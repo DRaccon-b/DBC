@@ -123,10 +123,11 @@ def bauen(frame=None, speichern=True):
     linien = set()
     for k in ('schienen', 'foerderbaender', 'rohre'):
         for l in lay.get(k, []):
-            (ax, ay), (bx, by) = l['von'], l['bis']
-            for x in range(min(ax, bx) - 1, max(ax, bx) + 3):
-                for y in range(min(ay, by) - 1, max(ay, by) + 3):
-                    linien.add((x, y))
+            pts = l['pfad'] if 'pfad' in l else [l['von'], l['bis']]
+            for (ax, ay), (bx, by) in zip(pts, pts[1:]):
+                for x in range(min(ax, bx) - 1, max(ax, bx) + 3):
+                    for y in range(min(ay, by) - 1, max(ay, by) + 3):
+                        linien.add((x, y))
     for (tx, ty) in lay.get('bodenluefter', []):
         linien.update((tx + i, ty + j) for i in range(-1, 3) for j in range(-1, 3))
     pf_alt = os.path.join(OBJ, 'platzierung.json')        # Objekte stehen nie auf Dellen
@@ -159,8 +160,12 @@ def bauen(frame=None, speichern=True):
         ind.foerderband(L, f['von'], f['bis'], frame or 0)
     for (tx, ty) in lay.get('bodenluefter', []):
         ind.bodenluefter(L, tx, ty, frame or 0)
+    ind.dach_fassade(L, cls, rows, cols)
     for r in lay.get('rohre', []):
-        ind.rohr(L, r['von'], r['bis'])
+        if 'pfad' in r:
+            ind.rohr_pfad(L, [tuple(p_) for p_ in r['pfad']])
+        else:
+            ind.rohr(L, r['von'], r['bis'])
     # --- Mauern und Gebaeude
     import random
     rnd = random.Random(5)
@@ -186,36 +191,34 @@ def bauen(frame=None, speichern=True):
                 w, h = o['schatten']
                 cx, cy = o['x'] + cache[o['datei']].width // 2, o['y'] + o['fuss'] - 2
                 sd.ellipse((cx - w // 2, cy - h // 2, cx + w // 2, cy + h // 2), fill=95)
-        # Fundamente: schwere Maschinen stehen auf einer Betonplatte, die exakt auf dem Kachelraster liegt
-        import numpy as _np0
+        # Kante Boden/Objekt: entlang der Auflagekante Schmutzsaum, Sand-/Schlammspritzer und Unkraut
+        import numpy as _np0, random as _rr
+        rk = _rr.Random(11)
         for o in objs:
             b_ = o.get('basis', '')
-            gruppe = b_.split('/')[0]
-            if gruppe not in ('ortho', 'mittel', 'turm', 'hoch', 'reaktor') and b_ != 'abgeleitet/hochofen':
+            if b_ in ('schatten', 'abgeleitet/laterne', 'abgeleitet/leer') or 'kran' in b_:
                 continue
             a = _np0.array(cache[o['datei']].getchannel('A')) >= 200
             zeilen = _np0.nonzero(a.any(axis=1))[0]
-            unten = a[max(0, zeilen.max() - 5):zeilen.max() + 1].any(axis=0)
-            spalten = _np0.nonzero(unten)[0]
-            fx0, fx1 = o['x'] + spalten.min(), o['x'] + spalten.max()
-            fy = o['y'] + zeilen.max()
-            tief = T if a.shape[0] < 70 else 2 * T
-            px0, px1 = (fx0 - 3) // T * T, -(-(fx1 + 4) // T) * T
-            py0, py1 = (fy - tief) // T * T, -(-(fy + 5) // T) * T
-            fund = cls[min(rows - 1, py1 // T - 1)][min(cols - 1, (px0 + px1) // 2 // T)]
-            for y in range(py0, py1):
-                for x in range(px0, px1):
-                    L.neutral(x, y, 0.93 if fund != 'm' else 1.0)
-            for x in range(px0, px1):                       # erhoehte Platte: Licht oben, Schatten unten
-                L.p(x, py0, ind.WAND[5] if fund != 'm' else ind.STAHL[3])
-                L.p(x, py1 - 1, ind.WAND[1] if fund != 'm' else ind.STAHL[0])
-                L.neutral(x, py1, 0.7); L.neutral(x, py1 + 1, 0.85)
-            for y in range(py0, py1):
-                L.p(px0, y, ind.WAND[4] if fund != 'm' else ind.STAHL[3])
-                L.p(px1 - 1, y, ind.WAND[1] if fund != 'm' else ind.STAHL[0])
-                L.neutral(px1, y, 0.75)
-            for (bx, by) in ((px0 + 2, py0 + 2), (px1 - 3, py0 + 2), (px0 + 2, py1 - 3), (px1 - 3, py1 - 3)):
-                L.p(bx, by, ind.STAHL[4]); L.p(bx + 1, by + 1, ind.STAHL[0])
+            if len(zeilen) == 0:
+                continue
+            gross = a.shape[0] > 40
+            for xi in _np0.nonzero(a.any(axis=0))[0]:
+                yu = int(_np0.nonzero(a[:, xi])[0].max())
+                if yu < zeilen.max() - 4:
+                    continue                                   # nur die tatsaechliche Auflagekante
+                X, Y = o['x'] + int(xi), o['y'] + yu
+                for d, f in ((1, 0.62), (2, 0.78), (3, 0.9)):    # Schmutzsaum direkt an der Kante
+                    L.neutral(X, Y + d, f, waerme=3)
+                r = rk.random()
+                if r < (0.22 if gross else 0.12):              # Sand/Staub angeweht
+                    for k in range(rk.randint(1, 3)):
+                        L.p(X + rk.randint(-1, 1), Y + rk.randint(1, 3), ind.rgb('#9a8a6e') if k % 2 else ind.rgb('#b3a283'))
+                elif r < (0.32 if gross else 0.18):            # Schlammspritzer
+                    L.p(X, Y + rk.randint(1, 4), ind.SCHLAMM[2]); L.p(X + 1, Y + 2, ind.SCHLAMM[1])
+                elif r < (0.40 if gross else 0.22):            # Unkraut in der Fuge
+                    for k in range(rk.randint(2, 4)):
+                        L.p(X + rk.randint(-1, 1), Y - k + 1, ind.rgb('#5f9a48') if k % 2 else ind.rgb('#43783a'))
         # Schmutz/Oel unter schweren Objekten (vor den Schatten, direkt auf den Boden)
         import random as _r
         rs = _r.Random(3)
@@ -271,10 +274,9 @@ def bauen(frame=None, speichern=True):
             if frame is not None and o.get('anim') == 'wehen':
                 sp = kb.wehen(sp, kb.wind(frame, o['x']))
             elif frame is not None and o.get('anim') == 'greifarm':
-                import math as _m
-                ph = (o['x'] * 13 + o['y'] * 7) % 16
-                sp = kb.wehen(sp, round(2 * _m.sin(2 * _m.pi * (frame + ph) / 16)))
-                oy += round(0.8 * _m.sin(4 * _m.pi * (frame + ph) / 16))
+                sp = greifarm_pose(sp, frame, (o['x'] * 13 + o['y'] * 7) % 16)
+            elif frame is not None and o.get('anim') == 'portal':
+                sp = portal_pose(sp, frame, (o['x'] // 16) % 16)
             elif frame is not None and o.get('anim') == 'kran':
                 sp = Image.open(os.path.join(OBJ, o['datei'].replace('abgeleitet-kran_', 'abgeleitet-kran_f%02d_' % frame))).convert('RGBA')
             img.alpha_composite(sp, (ox, oy))
@@ -330,6 +332,43 @@ def leitungen(img, pfad):
     for a, b in zip(m, m[1:]):
         for i in range(4):
             _linie(img, a[i], b[i], (35, 40, 47), durchhang=6)
+
+
+def greifarm_pose(sp, frame, phase):
+    """Fester Roboterarm: Sockel (untere 40 %) steht, Oberarm dreht um das Schultergelenk, die Hand
+    (oberes Viertel) dreht zusaetzlich um das Ellbogengelenk -> Scherung in zwei Stufen, kein Auf und Ab."""
+    import math
+    h = sp.height
+    a = 2.2 * math.sin(2 * math.pi * (frame + phase) / 16)
+    b = 1.4 * math.sin(2 * math.pi * (frame + phase) / 16 + 1.4)
+    out = Image.new('RGBA', sp.size)
+    schulter, ellbogen = h * 0.6, h * 0.28
+    for y in range(h):
+        d = 0.0
+        if y < schulter:
+            d += a * (1 - y / schulter)
+        if y < ellbogen:
+            d += b * (1 - y / ellbogen)
+        out.paste(sp.crop((0, y, sp.width, y + 1)), (round(d), y))
+    return out
+
+
+def portal_pose(sp, frame, phase):
+    """Portal-Greifer: Rahmen und Traeger stehen, Laufkatze mit Klaue faehrt links/rechts."""
+    import math
+    w, h = sp.size
+    dx = round(6 * math.sin(2 * math.pi * (frame + phase) / 16))
+    bein = max(9, round(w * 0.15))        # Beine samt Innenkante bleiben stehen
+    traeger = int(h * 0.24)
+    out = sp.copy()
+    teil = sp.crop((bein, traeger, w - bein, h))
+    leer = Image.new('RGBA', teil.size)
+    out.paste(leer, (bein, traeger))
+    # Beine wieder einsetzen (falls im Ausschnitt) und Klaue verschoben einsetzen
+    out.alpha_composite(teil, (bein + dx, traeger))
+    out.alpha_composite(sp.crop((0, 0, bein + 1, h)), (0, 0))
+    out.alpha_composite(sp.crop((w - bein - 1, 0, w, h)), (w - bein - 1, 0))
+    return out
 
 
 def animation(img, objs, frame):

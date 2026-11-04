@@ -1057,3 +1057,77 @@ def bodenluefter(L, tx, ty, frame=0, kacheln=2):
             L.p(k, y, STAHL[1])
     for (bx, by) in ((X + 2, Y + 2), (X + S_ - 3, Y + 2), (X + 2, Y + S_ - 3), (X + S_ - 3, Y + S_ - 3)):
         L.p(bx, by, STAHL[5])
+
+
+
+def rohr_pfad(L, punkte):
+    """Rohrleitung entlang einer Kachel-Polylinie [(x, y), ...] mit runden 90-Grad-Boegen an den Ecken."""
+    import math
+    if len(punkte) == 2:
+        rohr(L, punkte[0], punkte[1])
+        return
+    # gerade Stuecke (an inneren Ecken um eine Kachel gekuerzt)
+    for i in range(len(punkte) - 1):
+        (ax, ay), (bx, by) = punkte[i], punkte[i + 1]
+        dx, dy = (bx > ax) - (bx < ax), (by > ay) - (by < ay)
+        if i > 0:
+            ax, ay = ax + dx, ay + dy
+        if i < len(punkte) - 2:
+            bx, by = bx - dx, by - dy
+        if (bx - ax) * dx >= 0 and (by - ay) * dy >= 0:
+            rohr(L, (ax, ay), (bx, by))
+    toene = [ROHR[1], ROHR[4], ROHR[5], ROHR[6], ROHR[4], ROHR[3], ROHR[2], ROHR[0]]
+    for i in range(1, len(punkte) - 1):
+        cx, cy = punkte[i]
+        (px_, py_), (nx, ny) = punkte[i - 1], punkte[i + 1]
+        d1 = ((cx > px_) - (cx < px_), (cy > py_) - (cy < py_))
+        d2 = ((nx > cx) - (nx < cx), (ny > cy) - (ny < cy))
+        mx, my = cx * T + 8 - 8 * d1[0] + 8 * d2[0], cy * T + 8 - 8 * d1[1] + 8 * d2[1]
+        for y in range(cy * T - 2, cy * T + T + 2):
+            for x in range(cx * T - 2, cx * T + T + 2):
+                r = math.hypot(x + 0.5 - mx, y + 0.5 - my)
+                if 4 <= r < 12 and cx * T <= x < cx * T + T and cy * T <= y < cy * T + T:
+                    nxv, nyv = (x + 0.5 - mx) / r, (y + 0.5 - my) / r
+                    t = int((r - 4))
+                    licht = (nxv * -1 + nyv * -1) > 0          # Aussenseite zeigt zum Licht?
+                    L.neutral(x + 3, y + 3, 0.8)
+                    L.p(x, y, toene[7 - t] if licht else toene[t])
+
+
+def dach_fassade(L, cls, rows, cols, hoehe=28, art='m'):
+    """Flaechen der Art `art` (Metall) sind Daecher: an jeder Suedkante (darunter kein Dach) haengt eine
+    Fassade (Paneele, Fensterband, Sockel) mit Schatten; Nord-/Seitenkanten bekommen eine Attika."""
+    for y in range(rows):
+        for x in range(cols):
+            if cls[y][x] != art:
+                continue
+            X, Y = x * T, y * T
+            unten = y + 1 < rows and cls[y + 1][x] == art
+            if not unten and y + 1 < rows:
+                F0 = (y + 1) * T
+                for yy in range(F0, F0 + hoehe):
+                    for xx in range(X, X + T):
+                        k = yy - F0
+                        c = REAK[3] if (xx % 16) == 1 else REAK[1] if (xx % 16) == 0 else REAK[2]
+                        if k < 2:
+                            c = REAK[4] if k == 0 else REAK[0]
+                        elif 6 <= k <= 9 and (xx % 16) not in (0, 1, 15):
+                            c = rgb('#1b3a3a') if k in (6, 9) else GRUEN[0] if (xx // 4) % 2 else rgb('#2a6a5a')
+                        elif k >= hoehe - 2:
+                            c = REAK[0]
+                        L.p(xx, yy, c)
+                for xx in range(X, X + T):
+                    for d, f in ((0, 0.62), (1, 0.76), (2, 0.9)):
+                        L.neutral(xx, F0 + hoehe + d, f)
+            oben = y > 0 and cls[y - 1][x] == art
+            if not oben:
+                for xx in range(X, X + T):
+                    L.p(xx, Y, REAK[5]); L.p(xx, Y + 1, REAK[4])
+            for sx, nb in ((X, x - 1), (X + T - 1, x + 1)):
+                if not (0 <= nb < cols and cls[y][nb] == art):
+                    for yy in range(Y, Y + T + (hoehe if not unten else 0)):
+                        L.p(sx, yy, REAK[0])
+                    if nb > x:
+                        for yy in range(Y, Y + T + (hoehe if not unten else 0)):
+                            for d, f in ((1, 0.68), (2, 0.84)):
+                                L.neutral(sx + d, yy, f)

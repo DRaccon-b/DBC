@@ -36,7 +36,8 @@ FEST = [
     ('ortho/00', 20, 26, {}),                              # LKW
     ('klein/12', 26, 15, {}), ('klein/12', 26, 44, {}),    # Kabeltrommeln
     # Fabrikhof: Pressen ueber den Foerderbaendern, Roboterarme
-    ('mittel/10', 33, 15, {}), ('mittel/10', 43, 15, {}), ('mittel/10', 53, 15, {}),
+    ('mittel/10', 33, 15, {'anim': 'portal'}), ('mittel/10', 43, 15, {'anim': 'portal'}),
+    ('mittel/10', 53, 15, {'anim': 'portal'}),
     ('klein/09', 36, 12, {'anim': 'greifarm'}), ('klein/10', 30, 19, {'anim': 'greifarm'}),
     ('klein/09', 46, 12, {'anim': 'greifarm'}), ('klein/10', 40, 19, {'anim': 'greifarm'}),
     ('klein/09', 56, 12, {'anim': 'greifarm'}), ('klein/10', 50, 19, {'anim': 'greifarm'}),
@@ -48,18 +49,18 @@ FEST = [
     ('hoch/01', 83.5, 9, {'anim': 'rauch', 'rauch': [0.5, 0.03]}),
     ('ortho/05', 87, 9, {}), ('ortho/15', 90.5, 9, {}),
     # Reaktor mit Pylonen und Generatoren
-    ('reaktor/00', 75.5, 26, {'anim': 'reaktor'}),
-    ('turm/03', 67.5, 22, {'anim': 'reaktor'}), ('turm/03', 83.5, 22, {'anim': 'reaktor'}),
-    ('mittel/00', 66.5, 31, {'anim': 'reaktor'}), ('mittel/01', 85, 31, {'anim': 'reaktor'}),
+    ('reaktor/00', 75.5, 31, {'anim': 'reaktor'}),
+    ('turm/03', 67.5, 30, {'anim': 'reaktor'}), ('turm/03', 83.5, 30, {'anim': 'reaktor'}),
+    ('mittel/00', 67, 38, {'anim': 'reaktor'}), ('mittel/01', 84.5, 38, {'anim': 'reaktor'}),
     ('mittel/00', 66.5, 50, {'anim': 'reaktor'}), ('mittel/01', 85, 50, {'anim': 'reaktor'}),
     # Platz links und Strasse
-    ('hoch/02', 3.5, 34, {'anim': 'blinken'}), ('hoch/02', 3.5, 46, {'anim': 'blinken'}),
+    ('hoch/02', 4.6, 34, {'anim': 'blinken'}), ('hoch/02', 4.6, 46, {'anim': 'blinken'}),
     ('ortho/09', 8, 34, {}), ('klein/22', 5.5, 33, {}),
     ('ortho/01', 21, 44, {}),                               # zweiter LKW
     ('klein/11', 5, 61, {}),
     ('mini/04', 13.5, 59, {}), ('mini/04', 14.5, 59, {}), ('mini/24', 9.5, 63, {}),
     # Werkstatt unten: Oefen, Hochoefen, Schornsteine, Schrott
-    ('mittel/03', 31, 54, {'anim': 'feuer'}), ('mittel/02', 47, 58, {'anim': 'feuer'}),
+    ('mittel/03', 31, 54, {'anim': 'feuer', 'rauch': [0.5, 0.0]}), ('mittel/02', 47, 58, {'anim': 'feuer', 'rauch': [0.5, 0.0]}),
     ('turm/01', 39, 69, {'anim': 'feuer'}), ('abgeleitet/hochofen', 51.5, 71, {'anim': 'feuer', 'rauch': [0.5, 0.0]}),
     ('hoch/01', 44.5, 71, {'anim': 'rauch', 'rauch': [0.5, 0.03]}), ('hoch/01', 33.5, 67, {'anim': 'rauch', 'rauch': [0.5, 0.03]}),
     ('hoch/01', 47.5, 44, {'anim': 'rauch', 'rauch': [0.5, 0.03]}),   # Schornstein auf dem Backsteinhaus
@@ -79,7 +80,7 @@ SCHILDER = [(12, 22), (26, 11), (29, 56), (49, 60), (41, 70), (54, 70), (79, 69)
             (62, 10), (25, 46), (24, 61), (58, 26), (70, 62)]
 LATERNEN = [(16, 34), (24, 34), (32, 34), (40, 34), (49, 34), (56, 34), (18, 41), (26, 41), (34, 41), (45, 41), (7, 41),
             # Hoefe: Containerlager, Fabrikhof, Werkstatt, Tanklager, Reaktorplatz-Rand, unten links
-            (12, 11), (27, 21), (30, 25), (46, 26), (57, 25), (36, 51), (58, 51), (28, 61), (59, 66),
+            (12, 11), (27, 21), (30, 25), (46, 27), (57, 25), (36, 51), (58, 51), (28, 61), (59, 66),
             (61, 13), (88, 13), (17, 67), (9, 57), (65, 59), (86, 63)]
 # Kleinteile, die verstreut werden (Gruppe mini; Nummern werden nach Sichtung eingetragen)
 STREU = ['mini/00', 'mini/01', 'mini/02', 'mini/03', 'mini/15', 'mini/00', 'mini/01', 'mini/04', 'mini/10',
@@ -166,8 +167,9 @@ def main():
         bau[y0 * T:(y1 + 1) * T + 4, x0 * T:(x1 + 1) * T + 4] = True
     for k in ('schienen', 'foerderbaender', 'rohre'):
         for l in lay.get(k, []):
-            (ax, ay), (bx, by) = l['von'], l['bis']
-            bau[min(ay, by) * T:(max(ay, by) + 1) * T, min(ax, bx) * T:(max(ax, bx) + 1) * T] = True
+            pts = l['pfad'] if 'pfad' in l else [l['von'], l['bis']]
+            for (ax, ay), (bx, by) in zip(pts, pts[1:]):
+                bau[min(ay, by) * T:(max(ay, by) + 2) * T, min(ax, bx) * T:(max(ax, bx) + 2) * T] = True
     for z in lay['boden']:
         if z['art'] in ('asphalt', 'gehweg'):
             x0, y0, x1, y1 = z['r']
@@ -314,6 +316,36 @@ def animieren(img, objs, frame):
                 reg[m, :3] = (reg[m, :3] * 0.45).astype(np.uint8)
         a[y0:y1, x0:x1] = reg
     img.paste(Image.fromarray(a))
+    # Feuer: warmer Lichtschein vor der Ofenoeffnung (pulsierend) und aufsteigende Funken
+    from PIL import ImageDraw as _D
+    glut = Image.new('RGBA', img.size, (0, 0, 0, 0))
+    gd = _D.Draw(glut)
+    a2 = np.array(img)
+    for i, o in enumerate(objs):
+        if o.get('anim') != 'feuer':
+            continue
+        sp = Image.open(os.path.join(OBJ, o['datei']))
+        x0, y0 = max(0, o['x']), max(0, o['y'])
+        reg = a2[y0:y0 + sp.height, x0:x0 + sp.width, :3].astype(np.int16)
+        m = np.zeros(reg.shape[:2], bool)
+        for c in FEUER:
+            m |= (reg == c).all(axis=2)
+        ys, xs = np.nonzero(m)
+        if len(xs) < 3:
+            continue
+        fx, fy = x0 + xs.mean(), y0 + ys.max()
+        flack = 0.75 + 0.25 * math.sin(frame * 2.1 + i * 1.3) * math.sin(frame * 0.9 + i)
+        for r, alpha in ((22, 34), (15, 46), (9, 60)):
+            gd.ellipse((fx - r, fy - r * 0.45 + 4, fx + r, fy + r * 0.45 + 4), fill=(255, 150, 60, int(alpha * flack)))
+        rnd = random.Random(i * 31)
+        for k in range(5):                         # Funken steigen auf und verloeschen
+            t = ((frame + k * 3 + rnd.randint(0, 15)) % 16) / 16
+            sx = fx + rnd.uniform(-5, 5) + math.sin(t * 7 + k) * 2
+            sy = y0 + ys.min() - t * 22
+            farbe = (255, 242, 160) if t < 0.4 else (245, 176, 66) if t < 0.75 else (200, 80, 40)
+            if t < 0.9:
+                gd.point((sx, sy), fill=farbe + (255,))
+    img.alpha_composite(glut)
     # Rauch aus Schornsteinen: Woelkchen steigen auf und werden groesser und blasser
     from PIL import ImageDraw
     rauch = Image.new('RGBA', img.size, (0, 0, 0, 0))
