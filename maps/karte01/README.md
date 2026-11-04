@@ -15,7 +15,9 @@ python3 tools/pruefen.py            # Kontrolle: keine Objekte, die sich ueberla
 
 Objekte werden nur gesetzt, wenn ihre sichtbaren Pixel kein anderes Objekt und kein Bauwerk
 (Klippe, Treppe, Brücke, Steg) berühren; Ausnahme: Bäume untereinander (dichter Wald).
-Gras und Blumen, die sich im Wind neigen, halten 1 px Abstand zur Seite.
+Gras und Blumen, die sich im Wind neigen, halten 1 px Abstand zur Seite. Wiesen-Deko liegt
+mit allen Pixeln plus 1 px Rand auf Gras (nie im Sand/Weg/Wasser), bei Bäumen gilt das für
+Stamm und Fuß.
 
 ## Aufbau
 

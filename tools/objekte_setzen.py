@@ -130,6 +130,24 @@ def main():
     for st in plan.get('stege', []):
         maske_bau[(st['y'] - 3) * T: (st['y'] + st['hoehe'] + 1) * T, (st['x'] - 1) * T: (st['x'] + st['breite'] + 1) * T] = True
     alpha_cache = {}
+    _b = np.array(Image.open(os.path.join(KARTE, 'terrain_basis.png')).convert('RGB')).astype(np.int16)
+    gras_maske = (_b[..., 1] > _b[..., 0] + 25) & (_b[..., 1] > _b[..., 2] + 25)   # gruen dominiert
+
+    def auf_untergrund(name, ax, ay, im, art):
+        """art='gras': alle sichtbaren Pixel + 1 px Rand liegen auf Gras;
+        art='fuss': die unteren 5 sichtbaren Zeilen (Stamm/Fuss) liegen auf Gras."""
+        r = ausschnitt(name, ax, ay, im)
+        if r is None:
+            return False
+        sl, a = r
+        if art == 'fuss':
+            zeilen = np.nonzero(a.any(axis=1))[0]
+            if len(zeilen) == 0:
+                return True
+            a = a.copy(); a[: max(0, zeilen[-1] - 4)] = False
+        else:
+            a = a | np.roll(a, 1, 0) | np.roll(a, -1, 0) | np.roll(a, 1, 1) | np.roll(a, -1, 1)
+        return bool(gras_maske[sl][a].all())
 
     def ist_baum(name):
         return name.startswith('baeume/') or name in ('gross/00', 'gross/01', 'gross/02', 'gross/10', 'gross/11')
@@ -158,11 +176,13 @@ def main():
             return not (maske_objekt[sl] & a).any()
         return not ((maske_alle[sl] | maske_bau[sl]) & a).any()
 
-    def setze(name, ax, ay, ebene=1, bild=None, fuss_off=0):
+    def setze(name, ax, ay, ebene=1, bild=None, fuss_off=0, untergrund=None):
         """Anker (ax, ay) in Pixeln = Mitte unten. Gibt None zurueck, wenn das Objekt ein anderes
         beruehren wuerde (dann wird es nicht gesetzt)."""
         im = bild or lade(name)
         if not passt(name, ax, ay, im):
+            return None
+        if untergrund and not auf_untergrund(name, ax, ay, im, untergrund):
             return None
         sl, a = ausschnitt(name, ax, ay, im)
         maske_alle[sl] |= a
@@ -174,6 +194,8 @@ def main():
             o['datei'] = name + '.png'
         if name.startswith(SCHATTEN):
             o['schatten'] = [int(im.width * 0.7), max(4, im.width // 7)]
+        if untergrund:
+            o['untergrund'] = untergrund
         if name in WEHEN:
             o['anim'] = 'wehen'
         elif name in WIPPEN:
@@ -302,7 +324,7 @@ def main():
                 continue
             if not frei_umgebung(cx, cy, 1) or (cx, cy) in belegt:
                 continue
-            setze(wahl('wald'), px, py + 2)
+            setze(wahl('wald'), px, py + 2, untergrund='fuss')
 
     # --- Waldrand, Wiese, Strand, Wasser: je Kachel wuerfeln
     for cy in range(rows):
@@ -316,14 +338,14 @@ def main():
                 am_wald = any(grid[cy + dy][cx + dx] == 'F' for dx in (-1, 0, 1) for dy in (-1, 0, 1)
                               if 0 <= cy + dy < rows and 0 <= cx + dx < cols)
                 if am_wald and frei_umgebung(cx, cy, 0) and r < 0.22:
-                    setze(wahl('waldrand'), px, py)
+                    setze(wahl('waldrand'), px, py, untergrund='gras')
                 elif frei_umgebung(cx, cy, 1) and r < 0.012:
-                    if setze(wahl('wiese_baum'), px, py):
+                    if setze(wahl('wiese_baum'), px, py, untergrund='fuss'):
                         belegt.update({(cx + 1, cy), (cx - 1, cy), (cx, cy - 1)})
                 elif frei_umgebung(cx, cy, 1) and r < 0.03:          # mittlere Deko: 1 Kachel Abstand zu Weg/Wasser
-                    setze(wahl('wiese_mittel'), px, py)
+                    setze(wahl('wiese_mittel'), px, py, untergrund='gras')
                 elif frei_umgebung(cx, cy, 0) and frei_umgebung(cx, cy, 1, 'gs') and r < 0.11:   # nicht ans Wasser
-                    setze(wahl('wiese_klein'), px, py, ebene=0)
+                    setze(wahl('wiese_klein'), px, py, ebene=0, untergrund='gras')
             elif kl == 's' and ch in 'Ss' and frei_umgebung(cx, cy, 0, 's') and r < 0.03:
                 setze(wahl('strand'), px, py, ebene=0)
             elif kl in 'mw' and ch in 'hD':

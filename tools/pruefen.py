@@ -1,9 +1,10 @@
-"""Prueft die Objektplatzierung von Karte 01 auf Ueberlappungen (sichtbare Pixel).
+"""Prueft die Objektplatzierung von Karte 01: Ueberlappungen und Untergrund (sichtbare Pixel).
 
   python3 tools/pruefen.py
 
-Meldet jedes Objektpaar, dessen nicht-transparente Pixel sich beruehren. Erlaubt sind nur
-Baeume untereinander (dichter Wald). Ausgabe: Anzahl + Liste, Exit-Code 1 bei Fehlern.
+Meldet jedes Objektpaar, dessen nicht-transparente Pixel sich beruehren (erlaubt sind nur
+Baeume untereinander), und jedes Wiesen-Objekt, das in Sand/Weg/Wasser ragt (Deko: alle
+Pixel + 1 px Rand auf Gras; Baeume: Stamm/Fuss auf Gras). Exit-Code 1 bei Fehlern.
 """
 import json, os, sys
 import numpy as np
@@ -40,10 +41,31 @@ def main():
             if not (ist_baum(o['datei']) and ist_baum(objs[j]['datei'])):
                 fehler.append((objs[j]['datei'], (objs[j]['x'], objs[j]['y']), o['datei'], (x0, y0)))
         bereich[a] = i
-    print('%d Objekte geprueft, %d Ueberlappungen' % (len(objs), len(fehler)))
-    for f in fehler[:30]:
+    # Untergrund
+    b = np.array(Image.open(os.path.join(ROOT, 'maps', 'karte01', 'terrain_basis.png')).convert('RGB')).astype(np.int16)
+    gras = (b[..., 1] > b[..., 0] + 25) & (b[..., 1] > b[..., 2] + 25)
+    boden_fehler = []
+    for o in objs:
+        art = o.get('untergrund')
+        if not art:
+            continue
+        a = cache[o['datei']]
+        h, w = a.shape
+        x0, y0 = o['x'], o['y']
+        xs0, ys0, xs1, ys1 = max(0, x0), max(0, y0), min(W, x0 + w), min(H, y0 + h)
+        a = a[ys0 - y0: ys1 - y0, xs0 - x0: xs1 - x0]
+        if art == 'fuss':
+            z = np.nonzero(a.any(axis=1))[0]
+            a = a.copy(); a[: max(0, z[-1] - 4)] = False
+        else:
+            a = a | np.roll(a, 1, 0) | np.roll(a, -1, 0) | np.roll(a, 1, 1) | np.roll(a, -1, 1)
+        if not gras[ys0:ys1, xs0:xs1][a].all():
+            boden_fehler.append((o['datei'], (x0, y0)))
+    print('%d Objekte geprueft, %d Ueberlappungen, %d Objekte ragen aus dem Gras' %
+          (len(objs), len(fehler), len(boden_fehler)))
+    for f in (fehler + boden_fehler)[:30]:
         print('  ', f)
-    return 1 if fehler else 0
+    return 1 if fehler or boden_fehler else 0
 
 
 if __name__ == '__main__':
