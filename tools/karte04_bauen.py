@@ -160,6 +160,13 @@ def hoehenkanten(a, hoch, fels, front, seite, lippe_pal, frei, seed, treppen=())
         yy = y + 1 + tief
         if yy < Hh and wand[yy, x]:
             a[yy, x] = (a[yy, x] * 0.72).astype(np.uint8)
+    # Seitliche Frontenden sauber abschliessen (dunkle Kante + Lichtkante)
+    fm = wand & ~hoch
+    for y, x in zip(*np.nonzero(fm)):
+        if x + 1 < W and not fm[y, x + 1] and not hoch[y, x + 1]:
+            a[y, x] = F[0]
+        if x - 1 >= 0 and not fm[y, x - 1] and not hoch[y, x - 1]:
+            a[y, x] = F[5]
     # Nordkante: schmale Felskante
     oben = hoch & ~np.roll(hoch, 1, axis=0); oben[0] = False
     for y, x in zip(*np.nonzero(oben)):
@@ -500,6 +507,28 @@ def animieren(img, objs, cache, frame):
     img.alpha_composite(glut)
 
 
+def splitter_weg(m, minimum):
+    """Zusammenhaengende Teile einer Pixelmaske unter minimum Pixeln entfernen."""
+    from collections import deque
+    m = m.copy()
+    Hh, W = m.shape
+    gesehen = np.zeros_like(m)
+    for y0, x0 in zip(*np.nonzero(m)):
+        if gesehen[y0, x0]:
+            continue
+        q = deque([(y0, x0)]); gesehen[y0, x0] = True; teil = []
+        while q:
+            y, x = q.popleft(); teil.append((y, x))
+            for dy, dx in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+                yy, xx = y + dy, x + dx
+                if 0 <= yy < Hh and 0 <= xx < W and m[yy, xx] and not gesehen[yy, xx]:
+                    gesehen[yy, xx] = True; q.append((yy, xx))
+        if len(teil) < minimum:
+            for y, x in teil:
+                m[y, x] = False
+    return m
+
+
 def _laeufe(ys):
     out = []
     for y in ys:
@@ -519,7 +548,7 @@ def bauen(frame=None, speichern=True):
     a = textur(cls, 's', cols, rows)
     # --- weiche Bodenarten
     for art, blur, rausch, seed in (('d', 6.0, 0.55, 3), ('e', 6.0, 0.5, 4), ('m', 5.0, 0.4, 5),
-                                    ('a', 6.0, 0.45, 6), ('w', 3.0, 0.25, 7)):
+                                    ('a', 6.0, 0.45, 6), ('w', 4.0, 0.42, 7)):
         roh = zell_maske(cls, art, cols, rows)
         m = weich(roh, blur, rausch, seed)
         tx = textur(cls, art, cols, rows)
@@ -555,7 +584,8 @@ def bauen(frame=None, speichern=True):
     a[m2] = tx[m2]
     # --- Wasser
     xm = zell_maske(cls, 'x', cols, rows)
-    wm = (weich(xm, 4.5, 0.15, 24, 0.45) & can) | (weich(xm, 11, 0.35, 26, 0.5) & m1)
+    wm = (weich(xm, 6, 0.12, 24, 0.4) & can) | (weich(xm, 11, 0.35, 26, 0.5) & m1)
+    wm = splitter_weg(wm, 120)
     fluss = wm & can
     wasser_zeichnen(a, wm, frame, fluss)
     for (y0, y1) in lay.get('furten', []):
@@ -661,7 +691,8 @@ def bauen(frame=None, speichern=True):
     pf = os.path.join(OBJ, 'platzierung.json')
     objs = []
     if os.path.exists(pf):
-        objs = sorted(json.load(open(pf)), key=lambda o: o['y'] + o['fuss'])
+        objs = sorted((o for o in json.load(open(pf)) if os.path.exists(os.path.join(OBJ, o['datei']))),
+                      key=lambda o: o['y'] + o['fuss'])
         cache = {}
         for o in objs:
             if o['datei'] not in cache:

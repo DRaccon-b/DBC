@@ -156,6 +156,8 @@ def main():
     t = maske_schliessen(neu == 't', 1) & (xx >= 72)
     neu[(neu == 't') & ~t] = 'a'
     neu[t] = 't'
+    # schmaler Teerkanal bis zum Monument schliessen (Asche)
+    neu[(yy <= 61) & (xx >= 85) & (xx <= 91) & (neu == 't')] = 'a'
     # Aufraeumen: Plateau-Umriss per Mehrheit glaetten, kleine Splitter aller weichen Arten entfernen
     for _ in range(2):
         gm = neu == 'g'

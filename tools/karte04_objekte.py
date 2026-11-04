@@ -40,7 +40,7 @@ FEST = [
     ('baeume/01', 168, 72, {}), ('mittel/11', 360, 128, {}), ('mittel/11', 280, 254, {}), ('baeume/01', 265, 368, {}),
     ('mittel/11', 372, 440, {}), ('mittel/11', 267, 494, {}), ('baeume/01', 368, 752, {}), ('mittel/11', 392, 766, {}),
     ('baeume/01', 464, 1008, {}), ('mittel/11', 488, 1020, {}), ('mittel/11', 568, 1248, {}), ('baeume/01', 1640, 64, {}),
-    ('mittel/11', 1530, 126, {}), ('baeume/01', 1750, 264, {}), ('baeume/01', 720, 560, {}),
+    ('mittel/11', 1468, 120, {}), ('baeume/01', 720, 560, {}),
     # Akazien
     ('A', 193, 330, {}), ('A', 225, 393, {}), ('A', 145, 408, {}), ('A', 128, 459, {}), ('A', 497, 380, {}),
     ('A', 462, 478, {}), ('A', 303, 557, {}), ('A', 337, 237, {}), ('A', 400, 620, {}), ('A', 432, 776, {}),
@@ -51,28 +51,28 @@ FEST = [
     ('A', 1150, 1150, {}), ('A', 1610, 756, {}), ('A', 1568, 843, {}), ('A', 1073, 1053, {}), ('A', 1080, 1273, {}),
     ('A', 1153, 1273, {}),
     # Canyon: Riesenschaedel, Brustkorb, Felsen, Knochen
-    ('gross/02', 800, 522, {}), ('gross/03', 1000, 842, {}), ('mittel/15', 1022, 556, {}), ('mittel/08', 850, 800, {}),
+    ('gross/02', 800, 522, {}), ('gross/03', 1000, 842, {}), ('mittel/15', 1022, 556, {}), ('mittel/08', 890, 772, {}),
     ('mittel/09', 830, 300, {}), ('klein/04', 905, 600, {}), ('klein/34', 860, 180, {}), ('klein/04', 950, 960, {}),
     # Lager
     ('zelte/00', 112, 612, {}), ('zelte2/00', 236, 596, {}), ('zelte2/00', 252, 790, {'spiegeln': True}),
-    ('mittel/04', 166, 734, {'anim': 'feuer'}), ('mittel/12', 74, 772, {}), ('mittel/05', 84, 740, {}),
-    ('mittel/13', 216, 638, {}), ('mittel/03', 280, 682, {}), ('baeume/07', 130, 790, {}), ('klein/25', 196, 770, {}),
+    ('mittel/04', 166, 734, {'anim': 'feuer'}), ('mittel/12', 300, 744, {}), ('mittel/05', 318, 708, {}),
+    ('mittel/13', 186, 684, {}), ('mittel/03', 280, 682, {}), ('baeume/07', 112, 700, {}), ('klein/25', 196, 770, {}),
     ('klein/31', 120, 660, {'anim': 'leuchten'}), ('klein/28', 26, 720, {}),
     # Teerfeld: Monument, tote Baeume, Kristalle, dunkle Felsen
-    ('monument/00', 1407, 975, {'anim': 'juwel'}),
+    ('monument/00', 1380, 958, {'anim': 'juwel'}),
     ('baeume/02', 1196, 900, {}), ('baeume/02', 1377, 1262, {'spiegeln': True}), ('baeume/02', 1567, 1164, {}),
     ('baeume/02', 1280, 1150, {'spiegeln': True}), ('baeume/02', 1519, 1294, {}),
     ('mittel/07', 1512, 912, {'anim': 'glitzern'}), ('klein/05', 1288, 1102, {'anim': 'glitzern'}),
-    ('klein/05', 1448, 1222, {'anim': 'glitzern'}), ('mittel/07', 1353, 1248, {'anim': 'glitzern'}),
+    ('klein/05', 1440, 1186, {'anim': 'glitzern'}), ('mittel/07', 1353, 1196, {'anim': 'glitzern'}),
     ('klein/05', 1350, 1178, {'anim': 'glitzern'}), ('klein/05', 1527, 1148, {'anim': 'glitzern'}),
     ('klein/05', 1480, 1178, {'anim': 'glitzern'}), ('klein/10', 1310, 1034, {}), ('klein/10', 1577, 970, {}),
     ('klein/10', 1495, 1194, {}),
     # Schrott am Wegesrand (Zahnrad-Thema)
     ('baeume/09', 600, 900, {}), ('baeume/06', 1180, 560, {}), ('mittel/14', 1660, 600, {}), ('baeume/05', 1650, 920, {}),
-    ('mittel/00', 272, 862, {}), ('mittel/00', 592, 1286, {}),
+    ('mittel/00', 272, 862, {}), ('mittel/00', 648, 1222, {}),
 ]
 STREU = {
-    's': {'klein/00': 8, 'klein/27': 4, 'klein/01': 3, 'klein/02': 3, 'klein/08': 2, 'klein/07': 2, 'klein/03': 1,
+    's': {'klein/00': 8, 'klein/27': 4, 'klein/02': 3, 'klein/08': 2, 'klein/07': 2, 'klein/03': 1,
           'klein/59': 1, 'klein/09': 1, 'klein/14': 2, 'klein/50': 1, 'klein/06': 0.4, 'klein/18': 0.3, 'klein/55': 0.3},
     'g': {'klein/01': 6, 'klein/07': 3, 'klein/02': 2, 'klein/08': 2, 'klein/05': 0.6, 'klein/06': 1, 'klein/18': 0.6,
           'klein/55': 0.6, 'klein/12': 0.4, 'klein/17': 0.4},
@@ -129,7 +129,7 @@ def einbetten(sp, boden):
             r, g, b = a[y, x, :3] / 255.0
             hh, ss, vv = colorsys.rgb_to_hsv(r, g, b)
             if ss > 0.28 and 0.10 <= hh <= 0.42 and vv > 0.3:     # Gras (gelb bis gruen)
-                i = min(5, max(0, int((vv - 0.3) / 0.6 * 6)))
+                i = min(4, max(0, int((vv - 0.3) / 0.7 * 5)))
                 a[y, x, :3] = (erde if boden == 'c' else ramp)[i]
     return Image.fromarray(a)
 
@@ -184,7 +184,7 @@ def main():
                     gesperrt[y * T:(y + 1) * T, (x + dx) * T:(x + dx + 1) * T] = True
                     gesperrt[y * T:(y + 1) * T, x * T:(x + 1) * T] = True
     for (x0, x1, y0, y1, *_r) in lay.get('treppen', []):
-        gesperrt[y0 * T:(y1 + 3) * T, x0 * T:(x1 + 1) * T] = True
+        gesperrt[(y0 - 1) * T:(y1 + 4) * T, (x0 - 2) * T:(x1 + 3) * T] = True
     # unter der hohen Bruecke nichts (Objekte auf dem Canyonboden wuerden sonst ueber ihr liegen)
     br = lay.get('bruecke')
     unter_bruecke = np.zeros((MH, MW), bool)
@@ -256,7 +256,12 @@ def main():
             if any(tx - 1 <= cx_ <= tx + tb and ty - 1 <= cy_ <= ty + th for (tx, ty, tb, th) in tp):
                 continue
             wald.append((rw.choice(RAND), x, y))
+    tp_px = [((tx - 1) * T, (ty - 1) * T, (tx + tb + 1) * T, (ty + th + 1) * T) for (tx, ty, tb, th) in tp]
     for (name, x, y) in wald:
+        sp = Image.open(os.path.join(OBJ, name + '.png'))
+        bx0, by0, bx1, by1 = x - sp.width // 2, y - sp.height, x + sp.width // 2, y
+        if any(bx0 < r[2] and bx1 > r[0] and by0 < r[3] and by1 > r[1] for r in tp_px):
+            continue
         setze(name, x, y, True, {'spiegeln': rw.random() < 0.5})
     for i, (name, px, py, opt) in enumerate(FEST):
         if name == 'A':
