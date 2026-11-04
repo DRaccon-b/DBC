@@ -238,24 +238,32 @@ def main():
             for dy in range(-3, 1):
                 belegt.add((cx + dx, cy + dy))
 
-    # Unterwuchs um den Dschungelbaum: Farne, Bueschel und Gras dicht an den Wurzeln (ohne Ueberlappung)
+    # Bewuchs um den Dschungelbaum in Ringen (innen Farne/Gras/Pilze/Blumen, mitte Bueschel/Steine,
+    # aussen kleinere Baeume als Rahmen); alles mit Kollisions- und Untergrundpruefung
+    import math
     for name, cx, cy in FEST:
         if not name.startswith('dschungel/'):
             continue
         b = lade(name)
         ax, ay = cx * T + 8, cy * T + 14
-        for i, (dx, dy, n) in enumerate(((-b.width // 2 - 2, 1, 'deko/26'), (b.width // 2 + 3, 4, 'deko/61'),
-                                          (-b.width // 2 + 8, 9, 'deko/05'), (b.width // 2 - 8, 7, 'deko/06'),
-                                          (-b.width // 2 - 10, -6, 'baeume/12'), (b.width // 2 + 12, -3, 'baeume/13'),
-                                          (-22, 12, 'deko/06'), (24, 9, 'deko/05'), (-6, 14, 'deko/14'),
-                                          (8, 15, 'deko/31'), (-34, 15, 'deko/00'), (36, 14, 'deko/03'),
-                                          (-b.width // 2 - 16, 10, 'deko/61'), (b.width // 2 + 18, 13, 'deko/26'))):
-            for versuch in range(6):              # bei Kollision etwas weiter nach aussen/unten
-                if setze(n, ax + dx + (versuch * 3 if dx > 0 else -versuch * 3), ay + dy + versuch,
-                         untergrund='gras'):
-                    break
-        for x in range(cx - 5, cx + 6):
-            for y in range(cy - 8, cy + 2):
+        ringe = [
+            (b.width * 0.42, b.width * 0.62, 70, {'deko/26': 4, 'deko/61': 4, 'deko/05': 3, 'deko/06': 3,
+                                                  'deko/14': 2, 'deko/31': 2, 'deko/00': 2, 'deko/03': 1,
+                                                  'deko/29': 2, 'deko/27': 1}, 'gras'),
+            (b.width * 0.6, b.width * 0.85, 60, {'baeume/12': 3, 'baeume/13': 2, 'deko/25': 3, 'deko/11': 2,
+                                                 'deko/09': 1, 'deko/13': 1, 'deko/26': 2, 'deko/16': 1}, 'gras'),
+            (b.width * 0.85, b.width * 1.25, 50, {'baeume/00': 3, 'baeume/01': 3, 'baeume/02': 2, 'baeume/06': 2,
+                                                  'baeume/09': 2, 'baeume/15': 1, 'baeume/04': 1}, 'fuss'),
+        ]
+        for r0, r1, versuche, auswahl, unter in ringe:
+            namen, gew = list(auswahl), list(auswahl.values())
+            for _ in range(versuche):
+                w = rnd.uniform(0, 2 * math.pi)
+                r = rnd.uniform(r0, r1)
+                px_, py_ = ax + r * math.cos(w), ay - 18 + r * 0.6 * math.sin(w)   # flache Ellipse (Draufsicht)
+                setze(rnd.choices(namen, weights=gew)[0], px_, py_, ebene=1, untergrund=unter)
+        for x in range(cx - 7, cx + 8):
+            for y in range(cy - 9, cy + 4):
                 belegt.add((x, y))
 
     # Treppen, Bruecken, Steg und Wasserfaelle zeichnet karte_bauen.py selbst (tools/bauwerke.py, klippen.py)

@@ -246,6 +246,65 @@ def laternen_licht(img, laternen, frame):
                         px[x, y] = (mittel if c == hell else hell) + (255,)
 
 
+# ---------------------------------------------------------------- Waldboden unter dem Dschungelbaum
+def waldboden(img, o, sp):
+    """Wiese rund um den Riesenbaum wird zu Waldboden: Gras dunkler und moosiger (Rand laeuft
+    unregelmaessig aus), etwas Laub, und Oberflaechenwurzeln, die vom Stamm in die Wiese laufen.
+    Veraendert nur Graspixel (gruen dominiert), Wege/Wasser bleiben unberuehrt."""
+    import math, random
+    rnd = random.Random(4711)
+    px = img.load()
+    W, H = img.size
+    cx, cy = o['x'] + sp.width / 2, o['y'] + sp.height - 8
+    rx, ry = sp.width * 0.95, sp.width * 0.5
+    dunkler = {}
+    stufen = [(0x2e, 0x7a, 0x4c), (0x45, 0xa0, 0x52), (0x5f, 0xbb, 0x58), (0x78, 0xcc, 0x60),
+              (0x93, 0xdb, 0x70), (0xb6, 0xeb, 0x8a)]
+    for i, c in enumerate(stufen):
+        dunkler[c] = stufen[max(0, i - 1)]
+    def gras(c):
+        return c[1] > c[0] + 25 and c[1] > c[2] + 25
+    for y in range(int(cy - ry), int(cy + ry) + 1):
+        for x in range(int(cx - rx), int(cx + rx) + 1):
+            if not (0 <= x < W and 0 <= y < H):
+                continue
+            d = ((x - cx) / rx) ** 2 + ((y - cy) / ry) ** 2
+            if d > 1.0:
+                continue
+            c = px[x, y][:3]
+            if not gras(c):
+                continue
+            # dicht innen, zum Rand hin immer lueckiger (deterministisches Rauschen)
+            if variante(x, y, 100) / 100 > (1.15 - d) * 1.2:
+                continue
+            neu = dunkler.get(c, c)
+            if d < 0.35 and variante(x * 3, y, 7) == 0:
+                neu = dunkler.get(neu, neu)                 # Moosflecken innen
+            px[x, y] = neu + (255,)
+            r_ = variante(x, y * 5, 160)
+            if r_ == 0:
+                px[x, y] = (0x9c, 0x6c, 0x44, 255)          # Laub
+            elif r_ == 1:
+                px[x, y] = (0xc0, 0x8c, 0x58, 255)
+            elif r_ == 2 and d < 0.6:
+                px[x, y] = (0xe8, 0x70, 0x2a, 255)
+    # Oberflaechenwurzeln: vom Stamm nach aussen, werden duenner
+    for k in range(7):
+        w = math.pi * (0.05 + 0.9 * k / 6) + rnd.uniform(-0.12, 0.12)
+        laenge = rnd.uniform(26, 44)
+        x, y = cx + math.cos(w) * 10, cy + 2
+        richtung_x, richtung_y = math.cos(w), abs(math.sin(w)) * 0.45 + 0.1
+        for schritt in range(int(laenge)):
+            dicke = 2 if schritt < laenge * 0.6 else 1
+            for t in range(dicke):
+                xx, yy = int(x), int(y) + t
+                if 0 <= xx < W and 0 <= yy < H and gras(px[xx, yy][:3]) or (0 <= xx < W and 0 <= yy < H and px[xx, yy][:3] in dunkler.values()):
+                    px[xx, yy] = ((0x7a, 0x52, 0x36) if t == 0 else (0x3a, 0x24, 0x20)) + (255,)
+            x += richtung_x + rnd.uniform(-0.3, 0.3)
+            y += richtung_y * (1 if k % 2 else 0.6) + rnd.uniform(-0.25, 0.25)
+            richtung_x *= 0.995
+
+
 RUNENFARBEN = [(0x2f, 0xc7, 0xd8), (0x7f, 0xf0, 0xf5), (0xe6, 0xff, 0xff)]
 FEUER = [(0xc8, 0x3a, 0x3a), (0xe8, 0x70, 0x2a), (0xf5, 0xc8, 0x42), (0xff, 0xf2, 0xa0)]
 
@@ -477,6 +536,10 @@ def bauen(frame=None, speichern=True):
     if os.path.exists(pf):
         cache = {}
         objs = sorted(json.load(open(pf)), key=lambda o: (o.get('ebene', 1), o['y'] + o.get('fuss', 0)))
+        # Waldboden und Oberflaechenwurzeln unter dem Dschungelbaum (vor Schatten und Sprites)
+        for o in objs:
+            if o['datei'].startswith('dschungel/'):
+                waldboden(img, o, Image.open(os.path.join(OBJ, o['datei'])))
         # weiche Bodenschatten (Ellipse unter dem Fuss), vor allen Sprites
         from PIL import ImageDraw, ImageFilter
         schatten = Image.new('L', img.size, 0)
