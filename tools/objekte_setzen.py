@@ -114,9 +114,60 @@ def main():
 
     objekte, belegt = [], set()
 
-    def setze(name, ax, ay, ebene=1, bild=None, fuss_off=0):
-        """Anker (ax, ay) in Pixeln = Mitte unten."""
+    # --- Kollision ueber die sichtbaren Pixel: kein Objekt darf ein anderes beruehren
+    #     (Ausnahme: Baeume untereinander -> dichter Wald). Bauwerke (Klippen, Treppen,
+    #     Bruecken, Steg) sind fuer alles ausser Baeumen tabu.
+    import numpy as np
+    MW, MH = cols * T, rows * T
+    maske_alle = np.zeros((MH, MW), bool)
+    maske_objekt = np.zeros((MH, MW), bool)      # alles ausser Baeumen
+    maske_bau = np.zeros((MH, MW), bool)
+    for sg in plan['segmente']:
+        t_, h_ = sg['t'], sg.get('h', 3)
+        maske_bau[max(0, (t_ - h_) * T): (t_ + 1) * T + 4, sg['von'] * T: (sg['bis'] + 1) * T] = True
+    for br in plan.get('bruecken', []):
+        maske_bau[(br['y'] - 1) * T: (br['y'] + br['hoehe'] + 1) * T, (br['x'] - 1) * T: (br['x'] + br['breite'] + 1) * T] = True
+    for st in plan.get('stege', []):
+        maske_bau[(st['y'] - 3) * T: (st['y'] + st['hoehe'] + 1) * T, (st['x'] - 1) * T: (st['x'] + st['breite'] + 1) * T] = True
+    alpha_cache = {}
+
+    def ist_baum(name):
+        return name.startswith('baeume/') or name in ('gross/00', 'gross/01', 'gross/02', 'gross/10', 'gross/11')
+
+    def ausschnitt(name, ax, ay, im):
+        if name not in alpha_cache:
+            a = np.array(im.getchannel('A')) > 0
+            if name in WEHEN:                    # neigt sich im Wind um 1 px -> 1 px Spielraum seitlich
+                a = a | np.roll(a, 1, axis=1) | np.roll(a, -1, axis=1)
+            alpha_cache[name] = a
+        a = alpha_cache[name]
+        x0, y0 = int(ax - im.width // 2), int(ay - im.height)
+        xs0, ys0 = max(0, x0), max(0, y0)
+        xs1, ys1 = min(MW, x0 + im.width), min(MH, y0 + im.height)
+        if xs1 <= xs0 or ys1 <= ys0:
+            return None
+        return (slice(ys0, ys1), slice(xs0, xs1)), a[ys0 - y0: ys1 - y0, xs0 - x0: xs1 - x0]
+
+    def passt(name, ax, ay, bild=None):
         im = bild or lade(name)
+        r = ausschnitt(name, ax, ay, im)
+        if r is None:
+            return False
+        sl, a = r
+        if ist_baum(name):
+            return not (maske_objekt[sl] & a).any()
+        return not ((maske_alle[sl] | maske_bau[sl]) & a).any()
+
+    def setze(name, ax, ay, ebene=1, bild=None, fuss_off=0):
+        """Anker (ax, ay) in Pixeln = Mitte unten. Gibt None zurueck, wenn das Objekt ein anderes
+        beruehren wuerde (dann wird es nicht gesetzt)."""
+        im = bild or lade(name)
+        if not passt(name, ax, ay, im):
+            return None
+        sl, a = ausschnitt(name, ax, ay, im)
+        maske_alle[sl] |= a
+        if not ist_baum(name):
+            maske_objekt[sl] |= a
         o = {'datei': name + '.png', 'x': int(ax - im.width // 2), 'y': int(ay - im.height),
              'fuss': im.height - fuss_off, 'ebene': ebene}
         if bild is not None:
@@ -180,10 +231,16 @@ def main():
         eine halbe Kachel in die Nachbarkachel)."""
         ax, ay = anker(cx, cy, richtung)
         o = setze('laterne', ax, ay)
+        if o is None:
+            return False
         o['anim'] = 'laterne'
         o['schatten'] = [18, 5]                  # Kontaktschatten unter dem Sockel
-        belegt.update({(cx, cy), (cx, cy - 1), (cx, cy - 2), (cx, cy + 1)})
+        belegt.update({(cx, cy), (cx, cy - 1), (cx, cy - 2), (cx, cy - 3), (cx, cy + 1)})
         laternen.append((cx, cy))
+        return True
+
+    def paar_passt(a, b):
+        return all(passt('laterne', *anker(cx, cy, r)) for cx, cy, r in (a, b))
 
     def frei(cx, cy):
         return (k(cx, cy) == 'g' and (cx, cy) not in gesperrt and (cx, cy) not in belegt
@@ -196,7 +253,8 @@ def main():
         for y in range(t + 3, t + 7):                 # erst nah an der Treppe, dann weiter weg
             for d in (1, 2, 3):                       # gleicher Abstand links und rechts
                 l, r = tr['x'] - 1 - d, tr['x'] + tr['breite'] + d
-                if frei(l, y) and frei(r, y) and auf_gras(l, y, (1, 0)) and auf_gras(r, y, (-1, 0)):
+                if frei(l, y) and frei(r, y) and auf_gras(l, y, (1, 0)) and auf_gras(r, y, (-1, 0)) \
+                        and paar_passt((l, y, (1, 0)), (r, y, (-1, 0))):
                     laterne_setzen(l, y, (1, 0)); laterne_setzen(r, y, (-1, 0))
                     gesetzt = True
                     break
@@ -216,7 +274,7 @@ def main():
         for d in (1, 2):                          # gleicher Abstand ober- und unterhalb des Weges
             for xx in (x, x - 1, x - 2):
                 if frei(xx, r0 - d) and frei(xx, r1 + d) and auf_gras(xx, r0 - d, (0, 1)) \
-                        and auf_gras(xx, r1 + d, (0, -1)):
+                        and auf_gras(xx, r1 + d, (0, -1)) and paar_passt((xx, r0 - d, (0, 1)), (xx, r1 + d, (0, -1))):
                     laterne_setzen(xx, r0 - d, (0, 1)); laterne_setzen(xx, r1 + d, (0, -1))
                     fertig = True
                     break
@@ -260,7 +318,8 @@ def main():
                 if am_wald and frei_umgebung(cx, cy, 0) and r < 0.22:
                     setze(wahl('waldrand'), px, py)
                 elif frei_umgebung(cx, cy, 1) and r < 0.012:
-                    setze(wahl('wiese_baum'), px, py); belegt.update({(cx + 1, cy), (cx - 1, cy), (cx, cy - 1)})
+                    if setze(wahl('wiese_baum'), px, py):
+                        belegt.update({(cx + 1, cy), (cx - 1, cy), (cx, cy - 1)})
                 elif frei_umgebung(cx, cy, 1) and r < 0.03:          # mittlere Deko: 1 Kachel Abstand zu Weg/Wasser
                     setze(wahl('wiese_mittel'), px, py)
                 elif frei_umgebung(cx, cy, 0) and frei_umgebung(cx, cy, 1, 'gs') and r < 0.11:   # nicht ans Wasser

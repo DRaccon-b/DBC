@@ -224,7 +224,7 @@ def laternen_licht(img, laternen, frame):
     for i, o in enumerate(laternen):
         f = 1.0 if frame is None else 0.85 + 0.15 * math.sin(2 * math.pi * frame / N_FRAMES * 2 + i * 1.7)
         kx, ky = o['x'] + 7, o['y'] + 9                       # Glasmitte (bauwerke.LATERNE_KOPF)
-        for (cx, cy, rx, ry, staerke) in ((kx, ky, 18, 16, 62), (kx, o['y'] + 44, 18, 6, 40)):
+        for (cx, cy, rx, ry, staerke) in ((kx, ky, 18, 16, 62), (kx, o['y'] + 58, 18, 6, 40)):
             y0, y1 = max(0, cy - ry), min(H, cy + ry + 1)
             x0, x1 = max(0, cx - rx), min(W, cx + rx + 1)
             yy, xx = np.mgrid[y0:y1, x0:x1]

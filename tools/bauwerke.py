@@ -235,12 +235,13 @@ def zeichne_steg(img, x0, x1, y0, y1, frame=0, seed=9):
 GLAS = [rgb('#c87a2a'), rgb('#f5c842'), rgb('#fff2a0'), rgb('#fffbe6')]
 EISEN = [rgb(c) for c in ('#161b28', '#232c40', '#35415c', '#4f5f80', '#7a8cb0')]
 GRAS_L = [rgb(c) for c in ('#2e7a4c', '#45a052', '#5fbb58', '#78cc60', '#93db70')]
-LATERNE_B, LATERNE_H = 15, 44
+LATERNE_B, LATERNE_H = 15, 58
+MAST_PLUS = 14               # zusaetzliche Masthoehe gegenueber der ersten Fassung
 LATERNE_KOPF = (7, 9)        # Mitte des Glases (fuer den Lichtschein)
 
 
 def laterne_bild():
-    """Grosse Strassenlaterne 15x44 px, Silhouette exakt symmetrisch um x=7.
+    """Grosse Strassenlaterne 15x58 px, Silhouette exakt symmetrisch um x=7.
 
     Licht von oben links nur in der Schattierung. Unten: moosiger Steinsockel mit Grashalmen,
     die vorne ueber die Kanten wachsen (Kontaktschatten setzt karte_bauen.py darunter).
@@ -293,33 +294,34 @@ def laterne_bild():
     for dy, dx in ((16, 3), (17, 4), (18, 4), (19, 3)):
         px[M - dx, dy] = EISEN[0]; px[M + dx, dy] = EISEN[0]
     zeile(16, 1, metall)
+    P = MAST_PLUS
     # Mast 3 px + Kontur, Zierringe
-    for y in range(17, 36):
+    for y in range(17, 36 + P):
         zeile(y, 2, metall)
-    for y in (22, 29):
+    for y in (22, 29 + P // 2, 36 + P - 7):
         zeile(y, 2, lambda dx, h: EISEN[0] if abs(dx) == 2 else EISEN[4] if dx < 0 else EISEN[2])
     # ausgestellter Fuss
-    zeile(36, 3, metall)
-    zeile(37, 4, metall)
+    zeile(36 + P, 3, metall)
+    zeile(37 + P, 4, metall)
     # Steinsockel (Schiefer wie die Klippen), oben Lichtkante
-    for y in range(38, 44):
+    for y in range(38 + P, 44 + P):
         def sockel(dx, h, y=y):
-            if abs(dx) == h or y == 43:
+            if abs(dx) == h or y == 43 + P:
                 return S[0]
-            if y == 38:
+            if y == 38 + P:
                 return S[5] if dx < 2 else S[4]
             return S[4] if dx == -h + 1 else S[3] if dx < 0 else S[2]
         zeile(y, 5, sockel)
     # Moos am Sockelfuss und Grashalme vorne ueber den Kanten (spiegelgleich)
     for dx in (-4, -1, 2):
-        px[M + dx, 42] = GRAS_L[1]
+        px[M + dx, 42 + P] = GRAS_L[1]
     for dx in (-3, 1, 4):
-        px[M + dx, 42] = GRAS_L[2]
+        px[M + dx, 42 + P] = GRAS_L[2]
     for (dx, y, c) in ((-6, 43, 1), (-6, 42, 3), (-5, 43, 2), (-7, 43, 0),
                        (6, 43, 1), (6, 42, 3), (5, 43, 2), (7, 43, 0),
                        (-2, 43, 2), (2, 43, 2), (0, 43, 1)):
-        px[M + dx, y] = GRAS_L[c]
-    px[M - 6, 41] = GRAS_L[4]; px[M + 6, 41] = GRAS_L[4]
+        px[M + dx, y + P] = GRAS_L[c]
+    px[M - 6, 41 + P] = GRAS_L[4]; px[M + 6, 41 + P] = GRAS_L[4]
     return im
 
 

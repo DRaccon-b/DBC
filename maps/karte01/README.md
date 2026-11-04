@@ -10,7 +10,12 @@ python3 tools/basis_kacheln.py      # Grundkacheln Gras/Sand/Wasser/Meer (je 5 V
 python3 tools/karte_bauen.py        # Boden + Klippen  (schreibt tilemap.json mit Klassen)
 python3 tools/objekte_setzen.py     # Wald, Deko, Sonderobjekte -> platzierung.json
 python3 tools/karte_bauen.py        # fertige Karte mit Objekten
+python3 tools/pruefen.py            # Kontrolle: keine Objekte, die sich ueberlappen
 ```
+
+Objekte werden nur gesetzt, wenn ihre sichtbaren Pixel kein anderes Objekt und kein Bauwerk
+(Klippe, Treppe, Brücke, Steg) berühren; Ausnahme: Bäume untereinander (dichter Wald).
+Gras und Blumen, die sich im Wind neigen, halten 1 px Abstand zur Seite.
 
 ## Aufbau
 
@@ -40,7 +45,8 @@ python3 tools/karte_bauen.py        # fertige Karte mit Objekten
 python3 tools/animation_bauen.py    # 16 Frames à 110 ms, nahtlose Schleife
 ```
 
-Ausgabe in `animation/`: `karte01_animiert.webp` (ganze Karte), `detail_*.gif` (Ausschnitte 3×),
+Ausgabe in `animation/`: `karte01_animiert.webp` (ganze Karte), `karte01_discord.gif` (ganze Karte
+in voller Auflösung unter 10 MB, 8 Frames à 220 ms), `detail_*.gif` (Ausschnitte 3×),
 `kacheln/*.png` (Wasser-Grundkacheln als 16-Frame-Streifen für eine Engine: `_fluss` = fließt nach
 unten, `_schwappen` = pendelt seitlich).
 
