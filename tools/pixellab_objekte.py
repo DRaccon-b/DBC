@@ -310,6 +310,12 @@ OBJEKTGRUPPEN_K3 = {
         'stage monitor speaker stack, two black speaker boxes on top of each other, front view',
         'tall sandstone obelisk with a golden tip, front view',
     ]},
+    'k3_baeume': {'size': 64, 'items': [
+        'small flat-topped acacia tree with green canopy, desert tree, front view',
+        'joshua tree with spiky green leaf clusters, front view',
+        'small olive tree with silvery green leaves, front view',
+        'bushy desert shrub tree with small green leaves, front view',
+    ]},
     'k3_pyramide2': {'size': 240, 'items': [
         'classic egyptian pyramid with four smooth triangular sloped sides made of sandstone blocks, pointed apex, small dark arched entrance at the bottom center, a small glowing cyan eye emblem near the apex, light side on the left, shaded side on the right, front view, orthographic',
     ]},

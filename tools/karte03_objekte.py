@@ -16,7 +16,7 @@ ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
 KARTE = os.path.join(ROOT, 'maps', 'karte03')
 OBJ = os.path.join(ROOT, 'assets', 'objekte', 'karte03')
 T = 16
-FUSS = {'tor': 'stein', 'klein': 'klein', 'mittel': 'stein', 'gross': 'stein', 'pyramide': 'stein', 'pyramide2': 'stein'}
+FUSS = {'baeume': 'baum', 'tor': 'stein', 'klein': 'klein', 'mittel': 'stein', 'gross': 'stein', 'pyramide': 'stein', 'pyramide2': 'stein'}
 PALMEN = ('mittel/00', 'mittel/01', 'mittel/02', 'klein/25')
 
 # (sprite, Anker-x Kachel (Mitte), Anker-y = unterste Kachelzeile, Optionen)
@@ -29,14 +29,14 @@ FEST = [
     ('mittel/01', 12.5, 29, {'anim': 'wehen'}), ('mittel/00', 26.5, 30, {'anim': 'wehen'}),
     ('klein/05', 22, 16, {}), ('klein/05', 26, 26, {}), ('klein/04', 11, 26, {}),
     # Bus und Haltestelle
-    ('gross/06', 44, 31, {}), ('klein/18', 48, 31, {}), ('mittel2/00', 49.8, 31, {}),
+    ('gross/06', 44, 31, {}), ('klein/18', 48, 31, {'anim': 'flagge'}), ('mittel2/00', 49.8, 31, {}),
     # Ruinen-Arena
-    ('tor/00', 54.5, 28, {'ueber_mauer': True, 'roh': True}),
+    ('abgeleitet/arena_tor', 54.5, 28, {'ueber_mauer': True, 'roh': True}),
     ('mittel/03', 74, 8, {}), ('mittel/03', 86, 13, {}), ('mittel/03', 74, 19, {}), ('mittel/03', 78, 25, {}),
     ('mittel/04', 59, 15, {}), ('mittel/05', 77, 9, {}), ('mittel/05', 84.5, 9, {}), ('mittel/05', 71, 23, {}),
     ('klein/20', 70, 11, {}), ('klein/20', 81, 23, {}), ('klein/21', 66, 13, {}), ('klein/21', 47, 13, {}),
     # Garten im Nordosten
-    ('gross/10', 95.2, 13, {}), ('klein/31', 92.2, 21, {}), ('klein/31', 98.8, 21, {}), ('klein/12', 95, 15, {}),
+    ('gross/10', 95.2, 13, {}), ('klein/31', 92.2, 21, {}), ('klein/31', 98.8, 21, {}),
     # Lautsprechersaeulen an den Wegen
     ('mittel2/00', 66.5, 26, {}), ('mittel2/00', 92.5, 26, {}), ('mittel2/00', 52.3, 40, {}), ('mittel2/00', 25, 56, {}),
     ('mittel2/00', 40.5, 63, {}),
@@ -47,10 +47,10 @@ FEST = [
     ('gross/13', 86, 35, {'anim': 'blinken'}),
     # Pyramide, Grabtor, Buehne
     ('PYRAMIDE', 96, 41, {}), ('mittel/10', 86.5, 41, {}),
-    ('gross2/02', 96, 50, {'anim': 'musik'}),
-    ('mittel2/01', 88.5, 50, {}), ('mittel2/01', 103.5, 50, {}),
-    ('mittel3/02', 90, 55, {}), ('mittel3/02', 102, 55, {}),
-    ('mittel3/01', 89, 62, {}), ('mittel3/01', 103, 62, {}),
+    ('abgeleitet/buehne', 96, 52, {'roh': True, 'proz': 'buehne', 'anim': 'musik'}),
+    ('abgeleitet/box_monitor', 90.5, 56, {'roh': True, 'proz': 'box_monitor', 'anim': 'bass'}),
+    ('abgeleitet/box_monitor', 101.5, 56, {'roh': True, 'proz': 'box_monitor', 'anim': 'bass'}),
+    ('mittel3/01', 89, 62, {'anim': 'flagge'}), ('mittel3/01', 103, 62, {'anim': 'flagge'}),
     # Mitte / Sueden
     ('mittel3/00', 78, 54, {'anim': 'leuchten'}), ('mittel/06', 44.5, 54, {}),
     ('mittel/07', 37, 44, {}), ('mittel/07', 26, 75, {}), ('mittel/07', 95, 74, {}),
@@ -74,6 +74,37 @@ STREU = {'klein/00': 3, 'klein/01': 3, 'klein/02': 2, 'klein/03': 2, 'klein/04':
 BLUETEN = ['blueten/00', 'blueten/01', 'blueten/02', 'blueten/03', 'blueten/04', 'blueten/05',
            'mittel2/06', 'mittel2/07', 'mittel2/08', 'mittel2/09', 'mittel2/12', 'mittel2/13']
 ROSA = [(0x7a, 0x2a, 0x5a), (0xb2, 0x3c, 0x82), (0xe0, 0x60, 0xa8), (0xf5, 0x9a, 0xcb), (0xff, 0xd2, 0xe8)]
+
+
+KAKTEEN = ('klein/00', 'klein/01', 'klein/02', 'klein/03', 'mittel2/06', 'mittel2/07', 'mittel2/08', 'mittel2/12',
+           'mittel2/13', 'mittel/07', 'baeume/04', 'baeume/05')
+
+
+def anim_fuer(name):
+    """Kakteen wiegen sich leicht und ihre Blueten leuchten, Buesche/Steppenlaeufer wehen, Steine ruhen."""
+    if name.startswith('rosa/') or name.startswith('blueten/') or name in KAKTEEN:
+        return {'anim': 'kaktus'}
+    if name in ('klein/04', 'klein/05', 'klein/26'):
+        return {'anim': 'wehen'}
+    return {}
+
+
+def garten_ring():
+    """Ring aus Palmen, Kakteen und Wuestenbaeumen um den Garten (statt Ziegelmauer), offen nach Sueden."""
+    import math
+    pflanzen = ['mittel/00', 'baeume/00', 'mittel2/12', 'baeume/02', 'mittel/01', 'baeume/01', 'mittel2/07',
+                'baeume/03', 'mittel/02', 'baeume/05', 'mittel2/06', 'baeume/00']
+    cx, cy, rx, ry = 95.5, 12.6, 6.9, 7.2
+    out = []
+    winkel = [w for w in range(-90 + 18, 270 - 18, 26) if not (60 < w < 120)]   # Sueden (90 Grad) offen
+    for i, w in enumerate(winkel):
+        n = pflanzen[i % len(pflanzen)]
+        if n.startswith('baeume/') and not os.path.exists(os.path.join(OBJ, n + '.png')):
+            n = 'mittel/0%d' % (i % 3)
+        x = cx + rx * math.cos(math.radians(w)); y = cy + ry * math.sin(math.radians(w))
+        opt = anim_fuer(n) if n in KAKTEEN else {'anim': 'wehen'}
+        out.append((n, round(x, 1), round(y, 1), opt))
+    return out
 
 
 def rosa_machen(name):
@@ -104,6 +135,8 @@ def lade(name, cache={}):
 
 def main():
     import karte03_bauen as k3
+    import karte03_prozedural as kp
+    kp.statisch_speichern()
     os.makedirs(os.path.join(OBJ, 'abgeleitet'), exist_ok=True)
     rnd = random.Random(5)
     lay = json.load(open(os.path.join(KARTE, 'layout.json')))
@@ -144,7 +177,7 @@ def main():
         basis = pyr if name == 'PYRAMIDE' else name
         gruppe = basis.split('/')[0]
         boden = boden_bei(ax, ay)
-        art = 'pflanze' if basis in PALMEN or gruppe == 'rosa' or basis in ('klein/00', 'klein/01', 'klein/02', 'klein/03', 'klein/04', 'klein/05') else FUSS.get(gruppe, 'stein')
+        art = 'pflanze' if basis in PALMEN or basis in KAKTEEN or gruppe == 'rosa' or basis in ('klein/00', 'klein/01', 'klein/02', 'klein/03', 'klein/04', 'klein/05') else FUSS.get(gruppe, 'stein')
         vname = 'varianten/%s_%s' % (basis.replace('/', '-'), boden)
         pfad = os.path.join(OBJ, vname + '.png')
         if not os.path.exists(pfad):
@@ -172,7 +205,9 @@ def main():
         objekte.append(o)
         return o
 
-    for name, tx, ty, opt in FEST:
+    for name, tx, ty, opt in FEST + garten_ring():
+        if 'anim' not in opt:
+            opt = dict(opt, **anim_fuer(name))
         setze(name, tx * T, ty * T + 15, True, opt)
     for (tx, ty) in ZAUN:
         setze('klein/22', tx * T + 8, ty * T + 12, True)
@@ -190,8 +225,8 @@ def main():
             continue
         if cls[cy][cx] != 's' or rnd.random() < 0.4:   # nur auf Sand, nicht auf Pflaster
             continue
-        if setze(rnd.choices(namen, weights=gew)[0], cx * T + rnd.randint(3, 13), cy * T + rnd.randint(8, 15), False,
-                 {'anim': 'wehen'} if rnd.random() < 0.5 else {}):
+        n = rnd.choices(namen, weights=gew)[0]
+        if setze(n, cx * T + rnd.randint(3, 13), cy * T + rnd.randint(8, 15), False, anim_fuer(n)):
             gesetzt += 1
     json.dump(objekte, open(os.path.join(OBJ, 'platzierung.json'), 'w'), indent=0)
     print(len(objekte), 'Objekte gesetzt')

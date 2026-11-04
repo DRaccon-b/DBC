@@ -15,6 +15,7 @@ import numpy as np
 from PIL import Image, ImageDraw, ImageFilter
 import karte_bauen as kb
 import industrie as ind
+import karte03_prozedural as kp
 import bauwerke
 
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
@@ -579,15 +580,28 @@ def bauen(frame=None, speichern=True):
     if 'tor' in ar:
         x0, y0, x1, y1 = ar['tor']
         arena = {c for c in arena if not (x0 <= c[0] <= x1 and y0 <= c[1] <= y1)}
-    mauer_zeichnen(L, arena, SANDSTEIN, 24)
+    # Arena ragt ueber die noerdliche Sandwand: in ihrer Grundflaeche wird die Sandwand ausgespart
+    arena_flaeche = set()
+    if 'e' in ar:
+        cx, cy, rx, ry = ar['e']
+        arena_flaeche = {(x, y) for y in range(rows) for x in range(cols)
+                         if ((x - cx) / rx) ** 2 + ((y - cy) / ry) ** 2 <= 1}
     sw = lay.get('sandwand', {})
     if 'oben' in sw:
+        vorher = np.array(img)
         sandwand_oben(L, sw['oben'], random.Random(4))
         ob = sw['oben']
         fu = (ob['kappe'][1] + 1) * T + ob['front']        # Fusslinie der Front
         if sw.get('rechts'):                               # Innenecke oben rechts: Sand in der Ecke
             sx = sw['rechts'][0]['x'][0] * T + 5 + seiten_kante(fu)
             eck_verwehung(L, sx, fu + 1, 30, 14, links=True)
+        nachher = np.array(img)
+        for (x, y) in arena_flaeche:
+            if y * T < fu + 4:
+                nachher[y * T:(y + 1) * T, x * T:(x + 1) * T] = vorher[y * T:(y + 1) * T, x * T:(x + 1) * T]
+        img.paste(Image.fromarray(nachher))
+        L = ind.Leinwand(img)
+    mauer_zeichnen(L, arena, SANDSTEIN, 24)
     for seg in sw.get('rechts', []):
         sandwand_seite(L, seg, random.Random(6))
     ga = lay.get('garten')
@@ -612,6 +626,10 @@ def bauen(frame=None, speichern=True):
         boden[max(0, y * T - 14):(y + 1) * T, x * T:(x + 1) * T] = 0
     if 'oben' in sw:
         boden[:(sw['oben']['kappe'][1] + 1) * T + sw['oben']['front'], :] = 0
+        for (x, y) in arena_flaeche:
+            boden[y * T:(y + 1) * T, x * T:(x + 1) * T] = 1
+        for (x, y) in arena:
+            boden[max(0, y * T - 24):(y + 1) * T, x * T:(x + 1) * T] = 0
     for seg in sw.get('rechts', []):                       # exakt entlang der welligen Innenkante
         for yy in range(seg['y'][0] * T, (seg['y'][1] + 1) * T):
             boden[yy, seg['x'][0] * T + 5 + seiten_kante(yy) - 1:] = 0
@@ -673,40 +691,96 @@ def objekte_zeichnen(img, objs, cache, boden, frame):
                 L.neutral(X, Y + d, f, waerme=4)
             if rk.random() < 0.25:                         # angewehter Sand vor der Kante
                 L.p(X + rk.randint(-1, 1), Y + rk.randint(0, 2), ind.rgb('#e8cf98') if rk.random() < 0.5 else ind.rgb('#d8b87e'))
-    sm = np.zeros(boden.shape, np.float32)
-    ellip = Image.new('L', img.size, 0)
-    ed = ImageDraw.Draw(ellip)
+    # Schatten (Licht oben links): Kontaktschatten genau unter der Auflageflaeche, Schlagschatten der
+    # Silhouette nach rechts unten, der mit der Hoehe heller wird. Zwei klare Stufen statt Verlauf.
+    kern = np.zeros(boden.shape, np.float32)
+    wurf = np.zeros(boden.shape, np.float32)
     for o in objs:
         sp = cache[o['datei']]
         a = np.array(sp.getchannel('A')) >= 200
         zeilen = np.nonzero(a.any(axis=1))[0]
         if len(zeilen) < 4 or o.get('ohne_schatten'):
             continue
-        fuss_y = o['y'] + zeilen.max()
-        cx = o['x'] + sp.width // 2
-        w = int(sp.width * 0.6)
-        ed.ellipse((cx - w // 2, fuss_y - 3, cx + w // 2, fuss_y + 3), fill=90)
+        zu = zeilen.max()
+        fuss_y = o['y'] + zu
+        fuss = np.nonzero(a[max(0, zu - 3):zu + 1].any(axis=0))[0]       # Auflageflaeche
+        if len(fuss):
+            fx0, fx1 = o['x'] + fuss.min(), o['x'] + fuss.max()
+            for yy in range(fuss_y - 1, fuss_y + 3):
+                if 0 <= yy < kern.shape[0]:
+                    ein = (yy - fuss_y + 1) if yy > fuss_y else 0
+                    kern[yy, max(0, fx0 - 1 + ein):max(0, min(kern.shape[1], fx1 + 3 - ein))] = 1
+        hoehe = max(1, zu - zeilen.min())
         for zi in zeilen:
-            k = zeilen.max() - zi
-            ty = int(fuss_y - 2 + k * 0.42 * 0.55)
-            dx = int(3 + k * 0.42)
-            if 0 <= ty < sm.shape[0]:
+            k = zu - zi
+            ty = int(fuss_y + k * 0.24)
+            dx = int(1 + k * 0.45)
+            if 0 <= ty < wurf.shape[0]:
                 xs = np.nonzero(a[zi])[0] + o['x'] + dx
-                xs = xs[(xs >= 0) & (xs < sm.shape[1])]
-                sm[ty, xs] = 1.0
-    sch = np.maximum(np.array(ellip.filter(ImageFilter.GaussianBlur(1.2))),
-                     np.array(Image.fromarray((sm * 72).astype(np.uint8)).filter(ImageFilter.MaxFilter(3))))
-    sch = (sch.astype(np.float32) * boden).astype(np.uint8)
-    dunkel = Image.new('RGBA', img.size, (70, 40, 30, 255))
+                xs = xs[(xs >= 0) & (xs < wurf.shape[1])]
+                wurf[ty, xs] = np.maximum(wurf[ty, xs], 1.0 - 0.35 * k / hoehe)
+    wurf = np.array(Image.fromarray((wurf * 255).astype(np.uint8)).filter(ImageFilter.MaxFilter(3))) / 255.0
+    sch = np.where(kern > 0, 92, np.where(wurf > 0.82, 64, np.where(wurf > 0, 50, 0))).astype(np.float32)
+    sch = (sch * boden).astype(np.uint8)
+    dunkel = Image.new('RGBA', img.size, (64, 36, 30, 255))
     dunkel.putalpha(Image.fromarray(sch))
     img.alpha_composite(dunkel)
     for o in objs:
         sp = cache[o['datei']]
-        if frame is not None and o.get('anim') == 'wehen':
-            sp = kb.wehen(sp, kb.wind(frame, o['x']))
+        if frame is not None:
+            anim = o.get('anim')
+            if o.get('proz'):
+                sp = kp.PROZ[o['proz']](frame)
+            elif anim == 'wehen':
+                sp = kb.wehen(sp, kb.wind(frame, o['x']))
+            elif anim == 'flagge':
+                sp = flagge(sp, frame, o['x'])
+            elif anim == 'kaktus':
+                sp = kaktus(sp, frame, o['x'], o['y'])
         img.alpha_composite(sp, (o['x'], o['y']))
         if o['datei'].endswith('_sand.png') and not o.get('ohne_fuss'):
             sandverwehung(img, o, cache[o['datei']])
+
+
+def flagge(sp, frame, x0):
+    """Fahnentuch weht: Zeilen unterhalb der Aufhaengung wandern sinusfoermig seitlich, unten staerker."""
+    a = np.array(sp.getchannel('A')) > 0
+    breit = np.nonzero(a.sum(axis=1) >= 8)[0]
+    if len(breit) < 6:
+        return sp
+    oben, unten = breit.min() + 3, breit.max()
+    out = sp.copy()
+    out.paste((0, 0, 0, 0), (0, oben, sp.width, unten + 1))
+    for y in range(oben, unten + 1):
+        t = (y - oben) / max(1, unten - oben)
+        d = round(2.2 * t * math.sin(2 * math.pi * frame / N_FRAMES * 2 - y / 4.0 + x0 / 50.0))
+        out.alpha_composite(sp.crop((0, y, sp.width, y + 1)), (d, y)) if d >= 0 else \
+            out.alpha_composite(sp.crop((-d, y, sp.width, y + 1)), (0, y))
+    return out
+
+
+def kaktus(sp, frame, x0, y0):
+    """Kaktus: sehr leichtes Wiegen (1 px an der Spitze, selten), Blueten pulsieren rosa auf,
+    ab und zu glitzert ein Tautropfen auf einem Dorn."""
+    ph = 2 * math.pi * (frame / N_FRAMES - x0 / 300.0)
+    v = 1 if math.sin(ph) > 0.55 else 0
+    out = kb.wehen(sp, v) if v else sp.copy()
+    a = np.array(out).astype(np.int16)
+    r, g, b = a[..., 0], a[..., 1], a[..., 2]
+    bl = (a[..., 3] > 0) & (r > g + 50) & (b > g + 15)
+    if bl.any():
+        f = 0.18 * (0.5 + 0.5 * math.sin(ph * 2 + y0 / 40.0))
+        a[bl, :3] = np.clip(a[bl, :3] + (255 - a[bl, :3]) * f, 0, 255)
+    h = (x0 * 7 + y0 * 3) % N_FRAMES
+    if frame % N_FRAMES in (h, (h + 1) % N_FRAMES):
+        ys, xs = np.nonzero(a[..., 3] > 200)
+        if len(ys):
+            i = (x0 + y0) % len(ys)
+            oben = ys < ys.min() + max(3, (ys.max() - ys.min()) // 2)
+            if oben.any():
+                k = np.nonzero(oben)[0][(x0 * 3 + y0) % oben.sum()]
+                a[ys[k], xs[k], :3] = (255, 255, 240)
+    return Image.fromarray(a.astype(np.uint8))
 
 
 import basis_kacheln as _bk
@@ -847,6 +921,14 @@ def animieren(img, objs, frame):
     gd = ImageDraw.Draw(glut)
     for i, o in enumerate(objs):
         anim = o.get('anim')
+        if o.get('proz') in ('box_monitor', 'buehne'):            # Bass: Druckwellen vor den Membranen
+            ph = frame % 4
+            if ph < 3:
+                for (bx, by) in kp.PROZ[o['proz']](0).info.get('bass', [])[:2]:
+                    r = (9 if o['proz'] == 'box_monitor' else 15) + ph * 6
+                    al = (120, 75, 35)[ph]
+                    cx, cy = o['x'] + bx, o['y'] + by
+                    gd.ellipse((cx - r, cy - r * 0.8, cx + r, cy + r * 0.8), outline=(255, 210, 245, al))
         if anim not in ('feuer', 'leuchten', 'blinken', 'musik'):
             continue
         sp = Image.open(os.path.join(OBJ, o['datei']))
