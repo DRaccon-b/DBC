@@ -51,7 +51,7 @@ FEST = [
     ('A', 1150, 1150, {}), ('A', 1610, 756, {}), ('A', 1568, 843, {}), ('A', 1073, 1053, {}), ('A', 1080, 1273, {}),
     ('A', 1153, 1273, {}),
     # Canyon: Riesenschaedel, Brustkorb, Felsen, Knochen
-    ('gross/02', 800, 522, {}), ('gross/03', 1000, 842, {}), ('mittel/15', 1022, 556, {}), ('mittel/08', 930, 700, {}),
+    ('gross/02', 800, 522, {}), ('gross/03', 1000, 842, {}), ('mittel/15', 1022, 556, {}), ('mittel/08', 850, 800, {}),
     ('mittel/09', 830, 300, {}), ('klein/04', 905, 600, {}), ('klein/34', 860, 180, {}), ('klein/04', 950, 960, {}),
     # Lager
     ('mittel/01', 76, 604, {}), ('mittel/02', 232, 588, {}), ('mittel/02', 248, 780, {'spiegeln': True}),
@@ -185,6 +185,16 @@ def main():
                     gesperrt[y * T:(y + 1) * T, x * T:(x + 1) * T] = True
     for (x0, x1, y0, y1, _r) in lay.get('treppen', []):
         gesperrt[y0 * T:(y1 + 3) * T, x0 * T:(x1 + 1) * T] = True
+    # unter der hohen Bruecke nichts (Objekte auf dem Canyonboden wuerden sonst ueber ihr liegen)
+    br = lay.get('bruecke')
+    unter_bruecke = np.zeros((MH, MW), bool)
+    if br:
+        unter_bruecke[(br[0] - 2) * T:(br[1] + 4) * T, :] = True
+        for y in range(rows):
+            for x in range(cols):
+                if hoehe[y][x] != 0:
+                    unter_bruecke[y * T:(y + 1) * T, x * T:(x + 1) * T] = False
+        gesperrt |= unter_bruecke
     belegt = np.zeros((MH, MW), bool)
     objekte = []
 
@@ -247,7 +257,7 @@ def main():
                 continue
             wald.append((rw.choice(RAND), x, y))
     for (name, x, y) in wald:
-        setze(name, x, y, True, {'anim': 'baum', 'spiegeln': rw.random() < 0.5})
+        setze(name, x, y, True, {'spiegeln': rw.random() < 0.5})
     for i, (name, px, py, opt) in enumerate(FEST):
         if name == 'A':
             name = AKAZIE[i % len(AKAZIE)]
@@ -255,6 +265,9 @@ def main():
         elif name in ('baeume/02',):
             opt = dict(opt, anim='baum')
         px, py = frei_von_wand(name, px, py)
+        if unter_bruecke[min(MH - 1, py), min(MW - 1, px)]:
+            print('  unter der Bruecke, weggelassen:', name, (px, py))
+            continue
         setze(name, px, py, True, opt)
     for art, anzahl in STREU_ANZAHL.items():
         namen, gew = list(STREU[art]), list(STREU[art].values())

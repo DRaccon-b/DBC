@@ -134,17 +134,24 @@ def main():
     lager = ((xx - 9.5) / 9.5) ** 2 + ((yy - 43) / 6.5) ** 2 <= 1
     neu[lager & (neu != 'h')] = 'w'
     # Furten im Canyon (heller Boden), Bruecke liegt auf der Hauptstrasse
-    for (y0, y1) in ((20, 23), (58, 61), (40, 42)):
+    for (y0, y1) in ((20, 23), (58, 61)):
         m = can & (yy >= y0) & (yy <= y1)
         neu[m & (neu != 'x')] = 'f'
+    neu[can & (yy >= 40) & (yy <= 42) & (neu != 'x')] = 'c'
     # Hecke nur am Rand (Vorlage) - zusammenhaengend machen
     h = maske_schliessen(neu == 'h', 1)
     h &= (xx <= 6) | (yy >= 79) | ((xx >= 105) & (yy >= 34) & (yy <= 47))
     neu[(neu == 'h') & ~h] = 's'
     neu[h] = 'h'
-    # rechter Rand: Zugang zum Plateaustreifen (Hecke weg, Weg, Treppe von Norden)
-    neu[43:48, 105:110] = 'd'
-    neu[43:48, 107:110] = 'w'
+    # Wege enden vor der Canyonwand (Hoehenlogik); nur die Hauptstrasse fuehrt ueber die Bruecke
+    for y in range(R):
+        if 40 <= y <= 42:
+            continue
+        for x in range(C):
+            if neu[y, x] == 'w' and not can[y, x] and can[y, max(0, x - 2):x + 3].any():
+                neu[y, x] = 's'
+    # Weg unter der Treppe des rechten Plateaustreifens
+    neu[60:63, 107:110] = 'w'
     # Teer/Asche: Asche-Ring um das Teerbecken
     t = maske_schliessen(neu == 't', 1) & (xx >= 72)
     neu[(neu == 't') & ~t] = 'a'
@@ -185,13 +192,8 @@ def main():
         'rampen': [],
         'furten': [[20, 23], [58, 61]],
         'bruecke': [40, 42],
-        'treppen': [[22, 24, 17, 23, 's'], [76, 79, 22, 29, 's'], [92, 95, 24, 31, 's'], [107, 109, 47, 49, 'n']],
+        'treppen': [[22, 24, 17, 23, 's'], [76, 79, 22, 29, 's'], [92, 95, 24, 31, 's'], [107, 109, 55, 61, 's']],
     }
-    for (y0, y1) in ((20, 23), (40, 42), (58, 61)):
-        for y in range(y0, y1 + 1):
-            xs = np.nonzero(can[y])[0]
-            extras['rampen'].append([int(xs.min()) - 1, y, int(xs.min()), y])
-            extras['rampen'].append([int(xs.max()), y, int(xs.max()) + 1, y])
     lay = {'groesse': [C, R], 'klassen': [''.join(r) for r in neu],
            'hoehe': [''.join(str(v) for v in r) for r in hoehe]}
     lay.update(extras)

@@ -603,7 +603,7 @@ def bauen(frame=None, speichern=True):
                       for xc in range(px0, px1) if m2[y0 * T:(y1 + 1) * T, xc].any()), default=None)
             if ye is None:
                 continue
-            frei_pl[ye - 14:ye + 50, px0 - 2:px1 + 2] = True
+            frei_pl[ye - 14:ye + 46, px0 - 6:px1 + 6] = True
         else:
             ye = min((min(np.nonzero(m2[y0 * T:(y1 + 1) * T, xc])[0]) + y0 * T
                       for xc in range(px0, px1) if m2[y0 * T:(y1 + 1) * T, xc].any()), default=None)
@@ -619,8 +619,17 @@ def bauen(frame=None, speichern=True):
     if speichern and frame is None:
         np.save(os.path.join(KARTE, 'waende.npy'), np.packbits(waende))
     wegtex = textur(cls, 'w', cols, rows)
+    img_t = Image.fromarray(a).convert("RGBA")
+    alt_S = bauwerke.S
+    bauwerke.S = [H(c) + (255,) for c in FELS['sandstein']]
     for (px0, px1, ye, r) in treppen_info:
-        treppe(a, px0, px1, ye, r, 40, 'sandstein', wegtex)
+        for y in range(ye - 12, ye + 1):                          # Wegstueck oben auf dem Plateau
+            for x in range(px0 + 4, px1 - 4):
+                if (y - (ye - 12)) + min(x - px0 - 4, px1 - 5 - x) > 2:
+                    img_t.putpixel((x, y), tuple(wegtex[y, x]) + (255,))
+        bauwerke.zeichne_treppe(img_t, px0 - 6, px1 + 6, ye + 2, ye + 40 + 2)
+    bauwerke.S = alt_S
+    a = np.array(img_t.convert('RGB'))
     # Rampen-Oberflaechen: Furtboden, der zur Tiefe hin leicht dunkler wird
     rm = weich(rampen_roh, 3.0, 0.3, 27) & ~fluss
     tx = textur(cls, 'f', cols, rows)
@@ -636,10 +645,34 @@ def bauen(frame=None, speichern=True):
     img = Image.fromarray(a).convert('RGBA')
     if br:
         y0, y1 = br
-        xs = np.nonzero(fluss[(y0 * T + y1 * T) // 2])[0]
+        ym = (y0 * T + (y1 + 1) * T) // 2
+        xs = np.nonzero(can[ym])[0]
         if len(xs):
-            bauwerke.zeichne_bruecke(img, int(xs.min()) - 8, int(xs.max()) + 9, y0 * T + 2, (y1 + 1) * T - 2,
-                                     frame=frame or 0)
+            bx0, bx1 = int(xs.min()) - 12, int(xs.max()) + 13
+            by0, by1 = y0 * T + 2, (y1 + 1) * T - 2
+            px_ = img.load()
+            # Stuetzen bis auf den Canyonboden und Schlagschatten der hohen Bruecke auf dem Grund
+            for x in range(bx0 + 10, bx1 - 10):
+                for d in range(14, 24):
+                    yy = by1 + d
+                    if can[yy, x]:
+                        r_, g_, b_, _ = px_[x, yy]
+                        px_[x, yy] = (int(r_ * 0.7), int(g_ * 0.7), int(b_ * 0.72), 255)
+            HOLZ = [H(c) for c in ('#3a2416', '#5a3a22', '#7a5232', '#94683e', '#b0844e', '#c89c62')]
+            for sx in range(bx0 + 30, bx1 - 20, 44):
+                for x in range(sx, sx + 5):
+                    for yy in range(by1, by1 + 22):
+                        k = x - sx
+                        c = HOLZ[0] if k in (0, 4) else HOLZ[3] if k == 1 else HOLZ[2]
+                        px_[x, yy] = c + (255,)
+                    for yy in range(by1 + 22, by1 + 24):
+                        r_, g_, b_, _ = px_[x, yy]
+                        px_[x, yy] = (int(r_ * 0.7), int(g_ * 0.7), int(b_ * 0.7), 255)
+            seg = 80
+            x = bx0
+            while x < bx1:
+                bauwerke.zeichne_bruecke(img, x, min(bx1, x + seg), by0, by1, frame=frame or 0, seed=x)
+                x += seg
     a = np.array(img.convert('RGB'))
     for tp in lay.get('teleporter', []):
         teleporter_zeichnen(a, tp['x'], tp['y'], tp['b'], tp['h'], frame)
