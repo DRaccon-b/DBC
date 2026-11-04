@@ -1,0 +1,798 @@
+{
+ "usage": null,
+ "tileset": {
+  "total_tiles": 16,
+  "tile_size": {
+   "width": 16,
+   "height": 16
+  },
+  "terrain_types": [
+   "lower",
+   "upper"
+  ],
+  "tiles": [
+   {
+    "id": "13",
+    "name": "wang_13",
+    "image": {
+     "type": "base64",
+     "base64": "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAzUlEQVR4nGNk+Mrwn4ECwMTUQIHuYEYGpn+XGSlxAAMj3AvBUIPW/ifTAHwAj+GMFAci+xxGBhAm2wAGKAAZIn2AlWQDGN/tqIJ7QfJmO5gWUWFheOrwmygDWNjNPOCc5yDNe9sYnj/5zSDNwIrdELQAZUGWAxn2BsoGGYTVELSYYEK3AOYiVhlGhjd3/hD0AhOI+HlqB4Yhz9UrGX4/+c/A8IQIA5DDARmAXMG+AymKQf6HhQEUMH59dwhvQuJttwMb9DMFuzKMMCAVAADBWD2L30MOFwAAAABJRU5ErkJggg==",
+     "format": "png"
+    },
+    "corners": {
+     "NW": "upper",
+     "NE": "upper",
+     "SW": "lower",
+     "SE": "upper"
+    },
+    "pattern_4x4": {
+     "row_0": [
+      255,
+      255,
+      255,
+      255
+     ],
+     "row_1": [
+      255,
+      1,
+      1,
+      255
+     ],
+     "row_2": [
+      255,
+      0,
+      1,
+      255
+     ],
+     "row_3": [
+      255,
+      255,
+      255,
+      255
+     ]
+    },
+    "original_position": {
+     "row": 4,
+     "col": 2
+    },
+    "description": null,
+    "connections": null
+   },
+   {
+    "id": "10",
+    "name": "wang_10",
+    "image": {
+     "type": "base64",
+     "base64": "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA4klEQVR4nGNk+MrwnwELYJ/DCKbfxR5kwAeYYIphGmDgpwfE3J+ndhA24Od2CEYBMnj1oRrAsPY/BAcjXAFy0e8n/xnYzTzwuoQRWxhIH2BleH7gN8PnykNEugANPHX4zUAsYMIq+oSBqABENSCYEREGMgwMkg6sDCJ72/AaApJjxJUOQAAWtc/VK+GBSZwX0NICPsCCV1aGgUFEhQXslTdQIXSXsBCy4c2dPwysMowEvBCMFIBIAJQeQIkJFAa4AM5AZGqA0CDb8WUonIH4LwVTM7YoxWmA9B1WDE2gcEA3BACMd1GG5/xsSwAAAABJRU5ErkJggg==",
+     "format": "png"
+    },
+    "corners": {
+     "NW": "upper",
+     "NE": "lower",
+     "SW": "upper",
+     "SE": "lower"
+    },
+    "pattern_4x4": {
+     "row_0": [
+      255,
+      255,
+      255,
+      255
+     ],
+     "row_1": [
+      255,
+      1,
+      0,
+      255
+     ],
+     "row_2": [
+      255,
+      1,
+      0,
+      255
+     ],
+     "row_3": [
+      255,
+      255,
+      255,
+      255
+     ]
+    },
+    "original_position": {
+     "row": 2,
+     "col": 6
+    },
+    "description": null,
+    "connections": null
+   },
+   {
+    "id": "4",
+    "name": "wang_4",
+    "image": {
+     "type": "base64",
+     "base64": "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAwElEQVR4nGP8+u7QfwYcgLfdjuFfAwNewARj/Dy1A0UCxmefw4hbdzAjwgB2Mw8UORD/jXMVw+8n/xkYnuBxwU80m9ENASuaw8AgfYAVU8Ha/wxM6DajA5ArwPSdP1hdwoRXN5JXwOwdjBguYULXgM1LIEOeq1cyiKiwgPlgQ6CuYcQXjbgMF9nbBhdjIUYTLJxg9BskeUZSXIANMJGiGFv4MFLFBT/xJCaiDMCVmIgxGG8YoBuMzUCSAhFkILohAD13SfAiAcTXAAAAAElFTkSuQmCC",
+     "format": "png"
+    },
+    "corners": {
+     "NW": "lower",
+     "NE": "upper",
+     "SW": "lower",
+     "SE": "lower"
+    },
+    "pattern_4x4": {
+     "row_0": [
+      255,
+      255,
+      255,
+      255
+     ],
+     "row_1": [
+      255,
+      0,
+      1,
+      255
+     ],
+     "row_2": [
+      255,
+      0,
+      0,
+      255
+     ],
+     "row_3": [
+      255,
+      255,
+      255,
+      255
+     ]
+    },
+    "original_position": {
+     "row": 4,
+     "col": 1
+    },
+    "description": null,
+    "connections": null
+   },
+   {
+    "id": "12",
+    "name": "wang_12",
+    "image": {
+     "type": "base64",
+     "base64": "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA2UlEQVR4nGNk+Mrwn4ECwMTUQIHuYEYGpn+XGSlxAAMj3AvBjAwMa/9TYACZgAWZI32AleH5gd9gNqsMI8PPFMJms4A0oQNQuPxm+M/APoeR4afHfwYGGUyNIDkQYGQqhXjhjXMVhiLJm+1gWkSFheGpA8RlDE8YGNh3MDL8fgJxHeO7HVVgFruZB05n8rbbwdkgr72LPcjw89QOiAFf3x0i6FGQYpG9bQwwlyJbxkJIM8x1b5DYyICRGBfgA0wwJ1JkAK4AJMZgsAG4ALrB2AzEawA2A9ENAQDv3UhCoZXpswAAAABJRU5ErkJggg==",
+     "format": "png"
+    },
+    "corners": {
+     "NW": "upper",
+     "NE": "upper",
+     "SW": "lower",
+     "SE": "lower"
+    },
+    "pattern_4x4": {
+     "row_0": [
+      255,
+      255,
+      255,
+      255
+     ],
+     "row_1": [
+      255,
+      1,
+      1,
+      255
+     ],
+     "row_2": [
+      255,
+      0,
+      0,
+      255
+     ],
+     "row_3": [
+      255,
+      255,
+      255,
+      255
+     ]
+    },
+    "original_position": {
+     "row": 3,
+     "col": 5
+    },
+    "description": null,
+    "connections": null
+   },
+   {
+    "id": "6",
+    "name": "wang_6",
+    "image": {
+     "type": "base64",
+     "base64": "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABMUlEQVR4nJVTPW/CMBB9ZxF5YkEsiIxRO3WtxEKRWOjM3K175/YHlLnq2o25OwtS2qUS/wDECGKJ2BiiRHJ1tpyGxE7bJyVxfL537z5Mp+OnQgM68xv97UYt7EdZzS7sIl0tnATsyHA5Y0owVgDyenJms4TJNkd67xcpfJF19OVzocCJdwVRjfxfCJ+BiXujQKfQjwMvQav8U06HCTaDJdrxEAlyIAIQ/py1pMRtZMfeeoZspxCEpA3Hu4/icHs21PvpxBSzvw1wiE1XCGsoPBDkLYoDckGaLBk/Fd25+Bpj/5pDXJl9C5IvpPSQRNmZRPlWV1JN0Sg4wd3knVFyuHyszcifuoDQTCHXpmlWhH5PyTwOcC2a8GsKjHId3AocsJ3gGli4UvES2DtQLiCvqyTf9Tx0uwRuv3EAAAAASUVORK5CYII=",
+     "format": "png"
+    },
+    "corners": {
+     "NW": "lower",
+     "NE": "upper",
+     "SW": "upper",
+     "SE": "lower"
+    },
+    "pattern_4x4": {
+     "row_0": [
+      255,
+      255,
+      255,
+      255
+     ],
+     "row_1": [
+      255,
+      0,
+      1,
+      255
+     ],
+     "row_2": [
+      255,
+      1,
+      0,
+      255
+     ],
+     "row_3": [
+      255,
+      255,
+      255,
+      255
+     ]
+    },
+    "original_position": {
+     "row": 5,
+     "col": 2
+    },
+    "description": null,
+    "connections": null
+   },
+   {
+    "id": "8",
+    "name": "wang_8",
+    "image": {
+     "type": "base64",
+     "base64": "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAwklEQVR4nGNk+MrwnwEHYJ/DyPAu9iADPsDE1IBbUkSFBa9msAH/LjPitP35gd8MP0/twG8Aw1qoD4IxDWKVYWRgN/MAs3EZxIgRBk8YGNh3MDL8fvKf4Y1zFdwAXIARbgBUIww8V68kqBkEWKQPsIIZb+78gWsEAWI0gw14fuA3xADnKpI0wsKF8d2Oqv/4NIIU4TOU8eu7QzgTEjGAiRTF2KKSkSou+EkgtRE0AF8AEmUALoBuMDYDSQpEkIHohgAAa3lJW1O29w0AAAAASUVORK5CYII=",
+     "format": "png"
+    },
+    "corners": {
+     "NW": "upper",
+     "NE": "lower",
+     "SW": "lower",
+     "SE": "lower"
+    },
+    "pattern_4x4": {
+     "row_0": [
+      255,
+      255,
+      255,
+      255
+     ],
+     "row_1": [
+      255,
+      1,
+      0,
+      255
+     ],
+     "row_2": [
+      255,
+      0,
+      0,
+      255
+     ],
+     "row_3": [
+      255,
+      255,
+      255,
+      255
+     ]
+    },
+    "original_position": {
+     "row": 3,
+     "col": 6
+    },
+    "description": null,
+    "connections": null
+   },
+   {
+    "id": "63705079-b7d3-4198-8e9f-683375ce86e1",
+    "name": "wang_0",
+    "image": {
+     "type": "base64",
+     "base64": "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAYElEQVR4nGP8+u7QfwYKABOM8fPUDrIMYKTYBT+JtBmXOkaqhQHVDPhJYmAyUuIFkGVMxCjCBdjNPOgciD+xuIaRKi74SWYyhhsACgxsgBiD8YYBusHYDCQpEEEGohsCAGJJM1AnHtN/AAAAAElFTkSuQmCC",
+     "format": "png"
+    },
+    "corners": {
+     "NW": "lower",
+     "NE": "lower",
+     "SW": "lower",
+     "SE": "lower"
+    },
+    "pattern_4x4": {
+     "row_0": [
+      255,
+      255,
+      255,
+      255
+     ],
+     "row_1": [
+      255,
+      0,
+      0,
+      255
+     ],
+     "row_2": [
+      255,
+      0,
+      0,
+      255
+     ],
+     "row_3": [
+      255,
+      255,
+      255,
+      255
+     ]
+    },
+    "original_position": {
+     "row": 6,
+     "col": 3
+    },
+    "description": null,
+    "connections": null
+   },
+   {
+    "id": "1",
+    "name": "wang_1",
+    "image": {
+     "type": "base64",
+     "base64": "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAnklEQVR4nGP8+u7QfwYKABOM8fPUDrIMYKTYBT+JtBmXOkaqhQHVDPhJYmAykusFmEUsxChkN/PA0Ch5s510F/w8tYNB9283w/MDvxkkHViJcwGyZpit/1IYGJ7K/CbegJ9QzT89/jMwyGCJhZ8EQh5mM7pmuAHIgYTNdjANsh0EghkxDcCnWWRvG4OICgvC9rWoYU5USnyqAgkwbAAA3oBMAQ26IlgAAAAASUVORK5CYII=",
+     "format": "png"
+    },
+    "corners": {
+     "NW": "lower",
+     "NE": "lower",
+     "SW": "lower",
+     "SE": "upper"
+    },
+    "pattern_4x4": {
+     "row_0": [
+      255,
+      255,
+      255,
+      255
+     ],
+     "row_1": [
+      255,
+      0,
+      0,
+      255
+     ],
+     "row_2": [
+      255,
+      0,
+      1,
+      255
+     ],
+     "row_3": [
+      255,
+      255,
+      255,
+      255
+     ]
+    },
+    "original_position": {
+     "row": 1,
+     "col": 1
+    },
+    "description": null,
+    "connections": null
+   },
+   {
+    "id": "11",
+    "name": "wang_11",
+    "image": {
+     "type": "base64",
+     "base64": "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAy0lEQVR4nGNk+MrwnwELYJ/DCKbfxR5kwAeYmBqwS/z0gJj789QO/Ab8uwyxCQPIMBAFGOFeCIYatBbJR08YGJjmMDC8ca5iYDfzIGAADiB9gJXh+YHfYENAAN0gJgYC4KnDbwZJB1YGkb1t5LkADJ5AKJB3QIZdZi6Fu4QFIoUjDNACFKT5zZ0/DCJP2hjeQL3DiNcFOAJW+g7EoN9P/hPpBWwAahAj2QYQGwvEGRDMiPAviYA0L2AJVPwGgOKfQJ5ApANctqHZiA4ASItHp5KZCq8AAAAASUVORK5CYII=",
+     "format": "png"
+    },
+    "corners": {
+     "NW": "upper",
+     "NE": "lower",
+     "SW": "upper",
+     "SE": "upper"
+    },
+    "pattern_4x4": {
+     "row_0": [
+      255,
+      255,
+      255,
+      255
+     ],
+     "row_1": [
+      255,
+      1,
+      0,
+      255
+     ],
+     "row_2": [
+      255,
+      1,
+      1,
+      255
+     ],
+     "row_3": [
+      255,
+      255,
+      255,
+      255
+     ]
+    },
+    "original_position": {
+     "row": 2,
+     "col": 3
+    },
+    "description": null,
+    "connections": null
+   },
+   {
+    "id": "3",
+    "name": "wang_3",
+    "image": {
+     "type": "base64",
+     "base64": "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA5ElEQVR4nGP8+u7QfwYKABOM8fPUDrIMYKTYBT+JtBmXOkaqhQG5YcGErllkbxsDd5Q9mE2MYSwwRbp/uxmeH/jN8C+FgUH6DguD5M12ht9P/jO8YWBgYDfzwNAI08fIVMoADgNJB1aGpw6/ESqegAxiZXhz5w/Du9iDYA0wg0BskAVgA6S3soINQNGMBKQPsIJd9sa5Ci4G0iyiwsLwVOU3AyPDV4gL8IInDAxMcyDMf5cZGRgm/mdgkIHwGYkygGAsBDNCMDLAJoYFkOYCmIFrEVrwG/CEAe5XXICFoG1oNqIDAEhBYWIOQ/MsAAAAAElFTkSuQmCC",
+     "format": "png"
+    },
+    "corners": {
+     "NW": "lower",
+     "NE": "lower",
+     "SW": "upper",
+     "SE": "upper"
+    },
+    "pattern_4x4": {
+     "row_0": [
+      255,
+      255,
+      255,
+      255
+     ],
+     "row_1": [
+      255,
+      0,
+      0,
+      255
+     ],
+     "row_2": [
+      255,
+      1,
+      1,
+      255
+     ],
+     "row_3": [
+      255,
+      255,
+      255,
+      255
+     ]
+    },
+    "original_position": {
+     "row": 1,
+     "col": 2
+    },
+    "description": null,
+    "connections": null
+   },
+   {
+    "id": "2",
+    "name": "wang_2",
+    "image": {
+     "type": "base64",
+     "base64": "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAwUlEQVR4nGP8+u7QfwYKABOM8fPUDrIMYKTYBT+JtBmXOkaqhQHVDPhJYmAyoWtgN/MgWjNIL5PI3ja8tuKTA1nGKL2V9f/zA7/BAp8rDzGQCpieOvxm+NfAwMAqw8ggtNieZNcwMnxlgETjEwYG6TusDG/u/GF4rl5JdFgwgclgRgYGGQYGkGt+evxnkLzZTnRsQAxYi5SWZBgYRFRYGAgFLqoBaOCpym9wmIBcggywGYg9JUJd8fsJaioHhQu6IQDK01UdUSlsqwAAAABJRU5ErkJggg==",
+     "format": "png"
+    },
+    "corners": {
+     "NW": "lower",
+     "NE": "lower",
+     "SW": "upper",
+     "SE": "lower"
+    },
+    "pattern_4x4": {
+     "row_0": [
+      255,
+      255,
+      255,
+      255
+     ],
+     "row_1": [
+      255,
+      0,
+      0,
+      255
+     ],
+     "row_2": [
+      255,
+      1,
+      0,
+      255
+     ],
+     "row_3": [
+      255,
+      255,
+      255,
+      255
+     ]
+    },
+    "original_position": {
+     "row": 1,
+     "col": 3
+    },
+    "description": null,
+    "connections": null
+   },
+   {
+    "id": "5",
+    "name": "wang_5",
+    "image": {
+     "type": "base64",
+     "base64": "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA7ElEQVR4nGP8+u7QfwYCQGixPYOICgvDU4ffGHJMMMbPUzswJEFivO12ODUzBDMiDGA388CQF9nbxsAqw8jwVAWLZpgLfmKxGcUVKf8ZGGRwSK79z8CEzWYQADmdGMCES+Jz5SEwLX2AlTQDfiJ5CeT/N3f+MDA8IcEAdiQvvYs9yPD7yX8G9h2MxBuADt44V4ENYWpgwApYGIgAIK+AwE+G/+C4B4O1/wm74OepHWAvgVwAByCNUM0EDWBHCg+QIdhihAlmEz5XgICkAyvuvIArMYE0g5IzCMA1w8KAGC/AwD/kGEDyP9EG4AMAOiJTDZxKkDEAAAAASUVORK5CYII=",
+     "format": "png"
+    },
+    "corners": {
+     "NW": "lower",
+     "NE": "upper",
+     "SW": "lower",
+     "SE": "upper"
+    },
+    "pattern_4x4": {
+     "row_0": [
+      255,
+      255,
+      255,
+      255
+     ],
+     "row_1": [
+      255,
+      0,
+      1,
+      255
+     ],
+     "row_2": [
+      255,
+      0,
+      1,
+      255
+     ],
+     "row_3": [
+      255,
+      255,
+      255,
+      255
+     ]
+    },
+    "original_position": {
+     "row": 2,
+     "col": 1
+    },
+    "description": null,
+    "connections": null
+   },
+   {
+    "id": "1cde670d-8a2a-44d8-bedf-84601bb84138",
+    "name": "wang_15",
+    "image": {
+     "type": "base64",
+     "base64": "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAaUlEQVR4nGNk+Mrwn4ECwMTUQIHuYEYGpn+XGSlxAAMj3AvBUIPW/ifTAHwAj+GMFAciA4WACcWZMKeSABjxeoGIgGUkOQzQDGUcJIEYTF4AggBpXsASqPgNeMLAwCCD30wWgrah2YgOAC7HIqYW2M+cAAAAAElFTkSuQmCC",
+     "format": "png"
+    },
+    "corners": {
+     "NW": "upper",
+     "NE": "upper",
+     "SW": "upper",
+     "SE": "upper"
+    },
+    "pattern_4x4": {
+     "row_0": [
+      255,
+      255,
+      255,
+      255
+     ],
+     "row_1": [
+      255,
+      1,
+      1,
+      255
+     ],
+     "row_2": [
+      255,
+      1,
+      1,
+      255
+     ],
+     "row_3": [
+      255,
+      255,
+      255,
+      255
+     ]
+    },
+    "original_position": {
+     "row": 2,
+     "col": 2
+    },
+    "description": null,
+    "connections": null
+   },
+   {
+    "id": "14",
+    "name": "wang_14",
+    "image": {
+     "type": "base64",
+     "base64": "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAt0lEQVR4nGNk+Mrwn4ECwMTUQIHuYEYGpn+XGSlxAAMj3AvBUIPW/ifTAHwAj+GMlAYiC9k6nzAwsO9gRDKA2DB4wsAgfYeV4fmB3wy/Gf4T7wX2OYjYeq5eSZoX2OcwMvx+ArHnjXMVRMzMA0wzEnIBzGZkW2GaQYAJr18PsIJtxqUZ4YVgLAEow8DwfM5vnBphAKcXQLa/ufMHbDsuzXi9ANKMDn6e2kG8ASIqEN8h2w5ioxsCAJWVQ57d8bCzAAAAAElFTkSuQmCC",
+     "format": "png"
+    },
+    "corners": {
+     "NW": "upper",
+     "NE": "upper",
+     "SW": "upper",
+     "SE": "lower"
+    },
+    "pattern_4x4": {
+     "row_0": [
+      255,
+      255,
+      255,
+      255
+     ],
+     "row_1": [
+      255,
+      1,
+      1,
+      255
+     ],
+     "row_2": [
+      255,
+      1,
+      0,
+      255
+     ],
+     "row_3": [
+      255,
+      255,
+      255,
+      255
+     ]
+    },
+    "original_position": {
+     "row": 3,
+     "col": 4
+    },
+    "description": null,
+    "connections": null
+   },
+   {
+    "id": "9",
+    "name": "wang_9",
+    "image": {
+     "type": "base64",
+     "base64": "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABDUlEQVR4nGNk+MrwnwELYGqA0J8rD2GTRqhjgipEB/9SGBhYZRjxagYb8O8yfkU/T+0AY5wGMKyF+iCYEYJhQAZCiextw2sBC5wFMwgNEPIGEy4J9jkIjexmHrgNYAcpfIJb87vYg3C22nFnjPBgZCqFRCMo1EFA+g4rw5s7fxieq1fCbQdpkrzZzvD7CcSbkg6sDJeZS8FyjO92VP1HDyjkuIdpFlFhYXiq8htuAdwFX98dgocesvNgNoMMB9kI0gyLGbBLD7BiGoAMUDQ7/GYgORZAgKiUyIDmdBgAeQEUkM8P/MaIJQwD8MUzyBWggIMD5NSKzwsgV4EMBkUdiivQUizulIjkKgxXIAEA+WxtDkOGURcAAAAASUVORK5CYII=",
+     "format": "png"
+    },
+    "corners": {
+     "NW": "upper",
+     "NE": "lower",
+     "SW": "lower",
+     "SE": "upper"
+    },
+    "pattern_4x4": {
+     "row_0": [
+      255,
+      255,
+      255,
+      255
+     ],
+     "row_1": [
+      255,
+      1,
+      0,
+      255
+     ],
+     "row_2": [
+      255,
+      0,
+      1,
+      255
+     ],
+     "row_3": [
+      255,
+      255,
+      255,
+      255
+     ]
+    },
+    "original_position": {
+     "row": 4,
+     "col": 4
+    },
+    "description": null,
+    "connections": null
+   },
+   {
+    "id": "7",
+    "name": "wang_7",
+    "image": {
+     "type": "base64",
+     "base64": "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA5UlEQVR4nGP8+u7QfwY8QGixPYOICgvDU4ffWOWZYIyfp3ZgVfBcvZLhzZ0/DNIHWDElgxkRBrCbeWDIgwyVvNkOZuN0wU8cNiOL//TA4cu1/xmYsNkMAyDbQf5nkMGphIEFl60ie9sYWGUYGZ6qYHc6DDCixwJvux3Dv8uMDNK5uEMexYB3O6r+g7yhdtyZ4fmB3wySDqwQW/E4G8UAplKG/zAbQQDF1mBGCL0Wd1JhlN7KCpYl2lY0QxkZvjLgTYmEABMlmhEGBDMinEYiIM0LWAIVvwFPGAgGLEpKxGobmo3oAABAF1Mo2q7ctwAAAABJRU5ErkJggg==",
+     "format": "png"
+    },
+    "corners": {
+     "NW": "lower",
+     "NE": "upper",
+     "SW": "upper",
+     "SE": "upper"
+    },
+    "pattern_4x4": {
+     "row_0": [
+      255,
+      255,
+      255,
+      255
+     ],
+     "row_1": [
+      255,
+      0,
+      1,
+      255
+     ],
+     "row_2": [
+      255,
+      1,
+      1,
+      255
+     ],
+     "row_3": [
+      255,
+      255,
+      255,
+      255
+     ]
+    },
+    "original_position": {
+     "row": 2,
+     "col": 4
+    },
+    "description": null,
+    "connections": null
+   }
+  ]
+ },
+ "metadata": {
+  "edge_types": [
+   "lower",
+   "upper"
+  ],
+  "terrain_prompts": {
+   "lower": "clean light beige sand path, smooth flat color with very few tiny pebbles, crisp pixel art, no noise",
+   "upper": "clean bright green grass, smooth flat color areas with only a few small scattered grass tufts, crisp pixel art, no noise",
+   "transition": "neat darker green grass border with a soft rounded edge"
+  },
+  "terrain_ids": {
+   "lower": "63705079-b7d3-4198-8e9f-683375ce86e1",
+   "upper": "1cde670d-8a2a-44d8-bedf-84601bb84138"
+  },
+  "transition_size": 0.0,
+  "view": "high top-down",
+  "generation_parameters": {
+   "mode": "pro",
+   "spread_x": 0.5,
+   "raggedness": 0.0,
+   "slope_size": 0.0,
+   "tile_strength": 1.0,
+   "tileset_adherence": 100.0,
+   "text_guidance_scale": 8.0,
+   "requested_transition_size": 0.0,
+   "tileset_adherence_freedom": 500
+  },
+  "created_at": "2026-11-04T12:26:56.706691+00:00"
+ },
+ "id": "8804c71b-6cf5-4316-a2a4-7ef90b26c50d"
+}
