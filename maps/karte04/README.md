@@ -1,6 +1,6 @@
 # Karte 04 – Gear Savanna
 
-110 × 85 Kacheln à 16 px (1760 × 1280 px … 1360 px), Vorlage: `assets/vorlagen/karte04_vorlage.png`.
+110 × 85 Kacheln à 16 px (1760 × 1360 px), Vorlage: `assets/vorlagen/karte04_vorlage.png`.
 
 ```
 python3 tools/karte04_layout.py     # Raster aus der Vorlage -> layout.json
