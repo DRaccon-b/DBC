@@ -90,7 +90,7 @@ def dunkeln(a, m, f):
     a[m] = (a[m].astype(np.float32) * f).astype(np.uint8)
 
 
-def hoehenkanten(a, hoch, fels, front, seite, lippe_pal, frei, seed, treppen=()):
+def hoehenkanten(a, hoch, fels, front, seite, lippe_pal, frei, seed, treppen=(), min_breite=10):
     """a: RGB-Bild. hoch: Pixelmaske der hoeheren Ebene. Waende werden in die tiefere Flaeche gezeichnet:
     Front (Sueden) front px hoch, Seitenwaende seite px breit (Westwand im Licht, Ostwand im Schatten),
     Lippe mit Ueberhang, Kontaktschatten. frei: Pixelmaske ohne Kanten (Rampen). treppen: Liste (x0, x1) in px."""
@@ -126,10 +126,15 @@ def hoehenkanten(a, hoch, fels, front, seite, lippe_pal, frei, seed, treppen=())
     trm = np.zeros((Hh, W), bool)
     for (t0, t1, ya, yb) in treppen:
         trm[ya:yb, t0:t1] = True
+    a_vor = a.copy()
+    frontm = np.zeros_like(hoch)
+    front_kanten = []
     for y, x in zip(*np.nonzero(unten)):
         if frei[min(Hh - 1, y + 1), x]:
             continue
         tr = trm[y]
+        if not tr[x]:
+            front_kanten.append((y, x))
         for d in range(front):
             yy = y + 1 + d
             if yy >= Hh or hoch[yy, x]:
@@ -142,6 +147,7 @@ def hoehenkanten(a, hoch, fels, front, seite, lippe_pal, frei, seed, treppen=())
                 a[yy, x] = c
             else:
                 a[yy, x] = tex[d, x]
+                frontm[yy, x] = True
             wand[yy, x] = True
         else:
             for k, f in ((0, 0.62), (1, 0.75), (2, 0.86), (3, 0.94)):
@@ -160,6 +166,30 @@ def hoehenkanten(a, hoch, fels, front, seite, lippe_pal, frei, seed, treppen=())
         yy = y + 1 + tief
         if yy < Hh and wand[yy, x]:
             a[yy, x] = (a[yy, x] * 0.72).astype(np.uint8)
+    # Stummel und schraege Streifen entfernen: Kantenzuege (benachbarte Spalten, Hoehensprung <= 2 px)
+    # werden einzeln bewertet - steiler als ~30 Grad oder schmaler als 10 px -> nur Graskante
+    kanten = {}
+    for y, x in front_kanten:
+        kanten.setdefault(x, []).append(y)
+    benutzt = set()
+    for x0 in sorted(kanten):
+        for y0 in kanten[x0]:
+            if (y0, x0) in benutzt:
+                continue
+            zug = [(y0, x0)]; benutzt.add((y0, x0))
+            y, x = y0, x0
+            while True:
+                nxt = [yy for yy in kanten.get(x + 1, []) if abs(yy - y) <= 2 and (yy, x + 1) not in benutzt]
+                if not nxt:
+                    break
+                y = min(nxt, key=lambda v: abs(v - y)); x += 1
+                zug.append((y, x)); benutzt.add((y, x))
+            breite_ = len(zug)
+            steig = abs(zug[-1][0] - zug[0][0]) / max(1, breite_)
+            if breite_ < min_breite or steig > 0.58:
+                for (yk, xk) in zug:
+                    a[yk + 1:yk + front + 6, xk] = a_vor[yk + 1:yk + front + 6, xk]
+                    wand[yk + 1:yk + front + 1, xk] = False
     # Seitliche Frontenden sauber abschliessen (dunkle Kante + Lichtkante)
     fm = wand & ~hoch
     for y, x in zip(*np.nonzero(fm)):
@@ -584,7 +614,7 @@ def bauen(frame=None, speichern=True):
     a[m2] = tx[m2]
     # --- Wasser
     xm = zell_maske(cls, 'x', cols, rows)
-    wm = (weich(xm, 6, 0.12, 24, 0.4) & can) | (weich(xm, 11, 0.35, 26, 0.5) & m1)
+    wm = (weich(xm, 9, 0.1, 24, 0.33) & can) | (weich(xm, 11, 0.35, 26, 0.5) & m1)
     wm = splitter_weg(wm, 120)
     fluss = wm & can
     wasser_zeichnen(a, wm, frame, fluss)
@@ -613,8 +643,8 @@ def bauen(frame=None, speichern=True):
         treppen_info.append((px0, px1, ye, art, front))
     treppen = []
     # --- Waende: Canyon (Erde), Teerbecken (Schiefer), Plateaus (Sandstein)
-    waende = hoehenkanten(a, m1 | teer, 'erde', 26, 14, LIPPE['s'], rampen, 11)
-    waende |= hoehenkanten(a, m1 | can, 'schiefer', 20, 8, LIPPE['a'], rampen | frei_t, 12)
+    waende = hoehenkanten(a, m1 | teer, 'erde', 26, 14, LIPPE['s'], rampen, 11, min_breite=22)
+    waende |= hoehenkanten(a, m1 | can, 'schiefer', 20, 8, LIPPE['a'], rampen | frei_t, 12, min_breite=16)
     waende |= hoehenkanten(a, m2, 'sandstein', 40, 8, LIPPE['g'], frei_pl, 13, treppen)
     if speichern and frame is None:
         np.save(os.path.join(KARTE, 'waende.npy'), np.packbits(waende))

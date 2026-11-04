@@ -30,32 +30,32 @@ RAND = ['rand/00', 'rand/01', 'rand/02', 'rand/03', 'rand/03', 'rand/04', 'rand/
 # (sprite, x_px, y_px [Fussmitte in der Vorlage], Optionen)
 FEST = [
     # Plateaus mit Zahnraedern
-    ('gross/00', 543, 104, {}), ('gross/01', 417, 252, {'spiegeln': True}), ('gross/01', 1232, 96, {}),
+    ('gross/00', 543, 104, {}), ('gross/01', 424, 270, {'spiegeln': True}), ('gross/01', 1232, 96, {}),
     ('gross/00', 1520, 218, {'spiegeln': True}), ('gross/01', 1567, 364, {}),
     ('mittel/06', 1312, 380, {}), ('mittel/07', 1288, 190, {'anim': 'glitzern'}), ('klein/05', 1192, 317, {'anim': 'glitzern'}),
     ('klein/05', 1177, 380, {'anim': 'glitzern'}), ('mittel/07', 1575, 286, {'anim': 'glitzern'}),
-    ('mittel/00', 1168, 204, {}), ('mittel/00', 440, 60, {}), ('mittel/15', 639, 46, {}), ('mittel/00', 319, 78, {}),
+    ('mittel/00', 1172, 226, {}), ('mittel/00', 440, 60, {}), ('mittel/15', 639, 46, {}), ('mittel/00', 319, 78, {}),
     ('mittel/00', 700, 302, {}),
     # Termitenhuegel
-    ('baeume/01', 168, 72, {}), ('mittel/11', 360, 128, {}), ('mittel/11', 280, 254, {}), ('baeume/01', 265, 368, {}),
+    ('baeume/01', 168, 72, {}), ('mittel/11', 360, 100, {}), ('mittel/11', 270, 282, {}), ('baeume/01', 265, 368, {}),
     ('mittel/11', 372, 440, {}), ('mittel/11', 267, 494, {}), ('baeume/01', 368, 752, {}), ('mittel/11', 392, 766, {}),
     ('baeume/01', 464, 1008, {}), ('mittel/11', 488, 1020, {}), ('mittel/11', 568, 1248, {}), ('baeume/01', 1640, 64, {}),
-    ('mittel/11', 1468, 120, {}), ('baeume/01', 720, 560, {}),
+    ('mittel/11', 1462, 154, {}), ('baeume/01', 720, 560, {}),
     # Akazien
     ('A', 193, 330, {}), ('A', 225, 393, {}), ('A', 145, 408, {}), ('A', 128, 459, {}), ('A', 497, 380, {}),
-    ('A', 462, 478, {}), ('A', 303, 557, {}), ('A', 337, 237, {}), ('A', 400, 620, {}), ('A', 432, 776, {}),
+    ('A', 462, 478, {}), ('A', 303, 557, {}), ('A', 316, 256, {}), ('A', 400, 620, {}), ('A', 432, 776, {}),
     ('A', 528, 812, {}), ('A', 640, 828, {}), ('A', 448, 856, {}), ('A', 48, 844, {}), ('A', 128, 924, {}),
     ('A', 224, 924, {}), ('A', 224, 1020, {}), ('A', 496, 1116, {}), ('A', 592, 1116, {}), ('A', 672, 1100, {}),
     ('A', 512, 1180, {}), ('A', 432, 1212, {}), ('A', 304, 1228, {}), ('A', 224, 1244, {}), ('A', 696, 744, {}),
-    ('A', 780, 66, {}), ('A', 1090, 706, {}), ('A', 1150, 726, {}), ('A', 1075, 1040, {}), ('A', 1060, 1150, {}),
+    ('A', 780, 66, {}), ('A', 1112, 748, {}), ('A', 1150, 726, {}), ('A', 1075, 1040, {}), ('A', 1060, 1150, {}),
     ('A', 1150, 1150, {}), ('A', 1610, 756, {}), ('A', 1568, 843, {}), ('A', 1073, 1053, {}), ('A', 1080, 1273, {}),
     ('A', 1153, 1273, {}),
     # Canyon: Riesenschaedel, Brustkorb, Felsen, Knochen
-    ('gross/02', 800, 522, {}), ('gross/03', 1000, 842, {}), ('mittel/15', 1022, 556, {}), ('mittel/08', 890, 772, {}),
+    ('gross/02', 800, 522, {}), ('gross/03', 1000, 842, {}), ('mittel/15', 1022, 556, {}), ('mittel/08', 944, 760, {}),
     ('mittel/09', 830, 300, {}), ('klein/04', 905, 600, {}), ('klein/34', 860, 180, {}), ('klein/04', 950, 960, {}),
     # Lager
     ('zelte/00', 112, 612, {}), ('zelte2/00', 236, 596, {}), ('zelte2/00', 252, 790, {'spiegeln': True}),
-    ('mittel/04', 166, 734, {'anim': 'feuer'}), ('mittel/12', 300, 744, {}), ('mittel/05', 318, 708, {}),
+    ('mittel/04', 166, 734, {'anim': 'feuer'}), ('mittel/12', 330, 730, {}), ('mittel/05', 344, 694, {}),
     ('mittel/13', 186, 684, {}), ('mittel/03', 280, 682, {}), ('baeume/07', 112, 700, {}), ('klein/25', 196, 770, {}),
     ('klein/31', 120, 660, {'anim': 'leuchten'}), ('klein/28', 26, 720, {}),
     # Teerfeld: Monument, tote Baeume, Kristalle, dunkle Felsen
@@ -128,6 +128,9 @@ def einbetten(sp, boden):
                 continue
             r, g, b = a[y, x, :3] / 255.0
             hh, ss, vv = colorsys.rgb_to_hsv(r, g, b)
+            if vv > 0.86 and ss < 0.18:                            # weisse Splitter im Gras
+                a[y, x, :3] = ramp[3]
+                continue
             if ss > 0.28 and 0.10 <= hh <= 0.42 and vv > 0.3:     # Gras (gelb bis gruen)
                 i = min(4, max(0, int((vv - 0.3) / 0.7 * 5)))
                 a[y, x, :3] = (erde if boden == 'c' else ramp)[i]
@@ -195,6 +198,11 @@ def main():
                 if hoehe[y][x] != 0:
                     unter_bruecke[y * T:(y + 1) * T, x * T:(x + 1) * T] = False
         gesperrt |= unter_bruecke
+    wasser = np.zeros((MH, MW), bool)
+    for y in range(rows):
+        for x in range(cols):
+            if cls[y][x] == 'x':
+                wasser[max(0, y * T - 6):(y + 1) * T + 6, max(0, x * T - 6):(x + 1) * T + 6] = True
     belegt = np.zeros((MH, MW), bool)
     objekte = []
 
@@ -213,7 +221,8 @@ def main():
         a = a[ys0 - y:ys1 - y, xs0 - x:xs1 - x]
         if not fest:
             fuss = np.zeros_like(a); fuss[-6:] = a[-6:]
-            if ((belegt[ys0:ys1, xs0:xs1] & a).any() or (gesperrt[ys0:ys1, xs0:xs1] & fuss).any()):
+            if ((belegt[ys0:ys1, xs0:xs1] & a).any() or (gesperrt[ys0:ys1, xs0:xs1] & fuss).any()
+                    or (wasser[ys0:ys1, xs0:xs1] & a).any()):
                 return None
         belegt[ys0:ys1, xs0:xs1] |= a
         o = {'datei': vname + '.png', 'basis': name, 'x': x, 'y': y, 'fuss': im.height}
