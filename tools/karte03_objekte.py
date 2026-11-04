@@ -29,7 +29,7 @@ FEST = [
     ('mittel/01', 12.5, 29, {'anim': 'wehen'}), ('mittel/00', 26.5, 30, {'anim': 'wehen'}),
     ('klein/05', 22, 16, {}), ('klein/05', 26, 26, {}), ('klein/04', 11, 26, {}),
     # Bus und Haltestelle
-    ('gross/06', 44, 31, {}), ('klein/18', 48, 31, {'anim': 'flagge'}), ('mittel2/00', 49.8, 31, {}),
+    ('gross/06', 44, 31, {}), ('klein/18', 48, 31, {'anim': 'flagge'}), ('mittel2/00', 49.8, 31, {'anim': 'schall'}),
     # Ruinen-Arena
     ('abgeleitet/arena_tor', 54.5, 28, {'ueber_mauer': True, 'roh': True}),
     ('mittel/03', 74, 8, {}), ('mittel/03', 86, 13, {}), ('mittel/03', 74, 19, {}), ('mittel/03', 78, 25, {}),
@@ -38,12 +38,12 @@ FEST = [
     # Garten im Nordosten
     ('gross/10', 95.2, 13, {}), ('klein/31', 92.2, 21, {}), ('klein/31', 98.8, 21, {}),
     # Lautsprechersaeulen an den Wegen
-    ('mittel2/00', 66.5, 26, {}), ('mittel2/00', 92.5, 26, {}), ('mittel2/00', 52.3, 40, {}), ('mittel2/00', 25, 56, {}),
-    ('mittel2/00', 40.5, 63, {}),
+    ('mittel2/00', 66.5, 26, {'anim': 'schall'}), ('mittel2/00', 92.5, 26, {'anim': 'schall'}), ('mittel2/00', 52.3, 40, {'anim': 'schall'}), ('mittel2/00', 25, 56, {'anim': 'schall'}),
+    ('mittel2/00', 40.5, 63, {'anim': 'schall'}),
     # Server-Feld mit Antennen (auf den Kabelknoten)
-    ('gross2/00', 62.5, 41, {'anim': 'blinken'}), ('gross2/01', 66.5, 48, {'anim': 'blinken'}),
-    ('gross2/00', 70.5, 37, {'anim': 'blinken'}), ('gross2/01', 74.5, 45, {'anim': 'blinken'}),
-    ('gross2/00', 78.5, 49, {'anim': 'blinken'}), ('gross2/01', 82.5, 43, {'anim': 'blinken'}),
+    ('gross2/00', 62.5, 41, {'anim': 'blinken', 'dreh': True}), ('gross2/01', 66.5, 48, {'anim': 'blinken', 'dreh': True}),
+    ('gross2/00', 70.5, 37, {'anim': 'blinken', 'dreh': True}), ('gross2/01', 74.5, 45, {'anim': 'blinken', 'dreh': True}),
+    ('gross2/00', 78.5, 49, {'anim': 'blinken', 'dreh': True}), ('gross2/01', 82.5, 43, {'anim': 'blinken', 'dreh': True}),
     ('gross/13', 86, 35, {'anim': 'blinken'}),
     # Pyramide, Grabtor, Buehne
     ('PYRAMIDE', 96, 41, {}), ('mittel/10', 86.5, 41, {}),

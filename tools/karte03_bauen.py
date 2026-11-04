@@ -158,6 +158,38 @@ def sandwand_oben(L, cfg, rnd):
     for x in range(x0, x1):                                  # Schatten der Wand auf den Boden
         for d, f in ((0, 0.72), (1, 0.84), (2, 0.93)):
             L.neutral(x, y1 + fr + d, f)
+    dl = cfg.get('durchlass')                                # Fluss tritt unter der Wand hervor
+    if dl:
+        bx0, bx1 = dl[0] * T + 6, (dl[1] + 1) * T + 4
+        bm, bw = (bx0 + bx1) / 2, (bx1 - bx0) / 2
+        unten = y1 + fr
+        def kurve(x, extra=0):
+            dx = (x - bm) / (bw + extra)
+            if abs(dx) > 1:
+                return None
+            return unten - (fr - 6 + extra) * math.sqrt(1 - dx * dx)
+        for x in range(bx0 - 4, bx1 + 4):
+            ka, ki = kurve(x, 3), kurve(x)
+            if ka is None:
+                continue
+            for y in range(int(ka), unten):
+                if ki is not None and y >= ki:
+                    tief = (y - ki) / max(1, unten - ki)
+                    c = ind.rgb('#16202c') if tief < 0.45 else ind.rgb('#1f3a5c')
+                    if tief >= 0.45 and (x + 3 * ((y // 2) % 3)) % 9 == 0:
+                        c = ind.rgb('#3a6aa0')
+                    L.p(x, y, c)
+                else:                                             # Bogensteine (Licht oben links)
+                    c = SANDSTEIN[5] if x < bm - bw * 0.3 else SANDSTEIN[4] if x < bm + bw * 0.3 else SANDSTEIN[2]
+                    if int(math.degrees(math.atan2(unten - y, x - bm))) % 22 == 0:
+                        c = SANDSTEIN[1]
+                    L.p(x, y, c)
+        for x in range(bx0 - 1, bx1 + 1):                                 # Gischt am Austritt
+            if (x * 3) % 7 < 4:
+                L.p(x, unten - 1, ind.rgb('#cfe8ff'))
+            if (x * 5) % 11 < 3:
+                L.p(x, unten, ind.rgb('#e8f4ff'))
+        return
     for y in range(y0, y1):                                  # Deckenrand am Fluss: Lichtkante
         L.p(x0, y, SANDKAPPE[1]); L.p(x0 + 1, y, SANDKAPPE[4])
     for y in range(y1, y1 + fr):                             # Stirnseite der Front
@@ -271,6 +303,41 @@ def eck_verwehung(L, cx, cy, rx, ry, links=True):
             dd = math.hypot((x - cx) / rx, (y - cy) / ry) + 0.08 * math.sin(x / 3.0 + y / 4.0)
             if dd < 1:
                 _verwehung_pixel(L, x, y, 1 - dd)
+
+
+def arena_uebergang(img, L, arena, ob, arena_flaeche):
+    """Die Arena liegt halb unter der noerdlichen Duene: ueber dem Ring wird die Sanddecke weitergefuehrt
+    (welliger Kamm mit Lichtkante), darunter rieselt ein Sandhang in die Arena und ueber die Mauerkronen.
+    In den Ecken zwischen Sandsteinfront und Ring liegen Sandhaufen."""
+    y1 = (ob['kappe'][1] + 1) * T
+    fu = y1 + ob['front']
+    zellen = [(x, y) for (x, y) in arena_flaeche if y * T < fu + 4]
+    if not zellen:
+        return
+    xa = min(x for x, _ in zellen) * T - 4
+    xb = (max(x for x, _ in zellen) + 1) * T + 4
+    breite = xb - xa
+    for x in range(xa, xb):
+        u = (x - xa) / breite
+        tief = int(10 * math.sin(math.pi * u) ** 0.7)           # Duene haengt in der Mitte etwas tiefer
+        kamm = y1 + tief + int(2 * math.sin(x / 9.0) + 1.5 * math.sin(x / 17.0))
+        for y in range(0, kamm):
+            kk = (y + int(2 * math.sin(x / 11.0))) % 9
+            c = SANDKAPPE[2] if kk not in (0, 1) else (SANDKAPPE[1] if kk == 0 else SANDKAPPE[3])
+            if (x * 7 + y * 13) % 41 == 0:
+                c = SANDKAPPE[4]
+            L.p(x, y, c)
+        L.p(x, kamm - 1, SANDKAPPE[4]); L.p(x, kamm, SANDKAPPE[3])
+        hang = 9 + int(4 * math.sin(math.pi * u)) + int(2 * math.sin(x / 4.3))
+        for d in range(1, hang):                                 # Sandhang nach Sueden
+            _verwehung_pixel(L, x, kamm + d, 1 - d / hang)
+        for d in range(hang, hang + 2):
+            L.neutral(x, kamm + d, 0.9)
+    zeile = fu // T
+    xs = sorted(x for (x, y) in arena if y == zeile)
+    if xs:
+        eck_verwehung(L, xs[0] * T, fu + 1, 26, 12, links=True)
+        eck_verwehung(L, (xs[-1] + 1) * T, fu + 1, 26, 12, links=False)
 
 
 def pyramide_sprite(breite=240, hoehe=168):
@@ -602,6 +669,9 @@ def bauen(frame=None, speichern=True):
         img.paste(Image.fromarray(nachher))
         L = ind.Leinwand(img)
     mauer_zeichnen(L, arena, SANDSTEIN, 24)
+    if 'oben' in sw and arena_flaeche:
+        arena_uebergang(img, L, arena, sw['oben'], arena_flaeche)
+        L = ind.Leinwand(img)
     for seg in sw.get('rechts', []):
         sandwand_seite(L, seg, random.Random(6))
     ga = lay.get('garten')
@@ -737,9 +807,75 @@ def objekte_zeichnen(img, objs, cache, boden, frame):
                 sp = flagge(sp, frame, o['x'])
             elif anim == 'kaktus':
                 sp = kaktus(sp, frame, o['x'], o['y'])
+            if o.get('dreh'):
+                sp = schuesseln_drehen(sp, frame, o['x'] + o['y'])
         img.alpha_composite(sp, (o['x'], o['y']))
         if o['datei'].endswith('_sand.png') and not o.get('ohne_fuss'):
             sandverwehung(img, o, cache[o['datei']])
+
+
+_SCHUESSELN = {}
+
+
+def _schuesseln(sp):
+    """Satellitenschuesseln im Sprite finden: helle, ungesaettigte Flaechen (>= 14 px) in den oberen
+    zwei Dritteln, um 1 px erweitert (Rand). Ergebnis: Liste von Masken."""
+    key = sp.tobytes()[:4000] + bytes(sp.size)
+    if key in _SCHUESSELN:
+        return _SCHUESSELN[key]
+    from collections import deque
+    a = np.array(sp).astype(np.int16)
+    h, w = a.shape[:2]
+    mx, mn = a[..., :3].max(axis=2), a[..., :3].min(axis=2)
+    hell = (a[..., 3] > 200) & (mx > 150) & (mx - mn < 40)
+    hell[int(h * 0.62):] = False
+    gesehen = np.zeros_like(hell)
+    masken = []
+    for y0 in range(h):
+        for x0 in range(w):
+            if not hell[y0, x0] or gesehen[y0, x0]:
+                continue
+            q = deque([(y0, x0)]); gesehen[y0, x0] = True; pts = []
+            while q:
+                y, x = q.popleft(); pts.append((y, x))
+                for dy, dx in ((1, 0), (-1, 0), (0, 1), (0, -1), (1, 1), (-1, -1), (1, -1), (-1, 1)):
+                    yy, xx = y + dy, x + dx
+                    if 0 <= yy < h and 0 <= xx < w and hell[yy, xx] and not gesehen[yy, xx]:
+                        gesehen[yy, xx] = True; q.append((yy, xx))
+            if len(pts) >= 14:
+                m = np.zeros((h, w), bool)
+                for y, x in pts:
+                    m[y, x] = True
+                m = np.array(Image.fromarray(m.astype(np.uint8) * 255).filter(ImageFilter.MaxFilter(3))) > 0
+                m &= a[..., 3] > 0
+                masken.append(m)
+    _SCHUESSELN[key] = masken
+    return masken
+
+
+def schuesseln_drehen(sp, frame, phase):
+    """Schuesseln schwenken langsam von links nach rechts: Breite folgt cos(Winkel), Mitte wandert mit."""
+    masken = _schuesseln(sp)
+    if not masken:
+        return sp
+    out = sp.copy()
+    arr = np.array(out)
+    for i, m in enumerate(masken):
+        ys, xs = np.nonzero(m)
+        y0, y1, x0, x1 = ys.min(), ys.max() + 1, xs.min(), xs.max() + 1
+        teil = np.array(sp)[y0:y1, x0:x1].copy()
+        teil[~m[y0:y1, x0:x1]] = 0
+        arr[y0:y1, x0:x1][m[y0:y1, x0:x1]] = 0
+        wink = 1.0 * math.sin(2 * math.pi * frame / N_FRAMES + phase / 37.0 + i * 1.3)
+        bw = max(3, int(round((x1 - x0) * (0.55 + 0.45 * math.cos(wink)))))
+        st = Image.fromarray(teil).resize((bw, y1 - y0), Image.NEAREST)
+        if wink < -0.35:
+            st = st.transpose(Image.FLIP_LEFT_RIGHT)
+        cx = (x0 + x1) / 2 + 2 * math.sin(wink)
+        tmp = Image.fromarray(arr)
+        tmp.alpha_composite(st, (int(round(cx - bw / 2)), int(y0)))
+        arr = np.array(tmp)
+    return Image.fromarray(arr)
 
 
 def flagge(sp, frame, x0):
@@ -929,6 +1065,24 @@ def animieren(img, objs, frame):
                     al = (120, 75, 35)[ph]
                     cx, cy = o['x'] + bx, o['y'] + by
                     gd.ellipse((cx - r, cy - r * 0.8, cx + r, cy + r * 0.8), outline=(255, 210, 245, al))
+        if anim == 'schall':                                      # Schallboegen aus beiden Trichtern
+            spr = Image.open(os.path.join(OBJ, o['datei'])).convert('RGBA')
+            al = np.array(spr.getchannel('A')) > 0
+            oben = al[:int(spr.height * 0.35)]
+            spalten = np.nonzero(oben.any(axis=0))[0]
+            if len(spalten):
+                for seite, sx in ((-1, spalten.min()), (1, spalten.max())):
+                    zy = np.nonzero(oben[:, sx])[0].mean()
+                    cx, cy = o['x'] + sx, o['y'] + zy
+                    for k in range(3):
+                        t = ((frame + k * 5 + i * 3) % 15) / 15
+                        r = 4 + t * 16
+                        a_ = int(235 * (1 - t) ** 0.8)
+                        box = (cx - r, cy - r * 0.9, cx + r, cy + r * 0.9)
+                        if seite < 0:
+                            gd.arc(box, 135, 225, fill=(255, 250, 235, a_), width=2 if t < 0.5 else 1)
+                        else:
+                            gd.arc(box, -45, 45, fill=(255, 250, 235, a_), width=2 if t < 0.5 else 1)
         if anim not in ('feuer', 'leuchten', 'blinken', 'musik'):
             continue
         sp = Image.open(os.path.join(OBJ, o['datei']))
