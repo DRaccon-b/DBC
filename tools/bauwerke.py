@@ -419,3 +419,105 @@ def pflanzen_variante(sp, boden):
                 setz(xi, y, c)
             x += rnd.choice((1.5, 2, 2.5))
     return out
+
+
+# ---------------------------------------------------------------- Bodenfuss fuer alle Objekte
+FUSS_ARTEN = {
+    # art: (Halm-Dichte auf Gras, max. Halmhoehe, Sandwall, Kontaktschatten-Staerke, Fuss abdunkeln)
+    'stein': (0.55, 5, True, 120, 2),
+    'busch': (0.45, 4, True, 110, 1),
+    'baum':  (0.5, 4, True, 110, 2),
+    'holz':  (0.5, 4, True, 110, 1),
+    'klein': (0.3, 3, False, 80, 1),
+}
+
+
+def bodenfuss(sp, boden, art):
+    """Objekt-Sprite mit Fuss fuer den Untergrund (4 px breiter, 3 px hoeher, Fuss an derselben Stelle).
+
+    Erkennt die Auflagekante (unterste deckende Pixel je Spalte) und setzt dort: halbtransparenten
+    Kontaktschatten, leicht abgedunkelten Fuss, auf Gras kurze Halme VOR der Unterkante (das Objekt
+    steht im Gras), auf Sand einen kleinen, zum Rand ausduennenden Sandwall plus Koerner.
+    """
+    if art == 'pflanze':
+        return pflanzen_variante(sp, boden)
+    import random
+    from PIL import Image
+    from basis_kacheln import RGB
+    import numpy as np
+    dichte, hmax, wall, schatten_a, dunkel_n = FUSS_ARTEN[art]
+    rnd = random.Random(hash((sp.size, boden, art, sp.tobytes()[:96])) & 0xffff)
+    w, h = sp.size
+    a = np.array(sp.getchannel('A')) >= 200
+    W, H = w + 4, h + 3
+    # Auflagekante: je Spalte die unterste deckende Zeile; Kontakt = innerhalb 3 px der tiefsten
+    unten = {x: int(np.nonzero(a[:, x])[0].max()) for x in range(w) if a[:, x].any()}
+    if not unten:
+        return sp
+    tief = max(unten.values())
+    kontakt = sorted(x + 2 for x, y in unten.items() if y >= tief - 2)
+    k0, k1 = kontakt[0], kontakt[-1]
+    cx, yb = (k0 + k1) / 2, tief + 1                     # yb: Zeile direkt unter dem Fuss (neue Koord.)
+    rx = (k1 - k0) / 2 + 2.5
+
+    out = Image.new('RGBA', (W, H), (0, 0, 0, 0))
+    po = out.load()
+    farbe = (24, 70, 50) if boden == 'gras' else (120, 82, 52)
+    for y in range(yb - 3, min(H, yb + 3)):
+        for x in range(W):
+            d = ((x - cx) / (rx + 1)) ** 2 + ((y - yb + 0.5) / 2.3) ** 2
+            if d <= 1.0:
+                po[x, y] = farbe + (int(schatten_a if d < 0.45 else schatten_a * 0.55),)
+
+    obj = sp.convert('RGBA').copy()
+    pp = obj.load()
+    for x, y in unten.items():                           # Fuss abdunkeln (steckt im Boden)
+        if y >= tief - 2:
+            for k in range(dunkel_n):
+                if y - k >= 0 and pp[x, y - k][3]:
+                    r_, g_, b_, a_ = pp[x, y - k]
+                    f = 0.75 if k == 0 else 0.87
+                    pp[x, y - k] = (int(r_ * f), int(g_ * f), int(b_ * f), a_)
+
+    def setz(x, y, c):
+        if 0 <= x < W and 0 <= y < H:
+            po[x, y] = c + (255,)
+
+    if boden == 'sand' and wall:
+        out.alpha_composite(obj, (2, 0))
+        for x in range(int(cx - rx), int(cx + rx) + 1):  # Sandwall vor der Unterkante
+            rand = abs(x - cx) / rx
+            if rnd.random() < 0.85 - rand * 0.5:
+                setz(x, yb - 1, RGB['s3'] if x < cx else RGB['s2'])
+            if rnd.random() < 0.75 - rand * 0.4:
+                setz(x, yb, RGB['s2'] if x < cx else RGB['s1'])
+        for _ in range(3):
+            setz(int(cx + rnd.uniform(-rx - 2, rx + 2)), yb + rnd.randint(0, 1), RGB[rnd.choice(('s1', 's4'))])
+    elif boden == 'sand':
+        out.alpha_composite(obj, (2, 0))
+        for _ in range(2):
+            setz(int(cx + rnd.uniform(-rx, rx)), yb, RGB['s1'])
+    else:
+        out.alpha_composite(obj, (2, 0))
+        # Grasbueschel (2-3 Halme) vor der Unterkante: unten dunkel, Spitze hell, ragen ueber die
+        # Auflagekante; an den Kontaktspalten dichter, nach aussen kleiner und seltener
+        def halm(xi, hoehe, neigung):
+            for kk in range(hoehe):
+                y = yb + 1 - kk
+                xx = xi + (neigung if kk >= hoehe - 1 and hoehe > 2 else 0)
+                c = RGB['g1'] if kk == 0 else RGB['g4'] if kk == hoehe - 1 else RGB['g2'] if kk == 1 else RGB['g3']
+                setz(xx, y, c)
+        x = k0 - 3.0
+        while x <= k1 + 3:
+            xi = int(x)
+            innen = k0 <= xi <= k1
+            if rnd.random() < (dichte if innen else dichte * 0.45):
+                gross_ = hmax if innen else max(2, hmax - 2)
+                hoehen = [rnd.randint(gross_ - 2, gross_), rnd.randint(max(1, gross_ - 1), gross_ + 1),
+                          rnd.randint(max(1, gross_ - 3), gross_ - 1)]
+                for k, hh in enumerate(hoehen[: rnd.choice((2, 3))]):
+                    halm(xi + k, max(1, hh), (-1, 0, 1)[k])
+                x += rnd.choice((3, 4, 5))
+            else:
+                x += rnd.choice((2, 3))
+    return out

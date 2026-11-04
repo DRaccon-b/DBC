@@ -16,6 +16,8 @@ OBJ = os.path.join(ROOT, 'assets', 'objekte', 'karte01')
 
 def ist_baum(datei):
     n = datei[:-4]
+    if n.startswith('varianten/'):
+        n = n.replace('varianten/', '').rsplit('_', 1)[0].replace('-', '/')
     return n.startswith('baeume/') or n in ('gross/00', 'gross/01', 'gross/02', 'gross/10', 'gross/11')
 
 
@@ -27,7 +29,7 @@ def main():
     cache, fehler = {}, []
     for i, o in enumerate(objs):
         if o['datei'] not in cache:
-            cache[o['datei']] = np.array(Image.open(os.path.join(OBJ, o['datei'])).getchannel('A')) > 0
+            cache[o['datei']] = np.array(Image.open(os.path.join(OBJ, o['datei'])).getchannel('A')) >= 200
         a = cache[o['datei']]
         h, w = a.shape
         x0, y0 = o['x'], o['y']

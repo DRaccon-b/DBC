@@ -38,7 +38,19 @@ AUSWAHL = {
 WEHEN = ('deko/05', 'deko/06', 'deko/07', 'deko/24', 'deko/26', 'deko/61', 'deko/00', 'deko/01', 'deko/02',
          'deko/03', 'deko/04', 'deko/30', 'deko/38', 'deko/33')
 WIPPEN = ('deko/17', 'deko/18', 'deko/19')
-PFLANZEN = ('deko/05', 'deko/06', 'deko/07', 'deko/24', 'deko/26', 'deko/61')   # bekommen Gras-/Sand-Fuss
+PFLANZEN = ('deko/05', 'deko/06', 'deko/07', 'deko/24', 'deko/26', 'deko/61')
+# Bodenfuss je Objektart (tools/bauwerke.bodenfuss): wird je nach Untergrund als Gras- oder Sand-Variante erzeugt
+FUSS_ART = {n: 'pflanze' for n in PFLANZEN}
+FUSS_ART.update({n: 'stein' for n in ('deko/08', 'deko/09', 'deko/10', 'deko/11', 'deko/12', 'deko/13', 'deko/51',
+                                       'gross/09')})
+FUSS_ART.update({n: 'busch' for n in ('baeume/12', 'baeume/13', 'baeume/14', 'deko/25', 'gross/11', 'deko/27',
+                                       'deko/28')})
+FUSS_ART.update({n: 'baum' for n in ['baeume/%02d' % i for i in list(range(12)) + [15]] +
+                 ['gross/00', 'gross/01', 'gross/02', 'gross/10']})
+FUSS_ART.update({n: 'holz' for n in ('deko/15', 'deko/16', 'deko/34', 'gross/03', 'gross/14', 'gross/13')})
+FUSS_ART.update({n: 'klein' for n in ('deko/00', 'deko/01', 'deko/02', 'deko/03', 'deko/04', 'deko/14', 'deko/29',
+                                       'deko/30', 'deko/31', 'deko/33', 'deko/37', 'deko/38', 'deko/20', 'deko/21',
+                                       'deko/58', 'deko/60')})
 BLUMEN = ('deko/00', 'deko/01', 'deko/02', 'deko/03', 'deko/04', 'deko/30', 'deko/38', 'deko/27')
 SCHATTEN = ('dschungel/', 'baeume/', 'gross/00', 'gross/01', 'gross/02', 'gross/07', 'gross/09', 'gross/10', 'gross/11',
             'gross/03', 'deko/09', 'deko/11', 'deko/12', 'deko/13', 'deko/25')
@@ -158,11 +170,12 @@ def main():
         return bool(gras_maske[sl][a].all())
 
     def ist_baum(name):
-        return name.startswith('baeume/') or name in ('gross/00', 'gross/01', 'gross/02', 'gross/10', 'gross/11')
+        n = name.replace('varianten/', '').rsplit('_', 1)[0].replace('-', '/') if name.startswith('varianten/') else name
+        return n.startswith('baeume/') or n in ('gross/00', 'gross/01', 'gross/02', 'gross/10', 'gross/11')
 
     def ausschnitt(name, ax, ay, im):
         if name not in alpha_cache:
-            a = np.array(im.getchannel('A')) > 0
+            a = np.array(im.getchannel('A')) >= 200          # halbtransparente Schatten zaehlen nicht
             if name in WEHEN or name.startswith('varianten/'):   # neigt sich im Wind -> 1 px Spielraum
                 a = a | np.roll(a, 1, axis=1) | np.roll(a, -1, axis=1)
             alpha_cache[name] = a
@@ -188,18 +201,19 @@ def main():
         """Anker (ax, ay) in Pixeln = Mitte unten. Gibt None zurueck, wenn das Objekt ein anderes
         beruehren wuerde (dann wird es nicht gesetzt)."""
         basisname = name
-        if name in PFLANZEN and bild is None:
+        if name in FUSS_ART and bild is None:
             # Gras- oder Sand-Variante je nach Boden unter dem Fuss
             fx, fy = min(max(int(ax), 0), MW - 1), min(max(int(ay) - 1, 0), MH - 1)
             boden_art = 'sand' if sand_maske[fy, fx] else 'gras'
-            name = 'varianten/%s_%s' % (name.split('/')[1], boden_art)
+            name = 'varianten/%s_%s' % (name.replace('/', '-'), boden_art)
             if not os.path.exists(os.path.join(OBJ, name + '.png')):
                 os.makedirs(os.path.join(OBJ, 'varianten'), exist_ok=True)
-                bauwerke_mod.pflanzen_variante(lade(basisname), boden_art).save(os.path.join(OBJ, name + '.png'))
+                bauwerke_mod.bodenfuss(lade(basisname), boden_art, FUSS_ART[basisname]).save(
+                    os.path.join(OBJ, name + '.png'))
             ay += 3                              # Variante ist 3 px hoeher, Fuss bleibt an derselben Stelle
-            if boden_art == 'sand' and untergrund == 'gras':
+            if boden_art == 'sand' and untergrund in ('gras', 'fuss'):
                 return None
-            if boden_art == 'sand':
+            if boden_art == 'sand' and untergrund is not None:
                 untergrund = 'sand'
         im = bild or lade(name)
         if not passt(name, ax, ay, im):
@@ -216,8 +230,9 @@ def main():
             o['datei'] = name + '.png'
         if name.startswith('dschungel/'):
             o['schatten'] = [int(im.width * 1.0), 24]        # breiter Kronenschatten unter dem Riesenbaum
-        elif name.startswith(SCHATTEN):
+        elif basisname.startswith(SCHATTEN):
             o['schatten'] = [int(im.width * 0.7), max(4, im.width // 7)]
+        o['basis'] = basisname                   # urspruengliches Objekt (vor Gras-/Sand-Variante)
         if untergrund:
             o['untergrund'] = untergrund
         if basisname in WEHEN:
@@ -415,7 +430,7 @@ def main():
 
     # --- Schmetterlinge: ueber Wiesenstellen mit Blumen, mit Abstand zueinander
     farben = ['gelb', 'weiss', 'blau', 'rosa']
-    kandidaten = [o for o in objekte if o['datei'][:-4] in BLUMEN]
+    kandidaten = [o for o in objekte if o.get('basis') in BLUMEN]
     rnd.shuffle(kandidaten)
     falter = []
     for o in kandidaten:

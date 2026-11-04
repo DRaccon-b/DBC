@@ -322,7 +322,7 @@ def leuchten(img, frame, objs):
         neu = dunkel + (hell - dunkel) * (0.35 + 0.65 * puls)
         a[m, :3] = neu.astype(np.uint8)
     for o in objs:
-        if o['datei'] != 'gross/14.png':
+        if o['datei'] not in ('gross/14.png', 'varianten/gross-14_sand.png', 'varianten/gross-14_gras.png'):
             continue
         sp = Image.open(os.path.join(OBJ, o['datei']))
         y0, y1, x0, x1 = o['y'], o['y'] + sp.height, o['x'], o['x'] + sp.width

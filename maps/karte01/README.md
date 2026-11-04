@@ -22,6 +22,11 @@ automatisch nach Untergrund gewählt werden: `varianten/NN_gras.png` (kurze Halm
 Fuß) und `varianten/NN_sand.png` (wachsen aus einem kleinen Sandhügel); am Ufer und Strand muss der
 Fuß ganz auf Sand stehen. Beide Varianten haben einen halbtransparenten Kontaktschatten und einen
 leicht abgedunkelten Halmfuß; auf Gras fransen kurze Halme aus, auf Sand dünnt der Hügel zum Rand aus.
+Dasselbe Prinzip gilt für alle Objekte an Land (`tools/bauwerke.py`, `bodenfuss`, Art je Objekt in
+`FUSS_ART` in `tools/objekte_setzen.py`): Steine, Runensteine, Kristalle, Bäume, Büsche, Stümpfe,
+Zelt, Lagerfeuer und kleine Deko bekommen Kontaktschatten, abgedunkelten Fuß und auf Gras kleine
+Grasbüschel vor der Unterkante bzw. auf Sand einen Sandwall. Varianten: `varianten/<gruppe>-<nr>_<gras|sand>.png`.
+Halbtransparente Schatten zählen bei der Überlappungsprüfung nicht mit.
 
 Riesiger Dschungelbaum (`assets/objekte/karte01/dschungel/00.png`, PixelLab-Objekt-Manager, 118×113 px)
 östlich des Weges, mit Kronenschatten und Unterwuchs; kein anderer Baum überlappt ihn.
