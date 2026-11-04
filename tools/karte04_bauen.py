@@ -105,51 +105,22 @@ def hoehenkanten(a, hoch, fels, front, seite, lippe_pal, frei, seed, treppen=())
     rechts = hoch & ~np.roll(hoch, -1, axis=1); rechts[:, -1] = False   # Hochflaeche endet nach Osten
     links = hoch & ~np.roll(hoch, 1, axis=1); links[:, 0] = False       # Hochflaeche endet nach Westen
 
-    def block(y, k, seite_, hell):
-        versatz = 6 if (k // 6) % 2 else 0
-        bh = 12
-        yb = (y + versatz) % bh
-        bid = (y + versatz) // bh * 7 + k // 6
-        if k == seite_ - 1:
-            return F[0]
-        if yb == 0:
-            c = F[5] if hell else F[4]
-        elif yb == bh - 1:
-            c = F[1]
-        elif k % 6 == 5:
-            c = F[2]                                                    # senkrechte Fuge
-        else:
-            c = F[4] if hell else F[3]
-            if (bid * 37 + yb * 3 + k) % 41 == 0:
-                c = F[2]
-        if not hell:
-            c = (c.astype(np.float32) * 0.86).astype(np.uint8)
-        return c
-
-    for kante, richtung, hell in ((rechts, 1, False), (links, -1, True)):
+    # Seitliche Kanten: keine Wand, nur eine gerade Graskante der hohen Flaeche (Lichtkante innen,
+    # dunkle Kontur) und ein kurzer weicher Schatten auf der tiefen Seite
+    for kante, richtung in ((rechts, 1), (links, -1)):
         for y, x in zip(*np.nonzero(kante)):
             if frei[y, x]:
                 continue
-            n = 0
-            for k in range(seite):
-                xx = x + richtung * (1 + k)
-                if not (0 <= xx < W) or hoch[y, xx]:
-                    break
-                n += 1
-            for k in range(n):
-                xx = x + richtung * (1 + k)
-                a[y, xx] = block(y, k if n == seite else k + (seite - n), seite, hell); wand[y, xx] = True
-            if n == seite and not hell:                                 # Schatten der Ostwand
-                for k, f in ((0, 0.72), (1, 0.84), (2, 0.93)):
-                    xx = x + richtung * (1 + seite + k)
-                    if 0 <= xx < W and not hoch[y, xx]:
-                        a[y, xx] = (a[y, xx] * f).astype(np.uint8)
-            # Grasueberhang an der Oberkante (Buckel)
-            u = 1 + int(1 + math.sin(y / 3.1 + x) + 0.8 * math.sin(y / 1.9))
-            for d in range(-1, u):
-                xx = x + richtung * (1 + d) if d >= 0 else x
-                if 0 <= xx < W:
-                    a[y, xx] = Lp[1] if d == u - 1 else Lp[3] if d < 0 else Lp[2]
+            a[y, x] = Lp[0]                                             # Kontur
+            xi = x - richtung
+            if 0 <= xi < W and hoch[y, xi]:
+                a[y, xi] = Lp[4] if richtung < 0 else Lp[1]            # Westkante hell, Ostkante dunkler
+            stufen = ((1, 0.7), (2, 0.82), (3, 0.92)) if richtung > 0 else ((1, 0.82), (2, 0.93))
+            for k, f in stufen:
+                xx = x + richtung * k
+                if 0 <= xx < W and not hoch[y, xx]:
+                    a[y, xx] = (a[y, xx] * f).astype(np.uint8)
+                    wand[y, xx] = True
     # Fronten
     unten = hoch & ~np.roll(hoch, -1, axis=0); unten[-1] = False
     trm = np.zeros((Hh, W), bool)
