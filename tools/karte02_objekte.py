@@ -81,7 +81,7 @@ SCHILDER = [(12, 22), (26, 11), (29, 56), (49, 60), (41, 70), (54, 70), (79, 69)
 LATERNEN = [(16, 34), (24, 34), (32, 34), (40, 34), (49, 34), (56, 34), (18, 41), (26, 41), (34, 41), (45, 41), (7, 41),
             # Hoefe: Containerlager, Fabrikhof, Werkstatt, Tanklager, Reaktorplatz-Rand, unten links
             (12, 11), (27, 21), (30, 25), (46, 27), (57, 25), (36, 51), (58, 51), (28, 61), (59, 66),
-            (61, 12), (88, 12), (17, 67), (9, 57), (65, 59), (86, 63)]
+            (61, 12), (88, 12), (17, 67), (9, 57), (65, 61), (86, 63)]
 # Kleinteile, die verstreut werden (Gruppe mini; Nummern werden nach Sichtung eingetragen)
 STREU = ['mini/00', 'mini/01', 'mini/02', 'mini/03', 'mini/15', 'mini/00', 'mini/01', 'mini/04', 'mini/10',
          'mini/09', 'mini/14', 'mini/08', 'mini/11', 'mini/12', 'mini/55', 'mini/63', 'mini/13', 'mini/17',

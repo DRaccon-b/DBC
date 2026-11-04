@@ -1131,3 +1131,32 @@ def dach_fassade(L, cls, rows, cols, hoehe=28, art='m'):
                         for yy in range(Y, Y + T + (hoehe if not unten else 0)):
                             for d, f in ((1, 0.68), (2, 0.84)):
                                 L.neutral(sx + d, yy, f)
+
+
+
+def mauer_vorne(L, r):
+    """Suedliche Aussenmauer im Vordergrund (nach allen Objekten gezeichnet): die Kappe ragt ueber die
+    Kacheln dahinter (Wand ist hoch), darunter die nach Sueden gewandte Front mit Paneelen."""
+    x0, x1 = r[0] * T, (r[2] + 1) * T
+    yb = r[1] * T                                  # Mauerfuss (innen)
+    kappe0 = yb - 14                               # Kappe ragt 14 px ueber den Boden davor
+    y_end = (r[3] + 1) * T
+    for x in range(x0, x1):
+        for y in range(kappe0, yb + 6):            # Kappe (Draufsicht)
+            k = y - kappe0
+            c = WAND[6] if k == 0 else WAND[5] if k < 14 else WAND[4] if k < 18 else WAND[1]
+            if (x - x0) % 32 == 0 and 0 < k < 18:
+                c = WAND[3]
+            L.p(x, y, c)
+        L.p(x, kappe0 - 1, WAND[1])                # Innenkante
+        for y in range(yb + 6, y_end):             # Front
+            t = (y - yb - 6) / max(1, y_end - yb - 6)
+            c = WAND[4] if t < 0.15 else WAND[3] if t < 0.6 else WAND[2]
+            if (x - x0) % 24 == 0:
+                c = WAND[1]
+            elif (x - x0) % 24 == 1:
+                c = WAND[5] if t < 0.6 else WAND[4]
+            L.p(x, y, c)
+    for x in range(x0, x1):                        # Kontaktschatten an der Innenkante
+        for d, f in ((2, 0.7), (3, 0.85)):
+            L.neutral(x, kappe0 - d, f)

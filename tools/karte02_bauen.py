@@ -169,8 +169,9 @@ def bauen(frame=None, speichern=True):
     # --- Mauern und Gebaeude
     import random
     rnd = random.Random(5)
-    for m in lay.get('mauern', []):
-        ind.mauer(L, m['r'], m['seite'], rnd)
+    for m in sorted(lay.get('mauern', []), key=lambda m: m['seite'] in ('links', 'rechts')):
+        if m['seite'] != 'vorne':
+            ind.mauer(L, m['r'], m['seite'], rnd)
     for g in sorted(lay.get('gebaeude', []), key=lambda g: g['r'][3]):
         ind.gebaeude(L, g, rnd)
     if speichern:
@@ -281,6 +282,11 @@ def bauen(frame=None, speichern=True):
                 sp = Image.open(os.path.join(OBJ, o['datei'].replace('abgeleitet-kran_', 'abgeleitet-kran_f%02d_' % frame))).convert('RGBA')
             img.alpha_composite(sp, (ox, oy))
         kb.laternen_licht(img, [o for o in objs if o.get('anim') == 'laterne'], frame)
+    # Vordergrund: suedliche Aussenmauer ueber Objekten und Schatten
+    L2 = ind.Leinwand(img)
+    for m in lay.get('mauern', []):
+        if m['seite'] == 'vorne':
+            ind.mauer_vorne(L2, m['r'])
         leitungen(img, os.path.join(OBJ, 'leitungen.json'))
     if frame is not None:
         animation(img, objs, frame)
