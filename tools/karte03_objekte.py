@@ -29,32 +29,36 @@ FEST = [
     ('mittel/01', 12.5, 29, {'anim': 'wehen'}), ('mittel/00', 26.5, 30, {'anim': 'wehen'}),
     ('klein/05', 22, 16, {}), ('klein/05', 26, 26, {}), ('klein/04', 11, 26, {}),
     # Bus und Haltestelle
-    ('gross/06', 44, 31, {}), ('klein/18', 48, 31, {}), ('klein/17', 49.5, 31, {}),
+    ('gross/06', 44, 31, {}), ('klein/18', 48, 31, {}), ('mittel2/00', 49.8, 31, {}),
     # Ruinen-Arena
     ('gross/11', 54.5, 27, {}),
     ('mittel/03', 74, 8, {}), ('mittel/03', 86, 13, {}), ('mittel/03', 74, 19, {}), ('mittel/03', 78, 25, {}),
-    ('mittel/04', 59, 15, {}), ('mittel/05', 77, 9, {}), ('mittel/05', 89, 9, {}), ('mittel/05', 62.5, 23, {}),
+    ('mittel/04', 59, 15, {}), ('mittel/05', 77, 9, {}), ('mittel/05', 89, 9, {}), ('mittel/05', 68, 24, {}),
     ('klein/20', 70, 11, {}), ('klein/20', 81, 23, {}), ('klein/21', 66, 13, {}), ('klein/21', 47, 13, {}),
-    ('klein/20', 47, 21, {}),
     # Garten im Nordosten
-    ('gross/10', 99.5, 10, {}), ('klein/31', 97.5, 16, {}), ('klein/31', 104.5, 16, {}), ('klein/12', 101, 12, {}),
-    ('klein/05', 98, 13, {}), ('klein/04', 104, 13, {}),
+    ('gross/10', 93.5, 13, {}), ('klein/31', 92.2, 21, {}), ('klein/31', 98.8, 21, {}), ('klein/12', 95, 15, {}),
+    ('klein/05', 92, 16, {}), ('klein/04', 98, 16, {}),
     # Lautsprechersaeulen an den Wegen
-    ('klein/17', 62.5, 26, {}), ('klein/17', 98.5, 26, {}), ('klein/17', 52.5, 40, {}), ('klein/17', 25, 56, {}),
-    ('klein/17', 40.5, 63, {}),
+    ('mittel2/00', 62.5, 26, {}), ('mittel2/00', 92.5, 26, {}), ('mittel2/00', 52.3, 40, {}), ('mittel2/00', 25, 56, {}),
+    ('mittel2/00', 40.5, 63, {}),
     # Server-Feld mit Antennen (auf den Kabelknoten)
-    ('gross/08', 62.5, 41, {'anim': 'blinken'}), ('gross/09', 66.5, 48, {'anim': 'blinken'}),
-    ('gross/08', 70.5, 37, {'anim': 'blinken'}), ('gross/09', 74.5, 45, {'anim': 'blinken'}),
-    ('gross/08', 78.5, 49, {'anim': 'blinken'}), ('gross/09', 82.5, 43, {'anim': 'blinken'}),
-    ('mittel/12', 80, 34, {'anim': 'leuchten'}), ('gross/13', 86, 35, {'anim': 'blinken'}),
+    ('gross2/00', 62.5, 41, {'anim': 'blinken'}), ('gross2/01', 66.5, 48, {'anim': 'blinken'}),
+    ('gross2/00', 70.5, 37, {'anim': 'blinken'}), ('gross2/01', 74.5, 45, {'anim': 'blinken'}),
+    ('gross2/00', 78.5, 49, {'anim': 'blinken'}), ('gross2/01', 82.5, 43, {'anim': 'blinken'}),
+    ('gross/13', 86, 35, {'anim': 'blinken'}),
     # Pyramide, Grabtor, Buehne
-    ('PYRAMIDE', 101, 41, {}), ('mittel/10', 89.5, 41, {}),
-    ('gross/07', 100.5, 48, {'anim': 'musik'}),
-    ('klein/30', 93, 48, {}), ('klein/30', 107, 48, {}), ('klein/30', 88, 52, {}), ('klein/30', 104.5, 52, {}),
-    ('klein/18', 92, 57, {}), ('klein/18', 104, 56, {}),
+    ('PYRAMIDE', 96, 41, {}), ('mittel/10', 86.5, 41, {}),
+    ('gross2/02', 96, 50, {'anim': 'musik'}),
+    ('mittel2/01', 87.5, 50, {}), ('mittel2/01', 104.5, 50, {}),
+    ('klein/30', 89.5, 55, {}), ('klein/30', 102.5, 55, {}),
+    ('klein/18', 88, 57, {}), ('klein/18', 104, 57, {}),
     # Mitte / Sueden
-    ('mittel/11', 78, 54, {'anim': 'leuchten'}), ('mittel/06', 44.5, 54, {}), ('mittel/12', 86.5, 69, {'anim': 'leuchten'}),
-    ('mittel/07', 37, 44, {}), ('mittel/07', 46.5, 44, {}), ('mittel/07', 26, 75, {}), ('mittel/07', 78, 74, {}),
+    ('mittel/11', 78, 54, {'anim': 'leuchten'}), ('mittel/06', 44.5, 54, {}),
+    ('mittel/07', 37, 44, {}), ('mittel/07', 26, 75, {}), ('mittel/07', 95, 74, {}),
+    # grosse Sandfelsen (statt der Lehmflaechen)
+    ('gross2/03', 44.5, 49, {}), ('mittel2/02', 33, 53, {}), ('mittel2/03', 27, 63, {}), ('gross2/03', 39.5, 70, {}),
+    ('mittel2/02', 48.5, 70, {}), ('gross2/03', 63, 71, {}), ('mittel2/04', 77, 70, {}), ('mittel2/05', 83.5, 73, {}),
+    ('mittel2/11', 57, 72, {}), ('mittel2/15', 19, 72, {}),
     # Zeltlager am Fluss
     ('gross/04', 9, 54, {}), ('gross/05', 20.5, 54, {}), ('gross/04', 20.5, 66, {}),
     ('klein/15', 23.5, 49, {'anim': 'feuer'}), ('klein/15', 6.5, 67, {'anim': 'feuer'}), ('klein/16', 12.5, 56, {'anim': 'feuer'}),
@@ -62,8 +66,35 @@ FEST = [
     ('klein/43', 7.5, 57, {}),
 ]
 ZAUN = [(x, 58) for x in range(55, 87, 3)]
+STREU_BLUETEN = {'blueten/00': 3, 'blueten/01': 3, 'blueten/02': 2, 'blueten/03': 2, 'blueten/04': 1, 'blueten/05': 2,
+                 'mittel2/06': 1, 'mittel2/07': 1, 'mittel2/08': 1, 'mittel2/12': 1}
 STREU = {'klein/00': 3, 'klein/01': 3, 'klein/02': 2, 'klein/03': 2, 'klein/04': 4, 'klein/05': 5, 'klein/06': 1,
          'klein/07': 2, 'klein/08': 3, 'klein/09': 3, 'klein/26': 2, 'klein/27': 2}
+
+
+BLUETEN = ['blueten/00', 'blueten/01', 'blueten/02', 'blueten/03', 'blueten/04', 'blueten/05',
+           'mittel2/06', 'mittel2/07', 'mittel2/08', 'mittel2/09', 'mittel2/12', 'mittel2/13']
+ROSA = [(0x7a, 0x2a, 0x5a), (0xb2, 0x3c, 0x82), (0xe0, 0x60, 0xa8), (0xf5, 0x9a, 0xcb), (0xff, 0xd2, 0xe8)]
+
+
+def rosa_machen(name):
+    """Rote/orange Bluetenpixel eines Kaktus nach Helligkeit auf Rosatoene umfaerben -> rosa/<name>.png"""
+    import colorsys
+    im = Image.open(os.path.join(OBJ, name + '.png')).convert('RGBA')
+    px = im.load()
+    for y in range(im.height):
+        for x in range(im.width):
+            r_, g_, b_, a_ = px[x, y]
+            if not a_:
+                continue
+            h, s_, v = colorsys.rgb_to_hsv(r_ / 255, g_ / 255, b_ / 255)
+            if (h < 0.11 or h > 0.93) and s_ > 0.45 and v > 0.35 and r_ > g_ + 40:
+                i = min(4, int(v * 5.2) - 1)
+                px[x, y] = ROSA[max(0, i)] + (a_,)
+    ziel = os.path.join(OBJ, 'rosa', name.replace('/', '-') + '.png')
+    os.makedirs(os.path.dirname(ziel), exist_ok=True)
+    im.save(ziel)
+    return 'rosa/' + name.replace('/', '-')
 
 
 def lade(name, cache={}):
@@ -88,8 +119,11 @@ def main():
         for x in range(cols):
             if cls[y][x] in 'xwpd':
                 gesperrt[y * T:(y + 1) * T, x * T:(x + 1) * T] = True
+    mauer = np.zeros((MH, MW), bool)
     for (x, y) in tm.get('arena', []) + tm.get('garten', []):
         gesperrt[max(0, y * T - 26):(y + 1) * T + 4, x * T:(x + 1) * T + 4] = True
+    for (x, y) in tm.get('arena', []):
+        mauer[max(0, y * T - 22):(y + 1) * T, x * T:(x + 1) * T] = True
     for (a, c) in lay.get('kabel', []):
         (ax, ay), (bx, by) = a, c
         gesperrt[min(ay, by) * T:(max(ay, by) + 1) * T, min(ax, bx) * T:(max(ax, bx) + 1) * T] = True
@@ -107,7 +141,7 @@ def main():
         basis = pyr if name == 'PYRAMIDE' else name
         gruppe = basis.split('/')[0]
         boden = boden_bei(ax, ay)
-        art = 'pflanze' if basis in PALMEN or basis in ('klein/00', 'klein/01', 'klein/02', 'klein/03', 'klein/04', 'klein/05') else FUSS.get(gruppe, 'stein')
+        art = 'pflanze' if basis in PALMEN or gruppe == 'rosa' or basis in ('klein/00', 'klein/01', 'klein/02', 'klein/03', 'klein/04', 'klein/05') else FUSS.get(gruppe, 'stein')
         vname = 'varianten/%s_%s' % (basis.replace('/', '-'), boden)
         pfad = os.path.join(OBJ, vname + '.png')
         if not os.path.exists(pfad):
@@ -118,6 +152,9 @@ def main():
         a = np.array(im.getchannel('A')) >= 200
         xs0, ys0, xs1, ys1 = max(0, x), max(0, y), min(MW, x + im.width), min(MH, y + im.height)
         a = a[ys0 - y:ys1 - y, xs0 - x:xs1 - x]
+        if fest and (mauer[ys0:ys1, xs0:xs1] & a).any():
+            print('  auf Mauer, uebersprungen:', name, ax // T, ay // T)
+            return None
         if not fest:
             if ((belegt[ys0:ys1, xs0:xs1] | gesperrt[ys0:ys1, xs0:xs1]) & a).any():
                 return None
@@ -134,10 +171,14 @@ def main():
         setze(name, tx * T, ty * T + 15, True, opt)
     for (tx, ty) in ZAUN:
         setze('klein/22', tx * T + 8, ty * T + 12, True)
-    namen, gew = list(STREU), list(STREU.values())
+    rosa = {n: rosa_machen(n) for n in BLUETEN}
+    streu = dict(STREU)
+    for n, w in STREU_BLUETEN.items():
+        streu[rosa[n]] = w
+    namen, gew = list(streu), list(streu.values())
     gesetzt = 0
     for _ in range(9000):
-        if gesetzt >= 105:
+        if gesetzt >= 125:
             break
         cx, cy = rnd.randrange(5, cols - 6), rnd.randrange(4, rows - 4)
         if cls[cy][cx] not in 'sk' or rnd.random() < 0.4:

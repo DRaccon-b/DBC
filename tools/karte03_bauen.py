@@ -109,6 +109,94 @@ def mauer_zeichnen(L, zellen, pal, hoehe, ziegel=True, rnd=None):
             L.p(X + rnd.randint(2, 13), Y - hoehe + rnd.randint(2, 13), pal[2])
 
 
+SANDKAPPE = ind.pal('#d8bc84', '#e6cc96', '#efdaa8', '#f6e6c0', '#fff4dc')
+
+
+def _sandkappe(L, x0, x1, y0, y1, rnd):
+    """Oberseite der Sandwand: heller Sand mit Windrippeln, Kante unten leicht gewellt."""
+    for y in range(y0, y1):
+        for x in range(x0, x1):
+            k = (y - y0 + int(2 * math.sin(x / 11.0))) % 9
+            c = SANDKAPPE[2] if k not in (0, 1) else (SANDKAPPE[1] if k == 0 else SANDKAPPE[3])
+            if (x * 7 + y * 13) % 41 == 0:
+                c = SANDKAPPE[4]
+            L.p(x, y, c)
+
+
+def _sandfront(L, x0, x1, y0, y1, rnd, verweht=6):
+    """Sandsteinfront der Wand (Bloecke im Verband) mit angewehtem Sand am Fuss."""
+    for y in range(y0, y1):
+        for x in range(x0, x1):
+            k = y - y0
+            zeile = k // 6
+            vers = 8 if zeile % 2 else 0
+            c = SANDSTEIN[3] if k < 2 else SANDSTEIN[2]
+            if k % 6 == 5 or (x + vers) % 16 == 15:
+                c = SANDSTEIN[1]
+            elif k % 6 == 0 and k > 0:
+                c = SANDSTEIN[4]
+            if (x * 5 + y * 3) % 37 == 0:
+                c = SANDSTEIN[1]
+            L.p(x, y, c)
+    for x in range(x0, x1):                                  # Lichtkante oben (Kappenrand)
+        L.p(x, y0, SANDKAPPE[4]); L.p(x, y0 + 1, SANDSTEIN[5])
+        hoch = int(verweht + 3 * math.sin(x / 13.0) + 2 * math.sin(x / 5.3))
+        for d in range(max(0, hoch)):                        # Sandverwehung am Fuss
+            yy = y1 - 1 - d
+            L.p(x, yy, SANDKAPPE[1] if d == hoch - 1 else SANDKAPPE[0] if d > hoch - 3 else ind.rgb('#d0b07a'))
+
+
+def sandwand_oben(L, cfg, rnd):
+    x0, x1 = cfg['x'][0] * T, (cfg['x'][1] + 1) * T
+    y0, y1 = cfg['kappe'][0] * T, (cfg['kappe'][1] + 1) * T
+    _sandkappe(L, x0, x1, y0, y1, rnd)
+    _sandfront(L, x0, x1, y1, y1 + cfg['front'], rnd)
+    for x in range(x0, x1):                                  # Schatten der Wand auf den Boden
+        for d, f in ((0, 0.72), (1, 0.84), (2, 0.93)):
+            L.neutral(x, y1 + cfg['front'] + d, f)
+
+
+def sandwand_vorne(L, cfg, rnd):
+    """Suedliche Kartengrenze im Vordergrund: nur die Sanddecke (ohne Front). Sie ragt ueber den Boden
+    davor und deckt Objekte ab, die dahinter stehen; welliger Kamm mit Lichtkante und Kontaktschatten."""
+    x0, x1 = cfg['x'][0] * T, (cfg['x'][1] + 1) * T
+    k0 = cfg['fuss'] * T - 16
+    for x in range(x0, x1):
+        w = int(2 * math.sin(x / 9.0) + 1.5 * math.sin(x / 21.0))
+        for y in range(k0 + w, L.H):
+            kk = (y - k0 + int(2 * math.sin(x / 11.0))) % 9
+            c = SANDKAPPE[2] if kk not in (0, 1) else (SANDKAPPE[1] if kk == 0 else SANDKAPPE[3])
+            if (x * 7 + y * 13) % 41 == 0:
+                c = SANDKAPPE[4]
+            L.p(x, y, c)
+        for d in range(3):
+            L.p(x, k0 + w + d, SANDKAPPE[4] if d == 0 else SANDKAPPE[3])
+        L.neutral(x, k0 + w - 1, 0.78); L.neutral(x, k0 + w - 2, 0.9)
+
+
+def sandwand_seite(L, cfg, rnd):
+    """Seitliche Kartengrenze (rechts): Sanddecke von oben gesehen, Innenkante mit Lip und Schatten,
+    am unteren Ende vor einem Ausgang eine kurze Sandsteinfront."""
+    x0, x1 = cfg['x'][0] * T, (cfg['x'][1] + 1) * T
+    y0, y1 = cfg['y'][0] * T, (cfg['y'][1] + 1) * T
+    front = cfg.get('front_unten', 0)
+    kap_ende = y1 - front
+    for y in range(y0, kap_ende):
+        w = int(2 * math.sin(y / 8.0) + 1.5 * math.sin(y / 19.0))
+        xi = x0 + 2 + w
+        for x in range(xi, x1):
+            kk = (y + int(2 * math.sin(x / 7.0))) % 9
+            c = SANDKAPPE[2] if kk not in (0, 1) else (SANDKAPPE[1] if kk == 0 else SANDKAPPE[3])
+            L.p(x, y, c)
+        L.p(xi, y, SANDKAPPE[4]); L.p(xi + 1, y, SANDKAPPE[3])
+        L.neutral(xi - 1, y, 0.8); L.neutral(xi - 2, y, 0.9)
+    if front:
+        _sandfront(L, x0 + 2, x1, kap_ende, y1, rnd, verweht=4)
+        for x in range(x0 + 2, x1):
+            for d, f in ((0, 0.72), (1, 0.85)):
+                L.neutral(x, y1 + d, f)
+
+
 def bauen(frame=None, speichern=True):
     lay = json.load(open(os.path.join(KARTE, 'layout.json')))
     cols, rows = lay['groesse']
@@ -335,6 +423,11 @@ def bauen(frame=None, speichern=True):
         x0, y0, x1, y1 = ar['tor']
         arena = {c for c in arena if not (x0 <= c[0] <= x1 and y0 <= c[1] <= y1)}
     mauer_zeichnen(L, arena, SANDSTEIN, 24)
+    sw = lay.get('sandwand', {})
+    if 'oben' in sw:
+        sandwand_oben(L, sw['oben'], random.Random(4))
+    for seg in sw.get('rechts', []):
+        sandwand_seite(L, seg, random.Random(6))
     ga = lay.get('garten')
     garten = set()
     if ga:
@@ -355,6 +448,10 @@ def bauen(frame=None, speichern=True):
         boden[max(0, y * T - 24):(y + 1) * T, x * T:(x + 1) * T] = 0
     for (x, y) in garten:
         boden[max(0, y * T - 14):(y + 1) * T, x * T:(x + 1) * T] = 0
+    if 'oben' in sw:
+        boden[:(sw['oben']['kappe'][1] + 1) * T + sw['oben']['front'], :] = 0
+    for seg in sw.get('rechts', []):
+        boden[seg['y'][0] * T:(seg['y'][1] + 1) * T, seg['x'][0] * T:] = 0
 
     # --- 5. Objekte
     pf = os.path.join(OBJ, 'platzierung.json')
@@ -366,6 +463,10 @@ def bauen(frame=None, speichern=True):
             if o['datei'] not in cache:
                 cache[o['datei']] = Image.open(os.path.join(OBJ, o['datei'])).convert('RGBA')
         objekte_zeichnen(img, objs, cache, boden, frame)
+    if objs:                                              # kleine Tiere im Sand
+        viecher_zeichnen(img, viecher_positionen(objs, cols, rows, cls), frame or 0)
+    if 'unten' in sw:                                     # Vordergrund ueber Objekten und Schatten
+        sandwand_vorne(ind.Leinwand(img), sw['unten'], random.Random(5))
     if frame is not None:
         animieren(img, objs, frame)
         return img
@@ -431,6 +532,134 @@ def objekte_zeichnen(img, objs, cache, boden, frame):
         if frame is not None and o.get('anim') == 'wehen':
             sp = kb.wehen(sp, kb.wind(frame, o['x']))
         img.alpha_composite(sp, (o['x'], o['y']))
+        if o['datei'].endswith('_sand.png') and not o.get('ohne_fuss'):
+            sandverwehung(img, o, cache[o['datei']])
+
+
+import basis_kacheln as _bk
+SAND_V = [_bk.RGB[k] + (255,) for k in ('s0', 's1', 's2', 's2', 's3')]   # exakt die Bodensand-Toene
+
+
+def sandverwehung(img, o, sp):
+    """Objekt steckt im Sand: an der Auflagekante liegt ein kleiner Sandwall ueber dem Objektfuss
+    (2-5 px, wellig, Licht oben), seitlich auslaufend, auf der Leeseite (rechts) eine Windfahne."""
+    a = np.array(sp.getchannel('A')) >= 200
+    spalten = np.nonzero(a.any(axis=0))[0]
+    if len(spalten) == 0:
+        return
+    tief = int(np.nonzero(a.any(axis=1))[0].max())
+    rs = random.Random(o['x'] * 7 + o['y'])
+    px = img.load()
+    W, H = img.size
+    def setz(x, y, c):
+        if 0 <= x < W and 0 <= y < H:
+            px[x, y] = c
+    kontakt = [x for x in spalten if np.nonzero(a[:, x])[0].max() >= tief - 3]
+    if not kontakt:
+        return
+    k0, k1 = min(kontakt), max(kontakt)
+    breit = k1 - k0 + 1
+    hmax = 3 + min(4, breit // 9)
+    for xi in range(k0 - 3, k1 + 4 + min(10, breit // 3)):
+        if xi < k0:
+            h = max(0, hmax - (k0 - xi))                   # links auslaufend
+        elif xi > k1:
+            h = max(0, int(hmax - (xi - k1) * 0.5))        # rechts Windfahne, flacher und laenger
+        else:
+            h = hmax + int(1.2 * math.sin(xi * 0.9 + o['x']))
+        X = o['x'] + xi
+        Yb = o['y'] + tief + 1
+        for d in range(h):
+            y = Yb - d
+            c = SAND_V[4] if d == h - 1 and xi <= k1 else SAND_V[2] if d > 0 else SAND_V[1]
+            setz(X, y, c)
+        if h > 0 and rs.random() < 0.25:
+            setz(X, Yb - h - 1, SAND_V[2])             # einzelne Koerner auf dem Objektfuss
+
+
+# ---------------------------------------------------------------- kleine Wuestentiere (animiert)
+VIECH = {
+    'kaefer': {'farben': {'k': '#141c28', 'b': '#2a3a5a', 'h': '#7ff0f5', 'l': '#141c28'},
+               'bild': [["l.l.l..", ".kkkk..", "kbhbbkk", ".kkkk..", "l.l.l.."],
+                        [".l.l.l.", ".kkkk..", "kbhbbkk", ".kkkk..", ".l.l.l."]]},
+    'eidechse': {'farben': {'k': '#4a3a20', 'b': '#8a7a3a', 'h': '#c8b060', 'l': '#6a5a30', 't': '#7a6a34'},
+                 'bild': [["...l....l..", "t..kbbbbhkk", ".tkbbbbbbk.", "....l....l."],
+                          ["....l....l.", "t..kbbbbhkk", ".tkbbbbbbk.", "...l....l.."]]},
+    'skorpion': {'farben': {'k': '#4a2a14', 'b': '#9a5a2a', 'c': '#b8743a', 'l': '#6a3a1c'},
+                 'bild': [["kk.......", "..k.l.l.cc", "..kbbbbbkc", "....l.l.cc"],
+                          ["kk.......", "..k..l.lcc", "..kbbbbbkc", ".....l.lcc"]]},
+}
+
+
+def viecher_positionen(objs, cols, rows, cls, anzahl=11, seed=9):
+    """Freie Sandstellen (abseits von Objekten, Wegen und Mauern) fuer die kleinen Tiere."""
+    rnd = random.Random(seed)
+    boxen = []
+    for o in objs:
+        sp = Image.open(os.path.join(OBJ, o['datei']))
+        boxen.append((o['x'] - 12, o['y'] - 6, o['x'] + sp.width + 12, o['y'] + sp.height + 8))
+    pos = []
+    arten = ['kaefer', 'eidechse', 'skorpion']
+    for _ in range(4000):
+        if len(pos) >= anzahl:
+            break
+        x, y = rnd.randrange(8, cols - 8), rnd.randrange(8, rows - 8)
+        if any(cls[y + dy][x + dx] != 's' for dx in (-1, 0, 1) for dy in (-1, 0, 1)):
+            continue
+        px_, py_ = x * T + 8, y * T + 8
+        if any(b[0] - 20 < px_ < b[2] + 20 and b[1] - 12 < py_ < b[3] + 12 for b in boxen):
+            continue
+        if any(abs(px_ - q[0]) + abs(py_ - q[1]) < 140 for q in pos):
+            continue
+        pos.append((px_, py_, arten[len(pos) % 3], rnd.random()))
+    return pos
+
+
+def viecher_zeichnen(img, positionen, frame):
+    px = img.load()
+    W, H = img.size
+    for i, (bx, by, art, ph) in enumerate(positionen):
+        t = (frame / N_FRAMES + ph) % 1.0
+        if art == 'kaefer':                                # langsam im Kreis
+            w = 2 * math.pi * t
+            x, y = bx + 8 * math.cos(w), by + 4 * math.sin(w)
+            vx = -math.sin(w)
+        elif art == 'eidechse':                            # flitzt hin und her, mit Pausen
+            s_ = min(1, max(0, (t % 0.5) * 2 * 1.6 - 0.3))
+            s_ = s_ * s_ * (3 - 2 * s_)
+            x = bx - 10 + 20 * (s_ if t < 0.5 else 1 - s_)
+            y = by
+            vx = 1 if t < 0.5 else -1
+        else:                                              # Skorpion: kleine Seitwaertsschritte
+            x = bx + 5 * math.sin(2 * math.pi * t)
+            y = by + 1.5 * math.sin(4 * math.pi * t)
+            vx = math.cos(2 * math.pi * t)
+        v = VIECH[art]
+        bild = v['bild'][(frame // 1) % 2] if abs(vx) > 0.15 or art == 'kaefer' else v['bild'][0]
+        if vx < 0:
+            bild = [z[::-1] for z in bild]
+        hb, wb = len(bild), max(len(z) for z in bild)
+        x0, y0 = int(round(x - wb / 2)), int(round(y - hb / 2))
+        # Spur im Sand (ein paar Tupfen hinter dem Tier)
+        for k in range(1, 4):
+            tx = int(x - (vx if vx else 1) * (wb / 2 + 2 * k))
+            ty = int(y + (1 if k % 2 else -1))
+            if 0 <= tx < W and 0 <= ty < H:
+                r_, g_, b_, a_ = px[tx, ty]
+                px[tx, ty] = (int(r_ * 0.88), int(g_ * 0.86), int(b_ * 0.82), a_)
+        # Schatten
+        for xx in range(x0 + 1, x0 + wb):
+            yy = y0 + hb
+            if 0 <= xx < W and 0 <= yy < H:
+                r_, g_, b_, a_ = px[xx, yy]
+                px[xx, yy] = (int(r_ * 0.8), int(g_ * 0.78), int(b_ * 0.75), a_)
+        for dy, z in enumerate(bild):
+            for dx, ch in enumerate(z):
+                if ch == '.':
+                    continue
+                xx, yy = x0 + dx, y0 + dy
+                if 0 <= xx < W and 0 <= yy < H:
+                    px[xx, yy] = ind.rgb(v['farben'][ch])
 
 
 FEUER = [(0xc8, 0x3a, 0x1e), (0xe8, 0x70, 0x2a), (0xf5, 0xb0, 0x42), (0xff, 0xf2, 0xa0)]
