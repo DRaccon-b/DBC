@@ -9,9 +9,10 @@ Je 16x16-Kachel eine Klasse:
 
 Ausgabe:
   ebene1_boden.png           alles, was UNTER dem Spieler liegt (Boden, Klippen, Bauwerke, Objektfuesse, Schatten)
-  ebene2_kollision.png       Maske: rote Kachel = nicht begehbar (dieselbe Information wie kollision.json)
+  ebene2_kollision.png       Maske: rotes 8x8-Feld = nicht begehbar (dieselbe Information wie kollision_fein.json)
   ebene3_ueberlagerung.png   transparent: alles, was UEBER dem Spieler liegt (obere Teile hoher Objekte)
-  kollision.json / .txt      Kachelraster mit 1/2/3 (Zeile = y, Zeichen = x)
+  kollision_fein.json / .txt Raster aus 8x8-Feldern mit 1/2/3 (Zeile = y, Zeichen = x)
+  kollision.json / .txt      daraus abgeleitetes 16x16-Kachelraster
   vorschau.png               Karte mit eingefaerbten Klassen (rot = 2, blau = 3)
 Zeichenreihenfolge im Spiel: ebene1_boden -> Spieler/NPCs -> ebene3_ueberlagerung.
 """
@@ -26,8 +27,9 @@ OBJ = os.path.join(ROOT, 'assets', 'objekte', 'karte01')
 OUT = os.path.join(KARTE, 'ebenen')
 T = 16
 FUSS = 10          # unterste Pixelzeilen eines hohen Objekts: Fuss (blockiert, liegt unter dem Spieler)
-MIN_FUSS = 6       # ab so vielen Fusspixeln (Stamm, Mast, Sockel) ist eine Kachel blockiert
-MIN_DECKT = 12     # ab so vielen deckenden Pixeln der Ueberlagerung verdeckt eine Kachel den Spieler
+Z = 8              # Kollisionsraster: 8x8-Felder (2x2 je Kachel)
+MIN_FUSS = 3       # ab so vielen Fusspixeln (Stamm, Mast, Sockel) ist ein 8x8-Feld blockiert
+MIN_DECKT = 4      # ab so vielen deckenden Pixeln der Ueberlagerung verdeckt ein 8x8-Feld den Spieler
 # begehbare Bodendeko (liegt unter dem Spieler): Gras, Farne, Schilf, Blumen, Pilze, Kiesel, Zweige
 FLACH = {'deko/05', 'deko/06', 'deko/07', 'deko/08', 'deko/10', 'deko/14', 'deko/26', 'deko/27', 'deko/31',
          'deko/33', 'deko/61'}
@@ -44,57 +46,75 @@ def korrekturen_laden():
     return json.load(open(KORREKTUREN)).get('kacheln', {})
 
 
-def korrekturen_anwenden(klasse):
-    rows, cols = klasse.shape
+def korrekturen_anwenden(fein):
+    """Korrekturen gelten fuer 8x8-Felder (Spalte, Zeile im feinen Raster)."""
+    rows, cols = fein.shape
     for key, w in korrekturen_laden().items():
         x, y = map(int, key.split(','))
         if 0 <= x < cols and 0 <= y < rows:
-            klasse[y, x] = int(w)
+            fein[y, x] = int(w)
 
 
-def kollision_schreiben(klasse):
-    """kollision.json/.txt, ebene2_kollision.png, vorschau.png und spiel/karte01_kollision.js schreiben."""
+def grob_aus_fein(fein):
+    """16x16-Raster fuer Engines ohne feine Kollision: Kachel gesperrt, wenn mindestens 2 ihrer 4 Felder
+    gesperrt sind; sonst verdeckt, wenn eines verdeckt ist; sonst begehbar."""
+    rows, cols = fein.shape[0] // 2, fein.shape[1] // 2
+    viertel = fein.reshape(rows, 2, cols, 2).transpose(0, 2, 1, 3).reshape(rows, cols, 4)
+    grob = np.ones((rows, cols), int)
+    grob[(viertel == 3).any(axis=2)] = 3
+    grob[(viertel == 2).sum(axis=2) >= 2] = 2
+    return grob
+
+
+def raster_bild(klasse, z, farben, basis=None, gitter=None):
     rows, cols = klasse.shape
-    W, H = cols * T, rows * T
-    zeilen = [''.join(str(v) for v in r) for r in klasse]
-    json.dump({'tile_size': T, 'cols': cols, 'rows': rows,
-               'legende': {'1': 'begehbar', '2': 'nicht begehbar', '3': 'begehbar, verdeckt den Spieler'},
-               'zeichenreihenfolge': ['ebene1_boden.png', 'Spieler', 'ebene3_ueberlagerung.png'],
-               'raster': zeilen}, open(os.path.join(OUT, 'kollision.json'), 'w'), indent=0)
-    open(os.path.join(OUT, 'kollision.txt'), 'w').write('\n'.join(zeilen) + '\n')
-
-    # Ebene 2 als Bild: halbtransparente Maske der nicht begehbaren Kacheln (fuer Editor/Engine-Import)
-    maske = Image.new('RGBA', (W, H), (0, 0, 0, 0))
-    md = ImageDraw.Draw(maske)
-    for y in range(rows):
-        for x in range(cols):
-            if klasse[y, x] == 2:
-                md.rectangle((x * T, y * T, x * T + T - 1, y * T + T - 1), fill=(255, 0, 0, 255))
-    maske.save(os.path.join(OUT, 'ebene2_kollision.png'))
-
-    # ---------------------------------------------------------------- Vorschau
-    karte = Image.open(os.path.join(KARTE, 'terrain.png')).convert('RGBA')
-    farbe = Image.new('RGBA', karte.size, (0, 0, 0, 0))
+    bild = basis.copy() if basis is not None else Image.new('RGBA', (cols * z, rows * z), (0, 0, 0, 0))
+    farbe = Image.new('RGBA', bild.size, (0, 0, 0, 0))
     fd = ImageDraw.Draw(farbe)
     for y in range(rows):
         for x in range(cols):
-            k = klasse[y, x]
-            if k == 2:
-                fd.rectangle((x * T, y * T, x * T + T - 1, y * T + T - 1), fill=(230, 40, 40, 110))
-            elif k == 3:
-                fd.rectangle((x * T, y * T, x * T + T - 1, y * T + T - 1), fill=(40, 110, 255, 120))
-    karte.alpha_composite(farbe)
-    gd = ImageDraw.Draw(karte)
-    for x in range(0, W, T):
-        gd.line((x, 0, x, H), fill=(0, 0, 0, 40))
-    for y in range(0, H, T):
-        gd.line((0, y, W, y), fill=(0, 0, 0, 40))
-    karte.save(os.path.join(OUT, 'vorschau.png'))
+            f = farben.get(int(klasse[y, x]))
+            if f:
+                fd.rectangle((x * z, y * z, x * z + z - 1, y * z + z - 1), fill=f)
+    bild.alpha_composite(farbe)
+    for schritt, a in gitter or []:             # Gitter als eigene Schicht, damit es abdunkelt statt Loecher zu stanzen
+        linien = Image.new('RGBA', bild.size, (0, 0, 0, 0))
+        gd = ImageDraw.Draw(linien)
+        for x in range(0, bild.width, schritt):
+            gd.line((x, 0, x, bild.height), fill=(0, 0, 0, a))
+        for y in range(0, bild.height, schritt):
+            gd.line((0, y, bild.width, y), fill=(0, 0, 0, a))
+        bild.alpha_composite(linien)
+    return bild
 
-    spiel = {'tile_size': T, 'cols': cols, 'rows': rows, 'raster': zeilen}
-    open(SPIEL_JS, 'w').write('// Erzeugt aus maps/karte01/ebenen/kollision.json (1 begehbar, 2 gesperrt, 3 begehbar + verdeckt)\n'
+
+def kollision_schreiben(fein):
+    """Schreibt das feine Raster (8x8) und das daraus abgeleitete 16x16-Raster:
+    kollision_fein.json/.txt, kollision.json/.txt, ebene2_kollision.png (8x8), vorschau.png,
+    spiel/karte01_kollision.js."""
+    legende = {'1': 'begehbar', '2': 'nicht begehbar', '3': 'begehbar, verdeckt den Spieler'}
+    reihenfolge = ['ebene1_boden.png', 'Spieler', 'ebene3_ueberlagerung.png']
+    zf = [''.join(str(v) for v in r) for r in fein]
+    json.dump({'zelle': Z, 'cols': fein.shape[1], 'rows': fein.shape[0], 'legende': legende,
+               'zeichenreihenfolge': reihenfolge, 'raster': zf},
+              open(os.path.join(OUT, 'kollision_fein.json'), 'w'), indent=0)
+    open(os.path.join(OUT, 'kollision_fein.txt'), 'w').write('\n'.join(zf) + '\n')
+
+    grob = grob_aus_fein(fein)
+    zg = [''.join(str(v) for v in r) for r in grob]
+    json.dump({'tile_size': T, 'cols': grob.shape[1], 'rows': grob.shape[0], 'legende': legende,
+               'zeichenreihenfolge': reihenfolge, 'hinweis': 'aus kollision_fein.json abgeleitet (8x8-Felder)',
+               'raster': zg}, open(os.path.join(OUT, 'kollision.json'), 'w'), indent=0)
+    open(os.path.join(OUT, 'kollision.txt'), 'w').write('\n'.join(zg) + '\n')
+
+    raster_bild(fein, Z, {2: (255, 0, 0, 255)}).save(os.path.join(OUT, 'ebene2_kollision.png'))
+    karte = Image.open(os.path.join(KARTE, 'terrain.png')).convert('RGBA')
+    raster_bild(fein, Z, {2: (230, 40, 40, 110), 3: (40, 110, 255, 120)}, karte,
+                gitter=[(Z, 18), (T, 40)]).save(os.path.join(OUT, 'vorschau.png'))
+
+    spiel = {'zelle': Z, 'cols': fein.shape[1], 'rows': fein.shape[0], 'raster': zf}
+    open(SPIEL_JS, 'w').write('// Erzeugt aus maps/karte01/ebenen/kollision_fein.json (8x8-Felder; 1 begehbar, 2 gesperrt, 3 verdeckt)\n'
                               'window.KARTE01_KOLLISION = ' + json.dumps(spiel, indent=0) + ';\n')
-
 
 EBENEN_KORREKTUREN = os.path.join(OUT, 'ebenen_korrekturen.json')
 SPIEL_OBJEKTE_JS = os.path.join(ROOT, 'spiel', 'karte01_objekte.js')
@@ -246,23 +266,19 @@ def main():
         for y in range(br['y'], br['y'] + br['hoehe']):
             for x in range(br['x'], br['x'] + br['breite']):
                 klasse[y, x] = 1
-    # Objektfuesse
-    for y in range(rows):
-        for x in range(cols):
-            if blockiert_px[y * T:(y + 1) * T, x * T:(x + 1) * T].sum() >= MIN_FUSS:
-                klasse[y, x] = 2
-    # Verdeckung: begehbare Kacheln unter deckenden Objektteilen
+    # Feines Raster: jede Kachel in 2x2 Felder, dann Objektfuesse und Verdeckung je 8x8-Feld
+    fein = np.kron(klasse, np.ones((2, 2), int))
+    fr, fc = fein.shape
+    fuss = blockiert_px.reshape(fr, Z, fc, Z).sum(axis=(1, 3))
+    fein[fuss >= MIN_FUSS] = 2
     oa = np.array(oben.getchannel('A')) >= 128
-    for y in range(rows):
-        for x in range(cols):
-            if klasse[y, x] == 1 and oa[y * T:(y + 1) * T, x * T:(x + 1) * T].sum() >= MIN_DECKT:
-                klasse[y, x] = 3
+    deckt = oa.reshape(fr, Z, fc, Z).sum(axis=(1, 3))
+    fein[(fein == 1) & (deckt >= MIN_DECKT)] = 3
 
-    korrekturen_anwenden(klasse)
-    kollision_schreiben(klasse)
-    n = {k: int((klasse == k).sum()) for k in (1, 2, 3)}
-    print('Kacheln: begehbar %d, blockiert %d, verdeckt %d' % (n[1], n[2], n[3]))
-
+    korrekturen_anwenden(fein)
+    kollision_schreiben(fein)
+    n = {k: int((fein == k).sum()) for k in (1, 2, 3)}
+    print('8x8-Felder: begehbar %d, blockiert %d, verdeckt %d' % (n[1], n[2], n[3]))
 
 if __name__ == '__main__':
     main()

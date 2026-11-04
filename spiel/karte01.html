@@ -35,6 +35,7 @@
   button:hover { background: #2d3240; }
   button:focus-visible { outline: 2px solid var(--akzent); outline-offset: 1px; }
   button.pinsel { display: flex; align-items: center; gap: 6px; flex: 1 1 0; justify-content: center; min-width: 0; }
+  #groesse { flex: 1 1 100%; }
   button.pinsel[aria-pressed="true"] { border-color: var(--akzent); background: #353a2a; }
   .farbe { width: 10px; height: 10px; border-radius: 2px; flex: none; }
   #ausgabe {
@@ -65,6 +66,7 @@
     <button type="button" class="pinsel" data-wert="1"><span class="farbe" style="background:var(--frei)"></span>Frei <small>1</small></button>
     <button type="button" class="pinsel" data-wert="2"><span class="farbe" style="background:var(--sperr)"></span>Gesperrt <small>2</small></button>
     <button type="button" class="pinsel" data-wert="3"><span class="farbe" style="background:var(--deckt)"></span>Verdeckt <small>3</small></button>
+    <button type="button" id="groesse" aria-pressed="false">Pinsel: 8×8 Feld <small>G</small></button>
   </div>
   <div class="reihe" role="group" aria-label="Pinsel Ebenen" id="pinselEbenen" hidden>
     <button type="button" class="pinsel" data-wert="hinten">Hinter Spieler <small>1</small></button>
@@ -88,10 +90,12 @@
 
   const EBENEN = '../maps/karte01/ebenen/';
   const K = window.KARTE01_KOLLISION;
-  const TILE = K.tile_size;               // 16
-  const COLS = K.cols, ROWS = K.rows;     // 110 x 120
-  const MAP_W = COLS * TILE, MAP_H = ROWS * TILE;
-  const SPEICHER = 'karte01_kollision_aenderungen';
+  const TILE = 16;                        // Kachelgroesse der Karte
+  const Z = K.zelle;                      // Kollisionsraster: 8x8-Felder
+  const COLS = K.cols, ROWS = K.rows;     // 220 x 240 Felder
+  const MAP_W = COLS * Z, MAP_H = ROWS * Z;
+  const SPEICHER_ALT = 'karte01_kollision_aenderungen';   // frueher 16x16-Kacheln
+  const SPEICHER = 'karte01_kollision_fein';
   const SPEICHER_EBENEN = 'karte01_ebenen_aenderungen';
 
   // ---- Objekte (einzeln gezeichnet, damit ihre Ebene umschaltbar ist) --
@@ -131,6 +135,7 @@
   }
 
   const SPIELER_GROESSE = 16;             // 16x16 grauer Pixel
+  const HITBOX = { x: 2, y: 8, w: 12, h: 8 };  // nur die Fuesse stossen an (relativ zum Spieler)
   const TEMPO = 80;                       // Kartenpixel pro Sekunde
   const START = { x: 54 * TILE, y: 53 * TILE };
 
@@ -155,6 +160,17 @@
   }
 
   try {
+    // aeltere Aenderungen auf 16x16-Kacheln in je 2x2 Felder umrechnen
+    const alt = JSON.parse(localStorage.getItem(SPEICHER_ALT) || '[]');
+    if (alt.length) {
+      const neu = JSON.parse(localStorage.getItem(SPEICHER) || '[]');
+      for (const [x, y, w] of alt)
+        for (const [dx, dy] of [[0, 0], [1, 0], [0, 1], [1, 1]]) neu.push([x * 2 + dx, y * 2 + dy, w]);
+      localStorage.setItem(SPEICHER, JSON.stringify(neu));
+      localStorage.removeItem(SPEICHER_ALT);
+    }
+  } catch (e) { /* kein Speicher verfuegbar */ }
+  try {
     const gespeichert = JSON.parse(localStorage.getItem(SPEICHER) || '[]');
     for (const [x, y, w] of gespeichert)
       if (x >= 0 && y >= 0 && x < COLS && y < ROWS && '123'.includes(w)) setzeKachel(x, y, String(w));
@@ -177,8 +193,8 @@
 
   // ---- Kollision -------------------------------------------------------
   function kollidiert(x, y, w, h) {
-    const x0 = Math.floor(x / TILE), x1 = Math.floor((x + w - 1) / TILE);
-    const y0 = Math.floor(y / TILE), y1 = Math.floor((y + h - 1) / TILE);
+    const x0 = Math.floor(x / Z), x1 = Math.floor((x + w - 1) / Z);
+    const y0 = Math.floor(y / Z), y1 = Math.floor((y + h - 1) / Z);
     for (let ty = y0; ty <= y1; ty++)
       for (let tx = x0; tx <= x1; tx++)
         if (kachel(tx, ty) === '2') return true;
@@ -192,17 +208,18 @@
     spieler.rx += dx; spieler.ry += dy;
     let sx = Math.trunc(spieler.rx), sy = Math.trunc(spieler.ry);
     spieler.rx -= sx; spieler.ry -= sy;
-    const s = SPIELER_GROESSE;
-    // Steht man schon in einer gesperrten Kachel (z. B. gerade hineingemalt), darf man frei heraus.
-    const frei = kollidiert(spieler.x, spieler.y, s, s);
+    const s = SPIELER_GROESSE, hb = HITBOX;
+    const stoesst = (x, y) => kollidiert(x + hb.x, y + hb.y, hb.w, hb.h);
+    // Steht man schon in einem gesperrten Feld (z. B. gerade hineingemalt), darf man frei heraus.
+    const frei = stoesst(spieler.x, spieler.y);
     while (sx !== 0) {
       const st = Math.sign(sx);
-      if (!frei && kollidiert(spieler.x + st, spieler.y, s, s)) { spieler.rx = 0; break; }
+      if (!frei && stoesst(spieler.x + st, spieler.y)) { spieler.rx = 0; break; }
       spieler.x = Math.max(0, Math.min(MAP_W - s, spieler.x + st)); sx -= st;
     }
     while (sy !== 0) {
       const st = Math.sign(sy);
-      if (!frei && kollidiert(spieler.x, spieler.y + st, s, s)) { spieler.ry = 0; break; }
+      if (!frei && stoesst(spieler.x, spieler.y + st)) { spieler.ry = 0; break; }
       spieler.y = Math.max(0, Math.min(MAP_H - s, spieler.y + st)); sy -= st;
     }
   }
@@ -223,7 +240,7 @@
     const dpr = window.devicePixelRatio || 1;
     const mx = ((cx - r.left) * dpr) / kamera.skala + kamera.camX;
     const my = ((cy - r.top) * dpr) / kamera.skala + kamera.camY;
-    return { tx: Math.floor(mx / TILE), ty: Math.floor(my / TILE), mx, my };
+    return { tx: Math.floor(mx / Z), ty: Math.floor(my / Z), mx, my };
   }
 
   // ---- Editor ----------------------------------------------------------
@@ -232,6 +249,7 @@
   let modusTab = 'kollision';             // 'kollision' | 'ebenen'
   let pinsel = '2';
   let ebenenPinsel = 'vorne';
+  let grob = false;                       // Pinselgroesse: false = 8x8-Feld, true = ganze 16x16-Kachel
   let maus = null;                        // Kachel unter dem Mauszeiger
   let mausObjekt = null;                  // Objekt unter dem Mauszeiger (Ebenen-Modus)
   const verlauf = [];                     // Striche fuer Rueckgaengig
@@ -260,7 +278,7 @@
     const liste = [...aenderungen].map(([k, w]) => { const [x, y] = k.split(',').map(Number); return [x, y, w]; })
       .sort((a, b) => a[1] - b[1] || a[0] - b[0]);
     const zeilen = ['karte01 editor'];
-    if (liste.length) zeilen.push('# kollision (x,y=wert  1 frei, 2 gesperrt, 3 verdeckt)',
+    if (liste.length) zeilen.push('# kollision 8x8-Felder (spalte,zeile=wert  1 frei, 2 gesperrt, 3 verdeckt)',
       ...liste.map(([x, y, w]) => x + ',' + y + '=' + w));
     if (ebenenAenderungen.size) zeilen.push('# ebenen (objekt=hinten|geteilt|vorne)',
       ...[...ebenenAenderungen].sort().map(([k, m]) => k + '=' + m));
@@ -269,10 +287,10 @@
   function editorAktualisieren(meldung) {
     $('ausgabe').value = anzahl() ? textAusgabe() : '';
     const teile = [];
-    if (aenderungen.size) teile.push(aenderungen.size + (aenderungen.size === 1 ? ' Kachel' : ' Kacheln'));
+    if (aenderungen.size) teile.push(aenderungen.size + (aenderungen.size === 1 ? ' Feld' : ' Felder'));
     if (ebenenAenderungen.size) teile.push(ebenenAenderungen.size + (ebenenAenderungen.size === 1 ? ' Objekt' : ' Objekte'));
     $('status').textContent = meldung || (teile.length ? teile.join(', ') + ' geändert'
-      : modusTab === 'kollision' ? 'Noch nichts geändert. Auf Kacheln klicken oder ziehen.'
+      : modusTab === 'kollision' ? 'Noch nichts geändert. Auf Felder klicken oder ziehen.'
       : 'Noch nichts geändert. Pinsel wählen und Objekte anklicken.');
   }
 
@@ -294,6 +312,13 @@
     setzeModus(o, ebenenPinsel);
   }
   function male(tx, ty) {
+    if (grob && !male.innen) {
+      male.innen = true;
+      const bx = tx - (tx & 1), by = ty - (ty & 1);
+      male(bx, by); male(bx + 1, by); male(bx, by + 1); male(bx + 1, by + 1);
+      male.innen = false;
+      return;
+    }
     if (tx < 0 || ty < 0 || tx >= COLS || ty >= ROWS) return;
     const vorher = raster[ty][tx];
     if (vorher === pinsel) return;
@@ -325,6 +350,12 @@
 
   $('editorKnopf').addEventListener('click', () => editorUmschalten(!editor));
   for (const b of document.querySelectorAll('.pinsel')) b.addEventListener('click', () => { setzePinsel(b.dataset.wert); canvas.focus(); });
+  function setzeGroesse(g) {
+    grob = g;
+    $('groesse').innerHTML = (g ? 'Pinsel: 16×16 Kachel' : 'Pinsel: 8×8 Feld') + ' <small>G</small>';
+    $('groesse').setAttribute('aria-pressed', String(g));
+  }
+  $('groesse').addEventListener('click', () => { setzeGroesse(!grob); canvas.focus(); });
   $('tabKollision').addEventListener('click', () => { setzeTab('kollision'); canvas.focus(); });
   $('tabEbenen').addEventListener('click', () => { setzeTab('ebenen'); canvas.focus(); });
   $('rueckgaengig').addEventListener('click', rueckgaengig);
@@ -374,6 +405,7 @@
     const ziffer = { Digit1: 0, Digit2: 1, Digit3: 2 }[e.code];
     if (editor && ziffer !== undefined)
       setzePinsel(modusTab === 'kollision' ? ['1', '2', '3'][ziffer] : ['hinten', 'geteilt', 'vorne'][ziffer]);
+    if (editor && e.code === 'KeyG') setzeGroesse(!grob);
     if (editor && e.code === 'Tab') { setzeTab(modusTab === 'kollision' ? 'ebenen' : 'kollision'); e.preventDefault(); }
     if (e.code === 'Equal' || e.code === 'NumpadAdd' || e.key === '+') zoom = Math.min(8, zoom + 1);
     if (e.code === 'Minus' || e.code === 'NumpadSubtract' || e.key === '-') zoom = Math.max(1, zoom - 1);
@@ -467,13 +499,13 @@
     zeichneObjekte(atlas, true, camX, camY, camX + vw, camY + vh);
 
     // Kollisions-Ansicht (aus dem aktuellen Raster, zeigt also auch Aenderungen)
-    const x0 = Math.max(0, Math.floor(camX / TILE)), x1 = Math.min(COLS - 1, Math.floor((camX + vw) / TILE));
-    const y0 = Math.max(0, Math.floor(camY / TILE)), y1 = Math.min(ROWS - 1, Math.floor((camY + vh) / TILE));
+    const x0 = Math.max(0, Math.floor(camX / Z)), x1 = Math.min(COLS - 1, Math.floor((camX + vw) / Z));
+    const y0 = Math.max(0, Math.floor(camY / Z)), y1 = Math.min(ROWS - 1, Math.floor((camY + vh) / Z));
     if (zeigeKollision || (editor && modusTab === 'kollision')) {
       for (let ty = y0; ty <= y1; ty++)
         for (let tx = x0; tx <= x1; tx++) {
           const f = FARBE[raster[ty][tx]];
-          if (f) { ctx.fillStyle = f; ctx.fillRect(tx * TILE, ty * TILE, TILE, TILE); }
+          if (f) { ctx.fillStyle = f; ctx.fillRect(tx * Z, ty * Z, Z, Z); }
         }
     }
     if (editor && modusTab === 'ebenen') {
@@ -497,22 +529,34 @@
     }
     if (editor && modusTab === 'kollision') {
       const l = 1 / skala;
-      ctx.fillStyle = 'rgba(0,0,0,.18)';
-      for (let tx = x0; tx <= x1 + 1; tx++) ctx.fillRect(tx * TILE, y0 * TILE, l, (y1 - y0 + 1) * TILE);
-      for (let ty = y0; ty <= y1 + 1; ty++) ctx.fillRect(x0 * TILE, ty * TILE, (x1 - x0 + 1) * TILE, l);
+      // Gitter: feine 8x8-Linien schwach, 16x16-Kachelgrenzen kraeftiger
+      for (let tx = x0; tx <= x1 + 1; tx++) {
+        ctx.fillStyle = tx % 2 ? 'rgba(0,0,0,.08)' : 'rgba(0,0,0,.25)';
+        ctx.fillRect(tx * Z, y0 * Z, l, (y1 - y0 + 1) * Z);
+      }
+      for (let ty = y0; ty <= y1 + 1; ty++) {
+        ctx.fillStyle = ty % 2 ? 'rgba(0,0,0,.08)' : 'rgba(0,0,0,.25)';
+        ctx.fillRect(x0 * Z, ty * Z, (x1 - x0 + 1) * Z, l);
+      }
       // geaenderte Kacheln gelb umranden
       ctx.strokeStyle = '#ffd23f';
       ctx.lineWidth = 2 / skala;
       for (const key of aenderungen.keys()) {
         const [tx, ty] = key.split(',').map(Number);
         if (tx >= x0 && tx <= x1 && ty >= y0 && ty <= y1)
-          ctx.strokeRect(tx * TILE + l, ty * TILE + l, TILE - 2 * l, TILE - 2 * l);
+          ctx.strokeRect(tx * Z + l, ty * Z + l, Z - 2 * l, Z - 2 * l);
       }
       if (maus && maus.tx >= 0 && maus.ty >= 0 && maus.tx < COLS && maus.ty < ROWS) {
         ctx.strokeStyle = '#fff';
         ctx.lineWidth = 1 / skala * 2;
-        ctx.strokeRect(maus.tx * TILE, maus.ty * TILE, TILE, TILE);
+        if (grob) ctx.strokeRect((maus.tx - (maus.tx & 1)) * Z, (maus.ty - (maus.ty & 1)) * Z, TILE, TILE);
+        else ctx.strokeRect(maus.tx * Z, maus.ty * Z, Z, Z);
       }
+      // Hitbox des Spielers
+      ctx.strokeStyle = '#ffd23f';
+      ctx.setLineDash([2 / skala, 2 / skala]);
+      ctx.strokeRect(spieler.x + HITBOX.x, spieler.y + HITBOX.y, HITBOX.w, HITBOX.h);
+      ctx.setLineDash([]);
     }
     return { camX, camY, skala };
   }
@@ -549,9 +593,10 @@
         let text = 'Pfeiltasten/WASD laufen · K Kollision · E Editor · +/- Zoom (' + zoom + 'x)\n' +
           'Spieler auf Kachel ' + tx + ', ' + ty;
         if (editor && modusTab === 'kollision') {
-          text += '\nKollision: klicken/ziehen malt · 1 frei · 2 gesperrt · 3 verdeckt · Tab Ebenen · Strg+Z';
+          text += '\nKollision: klicken/ziehen malt · 1 frei · 2 gesperrt · 3 verdeckt · G Pinselgröße · Tab Ebenen · Strg+Z';
           if (maus && maus.tx >= 0 && maus.ty >= 0 && maus.tx < COLS && maus.ty < ROWS)
-            text += '\nZeiger auf Kachel ' + maus.tx + ', ' + maus.ty + ' (' + NAME[raster[maus.ty][maus.tx]] + ')';
+            text += '\nZeiger auf Feld ' + maus.tx + ', ' + maus.ty + ' (Kachel ' + (maus.tx >> 1) + ', ' + (maus.ty >> 1) + ', ' +
+              NAME[raster[maus.ty][maus.tx]] + ')';
         } else if (editor) {
           text += '\nEbenen: Objekt anklicken · 1 hinter · 2 geteilt · 3 vor Spieler · Tab Kollision · Strg+Z';
           if (mausObjekt) text += '\nObjekt ' + mausObjekt.sp.name + ' (' + MODUS_NAME[mausObjekt.modus] + ')';
