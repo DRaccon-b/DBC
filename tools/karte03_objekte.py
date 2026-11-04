@@ -31,15 +31,14 @@ FEST = [
     # Bus und Haltestelle
     ('gross/06', 44, 31, {}), ('klein/18', 48, 31, {}), ('mittel2/00', 49.8, 31, {}),
     # Ruinen-Arena
-    ('gross/11', 54.5, 27, {}),
+    ('gross/11', 54.5, 28, {}),
     ('mittel/03', 74, 8, {}), ('mittel/03', 86, 13, {}), ('mittel/03', 74, 19, {}), ('mittel/03', 78, 25, {}),
-    ('mittel/04', 59, 15, {}), ('mittel/05', 77, 9, {}), ('mittel/05', 89, 9, {}), ('mittel/05', 68, 24, {}),
+    ('mittel/04', 59, 15, {}), ('mittel/05', 77, 9, {}), ('mittel/05', 84.5, 9, {}), ('mittel/05', 68, 24, {}),
     ('klein/20', 70, 11, {}), ('klein/20', 81, 23, {}), ('klein/21', 66, 13, {}), ('klein/21', 47, 13, {}),
     # Garten im Nordosten
-    ('gross/10', 93.5, 13, {}), ('klein/31', 92.2, 21, {}), ('klein/31', 98.8, 21, {}), ('klein/12', 95, 15, {}),
-    ('klein/05', 92, 16, {}), ('klein/04', 98, 16, {}),
+    ('gross/10', 95.2, 13, {}), ('klein/31', 92.2, 21, {}), ('klein/31', 98.8, 21, {}), ('klein/12', 95, 15, {}),
     # Lautsprechersaeulen an den Wegen
-    ('mittel2/00', 62.5, 26, {}), ('mittel2/00', 92.5, 26, {}), ('mittel2/00', 52.3, 40, {}), ('mittel2/00', 25, 56, {}),
+    ('mittel2/00', 66.5, 26, {}), ('mittel2/00', 92.5, 26, {}), ('mittel2/00', 52.3, 40, {}), ('mittel2/00', 25, 56, {}),
     ('mittel2/00', 40.5, 63, {}),
     # Server-Feld mit Antennen (auf den Kabelknoten)
     ('gross2/00', 62.5, 41, {'anim': 'blinken'}), ('gross2/01', 66.5, 48, {'anim': 'blinken'}),
@@ -47,11 +46,11 @@ FEST = [
     ('gross2/00', 78.5, 49, {'anim': 'blinken'}), ('gross2/01', 82.5, 43, {'anim': 'blinken'}),
     ('gross/13', 86, 35, {'anim': 'blinken'}),
     # Pyramide, Grabtor, Buehne
-    ('PYRAMIDE', 96, 41, {}), ('mittel/10', 86.5, 41, {}),
+    ('PYRAMIDE', 96, 41, {'ohne_fuss': True}), ('mittel/10', 86.5, 41, {}),
     ('gross2/02', 96, 50, {'anim': 'musik'}),
     ('mittel2/01', 87.5, 50, {}), ('mittel2/01', 104.5, 50, {}),
     ('klein/30', 89.5, 55, {}), ('klein/30', 102.5, 55, {}),
-    ('klein/18', 88, 57, {}), ('klein/18', 104, 57, {}),
+    ('klein/18', 88, 62, {}), ('klein/18', 104, 62, {}),
     # Mitte / Sueden
     ('mittel/11', 78, 54, {'anim': 'leuchten'}), ('mittel/06', 44.5, 54, {}),
     ('mittel/07', 37, 44, {}), ('mittel/07', 26, 75, {}), ('mittel/07', 95, 74, {}),
@@ -65,7 +64,7 @@ FEST = [
     ('klein/13', 10.5, 62, {}), ('klein/14', 11.7, 62, {}), ('klein/13', 22.5, 62, {}), ('klein/28', 8.5, 64, {}),
     ('klein/43', 7.5, 57, {}),
 ]
-ZAUN = [(x, 58) for x in range(55, 87, 3)]
+ZAUN = [(x, 56) for x in range(58, 85, 3)]   # auf dem Sand oberhalb des Weges
 STREU_BLUETEN = {'blueten/00': 3, 'blueten/01': 3, 'blueten/02': 2, 'blueten/03': 2, 'blueten/04': 1, 'blueten/05': 2,
                  'mittel2/06': 1, 'mittel2/07': 1, 'mittel2/08': 1, 'mittel2/12': 1}
 STREU = {'klein/00': 3, 'klein/01': 3, 'klein/02': 2, 'klein/03': 2, 'klein/04': 4, 'klein/05': 5, 'klein/06': 1,
@@ -104,6 +103,9 @@ def lade(name, cache={}):
 
 
 def main():
+    import karte03_bauen as k3
+    os.makedirs(os.path.join(OBJ, 'abgeleitet'), exist_ok=True)
+    k3.pyramide_sprite().save(os.path.join(OBJ, 'abgeleitet', 'pyramide.png'))
     rnd = random.Random(5)
     lay = json.load(open(os.path.join(KARTE, 'layout.json')))
     tm = json.load(open(os.path.join(KARTE, 'tilemap.json')))
@@ -124,6 +126,8 @@ def main():
         gesperrt[max(0, y * T - 26):(y + 1) * T + 4, x * T:(x + 1) * T + 4] = True
     for (x, y) in tm.get('arena', []):
         mauer[max(0, y * T - 22):(y + 1) * T, x * T:(x + 1) * T] = True
+    for (x, y) in tm.get('garten', []):
+        mauer[max(0, y * T - 12):(y + 1) * T, x * T + 2:(x + 1) * T - 2] = True
     for (a, c) in lay.get('kabel', []):
         (ax, ay), (bx, by) = a, c
         gesperrt[min(ay, by) * T:(max(ay, by) + 1) * T, min(ax, bx) * T:(max(ax, bx) + 1) * T] = True
@@ -138,7 +142,7 @@ def main():
 
     def setze(name, ax, ay, fest=True, opt=None):
         opt = dict(opt or {})
-        basis = pyr if name == 'PYRAMIDE' else name
+        basis = 'abgeleitet/pyramide' if name == 'PYRAMIDE' else name
         gruppe = basis.split('/')[0]
         boden = boden_bei(ax, ay)
         art = 'pflanze' if basis in PALMEN or gruppe == 'rosa' or basis in ('klein/00', 'klein/01', 'klein/02', 'klein/03', 'klein/04', 'klein/05') else FUSS.get(gruppe, 'stein')
@@ -181,7 +185,7 @@ def main():
         if gesetzt >= 125:
             break
         cx, cy = rnd.randrange(5, cols - 6), rnd.randrange(4, rows - 4)
-        if cls[cy][cx] not in 'sk' or rnd.random() < 0.4:
+        if cls[cy][cx] != 's' or rnd.random() < 0.4:   # nur auf Sand, nicht auf Pflaster
             continue
         if setze(rnd.choices(namen, weights=gew)[0], cx * T + rnd.randint(3, 13), cy * T + rnd.randint(8, 15), False,
                  {'anim': 'wehen'} if rnd.random() < 0.5 else {}):

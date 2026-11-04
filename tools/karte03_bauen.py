@@ -164,6 +164,8 @@ def sandwand_vorne(L, cfg, rnd):
     for x in range(x0, x1):
         w = int(2 * math.sin(x / 9.0) + 1.5 * math.sin(x / 21.0))
         for y in range(k0 + w, L.H):
+            if x < x0 + 6 + int(2 * math.sin(y / 6.0)):
+                continue                                   # Uferseite: wellige Kante statt Kachelkante
             kk = (y - k0 + int(2 * math.sin(x / 11.0))) % 9
             c = SANDKAPPE[2] if kk not in (0, 1) else (SANDKAPPE[1] if kk == 0 else SANDKAPPE[3])
             if (x * 7 + y * 13) % 41 == 0:
@@ -185,8 +187,10 @@ def sandwand_seite(L, cfg, rnd):
         w = int(2 * math.sin(y / 8.0) + 1.5 * math.sin(y / 19.0))
         xi = x0 + 2 + w
         for x in range(xi, x1):
-            kk = (y + int(2 * math.sin(x / 7.0))) % 9
+            kk = (y + int(2 * math.sin(x / 11.0))) % 9
             c = SANDKAPPE[2] if kk not in (0, 1) else (SANDKAPPE[1] if kk == 0 else SANDKAPPE[3])
+            if (x * 7 + y * 13) % 41 == 0:
+                c = SANDKAPPE[4]
             L.p(x, y, c)
         L.p(xi, y, SANDKAPPE[4]); L.p(xi + 1, y, SANDKAPPE[3])
         L.neutral(xi - 1, y, 0.8); L.neutral(xi - 2, y, 0.9)
@@ -195,6 +199,81 @@ def sandwand_seite(L, cfg, rnd):
         for x in range(x0 + 2, x1):
             for d, f in ((0, 0.72), (1, 0.85)):
                 L.neutral(x, y1 + d, f)
+
+
+def pyramide_sprite(breite=240, hoehe=168):
+    """Klassische Pyramide (prozedural, garantiert dreieckig): Spitze mittig, linke Flanke im Licht,
+    rechte Flanke im Schatten, Steinlagen im Verband, Eingang mit Rundbogen unten in der Mitte und ein
+    leuchtendes Auge (Cyan) unter der Spitze. Fuss ist die unterste Zeile."""
+    im = Image.new('RGBA', (breite, hoehe), (0, 0, 0, 0))
+    L = ind.Leinwand(im)
+    cx = breite // 2
+    licht = ind.pal('#8a6640', '#b08a58', '#c8a46c', '#dcbc84', '#ecd49c', '#f8e8c0')
+    schatten = ind.pal('#4a3020', '#6a4630', '#82583a', '#9a6c46', '#ae7e52')
+    teil = 0.62                                         # Kante zwischen Licht- und Schattenflanke
+    for y in range(hoehe):
+        t = y / (hoehe - 1)
+        xl = int(round(cx - t * breite / 2)); xr = int(round(cx + t * breite / 2))
+        xk = int(round(cx + t * (breite / 2) * (2 * teil - 1)))   # Grat (leicht rechts der Mitte)
+        lage = y // 7
+        for x in range(xl, xr + 1):
+            licht_seite = x <= xk
+            pal_ = licht if licht_seite else schatten
+            c = pal_[3] if licht_seite else pal_[2]
+            vers = 6 if lage % 2 else 0
+            if y % 7 == 6:
+                c = pal_[1]                             # Lagenfuge
+            elif (x + vers) % 12 == 11:
+                c = pal_[1]                             # Stossfuge
+            elif y % 7 == 0:
+                c = pal_[4] if licht_seite else pal_[3]  # Lichtkante der Lage
+            if (x * 7 + y * 11) % 53 == 0:
+                c = pal_[2]                             # Verwitterung
+            if x in (xl, xl + 1) and licht_seite:
+                c = licht[5]
+            if x in (xr, xr - 1):
+                c = schatten[0]
+            if abs(x - xk) < 1:
+                c = licht[5]                            # Grat im Licht
+            L.p(x, y, c)
+    for x in range(breite):                             # Sockelkante
+        L.p(x, hoehe - 1, schatten[0])
+    # Eingang (Rundbogen) mittig auf der Lichtflanke
+    ex, eb, eh = cx - 8, 22, 30
+    for y in range(hoehe - eh, hoehe - 1):
+        for x in range(ex - eb // 2, ex + eb // 2):
+            dx = x - ex
+            oben = hoehe - eh + 8
+            if y < oben and dx * dx + ((y - oben) * 1.3) ** 2 > (eb / 2) ** 2:
+                continue
+            rand = abs(dx) >= eb // 2 - 3 or (y < oben and dx * dx + ((y - oben) * 1.3) ** 2 > (eb / 2 - 3) ** 2)
+            L.p(x, y, licht[4] if rand and dx < 0 else schatten[1] if rand else ind.rgb('#1c1a20'))
+    # leuchtendes Auge
+    ay = int(hoehe * 0.2); ax = cx - 2
+    auge = ["..cccc..", ".c.ww.c.", "c.wwhw.c", ".c.ww.c.", "..cccc..", "...cc...", "..c..c.."]
+    farbe = {'c': ind.rgb('#2fc7d8'), 'w': ind.rgb('#7ff0f5'), 'h': ind.rgb('#e6ffff')}
+    for dy, z in enumerate(auge):
+        for dx, ch in enumerate(z):
+            if ch != '.':
+                for sy in (0, 1):
+                    for sx in (0, 1):
+                        L.p(ax - 8 + dx * 2 + sx, ay + dy * 2 + sy, farbe[ch])
+    return im
+
+
+def _sandhuegel(L, cx, cy, rx, ry, rnd):
+    """Weicher Sandhuegel ueber einer Wand-Naht (Ecken): Kuppe hell, Rand dunkler, Lichtkante oben links."""
+    for y in range(int(cy - ry), int(cy + ry) + 1):
+        for x in range(int(cx - rx), int(cx + rx) + 1):
+            d = ((x - cx) / rx) ** 2 + ((y - cy) / ry) ** 2
+            if d <= 1:
+                c = SANDKAPPE[3] if d < 0.35 else SANDKAPPE[2] if d < 0.75 else SANDKAPPE[1]
+                if d > 0.6 and (x - cx) + (y - cy) < -rx * 0.5:
+                    c = SANDKAPPE[4]
+                L.p(x, y, c)
+    for x in range(int(cx - rx), int(cx + rx) + 1):     # Schatten am Fuss
+        yy = int(cy + ry * math.sqrt(max(0, 1 - ((x - cx) / rx) ** 2))) + 1
+        L.neutral(x, yy, 0.82)
 
 
 def bauen(frame=None, speichern=True):
@@ -428,6 +507,17 @@ def bauen(frame=None, speichern=True):
         sandwand_oben(L, sw['oben'], random.Random(4))
     for seg in sw.get('rechts', []):
         sandwand_seite(L, seg, random.Random(6))
+    rnd_e = random.Random(8)
+    if 'oben' in sw:
+        ob = sw['oben']
+        fy = (ob['kappe'][1] + 1) * T                       # Unterkante der Decke = Oberkante der Front
+        # Ecke oben rechts: Sandhuegel ueber der Naht Front/Seitendecke
+        if sw.get('rechts'):
+            sx = sw['rechts'][0]['x'][0] * T
+            _sandhuegel(L, sx + 2, fy + ob['front'] // 2 + 2, 14, ob['front'] // 2 + 6, rnd_e)
+        # Ende oben links am Fluss: Sandrampe statt hartem Schnitt
+        lx = ob['x'][0] * T
+        _sandhuegel(L, lx + 4, fy + ob['front'] // 2, 10, ob['front'] // 2 + 5, rnd_e)
     ga = lay.get('garten')
     garten = set()
     if ga:
@@ -466,7 +556,11 @@ def bauen(frame=None, speichern=True):
     if objs:                                              # kleine Tiere im Sand
         viecher_zeichnen(img, viecher_positionen(objs, cols, rows, cls), frame or 0)
     if 'unten' in sw:                                     # Vordergrund ueber Objekten und Schatten
-        sandwand_vorne(ind.Leinwand(img), sw['unten'], random.Random(5))
+        Lv = ind.Leinwand(img)
+        sandwand_vorne(Lv, sw['unten'], random.Random(5))
+        if sw.get('rechts'):                               # Ecke unten rechts: Uebergang abrunden
+            sx = sw['rechts'][-1]['x'][0] * T
+            _sandhuegel(Lv, sx + 4, sw['unten']['fuss'] * T - 14, 12, 8, random.Random(9))
     if frame is not None:
         animieren(img, objs, frame)
         return img
