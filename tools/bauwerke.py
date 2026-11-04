@@ -327,3 +327,59 @@ def laterne_bild():
 
 def laterne_glas_farben():
     return [g[:3] for g in GLAS]
+
+
+# ---------------------------------------------------------------- Pflanzen: Gras- und Sand-Variante
+def pflanzen_variante(sp, boden):
+    """Pflanzen-Sprite mit Fuss fuer den Untergrund.
+
+    boden='sand': die Halme wachsen aus einem kleinen Sandhuegel (Licht oben links, Schatten unten,
+    Vorderkante liegt ueber den Halmen). boden='gras': kurze Halme in Grasfarben und dunkler Schatten am
+    Fuss, damit die Pflanze in die Wiese uebergeht. Gibt ein um 4 px breiteres, 3 px hoeheres Bild zurueck
+    (Fuss bleibt an derselben Stelle: Mitte unten + 3 px).
+    """
+    from PIL import Image
+    from basis_kacheln import RGB
+    import numpy as np
+    w, h = sp.size
+    a = np.array(sp.getchannel('A')) > 0
+    unten = a[max(0, h - 3):].any(axis=0)
+    xs = np.nonzero(unten)[0]
+    if len(xs) == 0:
+        xs = np.array([w // 2])
+    fx0, fx1 = int(xs.min()), int(xs.max())
+    out = Image.new('RGBA', (w + 4, h + 3), (0, 0, 0, 0))
+    px = out.load()
+    cx = (fx0 + fx1) / 2 + 2
+    rx = max(4.0, (fx1 - fx0) / 2 + (3.5 if boden == 'sand' else 2.5))
+    yb = h + 0.5                                  # Mitte des Huegels/Fusses (in neuen Koordinaten)
+    if boden == 'sand':
+        oben, mitte, schatten, rand = RGB['s3'], RGB['s2'], RGB['s1'], RGB['s0']
+    else:
+        oben, mitte, schatten, rand = RGB['g3'], RGB['g2'], RGB['g1'], RGB['g0']
+
+    def huegel(nur_vorn):
+        for y in range(h - 2, h + 3):
+            for x in range(w + 4):
+                d = ((x - cx) / rx) ** 2 + ((y - yb) / (3.0 if boden == 'sand' else 2.6)) ** 2
+                if d > 1.0:
+                    continue
+                if nur_vorn and y < h:
+                    continue
+                if y >= h + 2 or (d > 0.75 and y >= h + 1):
+                    c = rand if abs(x - cx) < rx * 0.6 else schatten
+                elif y >= h:
+                    c = schatten if x > cx else mitte
+                else:
+                    c = oben if x < cx else mitte          # Licht von oben links
+                px[x, y] = c + (255,)
+
+    huegel(False)                                 # hinter der Pflanze
+    out.alpha_composite(sp.convert('RGBA'), (2, 0))
+    huegel(True)                                  # Vorderkante ueber den Halmen
+    if boden == 'gras':                           # ein paar kurze Halme am Fuss
+        for x in range(int(cx - rx), int(cx + rx) + 1, 3):
+            if 0 <= x < w + 4:
+                px[x, h] = RGB['g4'] + (255,)
+                px[x, h + 1] = RGB['g2'] + (255,)
+    return out

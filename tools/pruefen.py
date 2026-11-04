@@ -44,6 +44,7 @@ def main():
     # Untergrund
     b = np.array(Image.open(os.path.join(ROOT, 'maps', 'karte01', 'terrain_basis.png')).convert('RGB')).astype(np.int16)
     gras = (b[..., 1] > b[..., 0] + 25) & (b[..., 1] > b[..., 2] + 25)
+    sand = (b[..., 0] >= b[..., 1]) & (b[..., 0] > b[..., 2] + 40)
     boden_fehler = []
     for o in objs:
         art = o.get('untergrund')
@@ -54,14 +55,19 @@ def main():
         x0, y0 = o['x'], o['y']
         xs0, ys0, xs1, ys1 = max(0, x0), max(0, y0), min(W, x0 + w), min(H, y0 + h)
         a = a[ys0 - y0: ys1 - y0, xs0 - x0: xs1 - x0]
-        if art == 'fuss':
+        boden = gras
+        if art == 'sand':
+            z = np.nonzero(a.any(axis=1))[0]
+            a = a.copy(); a[: max(0, z[-1] - 3)] = False
+            boden = sand
+        elif art == 'fuss':
             z = np.nonzero(a.any(axis=1))[0]
             a = a.copy(); a[: max(0, z[-1] - 4)] = False
         else:
             a = a | np.roll(a, 1, 0) | np.roll(a, -1, 0) | np.roll(a, 1, 1) | np.roll(a, -1, 1)
-        if not gras[ys0:ys1, xs0:xs1][a].all():
+        if not boden[ys0:ys1, xs0:xs1][a].all():
             boden_fehler.append((o['datei'], (x0, y0)))
-    print('%d Objekte geprueft, %d Ueberlappungen, %d Objekte ragen aus dem Gras' %
+    print('%d Objekte geprueft, %d Ueberlappungen, %d Objekte auf falschem Untergrund' %
           (len(objs), len(fehler), len(boden_fehler)))
     for f in (fehler + boden_fehler)[:30]:
         print('  ', f)

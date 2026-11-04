@@ -17,7 +17,10 @@ Objekte werden nur gesetzt, wenn ihre sichtbaren Pixel kein anderes Objekt und k
 (Klippe, Treppe, Brücke, Steg) berühren; Ausnahme: Bäume untereinander (dichter Wald).
 Gras und Blumen, die sich im Wind neigen, halten 1 px Abstand zur Seite. Wiesen-Deko liegt
 mit allen Pixeln plus 1 px Rand auf Gras (nie im Sand/Weg/Wasser), bei Bäumen gilt das für
-Stamm und Fuß.
+Stamm und Fuß. Pflanzen (Gras, Schilf, Strandgras, Farne) gibt es in zwei Varianten, die
+automatisch nach Untergrund gewählt werden: `varianten/NN_gras.png` (kurze Halme und Schatten am
+Fuß) und `varianten/NN_sand.png` (wachsen aus einem kleinen Sandhügel); am Ufer und Strand muss der
+Fuß ganz auf Sand stehen.
 
 ## Aufbau
 

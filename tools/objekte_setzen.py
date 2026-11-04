@@ -38,6 +38,7 @@ AUSWAHL = {
 WEHEN = ('deko/05', 'deko/06', 'deko/07', 'deko/24', 'deko/26', 'deko/61', 'deko/00', 'deko/01', 'deko/02',
          'deko/03', 'deko/04', 'deko/30', 'deko/38', 'deko/33')
 WIPPEN = ('deko/17', 'deko/18', 'deko/19')
+PFLANZEN = ('deko/05', 'deko/06', 'deko/07', 'deko/24', 'deko/26', 'deko/61')   # bekommen Gras-/Sand-Fuss
 BLUMEN = ('deko/00', 'deko/01', 'deko/02', 'deko/03', 'deko/04', 'deko/30', 'deko/38', 'deko/27')
 SCHATTEN = ('baeume/', 'gross/00', 'gross/01', 'gross/02', 'gross/07', 'gross/09', 'gross/10', 'gross/11',
             'gross/03', 'deko/09', 'deko/11', 'deko/12', 'deko/13', 'deko/25')
@@ -113,6 +114,8 @@ def main():
                    for dx in range(-r, r + 1) for dy in range(-r, r + 1))
 
     objekte, belegt = [], set()
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    import bauwerke as bauwerke_mod
 
     # --- Kollision ueber die sichtbaren Pixel: kein Objekt darf ein anderes beruehren
     #     (Ausnahme: Baeume untereinander -> dichter Wald). Bauwerke (Klippen, Treppen,
@@ -132,6 +135,7 @@ def main():
     alpha_cache = {}
     _b = np.array(Image.open(os.path.join(KARTE, 'terrain_basis.png')).convert('RGB')).astype(np.int16)
     gras_maske = (_b[..., 1] > _b[..., 0] + 25) & (_b[..., 1] > _b[..., 2] + 25)   # gruen dominiert
+    sand_maske = (_b[..., 0] >= _b[..., 1]) & (_b[..., 0] > _b[..., 2] + 40)         # beige: rot >= gruen >> blau
 
     def auf_untergrund(name, ax, ay, im, art):
         """art='gras': alle sichtbaren Pixel + 1 px Rand liegen auf Gras;
@@ -140,6 +144,10 @@ def main():
         if r is None:
             return False
         sl, a = r
+        if art == 'sand':                         # Fuss (untere 4 Zeilen) liegt ganz auf Sand
+            zeilen = np.nonzero(a.any(axis=1))[0]
+            a = a.copy(); a[: max(0, zeilen[-1] - 3)] = False
+            return bool(sand_maske[sl][a].all())
         if art == 'fuss':
             zeilen = np.nonzero(a.any(axis=1))[0]
             if len(zeilen) == 0:
@@ -155,7 +163,7 @@ def main():
     def ausschnitt(name, ax, ay, im):
         if name not in alpha_cache:
             a = np.array(im.getchannel('A')) > 0
-            if name in WEHEN:                    # neigt sich im Wind um 1 px -> 1 px Spielraum seitlich
+            if name in WEHEN or name.startswith('varianten/'):   # neigt sich im Wind -> 1 px Spielraum
                 a = a | np.roll(a, 1, axis=1) | np.roll(a, -1, axis=1)
             alpha_cache[name] = a
         a = alpha_cache[name]
@@ -179,6 +187,20 @@ def main():
     def setze(name, ax, ay, ebene=1, bild=None, fuss_off=0, untergrund=None):
         """Anker (ax, ay) in Pixeln = Mitte unten. Gibt None zurueck, wenn das Objekt ein anderes
         beruehren wuerde (dann wird es nicht gesetzt)."""
+        basisname = name
+        if name in PFLANZEN and bild is None:
+            # Gras- oder Sand-Variante je nach Boden unter dem Fuss
+            fx, fy = min(max(int(ax), 0), MW - 1), min(max(int(ay) - 1, 0), MH - 1)
+            boden_art = 'sand' if sand_maske[fy, fx] else 'gras'
+            name = 'varianten/%s_%s' % (name.split('/')[1], boden_art)
+            if not os.path.exists(os.path.join(OBJ, name + '.png')):
+                os.makedirs(os.path.join(OBJ, 'varianten'), exist_ok=True)
+                bauwerke_mod.pflanzen_variante(lade(basisname), boden_art).save(os.path.join(OBJ, name + '.png'))
+            ay += 3                              # Variante ist 3 px hoeher, Fuss bleibt an derselben Stelle
+            if boden_art == 'sand' and untergrund == 'gras':
+                return None
+            if boden_art == 'sand':
+                untergrund = 'sand'
         im = bild or lade(name)
         if not passt(name, ax, ay, im):
             return None
@@ -196,9 +218,9 @@ def main():
             o['schatten'] = [int(im.width * 0.7), max(4, im.width // 7)]
         if untergrund:
             o['untergrund'] = untergrund
-        if name in WEHEN:
+        if basisname in WEHEN:
             o['anim'] = 'wehen'
-        elif name in WIPPEN:
+        elif basisname in WIPPEN:
             o['anim'] = 'wippen'
         objekte.append(o)
         return o
@@ -347,7 +369,7 @@ def main():
                 elif frei_umgebung(cx, cy, 0) and frei_umgebung(cx, cy, 1, 'gs') and r < 0.11:   # nicht ans Wasser
                     setze(wahl('wiese_klein'), px, py, ebene=0, untergrund='gras')
             elif kl == 's' and ch in 'Ss' and frei_umgebung(cx, cy, 0, 's') and r < 0.03:
-                setze(wahl('strand'), px, py, ebene=0)
+                setze(wahl('strand'), px, py, ebene=0, untergrund='sand')
             elif kl in 'mw' and ch in 'hD':
                 nahe_strand = any(k(cx + dx, cy + dy) == 's' for dx in range(-4, 5) for dy in range(-4, 5))
                 if nahe_strand and frei_umgebung(cx, cy, 1, 'mw') and r < 0.035:
@@ -356,7 +378,7 @@ def main():
                 setze(wahl('teich'), px, py, ebene=0)
             elif kl == 's' and ch == 'p' and any(k(cx + dx, cy + dy) == 'w' for dx in (-1, 0, 1) for dy in (-1, 0, 1)) \
                     and r < 0.12:
-                setze(wahl('ufer'), px, py)
+                setze(wahl('ufer'), px, py, untergrund='sand')
 
     json.dump(objekte, open(os.path.join(OBJ, 'platzierung.json'), 'w'), indent=0)
     print(len(objekte), 'Objekte gesetzt')
