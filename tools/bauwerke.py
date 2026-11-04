@@ -120,10 +120,13 @@ def zeichne_bruecke(img, x0, x1, y0, y1, frame=0, seed=5):
     pfosten = [x0 - 1, (x0 + x1) // 2 - 2, x1 - 4]
     for yb in (y0, y1):
         for p in pfosten:
+            unten = yb + (6 if yb == y1 else 2)          # untere Pfosten stehen als Pfaehle im Wasser
             for xx in range(p, p + 5):
-                for yy in range(yb - 7, yb + 2):
+                for yy in range(yb - 7, unten):
                     k = xx - p
-                    c = HOLZ[1] if k in (0, 4) or yy == yb + 1 else HOLZ[5] if k == 1 else HOLZ[3]
+                    c = HOLZ[1] if k in (0, 4) or yy == unten - 1 else HOLZ[5] if k == 1 else HOLZ[3]
+                    if yy > yb + 1:
+                        c = HOLZ[1] if k in (0, 4) else HOLZ[2]     # nasser, dunkler Pfahl
                     if yy == yb - 7:
                         c = HOLZ[1] if k in (0, 4) else HOLZ[6]
                     _setz(px, W, H, xx, yy, c)
@@ -137,7 +140,7 @@ def zeichne_bruecke(img, x0, x1, y0, y1, frame=0, seed=5):
     for p in pfosten:
         for k, xx in enumerate(range(p - 2, p + 7)):
             if (k + frame) % 3:
-                _setz(px, W, H, xx, y1 + 3, WS['w4'] if k % 4 else WS['w5'])
+                _setz(px, W, H, xx, y1 + 7, WS['w4'] if k % 4 else WS['w5'])
 
 
 # ---------------------------------------------------------------- Steg (Laufrichtung senkrecht)

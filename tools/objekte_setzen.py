@@ -91,13 +91,18 @@ def main():
         for vx in range(s['von'], s['bis'] + 1):
             tcol[vx], hcol[vx] = s['t'], s.get('h', 3)
     gesperrt = set()
+    for tr in plan['treppen']:                # Treppen-Zuwege frei halten
+        t, h = tcol[tr['x']], hcol[tr['x']]
+        for x in range(tr['x'] - 1, tr['x'] + tr['breite'] + 1):
+            for y in range(t - h - 4, t + 5):
+                gesperrt.add((x, y))
     for x in range(cols):                     # Klippenwand + eine Zeile darunter
         t, h = max(tcol[x], tcol[x + 1]), max(hcol[x], hcol[x + 1])
         for y in range(min(tcol[x], tcol[x + 1]) - h, t + 2):
             gesperrt.add((x, y))
     for br in plan.get('bruecken', []) + plan.get('stege', []):
         for x in range(br['x'] - 1, br['x'] + br['breite'] + 1):
-            for y in range(br['y'] - 1, br['y'] + br['hoehe'] + 1):
+            for y in range(br['y'] - 2, br['y'] + br['hoehe'] + 3):   # Objekte wachsen nach oben
                 gesperrt.add((x, y))
 
     def k(x, y):
