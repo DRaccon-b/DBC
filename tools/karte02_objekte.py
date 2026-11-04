@@ -50,8 +50,8 @@ FEST = [
     ('ortho/05', 87, 9, {}), ('ortho/15', 90.5, 9, {}),
     # Reaktor mit Pylonen und Generatoren
     ('reaktor/00', 75.5, 31, {'anim': 'reaktor'}),
-    ('turm/03', 67.5, 30, {'anim': 'reaktor'}), ('turm/03', 83.5, 30, {'anim': 'reaktor'}),
-    ('mittel/00', 67, 38, {'anim': 'reaktor'}), ('mittel/01', 84.5, 38, {'anim': 'reaktor'}),
+    ('turm/03', 67.5, 30, {'anim': 'reaktor', 'blitze': True}), ('turm/03', 83.5, 30, {'anim': 'reaktor', 'blitze': True}),
+    ('mittel/00', 67, 34, {'anim': 'reaktor'}), ('mittel/01', 84.5, 34, {'anim': 'reaktor'}),
     ('mittel/00', 66.5, 50, {'anim': 'reaktor'}), ('mittel/01', 85, 50, {'anim': 'reaktor'}),
     # Platz links und Strasse
     ('hoch/02', 4.6, 34, {'anim': 'blinken'}), ('hoch/02', 4.6, 46, {'anim': 'blinken'}),
@@ -81,7 +81,7 @@ SCHILDER = [(12, 22), (26, 11), (29, 56), (49, 60), (41, 70), (54, 70), (79, 69)
 LATERNEN = [(16, 34), (24, 34), (32, 34), (40, 34), (49, 34), (56, 34), (18, 41), (26, 41), (34, 41), (45, 41), (7, 41),
             # Hoefe: Containerlager, Fabrikhof, Werkstatt, Tanklager, Reaktorplatz-Rand, unten links
             (12, 11), (27, 21), (30, 25), (46, 27), (57, 25), (36, 51), (58, 51), (28, 61), (59, 66),
-            (61, 13), (88, 13), (17, 67), (9, 57), (65, 59), (86, 63)]
+            (61, 12), (88, 12), (17, 67), (9, 57), (65, 59), (86, 63)]
 # Kleinteile, die verstreut werden (Gruppe mini; Nummern werden nach Sichtung eingetragen)
 STREU = ['mini/00', 'mini/01', 'mini/02', 'mini/03', 'mini/15', 'mini/00', 'mini/01', 'mini/04', 'mini/10',
          'mini/09', 'mini/14', 'mini/08', 'mini/11', 'mini/12', 'mini/55', 'mini/63', 'mini/13', 'mini/17',
@@ -346,6 +346,44 @@ def animieren(img, objs, frame):
             if t < 0.9:
                 gd.point((sx, sy), fill=farbe + (255,))
     img.alpha_composite(glut)
+    # Pylonkoepfe: kleine Blitzboegen und Funken (jedes Frame anders, ab und zu Pause)
+    bl = Image.new('RGBA', img.size, (0, 0, 0, 0))
+    bp = bl.load()
+    W, H = img.size
+    def punkt(x, y, c):
+        x, y = int(round(x)), int(round(y))
+        if 0 <= x < W and 0 <= y < H:
+            bp[x, y] = c
+    for i, o in enumerate(objs):
+        if not o.get('blitze'):
+            continue
+        sp = Image.open(os.path.join(OBJ, o['datei']))
+        al = np.array(sp.getchannel('A')) >= 200
+        top = int(np.nonzero(al.any(axis=1))[0].min())
+        cx, cy = o['x'] + sp.width / 2, o['y'] + top + 3
+        rnd = random.Random(frame * 97 + i * 13)
+        if rnd.random() < 0.2:                       # kurze Pause
+            continue
+        for b_ in range(rnd.randint(1, 3)):          # Blitzbogen: Zickzack vom Kopf nach aussen
+            w_ = rnd.uniform(-math.pi * 0.95, -math.pi * 0.05)
+            laenge = rnd.randint(12, 20)
+            x, y = cx, cy
+            for k in range(laenge):
+                x += math.cos(w_) * 1.4 + rnd.uniform(-1.3, 1.3)
+                y += math.sin(w_) * 1.2 + rnd.uniform(-1, 1)
+                punkt(x, y, (255, 255, 255, 255) if k < laenge // 2 else (127, 240, 245, 255))
+                punkt(x + 1, y, (47, 199, 216, 150))
+        for _ in range(rnd.randint(3, 6)):           # Funken
+            punkt(cx + rnd.uniform(-9, 9), cy + rnd.uniform(-10, 4),
+                  rnd.choice(((230, 255, 255, 255), (127, 240, 245, 255), (255, 242, 160, 255))))
+        for r, al_ in ((6, 70), (3, 110)):           # Glimmen um den Kopf
+            for yy in range(-r, r + 1):
+                for xx in range(-r, r + 1):
+                    if xx * xx + yy * yy <= r * r:
+                        x_, y_ = int(cx + xx), int(cy + yy)
+                        if 0 <= x_ < W and 0 <= y_ < H and bp[x_, y_][3] == 0:
+                            bp[x_, y_] = (127, 240, 245, al_ // 3)
+    img.alpha_composite(bl)
     # Rauch aus Schornsteinen: Woelkchen steigen auf und werden groesser und blasser
     from PIL import ImageDraw
     rauch = Image.new('RGBA', img.size, (0, 0, 0, 0))
