@@ -100,37 +100,56 @@ def hoehenkanten(a, hoch, fels, front, seite, lippe_pal, frei, seed, treppen=())
     F = [np.array(H(c)) for c in FELS[fels]]
     Lp = [np.array(H(c)) for c in lippe_pal]
     wand = np.zeros_like(hoch)
-    # Seitenwaende (zuerst, die Fronten liegen davor)
+    # Seitenwaende (zuerst, die Fronten liegen davor): gestapelte Felsbloecke, Westwand im Licht,
+    # Ostwand im Schatten, aussen dunkle Kante, oben ueberhaengendes Gras
     rechts = hoch & ~np.roll(hoch, -1, axis=1); rechts[:, -1] = False   # Hochflaeche endet nach Osten
     links = hoch & ~np.roll(hoch, 1, axis=1); links[:, 0] = False       # Hochflaeche endet nach Westen
-    for y, x in zip(*np.nonzero(rechts)):
-        if frei[y, x]:
-            continue
-        for k in range(seite):
-            xx = x + 1 + k
-            if xx >= W or hoch[y, xx]:
-                break
-            c = stex[k, y].astype(np.float32) * (0.78 + 0.02 * k)       # Ostwand: im Schatten
-            a[y, xx] = c.astype(np.uint8); wand[y, xx] = True
+
+    def block(y, k, seite_, hell):
+        versatz = 6 if (k // 6) % 2 else 0
+        bh = 12
+        yb = (y + versatz) % bh
+        bid = (y + versatz) // bh * 7 + k // 6
+        if k == seite_ - 1:
+            return F[0]
+        if yb == 0:
+            c = F[5] if hell else F[4]
+        elif yb == bh - 1:
+            c = F[1]
+        elif k % 6 == 5:
+            c = F[2]                                                    # senkrechte Fuge
         else:
-            for k, f in ((0, 0.7), (1, 0.82), (2, 0.92)):
-                xx = x + 1 + seite + k
-                if xx < W and not hoch[y, xx]:
-                    a[y, xx] = (a[y, xx] * f).astype(np.uint8)
-        a[y, min(W - 1, x + 1)] = F[0]
-    for y, x in zip(*np.nonzero(links)):
-        if frei[y, x]:
-            continue
-        for k in range(seite):
-            xx = x - 1 - k
-            if xx < 0 or hoch[y, xx]:
-                break
-            c = stex[k, y].astype(np.float32) * (1.08 - 0.015 * k)      # Westwand: im Licht
-            a[y, xx] = np.clip(c, 0, 255).astype(np.uint8); wand[y, xx] = True
-        xx = x - 1 - seite
-        if xx >= 0 and not hoch[y, xx]:
-            a[y, xx] = F[1]
-        a[y, max(0, x - 1)] = F[5]
+            c = F[4] if hell else F[3]
+            if (bid * 37 + yb * 3 + k) % 41 == 0:
+                c = F[2]
+        if not hell:
+            c = (c.astype(np.float32) * 0.86).astype(np.uint8)
+        return c
+
+    for kante, richtung, hell in ((rechts, 1, False), (links, -1, True)):
+        for y, x in zip(*np.nonzero(kante)):
+            if frei[y, x]:
+                continue
+            n = 0
+            for k in range(seite):
+                xx = x + richtung * (1 + k)
+                if not (0 <= xx < W) or hoch[y, xx]:
+                    break
+                n += 1
+            for k in range(n):
+                xx = x + richtung * (1 + k)
+                a[y, xx] = block(y, k if n == seite else k + (seite - n), seite, hell); wand[y, xx] = True
+            if n == seite and not hell:                                 # Schatten der Ostwand
+                for k, f in ((0, 0.72), (1, 0.84), (2, 0.93)):
+                    xx = x + richtung * (1 + seite + k)
+                    if 0 <= xx < W and not hoch[y, xx]:
+                        a[y, xx] = (a[y, xx] * f).astype(np.uint8)
+            # Grasueberhang an der Oberkante (Buckel)
+            u = 1 + int(1 + math.sin(y / 3.1 + x) + 0.8 * math.sin(y / 1.9))
+            for d in range(-1, u):
+                xx = x + richtung * (1 + d) if d >= 0 else x
+                if 0 <= xx < W:
+                    a[y, xx] = Lp[1] if d == u - 1 else Lp[3] if d < 0 else Lp[2]
     # Fronten
     unten = hoch & ~np.roll(hoch, -1, axis=0); unten[-1] = False
     trm = np.zeros((Hh, W), bool)
@@ -179,6 +198,68 @@ def hoehenkanten(a, hoch, fels, front, seite, lippe_pal, frei, seed, treppen=())
         if y + 1 < Hh and hoch[y + 1, x]:
             a[y + 1, x] = Lp[4]
     return wand
+
+
+def treppe(a, x0, x1, ye, richtung, front, fels, wegtex):
+    """Steintreppe an einer Plateaukante. richtung 's': Front nach Sueden (Stufen frontal sichtbar, Wangen
+    links/rechts, oben ein Wegstueck auf dem Plateau). 'n': Nordkante - Stufen von oben gesehen steigen
+    nach Sueden an (Tritte mit Lichtkante), Wangen seitlich."""
+    F = [np.array(H(c)) for c in FELS[fels]]
+    Hh, W = a.shape[:2]
+    if richtung == 's':
+        for y in range(ye - 12, ye + 1):                          # Wegstueck oben
+            for x in range(x0 + 1, x1 - 1):
+                if (y - (ye - 12)) + min(x - x0, x1 - 1 - x) > 2:
+                    a[y, x] = wegtex[y, x]
+        n = 5
+        hoehe = front + 4
+        sh = hoehe / n
+        for y in range(ye + 1, ye + 1 + hoehe):
+            i = int((y - ye - 1) / sh)
+            yy = (y - ye - 1) - i * sh
+            for x in range(x0, x1):
+                k = x - x0
+                if k < 3:
+                    c = (F[1], F[5], F[4])[k]
+                elif x >= x1 - 3:
+                    c = (F[3], F[2], F[0])[x - (x1 - 3)]
+                elif yy < 1:
+                    c = F[6]
+                elif yy < 3:
+                    c = F[5] if k < (x1 - x0) * 0.6 else F[4]
+                elif yy >= sh - 1:
+                    c = F[1]
+                else:
+                    c = F[3] if k < (x1 - x0) * 0.6 else F[2]
+                a[y, x] = c
+        for x in range(x0, x1):                                   # Kontaktschatten unter der letzten Stufe
+            for d, f in ((0, 0.7), (1, 0.85)):
+                yy = ye + 1 + hoehe + d
+                if yy < Hh:
+                    a[yy, x] = (a[yy, x] * f).astype(np.uint8)
+        for y in range(ye + 1, ye + 1 + hoehe):                   # Schatten der rechten Wange
+            for d, f in ((0, 0.75), (1, 0.88)):
+                if x1 + d < W:
+                    a[y, x1 + d] = (a[y, x1 + d] * f).astype(np.uint8)
+    else:
+        n, sh = 4, 6
+        for y in range(ye - 1, ye + n * sh):
+            i = (y - ye + 1) // sh
+            yy = (y - ye + 1) % sh
+            for x in range(x0, x1):
+                k = x - x0
+                if k < 3:
+                    c = (F[1], F[4], F[3])[k]
+                elif x >= x1 - 3:
+                    c = (F[3], F[2], F[0])[x - (x1 - 3)]
+                elif yy == 0:
+                    c = F[1]
+                elif yy == 1:
+                    c = F[6] if i > 0 else F[5]
+                else:
+                    t = i / n
+                    c = F[4] if t < 0.5 else F[5]
+                a[y, x] = c
 
 
 def rampe_zeichnen(a, x0, y0, x1, y1, abwaerts_nach_osten, fels):
@@ -347,7 +428,30 @@ def objekte_zeichnen(img, objs, cache, boden, frame):
         sp = cache[o['datei']]
         if frame is not None and o.get('anim') == 'wehen':
             sp = kb.wehen(sp, kb.wind(frame, o['x']))
+        elif frame is not None and o.get('anim') == 'baum':
+            sp = baum_wind(sp, frame, o['x'] + o['y'] * 0.3)
         img.alpha_composite(sp, (o['x'], o['y']))
+
+
+def baum_wind(sp, frame, phase):
+    """Baum im Wind: die Krone (obere 65 %) schwingt weich bis 2 px seitlich, unten weniger, der Stamm steht;
+    dazu flirren einzelne Blattpixel hell auf."""
+    t = 2 * math.pi * (frame / N_FRAMES - phase / 520.0)
+    amp = 1.6 * math.sin(t) + 0.5 * math.sin(2 * t + 1.0)
+    out = Image.new('RGBA', sp.size)
+    grenze = sp.height * 0.65
+    for y in range(sp.height):
+        d = round(amp * (1 - y / grenze)) if y < grenze else 0
+        out.paste(sp.crop((0, y, sp.width, y + 1)), (d, y))
+    a = np.array(out)
+    g = (a[..., 1] > a[..., 0] + 15) & (a[..., 1] > a[..., 2] + 15) & (a[..., 3] > 0)
+    ys, xs = np.nonzero(g)
+    if len(ys):
+        rs = random.Random(int(phase) * 31 + frame)
+        for _ in range(max(1, len(ys) // 90)):
+            i = rs.randrange(len(ys))
+            a[ys[i], xs[i], :3] = np.minimum(255, a[ys[i], xs[i], :3].astype(int) + 55)
+    return Image.fromarray(a)
 
 
 FLAMME = [  # 7x9, f1 dunkelrot .. f4 hellgelb
@@ -390,6 +494,22 @@ def animieren(img, objs, cache, frame):
                                                     min(255, int(b_ * f + 20 * puls)), 255)
                 for r, al in ((20, 30), (12, 50), (6, 80)):
                     gd.ellipse((cx - r, cy - r, cx + r, cy + r), fill=(255, 60, 60, int(al * (0.4 + 0.6 * puls))))
+                # Funkeln: Sternblitze wandern ueber das Juwel (wachsen und schrumpfen)
+                for k in range(2):
+                    ph = (frame + k * 8) % N_FRAMES
+                    gr = (0, 2, 4, 5, 4, 2, 1, 0)[ph // 2] if ph < 16 else 0
+                    if gr:
+                        j = (k * 5 + frame // 8 * 3) % len(xs)
+                        sx_, sy_ = o['x'] + xs[j], o['y'] + ys[j]
+                        if k == 1:
+                            sx_, sy_ = int(cx - 2), int(cy - 3)
+                        for d in range(-gr, gr + 1):
+                            al_ = 255 if abs(d) < gr else 170
+                            gd.point((sx_ + d, sy_), fill=(255, 255, 255, al_))
+                            gd.point((sx_, sy_ + d), fill=(255, 255, 255, al_))
+                        if gr >= 2:
+                            for dx_, dy_ in ((1, 1), (-1, -1), (1, -1), (-1, 1)):
+                                gd.point((sx_ + dx_, sy_ + dy_), fill=(255, 230, 230, 150))
         elif anim == 'glitzern':
             a = np.array(sp)
             m = (a[..., 2] > 200) & (a[..., 0] > 150) & (a[..., 3] > 0)
@@ -446,9 +566,9 @@ def bauen(frame=None, speichern=True):
             dunkeln(a, saum, 0.93)
     # --- Hoehenmasken (stark gerundet, damit die Kanten nicht treppig wirken)
     stufe = lambda n: zell_maske([''.join('1' if v >= n else '0' for v in r) for r in hoehe], '1', cols, rows)
-    m1 = weich(stufe(1), 6, 0.25, 21)
-    m2 = weich(stufe(2), 6, 0.25, 22)
-    teer = weich(zell_maske(cls, 't', cols, rows), 6, 0.25, 23)
+    m1 = weich(stufe(1), 6, 0, 21)
+    m2 = weich(stufe(2), 6, 0, 22)
+    teer = weich(zell_maske(cls, 't', cols, rows), 6, 0, 23)
     can = ~m1 & ~teer
     for art, m in (('c', can), ('t', teer)):
         tx = textur(cls, art, cols, rows)
@@ -474,11 +594,33 @@ def bauen(frame=None, speichern=True):
     for r in lay.get('rampen', []):
         x0, y0, x1, y1 = r
         rampen[y0 * T:(y1 + 1) * T, x0 * T:(x1 + 1) * T] = True
-    treppen = [(x0 * T + 2, (x1 + 1) * T - 2, y0 * T, (y1 + 1) * T) for (x0, x1, y0, y1) in lay.get('treppen', [])]
+    treppen_info = []
+    frei_pl = np.zeros((Hp, Wp), bool)
+    for (x0, x1, y0, y1, r) in lay.get('treppen', []):
+        px0, px1 = x0 * T + 1, (x1 + 1) * T - 1
+        if r == 's':
+            ye = max((max(np.nonzero(m2[y0 * T:(y1 + 1) * T, xc])[0]) + y0 * T
+                      for xc in range(px0, px1) if m2[y0 * T:(y1 + 1) * T, xc].any()), default=None)
+            if ye is None:
+                continue
+            frei_pl[ye - 14:ye + 50, px0 - 2:px1 + 2] = True
+        else:
+            ye = min((min(np.nonzero(m2[y0 * T:(y1 + 1) * T, xc])[0]) + y0 * T
+                      for xc in range(px0, px1) if m2[y0 * T:(y1 + 1) * T, xc].any()), default=None)
+            if ye is None:
+                continue
+            frei_pl[ye - 2:ye + 30, px0 - 2:px1 + 2] = True
+        treppen_info.append((px0, px1, ye, r))
+    treppen = []
     # --- Waende: Canyon (Erde), Teerbecken (Schiefer), Plateaus (Sandstein)
-    hoehenkanten(a, m1 | teer, 'erde', 26, 14, LIPPE['s'], rampen, 11)
-    hoehenkanten(a, m1 | can, 'schiefer', 20, 8, LIPPE['a'], rampen, 12)
-    hoehenkanten(a, m2, 'sandstein', 40, 8, LIPPE['g'], np.zeros_like(rampen), 13, treppen)
+    waende = hoehenkanten(a, m1 | teer, 'erde', 26, 14, LIPPE['s'], rampen, 11)
+    waende |= hoehenkanten(a, m1 | can, 'schiefer', 20, 8, LIPPE['a'], rampen, 12)
+    waende |= hoehenkanten(a, m2, 'sandstein', 40, 8, LIPPE['g'], frei_pl, 13, treppen)
+    if speichern and frame is None:
+        np.save(os.path.join(KARTE, 'waende.npy'), np.packbits(waende))
+    wegtex = textur(cls, 'w', cols, rows)
+    for (px0, px1, ye, r) in treppen_info:
+        treppe(a, px0, px1, ye, r, 40, 'sandstein', wegtex)
     # Rampen-Oberflaechen: Furtboden, der zur Tiefe hin leicht dunkler wird
     rm = weich(rampen_roh, 3.0, 0.3, 27) & ~fluss
     tx = textur(cls, 'f', cols, rows)
@@ -502,8 +644,13 @@ def bauen(frame=None, speichern=True):
     for tp in lay.get('teleporter', []):
         teleporter_zeichnen(a, tp['x'], tp['y'], tp['b'], tp['h'], frame)
     # --- Hecke
-    hm = weich(zell_maske(cls, 'h', cols, rows), 2.5, 0.35, 8)
-    hecke(a, hm, 9)
+    # Waldrand: schattiger Waldboden (Olivgras, dunkler), die Baeume kommen als Objekte
+    hroh = zell_maske(cls, 'h', cols, rows)
+    hm = weich(hroh, 5, 0.4, 8)
+    tx = textur(cls, 'd', cols, rows)
+    a[hm] = (tx[hm] * np.array([0.7, 0.76, 0.66])).astype(np.uint8)
+    saum = weich(hroh, 5, 0.4, 8, 0.32) & ~hm
+    a[saum] = (a[saum] * 0.85).astype(np.uint8)
     img = Image.fromarray(a).convert('RGBA')
     if speichern and frame is None:
         img.save(os.path.join(KARTE, 'terrain_basis.png'))

@@ -285,6 +285,16 @@ OBJEKTGRUPPEN_K4 = {
         'tiny animal skull', 'small pale blue crystal', 'tiny rusty cog', 'small orange savanna flower',
         'small grey rock', 'dry twig', 'small dark rock with ash', 'little red mushroom',
     ]},
+    'k4_rand': {'size': 80, 'items': [
+        'large baobab tree with a very thick bottle shaped trunk and a small green crown',
+        'wide flat-topped umbrella acacia tree with a dense green canopy',
+        'tall acacia tree with two layered flat green canopies',
+        'dense round green savanna bush',
+        'marula tree with a round full green crown and a short trunk',
+        'thorny acacia shrub with small green leaves',
+        'dragon blood tree with an umbrella shaped crown of thick branches',
+        'young baobab tree with a few bare branches and small leaves',
+    ]},
     'k4_monument': {'size': 160, 'items': [
         'giant dark iron gear monument standing upright with a glowing red gem in the hub, on a rocky dark stone base',
     ]},

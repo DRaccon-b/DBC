@@ -18,11 +18,15 @@ KARTE = os.path.join(ROOT, 'maps', 'karte04')
 OBJ = os.path.join(ROOT, 'assets', 'objekte', 'karte04')
 T = 16
 H = lambda h: tuple(int(h[i:i + 2], 16) for i in (1, 3, 5))
-GRASRAMPE = {'s': ['#7a6430', '#957c3e', '#ad944e', '#c4aa60', '#d6bc70', '#e8d08a'],
+GRASRAMPE = {'c': ['#5e4630', '#7a5c40', '#977c58', '#b09470', '#c4ac88', '#d6c4a2'],
+             's': ['#7a6430', '#957c3e', '#ad944e', '#c4aa60', '#d6bc70', '#e8d08a'],
              'g': ['#66783e', '#82924e', '#9aa95e', '#afbd70', '#c2ce82', '#d6df9a'],
              'a': ['#55554c', '#69695e', '#7c7c70', '#8e8e80', '#a4a496', '#b8b8aa']}
 
-AKAZIE = ['baeume/00', 'baeume/03']
+AKAZIE = ['baeume/00', 'rand/01', 'baeume/03', 'rand/02']
+# Waldrand wie in Karte 01: viele verschiedene Savannenbaeume (Baobab, Akazien, Marula, Drachenbaum, Buesche)
+RAND = ['rand/00', 'rand/01', 'rand/02', 'rand/03', 'rand/03', 'rand/04', 'rand/04', 'rand/05', 'rand/06', 'rand/07',
+        'baeume/00', 'baeume/03', 'rand/03', 'rand/05']
 # (sprite, x_px, y_px [Fussmitte in der Vorlage], Optionen)
 FEST = [
     # Plateaus mit Zahnraedern
@@ -90,7 +94,9 @@ def fuss_variante(name, boden, spiegeln):
         if spiegeln:
             sp = sp.transpose(Image.FLIP_LEFT_RIGHT)
         sp = saeubern(sp)
-        art = 'baum' if name in PFLANZEN or name.startswith('baeume/') else 'klein' if name.startswith('klein/') else 'stein'
+        art = 'baum' if name in PFLANZEN or name.startswith('baeume/') or name.startswith('rand/') else 'klein' if name.startswith('klein/') else 'stein'
+        if not name.startswith('klein/') and not name.startswith('rand/') and name not in AKAZIE:
+            sp = einbetten(sp, boden)
         v = bauwerke.bodenfuss(sp, 'gras', art)
         a = np.array(v)
         ramp = [H(c) for c in GRASRAMPE[boden]]
@@ -105,6 +111,27 @@ def fuss_variante(name, boden, spiegeln):
         os.makedirs(os.path.dirname(pfad), exist_ok=True)
         Image.fromarray(a).save(pfad)
     return vname
+
+
+def einbetten(sp, boden):
+    """Eigenes Gras/Erdreich am Fuss des Sprites (untere 35 %) an den Untergrund anpassen: Grashalme nach
+    Helligkeit auf die Bodenrampe (Plateau gruen, Savanne gelb, Asche grau); im Canyon wird Gras zu Erde."""
+    import colorsys
+    a = np.array(sp.convert('RGBA'))
+    h = a.shape[0]
+    y0 = int(h * 0.65)
+    ramp = [np.array(H(c)) for c in GRASRAMPE[boden if boden != 'c' else 's']]
+    erde = [np.array(H(c)) for c in ('#5e4630', '#7a5c40', '#977c58', '#b09470', '#c4ac88', '#d6c4a2')]
+    for y in range(y0, h):
+        for x in range(a.shape[1]):
+            if a[y, x, 3] == 0:
+                continue
+            r, g, b = a[y, x, :3] / 255.0
+            hh, ss, vv = colorsys.rgb_to_hsv(r, g, b)
+            if ss > 0.28 and 0.10 <= hh <= 0.42 and vv > 0.3:     # Gras (gelb bis gruen)
+                i = min(5, max(0, int((vv - 0.3) / 0.6 * 6)))
+                a[y, x, :3] = (erde if boden == 'c' else ramp)[i]
+    return Image.fromarray(a)
 
 
 def saeubern(sp):
@@ -156,14 +183,14 @@ def main():
                 if 0 <= x + dx < cols and hoehe[y][x] > hoehe[y][x + dx]:
                     gesperrt[y * T:(y + 1) * T, (x + dx) * T:(x + dx + 1) * T] = True
                     gesperrt[y * T:(y + 1) * T, x * T:(x + 1) * T] = True
-    for (x0, x1, y0, y1) in lay.get('treppen', []):
+    for (x0, x1, y0, y1, _r) in lay.get('treppen', []):
         gesperrt[y0 * T:(y1 + 3) * T, x0 * T:(x1 + 1) * T] = True
     belegt = np.zeros((MH, MW), bool)
     objekte = []
 
     def boden_bei(px, py):
         k = cls[min(rows - 1, max(0, int(py - 2) // T))][min(cols - 1, max(0, int(px) // T))]
-        return 'g' if k == 'g' else 'a' if k in 'at' else 's'
+        return 'g' if k == 'g' else 'a' if k in 'at' else 'c' if k in 'cf' else 's'
 
     def setze(name, ax, ay, fest, opt):
         opt = dict(opt)
@@ -184,10 +211,50 @@ def main():
         objekte.append(o)
         return o
 
+    wandpfad = os.path.join(KARTE, 'waende.npy')
+    wand = np.unpackbits(np.load(wandpfad))[:MH * MW].reshape(MH, MW).astype(bool) if os.path.exists(wandpfad) else np.zeros((MH, MW), bool)
+
+    def frei_von_wand(name, px, py):
+        """Steht der Fuss eines festen Objekts auf einer Wand/Front, wird es zur naechsten freien Stelle
+        (bis 48 px) verschoben - nach unten bevorzugt (vor die Wand)."""
+        sp = Image.open(os.path.join(OBJ, name + '.png'))
+        b = max(6, sp.width // 3)
+        def trifft(x, y):
+            y0 = max(0, y - 3); x0 = max(0, x - b)
+            return wand[y0:y + 2, x0:x + b].any()
+        if not trifft(px, py):
+            return px, py
+        for r in range(4, 49, 4):
+            for dx, dy in ((0, r), (0, -r), (r, 0), (-r, 0), (r, r), (-r, r)):
+                if 0 <= px + dx < MW and 0 <= py + dy < MH and not trifft(px + dx, py + dy):
+                    print('  verschoben (Wand):', name, (px, py), '->', (px + dx, py + dy))
+                    return px + dx, py + dy
+        return px, py
+
+    # Waldrand: dichte Reihen verschiedener Savannenbaeume auf den Heckenflaechen
+    hz = np.array([[c == 'h' for c in r] for r in cls])
+    tp = [(t['x'], t['y'], t['b'], t['h']) for t in lay.get('teleporter', [])]
+    rw = random.Random(17)
+    wald = []
+    for gy in range(0, MH + 20, 15):
+        for gx in range(-6, MW + 10, 21):
+            x = gx + rw.randint(-6, 6) + (10 if (gy // 15) % 2 else 0)
+            y = gy + rw.randint(-4, 4)
+            cx_, cy_ = min(cols - 1, max(0, x // T)), min(rows - 1, max(0, (y - 4) // T))
+            if not hz[cy_, cx_]:
+                continue
+            if any(tx - 1 <= cx_ <= tx + tb and ty - 1 <= cy_ <= ty + th for (tx, ty, tb, th) in tp):
+                continue
+            wald.append((rw.choice(RAND), x, y))
+    for (name, x, y) in wald:
+        setze(name, x, y, True, {'anim': 'baum', 'spiegeln': rw.random() < 0.5})
     for i, (name, px, py, opt) in enumerate(FEST):
         if name == 'A':
-            name = AKAZIE[i % 2]
-            opt = dict(opt, anim='wehen', spiegeln=(i * 7) % 3 == 0)
+            name = AKAZIE[i % len(AKAZIE)]
+            opt = dict(opt, anim='baum', spiegeln=(i * 7) % 3 == 0)
+        elif name in ('baeume/02',):
+            opt = dict(opt, anim='baum')
+        px, py = frei_von_wand(name, px, py)
         setze(name, px, py, True, opt)
     for art, anzahl in STREU_ANZAHL.items():
         namen, gew = list(STREU[art]), list(STREU[art].values())

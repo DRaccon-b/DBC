@@ -142,6 +142,9 @@ def main():
     h &= (xx <= 6) | (yy >= 79) | ((xx >= 105) & (yy >= 34) & (yy <= 47))
     neu[(neu == 'h') & ~h] = 's'
     neu[h] = 'h'
+    # rechter Rand: Zugang zum Plateaustreifen (Hecke weg, Weg, Treppe von Norden)
+    neu[43:48, 105:110] = 'd'
+    neu[43:48, 107:110] = 'w'
     # Teer/Asche: Asche-Ring um das Teerbecken
     t = maske_schliessen(neu == 't', 1) & (xx >= 72)
     neu[(neu == 't') & ~t] = 'a'
@@ -182,7 +185,7 @@ def main():
         'rampen': [],
         'furten': [[20, 23], [58, 61]],
         'bruecke': [40, 42],
-        'treppen': [[22, 24, 17, 23], [76, 79, 22, 29], [92, 95, 24, 31]],
+        'treppen': [[22, 24, 17, 23, 's'], [76, 79, 22, 29, 's'], [92, 95, 24, 31, 's'], [107, 109, 47, 49, 'n']],
     }
     for (y0, y1) in ((20, 23), (40, 42), (58, 61)):
         for y in range(y0, y1 + 1):
