@@ -20,7 +20,11 @@ mit allen Pixeln plus 1 px Rand auf Gras (nie im Sand/Weg/Wasser), bei Bäumen g
 Stamm und Fuß. Pflanzen (Gras, Schilf, Strandgras, Farne) gibt es in zwei Varianten, die
 automatisch nach Untergrund gewählt werden: `varianten/NN_gras.png` (kurze Halme und Schatten am
 Fuß) und `varianten/NN_sand.png` (wachsen aus einem kleinen Sandhügel); am Ufer und Strand muss der
-Fuß ganz auf Sand stehen.
+Fuß ganz auf Sand stehen. Beide Varianten haben einen halbtransparenten Kontaktschatten und einen
+leicht abgedunkelten Halmfuß; auf Gras fransen kurze Halme aus, auf Sand dünnt der Hügel zum Rand aus.
+
+Riesiger Dschungelbaum (`assets/objekte/karte01/dschungel/00.png`, PixelLab-Objekt-Manager, 118×113 px)
+östlich des Weges, mit Kronenschatten und Unterwuchs; kein anderer Baum überlappt ihn.
 
 ## Aufbau
 

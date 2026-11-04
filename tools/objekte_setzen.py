@@ -40,15 +40,15 @@ WEHEN = ('deko/05', 'deko/06', 'deko/07', 'deko/24', 'deko/26', 'deko/61', 'deko
 WIPPEN = ('deko/17', 'deko/18', 'deko/19')
 PFLANZEN = ('deko/05', 'deko/06', 'deko/07', 'deko/24', 'deko/26', 'deko/61')   # bekommen Gras-/Sand-Fuss
 BLUMEN = ('deko/00', 'deko/01', 'deko/02', 'deko/03', 'deko/04', 'deko/30', 'deko/38', 'deko/27')
-SCHATTEN = ('baeume/', 'gross/00', 'gross/01', 'gross/02', 'gross/07', 'gross/09', 'gross/10', 'gross/11',
+SCHATTEN = ('dschungel/', 'baeume/', 'gross/00', 'gross/01', 'gross/02', 'gross/07', 'gross/09', 'gross/10', 'gross/11',
             'gross/03', 'deko/09', 'deko/11', 'deko/12', 'deko/13', 'deko/25')
 
 # Feste Objekte: (sprite, Ankerzelle x, y)  Anker = Mitte unten
 FEST = [
+    ('dschungel/00', 98, 61),   # riesiger Dschungelbaum mit Lianen und Runen (oestlich des Weges)
     ('gross/01', 21, 11),   # grosser Rosabaum (Original: grosser Baum oben links)
     ('gross/00', 44, 13),   # uralter Runenbaum
     ('gross/02', 71, 11),   # Kristallbaum
-    ('gross/00', 93, 55),   # Runenbaum im Osten
     ('gross/02', 26, 54),   # Kristallbaum im Suedwesten (Zielbild)
     ('gross/01', 86, 68),   # Rosabaum im Osten (Zielbild)
     ('gross/09', 30, 37),   # Runen-Findling auf der Wiese
@@ -214,7 +214,9 @@ def main():
              'fuss': im.height - fuss_off, 'ebene': ebene}
         if bild is not None:
             o['datei'] = name + '.png'
-        if name.startswith(SCHATTEN):
+        if name.startswith('dschungel/'):
+            o['schatten'] = [int(im.width * 1.0), 24]        # breiter Kronenschatten unter dem Riesenbaum
+        elif name.startswith(SCHATTEN):
             o['schatten'] = [int(im.width * 0.7), max(4, im.width // 7)]
         if untergrund:
             o['untergrund'] = untergrund
@@ -235,6 +237,26 @@ def main():
         for dx in range(-2, 3):
             for dy in range(-3, 1):
                 belegt.add((cx + dx, cy + dy))
+
+    # Unterwuchs um den Dschungelbaum: Farne, Bueschel und Gras dicht an den Wurzeln (ohne Ueberlappung)
+    for name, cx, cy in FEST:
+        if not name.startswith('dschungel/'):
+            continue
+        b = lade(name)
+        ax, ay = cx * T + 8, cy * T + 14
+        for i, (dx, dy, n) in enumerate(((-b.width // 2 - 2, 1, 'deko/26'), (b.width // 2 + 3, 4, 'deko/61'),
+                                          (-b.width // 2 + 8, 9, 'deko/05'), (b.width // 2 - 8, 7, 'deko/06'),
+                                          (-b.width // 2 - 10, -6, 'baeume/12'), (b.width // 2 + 12, -3, 'baeume/13'),
+                                          (-22, 12, 'deko/06'), (24, 9, 'deko/05'), (-6, 14, 'deko/14'),
+                                          (8, 15, 'deko/31'), (-34, 15, 'deko/00'), (36, 14, 'deko/03'),
+                                          (-b.width // 2 - 16, 10, 'deko/61'), (b.width // 2 + 18, 13, 'deko/26'))):
+            for versuch in range(6):              # bei Kollision etwas weiter nach aussen/unten
+                if setze(n, ax + dx + (versuch * 3 if dx > 0 else -versuch * 3), ay + dy + versuch,
+                         untergrund='gras'):
+                    break
+        for x in range(cx - 5, cx + 6):
+            for y in range(cy - 8, cy + 2):
+                belegt.add((x, y))
 
     # Treppen, Bruecken, Steg und Wasserfaelle zeichnet karte_bauen.py selbst (tools/bauwerke.py, klippen.py)
 

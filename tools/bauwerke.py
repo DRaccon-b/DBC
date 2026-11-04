@@ -331,55 +331,91 @@ def laterne_glas_farben():
 
 # ---------------------------------------------------------------- Pflanzen: Gras- und Sand-Variante
 def pflanzen_variante(sp, boden):
-    """Pflanzen-Sprite mit Fuss fuer den Untergrund.
+    """Pflanzen-Sprite mit Fuss fuer den Untergrund (4 px breiter, 3 px hoeher, Fuss an derselben Stelle).
 
-    boden='sand': die Halme wachsen aus einem kleinen Sandhuegel (Licht oben links, Schatten unten,
-    Vorderkante liegt ueber den Halmen). boden='gras': kurze Halme in Grasfarben und dunkler Schatten am
-    Fuss, damit die Pflanze in die Wiese uebergeht. Gibt ein um 4 px breiteres, 3 px hoeheres Bild zurueck
-    (Fuss bleibt an derselben Stelle: Mitte unten + 3 px).
+    Gemeinsam: halbtransparenter Kontaktschatten (passt auf jedes Gruen/Beige) und leicht abgedunkelter
+    Halmfuss, damit die Pflanze im Boden steckt statt aufgeklebt zu wirken.
+    boden='gras': einzelne kurze Halme in den Grastoenen fransen nach aussen aus und gehen in die
+    Wiesentextur ueber. boden='sand': flacher, unregelmaessiger Sandhuegel, der zu den Raendern hin
+    ausduennt (Licht links, Schatten rechts/unten), dazu ein paar Sandkoerner und ein Kiesel.
     """
+    import random
     from PIL import Image
     from basis_kacheln import RGB
     import numpy as np
+    rnd = random.Random(hash((sp.size, boden, sp.tobytes()[:64])) & 0xffff)
     w, h = sp.size
     a = np.array(sp.getchannel('A')) > 0
-    unten = a[max(0, h - 3):].any(axis=0)
-    xs = np.nonzero(unten)[0]
+    xs = np.nonzero(a[max(0, h - 3):].any(axis=0))[0]
     if len(xs) == 0:
         xs = np.array([w // 2])
-    fx0, fx1 = int(xs.min()), int(xs.max())
-    out = Image.new('RGBA', (w + 4, h + 3), (0, 0, 0, 0))
+    fx0, fx1 = int(xs.min()) + 2, int(xs.max()) + 2      # Fussbreite in neuen Koordinaten
+    W, H = w + 4, h + 3
+    cx, yb = (fx0 + fx1) / 2, h                          # Fussmitte (Zeile h = alte Unterkante + 1)
+    rx = (fx1 - fx0) / 2 + 2.5
+
+    # 1) Kontaktschatten (halbtransparent)
+    schatten = Image.new('RGBA', (W, H), (0, 0, 0, 0))
+    ps = schatten.load()
+    farbe = (24, 70, 50) if boden == 'gras' else (120, 82, 52)
+    for y in range(h - 2, H):
+        for x in range(W):
+            d = ((x - cx) / (rx + 1)) ** 2 + ((y - yb) / 2.2) ** 2
+            if d <= 1.0:
+                ps[x, y] = farbe + (int(120 if d < 0.45 else 70),)
+    out = schatten
+
+    # 2) Pflanze mit abgedunkeltem Fuss
+    pfl = sp.convert('RGBA').copy()
+    pp = pfl.load()
+    for y in range(max(0, h - 2), h):
+        f = 0.78 if y == h - 1 else 0.88
+        for x in range(w):
+            r_, g_, b_, a_ = pp[x, y]
+            if a_:
+                pp[x, y] = (int(r_ * f), int(g_ * f), int(b_ * f), a_)
+
     px = out.load()
-    cx = (fx0 + fx1) / 2 + 2
-    rx = max(4.0, (fx1 - fx0) / 2 + (3.5 if boden == 'sand' else 2.5))
-    yb = h + 0.5                                  # Mitte des Huegels/Fusses (in neuen Koordinaten)
+    def setz(x, y, c):
+        if 0 <= x < W and 0 <= y < H:
+            px[x, y] = c + (255,)
+
     if boden == 'sand':
-        oben, mitte, schatten, rand = RGB['s3'], RGB['s2'], RGB['s1'], RGB['s0']
-    else:
-        oben, mitte, schatten, rand = RGB['g3'], RGB['g2'], RGB['g1'], RGB['g0']
-
-    def huegel(nur_vorn):
-        for y in range(h - 2, h + 3):
-            for x in range(w + 4):
-                d = ((x - cx) / rx) ** 2 + ((y - yb) / (3.0 if boden == 'sand' else 2.6)) ** 2
-                if d > 1.0:
+        # 3a) Sandhuegel hinter den Halmen: Mitte dicht, Rand ausgeduennt
+        for y in range(h - 2, h + 2):
+            for x in range(W):
+                d = ((x - cx) / rx) ** 2 + ((y - (yb - 0.5)) / 1.8) ** 2
+                if d > 1.0 or (d > 0.6 and rnd.random() < 0.55):
                     continue
-                if nur_vorn and y < h:
-                    continue
-                if y >= h + 2 or (d > 0.75 and y >= h + 1):
-                    c = rand if abs(x - cx) < rx * 0.6 else schatten
-                elif y >= h:
-                    c = schatten if x > cx else mitte
+                if y <= h - 2:
+                    c = RGB['s4'] if x < cx else RGB['s3']
+                elif y == h - 1:
+                    c = RGB['s3'] if x < cx - 1 else RGB['s2']
                 else:
-                    c = oben if x < cx else mitte          # Licht von oben links
-                px[x, y] = c + (255,)
-
-    huegel(False)                                 # hinter der Pflanze
-    out.alpha_composite(sp.convert('RGBA'), (2, 0))
-    huegel(True)                                  # Vorderkante ueber den Halmen
-    if boden == 'gras':                           # ein paar kurze Halme am Fuss
-        for x in range(int(cx - rx), int(cx + rx) + 1, 3):
-            if 0 <= x < w + 4:
-                px[x, h] = RGB['g4'] + (255,)
-                px[x, h + 1] = RGB['g2'] + (255,)
+                    c = RGB['s2'] if x < cx else RGB['s1']
+                setz(x, y, c)
+        out.alpha_composite(pfl, (2, 0))
+        # Vorderkante des Huegels ueber den Halmen (Halme stecken im Sand)
+        for x in range(int(cx - rx + 1), int(cx + rx)):
+            if rnd.random() < 0.8:
+                setz(x, h - 1, RGB['s3'] if x < cx else RGB['s2'])
+            if rnd.random() < 0.6:
+                setz(x, h, RGB['s2'] if x < cx else RGB['s1'])
+        # Sandkoerner und ein kleiner Kiesel
+        for _ in range(3):
+            setz(int(cx + rnd.uniform(-rx - 2, rx + 2)), h + rnd.randint(0, 2), RGB[rnd.choice(('s1', 's4'))])
+        kx = int(cx + rx) if rnd.random() < 0.5 else int(cx - rx - 1)
+        setz(kx, h + 1, RGB['s4']); setz(kx + 1, h + 1, RGB['s1']); setz(kx + 1, h + 2, RGB['s0'])
+    else:
+        out.alpha_composite(pfl, (2, 0))
+        # 3b) kurze Halme, die nach aussen ausfransen (vorne, unterschiedlich hoch)
+        x = cx - rx - 1
+        while x <= cx + rx + 1:
+            xi = int(x)
+            hoehe = rnd.choice((1, 2, 2, 3)) if abs(xi - cx) < rx else rnd.choice((1, 1, 2))
+            for k in range(hoehe):
+                y = h + 1 - k
+                c = RGB['g4'] if k == hoehe - 1 else RGB['g2'] if k == 0 else RGB['g3']
+                setz(xi, y, c)
+            x += rnd.choice((1.5, 2, 2.5))
     return out

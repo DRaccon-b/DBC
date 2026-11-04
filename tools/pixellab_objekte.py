@@ -89,6 +89,14 @@ OBJEKTGRUPPEN = {
         'small fern',
         'cluster of tiny white flowers in grass',
     ]},
+    'dschungel': {'size': 128, 'items': [
+        'gigantic ancient jungle tree seen from above at an angle: huge layered dome canopy of rounded leaf clumps in several greens, '
+        'thick twisted trunk with large buttress roots spreading on the ground, hanging liana vines and moss, a few glowing cyan runes on the trunk',
+        'colossal jungle tree, very wide multi-layered canopy with lighter leaf highlights on top, massive trunk with sprawling buttress roots, '
+        'long hanging vines with small flowers, moss patches',
+        'giant tropical rainforest tree, broad umbrella canopy made of many round leaf clusters, thick trunk, big snake-like roots, hanging lianas',
+        'enormous mystical jungle tree with a huge rounded canopy, glowing cyan rune carvings in the bark, buttress roots, hanging vines and ferns at its base',
+    ]},
     'gross': {'size': 64, 'items': [
         'huge ancient tree with a massive round green canopy and thick trunk with glowing cyan runes and roots',
         'huge round pink blossom tree with thick trunk',
