@@ -143,40 +143,95 @@ def main():
 
     # Treppen, Bruecken, Steg und Wasserfaelle zeichnet karte_bauen.py selbst (tools/bauwerke.py, klippen.py)
 
-    # --- Laternen am Wegrand: Wiesenkachel direkt neben einem Weg, Abstand >= 14 Kacheln,
-    #     zuerst an Treppen, Brueckenkoepfen und am Steg, dann gleichmaessig verteilt
+    # --- Laternen am Wegrand: als Paar an Treppen und Brueckenkoepfen, sonst einzeln mit
+    #     >= 14 Kacheln Abstand; immer auf der Wiese, vom Weg weg gerueckt
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
     import bauwerke
     bauwerke.laterne_bild().save(os.path.join(OBJ, 'laterne.png'))
-    wichtig = []
+    laternen = []
+
+    def weg_richtung(cx, cy):
+        """Richtung (dx, dy) zur naechsten Wegkachel (4er-Nachbarschaft) oder None."""
+        for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+            if k(cx + dx, cy + dy) == 's' and grid[cy + dy][cx + dx] in 'RPp':
+                return dx, dy
+        return None
+
+    boden = Image.open(os.path.join(KARTE, 'terrain_basis.png')).convert('RGB').load()
+
+    def anker(cx, cy, richtung):
+        richtung = richtung or weg_richtung(cx, cy) or (0, 0)
+        ax = cx * T + 8 - 5 * richtung[0]
+        ay = cy * T + 15 - (6 if richtung[1] > 0 else 0) + (2 if richtung[1] < 0 else 0)
+        return ax, ay
+
+    def auf_gras(cx, cy, richtung=None):
+        """Steht der ganze Sockel (11 px breit) samt Rand im gerenderten Boden auf Gras?"""
+        ax, ay = anker(cx, cy, richtung)
+        for x in range(ax - 7, ax + 8):
+            for y in (ay - 6, ay - 1, ay + 1):
+                r_, g_, b_ = boden[min(max(x, 0), cols * T - 1), min(max(y, 0), rows * T - 1)]
+                if not (g_ > r_ + 25 and g_ > b_ + 25):
+                    return False
+        return True
+
+    def laterne_setzen(cx, cy, richtung=None):
+        """Laterne auf Wiesenkachel (cx, cy), vom Weg weg in die Wiese gerueckt (Wegkante reicht
+        eine halbe Kachel in die Nachbarkachel)."""
+        ax, ay = anker(cx, cy, richtung)
+        o = setze('laterne', ax, ay)
+        o['anim'] = 'laterne'
+        o['schatten'] = [18, 5]                  # Kontaktschatten unter dem Sockel
+        belegt.update({(cx, cy), (cx, cy - 1), (cx, cy - 2), (cx, cy + 1)})
+        laternen.append((cx, cy))
+
+    def frei(cx, cy):
+        return (k(cx, cy) == 'g' and (cx, cy) not in gesperrt and (cx, cy) not in belegt
+                and not any(k(cx + dx, cy + dy) in 'wm' for dx in (-1, 0, 1) for dy in (-1, 0, 1)))
+
+    # Paare (spiegelgleich links/rechts des Weges) unten an jeder Treppe ...
     for tr in plan['treppen']:
-        t, h = tcol[tr['x']], hcol[tr['x']]
-        wichtig += [(tr['x'] + tr['breite'] / 2, t - h - 2), (tr['x'] + tr['breite'] / 2, t + 2)]
+        t = tcol[tr['x']]
+        gesetzt = False
+        for y in range(t + 3, t + 7):                 # erst nah an der Treppe, dann weiter weg
+            for d in (1, 2, 3):                       # gleicher Abstand links und rechts
+                l, r = tr['x'] - 1 - d, tr['x'] + tr['breite'] + d
+                if frei(l, y) and frei(r, y) and auf_gras(l, y, (1, 0)) and auf_gras(r, y, (-1, 0)):
+                    laterne_setzen(l, y, (1, 0)); laterne_setzen(r, y, (-1, 0))
+                    gesetzt = True
+                    break
+            if gesetzt:
+                break
+    # ... und am Westkopf jeder Bruecke (oberhalb und unterhalb des Weges)
     for br in plan.get('bruecken', []):
-        wichtig += [(br['x'] - 1, br['y'] + 1), (br['x'] + br['breite'], br['y'] + 1)]
-    for st in plan.get('stege', []):
-        wichtig.append((st['x'], st['y'] - 2))
+        wx = [x for x in range(br['x'], br['x'] + br['breite']) if k(x, br['y'] + br['hoehe'] // 2) == 'w']
+        if not wx:
+            continue
+        mitte = br['y'] + br['hoehe'] // 2
+        r0 = r1 = mitte
+        x = min(wx) - 3
+        while k(x, r0 - 1) == 's': r0 -= 1
+        while k(x, r1 + 1) == 's': r1 += 1
+        fertig = False
+        for d in (1, 2):                          # gleicher Abstand ober- und unterhalb des Weges
+            for xx in (x, x - 1, x - 2):
+                if frei(xx, r0 - d) and frei(xx, r1 + d) and auf_gras(xx, r0 - d, (0, 1)) \
+                        and auf_gras(xx, r1 + d, (0, -1)):
+                    laterne_setzen(xx, r0 - d, (0, 1)); laterne_setzen(xx, r1 + d, (0, -1))
+                    fertig = True
+                    break
+            if fertig:
+                break
+    # einzelne Laternen gleichmaessig entlang der uebrigen Wege
     kand = []
     for cy in range(2, rows - 2):
         for cx in range(2, cols - 2):
-            if grid[cy][cx] != 'G' or k(cx, cy) != 'g' or (cx, cy) in gesperrt or (cx, cy) in belegt:
-                continue
-            if not any(k(cx + dx, cy + dy) == 's' and grid[cy + dy][cx + dx] in 'RPp'
-                       for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1))):
-                continue
-            if any(k(cx + dx, cy + dy) in 'wm' for dx in (-1, 0, 1) for dy in (-1, 0, 1)):
-                continue
-            nah = min((abs(cx - wx) + abs(cy - wy) for wx, wy in wichtig), default=99)
-            kand.append((0 if nah <= 3 else 1, rnd.random(), cx, cy))
+            if grid[cy][cx] == 'G' and frei(cx, cy) and weg_richtung(cx, cy) and auf_gras(cx, cy):
+                kand.append((rnd.random(), cx, cy))
     kand.sort()
-    laternen = []
-    for _, _, cx, cy in kand:
+    for _, cx, cy in kand:
         if all(abs(cx - lx) + abs(cy - ly) >= 14 for lx, ly in laternen):
-            laternen.append((cx, cy))
-            o = setze('laterne', cx * T + 8, cy * T + 15)
-            o['anim'] = 'laterne'
-            o['schatten'] = [9, 3]
-            belegt.update({(cx, cy), (cx, cy - 1)})
+            laterne_setzen(cx, cy)
     print(len(laternen), 'Laternen')
 
     # --- Wald: dichtes, versetztes Raster

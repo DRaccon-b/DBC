@@ -231,51 +231,95 @@ def zeichne_steg(img, x0, x1, y0, y1, frame=0, seed=9):
             _setz(px, W, H, xx, yy, HOLZ[1] if xx in (bx, bx + 2) or yy == by + 3 else HOLZ[5])
 
 
-# ---------------------------------------------------------------- Laterne (Objekt-Sprite)
+# ---------------------------------------------------------------- Strassenlaterne (Objekt-Sprite)
 GLAS = [rgb('#c87a2a'), rgb('#f5c842'), rgb('#fff2a0'), rgb('#fffbe6')]
+EISEN = [rgb(c) for c in ('#161b28', '#232c40', '#35415c', '#4f5f80', '#7a8cb0')]
+GRAS_L = [rgb(c) for c in ('#2e7a4c', '#45a052', '#5fbb58', '#78cc60', '#93db70')]
+LATERNE_B, LATERNE_H = 15, 44
+LATERNE_KOPF = (7, 9)        # Mitte des Glases (fuer den Lichtschein)
 
 
 def laterne_bild():
-    """Laterne 11x26 px: Sockelstein, Holzpfahl, Ausleger, Schiefergehaeuse mit leuchtendem Glas."""
+    """Grosse Strassenlaterne 15x44 px, Silhouette exakt symmetrisch um x=7.
+
+    Licht von oben links nur in der Schattierung. Unten: moosiger Steinsockel mit Grashalmen,
+    die vorne ueber die Kanten wachsen (Kontaktschatten setzt karte_bauen.py darunter).
+    """
     from PIL import Image
-    im = Image.new('RGBA', (11, 26), (0, 0, 0, 0))
+    B, H = LATERNE_B, LATERNE_H
+    im = Image.new('RGBA', (B, H), (0, 0, 0, 0))
     px = im.load()
-    def s(x, y, c):
-        px[x, y] = c
-    # Sockelstein
-    for x in range(2, 9):
-        for y in range(22, 26):
-            c = S[0] if x in (2, 8) or y == 25 else S[5] if y == 22 else S[3] if x < 5 else S[2]
-            s(x, y, c)
-    # Pfahl (3 px, Licht links)
-    for y in range(9, 22):
-        s(4, y, HOLZ[1]); s(5, y, HOLZ[5]); s(6, y, HOLZ[3]); s(7, y, HOLZ[1])
-        if y in (12, 17):
-            s(5, y, HOLZ[4])
-    s(4, 21, HOLZ[1]); s(6, 21, HOLZ[1])
-    for x in range(3, 8):                               # Bodenplatte unter dem Glas
-        s(x, 10, S[0] if x in (3, 7) else S[2])
-    # Dach (spitz, Schiefer)
-    for y, (a, b) in enumerate(((5, 5), (4, 6), (3, 7))):
-        for x in range(a, b + 1):
-            s(x, y, S[0] if x in (a, b) else S[5] if x <= 5 else S[3])
-    for x in range(1, 10):                              # Dach steht ueber
-        s(x, 3, S[0] if x in (1, 9) else S[4] if x < 6 else S[3])
-    # Gehaeuse mit Glas (Zeilen 4-9)
-    for y in range(4, 10):
-        for x in range(2, 9):
-            if x in (2, 8) or y in (4, 9):
-                c = S[0]
-            elif x == 5:
-                c = S[1]                                # Mittelsteg
-            else:
-                c = GLAS[2] if y in (6, 7) and x in (4, 6) else GLAS[1]
-                if y == 5 and x == 3:
-                    c = GLAS[3]                         # Glanz oben links
-                if y == 8:
-                    c = GLAS[0]
-            s(x, y, c)
-    s(5, 0, S[0]); s(5, 1, S[2])                        # Knauf
+    M = 7
+
+    def zeile(y, halb, fuell):
+        """symmetrische Zeile von M-halb bis M+halb; fuell(dx) -> Farbe, dx = x - M"""
+        for x in range(M - halb, M + halb + 1):
+            c = fuell(x - M, halb)
+            if c is not None:
+                px[x, y] = c
+
+    rand = lambda dx, h: EISEN[0] if abs(dx) == h else None
+    def metall(dx, h):                       # Licht von links: links hell, rechts dunkel
+        if abs(dx) == h:
+            return EISEN[0]
+        return EISEN[4] if dx == -h + 1 else EISEN[3] if dx < 0 else EISEN[2] if dx == 0 else EISEN[1]
+
+    # Spitze und Dach
+    zeile(0, 0, lambda dx, h: EISEN[0])
+    zeile(1, 1, lambda dx, h: EISEN[0] if abs(dx) == 1 else EISEN[3])
+    zeile(2, 1, metall)
+    zeile(3, 3, metall)
+    zeile(4, 5, metall)
+    zeile(5, 6, lambda dx, h: EISEN[0])
+    # Glaskasten (Zeilen 6-13), Sprossen bei dx = -3, 0, 3
+    for y in range(6, 14):
+        def glas(dx, h, y=y):
+            if abs(dx) == h:
+                return EISEN[0]
+            if dx in (-3, 0, 3) or y == 13:
+                return EISEN[1] if dx >= 0 else EISEN[2]
+            if y == 6:
+                return GLAS[2]
+            if y in (8, 9, 10) and abs(dx) in (1, 2):
+                return GLAS[3] if y == 9 else GLAS[2]
+            if y == 12:
+                return GLAS[0]
+            return GLAS[1]
+        zeile(y, 5, glas)
+    px[M - 4, 7] = GLAS[3]                   # Glanz oben links
+    zeile(14, 5, lambda dx, h: EISEN[0])
+    zeile(15, 3, metall)                     # Kragen
+    # Zierboegen links/rechts unter dem Kragen (spiegelgleich)
+    for dy, dx in ((16, 3), (17, 4), (18, 4), (19, 3)):
+        px[M - dx, dy] = EISEN[0]; px[M + dx, dy] = EISEN[0]
+    zeile(16, 1, metall)
+    # Mast 3 px + Kontur, Zierringe
+    for y in range(17, 36):
+        zeile(y, 2, metall)
+    for y in (22, 29):
+        zeile(y, 2, lambda dx, h: EISEN[0] if abs(dx) == 2 else EISEN[4] if dx < 0 else EISEN[2])
+    # ausgestellter Fuss
+    zeile(36, 3, metall)
+    zeile(37, 4, metall)
+    # Steinsockel (Schiefer wie die Klippen), oben Lichtkante
+    for y in range(38, 44):
+        def sockel(dx, h, y=y):
+            if abs(dx) == h or y == 43:
+                return S[0]
+            if y == 38:
+                return S[5] if dx < 2 else S[4]
+            return S[4] if dx == -h + 1 else S[3] if dx < 0 else S[2]
+        zeile(y, 5, sockel)
+    # Moos am Sockelfuss und Grashalme vorne ueber den Kanten (spiegelgleich)
+    for dx in (-4, -1, 2):
+        px[M + dx, 42] = GRAS_L[1]
+    for dx in (-3, 1, 4):
+        px[M + dx, 42] = GRAS_L[2]
+    for (dx, y, c) in ((-6, 43, 1), (-6, 42, 3), (-5, 43, 2), (-7, 43, 0),
+                       (6, 43, 1), (6, 42, 3), (5, 43, 2), (7, 43, 0),
+                       (-2, 43, 2), (2, 43, 2), (0, 43, 1)):
+        px[M + dx, y] = GRAS_L[c]
+    px[M - 6, 41] = GRAS_L[4]; px[M + 6, 41] = GRAS_L[4]
     return im
 
 

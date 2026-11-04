@@ -223,7 +223,8 @@ def laternen_licht(img, laternen, frame):
     a = np.zeros((H, W), dtype=np.float32)
     for i, o in enumerate(laternen):
         f = 1.0 if frame is None else 0.85 + 0.15 * math.sin(2 * math.pi * frame / N_FRAMES * 2 + i * 1.7)
-        for (cx, cy, rx, ry, staerke) in ((o['x'] + 5, o['y'] + 7, 14, 13, 60), (o['x'] + 5, o['y'] + 25, 13, 5, 38)):
+        kx, ky = o['x'] + 7, o['y'] + 9                       # Glasmitte (bauwerke.LATERNE_KOPF)
+        for (cx, cy, rx, ry, staerke) in ((kx, ky, 18, 16, 62), (kx, o['y'] + 44, 18, 6, 40)):
             y0, y1 = max(0, cy - ry), min(H, cy + ry + 1)
             x0, x1 = max(0, cx - rx), min(W, cx + rx + 1)
             yy, xx = np.mgrid[y0:y1, x0:x1]
@@ -238,8 +239,8 @@ def laternen_licht(img, laternen, frame):
         px = img.load()
         hell, mittel = (0xff, 0xf2, 0xa0), (0xf5, 0xc8, 0x42)
         for i, o in enumerate(laternen):
-            for y in range(o['y'] + 5, o['y'] + 9):
-                for x in range(o['x'] + 3, o['x'] + 8):
+            for y in range(o['y'] + 6, o['y'] + 13):
+                for x in range(o['x'] + 3, o['x'] + 12):
                     c = px[x, y][:3]
                     if c in (hell, mittel) and variante(x, y + frame * 3 + i, 5) == 0:
                         px[x, y] = (mittel if c == hell else hell) + (255,)
