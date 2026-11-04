@@ -11,6 +11,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import numpy as np
 from PIL import Image
 from karte04_objekte import saeubern
+from karte05_pruefen import bewerten
 
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
 KARTE = os.path.join(ROOT, 'maps', 'karte05')
@@ -39,7 +40,7 @@ FEST = [
     ('mittel/02', 92, 55, {'anim': 'glitzern'}), ('mittel/02', 96, 57, {'anim': 'glitzern'}),
     ('mittel/02', 99, 58, {'anim': 'glitzern'}), ('mittel/02', 75, 24, {'anim': 'glitzern'}),
     ('mittel/02', 102, 68, {'anim': 'glitzern'}), ('mittel/02', 48, 78, {'anim': 'glitzern'}),
-    ('mittel/02', 41, 82, {'anim': 'glitzern'}), ('mittel/02', 65, 15, {'anim': 'glitzern'}),
+    ('mittel/02', 41, 82, {'anim': 'glitzern'}), ('mittel/02', 69, 16, {'anim': 'glitzern'}),
     # Schneemaenner
     ('mittel/03', 70, 57, {}), ('mittel/03', 62, 61, {}), ('mittel/03', 64, 68, {}), ('mittel/03', 86, 65, {}),
     ('mittel/03', 92, 58, {}),
@@ -123,19 +124,48 @@ def main():
             cache[key] = (datei, sp.height, zu, (sp_.min() + sp_.max() + 1) / 2.0)
         return cache[key]
 
-    def setze(name, tx, ty, opt, pruefen=False):
+    lvl = np.load(os.path.join(KARTE, 'pixelhoehe.npy')) if os.path.exists(os.path.join(KARTE, 'pixelhoehe.npy')) else None
+    alpha = {}
+    verschoben, weggelassen = [], 0
+
+    def passt(datei, x, y, rand_ok):
+        if lvl is None:
+            return True
+        if datei not in alpha:
+            alpha[datei] = np.array(Image.open(os.path.join(OBJ, datei)).getchannel('A')) >= 128
+        ok, grund = bewerten(lvl, alpha[datei], x, y)
+        return ok or (rand_ok and grund == 'ragt aus der Karte')
+
+    def setze(name, tx, ty, opt, pruefen=False, fest=False, rand_ok=False):
+        nonlocal weggelassen
         opt = dict(opt)
         spiegeln = opt.pop('spiegeln', False)
         art = 'flach' if name in FLACH else 'hoch'
-        if (tx, ty, art) in belegt:
-            return False
-        if pruefen:
-            if not (0 <= tx < cols and 0 <= ty < rows) or (tx, ty) in gesperrt:
-                return False
-            if art == 'hoch' and any((tx + dx, ty, 'hoch') in belegt for dx in (-1, 1)):
-                return False
         datei, h, zu, mitte = sprite(name, spiegeln)
-        o = {'datei': datei, 'basis': name, 'x': int(round(tx * T + T / 2 - mitte)), 'y': int(ty * T + T - 2 - zu),
+        kandidaten = [(tx, ty)]
+        if fest:                                  # feste Objekte: naechste passende Kachel suchen
+            kandidaten += sorted(((tx + dx, ty + dy) for dx in range(-4, 5) for dy in range(-4, 5) if dx or dy),
+                                 key=lambda k: (abs(k[0] - tx) + abs(k[1] - ty), -k[1]))
+        for (kx, ky) in kandidaten:
+            if (kx, ky, art) in belegt:
+                continue
+            if pruefen or (fest and (kx, ky) != (tx, ty)):
+                if not (0 <= kx < cols and 0 <= ky < rows) or (kx, ky) in gesperrt:
+                    continue
+                if art == 'hoch' and any((kx + dx, ky, 'hoch') in belegt for dx in (-1, 1)):
+                    continue
+            x, y = int(round(kx * T + T / 2 - mitte)), int(ky * T + T - 2 - zu)
+            if passt(datei, x, y, rand_ok):
+                break
+        else:
+            weggelassen += 1
+            if fest:
+                print('  keine passende Stelle:', name, (tx, ty))
+            return False
+        if (kx, ky) != (tx, ty):
+            verschoben.append((name, (tx, ty), (kx, ky)))
+        tx, ty = kx, ky
+        o = {'datei': datei, 'basis': name, 'x': x, 'y': y,
              'fuss': h, 'kachel': [tx, ty], 'ebene': 0 if art == 'flach' else 1}
         o.update(opt)
         objekte.append(o)
@@ -143,12 +173,12 @@ def main():
         return True
 
     for (name, tx, ty, opt) in FEST:
-        setze(name, tx, ty, opt)
+        setze(name, tx, ty, opt, fest=True)
     # Waldrand: jede zweite Kachel eine Tanne (versetzt), keine Animation
     for ty in range(rows):
         for tx in range(cols):
             if cls[ty][tx] == 'h' and (tx + ty) % 2 == 0 and (tx, ty) not in gesperrt:
-                setze(rnd.choice(TANNEN), tx, ty, {'spiegeln': rnd.random() < 0.5})
+                setze(rnd.choice(TANNEN), tx, ty, {'spiegeln': rnd.random() < 0.5}, rand_ok=True)
     # Haine im Schneefeld (Wind)
     for (x0, y0, x1, y1, dichte) in HAINE:
         for ty in range(y0, y1 + 1):
@@ -170,7 +200,9 @@ def main():
                  {'anim': 'glitzern'} if n in ('klein/02', 'klein/39', 'klein/45') else {}, pruefen=True):
             gesetzt += 1
     json.dump(objekte, open(os.path.join(OBJ, 'platzierung.json'), 'w'), indent=0)
-    print(len(objekte), 'Objekte am Raster gesetzt')
+    for v in verschoben:
+        print('  verschoben:', v[0], v[1], '->', v[2])
+    print(len(objekte), 'Objekte am Raster gesetzt,', weggelassen, 'unpassende Stellen ausgelassen')
 
 
 if __name__ == '__main__':

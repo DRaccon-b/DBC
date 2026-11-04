@@ -103,7 +103,7 @@ def main():
     neu[pl & ~np.isin(neu, list('xl'))] = 's'
 
     # ---------------------------------------------------------------- Waldrand links und unten
-    neu[:, 0:3] = 'h'
+    neu[10:, 0:3] = 'h'
     neu[(xx <= 4) & (yy >= 10)] = 'h'
     neu[(yy >= 81) & (xx <= 103)] = 'h'
     neu[(yy >= 80) & (xx <= 103) & (np.isin(roh, list('hc')))] = 'h'

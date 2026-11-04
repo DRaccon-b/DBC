@@ -105,6 +105,63 @@ def schneefall(img, frame):
                                 px[X, Y] = (int(r_ + (255 - r_) * t), int(g_ + (255 - g_) * t), int(b_ + (255 - b_) * t), 255)
 
 
+def schatten_k5(img, objs, cache, lvl):
+    """Kontakt- und Schlagschatten (Licht oben links) wie Karte 04, aber je Objekt nur auf der Hoehenebene,
+    auf der sein Fuss steht: nie auf Klippenwaende, Wasser, Spalten oder ueber eine Kante auf eine andere Ebene.
+    Gerechnet wird je Objekt nur in seinem Ausschnitt (schnell genug fuer die Animation)."""
+    from PIL import ImageFilter
+    Hh, W = lvl.shape
+    sch = np.zeros((Hh, W), np.uint8)
+    for o in objs:
+        sp = cache[o['datei']]
+        a = np.array(sp.getchannel('A')) >= 200
+        zeilen = np.nonzero(a.any(axis=1))[0]
+        if len(zeilen) < 4:
+            continue
+        zu = int(zeilen.max())
+        hoehe_ = max(1, zu - int(zeilen.min()))
+        fuss = np.nonzero(a[max(0, zu - 3):zu + 1].any(axis=0))[0]
+        if not len(fuss):
+            continue
+        fx = min(W - 1, max(0, o['x'] + int(fuss.min() + fuss.max()) // 2))
+        fy = min(Hh - 1, max(0, o['y'] + zu + 1))
+        ebene = lvl[fy, fx]
+        if ebene not in (1, 2):
+            continue
+        # Ausschnitt in Kartenkoordinaten
+        X0 = o['x'] - 2
+        Y0 = o['y']
+        bw = sp.width + int(hoehe_ * 0.5) + 8
+        bh = zu + int(hoehe_ * 0.3) + 8
+        teil = np.zeros((bh, bw), np.float32)
+        wurf = np.zeros((bh, bw), np.float32)
+        fx0, fx1 = int(fuss.min()) + 2, int(fuss.max()) + 2
+        for yy in range(zu - 1, zu + 3):
+            ein = (yy - zu + 1) if yy > zu else 0
+            teil[yy, max(0, fx0 - 1 + ein):max(0, fx1 + 3 - ein)] = 92
+        for zi in zeilen:
+            k = zu - zi
+            ty = int(zu + k * 0.24)
+            dx = int(1 + k * 0.45)
+            xs = np.nonzero(a[zi])[0] + 2 + dx
+            xs = xs[xs < bw]
+            if ty < bh:
+                wurf[ty, xs] = np.maximum(wurf[ty, xs], 1.0 - 0.35 * k / hoehe_)
+        w = np.array(Image.fromarray((wurf * 255).astype(np.uint8)).filter(ImageFilter.MaxFilter(3))) / 255.0
+        teil = np.maximum(teil, np.where(w > 0.82, 64, np.where(w > 0, 50, 0)))
+        # auf die Karte zuschneiden und nur auf der eigenen Ebene
+        y0, y1 = max(0, Y0), min(Hh, Y0 + bh)
+        x0, x1 = max(0, X0), min(W, X0 + bw)
+        if y1 <= y0 or x1 <= x0:
+            continue
+        t = teil[y0 - Y0:y1 - Y0, x0 - X0:x1 - X0]
+        t[lvl[y0:y1, x0:x1] != ebene] = 0
+        sch[y0:y1, x0:x1] = np.maximum(sch[y0:y1, x0:x1], t.astype(np.uint8))
+    dunkel = Image.new('RGBA', img.size, (40, 52, 84, 255))       # kuehler Schnee-Schatten
+    dunkel.putalpha(Image.fromarray(sch))
+    img.alpha_composite(dunkel)
+
+
 def bauen(frame=None, speichern=True):
     lay = json.load(open(os.path.join(KARTE, 'layout.json')))
     cols, rows = lay['groesse']
@@ -176,6 +233,12 @@ def bauen(frame=None, speichern=True):
     spalten_zeichnen(a, km)
     if speichern and frame is None:
         np.save(os.path.join(KARTE, 'waende.npy'), np.packbits(waende | km))
+        lvl = np.ones((Hp, Wp), np.uint8)
+        lvl[m2] = 2
+        lvl[meer | loch] = 0
+        lvl[waende] = 9
+        lvl[km] = 8
+        np.save(os.path.join(KARTE, 'pixelhoehe.npy'), lvl)
     wegtex = textur(cls, 'w', cols, rows)
     img = Image.fromarray(a).convert('RGBA')
     alt_S = bauwerke.S
@@ -204,7 +267,13 @@ def bauen(frame=None, speichern=True):
         objs = sorted((o for o in json.load(open(pf)) if os.path.exists(os.path.join(OBJ, o['datei']))),
                       key=lambda o: o['y'] + o['fuss'])
         cache = {o['datei']: Image.open(os.path.join(OBJ, o['datei'])).convert('RGBA') for o in objs}
-        k4.objekte_zeichnen(img, objs, cache, ~(meer | loch | km), frame)
+        lvl = np.ones((Hp, Wp), np.uint8)
+        lvl[m2] = 2
+        lvl[meer | loch] = 0
+        lvl[waende] = 9
+        lvl[km] = 8
+        schatten_k5(img, objs, cache, lvl)
+        k4.objekte_zeichnen(img, objs, cache, np.zeros((Hp, Wp), bool), frame)
         k4.animieren(img, objs, cache, frame or 0)
     if frame is not None:
         schneefall(img, frame)
