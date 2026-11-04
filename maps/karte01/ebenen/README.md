@@ -21,16 +21,22 @@ Alle Objekte stehen am 16×16-Raster (`tools/karte01_raster.py`): Fußmitte auf 
 Pixelzeile 2 px über der Kachelunterkante, höchstens ein hohes und ein flaches Objekt je Kachel. Die
 Kachel jedes Objekts steht in `assets/objekte/karte01/platzierung.json` als `kachel: [x, y]`.
 
-## Kollision im Browser bearbeiten
+## Im Browser bearbeiten (Kollision und Ebenen)
 
-`spiel/karte01.html` öffnen, mit `E` den Editor einschalten und Kacheln anklicken oder überziehen
-(`1` frei, `2` gesperrt, `3` verdeckt, `Strg+Z` rückgängig). „Änderungen kopieren“ liefert Zeilen
-der Form `x,y=wert`. Übernehmen:
+`spiel/karte01.html` öffnen und mit `E` den Editor einschalten. `Tab` wechselt zwischen den Modi:
+
+- **Kollision:** Kacheln anklicken oder überziehen (`1` frei, `2` gesperrt, `3` verdeckt).
+- **Ebenen:** Objekte anklicken (`1` hinter dem Spieler, `2` geteilt = Fuß unten und Rest oben (Standard
+  für hohe Objekte), `3` vor dem Spieler).
+
+`Strg+Z` macht rückgängig. „Änderungen kopieren“ liefert Zeilen der Form `x,y=wert` bzw.
+`datei.png@x,y=modus`. Übernehmen:
 
 ```bash
-python3 tools/kollision_korrigieren.py aenderungen.txt
+python3 tools/editor_uebernehmen.py aenderungen.txt
 ```
 
-Die Korrekturen stehen dauerhaft in `kollision_korrekturen.json` und werden auch von
-`tools/karte01_ebenen.py` nach der Berechnung angewendet. Das Skript schreibt `kollision.json/.txt`,
-`ebene2_kollision.png`, `vorschau.png` und `spiel/karte01_kollision.js` neu.
+Die Korrekturen stehen dauerhaft in `kollision_korrekturen.json` und `ebenen_korrekturen.json` und werden
+von `tools/karte01_ebenen.py` beim Neubauen angewendet. Für den Editor schreibt das Skript zusätzlich
+`ebene0_untergrund.png` (Boden ohne Objekte), `objekte_atlas.png` und `spiel/karte01_objekte.js`.
+Die Verdeckung (Wert 3) im Kollisionsraster wird beim Übernehmen von Ebenen neu berechnet.

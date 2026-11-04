@@ -96,6 +96,62 @@ def kollision_schreiben(klasse):
                               'window.KARTE01_KOLLISION = ' + json.dumps(spiel, indent=0) + ';\n')
 
 
+EBENEN_KORREKTUREN = os.path.join(OUT, 'ebenen_korrekturen.json')
+SPIEL_OBJEKTE_JS = os.path.join(ROOT, 'spiel', 'karte01_objekte.js')
+MODI = ('hinten', 'geteilt', 'vorne')
+
+
+def objekt_key(o):
+    """Stabiler Name eines platzierten Objekts: Datei@x,y (+ ~ wenn gespiegelt)."""
+    return '%s@%d,%d%s' % (o['datei'], o['x'], o['y'], '~' if o.get('spiegeln') else '')
+
+
+def ebenen_korrekturen_laden():
+    """Ebenen je Objekt aus dem Editor: {key: 'hinten' | 'geteilt' | 'vorne'}."""
+    if not os.path.exists(EBENEN_KORREKTUREN):
+        return {}
+    return json.load(open(EBENEN_KORREKTUREN)).get('objekte', {})
+
+
+def objekte_exportieren(export, sprite):
+    """Sprite-Atlas + Objektliste fuer spiel/karte01.html (zeichnet jedes Objekt einzeln)."""
+    import base64
+    eindeutig = {}
+    for o, *_ in export:
+        k = (o['datei'], bool(o.get('spiegeln')))
+        if k not in eindeutig:
+            eindeutig[k] = sprite(o)
+    # einfache Regal-Packung
+    BREITE, x, y, zeile = 1024, 0, 0, 0
+    platz = {}
+    for k, sp in sorted(eindeutig.items(), key=lambda kv: -kv[1].height):
+        if x + sp.width > BREITE:
+            x, y, zeile = 0, y + zeile + 1, 0
+        platz[k] = (x, y)
+        x += sp.width + 1
+        zeile = max(zeile, sp.height)
+    atlas = Image.new('RGBA', (BREITE, y + zeile), (0, 0, 0, 0))
+    sprites = []
+    index = {}
+    for k, sp in eindeutig.items():
+        ax, ay = platz[k]
+        atlas.alpha_composite(sp, (ax, ay))
+        bits = np.packbits((np.array(sp.getchannel('A')) > 0).ravel())
+        index[k] = len(sprites)
+        sprites.append({'name': k[0][:-4] + (' (gespiegelt)' if k[1] else ''), 'ax': ax, 'ay': ay,
+                        'w': sp.width, 'h': sp.height, 'maske': base64.b64encode(bits.tobytes()).decode()})
+    atlas.save(os.path.join(OUT, 'objekte_atlas.png'))
+    objekte = []
+    for o, trenn, flach, modus in export:
+        objekte.append([objekt_key(o), index[(o['datei'], bool(o.get('spiegeln')))], o['x'], o['y'],
+                        max(0, trenn), 'hinten' if flach else 'geteilt', modus])
+    daten = {'sprites': sprites, 'objekte': objekte,
+             'felder': ['key', 'sprite', 'x', 'y', 'trenn', 'standard', 'modus']}
+    open(SPIEL_OBJEKTE_JS, 'w').write(
+        '// Erzeugt von tools/karte01_ebenen.py: Objekte in Zeichenreihenfolge, Atlas maps/karte01/ebenen/objekte_atlas.png\n'
+        'window.KARTE01_OBJEKTE = ' + json.dumps(daten, separators=(',', ':')) + ';\n')
+
+
 def main():
     os.makedirs(OUT, exist_ok=True)
     g = json.load(open(os.path.join(KARTE, 'terrain_grid.json')))
@@ -128,6 +184,10 @@ def main():
     dunkel.putalpha(schatten.filter(ImageFilter.GaussianBlur(1.2)))
     boden.alpha_composite(dunkel)
 
+    boden.save(os.path.join(OUT, 'ebene0_untergrund.png'))     # Boden ohne Objekte (fuer den Ebenen-Editor)
+
+    modi = ebenen_korrekturen_laden()
+    export = []
     blockiert_px = np.zeros((H, W), bool)       # Fuesse hoher Objekte
     for o in objs:
         sp = sprite(o)
@@ -135,19 +195,26 @@ def main():
         zeilen = np.nonzero((a > 0).any(axis=1))[0]
         if not len(zeilen):
             continue
-        if o.get('ebene', 1) == 0 or o.get('basis') in FLACH:      # flache Deko: Boden, begehbar
-            boden.alpha_composite(sp, (o['x'], o['y']))
-            continue
+        flach = o.get('ebene', 1) == 0 or o.get('basis') in FLACH   # flache Deko: Boden, begehbar
         trenn = int(zeilen.max()) + 1 - FUSS    # Zeile im Sprite: darueber Ueberlagerung, darunter Fuss
+        modus = modi.get(objekt_key(o)) or ('hinten' if flach else 'geteilt')
+        export.append((o, trenn, flach, modus))
+        if modus == 'hinten':                   # ganz unter dem Spieler
+            boden.alpha_composite(sp, (o['x'], o['y']))
+        elif modus == 'vorne':                  # ganz ueber dem Spieler
+            oben.alpha_composite(sp, (o['x'], o['y']))
+        else:                                   # geteilt: Fuss unten, Rest oben
+            boden.alpha_composite(sp.crop((0, trenn, sp.width, sp.height)), (o['x'], o['y'] + trenn))
+            oben.alpha_composite(sp.crop((0, 0, sp.width, trenn)), (o['x'], o['y']))
+        if flach:
+            continue
         fuss = sp.crop((0, trenn, sp.width, sp.height))
-        kopf = sp.crop((0, 0, sp.width, trenn))
-        boden.alpha_composite(fuss, (o['x'], o['y'] + trenn))
-        oben.alpha_composite(kopf, (o['x'], o['y']))
         fa = np.array(fuss.getchannel('A')) >= 128
         ys, xs = np.nonzero(fa)
         ys, xs = ys + o['y'] + trenn, xs + o['x']
         ok = (ys >= 0) & (ys < H) & (xs >= 0) & (xs < W)
         blockiert_px[ys[ok], xs[ok]] = True
+    objekte_exportieren(export, sprite)
     boden.save(os.path.join(OUT, 'ebene1_boden.png'))
     oben.save(os.path.join(OUT, 'ebene3_ueberlagerung.png'))
 
