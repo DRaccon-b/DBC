@@ -376,6 +376,26 @@ def bauen(frame=None, speichern=True):
                                          for dx in (-1, 0, 1) for dy in (-1, 0, 1)):
                 vk[vy][vx] = 's'
 
+    # Keine Kachel mit drei Gelaendearten (dafuer gibt es keine Uebergangskachel; vorher entstanden
+    # harte Graszipfel am Wasser): an solchen Kacheln wird die Grasecke zu Sand (weicher Sandsaum
+    # zwischen Wiese und Wasser), direkt an Bruecken umgekehrt die Sandecke zu Gras. Geaendert wird
+    # die gemeinsame Ecke, damit die Nachbarkacheln dazu passen.
+    for _ in range(6):
+        geaendert = False
+        for y in range(rows):
+            for x in range(cols):
+                ecken = [(x, y), (x + 1, y), (x, y + 1), (x + 1, y + 1)]
+                arten = {vk[vy][vx] for vx, vy in ecken}
+                if len(arten) < 3:
+                    continue
+                von, zu = (('s', 'g') if (x, y) in bruecken_rand else ('g', 's'))
+                for vx, vy in ecken:
+                    if vk[vy][vx] == von:
+                        vk[vy][vx] = zu
+                        geaendert = True
+        if not geaendert:
+            break
+
     # --- Vertex-Raster Hoehe
     vh = [[(UPPER if vy < tcol[vx] else TRANS if vy == tcol[vx] else LOWER) if tcol[vx] is not None else LOWER
            for vx in range(cols + 1)] for vy in range(rows + 1)]
