@@ -192,7 +192,7 @@ def main():
         'rampen': [],
         'furten': [[20, 23], [58, 61]],
         'bruecke': [40, 42],
-        'treppen': [[22, 24, 17, 23, 's'], [76, 79, 22, 29, 's'], [92, 95, 24, 31, 's'], [107, 109, 55, 61, 's']],
+        'treppen': [[22, 24, 17, 23, 's'], [76, 79, 22, 29, 's'], [92, 95, 24, 31, 's'], [107, 109, 55, 61, 's'], [92, 94, 60, 64, 's', 'teer']],
     }
     lay = {'groesse': [C, R], 'klassen': [''.join(r) for r in neu],
            'hoehe': [''.join(str(v) for v in r) for r in hoehe]}

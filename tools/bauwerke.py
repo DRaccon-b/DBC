@@ -87,7 +87,7 @@ def zeichne_treppe(img, x0, x1, y_top, y_bot, seed=3):
 
 
 # ---------------------------------------------------------------- Bruecke (Laufrichtung waagerecht)
-def zeichne_bruecke(img, x0, x1, y0, y1, frame=0, seed=5):
+def zeichne_bruecke(img, x0, x1, y0, y1, frame=0, seed=5, wasser=True):
     rnd = random.Random(seed)
     px = img.load(); W, H = img.size
     # Schatten aufs Wasser unter dem unteren Balken
@@ -137,7 +137,7 @@ def zeichne_bruecke(img, x0, x1, y0, y1, frame=0, seed=5):
                 _setz(px, W, H, xx, yy, SEIL[0])
                 _setz(px, W, H, xx, yy + 1, SEIL[1])
     # Wasserringe an den Pfosten des unteren Balkens (schimmern je Frame)
-    for p in pfosten:
+    for p in (pfosten if wasser else []):
         for k, xx in enumerate(range(p - 2, p + 7)):
             if (k + frame) % 3:
                 _setz(px, W, H, xx, y1 + 7, WS['w4'] if k % 4 else WS['w5'])

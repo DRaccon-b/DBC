@@ -54,7 +54,7 @@ FEST = [
     ('gross/02', 800, 522, {}), ('gross/03', 1000, 842, {}), ('mittel/15', 1022, 556, {}), ('mittel/08', 850, 800, {}),
     ('mittel/09', 830, 300, {}), ('klein/04', 905, 600, {}), ('klein/34', 860, 180, {}), ('klein/04', 950, 960, {}),
     # Lager
-    ('mittel/01', 76, 604, {}), ('mittel/02', 232, 588, {}), ('mittel/02', 248, 780, {'spiegeln': True}),
+    ('zelte/00', 112, 612, {}), ('zelte2/00', 236, 596, {}), ('zelte2/00', 252, 790, {'spiegeln': True}),
     ('mittel/04', 166, 734, {'anim': 'feuer'}), ('mittel/12', 46, 782, {}), ('mittel/05', 50, 748, {}),
     ('mittel/13', 216, 638, {}), ('mittel/03', 280, 682, {}), ('baeume/07', 130, 790, {}), ('klein/25', 196, 770, {}),
     ('klein/31', 120, 660, {'anim': 'leuchten'}), ('klein/28', 26, 720, {}),
@@ -183,7 +183,7 @@ def main():
                 if 0 <= x + dx < cols and hoehe[y][x] > hoehe[y][x + dx]:
                     gesperrt[y * T:(y + 1) * T, (x + dx) * T:(x + dx + 1) * T] = True
                     gesperrt[y * T:(y + 1) * T, x * T:(x + 1) * T] = True
-    for (x0, x1, y0, y1, _r) in lay.get('treppen', []):
+    for (x0, x1, y0, y1, *_r) in lay.get('treppen', []):
         gesperrt[y0 * T:(y1 + 3) * T, x0 * T:(x1 + 1) * T] = True
     # unter der hohen Bruecke nichts (Objekte auf dem Canyonboden wuerden sonst ueber ihr liegen)
     br = lay.get('bruecke')

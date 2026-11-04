@@ -594,40 +594,40 @@ def bauen(frame=None, speichern=True):
     for r in lay.get('rampen', []):
         x0, y0, x1, y1 = r
         rampen[y0 * T:(y1 + 1) * T, x0 * T:(x1 + 1) * T] = True
+    # Treppen: 's' an Plateau-Fronten (Sandstein, 40 px), 't' ins Teerbecken (Schiefer, 20 px)
     treppen_info = []
     frei_pl = np.zeros((Hp, Wp), bool)
-    for (x0, x1, y0, y1, r) in lay.get('treppen', []):
+    frei_t = np.zeros((Hp, Wp), bool)
+    for eintrag in lay.get('treppen', []):
+        x0, x1, y0, y1, r = eintrag[:5]
+        art = eintrag[5] if len(eintrag) > 5 else 'plateau'
+        maske, front, frei = (m1 | can, 20, frei_t) if art == 'teer' else (m2, 40, frei_pl)
         px0, px1 = x0 * T + 1, (x1 + 1) * T - 1
-        if r == 's':
-            ye = max((max(np.nonzero(m2[y0 * T:(y1 + 1) * T, xc])[0]) + y0 * T
-                      for xc in range(px0, px1) if m2[y0 * T:(y1 + 1) * T, xc].any()), default=None)
-            if ye is None:
-                continue
-            frei_pl[ye - 14:ye + 46, px0 - 6:px1 + 6] = True
-        else:
-            ye = min((min(np.nonzero(m2[y0 * T:(y1 + 1) * T, xc])[0]) + y0 * T
-                      for xc in range(px0, px1) if m2[y0 * T:(y1 + 1) * T, xc].any()), default=None)
-            if ye is None:
-                continue
-            frei_pl[ye - 2:ye + 30, px0 - 2:px1 + 2] = True
-        treppen_info.append((px0, px1, ye, r))
+        ye = max((max(np.nonzero(maske[y0 * T:(y1 + 1) * T, xc])[0]) + y0 * T
+                  for xc in range(px0, px1) if maske[y0 * T:(y1 + 1) * T, xc].any()
+                  and not maske[y0 * T:(y1 + 1) * T, xc].all()), default=None)
+        if ye is None:
+            continue
+        frei[ye - 14:ye + front + 6, px0 - 6:px1 + 6] = True
+        treppen_info.append((px0, px1, ye, art, front))
     treppen = []
     # --- Waende: Canyon (Erde), Teerbecken (Schiefer), Plateaus (Sandstein)
     waende = hoehenkanten(a, m1 | teer, 'erde', 26, 14, LIPPE['s'], rampen, 11)
-    waende |= hoehenkanten(a, m1 | can, 'schiefer', 20, 8, LIPPE['a'], rampen, 12)
+    waende |= hoehenkanten(a, m1 | can, 'schiefer', 20, 8, LIPPE['a'], rampen | frei_t, 12)
     waende |= hoehenkanten(a, m2, 'sandstein', 40, 8, LIPPE['g'], frei_pl, 13, treppen)
     if speichern and frame is None:
         np.save(os.path.join(KARTE, 'waende.npy'), np.packbits(waende))
     wegtex = textur(cls, 'w', cols, rows)
     img_t = Image.fromarray(a).convert("RGBA")
     alt_S = bauwerke.S
-    bauwerke.S = [H(c) + (255,) for c in FELS['sandstein']]
-    for (px0, px1, ye, r) in treppen_info:
-        for y in range(ye - 12, ye + 1):                          # Wegstueck oben auf dem Plateau
+    for (px0, px1, ye, art, front) in treppen_info:
+        bauwerke.S = [H(c) + (255,) for c in FELS['schiefer' if art == 'teer' else 'sandstein']]
+        oben = textur(cls, 'a', cols, rows) if art == 'teer' else wegtex
+        for y in range(ye - 12, ye + 1):                          # Wegstueck oben
             for x in range(px0 + 4, px1 - 4):
                 if (y - (ye - 12)) + min(x - px0 - 4, px1 - 5 - x) > 2:
-                    img_t.putpixel((x, y), tuple(wegtex[y, x]) + (255,))
-        bauwerke.zeichne_treppe(img_t, px0 - 6, px1 + 6, ye + 2, ye + 40 + 2)
+                    img_t.putpixel((x, y), tuple(oben[y, x] if art != 'teer' else (oben[y, x] * 0.8).astype(np.uint8)) + (255,))
+        bauwerke.zeichne_treppe(img_t, px0 - 6, px1 + 6, ye + 2, ye + front + 2)
     bauwerke.S = alt_S
     a = np.array(img_t.convert('RGB'))
     # Rampen-Oberflaechen: Furtboden, der zur Tiefe hin leicht dunkler wird
@@ -671,7 +671,7 @@ def bauen(frame=None, speichern=True):
             seg = 80
             x = bx0
             while x < bx1:
-                bauwerke.zeichne_bruecke(img, x, min(bx1, x + seg), by0, by1, frame=frame or 0, seed=x)
+                bauwerke.zeichne_bruecke(img, x, min(bx1, x + seg), by0, by1, frame=frame or 0, seed=x, wasser=False)
                 x += seg
     a = np.array(img.convert('RGB'))
     for tp in lay.get('teleporter', []):

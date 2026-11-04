@@ -295,6 +295,13 @@ OBJEKTGRUPPEN_K4 = {
         'dragon blood tree with an umbrella shaped crown of thick branches',
         'young baobab tree with a few bare branches and small leaves',
     ]},
+    'k4_zelte': {'size': 120, 'items': [
+        'large safari canvas tent with an open entrance, wooden poles and guy ropes',
+        'medium canvas expedition tent with an open flap and ropes',
+    ]},
+    'k4_zelte2': {'size': 100, 'items': [
+        'canvas A-frame tent seen straight from the front, symmetric, open entrance flap in the middle, guy ropes on both sides',
+    ]},
     'k4_monument': {'size': 160, 'items': [
         'giant dark iron gear monument standing upright with a glowing red gem in the hub, on a rocky dark stone base',
     ]},
