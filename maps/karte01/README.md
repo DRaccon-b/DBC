@@ -33,3 +33,18 @@ python3 tools/karte_bauen.py        # fertige Karte mit Objekten
 - Übergänge ohne Linie: dunklerer Rand + Saum.
 - Objekte mit farbiger dunkler Kontur (nie Schwarz), Licht von oben links, runde gebündelte Formen,
   weicher Bodenschatten.
+
+## Animation
+
+```bash
+python3 tools/animation_bauen.py    # 16 Frames à 110 ms, nahtlose Schleife
+```
+
+Ausgabe in `animation/`: `karte01_animiert.webp` (ganze Karte), `detail_*.gif` (Ausschnitte 3×),
+`kacheln/*.png` (Wasser-Grundkacheln als 16-Frame-Streifen für eine Engine: `_fluss` = fließt nach
+unten, `_schwappen` = pendelt seitlich).
+
+Animiert werden: Fluss (fließt), Teich und Meer (schwappen), Schaum an Ufern und Strand (glitzert),
+Wasserfall (fallende Streifen, brodelnde Gischt, Nebel), Runen in Klippen, Steinen und Bäumen
+(pulsieren), Lagerfeuer (flackert). Die Logik steckt in `tools/karte_bauen.py` (`bauen(frame)`,
+`wasser_frame`, `leuchten`) und `tools/klippen.py` (`zeichne_wasserfall(..., frame)`).

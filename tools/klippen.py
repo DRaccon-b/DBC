@@ -159,6 +159,7 @@ def zeichne_klippen(img, plan, cols, treppen_spalten=frozenset(), seed=7):
     dunkel = Image.new('RGBA', img.size, (18, 40, 52, 255))
     dunkel.putalpha(schatten)
     img.alpha_composite(dunkel)
+    return []
 
 
 WASSER = {'w0': '#173f86', 'w1': '#2358b0', 'w2': '#3274d2', 'w3': '#4c93e6', 'w4': '#8cc4f4', 'w5': '#dff3ff'}
@@ -166,7 +167,7 @@ WS = {k: rgb(v) for k, v in WASSER.items()}
 WEISS = (255, 255, 255, 255)
 
 
-def zeichne_wasserfall(img, x0, x1, y_top, y_bot, seed=11):
+def zeichne_wasserfall(img, x0, x1, y_top, y_bot, seed=11, frame=0):
     """Wasserfall ueber die volle Flussbreite x0..x1 von der Wandoberkante y_top bis zum Fuss y_bot.
 
     Aufbau (Licht von oben links): Abbruchkante, an der das Wasser ueber den Rand kippt ->
@@ -190,11 +191,11 @@ def zeichne_wasserfall(img, x0, x1, y_top, y_bot, seed=11):
         x = x0 + i
         rand = min(i, breite - 1 - i)
         basis = WS['w0'] if rand == 0 else WS['w1'] if rand == 1 else WS['w2'] if rand <= 3 else WS['w3']
-        art, phase, laenge = rnd.random(), rnd.randint(0, 60), rnd.randint(18, 34)
+        art, phase, laenge = rnd.random(), rnd.randint(0, 60), rnd.choice((16, 24, 24, 48))  # teilt 48 -> nahtlose Schleife
         for y in range(y_top + 2, y_bot):
             c = basis
             if rand >= 2:
-                v = (y + phase) % laenge
+                v = (y + phase - frame * 3) % laenge      # Streifen fallen 3 px pro Frame
                 if art < 0.45 and v < laenge * 2 // 3:          # lange helle Fallstreifen
                     c = WS['w4'] if 0 < v < laenge * 2 // 3 - 1 else WS['w3']
                 elif art < 0.6 and v < 6:                       # weisse Glanzstriche
@@ -216,6 +217,7 @@ def zeichne_wasserfall(img, x0, x1, y_top, y_bot, seed=11):
         setz(x, y_top, WS['w4'] if rand >= 1 else WS['w1'])
         setz(x, y_top + 1, WS['w5'] if rand >= 2 and i % 5 != 4 else WS['w4'] if rand else WS['w1'])
         setz(x, y_top + 2, WS['w4'] if rand >= 2 else WS['w2'])
+    rnd = random.Random(seed * 100 + frame)   # Schaum, Blasen und Nebel brodeln je Frame anders
     # 3) Gischtbecken am Fuss: unregelmaessige Schaumwolke, breiter als der Fall
     cx, cy = (x0 + x1) / 2, y_bot + 1
     rx, ry = breite / 2 + 5, 6
@@ -243,5 +245,5 @@ def zeichne_wasserfall(img, x0, x1, y_top, y_bot, seed=11):
                 setz(x, int(cy + dy), farbe)
     # 5) feiner Spruehnebel
     for _ in range(breite):
-        setz(int(cx + rnd.uniform(-rx - 4, rx + 4)), int(cy - rnd.uniform(2, 14)),
+        setz(int(cx + rnd.uniform(-rx - 4, rx + 4)), int(cy - rnd.uniform(2, 14) - (frame % 4)),
              (230, 245, 255, 255) if rnd.random() < 0.5 else WS['w5'])

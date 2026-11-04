@@ -100,7 +100,88 @@ def bereinigen(cls, rows, cols):
                     cls[y][x] = 'g'
 
 
-def main():
+# ---------------------------------------------------------------- Animation
+N_FRAMES = 16
+PENDEL = [0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 3, 3, 2, 2, 1, 1]      # Hin-und-her-Schwappen (Teich, Meer)
+WASSERSETS = {'wasser_gras': ('wasser',), 'wasser_sand': ('wasser',), 'meer_sand': ('meer',),
+              'meer_wasser': ('meer', 'wasser')}
+SCHAUM = {(0xdf, 0xf3, 0xff), (0xff, 0xff, 0xff), (0x9a, 0xe8, 0xe0), (0x5f, 0xd0, 0xd0)}
+
+
+def verschiebung(art, gridzeichen, y, frame):
+    """Wie weit sich das Wasser dieser Kachel im Frame bewegt (dx, dy)."""
+    if art == 'wasser' and gridzeichen in 'WB' and y < 53:
+        return 0, frame                      # Fluss: fliesst nach unten, 1 px pro Frame (16er-Schleife)
+    return PENDEL[frame], 0                  # Teich, Flachwasser, Meer: sanftes Schwappen
+
+
+def wasser_frame(kachel, beschr, gridzeichen, y, x, frame, basis):
+    from PIL import ImageChops
+    art, _, rest = beschr.partition(':')
+    if art == 'basis' and rest.startswith(('wasser', 'meer')):
+        name, i = rest.rsplit('_', 1)
+        dx, dy = verschiebung(name, gridzeichen, y, frame)
+        return ImageChops.offset(basis['w' if name == 'wasser' else 'm'][int(i)], dx, dy)
+    if art not in WASSERSETS:
+        return kachel
+    out = kachel.copy()
+    po, pk = out.load(), kachel.load()
+    for name in WASSERSETS[art]:
+        ref = basis['w' if name == 'wasser' else 'm'][0]
+        dx, dy = verschiebung(name, gridzeichen, y, frame)
+        bewegt = ImageChops.offset(ref, dx, dy).load()
+        pr = ref.load()
+        for yy in range(T):
+            for xx in range(T):
+                if pk[xx, yy] == pr[xx, yy]:          # reine Wasserflaeche -> bewegtes Wasser
+                    po[xx, yy] = bewegt[xx, yy]
+    # Schaum glitzert: einzelne Schaumpixel wechseln von Frame zu Frame
+    for yy in range(T):
+        for xx in range(T):
+            c = pk[xx, yy]
+            if c[:3] in SCHAUM and variante(x * T + xx, y * T + yy + frame * 7, 4) == 0:
+                po[xx, yy] = (0x8c, 0xc4, 0xf4, 255)
+    return out
+
+
+RUNENFARBEN = [(0x2f, 0xc7, 0xd8), (0x7f, 0xf0, 0xf5), (0xe6, 0xff, 0xff)]
+FEUER = [(0xc8, 0x3a, 0x3a), (0xe8, 0x70, 0x2a), (0xf5, 0xc8, 0x42), (0xff, 0xf2, 0xa0)]
+
+
+def leuchten(img, frame, objs):
+    """Runen pulsieren (ganze Karte), Lagerfeuer flackert."""
+    import math
+    import numpy as np
+    a = np.array(img)
+    puls = 0.5 + 0.5 * math.sin(frame / N_FRAMES * 2 * math.pi)       # 0..1
+    rgb = a[..., :3].astype(np.int16)
+    for i, c in enumerate(RUNENFARBEN):
+        m = (rgb == c).all(axis=2)
+        dunkel = np.array([int(v * 0.55) for v in c]); hell = np.array([min(255, v + 70) for v in c])
+        neu = dunkel + (hell - dunkel) * (0.35 + 0.65 * puls)
+        a[m, :3] = neu.astype(np.uint8)
+    for o in objs:
+        if o['datei'] != 'gross/14.png':
+            continue
+        sp = Image.open(os.path.join(OBJ, o['datei']))
+        y0, y1, x0, x1 = o['y'], o['y'] + sp.height, o['x'], o['x'] + sp.width
+        reg = a[y0:y1, x0:x1]
+        rr = reg[..., :3].astype(np.int16)
+        yy, xx = np.mgrid[y0:y1, x0:x1]
+        for i, c in enumerate(FEUER):
+            m = (rr == c).all(axis=2)
+            # Flammen wandern: Farbe je Pixel um eine Stufe rauf/runter, je nach Frame und Ort
+            stufe = (((yy + xx * 3 + frame * 5) % 7) > 3).astype(int) * 2 - 1
+            ziel = np.clip(i + stufe, 0, len(FEUER) - 1)
+            for j, cz in enumerate(FEUER):
+                mm = m & (ziel == j)
+                reg[mm, :3] = cz
+        a[y0:y1, x0:x1] = reg
+    img.paste(Image.fromarray(a))
+
+
+def bauen(frame=None, speichern=True):
+    """Baut die Karte. frame=None: statisch; frame=0..N_FRAMES-1: Animationsbild."""
     g = json.load(open(os.path.join(KARTE, 'terrain_grid.json')))
     plan = json.load(open(os.path.join(KARTE, 'hoehenplan.json')))
     grid, cols, rows = g['grid'], g['cols'], g['rows']
@@ -195,16 +276,19 @@ def main():
                 warn.append((x, y, name))
             karte[y][x] = (t['img'], '%s:%s' % (name, t['name']))
 
-    # --- Rendern
+    # --- Rendern (bei Animation: Wasserflaechen je Kachel verschoben, Schaum glitzert)
     img = Image.new('RGBA', (cols * T, rows * T))
     for y in range(rows):
         for x in range(cols):
-            img.paste(karte[y][x][0], (x * T, y * T))
+            kachel = karte[y][x][0]
+            if frame is not None:
+                kachel = wasser_frame(kachel, karte[y][x][1], grid[y][x], y, x, frame, basis)
+            img.paste(kachel, (x * T, y * T))
 
     # --- 2. Klippen: handgezeichnete Waende (tools/klippen.py), h Kacheln hoch
     import klippen
     treppen_px = frozenset((tr['x'] * T, (tr['x'] + tr['breite']) * T) for tr in plan.get('treppen', []))
-    klippen.zeichne_klippen(img, plan, cols, treppen_px)
+    runen = klippen.zeichne_klippen(img, plan, cols, treppen_px)
     # Wasserfaelle: volle Flussbreite an der Wandoberkante (Spalten mit Wasser direkt oberhalb der Wand)
     for wf in plan.get('wasserfaelle', []):
         t, h = tcol[wf['x']], hcol[wf['x']]
@@ -213,8 +297,9 @@ def main():
         if spalten:
             # Wasserflaeche reicht durch die Wang-Ecken eine halbe Kachel weiter, minus Uferkante
             klippen.zeichne_wasserfall(img, min(spalten) * T - 5, (max(spalten) + 1) * T + 5,
-                                       (t - h) * T + 8, (t + 1) * T - 2)
-    img.save(os.path.join(KARTE, 'terrain_basis.png'))
+                                       (t - h) * T + 8, (t + 1) * T - 2, frame=frame or 0)
+    if speichern:
+        img.save(os.path.join(KARTE, 'terrain_basis.png'))
 
     # --- 3. Objekte
     pf = os.path.join(OBJ, 'platzierung.json')
@@ -241,7 +326,11 @@ def main():
             if o.get('spiegeln'):
                 sp = sp.transpose(Image.FLIP_LEFT_RIGHT)
             img.alpha_composite(sp, (o['x'], o['y']))
-    img.save(os.path.join(KARTE, 'terrain.png'))
+    if frame is not None:
+        leuchten(img, frame, objs if os.path.exists(pf) else [])
+        return img
+    if speichern:
+        img.save(os.path.join(KARTE, 'terrain.png'))
 
     json.dump({'tile_size': T, 'cols': cols, 'rows': rows,
                'tilesets': {n: s['id'] for n, s in sets.items() if s},
@@ -252,6 +341,11 @@ def main():
     for w in warn[:20]:
         print('  ungenau:', w)
     print('Karte %dx%d gebaut, %d ungenaue Kacheln' % (cols, rows, len(warn)))
+    return img
+
+
+def main():
+    bauen()
 
 
 if __name__ == '__main__':
