@@ -303,6 +303,87 @@ def statisch_speichern():
     tor_anpassen()
 
 
+# Satellitenschuesseln der Funkmasten (Koordinaten im PixelLab-Sprite): Mitte, Halbachsen, Seite der Halterung
+SCHUESSELN = {
+    'gross2/00': {'mast': (8, 30), 'schalen': [(33.5, 50.0, 10.5, 14.0, -1), (9.0, 23.0, 4.0, 6.5, 1),
+                                               (31.5, 20.0, 2.5, 4.5, -1), (6.5, 42.0, 3.0, 5.0, 1)]},
+    'gross2/01': {'mast': (9, 26), 'schalen': [(5.5, 17.5, 6.0, 9.0, 1), (28.5, 17.5, 6.0, 9.0, -1),
+                                               (24.5, 34.5, 5.0, 7.0, -1)]},
+}
+SCH = {n: ind.rgb(h) for n, h in dict(rand='#1e2228', hell='#f4f8fa', licht='#dce6ec', mitte='#b8c4cc',
+                                      dunkel='#8e9ba3', ruecken='#5a6670', ruecken2='#3e4850').items()}
+
+
+def _in_ellipse(x, y, cx, cy, rx, ry):
+    return ((x - cx) / rx) ** 2 + ((y - cy) / ry) ** 2 <= 1
+
+
+def mast_ohne_schuesseln(sp, basis, ox=0, oy=0):
+    """Schuesseln aus dem Sprite entfernen; im Mastbereich das Gitter aus der Zeile 8 px darueber/darunter
+    (Gitterperiode) ergaenzen, ausserhalb des Masts bleibt es durchsichtig."""
+    cfg = SCHUESSELN[basis]
+    a = np.array(sp)
+    h, w = a.shape[:2]
+    weg = np.zeros((h, w), bool)
+    for (cx, cy, rx, ry, _) in cfg['schalen']:
+        for y in range(h):
+            for x in range(w):
+                if _in_ellipse(x, y, cx + ox, cy + oy, rx + 1.2, ry + 1.2):
+                    weg[y, x] = True
+    out = a.copy()
+    m0, m1 = cfg['mast'][0] + ox, cfg['mast'][1] + ox
+    for y, x in zip(*np.nonzero(weg)):
+        out[y, x] = 0
+        if m0 <= x <= m1:
+            for dy in (8, -8, 16, -16):
+                yy = y + dy
+                if 0 <= yy < h and not weg[yy, x] and a[yy, x, 3] > 0:
+                    out[y, x] = a[yy, x]
+                    break
+    return Image.fromarray(out)
+
+
+def schale(L, cx, cy, rx, ry, gier, seite):
+    """Eine Schuessel frontal mit Gierwinkel gier (rad): Breite ~cos, Rueckseite als Sichel, Speisearm."""
+    sg = math.sin(gier)
+    w = max(1.6, rx * (0.35 + 0.65 * math.cos(gier)))
+    # Halterung zum Mast
+    for x in range(int(round(cx)), int(round(cx + seite * (rx + 2))), seite):
+        L.p(x, int(round(cy)), SCH['ruecken2']); L.p(x, int(round(cy)) + 1, SCH['rand'])
+    # Rueckseite (Dicke der Schale) auf der abgewandten Seite
+    dick = rx * 0.32 * abs(sg)
+    if dick >= 0.6:
+        bx = cx - math.copysign(dick, sg)
+        for y in range(int(cy - ry) - 1, int(cy + ry) + 2):
+            for x in range(int(bx - w) - 1, int(bx + w) + 2):
+                if _in_ellipse(x + 0.5, y + 0.5, bx, cy, w, ry):
+                    L.p(x, y, SCH['ruecken'] if (x - bx) * sg < 0 else SCH['ruecken2'])
+    # Schale: Rand dunkel, Innenseite (hohl): oben links im Schatten, unten rechts im Licht
+    for y in range(int(cy - ry) - 1, int(cy + ry) + 2):
+        for x in range(int(cx - w) - 1, int(cx + w) + 2):
+            px, py = x + 0.5, y + 0.5
+            if not _in_ellipse(px, py, cx, cy, w, ry):
+                continue
+            d = ((px - cx) / w) ** 2 + ((py - cy) / ry) ** 2
+            u, v = (px - cx) / w, (py - cy) / ry
+            if not _in_ellipse(px, py, cx, cy, max(0.6, w - 1), ry - 1):
+                c = SCH['rand']
+            elif d > 0.62 and u + v < -0.3:
+                c = SCH['hell']                                  # Lichtkante des Randes oben links
+            else:
+                t = u + v - 0.5 * sg
+                c = SCH['dunkel'] if t < -0.55 else SCH['mitte'] if t < 0.25 else SCH['licht']
+            L.p(x, y, c)
+    # Speisearm und Empfaenger (zeigt zum Betrachter, wandert mit dem Winkel)
+    fx, fy = cx + rx * 0.55 * sg, cy - ry * 0.05
+    n = max(4, int(ry * 0.7) + 2)
+    for k in range(n + 1):
+        t = k / n
+        L.p(int(round(cx + (fx - cx) * t)), int(round(cy + ry * 0.55 + (fy - cy - ry * 0.55) * t)), SCH['ruecken2'])
+    L.rect(int(round(fx)) - 1, int(round(fy)) - 1, int(round(fx)) + 1, int(round(fy)) + 1, SCH['ruecken2'])
+    L.p(int(round(fx)) - 1, int(round(fy)) - 1, SCH['dunkel'])
+
+
 PROZ = {'box_monitor': lambda f: lautsprecher(f, 'monitor'), 'box_turm': lambda f: lautsprecher(f, 'turm'),
         'buehne': buehne}
 

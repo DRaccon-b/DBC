@@ -805,74 +805,38 @@ def objekte_zeichnen(img, objs, cache, boden, frame):
             elif anim == 'kaktus':
                 sp = kaktus(sp, frame, o['x'], o['y'])
             if o.get('dreh'):
-                sp = schuesseln_drehen(sp, frame, o['x'] + o['y'])
+                sp = schuesseln_drehen(sp, frame, o['x'] + o['y'], o['basis'])
         img.alpha_composite(sp, (o['x'], o['y']))
         if o['datei'].endswith('_sand.png') and not o.get('ohne_fuss'):
             sandverwehung(img, o, cache[o['datei']])
 
 
-_SCHUESSELN = {}
+_MAST_CACHE = {}
 
 
-def _schuesseln(sp):
-    """Satellitenschuesseln im Sprite finden: helle, ungesaettigte Flaechen (>= 14 px) in den oberen
-    zwei Dritteln, um 1 px erweitert (Rand). Ergebnis: Liste von Masken."""
-    key = sp.tobytes()[:4000] + bytes(sp.size)
-    if key in _SCHUESSELN:
-        return _SCHUESSELN[key]
-    from collections import deque
-    a = np.array(sp).astype(np.int16)
-    h, w = a.shape[:2]
-    mx, mn = a[..., :3].max(axis=2), a[..., :3].min(axis=2)
-    hell = (a[..., 3] > 200) & (mx > 150) & (mx - mn < 40)
-    hell[int(h * 0.62):] = False
-    gesehen = np.zeros_like(hell)
-    masken = []
-    for y0 in range(h):
-        for x0 in range(w):
-            if not hell[y0, x0] or gesehen[y0, x0]:
-                continue
-            q = deque([(y0, x0)]); gesehen[y0, x0] = True; pts = []
-            while q:
-                y, x = q.popleft(); pts.append((y, x))
-                for dy, dx in ((1, 0), (-1, 0), (0, 1), (0, -1), (1, 1), (-1, -1), (1, -1), (-1, 1)):
-                    yy, xx = y + dy, x + dx
-                    if 0 <= yy < h and 0 <= xx < w and hell[yy, xx] and not gesehen[yy, xx]:
-                        gesehen[yy, xx] = True; q.append((yy, xx))
-            if len(pts) >= 14:
-                m = np.zeros((h, w), bool)
-                for y, x in pts:
-                    m[y, x] = True
-                m = np.array(Image.fromarray(m.astype(np.uint8) * 255).filter(ImageFilter.MaxFilter(3))) > 0
-                m &= a[..., 3] > 0
-                masken.append(m)
-    _SCHUESSELN[key] = masken
-    return masken
-
-
-def schuesseln_drehen(sp, frame, phase):
-    """Schuesseln schwenken langsam von links nach rechts: Breite folgt cos(Winkel), Mitte wandert mit."""
-    masken = _schuesseln(sp)
-    if not masken:
+def schuesseln_drehen(sp, frame, phase, basis):
+    """Funkmast: Schuesseln werden aus dem Sprite genommen (Gitter dahinter ergaenzt) und jedes Frame neu
+    gezeichnet; sie schwenken weich von links nach rechts (+-45 Grad), jede mit eigenem Versatz."""
+    if basis not in kp.SCHUESSELN:
         return sp
-    out = sp.copy()
-    arr = np.array(out)
-    for i, m in enumerate(masken):
-        ys, xs = np.nonzero(m)
-        y0, y1, x0, x1 = ys.min(), ys.max() + 1, xs.min(), xs.max() + 1
-        teil = np.array(sp)[y0:y1, x0:x1].copy()
-        teil[~m[y0:y1, x0:x1]] = 0
-        arr[y0:y1, x0:x1][m[y0:y1, x0:x1]] = 0
-        wink = 1.0 * math.sin(2 * math.pi * frame / N_FRAMES + phase / 37.0 + i * 1.3)
-        bw = max(3, int(round((x1 - x0) * (0.55 + 0.45 * math.cos(wink)))))
-        st = Image.fromarray(teil).resize((bw, y1 - y0), Image.NEAREST)
-        if wink < -0.35:
-            st = st.transpose(Image.FLIP_LEFT_RIGHT)
-        cx = (x0 + x1) / 2 + 2 * math.sin(wink)
-        tmp = Image.fromarray(arr)
-        tmp.alpha_composite(st, (int(round(cx - bw / 2)), int(y0)))
-        arr = np.array(tmp)
-    return Image.fromarray(arr)
+    key = (basis, sp.size)
+    if key not in _MAST_CACHE:
+        roh = Image.open(os.path.join(OBJ, basis + '.png')).convert('RGBA')
+        ra, va = np.array(roh.getchannel('A')) > 0, np.array(sp.getchannel('A')) > 0
+        best, off = -1, (0, 0)
+        for oy in range(0, sp.height - roh.height + 1):
+            for ox in range(0, sp.width - roh.width + 1):
+                sc = (ra & va[oy:oy + roh.height, ox:ox + roh.width]).sum()
+                if sc > best:
+                    best, off = sc, (ox, oy)
+        _MAST_CACHE[key] = (kp.mast_ohne_schuesseln(sp, basis, *off), off)
+    kahl, (ox, oy) = _MAST_CACHE[key]
+    out = kahl.copy()
+    Lm = ind.Leinwand(out)
+    for i, (cx, cy, rx, ry, seite) in enumerate(kp.SCHUESSELN[basis]['schalen']):
+        gier = math.radians(45) * math.sin(2 * math.pi * frame / N_FRAMES + phase / 37.0 + i * 1.7)
+        kp.schale(Lm, cx + ox, cy + oy, rx, ry, gier, seite)
+    return out
 
 
 def flagge(sp, frame, x0):
