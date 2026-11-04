@@ -89,7 +89,8 @@
 "x": 206,
 "y": 207,
 "fuss": 147,
-"ebene": 1
+"ebene": 1,
+"anim": "kran"
 },
 {
 "datei": "varianten/klein-11_beton.png",
@@ -603,20 +604,20 @@
 ]
 },
 {
-"datei": "varianten/turm-00_beton.png",
-"basis": "turm/00",
-"x": 746,
-"y": 1020,
-"fuss": 134,
+"datei": "varianten/abgeleitet-hochofen_beton.png",
+"basis": "abgeleitet/hochofen",
+"x": 760,
+"y": 1028,
+"fuss": 126,
 "ebene": 1,
 "anim": "feuer",
 "rauch": [
-0.37,
-0.02
+0.5,
+0.0
 ],
 "schatten": [
-74,
-11
+51,
+8
 ]
 },
 {
@@ -875,6 +876,146 @@
 ]
 },
 {
+"datei": "varianten/klein-08_beton.png",
+"basis": "klein/08",
+"x": 414,
+"y": 161,
+"fuss": 32,
+"ebene": 1
+},
+{
+"datei": "varianten/klein-08_beton.png",
+"basis": "klein/08",
+"x": 478,
+"y": 897,
+"fuss": 32,
+"ebene": 1
+},
+{
+"datei": "varianten/klein-08_beton.png",
+"basis": "klein/08",
+"x": 766,
+"y": 897,
+"fuss": 32,
+"ebene": 1
+},
+{
+"datei": "varianten/klein-08_beton.png",
+"basis": "klein/08",
+"x": 638,
+"y": 1105,
+"fuss": 32,
+"ebene": 1
+},
+{
+"datei": "varianten/klein-08_beton.png",
+"basis": "klein/08",
+"x": 846,
+"y": 1105,
+"fuss": 32,
+"ebene": 1
+},
+{
+"datei": "varianten/klein-08_beton.png",
+"basis": "klein/08",
+"x": 1006,
+"y": 577,
+"fuss": 32,
+"ebene": 1
+},
+{
+"datei": "varianten/klein-08_beton.png",
+"basis": "klein/08",
+"x": 1406,
+"y": 577,
+"fuss": 32,
+"ebene": 1
+},
+{
+"datei": "varianten/klein-08_beton.png",
+"basis": "klein/08",
+"x": 1262,
+"y": 1089,
+"fuss": 32,
+"ebene": 1
+},
+{
+"datei": "varianten/klein-08_beton.png",
+"basis": "klein/08",
+"x": 398,
+"y": 721,
+"fuss": 32,
+"ebene": 1
+},
+{
+"datei": "varianten/klein-08_beton.png",
+"basis": "klein/08",
+"x": 926,
+"y": 401,
+"fuss": 32,
+"ebene": 1
+},
+{
+"datei": "varianten/abgeleitet-strommast_beton.png",
+"basis": "abgeleitet/strommast",
+"x": 1434,
+"y": 198,
+"fuss": 107,
+"ebene": 1,
+"schatten": [
+36,
+5
+]
+},
+{
+"datei": "varianten/abgeleitet-strommast_beton.png",
+"basis": "abgeleitet/strommast",
+"x": 1434,
+"y": 406,
+"fuss": 107,
+"ebene": 1,
+"schatten": [
+36,
+5
+]
+},
+{
+"datei": "varianten/abgeleitet-strommast_beton.png",
+"basis": "abgeleitet/strommast",
+"x": 1434,
+"y": 630,
+"fuss": 107,
+"ebene": 1,
+"schatten": [
+36,
+5
+]
+},
+{
+"datei": "varianten/abgeleitet-strommast_beton.png",
+"basis": "abgeleitet/strommast",
+"x": 1434,
+"y": 838,
+"fuss": 107,
+"ebene": 1,
+"schatten": [
+36,
+5
+]
+},
+{
+"datei": "varianten/abgeleitet-strommast_beton.png",
+"basis": "abgeleitet/strommast",
+"x": 1434,
+"y": 1030,
+"fuss": 107,
+"ebene": 1,
+"schatten": [
+36,
+5
+]
+},
+{
 "datei": "varianten/abgeleitet-laterne_beton.png",
 "basis": "abgeleitet/laterne",
 "x": 255,
@@ -1018,6 +1159,201 @@
 ]
 },
 {
+"datei": "varianten/abgeleitet-laterne_beton.png",
+"basis": "abgeleitet/laterne",
+"x": 191,
+"y": 130,
+"fuss": 61,
+"ebene": 1,
+"anim": "laterne",
+"schatten": [
+18,
+5
+]
+},
+{
+"datei": "varianten/abgeleitet-laterne_beton.png",
+"basis": "abgeleitet/laterne",
+"x": 431,
+"y": 290,
+"fuss": 61,
+"ebene": 1,
+"anim": "laterne",
+"schatten": [
+18,
+5
+]
+},
+{
+"datei": "varianten/abgeleitet-laterne_beton.png",
+"basis": "abgeleitet/laterne",
+"x": 479,
+"y": 354,
+"fuss": 61,
+"ebene": 1,
+"anim": "laterne",
+"schatten": [
+18,
+5
+]
+},
+{
+"datei": "varianten/abgeleitet-laterne_beton.png",
+"basis": "abgeleitet/laterne",
+"x": 735,
+"y": 354,
+"fuss": 61,
+"ebene": 1,
+"anim": "laterne",
+"schatten": [
+18,
+5
+]
+},
+{
+"datei": "varianten/abgeleitet-laterne_beton.png",
+"basis": "abgeleitet/laterne",
+"x": 911,
+"y": 354,
+"fuss": 61,
+"ebene": 1,
+"anim": "laterne",
+"schatten": [
+18,
+5
+]
+},
+{
+"datei": "varianten/abgeleitet-laterne_beton.png",
+"basis": "abgeleitet/laterne",
+"x": 575,
+"y": 770,
+"fuss": 61,
+"ebene": 1,
+"anim": "laterne",
+"schatten": [
+18,
+5
+]
+},
+{
+"datei": "varianten/abgeleitet-laterne_beton.png",
+"basis": "abgeleitet/laterne",
+"x": 927,
+"y": 770,
+"fuss": 61,
+"ebene": 1,
+"anim": "laterne",
+"schatten": [
+18,
+5
+]
+},
+{
+"datei": "varianten/abgeleitet-laterne_beton.png",
+"basis": "abgeleitet/laterne",
+"x": 447,
+"y": 930,
+"fuss": 61,
+"ebene": 1,
+"anim": "laterne",
+"schatten": [
+18,
+5
+]
+},
+{
+"datei": "varianten/abgeleitet-laterne_beton.png",
+"basis": "abgeleitet/laterne",
+"x": 943,
+"y": 1010,
+"fuss": 61,
+"ebene": 1,
+"anim": "laterne",
+"schatten": [
+18,
+5
+]
+},
+{
+"datei": "varianten/abgeleitet-laterne_beton.png",
+"basis": "abgeleitet/laterne",
+"x": 975,
+"y": 162,
+"fuss": 61,
+"ebene": 1,
+"anim": "laterne",
+"schatten": [
+18,
+5
+]
+},
+{
+"datei": "varianten/abgeleitet-laterne_beton.png",
+"basis": "abgeleitet/laterne",
+"x": 1407,
+"y": 162,
+"fuss": 61,
+"ebene": 1,
+"anim": "laterne",
+"schatten": [
+18,
+5
+]
+},
+{
+"datei": "varianten/abgeleitet-laterne_beton.png",
+"basis": "abgeleitet/laterne",
+"x": 271,
+"y": 1026,
+"fuss": 61,
+"ebene": 1,
+"anim": "laterne",
+"schatten": [
+18,
+5
+]
+},
+{
+"datei": "varianten/abgeleitet-laterne_beton.png",
+"basis": "abgeleitet/laterne",
+"x": 143,
+"y": 866,
+"fuss": 61,
+"ebene": 1,
+"anim": "laterne",
+"schatten": [
+18,
+5
+]
+},
+{
+"datei": "varianten/abgeleitet-laterne_beton.png",
+"basis": "abgeleitet/laterne",
+"x": 1039,
+"y": 898,
+"fuss": 61,
+"ebene": 1,
+"anim": "laterne",
+"schatten": [
+18,
+5
+]
+},
+{
+"datei": "varianten/abgeleitet-laterne_beton.png",
+"basis": "abgeleitet/laterne",
+"x": 1375,
+"y": 962,
+"fuss": 61,
+"ebene": 1,
+"anim": "laterne",
+"schatten": [
+18,
+5
+]
+},
+{
 "datei": "varianten/mini-04_beton.png",
 "basis": "mini/04",
 "x": 219,
@@ -1034,11 +1370,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/mini-26_beton.png",
-"basis": "mini/26",
-"x": 801,
-"y": 251,
-"fuss": 17,
+"datei": "varianten/mini-29_beton.png",
+"basis": "mini/29",
+"x": 243,
+"y": 190,
+"fuss": 13,
 "ebene": 1
 },
 {
@@ -1071,6 +1407,14 @@
 "x": 939,
 "y": 387,
 "fuss": 13,
+"ebene": 1
+},
+{
+"datei": "varianten/mini-32_beton.png",
+"basis": "mini/32",
+"x": 346,
+"y": 314,
+"fuss": 17,
 "ebene": 1
 },
 {
@@ -1114,6 +1458,14 @@
 "ebene": 1
 },
 {
+"datei": "varianten/mini-13_beton.png",
+"basis": "mini/13",
+"x": 946,
+"y": 93,
+"fuss": 19,
+"ebene": 1
+},
+{
 "datei": "varianten/mini-53_beton.png",
 "basis": "mini/53",
 "x": 866,
@@ -1122,27 +1474,19 @@
 "ebene": 1
 },
 {
-"datei": "varianten/mini-10_beton.png",
-"basis": "mini/10",
-"x": 1457,
-"y": 427,
-"fuss": 17,
+"datei": "varianten/mini-50_beton.png",
+"basis": "mini/50",
+"x": 922,
+"y": 380,
+"fuss": 16,
 "ebene": 1
 },
 {
-"datei": "varianten/mini-01_beton.png",
-"basis": "mini/01",
-"x": 1454,
-"y": 493,
-"fuss": 19,
-"ebene": 1
-},
-{
-"datei": "varianten/mini-00_beton.png",
-"basis": "mini/00",
-"x": 1451,
-"y": 655,
-"fuss": 19,
+"datei": "varianten/mini-29_beton.png",
+"basis": "mini/29",
+"x": 820,
+"y": 1090,
+"fuss": 13,
 "ebene": 1
 },
 {
@@ -1186,27 +1530,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/mini-55_beton.png",
-"basis": "mini/55",
-"x": 638,
-"y": 1120,
-"fuss": 18,
-"ebene": 1
-},
-{
 "datei": "varianten/mini-09_beton.png",
 "basis": "mini/09",
 "x": 675,
 "y": 219,
 "fuss": 16,
-"ebene": 1
-},
-{
-"datei": "varianten/mini-10_beton.png",
-"basis": "mini/10",
-"x": 979,
-"y": 209,
-"fuss": 17,
 "ebene": 1
 },
 {
@@ -1234,14 +1562,6 @@
 "ebene": 1
 },
 {
-"datei": "varianten/mini-14_beton.png",
-"basis": "mini/14",
-"x": 404,
-"y": 748,
-"fuss": 16,
-"ebene": 1
-},
-{
 "datei": "varianten/mini-35_beton.png",
 "basis": "mini/35",
 "x": 526,
@@ -1258,11 +1578,43 @@
 "ebene": 1
 },
 {
+"datei": "varianten/mini-15_beton.png",
+"basis": "mini/15",
+"x": 543,
+"y": 266,
+"fuss": 19,
+"ebene": 1
+},
+{
+"datei": "varianten/mini-00_beton.png",
+"basis": "mini/00",
+"x": 830,
+"y": 584,
+"fuss": 19,
+"ebene": 1
+},
+{
 "datei": "varianten/mini-00_beton.png",
 "basis": "mini/00",
 "x": 1006,
 "y": 1131,
 "fuss": 19,
+"ebene": 1
+},
+{
+"datei": "varianten/mini-63_beton.png",
+"basis": "mini/63",
+"x": 635,
+"y": 1084,
+"fuss": 18,
+"ebene": 1
+},
+{
+"datei": "varianten/mini-55_beton.png",
+"basis": "mini/55",
+"x": 445,
+"y": 684,
+"fuss": 18,
 "ebene": 1
 },
 {
@@ -1282,18 +1634,18 @@
 "ebene": 1
 },
 {
-"datei": "varianten/mini-08_beton.png",
-"basis": "mini/08",
-"x": 225,
-"y": 160,
-"fuss": 14,
+"datei": "varianten/mini-11_beton.png",
+"basis": "mini/11",
+"x": 747,
+"y": 910,
+"fuss": 16,
 "ebene": 1
 },
 {
-"datei": "varianten/mini-08_beton.png",
-"basis": "mini/08",
-"x": 1149,
-"y": 978,
+"datei": "varianten/mini-17_beton.png",
+"basis": "mini/17",
+"x": 143,
+"y": 1026,
 "fuss": 14,
 "ebene": 1
 },
@@ -1322,14 +1674,6 @@
 "ebene": 1
 },
 {
-"datei": "varianten/mini-15_beton.png",
-"basis": "mini/15",
-"x": 834,
-"y": 575,
-"fuss": 19,
-"ebene": 1
-},
-{
 "datei": "varianten/mini-13_beton.png",
 "basis": "mini/13",
 "x": 689,
@@ -1354,14 +1698,6 @@
 "ebene": 1
 },
 {
-"datei": "varianten/mini-04_beton.png",
-"basis": "mini/04",
-"x": 446,
-"y": 956,
-"fuss": 17,
-"ebene": 1
-},
-{
 "datei": "varianten/mini-12_beton.png",
 "basis": "mini/12",
 "x": 894,
@@ -1375,6 +1711,326 @@
 "x": 444,
 "y": 668,
 "fuss": 15,
+"ebene": 1
+},
+{
+"datei": "varianten/mini-02_beton.png",
+"basis": "mini/02",
+"x": 401,
+"y": 1017,
+"fuss": 19,
+"ebene": 1
+},
+{
+"datei": "varianten/mini-00_beton.png",
+"basis": "mini/00",
+"x": 145,
+"y": 1082,
+"fuss": 19,
+"ebene": 1
+},
+{
+"datei": "varianten/mini-35_beton.png",
+"basis": "mini/35",
+"x": 173,
+"y": 285,
+"fuss": 16,
+"ebene": 1
+},
+{
+"datei": "varianten/mini-29_beton.png",
+"basis": "mini/29",
+"x": 145,
+"y": 321,
+"fuss": 13,
+"ebene": 1
+},
+{
+"datei": "varianten/mini-32_beton.png",
+"basis": "mini/32",
+"x": 93,
+"y": 942,
+"fuss": 17,
+"ebene": 1
+},
+{
+"datei": "varianten/mini-26_beton.png",
+"basis": "mini/26",
+"x": 482,
+"y": 859,
+"fuss": 17,
+"ebene": 1
+},
+{
+"datei": "varianten/mini-01_beton.png",
+"basis": "mini/01",
+"x": 830,
+"y": 267,
+"fuss": 19,
+"ebene": 1
+},
+{
+"datei": "varianten/mini-09_beton.png",
+"basis": "mini/09",
+"x": 310,
+"y": 254,
+"fuss": 16,
+"ebene": 1
+},
+{
+"datei": "varianten/mini-63_beton.png",
+"basis": "mini/63",
+"x": 923,
+"y": 1118,
+"fuss": 18,
+"ebene": 1
+},
+{
+"datei": "varianten/mini-63_beton.png",
+"basis": "mini/63",
+"x": 388,
+"y": 282,
+"fuss": 18,
+"ebene": 1
+},
+{
+"datei": "varianten/mini-35_beton.png",
+"basis": "mini/35",
+"x": 1148,
+"y": 1089,
+"fuss": 16,
+"ebene": 1
+},
+{
+"datei": "varianten/mini-04_beton.png",
+"basis": "mini/04",
+"x": 704,
+"y": 1116,
+"fuss": 17,
+"ebene": 1
+},
+{
+"datei": "varianten/mini-36_beton.png",
+"basis": "mini/36",
+"x": 464,
+"y": 427,
+"fuss": 17,
+"ebene": 1
+},
+{
+"datei": "varianten/mini-63_beton.png",
+"basis": "mini/63",
+"x": 308,
+"y": 188,
+"fuss": 18,
+"ebene": 1
+},
+{
+"datei": "varianten/mini-32_beton.png",
+"basis": "mini/32",
+"x": 913,
+"y": 426,
+"fuss": 17,
+"ebene": 1
+},
+{
+"datei": "varianten/mini-14_beton.png",
+"basis": "mini/14",
+"x": 607,
+"y": 783,
+"fuss": 16,
+"ebene": 1
+},
+{
+"datei": "varianten/mini-29_beton.png",
+"basis": "mini/29",
+"x": 466,
+"y": 880,
+"fuss": 13,
+"ebene": 1
+},
+{
+"datei": "varianten/mini-32_beton.png",
+"basis": "mini/32",
+"x": 84,
+"y": 143,
+"fuss": 17,
+"ebene": 1
+},
+{
+"datei": "varianten/mini-25_beton.png",
+"basis": "mini/25",
+"x": 332,
+"y": 128,
+"fuss": 17,
+"ebene": 1
+},
+{
+"datei": "varianten/mini-09_beton.png",
+"basis": "mini/09",
+"x": 740,
+"y": 1022,
+"fuss": 16,
+"ebene": 1
+},
+{
+"datei": "varianten/mini-17_beton.png",
+"basis": "mini/17",
+"x": 930,
+"y": 753,
+"fuss": 14,
+"ebene": 1
+},
+{
+"datei": "varianten/mini-03_beton.png",
+"basis": "mini/03",
+"x": 1153,
+"y": 156,
+"fuss": 19,
+"ebene": 1
+},
+{
+"datei": "varianten/mini-16_beton.png",
+"basis": "mini/16",
+"x": 800,
+"y": 336,
+"fuss": 15,
+"ebene": 1
+},
+{
+"datei": "varianten/mini-14_beton.png",
+"basis": "mini/14",
+"x": 658,
+"y": 427,
+"fuss": 16,
+"ebene": 1
+},
+{
+"datei": "varianten/mini-25_beton.png",
+"basis": "mini/25",
+"x": 1450,
+"y": 350,
+"fuss": 17,
+"ebene": 1
+},
+{
+"datei": "varianten/mini-42_beton.png",
+"basis": "mini/42",
+"x": 1185,
+"y": 1072,
+"fuss": 15,
+"ebene": 1
+},
+{
+"datei": "varianten/mini-63_beton.png",
+"basis": "mini/63",
+"x": 691,
+"y": 816,
+"fuss": 18,
+"ebene": 1
+},
+{
+"datei": "varianten/mini-10_beton.png",
+"basis": "mini/10",
+"x": 897,
+"y": 1041,
+"fuss": 17,
+"ebene": 1
+},
+{
+"datei": "varianten/mini-19_beton.png",
+"basis": "mini/19",
+"x": 164,
+"y": 731,
+"fuss": 16,
+"ebene": 1
+},
+{
+"datei": "varianten/mini-29_beton.png",
+"basis": "mini/29",
+"x": 544,
+"y": 836,
+"fuss": 13,
+"ebene": 1
+},
+{
+"datei": "varianten/mini-14_beton.png",
+"basis": "mini/14",
+"x": 512,
+"y": 971,
+"fuss": 16,
+"ebene": 1
+},
+{
+"datei": "varianten/mini-17_beton.png",
+"basis": "mini/17",
+"x": 609,
+"y": 1070,
+"fuss": 14,
+"ebene": 1
+},
+{
+"datei": "varianten/mini-32_beton.png",
+"basis": "mini/32",
+"x": 260,
+"y": 817,
+"fuss": 17,
+"ebene": 1
+},
+{
+"datei": "varianten/mini-12_beton.png",
+"basis": "mini/12",
+"x": 942,
+"y": 369,
+"fuss": 16,
+"ebene": 1
+},
+{
+"datei": "varianten/mini-13_beton.png",
+"basis": "mini/13",
+"x": 339,
+"y": 93,
+"fuss": 19,
+"ebene": 1
+},
+{
+"datei": "varianten/mini-53_beton.png",
+"basis": "mini/53",
+"x": 322,
+"y": 428,
+"fuss": 18,
+"ebene": 1
+},
+{
+"datei": "varianten/mini-26_beton.png",
+"basis": "mini/26",
+"x": 466,
+"y": 333,
+"fuss": 17,
+"ebene": 1
+},
+{
+"datei": "varianten/mini-04_beton.png",
+"basis": "mini/04",
+"x": 877,
+"y": 1038,
+"fuss": 17,
+"ebene": 1
+},
+{
+"datei": "varianten/mini-09_beton.png",
+"basis": "mini/09",
+"x": 546,
+"y": 715,
+"fuss": 16,
+"ebene": 1
+},
+{
+"datei": "varianten/mini-13_beton.png",
+"basis": "mini/13",
+"x": 259,
+"y": 1064,
+"fuss": 19,
 "ebene": 1
 }
 ]

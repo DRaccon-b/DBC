@@ -113,8 +113,13 @@ def bauen(frame=None, speichern=True):
                         L.p(nx * T, y * T + i, ind.WAND[0] if 'm' in paar else ind.WAND[1])
                         L.p(nx * T + 1, y * T + i, ind.WAND[4] if b != 'm' else ind.WAND[2])
     # --- Bodenflecken, Markierungen, Mittellinie
-    ind.bodenflecken(L, [(x, y) for y in range(rows) for x in range(cols) if cls[y][x] == 'b'],
-                     [(x, y) for y in range(rows) for x in range(cols) if cls[y][x] == 'a'])
+    gebaut = set()
+    for g in lay.get('gebaeude', []) + lay.get('mauern', []):
+        x0, y0, x1, y1 = g['r']
+        gebaut.update((x, y) for x in range(x0, x1 + 1) for y in range(y0, y1 + 1))
+    def nah_wand(x, y):
+        return any((x + dx, y + dy) in gebaut for dx in (-1, 0, 1) for dy in (-1, 0, 1))
+    ind.boden_details(L, cls, rows, cols, nah_wand)
     zebras = [m for m in lay.get('markierungen', []) if m['art'] == 'zebra']
     strassen = [z_ for z_ in lay['boden'] if z_['art'] == 'asphalt']
     for s in strassen:
@@ -159,7 +164,52 @@ def bauen(frame=None, speichern=True):
                 w, h = o['schatten']
                 cx, cy = o['x'] + cache[o['datei']].width // 2, o['y'] + o['fuss'] - 2
                 sd.ellipse((cx - w // 2, cy - h // 2, cx + w // 2, cy + h // 2), fill=95)
-        schatten = schatten.filter(ImageFilter.GaussianBlur(1.2))
+        # Schmutz/Oel unter schweren Objekten (vor den Schatten, direkt auf den Boden)
+        import random as _r
+        rs = _r.Random(3)
+        for o in objs:
+            gruppe = o.get('basis', '').split('/')[0]
+            if gruppe not in ('ortho', 'mittel', 'turm', 'hoch', 'reaktor', 'abgeleitet') or o.get('basis') in (
+                    'schatten', 'abgeleitet/laterne'):
+                continue
+            w = cache[o['datei']].width
+            by = o['y'] + o['fuss'] - 3
+            for _ in range(max(2, w // 12)):
+                fx, fy = o['x'] + rs.randint(0, w), by + rs.randint(-2, 4)
+                rx, ry = rs.randint(3, 7), rs.randint(1, 3)
+                for yy in range(-ry, ry + 1):
+                    for xx in range(-rx, rx + 1):
+                        if xx * xx / (rx * rx) + yy * yy / (ry * ry) <= 1 and rs.random() < 0.8:
+                            L.neutral(fx + xx, fy + yy, 0.8, waerme=3)
+                if 'container' in o.get('basis', '') and rs.random() < 0.6:
+                    for _ in range(5):
+                        L.p(fx + rs.randint(-4, 4), fy + rs.randint(-1, 2), ind.rgb('#8a5a3a'))
+        # Schlagschatten aus der Silhouette: Licht oben links -> flach nach rechts unten auf den Boden
+        import numpy as _np
+        sm = _np.zeros((img.size[1], img.size[0]), _np.float32)
+        for o in objs:
+            if o.get('basis') in ('schatten',):
+                continue
+            sp = cache[o['datei']]
+            a = _np.array(sp.getchannel('A')) >= 200
+            zeilen = _np.nonzero(a.any(axis=1))[0]
+            if len(zeilen) < 6:
+                continue
+            fuss_y = o['y'] + zeilen.max()
+            hoehe = zeilen.max() - zeilen.min()
+            flach = 0.42                                   # Schattenlaenge relativ zur Hoehe
+            for zi in zeilen:
+                k = zeilen.max() - zi                      # Hoehe ueber dem Fuss
+                ty = int(fuss_y - 2 + k * flach * 0.55)    # Schatten liegt unterhalb/rechts des Fusses
+                dx = int(3 + k * flach)
+                if not (0 <= ty < sm.shape[0]):
+                    continue
+                xs = _np.nonzero(a[zi])[0] + o['x'] + dx
+                xs = xs[(xs >= 0) & (xs < sm.shape[1])]
+                sm[ty, xs] = 1.0
+        sm_img = Image.fromarray((sm * 70).astype(_np.uint8)).filter(ImageFilter.MaxFilter(3))
+        schatten = Image.fromarray(_np.maximum(_np.array(schatten.filter(ImageFilter.GaussianBlur(1.2))),
+                                               _np.array(sm_img)).astype(_np.uint8))
         dunkel = Image.new('RGBA', img.size, (14, 22, 30, 255))
         dunkel.putalpha(schatten)
         img.alpha_composite(dunkel)
@@ -168,8 +218,11 @@ def bauen(frame=None, speichern=True):
             ox, oy = o['x'], o['y']
             if frame is not None and o.get('anim') == 'wehen':
                 sp = kb.wehen(sp, kb.wind(frame, o['x']))
+            elif frame is not None and o.get('anim') == 'kran':
+                sp = Image.open(os.path.join(OBJ, o['datei'].replace('abgeleitet-kran_', 'abgeleitet-kran_f%02d_' % frame))).convert('RGBA')
             img.alpha_composite(sp, (ox, oy))
         kb.laternen_licht(img, [o for o in objs if o.get('anim') == 'laterne'], frame)
+        leitungen(img, os.path.join(OBJ, 'leitungen.json'))
     if frame is not None:
         animation(img, objs, frame)
         return img
@@ -180,6 +233,45 @@ def bauen(frame=None, speichern=True):
                   open(os.path.join(KARTE, 'tilemap.json'), 'w'))
     print('Karte 02 %dx%d gebaut' % (cols, rows))
     return img
+
+
+def _linie(img, a, b, farbe, durchhang=0):
+    px = img.load()
+    W, H = img.size
+    (x0, y0), (x1, y1) = a, b
+    n = int(max(abs(x1 - x0), abs(y1 - y0))) + 1
+    for i in range(n + 1):
+        t = i / max(1, n)
+        x = x0 + (x1 - x0) * t
+        y = y0 + (y1 - y0) * t + durchhang * 4 * t * (1 - t)
+        xi, yi = int(round(x)), int(round(y))
+        if 0 <= xi < W and 0 <= yi < H:
+            if len(farbe) == 4 and farbe[3] < 255:
+                r, g, b_, a_ = px[xi, yi]
+                f = farbe[3] / 255
+                px[xi, yi] = (int(r * (1 - f) + farbe[0] * f), int(g * (1 - f) + farbe[1] * f),
+                              int(b_ * (1 - f) + farbe[2] * f), a_)
+            else:
+                px[xi, yi] = farbe[:3] + (255,)
+
+
+def leitungen(img, pfad):
+    """Hochspannungsleitungen zwischen den Masten: Draehte mit leichtem Durchhang und ihr Schatten auf
+    dem Boden (versetzt nach rechts unten wie die Schlagschatten)."""
+    if not os.path.exists(pfad):
+        return
+    d = json.load(open(pfad))
+    m = d['masten']
+    h = d.get('hoehe', 84)
+    for a, b in zip(m, m[1:]):
+        for i in range(4):
+            pa, pb = a[i], b[i]
+            # Schatten auf dem Boden (Hoehe -> Versatz)
+            _linie(img, (pa[0] + h * 0.42, pa[1] + h * 0.55 + h * 0.23), (pb[0] + h * 0.42, pb[1] + h * 0.55 + h * 0.23),
+                   (14, 22, 30, 45), durchhang=3)
+    for a, b in zip(m, m[1:]):
+        for i in range(4):
+            _linie(img, a[i], b[i], (35, 40, 47), durchhang=6)
 
 
 def animation(img, objs, frame):

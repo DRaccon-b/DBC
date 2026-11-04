@@ -25,12 +25,13 @@ FUSS = {'klein': 'klein', 'mini': 'klein', 'mittel': 'stein', 'ortho': 'stein', 
         'turm': 'stein', 'reaktor': 'stein', 'abgeleitet': 'stein'}
 
 # Feste Objekte: (sprite, Anker-x in Kacheln (Mitte), Anker-y = unterste Kachelzeile, Optionen)
+KRAN_WEG = 26                                   # Fahrweg der Katze nach links/rechts (px)
 FEST = [
     # Containerlager oben links (hinten zuerst)
     ('C:rot:0', 5.5, 6, {}), ('C:blau:1', 5.5, 8, {}), ('C:orange:0', 10.5, 8, {}),
     ('C:gruen:0', 24.5, 6, {}), ('C:orange:1', 24.5, 8, {}),
     ('C:blau:0', 6.5, 15, {}), ('C:gruen:1', 6.5, 19, {}),
-    ('KRAN', 18.5, 21, {}),
+    ('KRAN', 18.5, 21, {'anim': 'kran'}),
     ('klein/11', 10, 19, {}),                              # Gabelstapler
     ('ortho/00', 20, 26, {}),                              # LKW
     ('klein/12', 26, 15, {}), ('klein/12', 26, 44, {}),    # Kabeltrommeln
@@ -59,7 +60,7 @@ FEST = [
     ('mini/04', 13.5, 59, {}), ('mini/04', 14.5, 59, {}), ('mini/24', 9.5, 63, {}),
     # Werkstatt unten: Oefen, Hochoefen, Schornsteine, Schrott
     ('mittel/03', 32.5, 55, {'anim': 'feuer'}), ('mittel/02', 45.5, 55, {'anim': 'feuer'}),
-    ('turm/01', 36.5, 71, {'anim': 'feuer'}), ('turm/00', 49.5, 71, {'anim': 'feuer', 'rauch': [0.37, 0.02]}),
+    ('turm/01', 36.5, 71, {'anim': 'feuer'}), ('abgeleitet/hochofen', 49.5, 71, {'anim': 'feuer', 'rauch': [0.5, 0.0]}),
     ('hoch/01', 42.5, 71, {'anim': 'rauch', 'rauch': [0.5, 0.03]}), ('hoch/01', 56.5, 71, {'anim': 'rauch', 'rauch': [0.5, 0.03]}),
     ('hoch/01', 47.5, 44, {'anim': 'rauch', 'rauch': [0.5, 0.03]}),   # Schornstein auf dem Backsteinhaus
     ('mittel/05', 30.5, 71, {}),
@@ -71,12 +72,49 @@ FEST = [
     ('C:gruen:1', 5.5, 69, {}), ('C:orange:1', 5.5, 71, {}), ('C:rot:1', 10.5, 71, {}),
     ('ortho/12', 30, 64, {}),
 ]
-LATERNEN = [(16, 34), (24, 34), (32, 34), (40, 34), (49, 34), (56, 34), (18, 41), (26, 41), (34, 41), (45, 41), (7, 41)]
+# Hochspannungsleitung: Masten an der Ostmauer (Anker-Kachel), Leitung vom rechten Reaktor-Pylon
+MASTEN = [(91, 18), (91, 31), (91, 45), (91, 58), (91, 70)]
+# Warnschilder (Dreieck mit !) an Gefahrenstellen
+SCHILDER = [(12, 22), (26, 11), (30, 57), (48, 57), (40, 70), (53, 70), (63, 37), (88, 37), (79, 69),
+            (62, 10), (25, 46), (24, 61), (58, 26), (70, 62)]
+LATERNEN = [(16, 34), (24, 34), (32, 34), (40, 34), (49, 34), (56, 34), (18, 41), (26, 41), (34, 41), (45, 41), (7, 41),
+            # Hoefe: Containerlager, Fabrikhof, Werkstatt, Tanklager, Reaktorplatz-Rand, unten links
+            (12, 11), (27, 21), (30, 25), (46, 25), (57, 25), (36, 51), (58, 51), (28, 61), (59, 66),
+            (61, 13), (88, 13), (17, 67), (9, 57), (65, 59), (86, 63)]
 # Kleinteile, die verstreut werden (Gruppe mini; Nummern werden nach Sichtung eingetragen)
 STREU = ['mini/00', 'mini/01', 'mini/02', 'mini/03', 'mini/15', 'mini/00', 'mini/01', 'mini/04', 'mini/10',
          'mini/09', 'mini/14', 'mini/08', 'mini/11', 'mini/12', 'mini/55', 'mini/63', 'mini/13', 'mini/17',
          'mini/26', 'mini/29', 'mini/25', 'mini/50', 'mini/53', 'mini/36', 'mini/37', 'mini/32', 'mini/19',
          'mini/16', 'mini/35', 'mini/42']
+
+
+# Farben, die animiert werden und deshalb beim Farbabgleich unveraendert bleiben muessen
+SCHUTZ = {(0xc8, 0x3a, 0x1e), (0xe8, 0x70, 0x2a), (0xf5, 0xb0, 0x42), (0xff, 0xf2, 0xa0),
+          (0x2f, 0x8f, 0x5a), (0x4f, 0xd0, 0x7a), (0x9a, 0xf5, 0xb0), (0x2f, 0xc7, 0xd8), (0x7f, 0xf0, 0xf5),
+          (0xe6, 0xff, 0xff)}
+UMGEBUNG = (125, 136, 144)                      # mittleres Beton-Grau der Karte
+
+
+def harmonisieren(im, entsaettigen=0.14, mischen=0.07, boden_ao=0.18):
+    """Objekt an die Szene angleichen: etwas weniger Saettigung, leicht zur Umgebungsfarbe gemischt,
+    unten etwas dunkler (Umgebungsverdeckung). Animierte Leuchtfarben bleiben exakt erhalten."""
+    a = np.array(im.convert('RGBA')).astype(np.float32)
+    rgb_ = a[..., :3]
+    schutz = np.zeros(a.shape[:2], bool)
+    for c in SCHUTZ:
+        schutz |= (np.abs(rgb_ - np.array(c)) < 0.5).all(axis=2)
+    grau = rgb_.mean(axis=2, keepdims=True)
+    neu = rgb_ + (grau - rgb_) * entsaettigen
+    neu = neu * (1 - mischen) + np.array(UMGEBUNG) * mischen
+    h = a.shape[0]
+    zeilen = np.nonzero((a[..., 3] > 0).any(axis=1))[0]
+    if len(zeilen):
+        y0, y1 = zeilen.min(), zeilen.max()
+        hoehe = max(1, y1 - y0)
+        t = np.clip((np.arange(h) - (y1 - hoehe * 0.25)) / (hoehe * 0.25), 0, 1)[:, None, None]
+        neu = neu * (1 - boden_ao * t)
+    a[..., :3] = np.where(schutz[..., None], rgb_, np.clip(neu, 0, 255))
+    return Image.fromarray(a.astype(np.uint8))
 
 
 def lade(name, cache={}):
@@ -92,7 +130,22 @@ def prozedural():
         for v in (0, 1):
             ind.container_sprite(f, v).save(os.path.join(OBJ, 'abgeleitet', 'container_%s_%d.png' % (f, v)))
     ind.kran_sprite(176, 144, ind.container_sprite('rot', 1)).save(os.path.join(OBJ, 'abgeleitet', 'kran.png'))
+    for f in range(16):                         # Animation: Katze faehrt mit dem Container hin und her
+        dx = round(KRAN_WEG * math.sin(2 * math.pi * f / 16))
+        ind.kran_sprite(176, 144, ind.container_sprite('rot', 1), dx).save(
+            os.path.join(OBJ, 'abgeleitet', 'kran_f%02d.png' % f))
     bauwerke.laterne_bild().save(os.path.join(OBJ, 'abgeleitet', 'laterne.png'))
+    mast, punkte = ind.strommast_sprite()
+    mast.save(os.path.join(OBJ, 'abgeleitet', 'strommast.png'))
+    json.dump(punkte, open(os.path.join(OBJ, 'abgeleitet', 'strommast_punkte.json'), 'w'))
+    # Hochofen ohne den seitlich angeklebten Steinhaufen und ohne eingezeichneten Rauch
+    ho = Image.open(os.path.join(OBJ, 'turm', '00.png')).convert('RGBA')
+    hp = ho.load()
+    for y in range(ho.height):
+        for x in range(ho.width):
+            if x >= 60 or y < 8:
+                hp[x, y] = (0, 0, 0, 0)
+    ho.crop(ho.getbbox()).save(os.path.join(OBJ, 'abgeleitet', 'hochofen.png'))
 
 
 def main():
@@ -149,7 +202,8 @@ def main():
         pfad = os.path.join(OBJ, vname + '.png')
         if not os.path.exists(pfad):
             os.makedirs(os.path.join(OBJ, 'varianten'), exist_ok=True)
-            bauwerke.bodenfuss(lade(basis), boden, FUSS.get(gruppe, 'stein')).save(pfad)
+            quelle = lade(basis) if basis == 'abgeleitet/strommast' else harmonisieren(lade(basis))
+            bauwerke.bodenfuss(quelle, boden, FUSS.get(gruppe, 'stein')).save(pfad)
         im = lade(vname)
         x, y = int(ax - im.width // 2), int(ay + 3 - im.height)
         a = np.array(im.getchannel('A')) >= 200
@@ -169,12 +223,33 @@ def main():
 
     for name, tx, ty, opt in FEST:
         setze(name, tx * T, ty * T + 15, True, opt)
+    for o in objekte:                                # Kran-Frames mit gleichem Bodenfuss
+        if o['basis'] == 'abgeleitet/kran':
+            boden = o['datei'].rsplit('_', 1)[1][:-4]
+            for f in range(16):
+                ziel = os.path.join(OBJ, 'varianten', 'abgeleitet-kran_f%02d_%s.png' % (f, boden))
+                bauwerke.bodenfuss(harmonisieren(lade('abgeleitet/kran_f%02d' % f)), boden, 'stein').save(ziel)
     for o in list(objekte):                          # Fahrwerk-Schatten des Krans als unsichtbare Hilfsobjekte
         if o['basis'] == 'abgeleitet/kran':
             for dx in (8, 176 - 8):
                 objekte.append({'datei': 'abgeleitet/leer.png', 'basis': 'schatten', 'x': o['x'] + dx + 2 - 1,
                                 'y': o['y'] + o['fuss'] - 6, 'fuss': 6, 'ebene': 0, 'schatten': [26, 6]})
     Image.new('RGBA', (2, 2), (0, 0, 0, 0)).save(os.path.join(OBJ, 'abgeleitet', 'leer.png'))
+    for tx, ty in SCHILDER:
+        setze('klein/08', tx * T + 8, ty * T + 14, False)
+    leitung = []
+    punkte = json.load(open(os.path.join(OBJ, 'abgeleitet', 'strommast_punkte.json')))
+    for tx, ty in MASTEN:
+        o = setze('abgeleitet/strommast', tx * T, ty * T + 14, True)
+        leitung.append([[o['x'] + 2 + px_, o['y'] + py_] for px_, py_ in punkte])
+    # Anschluss am rechten Reaktor-Pylon (Spitze) und Weiterfuehrung aus der Karte nach unten
+    pylon = [o for o in objekte if o['basis'] == 'turm/03']
+    if pylon:
+        p_ = max(pylon, key=lambda o: o['x'])
+        spitze = [p_['x'] + Image.open(os.path.join(OBJ, p_['datei'])).width // 2, p_['y'] + 6]
+        leitung.insert(0, [spitze] * 4)
+    leitung.append([[x, rows * T + 40] for x, _ in leitung[-1]])
+    json.dump({'masten': leitung, 'hoehe': 84}, open(os.path.join(OBJ, 'leitungen.json'), 'w'))
     for tx, ty in LATERNEN:
         o = setze('abgeleitet/laterne', tx * T + 8, ty * T + 12, True, {'anim': 'laterne'})
         o['schatten'] = [18, 5]
@@ -186,7 +261,7 @@ def main():
     eng = np.array(besetzt.filter(ImageFilter.MaxFilter(5))) > 0
     nah = weit & ~eng
     gesetzt, versuche = 0, 0
-    while gesetzt < 45 and versuche < 6000 and STREU:
+    while gesetzt < 85 and versuche < 9000 and STREU:
         versuche += 1
         cx, cy = rnd.randrange(3, cols - 3), rnd.randrange(4, rows - 3)
         if cls[cy][cx] != 'b':

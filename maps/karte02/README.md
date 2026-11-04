@@ -34,3 +34,14 @@ Objekte, die gerade (frontal) zur Karte passen muessen, wurden ausdruecklich ort
 
 Animation: Foerderbaender laufen, Reaktor/Pylone/Generatoren pulsieren, Feuer flackert, Rauch steigt
 aus den Schornsteinen, Signalsaeulen blinken, Laternen flackern.
+
+## Integration und Details (Runde 2)
+
+- Boden: verzweigte Risse mit Unkraut, abgesackte Platten, Schlagloecher, Flickstellen, Oel-/Rostflecken,
+  Pfuetzen, Schutt, Kratzer auf Metall und Muell (dichter an Mauern) – `industrie.boden_details`.
+- Objekte: Farbabgleich an die Szene (`karte02_objekte.harmonisieren`, Leuchtfarben bleiben), Schlagschatten
+  aus der Silhouette (Licht oben links), Schmutz/Oel unter schweren Objekten.
+- Portalkran animiert: Katze faehrt mit dem Container hin und her (`abgeleitet/kran_fNN.png`).
+- Hochofen ohne den angeklebten Steinhaufen (`abgeleitet/hochofen.png`).
+- Mehr Strassenlaternen in den Hoefen, Warnschilder (Dreieck mit !), Hochspannungsleitung vom
+  Reaktor-Pylon ueber Stahlgittermasten an der Ostmauer (`industrie.strommast_sprite`, `leitungen.json`).

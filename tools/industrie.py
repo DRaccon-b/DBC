@@ -70,6 +70,12 @@ class Leinwand:
             r, g, b, a = self.px[x, y]
             self.px[x, y] = (int(r * f), int(g * f), int(b * min(1.0, f + 0.06)), a)
 
+    def neutral(self, x, y, f, waerme=0):
+        """Abdunkeln ohne Blaustich (waerme > 0: leicht braeunlich, z. B. Oel/Schmutz)."""
+        if 0 <= x < self.W and 0 <= y < self.H:
+            r, g, b, a = self.px[x, y]
+            self.px[x, y] = (int(r * f + waerme), int(g * f + waerme * 0.6), int(b * f), a)
+
     def text(self, x, y, s, c):
         for i, ch in enumerate(s.upper()):
             g = SCHRIFT.get(ch, SCHRIFT[' '])
@@ -573,7 +579,7 @@ def container_sprite(farbe, variante=0, breite=80, dach=12, wand=32):
 KRANGELB = pal('#6a5010', '#9a7414', '#c8961e', '#e2b432', '#f2cf5c', '#fbe69a')
 
 
-def kran_sprite(spannweite, hoehe, container=None):
+def kran_sprite(spannweite, hoehe, container=None, katze_dx=0):
     """Portalkran in Frontalansicht: zwei Gitterbeine mit Fahrwerken, oberer Kastentraeger mit
     Katze, Seile mit Spreader und optional Container. Breite = spannweite (Aussenkante der Beine)."""
     im = Image.new('RGBA', (spannweite, hoehe), (0, 0, 0, 0))
@@ -583,7 +589,7 @@ def kran_sprite(spannweite, hoehe, container=None):
     # Container am Haken (hinter den Seilen, vor dem Hintergrund)
     if container is not None:
         cw, ch = container.size
-        cx = (spannweite - cw) // 2 + 6
+        cx = (spannweite - cw) // 2 + 6 + katze_dx
         im.alpha_composite(container, (cx, hoehe - ch - 30))
         # Spreader
         L.rect(cx + 6, hoehe - ch - 36, cx + cw - 6, hoehe - ch - 31, G[2])
@@ -631,7 +637,7 @@ def kran_sprite(spannweite, hoehe, container=None):
     for x in range(6, spannweite - 6, 10):
         L.p(x, 8, G[0]); L.p(x, 9, G[5])
     # Katze mit Kabine
-    kx = spannweite // 2 + 6
+    kx = spannweite // 2 + 6 + katze_dx
     L.rect(kx - 14, 2, kx + 14, 14, STAHL[1])
     L.rect(kx - 13, 3, kx + 13, 6, STAHL[3])
     L.rect(kx + 4, 5, kx + 12, 12, GLAS[2]); L.p(kx + 5, 6, GLAS[4])
@@ -640,3 +646,195 @@ def kran_sprite(spannweite, hoehe, container=None):
         for y in range(14, seil_unten):
             L.p(x, y, STAHL[0]); L.p(x + 1, y, STAHL[3])
     return im
+
+
+# ---------------------------------------------------------------- Bodendetails (ersetzt bodenflecken)
+MUELL = [
+    [rgb('#e8e4d8'), rgb('#c8c2b0')],            # Papier
+    [rgb('#d0d8de'), rgb('#a8b4bc')],            # Plastiktuete
+    [rgb('#b5503e'), rgb('#8c3a30')],            # rote Dose
+    [rgb('#aab6bd'), rgb('#717e87')],            # Blechdose
+    [rgb('#3e6a44'), rgb('#5a8c5c')],            # gruene Flasche
+    [rgb('#e8dcb4'), rgb('#c8a060')],            # Zigarettenstummel
+    [rgb('#56626b'), rgb('#3e4850')],            # Schraube / Mutter
+    [rgb('#94704e'), rgb('#5a4030')],            # Holzsplitter
+]
+
+
+def _hell(L, x, y, f=1.1):
+    if 0 <= x < L.W and 0 <= y < L.H:
+        r, g, b, a = L.px[x, y]
+        L.px[x, y] = (min(255, int(r * f)), min(255, int(g * f)), min(255, int(b * f)), a)
+
+
+def _riss(L, x, y, rnd, laenge, aste=True):
+    dx = rnd.choice((1, -1))
+    for i in range(laenge):
+        L.neutral(x, y, 0.55)
+        _hell(L, x, y + 1, 1.1)                      # Lichtkante unter dem Riss
+        if aste and rnd.random() < 0.14:
+            _riss(L, x, y, rnd, rnd.randint(3, 7), False)
+        x += dx if rnd.random() < 0.7 else 0
+        y += rnd.choice((0, 1, 1, -1))
+    if rnd.random() < 0.35:                          # Unkraut im Riss
+        for k in range(rnd.randint(1, 3)):
+            L.p(x + k - 1, y - (k % 2), rgb('#5fbb58') if k % 2 else rgb('#45a052'))
+
+
+def _abgesackt(L, X, Y, rnd):
+    """Abgesackte 32x32-Betonplatte: etwas dunkler, breite Schattenkante oben/links, Licht unten/rechts."""
+    for y in range(Y + 2, Y + 32):
+        for x in range(X + 2, X + 32):
+            L.neutral(x, y, 0.9)
+    for i in range(2, 32):
+        for d, f in ((2, 0.6), (3, 0.72), (4, 0.84)):
+            L.neutral(X + i, Y + d, f); L.neutral(X + d, Y + i, f)
+        _hell(L, X + i, Y + 31, 1.18); _hell(L, X + 31, Y + i, 1.12)
+    for (cx, cy) in ((X + 4, Y + 5), (X + 27, Y + 27), (X + 26, Y + 6)):
+        _riss(L, cx, cy, rnd, rnd.randint(4, 9), False)
+
+
+def _schlagloch(L, x, y, rnd, asphalt=False):
+    rx, ry = rnd.randint(3, 6), rnd.randint(2, 4)
+    for dy in range(-ry, ry + 1):
+        for dx in range(-rx, rx + 1):
+            d = (dx / rx) ** 2 + (dy / ry) ** 2
+            if d <= 1 + rnd.uniform(-0.2, 0.1):
+                if d > 0.6 and (dx > 0 or dy > 0):
+                    _hell(L, x + dx, y + dy, 1.2)                      # Lichtkante unten rechts
+                elif d > 0.6:
+                    L.neutral(x + dx, y + dy, 0.5)                     # Schattenkante oben links
+                else:
+                    L.p(x + dx, y + dy, SCHOTTER[rnd.randrange(4)] if rnd.random() < 0.6 else
+                        (rgb('#1c2026') if asphalt else WAND[1]))
+
+
+def _pfuetze(L, x, y, rnd):
+    rx, ry = rnd.randint(4, 8), rnd.randint(2, 3)
+    for dy in range(-ry, ry + 1):
+        for dx in range(-rx, rx + 1):
+            if (dx / rx) ** 2 + (dy / ry) ** 2 <= 1:
+                L.dunkel(x + dx, y + dy, 0.74)
+    L.p(x - rx // 2, y - 1, rgb('#c8d6e0')); L.p(x - rx // 2 + 1, y - 1, rgb('#9fb2c4'))
+
+
+def _schutt(L, x, y, rnd):
+    for _ in range(rnd.randint(6, 12)):
+        px_, py_ = x + rnd.randint(-4, 4), y + rnd.randint(-2, 2)
+        L.p(px_, py_, SCHOTTER[rnd.randrange(4)] if rnd.random() < 0.7 else WAND[rnd.randint(1, 4)])
+        L.neutral(px_ + 1, py_ + 1, 0.7)
+
+
+def boden_details(L, cls, rows, cols, nah_wand, seed=21):
+    """Risse, abgesackte Platten, Schlagloecher, Flickstellen, Flecken, Pfuetzen, Kratzer, Schutt und Muell."""
+    rnd = random.Random(seed)
+    for y in range(0, rows - 1, 2):
+        for x in range(0, cols - 1, 2):
+            if all(cls[y + j][x + i] == 'b' for i in (0, 1) for j in (0, 1)) and rnd.random() < 0.045:
+                _abgesackt(L, x * T, y * T, rnd)
+    for y in range(rows):
+        for x in range(cols):
+            k = cls[y][x]
+            X, Y = x * T + rnd.randint(2, 13), y * T + rnd.randint(2, 13)
+            r = rnd.random()
+            if k == 'b':
+                if r < 0.10:
+                    _riss(L, X, Y, rnd, rnd.randint(10, 24))
+                elif r < 0.12:
+                    _schlagloch(L, X, Y, rnd)
+                elif r < 0.15:                                  # Oelfleck (neutral/braeunlich)
+                    for dy in range(-3, 4):
+                        for dx in range(-5, 6):
+                            if dx * dx / 25 + dy * dy / 9 <= 1 and rnd.random() < 0.9:
+                                L.neutral(X + dx, Y + dy, 0.72, waerme=4)
+                elif r < 0.165:                                 # Rostfleck
+                    for _ in range(10):
+                        L.p(X + rnd.randint(-4, 4), Y + rnd.randint(-2, 2), rgb('#8a5a3a') if rnd.random() < 0.5 else rgb('#a06a42'))
+                elif r < 0.175:
+                    _pfuetze(L, X, Y, rnd)
+                elif r < 0.19:
+                    _schutt(L, X, Y, rnd)
+            elif k == 'a':
+                if r < 0.04:
+                    _schlagloch(L, X, Y, rnd, asphalt=True)
+                elif r < 0.08:                                  # Flickstelle
+                    w, h = rnd.randint(8, 16), rnd.randint(5, 10)
+                    for yy in range(Y, Y + h):
+                        for xx in range(X, X + w):
+                            L.neutral(xx, yy, 0.84)
+                elif r < 0.12:
+                    _riss(L, X, Y, rnd, rnd.randint(6, 12), False)
+            elif k == 'm' and r < 0.15:                         # Kratzer auf Metall
+                for i in range(rnd.randint(4, 10)):
+                    L.p(X + i, Y + i // 3, rgb('#4c6878'))
+            elif k in 'ph' and r < 0.06:
+                _riss(L, X, Y, rnd, rnd.randint(5, 10), False)
+            # Muell: haeufiger nahe an Mauern/Gebaeuden (Wind treibt ihn dorthin)
+            for _ in range(2):
+                if k in 'bawp' and rnd.random() < (0.16 if nah_wand(x, y) else 0.045):
+                    farbe = MUELL[rnd.randrange(len(MUELL))]
+                    mx, my = x * T + rnd.randint(1, 14), y * T + rnd.randint(1, 14)
+                    L.p(mx, my, farbe[0]); L.p(mx + 1, my, farbe[1] if rnd.random() < 0.7 else farbe[0])
+                    if rnd.random() < 0.5:
+                        L.p(mx, my + 1, farbe[1])
+                    L.neutral(mx + 1, my + 1, 0.72)
+
+
+# ---------------------------------------------------------------- Strommast (Hochspannung)
+ISOLATOR = pal('#8a96a0', '#c8d0d6', '#e8eef2')
+
+
+MAST = pal('#14181e', '#262d36', '#3a4450', '#55626e', '#7a8894')
+
+
+def strommast_sprite(hoehe=104):
+    """Stahlgitter-Strommast in Frontalansicht, exakt symmetrisch. Gibt (Bild, Leitungspunkte) zurueck;
+    Leitungspunkte = Spitzen der Isolatoren an zwei Quertraegern (x, y relativ zum Sprite)."""
+    B = 41
+    im = Image.new('RGBA', (B, hoehe), (0, 0, 0, 0))
+    L = Leinwand(im)
+    M = B // 2
+    fuss_b, kopf_b = 12, 3                                  # halbe Breite unten/oben
+    def halb(y):
+        return kopf_b + (fuss_b - kopf_b) * (y / (hoehe - 6))
+    # Beine
+    for y in range(6, hoehe - 4):
+        h = halb(y)
+        for s_ in (-1, 1):
+            x = int(round(M + s_ * h))
+            L.p(x, y, MAST[0]); L.p(x - s_, y, MAST[4] if s_ < 0 else MAST[2]); L.p(x - 2 * s_, y, MAST[0])
+    # Gitter: Querstreben und Diagonalen
+    stufen = list(range(14, hoehe - 6, 9))
+    for i, y in enumerate(stufen):
+        h = int(halb(y))
+        for x in range(M - h, M + h + 1):
+            L.p(x, y, MAST[1]); L.p(x, y + 1, MAST[0])
+        if i + 1 < len(stufen):
+            y2 = stufen[i + 1]
+            h2 = int(halb(y2))
+            for t in range(0, 101, 4):
+                f = t / 100
+                xa = int(round((M - h) + ((M + h2) - (M - h)) * f)); ya = int(round(y + (y2 - y) * f))
+                xb = int(round((M + h) + ((M - h2) - (M + h)) * f))
+                L.p(xa, ya, MAST[1]); L.p(xb, ya, MAST[1]); L.p(xa + 1, ya, MAST[3]); L.p(xb - 1, ya, MAST[0])
+    # Spitze
+    for y in range(0, 7):
+        L.p(M, y, MAST[1]); L.p(M - 1, y, MAST[3])
+    # Quertraeger mit Isolatoren
+    punkte = []
+    for ay, ab in ((10, 15), (24, 20)):
+        for x in range(M - ab, M + ab + 1):
+            L.p(x, ay, MAST[1]); L.p(x, ay - 1, MAST[4])
+        for s_ in (-1, 1):
+            xs = M + s_ * (ab - 1)
+            for k in range(1, 6):
+                c = ISOLATOR[2] if k % 2 else ISOLATOR[0]
+                L.p(xs, ay + k, c); L.p(xs - 1, ay + k, ISOLATOR[1] if k % 2 else ISOLATOR[0])
+            punkte.append((xs, ay + 6))
+    # Fundamente
+    for s_ in (-1, 1):
+        x = M + s_ * fuss_b
+        L.rect(x - 3, hoehe - 5, x + 4, hoehe, WAND[3])
+        L.rect(x - 3, hoehe - 5, x + 4, hoehe - 4, WAND[5])
+        L.rect(x - 3, hoehe - 1, x + 4, hoehe, WAND[1])
+    return im, punkte
