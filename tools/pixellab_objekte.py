@@ -16,6 +16,7 @@ ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
 OUT = os.path.join(ROOT, 'assets', 'objekte', 'karte01')
 OUT_K2 = os.path.join(ROOT, 'assets', 'objekte', 'karte02')
 OUT_K3 = os.path.join(ROOT, 'assets', 'objekte', 'karte03')
+OUT_K4 = os.path.join(ROOT, 'assets', 'objekte', 'karte04')
 API = 'https://api.pixellab.ai'
 
 STIL = ("Top-down RPG map object in polished handheld monster-collecting RPG pixel art: colored dark outline "
@@ -240,6 +241,55 @@ PALETTE_K3 = [
     # Leuchten
     '#2fc7d8', '#7ff0f5', '#e6ffff', '#c83a1e', '#e8702a', '#f5b042', '#fff2a0', '#ffffff',
 ]
+STIL_K4 = ("Top-down RPG map object for a sunny savanna with old rusty machinery in polished handheld monster-collecting "
+           "RPG pixel art: colored dark outline (darkest shade of the object's own hue, never pure black), light from the "
+           "upper left, hue-shifted shading (shadows toward purple-brown, highlights warm), clean readable shapes, "
+           "slightly muted warm savanna colors, no noise, no dithering, transparent background, no ground, no cast "
+           "shadow. Straight front view, orthographic, not isometric.")
+PALETTE_K4 = [
+    # Savannengras / Erde
+    '#5a4a26', '#7a6430', '#957c3e', '#ad944e', '#c4aa60', '#d6bc70', '#e8d08a',
+    '#7e5234', '#9a6844', '#b07c56', '#c08e66', '#d2a47c',
+    # Gruen (Akazien, Plateau)
+    '#2e3e22', '#3e5a2e', '#557a38', '#6e9a44', '#8cb455', '#afbd70',
+    # Stein / Knochen
+    '#4a4038', '#6a5e50', '#8a7c68', '#a8987e', '#c8b89a', '#e6dcc4', '#f6f0e0',
+    # Rost / Eisen
+    '#2e2830', '#4a3e44', '#6a4a3a', '#8a4a2a', '#a85e32', '#c47a44', '#5a5e6a', '#7e8494',
+    # Akzente: Rot (Juwel), Blau (Kristall), Stoff
+    '#8a1e22', '#c8303a', '#ff6a5a', '#3e5a8a', '#6e8ec4', '#a8c4ea', '#e6c49a',
+]
+OBJEKTGRUPPEN_K4 = {
+    'k4_gross': {'size': 128, 'items': [
+        'huge rusty broken iron gear wheel standing upright half buried in the ground, missing teeth, rust stains',
+        'huge old rusty cogwheel lying tilted in the grass with broken spokes and orange rust',
+        'giant bleached animal skull fossil like a crocodile skull lying on the ground',
+        'giant curved ribcage bones of a huge animal skeleton sticking out of the ground',
+    ]},
+    'k4_baeume': {'size': 80, 'items': [
+        'flat-topped umbrella acacia tree with a wide green canopy and a thin crooked trunk',
+        'tall termite mound, a pointed reddish clay tower',
+        'dead twisted charred black tree without leaves',
+        'small young acacia tree with a flat green canopy',
+    ]},
+    'k4_mittel': {'size': 64, 'items': [
+        'large rounded savanna boulder', 'safari canvas tent with an open entrance', 'small canvas tent',
+        'carved wooden totem pole', 'campfire with stones around it', 'clay pots and a woven basket',
+        'small rusty iron cogwheel lying on the ground', 'cluster of pale blue crystals growing out of rock',
+        'pile of old bones', 'horned cow skull', 'dry thorny savanna bush', 'small termite mound',
+        'wooden crate and barrel', 'wooden signpost with two arrows', 'stack of rusty pipes and scrap metal',
+        'pile of small rocks',
+    ]},
+    'k4_klein': {'size': 32, 'items': [
+        'tuft of dry yellow savanna grass', 'small green grass clump', 'few small pebbles', 'small white bone',
+        'tiny animal skull', 'small pale blue crystal', 'tiny rusty cog', 'small orange savanna flower',
+        'small grey rock', 'dry twig', 'small dark rock with ash', 'little red mushroom',
+    ]},
+    'k4_monument': {'size': 160, 'items': [
+        'giant dark iron gear monument standing upright with a glowing red gem in the hub, on a rocky dark stone base',
+    ]},
+}
+
 OBJEKTGRUPPEN_K3 = {
     'k3_klein': {'size': 32, 'items': [
         'small green saguaro cactus', 'tall green saguaro cactus with two arms', 'small round barrel cactus', 'prickly pear cactus',
@@ -377,7 +427,9 @@ def herunterladen(oid, d):
 
 
 def speichern(gruppe, ims, ids):
-    if gruppe.startswith('k3_'):
+    if gruppe.startswith('k4_'):
+        ziel = os.path.join(OUT_K4, gruppe[3:])
+    elif gruppe.startswith('k3_'):
         ziel = os.path.join(OUT_K3, gruppe[3:])
     else:
         ziel = os.path.join(OUT_K2, gruppe[3:]) if gruppe.startswith('k2_') else os.path.join(OUT, gruppe)
@@ -403,11 +455,12 @@ def speichern(gruppe, ims, ids):
 def erzeugen(gruppe):
     k2 = gruppe.startswith('k2_')
     k3 = gruppe.startswith('k3_')
-    g = (OBJEKTGRUPPEN_K3 if k3 else OBJEKTGRUPPEN_K2 if k2 else OBJEKTGRUPPEN)[gruppe]
-    stil, palette = (STIL_K3, PALETTE_K3) if k3 else (STIL_K2, PALETTE_K2) if k2 else (STIL, PALETTE)
+    k4 = gruppe.startswith('k4_')
+    g = (OBJEKTGRUPPEN_K4 if k4 else OBJEKTGRUPPEN_K3 if k3 else OBJEKTGRUPPEN_K2 if k2 else OBJEKTGRUPPEN)[gruppe]
+    stil, palette = (STIL_K4, PALETTE_K4) if k4 else (STIL_K3, PALETTE_K3) if k3 else (STIL_K2, PALETTE_K2) if k2 else (STIL, PALETTE)
     req = {'description': stil, 'size': g['size'], 'view': 'top-down',
            'item_descriptions': [it + '. ' + stil for it in g['items']],
-           'target_palette': {'colors': palette, 'name': 'Karte03 Wueste' if k3 else 'Karte02 Industrie' if k2 else 'Karte01 handheld'}}
+           'target_palette': {'colors': palette, 'name': 'Karte04 Savanne' if k4 else 'Karte03 Wueste' if k3 else 'Karte02 Industrie' if k2 else 'Karte01 handheld'}}
     d = call('POST', '/v2/create-1-direction-object', req)
     oid = d['object_id']
     print(gruppe, 'Objekt', oid)
