@@ -46,5 +46,8 @@ unten, `_schwappen` = pendelt seitlich).
 
 Animiert werden: Fluss (fließt), Teich und Meer (schwappen), Schaum an Ufern und Strand (glitzert),
 Wasserfall (fallende Streifen, brodelnde Gischt, Nebel), Runen in Klippen, Steinen und Bäumen
-(pulsieren), Lagerfeuer (flackert). Die Logik steckt in `tools/karte_bauen.py` (`bauen(frame)`,
+(pulsieren), Lagerfeuer (flackert), Gras/Schilf/Farne/Blumen (wiegen sich in einer Windwelle, die
+über die Karte läuft), Seerosen (wippen), Schmetterlinge (flattern über Blumenwiesen).
+Animationsart je Objekt steht als `anim` in `assets/objekte/karte01/platzierung.json`
+(`wehen`/`wippen`), Flugbahnen der Schmetterlinge in `schmetterlinge.json`. Die Logik steckt in `tools/karte_bauen.py` (`bauen(frame)`,
 `wasser_frame`, `leuchten`) und `tools/klippen.py` (`zeichne_wasserfall(..., frame)`).

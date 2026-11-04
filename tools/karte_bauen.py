@@ -144,6 +144,74 @@ def wasser_frame(kachel, beschr, gridzeichen, y, x, frame, basis):
     return out
 
 
+# ---------------------------------------------------------------- Wind, Wippen, Schmetterlinge
+def wind(frame, x):
+    """Windwelle, die von links nach rechts ueber die Karte laeuft: -1, 0 oder 1 (Pixel an der Spitze)."""
+    import math
+    return round(1.2 * math.sin(2 * math.pi * (frame / N_FRAMES - x / 420)))
+
+
+def wehen(sp, versatz):
+    """Spitzen (obere 60 %) um versatz Pixel seitlich neigen, nach unten auslaufend; Fuss bleibt stehen."""
+    if versatz == 0:
+        return sp
+    out = Image.new('RGBA', sp.size)
+    grenze = sp.height * 0.6
+    for y in range(sp.height):
+        d = round(versatz * (1 - y / grenze)) if y < grenze else 0
+        out.paste(sp.crop((0, y, sp.width, y + 1)), (d, y))
+    return out
+
+
+def wippen(frame, phase):
+    import math
+    return round(math.sin(2 * math.pi * (frame / N_FRAMES + (phase % 97) / 97)))
+
+
+FALTER_FARBEN = {'gelb': ((0xf5, 0xc8, 0x42), (0xff, 0xf2, 0xa0), (0xe8, 0x70, 0x2a)),
+                 'weiss': ((0xf4, 0xf6, 0xff), (0xff, 0xff, 0xff), (0x9f, 0xb2, 0xcf)),
+                 'blau': ((0x3f, 0x7f, 0xe0), (0x7f, 0xb8, 0xf8), (0x2a, 0x4f, 0xb0)),
+                 'rosa': ((0xe0, 0x60, 0xa8), (0xff, 0xd2, 0xe8), (0xb2, 0x3c, 0x82))}
+FALTER = {  # a = Fluegel, b = Fluegellicht, r = Fluegelrand (dunkel), x = Koerper
+    'offen': ["ra...ar",
+              "rbaxabr",
+              ".raxar.",
+              "..rxr..",
+              "...x..."],
+    'zu':    ["..rxr..",
+              "..bxb..",
+              "..axa..",
+              "...x...",
+              "......."],
+}
+
+
+def schmetterlinge(img, falter, frame):
+    import math
+    px = img.load()
+    W, H = img.size
+    for f in falter:
+        a = 2 * math.pi * (frame / N_FRAMES * f['richtung'] + f['phase'])
+        x = f['x'] + f['rx'] * math.cos(a)
+        y = f['y'] + f['ry'] * math.sin(a) + 2 * math.sin(2 * a)       # Auf und Ab beim Flattern
+        bild = FALTER['offen' if (frame + int(f['phase'] * 8)) % 4 < 2 else 'zu']
+        fa, fb, fr = FALTER_FARBEN[f['farbe']]
+        # kleiner Schatten am Boden
+        sx, sy = int(x), int(f['y'] + f['ry'] + 10)
+        for dx in (-1, 0, 1):
+            if 0 <= sx + dx < W and 0 <= sy < H:
+                r_, g_, b_, a_ = px[sx + dx, sy]
+                px[sx + dx, sy] = (int(r_ * 0.75), int(g_ * 0.78), int(b_ * 0.8), a_)
+        for dy, zeile in enumerate(bild):
+            for dx, ch in enumerate(zeile):
+                if ch == '.':
+                    continue
+                c = {'a': fa, 'b': fb, 'r': fr, 'x': (0x3a, 0x24, 0x20)}[ch]
+                xx, yy = int(x) - 3 + dx, int(y) - 2 + dy
+                if 0 <= xx < W and 0 <= yy < H:
+                    px[xx, yy] = c + (255,)
+
+
 RUNENFARBEN = [(0x2f, 0xc7, 0xd8), (0x7f, 0xf0, 0xf5), (0xe6, 0xff, 0xff)]
 FEUER = [(0xc8, 0x3a, 0x3a), (0xe8, 0x70, 0x2a), (0xf5, 0xc8, 0x42), (0xff, 0xf2, 0xa0)]
 
@@ -325,7 +393,15 @@ def bauen(frame=None, speichern=True):
             sp = cache[o['datei']]
             if o.get('spiegeln'):
                 sp = sp.transpose(Image.FLIP_LEFT_RIGHT)
-            img.alpha_composite(sp, (o['x'], o['y']))
+            ox, oy = o['x'], o['y']
+            if frame is not None and o.get('anim') == 'wehen':
+                sp = wehen(sp, wind(frame, o['x']))
+            elif frame is not None and o.get('anim') == 'wippen':
+                oy += wippen(frame, o['x'] * 7 + o['y'])
+            img.alpha_composite(sp, (ox, oy))
+        sf = os.path.join(OBJ, 'schmetterlinge.json')
+        if os.path.exists(sf):
+            schmetterlinge(img, json.load(open(sf)), frame or 0)
     if frame is not None:
         leuchten(img, frame, objs if os.path.exists(pf) else [])
         return img

@@ -34,6 +34,11 @@ AUSWAHL = {
     'teich': {'deko/17': 3, 'deko/18': 2, 'deko/19': 3},
     'ufer': {'deko/07': 3, 'deko/05': 1},
 }
+# Animationsart je Sprite (fuer karte_bauen.bauen(frame) und Engine-Export)
+WEHEN = ('deko/05', 'deko/06', 'deko/07', 'deko/24', 'deko/26', 'deko/61', 'deko/00', 'deko/01', 'deko/02',
+         'deko/03', 'deko/04', 'deko/30', 'deko/38', 'deko/33')
+WIPPEN = ('deko/17', 'deko/18', 'deko/19')
+BLUMEN = ('deko/00', 'deko/01', 'deko/02', 'deko/03', 'deko/04', 'deko/30', 'deko/38', 'deko/27')
 SCHATTEN = ('baeume/', 'gross/00', 'gross/01', 'gross/02', 'gross/07', 'gross/09', 'gross/10', 'gross/11',
             'gross/03', 'deko/09', 'deko/11', 'deko/12', 'deko/13', 'deko/25')
 
@@ -113,6 +118,10 @@ def main():
             o['datei'] = name + '.png'
         if name.startswith(SCHATTEN):
             o['schatten'] = [int(im.width * 0.7), max(4, im.width // 7)]
+        if name in WEHEN:
+            o['anim'] = 'wehen'
+        elif name in WIPPEN:
+            o['anim'] = 'wippen'
         objekte.append(o)
         return o
 
@@ -196,6 +205,21 @@ def main():
 
     json.dump(objekte, open(os.path.join(OBJ, 'platzierung.json'), 'w'), indent=0)
     print(len(objekte), 'Objekte gesetzt')
+
+    # --- Schmetterlinge: ueber Wiesenstellen mit Blumen, mit Abstand zueinander
+    farben = ['gelb', 'weiss', 'blau', 'rosa']
+    kandidaten = [o for o in objekte if o['datei'][:-4] in BLUMEN]
+    rnd.shuffle(kandidaten)
+    falter = []
+    for o in kandidaten:
+        cx, cy = o['x'] + 8, o['y'] - 6
+        if all(abs(cx - f['x']) + abs(cy - f['y']) > 120 for f in falter):
+            falter.append({'x': cx, 'y': cy, 'rx': rnd.randint(8, 18), 'ry': rnd.randint(4, 9),
+                           'phase': rnd.random(), 'richtung': rnd.choice((1, -1)), 'farbe': rnd.choice(farben)})
+        if len(falter) >= 18:
+            break
+    json.dump(falter, open(os.path.join(OBJ, 'schmetterlinge.json'), 'w'), indent=0)
+    print(len(falter), 'Schmetterlinge')
 
 
 if __name__ == '__main__':
