@@ -205,6 +205,15 @@ def main():
     import klippen
     treppen_px = frozenset((tr['x'] * T, (tr['x'] + tr['breite']) * T) for tr in plan.get('treppen', []))
     klippen.zeichne_klippen(img, plan, cols, treppen_px)
+    # Wasserfaelle: volle Flussbreite an der Wandoberkante (Spalten mit Wasser direkt oberhalb der Wand)
+    for wf in plan.get('wasserfaelle', []):
+        t, h = tcol[wf['x']], hcol[wf['x']]
+        oben = t - h - 1
+        spalten = [x for x in range(wf['x'] - 2, wf['x'] + wf['breite'] + 2) if cls[oben][x] == 'w']
+        if spalten:
+            # Wasserflaeche reicht durch die Wang-Ecken eine halbe Kachel weiter, minus Uferkante
+            klippen.zeichne_wasserfall(img, min(spalten) * T - 5, (max(spalten) + 1) * T + 5,
+                                       (t - h) * T + 8, (t + 1) * T - 2)
     img.save(os.path.join(KARTE, 'terrain_basis.png'))
 
     # --- 3. Objekte

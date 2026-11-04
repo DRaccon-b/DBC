@@ -137,13 +137,7 @@ def main():
         bild.save(os.path.join(OBJ, nm + '.png'))
         setze(nm, (tr['x'] + tr['breite'] / 2) * T, (t + 1) * T + 2, bild=bild)
 
-    # Wasserfall ueber der Wand, wo der Fluss die Klippe kreuzt
-    for wf in plan.get('wasserfaelle', []):
-        x = wf['x']; t, h = tcol[x], hcol[x]
-        bild = strecken(lade('gross/06'), (h + 1) * T + 10)
-        nm = 'abgeleitet/wasserfall_h%d' % h
-        bild.save(os.path.join(OBJ, nm + '.png'))
-        setze(nm, (x + wf['breite'] / 2) * T, (t + 1) * T + 6, bild=bild)
+    # Wasserfaelle zeichnet karte_bauen.py (tools/klippen.py) in voller Flussbreite
 
     # Bruecken (mittig ueber dem Fluss) und Stege (auf Laenge gestreckt)
     for br in plan.get('bruecken', []):

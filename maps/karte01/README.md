@@ -18,8 +18,8 @@ python3 tools/karte_bauen.py        # fertige Karte mit Objekten
 |---|---|---|
 | Grundkacheln | handgezeichnet (Skript) | `tools/basis_kacheln.py` → `assets/basis/` |
 | Übergänge Gras/Sand/Wasser/Meer | PixelLab Pro-Tilesets, Grundkacheln als exakte Referenz | `assets/tilesets/pixellab/` |
-| Klippen (3–4 Kacheln hoch) | handgezeichnet (Skript) | `tools/klippen.py` |
-| Bäume, Deko, Brücken, Treppen, Wasserfall, Zelt … | PixelLab-Objekt-Manager | `assets/objekte/karte01/{baeume,deko,gross}/` |
+| Klippen (3–4 Kacheln hoch) und Wasserfall | handgezeichnet (Skript) | `tools/klippen.py` |
+| Bäume, Deko, Brücken, Treppen, Zelt … | PixelLab-Objekt-Manager | `assets/objekte/karte01/{baeume,deko,gross}/` |
 
 - Geländetypen je Kachel: `terrain_grid.json` (aus dem Original abgeleitet).
 - Klippenverlauf, Wandhöhe `h`, Treppen, Brücken, Steg: `hoehenplan.json`.

@@ -159,3 +159,89 @@ def zeichne_klippen(img, plan, cols, treppen_spalten=frozenset(), seed=7):
     dunkel = Image.new('RGBA', img.size, (18, 40, 52, 255))
     dunkel.putalpha(schatten)
     img.alpha_composite(dunkel)
+
+
+WASSER = {'w0': '#173f86', 'w1': '#2358b0', 'w2': '#3274d2', 'w3': '#4c93e6', 'w4': '#8cc4f4', 'w5': '#dff3ff'}
+WS = {k: rgb(v) for k, v in WASSER.items()}
+WEISS = (255, 255, 255, 255)
+
+
+def zeichne_wasserfall(img, x0, x1, y_top, y_bot, seed=11):
+    """Wasserfall ueber die volle Flussbreite x0..x1 von der Wandoberkante y_top bis zum Fuss y_bot.
+
+    Aufbau (Licht von oben links): Abbruchkante, an der das Wasser ueber den Rand kippt ->
+    fallendes Wasser mit senkrechten Streifen -> Gischtbecken mit Schaumblasen -> Ringe im Fluss.
+    """
+    rnd = random.Random(seed)
+    px = img.load()
+    W, H = img.size
+    breite = x1 - x0
+
+    def setz(x, y, c):
+        if 0 <= x < W and 0 <= y < H:
+            px[x, y] = c
+
+    # 0) Graskante der Klippe ueber dem Fluss entfernen: Flusswasser bis zur Abbruchkante fortsetzen
+    for i in range(breite):
+        for y in range(y_top - 6, y_top - 1):
+            setz(x0 + i, y, WS['w3'] if (y == y_top - 3 and i % 6 in (1, 2, 3)) else WS['w2'])
+    # 1) fallendes Wasser: Grundton je Spalte (Raender dunkel und nass) + Streifen
+    for i in range(breite):
+        x = x0 + i
+        rand = min(i, breite - 1 - i)
+        basis = WS['w0'] if rand == 0 else WS['w1'] if rand == 1 else WS['w2'] if rand <= 3 else WS['w3']
+        art, phase, laenge = rnd.random(), rnd.randint(0, 60), rnd.randint(18, 34)
+        for y in range(y_top + 2, y_bot):
+            c = basis
+            if rand >= 2:
+                v = (y + phase) % laenge
+                if art < 0.45 and v < laenge * 2 // 3:          # lange helle Fallstreifen
+                    c = WS['w4'] if 0 < v < laenge * 2 // 3 - 1 else WS['w3']
+                elif art < 0.6 and v < 6:                       # weisse Glanzstriche
+                    c = WS['w5']
+                elif art > 0.8 and v < laenge // 2:             # dunklere Tiefenstreifen
+                    c = WS['w2']
+                # unten wird das Wasser durch Luft und Schaum heller
+                if y > y_bot - 8 and rnd.random() < (y - (y_bot - 8)) / 10:
+                    c = WS['w5'] if rnd.random() < 0.6 else WEISS
+            setz(x, y, c)
+        if rand == 0:                                           # nasser Fels direkt am Rand
+            for y in range(y_top + 2, y_bot):
+                setz(x - 1 if i == 0 else x + 1, y, S[0])
+    # 2) Abbruchkante: Wasser kippt ueber den Rand (Wulst mit Glanzlinie, Licht von oben)
+    for i in range(breite):
+        x = x0 + i
+        rand = min(i, breite - 1 - i)
+        setz(x, y_top - 1, WS['w3'] if rand else WS['w1'])
+        setz(x, y_top, WS['w4'] if rand >= 1 else WS['w1'])
+        setz(x, y_top + 1, WS['w5'] if rand >= 2 and i % 5 != 4 else WS['w4'] if rand else WS['w1'])
+        setz(x, y_top + 2, WS['w4'] if rand >= 2 else WS['w2'])
+    # 3) Gischtbecken am Fuss: unregelmaessige Schaumwolke, breiter als der Fall
+    cx, cy = (x0 + x1) / 2, y_bot + 1
+    rx, ry = breite / 2 + 5, 6
+    for y in range(int(cy - ry - 3), int(cy + ry + 1)):
+        for x in range(int(cx - rx - 1), int(cx + rx + 2)):
+            d = ((x - cx) / rx) ** 2 + ((y - cy) / ry) ** 2
+            if d <= 1.0 + rnd.uniform(-0.18, 0.1):
+                if y < cy - 1 and not (x0 <= x < x1):
+                    continue                       # oberhalb des Fusses nur im Fall selbst
+                if d < 0.35:
+                    c = WEISS if rnd.random() < 0.7 else WS['w5']
+                elif d < 0.75:
+                    c = WS['w5'] if rnd.random() < 0.75 else WEISS
+                else:
+                    c = WS['w4'] if rnd.random() < 0.7 else WS['w5']
+                setz(x, y, c)
+    # Schaumblasen mit Schatten unten rechts
+    for _ in range(breite // 2):
+        bx = int(cx + rnd.uniform(-rx, rx)); by = int(cy + rnd.uniform(-ry * 0.6, ry * 0.8))
+        setz(bx, by, WEISS); setz(bx + 1, by, WS['w5']); setz(bx + 1, by + 1, WS['w4'])
+    # 4) Ringe/Wellen im Fluss darunter
+    for k, (dy, farbe) in enumerate(((ry + 2, WS['w4']), (ry + 5, WS['w4']), (ry + 9, WS['w3']))):
+        for x in range(int(cx - rx + 3 + k * 2), int(cx + rx - 2 - k * 2)):
+            if rnd.random() < 0.55:
+                setz(x, int(cy + dy), farbe)
+    # 5) feiner Spruehnebel
+    for _ in range(breite):
+        setz(int(cx + rnd.uniform(-rx - 4, rx + 4)), int(cy - rnd.uniform(2, 14)),
+             (230, 245, 255, 255) if rnd.random() < 0.5 else WS['w5'])
