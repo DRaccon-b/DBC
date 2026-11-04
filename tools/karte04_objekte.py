@@ -55,7 +55,7 @@ FEST = [
     ('mittel/09', 830, 300, {}), ('klein/04', 905, 600, {}), ('klein/34', 860, 180, {}), ('klein/04', 950, 960, {}),
     # Lager
     ('zelte/00', 112, 612, {}), ('zelte2/00', 236, 596, {}), ('zelte2/00', 252, 790, {'spiegeln': True}),
-    ('mittel/04', 166, 734, {'anim': 'feuer'}), ('mittel/12', 330, 730, {}), ('mittel/05', 344, 694, {}),
+    ('mittel/04', 166, 734, {'anim': 'feuer'}), ('mittel/12', 326, 624, {}), ('mittel/05', 352, 596, {}),
     ('mittel/13', 186, 684, {}), ('mittel/03', 280, 682, {}), ('baeume/07', 112, 700, {}), ('klein/25', 196, 770, {}),
     ('klein/31', 120, 660, {'anim': 'leuchten'}), ('klein/28', 26, 720, {}),
     # Teerfeld: Monument, tote Baeume, Kristalle, dunkle Felsen
@@ -80,7 +80,7 @@ STREU = {
     'a': {'klein/10': 1, 'klein/09': 2, 'klein/14': 2, 'klein/05': 1, 'klein/43': 1, 'klein/02': 2},
 }
 STREU_ANZAHL = {'s': 140, 'g': 40, 'c': 30, 'a': 16}
-ANIM_STREU = {'klein/00': 'wehen', 'klein/27': 'wehen', 'klein/01': 'wehen', 'klein/14': 'wehen', 'klein/07': 'wehen',
+ANIM_STREU = {'klein/00': 'wehen', 'klein/27': 'wehen', 'klein/01': 'wehen', 'klein/14': 'wehen', 'klein/07': 'blume',
               'klein/05': 'glitzern'}
 PFLANZEN = set(AKAZIE) | {'baeume/02', 'klein/00', 'klein/01', 'klein/07', 'klein/14', 'klein/27', 'mittel/10'}
 

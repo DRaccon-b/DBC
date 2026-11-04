@@ -90,7 +90,7 @@ def dunkeln(a, m, f):
     a[m] = (a[m].astype(np.float32) * f).astype(np.uint8)
 
 
-def hoehenkanten(a, hoch, fels, front, seite, lippe_pal, frei, seed, treppen=(), min_breite=10, berg=False):
+def hoehenkanten(a, hoch, fels, front, seite, lippe_pal, frei, seed, treppen=(), min_breite=10, berg=False, filtern=False):
     """a: RGB-Bild. hoch: Pixelmaske der hoeheren Ebene. Waende werden in die tiefere Flaeche gezeichnet:
     Front (Sueden) front px hoch, Seitenwaende seite px breit (Westwand im Licht, Ostwand im Schatten),
     Lippe mit Ueberhang, Kontaktschatten. frei: Pixelmaske ohne Kanten (Rampen). treppen: Liste (x0, x1) in px."""
@@ -227,7 +227,7 @@ def hoehenkanten(a, hoch, fels, front, seite, lippe_pal, frei, seed, treppen=(),
                 zug.append((y, x)); benutzt.add((y, x))
             breite_ = len(zug)
             steig = abs(zug[-1][0] - zug[0][0]) / max(1, breite_)
-            if not berg and (breite_ < min_breite or steig > 0.58):
+            if filtern and (breite_ < min_breite or steig > 0.58):
                 for (yk, xk) in zug:
                     a[yk + 1:yk + front + 6, xk] = a_vor[yk + 1:yk + front + 6, xk]
                     wand[yk + 1:yk + front + 1, xk] = False
@@ -473,13 +473,61 @@ def objekte_zeichnen(img, objs, cache, boden, frame):
     dunkel = Image.new('RGBA', img.size, (60, 40, 24, 255))
     dunkel.putalpha(Image.fromarray(sch))
     img.alpha_composite(dunkel)
+    grund = np.array(img.convert('RGB'))
     for o in objs:
         sp = cache[o['datei']]
-        if frame is not None and o.get('anim') == 'wehen':
+        if frame is not None and o.get('anim') in ('wehen', 'blume'):
             sp = kb.wehen(sp, kb.wind(frame, o['x']))
         elif frame is not None and o.get('anim') == 'baum':
             sp = baum_wind(sp, frame, o['x'] + o['y'] * 0.3)
         img.alpha_composite(sp, (o['x'], o['y']))
+        if frame is not None and o.get('anim') == 'blume':
+            bluete_puls(img, o, sp, frame)
+        if not o['basis'].startswith(('rand/', 'klein/0', 'klein/1', 'klein/2', 'klein/5')):
+            bodenwall(img, grund, o, cache[o['datei']])
+
+
+def bodenwall(img, grund, o, sp):
+    """Objekt steckt im Boden: an der Auflagekante liegt ein kleiner, unregelmaessiger Wall aus genau der
+    Bodentextur darunter (oberste Reihe heller), seitlich auslaufend - so wirkt nichts aufgesetzt."""
+    a = np.array(sp.getchannel('A')) >= 200
+    if not a.any():
+        return
+    zu = int(np.nonzero(a.any(axis=1))[0].max())
+    spalten = [x for x in range(a.shape[1]) if a[max(0, zu - 3):zu + 1, x].any()]
+    if len(spalten) < 3:
+        return
+    x0, x1 = spalten[0], spalten[-1]
+    px = img.load()
+    W, H = img.size
+    rnd = random.Random(o['x'] * 7 + o['y'])
+    for x in range(x0 - 2, x1 + 3):
+        rand = min(x - (x0 - 2), (x1 + 2) - x)
+        h = min(3, 1 + rand // 2) + (1 if rnd.random() < 0.3 else 0) - (1 if rnd.random() < 0.25 else 0)
+        X = o['x'] + x
+        Yf = o['y'] + zu
+        for k in range(max(0, h)):
+            Y = Yf - k + 1
+            Q = min(H - 1, Yf + 4 + k)
+            if 0 <= X < W and 0 <= Y < H:
+                c = grund[Q, X].astype(np.float32)
+                if k == h - 1:
+                    c = np.minimum(255, c * 1.12 + 6)
+                px[X, Y] = tuple(int(v) for v in c) + (255,)
+
+
+def bluete_puls(img, o, sp, frame):
+    """Blueten leuchten im Takt sanft auf (bunte, gesaettigte Pixel werden heller)."""
+    a = np.array(sp).astype(np.int16)
+    mx, mn = a[..., :3].max(axis=2), a[..., :3].min(axis=2)
+    m = (a[..., 3] > 0) & (mx - mn > 70) & (a[..., 0] > a[..., 1] + 30)
+    f = 0.25 * (0.5 + 0.5 * math.sin(2 * math.pi * frame / N_FRAMES + o['x'] / 60.0))
+    px = img.load()
+    for y, x in zip(*np.nonzero(m)):
+        X, Y = o['x'] + x, o['y'] + y
+        r_, g_, b_, _ = px[X, Y]
+        px[X, Y] = (min(255, int(r_ + (255 - r_) * f)), min(255, int(g_ + (255 - g_) * f)),
+                    min(255, int(b_ + (255 - b_) * f)), 255)
 
 
 def baum_wind(sp, frame, phase):
@@ -685,7 +733,7 @@ def bauen(frame=None, speichern=True):
     treppen = []
     # --- Waende: Canyon (Erde), Teerbecken (Schiefer), Plateaus (Sandstein)
     waende = hoehenkanten(a, m1 | teer, 'erde', 26, 14, LIPPE['s'], rampen, 11, min_breite=22)
-    waende |= hoehenkanten(a, m1 | can, 'schiefer', 20, 8, LIPPE['a'], rampen | frei_t, 12, min_breite=16)
+    waende |= hoehenkanten(a, m1 | can, 'schiefer', 20, 8, LIPPE['a'], rampen | frei_t, 12, berg=True)
     waende |= hoehenkanten(a, m2, 'sandstein', 40, 8, LIPPE['g'], frei_pl, 13, treppen, berg=True)
     if speichern and frame is None:
         np.save(os.path.join(KARTE, 'waende.npy'), np.packbits(waende))
@@ -770,6 +818,14 @@ def bauen(frame=None, speichern=True):
                 cache[o['datei']] = Image.open(os.path.join(OBJ, o['datei'])).convert('RGBA')
         objekte_zeichnen(img, objs, cache, ~wm, frame)
         animieren(img, objs, cache, frame or 0)
+        blumen = [o for o in objs if o.get('anim') == 'blume']
+        rf = random.Random(4)
+        falter = []
+        for o in rf.sample(blumen, min(14, len(blumen))):
+            falter.append({'x': o['x'] + 8, 'y': o['y'] - 6, 'rx': rf.randint(8, 14), 'ry': rf.randint(4, 8),
+                           'phase': rf.random(), 'richtung': rf.choice((1, -1)),
+                           'farbe': rf.choice(('gelb', 'weiss', 'blau', 'rosa'))})
+        kb.schmetterlinge(img, falter, frame or 0)
     if speichern and frame is None:
         img.save(os.path.join(KARTE, 'terrain.png'))
     print('Karte 04 %dx%d gebaut' % (cols, rows))

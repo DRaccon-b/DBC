@@ -182,6 +182,12 @@ def main():
         ca = wz[ya].mean(); cb = wz[yb].mean()
         c = int(round(ca + (cb - ca) * t))
         neu[y, c - 1:c + 1] = 'x'
+    # Grasberg-Keil an der Westseite des rechten Plateaus entfernen (gerade Westkante)
+    keil = (yy >= 13) & (yy <= 26) & (xx >= 62) & (xx <= 71) & (neu == 'g')
+    neu[keil] = 's'
+    # Savannen-Nase in den Canyon an der Bruecke entfernen (Canyonrand gerade)
+    nase = (yy >= 33) & (yy <= 39) & (xx >= 47) & (xx <= 49) & (neu == 's')
+    neu[nase] = 'c'; can |= nase
     hoehe = np.ones((R, C), int)
     hoehe[neu == 'g'] = 2
     hoehe[np.isin(neu, list('cxf')) & can] = 0
