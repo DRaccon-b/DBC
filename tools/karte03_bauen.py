@@ -309,6 +309,25 @@ def arena_uebergang(img, L, arena, ob, arena_flaeche):
             continue                                            # dort liegt die normale Wandkante
         L.p(x, kamm - 2, SANDKAPPE[3]); L.p(x, kamm - 1, SANDKAPPE[4])
         hang = 6 + int(2 * math.sin(x / 5.3))
+        w = 0.0 if x < xa or x >= xb else glatt(min(1.0, math.sin(math.pi * (x - xa) / (xb - xa)) * 1.6))
+        if w > 0.5:                                              # verschuettetes Gemaeuer schaut hervor
+            hm = int(round(11 * (w - 0.5) / 0.5))
+            for k in range(hm):
+                y = kamm + k
+                zeile = k // 5
+                c = SANDSTEIN[4] if k == 0 else SANDSTEIN[3] if k % 5 < 2 else SANDSTEIN[2]
+                if k % 5 == 4 or (x + (5 if zeile % 2 else 0)) % 11 == 0:
+                    c = SANDSTEIN[1]
+                if (x * 5 + y * 3) % 29 == 0:
+                    c = SANDSTEIN[1]
+                L.p(x, y, c)
+            for d in range(2):                                   # Fuss: Schatten + angewehter Sand
+                L.neutral(x, kamm + hm + d, 0.82 if d == 0 else 0.92)
+            if (x // 3) % 4 != 0:
+                L.p(x, kamm + hm - 1, SANDKAPPE[1])
+            # Sand bedeckt das Mauerwerk unregelmaessig: mal fast ganz, mal nur die Krone
+            hang = 2 + int(round((hm - 4) * (0.5 + 0.38 * math.sin(x / 14.0 + 1.1) + 0.12 * math.sin(x / 5.5))))
+            hang = max(2, min(hm, hang))
         for d in range(hang):                                    # Sandhang
             t = 1 - d / hang
             c = SANDKAPPE[2] if t > 0.75 else SANDKAPPE[1] if t > 0.4 else SANDKAPPE[0]
