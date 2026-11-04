@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Karte 01 – Laufen</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #111; overflow: hidden; }
+  canvas { display: block; width: 100vw; height: 100vh; image-rendering: pixelated; image-rendering: crisp-edges; }
+  #info {
+    position: fixed; left: 8px; top: 8px; padding: 4px 8px;
+    font: 12px/1.4 monospace; color: #eee; background: rgba(0,0,0,.55); border-radius: 4px;
+    pointer-events: none; white-space: pre;
+  }
+</style>
+</head>
+<body>
+<canvas id="spiel"></canvas>
+<div id="info">Lade Karte …</div>
+
+<script src="karte01_kollision.js"></script>
+<script>
+(() => {
+  'use strict';
+
+  const EBENEN = '../maps/karte01/ebenen/';
+  const K = window.KARTE01_KOLLISION;
+  const TILE = K.tile_size;               // 16
+  const COLS = K.cols, ROWS = K.rows;     // 110 x 120
+  const MAP_W = COLS * TILE, MAP_H = ROWS * TILE;
+
+  const SPIELER_GROESSE = 16;             // 16x16 grauer Pixel
+  const TEMPO = 80;                       // Pixel pro Sekunde (Kartenpixel)
+  const START = { x: 54 * TILE, y: 53 * TILE };
+
+  const canvas = document.getElementById('spiel');
+  const ctx = canvas.getContext('2d');
+  const info = document.getElementById('info');
+
+  // ---- Kollision -------------------------------------------------------
+  function kachel(tx, ty) {
+    if (tx < 0 || ty < 0 || tx >= COLS || ty >= ROWS) return '2';
+    return K.raster[ty][tx];
+  }
+  function gesperrt(tx, ty) { return kachel(tx, ty) === '2'; }
+
+  // Prueft, ob ein Rechteck (Kartenpixel) eine gesperrte Kachel beruehrt.
+  function kollidiert(x, y, w, h) {
+    const x0 = Math.floor(x / TILE), x1 = Math.floor((x + w - 1) / TILE);
+    const y0 = Math.floor(y / TILE), y1 = Math.floor((y + h - 1) / TILE);
+    for (let ty = y0; ty <= y1; ty++)
+      for (let tx = x0; tx <= x1; tx++)
+        if (gesperrt(tx, ty)) return true;
+    return false;
+  }
+
+  // ---- Spieler ---------------------------------------------------------
+  const spieler = { x: START.x, y: START.y, rx: 0, ry: 0 }; // rx/ry: Sub-Pixel-Rest
+
+  // Bewegt pixelweise je Achse, damit man an Waenden entlanggleitet.
+  function bewege(dx, dy) {
+    spieler.rx += dx; spieler.ry += dy;
+    let sx = Math.trunc(spieler.rx), sy = Math.trunc(spieler.ry);
+    spieler.rx -= sx; spieler.ry -= sy;
+    const s = SPIELER_GROESSE;
+    while (sx !== 0) {
+      const st = Math.sign(sx);
+      if (kollidiert(spieler.x + st, spieler.y, s, s)) { spieler.rx = 0; break; }
+      spieler.x += st; sx -= st;
+    }
+    while (sy !== 0) {
+      const st = Math.sign(sy);
+      if (kollidiert(spieler.x, spieler.y + st, s, s)) { spieler.ry = 0; break; }
+      spieler.y += st; sy -= st;
+    }
+  }
+
+  // ---- Eingabe ---------------------------------------------------------
+  const tasten = new Set();
+  const KEYMAP = {
+    ArrowLeft: 'l', KeyA: 'l', ArrowRight: 'r', KeyD: 'r',
+    ArrowUp: 'o', KeyW: 'o', ArrowDown: 'u', KeyS: 'u',
+  };
+  let zeigeKollision = false;
+  addEventListener('keydown', e => {
+    if (KEYMAP[e.code]) { tasten.add(KEYMAP[e.code]); e.preventDefault(); }
+    if (e.code === 'KeyK') zeigeKollision = !zeigeKollision;
+    if (e.code === 'Equal' || e.code === 'NumpadAdd') zoom = Math.min(8, zoom + 1);
+    if (e.code === 'Minus' || e.code === 'NumpadSubtract') zoom = Math.max(1, zoom - 1);
+  });
+  addEventListener('keyup', e => { if (KEYMAP[e.code]) tasten.delete(KEYMAP[e.code]); });
+  addEventListener('blur', () => tasten.clear());
+
+  // Touch: Finger halten = in Richtung des Fingers laufen
+  let touchZiel = null;
+  function touchSetzen(e) {
+    const t = e.touches[0];
+    touchZiel = t ? { x: t.clientX, y: t.clientY } : null;
+    e.preventDefault();
+  }
+  canvas.addEventListener('touchstart', touchSetzen, { passive: false });
+  canvas.addEventListener('touchmove', touchSetzen, { passive: false });
+  canvas.addEventListener('touchend', touchSetzen, { passive: false });
+
+  // ---- Bilder ----------------------------------------------------------
+  function lade(name) {
+    return new Promise((ok, fehler) => {
+      const img = new Image();
+      img.onload = () => ok(img);
+      img.onerror = () => fehler(new Error('Konnte ' + name + ' nicht laden'));
+      img.src = EBENEN + name;
+    });
+  }
+
+  // ---- Darstellung -----------------------------------------------------
+  let zoom = 3;
+  let vw = 0, vh = 0; // sichtbarer Bereich in Kartenpixeln
+  function groesse() {
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = Math.round(innerWidth * dpr);
+    canvas.height = Math.round(innerHeight * dpr);
+  }
+  addEventListener('resize', groesse);
+  groesse();
+
+  function zeichne(boden, oben, kollBild) {
+    const dpr = window.devicePixelRatio || 1;
+    const skala = zoom * dpr;
+    vw = canvas.width / skala; vh = canvas.height / skala;
+
+    // Kamera folgt dem Spieler, bleibt in der Karte
+    const mx = spieler.x + SPIELER_GROESSE / 2, my = spieler.y + SPIELER_GROESSE / 2;
+    let camX = mx - vw / 2, camY = my - vh / 2;
+    camX = vw >= MAP_W ? (MAP_W - vw) / 2 : Math.max(0, Math.min(MAP_W - vw, camX));
+    camY = vh >= MAP_H ? (MAP_H - vh) / 2 : Math.max(0, Math.min(MAP_H - vh, camY));
+    camX = Math.round(camX * skala) / skala;
+    camY = Math.round(camY * skala) / skala;
+
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.fillStyle = '#111';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.imageSmoothingEnabled = false;
+    ctx.setTransform(skala, 0, 0, skala, -camX * skala, -camY * skala);
+
+    ctx.drawImage(boden, 0, 0);
+    if (zeigeKollision) { ctx.globalAlpha = 0.45; ctx.drawImage(kollBild, 0, 0); ctx.globalAlpha = 1; }
+
+    // Spieler: 16x16 grau mit leichtem Rand
+    ctx.fillStyle = '#8a8a8a';
+    ctx.fillRect(spieler.x, spieler.y, SPIELER_GROESSE, SPIELER_GROESSE);
+    ctx.fillStyle = '#5c5c5c';
+    ctx.fillRect(spieler.x, spieler.y + SPIELER_GROESSE - 1, SPIELER_GROESSE, 1);
+    ctx.fillRect(spieler.x + SPIELER_GROESSE - 1, spieler.y, 1, SPIELER_GROESSE);
+
+    ctx.drawImage(oben, 0, 0);
+
+    return { camX, camY, skala };
+  }
+
+  // ---- Spielschleife ---------------------------------------------------
+  Promise.all([lade('ebene1_boden.png'), lade('ebene3_ueberlagerung.png'), lade('ebene2_kollision.png')])
+    .then(([boden, oben, kollBild]) => {
+      let letzte = performance.now();
+      let kamera = { camX: 0, camY: 0, skala: 1 };
+
+      function schritt(jetzt) {
+        const dt = Math.min(0.05, (jetzt - letzte) / 1000);
+        letzte = jetzt;
+
+        let dx = 0, dy = 0;
+        if (tasten.has('l')) dx -= 1;
+        if (tasten.has('r')) dx += 1;
+        if (tasten.has('o')) dy -= 1;
+        if (tasten.has('u')) dy += 1;
+        if (touchZiel) {
+          const dpr = window.devicePixelRatio || 1;
+          const zx = (touchZiel.x * dpr) / kamera.skala + kamera.camX;
+          const zy = (touchZiel.y * dpr) / kamera.skala + kamera.camY;
+          const ex = zx - (spieler.x + SPIELER_GROESSE / 2), ey = zy - (spieler.y + SPIELER_GROESSE / 2);
+          if (Math.abs(ex) > 4) dx = Math.sign(ex);
+          if (Math.abs(ey) > 4) dy = Math.sign(ey);
+        }
+        if (dx && dy) { dx *= Math.SQRT1_2; dy *= Math.SQRT1_2; }
+        bewege(dx * TEMPO * dt, dy * TEMPO * dt);
+
+        kamera = zeichne(boden, oben, kollBild);
+
+        const tx = Math.floor((spieler.x + 8) / TILE), ty = Math.floor((spieler.y + 8) / TILE);
+        info.textContent =
+          'Pfeiltasten/WASD laufen · K Kollision · +/- Zoom (' + zoom + 'x)\n' +
+          'Kachel ' + tx + ', ' + ty + '  Pixel ' + spieler.x + ', ' + spieler.y;
+
+        requestAnimationFrame(schritt);
+      }
+      requestAnimationFrame(schritt);
+    })
+    .catch(err => {
+      info.textContent = err.message + '\nTipp: Seite aus dem Repo-Ordner öffnen (z. B. python3 -m http.server).';
+    });
+})();
+</script>
+</body>
+</html>
