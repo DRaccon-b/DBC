@@ -301,6 +301,15 @@ OBJEKTGRUPPEN_K3 = {
         'small saguaro cactus with pink flowers', 'barrel cactus with a pink blossom', 'prickly pear cactus with pink flowers',
         'small cactus cluster with pink blossoms', 'tall thin cactus with a pink flower', 'round cactus with three pink flowers',
     ]},
+    'k3_tor': {'size': 144, 'items': [
+        'grand sandstone colosseum arena entrance gate, wide tall round archway with open dark passage, two massive square towers with crenellations on both sides, red banners hanging from the towers, carved stone details, front view, orthographic',
+    ]},
+    'k3_mittel3': {'size': 64, 'items': [
+        'tall sandstone obelisk with glowing cyan hieroglyphs, on a stepped stone base, front view',
+        'tall red banner flag on a wooden pole with a golden emblem, front view',
+        'stage monitor speaker stack, two black speaker boxes on top of each other, front view',
+        'tall sandstone obelisk with a golden tip, front view',
+    ]},
     'k3_pyramide2': {'size': 240, 'items': [
         'classic egyptian pyramid with four smooth triangular sloped sides made of sandstone blocks, pointed apex, small dark arched entrance at the bottom center, a small glowing cyan eye emblem near the apex, light side on the left, shaded side on the right, front view, orthographic',
     ]},

@@ -147,58 +147,129 @@ def _sandfront(L, x0, x1, y0, y1, rnd, verweht=6):
 
 
 def sandwand_oben(L, cfg, rnd):
+    """Noerdliche Grenze: Sanddecke + Sandsteinfront. Am Fluss (links) endet sie nicht hart:
+    Stirnseite der Front im Schatten und eine Sandrampe davor."""
     x0, x1 = cfg['x'][0] * T, (cfg['x'][1] + 1) * T
     y0, y1 = cfg['kappe'][0] * T, (cfg['kappe'][1] + 1) * T
+    fr = cfg['front']
     _sandkappe(L, x0, x1, y0, y1, rnd)
-    _sandfront(L, x0, x1, y1, y1 + cfg['front'], rnd)
+    _sandfront(L, x0, x1, y1, y1 + fr, rnd)
     for x in range(x0, x1):                                  # Schatten der Wand auf den Boden
         for d, f in ((0, 0.72), (1, 0.84), (2, 0.93)):
-            L.neutral(x, y1 + cfg['front'] + d, f)
+            L.neutral(x, y1 + fr + d, f)
+    for y in range(y0, y1):                                  # Deckenrand am Fluss: Lichtkante
+        L.p(x0, y, SANDKAPPE[1]); L.p(x0 + 1, y, SANDKAPPE[4])
+    for y in range(y1, y1 + fr):                             # Stirnseite der Front
+        L.p(x0, y, SANDSTEIN[0]); L.p(x0 + 1, y, SANDSTEIN[1])
+    # Sandrampe vor dem Wandende: am Ufer hoch, laeuft nach rechts und unten aus
+    ry = fr + 6
+    for y in range(y1 + 2, y1 + fr + 8):
+        h = (y - y1) / ry
+        grenze = 46 * (1 - (1 - min(1, h)) ** 1.6) + 2 * math.sin(y / 3.0)
+        for x in range(x0, x0 + 50):
+            if x - x0 < grenze:
+                t = 1 - (x - x0) / max(1, grenze)
+                t = min(1, t * 1.6) if h < 0.9 else t * 0.8
+                _verwehung_pixel(L, x, y, t)
+        if y < y1 + fr:
+            L.p(x0 + max(0, int(grenze) - 1), y, SANDKAPPE[3])
 
 
-def sandwand_vorne(L, cfg, rnd):
+def sandwand_vorne(L, cfg, rnd, rechts_x=None):
     """Suedliche Kartengrenze im Vordergrund: nur die Sanddecke (ohne Front). Sie ragt ueber den Boden
     davor und deckt Objekte ab, die dahinter stehen; welliger Kamm mit Lichtkante und Kontaktschatten."""
     x0, x1 = cfg['x'][0] * T, (cfg['x'][1] + 1) * T
     k0 = cfg['fuss'] * T - 16
+    R = 34
     for x in range(x0, x1):
         w = int(2 * math.sin(x / 9.0) + 1.5 * math.sin(x / 21.0))
+        if rechts_x is not None:                           # Innenecke unten rechts: Kamm steigt weich an
+            xe = rechts_x(k0 - R)
+            if x >= xe - R:
+                u = min(R, x - (xe - R))
+                w -= int(R - math.sqrt(max(0, R * R - u * u)))
         for y in range(k0 + w, L.H):
             if x < x0 + 6 + int(2 * math.sin(y / 6.0)):
                 continue                                   # Uferseite: wellige Kante statt Kachelkante
+            if rechts_x is not None and x >= rechts_x(y) + 3:
+                continue                                   # dort liegt schon die Seitendecke
             kk = (y - k0 + int(2 * math.sin(x / 11.0))) % 9
             c = SANDKAPPE[2] if kk not in (0, 1) else (SANDKAPPE[1] if kk == 0 else SANDKAPPE[3])
             if (x * 7 + y * 13) % 41 == 0:
                 c = SANDKAPPE[4]
             L.p(x, y, c)
+        if rechts_x is not None and x >= rechts_x(k0 + w) + 3:
+            continue
         for d in range(3):
             L.p(x, k0 + w + d, SANDKAPPE[4] if d == 0 else SANDKAPPE[3])
         L.neutral(x, k0 + w - 1, 0.78); L.neutral(x, k0 + w - 2, 0.9)
 
 
+def seiten_kante(y):
+    """x-Versatz der Innenkante der rechten Sandwand (wellig, keine gerade Naht)."""
+    return int(round(3.5 * math.sin(y / 23.0) + 2.0 * math.sin(y / 9.0 + 1.3) + 1.0 * math.sin(y / 4.1)))
+
+
+def _verwehung_pixel(L, x, y, t):
+    """Angewehter Sand auf dem Boden, t=1 direkt an der Wand, t->0 laeuft aus (gerastert)."""
+    if t <= 0:
+        return
+    if t > 0.66:
+        c = SANDKAPPE[1]
+    elif t > 0.33:
+        c = SANDKAPPE[0]
+    else:
+        if (x + y) % 2:
+            return
+        c = SANDKAPPE[0]
+    L.p(x, y, c)
+
+
 def sandwand_seite(L, cfg, rnd):
-    """Seitliche Kartengrenze (rechts): Sanddecke von oben gesehen, Innenkante mit Lip und Schatten,
-    am unteren Ende vor einem Ausgang eine kurze Sandsteinfront."""
+    """Seitliche Kartengrenze (rechts): Sanddecke von oben, wellige Innenkante mit heller Lichtkante
+    (die Flanke zeigt zum Licht), am Fuss angewehter Sand, der weich in den Boden auslaeuft."""
     x0, x1 = cfg['x'][0] * T, (cfg['x'][1] + 1) * T
     y0, y1 = cfg['y'][0] * T, (cfg['y'][1] + 1) * T
     front = cfg.get('front_unten', 0)
     kap_ende = y1 - front
     for y in range(y0, kap_ende):
-        w = int(2 * math.sin(y / 8.0) + 1.5 * math.sin(y / 19.0))
-        xi = x0 + 2 + w
+        xi = x0 + 5 + seiten_kante(y)
+        breite = 7 + int(3 * math.sin(y / 13.0 + 0.7) + 2 * math.sin(y / 5.0))
+        for d in range(1, breite + 1):                    # Verwehung am Fuss der Flanke
+            _verwehung_pixel(L, xi - d, y, 1 - d / breite)
         for x in range(xi, x1):
+            if y0 > 0 and not front:                       # Nordkante (oberes Segmentende): welliger Kamm
+                wk = y0 + 2 + int(2 * math.sin(x / 9.0) + 1.5 * math.sin(x / 17.0))
+                if y < wk:
+                    continue
+                if y < wk + 3:
+                    L.p(x, y, SANDKAPPE[4] if y == wk else SANDKAPPE[3])
+                    if y == wk:
+                        L.neutral(x, y - 1, 0.8); L.neutral(x, y - 2, 0.9)
+                    continue
             kk = (y + int(2 * math.sin(x / 11.0))) % 9
             c = SANDKAPPE[2] if kk not in (0, 1) else (SANDKAPPE[1] if kk == 0 else SANDKAPPE[3])
             if (x * 7 + y * 13) % 41 == 0:
                 c = SANDKAPPE[4]
             L.p(x, y, c)
-        L.p(xi, y, SANDKAPPE[4]); L.p(xi + 1, y, SANDKAPPE[3])
-        L.neutral(xi - 1, y, 0.8); L.neutral(xi - 2, y, 0.9)
+        L.p(xi, y, SANDKAPPE[0]); L.p(xi + 1, y, SANDKAPPE[4]); L.p(xi + 2, y, SANDKAPPE[3])
     if front:
         _sandfront(L, x0 + 2, x1, kap_ende, y1, rnd, verweht=4)
         for x in range(x0 + 2, x1):
             for d, f in ((0, 0.72), (1, 0.85)):
                 L.neutral(x, y1 + d, f)
+
+
+def eck_verwehung(L, cx, cy, rx, ry, links=True):
+    """Sandhaufen in einer Innenecke (Wind treibt Sand hinein): Viertel-Ellipse am Boden,
+    aussen gerastert auslaufend, Kuppe mit Lichtkante oben links."""
+    for y in range(int(cy - ry), int(cy + ry) + 1):
+        for x in range(int(cx - rx), int(cx + rx) + 1):
+            if (x > cx) == links:
+                continue
+            dd = math.hypot((x - cx) / rx, (y - cy) / ry) + 0.08 * math.sin(x / 3.0 + y / 4.0)
+            if dd < 1:
+                _verwehung_pixel(L, x, y, 1 - dd)
 
 
 def pyramide_sprite(breite=240, hoehe=168):
@@ -259,21 +330,6 @@ def pyramide_sprite(breite=240, hoehe=168):
                     for sx in (0, 1):
                         L.p(ax - 8 + dx * 2 + sx, ay + dy * 2 + sy, farbe[ch])
     return im
-
-
-def _sandhuegel(L, cx, cy, rx, ry, rnd):
-    """Weicher Sandhuegel ueber einer Wand-Naht (Ecken): Kuppe hell, Rand dunkler, Lichtkante oben links."""
-    for y in range(int(cy - ry), int(cy + ry) + 1):
-        for x in range(int(cx - rx), int(cx + rx) + 1):
-            d = ((x - cx) / rx) ** 2 + ((y - cy) / ry) ** 2
-            if d <= 1:
-                c = SANDKAPPE[3] if d < 0.35 else SANDKAPPE[2] if d < 0.75 else SANDKAPPE[1]
-                if d > 0.6 and (x - cx) + (y - cy) < -rx * 0.5:
-                    c = SANDKAPPE[4]
-                L.p(x, y, c)
-    for x in range(int(cx - rx), int(cx + rx) + 1):     # Schatten am Fuss
-        yy = int(cy + ry * math.sqrt(max(0, 1 - ((x - cx) / rx) ** 2))) + 1
-        L.neutral(x, yy, 0.82)
 
 
 def bauen(frame=None, speichern=True):
@@ -354,9 +410,31 @@ def bauen(frame=None, speichern=True):
                 t[y * T:(y + 1) * T, x * T:(x + 1) * T] = np.array(neu[art][kb.variante(x, y)])
         return t
 
+    def kies_maske(blur=3.5, rausch=0.45, seed=9):
+        m = Image.new('L', img.size, 0)
+        d = ImageDraw.Draw(m)
+        for z in lay['boden']:
+            if z['art'] != 'kies':
+                continue
+            if 'e' in z:
+                cx, cy, rx, ry = z['e']
+                d.ellipse(((cx - rx + 0.5) * T, (cy - ry + 0.5) * T, (cx + rx + 0.5) * T, (cy + ry + 0.5) * T), fill=255)
+            else:
+                x0, y0, x1, y1 = z['r']
+                d.rounded_rectangle((x0 * T, y0 * T, (x1 + 1) * T - 1, (y1 + 1) * T - 1), radius=26, fill=255)
+        for y in range(rows):                              # Wege/Wasser schneiden den Kies
+            for x in range(cols):
+                if cls[y][x] != 'k':
+                    d.rectangle((x * T, y * T, x * T + T - 1, y * T + T - 1), fill=0) if cls[y][x] in 'xg' else None
+        a = np.array(m.filter(ImageFilter.GaussianBlur(blur))).astype(np.float32) / 255
+        h, w = a.shape
+        n = np.random.RandomState(seed).rand(h // 6 + 2, w // 6 + 2)
+        n = np.array(Image.fromarray((n * 255).astype(np.uint8)).resize((w + 12, h + 12), Image.BICUBIC))[:h, :w] / 255
+        return a + (n - 0.5) * rausch
+
     a_img = np.array(img)
-    for art, blur, rausch, rand in (('w', 4.0, 0.22, 'weich'), ('k', 2.2, 0.35, 'steine')):
-        f = maske_von(art, blur, rausch, seed=7 if art == 'w' else 9)
+    for art, blur, rausch, rand in (('k', 3.5, 0.45, 'steine'), ('w', 4.0, 0.22, 'weich')):
+        f = kies_maske() if art == 'k' else maske_von(art, blur, rausch, seed=7)
         tex = textur(art)
         innen = f > 0.5
         a_img[innen] = tex[innen]
@@ -367,7 +445,7 @@ def bauen(frame=None, speichern=True):
             ys, xs = np.nonzero(saum)
             rs = np.random.RandomState(5)
             for yy, xx in zip(ys, xs):
-                if rs.rand() < 0.18:
+                if rs.rand() < 0.10 and f[yy, xx] > 0.42:
                     a_img[yy, xx, :3] = tex[yy, xx, :3]
                 else:
                     a_img[yy, xx, :3] = (a_img[yy, xx, :3] * 0.93).astype(np.uint8)
@@ -505,19 +583,13 @@ def bauen(frame=None, speichern=True):
     sw = lay.get('sandwand', {})
     if 'oben' in sw:
         sandwand_oben(L, sw['oben'], random.Random(4))
+        ob = sw['oben']
+        fu = (ob['kappe'][1] + 1) * T + ob['front']        # Fusslinie der Front
+        if sw.get('rechts'):                               # Innenecke oben rechts: Sand in der Ecke
+            sx = sw['rechts'][0]['x'][0] * T + 5 + seiten_kante(fu)
+            eck_verwehung(L, sx, fu + 1, 30, 14, links=True)
     for seg in sw.get('rechts', []):
         sandwand_seite(L, seg, random.Random(6))
-    rnd_e = random.Random(8)
-    if 'oben' in sw:
-        ob = sw['oben']
-        fy = (ob['kappe'][1] + 1) * T                       # Unterkante der Decke = Oberkante der Front
-        # Ecke oben rechts: Sandhuegel ueber der Naht Front/Seitendecke
-        if sw.get('rechts'):
-            sx = sw['rechts'][0]['x'][0] * T
-            _sandhuegel(L, sx + 2, fy + ob['front'] // 2 + 2, 14, ob['front'] // 2 + 6, rnd_e)
-        # Ende oben links am Fluss: Sandrampe statt hartem Schnitt
-        lx = ob['x'][0] * T
-        _sandhuegel(L, lx + 4, fy + ob['front'] // 2, 10, ob['front'] // 2 + 5, rnd_e)
     ga = lay.get('garten')
     garten = set()
     if ga:
@@ -540,8 +612,9 @@ def bauen(frame=None, speichern=True):
         boden[max(0, y * T - 14):(y + 1) * T, x * T:(x + 1) * T] = 0
     if 'oben' in sw:
         boden[:(sw['oben']['kappe'][1] + 1) * T + sw['oben']['front'], :] = 0
-    for seg in sw.get('rechts', []):
-        boden[seg['y'][0] * T:(seg['y'][1] + 1) * T, seg['x'][0] * T:] = 0
+    for seg in sw.get('rechts', []):                       # exakt entlang der welligen Innenkante
+        for yy in range(seg['y'][0] * T, (seg['y'][1] + 1) * T):
+            boden[yy, seg['x'][0] * T + 5 + seiten_kante(yy) - 1:] = 0
 
     # --- 5. Objekte
     pf = os.path.join(OBJ, 'platzierung.json')
@@ -552,15 +625,21 @@ def bauen(frame=None, speichern=True):
         for o in objs:
             if o['datei'] not in cache:
                 cache[o['datei']] = Image.open(os.path.join(OBJ, o['datei'])).convert('RGBA')
+        if 'unten' in sw:                                 # hinter/an der Vorderkante: kein Schatten,
+            kamm = sw['unten']['fuss'] * T - 16               # sonst lugt er unter der Sandkante hervor
+            for o in objs:
+                if o['y'] + o['fuss'] > kamm - 14:
+                    o['ohne_schatten'] = True
         objekte_zeichnen(img, objs, cache, boden, frame)
     if objs:                                              # kleine Tiere im Sand
         viecher_zeichnen(img, viecher_positionen(objs, cols, rows, cls), frame or 0)
     if 'unten' in sw:                                     # Vordergrund ueber Objekten und Schatten
         Lv = ind.Leinwand(img)
-        sandwand_vorne(Lv, sw['unten'], random.Random(5))
-        if sw.get('rechts'):                               # Ecke unten rechts: Uebergang abrunden
-            sx = sw['rechts'][-1]['x'][0] * T
-            _sandhuegel(Lv, sx + 4, sw['unten']['fuss'] * T - 14, 12, 8, random.Random(9))
+        rx_ = None
+        if sw.get('rechts'):
+            sx0 = sw['rechts'][-1]['x'][0] * T
+            rx_ = lambda y: sx0 + 5 + seiten_kante(y)
+        sandwand_vorne(Lv, sw['unten'], random.Random(5), rx_)
     if frame is not None:
         animieren(img, objs, frame)
         return img

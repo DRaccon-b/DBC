@@ -16,7 +16,7 @@ ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
 KARTE = os.path.join(ROOT, 'maps', 'karte03')
 OBJ = os.path.join(ROOT, 'assets', 'objekte', 'karte03')
 T = 16
-FUSS = {'klein': 'klein', 'mittel': 'stein', 'gross': 'stein', 'pyramide': 'stein', 'pyramide2': 'stein'}
+FUSS = {'tor': 'stein', 'klein': 'klein', 'mittel': 'stein', 'gross': 'stein', 'pyramide': 'stein', 'pyramide2': 'stein'}
 PALMEN = ('mittel/00', 'mittel/01', 'mittel/02', 'klein/25')
 
 # (sprite, Anker-x Kachel (Mitte), Anker-y = unterste Kachelzeile, Optionen)
@@ -31,9 +31,9 @@ FEST = [
     # Bus und Haltestelle
     ('gross/06', 44, 31, {}), ('klein/18', 48, 31, {}), ('mittel2/00', 49.8, 31, {}),
     # Ruinen-Arena
-    ('gross/11', 54.5, 28, {}),
+    ('tor/00', 54.5, 28, {'ueber_mauer': True, 'roh': True}),
     ('mittel/03', 74, 8, {}), ('mittel/03', 86, 13, {}), ('mittel/03', 74, 19, {}), ('mittel/03', 78, 25, {}),
-    ('mittel/04', 59, 15, {}), ('mittel/05', 77, 9, {}), ('mittel/05', 84.5, 9, {}), ('mittel/05', 68, 24, {}),
+    ('mittel/04', 59, 15, {}), ('mittel/05', 77, 9, {}), ('mittel/05', 84.5, 9, {}), ('mittel/05', 71, 23, {}),
     ('klein/20', 70, 11, {}), ('klein/20', 81, 23, {}), ('klein/21', 66, 13, {}), ('klein/21', 47, 13, {}),
     # Garten im Nordosten
     ('gross/10', 95.2, 13, {}), ('klein/31', 92.2, 21, {}), ('klein/31', 98.8, 21, {}), ('klein/12', 95, 15, {}),
@@ -46,13 +46,13 @@ FEST = [
     ('gross2/00', 78.5, 49, {'anim': 'blinken'}), ('gross2/01', 82.5, 43, {'anim': 'blinken'}),
     ('gross/13', 86, 35, {'anim': 'blinken'}),
     # Pyramide, Grabtor, Buehne
-    ('PYRAMIDE', 96, 41, {'ohne_fuss': True}), ('mittel/10', 86.5, 41, {}),
+    ('PYRAMIDE', 96, 41, {}), ('mittel/10', 86.5, 41, {}),
     ('gross2/02', 96, 50, {'anim': 'musik'}),
-    ('mittel2/01', 87.5, 50, {}), ('mittel2/01', 104.5, 50, {}),
-    ('klein/30', 89.5, 55, {}), ('klein/30', 102.5, 55, {}),
-    ('klein/18', 88, 62, {}), ('klein/18', 104, 62, {}),
+    ('mittel2/01', 88.5, 50, {}), ('mittel2/01', 103.5, 50, {}),
+    ('mittel3/02', 90, 55, {}), ('mittel3/02', 102, 55, {}),
+    ('mittel3/01', 89, 62, {}), ('mittel3/01', 103, 62, {}),
     # Mitte / Sueden
-    ('mittel/11', 78, 54, {'anim': 'leuchten'}), ('mittel/06', 44.5, 54, {}),
+    ('mittel3/00', 78, 54, {'anim': 'leuchten'}), ('mittel/06', 44.5, 54, {}),
     ('mittel/07', 37, 44, {}), ('mittel/07', 26, 75, {}), ('mittel/07', 95, 74, {}),
     # grosse Sandfelsen (statt der Lehmflaechen)
     ('gross2/03', 44.5, 49, {}), ('mittel2/02', 33, 53, {}), ('mittel2/03', 27, 63, {}), ('gross2/03', 39.5, 70, {}),
@@ -105,7 +105,6 @@ def lade(name, cache={}):
 def main():
     import karte03_bauen as k3
     os.makedirs(os.path.join(OBJ, 'abgeleitet'), exist_ok=True)
-    k3.pyramide_sprite().save(os.path.join(OBJ, 'abgeleitet', 'pyramide.png'))
     rnd = random.Random(5)
     lay = json.load(open(os.path.join(KARTE, 'layout.json')))
     tm = json.load(open(os.path.join(KARTE, 'tilemap.json')))
@@ -142,7 +141,7 @@ def main():
 
     def setze(name, ax, ay, fest=True, opt=None):
         opt = dict(opt or {})
-        basis = 'abgeleitet/pyramide' if name == 'PYRAMIDE' else name
+        basis = pyr if name == 'PYRAMIDE' else name
         gruppe = basis.split('/')[0]
         boden = boden_bei(ax, ay)
         art = 'pflanze' if basis in PALMEN or gruppe == 'rosa' or basis in ('klein/00', 'klein/01', 'klein/02', 'klein/03', 'klein/04', 'klein/05') else FUSS.get(gruppe, 'stein')
@@ -151,12 +150,14 @@ def main():
         if not os.path.exists(pfad):
             os.makedirs(os.path.join(OBJ, 'varianten'), exist_ok=True)
             bauwerke.bodenfuss(lade(basis), boden, art).save(pfad)
+        if opt.pop('roh', False):                      # Sprite ohne Bodenfuss (steht auf dem Weg)
+            vname = basis
         im = lade(vname)
         x, y = int(ax - im.width // 2), int(ay + 3 - im.height)
         a = np.array(im.getchannel('A')) >= 200
         xs0, ys0, xs1, ys1 = max(0, x), max(0, y), min(MW, x + im.width), min(MH, y + im.height)
         a = a[ys0 - y:ys1 - y, xs0 - x:xs1 - x]
-        if fest and (mauer[ys0:ys1, xs0:xs1] & a).any():
+        if fest and not opt.pop('ueber_mauer', False) and (mauer[ys0:ys1, xs0:xs1] & a).any():
             print('  auf Mauer, uebersprungen:', name, ax // T, ay // T)
             return None
         if not fest:
@@ -185,6 +186,8 @@ def main():
         if gesetzt >= 125:
             break
         cx, cy = rnd.randrange(5, cols - 6), rnd.randrange(4, rows - 4)
+        if cy <= 5 or cy >= 73 or cx >= 104:            # Abstand zu den Sandwaenden
+            continue
         if cls[cy][cx] != 's' or rnd.random() < 0.4:   # nur auf Sand, nicht auf Pflaster
             continue
         if setze(rnd.choices(namen, weights=gew)[0], cx * T + rnd.randint(3, 13), cy * T + rnd.randint(8, 15), False,
