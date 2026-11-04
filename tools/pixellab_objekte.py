@@ -15,6 +15,7 @@ from PIL import Image, ImageDraw
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
 OUT = os.path.join(ROOT, 'assets', 'objekte', 'karte01')
 OUT_K2 = os.path.join(ROOT, 'assets', 'objekte', 'karte02')
+OUT_K3 = os.path.join(ROOT, 'assets', 'objekte', 'karte03')
 API = 'https://api.pixellab.ai'
 
 STIL = ("Top-down RPG map object in polished handheld monster-collecting RPG pixel art: colored dark outline "
@@ -219,6 +220,68 @@ OBJEKTGRUPPEN_K2 = {
 }
 
 
+# ---------------------------------------------------------------- Karte 03 (Server Desert)
+STIL_K3 = ("Top-down RPG map object for a sunny desert town in polished handheld monster-collecting RPG pixel art: "
+           "colored dark outline (darkest shade of the object's own hue, never pure black), light from the upper left, "
+           "hue-shifted shading (shadows toward purple-brown, highlights warm), clean readable shapes, bright and clean, "
+           "no noise, no dithering, transparent background, no ground, no cast shadow. Straight front view, orthographic, "
+           "not isometric.")
+PALETTE_K3 = [
+    # Sand / Sandstein
+    '#5a3e26', '#7a5636', '#9c7448', '#c09a62', '#d8b87e', '#e8cf98', '#f4e4bc', '#fff4dc',
+    # Lehm / Adobe / Ziegel
+    '#4a2a1e', '#6e3c28', '#8f5234', '#b06a42', '#c8865a',
+    # Gruen (Palmen, Kakteen)
+    '#173f3a', '#1f5a46', '#2e7a4c', '#45a052', '#5fbb58', '#93db70',
+    # Stoff rot / Holz
+    '#5e1e22', '#8c2c2e', '#b5443c', '#d86a52', '#3a2a20', '#5a4030', '#7a5a40',
+    # Stahl / Technik / Lila Kabel
+    '#1c2128', '#2a313a', '#3e4850', '#56626b', '#8e9ba3', '#c8d1d6', '#2a2050', '#4a3a8a', '#7a6ac8',
+    # Leuchten
+    '#2fc7d8', '#7ff0f5', '#e6ffff', '#c83a1e', '#e8702a', '#f5b042', '#fff2a0', '#ffffff',
+]
+OBJEKTGRUPPEN_K3 = {
+    'k3_klein': {'size': 32, 'items': [
+        'small green saguaro cactus', 'tall green saguaro cactus with two arms', 'small round barrel cactus', 'prickly pear cactus',
+        'dry desert bush', 'small dry grass tuft', 'animal skull', 'scattered bones', 'small sandstone rock', 'two small desert rocks',
+        'clay water jar', 'large clay amphora', 'burlap sack', 'wooden crate', 'wooden barrel', 'standing torch with flame',
+        'campfire with stones', 'speaker on a pole, dark grey', 'red banner on a pole with a yellow emblem', 'wooden signpost',
+        'broken sandstone column stump', 'sandstone rubble', 'wooden fence post', 'small satellite dish on a short pole',
+        'dark stone scarab beetle', 'small palm sapling', 'tumbleweed', 'small sand rock with crack', 'clay pot pair',
+        'stone well with a wooden roller', 'loudspeaker box', 'oil lamp on a post',
+    ]},
+    'k3_mittel': {'size': 64, 'items': [
+        'tall desert palm tree with a curved trunk and big fronds', 'desert palm tree, straight trunk', 'twin palm trees',
+        'tall sandstone column with capital, intact', 'broken sandstone column, half height', 'pile of sandstone ruin blocks',
+        'large animal rib cage skeleton half buried', 'big sandstone boulder', 'stone well with wooden roof',
+        'market stall with red and white striped awning, front view', 'small stone tomb gate with iron bars',
+        'stone obelisk with a glowing cyan crystal on a pedestal', 'dark scarab shaped stone robot',
+        'tall loudspeaker stack', 'DJ table with turntables, front view', 'red tent, front view',
+    ]},
+    'k3_gross': {'size': 84, 'items': [
+        'adobe dome hut with arched doorway and a striped awning, front view',
+        'adobe dome hut, round clay house with wooden door, front view',
+        'flat roof adobe house with wooden beams, two windows and a door, front view',
+        'flat roof clay house with a wooden balcony rail, front view',
+        'red canvas tent with open flap, front view', 'red canvas tent, closed, front view',
+        'red and white tour bus, side view facing right, orthographic',
+        'concert stage with a red banner screen, two big speakers and a DJ desk, front view',
+        'radio antenna tower: steel lattice mast with a satellite dish and small server box, front view',
+        'tall lattice antenna mast with two dishes and antennas, front view',
+        'wooden pavilion gazebo with red tiled pyramid roof and a bell, front view',
+        'sandstone arch gate with two towers, front view',
+        'big dark stone scarab robot with a glowing eye', 'stack of server racks with blinking lights, front view',
+        'sandstone ruin wall fragment', 'large desert rock formation',
+    ]},
+    'k3_pyramide2': {'size': 240, 'items': [
+        'classic egyptian pyramid with four smooth triangular sloped sides made of sandstone blocks, pointed apex, small dark arched entrance at the bottom center, a small glowing cyan eye emblem near the apex, light side on the left, shaded side on the right, front view, orthographic',
+    ]},
+    'k3_pyramide': {'size': 240, 'items': [
+        'large sandstone pyramid with stepped blocks, a dark entrance door at the bottom center and a glowing eye emblem near the top, front view, orthographic',
+    ]},
+}
+
+
 def call(method, path, body=None, raw=False):
     req = urllib.request.Request(API + path, method=method,
                                  data=json.dumps(body).encode() if body is not None else None,
@@ -271,7 +334,10 @@ def herunterladen(oid, d):
 
 
 def speichern(gruppe, ims, ids):
-    ziel = os.path.join(OUT_K2, gruppe[3:]) if gruppe.startswith('k2_') else os.path.join(OUT, gruppe)
+    if gruppe.startswith('k3_'):
+        ziel = os.path.join(OUT_K3, gruppe[3:])
+    else:
+        ziel = os.path.join(OUT_K2, gruppe[3:]) if gruppe.startswith('k2_') else os.path.join(OUT, gruppe)
     os.makedirs(ziel, exist_ok=True)
     for i, im in enumerate(ims):
         bb = im.getbbox()
@@ -293,11 +359,12 @@ def speichern(gruppe, ims, ids):
 
 def erzeugen(gruppe):
     k2 = gruppe.startswith('k2_')
-    g = (OBJEKTGRUPPEN_K2 if k2 else OBJEKTGRUPPEN)[gruppe]
-    stil, palette = (STIL_K2, PALETTE_K2) if k2 else (STIL, PALETTE)
+    k3 = gruppe.startswith('k3_')
+    g = (OBJEKTGRUPPEN_K3 if k3 else OBJEKTGRUPPEN_K2 if k2 else OBJEKTGRUPPEN)[gruppe]
+    stil, palette = (STIL_K3, PALETTE_K3) if k3 else (STIL_K2, PALETTE_K2) if k2 else (STIL, PALETTE)
     req = {'description': stil, 'size': g['size'], 'view': 'top-down',
            'item_descriptions': [it + '. ' + stil for it in g['items']],
-           'target_palette': {'colors': palette, 'name': 'Karte02 Industrie' if k2 else 'Karte01 handheld'}}
+           'target_palette': {'colors': palette, 'name': 'Karte03 Wueste' if k3 else 'Karte02 Industrie' if k2 else 'Karte01 handheld'}}
     d = call('POST', '/v2/create-1-direction-object', req)
     oid = d['object_id']
     print(gruppe, 'Objekt', oid)
