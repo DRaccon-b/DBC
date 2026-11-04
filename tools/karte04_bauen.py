@@ -90,7 +90,7 @@ def dunkeln(a, m, f):
     a[m] = (a[m].astype(np.float32) * f).astype(np.uint8)
 
 
-def hoehenkanten(a, hoch, fels, front, seite, lippe_pal, frei, seed, treppen=(), min_breite=10):
+def hoehenkanten(a, hoch, fels, front, seite, lippe_pal, frei, seed, treppen=(), min_breite=10, berg=False):
     """a: RGB-Bild. hoch: Pixelmaske der hoeheren Ebene. Waende werden in die tiefere Flaeche gezeichnet:
     Front (Sueden) front px hoch, Seitenwaende seite px breit (Westwand im Licht, Ostwand im Schatten),
     Lippe mit Ueberhang, Kontaktschatten. frei: Pixelmaske ohne Kanten (Rampen). treppen: Liste (x0, x1) in px."""
@@ -105,16 +105,57 @@ def hoehenkanten(a, hoch, fels, front, seite, lippe_pal, frei, seed, treppen=(),
     rechts = hoch & ~np.roll(hoch, -1, axis=1); rechts[:, -1] = False   # Hochflaeche endet nach Osten
     links = hoch & ~np.roll(hoch, 1, axis=1); links[:, 0] = False       # Hochflaeche endet nach Westen
 
-    # Seitliche Kanten: keine Wand, nur eine gerade Graskante der hohen Flaeche (Lichtkante innen,
-    # dunkle Kontur) und ein kurzer weicher Schatten auf der tiefen Seite
-    for kante, richtung in ((rechts, 1), (links, -1)):
+    if berg:
+        # Berge: schmale seitliche Felswand (gestapelte Bloecke), Westseite im Licht, Ostseite im Schatten,
+        # oben ueberhaengendes Gras - wirkt wie "frontal, ein bisschen seitlich"
+        def block(y, k, hell):
+            versatz = 6 if (k // 6) % 2 else 0
+            yb = (y + versatz) % 12
+            if k == seite - 1:
+                c = F[0]
+            elif yb == 0:
+                c = F[5] if hell else F[4]
+            elif yb == 11:
+                c = F[1]
+            elif k % 6 == 5:
+                c = F[2]
+            else:
+                c = F[4] if hell else F[3]
+                if ((y + versatz) // 12 * 7 + yb * 3 + k) % 41 == 0:
+                    c = F[2]
+            return c if hell else (c.astype(np.float32) * 0.84).astype(np.uint8)
+        for kante, richtung, hell in ((rechts, 1, False), (links, -1, True)):
+            for y, x in zip(*np.nonzero(kante)):
+                if frei[y, x]:
+                    continue
+                n = 0
+                for k in range(seite):
+                    xx = x + richtung * (1 + k)
+                    if not (0 <= xx < W) or hoch[y, xx]:
+                        break
+                    n += 1
+                for k in range(n):
+                    xx = x + richtung * (1 + k)
+                    a[y, xx] = block(y, k + (seite - n), hell); wand[y, xx] = True
+                if n == seite and not hell:
+                    for k, f in ((0, 0.72), (1, 0.84), (2, 0.93)):
+                        xx = x + richtung * (1 + seite + k)
+                        if 0 <= xx < W and not hoch[y, xx]:
+                            a[y, xx] = (a[y, xx] * f).astype(np.uint8)
+                u = 1 + int(1 + math.sin(y / 3.1 + x) + 0.8 * math.sin(y / 1.9))
+                for d in range(-1, u):
+                    xx = x + richtung * (1 + d) if d >= 0 else x
+                    if 0 <= xx < W:
+                        a[y, xx] = Lp[1] if d == u - 1 else Lp[3] if d < 0 else Lp[2]
+    else:
+      for kante, richtung in ((rechts, 1), (links, -1)):
         for y, x in zip(*np.nonzero(kante)):
             if frei[y, x]:
                 continue
             a[y, x] = Lp[0]                                             # Kontur
             xi = x - richtung
             if 0 <= xi < W and hoch[y, xi]:
-                a[y, xi] = Lp[4] if richtung < 0 else Lp[1]            # Westkante hell, Ostkante dunkler
+                a[y, xi] = Lp[4] if richtung < 0 else Lp[1]
             stufen = ((1, 0.7), (2, 0.82), (3, 0.92)) if richtung > 0 else ((1, 0.82), (2, 0.93))
             for k, f in stufen:
                 xx = x + richtung * k
@@ -186,7 +227,7 @@ def hoehenkanten(a, hoch, fels, front, seite, lippe_pal, frei, seed, treppen=(),
                 zug.append((y, x)); benutzt.add((y, x))
             breite_ = len(zug)
             steig = abs(zug[-1][0] - zug[0][0]) / max(1, breite_)
-            if breite_ < min_breite or steig > 0.58:
+            if not berg and (breite_ < min_breite or steig > 0.58):
                 for (yk, xk) in zug:
                     a[yk + 1:yk + front + 6, xk] = a_vor[yk + 1:yk + front + 6, xk]
                     wand[yk + 1:yk + front + 1, xk] = False
@@ -645,7 +686,7 @@ def bauen(frame=None, speichern=True):
     # --- Waende: Canyon (Erde), Teerbecken (Schiefer), Plateaus (Sandstein)
     waende = hoehenkanten(a, m1 | teer, 'erde', 26, 14, LIPPE['s'], rampen, 11, min_breite=22)
     waende |= hoehenkanten(a, m1 | can, 'schiefer', 20, 8, LIPPE['a'], rampen | frei_t, 12, min_breite=16)
-    waende |= hoehenkanten(a, m2, 'sandstein', 40, 8, LIPPE['g'], frei_pl, 13, treppen)
+    waende |= hoehenkanten(a, m2, 'sandstein', 40, 8, LIPPE['g'], frei_pl, 13, treppen, berg=True)
     if speichern and frame is None:
         np.save(os.path.join(KARTE, 'waende.npy'), np.packbits(waende))
     wegtex = textur(cls, 'w', cols, rows)
