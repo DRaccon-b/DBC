@@ -10,12 +10,15 @@ Ausgabe: assets/basis/*.png (+ vorschau_basis.png, 4x4 gekachelt, 4x)
 import os
 from PIL import Image
 
+VARIANTEN = 5
 OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'assets', 'basis')
 
 PAL = {
     # Gras: hell und luftig, Schatten ins Blaugruen, Licht ins Gelbgruen
     'g0': '#2e7a4c', 'g1': '#45a052', 'g2': '#5fbb58', 'g3': '#78cc60', 'g4': '#93db70', 'g5': '#b6eb8a',
     # Sand: weich, Schatten ins Rotbraun, Licht ins Cremige
+    # Wasser: klares Blau, Licht ins Tuerkis/Weiss
+    'w0': '#173f86', 'w1': '#2358b0', 'w2': '#3274d2', 'w3': '#4c93e6', 'w4': '#8cc4f4', 'w5': '#dff3ff',
     's0': '#b08458', 's1': '#cfaa74', 's2': '#e2c48e', 's3': '#eed5a2', 's4': '#f8e8c4',
 }
 RGB = {k: tuple(int(v[i:i + 2], 16) for i in (1, 3, 5)) for k, v in PAL.items()}
@@ -67,22 +70,45 @@ def sand(variante):
     return im
 
 
+def wasser(variante, tief=False):
+    """Wasser mit kurzen hellen Wellenstrichen; tief=True fuer das offene Meer."""
+    import random
+    r = random.Random(300 + variante + (50 if tief else 0))
+    basis, dunkel, hell, spitze = ('w1', 'w0', 'w2', 'w3') if tief else ('w2', 'w1', 'w3', 'w4')
+    im = Image.new('RGB', (16, 16), RGB[basis])
+    plaetze = [(1, 2), (9, 6), (4, 11), (12, 13)]
+    for i, (gx, gy) in enumerate(plaetze):
+        if i == 3 and r.random() < 0.5:
+            continue
+        x, y = gx + r.randint(-1, 1), gy + r.randint(-1, 1)
+        laenge = r.choice((3, 4))
+        for dx in range(laenge):            # Wellenkamm
+            px(im, x + dx, y, spitze if 0 < dx < laenge - 1 else hell)
+        px(im, x - 1, y + 1, dunkel)         # Wellental-Schatten an den Enden
+        px(im, x + laenge, y + 1, dunkel)
+    if not tief and r.random() < 0.4:        # Glanzpunkt
+        px(im, r.randint(0, 15), r.randint(0, 15), 'w4')
+    return im
+
+
 def main():
     os.makedirs(OUT, exist_ok=True)
     kacheln = {}
-    for v in range(3):
+    for v in range(VARIANTEN):
         kacheln['gras_%d' % v] = gras(v)
         kacheln['sand_%d' % v] = sand(v)
+        kacheln['wasser_%d' % v] = wasser(v)
+        kacheln['meer_%d' % v] = wasser(v, tief=True)
     for n, im in kacheln.items():
         im.save(os.path.join(OUT, n + '.png'))
     # Vorschau: Gras- und Sandflaeche mit gemischten Varianten, 4x
     import random
     random.seed(1)
-    v = Image.new('RGB', (16 * 12, 16 * 6))
+    v = Image.new('RGB', (16 * 24, 16 * 6))
     for y in range(6):
-        for x in range(12):
-            art = 'gras' if x < 6 else 'sand'
-            v.paste(kacheln['%s_%d' % (art, random.choice([0, 0, 1, 2]))], (x * 16, y * 16))
+        for x in range(24):
+            art = ['gras', 'sand', 'wasser', 'meer'][x // 6]
+            v.paste(kacheln['%s_%d' % (art, random.randrange(VARIANTEN))], (x * 16, y * 16))
     v.resize((v.width * 4, v.height * 4), Image.NEAREST).save(os.path.join(OUT, 'vorschau_basis.png'))
 
 
