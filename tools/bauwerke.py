@@ -154,6 +154,22 @@ def zeichne_steg(img, x0, x1, y0, y1, frame=0, seed=9):
     for x in range(x0 + 2, x1 + 3):
         for dy in range(1, 4):
             _abdunkeln(px, W, H, x, y1 + dy, 0.6 + dy * 0.08)
+    # Pfosten alle 2 Kacheln, AUSSEN neben dem Steg (werden zuerst gezeichnet, Planken liegen darueber)
+    for yp in range(y0 + 12, y1 + 1, 2 * T):
+        for xs in (x0 - 3, x1 - 2):
+            for xx in range(xs, xs + 5):
+                for yy in range(yp - 3, yp + 3):
+                    k = xx - xs
+                    c = HOLZ[1] if k in (0, 4) or yy == yp + 2 else HOLZ[5] if k == 1 else HOLZ[3]
+                    if yy == yp - 3:
+                        c = HOLZ[6]
+                    _setz(px, W, H, xx, yy, c)
+            r_, g_, b_, _ = px[min(W - 1, xs + 2), min(H - 1, yp + 5)]
+            if b_ <= r_ + 40:                         # an Land kein Wasserring
+                continue
+            for k, xx in enumerate(range(xs - 2, xs + 7)):
+                if (k + frame) % 3:
+                    _setz(px, W, H, xx, yp + 4, WS['w4'] if k % 4 else WS['w5'])
     # Planken quer (waagerecht), je 4 px hoch
     y = y0
     i = 0
@@ -173,16 +189,3 @@ def zeichne_steg(img, x0, x1, y0, y1, frame=0, seed=9):
     for yy in range(y0, y1 + 1):
         for xx, c in ((x0, HOLZ[1]), (x0 + 1, HOLZ[3]), (x1 - 2, HOLZ[2]), (x1 - 1, HOLZ[1])):
             _setz(px, W, H, xx, yy, c)
-    # Pfosten alle 2 Kacheln, mit Wasserring
-    for yp in range(y0 + 12, y1 + 1, 2 * T):
-        for xs in (x0 - 2, x1 - 3):
-            for xx in range(xs, xs + 5):
-                for yy in range(yp - 3, yp + 3):
-                    k = xx - xs
-                    c = HOLZ[1] if k in (0, 4) or yy == yp + 2 else HOLZ[5] if k == 1 else HOLZ[3]
-                    if yy == yp - 3:
-                        c = HOLZ[6]
-                    _setz(px, W, H, xx, yy, c)
-            for k, xx in enumerate(range(xs - 2, xs + 7)):
-                if (k + frame) % 3:
-                    _setz(px, W, H, xx, yp + 4, WS['w4'] if k % 4 else WS['w5'])

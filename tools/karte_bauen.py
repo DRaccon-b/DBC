@@ -291,6 +291,7 @@ def bauen(frame=None, speichern=True):
 
     # Bruecken: Weg auf voller Breite bis ans Wasser fuehren; Deckmasse aus der Wegbreite an den Ufern
     bruecken_mass = []
+    bruecken_rand = set()           # Kacheln direkt ober-/unterhalb eines Decks: dort weicht Sand statt Gras
     for br in plan.get('bruecken', []):
         wx = [x for x in range(br['x'], br['x'] + br['breite']) if cls[br['y'] + br['hoehe'] // 2][x] == 'w']
         if not wx:
@@ -303,22 +304,21 @@ def bauen(frame=None, speichern=True):
             return r0, r1
         laeufe = [lauf(min(wx) - 2), lauf(max(wx) + 2)]
         r0, r1 = min(laeufe, key=lambda l: l[1] - l[0])   # schmaleres Ufer bestimmt die Deckbreite
-        for x in (min(wx) - 1, max(wx) + 1):
-            for y in range(r0, r1 + 1):
-                cls[y][x] = 's'
+        # Ufer bleibt Gras mit Uferkante; das Deck ueberdeckt die ganze Uferzelle links und rechts.
         # Wegkante liegt eine halbe Kachel ausserhalb der Wegzellen (Wang-Ecken) -> Deck deckt sie ganz ab
-        bruecken_mass.append((min(wx) * T - 14, (max(wx) + 1) * T + 14, r0 * T - 9, (r1 + 1) * T + 9))
+        bruecken_mass.append(((min(wx) - 1) * T - 8, (max(wx) + 2) * T + 8, r0 * T - 9, (r1 + 1) * T + 9))
+        for x in range(min(wx) - 2, max(wx) + 3):
+            for y in (r0 - 1, r1 + 1):
+                bruecken_rand.add((x, y))
     # Stege: kurzer Sandweg vom naechsten Weg darueber bis ans Wasser; Steg beginnt an der Wasserkante
     stege_mass = []
     for st in plan.get('stege', []):
         xs = range(st['x'], st['x'] + st['breite'])
         rw = next(y for y in range(st['y'] - 4, rows) if all(cls[y][x] == 'w' for x in xs))
-        rp = next((y for y in range(rw - 1, 0, -1) if any(cls[y][x] == 's' for x in xs)), None)
-        if rp is not None and rw - rp <= 6:
-            for y in range(rp + 1, rw):
-                for x in xs:
-                    cls[y][x] = 's'
-        stege_mass.append((st['x'] * T, (st['x'] + st['breite']) * T, rw * T - 8 - 6, (st['y'] + st['hoehe']) * T))
+        rp = next((y for y in range(rw - 1, 0, -1) if all(cls[y][x] == 's' for x in xs)), None)
+        # Holzsteg beginnt am Weg (Wegkante = halbe Kachel unter der letzten Wegzelle) und fuehrt ueber die Wiese
+        y_start = (rp + 1) * T + 8 - 5 if rp is not None and rw - rp <= 6 else rw * T - 14
+        stege_mass.append((st['x'] * T, (st['x'] + st['breite']) * T, y_start, (st['y'] + st['hoehe']) * T))
 
     # --- Vertex-Raster Boden: Klasse mit >=2 von 4 angrenzenden Kacheln, Vorrang m > w > s > g
     def zelle(x, y):
@@ -361,8 +361,9 @@ def bauen(frame=None, speichern=True):
                 continue
             if len(ecken) >= 3:          # drei Gelaende an einer Kachel: das seltenste weicht (Gras zuerst)
                 c = Counter([vk[y][x], vk[y][x + 1], vk[y + 1][x], vk[y + 1][x + 1]])
+                vorzug = 's' if (x, y) in bruecken_rand else 'g'
                 while len(ecken) > 2:
-                    weg = min(ecken, key=lambda k: (c[k], k != 'g'))
+                    weg = min(ecken, key=lambda k: (c[k], k != vorzug))
                     ecken.discard(weg)
             name, lo, up = PAARE[frozenset(ecken)]
             st = sets[name]
@@ -386,7 +387,7 @@ def bauen(frame=None, speichern=True):
 
     # --- 2. Klippen: handgezeichnete Waende (tools/klippen.py), h Kacheln hoch
     import klippen
-    treppen_px = frozenset((tr['x'] * T, (tr['x'] + tr['breite']) * T) for tr in plan.get('treppen', []))
+    treppen_px = frozenset((tr['x'] * T - 8, (tr['x'] + tr['breite']) * T + 8) for tr in plan.get('treppen', []))
     runen = klippen.zeichne_klippen(img, plan, cols, treppen_px)
     # Wasserfaelle: volle Flussbreite an der Wandoberkante (Spalten mit Wasser direkt oberhalb der Wand)
     for wf in plan.get('wasserfaelle', []):
@@ -401,7 +402,8 @@ def bauen(frame=None, speichern=True):
     import bauwerke
     for tr in plan.get('treppen', []):
         t, h = tcol[tr['x']], hcol[tr['x']]
-        bauwerke.zeichne_treppe(img, tr['x'] * T, (tr['x'] + tr['breite']) * T, (t - h) * T + 8, (t + 1) * T - 2)
+        # Wegkante liegt eine halbe Kachel ausserhalb der Wegzellen -> Treppe auf volle sichtbare Wegbreite
+        bauwerke.zeichne_treppe(img, tr['x'] * T - 8, (tr['x'] + tr['breite']) * T + 8, (t - h) * T + 8, (t + 1) * T - 2)
     for (bx0, bx1, by0, by1) in bruecken_mass:
         bauwerke.zeichne_bruecke(img, bx0, bx1, by0, by1, frame=frame or 0)
     for (sx0, sx1, sy0, sy1) in stege_mass:
