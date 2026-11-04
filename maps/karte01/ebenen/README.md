@@ -16,3 +16,7 @@ Zeichenreihenfolge im Spiel: `ebene1_boden` → Spieler/NPCs → `ebene3_ueberla
 Regeln: Wasser, Meer, Flachwasser, Wald und Klippenwände sind gesperrt, Treppen, Brücken und der Steg sind begehbar.
 Hohe Objekte werden am Fuß geteilt: Die untersten 10 px (Stamm, Mast, Sockel) liegen auf Ebene 1 und
 sperren ihre Kachel, alles darüber liegt auf Ebene 3.
+
+Alle Objekte stehen am 16×16-Raster (`tools/karte01_raster.py`): Fußmitte auf der Kachelmitte, unterste
+Pixelzeile 2 px über der Kachelunterkante, höchstens ein hohes und ein flaches Objekt je Kachel. Die
+Kachel jedes Objekts steht in `assets/objekte/karte01/platzierung.json` als `kachel: [x, y]`.
