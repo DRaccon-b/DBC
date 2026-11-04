@@ -316,8 +316,15 @@ def bauen(frame=None, speichern=True):
         xs = range(st['x'], st['x'] + st['breite'])
         rw = next(y for y in range(st['y'] - 4, rows) if all(cls[y][x] == 'w' for x in xs))
         rp = next((y for y in range(rw - 1, 0, -1) if all(cls[y][x] == 's' for x in xs)), None)
-        # Holzsteg beginnt am Weg (Wegkante = halbe Kachel unter der letzten Wegzelle) und fuehrt ueber die Wiese
-        y_start = (rp + 1) * T + 8 - 5 if rp is not None and rw - rp <= 6 else rw * T - 14
+        if rp is not None and rw - rp <= 6:
+            # Teich reicht am Steg bis an den Weg (wie im Zielbild): Wiese dazwischen wird Wasser
+            for y in range(rp + 1, rw):
+                for x in range(st['x'] - 1, st['x'] + st['breite'] + 1):
+                    if cls[y][x] == 'g':
+                        cls[y][x] = 'w'
+            y_start = (rp + 1) * T - 8 - 4          # Wegkante (Wasser hat Vorrang -> halbe Kachel hoeher), Steg greift 4 px auf den Weg
+        else:
+            y_start = rw * T - 14
         stege_mass.append((st['x'] * T, (st['x'] + st['breite']) * T, y_start, (st['y'] + st['hoehe']) * T))
 
     # --- Vertex-Raster Boden: Klasse mit >=2 von 4 angrenzenden Kacheln, Vorrang m > w > s > g

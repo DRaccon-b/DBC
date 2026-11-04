@@ -144,48 +144,88 @@ def zeichne_bruecke(img, x0, x1, y0, y1, frame=0, seed=5):
 
 
 # ---------------------------------------------------------------- Steg (Laufrichtung senkrecht)
+def _pfosten(px, W, H, x, y_kopf, y_fuss, frame, ring=True):
+    """Pfosten wie bei der Bruecke: 5 px breit, helle Kappe, dunkler nasser Fuss, Wasserring."""
+    for xx in range(x, x + 5):
+        for yy in range(y_kopf, y_fuss):
+            k = xx - x
+            c = HOLZ[1] if k in (0, 4) else HOLZ[5] if k == 1 else HOLZ[3]
+            if yy == y_kopf:
+                c = HOLZ[1] if k in (0, 4) else HOLZ[6]
+            if yy > y_fuss - 4:
+                c = HOLZ[1] if k in (0, 4) else HOLZ[2]
+            _setz(px, W, H, xx, yy, c)
+    if ring:
+        for k, xx in enumerate(range(x - 2, x + 7)):
+            if (k + frame) % 3:
+                _setz(px, W, H, xx, y_fuss, WS['w4'] if k % 4 else WS['w5'])
+
+
+def _planken(px, W, H, x0, x1, y0, y1, rnd):
+    """Querplanken (Laufrichtung senkrecht), je 6 px: Lichtkante, Holz mit Maserung, dezente Fuge."""
+    y, i = y0, 0
+    while y < y1:
+        ton = (3, 4, 4, 3, 4)[i % 5]
+        vers_l, vers_r = rnd.choice((0, 0, 1)), rnd.choice((0, 0, 1))
+        for yy in range(y, min(y + 6, y1)):
+            k = yy - y
+            for xx in range(x0 + vers_l, x1 - vers_r):
+                if k == 0:
+                    c = HOLZ[6] if xx < x1 - vers_r - 1 else HOLZ[4]
+                elif k == 5:
+                    c = HOLZ[2]
+                else:
+                    c = HOLZ[ton]
+                    if k == 3 and (xx * 7 + i * 5) % 9 == 0:
+                        c = HOLZ[ton - 1]                  # Maserung
+                    if xx == x0 + vers_l:
+                        c = HOLZ[5]                        # Licht von links
+                    elif xx == x1 - vers_r - 1:
+                        c = HOLZ[2]
+                _setz(px, W, H, xx, yy, c)
+        for nx in (x0 + 2, x1 - 3):                        # Naegel
+            _setz(px, W, H, nx, y + 2, HOLZ[1])
+        y += 6; i += 1
+
+
 def zeichne_steg(img, x0, x1, y0, y1, frame=0, seed=9):
+    """Steg von y0 (Weg-/Uferkante) bis y1, Breite x0..x1, mit breiterer Plattform am Ende."""
     rnd = random.Random(seed)
     px = img.load(); W, H = img.size
-    # Schatten aufs Wasser rechts und unter dem Ende
-    for y in range(y0 + 6, y1 + 4):
-        for dx in range(1, 4):
-            _abdunkeln(px, W, H, x1 + dx, y, 0.6 + dx * 0.08)
-    for x in range(x0 + 2, x1 + 3):
-        for dy in range(1, 4):
-            _abdunkeln(px, W, H, x, y1 + dy, 0.6 + dy * 0.08)
-    # Pfosten alle 2 Kacheln, AUSSEN neben dem Steg (werden zuerst gezeichnet, Planken liegen darueber)
-    for yp in range(y0 + 12, y1 + 1, 2 * T):
-        for xs in (x0 - 3, x1 - 2):
-            for xx in range(xs, xs + 5):
-                for yy in range(yp - 3, yp + 3):
-                    k = xx - xs
-                    c = HOLZ[1] if k in (0, 4) or yy == yp + 2 else HOLZ[5] if k == 1 else HOLZ[3]
-                    if yy == yp - 3:
-                        c = HOLZ[6]
-                    _setz(px, W, H, xx, yy, c)
-            r_, g_, b_, _ = px[min(W - 1, xs + 2), min(H - 1, yp + 5)]
-            if b_ <= r_ + 40:                         # an Land kein Wasserring
-                continue
-            for k, xx in enumerate(range(xs - 2, xs + 7)):
-                if (k + frame) % 3:
-                    _setz(px, W, H, xx, yp + 4, WS['w4'] if k % 4 else WS['w5'])
-    # Planken quer (waagerecht), je 4 px hoch
-    y = y0
-    i = 0
-    while y < y1:
-        ton = rnd.choice((3, 4, 4))
-        kurz = rnd.choice((0, 0, 0, 1, 2))            # unregelmaessige Brettenden
-        for yy in range(y, min(y + 4, y1)):
-            k = yy - y
-            for xx in range(x0 + 2 - (1 if i % 2 else 0), x1 - 2 + (1 if i % 2 == 0 else 0) - kurz):
-                c = HOLZ[6] if k == 0 else HOLZ[1] if k == 3 else HOLZ[ton]
-                if xx == x0 + 2 - (1 if i % 2 else 0):
-                    c = HOLZ[5] if k < 3 else HOLZ[1]
-                _setz(px, W, H, xx, yy, c)
-        _setz(px, W, H, x0 + 4, y + 1, HOLZ[1]); _setz(px, W, H, x1 - 5, y + 1, HOLZ[1])   # Naegel
-        y += 4; i += 1
-    # Laengsbalken links/rechts
+    plat = 22                                   # Laenge der Plattform
+    px0, px1 = x0 - 6, x1 + 6                   # Plattform breiter
+    # Schatten aufs Wasser (Licht von oben links -> rechts und unten)
+    for y in range(y0 + 4, y1 + 5):
+        rechts = px1 if y >= y1 - plat else x1
+        for dx in range(1, 5):
+            _abdunkeln(px, W, H, rechts + dx, y, 0.58 + dx * 0.08)
+    for x in range(px0 + 3, px1 + 5):
+        for dy in range(1, 5):
+            _abdunkeln(px, W, H, x, y1 + dy, 0.58 + dy * 0.08)
+    # Pfosten zuerst (stehen aussen, Holz liegt darueber)
+    mitte = (y0 + y1 - plat) // 2
+    for yp in (mitte,):
+        _pfosten(px, W, H, x0 - 3, yp - 4, yp + 6, frame)
+        _pfosten(px, W, H, x1 - 2, yp - 4, yp + 6, frame)
+    for yp in (y1 - plat + 2, y1 - 2):
+        _pfosten(px, W, H, px0 - 3, yp - 4, yp + 6, frame)
+        _pfosten(px, W, H, px1 - 2, yp - 4, yp + 6, frame)
+    # Laufsteg und Plattform
+    _planken(px, W, H, x0 + 2, x1 - 2, y0, y1 - plat, rnd)
+    _planken(px, W, H, px0 + 2, px1 - 2, y1 - plat, y1, rnd)
+    # Laengsbalken (Licht links), an der Plattform nach aussen versetzt
     for yy in range(y0, y1 + 1):
-        for xx, c in ((x0, HOLZ[1]), (x0 + 1, HOLZ[3]), (x1 - 2, HOLZ[2]), (x1 - 1, HOLZ[1])):
+        l, r = (px0, px1) if yy >= y1 - plat else (x0, x1)
+        for xx, c in ((l, HOLZ[1]), (l + 1, HOLZ[4]), (r - 2, HOLZ[2]), (r - 1, HOLZ[1])):
             _setz(px, W, H, xx, yy, c)
+    for xx in range(px0, px1):                  # Stirnbalken am Ende
+        _setz(px, W, H, xx, y1, HOLZ[1]); _setz(px, W, H, xx, y1 - 1, HOLZ[3])
+    for xx in range(px0, x0 + 1):               # Uebergang Steg -> Plattform
+        _setz(px, W, H, xx, y1 - plat, HOLZ[1])
+    for xx in range(x1 - 1, px1):
+        _setz(px, W, H, xx, y1 - plat, HOLZ[1])
+    # Poller mit Seil auf der Plattform (Anlegestelle)
+    bx, by = px1 - 6, y1 - 10
+    for xx in range(bx, bx + 3):
+        for yy in range(by, by + 4):
+            _setz(px, W, H, xx, yy, HOLZ[1] if xx in (bx, bx + 2) or yy == by + 3 else HOLZ[5])
