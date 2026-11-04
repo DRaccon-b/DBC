@@ -170,7 +170,7 @@ def main():
                     setze(wahl('waldrand'), px, py)
                 elif frei_umgebung(cx, cy, 1) and r < 0.012:
                     setze(wahl('wiese_baum'), px, py); belegt.update({(cx + 1, cy), (cx - 1, cy), (cx, cy - 1)})
-                elif frei_umgebung(cx, cy, 0) and r < 0.03:
+                elif frei_umgebung(cx, cy, 1) and r < 0.03:          # mittlere Deko: 1 Kachel Abstand zu Weg/Wasser
                     setze(wahl('wiese_mittel'), px, py)
                 elif frei_umgebung(cx, cy, 0) and r < 0.11:
                     setze(wahl('wiese_klein'), px, py, ebene=0)
