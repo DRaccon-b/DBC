@@ -158,54 +158,21 @@ def sandwand_oben(L, cfg, rnd):
     for x in range(x0, x1):                                  # Schatten der Wand auf den Boden
         for d, f in ((0, 0.72), (1, 0.84), (2, 0.93)):
             L.neutral(x, y1 + fr + d, f)
-    dl = cfg.get('durchlass')                                # Fluss tritt unter der Wand hervor
-    if dl:
-        bx0, bx1 = dl[0] * T + 6, (dl[1] + 1) * T + 4
-        bm, bw = (bx0 + bx1) / 2, (bx1 - bx0) / 2
-        unten = y1 + fr
-        def kurve(x, extra=0):
-            dx = (x - bm) / (bw + extra)
-            if abs(dx) > 1:
-                return None
-            return unten - (fr - 6 + extra) * math.sqrt(1 - dx * dx)
-        for x in range(bx0 - 4, bx1 + 4):
-            ka, ki = kurve(x, 3), kurve(x)
-            if ka is None:
-                continue
-            for y in range(int(ka), unten):
-                if ki is not None and y >= ki:
-                    tief = (y - ki) / max(1, unten - ki)
-                    c = ind.rgb('#16202c') if tief < 0.45 else ind.rgb('#1f3a5c')
-                    if tief >= 0.45 and (x + 3 * ((y // 2) % 3)) % 9 == 0:
-                        c = ind.rgb('#3a6aa0')
-                    L.p(x, y, c)
-                else:                                             # Bogensteine (Licht oben links)
-                    c = SANDSTEIN[5] if x < bm - bw * 0.3 else SANDSTEIN[4] if x < bm + bw * 0.3 else SANDSTEIN[2]
-                    if int(math.degrees(math.atan2(unten - y, x - bm))) % 22 == 0:
-                        c = SANDSTEIN[1]
-                    L.p(x, y, c)
-        for x in range(bx0 - 1, bx1 + 1):                                 # Gischt am Austritt
-            if (x * 3) % 7 < 4:
-                L.p(x, unten - 1, ind.rgb('#cfe8ff'))
-            if (x * 5) % 11 < 3:
-                L.p(x, unten, ind.rgb('#e8f4ff'))
-        return
-    for y in range(y0, y1):                                  # Deckenrand am Fluss: Lichtkante
-        L.p(x0, y, SANDKAPPE[1]); L.p(x0 + 1, y, SANDKAPPE[4])
-    for y in range(y1, y1 + fr):                             # Stirnseite der Front
-        L.p(x0, y, SANDSTEIN[0]); L.p(x0 + 1, y, SANDSTEIN[1])
-    # Sandrampe vor dem Wandende: am Ufer hoch, laeuft nach rechts und unten aus
-    ry = fr + 6
-    for y in range(y1 + 2, y1 + fr + 8):
-        h = (y - y1) / ry
-        grenze = 46 * (1 - (1 - min(1, h)) ** 1.6) + 2 * math.sin(y / 3.0)
-        for x in range(x0, x0 + 50):
-            if x - x0 < grenze:
-                t = 1 - (x - x0) / max(1, grenze)
-                t = min(1, t * 1.6) if h < 0.9 else t * 0.8
-                _verwehung_pixel(L, x, y, t)
-        if y < y1 + fr:
-            L.p(x0 + max(0, int(grenze) - 1), y, SANDKAPPE[3])
+    # Wandende am Fluss: saubere Kante. Decke mit Lichtkante, Stirnseite der Front im Schatten,
+    # auf dem Wasser eine Schaumlinie entlang der Wand.
+    for y in range(y0, y1):
+        L.p(x0, y, SANDKAPPE[0]); L.p(x0 + 1, y, SANDKAPPE[4]); L.p(x0 + 2, y, SANDKAPPE[3])
+    for x in range(x0, x0 + 3):
+        L.p(x, y1, SANDKAPPE[4])
+    for y in range(y1 + 1, y1 + fr):
+        L.p(x0, y, SANDSTEIN[0]); L.p(x0 + 1, y, SANDSTEIN[1]); L.p(x0 + 2, y, SANDSTEIN[2])
+    for y in range(y0, y1 + fr + 1):
+        if (y // 2) % 3 != 2:
+            L.p(x0 - 1, y, ind.rgb('#cfe8ff'))
+        if y % 5 == 0:
+            L.p(x0 - 2, y, ind.rgb('#8cc4f4'))
+    for x in range(x0, x0 + 3):
+        L.neutral(x, y1 + fr, 0.75); L.neutral(x, y1 + fr + 1, 0.86)
 
 
 def sandwand_vorne(L, cfg, rnd, rechts_x=None):
@@ -306,38 +273,49 @@ def eck_verwehung(L, cx, cy, rx, ry, links=True):
 
 
 def arena_uebergang(img, L, arena, ob, arena_flaeche):
-    """Die Arena liegt halb unter der noerdlichen Duene: ueber dem Ring wird die Sanddecke weitergefuehrt
-    (welliger Kamm mit Lichtkante), darunter rieselt ein Sandhang in die Arena und ueber die Mauerkronen.
-    In den Ecken zwischen Sandsteinfront und Ring liegen Sandhaufen."""
+    """Die Arena ist in die noerdliche Duene gegraben: Neben dem Ring fliesst die Duene schraeg ueber die
+    Sandsteinfront bis auf den Boden, ueber der Arena woelbt sich ihr Kamm nach oben. Kamm mit Lichtkante,
+    darunter ein weicher Sandhang und ein schmaler Schatten."""
     y1 = (ob['kappe'][1] + 1) * T
     fu = y1 + ob['front']
     zellen = [(x, y) for (x, y) in arena_flaeche if y * T < fu + 4]
     if not zellen:
         return
-    xa = min(x for x, _ in zellen) * T - 4
-    xb = (max(x for x, _ in zellen) + 1) * T + 4
-    breite = xb - xa
-    for x in range(xa, xb):
-        u = (x - xa) / breite
-        tief = int(10 * math.sin(math.pi * u) ** 0.7)           # Duene haengt in der Mitte etwas tiefer
-        kamm = y1 + tief + int(2 * math.sin(x / 9.0) + 1.5 * math.sin(x / 17.0))
+    xa = min(x for x, _ in zellen) * T
+    xb = (max(x for x, _ in zellen) + 1) * T
+    rampe = 40
+    unten, oben = fu + 3, y1 + 15
+
+    def glatt(t):
+        t = min(1.0, max(0.0, t))
+        return t * t * (3 - 2 * t)
+
+    for x in range(xa - rampe, xb + rampe):
+        if x < xa:
+            kamm = y1 + (unten - y1) * glatt((x - (xa - rampe)) / rampe)
+        elif x >= xb:
+            kamm = y1 + (unten - y1) * glatt(((xb + rampe) - x) / rampe)
+        else:
+            u = (x - xa) / (xb - xa)
+            kamm = unten - (unten - oben) * glatt(min(1.0, math.sin(math.pi * u) * 1.6))
+        kamm = int(round(kamm + 1.5 * math.sin(x / 9.0) + math.sin(x / 4.7)))
         for y in range(0, kamm):
             kk = (y + int(2 * math.sin(x / 11.0))) % 9
             c = SANDKAPPE[2] if kk not in (0, 1) else (SANDKAPPE[1] if kk == 0 else SANDKAPPE[3])
             if (x * 7 + y * 13) % 41 == 0:
                 c = SANDKAPPE[4]
             L.p(x, y, c)
-        L.p(x, kamm - 1, SANDKAPPE[4]); L.p(x, kamm, SANDKAPPE[3])
-        hang = 9 + int(4 * math.sin(math.pi * u)) + int(2 * math.sin(x / 4.3))
-        for d in range(1, hang):                                 # Sandhang nach Sueden
-            _verwehung_pixel(L, x, kamm + d, 1 - d / hang)
-        for d in range(hang, hang + 2):
-            L.neutral(x, kamm + d, 0.9)
-    zeile = fu // T
-    xs = sorted(x for (x, y) in arena if y == zeile)
-    if xs:
-        eck_verwehung(L, xs[0] * T, fu + 1, 26, 12, links=True)
-        eck_verwehung(L, (xs[-1] + 1) * T, fu + 1, 26, 12, links=False)
+        if kamm <= y1 + 1:
+            continue                                            # dort liegt die normale Wandkante
+        L.p(x, kamm - 2, SANDKAPPE[3]); L.p(x, kamm - 1, SANDKAPPE[4])
+        hang = 6 + int(2 * math.sin(x / 5.3))
+        for d in range(hang):                                    # Sandhang
+            t = 1 - d / hang
+            c = SANDKAPPE[2] if t > 0.75 else SANDKAPPE[1] if t > 0.4 else SANDKAPPE[0]
+            if t <= 0.4 and (x + d) % 2:
+                continue
+            L.p(x, kamm + d, c)
+        L.neutral(x, kamm + hang, 0.84); L.neutral(x, kamm + hang + 1, 0.92)
 
 
 def pyramide_sprite(breite=240, hoehe=168):
