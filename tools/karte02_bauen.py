@@ -174,6 +174,38 @@ def bauen(frame=None, speichern=True):
             ind.mauer(L, m['r'], m['seite'], rnd)
     for g in sorted(lay.get('gebaeude', []), key=lambda g: g['r'][3]):
         ind.gebaeude(L, g, rnd)
+    # Bodenmaske: nur hier duerfen Objektschatten liegen (nicht auf Daechern, Fassaden, Mauern,
+    # Gebaeuden, Rohren, Foerderbaendern)
+    import numpy as _npm
+    boden = _npm.ones((rows * T, cols * T), _npm.float32)
+    for y in range(rows):
+        for x in range(cols):
+            if cls[y][x] == 'm':
+                boden[y * T:(y + 1) * T, x * T:(x + 1) * T] = 0
+                if y + 1 < rows and cls[y + 1][x] != 'm':          # Fassade unter der Dachkante
+                    boden[(y + 1) * T:(y + 1) * T + 28, x * T:(x + 1) * T] = 0
+    for g in lay.get('gebaeude', []):
+        x0, y0, x1, y1 = g['r']
+        boden[y0 * T:(y1 + 1) * T, x0 * T:(x1 + 1) * T] = 0
+    for m in lay.get('mauern', []):
+        x0, y0, x1, y1 = m['r']
+        boden[max(0, y0 * T - (14 if m['seite'] == 'vorne' else 0)):(y1 + 1) * T, x0 * T:(x1 + 1) * T] = 0
+    for k in ('foerderbaender', 'rohre'):
+        for l in lay.get(k, []):
+            pts = l['pfad'] if 'pfad' in l else [l['von'], l['bis']]
+            breite = 2 if k == 'foerderbaender' else 1
+            for (ax, ay), (bx, by) in zip(pts, pts[1:]):
+                if k == 'rohre':
+                    q0, q1 = 4, 12
+                    if ax == bx:
+                        boden[min(ay, by) * T:(max(ay, by) + 1) * T, ax * T + q0:ax * T + q1] = 0
+                    else:
+                        boden[ay * T + q0:ay * T + q1, min(ax, bx) * T:(max(ax, bx) + 1) * T] = 0
+                else:
+                    if ax == bx:
+                        boden[min(ay, by) * T:(max(ay, by) + 1) * T, ax * T:(ax + breite) * T] = 0
+                    else:
+                        boden[ay * T:(ay + breite) * T, min(ax, bx) * T:(max(ax, bx) + 1) * T] = 0
     if speichern:
         img.save(os.path.join(KARTE, 'terrain_basis.png'))
 
@@ -267,6 +299,7 @@ def bauen(frame=None, speichern=True):
         schatten = Image.fromarray(_np.maximum(_np.array(schatten.filter(ImageFilter.GaussianBlur(1.2))),
                                                _np.array(sm_img)).astype(_np.uint8))
         dunkel = Image.new('RGBA', img.size, (14, 22, 30, 255))
+        schatten = Image.fromarray((_np.array(schatten).astype(_np.float32) * boden).astype(_np.uint8))
         dunkel.putalpha(schatten)
         img.alpha_composite(dunkel)
         for o in objs:
@@ -287,7 +320,7 @@ def bauen(frame=None, speichern=True):
     for m in lay.get('mauern', []):
         if m['seite'] == 'vorne':
             ind.mauer_vorne(L2, m['r'])
-        leitungen(img, os.path.join(OBJ, 'leitungen.json'))
+        leitungen(img, os.path.join(OBJ, 'leitungen.json'), boden)
     if frame is not None:
         animation(img, objs, frame)
         return img
@@ -301,7 +334,7 @@ def bauen(frame=None, speichern=True):
     return img
 
 
-def _linie(img, a, b, farbe, durchhang=0):
+def _linie(img, a, b, farbe, durchhang=0, maske=None):
     px = img.load()
     W, H = img.size
     (x0, y0), (x1, y1) = a, b
@@ -312,6 +345,8 @@ def _linie(img, a, b, farbe, durchhang=0):
         y = y0 + (y1 - y0) * t + durchhang * 4 * t * (1 - t)
         xi, yi = int(round(x)), int(round(y))
         if 0 <= xi < W and 0 <= yi < H:
+            if maske is not None and maske[yi, xi] == 0:
+                continue
             if len(farbe) == 4 and farbe[3] < 255:
                 r, g, b_, a_ = px[xi, yi]
                 f = farbe[3] / 255
@@ -321,7 +356,7 @@ def _linie(img, a, b, farbe, durchhang=0):
                 px[xi, yi] = farbe[:3] + (255,)
 
 
-def leitungen(img, pfad):
+def leitungen(img, pfad, boden=None):
     """Hochspannungsleitungen zwischen den Masten: Draehte mit leichtem Durchhang und ihr Schatten auf
     dem Boden (versetzt nach rechts unten wie die Schlagschatten)."""
     if not os.path.exists(pfad):
@@ -334,7 +369,7 @@ def leitungen(img, pfad):
             pa, pb = a[i], b[i]
             # Schatten auf dem Boden (Hoehe -> Versatz)
             _linie(img, (pa[0] + h * 0.42, pa[1] + h * 0.55 + h * 0.23), (pb[0] + h * 0.42, pb[1] + h * 0.55 + h * 0.23),
-                   (14, 22, 30, 45), durchhang=3)
+                   (14, 22, 30, 45), durchhang=3, maske=boden)
     for a, b in zip(m, m[1:]):
         for i in range(4):
             _linie(img, a[i], b[i], (35, 40, 47), durchhang=6)
