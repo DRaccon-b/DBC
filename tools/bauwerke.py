@@ -462,7 +462,7 @@ def bodenfuss(sp, boden, art):
 
     out = Image.new('RGBA', (W, H), (0, 0, 0, 0))
     po = out.load()
-    farbe = (24, 70, 50) if boden == 'gras' else (120, 82, 52)
+    farbe = {'gras': (24, 70, 50), 'sand': (120, 82, 52), 'beton': (22, 28, 36), 'metall': (8, 12, 18)}[boden]
     for y in range(yb - 3, min(H, yb + 3)):
         for x in range(W):
             d = ((x - cx) / (rx + 1)) ** 2 + ((y - yb + 0.5) / 2.3) ** 2
@@ -483,6 +483,13 @@ def bodenfuss(sp, boden, art):
         if 0 <= x < W and 0 <= y < H:
             po[x, y] = c + (255,)
 
+    if boden in ('beton', 'metall'):
+        # harter Boden: Kontaktschatten (oben schon), abgedunkelter Fuss und etwas Schmutz am Fuss
+        out.alpha_composite(obj, (2, 0))
+        for _ in range(3 if art in ('stein', 'holz', 'busch', 'baum') else 1):
+            x = int(cx + rnd.uniform(-rx - 1, rx + 1))
+            setz(x, yb + rnd.randint(0, 1), (58, 66, 74) if boden == 'beton' else (24, 34, 42))
+        return out
     if boden == 'sand' and wall:
         out.alpha_composite(obj, (2, 0))
         for x in range(int(cx - rx), int(cx + rx) + 1):  # Sandwall vor der Unterkante

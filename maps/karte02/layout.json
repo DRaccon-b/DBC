@@ -1,0 +1,654 @@
+{
+ "_info": "Karte 02 'Factorial Town'. 95x75 Kacheln a 16 px. Rechtecke [x0, y0, x1, y1] in Kacheln, inklusiv. Abgeleitet aus assets/vorlagen/karte02_vorlage.png. Spaeter eingetragene Flaechen ueberschreiben fruehere.",
+ "groesse": [
+  95,
+  75
+ ],
+ "boden": [
+  {
+   "art": "beton",
+   "r": [
+    0,
+    0,
+    94,
+    74
+   ]
+  },
+  {
+   "art": "gehweg",
+   "r": [
+    11,
+    32,
+    58,
+    34
+   ]
+  },
+  {
+   "art": "gehweg",
+   "r": [
+    11,
+    40,
+    52,
+    40
+   ]
+  },
+  {
+   "art": "platz",
+   "r": [
+    3,
+    32,
+    10,
+    40
+   ]
+  },
+  {
+   "art": "asphalt",
+   "r": [
+    11,
+    35,
+    51,
+    39
+   ]
+  },
+  {
+   "art": "metall",
+   "r": [
+    61,
+    14,
+    89,
+    55
+   ]
+  },
+  {
+   "art": "platz",
+   "r": [
+    61,
+    35,
+    89,
+    39
+   ]
+  },
+  {
+   "art": "platz",
+   "r": [
+    65,
+    26,
+    86,
+    51
+   ]
+  },
+  {
+   "art": "platz_hell",
+   "r": [
+    73,
+    26,
+    78,
+    51
+   ]
+  },
+  {
+   "art": "gras",
+   "r": [
+    36,
+    55,
+    38,
+    59
+   ]
+  },
+  {
+   "art": "gras",
+   "r": [
+    34,
+    57,
+    40,
+    58
+   ]
+  },
+  {
+   "art": "gras",
+   "r": [
+    55,
+    59,
+    60,
+    62
+   ]
+  },
+  {
+   "art": "gras",
+   "r": [
+    57,
+    58,
+    58,
+    64
+   ]
+  }
+ ],
+ "mauern": [
+  {
+   "seite": "oben",
+   "r": [
+    0,
+    0,
+    28,
+    3
+   ]
+  },
+  {
+   "seite": "oben",
+   "r": [
+    59,
+    0,
+    94,
+    3
+   ]
+  },
+  {
+   "seite": "links",
+   "r": [
+    0,
+    4,
+    2,
+    31
+   ]
+  },
+  {
+   "seite": "links",
+   "r": [
+    0,
+    41,
+    2,
+    71
+   ]
+  },
+  {
+   "seite": "rechts",
+   "r": [
+    92,
+    4,
+    94,
+    33
+   ]
+  },
+  {
+   "seite": "rechts",
+   "r": [
+    92,
+    39,
+    94,
+    71
+   ]
+  },
+  {
+   "seite": "unten",
+   "r": [
+    0,
+    72,
+    94,
+    74
+   ]
+  }
+ ],
+ "tore": [
+  {
+   "r": [
+    0,
+    32,
+    2,
+    40
+   ],
+   "_info": "Strasse fuehrt links hinaus"
+  },
+  {
+   "r": [
+    92,
+    34,
+    94,
+    38
+   ],
+   "_info": "Ausgang rechts zum Reaktorplatz"
+  }
+ ],
+ "gebaeude": [
+  {
+   "name": "fabrikhalle",
+   "typ": "wellblech",
+   "r": [
+    29,
+    0,
+    58,
+    8
+   ],
+   "fassade": 4,
+   "tore": [
+    33,
+    43,
+    53
+   ],
+   "tueren": [
+    38,
+    48
+   ],
+   "schilder": [
+    [
+     36,
+     "GEAR"
+    ],
+    [
+     46,
+     "GEAR"
+    ]
+   ],
+   "luefter": [
+    [
+     31,
+     1
+    ],
+    [
+     50,
+     1
+    ]
+   ]
+  },
+  {
+   "name": "halle_heat",
+   "typ": "wellblech",
+   "r": [
+    3,
+    22,
+    12,
+    30
+   ],
+   "fassade": 4,
+   "tore": [
+    10
+   ],
+   "tueren": [
+    5
+   ],
+   "schilder": [
+    [
+     8,
+     "HEAT"
+    ]
+   ],
+   "luefter": []
+  },
+  {
+   "name": "halle_unten",
+   "typ": "wellblech",
+   "r": [
+    3,
+    47,
+    15,
+    56
+   ],
+   "fassade": 4,
+   "tore": [
+    5,
+    10
+   ],
+   "tueren": [
+    14
+   ],
+   "schilder": [],
+   "luefter": []
+  },
+  {
+   "name": "backstein_klein",
+   "typ": "backstein",
+   "r": [
+    29,
+    42,
+    33,
+    49
+   ],
+   "fassade": 4,
+   "tore": [],
+   "tueren": [
+    30
+   ],
+   "schilder": [],
+   "luefter": []
+  },
+  {
+   "name": "backstein_gross",
+   "typ": "backstein",
+   "r": [
+    39,
+    42,
+    55,
+    49
+   ],
+   "fassade": 4,
+   "tore": [
+    41,
+    50
+   ],
+   "tueren": [
+    46
+   ],
+   "schilder": [],
+   "luefter": [
+    [
+     44,
+     42
+    ]
+   ]
+  },
+  {
+   "name": "reaktorhaus",
+   "typ": "reaktor",
+   "r": [
+    61,
+    52,
+    89,
+    59
+   ],
+   "fassade": 4,
+   "tore": [
+    75
+   ],
+   "tueren": [],
+   "schilder": [],
+   "luefter": []
+  }
+ ],
+ "schienen": [
+  {
+   "von": [
+    13,
+    9
+   ],
+   "bis": [
+    13,
+    31
+   ]
+  },
+  {
+   "von": [
+    23,
+    9
+   ],
+   "bis": [
+    23,
+    31
+   ]
+  },
+  {
+   "von": [
+    24,
+    41
+   ],
+   "bis": [
+    24,
+    66
+   ]
+  },
+  {
+   "von": [
+    25,
+    66
+   ],
+   "bis": [
+    33,
+    66
+   ]
+  },
+  {
+   "von": [
+    42,
+    50
+   ],
+   "bis": [
+    42,
+    62
+   ]
+  }
+ ],
+ "foerderbaender": [
+  {
+   "von": [
+    33,
+    9
+   ],
+   "bis": [
+    33,
+    21
+   ]
+  },
+  {
+   "von": [
+    43,
+    9
+   ],
+   "bis": [
+    43,
+    21
+   ]
+  },
+  {
+   "von": [
+    53,
+    9
+   ],
+   "bis": [
+    53,
+    21
+   ]
+  },
+  {
+   "von": [
+    33,
+    22
+   ],
+   "bis": [
+    57,
+    22
+   ]
+  }
+ ],
+ "rohre": [
+  {
+   "von": [
+    28,
+    9
+   ],
+   "bis": [
+    28,
+    15
+   ]
+  },
+  {
+   "von": [
+    28,
+    20
+   ],
+   "bis": [
+    28,
+    28
+   ]
+  },
+  {
+   "von": [
+    29,
+    28
+   ],
+   "bis": [
+    36,
+    28
+   ]
+  },
+  {
+   "von": [
+    39,
+    28
+   ],
+   "bis": [
+    58,
+    28
+   ]
+  },
+  {
+   "von": [
+    59,
+    9
+   ],
+   "bis": [
+    59,
+    13
+   ]
+  },
+  {
+   "von": [
+    60,
+    10
+   ],
+   "bis": [
+    60,
+    31
+   ]
+  },
+  {
+   "von": [
+    12,
+    31
+   ],
+   "bis": [
+    58,
+    31
+   ]
+  },
+  {
+   "von": [
+    63,
+    11
+   ],
+   "bis": [
+    68,
+    11
+   ]
+  },
+  {
+   "von": [
+    72,
+    11
+   ],
+   "bis": [
+    78,
+    11
+   ]
+  },
+  {
+   "von": [
+    81,
+    11
+   ],
+   "bis": [
+    85,
+    11
+   ]
+  },
+  {
+   "von": [
+    86,
+    11
+   ],
+   "bis": [
+    89,
+    11
+   ]
+  }
+ ],
+ "markierungen": [
+  {
+   "art": "warnstreifen",
+   "r": [
+    33,
+    63,
+    39,
+    63
+   ]
+  },
+  {
+   "art": "warnstreifen",
+   "r": [
+    47,
+    63,
+    53,
+    63
+   ]
+  },
+  {
+   "art": "warnstreifen",
+   "r": [
+    32,
+    9,
+    35,
+    9
+   ]
+  },
+  {
+   "art": "warnstreifen",
+   "r": [
+    42,
+    9,
+    45,
+    9
+   ]
+  },
+  {
+   "art": "warnstreifen",
+   "r": [
+    52,
+    9,
+    55,
+    9
+   ]
+  },
+  {
+   "art": "parklinie",
+   "r": [
+    7,
+    57,
+    7,
+    63
+   ]
+  },
+  {
+   "art": "parklinie",
+   "r": [
+    12,
+    57,
+    12,
+    63
+   ]
+  },
+  {
+   "art": "zebra",
+   "r": [
+    13,
+    35,
+    14,
+    39
+   ]
+  },
+  {
+   "art": "zebra",
+   "r": [
+    37,
+    35,
+    38,
+    39
+   ]
+  },
+  {
+   "art": "zebra",
+   "r": [
+    57,
+    35,
+    58,
+    38
+   ]
+  }
+ ]
+}

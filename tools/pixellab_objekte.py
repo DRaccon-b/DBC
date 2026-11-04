@@ -14,6 +14,7 @@ from PIL import Image, ImageDraw
 
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
 OUT = os.path.join(ROOT, 'assets', 'objekte', 'karte01')
+OUT_K2 = os.path.join(ROOT, 'assets', 'objekte', 'karte02')
 API = 'https://api.pixellab.ai'
 
 STIL = ("Top-down RPG map object in polished handheld monster-collecting RPG pixel art: colored dark outline "
@@ -114,6 +115,110 @@ OBJEKTGRUPPEN = {
 }
 
 
+# ---------------------------------------------------------------- Karte 02 (Factorial Town)
+STIL_K2 = ("Top-down RPG map object for an industrial factory town in polished handheld monster-collecting RPG "
+           "pixel art: colored dark outline (darkest shade of the object's own hue, never pure black), light from "
+           "the upper left, hue-shifted shading (shadows toward blue, highlights slightly warm), clean readable "
+           "shapes, bright and clean, no noise, no dithering, transparent background, no ground, no cast shadow.")
+PALETTE_K2 = [
+    # Stahl / Beton
+    '#1c2128', '#2a313a', '#3e4850', '#56626b', '#717e87', '#8e9ba3', '#aab6bd', '#c8d1d6', '#e8ecee',
+    # Container rot / blau / orange / gruen
+    '#5e2a26', '#8c3a30', '#b5503e', '#d47258', '#24395c', '#335888', '#4a78ad', '#7aa2cc',
+    '#7a4a1e', '#b06e2a', '#d99440', '#f0bc6c', '#2a4a30', '#3e6a44', '#5a8c5c', '#86b080',
+    # Gelb (Maschinen, Warnfarbe)
+    '#6e5410', '#a8801c', '#d6a828', '#f2d050', '#fff0a0',
+    # Reaktor / Leuchten
+    '#141c3a', '#22306a', '#34489c', '#4c66c8', '#2f8f5a', '#4fd07a', '#9af5b0', '#2fc7d8', '#7ff0f5',
+    # Feuer / Glut / Ziegel / Holz
+    '#c83a1e', '#e8702a', '#f5b042', '#fff2a0', '#5e2f26', '#8f4737', '#b8664b', '#5a4030', '#94704e',
+]
+OBJEKTGRUPPEN_K2 = {
+    'k2_klein': {'size': 32, 'items': [
+        'blue steel oil barrel', 'grey steel barrel with hazard stripe', 'rusty brown barrel', 'two stacked grey steel barrels',
+        'wooden pallet with two small crates', 'small wooden crate', 'orange traffic cone', 'two orange traffic cones',
+        'yellow triangle warning sign on a short post', 'yellow industrial robot arm, standing, side view from above',
+        'yellow robot arm with gripper, raised', 'small yellow forklift seen from above', 'wooden cable reel with dark cable',
+        'grey gas cylinder', 'green electrical box on a pole', 'short street light post with warm lamp',
+        'small grey trash bin', 'red fire hydrant', 'metal toolbox', 'stack of steel pipes', 'pile of bolts and nuts',
+        'small scrap metal pieces', 'park bench, wooden seat on metal legs', 'small metal vent box',
+        'stack of four grey metal canisters', 'small concrete barrier block', 'yellow and black hazard barrier',
+        'metal sewer manhole cover', 'small control terminal with screen', 'wall mounted fan unit',
+    ]},
+    'k2_mittel': {'size': 64, 'items': [
+        'compact industrial power generator with a glowing cyan core in a glass cylinder, steel housing',
+        'industrial power generator with cyan glowing capsule, pipes and bolts',
+        'small iron furnace with glowing orange fire inside the grated front, dark steel',
+        'small blacksmith furnace with burning coals visible, steel hood',
+        'big steel gear cog lying on the ground', 'pile of rusty scrap metal, pipes and plates',
+        'pile of broken machine parts and scrap', 'broken rusty red robot lying on the ground',
+        'broken orange spherical robot, damaged', 'yellow hydraulic press gantry frame over a conveyor belt',
+        'yellow industrial gantry with clamp, seen from above', 'large wooden cable reel with thick cable',
+        'industrial control panel console with screens', 'stack of metal crates',
+        'yellow forklift carrying a pallet', 'steel water tank on legs',
+    ]},
+    'k2_gross': {'size': 84, 'items': [
+        'red shipping container, horizontal, corrugated sides, seen from above at an angle',
+        'blue shipping container, horizontal, corrugated sides',
+        'orange shipping container, horizontal, corrugated sides',
+        'green shipping container, horizontal, corrugated sides',
+        'red shipping container with white label, horizontal', 'blue shipping container with doors on the side',
+        'orange shipping container, weathered', 'green shipping container, weathered',
+        'red flatbed truck carrying wooden crates, side view from above, facing right',
+        'red cargo truck with two crates on the flatbed',
+        'yellow industrial scrap crusher press machine with scrap inside',
+        'two stacked horizontal grey pressure gas tanks on a steel frame',
+        'two stacked horizontal steel tanks with pipes and valves',
+        'market stall with an orange and white striped awning', 'heavy hydraulic press machine, yellow frame',
+        'large steel generator housing with vents',
+    ]},
+    'k2_mini': {'size': 18, 'items': [
+        'blue steel oil barrel', 'grey steel barrel', 'rusty brown barrel', 'grey barrel with yellow hazard band',
+        'orange traffic cone', 'grey gas cylinder', 'small grey trash bin', 'red fire hydrant', 'red metal toolbox',
+        'small wooden crate', 'grey metal jerry can', 'pile of bolts', 'small scrap metal pieces', 'red fire extinguisher',
+        'small cardboard box', 'blue plastic barrel', 'metal bucket', 'small concrete block', 'yellow hard hat',
+        'coiled cable', 'small pipe valve', 'pressure gauge on a short pipe', 'oil can', 'small green crate',
+    ]},
+    'k2_ortho': {'size': 84, 'items': [
+        'red flatbed truck carrying two wooden crates, flat orthographic side view facing right, not isometric',
+        'red cargo truck with wooden crates on the flatbed, flat side view facing right, orthographic, axis aligned',
+        'red flatbed truck, orthographic side view facing right, top slightly visible',
+        'two horizontal grey pressure tanks stacked on a steel frame with pipes and a valve, flat front view, orthographic, not isometric',
+        'two stacked horizontal steel gas tanks with brass valves, straight front view, orthographic',
+        'two horizontal grey tanks on a rack, front view, orthographic, axis aligned',
+        'yellow industrial scrap crusher press with scrap metal inside, straight front view, orthographic, not isometric',
+        'yellow hydraulic scrap compactor machine, front view, orthographic',
+        'grey diesel generator housing with vents, straight front view, orthographic, not isometric',
+        'market stall with an orange and white striped awning and a wooden counter, straight front view, orthographic',
+        'yellow forklift, flat side view facing right, orthographic',
+        'industrial control console with screens, straight front view, orthographic',
+        'stack of wooden and metal crates, straight front view, orthographic',
+        'steel water tank on four legs, front view, orthographic',
+        'red flatbed truck with a covered load, side view facing left, orthographic',
+        'two stacked horizontal pressure tanks, rusty, front view, orthographic',
+    ]},
+    'k2_hoch': {'size': 100, 'items': [
+        'tall white vertical gas silo on four steel legs with a gear logo, seen from above at an angle',
+        'tall cylindrical industrial brick chimney stack with a metal ring top',
+        'tall dark signal pillar obelisk with a red light on top and a glowing blue core',
+        'tall white storage silo with ladder and legs',
+    ]},
+    'k2_turm': {'size': 140, 'items': [
+        'tall blast furnace tower with brick body, steel frame, glowing fire at the bottom and a chimney top',
+        'industrial smelting tower with orange glowing furnace opening, pipes and a tall metal chimney',
+        'tall dark metal tesla coil pylon with stacked rings and a cyan light on top',
+        'tall reactor cooling pylon of stacked dark discs with a glowing cap',
+    ]},
+    'k2_kran': {'size': 192, 'items': [
+        'large yellow gantry crane on rail wheels, two legs and a top beam with a trolley, holding a red container, seen from above at an angle',
+    ]},
+    'k2_reaktor': {'size': 256, 'items': [
+        'huge futuristic nuclear reactor: large dark blue cylindrical dome with glowing green rings and a big round green glowing core window, '
+        'antenna on top, standing on a wide dark metal base with control screens and a central secure door with hazard stripes, seen from above at an angle',
+    ]},
+}
+
+
 def call(method, path, body=None, raw=False):
     req = urllib.request.Request(API + path, method=method,
                                  data=json.dumps(body).encode() if body is not None else None,
@@ -146,6 +251,8 @@ def bilder_aus_zip(data):
 
 
 def herunterladen(oid, d):
+    if d.get('status') == 'completed':          # nur ein Kandidat: direkt als Spritesheet exportieren
+        return [bilder_aus_zip(call('GET', f'/v2/objects/{oid}/spritesheet', raw=True))[0]], [oid]
     # 1) direkter ZIP-Download (funktioniert auch fuer Objekte im Review-Status?)
     try:
         ims = bilder_aus_zip(call('GET', f'/mcp/objects/{oid}/download', raw=True))
@@ -164,7 +271,7 @@ def herunterladen(oid, d):
 
 
 def speichern(gruppe, ims, ids):
-    ziel = os.path.join(OUT, gruppe)
+    ziel = os.path.join(OUT_K2, gruppe[3:]) if gruppe.startswith('k2_') else os.path.join(OUT, gruppe)
     os.makedirs(ziel, exist_ok=True)
     for i, im in enumerate(ims):
         bb = im.getbbox()
@@ -185,10 +292,12 @@ def speichern(gruppe, ims, ids):
 
 
 def erzeugen(gruppe):
-    g = OBJEKTGRUPPEN[gruppe]
-    req = {'description': STIL, 'size': g['size'], 'view': 'top-down',
-           'item_descriptions': [it + '. ' + STIL for it in g['items']],
-           'target_palette': {'colors': PALETTE, 'name': 'Karte01 handheld'}}
+    k2 = gruppe.startswith('k2_')
+    g = (OBJEKTGRUPPEN_K2 if k2 else OBJEKTGRUPPEN)[gruppe]
+    stil, palette = (STIL_K2, PALETTE_K2) if k2 else (STIL, PALETTE)
+    req = {'description': stil, 'size': g['size'], 'view': 'top-down',
+           'item_descriptions': [it + '. ' + stil for it in g['items']],
+           'target_palette': {'colors': palette, 'name': 'Karte02 Industrie' if k2 else 'Karte01 handheld'}}
     d = call('POST', '/v2/create-1-direction-object', req)
     oid = d['object_id']
     print(gruppe, 'Objekt', oid)
