@@ -4,8 +4,8 @@
 
 Eingaben:  maps/karte01/terrain_grid.json   (Gelaendetyp je 16x16-Kachel)
            maps/karte01/hoehenplan.json     (Klippenverlauf, Treppen)
-           assets/tilesets/pixellab/weg_gras.json      (Weg <-> Gras, 16 Tiles)
-           assets/tilesets/pixellab/klippe_stein.json  (Gras <-> Gras mit Steinwand, 25 Tiles)
+           assets/tilesets/pixellab/gras_weg.json        (Weg <-> Gras, 16 Tiles)
+           assets/tilesets/pixellab/klippe_schiefer.json (Gras <-> Gras mit Schieferwand, 25 Tiles)
 Ausgaben:  maps/karte01/terrain_basis.png    (Gras, Wege, Klippen ohne Treppen)
            maps/karte01/terrain.png          (dazu Treppen aus assets/objekte/karte01)
            maps/karte01/terrain_vorschau.png (dazu Platzhalter fuer Wasser/Strand/Wald)
@@ -71,8 +71,8 @@ def main():
     g = json.load(open(os.path.join(KARTE, 'terrain_grid.json')))
     plan = json.load(open(os.path.join(KARTE, 'hoehenplan.json')))
     grid, cols, rows, T = g['grid'], g['cols'], g['rows'], g['tile_size']
-    weg_id, weg_tiles = lade_set('weg_gras')
-    kl_id, kl_tiles = lade_set('klippe_stein')
+    weg_id, weg_tiles = lade_set('gras_weg')
+    kl_id, kl_tiles = lade_set('klippe_schiefer')
 
     # Kleine isolierte Wegstuecke (Baumstaemme im Original) entfernen
     grid = [list(r) for r in grid]
@@ -127,7 +127,7 @@ def main():
 
     img = Image.new('RGBA', (cols * T, rows * T))
     karte = {'tile_size': T, 'cols': cols, 'rows': rows,
-             'tilesets': {'weg_gras': weg_id, 'klippe_stein': kl_id}, 'zellen': []}
+             'tilesets': {'gras_weg': weg_id, 'klippe_schiefer': kl_id}, 'zellen': []}
     warn = 0
     for y in range(rows):
         zeile = []
@@ -136,10 +136,10 @@ def main():
             core = {ph[r][c] for r in (1, 2) for c in (1, 2)}
             if (len(core) == 1 and TRANS not in core) or (x, y) in treppen_zellen:
                 t, e = waehle(weg_tiles, muster(vweg, x, y))
-                zeile.append(['weg_gras', t['name']])
+                zeile.append(['gras_weg', t['name']])
             else:
                 t, e = waehle(kl_tiles, ph)
-                zeile.append(['klippe_stein', t['name']])
+                zeile.append(['klippe_schiefer', t['name']])
             if e:
                 warn += 1
                 print("  ungenau:", x, y, t["name"])
