@@ -20,3 +20,17 @@ sperren ihre Kachel, alles darüber liegt auf Ebene 3.
 Alle Objekte stehen am 16×16-Raster (`tools/karte01_raster.py`): Fußmitte auf der Kachelmitte, unterste
 Pixelzeile 2 px über der Kachelunterkante, höchstens ein hohes und ein flaches Objekt je Kachel. Die
 Kachel jedes Objekts steht in `assets/objekte/karte01/platzierung.json` als `kachel: [x, y]`.
+
+## Kollision im Browser bearbeiten
+
+`spiel/karte01.html` öffnen, mit `E` den Editor einschalten und Kacheln anklicken oder überziehen
+(`1` frei, `2` gesperrt, `3` verdeckt, `Strg+Z` rückgängig). „Änderungen kopieren“ liefert Zeilen
+der Form `x,y=wert`. Übernehmen:
+
+```bash
+python3 tools/kollision_korrigieren.py aenderungen.txt
+```
+
+Die Korrekturen stehen dauerhaft in `kollision_korrekturen.json` und werden auch von
+`tools/karte01_ebenen.py` nach der Berechnung angewendet. Das Skript schreibt `kollision.json/.txt`,
+`ebene2_kollision.png`, `vorschau.png` und `spiel/karte01_kollision.js` neu.

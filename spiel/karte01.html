@@ -2,21 +2,70 @@
 <html lang="de">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Karte 01 – Laufen</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Karte 01</title>
 <style>
-  html, body { margin: 0; height: 100%; background: #111; overflow: hidden; }
-  canvas { display: block; width: 100vw; height: 100vh; image-rendering: pixelated; image-rendering: crisp-edges; }
+  :root {
+    --bg: #111; --fg: #eee; --dim: #aab; --panel: rgba(16,18,24,.88); --rand: #3a3f4c;
+    --sperr: #e63a3a; --frei: #3ec46d; --deckt: #3a7bff; --akzent: #ffd23f;
+    color-scheme: dark;
+  }
+  html, body { margin: 0; height: 100%; background: var(--bg); color: var(--fg); overflow: hidden;
+    font: 13px/1.4 ui-monospace, Menlo, Consolas, monospace; }
+  canvas { display: block; width: 100%; height: 100%; image-rendering: pixelated; image-rendering: crisp-edges;
+    touch-action: none; outline: none; }
+  canvas.editor { cursor: crosshair; }
   #info {
-    position: fixed; left: 8px; top: 8px; padding: 4px 8px;
-    font: 12px/1.4 monospace; color: #eee; background: rgba(0,0,0,.55); border-radius: 4px;
-    pointer-events: none; white-space: pre;
+    position: fixed; left: calc(8px + env(safe-area-inset-left, 0px)); top: calc(8px + env(safe-area-inset-top, 0px));
+    padding: 4px 8px; background: var(--panel); border-radius: 4px; pointer-events: none; white-space: pre;
+  }
+  #editor {
+    position: fixed; right: calc(8px + env(safe-area-inset-right, 0px)); bottom: calc(8px + env(safe-area-inset-bottom, 0px));
+    width: min(300px, calc(100vw - 16px - env(safe-area-inset-left, 0px) - env(safe-area-inset-right, 0px)));
+    box-sizing: border-box; padding: 10px; display: flex; flex-direction: column; gap: 8px;
+    background: var(--panel); border: 1px solid var(--rand); border-radius: 6px;
+  }
+  #editor h2 { margin: 0; font-size: 13px; letter-spacing: .06em; text-transform: uppercase; color: var(--akzent); }
+  .reihe { display: flex; gap: 6px; flex-wrap: wrap; }
+  button {
+    font: inherit; color: var(--fg); background: #232733; border: 1px solid var(--rand); border-radius: 4px;
+    padding: 5px 8px; cursor: pointer;
+  }
+  button:hover { background: #2d3240; }
+  button:focus-visible { outline: 2px solid var(--akzent); outline-offset: 1px; }
+  button.pinsel { display: flex; align-items: center; gap: 6px; flex: 1 1 0; justify-content: center; min-width: 0; }
+  button.pinsel[aria-pressed="true"] { border-color: var(--akzent); background: #353a2a; }
+  .farbe { width: 10px; height: 10px; border-radius: 2px; flex: none; }
+  #ausgabe {
+    width: 100%; box-sizing: border-box; height: 72px; resize: vertical; font: 11px/1.3 inherit;
+    font-family: inherit; color: var(--fg); background: #0b0c10; border: 1px solid var(--rand); border-radius: 4px; padding: 4px;
+  }
+  #status { color: var(--dim); min-height: 1.4em; }
+  #editorKnopf {
+    position: fixed; right: calc(8px + env(safe-area-inset-right, 0px)); top: calc(8px + env(safe-area-inset-top, 0px));
   }
 </style>
 </head>
 <body>
 <canvas id="spiel"></canvas>
 <div id="info">Lade Karte …</div>
+<button id="editorKnopf" type="button">Editor (E)</button>
+
+<div id="editor" hidden>
+  <h2>Kollision bearbeiten</h2>
+  <div class="reihe" role="group" aria-label="Pinsel">
+    <button type="button" class="pinsel" data-wert="1" id="pinsel1"><span class="farbe" style="background:var(--frei)"></span>Frei <small>1</small></button>
+    <button type="button" class="pinsel" data-wert="2" id="pinsel2"><span class="farbe" style="background:var(--sperr)"></span>Gesperrt <small>2</small></button>
+    <button type="button" class="pinsel" data-wert="3" id="pinsel3"><span class="farbe" style="background:var(--deckt)"></span>Verdeckt <small>3</small></button>
+  </div>
+  <div id="status"></div>
+  <textarea id="ausgabe" readonly spellcheck="false" aria-label="Änderungen als Text"></textarea>
+  <div class="reihe">
+    <button type="button" id="kopieren">Änderungen kopieren</button>
+    <button type="button" id="rueckgaengig">Rückgängig</button>
+    <button type="button" id="verwerfen">Alle verwerfen</button>
+  </div>
+</div>
 
 <script src="karte01_kollision.js"></script>
 <script>
@@ -28,52 +77,188 @@
   const TILE = K.tile_size;               // 16
   const COLS = K.cols, ROWS = K.rows;     // 110 x 120
   const MAP_W = COLS * TILE, MAP_H = ROWS * TILE;
+  const SPEICHER = 'karte01_kollision_aenderungen';
 
   const SPIELER_GROESSE = 16;             // 16x16 grauer Pixel
-  const TEMPO = 80;                       // Pixel pro Sekunde (Kartenpixel)
+  const TEMPO = 80;                       // Kartenpixel pro Sekunde
   const START = { x: 54 * TILE, y: 53 * TILE };
 
-  const canvas = document.getElementById('spiel');
+  const $ = id => document.getElementById(id);
+  const canvas = $('spiel');
   const ctx = canvas.getContext('2d');
-  const info = document.getElementById('info');
+  const info = $('info');
 
-  // ---- Kollision -------------------------------------------------------
+  // ---- Raster: Original + Aenderungen ----------------------------------
+  const basis = K.raster.map(z => z.split(''));
+  const raster = basis.map(z => z.slice());
+  const aenderungen = new Map();          // "x,y" -> '1' | '2' | '3'
+
   function kachel(tx, ty) {
     if (tx < 0 || ty < 0 || tx >= COLS || ty >= ROWS) return '2';
-    return K.raster[ty][tx];
+    return raster[ty][tx];
   }
-  function gesperrt(tx, ty) { return kachel(tx, ty) === '2'; }
+  function setzeKachel(tx, ty, w) {
+    raster[ty][tx] = w;
+    const key = tx + ',' + ty;
+    if (basis[ty][tx] === w) aenderungen.delete(key); else aenderungen.set(key, w);
+  }
 
-  // Prueft, ob ein Rechteck (Kartenpixel) eine gesperrte Kachel beruehrt.
+  try {
+    const gespeichert = JSON.parse(localStorage.getItem(SPEICHER) || '[]');
+    for (const [x, y, w] of gespeichert)
+      if (x >= 0 && y >= 0 && x < COLS && y < ROWS && '123'.includes(w)) setzeKachel(x, y, String(w));
+  } catch (e) { /* kein Speicher verfuegbar */ }
+
+  function speichern() {
+    try {
+      const liste = [...aenderungen].map(([k, w]) => { const [x, y] = k.split(',').map(Number); return [x, y, w]; });
+      localStorage.setItem(SPEICHER, JSON.stringify(liste));
+    } catch (e) { /* egal */ }
+  }
+
+  // ---- Kollision -------------------------------------------------------
   function kollidiert(x, y, w, h) {
     const x0 = Math.floor(x / TILE), x1 = Math.floor((x + w - 1) / TILE);
     const y0 = Math.floor(y / TILE), y1 = Math.floor((y + h - 1) / TILE);
     for (let ty = y0; ty <= y1; ty++)
       for (let tx = x0; tx <= x1; tx++)
-        if (gesperrt(tx, ty)) return true;
+        if (kachel(tx, ty) === '2') return true;
     return false;
   }
 
   // ---- Spieler ---------------------------------------------------------
-  const spieler = { x: START.x, y: START.y, rx: 0, ry: 0 }; // rx/ry: Sub-Pixel-Rest
+  const spieler = { x: START.x, y: START.y, rx: 0, ry: 0 };
 
-  // Bewegt pixelweise je Achse, damit man an Waenden entlanggleitet.
   function bewege(dx, dy) {
     spieler.rx += dx; spieler.ry += dy;
     let sx = Math.trunc(spieler.rx), sy = Math.trunc(spieler.ry);
     spieler.rx -= sx; spieler.ry -= sy;
     const s = SPIELER_GROESSE;
+    // Steht man schon in einer gesperrten Kachel (z. B. gerade hineingemalt), darf man frei heraus.
+    const frei = kollidiert(spieler.x, spieler.y, s, s);
     while (sx !== 0) {
       const st = Math.sign(sx);
-      if (kollidiert(spieler.x + st, spieler.y, s, s)) { spieler.rx = 0; break; }
-      spieler.x += st; sx -= st;
+      if (!frei && kollidiert(spieler.x + st, spieler.y, s, s)) { spieler.rx = 0; break; }
+      spieler.x = Math.max(0, Math.min(MAP_W - s, spieler.x + st)); sx -= st;
     }
     while (sy !== 0) {
       const st = Math.sign(sy);
-      if (kollidiert(spieler.x, spieler.y + st, s, s)) { spieler.ry = 0; break; }
-      spieler.y += st; sy -= st;
+      if (!frei && kollidiert(spieler.x, spieler.y + st, s, s)) { spieler.ry = 0; break; }
+      spieler.y = Math.max(0, Math.min(MAP_H - s, spieler.y + st)); sy -= st;
     }
   }
+
+  // ---- Darstellung / Kamera --------------------------------------------
+  let zoom = 3;
+  let kamera = { camX: 0, camY: 0, skala: 1 };
+  function groesse() {
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = Math.round(innerWidth * dpr);
+    canvas.height = Math.round(innerHeight * dpr);
+  }
+  addEventListener('resize', groesse);
+  groesse();
+
+  function bildschirmZuKachel(cx, cy) {
+    const r = canvas.getBoundingClientRect();
+    const dpr = window.devicePixelRatio || 1;
+    const mx = ((cx - r.left) * dpr) / kamera.skala + kamera.camX;
+    const my = ((cy - r.top) * dpr) / kamera.skala + kamera.camY;
+    return { tx: Math.floor(mx / TILE), ty: Math.floor(my / TILE), mx, my };
+  }
+
+  // ---- Editor ----------------------------------------------------------
+  let editor = false;
+  let zeigeKollision = false;
+  let pinsel = '2';
+  let maus = null;                        // Kachel unter dem Mauszeiger
+  const verlauf = [];                     // Striche fuer Rueckgaengig
+  let strich = null;
+
+  function setzePinsel(w) {
+    pinsel = w;
+    for (const b of document.querySelectorAll('.pinsel')) b.setAttribute('aria-pressed', String(b.dataset.wert === w));
+  }
+  setzePinsel('2');
+
+  function textAusgabe() {
+    const liste = [...aenderungen].map(([k, w]) => { const [x, y] = k.split(',').map(Number); return [x, y, w]; })
+      .sort((a, b) => a[1] - b[1] || a[0] - b[0]);
+    return ['karte01 kollision (x,y=wert  1 frei, 2 gesperrt, 3 verdeckt)']
+      .concat(liste.map(([x, y, w]) => x + ',' + y + '=' + w)).join('\n');
+  }
+  function editorAktualisieren(meldung) {
+    $('ausgabe').value = aenderungen.size ? textAusgabe() : '';
+    $('status').textContent = meldung || (aenderungen.size
+      ? aenderungen.size + (aenderungen.size === 1 ? ' Kachel geändert' : ' Kacheln geändert')
+      : 'Noch nichts geändert. Auf Kacheln klicken oder ziehen.');
+  }
+
+  function editorUmschalten(an) {
+    editor = an;
+    $('editor').hidden = !an;
+    canvas.classList.toggle('editor', an);
+    $('editorKnopf').textContent = an ? 'Editor schließen (E)' : 'Editor (E)';
+    if (an) editorAktualisieren();
+    canvas.focus();
+  }
+
+  function male(tx, ty) {
+    if (tx < 0 || ty < 0 || tx >= COLS || ty >= ROWS) return;
+    const vorher = raster[ty][tx];
+    if (vorher === pinsel) return;
+    const key = tx + ',' + ty;
+    if (strich && !strich.has(key)) strich.set(key, vorher);
+    setzeKachel(tx, ty, pinsel);
+  }
+  // Linie zwischen zwei Kacheln, damit schnelles Ziehen keine Luecken laesst
+  function maleLinie(a, b) {
+    const n = Math.max(Math.abs(b.tx - a.tx), Math.abs(b.ty - a.ty), 1);
+    for (let i = 0; i <= n; i++)
+      male(Math.round(a.tx + (b.tx - a.tx) * i / n), Math.round(a.ty + (b.ty - a.ty) * i / n));
+  }
+  function strichEnde() {
+    if (strich && strich.size) { verlauf.push(strich); speichern(); }
+    strich = null;
+    editorAktualisieren();
+  }
+  function rueckgaengig() {
+    const s = verlauf.pop();
+    if (!s) { editorAktualisieren('Nichts zum Rückgängigmachen.'); return; }
+    for (const [key, w] of s) { const [x, y] = key.split(',').map(Number); setzeKachel(x, y, w); }
+    speichern();
+    editorAktualisieren();
+  }
+
+  $('editorKnopf').addEventListener('click', () => editorUmschalten(!editor));
+  for (const b of document.querySelectorAll('.pinsel')) b.addEventListener('click', () => { setzePinsel(b.dataset.wert); canvas.focus(); });
+  $('rueckgaengig').addEventListener('click', rueckgaengig);
+  $('verwerfen').addEventListener('click', () => {
+    const b = $('verwerfen');
+    if (!aenderungen.size) return;
+    if (b.dataset.sicher !== 'ja') {
+      b.dataset.sicher = 'ja'; b.textContent = 'Wirklich verwerfen?';
+      setTimeout(() => { b.dataset.sicher = ''; b.textContent = 'Alle verwerfen'; }, 3000);
+      return;
+    }
+    b.dataset.sicher = ''; b.textContent = 'Alle verwerfen';
+    const s = new Map();
+    for (const [key] of aenderungen) { const [x, y] = key.split(',').map(Number); s.set(key, raster[y][x]); }
+    for (const [key] of s) { const [x, y] = key.split(',').map(Number); setzeKachel(x, y, basis[y][x]); }
+    verlauf.push(s);
+    speichern();
+    editorAktualisieren('Alle Änderungen verworfen. Rückgängig holt sie zurück.');
+  });
+  $('kopieren').addEventListener('click', () => {
+    if (!aenderungen.size) { editorAktualisieren('Es gibt noch keine Änderungen zum Kopieren.'); return; }
+    const text = textAusgabe();
+    const auswaehlen = () => { const t = $('ausgabe'); t.focus(); t.select(); };
+    try {
+      navigator.clipboard.writeText(text).then(
+        () => editorAktualisieren('Kopiert. Füge den Text im Chat ein.'),
+        () => { auswaehlen(); editorAktualisieren('Text ist markiert: mit Strg+C / Teilen kopieren.'); });
+    } catch (e) { auswaehlen(); editorAktualisieren('Text ist markiert: mit Strg+C / Teilen kopieren.'); }
+  });
 
   // ---- Eingabe ---------------------------------------------------------
   const tasten = new Set();
@@ -81,26 +266,49 @@
     ArrowLeft: 'l', KeyA: 'l', ArrowRight: 'r', KeyD: 'r',
     ArrowUp: 'o', KeyW: 'o', ArrowDown: 'u', KeyS: 'u',
   };
-  let zeigeKollision = false;
+  canvas.tabIndex = 0;
+  canvas.focus();
   addEventListener('keydown', e => {
+    if (e.target && e.target.tagName === 'TEXTAREA') return;
+    if ((e.ctrlKey || e.metaKey) && e.code === 'KeyZ') { if (editor) { rueckgaengig(); e.preventDefault(); } return; }
     if (KEYMAP[e.code]) { tasten.add(KEYMAP[e.code]); e.preventDefault(); }
+    if (e.code === 'KeyE') editorUmschalten(!editor);
     if (e.code === 'KeyK') zeigeKollision = !zeigeKollision;
-    if (e.code === 'Equal' || e.code === 'NumpadAdd') zoom = Math.min(8, zoom + 1);
-    if (e.code === 'Minus' || e.code === 'NumpadSubtract') zoom = Math.max(1, zoom - 1);
+    if (editor && e.code === 'Digit1') setzePinsel('1');
+    if (editor && e.code === 'Digit2') setzePinsel('2');
+    if (editor && e.code === 'Digit3') setzePinsel('3');
+    if (e.code === 'Equal' || e.code === 'NumpadAdd' || e.key === '+') zoom = Math.min(8, zoom + 1);
+    if (e.code === 'Minus' || e.code === 'NumpadSubtract' || e.key === '-') zoom = Math.max(1, zoom - 1);
   });
   addEventListener('keyup', e => { if (KEYMAP[e.code]) tasten.delete(KEYMAP[e.code]); });
-  addEventListener('blur', () => tasten.clear());
+  addEventListener('blur', () => { tasten.clear(); touchZiel = null; });
 
-  // Touch: Finger halten = in Richtung des Fingers laufen
+  // Zeiger: im Editor malen, sonst (Touch) in Fingerrichtung laufen
   let touchZiel = null;
-  function touchSetzen(e) {
-    const t = e.touches[0];
-    touchZiel = t ? { x: t.clientX, y: t.clientY } : null;
+  let letzteMalKachel = null;
+  canvas.addEventListener('pointerdown', e => {
+    canvas.focus();
+    if (editor) {
+      canvas.setPointerCapture(e.pointerId);
+      strich = new Map();
+      const k = bildschirmZuKachel(e.clientX, e.clientY);
+      male(k.tx, k.ty);
+      letzteMalKachel = k;
+    } else if (e.pointerType !== 'mouse') {
+      touchZiel = { x: e.clientX, y: e.clientY };
+    }
     e.preventDefault();
-  }
-  canvas.addEventListener('touchstart', touchSetzen, { passive: false });
-  canvas.addEventListener('touchmove', touchSetzen, { passive: false });
-  canvas.addEventListener('touchend', touchSetzen, { passive: false });
+  });
+  canvas.addEventListener('pointermove', e => {
+    const k = bildschirmZuKachel(e.clientX, e.clientY);
+    maus = k;
+    if (editor && strich) { maleLinie(letzteMalKachel, k); letzteMalKachel = k; }
+    else if (touchZiel) touchZiel = { x: e.clientX, y: e.clientY };
+  });
+  const loslassen = () => { if (strich) strichEnde(); touchZiel = null; };
+  canvas.addEventListener('pointerup', loslassen);
+  canvas.addEventListener('pointercancel', loslassen);
+  canvas.addEventListener('pointerleave', () => { maus = null; });
 
   // ---- Bilder ----------------------------------------------------------
   function lade(name) {
@@ -112,23 +320,13 @@
     });
   }
 
-  // ---- Darstellung -----------------------------------------------------
-  let zoom = 3;
-  let vw = 0, vh = 0; // sichtbarer Bereich in Kartenpixeln
-  function groesse() {
-    const dpr = window.devicePixelRatio || 1;
-    canvas.width = Math.round(innerWidth * dpr);
-    canvas.height = Math.round(innerHeight * dpr);
-  }
-  addEventListener('resize', groesse);
-  groesse();
+  const FARBE = { '2': 'rgba(230,58,58,.45)', '3': 'rgba(58,123,255,.40)' };
 
-  function zeichne(boden, oben, kollBild) {
+  function zeichne(boden, oben) {
     const dpr = window.devicePixelRatio || 1;
     const skala = zoom * dpr;
-    vw = canvas.width / skala; vh = canvas.height / skala;
+    const vw = canvas.width / skala, vh = canvas.height / skala;
 
-    // Kamera folgt dem Spieler, bleibt in der Karte
     const mx = spieler.x + SPIELER_GROESSE / 2, my = spieler.y + SPIELER_GROESSE / 2;
     let camX = mx - vw / 2, camY = my - vh / 2;
     camX = vw >= MAP_W ? (MAP_W - vw) / 2 : Math.max(0, Math.min(MAP_W - vw, camX));
@@ -143,9 +341,8 @@
     ctx.setTransform(skala, 0, 0, skala, -camX * skala, -camY * skala);
 
     ctx.drawImage(boden, 0, 0);
-    if (zeigeKollision) { ctx.globalAlpha = 0.45; ctx.drawImage(kollBild, 0, 0); ctx.globalAlpha = 1; }
 
-    // Spieler: 16x16 grau mit leichtem Rand
+    // Spieler
     ctx.fillStyle = '#8a8a8a';
     ctx.fillRect(spieler.x, spieler.y, SPIELER_GROESSE, SPIELER_GROESSE);
     ctx.fillStyle = '#5c5c5c';
@@ -154,14 +351,44 @@
 
     ctx.drawImage(oben, 0, 0);
 
+    // Kollisions-Ansicht (aus dem aktuellen Raster, zeigt also auch Aenderungen)
+    const x0 = Math.max(0, Math.floor(camX / TILE)), x1 = Math.min(COLS - 1, Math.floor((camX + vw) / TILE));
+    const y0 = Math.max(0, Math.floor(camY / TILE)), y1 = Math.min(ROWS - 1, Math.floor((camY + vh) / TILE));
+    if (zeigeKollision || editor) {
+      for (let ty = y0; ty <= y1; ty++)
+        for (let tx = x0; tx <= x1; tx++) {
+          const f = FARBE[raster[ty][tx]];
+          if (f) { ctx.fillStyle = f; ctx.fillRect(tx * TILE, ty * TILE, TILE, TILE); }
+        }
+    }
+    if (editor) {
+      const l = 1 / skala;
+      ctx.fillStyle = 'rgba(0,0,0,.18)';
+      for (let tx = x0; tx <= x1 + 1; tx++) ctx.fillRect(tx * TILE, y0 * TILE, l, (y1 - y0 + 1) * TILE);
+      for (let ty = y0; ty <= y1 + 1; ty++) ctx.fillRect(x0 * TILE, ty * TILE, (x1 - x0 + 1) * TILE, l);
+      // geaenderte Kacheln gelb umranden
+      ctx.strokeStyle = '#ffd23f';
+      ctx.lineWidth = 2 / skala;
+      for (const key of aenderungen.keys()) {
+        const [tx, ty] = key.split(',').map(Number);
+        if (tx >= x0 && tx <= x1 && ty >= y0 && ty <= y1)
+          ctx.strokeRect(tx * TILE + l, ty * TILE + l, TILE - 2 * l, TILE - 2 * l);
+      }
+      if (maus && maus.tx >= 0 && maus.ty >= 0 && maus.tx < COLS && maus.ty < ROWS) {
+        ctx.strokeStyle = '#fff';
+        ctx.lineWidth = 1 / skala * 2;
+        ctx.strokeRect(maus.tx * TILE, maus.ty * TILE, TILE, TILE);
+      }
+    }
     return { camX, camY, skala };
   }
 
+  const NAME = { '1': 'frei', '2': 'gesperrt', '3': 'verdeckt' };
+
   // ---- Spielschleife ---------------------------------------------------
-  Promise.all([lade('ebene1_boden.png'), lade('ebene3_ueberlagerung.png'), lade('ebene2_kollision.png')])
-    .then(([boden, oben, kollBild]) => {
+  Promise.all([lade('ebene1_boden.png'), lade('ebene3_ueberlagerung.png')])
+    .then(([boden, oben]) => {
       let letzte = performance.now();
-      let kamera = { camX: 0, camY: 0, skala: 1 };
 
       function schritt(jetzt) {
         const dt = Math.min(0.05, (jetzt - letzte) / 1000);
@@ -173,29 +400,32 @@
         if (tasten.has('o')) dy -= 1;
         if (tasten.has('u')) dy += 1;
         if (touchZiel) {
-          const dpr = window.devicePixelRatio || 1;
-          const zx = (touchZiel.x * dpr) / kamera.skala + kamera.camX;
-          const zy = (touchZiel.y * dpr) / kamera.skala + kamera.camY;
-          const ex = zx - (spieler.x + SPIELER_GROESSE / 2), ey = zy - (spieler.y + SPIELER_GROESSE / 2);
+          const z = bildschirmZuKachel(touchZiel.x, touchZiel.y);
+          const ex = z.mx - (spieler.x + SPIELER_GROESSE / 2), ey = z.my - (spieler.y + SPIELER_GROESSE / 2);
           if (Math.abs(ex) > 4) dx = Math.sign(ex);
           if (Math.abs(ey) > 4) dy = Math.sign(ey);
         }
         if (dx && dy) { dx *= Math.SQRT1_2; dy *= Math.SQRT1_2; }
         bewege(dx * TEMPO * dt, dy * TEMPO * dt);
 
-        kamera = zeichne(boden, oben, kollBild);
+        kamera = zeichne(boden, oben);
 
         const tx = Math.floor((spieler.x + 8) / TILE), ty = Math.floor((spieler.y + 8) / TILE);
-        info.textContent =
-          'Pfeiltasten/WASD laufen · K Kollision · +/- Zoom (' + zoom + 'x)\n' +
-          'Kachel ' + tx + ', ' + ty + '  Pixel ' + spieler.x + ', ' + spieler.y;
+        let text = 'Pfeiltasten/WASD laufen · K Kollision · E Editor · +/- Zoom (' + zoom + 'x)\n' +
+          'Spieler auf Kachel ' + tx + ', ' + ty;
+        if (editor) {
+          text += '\nEditor: klicken/ziehen malt · 1 frei · 2 gesperrt · 3 verdeckt · Strg+Z';
+          if (maus && maus.tx >= 0 && maus.ty >= 0 && maus.tx < COLS && maus.ty < ROWS)
+            text += '\nZeiger auf Kachel ' + maus.tx + ', ' + maus.ty + ' (' + NAME[raster[maus.ty][maus.tx]] + ')';
+        }
+        info.textContent = text;
 
         requestAnimationFrame(schritt);
       }
       requestAnimationFrame(schritt);
     })
     .catch(err => {
-      info.textContent = err.message + '\nTipp: Seite aus dem Repo-Ordner öffnen (z. B. python3 -m http.server).';
+      info.textContent = err.message + '\nTipp: Seite aus dem Repo-Ordner öffnen.';
     });
 })();
 </script>

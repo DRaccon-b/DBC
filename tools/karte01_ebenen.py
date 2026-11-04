@@ -33,6 +33,69 @@ FLACH = {'deko/05', 'deko/06', 'deko/07', 'deko/08', 'deko/10', 'deko/14', 'deko
          'deko/33', 'deko/61'}
 
 
+KORREKTUREN = os.path.join(OUT, 'kollision_korrekturen.json')
+SPIEL_JS = os.path.join(ROOT, 'spiel', 'karte01_kollision.js')
+
+
+def korrekturen_laden():
+    """Handkorrekturen aus dem Editor (spiel/karte01.html): {"x,y": wert}."""
+    if not os.path.exists(KORREKTUREN):
+        return {}
+    return json.load(open(KORREKTUREN)).get('kacheln', {})
+
+
+def korrekturen_anwenden(klasse):
+    rows, cols = klasse.shape
+    for key, w in korrekturen_laden().items():
+        x, y = map(int, key.split(','))
+        if 0 <= x < cols and 0 <= y < rows:
+            klasse[y, x] = int(w)
+
+
+def kollision_schreiben(klasse):
+    """kollision.json/.txt, ebene2_kollision.png, vorschau.png und spiel/karte01_kollision.js schreiben."""
+    rows, cols = klasse.shape
+    W, H = cols * T, rows * T
+    zeilen = [''.join(str(v) for v in r) for r in klasse]
+    json.dump({'tile_size': T, 'cols': cols, 'rows': rows,
+               'legende': {'1': 'begehbar', '2': 'nicht begehbar', '3': 'begehbar, verdeckt den Spieler'},
+               'zeichenreihenfolge': ['ebene1_boden.png', 'Spieler', 'ebene3_ueberlagerung.png'],
+               'raster': zeilen}, open(os.path.join(OUT, 'kollision.json'), 'w'), indent=0)
+    open(os.path.join(OUT, 'kollision.txt'), 'w').write('\n'.join(zeilen) + '\n')
+
+    # Ebene 2 als Bild: halbtransparente Maske der nicht begehbaren Kacheln (fuer Editor/Engine-Import)
+    maske = Image.new('RGBA', (W, H), (0, 0, 0, 0))
+    md = ImageDraw.Draw(maske)
+    for y in range(rows):
+        for x in range(cols):
+            if klasse[y, x] == 2:
+                md.rectangle((x * T, y * T, x * T + T - 1, y * T + T - 1), fill=(255, 0, 0, 255))
+    maske.save(os.path.join(OUT, 'ebene2_kollision.png'))
+
+    # ---------------------------------------------------------------- Vorschau
+    karte = Image.open(os.path.join(KARTE, 'terrain.png')).convert('RGBA')
+    farbe = Image.new('RGBA', karte.size, (0, 0, 0, 0))
+    fd = ImageDraw.Draw(farbe)
+    for y in range(rows):
+        for x in range(cols):
+            k = klasse[y, x]
+            if k == 2:
+                fd.rectangle((x * T, y * T, x * T + T - 1, y * T + T - 1), fill=(230, 40, 40, 110))
+            elif k == 3:
+                fd.rectangle((x * T, y * T, x * T + T - 1, y * T + T - 1), fill=(40, 110, 255, 120))
+    karte.alpha_composite(farbe)
+    gd = ImageDraw.Draw(karte)
+    for x in range(0, W, T):
+        gd.line((x, 0, x, H), fill=(0, 0, 0, 40))
+    for y in range(0, H, T):
+        gd.line((0, y, W, y), fill=(0, 0, 0, 40))
+    karte.save(os.path.join(OUT, 'vorschau.png'))
+
+    spiel = {'tile_size': T, 'cols': cols, 'rows': rows, 'raster': zeilen}
+    open(SPIEL_JS, 'w').write('// Erzeugt aus maps/karte01/ebenen/kollision.json (1 begehbar, 2 gesperrt, 3 begehbar + verdeckt)\n'
+                              'window.KARTE01_KOLLISION = ' + json.dumps(spiel, indent=0) + ';\n')
+
+
 def main():
     os.makedirs(OUT, exist_ok=True)
     g = json.load(open(os.path.join(KARTE, 'terrain_grid.json')))
@@ -128,40 +191,8 @@ def main():
             if klasse[y, x] == 1 and oa[y * T:(y + 1) * T, x * T:(x + 1) * T].sum() >= MIN_DECKT:
                 klasse[y, x] = 3
 
-    zeilen = [''.join(str(v) for v in r) for r in klasse]
-    json.dump({'tile_size': T, 'cols': cols, 'rows': rows,
-               'legende': {'1': 'begehbar', '2': 'nicht begehbar', '3': 'begehbar, verdeckt den Spieler'},
-               'zeichenreihenfolge': ['ebene1_boden.png', 'Spieler', 'ebene3_ueberlagerung.png'],
-               'raster': zeilen}, open(os.path.join(OUT, 'kollision.json'), 'w'), indent=0)
-    open(os.path.join(OUT, 'kollision.txt'), 'w').write('\n'.join(zeilen) + '\n')
-
-    # Ebene 2 als Bild: halbtransparente Maske der nicht begehbaren Kacheln (fuer Editor/Engine-Import)
-    maske = Image.new('RGBA', (W, H), (0, 0, 0, 0))
-    md = ImageDraw.Draw(maske)
-    for y in range(rows):
-        for x in range(cols):
-            if klasse[y, x] == 2:
-                md.rectangle((x * T, y * T, x * T + T - 1, y * T + T - 1), fill=(255, 0, 0, 255))
-    maske.save(os.path.join(OUT, 'ebene2_kollision.png'))
-
-    # ---------------------------------------------------------------- Vorschau
-    karte = Image.open(os.path.join(KARTE, 'terrain.png')).convert('RGBA')
-    farbe = Image.new('RGBA', karte.size, (0, 0, 0, 0))
-    fd = ImageDraw.Draw(farbe)
-    for y in range(rows):
-        for x in range(cols):
-            k = klasse[y, x]
-            if k == 2:
-                fd.rectangle((x * T, y * T, x * T + T - 1, y * T + T - 1), fill=(230, 40, 40, 110))
-            elif k == 3:
-                fd.rectangle((x * T, y * T, x * T + T - 1, y * T + T - 1), fill=(40, 110, 255, 120))
-    karte.alpha_composite(farbe)
-    gd = ImageDraw.Draw(karte)
-    for x in range(0, W, T):
-        gd.line((x, 0, x, H), fill=(0, 0, 0, 40))
-    for y in range(0, H, T):
-        gd.line((0, y, W, y), fill=(0, 0, 0, 40))
-    karte.save(os.path.join(OUT, 'vorschau.png'))
+    korrekturen_anwenden(klasse)
+    kollision_schreiben(klasse)
     n = {k: int((klasse == k).sum()) for k in (1, 2, 3)}
     print('Kacheln: begehbar %d, blockiert %d, verdeckt %d' % (n[1], n[2], n[3]))
 
