@@ -229,3 +229,55 @@ def zeichne_steg(img, x0, x1, y0, y1, frame=0, seed=9):
     for xx in range(bx, bx + 3):
         for yy in range(by, by + 4):
             _setz(px, W, H, xx, yy, HOLZ[1] if xx in (bx, bx + 2) or yy == by + 3 else HOLZ[5])
+
+
+# ---------------------------------------------------------------- Laterne (Objekt-Sprite)
+GLAS = [rgb('#c87a2a'), rgb('#f5c842'), rgb('#fff2a0'), rgb('#fffbe6')]
+
+
+def laterne_bild():
+    """Laterne 11x26 px: Sockelstein, Holzpfahl, Ausleger, Schiefergehaeuse mit leuchtendem Glas."""
+    from PIL import Image
+    im = Image.new('RGBA', (11, 26), (0, 0, 0, 0))
+    px = im.load()
+    def s(x, y, c):
+        px[x, y] = c
+    # Sockelstein
+    for x in range(2, 9):
+        for y in range(22, 26):
+            c = S[0] if x in (2, 8) or y == 25 else S[5] if y == 22 else S[3] if x < 5 else S[2]
+            s(x, y, c)
+    # Pfahl (3 px, Licht links)
+    for y in range(9, 22):
+        s(4, y, HOLZ[1]); s(5, y, HOLZ[5]); s(6, y, HOLZ[3]); s(7, y, HOLZ[1])
+        if y in (12, 17):
+            s(5, y, HOLZ[4])
+    s(4, 21, HOLZ[1]); s(6, 21, HOLZ[1])
+    for x in range(3, 8):                               # Bodenplatte unter dem Glas
+        s(x, 10, S[0] if x in (3, 7) else S[2])
+    # Dach (spitz, Schiefer)
+    for y, (a, b) in enumerate(((5, 5), (4, 6), (3, 7))):
+        for x in range(a, b + 1):
+            s(x, y, S[0] if x in (a, b) else S[5] if x <= 5 else S[3])
+    for x in range(1, 10):                              # Dach steht ueber
+        s(x, 3, S[0] if x in (1, 9) else S[4] if x < 6 else S[3])
+    # Gehaeuse mit Glas (Zeilen 4-9)
+    for y in range(4, 10):
+        for x in range(2, 9):
+            if x in (2, 8) or y in (4, 9):
+                c = S[0]
+            elif x == 5:
+                c = S[1]                                # Mittelsteg
+            else:
+                c = GLAS[2] if y in (6, 7) and x in (4, 6) else GLAS[1]
+                if y == 5 and x == 3:
+                    c = GLAS[3]                         # Glanz oben links
+                if y == 8:
+                    c = GLAS[0]
+            s(x, y, c)
+    s(5, 0, S[0]); s(5, 1, S[2])                        # Knauf
+    return im
+
+
+def laterne_glas_farben():
+    return [g[:3] for g in GLAS]

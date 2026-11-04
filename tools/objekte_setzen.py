@@ -7,7 +7,7 @@ siehe tools/pixellab_objekte.py). Die Auswahl, welche Kandidaten wofuer genutzt 
 steht unten in AUSWAHL; feste Positionen kommen aus hoehenplan.json und FEST.
 Alles ist mit festem Zufallsstartwert reproduzierbar.
 """
-import json, os, random
+import json, os, random, sys
 from PIL import Image
 
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
@@ -142,6 +142,42 @@ def main():
                 belegt.add((cx + dx, cy + dy))
 
     # Treppen, Bruecken, Steg und Wasserfaelle zeichnet karte_bauen.py selbst (tools/bauwerke.py, klippen.py)
+
+    # --- Laternen am Wegrand: Wiesenkachel direkt neben einem Weg, Abstand >= 14 Kacheln,
+    #     zuerst an Treppen, Brueckenkoepfen und am Steg, dann gleichmaessig verteilt
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    import bauwerke
+    bauwerke.laterne_bild().save(os.path.join(OBJ, 'laterne.png'))
+    wichtig = []
+    for tr in plan['treppen']:
+        t, h = tcol[tr['x']], hcol[tr['x']]
+        wichtig += [(tr['x'] + tr['breite'] / 2, t - h - 2), (tr['x'] + tr['breite'] / 2, t + 2)]
+    for br in plan.get('bruecken', []):
+        wichtig += [(br['x'] - 1, br['y'] + 1), (br['x'] + br['breite'], br['y'] + 1)]
+    for st in plan.get('stege', []):
+        wichtig.append((st['x'], st['y'] - 2))
+    kand = []
+    for cy in range(2, rows - 2):
+        for cx in range(2, cols - 2):
+            if grid[cy][cx] != 'G' or k(cx, cy) != 'g' or (cx, cy) in gesperrt or (cx, cy) in belegt:
+                continue
+            if not any(k(cx + dx, cy + dy) == 's' and grid[cy + dy][cx + dx] in 'RPp'
+                       for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1))):
+                continue
+            if any(k(cx + dx, cy + dy) in 'wm' for dx in (-1, 0, 1) for dy in (-1, 0, 1)):
+                continue
+            nah = min((abs(cx - wx) + abs(cy - wy) for wx, wy in wichtig), default=99)
+            kand.append((0 if nah <= 3 else 1, rnd.random(), cx, cy))
+    kand.sort()
+    laternen = []
+    for _, _, cx, cy in kand:
+        if all(abs(cx - lx) + abs(cy - ly) >= 14 for lx, ly in laternen):
+            laternen.append((cx, cy))
+            o = setze('laterne', cx * T + 8, cy * T + 15)
+            o['anim'] = 'laterne'
+            o['schatten'] = [9, 3]
+            belegt.update({(cx, cy), (cx, cy - 1)})
+    print(len(laternen), 'Laternen')
 
     # --- Wald: dichtes, versetztes Raster
     for ay in range(8, rows * T + 8, 15):

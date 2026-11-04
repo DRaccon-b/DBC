@@ -4,7 +4,8 @@
 
 Animiert: Wasser (Fluss fliesst, Teich/Meer schwappen), glitzernder Schaum an Ufern,
 fallender Wasserfall mit brodelnder Gischt und Nebel, pulsierende Runen, flackerndes
-Lagerfeuer, Gras/Schilf/Farne/Blumen im Wind, wippende Seerosen, Schmetterlinge. Ausgabe in maps/karte01/animation/:
+Lagerfeuer, Gras/Schilf/Farne/Blumen im Wind, wippende Seerosen, Schmetterlinge,
+flackernde Laternen. Ausgabe in maps/karte01/animation/:
   karte01_animiert.webp   ganze Karte, verlustfrei
   detail_*.gif            Ausschnitte 3x vergroessert
   kacheln/*.png           Wasser-Grundkacheln als 16-Frame-Streifen (fuer eine Engine)
@@ -22,6 +23,7 @@ AUSSCHNITTE = {      # Name: (x0, y0, x1, y1) in Kacheln
     'strand': (0, 86, 40, 108),
     'lager': (84, 88, 106, 100),
     'wiese': (8, 30, 34, 46),
+    'laternen': (26, 16, 58, 36),
 }
 
 

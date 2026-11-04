@@ -212,6 +212,39 @@ def schmetterlinge(img, falter, frame):
                     px[xx, yy] = c + (255,)
 
 
+# ---------------------------------------------------------------- Laternen
+def laternen_licht(img, laternen, frame):
+    """Warmer Lichtschein am Laternenkopf und Lichtkegel am Boden; im Frame leichtes Flackern."""
+    import math
+    import numpy as np
+    if not laternen:
+        return
+    W, H = img.size
+    a = np.zeros((H, W), dtype=np.float32)
+    for i, o in enumerate(laternen):
+        f = 1.0 if frame is None else 0.85 + 0.15 * math.sin(2 * math.pi * frame / N_FRAMES * 2 + i * 1.7)
+        for (cx, cy, rx, ry, staerke) in ((o['x'] + 5, o['y'] + 7, 14, 13, 60), (o['x'] + 5, o['y'] + 25, 13, 5, 38)):
+            y0, y1 = max(0, cy - ry), min(H, cy + ry + 1)
+            x0, x1 = max(0, cx - rx), min(W, cx + rx + 1)
+            yy, xx = np.mgrid[y0:y1, x0:x1]
+            d = ((xx - cx) / rx) ** 2 + ((yy - cy) / ry) ** 2
+            # in Stufen statt weichem Verlauf -> passt zur Pixelart
+            stufe = np.where(d < 0.25, 1.0, np.where(d < 0.55, 0.6, np.where(d < 1.0, 0.3, 0.0)))
+            a[y0:y1, x0:x1] = np.maximum(a[y0:y1, x0:x1], stufe * staerke * f)
+    licht = Image.new('RGBA', img.size, (255, 214, 120, 0))
+    licht.putalpha(Image.fromarray(a.clip(0, 255).astype(np.uint8)))
+    img.alpha_composite(licht)
+    if frame is not None:                                   # Glas flackert
+        px = img.load()
+        hell, mittel = (0xff, 0xf2, 0xa0), (0xf5, 0xc8, 0x42)
+        for i, o in enumerate(laternen):
+            for y in range(o['y'] + 5, o['y'] + 9):
+                for x in range(o['x'] + 3, o['x'] + 8):
+                    c = px[x, y][:3]
+                    if c in (hell, mittel) and variante(x, y + frame * 3 + i, 5) == 0:
+                        px[x, y] = (mittel if c == hell else hell) + (255,)
+
+
 RUNENFARBEN = [(0x2f, 0xc7, 0xd8), (0x7f, 0xf0, 0xf5), (0xe6, 0xff, 0xff)]
 FEUER = [(0xc8, 0x3a, 0x3a), (0xe8, 0x70, 0x2a), (0xf5, 0xc8, 0x42), (0xff, 0xf2, 0xa0)]
 
@@ -448,6 +481,7 @@ def bauen(frame=None, speichern=True):
             elif frame is not None and o.get('anim') == 'wippen':
                 oy += wippen(frame, o['x'] * 7 + o['y'])
             img.alpha_composite(sp, (ox, oy))
+        laternen_licht(img, [o for o in objs if o.get('anim') == 'laterne'], frame)
         sf = os.path.join(OBJ, 'schmetterlinge.json')
         if os.path.exists(sf):
             schmetterlinge(img, json.load(open(sf)), frame or 0)
