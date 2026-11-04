@@ -25,7 +25,8 @@ BASIS = os.path.join(ROOT, 'assets', 'karte02', 'basis')
 GRAS = os.path.join(ROOT, 'assets', 'basis')
 OBJ = os.path.join(ROOT, 'assets', 'objekte', 'karte02')
 T = 16
-KLASSE = {'beton': 'b', 'asphalt': 'a', 'gehweg': 'w', 'platz': 'p', 'platz_hell': 'h', 'metall': 'm', 'gras': 'g'}
+KLASSE = {'beton': 'b', 'asphalt': 'a', 'gehweg': 'w', 'platz': 'p', 'platz_hell': 'h', 'metall': 'm', 'gras': 'g',
+          'schlamm': 's'}
 N_FRAMES = kb.N_FRAMES
 
 
@@ -52,7 +53,7 @@ def bauen(frame=None, speichern=True):
 
     def kachel(x, y):
         k = cls[y][x]
-        if k == 'b':
+        if k in 'bs':
             return beton[(x % 2, y % 2, kb.variante(x, y, 3))]
         if k == 'g':
             return gras[kb.variante(x, y)]
@@ -98,7 +99,7 @@ def bauen(frame=None, speichern=True):
                 if nx >= cols or ny >= rows:
                     continue
                 b = cls[ny][nx]
-                if a == b or 'g' in (a, b):
+                if a == b or 'g' in (a, b) or 's' in (a, b):
                     continue
                 paar = {a, b}
                 if paar == {'w', 'a'} and dy:
@@ -119,7 +120,26 @@ def bauen(frame=None, speichern=True):
         gebaut.update((x, y) for x in range(x0, x1 + 1) for y in range(y0, y1 + 1))
     def nah_wand(x, y):
         return any((x + dx, y + dy) in gebaut for dx in (-1, 0, 1) for dy in (-1, 0, 1))
-    ind.boden_details(L, cls, rows, cols, nah_wand)
+    linien = set()
+    for k in ('schienen', 'foerderbaender', 'rohre'):
+        for l in lay.get(k, []):
+            (ax, ay), (bx, by) = l['von'], l['bis']
+            for x in range(min(ax, bx) - 1, max(ax, bx) + 3):
+                for y in range(min(ay, by) - 1, max(ay, by) + 3):
+                    linien.add((x, y))
+    for (tx, ty) in lay.get('bodenluefter', []):
+        linien.update((tx + i, ty + j) for i in range(-1, 3) for j in range(-1, 3))
+    pf_alt = os.path.join(OBJ, 'platzierung.json')        # Objekte stehen nie auf Dellen
+    if os.path.exists(pf_alt):
+        for o in json.load(open(pf_alt)):
+            if o.get('basis') in ('schatten',):
+                continue
+            fx, fy = o['x'] // T, (o['y'] + o.get('fuss', 0)) // T
+            for x in range(fx - 1, fx + 9):
+                for y in range(fy - 4, fy + 2):
+                    linien.add((x, y))
+    dellen = ind.boden_details(L, cls, rows, cols, nah_wand, gesperrt=linien)
+    ind.schlamm(L, [(x, y) for y in range(rows) for x in range(cols) if cls[y][x] == 's'])
     zebras = [m for m in lay.get('markierungen', []) if m['art'] == 'zebra']
     strassen = [z_ for z_ in lay['boden'] if z_['art'] == 'asphalt']
     for s in strassen:
@@ -137,6 +157,8 @@ def bauen(frame=None, speichern=True):
         ind.schiene(L, s['von'], s['bis'])
     for f in lay.get('foerderbaender', []):
         ind.foerderband(L, f['von'], f['bis'], frame or 0)
+    for (tx, ty) in lay.get('bodenluefter', []):
+        ind.bodenluefter(L, tx, ty, frame or 0)
     for r in lay.get('rohre', []):
         ind.rohr(L, r['von'], r['bis'])
     # --- Mauern und Gebaeude
@@ -164,6 +186,36 @@ def bauen(frame=None, speichern=True):
                 w, h = o['schatten']
                 cx, cy = o['x'] + cache[o['datei']].width // 2, o['y'] + o['fuss'] - 2
                 sd.ellipse((cx - w // 2, cy - h // 2, cx + w // 2, cy + h // 2), fill=95)
+        # Fundamente: schwere Maschinen stehen auf einer Betonplatte, die exakt auf dem Kachelraster liegt
+        import numpy as _np0
+        for o in objs:
+            b_ = o.get('basis', '')
+            gruppe = b_.split('/')[0]
+            if gruppe not in ('ortho', 'mittel', 'turm', 'hoch', 'reaktor') and b_ != 'abgeleitet/hochofen':
+                continue
+            a = _np0.array(cache[o['datei']].getchannel('A')) >= 200
+            zeilen = _np0.nonzero(a.any(axis=1))[0]
+            unten = a[max(0, zeilen.max() - 5):zeilen.max() + 1].any(axis=0)
+            spalten = _np0.nonzero(unten)[0]
+            fx0, fx1 = o['x'] + spalten.min(), o['x'] + spalten.max()
+            fy = o['y'] + zeilen.max()
+            tief = T if a.shape[0] < 70 else 2 * T
+            px0, px1 = (fx0 - 3) // T * T, -(-(fx1 + 4) // T) * T
+            py0, py1 = (fy - tief) // T * T, -(-(fy + 5) // T) * T
+            fund = cls[min(rows - 1, py1 // T - 1)][min(cols - 1, (px0 + px1) // 2 // T)]
+            for y in range(py0, py1):
+                for x in range(px0, px1):
+                    L.neutral(x, y, 0.93 if fund != 'm' else 1.0)
+            for x in range(px0, px1):                       # erhoehte Platte: Licht oben, Schatten unten
+                L.p(x, py0, ind.WAND[5] if fund != 'm' else ind.STAHL[3])
+                L.p(x, py1 - 1, ind.WAND[1] if fund != 'm' else ind.STAHL[0])
+                L.neutral(x, py1, 0.7); L.neutral(x, py1 + 1, 0.85)
+            for y in range(py0, py1):
+                L.p(px0, y, ind.WAND[4] if fund != 'm' else ind.STAHL[3])
+                L.p(px1 - 1, y, ind.WAND[1] if fund != 'm' else ind.STAHL[0])
+                L.neutral(px1, y, 0.75)
+            for (bx, by) in ((px0 + 2, py0 + 2), (px1 - 3, py0 + 2), (px0 + 2, py1 - 3), (px1 - 3, py1 - 3)):
+                L.p(bx, by, ind.STAHL[4]); L.p(bx + 1, by + 1, ind.STAHL[0])
         # Schmutz/Oel unter schweren Objekten (vor den Schatten, direkt auf den Boden)
         import random as _r
         rs = _r.Random(3)
@@ -218,6 +270,11 @@ def bauen(frame=None, speichern=True):
             ox, oy = o['x'], o['y']
             if frame is not None and o.get('anim') == 'wehen':
                 sp = kb.wehen(sp, kb.wind(frame, o['x']))
+            elif frame is not None and o.get('anim') == 'greifarm':
+                import math as _m
+                ph = (o['x'] * 13 + o['y'] * 7) % 16
+                sp = kb.wehen(sp, round(2 * _m.sin(2 * _m.pi * (frame + ph) / 16)))
+                oy += round(0.8 * _m.sin(4 * _m.pi * (frame + ph) / 16))
             elif frame is not None and o.get('anim') == 'kran':
                 sp = Image.open(os.path.join(OBJ, o['datei'].replace('abgeleitet-kran_', 'abgeleitet-kran_f%02d_' % frame))).convert('RGBA')
             img.alpha_composite(sp, (ox, oy))
@@ -229,6 +286,7 @@ def bauen(frame=None, speichern=True):
     if speichern:
         img.save(os.path.join(KARTE, 'terrain.png'))
         json.dump({'tile_size': T, 'cols': cols, 'rows': rows, 'klassen': [''.join(r) for r in cls],
+                   'dellen': sorted(dellen),
                    'tilesets': {'k2_beton_gras': bg['id'] if bg else None}},
                   open(os.path.join(KARTE, 'tilemap.json'), 'w'))
     print('Karte 02 %dx%d gebaut' % (cols, rows))

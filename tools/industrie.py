@@ -115,17 +115,49 @@ def mauer(L, r, seite, rnd):
                 for d, f in ((0, 0.7), (1, 0.8), (2, 0.9)):
                     L.dunkel(x, y1 + d, f)
     else:
-        # Seitenmauer: nur die Kappe ist zu sehen, Innenkante mit Schatten
+        # Seitenmauer wie die obere Mauer: Kappe mit Plattenfugen (Draufsicht), Innenkante mit Schatten.
+        # Endet die Mauer an einem Ausgang (Ende oberhalb einer Oeffnung), zeigt das Ende seine Front
+        # (Paneele wie die obere Mauer) - wie ein Torpfeiler.
         innen = x1 - 1 if seite == 'links' else x0
-        for y in range(y0, y1):
+        ende_offen = r[3] < 70                       # unteres Ende an einem Ausgang
+        front = 2 * T if ende_offen else 0
+        for y in range(y0, y1 - front):
             for x in range(x0, x1):
                 k = (x - x0) if seite == 'links' else (x1 - 1 - x)
-                c = WAND[5] if k < (x1 - x0) - 4 else WAND[4]
+                c = WAND[5] if k > 0 else WAND[4]
+                if k == 0:
+                    c = WAND[3]
                 if (y - y0) % 32 == 0:
                     c = WAND[3]
+                elif (y - y0) % 32 == 1:
+                    c = WAND[6]
                 if x == innen:
                     c = WAND[1]
                 L.p(x, y, c)
+        if ende_offen:
+            ky = y1 - front
+            for x in range(x0, x1):                  # Kappenkante vorne
+                L.p(x, ky - 1, WAND[4]); L.p(x, ky, WAND[1])
+            for y in range(ky + 1, y1):              # Front (Ansicht von Sueden)
+                for x in range(x0, x1):
+                    t = (y - ky) / front
+                    c = WAND[4] if t < 0.15 else WAND[3] if t < 0.6 else WAND[2]
+                    if (x - x0) % 24 == 0:
+                        c = WAND[1]
+                    elif (x - x0) % 24 == 1:
+                        c = WAND[5] if t < 0.6 else WAND[4]
+                    if x in (x0, x1 - 1):
+                        c = WAND[0]
+                    if y == y1 - 1:
+                        c = WAND[0]
+                    L.p(x, y, c)
+            for x in range(x0, x1 + 2):              # Schatten vor die Front
+                for d, f in ((0, 0.7), (1, 0.82), (2, 0.92)):
+                    L.dunkel(x, y1 + d, f)
+        else:
+            # oberes Ende an einem Ausgang: Stirnkante dunkel
+            for x in range(x0, x1):
+                L.p(x, y0, WAND[1]); L.p(x, y0 + 1, WAND[6])
         for y in range(y0, y1):
             for d, f in ((1, 0.72), (2, 0.85)):
                 L.dunkel(innen + d if seite == 'links' else innen - d, y, f)
@@ -311,7 +343,10 @@ def gebaeude(L, g, rnd):
     # Fensterband
     belegt = set()
     for tx in g.get('tore', []):
-        belegt.update(range(tx - 1, tx + 3))
+        if g.get('tor_mitte'):
+            belegt.update(range(tx - g.get('torbreite', 4) // 2 - 1, tx + g.get('torbreite', 4) // 2 + 1))
+        else:
+            belegt.update(range(tx - 1, tx + 3))
     for tx in g.get('tueren', []):
         belegt.update(range(tx, tx + 1))
     for sx, _ in g.get('schilder', []):
@@ -361,7 +396,11 @@ def gebaeude(L, g, rnd):
                 L.p(x, (by0 + y1) // 2, GRUEN[1])
         else:
             offen = g.get('name') == 'fabrikhalle'
-            _rolltor(L, tx * T - 4, fy + 3, (tx + 2) * T + 4, y1 - 1, offen=offen)
+            if g.get('tor_mitte'):                      # Tor mittig ueber Kachelkante tx, breit
+                tb = g.get('torbreite', 4) * T // 2
+                _rolltor(L, tx * T - tb, fy + 3, tx * T + tb, y1 - 1, offen=offen)
+            else:
+                _rolltor(L, tx * T - 4, fy + 3, (tx + 2) * T + 4, y1 - 1, offen=offen)
     for tx in g.get('tueren', []):
         _tuer(L, tx * T + 3, y1 - min(hoehe - 4, 22), y1 - 1)
     for sx, text in g.get('schilder', []):
@@ -383,75 +422,151 @@ def _linie_zellen(a, b):
 
 
 def schiene(L, a, b):
+    """Gleis: Schotterbett mit ausfransendem Rand, Holzschwellen (laenger als die Spurweite, mit
+    Licht-/Schattenkante), zwei Stahlschienen mit Glanzlinie und Schatten. Achsparallel."""
     rt, zellen = _linie_zellen(a, b)
-    for cx, cy in zellen:
+    if not zellen:
+        return
+    xs = [c[0] for c in zellen]; ys = [c[1] for c in zellen]
+    if rt == 'v':
+        X0, X1, Y0, Y1 = min(xs) * T, (max(xs) + 1) * T, min(ys) * T, (max(ys) + 1) * T
+    else:
+        X0, X1, Y0, Y1 = min(xs) * T, (max(xs) + 1) * T, min(ys) * T, (max(ys) + 1) * T
+    rnd = random.Random(X0 * 7 + Y0)
+    for y in range(Y0, Y1):
+        for x in range(X0, X1):
+            q = (x - X0) if rt == 'v' else (y - Y0)        # quer 0..15
+            l = y if rt == 'v' else x                      # laengs
+            # Schotterbett 1..14, Rand ausgefranst
+            if q in (0, 15) and rnd.random() < 0.55:
+                continue
+            c = SCHOTTER[(x * 7 + y * 13) % 4]
+            if q in (0, 1, 14, 15):
+                c = SCHOTTER[1] if (x + y) % 2 else SCHOTTER[0]
+            # Schwellen: 3 px breit, alle 6 px, von q=2 bis 13
+            s_ = l % 6
+            if 2 <= q <= 13 and s_ in (0, 1, 2):
+                c = HOLZ[3] if s_ == 0 else HOLZ[2] if s_ == 1 else HOLZ[1]
+                if q in (2, 13):
+                    c = HOLZ[1]
+            # Schienen bei q = 4/5 und 10/11 (Kopf hell, Fuss dunkel), Schatten bei 6 und 12
+            if q in (4, 10):
+                c = STAHL[5] if (l % 9) else STAHL[4]
+            elif q in (5, 11):
+                c = STAHL[2]
+            elif q in (6, 12) and not (2 <= q <= 13 and s_ in (0, 1, 2)):
+                c = SCHOTTER[0]
+            L.p(x, y, c)
+    # Prellbock an offenen Enden
+    for (cx, cy) in (zellen[0], zellen[-1]):
         X, Y = cx * T, cy * T
-        for i in range(T):
-            for j in range(T):
-                x, y = (X + j, Y + i)
-                q = j if rt == 'v' else i                 # quer zur Fahrtrichtung
-                l = i if rt == 'v' else j                 # laengs
-                if 2 <= q <= 13:
-                    c = SCHOTTER[(x * 7 + y * 3) % 4] if (x * 5 + y * 11) % 3 else SCHOTTER[1]
-                    if l % 5 in (0, 1) and 2 <= q <= 13:
-                        c = HOLZ[2] if l % 5 == 0 else HOLZ[1]
-                    if q in (4, 11):
-                        c = STAHL[4]
-                    elif q in (5, 12):
-                        c = STAHL[1]
-                    L.p(x, y, c)
-
-
-def foerderband(L, a, b, frame=0):
-    rt, zellen = _linie_zellen(a, b)
-    for cx, cy in zellen:
-        X, Y = cx * T, cy * T
-        for i in range(T):
-            for j in range(T):
-                x, y = X + j, Y + i
-                q = j if rt == 'v' else i
-                l = (i if rt == 'v' else j) + (Y if rt == 'v' else X)
-                if q in (1, 14):
-                    c = GELB[1]
-                elif q in (2, 13):
-                    c = GELB[2] if q == 2 else GELB[0]
-                elif q in (0, 15):
-                    c = SCHWARZ
-                else:
-                    c = rgb('#2c3036') if (l - frame) % 4 else rgb('#3c424a')   # laufende Bandglieder
-                    if q == 3:
-                        c = rgb('#1e2126')
-                L.p(x, y, c)
         if rt == 'v':
-            for y in range(Y, Y + T, 8):
-                L.p(X + 1, y, GELB[3]); L.p(X + 14, y + 4, GELB[3])
+            yy = Y if (cx, cy) == zellen[0] else Y + T - 4
+            L.rect(X + 3, yy, X + 13, yy + 4, GELB[2]); L.rect(X + 3, yy + 3, X + 13, yy + 4, GELB[0])
+            for x in range(X + 3, X + 13, 4):
+                L.rect(x, yy, x + 2, yy + 3, SCHWARZ)
+        else:
+            xx = X if (cx, cy) == zellen[0] else X + T - 4
+            L.rect(xx, Y + 3, xx + 4, Y + 13, GELB[2]); L.rect(xx + 3, Y + 3, xx + 4, Y + 13, GELB[0])
+
+
+def foerderband(L, a, b, frame=0, breite=2):
+    """Foerderband `breite` Kacheln breit. a/b = (x, y) der linken bzw. oberen Kachel des Bandes.
+    Seitenwangen gelb mit Warnmarken, Rollen alle 8 px, Bandglieder laufen in Foerderrichtung."""
+    (x0, y0), (x1, y1) = a, b
+    vert = x0 == x1
+    if vert:
+        X0, X1, Y0, Y1 = x0 * T, (x0 + breite) * T, min(y0, y1) * T, (max(y0, y1) + 1) * T
+    else:
+        X0, X1, Y0, Y1 = min(x0, x1) * T, (max(x0, x1) + 1) * T, y0 * T, (y0 + breite) * T
+    B = breite * T
+    for y in range(Y0, Y1):
+        for x in range(X0, X1):
+            q = (x - X0) if vert else (y - Y0)          # quer
+            l = y if vert else x                        # laengs
+            if q in (0, B - 1):
+                c = SCHWARZ
+            elif q in (1, 2):
+                c = GELB[3] if q == 1 else GELB[2]
+            elif q in (B - 3, B - 2):
+                c = GELB[1] if q == B - 3 else GELB[0]
+            elif q in (3, B - 4):
+                c = rgb('#1a1d22')
+            else:
+                glied = (l - frame) % 6
+                c = rgb('#3c424a') if glied == 0 else rgb('#33383f') if glied == 1 else rgb('#2a2e34')
+                if q == 4:
+                    c = rgb('#1e2126')                  # Schatten der linken/oberen Wange
+                elif q == B - 5:
+                    c = rgb('#444b54')
+            L.p(x, y, c)
+        if vert and (y - Y0) % 8 == 0:
+            for x in (X0 + 1, X1 - 2):
+                L.p(x, y, rgb('#2a2e34'))               # Rollenachsen in der Wange
+    if not vert:
+        for x in range(X0, X1, 8):
+            for y in (Y0 + 1, Y1 - 2):
+                L.p(x, y, rgb('#2a2e34'))
+    # Schatten des Bandes nach rechts/unten
+    for k in range(Y0, Y1) if vert else range(X0, X1):
+        for d, f in ((0, 0.72), (1, 0.86)):
+            if vert:
+                L.neutral(X1 + d, k, f)
+            else:
+                L.neutral(k, Y1 + d, f)
+
+
+ROHR = pal('#2a333b', '#3e4a54', '#56646f', '#73828c', '#94a2aa', '#b8c4ca', '#e2e9ec')
 
 
 def rohr(L, a, b):
+    """Rohrleitung auf Stuetzen: 8 px Zylinder (7 Toene, Glanzlinie oben/links), Flansche mit Bolzen
+    alle 3 Kacheln, Betonstuetzen alle 4 Kacheln, Endkappen, Schlagschatten auf dem Boden
+    (Rohr liegt etwas erhoeht -> Schatten 3 px nach rechts unten versetzt)."""
     rt, zellen = _linie_zellen(a, b)
-    for n, (cx, cy) in enumerate(zellen):
-        X, Y = cx * T, cy * T
-        for i in range(T):
-            for j in range(T):
-                q = j if rt == 'v' else i
-                if 5 <= q <= 10:
-                    c = STAHL[5] if q == 6 else STAHL[4] if q == 7 else STAHL[3] if q < 10 else STAHL[1]
-                    if q == 5:
-                        c = STAHL[2]
-                    L.p(X + j, Y + i, c)
-        if n % 3 == 0 or n == len(zellen) - 1:      # Flansch
-            for k in range(3, 13):
-                for d in (0, 1, 2):
-                    if rt == 'v':
-                        L.p(X + k, Y + 6 + d, STAHL[2] if d == 2 else STAHL[4])
-                    else:
-                        L.p(X + 6 + d, Y + k, STAHL[2] if d == 2 else STAHL[4])
-        # Schatten neben dem Rohr
-        for k in range(T):
-            if rt == 'v':
-                L.dunkel(X + 11, Y + k, 0.75)
-            else:
-                L.dunkel(X + k, Y + 11, 0.75)
+    if not zellen:
+        return
+    xs = [c[0] for c in zellen]; ys = [c[1] for c in zellen]
+    X0, X1, Y0, Y1 = min(xs) * T, (max(xs) + 1) * T, min(ys) * T, (max(ys) + 1) * T
+    v = rt == 'v'
+    q0 = 4                                             # Rohr belegt quer 4..11
+    def P(l, q):
+        return (X0 + q, l) if v else (l, Y0 + q)
+    lang = range(Y0 + 2, Y1 - 2) if v else range(X0 + 2, X1 - 2)
+    # Schatten
+    for l in lang:
+        for q in range(q0, q0 + 8):
+            x, y = P(l, q)
+            L.neutral(x + 3, y + 3, 0.78)
+    # Stuetzen
+    for n, l in enumerate(range(lang.start + 8, lang.stop, 4 * T)):
+        for d in range(-3, 4):
+            for q in (q0 - 2, q0 - 1, q0 + 8, q0 + 9):
+                x, y = P(l + d, q)
+                L.p(x, y, WAND[4] if d < 0 else WAND[2])
+    # Zylinder
+    toene = [ROHR[1], ROHR[4], ROHR[5], ROHR[6], ROHR[4], ROHR[3], ROHR[2], ROHR[0]]
+    for l in lang:
+        for i, q in enumerate(range(q0, q0 + 8)):
+            x, y = P(l, q)
+            L.p(x, y, toene[i])
+    # Flansche mit Bolzen
+    for l in list(range(lang.start + 2 * T, lang.stop - 4, 3 * T)):
+        for d in (0, 1, 2):
+            for q in range(q0 - 1, q0 + 9):
+                x, y = P(l + d, q)
+                L.p(x, y, ROHR[5] if d == 0 else ROHR[3] if d == 1 else ROHR[1])
+        for q in (q0, q0 + 7):
+            x, y = P(l + 1, q)
+            L.p(x, y, ROHR[0])
+    # Endkappen
+    for l in (lang.start, lang.stop - 3):
+        for d in range(3):
+            for q in range(q0 - 1, q0 + 9):
+                x, y = P(l + d, q)
+                L.p(x, y, ROHR[2] if d < 2 else ROHR[0])
+        x, y = P(l + 1, q0 + 2)
+        L.p(x, y, ROHR[6])
 
 
 # ---------------------------------------------------------------- Markierungen
@@ -725,51 +840,58 @@ def _schutt(L, x, y, rnd):
         L.neutral(px_ + 1, py_ + 1, 0.7)
 
 
-def boden_details(L, cls, rows, cols, nah_wand, seed=21):
-    """Risse, abgesackte Platten, Schlagloecher, Flickstellen, Flecken, Pfuetzen, Kratzer, Schutt und Muell."""
+def boden_details(L, cls, rows, cols, nah_wand, seed=21, gesperrt=frozenset()):
+    """Risse, abgesackte Platten, Schlagloecher, Flickstellen, Flecken, Pfuetzen, Kratzer, Schutt und Muell.
+    Gibt die Kacheln der abgesackten Platten zurueck: dort liegt sonst nichts (keine Textur, kein Objekt)."""
     rnd = random.Random(seed)
+    F = 0.9                                              # Haeufigkeit (90 % der ersten Fassung)
+    dellen = set()
     for y in range(0, rows - 1, 2):
         for x in range(0, cols - 1, 2):
-            if all(cls[y + j][x + i] == 'b' for i in (0, 1) for j in (0, 1)) and rnd.random() < 0.045:
+            if all(cls[y + j][x + i] == 'b' and (x + i, y + j) not in gesperrt for i in (0, 1) for j in (0, 1)) \
+                    and rnd.random() < 0.045 * F:
                 _abgesackt(L, x * T, y * T, rnd)
+                dellen.update({(x, y), (x + 1, y), (x, y + 1), (x + 1, y + 1)})
+    frei = lambda xx, yy: (xx // T, yy // T) not in dellen
     for y in range(rows):
         for x in range(cols):
             k = cls[y][x]
             X, Y = x * T + rnd.randint(2, 13), y * T + rnd.randint(2, 13)
             r = rnd.random()
+            if (x, y) in dellen or any((x + dx, y + dy) in dellen for dx in (-1, 0, 1) for dy in (-1, 0, 1)):
+                continue                                 # Dellen und ihr Rand bleiben sauber
             if k == 'b':
-                if r < 0.10:
-                    _riss(L, X, Y, rnd, rnd.randint(10, 24))
-                elif r < 0.12:
+                if r < 0.10 * F:
+                    _riss(L, X, Y, rnd, rnd.randint(10, 22))
+                elif r < 0.12 * F:
                     _schlagloch(L, X, Y, rnd)
-                elif r < 0.15:                                  # Oelfleck (neutral/braeunlich)
+                elif r < 0.15 * F:
                     for dy in range(-3, 4):
                         for dx in range(-5, 6):
                             if dx * dx / 25 + dy * dy / 9 <= 1 and rnd.random() < 0.9:
                                 L.neutral(X + dx, Y + dy, 0.72, waerme=4)
-                elif r < 0.165:                                 # Rostfleck
+                elif r < 0.165 * F:
                     for _ in range(10):
                         L.p(X + rnd.randint(-4, 4), Y + rnd.randint(-2, 2), rgb('#8a5a3a') if rnd.random() < 0.5 else rgb('#a06a42'))
-                elif r < 0.175:
+                elif r < 0.175 * F:
                     _pfuetze(L, X, Y, rnd)
-                elif r < 0.19:
+                elif r < 0.19 * F:
                     _schutt(L, X, Y, rnd)
             elif k == 'a':
-                if r < 0.04:
+                if r < 0.04 * F:
                     _schlagloch(L, X, Y, rnd, asphalt=True)
-                elif r < 0.08:                                  # Flickstelle
+                elif r < 0.08 * F:
                     w, h = rnd.randint(8, 16), rnd.randint(5, 10)
                     for yy in range(Y, Y + h):
                         for xx in range(X, X + w):
                             L.neutral(xx, yy, 0.84)
-                elif r < 0.12:
+                elif r < 0.12 * F:
                     _riss(L, X, Y, rnd, rnd.randint(6, 12), False)
-            elif k == 'm' and r < 0.15:                         # Kratzer auf Metall
+            elif k == 'm' and r < 0.15 * F:
                 for i in range(rnd.randint(4, 10)):
                     L.p(X + i, Y + i // 3, rgb('#4c6878'))
-            elif k in 'ph' and r < 0.06:
+            elif k in 'ph' and r < 0.06 * F:
                 _riss(L, X, Y, rnd, rnd.randint(5, 10), False)
-            # Muell: haeufiger nahe an Mauern/Gebaeuden (Wind treibt ihn dorthin)
             for _ in range(2):
                 if k in 'bawp' and rnd.random() < (0.16 if nah_wand(x, y) else 0.045):
                     farbe = MUELL[rnd.randrange(len(MUELL))]
@@ -778,6 +900,57 @@ def boden_details(L, cls, rows, cols, nah_wand, seed=21):
                     if rnd.random() < 0.5:
                         L.p(mx, my + 1, farbe[1])
                     L.neutral(mx + 1, my + 1, 0.72)
+    return dellen
+
+
+SCHLAMM = pal('#2e241c', '#3a2e24', '#4a3a2c', '#5a4634', '#6b5440', '#7d6650')
+OELFILM = pal('#3a3a5a', '#4a5a3e', '#5a4a6a', '#3e5a5a')
+
+
+def schlamm(L, zellen, seed=9):
+    """Schlammige, oelige Flecken statt Gras: organischer Rand (unscharfe Maske + Rauschen), nasser
+    dunkler Rand, hellere Kuppen, Pfuetzen mit Oelfilm (Regenbogen-Schimmer) und Spritzer drumherum."""
+    from PIL import ImageFilter
+    import numpy as np
+    rnd = random.Random(seed)
+    m = Image.new('L', (L.W, L.H), 0)
+    mp = m.load()
+    for (x, y) in zellen:
+        for yy in range(y * T, (y + 1) * T):
+            for xx in range(x * T, (x + 1) * T):
+                mp[xx, yy] = 255
+    m = np.array(m.filter(ImageFilter.GaussianBlur(6))).astype(np.float32) / 255
+    h, w = m.shape
+    rausch = np.random.RandomState(seed).rand(h // 4 + 2, w // 4 + 2)
+    rausch = np.array(Image.fromarray((rausch * 255).astype(np.uint8)).resize((w + 8, h + 8), Image.BICUBIC))[:h, :w] / 255
+    feld = m + (rausch - 0.5) * 0.35
+    grob = np.random.RandomState(seed + 1).rand(h // 14 + 2, w // 14 + 2)
+    grob = np.array(Image.fromarray((grob * 255).astype(np.uint8)).resize((w + 28, h + 28), Image.BICUBIC))[:h, :w] / 255
+    ys, xs = np.nonzero(feld > 0.38)
+    for y, x in zip(ys, xs):
+        f = feld[y, x]
+        if f <= 0.5:                                    # nasser Rand: nur abdunkeln
+            L.neutral(x, y, 0.74, waerme=6)
+            continue
+        g = grob[y, x]
+        c = SCHLAMM[3] if g > 0.55 else SCHLAMM[2]
+        if f < 0.58:
+            c = SCHLAMM[1]                              # dunkler, nasser Saum
+        elif feld[max(0, y - 2), x] <= 0.5:
+            c = SCHLAMM[5] if feld[max(0, y - 1), x] <= 0.5 else SCHLAMM[4]   # Lichtkante oben
+        if f > 0.78 and g < 0.4:                        # Pfuetze mit Oelfilm
+            c = SCHLAMM[0]
+            if 0.30 < g < 0.325 or 0.2 < g < 0.215:      # Oelfilm als schimmernde Ringe
+                c = OELFILM[(x // 3 + y // 2) % 4]
+            if feld[max(0, y - 1), x] > 0.78 and grob[max(0, y - 1), x] >= 0.4:
+                c = SCHLAMM[1]
+        elif (x * 7 + y * 13) % 29 == 0:
+            c = SCHLAMM[4]                              # einzelne Kiesel/Kuppen
+        L.p(x, y, c)
+    for _ in range(len(zellen) * 4):                   # Spritzer
+        (x, y) = rnd.choice(zellen)
+        sx, sy = x * T + rnd.randint(-8, 24), y * T + rnd.randint(-8, 24)
+        L.p(sx, sy, SCHLAMM[2]); L.neutral(sx + 1, sy, 0.8, waerme=5)
 
 
 # ---------------------------------------------------------------- Strommast (Hochspannung)
@@ -838,3 +1011,49 @@ def strommast_sprite(hoehe=104):
         L.rect(x - 3, hoehe - 5, x + 4, hoehe - 4, WAND[5])
         L.rect(x - 3, hoehe - 1, x + 4, hoehe, WAND[1])
     return im, punkte
+
+
+# ---------------------------------------------------------------- Bodenluefter (ins Dach/den Boden eingelassen)
+def bodenluefter(L, tx, ty, frame=0, kacheln=2):
+    """Ins Metalldach eingelassener Luefter, exakt auf dem Kachelraster (kacheln x kacheln).
+    Vertieft: Schattenkante oben/links innen, Lichtkante unten/rechts; Rotor dreht sich je Frame,
+    darueber ein Schutzgitter; Eckbolzen."""
+    import math
+    X, Y, S_ = tx * T, ty * T, kacheln * T
+    M = MAST
+    for y in range(Y, Y + S_):
+        for x in range(X, X + S_):
+            i, j = x - X, y - Y
+            if i in (0, S_ - 1) or j in (0, S_ - 1):
+                c = STAHL[0]
+            elif i == 1 or j == 1:
+                c = STAHL[4]                                # Rahmen-Licht oben links
+            elif i == S_ - 2 or j == S_ - 2:
+                c = STAHL[1]
+            elif i in (2, 3) or j in (2, 3):
+                c = STAHL[2]
+            else:
+                c = rgb('#10161c')                          # Schacht (dunkel)
+                if i == 4 or j == 4:
+                    c = rgb('#080c10')                      # Schatten der Rahmenkante
+            L.p(x, y, c)
+    # Rotor
+    cx, cy, r = X + S_ / 2, Y + S_ / 2, S_ / 2 - 6
+    winkel = frame / 16 * (math.pi / 2)                     # 4 Fluegel: Periode 90 Grad
+    for y in range(Y + 5, Y + S_ - 5):
+        for x in range(X + 5, X + S_ - 5):
+            dx, dy = x + 0.5 - cx, y + 0.5 - cy
+            d = math.hypot(dx, dy)
+            if d > r:
+                continue
+            w = (math.atan2(dy, dx) - winkel) % (math.pi / 2)
+            if d < 2.2:
+                L.p(x, y, STAHL[4])                         # Nabe
+            elif w < 0.62:
+                L.p(x, y, STAHL[3] if w < 0.3 else STAHL[2])  # Fluegel mit Lichtkante
+    # Schutzgitter darueber
+    for k in range(X + 5, X + S_ - 5, 3):
+        for y in range(Y + 5, Y + S_ - 5):
+            L.p(k, y, STAHL[1])
+    for (bx, by) in ((X + 2, Y + 2), (X + S_ - 3, Y + 2), (X + 2, Y + S_ - 3), (X + S_ - 3, Y + S_ - 3)):
+        L.p(bx, by, STAHL[5])

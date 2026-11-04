@@ -36,9 +36,11 @@ FEST = [
     ('ortho/00', 20, 26, {}),                              # LKW
     ('klein/12', 26, 15, {}), ('klein/12', 26, 44, {}),    # Kabeltrommeln
     # Fabrikhof: Pressen ueber den Foerderbaendern, Roboterarme
-    ('mittel/10', 33.5, 15, {}), ('mittel/10', 43.5, 15, {}), ('mittel/10', 53.5, 15, {}),
-    ('klein/09', 35, 12, {}), ('klein/10', 32, 19, {}), ('klein/09', 45, 12, {}),
-    ('klein/10', 42, 19, {}), ('klein/09', 55, 12, {}), ('klein/10', 51, 19, {}), ('klein/09', 57, 21, {}),
+    ('mittel/10', 33, 15, {}), ('mittel/10', 43, 15, {}), ('mittel/10', 53, 15, {}),
+    ('klein/09', 36, 12, {'anim': 'greifarm'}), ('klein/10', 30, 19, {'anim': 'greifarm'}),
+    ('klein/09', 46, 12, {'anim': 'greifarm'}), ('klein/10', 40, 19, {'anim': 'greifarm'}),
+    ('klein/09', 56, 12, {'anim': 'greifarm'}), ('klein/10', 50, 19, {'anim': 'greifarm'}),
+    ('klein/09', 56.5, 21, {'anim': 'greifarm'}),
     ('klein/08', 37.5, 29, {}), ('klein/08', 43.5, 29, {}),
     ('klein/24', 54, 25, {}),
     # Tanklager oben rechts
@@ -50,8 +52,6 @@ FEST = [
     ('turm/03', 67.5, 22, {'anim': 'reaktor'}), ('turm/03', 83.5, 22, {'anim': 'reaktor'}),
     ('mittel/00', 66.5, 31, {'anim': 'reaktor'}), ('mittel/01', 85, 31, {'anim': 'reaktor'}),
     ('mittel/00', 66.5, 50, {'anim': 'reaktor'}), ('mittel/01', 85, 50, {'anim': 'reaktor'}),
-    ('klein/29', 63, 24, {}), ('klein/29', 88, 24, {}), ('klein/29', 63, 47, {}), ('klein/29', 88, 47, {}),
-    ('klein/15', 67, 43, {'anim': 'laterne_klein'}), ('klein/15', 83, 43, {'anim': 'laterne_klein'}),
     # Platz links und Strasse
     ('hoch/02', 3.5, 34, {'anim': 'blinken'}), ('hoch/02', 3.5, 46, {'anim': 'blinken'}),
     ('ortho/09', 8, 34, {}), ('klein/22', 5.5, 33, {}),
@@ -59,9 +59,9 @@ FEST = [
     ('klein/11', 5, 61, {}),
     ('mini/04', 13.5, 59, {}), ('mini/04', 14.5, 59, {}), ('mini/24', 9.5, 63, {}),
     # Werkstatt unten: Oefen, Hochoefen, Schornsteine, Schrott
-    ('mittel/03', 32.5, 55, {'anim': 'feuer'}), ('mittel/02', 45.5, 55, {'anim': 'feuer'}),
-    ('turm/01', 36.5, 71, {'anim': 'feuer'}), ('abgeleitet/hochofen', 49.5, 71, {'anim': 'feuer', 'rauch': [0.5, 0.0]}),
-    ('hoch/01', 42.5, 71, {'anim': 'rauch', 'rauch': [0.5, 0.03]}), ('hoch/01', 56.5, 71, {'anim': 'rauch', 'rauch': [0.5, 0.03]}),
+    ('mittel/03', 31, 54, {'anim': 'feuer'}), ('mittel/02', 47, 58, {'anim': 'feuer'}),
+    ('turm/01', 39, 69, {'anim': 'feuer'}), ('abgeleitet/hochofen', 51.5, 71, {'anim': 'feuer', 'rauch': [0.5, 0.0]}),
+    ('hoch/01', 44.5, 71, {'anim': 'rauch', 'rauch': [0.5, 0.03]}), ('hoch/01', 33.5, 67, {'anim': 'rauch', 'rauch': [0.5, 0.03]}),
     ('hoch/01', 47.5, 44, {'anim': 'rauch', 'rauch': [0.5, 0.03]}),   # Schornstein auf dem Backsteinhaus
     ('mittel/05', 30.5, 71, {}),
     # Schrottplatz unten rechts
@@ -75,11 +75,11 @@ FEST = [
 # Hochspannungsleitung: Masten an der Ostmauer (Anker-Kachel), Leitung vom rechten Reaktor-Pylon
 MASTEN = [(91, 18), (91, 31), (91, 45), (91, 58), (91, 70)]
 # Warnschilder (Dreieck mit !) an Gefahrenstellen
-SCHILDER = [(12, 22), (26, 11), (30, 57), (48, 57), (40, 70), (53, 70), (63, 37), (88, 37), (79, 69),
+SCHILDER = [(12, 22), (26, 11), (29, 56), (49, 60), (41, 70), (54, 70), (79, 69),
             (62, 10), (25, 46), (24, 61), (58, 26), (70, 62)]
 LATERNEN = [(16, 34), (24, 34), (32, 34), (40, 34), (49, 34), (56, 34), (18, 41), (26, 41), (34, 41), (45, 41), (7, 41),
             # Hoefe: Containerlager, Fabrikhof, Werkstatt, Tanklager, Reaktorplatz-Rand, unten links
-            (12, 11), (27, 21), (30, 25), (46, 25), (57, 25), (36, 51), (58, 51), (28, 61), (59, 66),
+            (12, 11), (27, 21), (30, 25), (46, 26), (57, 25), (36, 51), (58, 51), (28, 61), (59, 66),
             (61, 13), (88, 13), (17, 67), (9, 57), (65, 59), (86, 63)]
 # Kleinteile, die verstreut werden (Gruppe mini; Nummern werden nach Sichtung eingetragen)
 STREU = ['mini/00', 'mini/01', 'mini/02', 'mini/03', 'mini/15', 'mini/00', 'mini/01', 'mini/04', 'mini/10',
@@ -175,6 +175,8 @@ def main():
     for m in lay.get('markierungen', []):
         x0, y0, x1, y1 = m['r']
         bau[y0 * T:(y1 + 1) * T, x0 * T:(x1 + 1) * T] = True
+    for (dx_, dy_) in tm.get('dellen', []):              # Dellen bleiben frei
+        bau[dy_ * T:(dy_ + 1) * T, dx_ * T:(dx_ + 1) * T] = True
     belegt = np.zeros((MH, MW), bool)
     objekte = []
 
