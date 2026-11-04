@@ -62,13 +62,13 @@ def warte(oid, ziel=('review', 'completed')):
 
 
 def erzeugen():
-    pal = json.load(open(os.path.join(REF, 'palette.json')))['farben']
+    pal = json.load(open(os.path.join(REF, 'palette_clean.json')))['farben']
     req = {
-        'description': 'wide stone staircase leading down a cliff, top-down view, grey-blue stone steps '
-                       'framed by mossy dark slate side walls with bushy green grass, game map tile object',
+        'description': 'clean wide stone staircase leading down a cliff, top-down view, smooth grey-blue stone steps '
+                       'framed by dark slate side walls with small neat grass tufts, crisp pixel art, flat simple shading, no noise',
         'view': 'top-down',
         'style_images': [b64(os.path.join(REF, 'treppe_48.png'))],
-        'target_palette': {'colors': pal, 'name': 'Karte01 Vorlage'},
+        'target_palette': {'colors': pal, 'name': 'Karte01 clean'},
     }
     d = call('POST', '/create-1-direction-object', req)
     oid = d.get('object_id')
