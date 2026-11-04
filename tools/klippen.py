@@ -152,9 +152,19 @@ def zeichne_klippen(img, plan, cols, treppen_spalten=frozenset(), seed=7):
                 for yy in range(y_top, y_bot):
                     px[xe, yy] = S[0]
                     px[xe + richtung, yy] = S[1]
-        sd.rectangle((x0, y_bot, x1 - 1, y_bot + 3), fill=110)
-        sd.rectangle((x0, y_bot + 4, x1 - 1, y_bot + 5), fill=50)
-        graskante(img, x0, x1, y_top, rnd)
+        # Schatten und Graskante nur ausserhalb der Treppen-Oeffnungen
+        stuecke, start = [], x0
+        for (tx0, tx1) in sorted(treppen_spalten):
+            if tx1 > x0 and tx0 < x1:
+                if tx0 > start:
+                    stuecke.append((start, tx0))
+                start = max(start, tx1)
+        if start < x1:
+            stuecke.append((start, x1))
+        for a, b in stuecke:
+            sd.rectangle((a, y_bot, b - 1, y_bot + 3), fill=110)
+            sd.rectangle((a, y_bot + 4, b - 1, y_bot + 5), fill=50)
+            graskante(img, a, b, y_top, rnd)
         # Treppen-Oeffnungen: Graskante dort wieder entfernen? -> Treppe ueberdeckt sie
     dunkel = Image.new('RGBA', img.size, (18, 40, 52, 255))
     dunkel.putalpha(schatten)

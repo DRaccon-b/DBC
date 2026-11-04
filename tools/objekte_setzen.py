@@ -136,29 +136,7 @@ def main():
             for dy in range(-3, 1):
                 belegt.add((cx + dx, cy + dy))
 
-    # Treppen (Wandoeffnung: Breite b, Hoehe h+1 Kacheln)
-    treppe = lade('gross/05')
-    for tr in plan['treppen']:
-        t, h = tcol[tr['x']], hcol[tr['x']]
-        bild = strecken(treppe, (h + 1) * T + 4)
-        os.makedirs(os.path.join(OBJ, 'abgeleitet'), exist_ok=True)
-        nm = 'abgeleitet/treppe_h%d' % h
-        bild.save(os.path.join(OBJ, nm + '.png'))
-        setze(nm, (tr['x'] + tr['breite'] / 2) * T, (t + 1) * T + 2, bild=bild)
-
-    # Wasserfaelle zeichnet karte_bauen.py (tools/klippen.py) in voller Flussbreite
-
-    # Bruecken (mittig ueber dem Fluss) und Stege (auf Laenge gestreckt)
-    for br in plan.get('bruecken', []):
-        wx = [x for x in range(br['x'], br['x'] + br['breite']) if k(x, br['y'] + 1) == 'w']
-        cx = (min(wx) + max(wx) + 1) / 2 * T if wx else (br['x'] + br['breite'] / 2) * T
-        b = lade('gross/04')
-        setze('gross/04', cx, (br['y'] + br['hoehe'] / 2) * T + b.height / 2, ebene=1)
-    for st in plan.get('stege', []):
-        bild = strecken(lade('gross/08'), st['hoehe'] * T)
-        nm = 'abgeleitet/steg_%d' % st['hoehe']
-        bild.save(os.path.join(OBJ, nm + '.png'))
-        setze(nm, (st['x'] + st['breite'] / 2) * T, (st['y'] + st['hoehe']) * T, ebene=0, bild=bild)
+    # Treppen, Bruecken, Steg und Wasserfaelle zeichnet karte_bauen.py selbst (tools/bauwerke.py, klippen.py)
 
     # --- Wald: dichtes, versetztes Raster
     for ay in range(8, rows * T + 8, 15):

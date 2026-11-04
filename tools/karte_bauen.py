@@ -366,6 +366,19 @@ def bauen(frame=None, speichern=True):
             # Wasserflaeche reicht durch die Wang-Ecken eine halbe Kachel weiter, minus Uferkante
             klippen.zeichne_wasserfall(img, min(spalten) * T - 5, (max(spalten) + 1) * T + 5,
                                        (t - h) * T + 8, (t + 1) * T - 2, frame=frame or 0)
+    # --- Bauwerke: Treppen, Bruecken, Steg (tools/bauwerke.py)
+    import bauwerke
+    for tr in plan.get('treppen', []):
+        t, h = tcol[tr['x']], hcol[tr['x']]
+        bauwerke.zeichne_treppe(img, tr['x'] * T, (tr['x'] + tr['breite']) * T, (t - h) * T + 8, (t + 1) * T - 2)
+    for br in plan.get('bruecken', []):
+        wx = [x for x in range(br['x'], br['x'] + br['breite']) if cls[br['y']][x] == 'w']
+        if wx:
+            bauwerke.zeichne_bruecke(img, min(wx) * T - 16, (max(wx) + 1) * T + 16,
+                                     br['y'] * T + 2, (br['y'] + br['hoehe']) * T - 3, frame=frame or 0)
+    for st in plan.get('stege', []):
+        bauwerke.zeichne_steg(img, st['x'] * T, (st['x'] + st['breite']) * T, st['y'] * T - 6,
+                              (st['y'] + st['hoehe']) * T, frame=frame or 0)
     if speichern:
         img.save(os.path.join(KARTE, 'terrain_basis.png'))
 
