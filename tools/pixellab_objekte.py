@@ -17,6 +17,7 @@ OUT = os.path.join(ROOT, 'assets', 'objekte', 'karte01')
 OUT_K2 = os.path.join(ROOT, 'assets', 'objekte', 'karte02')
 OUT_K3 = os.path.join(ROOT, 'assets', 'objekte', 'karte03')
 OUT_K4 = os.path.join(ROOT, 'assets', 'objekte', 'karte04')
+OUT_K5 = os.path.join(ROOT, 'assets', 'objekte', 'karte05')
 API = 'https://api.pixellab.ai'
 
 STIL = ("Top-down RPG map object in polished handheld monster-collecting RPG pixel art: colored dark outline "
@@ -307,6 +308,54 @@ OBJEKTGRUPPEN_K4 = {
     ]},
 }
 
+STIL_K5 = ("Top-down RPG map object for a snowy arctic land in polished handheld monster-collecting RPG pixel art: "
+           "colored dark outline (darkest shade of the object's own hue, never pure black), light from the upper left, "
+           "hue-shifted shading (shadows toward blue-violet, highlights toward warm white), clean readable shapes, "
+           "snow on top surfaces, no noise, no dithering, transparent background, no ground, no cast shadow. "
+           "Straight front view, orthographic, not isometric.")
+PALETTE_K5 = [
+    # Schnee / Eis
+    '#2a3a5a', '#3e5a7e', '#5a7ea2', '#7ea2c2', '#a8c6dc', '#cfe2ee', '#eaf3f8', '#ffffff',
+    '#2a6a8e', '#3e8eb4', '#5ab0d2', '#8ad2ea', '#c2ecf8',
+    # Tannengruen
+    '#14302e', '#1e4a40', '#2a6650', '#3a8462', '#56a276',
+    # Holz / Fell / Erde
+    '#3a2418', '#5a3a26', '#7a5434', '#9a7046', '#bc9262', '#dcb886',
+    # Stein
+    '#3e4252', '#5a6072', '#7e8496', '#a6acbc',
+    # Akzente: Feuer, Rot, Gold
+    '#c8303a', '#ff7a3a', '#ffc85a', '#fff2b0',
+]
+OBJEKTGRUPPEN_K5 = {
+    'k5_baeume': {'size': 80, 'items': [
+        'tall snow covered fir tree, dark green with thick snow on every branch layer',
+        'small snow covered pine tree',
+        'round snow covered spruce tree, dense, white snow caps',
+        'bare frozen birch tree with frost and icicles',
+    ]},
+    'k5_gross': {'size': 128, 'items': [
+        'igloo made of snow blocks with a dark arched entrance, front view',
+        'ice cave entrance in a frozen cliff, glowing blue ice, icicles hanging over a dark opening, front view',
+        'two huge curved mammoth tusks sticking out of a snow drift',
+        'frozen wooden fishing hut with snow on the roof',
+    ]},
+    'k5_mittel': {'size': 64, 'items': [
+        'big snow covered boulder', 'clear blue ice block cube', 'tall pointed ice crystal spike',
+        'snowman with a carrot nose and a red scarf', 'wooden signpost with snow on top',
+        'wooden supply crates covered with snow', 'wooden barrel with snow on the lid', 'campfire with stones in snow',
+        'wooden lantern post with a warm glowing lamp and snow cap', 'small snow covered rock pile',
+        'frozen dead bush with frost', 'fishing hole in ice with a small wooden sign', 'stack of firewood logs with snow',
+        'wooden sled with a fur blanket', 'banner flag on a pole, blue cloth with a snowflake emblem',
+        'small ice boulder with frost',
+    ]},
+    'k5_klein': {'size': 32, 'items': [
+        'tuft of frosted grass sticking out of snow', 'small snow covered pebble', 'tiny ice crystal',
+        'small frozen twig', 'tiny blue frost flower', 'small snow pile', 'small grey rock with snow cap',
+        'animal footprints in snow', 'small icicle on the ground', 'frozen fish', 'small white bone in snow',
+        'pine cone with frost',
+    ]},
+}
+
 OBJEKTGRUPPEN_K3 = {
     'k3_klein': {'size': 32, 'items': [
         'small green saguaro cactus', 'tall green saguaro cactus with two arms', 'small round barrel cactus', 'prickly pear cactus',
@@ -444,7 +493,9 @@ def herunterladen(oid, d):
 
 
 def speichern(gruppe, ims, ids):
-    if gruppe.startswith('k4_'):
+    if gruppe.startswith('k5_'):
+        ziel = os.path.join(OUT_K5, gruppe[3:])
+    elif gruppe.startswith('k4_'):
         ziel = os.path.join(OUT_K4, gruppe[3:])
     elif gruppe.startswith('k3_'):
         ziel = os.path.join(OUT_K3, gruppe[3:])
@@ -473,11 +524,12 @@ def erzeugen(gruppe):
     k2 = gruppe.startswith('k2_')
     k3 = gruppe.startswith('k3_')
     k4 = gruppe.startswith('k4_')
-    g = (OBJEKTGRUPPEN_K4 if k4 else OBJEKTGRUPPEN_K3 if k3 else OBJEKTGRUPPEN_K2 if k2 else OBJEKTGRUPPEN)[gruppe]
-    stil, palette = (STIL_K4, PALETTE_K4) if k4 else (STIL_K3, PALETTE_K3) if k3 else (STIL_K2, PALETTE_K2) if k2 else (STIL, PALETTE)
+    k5 = gruppe.startswith('k5_')
+    g = (OBJEKTGRUPPEN_K5 if k5 else OBJEKTGRUPPEN_K4 if k4 else OBJEKTGRUPPEN_K3 if k3 else OBJEKTGRUPPEN_K2 if k2 else OBJEKTGRUPPEN)[gruppe]
+    stil, palette = (STIL_K5, PALETTE_K5) if k5 else (STIL_K4, PALETTE_K4) if k4 else (STIL_K3, PALETTE_K3) if k3 else (STIL_K2, PALETTE_K2) if k2 else (STIL, PALETTE)
     req = {'description': stil, 'size': g['size'], 'view': 'top-down',
            'item_descriptions': [it + '. ' + stil for it in g['items']],
-           'target_palette': {'colors': palette, 'name': 'Karte04 Savanne' if k4 else 'Karte03 Wueste' if k3 else 'Karte02 Industrie' if k2 else 'Karte01 handheld'}}
+           'target_palette': {'colors': palette, 'name': 'Karte05 Freezeland' if k5 else 'Karte04 Savanne' if k4 else 'Karte03 Wueste' if k3 else 'Karte02 Industrie' if k2 else 'Karte01 handheld'}}
     d = call('POST', '/v2/create-1-direction-object', req)
     oid = d['object_id']
     print(gruppe, 'Objekt', oid)
