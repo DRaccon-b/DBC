@@ -1,0 +1,53 @@
+{
+ "_info": "Klippenverlauf von Karte 01. Spalten von..bis (Vertex-Spalten, inkl.) haben die Klippen-Unterkante in Vertex-Zeile t: Vertices < t sind Plateau (upper), Zeile t ist die Wandmitte (transition), > t ist unten (lower). Die Wand belegt die Kachelzeilen t-1 und t. Abgeleitet aus den C-Feldern in terrain_grid.json, auf wenige Stufen geglaettet. Stufen zwischen Segmenten muessen mindestens 2 Zeilen hoch sein (1er-Stufen hat das Wang-Set nicht).",
+ "segmente": [
+  {
+   "von": 0,
+   "bis": 25,
+   "t": 29
+  },
+  {
+   "von": 26,
+   "bis": 44,
+   "t": 27
+  },
+  {
+   "von": 45,
+   "bis": 64,
+   "t": 29
+  },
+  {
+   "von": 65,
+   "bis": 76,
+   "t": 27
+  },
+  {
+   "von": 77,
+   "bis": 110,
+   "t": 25
+  }
+ ],
+ "treppen": [
+  {
+   "x": 33,
+   "breite": 3,
+   "_info": "dunkler Weg vom Plateau runter zum hellen Weg"
+  },
+  {
+   "x": 49,
+   "breite": 3,
+   "_info": "Hauptweg am Fluss"
+  },
+  {
+   "x": 85,
+   "breite": 3,
+   "_info": "Ostweg"
+  }
+ ],
+ "wasserfaelle": [
+  {
+   "x": 59,
+   "breite": 2
+  }
+ ]
+}
