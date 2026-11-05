@@ -83,6 +83,8 @@ FEST = [
     (NADEL, 14, 95, {}), (NADEL, 31, 95, {}), (NADEL, 47, 95, {}), (NADEL, 61, 95, {}),
     (NADEL, 78, 95, {}), (NADEL, 92, 95, {}),
 ]
+STUMPF_PLAETZE = [(49, 57), (54, 38)]
+RUNEN_PLAETZE = [(40, 37), (57, 31), (89, 51), (27, 58), (65, 54)]
 BAUM_PLAETZE = [(52, 35), (58, 35), (40, 40), (47, 50), (53, 51), (66, 39), (92, 34), (14, 68),
                 (89, 59), (42, 55), (35, 34)]
 
@@ -169,7 +171,7 @@ def main():
             if b is None or (name.startswith('frucht/') and name not in OBSTBAEUME):   # Wolken / Beete: kein Fuss
                 v, off = sp, 0
             else:
-                art = 'baum' if name in BAEUME or name in OBSTBAEUME or 'tanne' in name else 'klein' if name.startswith(('k01/', 'neu/0')) else 'stein'
+                art = 'baum' if name in BAEUME or name == 'mittel/stumpf' or name in OBSTBAEUME or 'tanne' in name else 'klein' if name.startswith(('k01/', 'neu/0')) else 'stein'
                 v, off = bauwerke.bodenfuss(sp, b, art), 2
             datei = 'varianten/%s_%s%s.png' % (name.replace('/', '-'), b or 'wolke', '_m' if spiegeln else '')
             os.makedirs(os.path.join(OBJ, 'varianten'), exist_ok=True)
@@ -215,6 +217,10 @@ def main():
 
     for (name, fx, fy, opt) in FEST:
         setze(name, fx, fy, opt)
+    for (x, y) in STUMPF_PLAETZE:                                # alte Baumstuempfe auf der Wiese
+        setze('mittel/stumpf', x, y, {'spiegeln': rnd.random() < 0.5}, frei=True)
+    for (x, y) in RUNEN_PLAETZE:                                 # Runensteine mit leuchtenden Runen
+        setze('mittel/runenstein', x, y, {'anim': 'leuchten'}, frei=True)
     for (x, y) in BAUM_PLAETZE:
         setze(KIEFER, x, y, {'anim': 'baum', 'spiegeln': rnd.random() < 0.5}, frei=True)
     # Beete: Hochbeete mit Holzrahmen in unregelmaessigen Reihen, je Beet eine Fruchtsorte (digital)
