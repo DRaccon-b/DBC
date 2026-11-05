@@ -7,7 +7,7 @@
 Ablauf: POST /v2/create-character-with-4-directions (image_size 16x16; PixelLab legt die Figur auf
 eine etwas groessere Leinwand), dann POST /v2/animate-character mit Vorlage `walking-4-frames`,
 dann GET /v2/characters/<id>/zip. Ausgabe unter assets/charaktere/spieler/:
-  rohdaten/                     ZIP-Inhalt von PixelLab (rotations/, animations/, metadata.json)
+  rohdaten/                     ZIP-Inhalt von PixelLab (<Zustand>/rotations, <Zustand>/animations, metadata.json)
   spieler.png                   Spritesheet 16x16: Zeilen = unten, links, rechts, oben;
                                 Spalten = Stehen + 4 Lauf-Frames
   spieler.json                  Aufbau des Spritesheets
@@ -23,6 +23,7 @@ OUT = os.path.join(ROOT, 'assets', 'charaktere', 'spieler')
 API = 'https://api.pixellab.ai/v2'
 RICHTUNGEN = ['south', 'west', 'east', 'north']          # Zeilen im Spritesheet
 GROESSE = 16
+STEHEN_AUS_LAUF = ['north']                       # Stehbild aus dem 1. Lauf-Frame (Rotation fehlerhaft)
 BESCHREIBUNG = ("young adventurer kid for a top-down monster-collecting RPG overworld: short messy brown hair, "
                 "teal headband, red jacket over white shirt, dark blue shorts, small yellow backpack, brown boots, "
                 "cheerful, bright clean colors, readable at 16 pixels")
@@ -95,21 +96,17 @@ def holen(cid):
     spritesheet(roh)
 
 
-def finde(roh, teil, richtung):
-    """Alle PNGs unter roh, deren Pfad `teil` und die Richtung enthaelt, sortiert."""
-    treffer = []
-    for wurzel, _, dateien in os.walk(roh):
-        for f in dateien:
-            p = os.path.join(wurzel, f)
-            rel = os.path.relpath(p, roh).replace(os.sep, '/')
-            if f.endswith('.png') and teil in rel and '/%s/' % richtung in '/' + rel:
-                treffer.append(p)
-    return sorted(treffer)
-
-
 def spritesheet(roh):
-    stehen = {r: Image.open(os.path.join(roh, 'rotations', r + '.png')).convert('RGBA') for r in RICHTUNGEN}
-    gehen = {r: [Image.open(p).convert('RGBA') for p in finde(roh, 'animations/', r)] for r in RICHTUNGEN}
+    """Pfade aus metadata.json (PixelLab legt Rotationen/Animationen unter <Zustand>/... ab)."""
+    meta = json.load(open(os.path.join(roh, 'metadata.json')))
+    frames = meta['states'][0]['frames']
+    lauf = frames['animations'].get('walking') or next(iter(frames['animations'].values()))
+    bild = lambda rel: Image.open(os.path.join(roh, rel)).convert('RGBA')
+    stehen = {r: bild(frames['rotations'][r]) for r in RICHTUNGEN}
+    gehen = {r: [bild(f) for f in lauf[r]] for r in RICHTUNGEN}
+    # PixelLab liefert die Rotation 'north' bei dieser Figur von vorne; der erste Lauf-Frame zeigt den Ruecken
+    for r in STEHEN_AUS_LAUF:
+        stehen[r] = gehen[r][0]
     alle = list(stehen.values()) + [f for fs in gehen.values() for f in fs]
     # gemeinsamer Ausschnitt ueber alle Frames, damit die Figur nicht springt
     boxen = [im.getbbox() for im in alle if im.getbbox()]
