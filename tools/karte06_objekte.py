@@ -36,7 +36,7 @@ FEST = [
     # obere Reihe
     ('front_gebaeude/tv_treppe', 9.5, 14, {'anim': 'portal'}), ('front_gebaeude/01', 21.5, 15, {}), ('front_gebaeude/02', 33.5, 12, {'anim': 'werkstatt'}),
     ('front_gebaeude/03', 44.5, 16, {'anim': 'schmiede'}), ('portal/00', 58.5, 16, {'anim': 'portal'}),
-    ('k04/zahnrad', 39, 12, {}), ('front_mittel/13', 37, 14, {}), ('front_mittel/12', 30, 14, {}),
+    ('k04/zahnrad_m', 39, 12, {}), ('front_mittel/13', 35, 15, {}), ('front_mittel/12', 30, 15, {}),
     # Brunnenplatz mit Laternenkranz
     ('brunnen/00', 36, 30, {'anim': 'brunnen'}),
     ('k01/laterne', 28, 24, {'anim': 'laterne'}), ('k01/laterne', 44, 24, {'anim': 'laterne'}),
@@ -46,20 +46,20 @@ FEST = [
     ('k01/laterne', 61, 21, {'anim': 'laterne'}), ('k01/laterne', 66, 28, {'anim': 'laterne'}),
     ('k01/laterne', 17, 39, {'anim': 'laterne'}),
     # Marktstand, Wegweiser
-    ('front_gross/03', 36, 35, {}), ('front_mittel/08', 67, 28, {}), ('front_mittel/08', 20.5, 35, {}),
+    ('front_gross/03', 36, 37, {}), ('front_mittel/08', 63.5, 28, {}), ('front_mittel/08', 20.5, 35, {}),
     # Pension
-    ('front_gross/00', 10.5, 46, {}), ('datenbaum/klein', 17.5, 50, {'anim': 'daten'}),
-    ('front_mittel/09', 13, 52, {}), ('front_mittel/10', 22, 52, {}), ('front_mittel/11', 17.5, 52, {}),
-    ('front_mittel/04', 25.5, 45, {}), ('front_mittel/00', 25.5, 51, {}), ('front_mittel/01', 9, 52, {}),
+    ('front_gross/00', 9.5, 46, {}), ('datenbaum/klein', 17.5, 49, {'anim': 'daten'}),
+    ('front_mittel/09', 13, 53, {}), ('front_mittel/10', 22, 53, {}), ('front_mittel/11', 17.5, 53, {}),
+    ('front_mittel/04', 25.5, 45, {}), ('front_mittel/00', 25.5, 51, {}), ('front_mittel/01', 9, 53, {}),
     # Cyber-Datenplatz
     ('front_mittel/05', 53, 43, {'anim': 'leuchten'}), ('front_mittel/05', 55, 43, {'anim': 'leuchten'}),
     ('front_mittel/05', 57, 43, {'anim': 'leuchten'}), ('k03/server', 61, 44, {'anim': 'leuchten'}),
     ('k03/antenne', 64.5, 44, {}), ('front_mittel/06', 53, 48, {'anim': 'leuchten'}),
     ('front_mittel/07', 54, 52, {'anim': 'glitzern'}), ('front_mittel/03', 64, 52, {}), ('front_mittel/02', 64, 48, {}),
     # Kirschbaeume
-    ('k01/kirsche', 15, 10, {'anim': 'wehen'}), ('k01/kirsche', 28, 18, {'anim': 'wehen'}),
-    ('k01/kirsche', 51, 17, {'anim': 'wehen'}), ('k01/kirsche', 66, 18, {'anim': 'wehen'}),
-    ('k01/kirsche', 32, 42, {'anim': 'wehen'}), ('k01/kirsche', 49, 55, {'anim': 'wehen'}),
+    ('k01/kirsche', 15, 10, {'anim': 'wehen'}), ('k01/kirsche', 27, 19, {'anim': 'wehen'}),
+    ('k01/kirsche', 49, 19, {'anim': 'wehen'}), ('k01/kirsche', 67, 22, {'anim': 'wehen'}),
+    ('k01/kirsche', 32, 42, {'anim': 'wehen'}), ('k01/kirsche', 47, 53, {'anim': 'wehen'}),
     ('k01/kirsche', 13, 28, {'anim': 'wehen'}),
 ]
 
@@ -104,6 +104,10 @@ def main():
             shutil.copy(q, ziel)
     belegt = {}
     objekte = []
+    from PIL import ImageFilter
+    W_, H_ = cols * T, rows * T
+    pix_fest = np.zeros((H_, W_), bool)          # alle Objekte ausser Waldbaeume
+    pix_wald = np.zeros((H_, W_), bool)
     gesperrt = set()
     x0, y0, x1, y1 = lay['pension']                    # Zaun samt einer Kachel Abstand innen und aussen freihalten
     for x in range(x0 - 1, x1 + 2):
@@ -121,6 +125,7 @@ def main():
             for x in range(tp['x'] - 1, tp['x'] + tp['b'] + 1):
                 gesperrt.add((x, y))
     cache = {}
+    alpha = {}
 
     def boden(tx, ty):
         k = cls[min(rows - 1, max(0, ty))][min(cols - 1, max(0, tx))]
@@ -157,7 +162,24 @@ def main():
         bw, bh = ux1 - ux0 + 1, uy1 - uy0 + 1
         wt, ht = math.ceil(bw / T), math.ceil(bh / T)
         bx = int(round(fx + 0.5 - wt / 2.0))                     # linke Blockspalte (fx = Fussmitte in Kacheln)
-        o = {'datei': datei, 'basis': name, 'x': bx * T + (wt * T - bw) // 2 - ux0, 'y': (ty + 1) * T - 1 - uy1,
+        ox, oy = bx * T + (wt * T - bw) // 2 - ux0, (ty + 1) * T - 1 - uy1
+        if key not in alpha:
+            alpha[key] = np.array(Image.open(os.path.join(OBJ, datei)).getchannel('A')) >= 160
+        am = alpha[key]
+        ys_, xs_ = np.nonzero(am)
+        ys_, xs_ = ys_ + oy, xs_ + ox
+        ok_ = (ys_ >= 0) & (ys_ < H_) & (xs_ >= 0) & (xs_ < W_)
+        ys_, xs_ = ys_[ok_], xs_[ok_]
+        if frei:
+            y0_, y1_, x0_, x1_ = max(0, ys_.min() - 2), ys_.max() + 3, max(0, xs_.min() - 2), xs_.max() + 3
+            fenster = np.zeros((y1_ - y0_, x1_ - x0_), bool)
+            fenster[ys_ - y0_, xs_ - x0_] = True
+            fenster = np.array(Image.fromarray(fenster.astype(np.uint8) * 255).filter(ImageFilter.MaxFilter(5))) > 0
+            hindernis = pix_fest[y0_:y1_, x0_:x1_] | (pix_wald[y0_:y1_, x0_:x1_] if not wald else False)
+            if (fenster[:hindernis.shape[0], :hindernis.shape[1]] & hindernis).any():
+                return False
+        (pix_wald if wald else pix_fest)[ys_, xs_] = True
+        o = {'datei': datei, 'basis': name, 'x': ox, 'y': oy,
              'fuss': h, 'kachel': [tx, ty], 'block': [bx, ty - ht + 1, wt, ht], 'ebene': 0 if flach else 1}
         o.update(opt)
         objekte.append(o)
