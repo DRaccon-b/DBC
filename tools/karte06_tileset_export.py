@@ -3,7 +3,7 @@
   python3 tools/karte06_tileset_export.py   ->  maps/karte06/tileset/ (+ karte06_tileset.zip)
 
 objekte_tileset.png            ALLE Objekte der Karte (jede Variante einmal), je in ihrem eigenen Kachelblock,
-                               so wie sie auf der Karte stehen (ohne Boden, ohne Schatten).
+                               so wie sie auf der Karte stehen (ohne Boden, ohne Schatten, ohne Bodenfuss/Grashalme).
 objekte_tileset_animiert.png   NUR die animierten Objekte, exakt am selben Platz wie im ersten Tileset.
                                Die 16 Animationsbilder liegen untereinander: Bild n beginnt bei
                                y = n * hoehe_animationsbereich (steht in objekte_tileset.json).
@@ -58,7 +58,26 @@ def darstellen(o, cache, frame):
 
 def main():
     objs = json.load(open(os.path.join(OBJ, 'platzierung.json')))
-    cache = {o['datei']: Image.open(os.path.join(OBJ, o['datei'])).convert('RGBA') for o in objs}
+    # Originalsprites ohne Bodenfuss (keine Gras-/Sandpixel vor dem Objekt): die Variante ist 4 px breiter und
+    # 3 px hoeher, das Original sitzt darin bei x = 2 -> gleiche Position auf dem Raster
+    cache, ohne_fuss = {}, 0
+    for o in objs:
+        var = Image.open(os.path.join(OBJ, o['datei'])).convert('RGBA')
+        basis = os.path.join(OBJ, o['basis'] + '.png')
+        spiegel = o['datei'].endswith('_m.png')
+        if o['datei'].startswith('varianten/') and os.path.exists(basis):
+            orig = Image.open(basis).convert('RGBA')
+            if spiegel:
+                orig = orig.transpose(Image.FLIP_LEFT_RIGHT)
+            gleich = var.size == orig.size and var.tobytes() == orig.tobytes()
+            if var.size == (orig.width + 4, orig.height + 3) or gleich:
+                o['datei'] = o['basis'] + ('_m' if spiegel else '')
+                o['x'] += 0 if gleich else 2
+                cache[o['datei']] = orig
+                ohne_fuss += 1
+                continue
+        cache[o['datei']] = var
+    print(ohne_fuss, 'Platzierungen ohne Bodenfuss')
     # jede Variante (Datei + Animation) einmal; Fundstellen sammeln
     eintraege = {}
     for o in objs:
