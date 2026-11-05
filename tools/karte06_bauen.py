@@ -42,7 +42,7 @@ WEGE = [  # (x0, y0, x1, y1) Kacheln, Sandwege
     (44, 29, 71, 33),           # Ausgang rechts
 ]
 PLAETZE = [  # (cx, cy, rx, ry) Ellipsen, Kopfstein
-    (35.5, 30.5, 9.2, 7.6),     # Brunnenplatz
+    (36.0, 28.5, 9.2, 7.6),     # Brunnenplatz (Mitte = Brunnenmitte)
     (58.5, 11.0, 8.6, 7.4),     # Portalplatz
 ]
 TEICH = (38.5, 48.0, 6.5, 4.2)
@@ -250,6 +250,50 @@ def bauen(frame=None, speichern=True):
     return img
 
 
+ROST = [(0x2a, 0x1a, 0x12), (0x4a, 0x2e, 0x1c), (0x6e, 0x46, 0x28), (0x8e, 0x5c, 0x34), (0xb0, 0x76, 0x44),
+        (0xd2, 0x96, 0x5a)]
+
+
+def zahnrad(img, cx, cy, frame, r_aussen=20, r_innen=16, zaehne=10):
+    """Rostiges Zahnrad frontal (10 Zaehne, 5 Speichen), dreht sich 72 Grad je 16 Frames (nahtlos). Licht oben links."""
+    px = img.load()
+    teil = 2 * math.pi / zaehne
+    phase = frame / N_FRAMES * 2 * teil              # 2 Zahnteilungen = 1 Speichenteilung (5 Speichen) je Schleife
+    for y in range(cy - r_aussen - 1, cy + r_aussen + 2):
+        for x in range(cx - r_aussen - 1, cx + r_aussen + 2):
+            dx, dy = x - cx + 0.5, y - cy + 0.5
+            r = math.hypot(dx, dy)
+            if r > r_aussen + 0.5:
+                continue
+            w = math.atan2(dy, dx) - phase
+            licht = -(dx + dy) / max(r, 1) * 0.7                       # -1 (Schatten) .. +1 (Licht)
+            c = None
+            if r > r_innen:                                            # Zahnkranz
+                if ((w % teil) / teil) < 0.5:
+                    c = ROST[3] if licht > 0.2 else ROST[2]
+                    if r > r_aussen - 1:
+                        c = ROST[1]
+            elif r > r_innen - 4:                                      # Ring
+                c = ROST[4] if licht > 0.3 else ROST[3] if licht > -0.3 else ROST[2]
+                if r > r_innen - 1:
+                    c = ROST[1]
+            elif r < 5:                                                # Nabe
+                c = ROST[5] if r < 2 and licht > 0 else ROST[4] if licht > 0 else ROST[2]
+                if r > 4:
+                    c = ROST[1]
+            else:                                                      # Speichen (4) und Loecher
+                sp_t = 2 * math.pi / 5
+                ws = (math.atan2(dy, dx) - phase) % sp_t
+                if min(ws, sp_t - ws) * r < 2.6:
+                    c = ROST[3] if licht > 0 else ROST[2]
+                else:
+                    c = ROST[0]
+            if c is not None:
+                px[x, y] = c + (255,)
+            elif r <= r_aussen + 0.5:
+                px[x, y] = ROST[0] + (255,)                            # Nische hinter den Zahnluecken
+
+
 def animieren_k6(img, objs, cache, frame):
     """Portal/Fernseher wirbeln (Cyan-Pixel zyklisch), Brunnen glitzert, Datenfragmente um den Datenbaum."""
     px = img.load()
@@ -278,13 +322,8 @@ def animieren_k6(img, objs, cache, frame):
                 k = rs.randrange(len(xs))
                 X, Y = o['x'] + xs[k], o['y'] + ys[k]
                 px[X, Y] = (235, 248, 255, 255)
-        elif anim == 'werkstatt':                  # Zahnrad an der Fassade dreht sich
-            cx, cy, r = 2 + 47, 50, 21
-            box = (cx - r, cy - r, cx + r + 1, cy + r + 1)
-            teil = sp.crop(box).rotate(-frame * 360 / N_FRAMES / 2, resample=Image.NEAREST)
-            maske = Image.new('L', teil.size, 0)
-            ImageDraw.Draw(maske).ellipse((0, 0, 2 * r, 2 * r), fill=255)
-            img.paste(teil, (o['x'] + box[0], o['y'] + box[1]), maske)
+        elif anim == 'werkstatt':                  # Zahnrad an der Fassade dreht sich (jedes Frame neu gezeichnet)
+            zahnrad(img, o['x'] + 2 + 47, o['y'] + 50, frame)
             px = img.load()
         elif anim == 'schmiede':                   # Schornstein raucht, Ofen flackert
             a = np.array(sp).astype(np.int16)

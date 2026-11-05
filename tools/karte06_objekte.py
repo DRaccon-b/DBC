@@ -37,10 +37,10 @@ FEST = [
     ('front_gebaeude/03', 44.5, 13, {'anim': 'schmiede'}), ('portal/00', 58.5, 16, {'anim': 'portal'}),
     ('k04/zahnrad', 39, 12, {}), ('front_mittel/13', 37, 14, {}), ('front_mittel/12', 30, 14, {}),
     # Brunnenplatz mit Laternenkranz
-    ('brunnen/00', 35.5, 35, {'anim': 'brunnen'}),
-    ('k01/laterne', 28, 26, {'anim': 'laterne'}), ('k01/laterne', 43, 26, {'anim': 'laterne'}),
-    ('k01/laterne', 28, 35, {'anim': 'laterne'}), ('k01/laterne', 43, 35, {'anim': 'laterne'}),
-    ('k01/laterne', 31, 25, {'anim': 'laterne'}), ('k01/laterne', 40, 25, {'anim': 'laterne'}),
+    ('brunnen/00', 36, 35, {'anim': 'brunnen'}),
+    ('k01/laterne', 28, 24, {'anim': 'laterne'}), ('k01/laterne', 44, 24, {'anim': 'laterne'}),
+    ('k01/laterne', 28, 33, {'anim': 'laterne'}), ('k01/laterne', 44, 33, {'anim': 'laterne'}),
+    ('k01/laterne', 30, 22, {'anim': 'laterne'}), ('k01/laterne', 42, 22, {'anim': 'laterne'}),
     # Laternen an den Wegen
     ('k01/laterne', 12, 20, {'anim': 'laterne'}), ('k01/laterne', 24, 20, {'anim': 'laterne'}),
     ('k01/laterne', 36, 20, {'anim': 'laterne'}), ('k01/laterne', 47, 20, {'anim': 'laterne'}),
@@ -48,7 +48,7 @@ FEST = [
     ('k01/laterne', 61, 28, {'anim': 'laterne'}), ('k01/laterne', 66, 28, {'anim': 'laterne'}),
     ('k01/laterne', 48, 40, {'anim': 'laterne'}), ('k01/laterne', 17, 39, {'anim': 'laterne'}),
     # Marktstand, Wegweiser
-    ('stand/00', 35.5, 38, {}), ('front_mittel/08', 67, 28, {}), ('front_mittel/08', 20.5, 35, {}),
+    ('stand/00', 36, 38, {}), ('front_mittel/08', 67, 28, {}), ('front_mittel/08', 20.5, 35, {}),
     # Pension
     ('front_gross/00', 10.5, 46, {}), ('datenbaum/klein', 18.5, 50, {'anim': 'daten'}),
     ('front_mittel/09', 14, 53, {}), ('front_mittel/10', 23, 53, {}), ('front_mittel/11', 18.5, 53, {}),
