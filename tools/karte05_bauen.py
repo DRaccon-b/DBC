@@ -202,6 +202,9 @@ def bauen(frame=None, speichern=True):
     loch = weich(zell_maske(cls, 'd', cols, rows), 3.0, 0.3, 25, 0.5) & see
     wasser_kalt(a, meer, frame)
     wasser_kalt(a, loch, frame, dunkel=True)
+    import wasser_vertieft                                  # Stil von Karte 01: vertieftes Wasser, Schneerand
+    a = np.array(wasser_vertieft.vertiefen(Image.fromarray(a), np.ones_like(meer), frame, maske=meer | loch,
+                                           rand=('#7e96ae', '#a2b8cc', '#c6d6e4', '#e2ecf4')).convert('RGB'))
     for y, x in zip(*np.nonzero(loch & ~np.roll(loch, -1, 0))):        # Eiskante am Lochrand (Dicke)
         for k in range(1, 3):
             if y - k >= 0 and loch[y - k, x]:

@@ -452,6 +452,15 @@ def bauen(frame=None, speichern=True):
                                          {'w': basis['x'], 'm': basis['x']})
                 wasserzellen.append((x, y))
             img.paste(kachel, (x * T, y * T))
+    # --- 1b. Fluss und Oasenteiche vertieft (Stil von Karte 01: Ufermauer, Steingrund, Tiefenstufen)
+    import wasser_vertieft
+    region = np.zeros((rows * T, cols * T), bool)
+    for y in range(rows):
+        for x in range(cols):
+            if cls[y][x] == 'x':
+                region[max(0, y * T - T):(y + 2) * T, max(0, x * T - T):(x + 2) * T] = True
+    img = wasser_vertieft.vertiefen(img, region, frame,
+                                    rand=('#7a5434', '#a07448', '#c49a64', '#dcb886')).convert('RGBA')
     L = ind.Leinwand(img)
 
     # --- 2. Boden-Overlays auf Sand: Weg, Kies, Platz, Lehm, Duene

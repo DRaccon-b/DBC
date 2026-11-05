@@ -707,6 +707,9 @@ def bauen(frame=None, speichern=True):
     wm = splitter_weg(wm, 120)
     fluss = wm & can
     wasser_zeichnen(a, wm, frame, fluss)
+    import wasser_vertieft                                  # Stil von Karte 01: vertieftes Wasser
+    a = np.array(wasser_vertieft.vertiefen(Image.fromarray(a), np.ones_like(wm), frame, maske=wm,
+                                           rand=('#5e3e26', '#7e5634', '#9c7044', '#b88a58')).convert('RGB'))
     for (y0, y1) in lay.get('furten', []):
         stromschnelle(a, fluss, y0 * T, (y1 + 1) * T, frame)
     # --- Rampen (keine Kanten dort)

@@ -98,10 +98,23 @@ def _stufe(m, abstand):
     return (np.array(k) > 128) & m
 
 
-def vertiefen(img, region, frame=None, meiden=None):
+def vertiefen(img, region, frame=None, meiden=None, maske=None, rand=None):
+    """maske: fertige Wassermaske (sonst Erkennung ueber die Farbe), rand: 4 Farben fuer den Uferrand
+    (dunkel -> hell), Standard Erde."""
+    global ERDE
+    erde_alt = ERDE
+    if rand is not None:
+        ERDE = [H(c) for c in rand]
+    try:
+        return _vertiefen(img, region, frame, meiden, maske)
+    finally:
+        ERDE = erde_alt
+
+
+def _vertiefen(img, region, frame, meiden, maske):
     a = np.array(img.convert('RGB'))
     Hh, W = a.shape[:2]
-    m = wassermaske(a, region)
+    m = (maske & region) if maske is not None else wassermaske(a, region)
     if not m.any():
         return img
     oben = _lauf(m, 0)                     # Pixel seit Landkante oben
