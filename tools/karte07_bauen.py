@@ -30,6 +30,60 @@ LIPPE_SCHNEE = ['#90a6bc', '#b0c4d6', '#cad9e6', '#dfe9f2', '#f0f6fb', '#ffffff'
 LIPPE_FELS = ['#5a606a', '#727882', '#8c929c', '#a6abb4', '#bcc0c6', '#d2d5da']
 
 
+NEBEL = np.array(H('#e4e9f1'), np.float32)
+
+
+def wolkenfels(breite, hoehe, seed):
+    """Neue Bergwand: gestapelte, unregelmaessige Steinfragmente (blaugrau, Licht oben links, dunkle Fugen),
+    nach unten in Nebel uebergehend, mit Nebelschwaden und schwebenden Steinsplittern."""
+    rs = random.Random(seed)
+    P = [np.array(H(c), np.float32) for c in ('#2e333c', '#444b57', '#5c6472', '#77808e', '#959dab', '#b6bdc8', '#d6dbe2')]
+    a = np.zeros((hoehe, breite, 3), np.float32)
+    a[:] = P[1]
+    y = 0
+    while y < hoehe:
+        bh = rs.randint(5, 10)
+        x = -rs.randint(0, 8)
+        while x < breite:
+            bw = rs.randint(6, 15)
+            ton = rs.choice((2, 2, 3, 3, 4))
+            for yy in range(y, min(hoehe, y + bh)):
+                for xx in range(max(0, x), min(breite, x + bw)):
+                    dy, dx = yy - y, xx - x
+                    c = P[ton]
+                    if dy == 0 or dx == 0:
+                        c = P[min(6, ton + 2)] if dy == 0 else P[min(6, ton + 1)]
+                    if dy == bh - 1 or dx == bw - 1:
+                        c = P[0]
+                    elif dy == bh - 2 or dx == bw - 2:
+                        c = P[max(0, ton - 1)]
+                    a[yy, xx] = c
+            x += bw
+        y += bh
+    t = (np.arange(hoehe, dtype=np.float32) / max(1, hoehe - 1))[:, None]
+    xs = np.arange(breite, dtype=np.float32)[None, :]
+    schwade = 0.18 * np.sin(xs / 11.0 + seed) + 0.12 * np.sin(xs / 4.3 + t * 9)
+    f = np.clip(t ** 1.6 * 0.85 + schwade * t, 0, 0.92)[..., None]
+    a = a * (1 - f) + NEBEL * f
+    for _ in range(breite // 18):                         # schwebende Splitter im Nebel
+        fx, fy = rs.randrange(breite - 4), rs.randrange(int(hoehe * 0.55), max(int(hoehe * 0.55) + 1, hoehe - 3))
+        for dy, dx, c in ((0, 1, P[5]), (0, 2, P[4]), (1, 0, P[4]), (1, 1, P[3]), (1, 2, P[2]), (2, 1, P[1])):
+            if fy + dy < hoehe and fx + dx < breite:
+                a[fy + dy, fx + dx] = c
+    return np.clip(a, 0, 255).astype(np.uint8)
+
+
+_alt_fels = k4.fels_textur
+
+
+def _fels(name, breite, hoehe, seed):
+    return wolkenfels(breite, hoehe, seed) if name == 'wolkenfels' else _alt_fels(name, breite, hoehe, seed)
+
+
+k4.fels_textur = _fels
+k4.FELS['wolkenfels'] = ['#2e333c', '#444b57', '#5c6472', '#77808e', '#959dab', '#b6bdc8', '#d6dbe2']
+
+
 def R(cls, art, x0, y0, x1, y1):
     cls[y0:y1 + 1, x0:x1 + 1] = art
 
@@ -80,8 +134,11 @@ def layout():
     R(cls, 'p', 4, 76, 21, 87)
     R(cls, 'p', 85, 63, 96, 80)
     R(cls, 'p', 5, 62, 11, 66)
-    cls[~insel] = 'o'
-    hoehe[~insel] = 0
+    spalt = (xx >= 68) & (xx <= 73) & (yy >= 2) & (yy <= 26)
+    cls[~insel] = 'b'
+    hoehe[~insel] = 4
+    cls[spalt] = 'o'
+    hoehe[spalt] = 0
     lay = {'groesse': [COLS, ROWS], 'klassen': [''.join(r) for r in cls],
            'hoehe': [''.join(str(v) for v in r) for r in hoehe],
            'treppen': [[22, 26, 22, 26], [60, 64, 26, 30], [17, 21, 55, 60], [72, 76, 55, 60]],
@@ -208,13 +265,94 @@ def roter_zaun(img, stuecke):
                 pfosten(X, ty * T + 13)
 
 
+def _rauschen(Hh, W, zelle, seed):
+    rs = np.random.RandomState(seed)
+    n = rs.rand(Hh // zelle + 3, W // zelle + 3)
+    im = Image.fromarray((n * 255).astype(np.uint8)).resize(((W // zelle + 3) * zelle, (Hh // zelle + 3) * zelle), Image.BICUBIC)
+    return np.array(im)[:Hh, :W].astype(np.float32) / 255.0
+
+
+def bergboden(frame):
+    """Bergmassiv am Kartenrand (von oben): dunkler Fels mit weichen Schneefeldern, Felsbrocken-Struktur
+    und ziehenden, weichen Nebelfeldern."""
+    W, Hh = COLS * T, ROWS * T
+    fels = flaeche(kacheln(os.path.join(ROOT, 'assets', 'karte05', 'basis', 'r_%d.png'), 5,
+                           lambda x: x * np.array([0.7, 0.72, 0.78])))
+    a = fels.astype(np.float32)
+    schnee = (_rauschen(Hh, W, 20, 3) * 0.6 + _rauschen(Hh, W, 6, 4) * 0.4) > 0.68
+    a[schnee] = a[schnee] * 0.45 + np.array(H('#dfe6ee')) * 0.55
+    kante = schnee & ~(np.roll(schnee, 1, 0) & np.roll(schnee, -1, 0))
+    a[kante] = a[kante] * 0.8
+    fr = frame or 0
+    n = np.roll(_rauschen(Hh, W, 96, 5), fr * 4, axis=1)
+    f = np.clip((n - 0.45) * 0.9, 0, 0.35)[..., None]
+    a = a * (1 - f) + NEBEL * f
+    return np.clip(a, 0, 255).astype(np.uint8)
+
+
+def digitalfeld(a, m, frame):
+    """Digitale Felder: dunkler Datenboden mit feinem Cyan-Gitter, unregelmaessige Beetreihen (Furchen mit
+    leuchtender Kante); die Pflanzen kommen als Objekte."""
+    rs = random.Random(9)
+    ys, xs = np.nonzero(m)
+    a[m] = H('#2a3040')
+    gitter = m & (((np.arange(a.shape[1])[None, :] % 8) == 0) | ((np.arange(a.shape[0])[:, None] % 8) == 0))
+    a[gitter] = H('#33405a')
+    pfad = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'maps', 'karte07', 'feldreihen.json')
+    reihen = json.load(open(pfad)) if os.path.exists(pfad) else []
+    for (xa, xe, yf) in reihen:                          # Beetreihe unter den Pflanzen (Fusslinie yf)
+        dy = rs.randint(-1, 1)
+        for x in range(xa, xe):
+            y = yf + dy
+            if not (0 <= y - 4 and y + 2 < a.shape[0] and m[y, x]):
+                continue
+            a[y - 4, x] = H('#4be0e8') if (x + (frame or 0) * 3) % 24 < 2 else H('#2c8a9a')
+            a[y - 3, x] = H('#6a5438'); a[y - 2, x] = H('#5a4630'); a[y - 1, x] = H('#4a3a28')
+            a[y, x] = H('#3a2e22'); a[y + 1, x] = H('#30261c'); a[y + 2, x] = H('#262836')
+
+
+def steinbruecke(img, x0, x1, y0, y1):
+    """Steinbruecke: Steinplatten-Deck im Verband, niedrige Bruestung mit Pfeilern oben und unten, Schatten."""
+    px = img.load()
+    P = [(0x3a, 0x3e, 0x48), (0x56, 0x5c, 0x68), (0x74, 0x7a, 0x86), (0x94, 0x9a, 0xa6), (0xb4, 0xb9, 0xc2), (0xd2, 0xd6, 0xdc)]
+    W, Hh = img.size
+    for x in range(x0, x1):
+        for y in range(y1 + 1, y1 + 7):
+            if 0 <= y < Hh:
+                r, g, b, a_ = px[x, y]
+                f = 0.6 + (y - y1) * 0.06
+                px[x, y] = (int(r * f), int(g * f), int(b * f), a_)
+    for y in range(y0 + 4, y1 - 3):
+        for x in range(x0, x1):
+            reihe = (y - y0) // 6
+            k = (x - x0 + (5 if reihe % 2 else 0)) % 11
+            c = P[3] if k not in (0, 10) else P[1]
+            if (y - y0) % 6 == 0:
+                c = P[4]
+            elif (y - y0) % 6 == 5:
+                c = P[1]
+            px[x, y] = c + (255,)
+    for yb in (y0, y1 - 4):
+        for x in range(x0 - 2, x1 + 2):
+            for d, c in enumerate((P[0], P[5], P[4], P[2], P[0])):
+                if 0 <= yb + d < Hh:
+                    px[x, yb + d] = c + (255,)
+        for pxl in list(range(x0 - 2, x1 - 4, 18)) + [x1 - 4]:
+            for x in range(pxl, pxl + 6):
+                for y in range(yb - 6, yb + 5):
+                    c = P[0] if x in (pxl, pxl + 5) or y == yb - 6 else P[5] if x == pxl + 1 else P[3]
+                    px[x, y] = c + (255,)
+
+
 def bauen(frame=None, speichern=True):
     lay = json.load(open(os.path.join(KARTE, 'layout.json')))
     cls = lay['klassen']
     hoehe = np.array([[int(c) for c in r] for r in lay['hoehe']])
     Wp, Hp = COLS * T, ROWS * T
     a = wolken(frame)
-    insel = weich(zell_maske([''.join('1' if v >= 1 else '0' for v in r) for r in hoehe], '1', COLS, ROWS), 5, 0.3, 20)
+    berg = weich(zell_maske(cls, 'b', COLS, ROWS), 4, 0.5, 19)
+    a[berg] = bergboden(frame)[berg]
+    insel = weich(zell_maske([''.join('1' if 1 <= v <= 3 else '0' for v in r) for r in hoehe], '1', COLS, ROWS), 5, 0.3, 20) & ~berg
     gras = flaeche(kacheln(os.path.join(ROOT, 'assets', 'basis', 'gras_%d.png'), 5))
     a[insel] = gras[insel]
     schnee = flaeche(kacheln(os.path.join(ROOT, 'assets', 'karte05', 'basis', 's_%d.png'), 5))
@@ -230,22 +368,24 @@ def bauen(frame=None, speichern=True):
     rand = pm & ~(np.roll(pm, 1, 0) & np.roll(pm, -1, 0) & np.roll(pm, 1, 1) & np.roll(pm, -1, 1))
     a[rand] = H('#4a505a')
     tm = weich(zell_maske(cls, 't', COLS, ROWS), 1.5, 0, 8) & insel
-    teefeld(a, tm, frame)
+    digitalfeld(a, tm, frame)
     # Hoehenkanten: Insel -> Wolken (tiefe Felsfront), Stufen 1->2->3 mit Treppen
     m1 = insel
-    m2 = weich(zell_maske([''.join('1' if v >= 2 else '0' for v in r) for r in hoehe], '1', COLS, ROWS), 4, 0.25, 21)
-    m3 = weich(zell_maske([''.join('1' if v >= 3 else '0' for v in r) for r in hoehe], '1', COLS, ROWS), 4, 0.25, 22)
+    m2 = weich(zell_maske([''.join('1' if 2 <= v <= 3 else '0' for v in r) for r in hoehe], '1', COLS, ROWS), 4, 0.25, 21) & ~berg
+    m3 = weich(zell_maske([''.join('1' if v == 3 else '0' for v in r) for r in hoehe], '1', COLS, ROWS), 4, 0.25, 22) & ~berg
     frei = np.zeros((Hp, Wp), bool)
     treppen = []
     for (x0, x1, y0, y1) in lay['treppen']:
         frei[y0 * T:(y1 + 1) * T, x0 * T - 6:(x1 + 1) * T + 6] = True
         treppen.append((x0, x1, y0, y1))
-    k4.hoehenkanten(a, m3, 'heilig', 48, 8, LIPPE_SCHNEE, frei, 13, berg=True)
-    k4.hoehenkanten(a, m2, 'heilig', 48, 8, LIPPE_GRAS, frei, 12, berg=True)
-    k4.hoehenkanten(a, m1, 'heilig', 64, 8, LIPPE_GRAS, np.zeros((Hp, Wp), bool), 11, berg=True)
+    k4.hoehenkanten(a, berg, 'wolkenfels', 56, 10, LIPPE_FELS, np.zeros((Hp, Wp), bool), 10, berg=True)
+    k4.hoehenkanten(a, m3, 'wolkenfels', 48, 8, LIPPE_SCHNEE, frei, 13, berg=True)
+    k4.hoehenkanten(a, m2, 'wolkenfels', 48, 8, LIPPE_GRAS, frei, 12, berg=True)
+    spalt = weich(zell_maske(cls, 'o', COLS, ROWS), 2, 0, 18)
+    k4.hoehenkanten(a, ~spalt, 'wolkenfels', 64, 8, LIPPE_SCHNEE, np.zeros((Hp, Wp), bool), 11, berg=True)
     img = Image.fromarray(a).convert('RGBA')
     alt = bauwerke.S
-    bauwerke.S = [H(c) + (255,) for c in k4.FELS['heilig']]
+    bauwerke.S = [H(c) + (255,) for c in k4.FELS['wolkenfels']]
     for (x0, x1, y0, y1) in treppen:
         spalte = (x0 + x1) // 2
         stufe = m3 if any(hoehe[y, spalte] == 3 for y in range(y0, y1 + 1)) else m2
@@ -256,7 +396,7 @@ def bauen(frame=None, speichern=True):
             bauwerke.zeichne_treppe(img, x0 * T, (x1 + 1) * T, ye + 2, ye + 50)
     bauwerke.S = alt
     bx0, by0, bx1, by1 = lay['bruecke']
-    bauwerke.zeichne_bruecke(img, bx0 * T, (bx1 + 1) * T, by0 * T + 2, (by1 + 1) * T - 2, frame=frame or 0, wasser=False)
+    steinbruecke(img, bx0 * T, (bx1 + 1) * T, by0 * T + 2, (by1 + 1) * T - 2)
     a = np.array(img.convert('RGB'))
     for tp in lay['teleporter']:
         k4.teleporter_zeichnen(a, tp['x'], tp['y'], tp['b'], tp['h'], frame)
