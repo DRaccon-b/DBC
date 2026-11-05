@@ -25,7 +25,7 @@ SL, PL, BAMBUS = 'mittel/00', 'mittel/01', 'mittel/05'
 KIEFER, TANNE, GROSSKIEFER = 'neu/00', 'neu/01', 'turm/03'      # neue Baeume (statt Bonsai / alter Schneekiefer)
 BUSCH, AZALEE = 'neu/02', 'neu/03'
 OBELISK, KRISTALL = 'mittel/02', 'mittel/03'
-NADEL, NADEL_BODEN = 'gross/03', 'gross/03_ohne'                # Felsnadel mit / ohne Wolkensockel
+NADEL, NADEL_BODEN = 'gross/03', 'gross/03_land'                # Felsnadel mit / ohne Wolkensockel
 BAEUME = {KIEFER, TANNE, GROSSKIEFER}
 FRUECHTE = ['kuerbis', 'kohl', 'tomate', 'mais', 'karotte', 'erdbeere', 'aubergine', 'melone', 'zwiebel',
             'heidelbeere', 'weizen', 'kartoffel', 'ruebe', 'rote_bete', 'paprika', 'blumenkohl']
@@ -57,7 +57,7 @@ FEST = [
     (KRISTALL, 90.5, 70, {'anim': 'glitzern'}), (BUSCH, 91.5, 71, {}),
     ('gross/01', 90.5, 80, {}), ('mittel/10', 90.5, 73, {}),
     (SL, 86, 67, {}), (SL, 95, 67, {}), (BAMBUS, 86, 77, {'anim': 'wehen'}), (BAMBUS, 95, 77, {'anim': 'wehen'}),
-    (PL, 95, 63, {'anim': 'leuchten', 'spiegeln': True}),
+    (PL, 95, 64, {'anim': 'leuchten', 'spiegeln': True}),
     (BAMBUS, 45, 66, {'anim': 'wehen'}), (BAMBUS, 22, 70, {'anim': 'wehen'}), (BAMBUS, 6, 72, {'anim': 'wehen'}),
     (BAMBUS, 9, 72, {'anim': 'wehen'}), (BAMBUS, 12, 72, {'anim': 'wehen'}), (BAMBUS, 70, 73, {'anim': 'wehen'}),
     (PL, 46.5, 76, {'anim': 'leuchten', 'spiegeln': True}), (PL, 69.5, 81, {'anim': 'leuchten'}),
@@ -66,10 +66,10 @@ FEST = [
     (TURM_G, 47, 4, {}), (TURM_G, 62, 11, {}), (TURM_G, 57, 24, {}), (TURM_G, 37, 24, {}), (TURM_G, 32, 11, {}),
     # Kristallsaeulen verteilt, jeweils mit Baum/Strauch halb davor
     (LILA, 12, 30, {}), (TANNE, 13.5, 31, {'anim': 'baum'}),
-    (KRISTALL, 45, 31, {'anim': 'glitzern'}), (AZALEE, 46.5, 32, {}),
+    (KRISTALL, 45, 33, {'anim': 'glitzern'}), (AZALEE, 46.5, 34, {}),
     (KRISTALL, 64, 48, {'anim': 'glitzern'}), (KIEFER, 65.5, 49, {'anim': 'baum', 'spiegeln': True}),
     (LILA, 24, 67, {}), (BUSCH, 24.5, 68, {}),
-    (KRISTALL, 80, 27, {'anim': 'glitzern'}), (TANNE, 81.5, 28, {'anim': 'baum'}),
+    (KRISTALL, 80, 25, {'anim': 'glitzern'}), (TANNE, 81.5, 26, {'anim': 'baum'}),
     (LILA, 93, 40, {}), (AZALEE, 94, 41, {}),
     (LILA, 5, 49, {}), (TANNE, 6.5, 50, {'anim': 'baum', 'spiegeln': True}),
     # Felsnadeln ohne Wolken auf der Insel
@@ -80,7 +80,7 @@ FEST = [
     # (nur im Wolkenmeer, Sockel nie auf einer Felswand)
     (NADEL, -2, 30, {}), (NADEL, -2, 48, {}), (NADEL, -3, 12, {}), (NADEL, -3, 68, {}), (NADEL, -2, 84, {}),
     (NADEL, 102, 22, {}), (NADEL, 102, 56, {}), (NADEL, 103, 8, {}), (NADEL, 103, 72, {}), (NADEL, 102, 88, {}),
-    (NADEL, 70.5, 26, {}), (NADEL, 14, 95, {}), (NADEL, 31, 95, {}), (NADEL, 47, 95, {}), (NADEL, 61, 95, {}),
+    (NADEL, 14, 95, {}), (NADEL, 31, 95, {}), (NADEL, 47, 95, {}), (NADEL, 61, 95, {}),
     (NADEL, 78, 95, {}), (NADEL, 92, 95, {}),
 ]
 BAUM_PLAETZE = [(52, 35), (58, 35), (40, 40), (47, 50), (53, 51), (66, 39), (92, 34), (14, 68),
@@ -124,12 +124,23 @@ def main():
                 if 0 <= x + dx < cols and hoehe[y][x] != hoehe[y][x + dx]:
                     gesperrt.add((x, y))
     cache, alpha, objekte = {}, {}, []
+    # Wandkacheln: Kante der hoeheren Ebene + Felsfront darunter (3 Kacheln, zur Wolke 4), Seitenwaende
+    wand = set()
+    for y in range(rows - 1):
+        for x in range(cols):
+            if hoehe[y][x] > hoehe[y + 1][x]:
+                for k in range(0, (4 if hoehe[y + 1][x] == 0 else 3) + 1):
+                    wand.add((x, y + k))
+            for dx in (-1, 1):
+                if 0 <= x + dx < cols and hoehe[y][x] < hoehe[y][x + dx]:
+                    wand.add((x, y))
 
     def boden(tx, ty):
         k = cls[min(rows - 1, max(0, ty))][min(cols - 1, max(0, tx))]
         return 'sand' if k in 'nw' else 'beton' if k in 'prf' else 'gras'
 
-    def setze(name, fx, fy, opt, frei=False, nur=None, abs_=False):
+    def setze(name, fx, fy, opt, frei=False, nur=None, abs_=False, _versuch=False):
+        opt0 = dict(opt)
         opt = dict(opt)
         spiegeln = opt.pop('spiegeln', False)
         hoch = opt.pop('hoch', 0)
@@ -169,6 +180,16 @@ def main():
         bw, bh = ux1 - ux0 + 1, uy1 - uy0 + 1
         wt, ht = math.ceil(bw / T), math.ceil(bh / T)
         bx = int(round(fx + 0.5 - wt / 2.0))
+        # Wandregel: die unteren zwei Kachelreihen (Sockel) duerfen nie auf einer Felswand/Kante liegen
+        if any((x, y) in wand for x in range(bx, bx + wt) for y in (ty - 1, ty)):
+            if frei or _versuch:
+                return False
+            for (dx, dy) in ((0, 1), (0, -1), (0, 2), (0, -2), (0, 3), (0, -3), (1, 0), (-1, 0), (0, 4), (0, -4),
+                             (2, 0), (-2, 0), (0, 5), (0, -5)):
+                if setze(name, fx + dx, fy + dy, opt0, nur=nur, abs_=True, _versuch=True):
+                    print('  Wandregel: %s (%g,%g) -> (%g,%g)' % (name, fx - R, fy - R, fx + dx - R, fy + dy - R))
+                    return True
+            print('  WARNUNG Wand:', name, fx - R, fy - R)
         ox, oy = bx * T + (wt * T - bw) // 2 - ux0, (ty + 1) * T - 1 - uy1 - hoch
         ys_, xs_ = np.nonzero(alpha[key])
         ys_, xs_ = ys_ + oy, xs_ + ox
@@ -207,7 +228,7 @@ def main():
                 if ende - x >= 4:
                     beete.append([(x + R) * T + 2, (ende + R) * T - 2, (y + R) * T + 2, (y + 3 + R) * T - 2])
                     frucht = 'frucht/' + rnd.choice(FRUECHTE)
-                    anim = {'anim': 'wehen'} if frucht.endswith(('mais', 'weizen', 'zwiebel', 'karotte')) else {}
+                    anim = {'anim': 'wehen'}
                     px = x
                     while px + 4 <= ende:
                         setze(frucht, px + 1.5, y + 2, dict(anim, hoch=6, spiegeln=rnd.random() < 0.5))

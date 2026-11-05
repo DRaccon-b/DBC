@@ -225,10 +225,10 @@ def bausch(a, cx, cy, r, erlaubt=None, dunkel=0.0):
     a[y0:y1, x0:x1] = teil.astype(a.dtype)
 
 
-SCHICHTEN = [  # (Fuellung, Licht, Schatten, Kontur) von hinten nach vorne
-    ('#c3cde0', '#d6deeb', '#aab6cd', '#97a4bf'),
-    ('#d8e0ec', '#eaeff7', '#bcc7da', '#a4b1ca'),
-    ('#eaeff7', '#ffffff', '#cdd6e5', '#aebbd2'),
+SCHICHTEN = [  # (Fuellung, Licht, Schatten, Kontur) von hinten nach vorne - Palette der Felsnadel-Wolken
+    ('#a2b6d4', '#c8d6ea', '#7c95bb', '#5e78a2'),
+    ('#c8d6ea', '#ffffff', '#a2b6d4', '#7c95bb'),
+    ('#c8d6ea', '#ffffff', '#a2b6d4', '#7c95bb'),
 ]
 
 
@@ -261,7 +261,7 @@ def wolkenmeer(frame):
     """Dichtes Wolkenmeer rund um die Insel: drei Wolkenbaenke hintereinander, driften sanft hin und her."""
     W, Hh = COLS * T, ROWS * T
     a = np.zeros((Hh, W, 3), np.uint8)
-    a[:] = H('#aeb9cf')
+    a[:] = H('#a2b6d4')
     fr = frame or 0
     for k, farben in enumerate(SCHICHTEN):
         rs = random.Random(70 + k)

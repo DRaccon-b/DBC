@@ -458,6 +458,9 @@ OBJEKTGRUPPEN_K7 = {
         'small blueberry bush with blue berries, farm crop, perfectly straight front elevation view, symmetric, facing the camera head-on, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
         'golden ripe wheat bundle growing, farm crop, perfectly straight front elevation view, symmetric, facing the camera head-on, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
     ]},
+    'k7_nadel': {'size': 128, 'items': [
+        'tall jagged grey blue rock spire with green moss patches rising directly out of the grass, no platform, no slab, a few small rocks and grass tufts around its foot, no clouds, perfectly straight front elevation view, symmetric, facing the camera head-on, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+    ]},
     'k7_pagode': {'size': 240, 'items': [
         'three story asian pagoda temple with dark blue curved tiled roofs, red wooden walls and pillars, golden ornaments, stone base with steps, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
     ]},
