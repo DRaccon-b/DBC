@@ -44,7 +44,6 @@ FEST = [
     (SL, 80, 9, {}), (SL, 83, 9, {}), (SL, 80, 18, {}), (SL, 87, 18, {}),
     (PL, 76, 11, {'anim': 'leuchten', 'spiegeln': True}), (PL, 66, 22, {'anim': 'leuchten'}),
     (PL, 27, 23, {'anim': 'leuchten', 'spiegeln': True}),
-    (KIEFER, 64, 6, {'anim': 'baum'}),
     ('mittel/13', 59, 39, {}), ('mittel/13', 61, 49, {}),
     # Pagodenhof
     ('pagode/00', 80, 45, {}), (BAMBUS, 73, 39, {'anim': 'wehen'}), (BAMBUS, 87, 39, {'anim': 'wehen'}),
@@ -63,8 +62,8 @@ FEST = [
     (BAMBUS, 9, 72, {'anim': 'wehen'}), (BAMBUS, 12, 72, {'anim': 'wehen'}), (BAMBUS, 70, 73, {'anim': 'wehen'}),
     (PL, 46.5, 76, {'anim': 'leuchten', 'spiegeln': True}), (PL, 69.5, 81, {'anim': 'leuchten'}),
     # umgekippte schwarze Tuerme
-    (TURM_G, 48, 40, {}), (TURM_K, 33, 57, {}), (TURM_F, 13, 58, {}), (TURM_S, 5, 58, {}),
-    (TURM_F, 57, 57, {'spiegeln': True}), (TURM_G, 92, 46, {}),
+    # fuenf schwarze Tuerme wie die Spitzen eines Pentagramms um die Arena (Steinkreis, Mitte 47/15)
+    (TURM_G, 47, 4, {}), (TURM_G, 62, 11, {}), (TURM_G, 57, 24, {}), (TURM_G, 37, 24, {}), (TURM_G, 32, 11, {}),
     # Kristallsaeulen verteilt, jeweils mit Baum/Strauch halb davor
     (LILA, 12, 30, {}), (TANNE, 13.5, 31, {'anim': 'baum'}),
     (KRISTALL, 45, 31, {'anim': 'glitzern'}), (AZALEE, 46.5, 32, {}),
@@ -78,11 +77,11 @@ FEST = [
     # grosse Kiefern
     (GROSSKIEFER, 93, 58, {'anim': 'baum'}), (GROSSKIEFER, 66.5, 58, {'anim': 'baum', 'spiegeln': True}),
     # Felsnadeln in den Wolkenbergen
-    (NADEL, 1.5, 30, {}), (NADEL, 1.5, 46, {}), (NADEL, 98.5, 22, {}), (NADEL, 98.5, 56, {}),
-    (NADEL, 70.5, 26, {}), (NADEL, 30.5, 89, {}), (NADEL, 46.5, 89, {}), (NADEL, 60.5, 89, {}),
-    (NADEL, 92.5, 89, {}), (NADEL, 98.5, 85, {}),
-    (NADEL, -3, 12, {}), (NADEL, -3, 66, {}), (NADEL, 103, 8, {}), (NADEL, 103, 70, {}), (NADEL, 14, 92, {}),
-    (NADEL, 78, 92, {}),
+    # (nur im Wolkenmeer, Sockel nie auf einer Felswand)
+    (NADEL, -2, 30, {}), (NADEL, -2, 48, {}), (NADEL, -3, 12, {}), (NADEL, -3, 68, {}), (NADEL, -2, 84, {}),
+    (NADEL, 102, 22, {}), (NADEL, 102, 56, {}), (NADEL, 103, 8, {}), (NADEL, 103, 72, {}), (NADEL, 102, 88, {}),
+    (NADEL, 70.5, 26, {}), (NADEL, 14, 95, {}), (NADEL, 31, 95, {}), (NADEL, 47, 95, {}), (NADEL, 61, 95, {}),
+    (NADEL, 78, 95, {}), (NADEL, 92, 95, {}),
 ]
 BAUM_PLAETZE = [(52, 35), (58, 35), (40, 40), (47, 50), (53, 51), (66, 39), (92, 34), (14, 68),
                 (89, 59), (42, 55), (35, 34)]
@@ -201,20 +200,20 @@ def main():
     beete = []
     for (fx0, fx1) in FELDER:
         y = 64 + rnd.randint(0, 1)
-        while y + 1 <= 81:
+        while y + 2 <= 81:
             x = fx0 + rnd.randint(1, 2)
             while x <= fx1 - 3:
-                ende = min(x + rnd.randint(4, 9), fx1 + 1 - rnd.randint(0, 1))
-                if ende - x >= 3:
-                    beete.append([(x + R) * T + 2, (ende + R) * T - 2, (y + R) * T + 2, (y + 2 + R) * T - 2])
+                ende = x + 4 * min(rnd.randint(2, 4), (fx1 + 1 - x) // 4)
+                if ende - x >= 4:
+                    beete.append([(x + R) * T + 2, (ende + R) * T - 2, (y + R) * T + 2, (y + 3 + R) * T - 2])
                     frucht = 'frucht/' + rnd.choice(FRUECHTE)
                     anim = {'anim': 'wehen'} if frucht.endswith(('mais', 'weizen', 'zwiebel', 'karotte')) else {}
                     px = x
-                    while px + 2 <= ende:
-                        setze(frucht, px + 0.5, y + 1, dict(anim, hoch=5, spiegeln=rnd.random() < 0.5))
-                        px += 2
-                x = ende + rnd.randint(1, 2)
-            y += 3 + rnd.choice((0, 0, 1))
+                    while px + 4 <= ende:
+                        setze(frucht, px + 1.5, y + 2, dict(anim, hoch=6, spiegeln=rnd.random() < 0.5))
+                        px += 4
+                x = ende + 1
+            y += 4
     json.dump(beete, open(os.path.join(KARTE, 'beete.json'), 'w'))
     # Obstgarten: lockere Baumreihen
     ox0, ox1, oy0, oy1 = OBSTGARTEN

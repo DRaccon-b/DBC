@@ -443,6 +443,95 @@ def beete(a, frame):
                 a[y, x] = c
 
 
+def treppe07(img, xa, xb, y_top, y_bot, seed=3):
+    """Steintreppe in der Wandoeffnung: Wangen aus denselben Steinbloecken wie die Felswand (mit Deckstein),
+    Stufen als Steinplatten mit versetzten Fugen, helle Trittkante, dunkle Setzstufe, Schlagschatten der linken
+    Wange und unter jeder Trittkante, Antrittsplatte unten."""
+    rs = random.Random(seed)
+    px = img.load()
+    W, Hh = img.size
+    P = [tuple(int(v) for v in H(c)) for c in ('#1f232b', '#2e333c', '#444b57', '#5c6472', '#77808e', '#959dab', '#b6bdc8', '#d6dbe2')]
+
+    def setz(x, y, c):
+        if 0 <= x < W and 0 <= y < Hh:
+            px[x, y] = c + (255,)
+
+    def dunkel(x, y, f):
+        if 0 <= x < W and 0 <= y < Hh:
+            r, g, b, a_ = px[x, y]
+            px[x, y] = (int(r * f), int(g * f), int(b * f), a_)
+    wange = 12
+    # Stufen
+    i0, i1 = xa + wange, xb - wange
+    stufe = 8
+    y, n = y_top - 2, 0
+    while y < y_bot:
+        ton = max(0, min(2, 2 - n // 2))                          # oben etwas heller
+        fugen = set()
+        x = i0 + (n % 2) * 9 + rs.randint(0, 4)
+        while x < i1:
+            fugen.add(x)
+            x += rs.randint(14, 22)
+        for x in range(i0, i1):
+            for dy in range(stufe):
+                yy = y + dy
+                if yy > y_bot:
+                    break
+                if dy == 0:
+                    c = P[7 - (ton == 0)]                          # Trittkante (Licht)
+                elif dy < 3:
+                    c = P[6 - (ton == 0)]                          # Trittflaeche
+                elif dy == 3:
+                    c = P[2]                                       # Schatten unter der Kante
+                elif dy < stufe - 1:
+                    c = P[4 - (ton < 2)] if (x + yy * 3) % 13 else P[3]   # Setzstufe mit Koernung
+                else:
+                    c = P[1]                                       # Fuge
+                if x in fugen and 0 < dy < stufe - 1:
+                    c = P[2] if dy < 3 else P[1]
+                if x - 1 in fugen and 0 < dy < 3:
+                    c = P[7]                                       # Lichtkante rechts der Fuge
+                setz(x, yy, c)
+        y += stufe
+        n += 1
+    # Antrittsplatte
+    for x in range(i0 - 2, i1 + 2):
+        for dy, c in ((0, P[6]), (1, P[5]), (2, P[4]), (3, P[1])):
+            setz(x, y_bot + dy, c)
+    # Wangen aus Steinbloecken
+    for (w0, hell) in ((xa, True), (xb - wange, False)):
+        yb = y_top - 6
+        while yb < y_bot + 4:
+            bh = rs.randint(6, 9)
+            for yy in range(yb, min(y_bot + 4, yb + bh)):
+                for x in range(w0, w0 + wange):
+                    k, dy = x - w0, yy - yb
+                    c = P[5] if hell else P[3]
+                    if k == 0 or k == wange - 1:
+                        c = P[0]
+                    elif dy == 0:
+                        c = P[7] if hell else P[5]
+                    elif dy == bh - 1:
+                        c = P[1]
+                    elif k == 1:
+                        c = P[6] if hell else P[4]
+                    elif k == wange - 2:
+                        c = P[3] if hell else P[2]
+                    setz(x, yy, c)
+            yb += bh
+        for x in range(w0, w0 + wange):                           # Deckstein
+            for dy, c in ((-8, P[0]), (-7, P[7]), (-6, P[6])):
+                setz(x, y_top + dy, c)
+    # Schlagschatten: linke Wange auf die Stufen, rechte Wange auf den Boden daneben
+    for yy in range(y_top - 2, y_bot + 1):
+        for k, f in ((0, 0.6), (1, 0.72), (2, 0.85)):
+            dunkel(i0 + k, yy, f)
+    for x in range(xa + 3, xb + 3):
+        for dy, f in ((4, 0.75), (5, 0.85)):
+            if not (i0 - 2 <= x < i1 + 2):
+                dunkel(x, y_bot + dy, f)
+
+
 def steinbruecke(img, x0, x1, y0, y1):
     """Steinbruecke: Steinplatten-Deck im Verband, niedrige Bruestung mit Pfeilern oben und unten, Schatten."""
     px = img.load()
@@ -538,7 +627,7 @@ def bauen(frame=None, speichern=True):
         kante = [y for y in range(y0 * T, (y1 + 1) * T) if col[y] and not col[min(Hp - 1, y + 1)]]
         if kante:
             ye = kante[0]
-            bauwerke.zeichne_treppe(img, x0 * T, (x1 + 1) * T, ye + 2, ye + 50)
+            treppe07(img, x0 * T - 6, (x1 + 1) * T + 6, ye + 2, ye + 50, seed=x0 + y0)
     bauwerke.S = alt
     bx0, by0, bx1, by1 = lay['bruecke']
     steinbruecke(img, bx0 * T, (bx1 + 1) * T, by0 * T + 2, (by1 + 1) * T - 2)

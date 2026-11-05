@@ -10,12 +10,12 @@ ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
 QUELLE = os.path.join(ROOT, 'assets', 'objekte', 'karte07', 'obst')
 ZIEL = os.path.join(ROOT, 'assets', 'objekte', 'karte07', 'frucht')
 # name: (quelle, faktor)
-SORTEN = {'kuerbis': ('obst2', 0, 0.55), 'kohl': ('obst2', 1, 0.5), 'tomate': ('obst2', 2, 0.55),
-          'mais': ('obst2', 3, 0.6), 'karotte': ('obst2', 4, 0.5), 'erdbeere': ('obst2', 5, 0.5),
-          'aubergine': ('obst2', 6, 0.55), 'melone': ('obst2', 7, 0.5), 'zwiebel': ('obst2', 8, 0.5),
-          'heidelbeere': ('obst2', 9, 0.5), 'weizen': ('obst2', 10, 0.55), 'kartoffel': ('obst2', 11, 0.5),
-          'ruebe': ('obst2', 12, 0.5), 'rote_bete': ('obst2', 13, 0.5), 'paprika': ('obst2', 14, 0.55),
-          'blumenkohl': ('obst2', 15, 0.5),
+SORTEN = {'kuerbis': ('obst2', 0, 1.0), 'kohl': ('obst2', 1, 1.0), 'tomate': ('obst2', 2, 1.0),
+          'mais': ('obst2', 3, 1.0), 'karotte': ('obst2', 4, 1.0), 'erdbeere': ('obst2', 5, 1.0),
+          'aubergine': ('obst2', 6, 1.0), 'melone': ('obst2', 7, 1.0), 'zwiebel': ('obst2', 8, 1.0),
+          'heidelbeere': ('obst2', 9, 1.0), 'weizen': ('obst2', 10, 1.0), 'kartoffel': ('obst2', 11, 1.0),
+          'ruebe': ('obst2', 12, 1.0), 'rote_bete': ('obst2', 13, 1.0), 'paprika': ('obst2', 14, 1.0),
+          'blumenkohl': ('obst2', 15, 1.0),
           'apfelbaum': ('obst', 8, 1.0), 'kirschbusch': ('obst', 10, 0.8), 'trauben': ('obst', 11, 0.75)}
 CYAN = np.array([95, 240, 255], np.float32)
 
