@@ -308,6 +308,21 @@ def zahnrad(img, cx, cy, frame, r_aussen=20, r_innen=16, zaehne=10):
                 px[x, y] = ROST[0] + (255,)                            # Nische hinter den Zahnluecken
 
 
+_HG = {}
+
+
+def objekte_hintergrund(img, o, sp):
+    """Boden unter einem Objekt (aus terrain_basis.png), um es neu zeichnen zu koennen."""
+    if 'basis' not in _HG:
+        _HG['basis'] = Image.open(os.path.join(KARTE, 'terrain_basis.png')).convert('RGBA')
+    out = Image.new('RGBA', img.size, (0, 0, 0, 0))
+    box = (o['x'], o['y'], o['x'] + sp.width, o['y'] + sp.height)
+    teil = _HG['basis'].crop(box)
+    m = Image.fromarray((np.array(sp.getchannel('A')) > 0).astype(np.uint8) * 255)
+    out.paste(teil, box[:2], m)
+    return out
+
+
 def animieren_k6(img, objs, cache, frame):
     """Portal/Fernseher wirbeln (Cyan-Pixel zyklisch), Brunnen glitzert, Datenfragmente um den Datenbaum."""
     px = img.load()
@@ -421,7 +436,16 @@ def animieren_k6(img, objs, cache, frame):
                             r_, g_, b_, _ = px[x + dx, y + dy]
                             al = 1 - t
                             px[x + dx, y + dy] = (int(r_ + (127 - r_) * al), int(g_ + (240 - g_) * al), int(b_ + (245 - b_) * al), 255)
-        elif anim == 'antenne':                    # rotes Warnlicht an der Spitze blinkt
+        elif anim == 'antenne':                    # Schuesseln am Mast schwenken (wie Karte 03), Warnlicht blinkt
+            import karte03_bauen as k3
+            k3.OBJ_ALT = k3.OBJ
+            gedreht = k3.schuesseln_drehen(sp, frame, o['x'] + o['y'], 'gross2/00')
+            if gedreht is not sp:
+                img.paste((0, 0, 0, 0), (o['x'], o['y'], o['x'] + sp.width, o['y'] + sp.height),
+                          Image.fromarray((np.array(sp.getchannel('A')) > 0).astype(np.uint8) * 255))
+                img.alpha_composite(objekte_hintergrund(img, o, sp), (0, 0))
+                img.alpha_composite(gedreht, (o['x'], o['y']))
+                px = img.load()
             a = np.array(sp.getchannel('A')) > 0
             ys, xs = np.nonzero(a)
             y0 = ys.min(); xt = int(xs[ys == y0].mean())

@@ -55,7 +55,7 @@ FEST = [
     ('front_mittel/05', 53, 43, {'anim': 'server'}), ('front_mittel/05', 55, 43, {'anim': 'server'}),
     ('front_mittel/05', 57, 43, {'anim': 'server'}), ('k03/server', 61, 44, {'anim': 'server'}),
     ('k03/antenne', 64.5, 44, {'anim': 'antenne'}), ('front_mittel/06', 53, 48, {'anim': 'terminal'}),
-    ('front_mittel/07', 54, 52, {'anim': 'saeule'}), ('front_mittel/03', 64, 52, {'anim': 'kabelrolle'}), ('front_mittel/02', 64, 48, {'anim': 'schuessel'}),
+    ('front_mittel/07', 54, 52, {'anim': 'saeule'}), ('front_mittel/03', 64, 52, {}), ('front_mittel/02', 64, 48, {'anim': 'schuessel'}),
     # Kirschbaeume
     ('k01/kirsche', 15, 10, {'anim': 'wehen'}), ('k01/kirsche', 28, 18, {'anim': 'wehen'}),
     ('k01/kirsche', 51, 17, {'anim': 'wehen'}), ('k01/kirsche', 66, 18, {'anim': 'wehen'}),
