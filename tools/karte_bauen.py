@@ -512,7 +512,18 @@ def bauen(frame=None, speichern=True):
         for x in range(cols):
             if cls[y][x] == 'w' and grid[y][x] not in 'hDS':
                 region[max(0, y * T - T):(y + 2) * T, max(0, x * T - T):(x + 2) * T] = True
-    img = wasser_vertieft.vertiefen(img, region, frame)
+    meiden = np.zeros((rows * T, cols * T), bool)            # Bruecken, Steg: dort keine Felsen/Algen
+    for (bx0, bx1, by0, by1) in bruecken_mass + stege_mass:
+        meiden[max(0, by0 - 12):by1 + 12, max(0, bx0 - 12):bx1 + 12] = True
+    img = wasser_vertieft.vertiefen(img, region, frame, meiden)
+    # --- 1c. Meer am Strand: Flachwasser, Schaumkante, zwei Stufen, Tiefsee (Felsen, Algen)
+    import wasser_details
+    meer_region = np.zeros((rows * T, cols * T), bool)
+    for y in range(rows):
+        for x in range(cols):
+            if grid[y][x] in 'Dh':
+                meer_region[max(0, y * T - 2 * T):(y + 2) * T, max(0, x * T - 2 * T):(x + 2) * T] = True
+    img = wasser_details.meer_terrassen(img, meer_region, frame, meiden)
 
     # --- 2. Klippen: handgezeichnete Waende (tools/klippen.py), h Kacheln hoch
     import klippen

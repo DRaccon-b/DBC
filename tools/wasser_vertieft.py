@@ -98,7 +98,7 @@ def _stufe(m, abstand):
     return (np.array(k) > 128) & m
 
 
-def vertiefen(img, region, frame=None):
+def vertiefen(img, region, frame=None, meiden=None):
     a = np.array(img.convert('RGB'))
     Hh, W = a.shape[:2]
     m = wassermaske(a, region)
@@ -164,6 +164,8 @@ def vertiefen(img, region, frame=None):
     sued = m & ~np.roll(m, -1, 0)
     a[sued] = MAUER[1]
     # Tiefere Stufen im Wasser (nur wo die Flaeche breit genug ist, also im Teich, nicht im schmalen Fluss)
+    zonen = []
+    vorige = boden.copy()
     for (abstand, dunkel, mauer_h) in STUFEN:
         innen = _stufe(m, abstand)
         if not innen.any():
@@ -188,6 +190,9 @@ def vertiefen(img, region, frame=None):
         a[schatten] = (a[schatten] * 0.8).astype(np.uint8)
         kante_s = innen & ~np.roll(innen, -1, 0)                                  # Suedkante der Stufe
         a[kante_s] = np.clip(UNTER[3] * 0.9, 0, 255).astype(np.uint8)
+        zonen.append(vorige & ~innen)
+        vorige = rest & ~(il < 2) & ~(ir < 2) & ~kante_s
+    zonen.append(vorige)
     # Oberflaeche: kurze Lichtstriche je Kachel, wandern in 16 Frames eine Kachel nach unten
     fr = frame or 0
     yy, xx = np.nonzero(boden)
@@ -199,6 +204,9 @@ def vertiefen(img, region, frame=None):
             sy, sx = (h >> (4 * j)) % 13 + 1, (h >> (4 * j + 8)) % 11 + 1
             if py == sy and sx <= px < sx + 3:
                 a[y, x] = LICHT[1] if px == sx + 1 else LICHT[0]
+    if len(zonen) == 3:                                   # Felsen und Algen nach Tiefenregel
+        import wasser_details
+        a = wasser_details.teich_details(a, zonen, GRUND[2].astype(np.float32), fr, meiden)
     return Image.fromarray(a).convert('RGBA')
 
 
