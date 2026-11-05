@@ -192,7 +192,7 @@ def bauen(frame=None, speichern=True):
     a[wm] = (gras[wm] * np.array([0.62, 0.7, 0.66])).astype(np.uint8)
     # Sandwege, Spielplatz-Sand
     sand = flaeche(kacheln(os.path.join(basis, 'sand_%d.png'), 5))
-    for art, blur, rausch, seed in (('w', 3.5, 0.35, 4), ('s', 4.0, 0.4, 5)):
+    for art, blur, rausch, seed in (('w', 7.0, 0.5, 4), ('s', 4.0, 0.4, 5)):
         roh = zell_maske(cls, art, COLS, ROWS)
         m = weich(roh, blur, rausch, seed)
         a[m] = sand[m]
@@ -278,6 +278,45 @@ def animieren_k6(img, objs, cache, frame):
                 k = rs.randrange(len(xs))
                 X, Y = o['x'] + xs[k], o['y'] + ys[k]
                 px[X, Y] = (235, 248, 255, 255)
+        elif anim == 'werkstatt':                  # Zahnrad an der Fassade dreht sich
+            cx, cy, r = 2 + 47, 50, 21
+            box = (cx - r, cy - r, cx + r + 1, cy + r + 1)
+            teil = sp.crop(box).rotate(-frame * 360 / N_FRAMES / 2, resample=Image.NEAREST)
+            maske = Image.new('L', teil.size, 0)
+            ImageDraw.Draw(maske).ellipse((0, 0, 2 * r, 2 * r), fill=255)
+            img.paste(teil, (o['x'] + box[0], o['y'] + box[1]), maske)
+            px = img.load()
+        elif anim == 'schmiede':                   # Schornstein raucht, Ofen flackert
+            a = np.array(sp).astype(np.int16)
+            m = (a[..., 0] > 200) & (a[..., 1] > 70) & (a[..., 1] < 210) & (a[..., 2] < 110) & (a[..., 3] > 0)
+            m[:50] = False
+            f = 0.8 + 0.3 * math.sin(frame * 2.1) * math.sin(frame * 0.7 + 1)
+            ys, xs = np.nonzero(m)
+            for y, x in zip(ys, xs):
+                X, Y = o['x'] + x, o['y'] + y
+                r_, g_, b_, _ = px[X, Y]
+                px[X, Y] = (min(255, int(r_ * f + 10)), min(255, int(g_ * f)), min(255, int(b_ * f * 0.9)), 255)
+            if len(xs):
+                glut = Image.new('RGBA', img.size, (0, 0, 0, 0))
+                gd = ImageDraw.Draw(glut)
+                fx, fy = o['x'] + xs.mean(), o['y'] + ys.mean()
+                for rr, al in ((16, 26), (9, 40)):
+                    gd.ellipse((fx - rr, fy - rr * 0.7, fx + rr, fy + rr * 0.7), fill=(255, 150, 60, int(al * f)))
+                img.alpha_composite(glut)
+                px = img.load()
+            rauch = Image.new('RGBA', img.size, (0, 0, 0, 0))
+            rd = ImageDraw.Draw(rauch)
+            sx, sy = o['x'] + 2 + 87, o['y'] + 2
+            for k in range(4):
+                t = ((frame + k * 4) % N_FRAMES) / N_FRAMES
+                rr = 3 + t * 7
+                x = sx + t * 14 + 2 * math.sin(t * 6 + k)
+                y = sy - t * 34
+                al = int(225 * (1 - t) ** 0.7)
+                rd.ellipse((x - rr, y - rr, x + rr, y + rr), fill=(214, 214, 222, al))
+                rd.ellipse((x - rr * 0.5 - 1, y - rr * 0.6 - 1, x + rr * 0.3, y), fill=(240, 240, 246, al))
+            img.alpha_composite(rauch)
+            px = img.load()
         elif anim == 'daten':
             cx = o['x'] + sp.width // 2
             cy = o['y'] + sp.height // 2

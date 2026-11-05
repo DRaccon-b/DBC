@@ -33,25 +33,24 @@ DEKO = ['k01/deko%02d' % i for i in (5, 6, 8, 10, 14, 26, 27, 31, 33)]
 # (sprite, Kachel-x der Fussmitte, Fusszeile, Optionen)
 FEST = [
     # obere Reihe
-    ('front_gebaeude/00', 9.5, 14, {'anim': 'portal'}), ('front_gebaeude/01', 21.5, 12, {}), ('front_gebaeude/02', 33.5, 12, {}),
-    ('front_gebaeude/03', 44.5, 13, {}), ('portal/00', 58.5, 18, {'anim': 'portal'}),
+    ('front_gebaeude/tv_treppe', 9.5, 14, {'anim': 'portal'}), ('front_gebaeude/01', 21.5, 12, {}), ('front_gebaeude/02', 33.5, 12, {'anim': 'werkstatt'}),
+    ('front_gebaeude/03', 44.5, 13, {'anim': 'schmiede'}), ('portal/00', 58.5, 16, {'anim': 'portal'}),
     ('k04/zahnrad', 39, 12, {}), ('front_mittel/13', 37, 14, {}), ('front_mittel/12', 30, 14, {}),
     # Brunnenplatz mit Laternenkranz
-    ('brunnen/00', 35.5, 37, {'anim': 'brunnen'}),
+    ('brunnen/00', 35.5, 35, {'anim': 'brunnen'}),
     ('k01/laterne', 28, 26, {'anim': 'laterne'}), ('k01/laterne', 43, 26, {'anim': 'laterne'}),
     ('k01/laterne', 28, 35, {'anim': 'laterne'}), ('k01/laterne', 43, 35, {'anim': 'laterne'}),
     ('k01/laterne', 31, 25, {'anim': 'laterne'}), ('k01/laterne', 40, 25, {'anim': 'laterne'}),
-    ('k01/laterne', 31, 36, {'anim': 'laterne'}), ('k01/laterne', 40, 36, {'anim': 'laterne'}),
     # Laternen an den Wegen
     ('k01/laterne', 12, 20, {'anim': 'laterne'}), ('k01/laterne', 24, 20, {'anim': 'laterne'}),
     ('k01/laterne', 36, 20, {'anim': 'laterne'}), ('k01/laterne', 47, 20, {'anim': 'laterne'}),
-    ('k01/laterne', 56, 18, {'anim': 'laterne'}), ('k01/laterne', 61, 18, {'anim': 'laterne'}),
+    ('k01/laterne', 56, 21, {'anim': 'laterne'}), ('k01/laterne', 61, 21, {'anim': 'laterne'}),
     ('k01/laterne', 61, 28, {'anim': 'laterne'}), ('k01/laterne', 66, 28, {'anim': 'laterne'}),
     ('k01/laterne', 48, 40, {'anim': 'laterne'}), ('k01/laterne', 17, 39, {'anim': 'laterne'}),
     # Marktstand, Wegweiser
-    ('stand/00', 34.5, 42, {}), ('front_mittel/08', 67, 28, {}), ('front_mittel/08', 22, 40, {}),
+    ('stand/00', 35.5, 38, {}), ('front_mittel/08', 67, 28, {}), ('front_mittel/08', 20.5, 35, {}),
     # Pension
-    ('front_gross/00', 10.5, 46, {}), ('datenbaum/klein', 18.5, 51, {'anim': 'daten'}),
+    ('front_gross/00', 10.5, 46, {}), ('datenbaum/klein', 18.5, 50, {'anim': 'daten'}),
     ('front_mittel/09', 14, 53, {}), ('front_mittel/10', 23, 53, {}), ('front_mittel/11', 18.5, 53, {}),
     ('front_mittel/04', 24.5, 45, {}), ('front_mittel/00', 24.5, 50, {}), ('front_mittel/01', 9, 53, {}),
     # Cyber-Datenplatz
@@ -67,7 +66,34 @@ FEST = [
 ]
 
 
+def tv_mit_treppe():
+    """Fernseher mit Steintreppe in der Sockelmitte, die vom Weg hinauf zum Bildschirm fuehrt."""
+    im = Image.open(os.path.join(OBJ, 'front_gebaeude', '00.png')).convert('RGBA')
+    w, h = im.size
+    out = Image.new('RGBA', (w, h + 10), (0, 0, 0, 0))
+    out.alpha_composite(im, (0, 0))
+    px = out.load()
+    STEIN = [(0x1e, 0x3c, 0x40), (0x2a, 0x58, 0x5a), (0x3a, 0x74, 0x72), (0x52, 0x94, 0x8e), (0x8c, 0xc8, 0xc0)]
+    x0, x1 = w // 2 - 18, w // 2 + 18
+    stufe = 7
+    for i, y0 in enumerate(range(80, h + 10, stufe)):
+        breite = (x1 - x0) + i * 2                    # nach unten breiter
+        xa = (x0 + x1) // 2 - breite // 2
+        for y in range(y0, min(h + 10, y0 + stufe)):
+            for x in range(xa, xa + breite):
+                k = y - y0
+                c = STEIN[4] if k == 0 else STEIN[3] if k < 3 else STEIN[1] if k < stufe - 1 else STEIN[0]
+                if x == xa or x == xa + breite - 1:
+                    c = STEIN[0]
+                px[x, y] = c + (255,)
+    for y in range(78, h + 10):                       # Wangen
+        for dx in (0, 1, 2):
+            px[x0 - 3 + dx, y] = STEIN[2 - dx // 2] + (255,) if y < h else px[x0 - 3 + dx, y]
+    out.save(os.path.join(OBJ, 'front_gebaeude', 'tv_treppe.png'))
+
+
 def main():
+    tv_mit_treppe()
     rnd = random.Random(6)
     lay = json.load(open(os.path.join(KARTE, 'layout.json')))
     cls = lay['klassen']
