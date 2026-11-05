@@ -361,6 +361,18 @@ OBJEKTGRUPPEN_K5 = {
 }
 
 OBJEKTGRUPPEN_K6 = {
+    'k6_brunnen': {'size': 240, 'items': [
+        'gigantic ornate three tier stone fountain with water spraying high from the top, wide round basin, perfectly straight front elevation view, symmetric, facing the camera head-on, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+    ]},
+    'k6_portal': {'size': 240, 'items': [
+        'giant ancient stone ring portal standing upright on a wide stone base with steps, glowing cyan runes around the ring, swirling blue energy inside, perfectly straight front elevation view, symmetric, facing the camera head-on, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+    ]},
+    'k6_datenbaum': {'size': 240, 'items': [
+        'giant digital tree with a huge glowing cyan and green pixelated crown made of data blocks, thick trunk with circuit lines, roots, perfectly straight front elevation view, symmetric, facing the camera head-on, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+    ]},
+    'k6_stand': {'size': 64, 'items': [
+        'small wooden market stall with a striped pink awning and fruit baskets on the counter, perfectly straight front elevation view, symmetric, facing the camera head-on, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+    ]},
     'k6_front_gebaeude': {'size': 128, 'items': [
         'huge old wooden CRT television on a stone pedestal, screen is a glowing swirling cyan portal you can walk through, two antennas on top, perfectly straight front elevation view, symmetric, facade facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, like a classic 2D handheld RPG town building',
         'cozy log cabin with a red tiled roof, chimney, wooden door in the middle, two windows with flowers, perfectly straight front elevation view, symmetric, facade facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, like a classic 2D handheld RPG town building',

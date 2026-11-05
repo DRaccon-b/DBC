@@ -34,10 +34,10 @@ DEKO = ['k01/deko%02d' % i for i in (5, 6, 8, 10, 14, 26, 27, 31, 33)]
 FEST = [
     # obere Reihe
     ('front_gebaeude/00', 9.5, 14, {'anim': 'portal'}), ('front_gebaeude/01', 21.5, 12, {}), ('front_gebaeude/02', 33.5, 12, {}),
-    ('front_gebaeude/03', 44.5, 13, {}), ('front_gross/01', 58.5, 13, {'anim': 'portal'}),
+    ('front_gebaeude/03', 44.5, 13, {}), ('portal/00', 58.5, 18, {'anim': 'portal'}),
     ('k04/zahnrad', 39, 12, {}), ('front_mittel/13', 37, 14, {}), ('front_mittel/12', 30, 14, {}),
     # Brunnenplatz mit Laternenkranz
-    ('front_gross/02', 35.5, 32, {'anim': 'brunnen'}),
+    ('brunnen/00', 35.5, 37, {'anim': 'brunnen'}),
     ('k01/laterne', 28, 26, {'anim': 'laterne'}), ('k01/laterne', 43, 26, {'anim': 'laterne'}),
     ('k01/laterne', 28, 35, {'anim': 'laterne'}), ('k01/laterne', 43, 35, {'anim': 'laterne'}),
     ('k01/laterne', 31, 25, {'anim': 'laterne'}), ('k01/laterne', 40, 25, {'anim': 'laterne'}),
@@ -49,18 +49,16 @@ FEST = [
     ('k01/laterne', 61, 28, {'anim': 'laterne'}), ('k01/laterne', 66, 28, {'anim': 'laterne'}),
     ('k01/laterne', 48, 40, {'anim': 'laterne'}), ('k01/laterne', 17, 39, {'anim': 'laterne'}),
     # Marktstand, Wegweiser
-    ('front_gross/03', 40, 20, {}), ('front_mittel/08', 67, 28, {}), ('front_mittel/08', 22, 40, {}),
+    ('stand/00', 34.5, 42, {}), ('front_mittel/08', 67, 28, {}), ('front_mittel/08', 22, 40, {}),
     # Pension
-    ('front_gross/00', 10.5, 46, {}), ('gross/02', 18.5, 49, {'anim': 'daten'}),
-    ('front_mittel/09', 15, 51, {}), ('front_mittel/10', 22, 51, {}), ('front_mittel/11', 18.5, 52, {}),
-    ('front_mittel/04', 24, 45, {}), ('front_mittel/00', 24, 51, {}), ('front_mittel/01', 9, 52, {}),
+    ('front_gross/00', 10.5, 46, {}), ('datenbaum/klein', 18.5, 51, {'anim': 'daten'}),
+    ('front_mittel/09', 14, 53, {}), ('front_mittel/10', 23, 53, {}), ('front_mittel/11', 18.5, 53, {}),
+    ('front_mittel/04', 24.5, 45, {}), ('front_mittel/00', 24.5, 50, {}), ('front_mittel/01', 9, 53, {}),
     # Cyber-Datenplatz
     ('front_mittel/05', 53, 43, {'anim': 'leuchten'}), ('front_mittel/05', 55, 43, {'anim': 'leuchten'}),
     ('front_mittel/05', 57, 43, {'anim': 'leuchten'}), ('k03/server', 61, 44, {'anim': 'leuchten'}),
     ('k03/antenne', 64.5, 44, {}), ('front_mittel/06', 53, 48, {'anim': 'leuchten'}),
-    ('front_mittel/06', 57, 48, {'anim': 'leuchten'}), ('front_mittel/07', 61, 48, {'anim': 'glitzern'}),
-    ('front_mittel/07', 54, 52, {'anim': 'glitzern'}), ('front_mittel/07', 60, 52, {'anim': 'glitzern'}),
-    ('front_mittel/03', 64, 52, {}), ('front_mittel/02', 64, 48, {}),
+    ('front_mittel/07', 54, 52, {'anim': 'glitzern'}), ('front_mittel/03', 64, 52, {}), ('front_mittel/02', 64, 48, {}),
     # Kirschbaeume
     ('k01/kirsche', 15, 10, {'anim': 'wehen'}), ('k01/kirsche', 28, 18, {'anim': 'wehen'}),
     ('k01/kirsche', 51, 17, {'anim': 'wehen'}), ('k01/kirsche', 66, 18, {'anim': 'wehen'}),
@@ -139,7 +137,8 @@ def main():
         objekte.append(o)
         belegt[(tx, ty, flach)] = True
         for x in range(bx, bx + wt):
-            gesperrt.add((x, ty))
+            for y in range(ty - ht + 1, ty + 1):
+                gesperrt.add((x, y))
         return True
 
     for (name, fx, fy, opt) in FEST:

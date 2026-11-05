@@ -38,12 +38,12 @@ WEGE = [  # (x0, y0, x1, y1) Kacheln, Sandwege
     (44, 24, 47, 52),           # rechts am Brunnenplatz, runter zum Cyberplatz
     (18, 36, 47, 39),           # unten am Brunnenplatz
     (18, 36, 21, 41),           # zur Pension
-    (36, 39, 39, 43),           # zum Steg
+    (39, 39, 42, 43),           # zum Steg
     (44, 29, 71, 33),           # Ausgang rechts
 ]
 PLAETZE = [  # (cx, cy, rx, ry) Ellipsen, Kopfstein
-    (35.5, 30.5, 8.5, 6.2),     # Brunnenplatz
-    (58.5, 11.0, 7.0, 5.5),     # Portalplatz
+    (35.5, 30.5, 9.2, 7.6),     # Brunnenplatz
+    (58.5, 11.0, 8.6, 7.4),     # Portalplatz
 ]
 TEICH = (38.5, 48.0, 6.5, 4.2)
 CYBER = (51, 41, 65, 53)        # Cyber-Datenplatz (Rechteck, Ecken gerundet)
@@ -75,7 +75,7 @@ def layout():
     cls[((xx - 18) / 5.5) ** 2 + ((yy - 48) / 3.6) ** 2 <= 1] = 's'
     lay = {'groesse': [COLS, ROWS], 'klassen': [''.join(r) for r in cls],
            'pension': PENSION, 'pension_tor': PENSION_TOR, 'teich': TEICH,
-           'steg': [37, 43, 38, 47], 'teleporter': [{'x': 70, 'y': 30, 'b': 2, 'h': 3}]}
+           'steg': [40, 43, 41, 47], 'teleporter': [{'x': 70, 'y': 30, 'b': 2, 'h': 3}]}
     json.dump(lay, open(os.path.join(KARTE, 'layout.json'), 'w'), indent=0)
     print('Layout', COLS, ROWS)
 
