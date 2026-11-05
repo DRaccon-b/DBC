@@ -461,6 +461,18 @@ OBJEKTGRUPPEN_K7 = {
     'k7_nadel': {'size': 128, 'items': [
         'tall jagged grey blue rock spire with green moss patches rising directly out of the grass, no platform, no slab, a few small rocks and grass tufts around its foot, no clouds, perfectly straight front elevation view, symmetric, facing the camera head-on, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
     ]},
+    'k7_azul_gross': {'size': 128, 'items': [
+        'majestic azure blue eastern dragon statue coiled around a tall white jade pillar, blue scales, white mane, golden horns, a ring of glowing amber orbs around its body, standing on a white stone altar platform with steps, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'blue tiled chinese paifang shrine gate with white stone pillars, golden ornaments and a blue dragon emblem on top, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+    ]},
+    'k7_azul': {'size': 64, 'items': [
+        'white stone pedestal holding a glowing amber energy orb, golden ring, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'azure blue silk banner on a white pole with a golden dragon emblem, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'blue stone lantern with golden roof cap and glowing amber light inside, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'large pale blue crystal with small lightning bolts inside, on a white rock, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'round bronze incense cauldron with blue dragon handles and gentle smoke, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'small white cloud shaped stone with blue swirl carvings, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+    ]},
     'k7_pagode': {'size': 240, 'items': [
         'three story asian pagoda temple with dark blue curved tiled roofs, red wooden walls and pillars, golden ornaments, stone base with steps, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
     ]},

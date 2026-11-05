@@ -39,9 +39,15 @@ RING = (30, 62, 4, 26)                                          # Steinkreis obe
 FEST = [
     # Gipfel: Wirbelportal, Drachenschrein, Obelisk, Laternen (max. 4 Steinlaternen im Schrein)
     ('mittel/12', 6.5, 7, {'anim': 'portal'}),
-    ('gross/00', 89.5, 11, {}), (KRISTALL, 93, 21, {'anim': 'glitzern'}), (BUSCH, 92, 22, {}),
-    ('mittel/09', 84, 21, {}),
-    (SL, 80, 9, {}), (SL, 83, 9, {}), (SL, 80, 18, {}), (SL, 87, 18, {}),
+    # Reich des azurblauen Drachen (Schreinhof): Drachenstatue um Jadesaeule, Marmorweg, Kugelsockel, Banner
+    ('azul_gross/00', 87, 12, {'anim': 'leuchten'}),
+    ('azul/07', 79, 12, {}), ('azul/07', 79, 19, {'spiegeln': True}),
+    ('azul/00', 82, 12, {'anim': 'leuchten'}), ('azul/00', 82, 19, {'anim': 'leuchten'}),
+    ('azul/02', 94, 11, {'anim': 'leuchten'}), ('azul/02', 94, 21, {'anim': 'leuchten'}),
+    ('azul/01', 79, 6, {'anim': 'wehen'}), ('azul/01', 82, 6, {'anim': 'wehen'}),
+    ('azul/01', 92, 6, {'anim': 'wehen'}), ('azul/01', 95, 6, {'anim': 'wehen'}),
+    ('azul/04', 86.5, 21, {}), ('azul/09', 91, 22, {'anim': 'glitzern'}),
+    ('azul/03', 79, 23, {'anim': 'glitzern'}), ('azul/05', 82, 23, {}), ('azul/03', 95, 16, {'anim': 'glitzern'}),
     (PL, 76, 11, {'anim': 'leuchten', 'spiegeln': True}), (PL, 66, 22, {'anim': 'leuchten'}),
     (PL, 27, 23, {'anim': 'leuchten', 'spiegeln': True}),
     ('mittel/13', 59, 39, {}), ('mittel/13', 61, 49, {}),
@@ -69,7 +75,7 @@ FEST = [
     (KRISTALL, 45, 33, {'anim': 'glitzern'}), (AZALEE, 46.5, 34, {}),
     (KRISTALL, 64, 48, {'anim': 'glitzern'}), (KIEFER, 65.5, 49, {'anim': 'baum', 'spiegeln': True}),
     (LILA, 24, 67, {}), (BUSCH, 24.5, 68, {}),
-    (KRISTALL, 80, 25, {'anim': 'glitzern'}), (TANNE, 81.5, 26, {'anim': 'baum'}),
+    
     (LILA, 93, 40, {}), (AZALEE, 94, 41, {}),
     (LILA, 5, 49, {}), (TANNE, 6.5, 50, {'anim': 'baum', 'spiegeln': True}),
     # Felsnadeln ohne Wolken auf der Insel

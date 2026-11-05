@@ -312,12 +312,19 @@ def teefeld(a, m, frame):
             a[y, x] = c
 
 
-def roter_zaun(img, stuecke):
+AZUR_ZAUN = ((0x10, 0x22, 0x44), [(0x1c, 0x4a, 0x8c), (0x2a, 0x6a, 0xb8), (0x46, 0x8e, 0xd8), (0x8c, 0xc4, 0xf2)],
+             (0xd8, 0xa8, 0x3c))
+
+
+def roter_zaun(img, stuecke, palette=None):
     """Roter Holzzaun (Schreinstil) mit dunkler Kontur: Pfosten mit Kappe je Kachel, zwei Querlatten.
     stuecke: (x0, x1, y, 'h') waagerecht oder (x, y0, y1, 'v') senkrecht (von oben gesehen)."""
     px = img.load()
     K = (0x3a, 0x10, 0x10)
     ROT = [(0x7a, 0x1c, 0x1c), (0xa8, 0x2a, 0x26), (0xd0, 0x3e, 0x34), (0xec, 0x66, 0x52)]
+    KAPPE = (0x2a, 0x2e, 0x36)
+    if palette:
+        K, ROT, KAPPE = palette
     W, Hh = img.size
 
     def p(x, y, c):
@@ -334,7 +341,7 @@ def roter_zaun(img, stuecke):
             for dx in range(-2, 3):
                 p(x + dx, y, K if abs(dx) == 2 else ROT[3] if dx == -1 else ROT[2] if dx == 0 else ROT[1])
         for dx in range(-3, 4):
-            p(x + dx, yb - h - 1, K); p(x + dx, yb - h - 2, (0x2a, 0x2e, 0x36))
+            p(x + dx, yb - h - 1, K); p(x + dx, yb - h - 2, KAPPE)
         for dx in range(0, 5):
             sch(x + dx, yb + 1); sch(x + dx + 1, yb + 2, 0.84)
 
@@ -532,6 +539,62 @@ def treppe07(img, xa, xb, y_top, y_bot, seed=3):
                 dunkel(x, y_bot + dy, f)
 
 
+def azulhof(a, x0, y0, x1, y1, mitte):
+    """Reich des azurblauen Drachen: hellblaue Steinplatten im Verband (Licht oben links), weisser Marmorweg mit
+    Goldkanten vom Westeingang zum Altar, goldenes Wolkenring-Emblem um den Raeucherkessel."""
+    P = {'f1': H('#a6bedd'), 'f2': H('#b4cae6'), 'f3': H('#98b2d4'), 'fuge': H('#6a86b0'), 'licht': H('#d4e2f2'),
+         'm1': H('#e8eef6'), 'm2': H('#dbe4ef'), 'mf': H('#b4c4d8'), 'gold': H('#d8a83c'), 'gold2': H('#f2d27a'),
+         'gold0': H('#8a6420')}
+    rs = random.Random(12)
+    for ty in range(y0, y1, T):
+        for tx in range(x0 - (8 if (ty // T) % 2 else 0), x1, T):
+            ton = rs.choice(('f1', 'f1', 'f2', 'f3'))
+            for y in range(ty, min(y1, ty + T)):
+                for x in range(max(x0, tx), min(x1, tx + T)):
+                    dy, dx = y - ty, x - tx
+                    c = P[ton]
+                    if dy == T - 1 or dx == T - 1:
+                        c = P['fuge']
+                    elif dy == 0 or dx == 0:
+                        c = P['licht']
+                    a[y, x] = c
+    # Marmorweg (waagerecht, Eingang West -> Altar)
+    wy0, wy1, wx1 = mitte[1] - 24, mitte[1] + 24, mitte[0]
+    for y in range(wy0, wy1):
+        for x in range(x0, wx1):
+            c = P['m1'] if ((x - x0) // 24 + (y - wy0) // 16) % 2 == 0 else P['m2']
+            if (x - x0) % 24 == 23 or (y - wy0) % 16 == 15:
+                c = P['mf']
+            if y in (wy0, wy1 - 1):
+                c = P['gold0'] if y == wy1 - 1 else P['gold2']
+            elif y in (wy0 + 1, wy1 - 2):
+                c = P['gold']
+            a[y, x] = c
+    a[wy1:wy1 + 3, x0:wx1] = (a[wy1:wy1 + 3, x0:wx1] * 0.8).astype(np.uint8)
+
+
+def emblem(a, cx, cy, r):
+    """Goldener Wolkenring (Bodenintarsie): Ring mit sechs Wolkenwirbeln, Licht oben links."""
+    G = [H('#8a6420'), H('#d8a83c'), H('#f2d27a')]
+    yy, xx = np.mgrid[cy - r - 8:cy + r + 9, cx - r - 8:cx + r + 9]
+    d = np.sqrt((xx - cx) ** 2 + (yy - cy) ** 2)
+    teil = a[cy - r - 8:cy + r + 9, cx - r - 8:cx + r + 9]
+    ring = (d >= r - 5) & (d <= r)
+    teil[ring] = G[1]
+    teil[ring & ((d > r - 1) | (d < r - 4))] = G[0]
+    teil[ring & (d > r - 3) & (d < r - 1.5) & (xx + yy < cx + cy)] = G[2]
+    for k in range(6):
+        w = k * math.pi / 3
+        wx, wy = cx + r * math.cos(w), cy + r * math.sin(w)
+        dw = np.sqrt((xx - wx) ** 2 + (yy - wy) ** 2)
+        wirbel = (dw <= 8) & (dw >= 4)
+        teil[wirbel] = G[1]
+        teil[wirbel & ((dw > 7) | (dw < 5))] = G[0]
+        teil[(dw < 2.5)] = G[2]
+    innen = d <= r - 6
+    teil[innen & ((np.floor(d / 4) % 2) == 0) & (d > r - 10)] = (teil[innen & ((np.floor(d / 4) % 2) == 0) & (d > r - 10)] * 0.9).astype(np.uint8)
+
+
 def steinbruecke(img, x0, x1, y0, y1):
     """Steinbruecke: Steinplatten-Deck im Verband, niedrige Bruestung mit Pfeilern oben und unten, Schatten."""
     px = img.load()
@@ -587,6 +650,9 @@ def bauen(frame=None, speichern=True):
     a[pm] = pflaster[pm]
     rand = pm & ~(np.roll(pm, 1, 0) & np.roll(pm, -1, 0) & np.roll(pm, 1, 1) & np.roll(pm, -1, 1))
     a[rand] = H('#4a505a')
+    r_ = RAND
+    azulhof(a, (77 + r_) * T, (4 + r_) * T, (97 + r_) * T, (25 + r_) * T, ((91 + r_) * T, (14 + r_) * T + 8))
+    emblem(a, (87 + r_) * T, (21 + r_) * T + 2, 34)
     beete(a, frame)
     # Hoehenkanten: Insel -> Wolken (tiefe Felsfront), Stufen 1->2->3 mit Treppen
     m1 = insel
@@ -637,8 +703,9 @@ def bauen(frame=None, speichern=True):
     img = Image.fromarray(a).convert('RGBA')
     r = RAND
     roter_zaun(img, [(a_ + r, b_ + r, c_ + r, d_) for (a_, b_, c_, d_) in
-                     [(77, 96, 4, 'h'), (77, 96, 24, 'h'), (96, 4, 24, 'v'), (71, 77, 31, 'h'), (83, 89, 31, 'h'),
-                      (96, 63, 80, 'v')]])
+                     [(77, 96, 4, 'h'), (77, 96, 24, 'h'), (96, 4, 24, 'v')]], AZUR_ZAUN[:2] + ((0xd8, 0xa8, 0x3c),))
+    roter_zaun(img, [(a_ + r, b_ + r, c_ + r, d_) for (a_, b_, c_, d_) in
+                     [(71, 77, 31, 'h'), (83, 89, 31, 'h'), (96, 63, 80, 'v')]])
     if speichern and frame is None:
         img.save(os.path.join(KARTE, 'terrain_basis.png'))
     pf = os.path.join(OBJ, 'platzierung.json')
