@@ -81,6 +81,23 @@ def _kopfsteine(h, w):
     return t
 
 
+UNTER = [H(c) for c in ('#1c3c6c', '#24508a', '#3466a0', '#6aa2d4')]   # Unterwasser-Stufenkanten
+STUFEN = [(26, 0.8, 8), (54, 0.64, 7)]    # (Abstand zum Ufer in px, Helligkeit des Grunds, Kantenhoehe)
+
+
+def _stufe(m, abstand):
+    """Innenflaeche: Wasserpixel mit mindestens `abstand` px Abstand zum Ufer, gerundet und ohne schmale Reste."""
+    k = Image.fromarray((m * 255).astype(np.uint8))
+    for _ in range(abstand // 2):
+        k = k.filter(ImageFilter.MinFilter(5))
+    for _ in range(3):                                  # schmale Streifen (Fluss) entfernen, dann zurueckwachsen
+        k = k.filter(ImageFilter.MinFilter(5))
+    for _ in range(3):
+        k = k.filter(ImageFilter.MaxFilter(5))
+    k = k.filter(ImageFilter.GaussianBlur(6))
+    return (np.array(k) > 128) & m
+
+
 def vertiefen(img, region, frame=None):
     a = np.array(img.convert('RGB'))
     Hh, W = a.shape[:2]
@@ -146,6 +163,31 @@ def vertiefen(img, region, frame=None):
     # Suedkante: dunkle Linie (Ufer zeigt weg)
     sued = m & ~np.roll(m, -1, 0)
     a[sued] = MAUER[1]
+    # Tiefere Stufen im Wasser (nur wo die Flaeche breit genug ist, also im Teich, nicht im schmalen Fluss)
+    for (abstand, dunkel, mauer_h) in STUFEN:
+        innen = _stufe(m, abstand)
+        if not innen.any():
+            continue
+        io = _lauf(innen, 0)
+        il = _lauf(innen, 1)
+        ir = _lauf(innen, 1, rueckwaerts=True)
+        a[innen] = np.clip(a[innen] * dunkel, 0, 255).astype(np.uint8)          # Grund tiefer = dunkler
+        nw = innen & (io < mauer_h)
+        ys, xs = np.nonzero(nw)
+        for y, x in zip(ys, xs):                                                 # Unterwasser-Kante Nord
+            d = io[y, x]
+            blk = (x + (3 if (d // 5) % 2 else 0)) % 6
+            c = UNTER[3] if d == 0 else UNTER[2] if d == 1 else UNTER[0] if blk == 5 else UNTER[1]
+            if d == mauer_h - 1:
+                c = UNTER[0]
+            a[y, x] = np.clip(c * (dunkel + 0.12), 0, 255).astype(np.uint8)
+        rest = innen & ~nw
+        for msk, wert in ((rest & (il < 2), UNTER[0]), (rest & (ir < 2), UNTER[2])):
+            a[msk] = np.clip(wert * (dunkel + 0.1), 0, 255).astype(np.uint8)
+        schatten = rest & (io < mauer_h + 3) & (io >= mauer_h)
+        a[schatten] = (a[schatten] * 0.8).astype(np.uint8)
+        kante_s = innen & ~np.roll(innen, -1, 0)                                  # Suedkante der Stufe
+        a[kante_s] = np.clip(UNTER[3] * 0.9, 0, 255).astype(np.uint8)
     # Oberflaeche: kurze Lichtstriche je Kachel, wandern in 16 Frames eine Kachel nach unten
     fr = frame or 0
     yy, xx = np.nonzero(boden)
