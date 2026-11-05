@@ -23,6 +23,9 @@ ALGE = [H(c) for c in ('#1e5a44', '#2c7a52', '#43a05e', '#6cc472')]
 
 
 # ---------------------------------------------------------------- Felsen
+MEER_MASKE = [None]     # zuletzt gezeichnete Meeresflaeche (fuer die Kollision)
+FELSEN_PROTOKOLL = []
+SPITZEN = []            # (x, y) aller trockenen Felspixel ueber der Wasserlinie (fuer die Verdeckungs-Ebene)   # (x0, y0, x1, y1, Wasserlinie y, raus) je gezeichnetem Fels
 BRAUN = [H(c) for c in ('#2e1c12', '#4a2e1c', '#6a4328', '#8a5a36', '#ab7646', '#cf9a62', '#ebc28a')]
 
 
@@ -99,6 +102,8 @@ def fels(a, cx, cy, rx, ry, wasser, tiefe, raus, hoehe, frame, seed):
                 if raus and k < 3:
                     c = c * 0.72                          # nasser Streifen ueber der Wasserlinie
                 setz(x, y, c, unter)
+                if raus:
+                    SPITZEN.append((x, y))
     if raus:                                              # Schaumring um den Fuss (Luecken wandern)
         fr = frame or 0
         for x in range(int(cx - rx - 2), int(cx + rx + 3)):
@@ -139,6 +144,10 @@ def felsen_setzen(a, zonen, wasserfarben, tiefen, regeln, frame, seed, meiden=No
             ry_eff = ry_ + (hoehe / 2 if art == 'raus' else 0)
             if not passt(z, cx, cy, rx_, ry_, 2):              # Grundflaeche muss auf einer Stufe liegen
                 continue
+            hh_ = hoehe * (2.2 if art == 'raus' else 1) if hoehe else ry_ * 3
+            if meiden is not None and meiden[max(0, int(cy - ry_ - hh_) - 3):int(cy + ry_) + 4,
+                                             max(0, int(cx - rx_) - 3):int(cx + rx_) + 4].any():
+                continue                                       # auch die Spitze darf kein Objekt beruehren
             if belegt[max(0, cy - int(ry_ + hoehe * 2.2) - 4):cy + int(ry_) + 7, max(0, cx - int(rx_) - 6):cx + int(rx_) + 7].any():
                 continue
             belegt[max(0, cy - int(ry_ + hoehe * 2.2)):cy + int(ry_) + 1, max(0, cx - int(rx_)):cx + int(rx_) + 1] = True
@@ -146,6 +155,8 @@ def felsen_setzen(a, zonen, wasserfarben, tiefen, regeln, frame, seed, meiden=No
             n += 1
     for (i, art, cx, cy, rx, ry, hoehe, s) in sorted(gesetzt, key=lambda g: g[3]):
         hoehe = hoehe * (2.2 if art == 'raus' else 1)                # spitze Felsnadeln: hoch
+        FELSEN_PROTOKOLL.append((int(cx - rx - 3), int(cy - ry * 0.2 - hoehe - 2), int(cx + rx + 4), int(cy + ry + 3),
+                                 int(cy - ry * 0.25), art == 'raus'))
         fels(a, cx, cy, rx, ry, wasserfarben[i], tiefen[i], art == 'raus', hoehe, frame, s)
     return belegt
 
@@ -208,6 +219,7 @@ def meer_terrassen(img, region, frame=None, meiden=None):
     roh = region & (b > r + 40) & (b > g + 10)
     m = np.array(Image.fromarray((roh * 255).astype(np.uint8)).filter(ImageFilter.GaussianBlur(2.5))) > 120
     m &= region
+    MEER_MASKE[0] = m
     if not m.any():
         return img
     # Abstandsfeld zum Land (halbe Aufloesung, dann weich hochskaliert + leichte Welligkeit)

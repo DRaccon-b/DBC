@@ -512,9 +512,17 @@ def bauen(frame=None, speichern=True):
         for x in range(cols):
             if cls[y][x] == 'w' and grid[y][x] not in 'hDS':
                 region[max(0, y * T - T):(y + 2) * T, max(0, x * T - T):(x + 2) * T] = True
-    meiden = np.zeros((rows * T, cols * T), bool)            # Bruecken, Steg: dort keine Felsen/Algen
+    meiden = np.zeros((rows * T, cols * T), bool)            # Bruecken, Steg, Objekte: dort keine Felsen/Algen
     for (bx0, bx1, by0, by1) in bruecken_mass + stege_mass:
         meiden[max(0, by0 - 12):by1 + 12, max(0, bx0 - 12):bx1 + 12] = True
+    _pf = os.path.join(OBJ, 'platzierung.json')
+    if os.path.exists(_pf):
+        for _o in json.load(open(_pf)):
+            _w, _h = Image.open(os.path.join(OBJ, _o['datei'])).size
+            meiden[max(0, _o['y'] - 4):_o['y'] + _h + 4, max(0, _o['x'] - 4):_o['x'] + _w + 4] = True
+    import wasser_details
+    wasser_details.FELSEN_PROTOKOLL.clear()
+    wasser_details.SPITZEN.clear()
     img = wasser_vertieft.vertiefen(img, region, frame, meiden)
     # --- 1c. Meer am Strand: Flachwasser, Schaumkante, zwei Stufen, Tiefsee (Felsen, Algen)
     import wasser_details
@@ -550,6 +558,14 @@ def bauen(frame=None, speichern=True):
         bauwerke.zeichne_steg(img, sx0, sx1, sy0, sy1, frame=frame or 0)
     if speichern:
         img.save(os.path.join(KARTE, 'terrain_basis.png'))
+        json.dump(wasser_details.FELSEN_PROTOKOLL, open(os.path.join(KARTE, 'felsen.json'), 'w'))
+        sp_m = np.zeros((rows * T, cols * T), bool)
+        for (x, y) in wasser_details.SPITZEN:
+            if 0 <= x < cols * T and 0 <= y < rows * T:
+                sp_m[y, x] = True
+        np.save(os.path.join(KARTE, 'felsspitzen.npy'), np.packbits(sp_m))
+        if wasser_details.MEER_MASKE[0] is not None:
+            np.save(os.path.join(KARTE, 'meer.npy'), np.packbits(wasser_details.MEER_MASKE[0]))
 
     # --- 3. Objekte
     pf = os.path.join(OBJ, 'platzierung.json')

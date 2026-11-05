@@ -26,6 +26,7 @@ OBJ = os.path.join(ROOT, 'assets', 'objekte', 'karte01')
 OUT = os.path.join(KARTE, 'ebenen')
 T = 16
 FUSS = 10          # unterste Pixelzeilen eines hohen Objekts: Fuss (blockiert, liegt unter dem Spieler)
+BODENOBJEKTE = {'gross/14'}   # Feuerstelle mit Holzscheiten: liegt ganz am Boden
 MIN_FUSS = 6       # ab so vielen Fusspixeln (Stamm, Mast, Sockel) ist eine Kachel blockiert
 MIN_DECKT = 12     # ab so vielen deckenden Pixeln der Ueberlagerung verdeckt eine Kachel den Spieler
 # begehbare Bodendeko (liegt unter dem Spieler): Gras, Farne, Schilf, Blumen, Pilze, Kiesel, Zweige
@@ -75,7 +76,13 @@ def main():
         if o.get('ebene', 1) == 0 or o.get('basis') in FLACH:      # flache Deko: Boden, begehbar
             boden.alpha_composite(sp, (o['x'], o['y']))
             continue
-        trenn = int(zeilen.max()) + 1 - FUSS    # Zeile im Sprite: darueber Ueberlagerung, darunter Fuss
+        # Fusstiefe: schmale Objekte (Stamm, Mast) 10 px, breite (Zelt, Staender) bis 2 Kacheln tief
+        zu_ = int(zeilen.max())
+        fussbreite = int((a[max(0, zu_ - 3):zu_ + 1] > 0).any(axis=0).sum())
+        tiefe = int(min(32, max(FUSS, fussbreite * 0.4)))
+        if zu_ - int(zeilen.min()) + 1 <= 28 or o.get('basis') in BODENOBJEKTE:   # flach: ganz Boden + gesperrt
+            tiefe = zu_ - int(zeilen.min()) + 1
+        trenn = zu_ + 1 - tiefe                # Zeile im Sprite: darueber Ueberlagerung, darunter Fuss
         fuss = sp.crop((0, trenn, sp.width, sp.height))
         kopf = sp.crop((0, 0, sp.width, trenn))
         boden.alpha_composite(fuss, (o['x'], o['y'] + trenn))
@@ -85,6 +92,14 @@ def main():
         ys, xs = ys + o['y'] + trenn, xs + o['x']
         ok = (ys >= 0) & (ys < H) & (xs >= 0) & (xs < W)
         blockiert_px[ys[ok], xs[ok]] = True
+    # Felsspitzen im Wasser, die ueber begehbaren Boden ragen, gehoeren in die Ueberlagerung
+    sp_pfad = os.path.join(KARTE, 'felsspitzen.npy')
+    if os.path.exists(sp_pfad):
+        sp_m = np.unpackbits(np.load(sp_pfad))[:H * W].reshape(H, W).astype(bool)
+        ba = np.array(boden)
+        oa_ = np.array(oben)
+        oa_[sp_m] = ba[sp_m]
+        oben = Image.fromarray(oa_)
     boden.save(os.path.join(OUT, 'ebene1_boden.png'))
     oben.save(os.path.join(OUT, 'ebene3_ueberlagerung.png'))
 
@@ -106,6 +121,16 @@ def main():
         for y in range(t - h + 1, t + 1):
             if 0 <= y < rows:
                 klasse[y, x] = 2
+    # Kueste nach dem Bild: Meeres-/Flachwasser-/Strandkacheln sind gesperrt, wenn sie zu mehr als der
+    # Haelfte Meer zeigen (das terrassierte Meer folgt der echten Wasserlinie, nicht dem Vorlagenraster)
+    meer_pfad = os.path.join(KARTE, 'meer.npy')
+    if os.path.exists(meer_pfad):
+        meer = np.unpackbits(np.load(meer_pfad))[:H * W].reshape(H, W).astype(bool)
+        for y in range(rows):
+            for x in range(cols):
+                if grid[y][x] in 'DhSs':
+                    anteil = meer[y * T:(y + 1) * T, x * T:(x + 1) * T].mean()
+                    klasse[y, x] = 2 if anteil > 0.5 else (1 if grid[y][x] in 'hSs' else klasse[y, x])
     # begehbare Bauwerke ueberschreiben: Treppen, Bruecken, Steg
     for tr in plan.get('treppen', []):
         t, h = tcol[tr['x']], hcol[tr['x']]
