@@ -47,7 +47,7 @@ PLAETZE = [  # (cx, cy, rx, ry) Ellipsen, Kopfstein
 ]
 TEICH = (38.5, 48.0, 6.5, 4.2)
 CYBER = (51, 41, 65, 53)        # Cyber-Datenplatz (Rechteck, Ecken gerundet)
-PENSION = (6, 41, 26, 54)       # umzaeunt (Zaun auf dem Rand), Tor oben bei x 18..21
+PENSION = (5, 40, 29, 54)       # umzaeunt (Zaun auf dem Rand), Tor oben bei x 18..21
 PENSION_TOR = (18, 21)
 AUSGANG = (29, 33)              # Zeilen des Ausgangs rechts
 
@@ -72,7 +72,7 @@ def layout():
     cx, cy, rx, ry = TEICH
     cls[((xx - cx) / rx) ** 2 + ((yy - cy) / ry) ** 2 <= 1] = 'x'
     x0, y0, x1, y1 = PENSION                      # Spielplatz: Sandflaeche in der Mitte der Pension
-    cls[((xx - 18) / 5.5) ** 2 + ((yy - 48) / 3.6) ** 2 <= 1] = 's'
+    cls[((xx - 17.5) / 6.5) ** 2 + ((yy - 47.5) / 4.0) ** 2 <= 1] = 's'
     lay = {'groesse': [COLS, ROWS], 'klassen': [''.join(r) for r in cls],
            'pension': PENSION, 'pension_tor': PENSION_TOR, 'teich': TEICH,
            'steg': [40, 43, 41, 47], 'teleporter': [{'x': 70, 'y': 30, 'b': 2, 'h': 3}]}
@@ -134,49 +134,63 @@ def kabel_netz(a, m, frame):
 
 
 def zaun(img, rect, tor):
-    """Holzzaun auf dem Rand des Rechtecks (Kacheln), Pfosten mittig je Kachel, zwei Querlatten; Tor oben."""
+    """Holzzaun im Handheld-Stil: kraeftige Pfosten (mittig je Kachel, Kappe, Licht links), zwei breite
+    Querlatten mit Lichtkante und dunkler Unterkante, Schatten nach rechts unten. Seiten: Pfosten mit
+    senkrechten Latten. Tor oben (offen, zwei dickere Torpfosten)."""
     px = img.load()
-    HOLZ = [(0x4a, 0x2e, 0x1c), (0x6e, 0x46, 0x28), (0x94, 0x64, 0x3a), (0xb8, 0x86, 0x50), (0xd6, 0xa8, 0x6c)]
+    HOLZ = [(0x3a, 0x22, 0x14), (0x5e, 0x3a, 0x20), (0x84, 0x54, 0x2e), (0xa8, 0x72, 0x40), (0xc8, 0x92, 0x58),
+            (0xe4, 0xb6, 0x7a)]
     x0, y0, x1, y1 = rect
+    W, Hh = img.size
 
     def p(x, y, c):
-        if 0 <= x < img.width and 0 <= y < img.height:
+        if 0 <= x < W and 0 <= y < Hh:
             px[x, y] = c + (255,)
 
-    def schatten(x, y):
-        if 0 <= x < img.width and 0 <= y < img.height:
+    def schatten(x, y, f=0.72):
+        if 0 <= x < W and 0 <= y < Hh:
             r, g, b, a = px[x, y]
-            px[x, y] = (int(r * 0.72), int(g * 0.74), int(b * 0.72), a)
+            px[x, y] = (int(r * f), int(g * f), int(b * f), a)
 
-    def latte_waagerecht(xa, xb, y):
+    def latte(xa, xb, y):                       # waagerechte Latte, 4 px hoch
         for x in range(xa, xb):
-            p(x, y - 1, HOLZ[4]); p(x, y, HOLZ[3]); p(x, y + 1, HOLZ[2]); p(x, y + 2, HOLZ[1]); p(x, y + 3, HOLZ[0])
-            schatten(x + 1, y + 5)
+            p(x, y, HOLZ[5]); p(x, y + 1, HOLZ[4]); p(x, y + 2, HOLZ[3]); p(x, y + 3, HOLZ[1])
+            if (x - xa) % 9 == 4:
+                p(x, y + 1, HOLZ[2])            # Maserung
+            schatten(x + 1, y + 5, 0.8)
 
-    def pfosten(x, yb, h=16):
+    def pfosten(x, yb, h=17, dick=False):
+        b = 3 if dick else 2
         for y in range(yb - h, yb + 1):
-            p(x - 2, y, HOLZ[0]); p(x - 1, y, HOLZ[4]); p(x, y, HOLZ[3]); p(x + 1, y, HOLZ[2]); p(x + 2, y, HOLZ[0])
-        for dx in (-1, 0, 1):
-            p(x + dx, yb - h - 1, HOLZ[4])
-        schatten(x + 2, yb + 1); schatten(x + 3, yb + 1)
+            for dx in range(-b, b + 1):
+                c = HOLZ[0] if abs(dx) == b else HOLZ[4] if dx < 0 else HOLZ[3] if dx == 0 else HOLZ[2]
+                p(x + dx, y, c)
+        for dx in range(-b, b + 1):            # Kappe
+            p(x + dx, yb - h - 1, HOLZ[5] if dx <= 0 else HOLZ[4])
+            p(x + dx, yb - h - 2, HOLZ[0] if abs(dx) == b else HOLZ[5])
+        for dx in range(-b + 1, b + 3):        # Kontaktschatten
+            schatten(x + dx, yb + 1, 0.7); schatten(x + dx + 1, yb + 2, 0.82)
 
-    for ty in (y0, y1):                       # oben und unten
-        yb = ty * T + 13
+    for ty in (y0, y1):                        # oben und unten
+        yb = ty * T + 14
+        for tx in range(x0, x1):
+            if ty == y0 and tor[0] - 1 <= tx <= tor[1]:
+                continue
+            latte(tx * T + 8, (tx + 1) * T + 8, yb - 12)
+            latte(tx * T + 8, (tx + 1) * T + 8, yb - 6)
         for tx in range(x0, x1 + 1):
             if ty == y0 and tor[0] <= tx <= tor[1]:
                 continue
-            xa, xb = tx * T, (tx + 1) * T
-            if not (ty == y0 and tx + 1 == tor[0]):
-                latte_waagerecht(xa + 8, xb + 8 if tx < x1 else xb - 8, yb - 9)
-                latte_waagerecht(xa + 8, xb + 8 if tx < x1 else xb - 8, yb - 4)
-            pfosten(xa + 8, yb)
-    for tx in (x0, x1):                       # links und rechts: Pfosten mit senkrechter Latte
+            pfosten(tx * T + 8, yb, dick=(ty == y0 and tx in (tor[0] - 1, tor[1] + 1)))
+    for tx in (x0, x1):                        # Seiten: senkrechte Doppellatte, Pfosten je Kachel
         X = tx * T + 8
-        for ty in range(y0, y1 + 1):
-            for y in range(ty * T + 2, (ty + 1) * T + 6):
-                p(X - 1, y, HOLZ[3]); p(X, y, HOLZ[2]); p(X + 1, y, HOLZ[1])
-            schatten(X + 2, ty * T + 8)
-            pfosten(X, ty * T + 13)
+        for y in range(y0 * T + 14, y1 * T + 2):
+            for dx, c in ((-3, HOLZ[0]), (-2, HOLZ[4]), (-1, HOLZ[3]), (1, HOLZ[3]), (2, HOLZ[2]), (3, HOLZ[0])):
+                p(X + dx, y, c)
+            p(X, y, HOLZ[1])
+            schatten(X + 4, y, 0.78)
+        for ty in range(y0 + 1, y1):
+            pfosten(X, ty * T + 14)
 
 
 # ---------------------------------------------------------------- Bauen
@@ -315,7 +329,8 @@ def animieren_k6(img, objs, cache, frame):
                 px[X, Y] = (min(255, int(r_ * f)), min(255, int(g_ * f + 20 * (f - 0.75))), min(255, int(b_ * f + 30 * (f - 0.75))), 255)
         elif anim == 'brunnen':                    # nur das Wasser: faellt aus den Schalen, plaetschert im Becken
             a = np.array(sp).astype(np.int16)
-            m = (a[..., 2] > a[..., 0] + 40) & (a[..., 1] > a[..., 0] + 20) & (a[..., 3] > 0)
+            r0, g0, b0 = a[..., 0], a[..., 1], a[..., 2]       # nur helles Wasser, nicht der tuerkise Stein
+            m = (((g0 >= 180) & (b0 >= 190)) | ((b0 >= 150) & (b0 > g0 + 20) & (b0 > r0 + 40))) & (a[..., 3] > 0)
             ys, xs = np.nonzero(m)
             if not len(xs):
                 continue

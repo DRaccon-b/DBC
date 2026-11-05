@@ -29,15 +29,16 @@ for i in range(4, 62):
     FREMD['k01/deko%02d' % i] = 'karte01/deko/%02d.png' % i
 WALD = ['k01/baum%02d' % i for i in (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 12, 13, 14)]
 DEKO = ['k01/deko%02d' % i for i in (5, 6, 8, 10, 14, 26, 27, 31, 33)]
+DEKO_PFLANZE = {'k01/deko05', 'k01/deko06', 'k01/deko26', 'k01/deko27'}   # nur diese wiegen sich im Wind
 
 # (sprite, Kachel-x der Fussmitte, Fusszeile, Optionen)
 FEST = [
     # obere Reihe
-    ('front_gebaeude/tv_treppe', 9.5, 14, {'anim': 'portal'}), ('front_gebaeude/01', 21.5, 12, {}), ('front_gebaeude/02', 33.5, 12, {'anim': 'werkstatt'}),
-    ('front_gebaeude/03', 44.5, 13, {'anim': 'schmiede'}), ('portal/00', 58.5, 16, {'anim': 'portal'}),
+    ('front_gebaeude/tv_treppe', 9.5, 14, {'anim': 'portal'}), ('front_gebaeude/01', 21.5, 15, {}), ('front_gebaeude/02', 33.5, 12, {'anim': 'werkstatt'}),
+    ('front_gebaeude/03', 44.5, 16, {'anim': 'schmiede'}), ('portal/00', 58.5, 16, {'anim': 'portal'}),
     ('k04/zahnrad', 39, 12, {}), ('front_mittel/13', 37, 14, {}), ('front_mittel/12', 30, 14, {}),
     # Brunnenplatz mit Laternenkranz
-    ('brunnen/00', 36, 28, {'anim': 'brunnen'}),
+    ('brunnen/00', 36, 30, {'anim': 'brunnen'}),
     ('k01/laterne', 28, 24, {'anim': 'laterne'}), ('k01/laterne', 44, 24, {'anim': 'laterne'}),
     ('k01/laterne', 28, 33, {'anim': 'laterne'}), ('k01/laterne', 44, 33, {'anim': 'laterne'}),
     # Laternen an den Wegen
@@ -45,11 +46,11 @@ FEST = [
     ('k01/laterne', 61, 21, {'anim': 'laterne'}), ('k01/laterne', 66, 28, {'anim': 'laterne'}),
     ('k01/laterne', 17, 39, {'anim': 'laterne'}),
     # Marktstand, Wegweiser
-    ('stand/00', 36, 32, {}), ('front_mittel/08', 67, 28, {}), ('front_mittel/08', 20.5, 35, {}),
+    ('front_gross/03', 36, 35, {}), ('front_mittel/08', 67, 28, {}), ('front_mittel/08', 20.5, 35, {}),
     # Pension
-    ('front_gross/00', 10.5, 46, {}), ('datenbaum/klein', 18.5, 50, {'anim': 'daten'}),
-    ('front_mittel/09', 14, 53, {}), ('front_mittel/10', 23, 53, {}), ('front_mittel/11', 18.5, 53, {}),
-    ('front_mittel/04', 24.5, 45, {}), ('front_mittel/00', 24.5, 50, {}), ('front_mittel/01', 9, 53, {}),
+    ('front_gross/00', 10.5, 46, {}), ('datenbaum/klein', 17.5, 50, {'anim': 'daten'}),
+    ('front_mittel/09', 13, 52, {}), ('front_mittel/10', 22, 52, {}), ('front_mittel/11', 17.5, 52, {}),
+    ('front_mittel/04', 25.5, 45, {}), ('front_mittel/00', 25.5, 51, {}), ('front_mittel/01', 9, 52, {}),
     # Cyber-Datenplatz
     ('front_mittel/05', 53, 43, {'anim': 'leuchten'}), ('front_mittel/05', 55, 43, {'anim': 'leuchten'}),
     ('front_mittel/05', 57, 43, {'anim': 'leuchten'}), ('k03/server', 61, 44, {'anim': 'leuchten'}),
@@ -58,7 +59,7 @@ FEST = [
     # Kirschbaeume
     ('k01/kirsche', 15, 10, {'anim': 'wehen'}), ('k01/kirsche', 28, 18, {'anim': 'wehen'}),
     ('k01/kirsche', 51, 17, {'anim': 'wehen'}), ('k01/kirsche', 66, 18, {'anim': 'wehen'}),
-    ('k01/kirsche', 30, 45, {'anim': 'wehen'}), ('k01/kirsche', 49, 55, {'anim': 'wehen'}),
+    ('k01/kirsche', 32, 42, {'anim': 'wehen'}), ('k01/kirsche', 49, 55, {'anim': 'wehen'}),
     ('k01/kirsche', 13, 28, {'anim': 'wehen'}),
 ]
 
@@ -179,7 +180,8 @@ def main():
         tx, ty = rnd.randrange(4, cols - 4), rnd.randrange(4, rows - 4)
         if cls[ty][tx] != 'g':
             continue
-        if setze(rnd.choice(DEKO), tx, ty, {'anim': 'wehen'} if rnd.random() < 0.4 else {}, frei=True):
+        n_ = rnd.choice(DEKO)
+        if setze(n_, tx, ty, {'anim': 'wehen'} if n_ in DEKO_PFLANZE and rnd.random() < 0.6 else {}, frei=True):
             n += 1
     json.dump(objekte, open(os.path.join(OBJ, 'platzierung.json'), 'w'), indent=0)
     print(len(objekte), 'Objekte am Raster')
