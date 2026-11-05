@@ -33,11 +33,11 @@ DEKO = ['k01/deko%02d' % i for i in (5, 6, 8, 10, 14, 26, 27, 31, 33)]
 # (sprite, Kachel-x der Fussmitte, Fusszeile, Optionen)
 FEST = [
     # obere Reihe
-    ('gebaeude/00', 9.5, 14, {'anim': 'portal'}), ('gebaeude/01', 21.5, 12, {}), ('gebaeude/02', 33.5, 12, {}),
-    ('gebaeude/03', 44.5, 13, {}), ('gross/00', 58.5, 13, {'anim': 'portal'}),
-    ('k04/zahnrad', 39, 12, {}), ('k04/zahnrad_klein', 37, 14, {}), ('mittel/14', 30, 14, {}),
+    ('front_gebaeude/00', 9.5, 14, {'anim': 'portal'}), ('front_gebaeude/01', 21.5, 12, {}), ('front_gebaeude/02', 33.5, 12, {}),
+    ('front_gebaeude/03', 44.5, 13, {}), ('front_gross/01', 58.5, 13, {'anim': 'portal'}),
+    ('k04/zahnrad', 39, 12, {}), ('front_mittel/13', 37, 14, {}), ('front_mittel/12', 30, 14, {}),
     # Brunnenplatz mit Laternenkranz
-    ('gross/01', 35.5, 32, {'anim': 'brunnen'}),
+    ('front_gross/02', 35.5, 32, {'anim': 'brunnen'}),
     ('k01/laterne', 28, 26, {'anim': 'laterne'}), ('k01/laterne', 43, 26, {'anim': 'laterne'}),
     ('k01/laterne', 28, 35, {'anim': 'laterne'}), ('k01/laterne', 43, 35, {'anim': 'laterne'}),
     ('k01/laterne', 31, 25, {'anim': 'laterne'}), ('k01/laterne', 40, 25, {'anim': 'laterne'}),
@@ -49,18 +49,18 @@ FEST = [
     ('k01/laterne', 61, 28, {'anim': 'laterne'}), ('k01/laterne', 66, 28, {'anim': 'laterne'}),
     ('k01/laterne', 48, 40, {'anim': 'laterne'}), ('k01/laterne', 17, 39, {'anim': 'laterne'}),
     # Marktstand, Wegweiser
-    ('mittel/11', 40, 20, {}), ('mittel/15', 67, 28, {}), ('mittel/15', 22, 40, {}),
+    ('front_gross/03', 40, 20, {}), ('front_mittel/08', 67, 28, {}), ('front_mittel/08', 22, 40, {}),
     # Pension
-    ('gross/03', 10.5, 46, {}), ('gross/02', 18.5, 49, {'anim': 'daten'}),
-    ('mittel/00', 15, 51, {}), ('mittel/01', 22, 51, {}), ('mittel/02', 18.5, 52, {}),
-    ('mittel/03', 24, 45, {}), ('mittel/04', 24, 51, {}), ('mittel/05', 9, 52, {}),
+    ('front_gross/00', 10.5, 46, {}), ('gross/02', 18.5, 49, {'anim': 'daten'}),
+    ('front_mittel/09', 15, 51, {}), ('front_mittel/10', 22, 51, {}), ('front_mittel/11', 18.5, 52, {}),
+    ('front_mittel/04', 24, 45, {}), ('front_mittel/00', 24, 51, {}), ('front_mittel/01', 9, 52, {}),
     # Cyber-Datenplatz
-    ('mittel/06', 53, 43, {'anim': 'leuchten'}), ('mittel/06', 55, 43, {'anim': 'leuchten'}),
-    ('mittel/06', 57, 43, {'anim': 'leuchten'}), ('k03/server', 61, 44, {'anim': 'leuchten'}),
-    ('k03/antenne', 64.5, 44, {}), ('mittel/07', 53, 48, {'anim': 'leuchten'}),
-    ('mittel/07', 57, 48, {'anim': 'leuchten'}), ('mittel/08', 61, 48, {'anim': 'glitzern'}),
-    ('mittel/08', 54, 52, {'anim': 'glitzern'}), ('mittel/08', 60, 52, {'anim': 'glitzern'}),
-    ('mittel/09', 64, 52, {}), ('mittel/10', 64, 48, {}),
+    ('front_mittel/05', 53, 43, {'anim': 'leuchten'}), ('front_mittel/05', 55, 43, {'anim': 'leuchten'}),
+    ('front_mittel/05', 57, 43, {'anim': 'leuchten'}), ('k03/server', 61, 44, {'anim': 'leuchten'}),
+    ('k03/antenne', 64.5, 44, {}), ('front_mittel/06', 53, 48, {'anim': 'leuchten'}),
+    ('front_mittel/06', 57, 48, {'anim': 'leuchten'}), ('front_mittel/07', 61, 48, {'anim': 'glitzern'}),
+    ('front_mittel/07', 54, 52, {'anim': 'glitzern'}), ('front_mittel/07', 60, 52, {'anim': 'glitzern'}),
+    ('front_mittel/03', 64, 52, {}), ('front_mittel/02', 64, 48, {}),
     # Kirschbaeume
     ('k01/kirsche', 15, 10, {'anim': 'wehen'}), ('k01/kirsche', 28, 18, {'anim': 'wehen'}),
     ('k01/kirsche', 51, 17, {'anim': 'wehen'}), ('k01/kirsche', 66, 18, {'anim': 'wehen'}),
