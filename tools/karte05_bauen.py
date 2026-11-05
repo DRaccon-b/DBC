@@ -112,9 +112,6 @@ def eis_zeichnen(a, m, frame):
                 a[y - k, x + k] = H('#ffffff') if k in (1, 2) else H('#eaf7fd')
     rand = m & ~(np.roll(m, 1, 0) & np.roll(m, -1, 0) & np.roll(m, 1, 1) & np.roll(m, -1, 1))
     a[rand] = H('#ffffff')
-    fr = frame or 0                                       # wandernder Glanz ueber das Eis
-    band = m & (((np.arange(W)[None, :] + np.arange(Hh)[:, None] - fr * 12) % 220) < 3)
-    a[band] = np.clip(a[band] * 0.6 + 102, 0, 255).astype(np.uint8)
 
 
 def schneefall(img, frame):
