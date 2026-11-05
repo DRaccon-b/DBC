@@ -144,7 +144,7 @@ def layout():
     R(cls, 'p', 71, 31, 89, 46)
     # Wege
     for (x0, y0, x1, y1) in ((22, 25, 26, 57), (26, 41, 67, 45), (61, 15, 64, 35), (64, 31, 70, 35), (78, 47, 81, 58),
-                             (72, 51, 81, 54), (64, 13, 68, 15),
+                             (72, 51, 81, 54), (64, 12, 68, 15),
                              (18, 60, 89, 63), (18, 63, 21, 74), (44, 63, 47, 85), (68, 63, 71, 85),
                              (84, 63, 86, 70)):
         m = (xx >= x0) & (xx <= x1) & (yy >= y0) & (yy <= y1) & insel
@@ -171,7 +171,7 @@ def layout():
     lay = {'groesse': [COLS, ROWS], 'rand': RAND, 'klassen': [''.join(z) for z in cls],
            'hoehe': [''.join(str(v) for v in z) for z in hoehe],
            'treppen': [[x0 + r, x1 + r, y0 + r, y1 + r] for (x0, x1, y0, y1) in
-                       [[22, 26, 22, 26], [60, 64, 26, 30], [17, 21, 55, 60], [72, 76, 55, 60]]],
+                       [[22, 26, 22, 26], [60, 64, 26, 30], [22, 26, 55, 60], [77, 81, 55, 60]]],
            'bruecke': [67 + r, 12 + r, 74 + r, 15 + r],
            'teleporter': [{'x': 7 + r, 'y': 86 + r, 'b': 4, 'h': 1}]}
     json.dump(lay, open(os.path.join(KARTE, 'layout.json'), 'w'), indent=0)
@@ -501,6 +501,11 @@ def treppe07(img, xa, xb, y_top, y_bot, seed=3):
     wange = 12
     # Stufen
     i0, i1 = xa + wange, xb - wange
+    for x in range(i0, i1):                                       # obere Austrittsplatte (deckt die Kante ab)
+        for dy, c in ((-9, P[5]), (-8, P[7]), (-7, P[6]), (-6, P[6]), (-5, P[6]), (-4, P[5]), (-3, P[2])):
+            if (x - i0) % 22 == 21 and -8 < dy < -3:
+                c = P[3]
+            setz(x, y_top + dy, c)
     stufe = 8
     y, n = y_top - 2, 0
     while y < y_bot:
@@ -570,7 +575,7 @@ def treppe07(img, xa, xb, y_top, y_bot, seed=3):
                 dunkel(x, y_bot + dy, f)
 
 
-def azulhof(a, x0, y0, x1, y1, mitte):
+def azulhof(a, x0, y0, x1, y1, mitte, weg_x0=None):
     """Reich des azurblauen Drachen: hellblaue Steinplatten im Verband (Licht oben links), weisser Marmorweg mit
     Goldkanten vom Westeingang zum Altar, goldenes Wolkenring-Emblem um den Raeucherkessel."""
     P = {'f1': H('#a6bedd'), 'f2': H('#b4cae6'), 'f3': H('#98b2d4'), 'fuge': H('#6a86b0'), 'licht': H('#d4e2f2'),
@@ -590,9 +595,10 @@ def azulhof(a, x0, y0, x1, y1, mitte):
                         c = P['licht']
                     a[y, x] = c
     # Marmorweg (waagerecht, Eingang West -> Altar)
-    wy0, wy1, wx1 = mitte[1] - 24, mitte[1] + 24, mitte[0]
+    wy0, wy1, wx1 = mitte[1] - 28, mitte[1] + 28, mitte[0]
+    wx0 = weg_x0 if weg_x0 is not None else x0
     for y in range(wy0, wy1):
-        for x in range(x0, wx1):
+        for x in range(wx0, wx1):
             c = P['m1'] if ((x - x0) // 24 + (y - wy0) // 16) % 2 == 0 else P['m2']
             if (x - x0) % 24 == 23 or (y - wy0) % 16 == 15:
                 c = P['mf']
@@ -601,7 +607,7 @@ def azulhof(a, x0, y0, x1, y1, mitte):
             elif y in (wy0 + 1, wy1 - 2):
                 c = P['gold']
             a[y, x] = c
-    a[wy1:wy1 + 3, x0:wx1] = (a[wy1:wy1 + 3, x0:wx1] * 0.8).astype(np.uint8)
+    a[wy1:wy1 + 3, wx0:wx1] = (a[wy1:wy1 + 3, wx0:wx1] * 0.8).astype(np.uint8)
 
 
 def emblem(a, cx, cy, r):
@@ -626,7 +632,7 @@ def emblem(a, cx, cy, r):
     teil[innen & ((np.floor(d / 4) % 2) == 0) & (d > r - 10)] = (teil[innen & ((np.floor(d / 4) % 2) == 0) & (d > r - 10)] * 0.9).astype(np.uint8)
 
 
-def drachenbruecke(img, x0, x1, y0, y1, frame=None):
+def drachenbruecke(img, x0, x1, y0, y1, frame=None, spalt=None):
     """Imposante Drachenbruecke (Stil des azurblauen Drachen): weisses Marmordeck mit azurblauem Laeufer und
     Goldborte, Bruestungen aus Marmorpfosten mit Goldkappen und azurblauen Feldern, vier hohe Eckpfeiler mit
     leuchtenden Bernsteinkugeln, darunter eine azurblau gekachelte Bogenfront mit Goldkante und Marmorpfeilern."""
@@ -649,28 +655,43 @@ def drachenbruecke(img, x0, x1, y0, y1, frame=None):
     breite = x1 - x0
     # Bogenfront unter dem Deck (Sueden) + Schatten auf die Wolken
     tiefe = 30
-    for x in range(x0 - 6, x1 + 6):
-        t = (x - x0) / max(1, breite)
+    ga, gb = spalt if spalt else (x0, x1)                    # Bogenfront nur ueber der Wolkenluecke
+    for x in range(ga, gb):
+        t = (x - ga) / max(1, gb - ga)
         bogen = int(tiefe - 22 * max(0.0, 1 - ((t - 0.5) / 0.42) ** 2) ** 0.5) if 0.08 < t < 0.92 else tiefe
         for y in range(y1, y1 + bogen):
             dy = y - y1
             if dy < 3:
                 c = G[3] if dy == 0 else G[2] if dy == 1 else G[0]
-            elif x < x0 + 10 or x >= x1 - 10:
-                c = M[2] if (dy // 6 + (x - x0) // 10) % 2 else M[1]        # Marmorpfeiler
-                if (y - y1) % 6 == 0 or x in (x0 + 9, x1 - 10):
+            elif x < ga + 8 or x >= gb - 8:
+                c = M[2] if (dy // 6 + (x - ga) // 8) % 2 else M[1]         # Marmorpfeiler
+                if (y - y1) % 6 == 0 or x in (ga + 7, gb - 8):
                     c = M[0]
             else:
                 c = A[2] if ((x // 4 + dy // 4) % 2) else A[1]               # azurblaue Kacheln
                 if dy % 4 == 0:
                     c = A[3] if x < (x0 + x1) // 2 else A[2]
             if dy == bogen - 1:
-                c = G[1] if x0 + 10 <= x < x1 - 10 else K                    # goldene Bogenkante
-            if dy == bogen - 2 and x0 + 10 <= x < x1 - 10:
+                c = G[1] if ga + 8 <= x < gb - 8 else K                      # goldene Bogenkante
+            if dy == bogen - 2 and ga + 8 <= x < gb - 8:
                 c = G[3]
             p(x, y, c)
         for k, f in ((0, 0.72), (1, 0.8), (2, 0.88), (3, 0.94)):
             d(x + 3, y1 + bogen + k, f)
+    # Anlauf links: Marmorplatten vom Weg zum Deck, Goldkante oben/unten
+    for y in range(y0, y1):
+        for x in range(x0 - 40, x0):
+            c = M[3] if ((x - x0) // 12 + (y - y0) // 8) % 2 else M[2]
+            if (y - y0) % 8 == 7 or (x - x0) % 12 == 11:
+                c = M[1]
+            if y in (y0, y1 - 1):
+                c = G[2] if y == y0 else G[0]
+            p(x, y, c)
+        for k, f in ((0, 0.8), (1, 0.9)):
+            d(x0 - 24 + 2, y1 + k, f)
+    for x in range(x0 - 40, x0):
+        for k, f in ((0, 0.78), (1, 0.88)):
+            d(x + 2, y1 + k, f)
     # Deck: Marmorplatten, azurblauer Laeufer mit Goldborte in der Mitte
     mitte0, mitte1 = y0 + (y1 - y0) // 2 - 9, y0 + (y1 - y0) // 2 + 9
     for y in range(y0, y1):
@@ -794,7 +815,7 @@ def bauen(frame=None, speichern=True):
     rand = pm & ~(np.roll(pm, 1, 0) & np.roll(pm, -1, 0) & np.roll(pm, 1, 1) & np.roll(pm, -1, 1))
     a[rand] = H('#4a505a')
     r_ = RAND
-    azulhof(a, (77 + r_) * T, (4 + r_) * T, (97 + r_) * T, (25 + r_) * T, ((91 + r_) * T, (14 + r_) * T + 8))
+    azulhof(a, (77 + r_) * T, (4 + r_) * T, (97 + r_) * T, (25 + r_) * T, ((91 + r_) * T, (14 + r_) * T), weg_x0=(74 + r_) * T)
     emblem(a, (87 + r_) * T, (21 + r_) * T + 2, 34)
     beete(a, frame)
     # Hoehenkanten: Insel -> Wolken (tiefe Felsfront), Stufen 1->2->3 mit Treppen
@@ -839,7 +860,8 @@ def bauen(frame=None, speichern=True):
             treppe07(img, x0 * T - 6, (x1 + 1) * T + 6, ye + 2, ye + 50, seed=x0 + y0)
     bauwerke.S = alt
     bx0, by0, bx1, by1 = lay['bruecke']
-    drachenbruecke(img, bx0 * T + 8, (bx1 + 1) * T - 8, by0 * T + 4, (by1 + 1) * T - 4, frame)
+    drachenbruecke(img, bx0 * T + 8, (bx1 + 1) * T - 8, by0 * T + 4, (by1 + 1) * T - 4, frame,
+                   spalt=((bx0 + 1) * T - 4, bx1 * T + 4))
     a = np.array(img.convert('RGB'))
     for tp in lay['teleporter']:
         k4.teleporter_zeichnen(a, tp['x'], tp['y'], tp['b'], tp['h'], frame)

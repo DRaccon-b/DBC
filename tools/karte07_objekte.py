@@ -17,8 +17,15 @@ KARTE = os.path.join(ROOT, 'maps', 'karte07')
 OBJ = os.path.join(ROOT, 'assets', 'objekte', 'karte07')
 T = 16
 FREMD = {'k05/tanne%d' % i: 'karte05/baeume/0%d.png' % i for i in range(3)}
-for i in (5, 6, 8, 10, 26, 27, 31):
+for i in (1, 2, 3, 5, 6, 8, 10, 26, 27, 31):
     FREMD['k01/deko%02d' % i] = 'karte01/deko/%02d.png' % i
+for i in (0, 4, 13):
+    FREMD['k05/klein%02d' % i] = 'karte05/klein/%02d.png' % i
+# Einbettung: Bueschel und Blumen vor dem Sockel von Felsen, Baeumen, Kristallen, Stuempfen
+BUESCHEL_GRAS = ['k01/deko06', 'k01/deko05', 'k01/deko26']
+BLUMEN_GRAS = ['k01/deko01', 'k01/deko02', 'k01/deko03', 'k01/deko27']
+BUESCHEL_SCHNEE = ['k05/klein00', 'k05/klein13']
+BLUMEN_SCHNEE = ['k05/klein04']
 DEKO_GRAS = ['k01/deko05', 'k01/deko06', 'k01/deko26', 'k01/deko27']
 WIND = {'k01/deko05', 'k01/deko06', 'k01/deko26', 'k01/deko27'}
 SL, PL, BAMBUS = 'mittel/00', 'mittel/01', 'mittel/05'
@@ -34,6 +41,8 @@ TURM_G, TURM_K, TURM_F, TURM_S = 'turm/schwarz_gross', 'turm/schwarz_klein', 'tu
 LILA = 'mittel/13'
 FELDER = [(26, 43), (49, 67)]                                   # Beetfelder (Spalten), Zeilen 64..81
 OBSTGARTEN = (72, 83, 64, 80)
+EINBETTEN = {'gross/03_land', 'mittel/stumpf', 'mittel/runenstein', 'neu/00', 'neu/01', 'turm/03', 'mittel/13',
+             'mittel/03', 'mittel/07', 'frucht/apfelbaum', 'frucht/kirschbusch'}
 RING = (30, 62, 4, 26)                                          # Steinkreis oben: keine Felsen
 
 FEST = [
@@ -132,6 +141,7 @@ def main():
                 if 0 <= x + dx < cols and hoehe[y][x] != hoehe[y][x + dx]:
                     gesperrt.add((x, y))
     cache, alpha, objekte = {}, {}, []
+    rnd2 = random.Random(23)
     # Wandkacheln: Kante der hoeheren Ebene + Felsfront darunter (3 Kacheln, zur Wolke 4), Seitenwaende
     wand = set()
     for y in range(rows - 1):
@@ -219,7 +229,26 @@ def main():
         for x in range(bx, bx + wt):
             for y in range(ty - ht + 1, ty + 1):
                 gesperrt.add((x, y))
+        if name in EINBETTEN:
+            einbetten(bx, wt, ty)
         return True
+
+    def einbetten(bx, wt, ty):
+        """Ein Bueschel an einer Sockelecke und eine Blume an der anderen, im Sockelbereich (vorne gezeichnet)."""
+        ecken = [bx, bx + wt - 1] if wt > 1 else [bx]
+        rnd2.shuffle(ecken)
+        for i, x in enumerate(ecken):
+            if not (0 <= x < cols and 0 <= ty < rows) or (x, ty) in wand:
+                continue
+            k = cls[ty][x]
+            if k in 'gf':
+                n = rnd2.choice(BUESCHEL_GRAS if i == 0 else BLUMEN_GRAS)
+            elif k == 'n':
+                n = rnd2.choice(BUESCHEL_SCHNEE if i == 0 else BLUMEN_SCHNEE)
+            else:
+                continue
+            dx = 0.25 if x == bx else -0.25
+            setze(n, x + dx, ty, {'anim': 'wehen', 'spiegeln': rnd2.random() < 0.5}, abs_=True, _versuch=True)
 
     for (name, fx, fy, opt) in FEST:
         setze(name, fx, fy, opt)
