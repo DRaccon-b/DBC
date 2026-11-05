@@ -1,8 +1,8 @@
 {
  "kachel": 16,
  "breite_kacheln": 16,
- "reihen": 29,
- "animationsbereich_reihen": 8,
+ "reihen": 43,
+ "animationsbereich_reihen": 10,
  "animationsbilder": 16,
  "bilddauer_ms": 170,
  "ecken_hinweis": "Ecken = (oben links, oben rechts, unten links, unten rechts), 1 = Material",
@@ -37,10 +37,38 @@
   },
   {
    "gruppe": "Wasser",
-   "name": "Aussenecke oben rechts",
+   "name": "Kante oben",
    "spalte": 2,
    "reihe": 0,
    "index": 2,
+   "ecken": [
+    0,
+    0,
+    1,
+    1
+   ],
+   "animiert": true
+  },
+  {
+   "gruppe": "Wasser",
+   "name": "Kante oben",
+   "spalte": 3,
+   "reihe": 0,
+   "index": 3,
+   "ecken": [
+    0,
+    0,
+    1,
+    1
+   ],
+   "animiert": true
+  },
+  {
+   "gruppe": "Wasser",
+   "name": "Aussenecke oben rechts",
+   "spalte": 4,
+   "reihe": 0,
+   "index": 4,
    "ecken": [
     0,
     0,
@@ -79,10 +107,178 @@
   },
   {
    "gruppe": "Wasser",
-   "name": "Kante rechts",
+   "name": "Mitte",
    "spalte": 2,
    "reihe": 1,
    "index": 18,
+   "ecken": [
+    1,
+    1,
+    1,
+    1
+   ],
+   "animiert": true
+  },
+  {
+   "gruppe": "Wasser",
+   "name": "Mitte",
+   "spalte": 3,
+   "reihe": 1,
+   "index": 19,
+   "ecken": [
+    1,
+    1,
+    1,
+    1
+   ],
+   "animiert": true
+  },
+  {
+   "gruppe": "Wasser",
+   "name": "Kante rechts",
+   "spalte": 4,
+   "reihe": 1,
+   "index": 20,
+   "ecken": [
+    1,
+    0,
+    1,
+    0
+   ],
+   "animiert": true
+  },
+  {
+   "gruppe": "Wasser",
+   "name": "Kante links",
+   "spalte": 0,
+   "reihe": 2,
+   "index": 32,
+   "ecken": [
+    0,
+    1,
+    0,
+    1
+   ],
+   "animiert": true
+  },
+  {
+   "gruppe": "Wasser",
+   "name": "Mitte",
+   "spalte": 1,
+   "reihe": 2,
+   "index": 33,
+   "ecken": [
+    1,
+    1,
+    1,
+    1
+   ],
+   "animiert": true
+  },
+  {
+   "gruppe": "Wasser",
+   "name": "Mitte",
+   "spalte": 2,
+   "reihe": 2,
+   "index": 34,
+   "ecken": [
+    1,
+    1,
+    1,
+    1
+   ],
+   "animiert": true
+  },
+  {
+   "gruppe": "Wasser",
+   "name": "Mitte",
+   "spalte": 3,
+   "reihe": 2,
+   "index": 35,
+   "ecken": [
+    1,
+    1,
+    1,
+    1
+   ],
+   "animiert": true
+  },
+  {
+   "gruppe": "Wasser",
+   "name": "Kante rechts",
+   "spalte": 4,
+   "reihe": 2,
+   "index": 36,
+   "ecken": [
+    1,
+    0,
+    1,
+    0
+   ],
+   "animiert": true
+  },
+  {
+   "gruppe": "Wasser",
+   "name": "Kante links",
+   "spalte": 0,
+   "reihe": 3,
+   "index": 48,
+   "ecken": [
+    0,
+    1,
+    0,
+    1
+   ],
+   "animiert": true
+  },
+  {
+   "gruppe": "Wasser",
+   "name": "Mitte",
+   "spalte": 1,
+   "reihe": 3,
+   "index": 49,
+   "ecken": [
+    1,
+    1,
+    1,
+    1
+   ],
+   "animiert": true
+  },
+  {
+   "gruppe": "Wasser",
+   "name": "Mitte",
+   "spalte": 2,
+   "reihe": 3,
+   "index": 50,
+   "ecken": [
+    1,
+    1,
+    1,
+    1
+   ],
+   "animiert": true
+  },
+  {
+   "gruppe": "Wasser",
+   "name": "Mitte",
+   "spalte": 3,
+   "reihe": 3,
+   "index": 51,
+   "ecken": [
+    1,
+    1,
+    1,
+    1
+   ],
+   "animiert": true
+  },
+  {
+   "gruppe": "Wasser",
+   "name": "Kante rechts",
+   "spalte": 4,
+   "reihe": 3,
+   "index": 52,
    "ecken": [
     1,
     0,
@@ -95,8 +291,8 @@
    "gruppe": "Wasser",
    "name": "Aussenecke unten links",
    "spalte": 0,
-   "reihe": 2,
-   "index": 32,
+   "reihe": 4,
+   "index": 64,
    "ecken": [
     0,
     1,
@@ -109,8 +305,36 @@
    "gruppe": "Wasser",
    "name": "Kante unten",
    "spalte": 1,
-   "reihe": 2,
-   "index": 33,
+   "reihe": 4,
+   "index": 65,
+   "ecken": [
+    1,
+    1,
+    0,
+    0
+   ],
+   "animiert": true
+  },
+  {
+   "gruppe": "Wasser",
+   "name": "Kante unten",
+   "spalte": 2,
+   "reihe": 4,
+   "index": 66,
+   "ecken": [
+    1,
+    1,
+    0,
+    0
+   ],
+   "animiert": true
+  },
+  {
+   "gruppe": "Wasser",
+   "name": "Kante unten",
+   "spalte": 3,
+   "reihe": 4,
+   "index": 67,
    "ecken": [
     1,
     1,
@@ -122,9 +346,9 @@
   {
    "gruppe": "Wasser",
    "name": "Aussenecke unten rechts",
-   "spalte": 2,
-   "reihe": 2,
-   "index": 34,
+   "spalte": 4,
+   "reihe": 4,
+   "index": 68,
    "ecken": [
     1,
     0,
@@ -136,9 +360,9 @@
   {
    "gruppe": "Wasser",
    "name": "Innenecke oben links",
-   "spalte": 3,
+   "spalte": 6,
    "reihe": 0,
-   "index": 3,
+   "index": 6,
    "ecken": [
     1,
     1,
@@ -149,12 +373,68 @@
   },
   {
    "gruppe": "Wasser",
-   "name": "Innenecke oben rechts",
-   "spalte": 4,
+   "name": "Kante unten",
+   "spalte": 7,
    "reihe": 0,
-   "index": 4,
+   "index": 7,
    "ecken": [
     1,
+    1,
+    0,
+    0
+   ],
+   "animiert": true
+  },
+  {
+   "gruppe": "Wasser",
+   "name": "Innenecke oben rechts",
+   "spalte": 8,
+   "reihe": 0,
+   "index": 8,
+   "ecken": [
+    1,
+    1,
+    0,
+    1
+   ],
+   "animiert": true
+  },
+  {
+   "gruppe": "Wasser",
+   "name": "Kante rechts",
+   "spalte": 6,
+   "reihe": 1,
+   "index": 22,
+   "ecken": [
+    1,
+    0,
+    1,
+    0
+   ],
+   "animiert": true
+  },
+  {
+   "gruppe": "Wasser",
+   "name": "Gras",
+   "spalte": 7,
+   "reihe": 1,
+   "index": 23,
+   "ecken": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "animiert": true
+  },
+  {
+   "gruppe": "Wasser",
+   "name": "Kante links",
+   "spalte": 8,
+   "reihe": 1,
+   "index": 24,
+   "ecken": [
+    0,
     1,
     0,
     1
@@ -164,9 +444,9 @@
   {
    "gruppe": "Wasser",
    "name": "Innenecke unten links",
-   "spalte": 3,
-   "reihe": 1,
-   "index": 19,
+   "spalte": 6,
+   "reihe": 2,
+   "index": 38,
    "ecken": [
     1,
     0,
@@ -177,10 +457,24 @@
   },
   {
    "gruppe": "Wasser",
+   "name": "Kante oben",
+   "spalte": 7,
+   "reihe": 2,
+   "index": 39,
+   "ecken": [
+    0,
+    0,
+    1,
+    1
+   ],
+   "animiert": true
+  },
+  {
+   "gruppe": "Wasser",
    "name": "Innenecke unten rechts",
-   "spalte": 4,
-   "reihe": 1,
-   "index": 20,
+   "spalte": 8,
+   "reihe": 2,
+   "index": 40,
    "ecken": [
     0,
     1,
@@ -192,9 +486,9 @@
   {
    "gruppe": "Wasser",
    "name": "Diagonale \\",
-   "spalte": 3,
-   "reihe": 2,
-   "index": 35,
+   "spalte": 6,
+   "reihe": 4,
+   "index": 70,
    "ecken": [
     1,
     0,
@@ -206,9 +500,9 @@
   {
    "gruppe": "Wasser",
    "name": "Diagonale /",
-   "spalte": 4,
-   "reihe": 2,
-   "index": 36,
+   "spalte": 7,
+   "reihe": 4,
+   "index": 71,
    "ecken": [
     0,
     1,
@@ -221,60 +515,6 @@
    "gruppe": "Teleporter",
    "name": "Teleporter 0,0",
    "spalte": 0,
-   "reihe": 3,
-   "index": 48,
-   "ecken": null,
-   "animiert": true
-  },
-  {
-   "gruppe": "Teleporter",
-   "name": "Teleporter 1,0",
-   "spalte": 1,
-   "reihe": 3,
-   "index": 49,
-   "ecken": null,
-   "animiert": true
-  },
-  {
-   "gruppe": "Teleporter",
-   "name": "Teleporter 2,0",
-   "spalte": 2,
-   "reihe": 3,
-   "index": 50,
-   "ecken": null,
-   "animiert": true
-  },
-  {
-   "gruppe": "Teleporter",
-   "name": "Teleporter 0,1",
-   "spalte": 0,
-   "reihe": 4,
-   "index": 64,
-   "ecken": null,
-   "animiert": true
-  },
-  {
-   "gruppe": "Teleporter",
-   "name": "Teleporter 1,1",
-   "spalte": 1,
-   "reihe": 4,
-   "index": 65,
-   "ecken": null,
-   "animiert": true
-  },
-  {
-   "gruppe": "Teleporter",
-   "name": "Teleporter 2,1",
-   "spalte": 2,
-   "reihe": 4,
-   "index": 66,
-   "ecken": null,
-   "animiert": true
-  },
-  {
-   "gruppe": "Teleporter",
-   "name": "Teleporter 0,2",
-   "spalte": 0,
    "reihe": 5,
    "index": 80,
    "ecken": null,
@@ -282,7 +522,7 @@
   },
   {
    "gruppe": "Teleporter",
-   "name": "Teleporter 1,2",
+   "name": "Teleporter 1,0",
    "spalte": 1,
    "reihe": 5,
    "index": 81,
@@ -291,7 +531,7 @@
   },
   {
    "gruppe": "Teleporter",
-   "name": "Teleporter 2,2",
+   "name": "Teleporter 2,0",
    "spalte": 2,
    "reihe": 5,
    "index": 82,
@@ -300,7 +540,7 @@
   },
   {
    "gruppe": "Teleporter",
-   "name": "Teleporter 0,3",
+   "name": "Teleporter 0,1",
    "spalte": 0,
    "reihe": 6,
    "index": 96,
@@ -309,7 +549,7 @@
   },
   {
    "gruppe": "Teleporter",
-   "name": "Teleporter 1,3",
+   "name": "Teleporter 1,1",
    "spalte": 1,
    "reihe": 6,
    "index": 97,
@@ -318,7 +558,7 @@
   },
   {
    "gruppe": "Teleporter",
-   "name": "Teleporter 2,3",
+   "name": "Teleporter 2,1",
    "spalte": 2,
    "reihe": 6,
    "index": 98,
@@ -327,7 +567,7 @@
   },
   {
    "gruppe": "Teleporter",
-   "name": "Teleporter 0,4",
+   "name": "Teleporter 0,2",
    "spalte": 0,
    "reihe": 7,
    "index": 112,
@@ -336,7 +576,7 @@
   },
   {
    "gruppe": "Teleporter",
-   "name": "Teleporter 1,4",
+   "name": "Teleporter 1,2",
    "spalte": 1,
    "reihe": 7,
    "index": 113,
@@ -345,7 +585,7 @@
   },
   {
    "gruppe": "Teleporter",
-   "name": "Teleporter 2,4",
+   "name": "Teleporter 2,2",
    "spalte": 2,
    "reihe": 7,
    "index": 114,
@@ -353,11 +593,65 @@
    "animiert": true
   },
   {
-   "gruppe": "Grundflaechen",
-   "name": "Gras 1",
+   "gruppe": "Teleporter",
+   "name": "Teleporter 0,3",
    "spalte": 0,
    "reihe": 8,
    "index": 128,
+   "ecken": null,
+   "animiert": true
+  },
+  {
+   "gruppe": "Teleporter",
+   "name": "Teleporter 1,3",
+   "spalte": 1,
+   "reihe": 8,
+   "index": 129,
+   "ecken": null,
+   "animiert": true
+  },
+  {
+   "gruppe": "Teleporter",
+   "name": "Teleporter 2,3",
+   "spalte": 2,
+   "reihe": 8,
+   "index": 130,
+   "ecken": null,
+   "animiert": true
+  },
+  {
+   "gruppe": "Teleporter",
+   "name": "Teleporter 0,4",
+   "spalte": 0,
+   "reihe": 9,
+   "index": 144,
+   "ecken": null,
+   "animiert": true
+  },
+  {
+   "gruppe": "Teleporter",
+   "name": "Teleporter 1,4",
+   "spalte": 1,
+   "reihe": 9,
+   "index": 145,
+   "ecken": null,
+   "animiert": true
+  },
+  {
+   "gruppe": "Teleporter",
+   "name": "Teleporter 2,4",
+   "spalte": 2,
+   "reihe": 9,
+   "index": 146,
+   "ecken": null,
+   "animiert": true
+  },
+  {
+   "gruppe": "Grundflaechen",
+   "name": "Gras 1",
+   "spalte": 0,
+   "reihe": 10,
+   "index": 160,
    "ecken": null,
    "animiert": false
   },
@@ -365,8 +659,8 @@
    "gruppe": "Grundflaechen",
    "name": "Gras 2",
    "spalte": 1,
-   "reihe": 8,
-   "index": 129,
+   "reihe": 10,
+   "index": 161,
    "ecken": null,
    "animiert": false
   },
@@ -374,8 +668,8 @@
    "gruppe": "Grundflaechen",
    "name": "Gras 3",
    "spalte": 2,
-   "reihe": 8,
-   "index": 130,
+   "reihe": 10,
+   "index": 162,
    "ecken": null,
    "animiert": false
   },
@@ -383,8 +677,8 @@
    "gruppe": "Grundflaechen",
    "name": "Gras 4",
    "spalte": 3,
-   "reihe": 8,
-   "index": 131,
+   "reihe": 10,
+   "index": 163,
    "ecken": null,
    "animiert": false
   },
@@ -392,8 +686,8 @@
    "gruppe": "Grundflaechen",
    "name": "Gras 5",
    "spalte": 4,
-   "reihe": 8,
-   "index": 132,
+   "reihe": 10,
+   "index": 164,
    "ecken": null,
    "animiert": false
   },
@@ -401,8 +695,8 @@
    "gruppe": "Grundflaechen",
    "name": "Waldboden 1",
    "spalte": 5,
-   "reihe": 8,
-   "index": 133,
+   "reihe": 10,
+   "index": 165,
    "ecken": null,
    "animiert": false
   },
@@ -410,8 +704,8 @@
    "gruppe": "Grundflaechen",
    "name": "Waldboden 2",
    "spalte": 6,
-   "reihe": 8,
-   "index": 134,
+   "reihe": 10,
+   "index": 166,
    "ecken": null,
    "animiert": false
   },
@@ -419,8 +713,8 @@
    "gruppe": "Grundflaechen",
    "name": "Waldboden 3",
    "spalte": 7,
-   "reihe": 8,
-   "index": 135,
+   "reihe": 10,
+   "index": 167,
    "ecken": null,
    "animiert": false
   },
@@ -428,8 +722,8 @@
    "gruppe": "Grundflaechen",
    "name": "Waldboden 4",
    "spalte": 8,
-   "reihe": 8,
-   "index": 136,
+   "reihe": 10,
+   "index": 168,
    "ecken": null,
    "animiert": false
   },
@@ -437,8 +731,8 @@
    "gruppe": "Grundflaechen",
    "name": "Waldboden 5",
    "spalte": 9,
-   "reihe": 8,
-   "index": 137,
+   "reihe": 10,
+   "index": 169,
    "ecken": null,
    "animiert": false
   },
@@ -446,8 +740,8 @@
    "gruppe": "Grundflaechen",
    "name": "Sand 1",
    "spalte": 10,
-   "reihe": 8,
-   "index": 138,
+   "reihe": 10,
+   "index": 170,
    "ecken": null,
    "animiert": false
   },
@@ -455,8 +749,8 @@
    "gruppe": "Grundflaechen",
    "name": "Sand 2",
    "spalte": 11,
-   "reihe": 8,
-   "index": 139,
+   "reihe": 10,
+   "index": 171,
    "ecken": null,
    "animiert": false
   },
@@ -464,8 +758,8 @@
    "gruppe": "Grundflaechen",
    "name": "Sand 3",
    "spalte": 12,
-   "reihe": 8,
-   "index": 140,
+   "reihe": 10,
+   "index": 172,
    "ecken": null,
    "animiert": false
   },
@@ -473,8 +767,8 @@
    "gruppe": "Grundflaechen",
    "name": "Sand 4",
    "spalte": 13,
-   "reihe": 8,
-   "index": 141,
+   "reihe": 10,
+   "index": 173,
    "ecken": null,
    "animiert": false
   },
@@ -482,8 +776,8 @@
    "gruppe": "Grundflaechen",
    "name": "Sand 5",
    "spalte": 14,
-   "reihe": 8,
-   "index": 142,
+   "reihe": 10,
+   "index": 174,
    "ecken": null,
    "animiert": false
   },
@@ -491,8 +785,8 @@
    "gruppe": "Grundflaechen",
    "name": "Kopfstein 1",
    "spalte": 15,
-   "reihe": 8,
-   "index": 143,
+   "reihe": 10,
+   "index": 175,
    "ecken": null,
    "animiert": false
   },
@@ -500,8 +794,8 @@
    "gruppe": "Grundflaechen",
    "name": "Kopfstein 2",
    "spalte": 0,
-   "reihe": 9,
-   "index": 144,
+   "reihe": 11,
+   "index": 176,
    "ecken": null,
    "animiert": false
   },
@@ -509,8 +803,8 @@
    "gruppe": "Grundflaechen",
    "name": "Kopfstein 3",
    "spalte": 1,
-   "reihe": 9,
-   "index": 145,
+   "reihe": 11,
+   "index": 177,
    "ecken": null,
    "animiert": false
   },
@@ -518,8 +812,8 @@
    "gruppe": "Grundflaechen",
    "name": "Kopfstein 4",
    "spalte": 2,
-   "reihe": 9,
-   "index": 146,
+   "reihe": 11,
+   "index": 178,
    "ecken": null,
    "animiert": false
   },
@@ -527,8 +821,8 @@
    "gruppe": "Grundflaechen",
    "name": "Kopfstein 5",
    "spalte": 3,
-   "reihe": 9,
-   "index": 147,
+   "reihe": 11,
+   "index": 179,
    "ecken": null,
    "animiert": false
   },
@@ -536,8 +830,8 @@
    "gruppe": "Grundflaechen",
    "name": "Platten 1",
    "spalte": 4,
-   "reihe": 9,
-   "index": 148,
+   "reihe": 11,
+   "index": 180,
    "ecken": null,
    "animiert": false
   },
@@ -545,8 +839,8 @@
    "gruppe": "Grundflaechen",
    "name": "Platten 2",
    "spalte": 5,
-   "reihe": 9,
-   "index": 149,
+   "reihe": 11,
+   "index": 181,
    "ecken": null,
    "animiert": false
   },
@@ -554,8 +848,8 @@
    "gruppe": "Grundflaechen",
    "name": "Platten 3",
    "spalte": 6,
-   "reihe": 9,
-   "index": 150,
+   "reihe": 11,
+   "index": 182,
    "ecken": null,
    "animiert": false
   },
@@ -563,8 +857,8 @@
    "gruppe": "Waldboden",
    "name": "Aussenecke oben links",
    "spalte": 0,
-   "reihe": 10,
-   "index": 160,
+   "reihe": 12,
+   "index": 192,
    "ecken": [
     0,
     0,
@@ -577,8 +871,36 @@
    "gruppe": "Waldboden",
    "name": "Kante oben",
    "spalte": 1,
-   "reihe": 10,
-   "index": 161,
+   "reihe": 12,
+   "index": 193,
+   "ecken": [
+    0,
+    0,
+    1,
+    1
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Waldboden",
+   "name": "Kante oben",
+   "spalte": 2,
+   "reihe": 12,
+   "index": 194,
+   "ecken": [
+    0,
+    0,
+    1,
+    1
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Waldboden",
+   "name": "Kante oben",
+   "spalte": 3,
+   "reihe": 12,
+   "index": 195,
    "ecken": [
     0,
     0,
@@ -590,9 +912,9 @@
   {
    "gruppe": "Waldboden",
    "name": "Aussenecke oben rechts",
-   "spalte": 2,
-   "reihe": 10,
-   "index": 162,
+   "spalte": 4,
+   "reihe": 12,
+   "index": 196,
    "ecken": [
     0,
     0,
@@ -605,8 +927,8 @@
    "gruppe": "Waldboden",
    "name": "Kante links",
    "spalte": 0,
-   "reihe": 11,
-   "index": 176,
+   "reihe": 13,
+   "index": 208,
    "ecken": [
     0,
     1,
@@ -619,8 +941,36 @@
    "gruppe": "Waldboden",
    "name": "Mitte",
    "spalte": 1,
-   "reihe": 11,
-   "index": 177,
+   "reihe": 13,
+   "index": 209,
+   "ecken": [
+    1,
+    1,
+    1,
+    1
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Waldboden",
+   "name": "Mitte",
+   "spalte": 2,
+   "reihe": 13,
+   "index": 210,
+   "ecken": [
+    1,
+    1,
+    1,
+    1
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Waldboden",
+   "name": "Mitte",
+   "spalte": 3,
+   "reihe": 13,
+   "index": 211,
    "ecken": [
     1,
     1,
@@ -632,179 +982,11 @@
   {
    "gruppe": "Waldboden",
    "name": "Kante rechts",
-   "spalte": 2,
-   "reihe": 11,
-   "index": 178,
-   "ecken": [
-    1,
-    0,
-    1,
-    0
-   ],
-   "animiert": false
-  },
-  {
-   "gruppe": "Waldboden",
-   "name": "Aussenecke unten links",
-   "spalte": 0,
-   "reihe": 12,
-   "index": 192,
-   "ecken": [
-    0,
-    1,
-    0,
-    0
-   ],
-   "animiert": false
-  },
-  {
-   "gruppe": "Waldboden",
-   "name": "Kante unten",
-   "spalte": 1,
-   "reihe": 12,
-   "index": 193,
-   "ecken": [
-    1,
-    1,
-    0,
-    0
-   ],
-   "animiert": false
-  },
-  {
-   "gruppe": "Waldboden",
-   "name": "Aussenecke unten rechts",
-   "spalte": 2,
-   "reihe": 12,
-   "index": 194,
-   "ecken": [
-    1,
-    0,
-    0,
-    0
-   ],
-   "animiert": false
-  },
-  {
-   "gruppe": "Waldboden",
-   "name": "Innenecke oben links",
-   "spalte": 3,
-   "reihe": 10,
-   "index": 163,
-   "ecken": [
-    1,
-    1,
-    1,
-    0
-   ],
-   "animiert": false
-  },
-  {
-   "gruppe": "Waldboden",
-   "name": "Innenecke oben rechts",
    "spalte": 4,
-   "reihe": 10,
-   "index": 164,
-   "ecken": [
-    1,
-    1,
-    0,
-    1
-   ],
-   "animiert": false
-  },
-  {
-   "gruppe": "Waldboden",
-   "name": "Innenecke unten links",
-   "spalte": 3,
-   "reihe": 11,
-   "index": 179,
-   "ecken": [
-    1,
-    0,
-    1,
-    1
-   ],
-   "animiert": false
-  },
-  {
-   "gruppe": "Waldboden",
-   "name": "Innenecke unten rechts",
-   "spalte": 4,
-   "reihe": 11,
-   "index": 180,
-   "ecken": [
-    0,
-    1,
-    1,
-    1
-   ],
-   "animiert": false
-  },
-  {
-   "gruppe": "Waldboden",
-   "name": "Diagonale \\",
-   "spalte": 3,
-   "reihe": 12,
-   "index": 195,
-   "ecken": [
-    1,
-    0,
-    0,
-    1
-   ],
-   "animiert": false
-  },
-  {
-   "gruppe": "Waldboden",
-   "name": "Diagonale /",
-   "spalte": 4,
-   "reihe": 12,
-   "index": 196,
-   "ecken": [
-    0,
-    1,
-    1,
-    0
-   ],
-   "animiert": false
-  },
-  {
-   "gruppe": "Sand (Weg, Spielplatz)",
-   "name": "Aussenecke oben links",
-   "spalte": 0,
    "reihe": 13,
-   "index": 208,
+   "index": 212,
    "ecken": [
-    0,
-    0,
-    0,
-    1
-   ],
-   "animiert": false
-  },
-  {
-   "gruppe": "Sand (Weg, Spielplatz)",
-   "name": "Kante oben",
-   "spalte": 1,
-   "reihe": 13,
-   "index": 209,
-   "ecken": [
-    0,
-    0,
     1,
-    1
-   ],
-   "animiert": false
-  },
-  {
-   "gruppe": "Sand (Weg, Spielplatz)",
-   "name": "Aussenecke oben rechts",
-   "spalte": 2,
-   "reihe": 13,
-   "index": 210,
-   "ecken": [
-    0,
     0,
     1,
     0
@@ -812,7 +994,7 @@
    "animiert": false
   },
   {
-   "gruppe": "Sand (Weg, Spielplatz)",
+   "gruppe": "Waldboden",
    "name": "Kante links",
    "spalte": 0,
    "reihe": 14,
@@ -826,7 +1008,7 @@
    "animiert": false
   },
   {
-   "gruppe": "Sand (Weg, Spielplatz)",
+   "gruppe": "Waldboden",
    "name": "Mitte",
    "spalte": 1,
    "reihe": 14,
@@ -840,11 +1022,39 @@
    "animiert": false
   },
   {
-   "gruppe": "Sand (Weg, Spielplatz)",
-   "name": "Kante rechts",
+   "gruppe": "Waldboden",
+   "name": "Mitte",
    "spalte": 2,
    "reihe": 14,
    "index": 226,
+   "ecken": [
+    1,
+    1,
+    1,
+    1
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Waldboden",
+   "name": "Mitte",
+   "spalte": 3,
+   "reihe": 14,
+   "index": 227,
+   "ecken": [
+    1,
+    1,
+    1,
+    1
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Waldboden",
+   "name": "Kante rechts",
+   "spalte": 4,
+   "reihe": 14,
+   "index": 228,
    "ecken": [
     1,
     0,
@@ -854,8 +1064,8 @@
    "animiert": false
   },
   {
-   "gruppe": "Sand (Weg, Spielplatz)",
-   "name": "Aussenecke unten links",
+   "gruppe": "Waldboden",
+   "name": "Kante links",
    "spalte": 0,
    "reihe": 15,
    "index": 240,
@@ -863,88 +1073,32 @@
     0,
     1,
     0,
-    0
+    1
    ],
    "animiert": false
   },
   {
-   "gruppe": "Sand (Weg, Spielplatz)",
-   "name": "Kante unten",
+   "gruppe": "Waldboden",
+   "name": "Mitte",
    "spalte": 1,
    "reihe": 15,
    "index": 241,
    "ecken": [
     1,
     1,
-    0,
-    0
+    1,
+    1
    ],
    "animiert": false
   },
   {
-   "gruppe": "Sand (Weg, Spielplatz)",
-   "name": "Aussenecke unten rechts",
+   "gruppe": "Waldboden",
+   "name": "Mitte",
    "spalte": 2,
    "reihe": 15,
    "index": 242,
    "ecken": [
     1,
-    0,
-    0,
-    0
-   ],
-   "animiert": false
-  },
-  {
-   "gruppe": "Sand (Weg, Spielplatz)",
-   "name": "Innenecke oben links",
-   "spalte": 3,
-   "reihe": 13,
-   "index": 211,
-   "ecken": [
-    1,
-    1,
-    1,
-    0
-   ],
-   "animiert": false
-  },
-  {
-   "gruppe": "Sand (Weg, Spielplatz)",
-   "name": "Innenecke oben rechts",
-   "spalte": 4,
-   "reihe": 13,
-   "index": 212,
-   "ecken": [
-    1,
-    1,
-    0,
-    1
-   ],
-   "animiert": false
-  },
-  {
-   "gruppe": "Sand (Weg, Spielplatz)",
-   "name": "Innenecke unten links",
-   "spalte": 3,
-   "reihe": 14,
-   "index": 227,
-   "ecken": [
-    1,
-    0,
-    1,
-    1
-   ],
-   "animiert": false
-  },
-  {
-   "gruppe": "Sand (Weg, Spielplatz)",
-   "name": "Innenecke unten rechts",
-   "spalte": 4,
-   "reihe": 14,
-   "index": 228,
-   "ecken": [
-    0,
     1,
     1,
     1
@@ -952,13 +1106,265 @@
    "animiert": false
   },
   {
-   "gruppe": "Sand (Weg, Spielplatz)",
-   "name": "Diagonale \\",
+   "gruppe": "Waldboden",
+   "name": "Mitte",
    "spalte": 3,
    "reihe": 15,
    "index": 243,
    "ecken": [
     1,
+    1,
+    1,
+    1
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Waldboden",
+   "name": "Kante rechts",
+   "spalte": 4,
+   "reihe": 15,
+   "index": 244,
+   "ecken": [
+    1,
+    0,
+    1,
+    0
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Waldboden",
+   "name": "Aussenecke unten links",
+   "spalte": 0,
+   "reihe": 16,
+   "index": 256,
+   "ecken": [
+    0,
+    1,
+    0,
+    0
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Waldboden",
+   "name": "Kante unten",
+   "spalte": 1,
+   "reihe": 16,
+   "index": 257,
+   "ecken": [
+    1,
+    1,
+    0,
+    0
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Waldboden",
+   "name": "Kante unten",
+   "spalte": 2,
+   "reihe": 16,
+   "index": 258,
+   "ecken": [
+    1,
+    1,
+    0,
+    0
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Waldboden",
+   "name": "Kante unten",
+   "spalte": 3,
+   "reihe": 16,
+   "index": 259,
+   "ecken": [
+    1,
+    1,
+    0,
+    0
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Waldboden",
+   "name": "Aussenecke unten rechts",
+   "spalte": 4,
+   "reihe": 16,
+   "index": 260,
+   "ecken": [
+    1,
+    0,
+    0,
+    0
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Waldboden",
+   "name": "Innenecke oben links",
+   "spalte": 6,
+   "reihe": 12,
+   "index": 198,
+   "ecken": [
+    1,
+    1,
+    1,
+    0
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Waldboden",
+   "name": "Kante unten",
+   "spalte": 7,
+   "reihe": 12,
+   "index": 199,
+   "ecken": [
+    1,
+    1,
+    0,
+    0
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Waldboden",
+   "name": "Innenecke oben rechts",
+   "spalte": 8,
+   "reihe": 12,
+   "index": 200,
+   "ecken": [
+    1,
+    1,
+    0,
+    1
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Waldboden",
+   "name": "Kante rechts",
+   "spalte": 6,
+   "reihe": 13,
+   "index": 214,
+   "ecken": [
+    1,
+    0,
+    1,
+    0
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Waldboden",
+   "name": "Gras",
+   "spalte": 7,
+   "reihe": 13,
+   "index": 215,
+   "ecken": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Waldboden",
+   "name": "Kante links",
+   "spalte": 8,
+   "reihe": 13,
+   "index": 216,
+   "ecken": [
+    0,
+    1,
+    0,
+    1
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Waldboden",
+   "name": "Innenecke unten links",
+   "spalte": 6,
+   "reihe": 14,
+   "index": 230,
+   "ecken": [
+    1,
+    0,
+    1,
+    1
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Waldboden",
+   "name": "Kante oben",
+   "spalte": 7,
+   "reihe": 14,
+   "index": 231,
+   "ecken": [
+    0,
+    0,
+    1,
+    1
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Waldboden",
+   "name": "Innenecke unten rechts",
+   "spalte": 8,
+   "reihe": 14,
+   "index": 232,
+   "ecken": [
+    0,
+    1,
+    1,
+    1
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Waldboden",
+   "name": "Diagonale \\",
+   "spalte": 6,
+   "reihe": 16,
+   "index": 262,
+   "ecken": [
+    1,
+    0,
+    0,
+    1
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Waldboden",
+   "name": "Diagonale /",
+   "spalte": 7,
+   "reihe": 16,
+   "index": 263,
+   "ecken": [
+    0,
+    1,
+    1,
+    0
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Sand (Weg, Spielplatz)",
+   "name": "Aussenecke oben links",
+   "spalte": 0,
+   "reihe": 17,
+   "index": 272,
+   "ecken": [
+    0,
     0,
     0,
     1
@@ -967,96 +1373,54 @@
   },
   {
    "gruppe": "Sand (Weg, Spielplatz)",
-   "name": "Diagonale /",
-   "spalte": 4,
-   "reihe": 15,
-   "index": 244,
-   "ecken": [
-    0,
-    1,
-    1,
-    0
-   ],
-   "animiert": false
-  },
-  {
-   "gruppe": "Kopfsteinplatz",
-   "name": "Aussenecke oben links",
-   "spalte": 0,
-   "reihe": 16,
-   "index": 256,
-   "ecken": [
-    0,
-    0,
-    0,
-    1
-   ],
-   "animiert": false
-  },
-  {
-   "gruppe": "Kopfsteinplatz",
    "name": "Kante oben",
-   "spalte": 1,
-   "reihe": 16,
-   "index": 257,
-   "ecken": [
-    0,
-    0,
-    1,
-    1
-   ],
-   "animiert": false
-  },
-  {
-   "gruppe": "Kopfsteinplatz",
-   "name": "Aussenecke oben rechts",
-   "spalte": 2,
-   "reihe": 16,
-   "index": 258,
-   "ecken": [
-    0,
-    0,
-    1,
-    0
-   ],
-   "animiert": false
-  },
-  {
-   "gruppe": "Kopfsteinplatz",
-   "name": "Kante links",
-   "spalte": 0,
-   "reihe": 17,
-   "index": 272,
-   "ecken": [
-    0,
-    1,
-    0,
-    1
-   ],
-   "animiert": false
-  },
-  {
-   "gruppe": "Kopfsteinplatz",
-   "name": "Mitte",
    "spalte": 1,
    "reihe": 17,
    "index": 273,
    "ecken": [
-    1,
-    1,
+    0,
+    0,
     1,
     1
    ],
    "animiert": false
   },
   {
-   "gruppe": "Kopfsteinplatz",
-   "name": "Kante rechts",
+   "gruppe": "Sand (Weg, Spielplatz)",
+   "name": "Kante oben",
    "spalte": 2,
    "reihe": 17,
    "index": 274,
    "ecken": [
+    0,
+    0,
     1,
+    1
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Sand (Weg, Spielplatz)",
+   "name": "Kante oben",
+   "spalte": 3,
+   "reihe": 17,
+   "index": 275,
+   "ecken": [
+    0,
+    0,
+    1,
+    1
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Sand (Weg, Spielplatz)",
+   "name": "Aussenecke oben rechts",
+   "spalte": 4,
+   "reihe": 17,
+   "index": 276,
+   "ecken": [
+    0,
     0,
     1,
     0
@@ -1064,8 +1428,8 @@
    "animiert": false
   },
   {
-   "gruppe": "Kopfsteinplatz",
-   "name": "Aussenecke unten links",
+   "gruppe": "Sand (Weg, Spielplatz)",
+   "name": "Kante links",
    "spalte": 0,
    "reihe": 18,
    "index": 288,
@@ -1073,88 +1437,32 @@
     0,
     1,
     0,
-    0
+    1
    ],
    "animiert": false
   },
   {
-   "gruppe": "Kopfsteinplatz",
-   "name": "Kante unten",
+   "gruppe": "Sand (Weg, Spielplatz)",
+   "name": "Mitte",
    "spalte": 1,
    "reihe": 18,
    "index": 289,
    "ecken": [
     1,
     1,
-    0,
-    0
+    1,
+    1
    ],
    "animiert": false
   },
   {
-   "gruppe": "Kopfsteinplatz",
-   "name": "Aussenecke unten rechts",
+   "gruppe": "Sand (Weg, Spielplatz)",
+   "name": "Mitte",
    "spalte": 2,
    "reihe": 18,
    "index": 290,
    "ecken": [
     1,
-    0,
-    0,
-    0
-   ],
-   "animiert": false
-  },
-  {
-   "gruppe": "Kopfsteinplatz",
-   "name": "Innenecke oben links",
-   "spalte": 3,
-   "reihe": 16,
-   "index": 259,
-   "ecken": [
-    1,
-    1,
-    1,
-    0
-   ],
-   "animiert": false
-  },
-  {
-   "gruppe": "Kopfsteinplatz",
-   "name": "Innenecke oben rechts",
-   "spalte": 4,
-   "reihe": 16,
-   "index": 260,
-   "ecken": [
-    1,
-    1,
-    0,
-    1
-   ],
-   "animiert": false
-  },
-  {
-   "gruppe": "Kopfsteinplatz",
-   "name": "Innenecke unten links",
-   "spalte": 3,
-   "reihe": 17,
-   "index": 275,
-   "ecken": [
-    1,
-    0,
-    1,
-    1
-   ],
-   "animiert": false
-  },
-  {
-   "gruppe": "Kopfsteinplatz",
-   "name": "Innenecke unten rechts",
-   "spalte": 4,
-   "reihe": 17,
-   "index": 276,
-   "ecken": [
-    0,
     1,
     1,
     1
@@ -1162,69 +1470,97 @@
    "animiert": false
   },
   {
-   "gruppe": "Kopfsteinplatz",
-   "name": "Diagonale \\",
+   "gruppe": "Sand (Weg, Spielplatz)",
+   "name": "Mitte",
    "spalte": 3,
    "reihe": 18,
    "index": 291,
    "ecken": [
     1,
-    0,
-    0,
+    1,
+    1,
     1
    ],
    "animiert": false
   },
   {
-   "gruppe": "Kopfsteinplatz",
-   "name": "Diagonale /",
+   "gruppe": "Sand (Weg, Spielplatz)",
+   "name": "Kante rechts",
    "spalte": 4,
    "reihe": 18,
    "index": 292,
    "ecken": [
-    0,
     1,
+    0,
     1,
     0
    ],
    "animiert": false
   },
   {
-   "gruppe": "Cyber-Platten",
-   "name": "Aussenecke oben links",
+   "gruppe": "Sand (Weg, Spielplatz)",
+   "name": "Kante links",
    "spalte": 0,
    "reihe": 19,
    "index": 304,
    "ecken": [
     0,
-    0,
+    1,
     0,
     1
    ],
    "animiert": false
   },
   {
-   "gruppe": "Cyber-Platten",
-   "name": "Kante oben",
+   "gruppe": "Sand (Weg, Spielplatz)",
+   "name": "Mitte",
    "spalte": 1,
    "reihe": 19,
    "index": 305,
    "ecken": [
-    0,
-    0,
+    1,
+    1,
     1,
     1
    ],
    "animiert": false
   },
   {
-   "gruppe": "Cyber-Platten",
-   "name": "Aussenecke oben rechts",
+   "gruppe": "Sand (Weg, Spielplatz)",
+   "name": "Mitte",
    "spalte": 2,
    "reihe": 19,
    "index": 306,
    "ecken": [
-    0,
+    1,
+    1,
+    1,
+    1
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Sand (Weg, Spielplatz)",
+   "name": "Mitte",
+   "spalte": 3,
+   "reihe": 19,
+   "index": 307,
+   "ecken": [
+    1,
+    1,
+    1,
+    1
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Sand (Weg, Spielplatz)",
+   "name": "Kante rechts",
+   "spalte": 4,
+   "reihe": 19,
+   "index": 308,
+   "ecken": [
+    1,
     0,
     1,
     0
@@ -1232,7 +1568,7 @@
    "animiert": false
   },
   {
-   "gruppe": "Cyber-Platten",
+   "gruppe": "Sand (Weg, Spielplatz)",
    "name": "Kante links",
    "spalte": 0,
    "reihe": 20,
@@ -1246,7 +1582,7 @@
    "animiert": false
   },
   {
-   "gruppe": "Cyber-Platten",
+   "gruppe": "Sand (Weg, Spielplatz)",
    "name": "Mitte",
    "spalte": 1,
    "reihe": 20,
@@ -1260,11 +1596,39 @@
    "animiert": false
   },
   {
-   "gruppe": "Cyber-Platten",
-   "name": "Kante rechts",
+   "gruppe": "Sand (Weg, Spielplatz)",
+   "name": "Mitte",
    "spalte": 2,
    "reihe": 20,
    "index": 322,
+   "ecken": [
+    1,
+    1,
+    1,
+    1
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Sand (Weg, Spielplatz)",
+   "name": "Mitte",
+   "spalte": 3,
+   "reihe": 20,
+   "index": 323,
+   "ecken": [
+    1,
+    1,
+    1,
+    1
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Sand (Weg, Spielplatz)",
+   "name": "Kante rechts",
+   "spalte": 4,
+   "reihe": 20,
+   "index": 324,
    "ecken": [
     1,
     0,
@@ -1274,7 +1638,7 @@
    "animiert": false
   },
   {
-   "gruppe": "Cyber-Platten",
+   "gruppe": "Sand (Weg, Spielplatz)",
    "name": "Aussenecke unten links",
    "spalte": 0,
    "reihe": 21,
@@ -1288,7 +1652,7 @@
    "animiert": false
   },
   {
-   "gruppe": "Cyber-Platten",
+   "gruppe": "Sand (Weg, Spielplatz)",
    "name": "Kante unten",
    "spalte": 1,
    "reihe": 21,
@@ -1302,11 +1666,1047 @@
    "animiert": false
   },
   {
-   "gruppe": "Cyber-Platten",
-   "name": "Aussenecke unten rechts",
+   "gruppe": "Sand (Weg, Spielplatz)",
+   "name": "Kante unten",
    "spalte": 2,
    "reihe": 21,
    "index": 338,
+   "ecken": [
+    1,
+    1,
+    0,
+    0
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Sand (Weg, Spielplatz)",
+   "name": "Kante unten",
+   "spalte": 3,
+   "reihe": 21,
+   "index": 339,
+   "ecken": [
+    1,
+    1,
+    0,
+    0
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Sand (Weg, Spielplatz)",
+   "name": "Aussenecke unten rechts",
+   "spalte": 4,
+   "reihe": 21,
+   "index": 340,
+   "ecken": [
+    1,
+    0,
+    0,
+    0
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Sand (Weg, Spielplatz)",
+   "name": "Innenecke oben links",
+   "spalte": 6,
+   "reihe": 17,
+   "index": 278,
+   "ecken": [
+    1,
+    1,
+    1,
+    0
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Sand (Weg, Spielplatz)",
+   "name": "Kante unten",
+   "spalte": 7,
+   "reihe": 17,
+   "index": 279,
+   "ecken": [
+    1,
+    1,
+    0,
+    0
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Sand (Weg, Spielplatz)",
+   "name": "Innenecke oben rechts",
+   "spalte": 8,
+   "reihe": 17,
+   "index": 280,
+   "ecken": [
+    1,
+    1,
+    0,
+    1
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Sand (Weg, Spielplatz)",
+   "name": "Kante rechts",
+   "spalte": 6,
+   "reihe": 18,
+   "index": 294,
+   "ecken": [
+    1,
+    0,
+    1,
+    0
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Sand (Weg, Spielplatz)",
+   "name": "Gras",
+   "spalte": 7,
+   "reihe": 18,
+   "index": 295,
+   "ecken": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Sand (Weg, Spielplatz)",
+   "name": "Kante links",
+   "spalte": 8,
+   "reihe": 18,
+   "index": 296,
+   "ecken": [
+    0,
+    1,
+    0,
+    1
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Sand (Weg, Spielplatz)",
+   "name": "Innenecke unten links",
+   "spalte": 6,
+   "reihe": 19,
+   "index": 310,
+   "ecken": [
+    1,
+    0,
+    1,
+    1
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Sand (Weg, Spielplatz)",
+   "name": "Kante oben",
+   "spalte": 7,
+   "reihe": 19,
+   "index": 311,
+   "ecken": [
+    0,
+    0,
+    1,
+    1
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Sand (Weg, Spielplatz)",
+   "name": "Innenecke unten rechts",
+   "spalte": 8,
+   "reihe": 19,
+   "index": 312,
+   "ecken": [
+    0,
+    1,
+    1,
+    1
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Sand (Weg, Spielplatz)",
+   "name": "Diagonale \\",
+   "spalte": 6,
+   "reihe": 21,
+   "index": 342,
+   "ecken": [
+    1,
+    0,
+    0,
+    1
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Sand (Weg, Spielplatz)",
+   "name": "Diagonale /",
+   "spalte": 7,
+   "reihe": 21,
+   "index": 343,
+   "ecken": [
+    0,
+    1,
+    1,
+    0
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Kopfsteinplatz",
+   "name": "Aussenecke oben links",
+   "spalte": 0,
+   "reihe": 22,
+   "index": 352,
+   "ecken": [
+    0,
+    0,
+    0,
+    1
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Kopfsteinplatz",
+   "name": "Kante oben",
+   "spalte": 1,
+   "reihe": 22,
+   "index": 353,
+   "ecken": [
+    0,
+    0,
+    1,
+    1
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Kopfsteinplatz",
+   "name": "Kante oben",
+   "spalte": 2,
+   "reihe": 22,
+   "index": 354,
+   "ecken": [
+    0,
+    0,
+    1,
+    1
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Kopfsteinplatz",
+   "name": "Kante oben",
+   "spalte": 3,
+   "reihe": 22,
+   "index": 355,
+   "ecken": [
+    0,
+    0,
+    1,
+    1
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Kopfsteinplatz",
+   "name": "Aussenecke oben rechts",
+   "spalte": 4,
+   "reihe": 22,
+   "index": 356,
+   "ecken": [
+    0,
+    0,
+    1,
+    0
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Kopfsteinplatz",
+   "name": "Kante links",
+   "spalte": 0,
+   "reihe": 23,
+   "index": 368,
+   "ecken": [
+    0,
+    1,
+    0,
+    1
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Kopfsteinplatz",
+   "name": "Mitte",
+   "spalte": 1,
+   "reihe": 23,
+   "index": 369,
+   "ecken": [
+    1,
+    1,
+    1,
+    1
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Kopfsteinplatz",
+   "name": "Mitte",
+   "spalte": 2,
+   "reihe": 23,
+   "index": 370,
+   "ecken": [
+    1,
+    1,
+    1,
+    1
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Kopfsteinplatz",
+   "name": "Mitte",
+   "spalte": 3,
+   "reihe": 23,
+   "index": 371,
+   "ecken": [
+    1,
+    1,
+    1,
+    1
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Kopfsteinplatz",
+   "name": "Kante rechts",
+   "spalte": 4,
+   "reihe": 23,
+   "index": 372,
+   "ecken": [
+    1,
+    0,
+    1,
+    0
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Kopfsteinplatz",
+   "name": "Kante links",
+   "spalte": 0,
+   "reihe": 24,
+   "index": 384,
+   "ecken": [
+    0,
+    1,
+    0,
+    1
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Kopfsteinplatz",
+   "name": "Mitte",
+   "spalte": 1,
+   "reihe": 24,
+   "index": 385,
+   "ecken": [
+    1,
+    1,
+    1,
+    1
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Kopfsteinplatz",
+   "name": "Mitte",
+   "spalte": 2,
+   "reihe": 24,
+   "index": 386,
+   "ecken": [
+    1,
+    1,
+    1,
+    1
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Kopfsteinplatz",
+   "name": "Mitte",
+   "spalte": 3,
+   "reihe": 24,
+   "index": 387,
+   "ecken": [
+    1,
+    1,
+    1,
+    1
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Kopfsteinplatz",
+   "name": "Kante rechts",
+   "spalte": 4,
+   "reihe": 24,
+   "index": 388,
+   "ecken": [
+    1,
+    0,
+    1,
+    0
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Kopfsteinplatz",
+   "name": "Kante links",
+   "spalte": 0,
+   "reihe": 25,
+   "index": 400,
+   "ecken": [
+    0,
+    1,
+    0,
+    1
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Kopfsteinplatz",
+   "name": "Mitte",
+   "spalte": 1,
+   "reihe": 25,
+   "index": 401,
+   "ecken": [
+    1,
+    1,
+    1,
+    1
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Kopfsteinplatz",
+   "name": "Mitte",
+   "spalte": 2,
+   "reihe": 25,
+   "index": 402,
+   "ecken": [
+    1,
+    1,
+    1,
+    1
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Kopfsteinplatz",
+   "name": "Mitte",
+   "spalte": 3,
+   "reihe": 25,
+   "index": 403,
+   "ecken": [
+    1,
+    1,
+    1,
+    1
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Kopfsteinplatz",
+   "name": "Kante rechts",
+   "spalte": 4,
+   "reihe": 25,
+   "index": 404,
+   "ecken": [
+    1,
+    0,
+    1,
+    0
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Kopfsteinplatz",
+   "name": "Aussenecke unten links",
+   "spalte": 0,
+   "reihe": 26,
+   "index": 416,
+   "ecken": [
+    0,
+    1,
+    0,
+    0
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Kopfsteinplatz",
+   "name": "Kante unten",
+   "spalte": 1,
+   "reihe": 26,
+   "index": 417,
+   "ecken": [
+    1,
+    1,
+    0,
+    0
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Kopfsteinplatz",
+   "name": "Kante unten",
+   "spalte": 2,
+   "reihe": 26,
+   "index": 418,
+   "ecken": [
+    1,
+    1,
+    0,
+    0
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Kopfsteinplatz",
+   "name": "Kante unten",
+   "spalte": 3,
+   "reihe": 26,
+   "index": 419,
+   "ecken": [
+    1,
+    1,
+    0,
+    0
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Kopfsteinplatz",
+   "name": "Aussenecke unten rechts",
+   "spalte": 4,
+   "reihe": 26,
+   "index": 420,
+   "ecken": [
+    1,
+    0,
+    0,
+    0
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Kopfsteinplatz",
+   "name": "Innenecke oben links",
+   "spalte": 6,
+   "reihe": 22,
+   "index": 358,
+   "ecken": [
+    1,
+    1,
+    1,
+    0
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Kopfsteinplatz",
+   "name": "Kante unten",
+   "spalte": 7,
+   "reihe": 22,
+   "index": 359,
+   "ecken": [
+    1,
+    1,
+    0,
+    0
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Kopfsteinplatz",
+   "name": "Innenecke oben rechts",
+   "spalte": 8,
+   "reihe": 22,
+   "index": 360,
+   "ecken": [
+    1,
+    1,
+    0,
+    1
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Kopfsteinplatz",
+   "name": "Kante rechts",
+   "spalte": 6,
+   "reihe": 23,
+   "index": 374,
+   "ecken": [
+    1,
+    0,
+    1,
+    0
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Kopfsteinplatz",
+   "name": "Gras",
+   "spalte": 7,
+   "reihe": 23,
+   "index": 375,
+   "ecken": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Kopfsteinplatz",
+   "name": "Kante links",
+   "spalte": 8,
+   "reihe": 23,
+   "index": 376,
+   "ecken": [
+    0,
+    1,
+    0,
+    1
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Kopfsteinplatz",
+   "name": "Innenecke unten links",
+   "spalte": 6,
+   "reihe": 24,
+   "index": 390,
+   "ecken": [
+    1,
+    0,
+    1,
+    1
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Kopfsteinplatz",
+   "name": "Kante oben",
+   "spalte": 7,
+   "reihe": 24,
+   "index": 391,
+   "ecken": [
+    0,
+    0,
+    1,
+    1
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Kopfsteinplatz",
+   "name": "Innenecke unten rechts",
+   "spalte": 8,
+   "reihe": 24,
+   "index": 392,
+   "ecken": [
+    0,
+    1,
+    1,
+    1
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Kopfsteinplatz",
+   "name": "Diagonale \\",
+   "spalte": 6,
+   "reihe": 26,
+   "index": 422,
+   "ecken": [
+    1,
+    0,
+    0,
+    1
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Kopfsteinplatz",
+   "name": "Diagonale /",
+   "spalte": 7,
+   "reihe": 26,
+   "index": 423,
+   "ecken": [
+    0,
+    1,
+    1,
+    0
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Cyber-Platten",
+   "name": "Aussenecke oben links",
+   "spalte": 0,
+   "reihe": 27,
+   "index": 432,
+   "ecken": [
+    0,
+    0,
+    0,
+    1
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Cyber-Platten",
+   "name": "Kante oben",
+   "spalte": 1,
+   "reihe": 27,
+   "index": 433,
+   "ecken": [
+    0,
+    0,
+    1,
+    1
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Cyber-Platten",
+   "name": "Kante oben",
+   "spalte": 2,
+   "reihe": 27,
+   "index": 434,
+   "ecken": [
+    0,
+    0,
+    1,
+    1
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Cyber-Platten",
+   "name": "Kante oben",
+   "spalte": 3,
+   "reihe": 27,
+   "index": 435,
+   "ecken": [
+    0,
+    0,
+    1,
+    1
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Cyber-Platten",
+   "name": "Aussenecke oben rechts",
+   "spalte": 4,
+   "reihe": 27,
+   "index": 436,
+   "ecken": [
+    0,
+    0,
+    1,
+    0
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Cyber-Platten",
+   "name": "Kante links",
+   "spalte": 0,
+   "reihe": 28,
+   "index": 448,
+   "ecken": [
+    0,
+    1,
+    0,
+    1
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Cyber-Platten",
+   "name": "Mitte",
+   "spalte": 1,
+   "reihe": 28,
+   "index": 449,
+   "ecken": [
+    1,
+    1,
+    1,
+    1
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Cyber-Platten",
+   "name": "Mitte",
+   "spalte": 2,
+   "reihe": 28,
+   "index": 450,
+   "ecken": [
+    1,
+    1,
+    1,
+    1
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Cyber-Platten",
+   "name": "Mitte",
+   "spalte": 3,
+   "reihe": 28,
+   "index": 451,
+   "ecken": [
+    1,
+    1,
+    1,
+    1
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Cyber-Platten",
+   "name": "Kante rechts",
+   "spalte": 4,
+   "reihe": 28,
+   "index": 452,
+   "ecken": [
+    1,
+    0,
+    1,
+    0
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Cyber-Platten",
+   "name": "Kante links",
+   "spalte": 0,
+   "reihe": 29,
+   "index": 464,
+   "ecken": [
+    0,
+    1,
+    0,
+    1
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Cyber-Platten",
+   "name": "Mitte",
+   "spalte": 1,
+   "reihe": 29,
+   "index": 465,
+   "ecken": [
+    1,
+    1,
+    1,
+    1
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Cyber-Platten",
+   "name": "Mitte",
+   "spalte": 2,
+   "reihe": 29,
+   "index": 466,
+   "ecken": [
+    1,
+    1,
+    1,
+    1
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Cyber-Platten",
+   "name": "Mitte",
+   "spalte": 3,
+   "reihe": 29,
+   "index": 467,
+   "ecken": [
+    1,
+    1,
+    1,
+    1
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Cyber-Platten",
+   "name": "Kante rechts",
+   "spalte": 4,
+   "reihe": 29,
+   "index": 468,
+   "ecken": [
+    1,
+    0,
+    1,
+    0
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Cyber-Platten",
+   "name": "Kante links",
+   "spalte": 0,
+   "reihe": 30,
+   "index": 480,
+   "ecken": [
+    0,
+    1,
+    0,
+    1
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Cyber-Platten",
+   "name": "Mitte",
+   "spalte": 1,
+   "reihe": 30,
+   "index": 481,
+   "ecken": [
+    1,
+    1,
+    1,
+    1
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Cyber-Platten",
+   "name": "Mitte",
+   "spalte": 2,
+   "reihe": 30,
+   "index": 482,
+   "ecken": [
+    1,
+    1,
+    1,
+    1
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Cyber-Platten",
+   "name": "Mitte",
+   "spalte": 3,
+   "reihe": 30,
+   "index": 483,
+   "ecken": [
+    1,
+    1,
+    1,
+    1
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Cyber-Platten",
+   "name": "Kante rechts",
+   "spalte": 4,
+   "reihe": 30,
+   "index": 484,
+   "ecken": [
+    1,
+    0,
+    1,
+    0
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Cyber-Platten",
+   "name": "Aussenecke unten links",
+   "spalte": 0,
+   "reihe": 31,
+   "index": 496,
+   "ecken": [
+    0,
+    1,
+    0,
+    0
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Cyber-Platten",
+   "name": "Kante unten",
+   "spalte": 1,
+   "reihe": 31,
+   "index": 497,
+   "ecken": [
+    1,
+    1,
+    0,
+    0
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Cyber-Platten",
+   "name": "Kante unten",
+   "spalte": 2,
+   "reihe": 31,
+   "index": 498,
+   "ecken": [
+    1,
+    1,
+    0,
+    0
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Cyber-Platten",
+   "name": "Kante unten",
+   "spalte": 3,
+   "reihe": 31,
+   "index": 499,
+   "ecken": [
+    1,
+    1,
+    0,
+    0
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Cyber-Platten",
+   "name": "Aussenecke unten rechts",
+   "spalte": 4,
+   "reihe": 31,
+   "index": 500,
    "ecken": [
     1,
     0,
@@ -1318,9 +2718,9 @@
   {
    "gruppe": "Cyber-Platten",
    "name": "Innenecke oben links",
-   "spalte": 3,
-   "reihe": 19,
-   "index": 307,
+   "spalte": 6,
+   "reihe": 27,
+   "index": 438,
    "ecken": [
     1,
     1,
@@ -1331,12 +2731,68 @@
   },
   {
    "gruppe": "Cyber-Platten",
-   "name": "Innenecke oben rechts",
-   "spalte": 4,
-   "reihe": 19,
-   "index": 308,
+   "name": "Kante unten",
+   "spalte": 7,
+   "reihe": 27,
+   "index": 439,
    "ecken": [
     1,
+    1,
+    0,
+    0
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Cyber-Platten",
+   "name": "Innenecke oben rechts",
+   "spalte": 8,
+   "reihe": 27,
+   "index": 440,
+   "ecken": [
+    1,
+    1,
+    0,
+    1
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Cyber-Platten",
+   "name": "Kante rechts",
+   "spalte": 6,
+   "reihe": 28,
+   "index": 454,
+   "ecken": [
+    1,
+    0,
+    1,
+    0
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Cyber-Platten",
+   "name": "Gras",
+   "spalte": 7,
+   "reihe": 28,
+   "index": 455,
+   "ecken": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Cyber-Platten",
+   "name": "Kante links",
+   "spalte": 8,
+   "reihe": 28,
+   "index": 456,
+   "ecken": [
+    0,
     1,
     0,
     1
@@ -1346,9 +2802,9 @@
   {
    "gruppe": "Cyber-Platten",
    "name": "Innenecke unten links",
-   "spalte": 3,
-   "reihe": 20,
-   "index": 323,
+   "spalte": 6,
+   "reihe": 29,
+   "index": 470,
    "ecken": [
     1,
     0,
@@ -1359,10 +2815,24 @@
   },
   {
    "gruppe": "Cyber-Platten",
+   "name": "Kante oben",
+   "spalte": 7,
+   "reihe": 29,
+   "index": 471,
+   "ecken": [
+    0,
+    0,
+    1,
+    1
+   ],
+   "animiert": false
+  },
+  {
+   "gruppe": "Cyber-Platten",
    "name": "Innenecke unten rechts",
-   "spalte": 4,
-   "reihe": 20,
-   "index": 324,
+   "spalte": 8,
+   "reihe": 29,
+   "index": 472,
    "ecken": [
     0,
     1,
@@ -1374,9 +2844,9 @@
   {
    "gruppe": "Cyber-Platten",
    "name": "Diagonale \\",
-   "spalte": 3,
-   "reihe": 21,
-   "index": 339,
+   "spalte": 6,
+   "reihe": 31,
+   "index": 502,
    "ecken": [
     1,
     0,
@@ -1388,9 +2858,9 @@
   {
    "gruppe": "Cyber-Platten",
    "name": "Diagonale /",
-   "spalte": 4,
-   "reihe": 21,
-   "index": 340,
+   "spalte": 7,
+   "reihe": 31,
+   "index": 503,
    "ecken": [
     0,
     1,
@@ -1401,163 +2871,487 @@
   },
   {
    "gruppe": "Zaun (transparent)",
-   "name": "Ecke oben links",
+   "name": "Zaun 0,0",
    "spalte": 0,
-   "reihe": 22,
-   "index": 352,
+   "reihe": 32,
+   "index": 512,
    "ecken": null,
    "animiert": false
   },
   {
    "gruppe": "Zaun (transparent)",
-   "name": "Ecke oben links unten",
+   "name": "Zaun 1,0",
    "spalte": 1,
-   "reihe": 22,
-   "index": 353,
+   "reihe": 32,
+   "index": 513,
    "ecken": null,
    "animiert": false
   },
   {
    "gruppe": "Zaun (transparent)",
-   "name": "Latte oben",
+   "name": "Zaun 2,0",
    "spalte": 2,
-   "reihe": 22,
-   "index": 354,
+   "reihe": 32,
+   "index": 514,
    "ecken": null,
    "animiert": false
   },
   {
    "gruppe": "Zaun (transparent)",
-   "name": "Latte",
+   "name": "Zaun 3,0",
    "spalte": 3,
-   "reihe": 22,
-   "index": 355,
+   "reihe": 32,
+   "index": 515,
    "ecken": null,
    "animiert": false
   },
   {
    "gruppe": "Zaun (transparent)",
-   "name": "Torende links oben",
+   "name": "Zaun 4,0",
    "spalte": 4,
-   "reihe": 22,
-   "index": 356,
+   "reihe": 32,
+   "index": 516,
    "ecken": null,
    "animiert": false
   },
   {
    "gruppe": "Zaun (transparent)",
-   "name": "Torende links",
+   "name": "Zaun 5,0",
    "spalte": 5,
-   "reihe": 22,
-   "index": 357,
+   "reihe": 32,
+   "index": 517,
    "ecken": null,
    "animiert": false
   },
   {
    "gruppe": "Zaun (transparent)",
-   "name": "Torende rechts oben",
+   "name": "Zaun 6,0",
    "spalte": 6,
-   "reihe": 22,
-   "index": 358,
+   "reihe": 32,
+   "index": 518,
    "ecken": null,
    "animiert": false
   },
   {
    "gruppe": "Zaun (transparent)",
-   "name": "Torende rechts",
+   "name": "Zaun 7,0",
    "spalte": 7,
-   "reihe": 22,
-   "index": 359,
+   "reihe": 32,
+   "index": 519,
    "ecken": null,
    "animiert": false
   },
   {
    "gruppe": "Zaun (transparent)",
-   "name": "Ecke oben rechts",
+   "name": "Zaun 8,0",
    "spalte": 8,
-   "reihe": 22,
-   "index": 360,
+   "reihe": 32,
+   "index": 520,
    "ecken": null,
    "animiert": false
   },
   {
    "gruppe": "Zaun (transparent)",
-   "name": "Ecke oben rechts unten",
-   "spalte": 9,
-   "reihe": 22,
-   "index": 361,
-   "ecken": null,
-   "animiert": false
-  },
-  {
-   "gruppe": "Zaun (transparent)",
-   "name": "Seite links",
-   "spalte": 10,
-   "reihe": 22,
-   "index": 362,
-   "ecken": null,
-   "animiert": false
-  },
-  {
-   "gruppe": "Zaun (transparent)",
-   "name": "Seite rechts",
-   "spalte": 11,
-   "reihe": 22,
-   "index": 363,
-   "ecken": null,
-   "animiert": false
-  },
-  {
-   "gruppe": "Zaun (transparent)",
-   "name": "Ecke unten links oben",
-   "spalte": 12,
-   "reihe": 22,
-   "index": 364,
-   "ecken": null,
-   "animiert": false
-  },
-  {
-   "gruppe": "Zaun (transparent)",
-   "name": "Ecke unten links",
-   "spalte": 13,
-   "reihe": 22,
-   "index": 365,
-   "ecken": null,
-   "animiert": false
-  },
-  {
-   "gruppe": "Zaun (transparent)",
-   "name": "Latte unten oben",
-   "spalte": 14,
-   "reihe": 22,
-   "index": 366,
-   "ecken": null,
-   "animiert": false
-  },
-  {
-   "gruppe": "Zaun (transparent)",
-   "name": "Latte unten",
-   "spalte": 15,
-   "reihe": 22,
-   "index": 367,
-   "ecken": null,
-   "animiert": false
-  },
-  {
-   "gruppe": "Zaun (transparent)",
-   "name": "Ecke unten rechts oben",
+   "name": "Zaun 0,1",
    "spalte": 0,
-   "reihe": 23,
-   "index": 368,
+   "reihe": 33,
+   "index": 528,
    "ecken": null,
    "animiert": false
   },
   {
    "gruppe": "Zaun (transparent)",
-   "name": "Ecke unten rechts",
+   "name": "Zaun 1,1",
    "spalte": 1,
-   "reihe": 23,
-   "index": 369,
+   "reihe": 33,
+   "index": 529,
+   "ecken": null,
+   "animiert": false
+  },
+  {
+   "gruppe": "Zaun (transparent)",
+   "name": "Zaun 2,1",
+   "spalte": 2,
+   "reihe": 33,
+   "index": 530,
+   "ecken": null,
+   "animiert": false
+  },
+  {
+   "gruppe": "Zaun (transparent)",
+   "name": "Zaun 3,1",
+   "spalte": 3,
+   "reihe": 33,
+   "index": 531,
+   "ecken": null,
+   "animiert": false
+  },
+  {
+   "gruppe": "Zaun (transparent)",
+   "name": "Zaun 4,1",
+   "spalte": 4,
+   "reihe": 33,
+   "index": 532,
+   "ecken": null,
+   "animiert": false
+  },
+  {
+   "gruppe": "Zaun (transparent)",
+   "name": "Zaun 5,1",
+   "spalte": 5,
+   "reihe": 33,
+   "index": 533,
+   "ecken": null,
+   "animiert": false
+  },
+  {
+   "gruppe": "Zaun (transparent)",
+   "name": "Zaun 6,1",
+   "spalte": 6,
+   "reihe": 33,
+   "index": 534,
+   "ecken": null,
+   "animiert": false
+  },
+  {
+   "gruppe": "Zaun (transparent)",
+   "name": "Zaun 7,1",
+   "spalte": 7,
+   "reihe": 33,
+   "index": 535,
+   "ecken": null,
+   "animiert": false
+  },
+  {
+   "gruppe": "Zaun (transparent)",
+   "name": "Zaun 8,1",
+   "spalte": 8,
+   "reihe": 33,
+   "index": 536,
+   "ecken": null,
+   "animiert": false
+  },
+  {
+   "gruppe": "Zaun (transparent)",
+   "name": "Zaun 0,2",
+   "spalte": 0,
+   "reihe": 34,
+   "index": 544,
+   "ecken": null,
+   "animiert": false
+  },
+  {
+   "gruppe": "Zaun (transparent)",
+   "name": "Zaun 1,2",
+   "spalte": 1,
+   "reihe": 34,
+   "index": 545,
+   "ecken": null,
+   "animiert": false
+  },
+  {
+   "gruppe": "Zaun (transparent)",
+   "name": "Zaun 2,2",
+   "spalte": 2,
+   "reihe": 34,
+   "index": 546,
+   "ecken": null,
+   "animiert": false
+  },
+  {
+   "gruppe": "Zaun (transparent)",
+   "name": "Zaun 3,2",
+   "spalte": 3,
+   "reihe": 34,
+   "index": 547,
+   "ecken": null,
+   "animiert": false
+  },
+  {
+   "gruppe": "Zaun (transparent)",
+   "name": "Zaun 4,2",
+   "spalte": 4,
+   "reihe": 34,
+   "index": 548,
+   "ecken": null,
+   "animiert": false
+  },
+  {
+   "gruppe": "Zaun (transparent)",
+   "name": "Zaun 5,2",
+   "spalte": 5,
+   "reihe": 34,
+   "index": 549,
+   "ecken": null,
+   "animiert": false
+  },
+  {
+   "gruppe": "Zaun (transparent)",
+   "name": "Zaun 6,2",
+   "spalte": 6,
+   "reihe": 34,
+   "index": 550,
+   "ecken": null,
+   "animiert": false
+  },
+  {
+   "gruppe": "Zaun (transparent)",
+   "name": "Zaun 7,2",
+   "spalte": 7,
+   "reihe": 34,
+   "index": 551,
+   "ecken": null,
+   "animiert": false
+  },
+  {
+   "gruppe": "Zaun (transparent)",
+   "name": "Zaun 8,2",
+   "spalte": 8,
+   "reihe": 34,
+   "index": 552,
+   "ecken": null,
+   "animiert": false
+  },
+  {
+   "gruppe": "Zaun (transparent)",
+   "name": "Zaun 0,3",
+   "spalte": 0,
+   "reihe": 35,
+   "index": 560,
+   "ecken": null,
+   "animiert": false
+  },
+  {
+   "gruppe": "Zaun (transparent)",
+   "name": "Zaun 1,3",
+   "spalte": 1,
+   "reihe": 35,
+   "index": 561,
+   "ecken": null,
+   "animiert": false
+  },
+  {
+   "gruppe": "Zaun (transparent)",
+   "name": "Zaun 2,3",
+   "spalte": 2,
+   "reihe": 35,
+   "index": 562,
+   "ecken": null,
+   "animiert": false
+  },
+  {
+   "gruppe": "Zaun (transparent)",
+   "name": "Zaun 3,3",
+   "spalte": 3,
+   "reihe": 35,
+   "index": 563,
+   "ecken": null,
+   "animiert": false
+  },
+  {
+   "gruppe": "Zaun (transparent)",
+   "name": "Zaun 4,3",
+   "spalte": 4,
+   "reihe": 35,
+   "index": 564,
+   "ecken": null,
+   "animiert": false
+  },
+  {
+   "gruppe": "Zaun (transparent)",
+   "name": "Zaun 5,3",
+   "spalte": 5,
+   "reihe": 35,
+   "index": 565,
+   "ecken": null,
+   "animiert": false
+  },
+  {
+   "gruppe": "Zaun (transparent)",
+   "name": "Zaun 6,3",
+   "spalte": 6,
+   "reihe": 35,
+   "index": 566,
+   "ecken": null,
+   "animiert": false
+  },
+  {
+   "gruppe": "Zaun (transparent)",
+   "name": "Zaun 7,3",
+   "spalte": 7,
+   "reihe": 35,
+   "index": 567,
+   "ecken": null,
+   "animiert": false
+  },
+  {
+   "gruppe": "Zaun (transparent)",
+   "name": "Zaun 8,3",
+   "spalte": 8,
+   "reihe": 35,
+   "index": 568,
+   "ecken": null,
+   "animiert": false
+  },
+  {
+   "gruppe": "Zaun (transparent)",
+   "name": "Zaun 0,4",
+   "spalte": 0,
+   "reihe": 36,
+   "index": 576,
+   "ecken": null,
+   "animiert": false
+  },
+  {
+   "gruppe": "Zaun (transparent)",
+   "name": "Zaun 1,4",
+   "spalte": 1,
+   "reihe": 36,
+   "index": 577,
+   "ecken": null,
+   "animiert": false
+  },
+  {
+   "gruppe": "Zaun (transparent)",
+   "name": "Zaun 2,4",
+   "spalte": 2,
+   "reihe": 36,
+   "index": 578,
+   "ecken": null,
+   "animiert": false
+  },
+  {
+   "gruppe": "Zaun (transparent)",
+   "name": "Zaun 3,4",
+   "spalte": 3,
+   "reihe": 36,
+   "index": 579,
+   "ecken": null,
+   "animiert": false
+  },
+  {
+   "gruppe": "Zaun (transparent)",
+   "name": "Zaun 4,4",
+   "spalte": 4,
+   "reihe": 36,
+   "index": 580,
+   "ecken": null,
+   "animiert": false
+  },
+  {
+   "gruppe": "Zaun (transparent)",
+   "name": "Zaun 5,4",
+   "spalte": 5,
+   "reihe": 36,
+   "index": 581,
+   "ecken": null,
+   "animiert": false
+  },
+  {
+   "gruppe": "Zaun (transparent)",
+   "name": "Zaun 6,4",
+   "spalte": 6,
+   "reihe": 36,
+   "index": 582,
+   "ecken": null,
+   "animiert": false
+  },
+  {
+   "gruppe": "Zaun (transparent)",
+   "name": "Zaun 7,4",
+   "spalte": 7,
+   "reihe": 36,
+   "index": 583,
+   "ecken": null,
+   "animiert": false
+  },
+  {
+   "gruppe": "Zaun (transparent)",
+   "name": "Zaun 8,4",
+   "spalte": 8,
+   "reihe": 36,
+   "index": 584,
+   "ecken": null,
+   "animiert": false
+  },
+  {
+   "gruppe": "Zaun (transparent)",
+   "name": "Zaun 0,5",
+   "spalte": 0,
+   "reihe": 37,
+   "index": 592,
+   "ecken": null,
+   "animiert": false
+  },
+  {
+   "gruppe": "Zaun (transparent)",
+   "name": "Zaun 1,5",
+   "spalte": 1,
+   "reihe": 37,
+   "index": 593,
+   "ecken": null,
+   "animiert": false
+  },
+  {
+   "gruppe": "Zaun (transparent)",
+   "name": "Zaun 2,5",
+   "spalte": 2,
+   "reihe": 37,
+   "index": 594,
+   "ecken": null,
+   "animiert": false
+  },
+  {
+   "gruppe": "Zaun (transparent)",
+   "name": "Zaun 3,5",
+   "spalte": 3,
+   "reihe": 37,
+   "index": 595,
+   "ecken": null,
+   "animiert": false
+  },
+  {
+   "gruppe": "Zaun (transparent)",
+   "name": "Zaun 4,5",
+   "spalte": 4,
+   "reihe": 37,
+   "index": 596,
+   "ecken": null,
+   "animiert": false
+  },
+  {
+   "gruppe": "Zaun (transparent)",
+   "name": "Zaun 5,5",
+   "spalte": 5,
+   "reihe": 37,
+   "index": 597,
+   "ecken": null,
+   "animiert": false
+  },
+  {
+   "gruppe": "Zaun (transparent)",
+   "name": "Zaun 6,5",
+   "spalte": 6,
+   "reihe": 37,
+   "index": 598,
+   "ecken": null,
+   "animiert": false
+  },
+  {
+   "gruppe": "Zaun (transparent)",
+   "name": "Zaun 7,5",
+   "spalte": 7,
+   "reihe": 37,
+   "index": 599,
+   "ecken": null,
+   "animiert": false
+  },
+  {
+   "gruppe": "Zaun (transparent)",
+   "name": "Zaun 8,5",
+   "spalte": 8,
+   "reihe": 37,
+   "index": 600,
    "ecken": null,
    "animiert": false
   },
@@ -1565,8 +3359,8 @@
    "gruppe": "Steg (transparent)",
    "name": "Steg 0,0",
    "spalte": 0,
-   "reihe": 24,
-   "index": 384,
+   "reihe": 38,
+   "index": 608,
    "ecken": null,
    "animiert": false
   },
@@ -1574,8 +3368,8 @@
    "gruppe": "Steg (transparent)",
    "name": "Steg 1,0",
    "spalte": 1,
-   "reihe": 24,
-   "index": 385,
+   "reihe": 38,
+   "index": 609,
    "ecken": null,
    "animiert": false
   },
@@ -1583,8 +3377,8 @@
    "gruppe": "Steg (transparent)",
    "name": "Steg 2,0",
    "spalte": 2,
-   "reihe": 24,
-   "index": 386,
+   "reihe": 38,
+   "index": 610,
    "ecken": null,
    "animiert": false
   },
@@ -1592,8 +3386,8 @@
    "gruppe": "Steg (transparent)",
    "name": "Steg 3,0",
    "spalte": 3,
-   "reihe": 24,
-   "index": 387,
+   "reihe": 38,
+   "index": 611,
    "ecken": null,
    "animiert": false
   },
@@ -1601,8 +3395,8 @@
    "gruppe": "Steg (transparent)",
    "name": "Steg 0,1",
    "spalte": 0,
-   "reihe": 25,
-   "index": 400,
+   "reihe": 39,
+   "index": 624,
    "ecken": null,
    "animiert": false
   },
@@ -1610,8 +3404,8 @@
    "gruppe": "Steg (transparent)",
    "name": "Steg 1,1",
    "spalte": 1,
-   "reihe": 25,
-   "index": 401,
+   "reihe": 39,
+   "index": 625,
    "ecken": null,
    "animiert": false
   },
@@ -1619,8 +3413,8 @@
    "gruppe": "Steg (transparent)",
    "name": "Steg 2,1",
    "spalte": 2,
-   "reihe": 25,
-   "index": 402,
+   "reihe": 39,
+   "index": 626,
    "ecken": null,
    "animiert": false
   },
@@ -1628,8 +3422,8 @@
    "gruppe": "Steg (transparent)",
    "name": "Steg 3,1",
    "spalte": 3,
-   "reihe": 25,
-   "index": 403,
+   "reihe": 39,
+   "index": 627,
    "ecken": null,
    "animiert": false
   },
@@ -1637,8 +3431,8 @@
    "gruppe": "Steg (transparent)",
    "name": "Steg 0,2",
    "spalte": 0,
-   "reihe": 26,
-   "index": 416,
+   "reihe": 40,
+   "index": 640,
    "ecken": null,
    "animiert": false
   },
@@ -1646,8 +3440,8 @@
    "gruppe": "Steg (transparent)",
    "name": "Steg 1,2",
    "spalte": 1,
-   "reihe": 26,
-   "index": 417,
+   "reihe": 40,
+   "index": 641,
    "ecken": null,
    "animiert": false
   },
@@ -1655,8 +3449,8 @@
    "gruppe": "Steg (transparent)",
    "name": "Steg 2,2",
    "spalte": 2,
-   "reihe": 26,
-   "index": 418,
+   "reihe": 40,
+   "index": 642,
    "ecken": null,
    "animiert": false
   },
@@ -1664,8 +3458,8 @@
    "gruppe": "Steg (transparent)",
    "name": "Steg 3,2",
    "spalte": 3,
-   "reihe": 26,
-   "index": 419,
+   "reihe": 40,
+   "index": 643,
    "ecken": null,
    "animiert": false
   },
@@ -1673,8 +3467,8 @@
    "gruppe": "Steg (transparent)",
    "name": "Steg 0,3",
    "spalte": 0,
-   "reihe": 27,
-   "index": 432,
+   "reihe": 41,
+   "index": 656,
    "ecken": null,
    "animiert": false
   },
@@ -1682,8 +3476,8 @@
    "gruppe": "Steg (transparent)",
    "name": "Steg 1,3",
    "spalte": 1,
-   "reihe": 27,
-   "index": 433,
+   "reihe": 41,
+   "index": 657,
    "ecken": null,
    "animiert": false
   },
@@ -1691,8 +3485,8 @@
    "gruppe": "Steg (transparent)",
    "name": "Steg 2,3",
    "spalte": 2,
-   "reihe": 27,
-   "index": 434,
+   "reihe": 41,
+   "index": 658,
    "ecken": null,
    "animiert": false
   },
@@ -1700,8 +3494,8 @@
    "gruppe": "Steg (transparent)",
    "name": "Steg 3,3",
    "spalte": 3,
-   "reihe": 27,
-   "index": 435,
+   "reihe": 41,
+   "index": 659,
    "ecken": null,
    "animiert": false
   },
@@ -1709,8 +3503,8 @@
    "gruppe": "Steg (transparent)",
    "name": "Steg 0,4",
    "spalte": 0,
-   "reihe": 28,
-   "index": 448,
+   "reihe": 42,
+   "index": 672,
    "ecken": null,
    "animiert": false
   },
@@ -1718,8 +3512,8 @@
    "gruppe": "Steg (transparent)",
    "name": "Steg 1,4",
    "spalte": 1,
-   "reihe": 28,
-   "index": 449,
+   "reihe": 42,
+   "index": 673,
    "ecken": null,
    "animiert": false
   },
@@ -1727,8 +3521,8 @@
    "gruppe": "Steg (transparent)",
    "name": "Steg 2,4",
    "spalte": 2,
-   "reihe": 28,
-   "index": 450,
+   "reihe": 42,
+   "index": 674,
    "ecken": null,
    "animiert": false
   },
@@ -1736,8 +3530,8 @@
    "gruppe": "Steg (transparent)",
    "name": "Steg 3,4",
    "spalte": 3,
-   "reihe": 28,
-   "index": 451,
+   "reihe": 42,
+   "index": 675,
    "ecken": null,
    "animiert": false
   }
