@@ -379,6 +379,76 @@ def animieren_k6(img, objs, cache, frame):
                 rd.ellipse((x - rr * 0.5 - 1, y - rr * 0.6 - 1, x + rr * 0.3, y), fill=(240, 240, 246, al))
             img.alpha_composite(rauch)
             px = img.load()
+        elif anim == 'server':                     # LEDs blinken einzeln (bunte, helle Pixel)
+            a = np.array(sp).astype(np.int16)
+            mx, mn = a[..., :3].max(axis=2), a[..., :3].min(axis=2)
+            m = (a[..., 3] > 0) & (mx > 150) & (mx - mn > 60)
+            for y, x in zip(*np.nonzero(m)):
+                h = (x * 7 + y * 13 + i * 5) % 9
+                if (frame + h) % 6 < 2:
+                    X, Y = o['x'] + x, o['y'] + y
+                    r_, g_, b_, _ = px[X, Y]
+                    px[X, Y] = (r_ // 3, g_ // 3, b_ // 3, 255)
+        elif anim == 'terminal':                   # Bildschirm flackert, Scanline laeuft durch
+            a = np.array(sp).astype(np.int16)
+            m = (a[..., 2] > 170) & (a[..., 1] > 150) & (a[..., 3] > 0)
+            ys, xs = np.nonzero(m)
+            if len(ys):
+                zeile = ys.min() + (frame * 2) % max(1, ys.max() - ys.min() + 1)
+                f = 0.88 + 0.12 * math.sin(frame * 1.7)
+                for y, x in zip(ys, xs):
+                    X, Y = o['x'] + x, o['y'] + y
+                    r_, g_, b_, _ = px[X, Y]
+                    if y == zeile:
+                        px[X, Y] = (230, 255, 255, 255)
+                    else:
+                        px[X, Y] = (int(r_ * f), int(g_ * f), int(b_ * f), 255)
+        elif anim == 'saeule':                     # Datenwuerfel steigen auf, Kern pulsiert
+            a = np.array(sp).astype(np.int16)
+            m = (a[..., 2] > 170) & (a[..., 1] > 140) & (a[..., 3] > 0)
+            f = 0.8 + 0.3 * math.sin(2 * math.pi * frame / N_FRAMES)
+            for y, x in zip(*np.nonzero(m)):
+                X, Y = o['x'] + x, o['y'] + y
+                r_, g_, b_, _ = px[X, Y]
+                px[X, Y] = (min(255, int(r_ * f)), min(255, int(g_ * f)), min(255, int(b_ * f)), 255)
+            cx, top = o['x'] + sp.width // 2, o['y'] + int(sp.height * 0.15)
+            for k in range(4):
+                t = ((frame + k * 4) % N_FRAMES) / N_FRAMES
+                x = int(cx + 8 * math.sin(k * 2.1 + t * 3)); y = int(top - t * 22 + 6)
+                for dx in range(2):
+                    for dy in range(2):
+                        if 0 <= x + dx < img.width and 0 <= y + dy < img.height:
+                            r_, g_, b_, _ = px[x + dx, y + dy]
+                            al = 1 - t
+                            px[x + dx, y + dy] = (int(r_ + (127 - r_) * al), int(g_ + (240 - g_) * al), int(b_ + (245 - b_) * al), 255)
+        elif anim == 'antenne':                    # rotes Warnlicht an der Spitze blinkt
+            a = np.array(sp.getchannel('A')) > 0
+            ys, xs = np.nonzero(a)
+            y0 = ys.min(); xt = int(xs[ys == y0].mean())
+            X, Y = o['x'] + xt, o['y'] + y0
+            if frame % 8 < 4:
+                glut = Image.new('RGBA', img.size, (0, 0, 0, 0)); gd = ImageDraw.Draw(glut)
+                gd.ellipse((X - 5, Y - 5, X + 5, Y + 5), fill=(255, 60, 50, 70))
+                img.alpha_composite(glut); px = img.load()
+                for dx, dy in ((0, 0), (1, 0), (0, 1), (1, 1)):
+                    px[X + dx, Y + dy] = (255, 90, 70, 255)
+        elif anim == 'schuessel':                  # Signalwellen gehen von der Schuessel aus
+            welle = Image.new('RGBA', img.size, (0, 0, 0, 0)); wd = ImageDraw.Draw(welle)
+            cx, cy = o['x'] + sp.width * 0.45, o['y'] + sp.height * 0.3
+            for k in range(3):
+                t = ((frame + k * 5) % 15) / 15
+                r = 4 + t * 16
+                wd.arc((cx - r, cy - r, cx + r, cy + r), 200, 300, fill=(160, 230, 255, int(200 * (1 - t))), width=1)
+            img.alpha_composite(welle); px = img.load()
+        elif anim == 'kabelrolle':                 # Lichtpuls laeuft ueber die Kabelwicklung
+            a = np.array(sp).astype(np.int16)
+            m = (a[..., 3] > 0) & ((a[..., 2] > a[..., 0] + 50) | (a[..., 0] > a[..., 2] + 60))
+            ys, xs = np.nonzero(m)
+            for y, x in zip(ys, xs):
+                if (x - frame * 2) % 14 < 2:
+                    X, Y = o['x'] + x, o['y'] + y
+                    r_, g_, b_, _ = px[X, Y]
+                    px[X, Y] = (min(255, r_ + 90), min(255, g_ + 90), min(255, b_ + 90), 255)
         elif anim == 'daten':
             cx = o['x'] + sp.width // 2
             cy = o['y'] + sp.height // 2
