@@ -28,8 +28,8 @@ OBELISK, KRISTALL = 'mittel/02', 'mittel/03'
 NADEL, NADEL_BODEN = 'gross/03', 'gross/03_ohne'                # Felsnadel mit / ohne Wolkensockel
 BAEUME = {KIEFER, TANNE, GROSSKIEFER}
 FRUECHTE = ['kuerbis', 'kohl', 'tomate', 'mais', 'karotte', 'erdbeere', 'aubergine', 'melone', 'zwiebel',
-            'heidelbeere', 'weizen']
-OBSTBAEUME = ['frucht/apfelbaum', 'frucht/orangenbaum', 'frucht/kirschbusch', 'frucht/trauben']
+            'heidelbeere', 'weizen', 'kartoffel', 'ruebe', 'rote_bete', 'paprika', 'blumenkohl']
+OBSTBAEUME = ['frucht/apfelbaum', 'frucht/apfelbaum', 'frucht/kirschbusch', 'frucht/trauben']
 TURM_G, TURM_K, TURM_F, TURM_S = 'turm/schwarz_gross', 'turm/schwarz_klein', 'turm/schwarz_gefallen', 'turm/schwarz_stumpf'
 LILA = 'mittel/13'
 FELDER = [(26, 43), (49, 67)]                                   # Beetfelder (Spalten), Zeilen 64..81
@@ -208,7 +208,7 @@ def main():
                 if ende - x >= 3:
                     beete.append([(x + R) * T + 2, (ende + R) * T - 2, (y + R) * T + 2, (y + 2 + R) * T - 2])
                     frucht = 'frucht/' + rnd.choice(FRUECHTE)
-                    anim = {'anim': 'wehen'} if frucht.endswith(('mais', 'weizen', 'zwiebel', 'karotte')) else {'anim': 'glitzern'}
+                    anim = {'anim': 'wehen'} if frucht.endswith(('mais', 'weizen', 'zwiebel', 'karotte')) else {}
                     px = x
                     while px + 2 <= ende:
                         setze(frucht, px + 0.5, y + 1, dict(anim, hoch=5, spiegeln=rnd.random() < 0.5))

@@ -928,45 +928,45 @@
 {
 "datei": "varianten/turm-schwarz_gross_gras.png",
 "basis": "turm/schwarz_gross",
-"x": 846,
-"y": 576,
-"fuss": 179,
+"x": 831,
+"y": 562,
+"fuss": 193,
 "kachel": [
 54,
 46
 ],
 "block": [
-53,
-36,
-3,
-11
+52,
+35,
+4,
+12
 ],
 "ebene": 1
 },
 {
 "datei": "varianten/turm-schwarz_klein_sand.png",
 "basis": "turm/schwarz_klein",
-"x": 609,
-"y": 896,
-"fuss": 131,
+"x": 613,
+"y": 884,
+"fuss": 143,
 "kachel": [
 39,
 63
 ],
 "block": [
 38,
-56,
-3,
-8
+55,
+4,
+9
 ],
 "ebene": 1
 },
 {
 "datei": "varianten/turm-schwarz_gefallen_sand.png",
 "basis": "turm/schwarz_gefallen",
-"x": 226,
-"y": 987,
-"fuss": 57,
+"x": 227,
+"y": 994,
+"fuss": 49,
 "kachel": [
 19,
 64
@@ -974,7 +974,7 @@
 "block": [
 14,
 62,
-10,
+12,
 3
 ],
 "ebene": 1
@@ -982,27 +982,27 @@
 {
 "datei": "varianten/turm-schwarz_stumpf_sand.png",
 "basis": "turm/schwarz_stumpf",
-"x": 158,
-"y": 988,
-"fuss": 55,
+"x": 159,
+"y": 987,
+"fuss": 56,
 "kachel": [
 11,
 64
 ],
 "block": [
 10,
-62,
-3,
-3
+61,
+4,
+4
 ],
 "ebene": 1
 },
 {
 "datei": "varianten/turm-schwarz_gefallen_gras_m.png",
 "basis": "turm/schwarz_gefallen",
-"x": 924,
-"y": 971,
-"fuss": 57,
+"x": 931,
+"y": 978,
+"fuss": 49,
 "kachel": [
 63,
 63
@@ -1010,7 +1010,7 @@
 "block": [
 58,
 61,
-10,
+12,
 3
 ],
 "ebene": 1
@@ -1018,18 +1018,18 @@
 {
 "datei": "varianten/turm-schwarz_gross_gras.png",
 "basis": "turm/schwarz_gross",
-"x": 1550,
-"y": 672,
-"fuss": 179,
+"x": 1535,
+"y": 658,
+"fuss": 193,
 "kachel": [
 98,
 52
 ],
 "block": [
-97,
-42,
-3,
-11
+96,
+41,
+4,
+12
 ],
 "ebene": 1
 },
@@ -1787,25 +1787,6 @@
 "anim": "baum"
 },
 {
-"datei": "varianten/neu-00_gras_m.png",
-"basis": "neu/00",
-"x": 1535,
-"y": 596,
-"fuss": 63,
-"kachel": [
-98,
-40
-],
-"block": [
-96,
-37,
-4,
-4
-],
-"ebene": 1,
-"anim": "baum"
-},
-{
 "datei": "varianten/neu-00_gras.png",
 "basis": "neu/00",
 "x": 287,
@@ -1844,236 +1825,260 @@
 "anim": "baum"
 },
 {
-"datei": "varianten/frucht-mais_gras.png",
-"basis": "frucht/mais",
-"x": 548,
-"y": 1111,
-"fuss": 36,
+"datei": "varianten/frucht-melone_gras.png",
+"basis": "frucht/melone",
+"x": 545,
+"y": 1122,
+"fuss": 25,
 "kachel": [
 34,
 71
 ],
 "block": [
 34,
-69,
+70,
 2,
-3
+2
 ],
-"ebene": 1,
-"anim": "wehen"
+"ebene": 1
 },
 {
-"datei": "varianten/frucht-mais_gras.png",
-"basis": "frucht/mais",
-"x": 580,
-"y": 1111,
-"fuss": 36,
+"datei": "varianten/frucht-melone_gras.png",
+"basis": "frucht/melone",
+"x": 577,
+"y": 1122,
+"fuss": 25,
 "kachel": [
 36,
 71
 ],
 "block": [
 36,
-69,
+70,
 2,
-3
+2
 ],
-"ebene": 1,
-"anim": "wehen"
+"ebene": 1
 },
 {
-"datei": "varianten/frucht-kuerbis_gras.png",
-"basis": "frucht/kuerbis",
-"x": 615,
-"y": 1119,
-"fuss": 28,
+"datei": "varianten/frucht-kohl_gras.png",
+"basis": "frucht/kohl",
+"x": 625,
+"y": 1121,
+"fuss": 26,
 "kachel": [
 39,
 71
 ],
 "block": [
-38,
+39,
 70,
-3,
+2,
 2
 ],
-"ebene": 1,
-"anim": "glitzern"
+"ebene": 1
 },
 {
-"datei": "varianten/frucht-kuerbis_gras_m.png",
-"basis": "frucht/kuerbis",
-"x": 647,
-"y": 1119,
-"fuss": 28,
+"datei": "varianten/frucht-kohl_gras_m.png",
+"basis": "frucht/kohl",
+"x": 657,
+"y": 1121,
+"fuss": 26,
 "kachel": [
 41,
 71
 ],
 "block": [
-40,
+41,
 70,
-3,
-2
-],
-"ebene": 1,
-"anim": "glitzern"
-},
-{
-"datei": "varianten/frucht-kuerbis_gras.png",
-"basis": "frucht/kuerbis",
-"x": 679,
-"y": 1119,
-"fuss": 28,
-"kachel": [
-43,
-71
-],
-"block": [
-42,
-70,
-3,
-2
-],
-"ebene": 1,
-"anim": "glitzern"
-},
-{
-"datei": "varianten/frucht-kuerbis_gras_m.png",
-"basis": "frucht/kuerbis",
-"x": 711,
-"y": 1119,
-"fuss": 28,
-"kachel": [
-45,
-71
-],
-"block": [
-44,
-70,
-3,
-2
-],
-"ebene": 1,
-"anim": "glitzern"
-},
-{
-"datei": "varianten/frucht-zwiebel_gras.png",
-"basis": "frucht/zwiebel",
-"x": 531,
-"y": 1181,
-"fuss": 30,
-"kachel": [
-33,
-75
-],
-"block": [
-33,
-74,
 2,
 2
 ],
-"ebene": 1,
-"anim": "wehen"
+"ebene": 1
 },
 {
-"datei": "varianten/frucht-zwiebel_gras_m.png",
-"basis": "frucht/zwiebel",
-"x": 563,
-"y": 1181,
-"fuss": 30,
-"kachel": [
-35,
-75
-],
-"block": [
-35,
-74,
-2,
-2
-],
-"ebene": 1,
-"anim": "wehen"
-},
-{
-"datei": "varianten/frucht-zwiebel_gras.png",
-"basis": "frucht/zwiebel",
-"x": 595,
-"y": 1181,
-"fuss": 30,
-"kachel": [
-37,
-75
-],
-"block": [
-37,
-74,
-2,
-2
-],
-"ebene": 1,
-"anim": "wehen"
-},
-{
-"datei": "varianten/frucht-zwiebel_gras.png",
-"basis": "frucht/zwiebel",
-"x": 627,
-"y": 1181,
-"fuss": 30,
-"kachel": [
-39,
-75
-],
-"block": [
-39,
-74,
-2,
-2
-],
-"ebene": 1,
-"anim": "wehen"
-},
-{
-"datei": "varianten/frucht-heidelbeere_gras_m.png",
-"basis": "frucht/heidelbeere",
+"datei": "varianten/frucht-kohl_gras.png",
+"basis": "frucht/kohl",
 "x": 689,
-"y": 1185,
+"y": 1121,
 "fuss": 26,
 "kachel": [
 43,
-75
+71
 ],
 "block": [
 43,
-74,
+70,
 2,
 2
 ],
-"ebene": 1,
-"anim": "glitzern"
+"ebene": 1
 },
 {
-"datei": "varianten/frucht-heidelbeere_gras_m.png",
-"basis": "frucht/heidelbeere",
+"datei": "varianten/frucht-kohl_gras_m.png",
+"basis": "frucht/kohl",
 "x": 721,
-"y": 1185,
+"y": 1121,
 "fuss": 26,
 "kachel": [
 45,
-75
+71
 ],
 "block": [
 45,
-74,
+70,
 2,
 2
 ],
-"ebene": 1,
-"anim": "glitzern"
+"ebene": 1
 },
 {
 "datei": "varianten/frucht-erdbeere_gras_m.png",
 "basis": "frucht/erdbeere",
+"x": 530,
+"y": 1189,
+"fuss": 22,
+"kachel": [
+33,
+75
+],
+"block": [
+33,
+74,
+2,
+2
+],
+"ebene": 1
+},
+{
+"datei": "varianten/frucht-erdbeere_gras.png",
+"basis": "frucht/erdbeere",
+"x": 562,
+"y": 1189,
+"fuss": 22,
+"kachel": [
+35,
+75
+],
+"block": [
+35,
+74,
+2,
+2
+],
+"ebene": 1
+},
+{
+"datei": "varianten/frucht-erdbeere_gras_m.png",
+"basis": "frucht/erdbeere",
+"x": 594,
+"y": 1189,
+"fuss": 22,
+"kachel": [
+37,
+75
+],
+"block": [
+37,
+74,
+2,
+2
+],
+"ebene": 1
+},
+{
+"datei": "varianten/frucht-erdbeere_gras_m.png",
+"basis": "frucht/erdbeere",
+"x": 626,
+"y": 1189,
+"fuss": 22,
+"kachel": [
+39,
+75
+],
+"block": [
+39,
+74,
+2,
+2
+],
+"ebene": 1
+},
+{
+"datei": "varianten/frucht-aubergine_gras_m.png",
+"basis": "frucht/aubergine",
+"x": 673,
+"y": 1179,
+"fuss": 32,
+"kachel": [
+42,
+75
+],
+"block": [
+42,
+74,
+2,
+2
+],
+"ebene": 1
+},
+{
+"datei": "varianten/frucht-aubergine_gras.png",
+"basis": "frucht/aubergine",
+"x": 705,
+"y": 1179,
+"fuss": 32,
+"kachel": [
+44,
+75
+],
+"block": [
+44,
+74,
+2,
+2
+],
+"ebene": 1
+},
+{
+"datei": "varianten/frucht-aubergine_gras.png",
+"basis": "frucht/aubergine",
+"x": 737,
+"y": 1179,
+"fuss": 32,
+"kachel": [
+46,
+75
+],
+"block": [
+46,
+74,
+2,
+2
+],
+"ebene": 1
+},
+{
+"datei": "varianten/frucht-aubergine_gras_m.png",
+"basis": "frucht/aubergine",
+"x": 769,
+"y": 1179,
+"fuss": 32,
+"kachel": [
+48,
+75
+],
+"block": [
+48,
+74,
+2,
+2
+],
+"ebene": 1
+},
+{
+"datei": "varianten/frucht-melone_gras_m.png",
+"basis": "frucht/melone",
 "x": 545,
 "y": 1234,
 "fuss": 25,
@@ -2087,12 +2092,11 @@
 2,
 2
 ],
-"ebene": 1,
-"anim": "glitzern"
+"ebene": 1
 },
 {
-"datei": "varianten/frucht-erdbeere_gras.png",
-"basis": "frucht/erdbeere",
+"datei": "varianten/frucht-melone_gras_m.png",
+"basis": "frucht/melone",
 "x": 577,
 "y": 1234,
 "fuss": 25,
@@ -2106,290 +2110,478 @@
 2,
 2
 ],
-"ebene": 1,
-"anim": "glitzern"
+"ebene": 1
 },
 {
-"datei": "varianten/frucht-erdbeere_gras.png",
-"basis": "frucht/erdbeere",
-"x": 609,
-"y": 1234,
-"fuss": 25,
-"kachel": [
-38,
-78
-],
-"block": [
-38,
-77,
-2,
-2
-],
-"ebene": 1,
-"anim": "glitzern"
-},
-{
-"datei": "varianten/frucht-erdbeere_gras_m.png",
-"basis": "frucht/erdbeere",
-"x": 641,
-"y": 1234,
-"fuss": 25,
-"kachel": [
-40,
-78
-],
-"block": [
-40,
-77,
-2,
-2
-],
-"ebene": 1,
-"anim": "glitzern"
-},
-{
-"datei": "varianten/frucht-erdbeere_gras.png",
-"basis": "frucht/erdbeere",
-"x": 705,
-"y": 1234,
-"fuss": 25,
-"kachel": [
-44,
-78
-],
-"block": [
-44,
-77,
-2,
-2
-],
-"ebene": 1,
-"anim": "glitzern"
-},
-{
-"datei": "varianten/frucht-erdbeere_gras_m.png",
-"basis": "frucht/erdbeere",
-"x": 737,
-"y": 1234,
-"fuss": 25,
-"kachel": [
-46,
-78
-],
-"block": [
-46,
-77,
-2,
-2
-],
-"ebene": 1,
-"anim": "glitzern"
-},
-{
-"datei": "varianten/frucht-tomate_gras.png",
-"basis": "frucht/tomate",
-"x": 549,
-"y": 1278,
-"fuss": 29,
-"kachel": [
-34,
-81
-],
-"block": [
-34,
-80,
-2,
-2
-],
-"ebene": 1,
-"anim": "glitzern"
-},
-{
-"datei": "varianten/frucht-tomate_gras_m.png",
-"basis": "frucht/tomate",
-"x": 581,
-"y": 1278,
-"fuss": 29,
-"kachel": [
-36,
-81
-],
-"block": [
-36,
-80,
-2,
-2
-],
-"ebene": 1,
-"anim": "glitzern"
-},
-{
-"datei": "varianten/frucht-erdbeere_gras.png",
-"basis": "frucht/erdbeere",
-"x": 641,
-"y": 1282,
-"fuss": 25,
-"kachel": [
-40,
-81
-],
-"block": [
-40,
-80,
-2,
-2
-],
-"ebene": 1,
-"anim": "glitzern"
-},
-{
-"datei": "varianten/frucht-erdbeere_gras.png",
-"basis": "frucht/erdbeere",
-"x": 673,
-"y": 1282,
-"fuss": 25,
-"kachel": [
-42,
-81
-],
-"block": [
-42,
-80,
-2,
-2
-],
-"ebene": 1,
-"anim": "glitzern"
-},
-{
-"datei": "varianten/frucht-erdbeere_gras.png",
-"basis": "frucht/erdbeere",
-"x": 705,
-"y": 1282,
-"fuss": 25,
-"kachel": [
-44,
-81
-],
-"block": [
-44,
-80,
-2,
-2
-],
-"ebene": 1,
-"anim": "glitzern"
-},
-{
-"datei": "varianten/frucht-erdbeere_gras_m.png",
-"basis": "frucht/erdbeere",
-"x": 737,
-"y": 1282,
-"fuss": 25,
-"kachel": [
-46,
-81
-],
-"block": [
-46,
-80,
-2,
-2
-],
-"ebene": 1,
-"anim": "glitzern"
-},
-{
-"datei": "varianten/frucht-kuerbis_gras.png",
-"basis": "frucht/kuerbis",
-"x": 551,
-"y": 1327,
+"datei": "varianten/frucht-heidelbeere_gras.png",
+"basis": "frucht/heidelbeere",
+"x": 658,
+"y": 1231,
 "fuss": 28,
 "kachel": [
-34,
+41,
+78
+],
+"block": [
+41,
+77,
+2,
+2
+],
+"ebene": 1
+},
+{
+"datei": "varianten/frucht-heidelbeere_gras_m.png",
+"basis": "frucht/heidelbeere",
+"x": 690,
+"y": 1231,
+"fuss": 28,
+"kachel": [
+43,
+78
+],
+"block": [
+43,
+77,
+2,
+2
+],
+"ebene": 1
+},
+{
+"datei": "varianten/frucht-heidelbeere_gras.png",
+"basis": "frucht/heidelbeere",
+"x": 722,
+"y": 1231,
+"fuss": 28,
+"kachel": [
+45,
+78
+],
+"block": [
+45,
+77,
+2,
+2
+],
+"ebene": 1
+},
+{
+"datei": "varianten/frucht-kohl_gras.png",
+"basis": "frucht/kohl",
+"x": 529,
+"y": 1281,
+"fuss": 26,
+"kachel": [
+33,
+81
+],
+"block": [
+33,
+80,
+2,
+2
+],
+"ebene": 1
+},
+{
+"datei": "varianten/frucht-kohl_gras_m.png",
+"basis": "frucht/kohl",
+"x": 561,
+"y": 1281,
+"fuss": 26,
+"kachel": [
+35,
+81
+],
+"block": [
+35,
+80,
+2,
+2
+],
+"ebene": 1
+},
+{
+"datei": "varianten/frucht-kohl_gras.png",
+"basis": "frucht/kohl",
+"x": 593,
+"y": 1281,
+"fuss": 26,
+"kachel": [
+37,
+81
+],
+"block": [
+37,
+80,
+2,
+2
+],
+"ebene": 1
+},
+{
+"datei": "varianten/frucht-blumenkohl_gras.png",
+"basis": "frucht/blumenkohl",
+"x": 673,
+"y": 1281,
+"fuss": 26,
+"kachel": [
+42,
+81
+],
+"block": [
+42,
+80,
+2,
+2
+],
+"ebene": 1
+},
+{
+"datei": "varianten/frucht-blumenkohl_gras_m.png",
+"basis": "frucht/blumenkohl",
+"x": 705,
+"y": 1281,
+"fuss": 26,
+"kachel": [
+44,
+81
+],
+"block": [
+44,
+80,
+2,
+2
+],
+"ebene": 1
+},
+{
+"datei": "varianten/frucht-blumenkohl_gras.png",
+"basis": "frucht/blumenkohl",
+"x": 737,
+"y": 1281,
+"fuss": 26,
+"kachel": [
+46,
+81
+],
+"block": [
+46,
+80,
+2,
+2
+],
+"ebene": 1
+},
+{
+"datei": "varianten/frucht-paprika_gras_m.png",
+"basis": "frucht/paprika",
+"x": 529,
+"y": 1322,
+"fuss": 33,
+"kachel": [
+33,
 84
 ],
 "block": [
-34,
+33,
+82,
+2,
+3
+],
+"ebene": 1
+},
+{
+"datei": "varianten/frucht-paprika_gras_m.png",
+"basis": "frucht/paprika",
+"x": 561,
+"y": 1322,
+"fuss": 33,
+"kachel": [
+35,
+84
+],
+"block": [
+35,
+82,
+2,
+3
+],
+"ebene": 1
+},
+{
+"datei": "varianten/frucht-kartoffel_gras_m.png",
+"basis": "frucht/kartoffel",
+"x": 626,
+"y": 1325,
+"fuss": 30,
+"kachel": [
+39,
+84
+],
+"block": [
+39,
 83,
-3,
+2,
+2
+],
+"ebene": 1
+},
+{
+"datei": "varianten/frucht-kartoffel_gras_m.png",
+"basis": "frucht/kartoffel",
+"x": 658,
+"y": 1325,
+"fuss": 30,
+"kachel": [
+41,
+84
+],
+"block": [
+41,
+83,
+2,
+2
+],
+"ebene": 1
+},
+{
+"datei": "varianten/frucht-karotte_gras.png",
+"basis": "frucht/karotte",
+"x": 706,
+"y": 1325,
+"fuss": 30,
+"kachel": [
+44,
+84
+],
+"block": [
+44,
+83,
+2,
 2
 ],
 "ebene": 1,
-"anim": "glitzern"
+"anim": "wehen"
+},
+{
+"datei": "varianten/frucht-karotte_gras_m.png",
+"basis": "frucht/karotte",
+"x": 738,
+"y": 1325,
+"fuss": 30,
+"kachel": [
+46,
+84
+],
+"block": [
+46,
+83,
+2,
+2
+],
+"ebene": 1,
+"anim": "wehen"
+},
+{
+"datei": "varianten/frucht-zwiebel_gras.png",
+"basis": "frucht/zwiebel",
+"x": 529,
+"y": 1373,
+"fuss": 30,
+"kachel": [
+33,
+87
+],
+"block": [
+33,
+86,
+2,
+2
+],
+"ebene": 1,
+"anim": "wehen"
+},
+{
+"datei": "varianten/frucht-zwiebel_gras.png",
+"basis": "frucht/zwiebel",
+"x": 561,
+"y": 1373,
+"fuss": 30,
+"kachel": [
+35,
+87
+],
+"block": [
+35,
+86,
+2,
+2
+],
+"ebene": 1,
+"anim": "wehen"
+},
+{
+"datei": "varianten/frucht-zwiebel_gras.png",
+"basis": "frucht/zwiebel",
+"x": 593,
+"y": 1373,
+"fuss": 30,
+"kachel": [
+37,
+87
+],
+"block": [
+37,
+86,
+2,
+2
+],
+"ebene": 1,
+"anim": "wehen"
+},
+{
+"datei": "varianten/frucht-kartoffel_gras.png",
+"basis": "frucht/kartoffel",
+"x": 674,
+"y": 1373,
+"fuss": 30,
+"kachel": [
+42,
+87
+],
+"block": [
+42,
+86,
+2,
+2
+],
+"ebene": 1
+},
+{
+"datei": "varianten/frucht-kartoffel_gras_m.png",
+"basis": "frucht/kartoffel",
+"x": 706,
+"y": 1373,
+"fuss": 30,
+"kachel": [
+44,
+87
+],
+"block": [
+44,
+86,
+2,
+2
+],
+"ebene": 1
+},
+{
+"datei": "varianten/frucht-kartoffel_gras_m.png",
+"basis": "frucht/kartoffel",
+"x": 738,
+"y": 1373,
+"fuss": 30,
+"kachel": [
+46,
+87
+],
+"block": [
+46,
+86,
+2,
+2
+],
+"ebene": 1
 },
 {
 "datei": "varianten/frucht-kuerbis_gras_m.png",
 "basis": "frucht/kuerbis",
-"x": 583,
-"y": 1327,
+"x": 903,
+"y": 1119,
 "fuss": 28,
 "kachel": [
-36,
-84
+56,
+71
 ],
 "block": [
-36,
-83,
+56,
+70,
 3,
 2
 ],
-"ebene": 1,
-"anim": "glitzern"
+"ebene": 1
 },
 {
 "datei": "varianten/frucht-kuerbis_gras.png",
 "basis": "frucht/kuerbis",
-"x": 615,
-"y": 1327,
+"x": 935,
+"y": 1119,
 "fuss": 28,
 "kachel": [
-38,
-84
+58,
+71
 ],
 "block": [
-38,
-83,
+58,
+70,
 3,
 2
 ],
-"ebene": 1,
-"anim": "glitzern"
+"ebene": 1
 },
 {
-"datei": "varianten/frucht-kuerbis_gras.png",
+"datei": "varianten/frucht-kuerbis_gras_m.png",
 "basis": "frucht/kuerbis",
-"x": 647,
-"y": 1327,
+"x": 967,
+"y": 1119,
 "fuss": 28,
 "kachel": [
-40,
-84
+60,
+71
 ],
 "block": [
-40,
-83,
+60,
+70,
 3,
 2
 ],
-"ebene": 1,
-"anim": "glitzern"
+"ebene": 1
 },
 {
-"datei": "varianten/frucht-weizen_gras_m.png",
+"datei": "varianten/frucht-kuerbis_gras_m.png",
+"basis": "frucht/kuerbis",
+"x": 999,
+"y": 1119,
+"fuss": 28,
+"kachel": [
+62,
+71
+],
+"block": [
+62,
+70,
+3,
+2
+],
+"ebene": 1
+},
+{
+"datei": "varianten/frucht-weizen_gras.png",
 "basis": "frucht/weizen",
-"x": 720,
-"y": 1326,
-"fuss": 29,
+"x": 1063,
+"y": 1113,
+"fuss": 34,
 "kachel": [
-45,
-84
+67,
+71
 ],
 "block": [
-45,
-83,
-2,
-2
+66,
+69,
+3,
+3
 ],
 "ebene": 1,
 "anim": "wehen"
@@ -2397,15 +2589,398 @@
 {
 "datei": "varianten/frucht-weizen_gras.png",
 "basis": "frucht/weizen",
-"x": 752,
-"y": 1326,
-"fuss": 29,
+"x": 1095,
+"y": 1113,
+"fuss": 34,
 "kachel": [
-47,
+69,
+71
+],
+"block": [
+68,
+69,
+3,
+3
+],
+"ebene": 1,
+"anim": "wehen"
+},
+{
+"datei": "varianten/frucht-weizen_gras.png",
+"basis": "frucht/weizen",
+"x": 1127,
+"y": 1113,
+"fuss": 34,
+"kachel": [
+71,
+71
+],
+"block": [
+70,
+69,
+3,
+3
+],
+"ebene": 1,
+"anim": "wehen"
+},
+{
+"datei": "varianten/frucht-ruebe_gras_m.png",
+"basis": "frucht/ruebe",
+"x": 916,
+"y": 1167,
+"fuss": 28,
+"kachel": [
+57,
+74
+],
+"block": [
+57,
+73,
+2,
+2
+],
+"ebene": 1
+},
+{
+"datei": "varianten/frucht-ruebe_gras.png",
+"basis": "frucht/ruebe",
+"x": 948,
+"y": 1167,
+"fuss": 28,
+"kachel": [
+59,
+74
+],
+"block": [
+59,
+73,
+2,
+2
+],
+"ebene": 1
+},
+{
+"datei": "varianten/frucht-ruebe_gras_m.png",
+"basis": "frucht/ruebe",
+"x": 980,
+"y": 1167,
+"fuss": 28,
+"kachel": [
+61,
+74
+],
+"block": [
+61,
+73,
+2,
+2
+],
+"ebene": 1
+},
+{
+"datei": "varianten/frucht-erdbeere_gras_m.png",
+"basis": "frucht/erdbeere",
+"x": 1042,
+"y": 1173,
+"fuss": 22,
+"kachel": [
+65,
+74
+],
+"block": [
+65,
+73,
+2,
+2
+],
+"ebene": 1
+},
+{
+"datei": "varianten/frucht-erdbeere_gras.png",
+"basis": "frucht/erdbeere",
+"x": 1074,
+"y": 1173,
+"fuss": 22,
+"kachel": [
+67,
+74
+],
+"block": [
+67,
+73,
+2,
+2
+],
+"ebene": 1
+},
+{
+"datei": "varianten/frucht-kartoffel_gras.png",
+"basis": "frucht/kartoffel",
+"x": 898,
+"y": 1213,
+"fuss": 30,
+"kachel": [
+56,
+77
+],
+"block": [
+56,
+76,
+2,
+2
+],
+"ebene": 1
+},
+{
+"datei": "varianten/frucht-kartoffel_gras_m.png",
+"basis": "frucht/kartoffel",
+"x": 930,
+"y": 1213,
+"fuss": 30,
+"kachel": [
+58,
+77
+],
+"block": [
+58,
+76,
+2,
+2
+],
+"ebene": 1
+},
+{
+"datei": "varianten/frucht-kartoffel_gras_m.png",
+"basis": "frucht/kartoffel",
+"x": 962,
+"y": 1213,
+"fuss": 30,
+"kachel": [
+60,
+77
+],
+"block": [
+60,
+76,
+2,
+2
+],
+"ebene": 1
+},
+{
+"datei": "varianten/frucht-kartoffel_gras_m.png",
+"basis": "frucht/kartoffel",
+"x": 994,
+"y": 1213,
+"fuss": 30,
+"kachel": [
+62,
+77
+],
+"block": [
+62,
+76,
+2,
+2
+],
+"ebene": 1
+},
+{
+"datei": "varianten/frucht-blumenkohl_gras_m.png",
+"basis": "frucht/blumenkohl",
+"x": 1057,
+"y": 1217,
+"fuss": 26,
+"kachel": [
+66,
+77
+],
+"block": [
+66,
+76,
+2,
+2
+],
+"ebene": 1
+},
+{
+"datei": "varianten/frucht-blumenkohl_gras.png",
+"basis": "frucht/blumenkohl",
+"x": 1089,
+"y": 1217,
+"fuss": 26,
+"kachel": [
+68,
+77
+],
+"block": [
+68,
+76,
+2,
+2
+],
+"ebene": 1
+},
+{
+"datei": "varianten/frucht-blumenkohl_gras.png",
+"basis": "frucht/blumenkohl",
+"x": 1121,
+"y": 1217,
+"fuss": 26,
+"kachel": [
+70,
+77
+],
+"block": [
+70,
+76,
+2,
+2
+],
+"ebene": 1
+},
+{
+"datei": "varianten/frucht-karotte_gras_m.png",
+"basis": "frucht/karotte",
+"x": 914,
+"y": 1261,
+"fuss": 30,
+"kachel": [
+57,
+80
+],
+"block": [
+57,
+79,
+2,
+2
+],
+"ebene": 1,
+"anim": "wehen"
+},
+{
+"datei": "varianten/frucht-karotte_gras_m.png",
+"basis": "frucht/karotte",
+"x": 946,
+"y": 1261,
+"fuss": 30,
+"kachel": [
+59,
+80
+],
+"block": [
+59,
+79,
+2,
+2
+],
+"ebene": 1,
+"anim": "wehen"
+},
+{
+"datei": "varianten/frucht-karotte_gras_m.png",
+"basis": "frucht/karotte",
+"x": 978,
+"y": 1261,
+"fuss": 30,
+"kachel": [
+61,
+80
+],
+"block": [
+61,
+79,
+2,
+2
+],
+"ebene": 1,
+"anim": "wehen"
+},
+{
+"datei": "varianten/frucht-aubergine_gras.png",
+"basis": "frucht/aubergine",
+"x": 1025,
+"y": 1259,
+"fuss": 32,
+"kachel": [
+64,
+80
+],
+"block": [
+64,
+79,
+2,
+2
+],
+"ebene": 1
+},
+{
+"datei": "varianten/frucht-aubergine_gras.png",
+"basis": "frucht/aubergine",
+"x": 1057,
+"y": 1259,
+"fuss": 32,
+"kachel": [
+66,
+80
+],
+"block": [
+66,
+79,
+2,
+2
+],
+"ebene": 1
+},
+{
+"datei": "varianten/frucht-aubergine_gras_m.png",
+"basis": "frucht/aubergine",
+"x": 1089,
+"y": 1259,
+"fuss": 32,
+"kachel": [
+68,
+80
+],
+"block": [
+68,
+79,
+2,
+2
+],
+"ebene": 1
+},
+{
+"datei": "varianten/frucht-aubergine_gras.png",
+"basis": "frucht/aubergine",
+"x": 1121,
+"y": 1259,
+"fuss": 32,
+"kachel": [
+70,
+80
+],
+"block": [
+70,
+79,
+2,
+2
+],
+"ebene": 1
+},
+{
+"datei": "varianten/frucht-zwiebel_gras.png",
+"basis": "frucht/zwiebel",
+"x": 913,
+"y": 1325,
+"fuss": 30,
+"kachel": [
+57,
 84
 ],
 "block": [
-47,
+57,
 83,
 2,
 2
@@ -2414,749 +2989,227 @@
 "anim": "wehen"
 },
 {
-"datei": "varianten/frucht-mais_gras.png",
-"basis": "frucht/mais",
-"x": 532,
-"y": 1367,
-"fuss": 36,
-"kachel": [
-33,
-87
-],
-"block": [
-33,
-85,
-2,
-3
-],
-"ebene": 1,
-"anim": "wehen"
-},
-{
-"datei": "varianten/frucht-mais_gras_m.png",
-"basis": "frucht/mais",
-"x": 564,
-"y": 1367,
-"fuss": 36,
-"kachel": [
-35,
-87
-],
-"block": [
-35,
-85,
-2,
-3
-],
-"ebene": 1,
-"anim": "wehen"
-},
-{
-"datei": "varianten/frucht-mais_gras_m.png",
-"basis": "frucht/mais",
-"x": 596,
-"y": 1367,
-"fuss": 36,
-"kachel": [
-37,
-87
-],
-"block": [
-37,
-85,
-2,
-3
-],
-"ebene": 1,
-"anim": "wehen"
-},
-{
-"datei": "varianten/frucht-tomate_gras_m.png",
-"basis": "frucht/tomate",
-"x": 677,
-"y": 1374,
-"fuss": 29,
-"kachel": [
-42,
-87
-],
-"block": [
-42,
-86,
-2,
-2
-],
-"ebene": 1,
-"anim": "glitzern"
-},
-{
-"datei": "varianten/frucht-tomate_gras.png",
-"basis": "frucht/tomate",
-"x": 709,
-"y": 1374,
-"fuss": 29,
-"kachel": [
-44,
-87
-],
-"block": [
-44,
-86,
-2,
-2
-],
-"ebene": 1,
-"anim": "glitzern"
-},
-{
-"datei": "varianten/frucht-tomate_gras.png",
-"basis": "frucht/tomate",
-"x": 741,
-"y": 1374,
-"fuss": 29,
-"kachel": [
-46,
-87
-],
-"block": [
-46,
-86,
-2,
-2
-],
-"ebene": 1,
-"anim": "glitzern"
-},
-{
-"datei": "varianten/frucht-mais_gras_m.png",
-"basis": "frucht/mais",
-"x": 916,
-"y": 1127,
-"fuss": 36,
-"kachel": [
-57,
-72
-],
-"block": [
-57,
-70,
-2,
-3
-],
-"ebene": 1,
-"anim": "wehen"
-},
-{
-"datei": "varianten/frucht-mais_gras_m.png",
-"basis": "frucht/mais",
-"x": 948,
-"y": 1127,
-"fuss": 36,
+"datei": "varianten/frucht-zwiebel_gras.png",
+"basis": "frucht/zwiebel",
+"x": 945,
+"y": 1325,
+"fuss": 30,
 "kachel": [
 59,
-72
+84
 ],
 "block": [
 59,
-70,
+83,
 2,
-3
+2
 ],
 "ebene": 1,
 "anim": "wehen"
 },
 {
-"datei": "varianten/frucht-mais_gras_m.png",
-"basis": "frucht/mais",
-"x": 980,
-"y": 1127,
-"fuss": 36,
+"datei": "varianten/frucht-zwiebel_gras_m.png",
+"basis": "frucht/zwiebel",
+"x": 977,
+"y": 1325,
+"fuss": 30,
 "kachel": [
 61,
-72
+84
 ],
 "block": [
 61,
-70,
+83,
 2,
-3
+2
 ],
 "ebene": 1,
 "anim": "wehen"
 },
 {
-"datei": "varianten/frucht-heidelbeere_gras_m.png",
-"basis": "frucht/heidelbeere",
-"x": 1025,
-"y": 1137,
-"fuss": 26,
+"datei": "varianten/frucht-zwiebel_gras_m.png",
+"basis": "frucht/zwiebel",
+"x": 1009,
+"y": 1325,
+"fuss": 30,
 "kachel": [
-64,
-72
+63,
+84
 ],
 "block": [
-64,
-71,
+63,
+83,
 2,
 2
 ],
 "ebene": 1,
-"anim": "glitzern"
-},
-{
-"datei": "varianten/frucht-heidelbeere_gras_m.png",
-"basis": "frucht/heidelbeere",
-"x": 1057,
-"y": 1137,
-"fuss": 26,
-"kachel": [
-66,
-72
-],
-"block": [
-66,
-71,
-2,
-2
-],
-"ebene": 1,
-"anim": "glitzern"
-},
-{
-"datei": "varianten/frucht-heidelbeere_gras.png",
-"basis": "frucht/heidelbeere",
-"x": 1105,
-"y": 1137,
-"fuss": 26,
-"kachel": [
-69,
-72
-],
-"block": [
-69,
-71,
-2,
-2
-],
-"ebene": 1,
-"anim": "glitzern"
-},
-{
-"datei": "varianten/frucht-heidelbeere_gras.png",
-"basis": "frucht/heidelbeere",
-"x": 1137,
-"y": 1137,
-"fuss": 26,
-"kachel": [
-71,
-72
-],
-"block": [
-71,
-71,
-2,
-2
-],
-"ebene": 1,
-"anim": "glitzern"
-},
-{
-"datei": "varianten/frucht-aubergine_gras_m.png",
-"basis": "frucht/aubergine",
-"x": 912,
-"y": 1180,
-"fuss": 31,
-"kachel": [
-57,
-75
-],
-"block": [
-57,
-74,
-2,
-2
-],
-"ebene": 1,
-"anim": "glitzern"
+"anim": "wehen"
 },
 {
 "datei": "varianten/frucht-aubergine_gras.png",
 "basis": "frucht/aubergine",
-"x": 944,
-"y": 1180,
-"fuss": 31,
-"kachel": [
-59,
-75
-],
-"block": [
-59,
-74,
-2,
-2
-],
-"ebene": 1,
-"anim": "glitzern"
-},
-{
-"datei": "varianten/frucht-aubergine_gras_m.png",
-"basis": "frucht/aubergine",
-"x": 976,
-"y": 1180,
-"fuss": 31,
-"kachel": [
-61,
-75
-],
-"block": [
-61,
-74,
-2,
-2
-],
-"ebene": 1,
-"anim": "glitzern"
-},
-{
-"datei": "varianten/frucht-tomate_gras_m.png",
-"basis": "frucht/tomate",
-"x": 1045,
-"y": 1182,
-"fuss": 29,
-"kachel": [
-65,
-75
-],
-"block": [
-65,
-74,
-2,
-2
-],
-"ebene": 1,
-"anim": "glitzern"
-},
-{
-"datei": "varianten/frucht-tomate_gras.png",
-"basis": "frucht/tomate",
-"x": 1077,
-"y": 1182,
-"fuss": 29,
-"kachel": [
-67,
-75
-],
-"block": [
-67,
-74,
-2,
-2
-],
-"ebene": 1,
-"anim": "glitzern"
-},
-{
-"datei": "varianten/frucht-erdbeere_gras.png",
-"basis": "frucht/erdbeere",
-"x": 897,
-"y": 1234,
-"fuss": 25,
-"kachel": [
-56,
-78
-],
-"block": [
-56,
-77,
-2,
-2
-],
-"ebene": 1,
-"anim": "glitzern"
-},
-{
-"datei": "varianten/frucht-erdbeere_gras_m.png",
-"basis": "frucht/erdbeere",
-"x": 929,
-"y": 1234,
-"fuss": 25,
-"kachel": [
-58,
-78
-],
-"block": [
-58,
-77,
-2,
-2
-],
-"ebene": 1,
-"anim": "glitzern"
-},
-{
-"datei": "varianten/frucht-erdbeere_gras_m.png",
-"basis": "frucht/erdbeere",
-"x": 961,
-"y": 1234,
-"fuss": 25,
-"kachel": [
-60,
-78
-],
-"block": [
-60,
-77,
-2,
-2
-],
-"ebene": 1,
-"anim": "glitzern"
-},
-{
-"datei": "varianten/frucht-erdbeere_gras_m.png",
-"basis": "frucht/erdbeere",
-"x": 993,
-"y": 1234,
-"fuss": 25,
-"kachel": [
-62,
-78
-],
-"block": [
-62,
-77,
-2,
-2
-],
-"ebene": 1,
-"anim": "glitzern"
-},
-{
-"datei": "varianten/frucht-melone_gras_m.png",
-"basis": "frucht/melone",
-"x": 1063,
-"y": 1230,
-"fuss": 29,
-"kachel": [
-66,
-78
-],
-"block": [
-66,
-77,
-3,
-2
-],
-"ebene": 1,
-"anim": "glitzern"
-},
-{
-"datei": "varianten/frucht-melone_gras.png",
-"basis": "frucht/melone",
-"x": 1095,
-"y": 1230,
-"fuss": 29,
-"kachel": [
-68,
-78
-],
-"block": [
-68,
-77,
-3,
-2
-],
-"ebene": 1,
-"anim": "glitzern"
-},
-{
-"datei": "varianten/frucht-melone_gras.png",
-"basis": "frucht/melone",
-"x": 1127,
-"y": 1230,
-"fuss": 29,
-"kachel": [
-70,
-78
-],
-"block": [
-70,
-77,
-3,
-2
-],
-"ebene": 1,
-"anim": "glitzern"
-},
-{
-"datei": "varianten/frucht-tomate_gras_m.png",
-"basis": "frucht/tomate",
-"x": 917,
-"y": 1278,
-"fuss": 29,
-"kachel": [
-57,
-81
-],
-"block": [
-57,
-80,
-2,
-2
-],
-"ebene": 1,
-"anim": "glitzern"
-},
-{
-"datei": "varianten/frucht-tomate_gras_m.png",
-"basis": "frucht/tomate",
-"x": 949,
-"y": 1278,
-"fuss": 29,
-"kachel": [
-59,
-81
-],
-"block": [
-59,
-80,
-2,
-2
-],
-"ebene": 1,
-"anim": "glitzern"
-},
-{
-"datei": "varianten/frucht-tomate_gras_m.png",
-"basis": "frucht/tomate",
-"x": 981,
-"y": 1278,
-"fuss": 29,
-"kachel": [
-61,
-81
-],
-"block": [
-61,
-80,
-2,
-2
-],
-"ebene": 1,
-"anim": "glitzern"
-},
-{
-"datei": "varianten/frucht-mais_gras.png",
-"basis": "frucht/mais",
-"x": 1028,
-"y": 1271,
-"fuss": 36,
-"kachel": [
-64,
-81
-],
-"block": [
-64,
-79,
-2,
-3
-],
-"ebene": 1,
-"anim": "wehen"
-},
-{
-"datei": "varianten/frucht-mais_gras.png",
-"basis": "frucht/mais",
-"x": 1060,
-"y": 1271,
-"fuss": 36,
-"kachel": [
-66,
-81
-],
-"block": [
-66,
-79,
-2,
-3
-],
-"ebene": 1,
-"anim": "wehen"
-},
-{
-"datei": "varianten/frucht-mais_gras_m.png",
-"basis": "frucht/mais",
-"x": 1092,
-"y": 1271,
-"fuss": 36,
-"kachel": [
-68,
-81
-],
-"block": [
-68,
-79,
-2,
-3
-],
-"ebene": 1,
-"anim": "wehen"
-},
-{
-"datei": "varianten/frucht-mais_gras.png",
-"basis": "frucht/mais",
-"x": 1124,
-"y": 1271,
-"fuss": 36,
-"kachel": [
-70,
-81
-],
-"block": [
-70,
-79,
-2,
-3
-],
-"ebene": 1,
-"anim": "wehen"
-},
-{
-"datei": "varianten/frucht-karotte_gras.png",
-"basis": "frucht/karotte",
-"x": 913,
-"y": 1355,
-"fuss": 16,
-"kachel": [
-57,
-85
-],
-"block": [
-57,
-85,
-2,
-1
-],
-"ebene": 1,
-"anim": "wehen"
-},
-{
-"datei": "varianten/frucht-karotte_gras.png",
-"basis": "frucht/karotte",
-"x": 945,
-"y": 1355,
-"fuss": 16,
-"kachel": [
-59,
-85
-],
-"block": [
-59,
-85,
-2,
-1
-],
-"ebene": 1,
-"anim": "wehen"
-},
-{
-"datei": "varianten/frucht-karotte_gras_m.png",
-"basis": "frucht/karotte",
-"x": 977,
-"y": 1355,
-"fuss": 16,
-"kachel": [
-61,
-85
-],
-"block": [
-61,
-85,
-2,
-1
-],
-"ebene": 1,
-"anim": "wehen"
-},
-{
-"datei": "varianten/frucht-karotte_gras_m.png",
-"basis": "frucht/karotte",
-"x": 1009,
-"y": 1355,
-"fuss": 16,
-"kachel": [
-63,
-85
-],
-"block": [
-63,
-85,
-2,
-1
-],
-"ebene": 1,
-"anim": "wehen"
-},
-{
-"datei": "varianten/frucht-heidelbeere_gras.png",
-"basis": "frucht/heidelbeere",
 "x": 1089,
-"y": 1345,
-"fuss": 26,
+"y": 1323,
+"fuss": 32,
 "kachel": [
 68,
-85
+84
 ],
 "block": [
 68,
-84,
+83,
 2,
 2
 ],
-"ebene": 1,
-"anim": "glitzern"
+"ebene": 1
 },
 {
-"datei": "varianten/frucht-heidelbeere_gras.png",
-"basis": "frucht/heidelbeere",
+"datei": "varianten/frucht-aubergine_gras.png",
+"basis": "frucht/aubergine",
 "x": 1121,
-"y": 1345,
-"fuss": 26,
+"y": 1323,
+"fuss": 32,
 "kachel": [
 70,
-85
+84
 ],
 "block": [
 70,
-84,
+83,
 2,
 2
 ],
-"ebene": 1,
-"anim": "glitzern"
+"ebene": 1
 },
 {
-"datei": "varianten/frucht-heidelbeere_gras.png",
-"basis": "frucht/heidelbeere",
+"datei": "varianten/frucht-aubergine_gras.png",
+"basis": "frucht/aubergine",
 "x": 1153,
-"y": 1345,
-"fuss": 26,
+"y": 1323,
+"fuss": 32,
 "kachel": [
 72,
-85
+84
 ],
 "block": [
 72,
-84,
+83,
 2,
 2
 ],
-"ebene": 1,
-"anim": "glitzern"
+"ebene": 1
 },
 {
-"datei": "varianten/frucht-orangenbaum_gras_m.png",
-"basis": "frucht/orangenbaum",
+"datei": "varianten/frucht-kuerbis_gras.png",
+"basis": "frucht/kuerbis",
+"x": 903,
+"y": 1375,
+"fuss": 28,
+"kachel": [
+57,
+87
+],
+"block": [
+56,
+86,
+3,
+2
+],
+"ebene": 1
+},
+{
+"datei": "varianten/frucht-kuerbis_gras_m.png",
+"basis": "frucht/kuerbis",
+"x": 935,
+"y": 1375,
+"fuss": 28,
+"kachel": [
+59,
+87
+],
+"block": [
+58,
+86,
+3,
+2
+],
+"ebene": 1
+},
+{
+"datei": "varianten/frucht-kuerbis_gras_m.png",
+"basis": "frucht/kuerbis",
+"x": 967,
+"y": 1375,
+"fuss": 28,
+"kachel": [
+61,
+87
+],
+"block": [
+60,
+86,
+3,
+2
+],
+"ebene": 1
+},
+{
+"datei": "varianten/frucht-kartoffel_gras_m.png",
+"basis": "frucht/kartoffel",
+"x": 1042,
+"y": 1373,
+"fuss": 30,
+"kachel": [
+65,
+87
+],
+"block": [
+65,
+86,
+2,
+2
+],
+"ebene": 1
+},
+{
+"datei": "varianten/frucht-kartoffel_gras_m.png",
+"basis": "frucht/kartoffel",
+"x": 1074,
+"y": 1373,
+"fuss": 30,
+"kachel": [
+67,
+87
+],
+"block": [
+67,
+86,
+2,
+2
+],
+"ebene": 1
+},
+{
+"datei": "varianten/frucht-kartoffel_gras_m.png",
+"basis": "frucht/kartoffel",
+"x": 1106,
+"y": 1373,
+"fuss": 30,
+"kachel": [
+69,
+87
+],
+"block": [
+69,
+86,
+2,
+2
+],
+"ebene": 1
+},
+{
+"datei": "varianten/frucht-apfelbaum_gras_m.png",
+"basis": "frucht/apfelbaum",
 "x": 1267,
 "y": 1126,
 "fuss": 61,
@@ -3193,32 +3246,32 @@
 "anim": "baum"
 },
 {
-"datei": "varianten/frucht-kirschbusch_gras_m.png",
-"basis": "frucht/kirschbusch",
-"x": 1265,
-"y": 1237,
-"fuss": 46,
+"datei": "varianten/frucht-apfelbaum_gras_m.png",
+"basis": "frucht/apfelbaum",
+"x": 1267,
+"y": 1222,
+"fuss": 61,
 "kachel": [
-79,
+80,
 79
 ],
 "block": [
 79,
-77,
-3,
-3
+76,
+4,
+4
 ],
 "ebene": 1,
 "anim": "baum"
 },
 {
-"datei": "varianten/frucht-kirschbusch_gras.png",
+"datei": "varianten/frucht-kirschbusch_gras_m.png",
 "basis": "frucht/kirschbusch",
 "x": 1345,
 "y": 1237,
 "fuss": 46,
 "kachel": [
-85,
+84,
 79
 ],
 "block": [
@@ -3231,20 +3284,20 @@
 "anim": "baum"
 },
 {
-"datei": "varianten/frucht-trauben_gras_m.png",
-"basis": "frucht/trauben",
-"x": 1264,
-"y": 1316,
-"fuss": 47,
+"datei": "varianten/frucht-apfelbaum_gras.png",
+"basis": "frucht/apfelbaum",
+"x": 1267,
+"y": 1318,
+"fuss": 61,
 "kachel": [
-79,
-84
+80,
+85
 ],
 "block": [
 79,
 82,
-3,
-3
+4,
+4
 ],
 "ebene": 1,
 "anim": "baum"
@@ -3252,16 +3305,16 @@
 {
 "datei": "varianten/frucht-apfelbaum_gras_m.png",
 "basis": "frucht/apfelbaum",
-"x": 1315,
-"y": 1302,
+"x": 1331,
+"y": 1318,
 "fuss": 61,
 "kachel": [
-83,
-84
+84,
+85
 ],
 "block": [
+83,
 82,
-81,
 4,
 4
 ],
@@ -4068,21 +4121,40 @@
 {
 "datei": "varianten/neu-01_sand_m.png",
 "basis": "neu/01",
-"x": 223,
-"y": 930,
+"x": 575,
+"y": 866,
 "fuss": 65,
 "kachel": [
-15,
-61
+37,
+57
 ],
 "block": [
-14,
-58,
+36,
+54,
 3,
 4
 ],
 "ebene": 1,
 "anim": "baum"
+},
+{
+"datei": "varianten/k01-deko27_gras.png",
+"basis": "k01/deko27",
+"x": 1184,
+"y": 840,
+"fuss": 27,
+"kachel": [
+75,
+53
+],
+"block": [
+74,
+52,
+2,
+2
+],
+"ebene": 0,
+"anim": "wehen"
 },
 {
 "datei": "varianten/k01-deko26_gras.png",
@@ -4598,6 +4670,25 @@
 "anim": "wehen"
 },
 {
+"datei": "varianten/k01-deko27_gras.png",
+"basis": "k01/deko27",
+"x": 256,
+"y": 1176,
+"fuss": 27,
+"kachel": [
+17,
+74
+],
+"block": [
+16,
+73,
+2,
+2
+],
+"ebene": 0,
+"anim": "wehen"
+},
+{
 "datei": "varianten/k01-deko06_gras.png",
 "basis": "k01/deko06",
 "x": 899,
@@ -4667,6 +4758,25 @@
 "block": [
 92,
 53,
+2,
+2
+],
+"ebene": 0,
+"anim": "wehen"
+},
+{
+"datei": "varianten/k01-deko26_gras.png",
+"basis": "k01/deko26",
+"x": 1536,
+"y": 581,
+"fuss": 30,
+"kachel": [
+97,
+37
+],
+"block": [
+96,
+36,
 2,
 2
 ],
@@ -4895,6 +5005,25 @@
 "block": [
 86,
 86,
+2,
+2
+],
+"ebene": 0,
+"anim": "wehen"
+},
+{
+"datei": "varianten/k01-deko26_gras.png",
+"basis": "k01/deko26",
+"x": 1568,
+"y": 629,
+"fuss": 30,
+"kachel": [
+99,
+40
+],
+"block": [
+98,
+39,
 2,
 2
 ],
@@ -5149,6 +5278,25 @@
 "anim": "wehen"
 },
 {
+"datei": "varianten/k01-deko05_gras.png",
+"basis": "k01/deko05",
+"x": 1570,
+"y": 598,
+"fuss": 29,
+"kachel": [
+99,
+38
+],
+"block": [
+98,
+37,
+2,
+2
+],
+"ebene": 0,
+"anim": "wehen"
+},
+{
 "datei": "varianten/k01-deko26_gras.png",
 "basis": "k01/deko26",
 "x": 480,
@@ -5206,20 +5354,20 @@
 "anim": "wehen"
 },
 {
-"datei": "varianten/k01-deko06_gras.png",
-"basis": "k01/deko06",
-"x": 1059,
-"y": 961,
-"fuss": 18,
+"datei": "varianten/k01-deko05_gras.png",
+"basis": "k01/deko05",
+"x": 1410,
+"y": 902,
+"fuss": 29,
 "kachel": [
-67,
-60
+89,
+57
 ],
 "block": [
-66,
-60,
+88,
+56,
 2,
-1
+2
 ],
 "ebene": 0,
 "anim": "wehen"
@@ -5313,101 +5461,6 @@
 "block": [
 54,
 59,
-2,
-2
-],
-"ebene": 0,
-"anim": "wehen"
-},
-{
-"datei": "varianten/k01-deko27_gras.png",
-"basis": "k01/deko27",
-"x": 1504,
-"y": 984,
-"fuss": 27,
-"kachel": [
-94,
-62
-],
-"block": [
-94,
-61,
-2,
-2
-],
-"ebene": 0,
-"anim": "wehen"
-},
-{
-"datei": "varianten/k01-deko06_gras.png",
-"basis": "k01/deko06",
-"x": 739,
-"y": 657,
-"fuss": 18,
-"kachel": [
-46,
-41
-],
-"block": [
-46,
-41,
-2,
-1
-],
-"ebene": 0,
-"anim": "wehen"
-},
-{
-"datei": "varianten/k01-deko05_gras.png",
-"basis": "k01/deko05",
-"x": 482,
-"y": 1254,
-"fuss": 29,
-"kachel": [
-30,
-79
-],
-"block": [
-30,
-78,
-2,
-2
-],
-"ebene": 0,
-"anim": "wehen"
-},
-{
-"datei": "varianten/k01-deko05_gras.png",
-"basis": "k01/deko05",
-"x": 834,
-"y": 998,
-"fuss": 29,
-"kachel": [
-52,
-63
-],
-"block": [
-52,
-62,
-2,
-2
-],
-"ebene": 0,
-"anim": "wehen"
-},
-{
-"datei": "varianten/k01-deko27_gras.png",
-"basis": "k01/deko27",
-"x": 1504,
-"y": 856,
-"fuss": 27,
-"kachel": [
-95,
-54
-],
-"block": [
-94,
-53,
 2,
 2
 ],

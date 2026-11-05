@@ -1,5 +1,4 @@
-"""Digitale Anbaufruechte fuer Karte 07: PixelLab-Fruechte (assets/objekte/karte07/obst) verkleinern und
-nur die Fruechte digital machen (Voxel-Raster, cyanfarbene Kontur, Pixel-Glanz). Blaetter bleiben natuerlich.
+"""Anbaufruechte fuer Karte 07: normale PixelLab-Fruechte (obst2) und Obstbaeume (obst) verkleinern.
 
   python3 tools/karte07_obst.py   -> assets/objekte/karte07/frucht/*.png
 """
@@ -11,10 +10,13 @@ ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
 QUELLE = os.path.join(ROOT, 'assets', 'objekte', 'karte07', 'obst')
 ZIEL = os.path.join(ROOT, 'assets', 'objekte', 'karte07', 'frucht')
 # name: (quelle, faktor)
-SORTEN = {'kuerbis': (0, 0.55), 'kohl': (1, 0.5), 'tomate': (2, 0.55), 'mais': (3, 0.6), 'karotte': (4, 0.5),
-          'erdbeere': (5, 0.5), 'aubergine': (6, 0.55), 'melone': (7, 0.55), 'zwiebel': (12, 0.5),
-          'heidelbeere': (13, 0.5), 'weizen': (15, 0.55), 'trauben': (11, 0.75),
-          'apfelbaum': (8, 1.0), 'orangenbaum': (9, 1.0), 'kirschbusch': (10, 0.8)}
+SORTEN = {'kuerbis': ('obst2', 0, 0.55), 'kohl': ('obst2', 1, 0.5), 'tomate': ('obst2', 2, 0.55),
+          'mais': ('obst2', 3, 0.6), 'karotte': ('obst2', 4, 0.5), 'erdbeere': ('obst2', 5, 0.5),
+          'aubergine': ('obst2', 6, 0.55), 'melone': ('obst2', 7, 0.5), 'zwiebel': ('obst2', 8, 0.5),
+          'heidelbeere': ('obst2', 9, 0.5), 'weizen': ('obst2', 10, 0.55), 'kartoffel': ('obst2', 11, 0.5),
+          'ruebe': ('obst2', 12, 0.5), 'rote_bete': ('obst2', 13, 0.5), 'paprika': ('obst2', 14, 0.55),
+          'blumenkohl': ('obst2', 15, 0.5),
+          'apfelbaum': ('obst', 8, 1.0), 'kirschbusch': ('obst', 10, 0.8), 'trauben': ('obst', 11, 0.75)}
 CYAN = np.array([95, 240, 255], np.float32)
 
 
@@ -47,14 +49,14 @@ def digital(sp):
 
 if __name__ == '__main__':
     os.makedirs(ZIEL, exist_ok=True)
-    for name, (i, f) in SORTEN.items():
-        sp = Image.open(os.path.join(QUELLE, '%02d.png' % i)).convert('RGBA')
+    for name, (ordner, i, f) in SORTEN.items():
+        sp = Image.open(os.path.join(os.path.dirname(QUELLE), ordner, '%02d.png' % i)).convert('RGBA')
         sp = sp.crop(sp.getbbox())
         if f != 1.0:
             sp = sp.resize((max(1, round(sp.width * f)), max(1, round(sp.height * f))), Image.NEAREST)
         al = np.array(sp)
         al[..., 3] = np.where(al[..., 3] >= 128, 255, 0)
-        sp = digital(Image.fromarray(al))
+        sp = Image.fromarray(al)
         sp = sp.crop(sp.getbbox())
         sp.save(os.path.join(ZIEL, name + '.png'))
         print(name, sp.size)
