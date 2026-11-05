@@ -5,8 +5,8 @@
 | Datei | Inhalt |
 |---|---|
 | `bausteine.png` / `.json` | 100 Grundkacheln: Gras, Sand, Wasser, Meer (je 5 Varianten) und die Wang-Übergänge |
-| `boden_tiles.png` | 6572 Kacheln der Boden-Ebene (unter dem Spieler), 64 je Zeile |
-| `ueberlagerung_tiles.png` | 2686 Kacheln der Überlagerung (über dem Spieler), 64 je Zeile |
+| `boden_tiles.png` | 6451 Kacheln der Boden-Ebene (unter dem Spieler), 64 je Zeile |
+| `ueberlagerung_tiles.png` | 2716 Kacheln der Überlagerung (über dem Spieler), 64 je Zeile |
 | `kollision_tiles.png` | 3 Kacheln: grün begehbar, rot gesperrt, blau verdeckt |
 | `karte01.tmx` | Tiled-Karte: Boden → Spieler (Objektebene) → Überlagerung, dazu Kollision (ausgeblendet) |
 | `karte01_raster.json` | dieselben Raster als Listen (0 = leer, sonst Index + 1) |

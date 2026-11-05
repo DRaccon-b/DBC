@@ -27,11 +27,41 @@ OUT = os.path.join(KARTE, 'ebenen')
 T = 16
 FUSS = 10          # unterste Pixelzeilen eines hohen Objekts: Fuss (blockiert, liegt unter dem Spieler)
 BODENOBJEKTE = {'gross/14'}   # Feuerstelle mit Holzscheiten: liegt ganz am Boden
-MIN_FUSS = 6       # ab so vielen Fusspixeln (Stamm, Mast, Sockel) ist eine Kachel blockiert
+MIN_FUSS = 4       # ab so vielen Fusspixeln (Stamm, Mast, Sockel) ist eine Kachel blockiert
 MIN_DECKT = 12     # ab so vielen deckenden Pixeln der Ueberlagerung verdeckt eine Kachel den Spieler
 # begehbare Bodendeko (liegt unter dem Spieler): Gras, Farne, Schilf, Blumen, Pilze, Kiesel, Zweige
 FLACH = {'deko/05', 'deko/06', 'deko/07', 'deko/08', 'deko/10', 'deko/14', 'deko/26', 'deko/27', 'deko/31',
          'deko/33', 'deko/61'}
+
+
+PFLANZEN = ('baeume/', 'dschungel/', 'gross/00', 'gross/01', 'gross/02')
+
+
+def ist_pflanze(o):
+    return o.get('basis', '').startswith(PFLANZEN)
+
+
+def stamm_maske(sp, o):
+    """Stamm eines Baums: braune Pixel in den untersten 8 Zeilen des eigentlichen Sprites. Busch ohne
+    sichtbaren Stamm: schmaler Ansatz (6 px) mittig in den untersten 5 Zeilen."""
+    a = np.array(sp).astype(int)
+    h = a.shape[0]
+    deckend = a[..., 3] >= 128
+    if 'block' in o:
+        yb = (o['block'][1] + o['block'][3]) * T - 1 - o['y']
+    else:
+        yb = int(np.nonzero(deckend.any(axis=1))[0].max())
+    yb = min(h - 1, yb)
+    m = np.zeros(deckend.shape, bool)
+    r, g, b = a[..., 0], a[..., 1], a[..., 2]
+    braun = deckend & (r > g + 8) & (r > b + 18)
+    m[max(0, yb - 7):yb + 1] = braun[max(0, yb - 7):yb + 1]
+    if m.sum() < 6:                              # Busch: Ansatz in der Mitte
+        xs = np.nonzero(deckend[yb])[0]
+        if len(xs):
+            cx = (xs.min() + xs.max()) // 2
+            m[max(0, yb - 4):yb + 1, max(0, cx - 3):cx + 3] = deckend[max(0, yb - 4):yb + 1, max(0, cx - 3):cx + 3]
+    return m
 
 
 def main():
@@ -76,6 +106,22 @@ def main():
         if o.get('ebene', 1) == 0 or o.get('basis') in FLACH:      # flache Deko: Boden, begehbar
             boden.alpha_composite(sp, (o['x'], o['y']))
             continue
+        if ist_pflanze(o):                       # Baum/Busch: nur der Stamm ist Boden + gesperrt, Rest ueber dem Spieler
+            stamm = stamm_maske(sp, o)
+            arr = np.array(sp)
+            unten_ = arr.copy(); unten_[~stamm] = 0
+            rest = arr.copy(); rest[stamm] = 0
+            if 'block' in o:                     # Grasfuss/Schatten unter dem Block bleiben am Boden
+                y_basis = (o['block'][1] + o['block'][3]) * T - 1 - o['y']
+                unten_[y_basis + 1:] = arr[y_basis + 1:]
+                rest[y_basis + 1:] = 0
+            boden.alpha_composite(Image.fromarray(unten_), (o['x'], o['y']))
+            oben.alpha_composite(Image.fromarray(rest), (o['x'], o['y']))
+            ys, xs = np.nonzero(stamm)
+            ys, xs = ys + o['y'], xs + o['x']
+            ok = (ys >= 0) & (ys < H) & (xs >= 0) & (xs < W)
+            blockiert_px[ys[ok], xs[ok]] = True
+            continue
         # Fusstiefe: schmale Objekte (Stamm, Mast) 10 px, breite (Zelt, Staender) bis 2 Kacheln tief
         zu_ = int(zeilen.max())
         fussbreite = int((a[max(0, zu_ - 3):zu_ + 1] > 0).any(axis=0).sum())
@@ -110,8 +156,10 @@ def main():
     klasse = np.ones((rows, cols), int)
     for y in range(rows):
         for x in range(cols):
-            if grid[y][x] in 'WDhF':                # Wasser, Meer, Flachwasser, Wald
+            if grid[y][x] in 'WDh':                 # Wasser, Meer, Flachwasser (Wald: nur die Staemme)
                 klasse[y, x] = 2
+            if grid[y][x] == 'F' and (x == 0 or y == 0 or x == cols - 1 or y == rows - 1):
+                klasse[y, x] = 2                     # Kartenrand im Wald bleibt zu
     # Klippenwaende aus dem Hoehenplan (Wand belegt Zeilen t-h+1..t; Zeile t-h ist die Graskante oben)
     tcol, hcol = [None] * (cols + 1), [3] * (cols + 1)
     for s in plan['segmente']:

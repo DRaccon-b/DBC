@@ -20,3 +20,8 @@ sperren ihre Kachel, alles darüber liegt auf Ebene 3.
 Alle Objekte stehen am 16×16-Raster (`tools/karte01_raster.py`): Fußmitte auf der Kachelmitte, unterste
 Pixelzeile 2 px über der Kachelunterkante, höchstens ein hohes und ein flaches Objekt je Kachel. Die
 Kachel jedes Objekts steht in `assets/objekte/karte01/platzierung.json` als `kachel: [x, y]`.
+
+Bäume und Büsche: Nur der Stamm (braune Pixel in den untersten 8 Zeilen, bei Büschen ein 6 px breiter Ansatz
+in der Mitte) liegt auf Ebene 1 und sperrt seine Kachel. Die ganze Krone liegt auf Ebene 3, die Kacheln
+darunter sind begehbar und verdecken den Spieler. Der Wald ist zwischen den Stämmen begehbar, nur der äußere
+Kartenrand bleibt zu.
