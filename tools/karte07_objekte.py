@@ -48,7 +48,7 @@ FEST = [
     ('azul/01', 92, 6, {'anim': 'wehen'}), ('azul/01', 95, 6, {'anim': 'wehen'}),
     ('azul/04', 86.5, 21, {}), ('azul/09', 91, 22, {'anim': 'glitzern'}),
     ('azul/03', 79, 23, {'anim': 'glitzern'}), ('azul/05', 82, 23, {}), ('azul/03', 95, 16, {'anim': 'glitzern'}),
-    (PL, 76, 11, {'anim': 'leuchten', 'spiegeln': True}), (PL, 66, 22, {'anim': 'leuchten'}),
+    (PL, 66, 22, {'anim': 'leuchten'}),
     (PL, 27, 23, {'anim': 'leuchten', 'spiegeln': True}),
     ('mittel/13', 59, 39, {}), ('mittel/13', 61, 49, {}),
     # Pagodenhof
@@ -76,18 +76,18 @@ FEST = [
     (KRISTALL, 64, 48, {'anim': 'glitzern'}), (KIEFER, 65.5, 49, {'anim': 'baum', 'spiegeln': True}),
     (LILA, 24, 67, {}), (BUSCH, 24.5, 68, {}),
     
-    (LILA, 93, 40, {}), (AZALEE, 94, 41, {}),
+    (LILA, 92, 38, {}), (AZALEE, 93, 39, {}),
     (LILA, 5, 49, {}), (TANNE, 6.5, 50, {'anim': 'baum', 'spiegeln': True}),
     # Felsnadeln ohne Wolken auf der Insel
     (NADEL_BODEN, 17, 35, {}), (NADEL_BODEN, 13, 45, {}), (NADEL_BODEN, 41, 58, {}),
     # grosse Kiefern
-    (GROSSKIEFER, 93, 58, {'anim': 'baum'}), (GROSSKIEFER, 66.5, 58, {'anim': 'baum', 'spiegeln': True}),
+    (GROSSKIEFER, 90, 58, {'anim': 'baum'}), (GROSSKIEFER, 66.5, 58, {'anim': 'baum', 'spiegeln': True}),
     # Felsnadeln in den Wolkenbergen
     # (nur im Wolkenmeer, Sockel nie auf einer Felswand)
     (NADEL, -2, 30, {}), (NADEL, -2, 48, {}), (NADEL, -3, 12, {}), (NADEL, -3, 68, {}), (NADEL, -2, 84, {}),
     (NADEL, 102, 22, {}), (NADEL, 102, 56, {}), (NADEL, 103, 8, {}), (NADEL, 103, 72, {}), (NADEL, 102, 88, {}),
     (NADEL, 14, 95, {}), (NADEL, 31, 95, {}), (NADEL, 47, 95, {}), (NADEL, 61, 95, {}),
-    (NADEL, 78, 95, {}), (NADEL, 92, 95, {}),
+    (NADEL, 78, 95, {}), (NADEL, 2, 32, {}), (NADEL, 63, 90, {}), (NADEL, 92, 95, {}),
 ]
 STUMPF_PLAETZE = [(49, 57), (54, 38)]
 RUNEN_PLAETZE = [(40, 37), (57, 31), (89, 51), (27, 58), (65, 54)]
@@ -115,8 +115,8 @@ def main():
             for x in range(x0 - 1, x1 + 2):
                 gesperrt.add((x, y))
     bx0, by0, bx1, by1 = lay['bruecke']
-    for y in range(by0 - 1, by1 + 2):
-        for x in range(bx0 - 1, bx1 + 2):
+    for y in range(by0 - 3, by1 + 5):
+        for x in range(bx0 - 2, bx1 + 3):
             gesperrt.add((x, y))
     for tp in lay['teleporter']:
         for y in range(tp['y'] - 1, tp['y'] + tp['h'] + 1):
