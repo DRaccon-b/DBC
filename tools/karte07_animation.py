@@ -13,8 +13,8 @@ import animation_bauen as ab
 
 OUT = os.path.join(k3.KARTE, 'animation')
 DAUER = 170
-AUSSCHNITTE = {'gipfel': (0, 0, 50, 30), 'schrein': (66, 0, 100, 28), 'pagode': (66, 28, 100, 58),
-               'tee': (0, 58, 50, 90)}
+AUSSCHNITTE = {'gipfel': (3, 3, 56, 36), 'schrein': (72, 3, 109, 34), 'pagode': (72, 34, 109, 64),
+               'feld': (6, 64, 56, 99)}
 
 
 def main():

@@ -27,14 +27,19 @@ BUSCH, AZALEE = 'neu/02', 'neu/03'
 OBELISK, KRISTALL = 'mittel/02', 'mittel/03'
 NADEL, NADEL_BODEN = 'gross/03', 'gross/03_ohne'                # Felsnadel mit / ohne Wolkensockel
 BAEUME = {KIEFER, TANNE, GROSSKIEFER}
-FELDPFLANZEN = ['feld/04', 'feld/07', 'feld/09', 'feld/10', 'feld/11']
-FELDER = [(26, 43), (49, 67), (72, 83)]                         # Spalten der Felder, Zeilen 64..81
+FRUECHTE = ['kuerbis', 'kohl', 'tomate', 'mais', 'karotte', 'erdbeere', 'aubergine', 'melone', 'zwiebel',
+            'heidelbeere', 'weizen']
+OBSTBAEUME = ['frucht/apfelbaum', 'frucht/orangenbaum', 'frucht/kirschbusch', 'frucht/trauben']
+TURM_G, TURM_K, TURM_F, TURM_S = 'turm/schwarz_gross', 'turm/schwarz_klein', 'turm/schwarz_gefallen', 'turm/schwarz_stumpf'
+LILA = 'mittel/13'
+FELDER = [(26, 43), (49, 67)]                                   # Beetfelder (Spalten), Zeilen 64..81
+OBSTGARTEN = (72, 83, 64, 80)
 RING = (30, 62, 4, 26)                                          # Steinkreis oben: keine Felsen
 
 FEST = [
     # Gipfel: Wirbelportal, Drachenschrein, Obelisk, Laternen (max. 4 Steinlaternen im Schrein)
     ('mittel/12', 6.5, 7, {'anim': 'portal'}),
-    ('gross/00', 89.5, 11, {}), (OBELISK, 93, 21, {'anim': 'leuchten'}), (BUSCH, 92, 22, {}),
+    ('gross/00', 89.5, 11, {}), (KRISTALL, 93, 21, {'anim': 'glitzern'}), (BUSCH, 92, 22, {}),
     ('mittel/09', 84, 21, {}),
     (SL, 80, 9, {}), (SL, 83, 9, {}), (SL, 80, 18, {}), (SL, 87, 18, {}),
     (PL, 76, 11, {'anim': 'leuchten', 'spiegeln': True}), (PL, 66, 22, {'anim': 'leuchten'}),
@@ -50,7 +55,7 @@ FEST = [
     # untere Terrasse
     ('gross/02', 8.5, 66, {}), ('gross/02', 13.5, 79, {}), ('gross/01', 9.5, 85, {}),
     ('mittel/11', 6, 80, {}), ('mittel/15', 18, 80, {}), (SL, 5, 85, {}), (PL, 4, 78, {'anim': 'leuchten'}),
-    (OBELISK, 90.5, 70, {'anim': 'leuchten'}), (BUSCH, 91.5, 71, {}),
+    (KRISTALL, 90.5, 70, {'anim': 'glitzern'}), (BUSCH, 91.5, 71, {}),
     ('gross/01', 90.5, 80, {}), ('mittel/10', 90.5, 73, {}),
     (SL, 86, 67, {}), (SL, 95, 67, {}), (BAMBUS, 86, 77, {'anim': 'wehen'}), (BAMBUS, 95, 77, {'anim': 'wehen'}),
     (PL, 95, 63, {'anim': 'leuchten', 'spiegeln': True}),
@@ -58,15 +63,16 @@ FEST = [
     (BAMBUS, 9, 72, {'anim': 'wehen'}), (BAMBUS, 12, 72, {'anim': 'wehen'}), (BAMBUS, 70, 73, {'anim': 'wehen'}),
     (PL, 46.5, 76, {'anim': 'leuchten', 'spiegeln': True}), (PL, 69.5, 81, {'anim': 'leuchten'}),
     # umgekippte schwarze Tuerme
-    ('turm/00', 48.5, 40, {}), ('turm/01', 12, 58, {'spiegeln': True}), ('turm/01', 57, 57, {}),
+    (TURM_G, 48, 40, {}), (TURM_K, 33, 57, {}), (TURM_F, 13, 58, {}), (TURM_S, 5, 58, {}),
+    (TURM_F, 57, 57, {'spiegeln': True}), (TURM_G, 92, 46, {}),
     # Kristallsaeulen verteilt, jeweils mit Baum/Strauch halb davor
-    (OBELISK, 12, 30, {'anim': 'leuchten'}), (TANNE, 13.5, 31, {'anim': 'baum'}),
+    (LILA, 12, 30, {}), (TANNE, 13.5, 31, {'anim': 'baum'}),
     (KRISTALL, 45, 31, {'anim': 'glitzern'}), (AZALEE, 46.5, 32, {}),
-    (OBELISK, 64, 48, {'anim': 'leuchten'}), (KIEFER, 65.5, 49, {'anim': 'baum', 'spiegeln': True}),
-    (OBELISK, 24, 67, {'anim': 'leuchten'}), (BUSCH, 24.5, 68, {}),
+    (KRISTALL, 64, 48, {'anim': 'glitzern'}), (KIEFER, 65.5, 49, {'anim': 'baum', 'spiegeln': True}),
+    (LILA, 24, 67, {}), (BUSCH, 24.5, 68, {}),
     (KRISTALL, 80, 27, {'anim': 'glitzern'}), (TANNE, 81.5, 28, {'anim': 'baum'}),
-    (OBELISK, 93, 40, {'anim': 'leuchten'}), (AZALEE, 94, 41, {}),
-    (KRISTALL, 5, 49, {'anim': 'glitzern'}), (TANNE, 6.5, 50, {'anim': 'baum', 'spiegeln': True}),
+    (LILA, 93, 40, {}), (AZALEE, 94, 41, {}),
+    (LILA, 5, 49, {}), (TANNE, 6.5, 50, {'anim': 'baum', 'spiegeln': True}),
     # Felsnadeln ohne Wolken auf der Insel
     (NADEL_BODEN, 17, 35, {}), (NADEL_BODEN, 13, 45, {}), (NADEL_BODEN, 41, 58, {}),
     # grosse Kiefern
@@ -75,6 +81,8 @@ FEST = [
     (NADEL, 1.5, 30, {}), (NADEL, 1.5, 46, {}), (NADEL, 98.5, 22, {}), (NADEL, 98.5, 56, {}),
     (NADEL, 70.5, 26, {}), (NADEL, 30.5, 89, {}), (NADEL, 46.5, 89, {}), (NADEL, 60.5, 89, {}),
     (NADEL, 92.5, 89, {}), (NADEL, 98.5, 85, {}),
+    (NADEL, -3, 12, {}), (NADEL, -3, 66, {}), (NADEL, 103, 8, {}), (NADEL, 103, 70, {}), (NADEL, 14, 92, {}),
+    (NADEL, 78, 92, {}),
 ]
 BAUM_PLAETZE = [(52, 35), (58, 35), (40, 40), (47, 50), (53, 51), (66, 39), (92, 34), (14, 68),
                 (89, 59), (42, 55), (35, 34)]
@@ -86,6 +94,7 @@ def main():
     cls = lay['klassen']
     hoehe = [[int(c) for c in r] for r in lay['hoehe']]
     cols, rows = lay['groesse']
+    R = lay.get('rand', 0)
     for name, quelle in FREMD.items():
         ziel = os.path.join(OBJ, name + '.png')
         if not os.path.exists(ziel):
@@ -121,9 +130,12 @@ def main():
         k = cls[min(rows - 1, max(0, ty))][min(cols - 1, max(0, tx))]
         return 'sand' if k in 'nw' else 'beton' if k in 'prf' else 'gras'
 
-    def setze(name, fx, fy, opt, frei=False, nur=None):
+    def setze(name, fx, fy, opt, frei=False, nur=None, abs_=False):
         opt = dict(opt)
         spiegeln = opt.pop('spiegeln', False)
+        hoch = opt.pop('hoch', 0)
+        if not abs_:
+            fx, fy = fx + R, fy + R
         tx, ty = int(math.floor(fx)), int(fy)
         if frei and (tx, ty) in gesperrt:
             return False
@@ -144,10 +156,10 @@ def main():
             aa = np.array(sp.getchannel('A')) > 0
             ys, xs = np.nonzero(aa)
             ux0, uy0, ux1, uy1 = int(xs.min()), int(ys.min()), int(xs.max()), int(ys.max())
-            if b is None or name.startswith('feld/'):          # Wolken / Feldpflanzen: kein Bodenfuss
+            if b is None or (name.startswith('frucht/') and name not in OBSTBAEUME):   # Wolken / Beete: kein Fuss
                 v, off = sp, 0
             else:
-                art = 'baum' if name in BAEUME or 'tanne' in name else 'klein' if name.startswith(('k01/', 'neu/0')) else 'stein'
+                art = 'baum' if name in BAEUME or name in OBSTBAEUME or 'tanne' in name else 'klein' if name.startswith(('k01/', 'neu/0')) else 'stein'
                 v, off = bauwerke.bodenfuss(sp, b, art), 2
             datei = 'varianten/%s_%s%s.png' % (name.replace('/', '-'), b or 'wolke', '_m' if spiegeln else '')
             os.makedirs(os.path.join(OBJ, 'varianten'), exist_ok=True)
@@ -158,7 +170,7 @@ def main():
         bw, bh = ux1 - ux0 + 1, uy1 - uy0 + 1
         wt, ht = math.ceil(bw / T), math.ceil(bh / T)
         bx = int(round(fx + 0.5 - wt / 2.0))
-        ox, oy = bx * T + (wt * T - bw) // 2 - ux0, (ty + 1) * T - 1 - uy1
+        ox, oy = bx * T + (wt * T - bw) // 2 - ux0, (ty + 1) * T - 1 - uy1 - hoch
         ys_, xs_ = np.nonzero(alpha[key])
         ys_, xs_ = ys_ + oy, xs_ + ox
         ok = (ys_ >= 0) & (ys_ < H_) & (xs_ >= 0) & (xs_ < W_)
@@ -185,39 +197,46 @@ def main():
         setze(name, fx, fy, opt)
     for (x, y) in BAUM_PLAETZE:
         setze(KIEFER, x, y, {'anim': 'baum', 'spiegeln': rnd.random() < 0.5}, frei=True)
-    # digitale Felder: mehrere unsystematische Reihen, Furchen fuer karte07_bauen
-    reihen = []
+    # Beete: Hochbeete mit Holzrahmen in unregelmaessigen Reihen, je Beet eine Fruchtsorte (digital)
+    beete = []
     for (fx0, fx1) in FELDER:
-        ty = 65 + rnd.randint(0, 1)
-        while ty <= 80:
-            art = rnd.choice(FELDPFLANZEN)
-            x = fx0 + rnd.randint(0, 2)
-            start = x
-            while x <= fx1 - 1:
-                if rnd.random() < 0.12:                         # Luecke in der Reihe
-                    if x > start:
-                        reihen.append([start * T + 4, x * T - 4, (ty + 1) * T - 1])
-                    x += rnd.randint(2, 4)
-                    start = x
-                    continue
-                p = art if rnd.random() < 0.8 else rnd.choice(FELDPFLANZEN)
-                setze(p, x + 0.5, ty, {'anim': 'wehen'} if p != 'feld/11' else {'anim': 'leuchten'}, frei=True)
-                x += 2
-            if x > start:
-                reihen.append([start * T + 4, min(x, fx1 + 1) * T - 4, (ty + 1) * T - 1])
-            ty += rnd.choice((2, 2, 3, 3, 4))
-    json.dump(reihen, open(os.path.join(KARTE, 'feldreihen.json'), 'w'))
+        y = 64 + rnd.randint(0, 1)
+        while y + 1 <= 81:
+            x = fx0 + rnd.randint(1, 2)
+            while x <= fx1 - 3:
+                ende = min(x + rnd.randint(4, 9), fx1 + 1 - rnd.randint(0, 1))
+                if ende - x >= 3:
+                    beete.append([(x + R) * T + 2, (ende + R) * T - 2, (y + R) * T + 2, (y + 2 + R) * T - 2])
+                    frucht = 'frucht/' + rnd.choice(FRUECHTE)
+                    anim = {'anim': 'wehen'} if frucht.endswith(('mais', 'weizen', 'zwiebel', 'karotte')) else {'anim': 'glitzern'}
+                    px = x
+                    while px + 2 <= ende:
+                        setze(frucht, px + 0.5, y + 1, dict(anim, hoch=5, spiegeln=rnd.random() < 0.5))
+                        px += 2
+                x = ende + rnd.randint(1, 2)
+            y += 3 + rnd.choice((0, 0, 1))
+    json.dump(beete, open(os.path.join(KARTE, 'beete.json'), 'w'))
+    # Obstgarten: lockere Baumreihen
+    ox0, ox1, oy0, oy1 = OBSTGARTEN
+    y = oy0 + 3
+    while y <= oy1:
+        x = ox0 + 1.5 + rnd.random() * 1.5
+        while x <= ox1 - 1:
+            setze(rnd.choice(OBSTBAEUME), x, y, {'anim': 'baum', 'spiegeln': rnd.random() < 0.5}, frei=True)
+            x += 4 + rnd.random() * 1.5
+        y += 5 + rnd.randint(0, 1)
     # verschneite Tannen und Schneefelsen nur auf Schnee (nie auf Wegen), keine Felsen im Steinkreis
     n_s = n_r = 0
     for _ in range(5000):
         tx, ty = rnd.randrange(3, cols - 3), rnd.randrange(3, rows - 3)
         if cls[ty][tx] != 'n' or n_s >= 42 or rnd.random() > 0.5:
             continue
-        im_ring = RING[0] <= tx <= RING[1] and RING[2] <= ty <= RING[3]
-        if not im_ring and n_r < 6 and rnd.random() < 0.15:
-            if setze('mittel/07', tx, ty, {'spiegeln': rnd.random() < 0.5}, frei=True, nur='n'):
+        if RING[0] <= tx - R <= RING[1] and RING[2] <= ty - R <= RING[3]:   # Steinkreis bleibt frei
+            continue
+        if n_r < 6 and rnd.random() < 0.15:
+            if setze('mittel/07', tx, ty, {'spiegeln': rnd.random() < 0.5}, frei=True, nur='n', abs_=True):
                 n_r += 1
-        elif setze(TANNE, tx, ty, {'anim': 'baum', 'spiegeln': rnd.random() < 0.5}, frei=True):
+        elif setze(TANNE, tx, ty, {'anim': 'baum', 'spiegeln': rnd.random() < 0.5}, frei=True, abs_=True):
             n_s += 1
     n = 0
     for _ in range(3000):
@@ -227,7 +246,7 @@ def main():
         if cls[ty][tx] != 'g':
             continue
         d = rnd.choice(DEKO_GRAS)
-        if setze(d, tx, ty, {'anim': 'wehen'} if d in WIND else {}, frei=True):
+        if setze(d, tx, ty, {'anim': 'wehen'} if d in WIND else {}, frei=True, abs_=True):
             n += 1
     json.dump(objekte, open(os.path.join(OBJ, 'platzierung.json'), 'w'), indent=0)
     print(len(objekte), 'Objekte am Raster')

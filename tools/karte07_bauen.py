@@ -21,7 +21,9 @@ KARTE = os.path.join(ROOT, 'maps', 'karte07')
 OBJ = os.path.join(ROOT, 'assets', 'objekte', 'karte07')
 T = 16
 N_FRAMES = 16
-COLS, ROWS = 100, 90
+RAND = 6                                       # Wolkenring rundherum (Kacheln)
+IC, IR = 100, 90                               # Inselbereich (Koordinaten wie Vorlage)
+COLS, ROWS = IC + 2 * RAND, IR + 2 * RAND
 H = k4.H
 weich, zell_maske = k4.weich, k4.zell_maske
 k4.FELS['heilig'] = ['#3c4048', '#545a64', '#6e7480', '#8a909a', '#a6abb4', '#c2c6cc', '#dcdfe3']
@@ -34,8 +36,8 @@ NEBEL = np.array(H('#e4e9f1'), np.float32)
 
 
 def wolkenfels(breite, hoehe, seed):
-    """Neue Bergwand: gestapelte, unregelmaessige Steinfragmente (blaugrau, Licht oben links, dunkle Fugen),
-    nach unten in Nebel uebergehend, mit Nebelschwaden und schwebenden Steinsplittern."""
+    """Felswand: gerade gestapelte, unregelmaessige Steinbloecke (blaugrau, Licht oben links, dunkle Fugen,
+    einzelne Risse), nach unten leicht abgedunkelt."""
     rs = random.Random(seed)
     P = [np.array(H(c), np.float32) for c in ('#2e333c', '#444b57', '#5c6472', '#77808e', '#959dab', '#b6bdc8', '#d6dbe2')]
     a = np.zeros((hoehe, breite, 3), np.float32)
@@ -60,16 +62,13 @@ def wolkenfels(breite, hoehe, seed):
                     a[yy, xx] = c
             x += bw
         y += bh
-    t = (np.arange(hoehe, dtype=np.float32) / max(1, hoehe - 1))[:, None]
-    xs = np.arange(breite, dtype=np.float32)[None, :]
-    schwade = 0.18 * np.sin(xs / 11.0 + seed) + 0.12 * np.sin(xs / 4.3 + t * 9)
-    f = np.clip(t ** 1.6 * 0.85 + schwade * t, 0, 0.92)[..., None]
-    a = a * (1 - f) + NEBEL * f
-    for _ in range(breite // 18):                         # schwebende Splitter im Nebel
-        fx, fy = rs.randrange(breite - 4), rs.randrange(int(hoehe * 0.55), max(int(hoehe * 0.55) + 1, hoehe - 3))
-        for dy, dx, c in ((0, 1, P[5]), (0, 2, P[4]), (1, 0, P[4]), (1, 1, P[3]), (1, 2, P[2]), (2, 1, P[1])):
-            if fy + dy < hoehe and fx + dx < breite:
-                a[fy + dy, fx + dx] = c
+    t = (np.arange(hoehe, dtype=np.float32) / max(1, hoehe - 1))[:, None, None]
+    a = a * (1 - 0.22 * t)                                # nach unten etwas dunkler (gerade, ohne Nebel)
+    for _ in range(breite // 40):                         # vereinzelte Bruchstuecke / Risse in Bloecken
+        fx, fy = rs.randrange(2, breite - 6), rs.randrange(2, max(3, hoehe - 6))
+        for i in range(rs.randint(3, 6)):
+            if fy + i < hoehe and fx + i // 2 < breite:
+                a[fy + i, fx + i // 2] = P[0]
     return np.clip(a, 0, 255).astype(np.uint8)
 
 
@@ -89,13 +88,11 @@ def R(cls, art, x0, y0, x1, y1):
 
 
 def layout():
-    yy, xx = np.mgrid[0:ROWS, 0:COLS]
-    cls = np.full((ROWS, COLS), 'o')              # o = Wolken
-    hoehe = np.zeros((ROWS, COLS), int)
+    yy, xx = np.mgrid[0:IR, 0:IC]
+    cls = np.full((IR, IC), 'o')                  # o = Wolken
+    hoehe = np.zeros((IR, IC), int)
     # Insel-Umriss (leicht wellig) und Hoehen
     insel = (xx >= 3) & (xx <= 97) & (yy >= 2) & (yy <= 86)
-    welle = (np.sin(yy / 3.1) + np.sin(xx / 2.7)) > 1.4
-    insel &= ~(((xx <= 3) | (xx >= 97) | (yy <= 2) | (yy >= 86)) & welle)
     insel &= ~((xx >= 68) & (xx <= 73) & (yy <= 26))            # Wolkenspalt zwischen Gipfel und Schreinplateau
     cls[insel] = 'g'
     hoehe[insel] = 1
@@ -135,15 +132,17 @@ def layout():
     R(cls, 'p', 85, 63, 96, 80)
     R(cls, 'p', 5, 62, 11, 66)
     spalt = (xx >= 68) & (xx <= 73) & (yy >= 2) & (yy <= 26)
-    cls[~insel] = 'b'
-    hoehe[~insel] = 4
-    cls[spalt] = 'o'
-    hoehe[spalt] = 0
-    lay = {'groesse': [COLS, ROWS], 'klassen': [''.join(r) for r in cls],
-           'hoehe': [''.join(str(v) for v in r) for r in hoehe],
-           'treppen': [[22, 26, 22, 26], [60, 64, 26, 30], [17, 21, 55, 60], [72, 76, 55, 60]],
-           'bruecke': [67, 12, 74, 14],
-           'teleporter': [{'x': 7, 'y': 86, 'b': 4, 'h': 1}]}
+    cls[~insel] = 'o'
+    hoehe[~insel] = 0
+    cls = np.pad(cls, RAND, constant_values='o')
+    hoehe = np.pad(hoehe, RAND)
+    r = RAND
+    lay = {'groesse': [COLS, ROWS], 'rand': RAND, 'klassen': [''.join(z) for z in cls],
+           'hoehe': [''.join(str(v) for v in z) for z in hoehe],
+           'treppen': [[x0 + r, x1 + r, y0 + r, y1 + r] for (x0, x1, y0, y1) in
+                       [[22, 26, 22, 26], [60, 64, 26, 30], [17, 21, 55, 60], [72, 76, 55, 60]]],
+           'bruecke': [67 + r, 12 + r, 74 + r, 14 + r],
+           'teleporter': [{'x': 7 + r, 'y': 86 + r, 'b': 4, 'h': 1}]}
     json.dump(lay, open(os.path.join(KARTE, 'layout.json'), 'w'), indent=0)
     print('Layout', COLS, ROWS)
 
@@ -194,6 +193,101 @@ def wolken(frame):
         teil[m & ~hell & (sub > 0.55)] = H('#cdd5e3')
         teil[m & ~hell & (sub <= 0.55)] = H('#e8edf5')
     return np.clip(a, 0, 255).astype(np.uint8)
+
+
+WOLKE = {'hl': np.array(H('#ffffff'), np.float32), 'basis': np.array(H('#eef2f9'), np.float32),
+         'mitte': np.array(H('#d9e1ee'), np.float32), 'schatten': np.array(H('#bcc7db'), np.float32),
+         'kontur': np.array(H('#9aa7c2'), np.float32)}
+
+
+def bausch(a, cx, cy, r, erlaubt=None, dunkel=0.0):
+    """Ein Wolkenbausch (Kugel): Licht oben links, Schattensichel unten rechts, Kontur unten."""
+    Hh, W = a.shape[:2]
+    x0, x1, y0, y1 = int(max(0, cx - r - 1)), int(min(W, cx + r + 2)), int(max(0, cy - r - 1)), int(min(Hh, cy + r + 2))
+    if x0 >= x1 or y0 >= y1:
+        return
+    yy, xx = np.mgrid[y0:y1, x0:x1].astype(np.float32)
+    dx, dy = xx - cx, yy - cy
+    d2 = dx * dx + dy * dy
+    innen = d2 <= r * r
+    if erlaubt is not None:
+        innen &= erlaubt[y0:y1, x0:x1]
+    teil = a[y0:y1, x0:x1].astype(np.float32)
+    c = np.zeros_like(teil)
+    c[:] = WOLKE['basis']
+    c[(dx + 0.3 * r) ** 2 + (dy + 0.3 * r) ** 2 > (0.95 * r) ** 2] = WOLKE['mitte']
+    c[(dx + 0.2 * r) ** 2 + (dy + 0.15 * r) ** 2 > (1.05 * r) ** 2] = WOLKE['schatten']
+    c[((dx - 0.4 * r) ** 2 + (dy - 0.4 * r) ** 2 > (1.05 * r) ** 2) & (dx + dy < -0.3 * r)] = WOLKE['hl']
+    c[(d2 > (r - 1.3) ** 2) & (dy > -0.2 * r)] = WOLKE['kontur']
+    if dunkel:
+        c = c * (1 - dunkel)
+    teil[innen] = c[innen]
+    a[y0:y1, x0:x1] = teil.astype(a.dtype)
+
+
+SCHICHTEN = [  # (Fuellung, Licht, Schatten, Kontur) von hinten nach vorne
+    ('#c3cde0', '#d6deeb', '#aab6cd', '#97a4bf'),
+    ('#d8e0ec', '#eaeff7', '#bcc7da', '#a4b1ca'),
+    ('#eaeff7', '#ffffff', '#cdd6e5', '#aebbd2'),
+]
+
+
+def wolkenschicht(a, kreise, farben, erlaubt=None):
+    """Wolkenbank aus vereinigten Kreisen, als EINE Flaeche schattiert: heller Saum oben links, Schattensaum
+    unten rechts, feine Kontur unten - wirkt wie zusammenhaengende Cumulus-Waende, nicht wie Blasen."""
+    Hh, W = a.shape[:2]
+    im = Image.new('L', (W, Hh), 0)
+    d = ImageDraw.Draw(im)
+    for (cx, cy, r) in kreise:
+        d.ellipse((cx - r, cy - r * 0.8, cx + r, cy + r * 0.8), fill=255)
+    m = np.array(im) > 0
+    if erlaubt is not None:
+        m &= erlaubt
+
+    def nb(dy, dx):
+        z = np.zeros_like(m)
+        ys = slice(max(0, dy), Hh + min(0, dy)); yd = slice(max(0, -dy), Hh + min(0, -dy))
+        xs = slice(max(0, dx), W + min(0, dx)); xd = slice(max(0, -dx), W + min(0, -dx))
+        z[yd, xd] = m[ys, xs]
+        return z
+    fu, li, sc, ko = [np.array(H(c), np.uint8) for c in farben]
+    a[m] = fu
+    a[m & ~nb(-3, -3)] = li                     # oben links liegt Luft -> Licht
+    a[m & ~nb(5, 4)] = sc                       # unten rechts liegt Luft -> Schatten
+    a[m & ~nb(1, 0)] = ko                       # Unterkante
+
+
+def wolkenmeer(frame):
+    """Dichtes Wolkenmeer rund um die Insel: drei Wolkenbaenke hintereinander, driften sanft hin und her."""
+    W, Hh = COLS * T, ROWS * T
+    a = np.zeros((Hh, W, 3), np.uint8)
+    a[:] = H('#aeb9cf')
+    fr = frame or 0
+    for k, farben in enumerate(SCHICHTEN):
+        rs = random.Random(70 + k)
+        dx = 3 * math.sin(2 * math.pi * fr / N_FRAMES + k * 2.1)
+        kreise = []
+        y = -10 + k * 9
+        while y < Hh + 30:
+            x = rs.randrange(-60, 0)
+            while x < W + 40:
+                n = rs.randint(3, 7)                # Wolkenbank: Kette von Baeuschen, Mitte hoeher
+                for i in range(n):
+                    r = rs.randint(12, 20) + int(8 * math.sin(math.pi * (i + 0.5) / n))
+                    kreise.append((x + dx, y - int(6 * math.sin(math.pi * (i + 0.5) / n)) + rs.randint(-3, 3), r))
+                    x += int(r * 1.1)
+                x += rs.randint(20, 60) + k * 45
+            y += 26 + k * 9
+        wolkenschicht(a, kreise, farben)
+    return a
+
+
+def wolken_vorne(a, insel_hart, punkte, frame):
+    """Wolkenbank vor dem Fuss der Felswaende: die Insel schwebt im Wolkenmeer."""
+    rs = random.Random(31)
+    dx = 2 * math.sin(2 * math.pi * (frame or 0) / N_FRAMES + 1.3)
+    kreise = [(x + rs.randint(-6, 6) + dx, y + rs.randint(-4, 4), rs.randint(11, 19)) for (x, y) in punkte]
+    wolkenschicht(a, kreise, SCHICHTEN[2], ~insel_hart)
 
 
 def teefeld(a, m, frame):
@@ -311,6 +405,44 @@ def digitalfeld(a, m, frame):
             a[y, x] = H('#3a2e22'); a[y + 1, x] = H('#30261c'); a[y + 2, x] = H('#262836')
 
 
+def beete(a, frame):
+    """Hochbeete: Holzrahmen (Licht oben links), dunkle, gelockerte Erde mit Furchenreihen, Schatten rechts unten."""
+    pfad = os.path.join(KARTE, 'beete.json')
+    if not os.path.exists(pfad):
+        return
+    HOLZ = [H('#3a2414'), H('#6a4426'), H('#8a5c34'), H('#a87444'), H('#c48e58')]
+    ERDE = [H('#2e2018'), H('#3e2c1e'), H('#4c3624'), H('#5c442e'), H('#6c5238')]
+    for (x0, x1, y0, y1) in json.load(open(pfad)):
+        # Schatten
+        a[y1:y1 + 3, x0 + 3:x1 + 3] = (a[y1:y1 + 3, x0 + 3:x1 + 3] * 0.72).astype(np.uint8)
+        a[y0 + 3:y1, x1:x1 + 3] = (a[y0 + 3:y1, x1:x1 + 3] * 0.72).astype(np.uint8)
+        rs = random.Random(x0 * 7 + y0)
+        for y in range(y0, y1):
+            for x in range(x0, x1):
+                dy, dx = y - y0, x - x0
+                rand = dy < 3 or dy >= y1 - y0 - 3 or dx < 3 or dx >= x1 - x0 - 3
+                if rand:
+                    aussen = dy == 0 or dx == 0 or dy == y1 - y0 - 1 or dx == x1 - x0 - 1
+                    if aussen:
+                        c = HOLZ[0]
+                    elif dy == 1 or dx == 1:
+                        c = HOLZ[4] if dy == 1 else HOLZ[3]
+                    elif dy >= y1 - y0 - 3 or dx >= x1 - x0 - 3:
+                        c = HOLZ[1]
+                    else:
+                        c = HOLZ[2]
+                    if not aussen and dy in (1, 2, y1 - y0 - 3, y1 - y0 - 2) and (x - x0) % 23 == 22:
+                        c = HOLZ[0]                                   # Brettfuge
+                else:
+                    f = (dy - 3) % 6                                  # Furchen: Kamm hell, Tal dunkel
+                    c = ERDE[[3, 4, 3, 2, 1, 2][f]]
+                    if rs.random() < 0.05:
+                        c = ERDE[0] if rs.random() < 0.5 else ERDE[4]
+                    if dy == 3 or dx == 3:
+                        c = ERDE[0]                                   # Innenschatten am Rahmen
+                a[y, x] = c
+
+
 def steinbruecke(img, x0, x1, y0, y1):
     """Steinbruecke: Steinplatten-Deck im Verband, niedrige Bruestung mit Pfeilern oben und unten, Schatten."""
     px = img.load()
@@ -349,10 +481,9 @@ def bauen(frame=None, speichern=True):
     cls = lay['klassen']
     hoehe = np.array([[int(c) for c in r] for r in lay['hoehe']])
     Wp, Hp = COLS * T, ROWS * T
-    a = wolken(frame)
-    berg = weich(zell_maske(cls, 'b', COLS, ROWS), 4, 0.5, 19)
-    a[berg] = bergboden(frame)[berg]
-    insel = weich(zell_maske([''.join('1' if 1 <= v <= 3 else '0' for v in r) for r in hoehe], '1', COLS, ROWS), 5, 0.3, 20) & ~berg
+    a = wolkenmeer(frame)
+    insel_hart = zell_maske([''.join('1' if 1 <= v <= 3 else '0' for v in r) for r in hoehe], '1', COLS, ROWS)
+    insel = weich(insel_hart, 3, 0, 20)
     gras = flaeche(kacheln(os.path.join(ROOT, 'assets', 'basis', 'gras_%d.png'), 5))
     a[insel] = gras[insel]
     schnee = flaeche(kacheln(os.path.join(ROOT, 'assets', 'karte05', 'basis', 's_%d.png'), 5))
@@ -367,22 +498,36 @@ def bauen(frame=None, speichern=True):
     a[pm] = pflaster[pm]
     rand = pm & ~(np.roll(pm, 1, 0) & np.roll(pm, -1, 0) & np.roll(pm, 1, 1) & np.roll(pm, -1, 1))
     a[rand] = H('#4a505a')
-    tm = weich(zell_maske(cls, 't', COLS, ROWS), 1.5, 0, 8) & insel
-    digitalfeld(a, tm, frame)
+    beete(a, frame)
     # Hoehenkanten: Insel -> Wolken (tiefe Felsfront), Stufen 1->2->3 mit Treppen
     m1 = insel
-    m2 = weich(zell_maske([''.join('1' if 2 <= v <= 3 else '0' for v in r) for r in hoehe], '1', COLS, ROWS), 4, 0.25, 21) & ~berg
-    m3 = weich(zell_maske([''.join('1' if v == 3 else '0' for v in r) for r in hoehe], '1', COLS, ROWS), 4, 0.25, 22) & ~berg
+    m2 = weich(zell_maske([''.join('1' if 2 <= v <= 3 else '0' for v in r) for r in hoehe], '1', COLS, ROWS), 4, 0.25, 21) 
+    m3 = weich(zell_maske([''.join('1' if v == 3 else '0' for v in r) for r in hoehe], '1', COLS, ROWS), 4, 0.25, 22) 
     frei = np.zeros((Hp, Wp), bool)
     treppen = []
     for (x0, x1, y0, y1) in lay['treppen']:
         frei[y0 * T:(y1 + 1) * T, x0 * T - 6:(x1 + 1) * T + 6] = True
         treppen.append((x0, x1, y0, y1))
-    k4.hoehenkanten(a, berg, 'wolkenfels', 56, 10, LIPPE_FELS, np.zeros((Hp, Wp), bool), 10, berg=True)
     k4.hoehenkanten(a, m3, 'wolkenfels', 48, 8, LIPPE_SCHNEE, frei, 13, berg=True)
     k4.hoehenkanten(a, m2, 'wolkenfels', 48, 8, LIPPE_GRAS, frei, 12, berg=True)
-    spalt = weich(zell_maske(cls, 'o', COLS, ROWS), 2, 0, 18)
-    k4.hoehenkanten(a, ~spalt, 'wolkenfels', 64, 8, LIPPE_SCHNEE, np.zeros((Hp, Wp), bool), 11, berg=True)
+    k4.hoehenkanten(a, insel, 'wolkenfels', 64, 8, LIPPE_SCHNEE, np.zeros((Hp, Wp), bool), 11, berg=True)
+    # Wolken vor dem Wandfuss (Sueden) und an den Seiten
+    unten = []
+    for x in range(0, Wp, 14):
+        ys = np.nonzero(insel[:, x])[0]
+        if len(ys):
+            for y in ys:
+                if y + 1 < Hp and not insel[y + 1, x] and (y + 70 >= Hp or not insel[y + 70, x]):
+                    unten.append((x, y + 62))
+    rs_ = random.Random(5)
+    for y in range(0, Hp, 22):                     # an den Seiten nur vereinzelte Baeusche
+        xs = np.nonzero(insel[y])[0]
+        for x in xs:
+            if x + 1 < Wp and not insel[y, x + 1] and rs_.random() < 0.45:
+                unten.append((x + rs_.randint(10, 22), y))
+            if x > 0 and not insel[y, x - 1] and rs_.random() < 0.45:
+                unten.append((x - rs_.randint(10, 22), y))
+    wolken_vorne(a, weich(insel_hart, 3, 0, 20), unten, frame)
     img = Image.fromarray(a).convert('RGBA')
     alt = bauwerke.S
     bauwerke.S = [H(c) + (255,) for c in k4.FELS['wolkenfels']]
@@ -401,8 +546,10 @@ def bauen(frame=None, speichern=True):
     for tp in lay['teleporter']:
         k4.teleporter_zeichnen(a, tp['x'], tp['y'], tp['b'], tp['h'], frame)
     img = Image.fromarray(a).convert('RGBA')
-    roter_zaun(img, [(77, 96, 4, 'h'), (77, 96, 24, 'h'), (96, 4, 24, 'v'), (71, 77, 31, 'h'), (83, 89, 31, 'h'),
-                     (96, 63, 80, 'v')])
+    r = RAND
+    roter_zaun(img, [(a_ + r, b_ + r, c_ + r, d_) for (a_, b_, c_, d_) in
+                     [(77, 96, 4, 'h'), (77, 96, 24, 'h'), (96, 4, 24, 'v'), (71, 77, 31, 'h'), (83, 89, 31, 'h'),
+                      (96, 63, 80, 'v')]])
     if speichern and frame is None:
         img.save(os.path.join(KARTE, 'terrain_basis.png'))
     pf = os.path.join(OBJ, 'platzierung.json')
