@@ -45,6 +45,9 @@ PALETTE = [
 ]
 
 OBJEKTGRUPPEN = {
+    'zelt_strand': {'size': 96, 'items': [
+        'large teal canvas beach camping tent with an open front flap showing a cozy sleeping bag inside, wooden poles, guy ropes with pegs, small flag on top, straight front view',
+    ]},
     'baeume': {'size': 48, 'items': [
         'round leafy deciduous tree, big clumped canopy of rounded leaf puffs, short brown trunk with roots',
         'round leafy deciduous tree, slightly wider canopy, visible brown trunk',

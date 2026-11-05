@@ -23,22 +23,11 @@ ALGE = [H(c) for c in ('#1e5a44', '#2c7a52', '#43a05e', '#6cc472')]
 
 
 # ---------------------------------------------------------------- Felsen
-def fels_maske(rx, ry, seed):
-    """Unregelmaessiger, gerundeter Felsumriss (bool-Array) und Hilfsfelder u, v (-1..1)."""
-    rs = random.Random(seed)
-    w, h = int(2 * rx + 3), int(2 * ry + 3)
-    cx, cy = w / 2, h / 2
-    ph = [rs.random() * 6.28 for _ in range(3)]
-    yy, xx = np.mgrid[0:h, 0:w]
-    ang = np.arctan2(yy - cy, xx - cx)
-    r = 1 + 0.12 * np.sin(3 * ang + ph[0]) + 0.08 * np.sin(5 * ang + ph[1]) + 0.05 * np.sin(7 * ang + ph[2])
-    d = ((xx - cx) / rx) ** 2 + ((yy - cy) / ry) ** 2
-    m = d <= r ** 2
-    return m, (xx - cx) / rx, (yy - cy) / ry
+BRAUN = [H(c) for c in ('#2e1c12', '#4a2e1c', '#6a4328', '#8a5a36', '#ab7646', '#cf9a62', '#ebc28a')]
 
 
 def passt(zone, cx, cy, rx, ry, rand=4):
-    """Liegt der Fels (Ellipse + rand) vollstaendig in der Zone?"""
+    """Liegt die Grundflaeche (Ellipse + rand) vollstaendig in der Zone?"""
     Hh, W = zone.shape
     x0, x1, y0, y1 = int(cx - rx - rand), int(cx + rx + rand), int(cy - ry - rand), int(cy + ry + rand)
     if x0 < 0 or y0 < 0 or x1 >= W or y1 >= Hh:
@@ -47,58 +36,81 @@ def passt(zone, cx, cy, rx, ry, rand=4):
 
 
 def fels(a, cx, cy, rx, ry, wasser, tiefe, raus, hoehe, frame, seed):
-    """Fels zeichnen. wasser: Wasserfarbe der Stufe (RGB), tiefe 0..1 (Toenung unter Wasser).
-    raus: ragt heraus (hoehe px ueber der Wasserlinie), sonst komplett unter Wasser."""
-    m, u, v = fels_maske(rx, ry + (hoehe / 2 if raus else 0), seed)
-    h, w = m.shape
-    X0, Y0 = int(cx - w / 2), int(cy + ry - h + 1)
-    Hh, W = a.shape[:2]
-    lin = 0.35 if raus else 99.0                      # Wasserlinie (in v) - darunter ist der Fels nass/unter Wasser
-    # Schatten / Dunkelzone im Wasser rechts unten
-    for y in range(h):
-        for x in range(w):
-            if m[y, x]:
-                X, Y = X0 + x + 2, Y0 + y + 2
-                if 0 <= X < W and 0 <= Y < Hh and not (0 <= x + 2 < w and 0 <= y + 2 < h and m[y + 2, x + 2]):
-                    a[Y, X] = a[Y, X] * 0.8
+    """Spitzer brauner Fels (Stalagmit) mit Haupt- und Nebenspitzen. Grundflaeche = Ellipse (rx, ry) um
+    (cx, cy) auf dem Grund. raus: ragt hoehe px aus dem Wasser (trocken oben, nasser Streifen, Schaumring);
+    sonst komplett unter Wasser (je nach Tiefe mit der Wasserfarbe getoent)."""
     rs = random.Random(seed)
-    for y in range(h):
-        for x in range(w):
-            if not m[y, x]:
-                continue
-            X, Y = X0 + x, Y0 + y
-            if not (0 <= X < W and 0 <= Y < Hh):
-                continue
-            uu, vv = u[y, x], v[y, x]
-            rand_ = not (m[max(0, y - 1), x] and m[min(h - 1, y + 1), x] and m[y, max(0, x - 1)] and m[y, min(w - 1, x + 1)])
-            t = uu + vv
-            i = 4 if t < -0.9 else 3 if t < -0.2 else 2 if t < 0.5 else 1
-            if rand_:
-                i = 0 if t > -0.3 else 1
-            if (x * 7 + y * 5 + seed) % 23 == 0 and not rand_:
-                i = max(0, i - 1)                           # Riss/Pore
-            c = STEIN[i].copy()
-            unter = (not raus) or vv > lin
+    Hh, W = a.shape[:2]
+    Hges = max(6, hoehe)
+    unter_mix = 0.5 + 0.3 * tiefe
+
+    def setz(x, y, c, unter):
+        if 0 <= x < W and 0 <= y < Hh:
             if unter:
-                c = c * (1 - 0.55 - 0.25 * tiefe) + wasser * (0.55 + 0.25 * tiefe)
-            elif raus and vv > lin - 0.22:
-                c = c * 0.72                                # nasser Streifen ueber der Wasserlinie
-            a[Y, X] = np.clip(c, 0, 255)
-    if raus:                                                # Schaumring an der Wasserlinie (Luecken wandern)
-        for y in range(h):
-            for x in range(w):
-                if not m[y, x]:
+                c = c * (1 - unter_mix) + wasser * unter_mix
+            a[y, x] = np.clip(c, 0, 255)
+
+    # Schatten rechts unten auf dem Wasser
+    for y in range(int(cy - ry), int(cy + ry * 1.6) + 1):
+        for x in range(int(cx - rx * 0.2), int(cx + rx * 1.8) + 1):
+            if ((x - cx - rx * 0.7) / (rx * 1.1)) ** 2 + ((y - cy - 2) / (ry * 0.9)) ** 2 <= 1 and 0 <= x < W and 0 <= y < Hh:
+                a[y, x] = a[y, x] * 0.8
+    # Sockel (Ellipse): vordere Haelfte liegt im Wasser
+    for y in range(int(cy - ry), int(cy + ry) + 1):
+        for x in range(int(cx - rx), int(cx + rx) + 1):
+            u, v = (x - cx) / rx, (y - cy) / ry
+            if u * u + v * v > 1:
+                continue
+            i = 4 if u + v < -0.6 else 3 if u + v < 0.2 else 2
+            if u * u + v * v > 0.75:
+                i = 1
+            setz(x, y, BRAUN[i], (not raus) or v > -0.1)
+    # Spitzen: Nebenspitzen zuerst, dann die Hauptspitze
+    kegel = []
+    for _ in range(rs.choice((1, 2, 2))):
+        seite = rs.choice((-1, 1))
+        kegel.append((seite * rx * rs.uniform(0.35, 0.6), rx * rs.uniform(0.35, 0.5), Hges * rs.uniform(0.45, 0.7),
+                      rs.uniform(-2, 2)))
+    kegel.append((rs.uniform(-1.5, 1.5), rx * 0.72, Hges, rs.uniform(-3, 3)))
+    for (dx, bw, hk, biege) in kegel:
+        hk = int(hk)
+        for k in range(hk + 1):
+            t = k / max(1, hk)
+            w = bw * (1 - t) ** 0.85 + 0.6 * math.sin(k * 1.7 + seed)
+            if w < 0.6:
+                continue
+            xc = cx + dx + biege * t * t
+            y = int(round(cy - ry * 0.2 - k))
+            for x in range(int(math.floor(xc - w)), int(math.ceil(xc + w)) + 1):
+                r = (x - xc) / max(w, 1)
+                if abs(r) > 1:
                     continue
-                vv = v[y, x]
-                if abs(vv - lin) < 0.09 or (vv > lin and not m[min(h - 1, y + 1), x]):
-                    X, Y = X0 + x, Y0 + y
-                    if 0 <= X < W and 0 <= Y < Hh and (x + (frame or 0)) % 5 != 0:
-                        a[Y, X] = SCHAUM
-        for k in range(-2, w + 2):                          # Schaum seitlich auf dem Wasser
-            X = X0 + k
-            Y = int(Y0 + h / 2 + lin * h / 2) + (1 if (k + (frame or 0)) % 4 < 2 else 2)
-            if 0 <= X < W and 0 <= Y < Hh and (k < 1 or k > w - 2) and (k + (frame or 0)) % 3:
-                a[Y, X] = a[Y, X] * 0.4 + SCHAUM * 0.6
+                i = 5 if r < -0.45 else 4 if r < 0 else 3 if r < 0.45 else 2
+                if r > 0.82:
+                    i = 0
+                elif r < -0.82:
+                    i = 2
+                if (int(x - xc) + k // 3) % 4 == 0 and abs(r) < 0.8:
+                    i = max(0, i - 1)                     # senkrechte Rillen
+                if t > 0.82:
+                    i = min(6, i + 1)                     # helle Spitze
+                c = BRAUN[i]
+                unter = not raus
+                if raus and k < 3:
+                    c = c * 0.72                          # nasser Streifen ueber der Wasserlinie
+                setz(x, y, c, unter)
+    if raus:                                              # Schaumring um den Fuss (Luecken wandern)
+        fr = frame or 0
+        for x in range(int(cx - rx - 2), int(cx + rx + 3)):
+            u = (x - cx) / (rx + 1.5)
+            if abs(u) > 1:
+                continue
+            y = int(round(cy + (ry + 0.5) * math.sqrt(max(0, 1 - u * u)) * 0.55))
+            if (x + fr) % 5 and 0 <= x < W and 0 <= y < Hh:
+                a[y, x] = SCHAUM
+            y2 = int(round(cy - ry * 0.25))
+            if abs(u) > 0.8 and (x + fr) % 3 and 0 <= x < W and 0 <= y2 < Hh:
+                a[y2, x] = a[y2, x] * 0.4 + SCHAUM * 0.6
 
 
 def felsen_setzen(a, zonen, wasserfarben, tiefen, regeln, frame, seed, meiden=None, anzahl=None):
@@ -121,16 +133,19 @@ def felsen_setzen(a, zonen, wasserfarben, tiefen, regeln, frame, seed, meiden=No
             k = rs.randrange(len(ys))
             cx, cy = int(xs[k]), int(ys[k])
             art, rx, ry, hoehe = rs.choice(regeln[i])
+            if art == 'unter' and hoehe == 0:
+                hoehe = int(ry * rs.uniform(2.0, 3.0))
             rx_, ry_ = rx * rs.uniform(0.85, 1.15), ry * rs.uniform(0.85, 1.15)
             ry_eff = ry_ + (hoehe / 2 if art == 'raus' else 0)
             if not passt(z, cx, cy, rx_, ry_, 2):              # Grundflaeche muss auf einer Stufe liegen
                 continue
-            if belegt[max(0, cy - int(ry_ + hoehe) - 6):cy + int(ry_) + 7, max(0, cx - int(rx_) - 6):cx + int(rx_) + 7].any():
+            if belegt[max(0, cy - int(ry_ + hoehe * 2.2) - 4):cy + int(ry_) + 7, max(0, cx - int(rx_) - 6):cx + int(rx_) + 7].any():
                 continue
-            belegt[max(0, cy - int(ry_ + hoehe)):cy + int(ry_) + 1, max(0, cx - int(rx_)):cx + int(rx_) + 1] = True
+            belegt[max(0, cy - int(ry_ + hoehe * 2.2)):cy + int(ry_) + 1, max(0, cx - int(rx_)):cx + int(rx_) + 1] = True
             gesetzt.append((i, art, cx, cy, rx_, ry_, hoehe, rs.randrange(10000)))
             n += 1
     for (i, art, cx, cy, rx, ry, hoehe, s) in sorted(gesetzt, key=lambda g: g[3]):
+        hoehe = hoehe * (2.2 if art == 'raus' else 1)                # spitze Felsnadeln: hoch
         fels(a, cx, cy, rx, ry, wasserfarben[i], tiefen[i], art == 'raus', hoehe, frame, s)
     return belegt
 
