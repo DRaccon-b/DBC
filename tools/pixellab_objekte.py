@@ -19,6 +19,7 @@ OUT_K3 = os.path.join(ROOT, 'assets', 'objekte', 'karte03')
 OUT_K4 = os.path.join(ROOT, 'assets', 'objekte', 'karte04')
 OUT_K5 = os.path.join(ROOT, 'assets', 'objekte', 'karte05')
 OUT_K6 = os.path.join(ROOT, 'assets', 'objekte', 'karte06')
+OUT_K7 = os.path.join(ROOT, 'assets', 'objekte', 'karte07')
 API = 'https://api.pixellab.ai'
 
 STIL = ("Top-down RPG map object in polished handheld monster-collecting RPG pixel art: colored dark outline "
@@ -414,6 +415,27 @@ OBJEKTGRUPPEN_K6 = {
     ]},
 }
 
+OBJEKTGRUPPEN_K7 = {
+    'k7_pagode': {'size': 240, 'items': [
+        'three story asian pagoda temple with dark blue curved tiled roofs, red wooden walls and pillars, golden ornaments, stone base with steps, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+    ]},
+    'k7_gross': {'size': 128, 'items': [
+        'golden dragon shrine altar on a grey stone platform with steps, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'red japanese torii gate, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'small wooden pavilion gazebo with a dark teal curved roof and red pillars, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'tall jagged grey rock spire with moss rising out of clouds, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+    ]},
+    'k7_mittel': {'size': 64, 'items': [
+        'stone japanese lantern toro, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style', 'red paper lantern hanging on a wooden post, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'tall glowing teal crystal obelisk on a stone pedestal, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style', 'cluster of teal crystals growing from a rock, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'small bonsai pine tree with a flat windswept crown, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style', 'bamboo cluster, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'snow covered pine tree, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style', 'snow covered grey boulder, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style', 'grey mossy boulder, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'small stone incense burner, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style', 'wooden prayer bench, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style', 'small stone buddha statue, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'purple glowing swirling vortex portal, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style', 'broken dark stone pillar rubble with purple crystals, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'red wooden fence segment, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style', 'stone well, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+    ]},
+}
+
 OBJEKTGRUPPEN_K3 = {
     'k3_klein': {'size': 32, 'items': [
         'small green saguaro cactus', 'tall green saguaro cactus with two arms', 'small round barrel cactus', 'prickly pear cactus',
@@ -551,7 +573,9 @@ def herunterladen(oid, d):
 
 
 def speichern(gruppe, ims, ids):
-    if gruppe.startswith('k6_'):
+    if gruppe.startswith('k7_'):
+        ziel = os.path.join(OUT_K7, gruppe[3:])
+    elif gruppe.startswith('k6_'):
         ziel = os.path.join(OUT_K6, gruppe[3:])
     elif gruppe.startswith('k5_'):
         ziel = os.path.join(OUT_K5, gruppe[3:])
@@ -585,8 +609,8 @@ def erzeugen(gruppe):
     k3 = gruppe.startswith('k3_')
     k4 = gruppe.startswith('k4_')
     k5 = gruppe.startswith('k5_')
-    k6 = gruppe.startswith('k6_')
-    g = (OBJEKTGRUPPEN_K6 if k6 else OBJEKTGRUPPEN_K5 if k5 else OBJEKTGRUPPEN_K4 if k4 else OBJEKTGRUPPEN_K3 if k3 else OBJEKTGRUPPEN_K2 if k2 else OBJEKTGRUPPEN)[gruppe]
+    k6 = gruppe.startswith('k6_') or gruppe.startswith('k7_')
+    g = (OBJEKTGRUPPEN_K7 if gruppe.startswith('k7_') else OBJEKTGRUPPEN_K6 if k6 else OBJEKTGRUPPEN_K5 if k5 else OBJEKTGRUPPEN_K4 if k4 else OBJEKTGRUPPEN_K3 if k3 else OBJEKTGRUPPEN_K2 if k2 else OBJEKTGRUPPEN)[gruppe]
     stil, palette = (STIL, PALETTE) if k6 else (STIL_K5, PALETTE_K5) if k5 else (STIL_K4, PALETTE_K4) if k4 else (STIL_K3, PALETTE_K3) if k3 else (STIL_K2, PALETTE_K2) if k2 else (STIL, PALETTE)
     req = {'description': stil, 'size': g['size'], 'view': 'top-down',
            'item_descriptions': [it + '. ' + stil for it in g['items']],
