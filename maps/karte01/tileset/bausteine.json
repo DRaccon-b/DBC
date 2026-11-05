@@ -1,0 +1,505 @@
+{
+ "tile_size": 16,
+ "kacheln": [
+  {
+   "name": "gras_0",
+   "x": 0,
+   "y": 0
+  },
+  {
+   "name": "gras_1",
+   "x": 16,
+   "y": 0
+  },
+  {
+   "name": "gras_2",
+   "x": 32,
+   "y": 0
+  },
+  {
+   "name": "gras_3",
+   "x": 48,
+   "y": 0
+  },
+  {
+   "name": "gras_4",
+   "x": 64,
+   "y": 0
+  },
+  {
+   "name": "sand_0",
+   "x": 80,
+   "y": 0
+  },
+  {
+   "name": "sand_1",
+   "x": 96,
+   "y": 0
+  },
+  {
+   "name": "sand_2",
+   "x": 112,
+   "y": 0
+  },
+  {
+   "name": "sand_3",
+   "x": 128,
+   "y": 0
+  },
+  {
+   "name": "sand_4",
+   "x": 144,
+   "y": 0
+  },
+  {
+   "name": "wasser_0",
+   "x": 160,
+   "y": 0
+  },
+  {
+   "name": "wasser_1",
+   "x": 176,
+   "y": 0
+  },
+  {
+   "name": "wasser_2",
+   "x": 192,
+   "y": 0
+  },
+  {
+   "name": "wasser_3",
+   "x": 208,
+   "y": 0
+  },
+  {
+   "name": "wasser_4",
+   "x": 224,
+   "y": 0
+  },
+  {
+   "name": "meer_0",
+   "x": 240,
+   "y": 0
+  },
+  {
+   "name": "meer_1",
+   "x": 0,
+   "y": 16
+  },
+  {
+   "name": "meer_2",
+   "x": 16,
+   "y": 16
+  },
+  {
+   "name": "meer_3",
+   "x": 32,
+   "y": 16
+  },
+  {
+   "name": "meer_4",
+   "x": 48,
+   "y": 16
+  },
+  {
+   "name": "gras_weg:wang_13",
+   "x": 64,
+   "y": 16
+  },
+  {
+   "name": "gras_weg:wang_10",
+   "x": 80,
+   "y": 16
+  },
+  {
+   "name": "gras_weg:wang_4",
+   "x": 96,
+   "y": 16
+  },
+  {
+   "name": "gras_weg:wang_12",
+   "x": 112,
+   "y": 16
+  },
+  {
+   "name": "gras_weg:wang_6",
+   "x": 128,
+   "y": 16
+  },
+  {
+   "name": "gras_weg:wang_8",
+   "x": 144,
+   "y": 16
+  },
+  {
+   "name": "gras_weg:wang_0",
+   "x": 160,
+   "y": 16
+  },
+  {
+   "name": "gras_weg:wang_1",
+   "x": 176,
+   "y": 16
+  },
+  {
+   "name": "gras_weg:wang_11",
+   "x": 192,
+   "y": 16
+  },
+  {
+   "name": "gras_weg:wang_3",
+   "x": 208,
+   "y": 16
+  },
+  {
+   "name": "gras_weg:wang_2",
+   "x": 224,
+   "y": 16
+  },
+  {
+   "name": "gras_weg:wang_5",
+   "x": 240,
+   "y": 16
+  },
+  {
+   "name": "gras_weg:wang_15",
+   "x": 0,
+   "y": 32
+  },
+  {
+   "name": "gras_weg:wang_14",
+   "x": 16,
+   "y": 32
+  },
+  {
+   "name": "gras_weg:wang_9",
+   "x": 32,
+   "y": 32
+  },
+  {
+   "name": "gras_weg:wang_7",
+   "x": 48,
+   "y": 32
+  },
+  {
+   "name": "wasser_gras:wang_13",
+   "x": 64,
+   "y": 32
+  },
+  {
+   "name": "wasser_gras:wang_10",
+   "x": 80,
+   "y": 32
+  },
+  {
+   "name": "wasser_gras:wang_4",
+   "x": 96,
+   "y": 32
+  },
+  {
+   "name": "wasser_gras:wang_12",
+   "x": 112,
+   "y": 32
+  },
+  {
+   "name": "wasser_gras:wang_6",
+   "x": 128,
+   "y": 32
+  },
+  {
+   "name": "wasser_gras:wang_8",
+   "x": 144,
+   "y": 32
+  },
+  {
+   "name": "wasser_gras:wang_0",
+   "x": 160,
+   "y": 32
+  },
+  {
+   "name": "wasser_gras:wang_1",
+   "x": 176,
+   "y": 32
+  },
+  {
+   "name": "wasser_gras:wang_11",
+   "x": 192,
+   "y": 32
+  },
+  {
+   "name": "wasser_gras:wang_3",
+   "x": 208,
+   "y": 32
+  },
+  {
+   "name": "wasser_gras:wang_2",
+   "x": 224,
+   "y": 32
+  },
+  {
+   "name": "wasser_gras:wang_5",
+   "x": 240,
+   "y": 32
+  },
+  {
+   "name": "wasser_gras:wang_15",
+   "x": 0,
+   "y": 48
+  },
+  {
+   "name": "wasser_gras:wang_14",
+   "x": 16,
+   "y": 48
+  },
+  {
+   "name": "wasser_gras:wang_9",
+   "x": 32,
+   "y": 48
+  },
+  {
+   "name": "wasser_gras:wang_7",
+   "x": 48,
+   "y": 48
+  },
+  {
+   "name": "wasser_sand:wang_13",
+   "x": 64,
+   "y": 48
+  },
+  {
+   "name": "wasser_sand:wang_10",
+   "x": 80,
+   "y": 48
+  },
+  {
+   "name": "wasser_sand:wang_4",
+   "x": 96,
+   "y": 48
+  },
+  {
+   "name": "wasser_sand:wang_12",
+   "x": 112,
+   "y": 48
+  },
+  {
+   "name": "wasser_sand:wang_6",
+   "x": 128,
+   "y": 48
+  },
+  {
+   "name": "wasser_sand:wang_8",
+   "x": 144,
+   "y": 48
+  },
+  {
+   "name": "wasser_sand:wang_0",
+   "x": 160,
+   "y": 48
+  },
+  {
+   "name": "wasser_sand:wang_1",
+   "x": 176,
+   "y": 48
+  },
+  {
+   "name": "wasser_sand:wang_11",
+   "x": 192,
+   "y": 48
+  },
+  {
+   "name": "wasser_sand:wang_3",
+   "x": 208,
+   "y": 48
+  },
+  {
+   "name": "wasser_sand:wang_2",
+   "x": 224,
+   "y": 48
+  },
+  {
+   "name": "wasser_sand:wang_5",
+   "x": 240,
+   "y": 48
+  },
+  {
+   "name": "wasser_sand:wang_15",
+   "x": 0,
+   "y": 64
+  },
+  {
+   "name": "wasser_sand:wang_14",
+   "x": 16,
+   "y": 64
+  },
+  {
+   "name": "wasser_sand:wang_9",
+   "x": 32,
+   "y": 64
+  },
+  {
+   "name": "wasser_sand:wang_7",
+   "x": 48,
+   "y": 64
+  },
+  {
+   "name": "meer_sand:wang_13",
+   "x": 64,
+   "y": 64
+  },
+  {
+   "name": "meer_sand:wang_10",
+   "x": 80,
+   "y": 64
+  },
+  {
+   "name": "meer_sand:wang_4",
+   "x": 96,
+   "y": 64
+  },
+  {
+   "name": "meer_sand:wang_12",
+   "x": 112,
+   "y": 64
+  },
+  {
+   "name": "meer_sand:wang_6",
+   "x": 128,
+   "y": 64
+  },
+  {
+   "name": "meer_sand:wang_8",
+   "x": 144,
+   "y": 64
+  },
+  {
+   "name": "meer_sand:wang_0",
+   "x": 160,
+   "y": 64
+  },
+  {
+   "name": "meer_sand:wang_1",
+   "x": 176,
+   "y": 64
+  },
+  {
+   "name": "meer_sand:wang_11",
+   "x": 192,
+   "y": 64
+  },
+  {
+   "name": "meer_sand:wang_3",
+   "x": 208,
+   "y": 64
+  },
+  {
+   "name": "meer_sand:wang_2",
+   "x": 224,
+   "y": 64
+  },
+  {
+   "name": "meer_sand:wang_5",
+   "x": 240,
+   "y": 64
+  },
+  {
+   "name": "meer_sand:wang_15",
+   "x": 0,
+   "y": 80
+  },
+  {
+   "name": "meer_sand:wang_14",
+   "x": 16,
+   "y": 80
+  },
+  {
+   "name": "meer_sand:wang_9",
+   "x": 32,
+   "y": 80
+  },
+  {
+   "name": "meer_sand:wang_7",
+   "x": 48,
+   "y": 80
+  },
+  {
+   "name": "meer_wasser:wang_13",
+   "x": 64,
+   "y": 80
+  },
+  {
+   "name": "meer_wasser:wang_10",
+   "x": 80,
+   "y": 80
+  },
+  {
+   "name": "meer_wasser:wang_4",
+   "x": 96,
+   "y": 80
+  },
+  {
+   "name": "meer_wasser:wang_12",
+   "x": 112,
+   "y": 80
+  },
+  {
+   "name": "meer_wasser:wang_6",
+   "x": 128,
+   "y": 80
+  },
+  {
+   "name": "meer_wasser:wang_8",
+   "x": 144,
+   "y": 80
+  },
+  {
+   "name": "meer_wasser:wang_0",
+   "x": 160,
+   "y": 80
+  },
+  {
+   "name": "meer_wasser:wang_1",
+   "x": 176,
+   "y": 80
+  },
+  {
+   "name": "meer_wasser:wang_11",
+   "x": 192,
+   "y": 80
+  },
+  {
+   "name": "meer_wasser:wang_3",
+   "x": 208,
+   "y": 80
+  },
+  {
+   "name": "meer_wasser:wang_2",
+   "x": 224,
+   "y": 80
+  },
+  {
+   "name": "meer_wasser:wang_5",
+   "x": 240,
+   "y": 80
+  },
+  {
+   "name": "meer_wasser:wang_15",
+   "x": 0,
+   "y": 96
+  },
+  {
+   "name": "meer_wasser:wang_14",
+   "x": 16,
+   "y": 96
+  },
+  {
+   "name": "meer_wasser:wang_9",
+   "x": 32,
+   "y": 96
+  },
+  {
+   "name": "meer_wasser:wang_7",
+   "x": 48,
+   "y": 96
+  }
+ ]
+}
