@@ -22,10 +22,17 @@ for i in (1, 2, 3, 5, 6, 8, 10, 26, 27, 31):
 for i in (0, 4, 13):
     FREMD['k05/klein%02d' % i] = 'karte05/klein/%02d.png' % i
 # Einbettung: Bueschel und Blumen vor dem Sockel von Felsen, Baeumen, Kristallen, Stuempfen
-BUESCHEL_GRAS = ['k01/deko06', 'k01/deko05', 'k01/deko26']
-BLUMEN_GRAS = ['k01/deko01', 'k01/deko02', 'k01/deko03', 'k01/deko27']
-BUESCHEL_SCHNEE = ['k05/klein00', 'k05/klein13']
-BLUMEN_SCHNEE = ['k05/klein04']
+# neue Deko-Sets (PixelLab k7_deko_*) + bewaehrte aus Karte 01/05
+G_, S_, ST_ = 'deko_gras/%02d', 'deko_schnee/%02d', 'deko_stein/%02d'
+BUESCHEL_GRAS = ['k01/deko06', 'k01/deko05', 'k01/deko26'] + [G_ % i for i in (0, 1, 2, 3, 11, 12, 15, 40, 43, 50, 52, 54, 58, 59, 63)]
+BLUMEN_GRAS = ['k01/deko01', 'k01/deko02', 'k01/deko03', 'k01/deko27'] + [G_ % i for i in (4, 5, 6, 7, 8, 9, 13, 14, 29, 32, 39, 42, 48, 55, 57, 62)]
+KLEINKRAM_GRAS = [G_ % i for i in (10, 16, 17, 38, 56, 19, 27)]
+BUESCHEL_SCHNEE = ['k05/klein00', 'k05/klein13'] + [S_ % i for i in (0, 1, 2, 12, 15, 21, 23, 29, 34, 35, 39, 50, 53)]
+BLUMEN_SCHNEE = ['k05/klein04'] + [S_ % i for i in (5, 6, 9, 14, 28, 30, 31, 36, 41, 44, 45)]
+KLEINKRAM_SCHNEE = [S_ % i for i in (8, 18, 19, 47, 52, 58, 59)]
+DEKO_FELS = [ST_ % i for i in (0, 1, 3, 6, 10, 14, 19, 34, 36, 43, 47, 54)]
+BAMBUS_GRAS, BAMBUS_SCHNEE = ['bambus/00', 'bambus/02'], ['bambus/01', 'bambus/03']
+BAUM_BAMBUS = {'neu/00', 'neu/01', 'turm/03'}
 DEKO_GRAS = ['k01/deko05', 'k01/deko06', 'k01/deko26', 'k01/deko27']
 WIND = {'k01/deko05', 'k01/deko06', 'k01/deko26', 'k01/deko27'}
 SL, PL, BAMBUS = 'mittel/00', 'mittel/01', 'mittel/05'
@@ -187,7 +194,7 @@ def main():
             if b is None or (name.startswith('frucht/') and name not in OBSTBAEUME):   # Wolken / Beete: kein Fuss
                 v, off = sp, 0
             else:
-                art = 'baum' if name in BAEUME or name == 'mittel/stumpf' or name in OBSTBAEUME or 'tanne' in name else 'klein' if name.startswith(('k01/', 'neu/0')) else 'stein'
+                art = 'baum' if name in BAEUME or name == 'mittel/stumpf' or name.startswith('bambus/') or name in OBSTBAEUME or 'tanne' in name else 'klein' if name.startswith(('k01/', 'neu/0', 'deko_', 'k05/')) else 'stein'
                 v, off = bauwerke.bodenfuss(sp, b, art), 2
             datei = 'varianten/%s_%s%s.png' % (name.replace('/', '-'), b or 'wolke', '_m' if spiegeln else '')
             os.makedirs(os.path.join(OBJ, 'varianten'), exist_ok=True)
@@ -223,7 +230,7 @@ def main():
                 return False
         pix[ys_, xs_] = True
         o = {'datei': datei, 'basis': name, 'x': ox, 'y': oy, 'fuss': h, 'kachel': [tx, ty],
-             'block': [bx, ty - ht + 1, wt, ht], 'ebene': 0 if name.startswith('k01/') else 1}
+             'block': [bx, ty - ht + 1, wt, ht], 'ebene': 0 if name.startswith(('k01/', 'k05/', 'deko_')) else 1}
         o.update(opt)
         objekte.append(o)
         for x in range(bx, bx + wt):
@@ -231,6 +238,8 @@ def main():
                 gesperrt.add((x, y))
         if name in EINBETTEN:
             einbetten(bx, wt, ty)
+        if name in BAUM_BAMBUS and rnd2.random() < 0.22:
+            bambus_dazu(bx, wt, ty)
         return True
 
     def einbetten(bx, wt, ty):
@@ -249,6 +258,19 @@ def main():
                 continue
             dx = 0.25 if x == bx else -0.25
             setze(n, x + dx, ty, {'anim': 'wehen', 'spiegeln': rnd2.random() < 0.5}, abs_=True, _versuch=True)
+
+    def bambus_dazu(bx, wt, ty):
+        """Ab und zu ein Bambusbusch neben einem Baum (im Schnee die verschneite Variante)."""
+        for x in (bx - 1, bx + wt) if rnd2.random() < 0.5 else (bx + wt, bx - 1):
+            if not (0 <= x < cols) or (x, ty) in wand or (x, ty) in gesperrt or (x, ty - 1) in gesperrt:
+                continue
+            k = cls[ty][x]
+            if k not in 'gn':
+                continue
+            n = rnd2.choice(BAMBUS_SCHNEE if k == 'n' else BAMBUS_GRAS)
+            if setze(n, x + (0.0 if x < bx else 1.0), ty, {'anim': 'wehen', 'spiegeln': rnd2.random() < 0.5},
+                     abs_=True, _versuch=True):
+                return
 
     for (name, fx, fy, opt) in FEST:
         setze(name, fx, fy, opt)
@@ -306,9 +328,25 @@ def main():
         tx, ty = rnd.randrange(3, cols - 3), rnd.randrange(3, rows - 3)
         if cls[ty][tx] != 'g':
             continue
-        d = rnd.choice(DEKO_GRAS)
-        if setze(d, tx, ty, {'anim': 'wehen'} if d in WIND else {}, frei=True, abs_=True):
+        z = rnd.random()
+        d = rnd.choice(BUESCHEL_GRAS if z < 0.55 else BLUMEN_GRAS if z < 0.9 else KLEINKRAM_GRAS)
+        if setze(d, tx, ty, {'anim': 'wehen'} if d not in KLEINKRAM_GRAS else {}, frei=True, abs_=True):
             n += 1
+    # Schnee- und Felsdeko (abwechslungsreich, nicht im Steinkreis)
+    n_sn = n_fe = 0
+    for _ in range(6000):
+        tx, ty = rnd.randrange(3, cols - 3), rnd.randrange(3, rows - 3)
+        k = cls[ty][tx]
+        if RING[0] <= tx - R <= RING[1] and RING[2] <= ty - R <= RING[3]:
+            continue
+        if k == 'n' and n_sn < 40:
+            z = rnd.random()
+            d = rnd.choice(BUESCHEL_SCHNEE if z < 0.5 else BLUMEN_SCHNEE if z < 0.85 else KLEINKRAM_SCHNEE)
+            if setze(d, tx, ty, {'anim': 'wehen'} if d not in KLEINKRAM_SCHNEE else {}, frei=True, abs_=True):
+                n_sn += 1
+        elif k == 'f' and n_fe < 10 and hoehe[ty][tx] == 2:          # nur Felsflecken im Schnee, nicht am Gipfel
+            if setze(rnd.choice(DEKO_FELS), tx, ty, {}, frei=True, abs_=True):
+                n_fe += 1
     json.dump(objekte, open(os.path.join(OBJ, 'platzierung.json'), 'w'), indent=0)
     print(len(objekte), 'Objekte am Raster')
 
