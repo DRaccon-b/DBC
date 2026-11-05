@@ -313,15 +313,23 @@ def animieren_k6(img, objs, cache, frame):
                 X, Y = o['x'] + x, o['y'] + y
                 r_, g_, b_, _ = px[X, Y]
                 px[X, Y] = (min(255, int(r_ * f)), min(255, int(g_ * f + 20 * (f - 0.75))), min(255, int(b_ * f + 30 * (f - 0.75))), 255)
-        elif anim == 'brunnen':
+        elif anim == 'brunnen':                    # nur das Wasser: faellt aus den Schalen, plaetschert im Becken
             a = np.array(sp).astype(np.int16)
-            m = (a[..., 2] > a[..., 0] + 40) & (a[..., 3] > 0)
+            m = (a[..., 2] > a[..., 0] + 40) & (a[..., 1] > a[..., 0] + 20) & (a[..., 3] > 0)
             ys, xs = np.nonzero(m)
-            rs = random.Random(frame * 31 + i)
-            for _ in range(max(1, len(xs) // 25)):
-                k = rs.randrange(len(xs))
-                X, Y = o['x'] + xs[k], o['y'] + ys[k]
-                px[X, Y] = (235, 248, 255, 255)
+            if not len(xs):
+                continue
+            basis = a[..., :3].copy()
+            cx = xs.mean()
+            for y, x in zip(ys, xs):
+                # fallende Straehnen: Helligkeitsband wandert nach unten; im Becken: Ringe laufen nach aussen
+                stroem = math.sin(2 * math.pi * (y / 7.0 - frame / N_FRAMES * 2) + x * 0.9)
+                ring = math.sin(2 * math.pi * (abs(x - cx) / 9.0 - frame / N_FRAMES * 2) + y * 0.5)
+                welle = stroem if (y < sp.height * 0.62) else ring
+                f = 1.0 + 0.16 * welle
+                r_, g_, b_ = basis[y, x]
+                X, Y = o['x'] + x, o['y'] + y
+                px[X, Y] = (min(255, max(0, int(r_ * f))), min(255, max(0, int(g_ * f))), min(255, max(0, int(b_ * f + 6 * welle))), 255)
         elif anim == 'werkstatt':                  # Zahnrad an der Fassade dreht sich (jedes Frame neu gezeichnet)
             zahnrad(img, o['x'] + 2 + 47, o['y'] + 50, frame)
             px = img.load()

@@ -151,15 +151,15 @@
 "datei": "varianten/brunnen-00_beton.png",
 "basis": "brunnen/00",
 "x": 480,
-"y": 352,
+"y": 240,
 "fuss": 227,
 "kachel": [
 36,
-35
+28
 ],
 "block": [
 30,
-22,
+15,
 13,
 14
 ],
@@ -243,112 +243,17 @@
 "anim": "laterne"
 },
 {
-"datei": "varianten/k01-laterne_sand.png",
-"basis": "k01/laterne",
-"x": 480,
-"y": 310,
-"fuss": 58,
-"kachel": [
-30,
-22
-],
-"block": [
-30,
-19,
-1,
-4
-],
-"ebene": 1,
-"anim": "laterne"
-},
-{
-"datei": "varianten/k01-laterne_sand.png",
-"basis": "k01/laterne",
-"x": 672,
-"y": 310,
-"fuss": 58,
-"kachel": [
-42,
-22
-],
-"block": [
-42,
-19,
-1,
-4
-],
-"ebene": 1,
-"anim": "laterne"
-},
-{
 "datei": "varianten/k01-laterne_gras.png",
 "basis": "k01/laterne",
-"x": 192,
+"x": 288,
 "y": 278,
 "fuss": 58,
 "kachel": [
-12,
+18,
 20
 ],
 "block": [
-12,
-17,
-1,
-4
-],
-"ebene": 1,
-"anim": "laterne"
-},
-{
-"datei": "varianten/k01-laterne_gras.png",
-"basis": "k01/laterne",
-"x": 384,
-"y": 278,
-"fuss": 58,
-"kachel": [
-24,
-20
-],
-"block": [
-24,
-17,
-1,
-4
-],
-"ebene": 1,
-"anim": "laterne"
-},
-{
-"datei": "varianten/k01-laterne_gras.png",
-"basis": "k01/laterne",
-"x": 576,
-"y": 278,
-"fuss": 58,
-"kachel": [
-36,
-20
-],
-"block": [
-36,
-17,
-1,
-4
-],
-"ebene": 1,
-"anim": "laterne"
-},
-{
-"datei": "varianten/k01-laterne_gras.png",
-"basis": "k01/laterne",
-"x": 752,
-"y": 278,
-"fuss": 58,
-"kachel": [
-47,
-20
-],
-"block": [
-47,
+18,
 17,
 1,
 4
@@ -397,25 +302,6 @@
 {
 "datei": "varianten/k01-laterne_gras.png",
 "basis": "k01/laterne",
-"x": 976,
-"y": 406,
-"fuss": 58,
-"kachel": [
-61,
-28
-],
-"block": [
-61,
-25,
-1,
-4
-],
-"ebene": 1,
-"anim": "laterne"
-},
-{
-"datei": "varianten/k01-laterne_gras.png",
-"basis": "k01/laterne",
 "x": 1056,
 "y": 406,
 "fuss": 58,
@@ -426,25 +312,6 @@
 "block": [
 66,
 25,
-1,
-4
-],
-"ebene": 1,
-"anim": "laterne"
-},
-{
-"datei": "varianten/k01-laterne_gras.png",
-"basis": "k01/laterne",
-"x": 768,
-"y": 598,
-"fuss": 58,
-"kachel": [
-48,
-40
-],
-"block": [
-48,
-37,
 1,
 4
 ],
@@ -471,18 +338,18 @@
 "anim": "laterne"
 },
 {
-"datei": "varianten/stand-00_sand.png",
+"datei": "varianten/stand-00_beton.png",
 "basis": "stand/00",
 "x": 546,
-"y": 569,
+"y": 473,
 "fuss": 58,
 "kachel": [
 36,
-38
+32
 ],
 "block": [
 34,
-35,
+29,
 4,
 4
 ],
@@ -9521,6 +9388,25 @@
 "ebene": 1
 },
 {
+"datei": "varianten/k01-deko08_gras.png",
+"basis": "k01/deko08",
+"x": 964,
+"y": 400,
+"fuss": 19,
+"kachel": [
+61,
+25
+],
+"block": [
+60,
+25,
+2,
+1
+],
+"ebene": 0,
+"anim": "wehen"
+},
+{
 "datei": "varianten/k01-deko10_gras.png",
 "basis": "k01/deko10",
 "x": 195,
@@ -10149,24 +10035,6 @@
 "anim": "wehen"
 },
 {
-"datei": "varianten/k01-deko14_gras.png",
-"basis": "k01/deko14",
-"x": 483,
-"y": 236,
-"fuss": 23,
-"kachel": [
-30,
-15
-],
-"block": [
-30,
-14,
-2,
-2
-],
-"ebene": 0
-},
-{
 "datei": "varianten/k01-deko31_gras.png",
 "basis": "k01/deko31",
 "x": 261,
@@ -10495,6 +10363,25 @@
 1
 ],
 "ebene": 0
+},
+{
+"datei": "varianten/k01-deko06_gras.png",
+"basis": "k01/deko06",
+"x": 483,
+"y": 561,
+"fuss": 18,
+"kachel": [
+30,
+35
+],
+"block": [
+30,
+35,
+2,
+1
+],
+"ebene": 0,
+"anim": "wehen"
 },
 {
 "datei": "varianten/k01-deko27_gras.png",
@@ -10974,43 +10861,6 @@
 "ebene": 0
 },
 {
-"datei": "varianten/k01-deko27_gras.png",
-"basis": "k01/deko27",
-"x": 608,
-"y": 232,
-"fuss": 27,
-"kachel": [
-38,
-15
-],
-"block": [
-38,
-14,
-2,
-2
-],
-"ebene": 0
-},
-{
-"datei": "varianten/k01-deko05_gras.png",
-"basis": "k01/deko05",
-"x": 578,
-"y": 230,
-"fuss": 29,
-"kachel": [
-36,
-15
-],
-"block": [
-36,
-14,
-2,
-2
-],
-"ebene": 0,
-"anim": "wehen"
-},
-{
 "datei": "varianten/k01-deko10_gras.png",
 "basis": "k01/deko10",
 "x": 547,
@@ -11214,25 +11064,6 @@
 1
 ],
 "ebene": 0
-},
-{
-"datei": "varianten/k01-deko06_gras.png",
-"basis": "k01/deko06",
-"x": 643,
-"y": 289,
-"fuss": 18,
-"kachel": [
-40,
-18
-],
-"block": [
-40,
-18,
-2,
-1
-],
-"ebene": 0,
-"anim": "wehen"
 },
 {
 "datei": "varianten/k01-deko27_gras.png",
@@ -11544,5 +11375,42 @@
 2
 ],
 "ebene": 0
+},
+{
+"datei": "varianten/k01-deko27_gras.png",
+"basis": "k01/deko27",
+"x": 96,
+"y": 424,
+"fuss": 27,
+"kachel": [
+6,
+27
+],
+"block": [
+6,
+26,
+2,
+2
+],
+"ebene": 0
+},
+{
+"datei": "varianten/k01-deko31_gras.png",
+"basis": "k01/deko31",
+"x": 101,
+"y": 266,
+"fuss": 25,
+"kachel": [
+7,
+17
+],
+"block": [
+6,
+16,
+2,
+2
+],
+"ebene": 0,
+"anim": "wehen"
 }
 ]
