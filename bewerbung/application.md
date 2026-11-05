@@ -1,8 +1,8 @@
-# Application: Map Artist (volunteer) for [Project Name]
+# Application: Map Artist (volunteer) for Digimmo
 
-Hi [Name / Team],
+Hi Gorjie,
 
-I've been following [Project Name] for a while, and I really like what you're building. I'd like to help, so I'm offering to make maps for the project. **I'd do this for free.** I'm not asking for money or credit beyond what you'd normally give contributors. I just want the project to look and play as good as it can.
+I've been following Digimmo for a while, and I really like what you're building. I'd like to help, so I'm offering to make maps for the project. **I'd do this for free.** I'm not asking for money or credit beyond what you'd normally give contributors. I just want the project to look and play as good as it can.
 
 ## What I can contribute
 
@@ -71,8 +71,8 @@ That way the team can make small changes themselves without waiting for me.
 
 I'd love to show you more of the maps (full resolution, animated GIFs, individual layers) or build a test map in your style first so you can see if it's a good fit.
 
-Thanks for reading, and thanks for the work you're putting into [Project Name]!
+Thanks for reading, and thanks for the work you're putting into Digimmo!
 
 Best regards,
-[Your name]
+Bauzel
 [Discord / email]
