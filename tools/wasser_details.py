@@ -140,7 +140,11 @@ def felsen_setzen(a, zonen, wasserfarben, tiefen, regeln, frame, seed, meiden=No
             art, rx, ry, hoehe = rs.choice(regeln[i])
             if art == 'unter' and hoehe == 0:
                 hoehe = int(ry * rs.uniform(2.0, 3.0))
-            rx_, ry_ = rx * rs.uniform(0.85, 1.15), ry * rs.uniform(0.85, 1.15)
+            rx_, ry_ = int(round(rx * rs.uniform(0.85, 1.15))), int(round(ry * rs.uniform(0.85, 1.15)))
+            # am 16x16-Raster: Fels mittig im kleinsten Kachelblock, Fuss unten buendig auf der Kachelkante
+            wt = math.ceil((2 * rx_ + 3) / 16)
+            cx = (cx // 16) * 16 + 8 if wt % 2 else int(round(cx / 16.0)) * 16
+            cy = ((cy + ry_) // 16) * 16 + 15 - ry_
             ry_eff = ry_ + (hoehe / 2 if art == 'raus' else 0)
             if not passt(z, cx, cy, rx_, ry_, 2):              # Grundflaeche muss auf einer Stufe liegen
                 continue
@@ -172,7 +176,7 @@ def algen(a, zone, wasser, tiefe, dichte, frame, seed, meiden=None):
         return
     for _ in range(int(len(ys) * dichte)):
         k = rs.randrange(len(ys))
-        bx, by = int(xs[k]), int(ys[k])
+        bx, by = (int(xs[k]) // 16) * 16 + 8, (int(ys[k]) // 16) * 16 + 15   # Algen mittig in ihrer Kachel
         if not passt(z, bx, by - 6, 5, 8, 1):
             continue
         for s in range(rs.randint(3, 5)):

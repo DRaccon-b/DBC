@@ -400,7 +400,8 @@ def bauen(frame=None, speichern=True):
         r0, r1 = min(laeufe, key=lambda l: l[1] - l[0])   # schmaleres Ufer bestimmt die Deckbreite
         # Ufer bleibt Gras mit Uferkante; das Deck ueberdeckt die ganze Uferzelle links und rechts.
         # Wegkante liegt eine halbe Kachel ausserhalb der Wegzellen (Wang-Ecken) -> Deck deckt sie ganz ab
-        bruecken_mass.append(((min(wx) - 1) * T - 8, (max(wx) + 2) * T + 8, r0 * T - 9, (r1 + 1) * T + 9))
+        # bauwerke.zeichne_bruecke zeichnet x0-2..x1+2 / y0-7..y1+7 -> buendig auf Kachelgrenzen gelegt
+        bruecken_mass.append(((min(wx) - 2) * T + 2, (max(wx) + 2) * T + 13, r0 * T - 9, (r1 + 1) * T + 8))
         for x in range(min(wx) - 2, max(wx) + 3):
             for y in (r0 - 1, r1 + 1):
                 bruecken_rand.add((x, y))
@@ -419,7 +420,8 @@ def bauen(frame=None, speichern=True):
             y_start = (rp + 1) * T - 8 - 4          # Wegkante (Wasser hat Vorrang -> halbe Kachel hoeher), Steg greift 4 px auf den Weg
         else:
             y_start = rw * T - 14
-        stege_mass.append((st['x'] * T, (st['x'] + st['breite']) * T, y_start, (st['y'] + st['hoehe']) * T))
+        # zeichne_steg reicht bis y1+4 -> unten 5 px kuerzer, oben auf die Kachelgrenze
+        stege_mass.append((st['x'] * T, (st['x'] + st['breite']) * T, (y_start // T) * T, (st['y'] + st['hoehe']) * T - 5))
 
     # --- Vertex-Raster Boden: Klasse mit >=2 von 4 angrenzenden Kacheln, Vorrang m > w > s > g
     def zelle(x, y):
@@ -535,7 +537,7 @@ def bauen(frame=None, speichern=True):
 
     # --- 2. Klippen: handgezeichnete Waende (tools/klippen.py), h Kacheln hoch
     import klippen
-    treppen_px = frozenset((tr['x'] * T - 8, (tr['x'] + tr['breite']) * T + 8) for tr in plan.get('treppen', []))
+    treppen_px = frozenset((tr['x'] * T - T, (tr['x'] + tr['breite']) * T + T) for tr in plan.get('treppen', []))
     runen = klippen.zeichne_klippen(img, plan, cols, treppen_px)
     # Wasserfaelle: volle Flussbreite an der Wandoberkante (Spalten mit Wasser direkt oberhalb der Wand)
     for wf in plan.get('wasserfaelle', []):
@@ -551,7 +553,7 @@ def bauen(frame=None, speichern=True):
     for tr in plan.get('treppen', []):
         t, h = tcol[tr['x']], hcol[tr['x']]
         # Wegkante liegt eine halbe Kachel ausserhalb der Wegzellen -> Treppe auf volle sichtbare Wegbreite
-        bauwerke.zeichne_treppe(img, tr['x'] * T - 8, (tr['x'] + tr['breite']) * T + 8, (t - h) * T + 8, (t + 1) * T - 2)
+        bauwerke.zeichne_treppe(img, tr['x'] * T - T, (tr['x'] + tr['breite']) * T + T, (t - h) * T + 8, (t + 1) * T - 2)
     for (bx0, bx1, by0, by1) in bruecken_mass:
         bauwerke.zeichne_bruecke(img, bx0, bx1, by0, by1, frame=frame or 0)
     for (sx0, sx1, sy0, sy1) in stege_mass:
