@@ -134,12 +134,12 @@ def kabel_netz(a, m, frame):
 
 
 def zaun(img, rect, tor):
-    """Holzzaun im Handheld-Stil: kraeftige Pfosten (mittig je Kachel, Kappe, Licht links), zwei breite
-    Querlatten mit Lichtkante und dunkler Unterkante, Schatten nach rechts unten. Seiten: Pfosten mit
-    senkrechten Latten. Tor oben (offen, zwei dickere Torpfosten)."""
+    """Holzzaun im Handheld-Stil mit dunkler Kontur: dicke Pfosten (6 px) mit gerundeter Kappe je Kachel,
+    zwei kraeftige Querlatten (4 px) mit Lichtkante, Schatten nach rechts unten. Seiten von oben: breite
+    Latte (6 px) mit Pfostenkoepfen je Kachel. Tor oben offen."""
     px = img.load()
-    HOLZ = [(0x3a, 0x22, 0x14), (0x5e, 0x3a, 0x20), (0x84, 0x54, 0x2e), (0xa8, 0x72, 0x40), (0xc8, 0x92, 0x58),
-            (0xe4, 0xb6, 0x7a)]
+    K = (0x2c, 0x18, 0x0e)                                          # Kontur
+    HOLZ = [(0x6a, 0x40, 0x22), (0x8c, 0x58, 0x30), (0xae, 0x74, 0x42), (0xcc, 0x92, 0x56), (0xe6, 0xb4, 0x76)]
     x0, y0, x1, y1 = rect
     W, Hh = img.size
 
@@ -152,45 +152,45 @@ def zaun(img, rect, tor):
             r, g, b, a = px[x, y]
             px[x, y] = (int(r * f), int(g * f), int(b * f), a)
 
-    def latte(xa, xb, y):                       # waagerechte Latte, 4 px hoch
+    def latte(xa, xb, y):                                           # 4 px + Kontur
         for x in range(xa, xb):
-            p(x, y, HOLZ[5]); p(x, y + 1, HOLZ[4]); p(x, y + 2, HOLZ[3]); p(x, y + 3, HOLZ[1])
-            if (x - xa) % 9 == 4:
-                p(x, y + 1, HOLZ[2])            # Maserung
-            schatten(x + 1, y + 5, 0.8)
+            p(x, y - 1, K); p(x, y, HOLZ[4]); p(x, y + 1, HOLZ[3]); p(x, y + 2, HOLZ[2]); p(x, y + 3, HOLZ[1])
+            p(x, y + 4, K)
+            schatten(x + 1, y + 6, 0.78)
 
-    def pfosten(x, yb, h=17, dick=False):
-        b = 3 if dick else 2
+    def pfosten(x, yb, h=15):                                       # 6 px breit, x = Mitte
         for y in range(yb - h, yb + 1):
-            for dx in range(-b, b + 1):
-                c = HOLZ[0] if abs(dx) == b else HOLZ[4] if dx < 0 else HOLZ[3] if dx == 0 else HOLZ[2]
+            for dx in range(-3, 4):
+                c = K if abs(dx) == 3 else HOLZ[4] if dx == -2 else HOLZ[3] if dx < 1 else HOLZ[2] if dx < 2 else HOLZ[1]
                 p(x + dx, y, c)
-        for dx in range(-b, b + 1):            # Kappe
-            p(x + dx, yb - h - 1, HOLZ[5] if dx <= 0 else HOLZ[4])
-            p(x + dx, yb - h - 2, HOLZ[0] if abs(dx) == b else HOLZ[5])
-        for dx in range(-b + 1, b + 3):        # Kontaktschatten
-            schatten(x + dx, yb + 1, 0.7); schatten(x + dx + 1, yb + 2, 0.82)
+        for dx in range(-2, 3):                                     # gerundete Kappe
+            p(x + dx, yb - h - 1, K if abs(dx) == 2 else HOLZ[4])
+        p(x, yb - h - 2, K); p(x - 1, yb - h - 2, K); p(x + 1, yb - h - 2, K)
+        for dx in range(-3, 4):
+            p(x + dx, yb + 1, K)
+        for dx in range(-1, 6):
+            schatten(x + dx, yb + 2, 0.7); schatten(x + dx + 1, yb + 3, 0.84)
 
-    for ty in (y0, y1):                        # oben und unten
-        yb = ty * T + 14
+    for ty in (y0, y1):                                             # vorne/hinten
+        yb = ty * T + 13
         for tx in range(x0, x1):
             if ty == y0 and tor[0] - 1 <= tx <= tor[1]:
                 continue
-            latte(tx * T + 8, (tx + 1) * T + 8, yb - 12)
-            latte(tx * T + 8, (tx + 1) * T + 8, yb - 6)
+            latte(tx * T + 8, (tx + 1) * T + 8, yb - 11)
+            latte(tx * T + 8, (tx + 1) * T + 8, yb - 5)
         for tx in range(x0, x1 + 1):
             if ty == y0 and tor[0] <= tx <= tor[1]:
                 continue
-            pfosten(tx * T + 8, yb, dick=(ty == y0 and tx in (tor[0] - 1, tor[1] + 1)))
-    for tx in (x0, x1):                        # Seiten: senkrechte Doppellatte, Pfosten je Kachel
+            pfosten(tx * T + 8, yb)
+    for tx in (x0, x1):                                             # Seiten (von oben gesehen)
         X = tx * T + 8
-        for y in range(y0 * T + 14, y1 * T + 2):
-            for dx, c in ((-3, HOLZ[0]), (-2, HOLZ[4]), (-1, HOLZ[3]), (1, HOLZ[3]), (2, HOLZ[2]), (3, HOLZ[0])):
+        for y in range(y0 * T + 14, y1 * T + 1):
+            for dx in range(-3, 4):
+                c = K if abs(dx) == 3 else HOLZ[3] if dx < 0 else HOLZ[2] if dx == 0 else HOLZ[1]
                 p(X + dx, y, c)
-            p(X, y, HOLZ[1])
-            schatten(X + 4, y, 0.78)
+            schatten(X + 4, y, 0.75); schatten(X + 5, y, 0.86)
         for ty in range(y0 + 1, y1):
-            pfosten(X, ty * T + 14)
+            pfosten(X, ty * T + 13)
 
 
 # ---------------------------------------------------------------- Bauen

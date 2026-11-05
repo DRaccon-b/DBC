@@ -105,11 +105,13 @@ def main():
     belegt = {}
     objekte = []
     gesperrt = set()
-    x0, y0, x1, y1 = lay['pension']
-    for x in range(x0, x1 + 1):
-        gesperrt |= {(x, y0), (x, y1)}
-    for y in range(y0, y1 + 1):
-        gesperrt |= {(x0, y), (x1, y)}
+    x0, y0, x1, y1 = lay['pension']                    # Zaun samt einer Kachel Abstand innen und aussen freihalten
+    for x in range(x0 - 1, x1 + 2):
+        for d in (-1, 0, 1):
+            gesperrt |= {(x, y0 + d), (x, y1 + d)}
+    for y in range(y0 - 1, y1 + 2):
+        for d in (-1, 0, 1):
+            gesperrt |= {(x0 + d, y), (x1 + d, y)}
     sx0, sy0, sx1, sy1 = lay['steg']
     for y in range(sy0 - 1, sy1 + 2):
         for x in range(sx0 - 1, sx1 + 2):
