@@ -34,9 +34,9 @@ FEST = [
     # Wegweiser
     ('mittel/04', 38, 55, {}), ('mittel/04', 99, 7, {}), ('mittel/04', 93, 52, {}),
     # Eisbloecke und Eisspitzen
-    ('mittel/01', 48, 16, {}), ('mittel/01', 77, 12, {}), ('mittel/01', 88, 12, {}),
-    ('mittel/01', 57, 64, {}), ('mittel/01', 59, 66, {}), ('mittel/01', 57, 69, {}), ('mittel/01', 64, 64, {}),
-    ('mittel/01', 68, 66, {}), ('mittel/01', 64, 70, {}), ('mittel/01', 60, 73, {}),
+    
+    
+    
     ('mittel/02', 92, 55, {'anim': 'glitzern'}), ('mittel/02', 96, 57, {'anim': 'glitzern'}),
     ('mittel/02', 99, 58, {'anim': 'glitzern'}), ('mittel/02', 75, 24, {'anim': 'glitzern'}),
     ('mittel/02', 102, 68, {'anim': 'glitzern'}), ('mittel/02', 48, 78, {'anim': 'glitzern'}),
@@ -45,12 +45,12 @@ FEST = [
     ('mittel/03', 70, 57, {}), ('mittel/03', 62, 61, {}), ('mittel/03', 64, 68, {}), ('mittel/03', 86, 65, {}),
     ('mittel/03', 92, 58, {}),
     # Eisangeln am See
-    ('mittel/11', 46, 36, {}), ('mittel/11', 61, 36, {}), ('mittel/11', 54, 47, {}), ('mittel/11', 85, 70, {}),
+    
     # Felsbrocken
     ('mittel/00', 14, 11, {}), ('mittel/00', 30, 11, {}), ('mittel/00', 56, 13, {}), ('mittel/00', 42, 56, {}),
-    ('mittel/00', 51, 51, {}), ('mittel/00', 63, 51, {}), ('mittel/00', 84, 25, {}), ('mittel/00', 94, 47, {}),
+    ('mittel/00', 84, 25, {}), ('mittel/00', 94, 47, {}),
     ('mittel/00', 13, 65, {}), ('mittel/00', 43, 73, {}), ('mittel/00', 82, 74, {}), ('mittel/00', 98, 74, {}),
-    ('mittel/00', 59, 14, {}), ('mittel/09', 66, 51, {}), ('mittel/09', 75, 74, {}), ('mittel/15', 102, 63, {}),
+    ('mittel/00', 59, 14, {}), ('mittel/09', 75, 74, {}), ('mittel/15', 102, 63, {}),
     # Holzhuette am rechten Weg
     ('gross/03', 100, 11, {}),
     # Schlitten und Feuerholz am Lager rechts unten
@@ -61,7 +61,7 @@ HAINE = [
     (14, 21, 28, 31, 0.30), (27, 17, 34, 22, 0.30), (5, 33, 14, 58, 0.22), (27, 43, 36, 48, 0.35),
     (45, 52, 52, 58, 0.22), (73, 54, 80, 66, 0.18), (80, 55, 103, 67, 0.08), (66, 66, 103, 80, 0.12),
     (36, 78, 66, 80, 0.25), (5, 59, 18, 80, 0.12), (90, 8, 103, 20, 0.06), (6, 9, 15, 18, 0.15),
-    (48, 25, 52, 29, 0.5), (64, 41, 68, 43, 0.5),
+    
 ]
 STREU = {'klein/00': 6, 'klein/01': 4, 'klein/02': 2, 'klein/03': 3, 'klein/04': 2, 'klein/05': 3, 'klein/06': 2,
          'klein/07': 2, 'klein/13': 2, 'klein/17': 3, 'klein/18': 2, 'klein/11': 1, 'klein/10': 1, 'klein/55': 2,

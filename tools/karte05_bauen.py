@@ -83,6 +83,40 @@ def wasser_kalt(a, m, frame, dunkel=False):
                         a[y, x] = H('#f2f9fc') if y < cy else H('#d6ebf4')
 
 
+def eis_zeichnen(a, m, frame):
+    """Zugefrorene Flaeche ueber vertieftem Wasser: der Grund (Steine, Stufen, Felsen, Algen) bleibt sichtbar,
+    darueber eine helle, leicht blaue Eisschicht mit feinen Rissen, Lichtreflexen und Schneeflocken am Rand."""
+    if not m.any():
+        return
+    Hh, W = m.shape
+    eis = np.array(H('#dcf1fa'), np.float32)
+    a[m] = np.clip(a[m] * 0.5 + eis * 0.5, 0, 255).astype(np.uint8)
+    rs = random.Random(17)
+    ys, xs = np.nonzero(m)
+    for _ in range(len(ys) // 4500):                      # Risse: wenige, laengere Linien
+        i = rs.randrange(len(ys)); y, x = float(ys[i]), float(xs[i])
+        w = rs.uniform(0, 6.28)
+        for k in range(rs.randint(18, 40)):
+            w += rs.uniform(-0.5, 0.5)
+            y += math.sin(w); x += math.cos(w)
+            yi, xi = int(y), int(x)
+            if not (0 <= yi < Hh and 0 <= xi < W) or not m[yi, xi]:
+                break
+            a[yi, xi] = H('#f6fcff')
+            if 0 <= yi + 1 < Hh and m[yi + 1, xi]:
+                a[yi + 1, xi] = (a[yi + 1, xi] * 0.8).astype(np.uint8)
+    for _ in range(len(ys) // 900):                       # Reflexe: kurze helle Diagonalen (oben links Licht)
+        i = rs.randrange(len(ys)); y, x = ys[i], xs[i]
+        for k in range(4):
+            if 0 <= y - k < Hh and 0 <= x + k < W and m[y - k, x + k]:
+                a[y - k, x + k] = H('#ffffff') if k in (1, 2) else H('#eaf7fd')
+    rand = m & ~(np.roll(m, 1, 0) & np.roll(m, -1, 0) & np.roll(m, 1, 1) & np.roll(m, -1, 1))
+    a[rand] = H('#ffffff')
+    fr = frame or 0                                       # wandernder Glanz ueber das Eis
+    band = m & (((np.arange(W)[None, :] + np.arange(Hh)[:, None] - fr * 12) % 220) < 3)
+    a[band] = np.clip(a[band] * 0.6 + 102, 0, 255).astype(np.uint8)
+
+
 def schneefall(img, frame):
     """Zwei Schichten Flocken, die in 16 Frames nahtlos weiterfallen (Muster wiederholt sich senkrecht)."""
     px = img.load()
@@ -203,8 +237,9 @@ def bauen(frame=None, speichern=True):
     wasser_kalt(a, meer, frame)
     wasser_kalt(a, loch, frame, dunkel=True)
     import wasser_vertieft                                  # Stil von Karte 01: vertieftes Wasser, Schneerand
-    a = np.array(wasser_vertieft.vertiefen(Image.fromarray(a), np.ones_like(meer), frame, maske=meer | loch,
+    a = np.array(wasser_vertieft.vertiefen(Image.fromarray(a), np.ones_like(meer), frame, maske=meer | see,
                                            rand=('#7e96ae', '#a2b8cc', '#c6d6e4', '#e2ecf4')).convert('RGB'))
+    eis_zeichnen(a, see & ~loch, frame)
     for y, x in zip(*np.nonzero(loch & ~np.roll(loch, -1, 0))):        # Eiskante am Lochrand (Dicke)
         for k in range(1, 3):
             if y - k >= 0 and loch[y - k, x]:

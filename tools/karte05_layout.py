@@ -95,9 +95,7 @@ def main():
         hoehe[y0:y1 + 1, x0:x1 + 1] = 2
     # Meer oben (Eismeer hinter dem Plateau) und rechts
     neu[0:2, 0:90] = 'l'
-    neu[(xx >= 105) & (yy >= 11)] = 'x'
-    hoehe[(xx >= 105) & (yy >= 11)] = 0
-    neu[(xx >= 104) & (yy >= 11) & (neu != 'x')] = 's'
+    neu[(xx >= 105) & (yy >= 11)] = 'h'           # rechter Rand: Wald statt Meer
     # Plateau-Innenflaechen: Schnee, Eisflecken bleiben
     pl = hoehe == 2
     neu[pl & ~np.isin(neu, list('xl'))] = 's'
@@ -109,17 +107,24 @@ def main():
     neu[(yy >= 80) & (xx <= 103) & (np.isin(roh, list('hc')))] = 'h'
     # Ausgang unten (Weg zum Teleporter) und rechts unten Schnee
     neu[78:85, 30:34] = 'w'
-    neu[80:85, 96:104] = 's'
+    neu[80:85, 96:110] = 'h'                       # rechts unten: Wald
 
     # ---------------------------------------------------------------- Eissee, Loecher, Spalten
     see = (xx >= 40) & (xx <= 75) & (yy >= 26) & (yy <= 50)
     neu[see & (roh == 'd')] = 'd'
-    neu[see & (neu == 'i')] = 'i'
+    # zugefrorener See: groesser (Inseln geschlossen, Rand um 2 Kacheln erweitert), Loecher bleiben offen
+    from PIL import Image as _I, ImageFilter as _F
+    eis = see & np.isin(neu, list('id'))
+    k = _I.fromarray((eis * 255).astype(np.uint8))
+    k = k.filter(_F.MaxFilter(5)).filter(_F.MaxFilter(3)).filter(_F.MinFilter(3))
+    eis = (np.array(k) > 0) & (xx >= 38) & (xx <= 77) & (yy >= 25) & (yy <= 52)
+    neu[eis & (neu != 'd')] = 'i'
+    # Gletscherspalten -> zugefrorenes Wasser (etwa 2-3 Kacheln breite Rinnen)
     spalte = (xx >= 82) & (xx <= 102) & (yy >= 20) & (yy <= 47) & (roh == 'd')
-    neu[(xx >= 82) & (yy >= 20) & (yy <= 47) & (neu == 'd') & ~spalte] = 's'
-    neu[spalte] = 'k'
+    k = _I.fromarray((spalte * 255).astype(np.uint8)).filter(_F.MaxFilter(3))
+    rinne = (np.array(k) > 0) & (xx >= 81) & (xx <= 103) & (yy >= 19) & (yy <= 48)
+    neu[rinne & (neu != 'w')] = 'i'
     neu[(neu == 'd') & ~see] = 's'
-    hoehe[spalte] = 0
     # Dorfplatz
     dorf = ((xx - 29.5) / 10.5) ** 2 + ((yy - 71) / 8.5) ** 2 <= 1
     neu[dorf & np.isin(neu, list('esl'))] = 'e'
@@ -137,8 +142,8 @@ def main():
         # Treppen an den drei Plateaubuchten (x0, x1, y0, y1, Richtung)
         'treppen': [[24, 27, 11, 17, 's'], [49, 52, 13, 20, 's'], [77, 80, 14, 21, 's']],
         # Holzbruecken ueber die Spalten (x0, y0, x1, y1) und Steg in den See (x0, y0, x1, y1)
-        'bruecken': [[92, 33, 95, 35], [90, 41, 93, 42]],
-        'stege': [[43, 45, 49, 46]],
+        'bruecken': [],
+        'stege': [],
     }
     lay = {'groesse': [C, R], 'klassen': [''.join(r) for r in neu],
            'hoehe': [''.join(str(v) for v in r) for r in hoehe]}
