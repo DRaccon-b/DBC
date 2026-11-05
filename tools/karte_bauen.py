@@ -24,6 +24,7 @@ import base64, io, json, os, sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from collections import Counter
 from PIL import Image
+import numpy as np
 
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
 KARTE = os.path.join(ROOT, 'maps', 'karte01')
@@ -504,6 +505,14 @@ def bauen(frame=None, speichern=True):
             if frame is not None:
                 kachel = wasser_frame(kachel, karte[y][x][1], grid[y][x], y, x, frame, basis)
             img.paste(kachel, (x * T, y * T))
+    # --- 1b. Fluss und Teich vertieft (Wasser eine Stufe unter dem Boden, Ufermauern, Steingrund)
+    import wasser_vertieft
+    region = np.zeros((rows * T, cols * T), bool)
+    for y in range(rows):
+        for x in range(cols):
+            if cls[y][x] == 'w' and grid[y][x] not in 'hDS':
+                region[max(0, y * T - T):(y + 2) * T, max(0, x * T - T):(x + 2) * T] = True
+    img = wasser_vertieft.vertiefen(img, region, frame)
 
     # --- 2. Klippen: handgezeichnete Waende (tools/klippen.py), h Kacheln hoch
     import klippen
