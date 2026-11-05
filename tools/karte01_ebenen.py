@@ -91,6 +91,9 @@ def main():
         ys, xs = np.nonzero(fa)
         ys, xs = ys + o['y'] + trenn, xs + o['x']
         ok = (ys >= 0) & (ys < H) & (xs >= 0) & (xs < W)
+        if 'block' in o:                         # nur im eigenen Kachelblock sperren (Grasfuss ragt 2-3 px hinaus)
+            bx, by, bw, bh = o['block']
+            ok &= (xs >= bx * T) & (xs < (bx + bw) * T) & (ys >= by * T) & (ys < (by + bh) * T)
         blockiert_px[ys[ok], xs[ok]] = True
     # Felsspitzen im Wasser, die ueber begehbaren Boden ragen, gehoeren in die Ueberlagerung
     sp_pfad = os.path.join(KARTE, 'felsspitzen.npy')
