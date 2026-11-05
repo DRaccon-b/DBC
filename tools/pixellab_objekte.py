@@ -18,6 +18,7 @@ OUT_K2 = os.path.join(ROOT, 'assets', 'objekte', 'karte02')
 OUT_K3 = os.path.join(ROOT, 'assets', 'objekte', 'karte03')
 OUT_K4 = os.path.join(ROOT, 'assets', 'objekte', 'karte04')
 OUT_K5 = os.path.join(ROOT, 'assets', 'objekte', 'karte05')
+OUT_K6 = os.path.join(ROOT, 'assets', 'objekte', 'karte06')
 API = 'https://api.pixellab.ai'
 
 STIL = ("Top-down RPG map object in polished handheld monster-collecting RPG pixel art: colored dark outline "
@@ -359,6 +360,29 @@ OBJEKTGRUPPEN_K5 = {
     ]},
 }
 
+OBJEKTGRUPPEN_K6 = {
+    'k6_gebaeude': {'size': 128, 'items': [
+        'huge old wooden CRT television set standing on a stone pedestal, the screen is a glowing swirling cyan portal you can walk through, two antennas on top, knobs on the side, front view',
+        'cozy log cabin with a red tiled roof, small chimney with smoke, wooden door, window with flowers, front view',
+        'small workshop house made of rusty metal plates with a large rusty cogwheel on the wall, scrap metal and gears piled beside it, chimney, front view',
+        'seaside blacksmith forge house shaped like a big turtle shell roof in blue and white, stone walls with shells and coral, glowing furnace, anvil and giant hammer in front, anchor decoration, front view',
+    ]},
+    'k6_gross': {'size': 160, 'items': [
+        'giant ancient stone ring portal standing upright on a round stone platform, glowing cyan runes around the ring, shimmering blue energy inside the ring, front view',
+        'gigantic ornate three tier stone fountain with water spraying from the top, round basin, front view',
+        'giant digital tree with a glowing cyan and green pixelated crown, bark with circuit lines, front view',
+        'small cozy nursery house with a pastel roof and egg shaped windows, front view',
+    ]},
+    'k6_mittel': {'size': 64, 'items': [
+        'large spotted digital monster egg, white with colorful spots', 'large striped egg, cream with blue stripes',
+        'egg in a small straw nest', 'wooden playground swing', 'small wooden slide for children', 'sandbox with a toy bucket',
+        'server rack terminal with blinking blue lights', 'holographic computer terminal with a glowing screen',
+        'data pillar emitting floating cyan pixel cubes', 'big cable spool with blue and red cables', 'satellite dish on a small pole',
+        'wooden market stall with a striped pink awning', 'wooden fence section, horizontal', 'wooden fence post',
+        'stack of rusty gears and scrap', 'wooden sign board',
+    ]},
+}
+
 OBJEKTGRUPPEN_K3 = {
     'k3_klein': {'size': 32, 'items': [
         'small green saguaro cactus', 'tall green saguaro cactus with two arms', 'small round barrel cactus', 'prickly pear cactus',
@@ -496,7 +520,9 @@ def herunterladen(oid, d):
 
 
 def speichern(gruppe, ims, ids):
-    if gruppe.startswith('k5_'):
+    if gruppe.startswith('k6_'):
+        ziel = os.path.join(OUT_K6, gruppe[3:])
+    elif gruppe.startswith('k5_'):
         ziel = os.path.join(OUT_K5, gruppe[3:])
     elif gruppe.startswith('k4_'):
         ziel = os.path.join(OUT_K4, gruppe[3:])
@@ -528,11 +554,12 @@ def erzeugen(gruppe):
     k3 = gruppe.startswith('k3_')
     k4 = gruppe.startswith('k4_')
     k5 = gruppe.startswith('k5_')
-    g = (OBJEKTGRUPPEN_K5 if k5 else OBJEKTGRUPPEN_K4 if k4 else OBJEKTGRUPPEN_K3 if k3 else OBJEKTGRUPPEN_K2 if k2 else OBJEKTGRUPPEN)[gruppe]
-    stil, palette = (STIL_K5, PALETTE_K5) if k5 else (STIL_K4, PALETTE_K4) if k4 else (STIL_K3, PALETTE_K3) if k3 else (STIL_K2, PALETTE_K2) if k2 else (STIL, PALETTE)
+    k6 = gruppe.startswith('k6_')
+    g = (OBJEKTGRUPPEN_K6 if k6 else OBJEKTGRUPPEN_K5 if k5 else OBJEKTGRUPPEN_K4 if k4 else OBJEKTGRUPPEN_K3 if k3 else OBJEKTGRUPPEN_K2 if k2 else OBJEKTGRUPPEN)[gruppe]
+    stil, palette = (STIL, PALETTE) if k6 else (STIL_K5, PALETTE_K5) if k5 else (STIL_K4, PALETTE_K4) if k4 else (STIL_K3, PALETTE_K3) if k3 else (STIL_K2, PALETTE_K2) if k2 else (STIL, PALETTE)
     req = {'description': stil, 'size': g['size'], 'view': 'top-down',
            'item_descriptions': [it + '. ' + stil for it in g['items']],
-           'target_palette': {'colors': palette, 'name': 'Karte05 Freezeland' if k5 else 'Karte04 Savanne' if k4 else 'Karte03 Wueste' if k3 else 'Karte02 Industrie' if k2 else 'Karte01 handheld'}}
+           'target_palette': {'colors': palette, 'name': 'Karte01 handheld' if k6 else 'Karte05 Freezeland' if k5 else 'Karte04 Savanne' if k4 else 'Karte03 Wueste' if k3 else 'Karte02 Industrie' if k2 else 'Karte01 handheld'}}
     d = call('POST', '/v2/create-1-direction-object', req)
     oid = d['object_id']
     print(gruppe, 'Objekt', oid)
