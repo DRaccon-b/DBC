@@ -18,7 +18,8 @@
   canvas.editor { cursor: crosshair; }
   #info {
     position: fixed; left: calc(8px + env(safe-area-inset-left, 0px)); top: calc(8px + env(safe-area-inset-top, 0px));
-    padding: 4px 8px; background: var(--panel); border-radius: 4px; pointer-events: none; white-space: pre;
+    padding: 4px 8px; background: var(--panel); border-radius: 4px; pointer-events: none; white-space: pre-wrap;
+    max-width: calc(100vw - 190px - env(safe-area-inset-left, 0px) - env(safe-area-inset-right, 0px));
   }
   #editor {
     position: fixed; right: calc(8px + env(safe-area-inset-right, 0px)); bottom: calc(8px + env(safe-area-inset-bottom, 0px));
@@ -46,6 +47,16 @@
   .tabs { display: flex; gap: 0; border: 1px solid var(--rand); border-radius: 4px; overflow: hidden; }
   .tabs button { flex: 1; border: 0; border-radius: 0; background: transparent; }
   .tabs button[aria-selected="true"] { background: #353a2a; color: var(--akzent); }
+  #joystick {
+    position: fixed; touch-action: none; user-select: none; -webkit-user-select: none;
+    left: calc(20px + env(safe-area-inset-left, 0px)); bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+    width: 120px; height: 120px; border-radius: 50%;
+    background: rgba(16,18,24,.35); border: 2px solid rgba(255,255,255,.35);
+  }
+  #joystick .knauf {
+    position: absolute; left: 50%; top: 50%; width: 52px; height: 52px; margin: -26px 0 0 -26px; border-radius: 50%;
+    background: rgba(255,255,255,.55); border: 2px solid rgba(255,255,255,.8); pointer-events: none;
+  }
   #editorKnopf {
     position: fixed; right: calc(8px + env(safe-area-inset-right, 0px)); top: calc(8px + env(safe-area-inset-top, 0px));
   }
@@ -55,6 +66,7 @@
 <canvas id="spiel"></canvas>
 <div id="info">Lade Karte …</div>
 <button id="editorKnopf" type="button">Editor (E)</button>
+<div id="joystick" hidden aria-label="Joystick zum Laufen"><div class="knauf"></div></div>
 
 <div id="editor" hidden>
   <h2>Editor</h2>
@@ -84,11 +96,13 @@
 
 <script src="karte01_kollision.js"></script>
 <script src="karte01_objekte.js"></script>
+<script src="spieler.js"></script>
 <script>
 (() => {
   'use strict';
 
   const EBENEN = '../maps/karte01/ebenen/';
+  const SPIELER_BILD = '../assets/charaktere/spieler/spieler.png';
   const K = window.KARTE01_KOLLISION;
   const TILE = 16;                        // Kachelgroesse der Karte
   const Z = K.zelle;                      // Kollisionsraster: 8x8-Felder
@@ -224,6 +238,26 @@
     }
   }
 
+  // ---- Figur (PixelLab-Spritesheet) -------------------------------------
+  const SP = window.SPIELER_SPRITE;       // Zeilen: unten, links, rechts, oben
+  const RICHT_KEY = ['south', 'west', 'east', 'north'];
+  const figur = { bild: null, an: true, richtung: 0, laeuft: false, frame: 0, zeit: 0 };
+  if (SP) {
+    const img = new Image();
+    img.onload = () => { figur.bild = img; };
+    img.src = SPIELER_BILD;
+  }
+  function animation(dx, dy, bewegt, dt) {
+    if (dx || dy) {
+      if (Math.abs(dx) > Math.abs(dy)) figur.richtung = dx < 0 ? 1 : 2;
+      else figur.richtung = dy < 0 ? 3 : 0;
+    }
+    figur.laeuft = bewegt;
+    if (!bewegt) { figur.frame = 0; figur.zeit = 0; return; }
+    figur.zeit += dt;
+    if (figur.zeit >= 0.14) { figur.zeit -= 0.14; figur.frame++; }
+  }
+
   // ---- Darstellung / Kamera --------------------------------------------
   let zoom = 3;
   let kamera = { camX: 0, camY: 0, skala: 1 };
@@ -300,6 +334,7 @@
     canvas.classList.toggle('editor', an);
     $('editorKnopf').textContent = an ? 'Editor schließen (E)' : 'Editor (E)';
     if (an) editorAktualisieren();
+    if (typeof joystickAnzeigen === 'function') joystickAnzeigen();
     canvas.focus();
   }
 
@@ -402,6 +437,7 @@
     if (KEYMAP[e.code]) { tasten.add(KEYMAP[e.code]); e.preventDefault(); }
     if (e.code === 'KeyE') editorUmschalten(!editor);
     if (e.code === 'KeyK') zeigeKollision = !zeigeKollision;
+    if (e.code === 'KeyC') figur.an = !figur.an;
     const ziffer = { Digit1: 0, Digit2: 1, Digit3: 2 }[e.code];
     if (editor && ziffer !== undefined)
       setzePinsel(modusTab === 'kollision' ? ['1', '2', '3'][ziffer] : ['hinten', 'geteilt', 'vorne'][ziffer]);
@@ -411,10 +447,38 @@
     if (e.code === 'Minus' || e.code === 'NumpadSubtract' || e.key === '-') zoom = Math.max(1, zoom - 1);
   });
   addEventListener('keyup', e => { if (KEYMAP[e.code]) tasten.delete(KEYMAP[e.code]); });
-  addEventListener('blur', () => { tasten.clear(); touchZiel = null; });
+  addEventListener('blur', () => { tasten.clear(); stick.x = stick.y = 0; joystickKnauf(); });
 
-  // Zeiger: im Editor malen, sonst (Touch) in Fingerrichtung laufen
-  let touchZiel = null;
+  // ---- Joystick (Handy) ------------------------------------------------
+  const stick = { x: 0, y: 0, id: null };   // x/y: -1..1
+  const joy = $('joystick'), knauf = joy.querySelector('.knauf');
+  const RADIUS = 46;
+  let touchGeraet = matchMedia('(pointer: coarse)').matches || navigator.maxTouchPoints > 0;
+  function joystickKnauf() { knauf.style.transform = 'translate(' + stick.x * RADIUS + 'px,' + stick.y * RADIUS + 'px)'; }
+  function joystickAnzeigen() {
+    // auf schmalen Bildschirmen verdeckt das Editor-Feld den Joystick: dann ausblenden
+    joy.hidden = !touchGeraet || (editor && innerWidth < 700);
+  }
+  function joystickSetzen(e) {
+    const r = joy.getBoundingClientRect();
+    let x = (e.clientX - (r.left + r.width / 2)) / RADIUS, y = (e.clientY - (r.top + r.height / 2)) / RADIUS;
+    const l = Math.hypot(x, y);
+    if (l > 1) { x /= l; y /= l; }
+    stick.x = x; stick.y = y;
+    joystickKnauf();
+  }
+  joy.addEventListener('pointerdown', e => {
+    stick.id = e.pointerId; joy.setPointerCapture(e.pointerId); joystickSetzen(e); e.preventDefault();
+  });
+  joy.addEventListener('pointermove', e => { if (e.pointerId === stick.id) joystickSetzen(e); });
+  const joyLos = e => { if (e.pointerId === stick.id) { stick.id = null; stick.x = stick.y = 0; joystickKnauf(); } };
+  joy.addEventListener('pointerup', joyLos);
+  joy.addEventListener('pointercancel', joyLos);
+  addEventListener('touchstart', () => { if (!touchGeraet) { touchGeraet = true; joystickAnzeigen(); } }, { passive: true });
+  addEventListener('resize', joystickAnzeigen);
+  joystickAnzeigen();
+
+  // Zeiger auf der Karte: im Editor malen
   let letzteMalKachel = null;
   canvas.addEventListener('pointerdown', e => {
     canvas.focus();
@@ -424,8 +488,6 @@
       const k = bildschirmZuKachel(e.clientX, e.clientY);
       if (modusTab === 'kollision') male(k.tx, k.ty); else maleObjekt(k.mx, k.my);
       letzteMalKachel = k;
-    } else if (e.pointerType !== 'mouse') {
-      touchZiel = { x: e.clientX, y: e.clientY };
     }
     e.preventDefault();
   });
@@ -436,9 +498,8 @@
       if (modusTab === 'kollision') maleLinie(letzteMalKachel, k); else maleObjekt(k.mx, k.my);
       letzteMalKachel = k;
     }
-    else if (touchZiel) touchZiel = { x: e.clientX, y: e.clientY };
   });
-  const loslassen = () => { if (strich) strichEnde(); touchZiel = null; };
+  const loslassen = () => { if (strich) strichEnde(); };
   canvas.addEventListener('pointerup', loslassen);
   canvas.addEventListener('pointercancel', loslassen);
   canvas.addEventListener('pointerleave', () => { maus = null; });
@@ -489,12 +550,19 @@
     ctx.drawImage(boden, 0, 0);
     zeichneObjekte(atlas, false, camX, camY, camX + vw, camY + vh);
 
-    // Spieler
-    ctx.fillStyle = '#8a8a8a';
-    ctx.fillRect(spieler.x, spieler.y, SPIELER_GROESSE, SPIELER_GROESSE);
-    ctx.fillStyle = '#5c5c5c';
-    ctx.fillRect(spieler.x, spieler.y + SPIELER_GROESSE - 1, SPIELER_GROESSE, 1);
-    ctx.fillRect(spieler.x + SPIELER_GROESSE - 1, spieler.y, 1, SPIELER_GROESSE);
+    // Spieler: Figur aus dem Spritesheet, sonst grauer 16x16-Block (C schaltet um)
+    if (figur.bild && figur.an) {
+      const [zw, zh] = SP.zelle;
+      const spalte = figur.laeuft ? 1 + (figur.frame % SP.gehen_frames[RICHT_KEY[figur.richtung]]) : 0;
+      ctx.drawImage(figur.bild, spalte * zw, figur.richtung * zh, zw, zh,
+        Math.round(spieler.x + SPIELER_GROESSE / 2 - zw / 2), spieler.y + SPIELER_GROESSE - zh, zw, zh);
+    } else {
+      ctx.fillStyle = '#8a8a8a';
+      ctx.fillRect(spieler.x, spieler.y, SPIELER_GROESSE, SPIELER_GROESSE);
+      ctx.fillStyle = '#5c5c5c';
+      ctx.fillRect(spieler.x, spieler.y + SPIELER_GROESSE - 1, SPIELER_GROESSE, 1);
+      ctx.fillRect(spieler.x + SPIELER_GROESSE - 1, spieler.y, 1, SPIELER_GROESSE);
+    }
 
     zeichneObjekte(atlas, true, camX, camY, camX + vw, camY + vh);
 
@@ -578,19 +646,21 @@
         if (tasten.has('r')) dx += 1;
         if (tasten.has('o')) dy -= 1;
         if (tasten.has('u')) dy += 1;
-        if (touchZiel) {
-          const z = bildschirmZuKachel(touchZiel.x, touchZiel.y);
-          const ex = z.mx - (spieler.x + SPIELER_GROESSE / 2), ey = z.my - (spieler.y + SPIELER_GROESSE / 2);
-          if (Math.abs(ex) > 4) dx = Math.sign(ex);
-          if (Math.abs(ey) > 4) dy = Math.sign(ey);
-        }
         if (dx && dy) { dx *= Math.SQRT1_2; dy *= Math.SQRT1_2; }
+        const ausschlag = Math.hypot(stick.x, stick.y);
+        if (ausschlag > 0.2) {                    // Totzone; weiter ausgelenkt = schneller
+          const f = Math.min(1, (ausschlag - 0.2) / 0.6) / ausschlag;
+          dx = stick.x * f; dy = stick.y * f;
+        }
+        const vorher = { x: spieler.x, y: spieler.y };
         bewege(dx * TEMPO * dt, dy * TEMPO * dt);
+        animation(dx, dy, spieler.x !== vorher.x || spieler.y !== vorher.y, dt);
 
         kamera = zeichne(boden, atlas);
 
         const tx = Math.floor((spieler.x + 8) / TILE), ty = Math.floor((spieler.y + 8) / TILE);
-        let text = 'Pfeiltasten/WASD laufen · K Kollision · E Editor · +/- Zoom (' + zoom + 'x)\n' +
+        let text = (touchGeraet && !matchMedia('(pointer: fine)').matches ? 'Joystick unten links: laufen\n'
+          : 'Pfeiltasten/WASD laufen · K Kollision · E Editor · C Figur/Block · +/- Zoom (' + zoom + 'x)\n') +
           'Spieler auf Kachel ' + tx + ', ' + ty;
         if (editor && modusTab === 'kollision') {
           text += '\nKollision: klicken/ziehen malt · 1 frei · 2 gesperrt · 3 verdeckt · G Pinselgröße · Tab Ebenen · Strg+Z';
