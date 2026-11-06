@@ -43,7 +43,7 @@ WAND += [('wand/04', x, 35) for x in (24, 30)]
 # (sprite, Kachel-x, Fusskachel-y, Optionen)
 FEST = [
     # ---- Portalhalle: Portal in der Achse, je Seite Statue, Saeule, Feuerschale, Gargoyle, Kandelaber (symmetrisch)
-    ('gross/02', 27, 9, {'symm': None, 'achse': True}),
+    ('portal3/00', 27, 9, {'symm': None, 'achse': True}),
     ('einrichtung/13', 16, 9, {'symm': 'statue'}), ('einrichtung/13', 39, 9, {'symm': 'statue', 'spiegeln': True}),
     ('moebel/00', 19, 8, {'symm': 'saeule1'}), ('moebel/00', 36, 8, {'symm': 'saeule1'}),
     ('moebel/06', 22, 9, {'symm': 'schale', 'anim': 'glimmen'}), ('moebel/06', 33, 9, {'symm': 'schale', 'anim': 'glimmen'}),
