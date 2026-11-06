@@ -21,7 +21,7 @@ OBJ = os.path.join(ROOT, 'assets', 'objekte', 'karte09')
 OBJ8 = os.path.join(ROOT, 'assets', 'objekte', 'karte08')
 T = 16
 ACHSE_B = 27 * T + 8              # Teppichachse Portalhalle / grosser Saal (Teppich x 26-28 -> Mitte 440 px)
-ACHSE_D = 75 * T + 8              # Ritualsaal (Rahmen x 66-84)
+ACHSE_D = (66 * T + 85 * T) // 2   # Ritualsaal: Mitte des Teppichrahmens (x 66-84) = 1208 px
 
 TURM = 'turm/03'                  # neuer Wachturm (PixelLab k9_turm) mit Fledermaus-Fahne
 BANNER_AUSSEN = 'banner/03'       # neue Banner (PixelLab k9_banner)
@@ -66,9 +66,9 @@ FEST = [
     # ---- Gang zum Ritualsaal
     ('moebel/13', 58, 22, {}), ('moebel/09', 58, 33, {}),
     # ---- Ritualsaal: Orgel, Altar, Saerge an den Waenden, Statuen, Baenke, Fledermaus-Teppich im Kreis
-    ('gross/00', 75, 6, {}), ('gross/01', 75, 10, {}),
+    ('gross/00', 75, 6, {'achse': True}), ('gross/01', 75, 10, {'achse': True}),
     ('moebel/01', 71, 10, {'symm': 'kandD', 'anim': 'kerzen'}), ('moebel/01', 79, 10, {'symm': 'kandD', 'anim': 'kerzen'}),
-    ('einrichtung/04', 75, 21, {'boden': True}),
+    ('einrichtung/04', 75, 21, {'boden': True, 'achse': True}),
     ('einrichtung/13', 69, 17, {'symm': 'statD'}), ('einrichtung/13', 81, 17, {'symm': 'statD', 'spiegeln': True}),
     ('moebel/03', 69, 32, {'symm': 'bank1'}), ('moebel/03', 81, 32, {'symm': 'bank1'}),
     ('moebel/03', 73, 32, {'symm': 'bank2'}), ('moebel/03', 77, 32, {'symm': 'bank2'}),
@@ -80,7 +80,7 @@ FEST = [
     # Gartenhof: Gruft, toter Baum, Grab
     ('k8/krypta/00', 57, 7, {}), ('k8/baeume/00', 49, 7, {}), ('k8/mittel/02', 53, 12, {}), ('wand/38', 59, 12, {}),
     # Friedhof: Mausoleum, Gruften, Steinkreis, Lager, Statue, grosser toter Baum
-    ('k8/krypta/02', 11, 48, {}), ('k8/krypta/00', 21, 48, {}), ('k8/krypta/00', 4, 62, {}), ('k8/krypta/03', 84, 68, {}),
+    ('k8/krypta/02', 11, 48, {}), ('k8/krypta/00', 21, 48, {}), ('k8/krypta/00', 4, 62, {}), ('k8/krypta/03', 82, 68, {}),
     ('k8/gross/03', 77, 50, {}), ('wand/32', 38, 76, {}), ('k8/graeber/09', 20, 47, {}), ('k8/graeber/09', 36, 47, {'spiegeln': True}),
     ('wand/34', 66, 57, {}),
 ] + [('k8/mittel/04', x, y, {}) for (x, y) in ((61, 54), (63, 51), (68, 51), (73, 54), (71, 59), (68, 61), (63, 61), (61, 58))] + [
@@ -88,7 +88,7 @@ FEST = [
     ('k8/mittel/05', 35, 78, {'anim': 'geisterlicht'}), ('k8/mittel/05', 52, 80, {'anim': 'geisterlicht'}),
     ('k8/mittel/05', 24, 50, {'anim': 'geisterlicht'}), ('k8/mittel/05', 34, 50, {'anim': 'geisterlicht'}),
     ('k8/mittel/05', 57, 75, {'anim': 'geisterlicht'}), ('k8/mittel/05', 16, 74, {'anim': 'geisterlicht'}),
-    ('wand/26', 62, 46, {}), ('wand/53', 6, 75, {}), ('k8/mittel/11', 18, 58, {}), ('wand/28', 80, 69, {}),
+    ('wand/26', 62, 46, {}), ('wand/53', 6, 75, {}), ('k8/mittel/11', 18, 58, {}),
 ]
 GROSS2 = set()                    # keine Vergroesserung: Wandobjekte passen in Originalgroesse auf die Wand
 GRAEBER = ['k8/mittel/00', 'k8/mittel/01', 'k8/mittel/02', 'k8/mittel/03', 'k8/klein/50', 'k8/klein/51', 'wand/21',
@@ -122,7 +122,7 @@ def raster_x(a, X):
     return bx * T + (wt * T - w) // 2 - int(xs.min())
 
 
-def tor_anpassen(sp):
+def tor_anpassen(sp, umfaerben=True):
     """Tor passend zur Karte: Stein in den Farben der Schlossmauern (nach Helligkeit), Fackeln/Flammen bleiben;
     der dunkle Durchgang wird transparent (Teppich und Boden scheinen durch, das hochgezogene Gitter bleibt)."""
     from collections import deque
@@ -150,7 +150,8 @@ def tor_anpassen(sp):
     out = a.copy()
     idx = np.clip((lum / 255.0 * 1.25 * (len(ramp) - 1)).astype(int), 0, len(ramp) - 1)
     m = stein & ~durch
-    out[m, :3] = ramp[idx[m]]
+    if umfaerben:
+        out[m, :3] = ramp[idx[m]]
     out[durch, 3] = 0
     return Image.fromarray(np.clip(out, 0, 255).astype(np.uint8), 'RGBA')
 
@@ -248,8 +249,8 @@ def main():
         key = (name, spiegeln)
         if key not in cache:
             sp = saeubern(Image.open(quelle(name)).convert('RGBA'))
-            if name in ('tor/00', 'tor/01'):
-                sp = tor_anpassen(sp)
+            if name in ('tor/00', 'tor/01', 'tor3/00'):
+                sp = tor_anpassen(sp, umfaerben=not name.startswith('tor3/'))   # tor3 hat schon Mauerfarben
             if name == 'einrichtung/03':
                 sp = groesstes_teil(sp)
             if name == 'einrichtung/01':
@@ -342,13 +343,13 @@ def main():
                         **({'anim': 'kerzen'} if name == 'wand/04' else {})})
     # Tuerme auf der Aussenmauer und Tore (stehen auf/vor der Mauer, eigene Platzierung)
     for (name, tx, fuss_px) in [(TURM, x, 39 * T + 15) for x in (2, 12, 22, 32, 42, 52, 62, 72, 82)] + \
-                               [('tor2/01', 27, 39 * T + 15), ('tor2/02', 27, 19 * T + 15)]:
+                               [('tor2/01', 27, 39 * T + 15), ('tor3/00', 27, 19 * T + 15)]:
         datei, h, zu, mitte = sprite(name, False)
-        if name.startswith(('tor/', 'tor2/')):
+        if name.startswith(('tor/', 'tor2/', 'tor3/')):
             xs_ = np.nonzero(alpha[datei].any(axis=0))[0]
             mitte = (xs_.min() + xs_.max() + 1) / 2.0             # Tor genau mittig auf der Teppichachse
         x, y = int(round(tx * T + T / 2 - mitte)), fuss_px - zu
-        if not name.startswith(('tor/', 'tor2/')):          # Tore bleiben exakt auf der Teppichachse (440 px)
+        if not name.startswith(('tor/', 'tor2/', 'tor3/')):          # Tore bleiben exakt auf der Teppichachse (440 px)
             x = raster_x(alpha[datei], tx * T + T / 2)
         objekte.append({'datei': datei, 'basis': name, 'x': x, 'y': y, 'fuss': h, 'kachel': [int(tx), fuss_px // T],
                         'ebene': 1, 'an_wand': True, 'kein_schatten': True, 'keine_verdeckung': True,
@@ -408,7 +409,8 @@ def symmetrie():
         if o.get('achse'):
             a_ = np.array(Image.open(os.path.join(OBJ, o['datei'])).getchannel('A')) > 128
             xs_ = np.nonzero(a_.any(axis=0))[0]
-            o['x'] = int(round(ACHSE_B - (xs_.min() + xs_.max() + 1) / 2.0))
+            achse_ = ACHSE_D if o['x'] > 62 * T else ACHSE_B
+            o['x'] = int(round(achse_ - (xs_.min() + xs_.max() + 1) / 2.0))
     paare = {}
     for o in objs:
         if o.get('symm'):
