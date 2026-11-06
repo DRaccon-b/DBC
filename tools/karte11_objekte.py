@@ -50,7 +50,8 @@ FEST = [
     # Plattform: Runensaeulen am Rand, spiegelgleich zur Achse; Kohlenbecken am Bannkreis
     ('land/03', ACHSE_P - 80, 32, {'symm': 'p1'}), ('land/03', ACHSE_P + 80, 32, {'symm': 'p1'}),
     ('land/03', ACHSE_P - 72, 47, {'symm': 'p4'}), ('land/03', ACHSE_P + 72, 47, {'symm': 'p4'}),
-    ('land/02', ACHSE_P, 47, {'achse': ACHSE_P}),
+    # Brueckenkopf am Strand: zwei Laternen spiegelgleich zur Brueckenachse
+    ('land/11', 40 * T + 8, 36, {'symm_y': 'bk'}), ('land/11', 40 * T + 8, 41, {'symm_y': 'bk'}),
     # Ruinen-Platz: Kohlenbecken, Laternen, Schild, Kisten
     ('land/01', 3 * T + 8, 27, {'symm': 'r1'}), ('land/01', 12 * T + 8, 27, {'symm': 'r1'}),
     ('land/11', 3 * T + 8, 35, {}), ('land/12', 12 * T, 34, {}), ('land/13', 8 * T, 33, {}), ('land/05', 10 * T, 31, {}),
@@ -91,6 +92,11 @@ def main():
     objekte, belegt = [], set()
     pixel = np.zeros(lvl.shape, bool)
     gesperrt = set()
+    b_ = lay.get('bruecke')
+    if b_:
+        for y in range(b_[1] - 1, b_[3] + 4):
+            for x in range(b_[0], b_[2] + 1):
+                gesperrt.add((x, y))
     for tp in lay.get('teleporter', []):
         for y in range(tp['y'] - 1, tp['y'] + tp['h'] + 2):
             for x in range(tp['x'] - 1, tp['x'] + tp['b'] + 2):
@@ -242,6 +248,14 @@ def symmetrie():
         r['x'] = int(round(2 * achse - (l['x'] + m_) - m_))
         r['y'] = l['y']
     for name, ps in paare_y.items():
+        if len(ps) == 1:                                     # fehlender Partner: an der Brueckenachse gespiegelt
+            o0 = ps[0]
+            neu = dict(o0)
+            a_ = np.array(Image.open(os.path.join(OBJ, o0['datei'])).getchannel('A')) > 128
+            zu_ = int(np.nonzero(a_.any(axis=1))[0].max())
+            fuss = o0['y'] + zu_
+            neu['y'] = int(2 * ACHSE_BR - fuss) - zu_ + (T if fuss < ACHSE_BR else -T)
+            objs.append(neu); ps.append(neu)
         if len(ps) != 2:
             print('  Paar unvollstaendig:', name, len(ps))
             continue

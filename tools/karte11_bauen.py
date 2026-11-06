@@ -230,6 +230,57 @@ def kaimauer(a, m, tiefe=24, ebene=None):
     return front
 
 
+def bruecke_zeichnen(a, m, ebene, wasser):
+    """Steinbruecke: Deck aus Platten, Bruestungen an Nord- und Suedkante (dunkle Ziegel, helle Oberkante), nach
+    Sueden die Bogenreihe - Pfeiler alle 48 px gehen fest bis zum Meeresboden der jeweiligen Wasserstufe, dazwischen
+    runde Boegen, durch die das Wasser sichtbar bleibt."""
+    Hh, W = m.shape
+    ys, xs = np.nonzero(m)
+    if not len(ys):
+        return np.zeros_like(m)
+    y0, y1, x0, x1 = ys.min(), ys.max(), xs.min(), xs.max()
+    yy, xx = np.mgrid[0:Hh, 0:W]
+    br = m & ((yy <= y0 + 4) | (yy >= y1 - 4))
+    z = ((yy % 4 == 3) | ((xx + 4 * ((yy // 4) % 2)) % 8 == 7))
+    a[br] = np.where(z[br][:, None], H('#16161e'), H('#2e2e3e'))
+    a[m & ((yy == y0) | (yy == y1 - 4))] = H('#5a5a70')                 # Oberkante der Bruestungen im Licht
+    a[m & (yy == y0 + 5)] = (a[m & (yy == y0 + 5)] * 0.7).astype(np.uint8)   # Schatten der Nordbruestung aufs Deck
+    front = np.zeros_like(m)
+    UEBER = 10
+    for x in range(x0, x1 + 1):
+        st_ = int(ebene[min(Hh - 1, y1 + 24), x]) if wasser[min(Hh - 1, y1 + 24), x] else 0
+        tiefe = UEBER + MAUER_TIEFE[min(st_, len(MAUER_TIEFE) - 1)]
+        q = (x - x0) % 48
+        pfeiler = q < 12 or x > x1 - 12
+        if pfeiler:
+            bis = tiefe
+        else:
+            t = (q - 12) / 36.0                                         # Bogen zwischen zwei Pfeilern
+            bis = UEBER + int(round(8 * (1 - math.sqrt(max(0.0, 1 - (2 * t - 1) ** 2)))))
+        for d in range(bis + (2 if pfeiler else 1)):
+            Y = y1 + 1 + d
+            if Y >= Hh:
+                break
+            if d >= bis:
+                a[Y, x] = (a[Y, x] * (0.62 if pfeiler else 0.5)).astype(np.uint8)   # Fuss-/Bogenschatten
+                continue
+            front[Y, x] = True
+            reihe = d // 4
+            if d % 4 == 3 or (x + 4 * (reihe % 2)) % 8 == 7:
+                c = np.array((22, 22, 30), np.float32)
+            else:
+                c = np.array((52, 52, 66) if reihe % 2 else (46, 46, 60), np.float32)
+            if pfeiler and (q in (0, 1)):
+                c = c + 18                                              # Lichtkante am Pfeiler
+            if d > UEBER - 3:
+                tief_ = (d - UEBER + 3) / max(1, tiefe - UEBER + 3)
+                c = c * (0.7 - 0.25 * tief_) + np.array((24, 34, 70), np.float32) * (0.3 + 0.25 * tief_)
+            if d == UEBER - 3:
+                c = np.array((90, 120, 140), np.float32)               # Wasserlinie
+            a[Y, x] = np.clip(c, 0, 255).astype(np.uint8)
+    return front
+
+
 def wasser_ebenen(tief):
     """Wasserstufe 0..5 je Pixel (wie wasser_vertieft: Abstand zum Ufer >= Schwellen), fest fuer alle Bilder."""
     pf = os.path.join(KARTE, 'wasser_ebenen.npy')
@@ -382,7 +433,9 @@ def bauen(frame=None, speichern=True):
     a[kreis_m] = textur('z', cols, rows)[kreis_m]
     bt = textur('q', cols, rows)
     a[bruecke_m] = bt[bruecke_m]
-    front = kaimauer(a, plattform | bruecke_m, ebene=wasser_ebenen(tief))
+    ebenen_ = wasser_ebenen(tief)
+    front = kaimauer(a, plattform, ebene=ebenen_)
+    front |= bruecke_zeichnen(a, bruecke_m, ebenen_, tief | flach)
     bannkreis(a, 69.5 * T, 38.5 * T, 4.4 * T, 3.7 * T, frame)
     # --- Treppen (Suedseite der Plateaus) und Kanten
     treppen_info = []

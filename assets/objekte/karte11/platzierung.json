@@ -324,21 +324,42 @@
 ]
 },
 {
-"datei": "sauber/land-02.png",
-"basis": "land/02",
-"x": 1093,
-"y": 707,
-"fuss": 61,
+"datei": "sauber/land-11.png",
+"basis": "land/11",
+"x": 642,
+"y": 534,
+"fuss": 58,
 "kachel": [
-69,
-47
+40,
+36
 ],
 "ebene": 1,
-"achse": 1112,
+"anim": "geisterlicht",
+"symm_y": "bk",
 "block": [
-68,
-44,
-3,
+40,
+33,
+2,
+4
+]
+},
+{
+"datei": "sauber/land-11.png",
+"basis": "land/11",
+"x": 642,
+"y": 614,
+"fuss": 58,
+"kachel": [
+40,
+41
+],
+"ebene": 1,
+"anim": "geisterlicht",
+"symm_y": "bk",
+"block": [
+40,
+38,
+2,
 4
 ]
 },
@@ -1721,24 +1742,6 @@
 {
 "datei": "sauber/meer-07.png",
 "basis": "meer/07",
-"x": 517,
-"y": 383,
-"fuss": 33,
-"kachel": [
-33,
-25
-],
-"ebene": 0,
-"block": [
-32,
-23,
-3,
-3
-]
-},
-{
-"datei": "sauber/meer-07.png",
-"basis": "meer/07",
 "x": 549,
 "y": 911,
 "fuss": 33,
@@ -1773,94 +1776,22 @@
 ]
 },
 {
-"datei": "sauber/land-08.png",
-"basis": "land/08",
-"x": 610,
-"y": 506,
+"datei": "sauber/land-04.png",
+"basis": "land/04",
+"x": 516,
+"y": 378,
 "fuss": 38,
 "kachel": [
-39,
-33
+33,
+25
 ],
 "ebene": 0,
 "liegend": true,
 "block": [
-38,
-31,
-4,
-3
-]
-},
-{
-"datei": "sauber/meer-01.png",
-"basis": "meer/01",
-"x": 816,
-"y": 789,
-"fuss": 59,
-"kachel": [
-52,
-52
-],
-"ebene": 1,
-"block": [
-51,
-49,
-3,
-4
-]
-},
-{
-"datei": "sauber/meer-06.png",
-"basis": "meer/06",
-"x": 869,
-"y": 318,
-"fuss": 50,
-"kachel": [
-55,
-22
-],
-"ebene": 1,
-"block": [
-54,
-19,
-4,
-4
-]
-},
-{
-"datei": "sauber/meer-00.png",
-"basis": "meer/00",
-"x": 807,
-"y": 853,
-"fuss": 43,
-"kachel": [
-51,
-55
-],
-"ebene": 1,
-"block": [
-50,
-53,
-4,
-3
-]
-},
-{
-"datei": "sauber/meer-09.png",
-"basis": "meer/09",
-"x": 818,
-"y": 372,
-"fuss": 29,
-"kachel": [
-52,
-24
-],
-"ebene": 0,
-"block": [
-51,
+32,
 23,
-3,
-2
+4,
+3
 ]
 },
 {
@@ -1877,6 +1808,24 @@
 "block": [
 41,
 44,
+3,
+4
+]
+},
+{
+"datei": "sauber/meer-01.png",
+"basis": "meer/01",
+"x": 800,
+"y": 837,
+"fuss": 59,
+"kachel": [
+51,
+55
+],
+"ebene": 1,
+"block": [
+50,
+52,
 3,
 4
 ]
@@ -1913,24 +1862,6 @@
 "block": [
 43,
 8,
-3,
-4
-]
-},
-{
-"datei": "sauber/meer-10.png",
-"basis": "meer/10",
-"x": 673,
-"y": 559,
-"fuss": 49,
-"kachel": [
-43,
-37
-],
-"ebene": 1,
-"block": [
-42,
-34,
 3,
 4
 ]
@@ -1991,24 +1922,6 @@
 ]
 },
 {
-"datei": "sauber/meer-05.png",
-"basis": "meer/05",
-"x": 784,
-"y": 629,
-"fuss": 43,
-"kachel": [
-50,
-41
-],
-"ebene": 0,
-"block": [
-49,
-39,
-3,
-3
-]
-},
-{
 "datei": "sauber/meer-00.png",
 "basis": "meer/00",
 "x": 583,
@@ -2022,6 +1935,24 @@
 "block": [
 36,
 41,
+4,
+3
+]
+},
+{
+"datei": "sauber/meer-08.png",
+"basis": "meer/08",
+"x": 836,
+"y": 310,
+"fuss": 42,
+"kachel": [
+53,
+21
+],
+"ebene": 1,
+"block": [
+52,
+19,
 4,
 3
 ]
@@ -2118,6 +2049,78 @@
 ]
 },
 {
+"datei": "sauber/meer-02.png",
+"basis": "meer/02",
+"x": 865,
+"y": 780,
+"fuss": 52,
+"kachel": [
+55,
+51
+],
+"ebene": 1,
+"block": [
+54,
+48,
+4,
+4
+]
+},
+{
+"datei": "sauber/meer-10_m.png",
+"basis": "meer/10",
+"x": 817,
+"y": 383,
+"fuss": 49,
+"kachel": [
+52,
+26
+],
+"ebene": 1,
+"block": [
+51,
+23,
+3,
+4
+]
+},
+{
+"datei": "sauber/meer-08.png",
+"basis": "meer/08",
+"x": 932,
+"y": 182,
+"fuss": 42,
+"kachel": [
+59,
+13
+],
+"ebene": 1,
+"block": [
+58,
+11,
+4,
+3
+]
+},
+{
+"datei": "sauber/meer-01_m.png",
+"basis": "meer/01",
+"x": 1152,
+"y": 261,
+"fuss": 59,
+"kachel": [
+73,
+19
+],
+"ebene": 1,
+"block": [
+72,
+16,
+3,
+4
+]
+},
+{
 "datei": "sauber/meer-03_m.png",
 "basis": "meer/03",
 "x": 723,
@@ -2153,25 +2156,6 @@
 42,
 3,
 3
-]
-},
-{
-"datei": "sauber/meer-04.png",
-"basis": "meer/04",
-"x": 740,
-"y": 562,
-"fuss": 62,
-"kachel": [
-47,
-38
-],
-"ebene": 1,
-"anim": "wehen",
-"block": [
-46,
-35,
-3,
-4
 ]
 },
 {

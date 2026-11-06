@@ -85,8 +85,10 @@ def main():
     h[platt] = 2
     kreis = ((xx + 0.5 - 69.5) ** 2 / 5.2 ** 2 + (yy + 0.5 - 38.5) ** 2 / 4.6 ** 2) <= 1
     k[kreis] = 'z'
-    k[37:40, 54:60] = 'q'                          # Steinbruecke (liegt ueber der Tiefsee)
-    h[37:40, 54:60] = 1
+    k[35:42, 52:58] = np.where(np.isin(k[35:42, 52:58], ['d', 'm', 'n']), 'u', k[35:42, 52:58])   # keine Landreste im Riff
+    k[37:40, 42:60] = 'q'                          # Steinbruecke vom Strand ueber Riff und Tiefsee zur Plattform
+    h[37:40, 42:60] = 1
+    k[36:41, 39:42] = 'q'                          # Brueckenkopf am Strand (gepflastert)
     # rund um die Plattform nur Tiefsee (die Vorlage hat am rechten Rand noch einen Streifen Land)
     um = (xx >= 58) & (yy >= 24) & (yy <= 56) & np.isin(k, ['d', 'm', 'n'])
     k[um] = '~'
@@ -97,7 +99,7 @@ def main():
         # Treppen (x0, x1, Ebene): Sued-Treppe des oberen Plateaus; Osttreppen als (y0, y1, x, Ebene)
         # Treppen nach Sueden von beiden lila Plateaus: (x0, x1, Ebene, unterste Plateaureihe)
         'treppen_sued': [[5, 8, 2, 21], [5, 8, 2, 53]],
-        'bruecke': [54, 37, 59, 39],
+        'bruecke': [42, 37, 59, 39],
         'teleporter': [{'x': 29, 'y': 0, 'b': 6, 'h': 2}, {'x': 0, 'y': 30, 'b': 2, 'h': 4}],
     }
     os.makedirs(KARTE, exist_ok=True)
