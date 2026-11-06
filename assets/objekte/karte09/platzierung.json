@@ -732,6 +732,7 @@
 "kein_schatten": true,
 "keine_verdeckung": true,
 "vorrang": true,
+"anim": "feuer",
 "fest_pos": true
 },
 {
@@ -763,6 +764,7 @@
 ],
 "ebene": 1,
 "achse": true,
+"anim": "portal",
 "block": [
 24,
 3,
@@ -858,7 +860,7 @@
 ],
 "ebene": 1,
 "symm": "schale",
-"anim": "glimmen",
+"anim": "feuer_lila",
 "block": [
 21,
 6,
@@ -878,7 +880,7 @@
 ],
 "ebene": 1,
 "symm": "schale",
-"anim": "glimmen",
+"anim": "feuer_lila",
 "block": [
 32,
 6,
@@ -1253,6 +1255,7 @@
 23
 ],
 "ebene": 1,
+"anim": "kerzen",
 "block": [
 41,
 21,
@@ -1307,6 +1310,7 @@
 32
 ],
 "ebene": 1,
+"anim": "kerzen",
 "block": [
 41,
 30,
@@ -1491,6 +1495,7 @@
 ],
 "ebene": 1,
 "achse": true,
+"anim": "kerzen",
 "block": [
 72,
 8,

@@ -541,6 +541,10 @@ def objekte_zeichnen(img, objs, cache, boden, frame, ebenen=None):
             sp = fahne_wehen(sp, frame, o['x'] * 0.37)
         elif frame is not None and o.get('anim') == 'reaktor':
             sp = reaktor_ruetteln(sp, frame, o['x'])
+        elif frame is not None and o.get('anim') in ('kerzen', 'feuer_kamin', 'feuer', 'feuer_lila'):
+            sp = flammen_bewegen(sp, frame, o['x'] + o['y'], lila=o.get('anim') == 'feuer_lila')
+        elif frame is not None and o.get('anim') == 'portal':
+            sp = portal_drehen(sp, frame)
         img.alpha_composite(sp, (o['x'], o['y']))
         if frame is not None and o.get('anim') == 'blume':
             bluete_puls(img, o, sp, frame)
@@ -572,6 +576,76 @@ def reaktor_ruetteln(sp, frame, phase):
     fuss = sp.crop((0, schnitt - 1, sp.width, sp.height))          # Naht doppelt -> keine Luecke beim Hochruetteln
     neu.alpha_composite(fuss, (0, schnitt - 1))
     return neu
+
+
+def flammen_maske(a, lila=False):
+    r, g, b = a[..., 0].astype(int), a[..., 1].astype(int), a[..., 2].astype(int)
+    al = a[..., 3] > 0
+    if lila:                                                 # violettes Feuer (Feuerschalen)
+        return al & (b > 140) & (r > 100) & (g < r - 20) & (r + b > 300)
+    return al & (r > 200) & (g > 90) & (b < 150) & (r > g + 25)
+
+
+def flammen_bewegen(sp, frame, phase, lila=False):
+    """Nur die Flammen bewegen sich: Flammenpixel zuengeln (zeilenweise seitlicher Versatz, oben staerker) und
+    die Spitze springt um 1 px; Halter, Kerzen und Schalen bleiben ruhig."""
+    a = np.array(sp.convert('RGBA'))
+    m = flammen_maske(a, lila)
+    if m.sum() < 2:
+        return sp
+    out = a.copy()
+    ys, xs = np.nonzero(m)
+    # Hintergrund unter den Flammen: Nachbarfarbe des Halters bzw. transparent
+    out[m] = 0
+    t = 2 * math.pi * frame / N_FRAMES
+    y0, y1 = ys.min(), ys.max()
+    for y, x in zip(ys, xs):
+        k = (y1 - y) / max(1, y1 - y0)                       # 0 unten ... 1 Spitze
+        dx = int(round(k * 1.4 * math.sin(t * 3 + phase * 0.7 + y * 0.9)))
+        dy = -1 if (k > 0.6 and (frame + int(phase)) % 3 == 0) else 0
+        X, Y = x + dx, y + dy
+        if 0 <= X < a.shape[1] and 0 <= Y < a.shape[0]:
+            out[Y, X] = a[y, x]
+    # Loecher am Flammenfuss schliessen (Original dort, wo nichts hingerueckt ist und unten Flamme war)
+    return Image.fromarray(out, 'RGBA')
+
+
+def portal_drehen(sp, frame):
+    """Portal: der violette Wirbel dreht sich (einmal pro Schleife), der Rahmen bleibt fest."""
+    a = np.array(sp.convert('RGBA'))
+    r, g, b = a[..., 0].astype(int), a[..., 1].astype(int), a[..., 2].astype(int)
+    wirbel = (a[..., 3] > 0) & (b > 110) & (r > 70) & (g < r) & (b > g + 30)
+    from collections import deque
+    # groesste zusammenhaengende Wirbelflaeche (ohne einzelne violette Kristalle im Rahmen)
+    h, w = wirbel.shape
+    lab = np.zeros((h, w), int); n = 0; groesse = {}
+    for y in range(h):
+        for x in range(w):
+            if wirbel[y, x] and not lab[y, x]:
+                n += 1; q = deque([(y, x)]); lab[y, x] = n; c = 0
+                while q:
+                    yy, xx = q.popleft(); c += 1
+                    for dy, dx in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+                        y2, x2 = yy + dy, xx + dx
+                        if 0 <= y2 < h and 0 <= x2 < w and wirbel[y2, x2] and not lab[y2, x2]:
+                            lab[y2, x2] = n; q.append((y2, x2))
+                groesse[n] = c
+    if not groesse:
+        return sp
+    m = lab == max(groesse, key=groesse.get)
+    ys, xs = np.nonzero(m)
+    cy, cx = (ys.min() + ys.max()) / 2.0, (xs.min() + xs.max()) / 2.0
+    win = -360.0 * frame / N_FRAMES
+    ca, sa = math.cos(math.radians(win)), math.sin(math.radians(win))
+    out = a.copy()
+    # inverse Rotation: jedes Zielpixel holt sich die Farbe am gedrehten Quellpunkt (innerhalb des Wirbels)
+    dy_, dx_ = ys - cy, xs - cx
+    sy = np.round(cy + dy_ * ca - dx_ * sa).astype(int)
+    sx = np.round(cx + dy_ * sa + dx_ * ca).astype(int)
+    ok = (sy >= 0) & (sy < h) & (sx >= 0) & (sx < w)
+    ok[ok] &= m[sy[ok], sx[ok]]
+    out[ys[ok], xs[ok]] = a[sy[ok], sx[ok]]
+    return Image.fromarray(out, 'RGBA')
 
 
 def fahne_wehen(sp, frame, phase=0.0):
@@ -798,7 +872,7 @@ def animieren(img, objs, cache, frame, ruhig=False):
                     gd.ellipse((x0 - r, y0 - r, x0 + r, y0 + r), fill=(175, 170, 165, int(210 * k_)))
                     if r > 2.5:
                         gd.ellipse((x0 - r + 1, y0 - r + 1, x0, y0), fill=(220, 216, 210, int(200 * k_)))
-        elif anim in ('geisterlicht', 'kerzen', 'glimmen', 'feuer_kamin'):
+        elif anim in ('geisterlicht', 'kerzen', 'glimmen', 'feuer_kamin', 'feuer', 'feuer_lila', 'portal'):
             # Lichtquelle: hellste gesaettigte Pixel (gruene Flamme / Kerzenflamme / Pilzkappen) pulsieren,
             # weicher Schein in ihrer Farbe (Karte 08)
             a = np.array(sp).astype(np.int16)
@@ -806,16 +880,16 @@ def animieren(img, objs, cache, frame, ruhig=False):
             if anim == 'geisterlicht':
                 q = (a[..., 3] > 0) & (g_ > 150) & (g_ > r_ + 40)
                 farbe, rad = (120, 255, 170), (16, 8)
-            elif anim in ('kerzen', 'feuer_kamin'):
+            elif anim in ('kerzen', 'feuer_kamin', 'feuer'):
                 q = (a[..., 3] > 0) & (r_ > 200) & (g_ > 90) & (b_ < 140) & (r_ > g_ + 30)
-                farbe, rad = (255, 170, 70), ((22, 12) if anim == 'feuer_kamin' else (14, 7))
+                farbe, rad = (255, 170, 70), ((22, 12) if anim in ('feuer_kamin', 'feuer') else (14, 7))
             else:
                 q = (a[..., 3] > 0) & (b_ > 150) & (r_ > 120) & (g_ < r_ - 30)
                 farbe, rad = (190, 120, 255), (9, 4)
             ys_q, xs_q = np.nonzero(q)
             if len(xs_q):
                 f_ = 0.5 + 0.5 * math.sin(2 * math.pi * frame / N_FRAMES * (3 if anim == 'kerzen' else 1) + i * 1.7)
-                if anim in ('kerzen', 'feuer_kamin'):
+                if anim in ('kerzen', 'feuer_kamin', 'feuer'):
                     f_ = 0.55 + 0.45 * ((frame * 7 + i * 3) % 5) / 4.0
                 cx, cy = o['x'] + xs_q.mean(), o['y'] + ys_q.mean()
                 for k_, al in ((1.0, 26), (0.55, 46)):

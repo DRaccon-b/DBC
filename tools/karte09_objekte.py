@@ -43,10 +43,10 @@ WAND += [('wand/04', x, 35) for x in (24, 30)]
 # (sprite, Kachel-x, Fusskachel-y, Optionen)
 FEST = [
     # ---- Portalhalle: Portal in der Achse, je Seite Statue, Saeule, Feuerschale, Gargoyle, Kandelaber (symmetrisch)
-    ('portal3/00', 27, 9, {'symm': None, 'achse': True}),
+    ('portal3/00', 27, 9, {'symm': None, 'achse': True, 'anim': 'portal'}),
     ('einrichtung/13', 16, 9, {'symm': 'statue'}), ('einrichtung/13', 39, 9, {'symm': 'statue', 'spiegeln': True}),
     ('moebel/00', 19, 8, {'symm': 'saeule1'}), ('moebel/00', 36, 8, {'symm': 'saeule1'}),
-    ('moebel/06', 22, 9, {'symm': 'schale', 'anim': 'glimmen'}), ('moebel/06', 33, 9, {'symm': 'schale', 'anim': 'glimmen'}),
+    ('moebel/06', 22, 9, {'symm': 'schale', 'anim': 'feuer_lila'}), ('moebel/06', 33, 9, {'symm': 'schale', 'anim': 'feuer_lila'}),
     ('moebel/13', 23, 13, {'symm': 'garg'}), ('moebel/13', 32, 13, {'symm': 'garg', 'spiegeln': True}),
     ('moebel/01', 14, 13, {'symm': 'kand1', 'anim': 'kerzen'}), ('moebel/01', 41, 13, {'symm': 'kand1', 'anim': 'kerzen'}),
     # ---- Kreuzung: vier Saeulen um die Teppichkreuzung, Ruestungen am Tor (symmetrisch)
@@ -59,14 +59,14 @@ FEST = [
     ('einrichtung/11', 11, 32, {}), ('einrichtung/15', 7, 32, {'anim': 'kerzen'}), ('einrichtung/15', 15, 32, {'anim': 'kerzen'}),
     ('einrichtung/10', 19, 31, {}), ('einrichtung/09', 22, 33, {}),
     # ---- grosser Saal Ost: Speisesaal mit zwei Tafeln, Stuehle an den Kopfenden, Kandelaber, Kamin
-    ('einrichtung/00', 41, 23, {}), ('einrichtung/01', 38, 23, {}), ('einrichtung/01', 44, 23, {'spiegeln': True}),
-    ('einrichtung/00', 41, 32, {}), ('einrichtung/01', 38, 32, {}), ('einrichtung/01', 44, 32, {'spiegeln': True}),
+    ('einrichtung/00', 41, 23, {'anim': 'kerzen'}), ('einrichtung/01', 38, 23, {}), ('einrichtung/01', 44, 23, {'spiegeln': True}),
+    ('einrichtung/00', 41, 32, {'anim': 'kerzen'}), ('einrichtung/01', 38, 32, {}), ('einrichtung/01', 44, 32, {'spiegeln': True}),
     ('moebel/01', 34, 21, {'anim': 'kerzen'}), ('moebel/01', 51, 21, {'anim': 'kerzen'}),
     ('moebel/11', 51, 33, {}), ('moebel/05', 50, 25, {}),
     # ---- Gang zum Ritualsaal
     ('moebel/13', 58, 22, {}), ('moebel/09', 58, 33, {}),
     # ---- Ritualsaal: Orgel, Altar, Saerge an den Waenden, Statuen, Baenke, Fledermaus-Teppich im Kreis
-    ('gross/00', 75, 6, {'achse': True}), ('gross/01', 75, 10, {'achse': True}),
+    ('gross/00', 75, 6, {'achse': True}), ('gross/01', 75, 10, {'achse': True, 'anim': 'kerzen'}),
     ('moebel/01', 71, 10, {'symm': 'kandD', 'anim': 'kerzen'}), ('moebel/01', 79, 10, {'symm': 'kandD', 'anim': 'kerzen'}),
     ('einrichtung/04', 75, 21, {'boden': True, 'achse': True}),
     ('einrichtung/13', 69, 17, {'symm': 'statD'}), ('einrichtung/13', 81, 17, {'symm': 'statD', 'spiegeln': True}),
@@ -353,7 +353,7 @@ def main():
             x = raster_x(alpha[datei], tx * T + T / 2)
         objekte.append({'datei': datei, 'basis': name, 'x': x, 'y': y, 'fuss': h, 'kachel': [int(tx), fuss_px // T],
                         'ebene': 1, 'an_wand': True, 'kein_schatten': True, 'keine_verdeckung': True,
-                        'vorrang': True})
+                        'vorrang': True, **({'anim': 'feuer'} if name == 'tor2/01' else {})})
         if name == TURM:
             belegen(datei, x, y)
         if not name.startswith(TURM.split('/')[0]):
