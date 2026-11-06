@@ -32,23 +32,27 @@ def kacheln(block):
     return {(x, y) for x in range(bx, bx + wt) for y in range(by, by + ht)}
 
 
-def erlaubt(a, b):
-    """Duerfen sich die Bloecke a und b (Baeume) so ueberlappen?"""
+def erlaubt(a, b, wald=False):
+    """Duerfen sich die Bloecke a und b (Baeume) so ueberlappen?
+    Wiese: nur die aeusserste Spalte. Dichter Wald: bis zu zwei aeussere Spalten je Seite; mindestens eine Spalte
+    jedes Baums bleibt frei; Baeume bis 2 Kacheln Breite nie; die Sockelreihe nie."""
     ax, ay, aw, ah = a
     bx, by, bw, bh = b
     sx = set(range(ax, ax + aw)) & set(range(bx, bx + bw))
     sy = set(range(ay, ay + ah)) & set(range(by, by + bh))
     if not sx or not sy:
         return True
-    if aw < 3 or bw < 3 or len(sx) > 1:
+    if aw < 3 or bw < 3:
         return False
-    x = next(iter(sx))
-    if x not in (ax, ax + aw - 1) or x not in (bx, bx + bw - 1):        # nur aeusserste Spalte beider Baeume
+    rand = 2 if wald else 1
+    if len(sx) > rand or len(sx) >= min(aw, bw):
         return False
-    if (ay + ah - 1) in sy and (by + bh - 1) in sy and (ay + ah - 1) == (by + bh - 1):
-        return False                                                    # Sockel ueberlappen nie
-    if (ay + ah - 1) in sy or (by + bh - 1) in sy:
-        return False                                                    # Sockelreihe nicht im anderen Baum
+    aussen_a = set(range(ax, ax + rand)) | set(range(ax + aw - rand, ax + aw))
+    aussen_b = set(range(bx, bx + bw)) and (set(range(bx, bx + rand)) | set(range(bx + bw - rand, bx + bw)))
+    if not (sx <= aussen_a and sx <= aussen_b):
+        return False
+    if ay + ah == by + bh:
+        return False                                                    # Sockel zweier Baeume nie auf einer Kachel
     return True
 
 
@@ -69,8 +73,16 @@ def main():
     vorher = len(baeume)
     wichtig = lambda o: (0 if not o['basis'].startswith('baeume/') else 1, -o['block'][2] * o['block'][3])
     behalten = []
+    def ist_wald(o):
+        x, y = o['kachel']
+        return 0 <= y < len(grid) and 0 <= x < len(grid[0]) and (grid[y][x] == 'F' or (x, y) in wald_zellen)
+    wald_zellen = set()
+    for o in baeume:
+        if len([p for p in baeume if abs(p['kachel'][0] - o['kachel'][0]) <= 3 and
+                abs(p['kachel'][1] - o['kachel'][1]) <= 3]) >= 6:
+            wald_zellen.add(tuple(o['kachel']))
     for o in sorted(baeume, key=wichtig):
-        if all(erlaubt(o['block'], p['block']) for p in behalten):
+        if all(erlaubt(o['block'], p['block'], ist_wald(o) and ist_wald(p)) for p in behalten):
             behalten.append(o)
     entfernt = vorher - len(behalten)
     # Auffuellen: freie Stellen im Wald (Gelaende F) mit regelkonformen Baeumen
@@ -142,7 +154,8 @@ def main():
                     continue
                 if k & rest_kacheln:
                     continue
-                if not all(erlaubt(block, p['block']) for p in behalten):
+                wald_hier = grid[y][x] == 'F' or (x, y) in vorher_wald
+                if not all(erlaubt(block, p['block'], wald_hier and ist_wald(p)) for p in behalten):
                     continue
                 o = {'datei': datei, 'basis': name, 'x': bx * T + (wt * T - bw) // 2 - x0,
                      'y': (y + 1) * T - 1 - y1, 'fuss': h, 'ebene': 1, 'untergrund': 'gras',

@@ -28,6 +28,8 @@ wird jede Regel einzeln geprüft.
    - Ein Baum, der 3 oder mehr Kacheln breit ist, darf einen Nachbarbaum nur mit seiner äußersten Spalte links
      bzw. rechts überlappen – die inneren Spalten bleiben frei.
    - Ein Baum, der 1–2 Kacheln breit ist, überlappt gar nicht – solche Bäume stehen nebeneinander.
+   - Ausnahme dichter Wald: Dort dürfen sich Bäume mit bis zu **zwei** äußeren Spalten je Seite überlappen;
+     mindestens eine Spalte jedes Baums bleibt frei.
    - Die Sockelregel (4) gilt auch hier: Sockel (unterste Kachelreihe) zweier Bäume überlappen nie.
 
 ## Abschlusskontrolle (Pflicht)

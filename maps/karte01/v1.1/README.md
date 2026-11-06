@@ -19,7 +19,8 @@ Neue Fassung nach den Regeln in `CLAUDE.md`. v1.0 liegt in `maps/karte01/v1.0/`.
   (`tools/karte01_v11_begleiter.py`).
 - **Regel 8 – Bäume:** Bäume überlappen sich nur noch mit ihrer äußersten Spalte (ab 3 Kacheln Breite), schmalere
   stehen nebeneinander, Sockel überlappen nie. Regelwidrige Bäume entfernt, Wald danach regelkonform dicht neu
-  gepackt (`tools/karte01_v11_baeume.py`, 663 Bäume, 0 Verstöße); Waldboden dunkler wie auf der Startkarte.
+  gepackt (`tools/karte01_v11_baeume.py`); im dichten Wald bis zu zwei äußere Spalten je Seite, Sockel zweier
+  Bäume nie auf derselben Kachel (908 Bäume, 0 Verstöße); Waldboden dunkler wie auf der Startkarte.
 - **Zeichenreihenfolge:** Felsspitzen liegen über Schaum, Brandung und Lichtreflexen (alle Animationsbilder).
 - **Regel 7 – Schatten:** Schatten über Klippe/Wasser verkleinert.
 - **Abschlusskontrolle:** keine Überlappungen, alles auf dem richtigen Untergrund (`tools/karte01_v11_aufraeumen.py`,
