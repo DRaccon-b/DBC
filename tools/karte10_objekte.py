@@ -146,6 +146,12 @@ def main():
                 sp = sp.crop(sp.getbbox())
             else:
                 sp = saeubern(Image.open(os.path.join(OBJ, name + '.png')).convert('RGBA'))
+                if name.startswith('schloss2/'):                     # Rosa an das Hauptschloss anpassen
+                    a_ = np.array(sp)
+                    for q_, z_ in (('#f09ac8', '#ffd0e8'), ('#d06a9a', '#f09ac8')):
+                        m_ = (a_[..., :3] == [int(q_[i:i + 2], 16) for i in (1, 3, 5)]).all(-1)
+                        a_[m_, :3] = [int(z_[i:i + 2], 16) for i in (1, 3, 5)]
+                    sp = Image.fromarray(a_)
                 if name.startswith(('bahnhof/', 'haeuser', 'spielplatz/', 'baeume/', 'gross')):
                     sp = groesstes_teil(sp)                          # PixelLab-Reste (z. B. Glocke unter der Lok)
             if spiegeln:
@@ -251,17 +257,19 @@ def main():
                     'fuss': h, 'kachel': [76, 34], 'ebene': 1, 'an_wand': True, 'kein_schatten': True,
                     'keine_verdeckung': True, 'vorrang': True, 'fest_pos': True, 'anim': 'fahnen_tuch'})
     belegen(datei, int(round(ACHSE_BURG - mitte)), WAND_FUSS - zu)
-    td, th, tzu, tm = sprite('turm')
-    for x_l in (62 * T,):
-        for xx in (x_l, 2 * ACHSE_BURG - x_l - alpha[td].shape[1]):
-            objekte.append({'datei': td, 'basis': 'turm', 'x': int(xx), 'y': WAND_FUSS - tzu, 'fuss': th,
-                            'kachel': [int(xx // T), 34], 'ebene': 1, 'an_wand': True, 'kein_schatten': True,
-                            'keine_verdeckung': True, 'vorrang': True, 'fest_pos': True, 'anim': 'fahnen_tuch'})
-            belegen(td, int(xx), WAND_FUSS - tzu)
-    for xx in (60 * T, 84 * T):                              # Ecktuerme an der Suedmauer (stehen im Hof davor)
-        objekte.append({'datei': td, 'basis': 'turm', 'x': int(xx), 'y': 71 * T + 15 - tzu, 'fuss': th,
-                        'kachel': [xx // T, 71], 'ebene': 1, 'vorrang': True, 'fest_pos': True, 'anim': 'fahnen_tuch'})
-        belegen(td, int(xx), 71 * T + 15 - tzu)
+    # Rundtuerme (PixelLab k10_schloss2/02, im Stil des Hauptschlosses) in festem Rhythmus: an den Enden der
+    # Burgfront (spiegelgleich zur Achse), auf der Ostmauer in gleichen Abstaenden, an den Ecken der Suedmauer
+    td, th, tzu, tm = sprite('schloss2/02')
+    tw = alpha[td].shape[1]
+    tuerme = [(1016, WAND_FUSS, True), (2 * ACHSE_BURG - 1016, WAND_FUSS, True),
+              (88 * T, 46 * T + 15, True), (88 * T, 59 * T + 15, True),
+              (60 * T + tw // 2, 71 * T + 15, False), (86 * T - tw // 2 - 2, 71 * T + 15, False)]
+    for (cx, fy, wand) in tuerme:
+        xx = int(round(cx - tm))
+        objekte.append({'datei': td, 'basis': 'schloss2/02', 'x': xx, 'y': fy - tzu, 'fuss': th,
+                        'kachel': [int(cx // T), fy // T], 'ebene': 1, 'vorrang': True, 'fest_pos': True,
+                        'anim': 'fahnen_tuch', **({'an_wand': True, 'kein_schatten': True, 'keine_verdeckung': True} if wand else {})})
+        belegen(td, xx, fy - tzu)
     # 2) Zug auf dem unteren Gleis (Raeder auf der Schiene), Lok vorne links (Schienenraeumer zeigt nach links)
     gy = lay['gleise'][1]['y'] * T + 13
     x = 66 * T

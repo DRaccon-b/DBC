@@ -155,28 +155,28 @@ def herz(a, cx, cy, farbe='#e04c6a', hell='#ff9ab0', dunkel='#8a2040'):
     a[cy + 5, cx + 3] = H(dunkel)
 
 
+# Farben des Hauptschlosses (PixelLab k10_schloss) - Mauern, Zinnen und Wehrgang in genau diesem Stil
+SCHLOSS = {'hell': '#ffd0e8', 'ziegel': '#f09ac8', 'fuge': '#d06a9a', 'kontur': '#6a3a9a', 'gold': '#f8d040',
+           'gold2': '#e0a020', 'goldhell': '#fff080', 'glas': '#6aa8f0', 'glashell': '#a8d0ff', 'weg': '#f8c0dc',
+           'weg2': '#f4b2d2', 'wegfuge': '#e098bc'}
+
+
 def burgmauern(a, wm):
-    """Rosa Burgmauern: Krone aus rosa Steinen mit Zinnen, nach Sueden 3 Kacheln Wandflaeche (Ziegel, Goldleiste,
-    Sockel), Herzen in festem Rhythmus wie an der Burgfront; Seitenkanten nur als schmale Kontur."""
+    """Burgmauern im Stil des Hauptschlosses: oben ein Wehrgang aus hellrosa Platten mit violetter Kontur, an der
+    Suedkante Zinnen (Merlons mit heller Oberkante), nach Sueden 3 Kacheln Wandflaeche aus rosa Ziegeln mit feinen
+    Fugen, Schattenkante unter dem Wehrgang, Goldleiste und Sockel. An Ost- und Suedmauer (keine sichtbare
+    Wandflaeche) stehen die Zinnen zum Burghof hin. Seitenkanten nur als schmale Kontur."""
+    C = {k: np.array(H(v)) for k, v in SCHLOSS.items()}
     Hh, W = wm.shape
     yy, xx = np.mgrid[0:Hh, 0:W]
-    krone = wm
-    z = (xx // 8 + (yy // 8) % 2) % 2
-    a[krone] = np.where(z[krone][:, None] == 0, H('#d88a9e'), H('#e096a8'))
-    fuge = krone & ((yy % 8 == 7) | ((xx + 4 * ((yy // 8) % 2)) % 8 == 7))
-    a[fuge] = H('#b06a80')
+    # --- Wehrgang (Krone, von oben): Platten 8x8 im Verband
+    pl = (xx // 8 + (yy // 8)) % 2
+    a[wm] = np.where(pl[wm][:, None] == 0, C['weg'], C['weg2'])
+    fuge = wm & ((yy % 8 == 7) | ((xx + 4 * ((yy // 8) % 2)) % 8 == 7))
+    a[fuge] = C['wegfuge']
     rand = kontur(wm)
-    a[rand] = H('#7a3a52')
-    obere = krone & ~np.roll(wm, 1, 0)
-    for y, x in zip(*np.nonzero(obere)):
-        if (x // 8) % 2 == 0:
-            for dd in range(4):
-                if y + dd < Hh and wm[y + dd, x]:
-                    a[y + dd, x] = H('#ffd0dc') if dd == 0 else H('#eeaabb')
-        else:
-            for dd in range(3):
-                if y + dd < Hh and wm[y + dd, x]:
-                    a[y + dd, x] = H('#a05a70')
+    a[rand] = C['kontur']
+    # --- Wandflaechen unter jeder Suedkante
     flaeche = np.zeros_like(wm)
     sued = wm & ~np.roll(wm, -1, 0)
     sued[-1] = False
@@ -189,23 +189,48 @@ def burgmauern(a, wm):
     d = np.zeros((Hh, W), np.int32)
     for y in range(1, Hh):
         d[y] = np.where(flaeche[y], np.where(flaeche[y - 1], d[y - 1] + 1, 0), 0)
-    reihe = d // 8
-    vers = np.where(reihe % 2 == 1, 8, 0)
-    ziegel = (xx + vers) % 16
-    basis = np.where(((xx // 16 + reihe) % 3 == 0)[..., None], H('#d48298'), H('#dc8ea2'))
     f = flaeche
-    a[f] = basis[f]
-    a[f & ((d % 8 == 7) | (ziegel == 15))] = H('#b0687e')
-    a[f & (d % 8 == 0) & (ziegel != 15)] = H('#eaa8b8')
-    a[f & (d <= 1)] = H('#f6c4d0')
-    a[f & (d >= 2) & (d <= 4)] = (a[f & (d >= 2) & (d <= 4)] * 0.8).astype(np.uint8)
-    a[f & (d >= WAND_H - 9) & (d <= WAND_H - 8)] = H('#f4cc5a')       # Goldleiste
-    a[f & (d == WAND_H - 7)] = H('#b08a30')
-    a[f & (d >= WAND_H - 6) & (d < WAND_H - 2)] = H('#c87890')       # Sockel
-    a[f & (d >= WAND_H - 2)] = H('#9a5068')
-    links = f & ~np.roll(f, 1, 1)
-    rechts = f & ~np.roll(f, -1, 1)
-    a[links] = H('#f6c4d0'); a[rechts] = H('#9a5068')
+    reihe = d // 8
+    zx = (xx + np.where(reihe % 2 == 1, 8, 0)) % 16
+    a[f] = C['ziegel']
+    a[f & ((d % 8 == 7) | (zx == 15))] = C['fuge']
+    a[f & (d % 8 == 0) & (zx >= 1) & (zx <= 6)] = C['hell']                 # Lichtkante je Ziegel (Licht oben links)
+    a[f & (d <= 1)] = C['hell']
+    sch = f & (d >= 2) & (d <= 4)
+    a[sch] = (a[sch] * 0.84).astype(np.uint8)                              # Schatten unter dem Wehrgang
+    a[f & (d >= WAND_H - 10) & (d <= WAND_H - 9)] = C['gold']               # Goldleiste
+    a[f & (d == WAND_H - 8)] = C['gold2']
+    a[f & (d >= WAND_H - 7) & (d < WAND_H - 1)] = C['fuge']                 # Sockel
+    a[f & (d >= WAND_H - 7) & (d < WAND_H - 1) & (zx == 15)] = C['kontur']
+    a[f & (d == WAND_H - 7)] = C['ziegel']
+    a[f & (d == WAND_H - 1)] = C['kontur']
+    a[f & ~np.roll(f, 1, 1)] = C['kontur']; a[f & ~np.roll(f, -1, 1)] = C['kontur']
+    # --- Zinnen an der Suedkante des Wehrgangs (ragen ueber den Wehrgang, vor der Wandflaeche)
+    for y, x in zip(*np.nonzero(sued)):
+        q = x % 16
+        if q < 9:                                                            # Merlon 9 px breit, 8 px hoch
+            for k in range(8):
+                Y = y - k
+                if Y < 0 or not wm[Y, x]:
+                    break
+                c = C['kontur'] if (q in (0, 8) or k == 7) else C['hell'] if k >= 5 else C['ziegel']
+                a[Y, x] = c
+            if 0 <= y - 8 and wm[y - 8, x]:
+                a[y - 8, x] = (a[y - 8, x] * 0.8).astype(np.uint8)          # Schatten hinter der Zinne
+    # --- Zinnen zum Burghof an Ost-/Suedmauer (Kanten ohne Wandflaeche): kleine Merlons von oben
+    for richtung in ((0, 1), (0, -1), (-1, 0)):                              # West-, Ost- bzw. Nordkante
+        dy, dx = richtung
+        kante = wm & ~np.roll(np.roll(wm, -dy, 0), -dx, 1)
+        kante &= ~sued
+        for y, x in zip(*np.nonzero(kante)):
+            lauf = y if dx else x
+            if lauf % 12 < 6:
+                for k in range(5):
+                    Y, X = y + dy * k * 0 - (k if dy == 0 else 0) * 0, x
+                    Y2, X2 = y - dy * k, x - dx * k
+                    if 0 <= Y2 < Hh and 0 <= X2 < W and wm[Y2, X2]:
+                        a[Y2, X2] = C['kontur'] if k == 4 or lauf % 12 in (0, 5) else C['hell'] if k <= 1 else C['ziegel']
+    # --- Schatten der Wand auf den Boden, Seitenkanten auf dem Boden
     unten = f & ~np.roll(f, -1, 0)
     for k_, fa in ((1, 0.62), (2, 0.74), (3, 0.86), (4, 0.94)):
         m_ = np.roll(unten, k_, 0) & ~f & ~wm
@@ -216,6 +241,23 @@ def burgmauern(a, wm):
             m_ = np.roll(kante, richtung * k_, 1) & ~wm & ~f
             a[m_] = (a[m_] * fa).astype(np.uint8)
     return flaeche
+
+
+def fenster_auf_wand(a, flaeche, x_liste):
+    """Kleine Bogenfenster wie am Hauptschloss (violetter Rahmen, blaues Glas mit Lichtkante) mittig auf der
+    Wandflaeche, frei haengend zwischen Wehrgang-Schatten und Goldleiste."""
+    C = {k: H(v) for k, v in SCHLOSS.items()}
+    form = ['..###..', '.#ggg#.', '#gGggg#', '#gGggg#', '#gGggg#', '#ggggg#', '#ggggg#', '#ggggg#', '#######']
+    for cx in x_liste:
+        sp = flaeche[:, cx]
+        if not sp.any():
+            continue
+        y0 = np.nonzero(sp)[0].min() + 15
+        for j, z in enumerate(form):
+            for i, c in enumerate(z):
+                if c == '.':
+                    continue
+                a[y0 + j, cx - 3 + i] = C['kontur'] if c == '#' else C['glashell'] if c == 'G' else C['glas']
 
 
 def herzen_auf_wand(a, flaeche, x_liste):
@@ -290,7 +332,8 @@ def bauen(frame=None, speichern=True):
     flaeche = burgmauern(a, mauer)
     achse = int(lay['achse'] * T)
     # Herzreihen zwischen Burgfront und Ecktuermen (symmetrisch zur Achse)
-    herzen_auf_wand(a, flaeche, [achse - 141, achse + 141])
+    # Bogenfenster im festen Rhythmus zwischen Torbau und Ecktuermen, symmetrisch zur Achse
+    fenster_auf_wand(a, flaeche, [achse + s_ * d_ for s_ in (-1, 1) for d_ in (112, 140)])
     lvl = np.ones((Hp, Wp), np.uint8)
     lvl[wm] = 0
     lvl[mauer] = 3
