@@ -247,7 +247,7 @@ def kaimauer(a, m, tiefe=24, ebene=None):
                 c = np.array((90, 120, 140), np.float32)         # Wasserlinie
             elif d > UEBER:
                 tief_ = (d - UEBER) / max(1, gesamt - UEBER)
-                c = c * (0.62 - 0.22 * tief_) + np.array((24, 34, 70), np.float32) * (0.38 + 0.22 * tief_)
+                c = c * (0.62 - 0.22 * tief_) + np.array((26, 22, 40), np.float32) * (0.38 + 0.22 * tief_)
             if d == gesamt - 1:
                 c = np.array((12, 12, 22), np.float32)           # Fuss auf dem Grund
             a[Y, x] = np.clip(c, 0, 255).astype(np.uint8)
@@ -517,10 +517,10 @@ def bauen(frame=None, speichern=True):
     a = np.array(_wv.vertiefen(Image.fromarray(a), np.ones_like(tief), frame, maske=tief,
                                rand=('#1c3a40', '#24484e', '#2e565c', '#386468'),
                                stufen=[(22, 0.84, 7), (64, 0.72, 6), (120, 0.62, 6), (190, 0.53, 5), (270, 0.45, 5)]).convert('RGB'))
-    # dunkel wie das uebrige Wasser der Karte (Nachtblau der Vorlage): Helligkeit bleibt als Struktur, Farbe nachtblau
+    # dunkel wie die schwarzen Tuempel der Karte: Helligkeit bleibt als Struktur, Farbe oeliges Schwarz-Violett
     lum_t = a[tief].astype(np.float32) @ np.array([0.3, 0.59, 0.11], np.float32)
     lum_t = lum_t / max(1.0, float(lum_t.mean()))
-    a[tief] = np.clip(lum_t[:, None] * np.array([30, 36, 76], np.float32), 0, 255).astype(np.uint8)
+    a[tief] = np.clip(lum_t[:, None] * np.array([34, 30, 51], np.float32), 0, 255).astype(np.uint8)   # oeliges Schwarz-Violett wie die Tuempel
     tm = weich(zell_maske(cls, 'x', cols, rows), 5, 0.2, 47, 0.45) & ~em[2]
     tm = k4.splitter_weg(tm, 60)
     k4.wasser_zeichnen(a, tm, frame, np.zeros_like(tm))
