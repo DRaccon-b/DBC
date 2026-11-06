@@ -37,9 +37,15 @@ def main():
     # Grenzen nach Nutzer-Skizze: links Meer (bis zum unteren Rand), oben Sandwand bis vor die Lagune,
     # oben rechts Meer um die Insel bis zum Kartenrand, rechts unterhalb der Lagune wieder Sandwand
     kueste = [
-        {'art': 'meer', 'r': [0, 0, 7, 79]}, {'art': 'meer', 'e': [7.5, 24, 1.6, 4]}, {'art': 'meer', 'e': [7.5, 70, 1.5, 4]},
+        {'art': 'meer', 'r': [0, 0, 7, 79]},
+        # natuerliche Kueste links: Buchten ins Land, Landzungen ins Meer (Haeuser, Steg, Teleporter ausgespart)
+        {'art': 'meer', 'e': [8.4, 7, 1.4, 3]}, {'art': 'meer', 'e': [8.6, 27, 1.7, 4.5]},
+        {'art': 'meer', 'e': [8.3, 45, 1.4, 3]}, {'art': 'meer', 'e': [8.5, 70, 1.6, 4]},
+        {'art': 'sand', 'e': [6.5, 20, 1.8, 3.5]}, {'art': 'sand', 'e': [6.2, 37, 2.0, 4]},
+        {'art': 'sand', 'e': [6.6, 65.5, 1.6, 2.5]}, {'art': 'sand', 'e': [6.8, 76, 1.5, 3]},
         {'art': 'sand', 'r': [0, 54, 8, 61]},                       # Landzunge zum Teleporter links
         {'art': 'meer', 'r': [83, 0, 111, 21]}, {'art': 'meer', 'e': [104, 21, 7, 3.2]},
+        {'art': 'meer', 'e': [82.6, 6, 1.4, 3]}, {'art': 'sand', 'e': [84.2, 14, 1.4, 2.6]},
     ]
     for z in boden:                                                 # Pflasterflaechen am Zeltlager nicht ins Meer
         if z['art'] == 'kies' and z.get('r', [None])[0] == 6:

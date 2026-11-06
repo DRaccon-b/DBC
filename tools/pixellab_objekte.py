@@ -595,6 +595,24 @@ OBJEKTGRUPPEN_K7 = {
 }
 
 OBJEKTGRUPPEN_K3 = {
+    'k3_palmen_a': {'size': 96, 'items': [
+        'tall date palm tree with a slightly curved ringed trunk and a full crown of long green fronds, clusters of orange dates, perfectly straight front elevation view, facing the camera head-on, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'tall straight coconut palm tree with a lush crown of fronds and a few coconuts, perfectly straight front elevation view, facing the camera head-on, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'leaning palm tree with a curved trunk bending to the right, big drooping fronds, perfectly straight front elevation view, facing the camera head-on, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'group of two palm trees of different heights growing from one base, perfectly straight front elevation view, facing the camera head-on, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+    ]},
+    'k3_palmen_b': {'size': 96, 'items': [
+        'group of three palm trees, tall middle one, two smaller beside it, perfectly straight front elevation view, facing the camera head-on, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'young short palm tree with a thick trunk and wide fronds, perfectly straight front elevation view, facing the camera head-on, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'fan palm tree with round fan shaped leaves on a straight trunk, perfectly straight front elevation view, facing the camera head-on, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'tall slender palm tree with a small crown of fronds high up, perfectly straight front elevation view, facing the camera head-on, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+    ]},
+    'k3_palmen_c': {'size': 96, 'items': [
+        'bushy desert palm with fronds down to the ground, no visible trunk, perfectly straight front elevation view, facing the camera head-on, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'old palm tree with some dry brown fronds hanging below the green crown, perfectly straight front elevation view, facing the camera head-on, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'palm tree with a double bent trunk and a dense crown, perfectly straight front elevation view, facing the camera head-on, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'small palm tree cluster with dry grass at its base, perfectly straight front elevation view, facing the camera head-on, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+    ]},
     'k3_klein': {'size': 32, 'items': [
         'small green saguaro cactus', 'tall green saguaro cactus with two arms', 'small round barrel cactus', 'prickly pear cactus',
         'dry desert bush', 'small dry grass tuft', 'animal skull', 'scattered bones', 'small sandstone rock', 'two small desert rocks',
