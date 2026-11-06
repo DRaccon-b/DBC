@@ -1240,6 +1240,50 @@ OBJEKTGRUPPEN_K13 = {
 }
 
 
+STIL_K14 = ("Top-down RPG map object for the dark summit of a cursed spiral mountain ruled by a sinister jester, in polished "
+            "handheld monster-collecting RPG pixel art: colored dark outline (darkest shade of the object's own hue, never "
+            "pure black), light from the upper left, grey-violet stone, deep red, harlequin black and lavender, gold "
+            "accents, clean shapes, no noise, no dithering, transparent background, no ground, no cast shadow.")
+PALETTE_K14 = ['#12101a', '#1c1826', '#282236', '#363046', '#464058', '#58526c', '#6c6882', '#86829a', '#a4a0b8', '#c8c4d8',
+               '#3a0e16', '#5a1420', '#7a1a28', '#a02232', '#c83446', '#e8606e', '#4a2a6a', '#6a3e92', '#8a5cbc', '#b088e0',
+               '#d8b8f8', '#5a4018', '#8a6424', '#b88a34', '#e0b44a', '#f8dc80', '#2a3a4a', '#4a6a80', '#f4f0f8', '#ffffff']
+FR14 = "perfectly straight front elevation view, facing the camera head-on, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style"
+DACH14 = "seen from the front and slightly from above so the roofs are clearly visible, like a classic 2D handheld RPG castle"
+OBJEKTGRUPPEN_K14 = {
+    'k14_schloss': {'size': 224, 'items': [
+        'sinister jester castle on a mountain summit, dark grey-violet stone with harlequin diamond patterns in red and black, many slender towers with pointed red cone roofs and golden spires, a big arched gate in the middle with a golden playing-card suit emblem above, gothic windows glowing faintly, the whole castle fully visible and centered, ' + DACH14,
+    ]},
+    'k14_bau': {'size': 128, 'items': [
+        'straight grey stone castle wall segment with battlements and narrow arrow slits, ' + DACH14 + ', ' + FR14,
+        'round grey stone castle tower with a pointed red cone roof and a golden spire, small window and door, ' + DACH14,
+        'dark swirling void portal inside a ring of jagged black crystals and stone, violet and cyan sparks, ' + FR14,
+        'dark stone throne with tall spiky back and red cushion, harlequin pattern, ' + FR14,
+    ]},
+    'k14_statue': {'size': 96, 'items': [
+        'stone statue of an armored knight holding a huge sword point down, on a stone pedestal, ' + FR14,
+        'stone statue of a sinister harlequin jester juggling, on a stone pedestal, ' + FR14,
+        'dark stone statue of an elegant winged lady with bat wings, on a stone pedestal, ' + FR14,
+        'giant standing stone playing card monolith with a carved spade, ' + FR14,
+    ]},
+    'k14_mittel': {'size': 64, 'items': [
+        'large standing playing card with a red heart, stuck in the ground', 'large standing playing card with a black spade, stuck in the ground',
+        'large standing playing card with a red diamond, stuck in the ground', 'large standing playing card with a black club, stuck in the ground',
+        'cluster of glowing violet crystals', 'stone brazier with violet flames', 'purple banner with a gold diamond on a pole',
+        'big sword stuck in a rock', 'broken giant sword lying', 'harlequin mask on a wooden stake', 'small stone bat gargoyle',
+        'pile of skulls', 'gothic iron candle stand with lit candles', 'stone urn', 'broken stone pillar', 'black top hat with playing cards',
+    ]},
+    'k14_klein': {'size': 32, 'items': [
+        'small grey rocks', 'pebbles', 'small bones', 'small skull', 'scattered playing cards', 'few gold coins', 'two dice',
+        'broken mask shard', 'small violet crystal', 'dead grass tuft', 'black feather', 'small rubble', 'small lit candle',
+        'rusty chain', 'small star shard glowing', 'cracked stone tile piece',
+    ]},
+    'k14_wolken': {'size': 64, 'items': [
+        'soft lavender-white cloud puff', 'big fluffy pale violet cloud', 'flat wispy cloud', 'round small cloud puff',
+        'long thin cloud streak', 'cluster of two cloud puffs', 'dense white cloud', 'fading misty cloud',
+    ]},
+}
+
+
 def call(method, path, body=None, raw=False):
     req = urllib.request.Request(API + path, method=method,
                                  data=json.dumps(body).encode() if body is not None else None,
@@ -1292,7 +1336,9 @@ def herunterladen(oid, d):
 
 
 def speichern(gruppe, ims, ids):
-    if gruppe.startswith('k13_'):
+    if gruppe.startswith('k14_'):
+        ziel = os.path.join(ROOT, 'assets', 'objekte', 'karte14', gruppe[4:])
+    elif gruppe.startswith('k13_'):
         ziel = os.path.join(ROOT, 'assets', 'objekte', 'karte13', gruppe[4:])
     elif gruppe.startswith('k12_'):
         ziel = os.path.join(ROOT, 'assets', 'objekte', 'karte12', gruppe[4:])
@@ -1341,8 +1387,9 @@ def erzeugen(gruppe):
     k4 = gruppe.startswith('k4_')
     k5 = gruppe.startswith('k5_')
     k6 = gruppe.startswith('k6_') or gruppe.startswith('k7_')
-    if gruppe.startswith('k11_') or gruppe.startswith('k12_') or gruppe.startswith('k13_'):
-        g, stil_, pal_, pn_ = ((OBJEKTGRUPPEN_K13[gruppe], STIL_K13, PALETTE_K13, 'Karte13 Machine City') if gruppe.startswith('k13_') else
+    if gruppe.startswith('k11_') or gruppe.startswith('k12_') or gruppe.startswith('k13_') or gruppe.startswith('k14_'):
+        g, stil_, pal_, pn_ = ((OBJEKTGRUPPEN_K14[gruppe], STIL_K14, PALETTE_K14, 'Karte14 Summit') if gruppe.startswith('k14_') else
+                               (OBJEKTGRUPPEN_K13[gruppe], STIL_K13, PALETTE_K13, 'Karte13 Machine City') if gruppe.startswith('k13_') else
                                (OBJEKTGRUPPEN_K12[gruppe], STIL_K12, PALETTE_K12, 'Karte12 Puppet Woods') if gruppe.startswith('k12_')
                                else (OBJEKTGRUPPEN_K11[gruppe], STIL_K11, PALETTE_K11, 'Karte11 Dark Ocean'))
         req = {'description': stil_, 'size': g['size'], 'view': 'top-down',
