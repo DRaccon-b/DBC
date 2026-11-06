@@ -32,7 +32,7 @@ BAEUME = ['baeume/00', 'baeume/01', 'baeume/02', 'klein/49', 'klein/48', 'baeume
 STARR = {'baeume2/00', 'baeume2/01', 'baeume2/02'}     # Spielzeugbaeume aus Holz/Zucker: bewegen sich nicht im Wind
 BUESCHE = ['baeume2/03', 'baeume/03', 'klein2/58', 'klein2/04', 'klein2/05', 'klein2/11']
 LIEGEND = {'klein/58', 'klein/63', 'klein/15', 'klein/30', 'klein/25'}
-FLACH = LIEGEND | {'klein/09', 'klein/10', 'klein/11', 'klein/12', 'baeume/14', 'klein2/04', 'klein2/05', 'klein2/11'}
+FLACH = LIEGEND | {'klein/09', 'klein/10', 'klein/11', 'klein/12', 'klein2/04', 'klein2/05', 'klein2/11'}
 WIND = {'klein/09', 'klein/10', 'klein/12', 'klein/35', 'baeume/03', 'klein2/04', 'klein2/05', 'klein2/11', 'klein2/58'}
 SPIELZEUG = ['klein/02', 'klein/03', 'klein/06', 'klein/07', 'klein/22', 'klein/32', 'klein/41', 'klein/42',
              'klein/43', 'klein/45', 'klein/46', 'klein/53', 'klein/54', 'klein/59', 'klein/14', 'klein/52']
@@ -170,6 +170,14 @@ def main():
                     a_[:oben_arm, :, 3] = 0
                     sp = Image.fromarray(a_)
                     sp = sp.crop(sp.getbbox())
+                if name == 'bahn2/14':                           # Bahnlaterne brennt: Glas warm gelb statt grau
+                    a_ = np.array(sp)
+                    for q_, z_ in (((176, 176, 192), (255, 214, 110)), ((232, 232, 240), (255, 244, 190)),
+                                   ((122, 122, 142), (240, 170, 70))):
+                        m_ = (a_[..., :3] == q_).all(-1)
+                        m_[a_.shape[0] // 2:] = False
+                        a_[m_, :3] = z_
+                    sp = Image.fromarray(a_)
                 if name.endswith('_gedreht'):                    # Prellbock quer zum Gleisende (Puffer nach links)
                     sp = sp.transpose(Image.ROTATE_90)
                 if name.startswith('schloss2/'):                     # Rosa an das Hauptschloss anpassen

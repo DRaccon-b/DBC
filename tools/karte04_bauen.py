@@ -806,8 +806,8 @@ def fahnen_tuch(sp, frame, o):
         nah = m.copy()
         for _ in range(2):
             nah = nah | np.roll(nah, 1, 0) | np.roll(nah, -1, 0) | np.roll(nah, 1, 1) | np.roll(nah, -1, 1)
-        if not (nah & gold).any():
-            continue                                     # nur Tuch, das an einer (goldenen) Stange haengt
+        if not (nah & gold).any() and ys.max() > h * 0.12:
+            continue                                     # nur Tuch an einer Stange (gold) oder ganz oben an der Turmspitze
         rand = (np.roll(m, 1, 0) | np.roll(m, -1, 0) | np.roll(m, 1, 1) | np.roll(m, -1, 1)) & al & ~gold & ~rot
         m |= rand
         mys, mxs = np.nonzero(m)
@@ -1205,8 +1205,11 @@ def animieren(img, objs, cache, frame, ruhig=False):
             if anim == 'kessel':                               # gruen brodelnder Kesselinhalt
                 q = (a[..., 3] > 0) & (g_ > r_ + 25) & (g_ > b_)
                 farbe, rad = (120, 255, 140), (12, 6)
-            elif anim == 'lampe':                              # Strassenlaterne: gelbe Glaskugel leuchtet (Karte 10)
+            elif anim == 'lampe':                              # Strassenlaterne: gelbe/cremige Glaskugel leuchtet (Karte 10)
                 q = (a[..., 3] > 0) & (r_ > 200) & (g_ > 160) & (b_ < 150)
+                if not q.any():
+                    q = (a[..., 3] > 0) & (r_ > 200) & (g_ > 180) & (r_ - b_ > 25)
+                    q[int(a.shape[0] * 0.5):] = False
                 farbe, rad = (255, 220, 120), (14, 10)
             elif anim == 'geisterlicht':
                 q = (a[..., 3] > 0) & (g_ > 150) & (g_ > r_ + 40)

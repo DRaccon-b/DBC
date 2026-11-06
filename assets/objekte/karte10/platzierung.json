@@ -1027,7 +1027,7 @@
 20,
 57
 ],
-"ebene": 0,
+"ebene": 1,
 "block": [
 19,
 55,
@@ -17566,25 +17566,6 @@
 ]
 },
 {
-"datei": "sauber/baeume-01.png",
-"basis": "baeume/01",
-"x": 321,
-"y": 877,
-"fuss": 67,
-"kachel": [
-21,
-58
-],
-"ebene": 1,
-"anim": "baum",
-"block": [
-20,
-54,
-4,
-5
-]
-},
-{
 "datei": "sauber/klein-49_m.png",
 "basis": "klein/49",
 "x": 645,
@@ -18979,6 +18960,25 @@
 "block": [
 18,
 48,
+2,
+2
+]
+},
+{
+"datei": "sauber/klein2-05.png",
+"basis": "klein2/05",
+"x": 324,
+"y": 858,
+"fuss": 22,
+"kachel": [
+20,
+54
+],
+"ebene": 0,
+"anim": "wehen",
+"block": [
+20,
+53,
 2,
 2
 ]
