@@ -87,7 +87,7 @@ FEST = [
     ('k8/mittel/05', 57, 75, {'anim': 'geisterlicht'}), ('k8/mittel/05', 14, 74, {'anim': 'geisterlicht'}),
     ('wand/26', 62, 46, {}), ('wand/53', 6, 75, {}), ('k8/mittel/11', 18, 58, {}), ('wand/28', 80, 69, {}),
 ]
-GROSS2 = {'wand/00', 'wand/01', 'wand/02', 'wand/05', 'wand/06', 'wand/03'}
+GROSS2 = set()                    # keine Vergroesserung: Wandobjekte passen in Originalgroesse auf die Wand
 GRAEBER = ['k8/mittel/00', 'k8/mittel/01', 'k8/mittel/02', 'k8/mittel/03', 'k8/klein/50', 'k8/klein/51', 'wand/21',
            'wand/22', 'wand/31', 'wand/55', 'wand/59', 'k8/graeber/04']
 GRABFELDER = [(7, 51, 16, 51), (6, 56, 9, 56), (13, 56, 17, 56), (7, 60, 12, 60), (60, 47, 68, 47), (76, 61, 84, 66)]
@@ -277,7 +277,13 @@ def main():
             print('  keine Wandflaeche:', name, tx, reihe)
             continue
         oben = reihe * T + int(np.nonzero(spalte)[0].min())
-        x, y = int(round(X - mitte)), oben + 38 - zu if name not in GROSS2 else oben + 39 - zu
+        # Wandobjekte haengen frei auf der Wandflaeche: Abstand zur Mauerkrone oben, Unterkante ueber der Goldleiste
+        a_w = alpha[datei]
+        zl_ = np.nonzero(a_w.any(axis=1))[0]
+        hoehe_w = int(zl_.max() - zl_.min() + 1)
+        oben_d = {'wand/05': 9, 'wand/04': 12, 'wand/06': 8}.get(name, 5)
+        oben_d = min(oben_d, 37 - hoehe_w)
+        x, y = int(round(X - mitte)), oben + oben_d - int(zl_.min())
         objekte.append({'datei': datei, 'basis': name, 'x': x, 'y': y, 'fuss': h, 'kachel': [tx, oben // T + 2],
                         'ebene': 1, 'an_wand': True, 'kein_schatten': True, 'keine_verdeckung': True,
                         **({'anim': 'kerzen'} if name == 'wand/04' else {})})

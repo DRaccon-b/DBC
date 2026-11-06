@@ -544,8 +544,8 @@ def objekte_zeichnen(img, objs, cache, boden, frame, ebenen=None):
         img.alpha_composite(sp, (o['x'], o['y']))
         if frame is not None and o.get('anim') == 'blume':
             bluete_puls(img, o, sp, frame)
-        if not o['basis'].startswith(('rand/', 'klein/0', 'klein/1', 'klein/2', 'klein/5')):
-            bodenwall(img, grund, o, cache[o['datei']])
+        if not o['basis'].startswith(('rand/', 'klein/0', 'klein/1', 'klein/2', 'klein/5')) and not o.get('an_wand'):
+            bodenwall(img, grund, o, cache[o['datei']])     # Wandobjekte (Fenster, Banner ...) stehen nicht am Boden
 
 
 RUETTEL_X = (0, 1, 0, -1, 1, 0, -1, 0, 0, 1, -1, 0, 1, 0, 0, -1)
