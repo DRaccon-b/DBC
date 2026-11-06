@@ -87,19 +87,20 @@ FEST = [
     # Neu (PixelLab k10_banner, k10_klein2, k10_baeume2)
     ('baeume2/12', 52 * T, 67, {'anim': 'zirkus'}), ('baeume2/13', 21 * T, 66, {'achse': 21 * T}), ('baeume2/08', 23 * T + 8, 52, {'anim': 'schaukeln', 'amp': 7, 'fest': 0.32}),
     ('klein2/63', 33 * T, 52, {}), ('klein2/61', 27 * T, 54, {'anim': 'schaukeln', 'amp': 6, 'fest': 0.12}),
-    ('banner/12', 62 * T + 4, 23, {}), ('banner/05', 85 * T, 17, {'anim': 'signal'}),
+    ('banner/12', 62 * T + 4, 23, {}), ('banner/05', 85 * T, 18, {'anim': 'signal'}),
     # Bahnhof und Strecke (PixelLab k10_bahn, k10_bahn2): Wasserturm und Stellwerk neben dem Bahnhof, Gueterschuppen
     # und Kohlebunker auf dem Vorplatz, Prellboecke an den Gleisenden, Gepaeck am Bahnsteig, Masten im festen Abstand
     ('bahn/00', 67 * T, 12, {'achse': 67 * T}), ('bahn/01', 1354, 12, {'achse': 1354}),
     ('bahn/02', 1050, 29, {'achse': 1050}), ('bahn/03', 1380, 29, {'achse': 1380}),
-    ('bahn2/12', 64 * T + 8, 12, {}), ('bahn2/02', 66 * T + 8, 31, {}), ('bahn2/13', 85 * T, 31, {}),
-    ('bahn2/07', 1410, 19, {'achse': 1410}), ('bahn2/07', 1410, 4, {'achse': 1410}),
+    ('bahn2/02', 66 * T + 8, 31, {}), ('bahn2/13', 85 * T, 31, {}),
     ('bahn2/00', 74 * T, 15, {'ueberlappen': True}), ('bahn2/03', 78 * T + 8, 15, {'ueberlappen': True}),
-    ('bahn2/11', 32 * T + 8, 6, {}), ('bahn2/11', 42 * T + 8, 6, {}),
+    # Schranken geschlossen: Pfosten auf dem linken Gehweg, der Arm sperrt quer ueber die Strasse
+    ('bahn2/11_zu', 29 * T + 8, 8, {'ueberlappen': True}), ('bahn2/11_zu', 43 * T + 8, 8, {'ueberlappen': True}),
+    ('bahn2/11_zu', 57 * T + 8, 8, {'ueberlappen': True}),
     ('bahn2/05', 55 * T + 8, 6, {}), ('bahn2/05', 63 * T + 8, 21, {}),
     ('bahn2/02', 9 * T + 8, 6, {}), ('bahn2/03', 37 * T + 8, 6, {}), ('bahn2/09', 26 * T + 8, 6, {}),
-    ('bahn2/12', 13 * T + 8, 6, {}), ('bahn2/14', 52 * T + 8, 6, {'anim': 'lampe'}),
-] + [('bahn2/06', x * T + 8, 3, {}) for x in (6, 18, 30, 42, 54)] + [
+    ('bahn2/14', 52 * T + 8, 6, {'anim': 'lampe'}),
+] + [('bahn2/06', x * T + 8, 3, {'fest_pos': True}) for x in (6, 18, 30, 42, 54, 66)] + [
     ('banner/05', 20 * T + 8, 6, {'anim': 'signal'}), ('banner/05', 46 * T + 8, 6, {'anim': 'signal'}),
     ('banner/13', 32 * T + 8, 23, {'anim': 'ampel'}), ('banner/13', 46 * T + 8, 23, {'anim': 'ampel'}),
     ('banner/13', 43 * T + 8, 34, {'anim': 'ampel'}),
@@ -111,7 +112,7 @@ FEST = [
 ]
 # Laternen in festem Rhythmus entlang der Gehwege (alle 6 Kacheln), Wegweiser an den Kreuzungen
 # (ausgeduennt: je Strassenzug nur wenige Laternen, versetzt statt in Reihen)
-FEST += [(LAMPE, 43 * T + 8, 9, {'anim': 'lampe'}), (LAMPE, 43 * T + 8, 29, {'anim': 'lampe'}),
+FEST += [(LAMPE, 43 * T + 8, 12, {'anim': 'lampe'}), (LAMPE, 43 * T + 8, 29, {'anim': 'lampe'}),
          (LAMPE, 24 * T + 8, 19, {'anim': 'lampe'}), (LAMPE, 52 * T + 8, 19, {'anim': 'lampe'}),
          (LAMPE, 38 * T + 8, 35, {'anim': 'lampe'})]
 # Waldrand (Karte 01 wiederverwendet, Regel 3) mit ein paar rosa Bluetenbaeumen passend zur Spielzeugstadt
@@ -158,7 +159,17 @@ def main():
                 sp = Image.fromarray(a)
                 sp = sp.crop(sp.getbbox())
             else:
-                sp = saeubern(Image.open(os.path.join(OBJ, name + '.png')).convert('RGBA'))
+                basis_ = name.replace('_zu', '').replace('_gedreht', '')
+                sp = saeubern(Image.open(os.path.join(OBJ, basis_ + '.png')).convert('RGBA'))
+                if name.endswith('_zu'):                         # Schranke geschlossen: senkrechten Arm entfernen
+                    a_ = np.array(sp)
+                    pfosten = int(np.nonzero(a_[:, :a_.shape[1] // 3, 3].any(axis=1))[0].min())
+                    oben_arm = int(a_.shape[0] * 0.48)
+                    a_[:oben_arm, :, 3] = 0
+                    sp = Image.fromarray(a_)
+                    sp = sp.crop(sp.getbbox())
+                if name.endswith('_gedreht'):                    # Prellbock quer zum Gleisende (Puffer nach links)
+                    sp = sp.transpose(Image.ROTATE_90)
                 if name.startswith('schloss2/'):                     # Rosa an das Hauptschloss anpassen
                     a_ = np.array(sp)
                     for q_, z_ in (('#f09ac8', '#ffd0e8'), ('#d06a9a', '#f09ac8')):
@@ -277,6 +288,17 @@ def main():
                         'anim': 'fahnen_tuch', 'an_wand': True, 'kein_schatten': True, 'keine_verdeckung': True,
                         **({'mauer_davor': T} if fy < 70 * T else {})})
         belegen(td, xx, fy - tzu)
+    # Prellboecke an den rechten Gleisenden: gedreht, stehen senkrecht quer zum Gleis, Puffer zum Zug hin
+    pd, ph, pzu, pm = sprite('bahn2/07_gedreht')
+    pa = alpha[pd]
+    pys = np.nonzero(pa.any(axis=1))[0]
+    for gl in lay['gleise']:
+        yc = gl['y'] * T + 7
+        x_ = gl['x'][1] * T - pa.shape[1] - 2 if gl['x'][1] < cols else cols * T - pa.shape[1] - 2
+        y_ = int(yc - (pys.min() + pys.max()) / 2)
+        objekte.append({'datei': pd, 'basis': 'bahn2/07_gedreht', 'x': int(x_), 'y': y_, 'fuss': ph,
+                        'kachel': [int(x_ // T), gl['y']], 'ebene': 1, 'fest_pos': True, 'vorrang': True})
+        belegen(pd, int(x_), y_)
     # 2) Zug auf dem unteren Gleis (Raeder auf der Schiene), Lok vorne links (Schienenraeumer zeigt nach links)
     gy = lay['gleise'][1]['y'] * T + 13
     x = 66 * T

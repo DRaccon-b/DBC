@@ -272,6 +272,40 @@ def herzen_auf_wand(a, flaeche, x_liste):
             herz(a, cx + dx - 3, y_oben + 18)
 
 
+def isolatoren(sp):
+    """Isolatoren eines Telegrafenmasts: helle Punkte auf den Querarmen im oberen Drittel -> [(x, y_oben)]."""
+    a = np.array(sp).astype(int)
+    h = a.shape[0]
+    hell = (a[..., 3] > 0) & (a[..., :3].min(-1) > 165)
+    hell[int(h * 0.32):] = False
+    pkt = []
+    for ys, xs in k4._komponenten(hell):
+        pkt.append((int(round(xs.mean())), int(ys.min()) - 1))
+    return sorted(pkt)
+
+
+def leitungen(img, objs, cache):
+    """Telegrafenleitungen: von Isolator zu Isolator der benachbarten Masten, leicht durchhaengend (Parabel),
+    links laufen sie aus der Karte hinaus. Dunkle 1-px-Linie mit hellem Glanzpunkt oben (Licht von links oben)."""
+    maste = sorted((o for o in objs if o['basis'] == 'bahn2/06'), key=lambda o: o['x'])
+    if not maste:
+        return
+    px = img.load()
+    W, Hh = img.size
+    punkte = [[(o['x'] + x, o['y'] + y) for (x, y) in isolatoren(cache[o['datei']])] for o in maste]
+    n = min(len(p) for p in punkte)
+    paare = [([(0, p[1] + 3) for p in punkte[0][:n]], punkte[0][:n])]
+    paare += [(punkte[i][:n], punkte[i + 1][:n]) for i in range(len(punkte) - 1)]
+    for links, rechts in paare:
+        for (x1, y1), (x2, y2) in zip(links, rechts):
+            durch = max(3, (x2 - x1) // 28)
+            for x in range(int(x1), int(x2) + 1):
+                t = (x - x1) / max(1, x2 - x1)
+                y = int(round(y1 + (y2 - y1) * t + 4 * durch * t * (1 - t)))
+                if 0 <= x < W and 0 <= y < Hh:
+                    px[x, y] = (42, 42, 58, 255)
+
+
 def bauen(frame=None, speichern=True):
     lay = json.load(open(os.path.join(KARTE, 'layout.json')))
     cols, rows = lay['groesse']
@@ -377,7 +411,9 @@ def bauen(frame=None, speichern=True):
                 y0_ = max(0, unten_ - n_ + 1)
                 m_ = mauer[y0_:unten_ + 1, x0_:x1_]
                 arr[y0_:unten_ + 1, x0_:x1_][m_] = grund_mauer[y0_:unten_ + 1, x0_:x1_][m_]
-            img = Image.fromarray(arr)
+            img = Image.fromarray(arr.copy())
+        img = img.copy()
+        leitungen(img, objs, cache)
     if speichern and frame is None:
         img.save(os.path.join(KARTE, 'terrain.png'))
     print('Karte 10 %dx%d gebaut' % (cols, rows))
