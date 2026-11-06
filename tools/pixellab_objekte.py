@@ -1181,6 +1181,25 @@ OBJEKTGRUPPEN_K13 = {
         'abandoned beige apartment block with rows of small windows and balconies, one door, cracked walls, ' + FR13,
         'small grey office building with blue glass windows, glass double door and a rooftop antenna, ' + FR13,
     ]},
+    'k13_rand': {'size': 64, 'items': [
+        'bent rusty steel I-beam', 'pile of rusty pipes', 'rusty cogwheel half buried', 'tangled bundle of black cables',
+        'stack of old tires', 'crumpled rusty sheet metal', 'broken rusty engine block', 'pile of scrap metal with bolts',
+        'cluster of broken rusty gears', 'twisted rusty rebar sticking out', 'broken rusty radiator', 'heap of mixed junk and wires',
+        'bent broken metal fence piece', 'rusty barrel lying on its side', 'pile of rusty chains', 'broken rusty robot leg',
+    ]},
+    'k13_berg': {'size': 128, 'items': [
+        'giant rusty cogwheel half buried in dark rock, ' + FR13,
+        'segment of a giant rusty tank track half buried in rubble, ' + FR13,
+        'broken giant mechanical robot arm with a claw sticking out of rubble, ' + FR13,
+        'broken giant mechanical robot head half buried in rubble, one dim red eye, ' + FR13,
+    ]},
+    'k13_wache': {'size': 64, 'items': [
+        'small rusty radio mast with a red warning light on top', 'rusty antenna pole', 'red warning lamp on a metal pole',
+        'broken security camera on a pole with a red lens light', 'old searchlight on a metal stand', 'upright chain-link fence segment with posts',
+        'fallen chain-link fence segment lying flat', 'coil of barbed wire', 'rusty warning sign with a skull', 'cluster of glowing violet crystals',
+        'small violet crystal vein in a dark rock', 'small rusty satellite dish', 'thick black power cable coming out of the ground',
+        'rusty pipe elbow sticking out of the ground', 'broken metal post with a red light', 'small rusty control box with a red light',
+    ]},
     'k13_haus': {'size': 128, 'items': [
         'abandoned industrial warehouse with a large grey roll-up shutter door with yellow hazard stripes and red warning lights, dark teal metal walls, flat metal roof with a big vent and a skylight, seen from the front and slightly from above so the whole flat roof surface is clearly visible above the facade (roof parapet, vents, pipes), the front facade below, like a classic 2D handheld RPG town building with a visible roof, no isometric',
         'ruined two-storey city building with two small shops below with red and yellow awnings, cracked grey walls, flat roof with a broken parapet, an air-conditioning unit and rubble, seen from the front and slightly from above so the whole flat roof surface is clearly visible above the facade (roof parapet, vents, pipes), the front facade below, like a classic 2D handheld RPG town building with a visible roof, no isometric',

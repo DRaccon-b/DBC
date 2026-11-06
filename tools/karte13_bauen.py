@@ -145,6 +145,71 @@ def techkreis(a, cx, cy, r, frame):
     a[kern] = np.clip(np.array([200, 60, 70], np.float32) * (0.6 + 0.4 * puls), 0, 255).astype(np.uint8)
 
 
+def bergkuppe(a, kuppe):
+    """Bergkuppe: dicke schwarze Stromkabel und rostige Rohre laufen in Boegen ueber den Fels (zur Festung hin),
+    dazu violette Kristalladern und oelige Flecken (Verseuchung). Nur auf der begehbaren Kuppe, nie auf Fronten."""
+    Hh, W = kuppe.shape
+    rs = random.Random(4)
+    def linie(pts, breite, farbe, licht, schatten, glied=0):
+        for (ax, ay), (bx, by) in zip(pts, pts[1:]):
+            n = int(max(abs(bx - ax), abs(by - ay))) + 1
+            for t in range(n):
+                x, y = ax + (bx - ax) * t / n, ay + (by - ay) * t / n
+                for d in range(-(breite // 2), breite - breite // 2):
+                    X, Y = int(x), int(y + d)
+                    if 0 <= X < W and 0 <= Y < Hh and kuppe[Y, X]:
+                        a[Y, X] = licht if d == -(breite // 2) else (schatten if d == breite - breite // 2 - 1 else farbe)
+                    if 0 <= X < W and 0 <= Y + 1 < Hh and d == breite - breite // 2 - 1 and kuppe[Y + 1, X]:
+                        a[Y + 1, X] = (a[Y + 1, X] * 0.7).astype(np.uint8)
+                if glied and int(t) % glied == 0:
+                    for d in range(-(breite // 2) - 1, breite - breite // 2 + 1):
+                        X, Y = int(x), int(y + d)
+                        if 0 <= X < W and 0 <= Y < Hh and kuppe[Y, X]:
+                            a[Y, X] = H('#3a2416')
+    def bogen(p0, p1, durchhang, n=24):
+        return [(p0[0] + (p1[0] - p0[0]) * t / n, p0[1] + (p1[1] - p0[1]) * t / n + durchhang * math.sin(math.pi * t / n))
+                for t in range(n + 1)]
+    # Kabel oben entlang zur Festung (links und rechts), Kabel an den Seiten herab
+    for (p0, p1, dh) in (((4, 22), (300, 14), 8), ((300, 14), (430, 30), 5), ((1275, 24), (1000, 12), 7), ((1000, 12), (860, 30), 5),
+                         ((22, 1110), (22, 600), 0), ((1258, 1105), (1258, 520), 0)):
+        pts = bogen(p0, p1, dh) if p0[0] != p1[0] else [(p0[0] + 3 * math.sin(t / 6.0), p0[1] + (p1[1] - p0[1]) * t / 40.0) for t in range(41)]
+        linie(pts, 3, H('#1a1c22'), H('#4a4e5c'), H('#0c0d10'))
+    # rostige Rohre (mit Muffen)
+    for (p0, p1, dh) in (((40, 1090), (560, 1094), 3), ((700, 1094), (1240, 1088), 3), ((38, 300), (38, 60), 0)):
+        pts = bogen(p0, p1, dh) if p0[0] != p1[0] else [(p0[0], p0[1] + (p1[1] - p0[1]) * t / 40.0) for t in range(41)]
+        linie(pts, 5, H('#6a3e22'), H('#a0643a'), H('#3a2214'), glied=26)
+    # Verseuchung: violette Kristalladern (Zickzack) und oelige Flecken
+    ys, xs = np.nonzero(kuppe)
+    for _ in range(26):
+        i = rs.randrange(len(ys)); y, x = int(ys[i]), int(xs[i])
+        for d in range(rs.randint(6, 14)):
+            if 0 <= x < W and 0 <= y < Hh and kuppe[y, x]:
+                a[y, x] = H('#8a5ac0') if d % 4 else H('#c8a0f0')
+            x += rs.choice((-1, 1)); y += rs.choice((-1, 0, 1))
+    for _ in range(14):
+        i = rs.randrange(len(ys)); cy, cx = int(ys[i]), int(xs[i])
+        rx, ry = rs.randint(4, 9), rs.randint(2, 4)
+        for y in range(cy - ry, cy + ry + 1):
+            for x in range(cx - rx, cx + rx + 1):
+                if 0 <= x < W and 0 <= y < Hh and kuppe[y, x] and ((x - cx) / rx) ** 2 + ((y - cy) / ry) ** 2 <= 1:
+                    a[y, x] = (a[y, x] * 0.45 + np.array([20, 16, 30]) * 0.55).astype(np.uint8)
+        a[cy - 1, cx - rx // 2:cx] = H('#5a4a78')                  # Oelschimmer
+
+
+def rotlicht(sp, frame, o):
+    """Warnleuchten, Kameralinse, Mech-Auge: nur die roten Lichtpixel blinken langsam (an/ab), sonst nichts."""
+    a = np.array(sp)
+    ai = a.astype(int)
+    rot = (ai[..., 3] > 0) & (ai[..., 0] > 150) & (ai[..., 0] > ai[..., 1] + 70) & (ai[..., 0] > ai[..., 2] + 60)
+    an = 0.5 + 0.5 * math.sin(2 * math.pi * frame / N_FRAMES * 2 + o.get('x', 0) * 0.03)
+    k_ = 0.55 + 0.6 * an
+    a[rot, :3] = np.clip(ai[rot, :3] * k_, 0, 255).astype(np.uint8)
+    return Image.fromarray(a)
+
+
+k4.TEILANIM['rotlicht'] = rotlicht
+
+
 def bauen(frame=None, speichern=True):
     lay = json.load(open(os.path.join(KARTE, 'layout.json')))
     cols, rows = lay['groesse']
@@ -173,6 +238,7 @@ def bauen(frame=None, speichern=True):
     b = lay['boss']
     techkreis(a, b[0] * T, b[1] * T, 3.6 * T, frame)
     waende = k4.hoehenkanten(a, em[5], 'dunkelberg', FRONT[5], 12, LIPPE_BERG, np.zeros((Hp, Wp), bool), 35, berg=False)
+    bergkuppe(a, em[5] & ~waende)
     lvl = np.ones((Hp, Wp), np.uint8)
     lvl[fest] = 2
     lvl[em[5]] = 5

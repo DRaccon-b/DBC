@@ -180,6 +180,77 @@ def main():
             belegen(datei, x, y)
         return o
 
+    # 0) Bergwand ringsum (Regel 3b: neue Teile, alle starr ausser echten Lichtern):
+    #    a) halb im Fels versunkene Maschinenteile, vom Kartenrand angeschnitten
+    Hp, Wp = lvl.shape
+    rr = random.Random(7)
+    def fest_setzen(name, X, fussy, spiegeln=False, **extra):
+        datei, h, zu, mitte = sprite(name, spiegeln)
+        x, y = int(round(X - mitte)), int(fussy) - zu
+        o = {'datei': datei, 'basis': name, 'x': x, 'y': y, 'fuss': h, 'kachel': [max(0, min(cols - 1, int(X) // T)),
+             max(0, min(rows - 1, int(fussy) // T))], 'ebene': 1, 'fest_pos': True, 'rand': True}
+        o.update(extra)
+        objekte.append(o)
+        belegen(datei, x, y)
+        return o
+    fest_setzen('berg/00', 22, 26 * T, kein_schatten=True)                      # Zahnrad links, Kante am Kartenrand
+    fest_setzen('berg/01', 17 * T, Hp + 44, kein_schatten=True)                 # Panzerkette unten
+    fest_setzen('berg/02', Wp - 18, 47 * T, spiegeln=True, kein_schatten=True)  # Roboterarm rechts
+    fest_setzen('berg/03', Wp - 30, Hp + 52, kein_schatten=True, anim='rotlicht')   # Mech-Kopf unten rechts, rotes Auge
+    #    b) Schrottrand: vom Kartenrand angeschnitten, Tiefe wellenfoermig, ungleiche Abstaende (wie Karte 12)
+    RAND = ['rand/%02d' % i for i in range(16)]
+    GEW = [2, 3, 2, 3, 2, 2, 1, 3, 2, 2, 1, 3, 1, 1, 2, 1]
+    frei_x = [(66 * T - 8, 69 * T + 8), (38 * T - 8, 42 * T + 8)]
+    def kante(laenge):
+        pos, tiefe, out = -8, 0.0, []
+        while pos < laenge + 24:
+            tiefe = max(-8, min(12, tiefe * 0.7 + rr.uniform(-6, 6)))
+            out.append((pos, tiefe + rr.uniform(-4, 4)))
+            pos += rr.randint(22, 38)
+        return out
+    stellen = [(X, 18 + t, 'oben') for X, t in kante(Wp)] + [(X, Hp + 12 - t, 'unten') for X, t in kante(Wp)]
+    stellen += [(t, Y + 20, 'seite') for Y, t in kante(Hp)] + [(Wp - t, Y + 20, 'seite') for Y, t in kante(Hp)]
+    for (X, fussy, seite) in stellen:
+        X, fussy = int(round(X)), int(round(fussy))
+        if seite != 'seite' and any(a_ <= X <= b_ for a_, b_ in frei_x if (seite == 'unten') == (a_ < 700)):
+            continue
+        name_ = rr.choices(RAND, weights=GEW)[0]
+        datei, h, zu, mitte = sprite(name_, rr.random() < 0.5)
+        x, y = int(round(X - mitte)), fussy - zu
+        if not frei_px(datei, x, y):
+            continue
+        objekte.append({'datei': datei, 'basis': name_, 'x': x, 'y': y, 'fuss': h, 'kachel': [max(0, min(cols - 1, X // T)),
+                        max(0, min(rows - 1, fussy // T))], 'ebene': 1, 'fest_pos': True, 'rand': True, 'kein_schatten': True})
+        belegen(datei, x, y)
+    #    c) Wachtechnik auf der Bergkuppe: Funkmasten an den Ecken, Warnleuchten im festen Abstand, Kameras und
+    #       Scheinwerfer zur Stadt, Zaun mit Luecken, Stacheldraht, Warnschilder, Kristalle, Kabel- und Rohrenden
+    WACHE = [('wache/00', 1, 4), ('wache/00', 78, 4), ('wache/00', 1, 66), ('wache/00', 78, 66),
+             ('wache/04', 25, 2), ('wache/04', 55, 2), ('wache/11', 9, 2), ('wache/15', 47, 68), ('wache/13', 30, 68),
+             ('wache/12', 1, 27), ('wache/12', 78, 33), ('wache/08', 1, 38), ('wache/08', 78, 57), ('wache/08', 59, 68),
+             ('wache/09', 1, 51), ('wache/10', 78, 21), ('wache/09', 23, 68), ('wache/10', 69, 68), ('wache/07', 1, 15),
+             ('wache/07', 78, 44), ('wache/07', 12, 68)]
+    for y in range(8, 66, 12):                                    # Warnleuchten links/rechts im festen Rhythmus
+        WACHE += [('wache/02', 1, y), ('wache/02', 78, y)]
+    for y in (20, 44):                                            # Kameras zur Stadt hin (rechts gespiegelt)
+        WACHE += [('wache/03', 1, y), ('wache/03', 78, y + 1)]
+    for x in range(6, 76, 9):                                     # Zaun entlang der unteren Bergkante, mit Luecken
+        if rr.random() < 0.7 and not (36 <= x <= 43):
+            WACHE.append(('wache/05' if rr.random() < 0.75 else 'wache/06', x, 68))
+    for (name_, tx, ty) in WACHE:
+        o = None
+        for dy in (0, 1, -1, 2, -2, 3, -3):                       # nur entlang der Bergkuppe ausweichen, nie in die Stadt
+            ty_ = ty + dy if tx in (1, 78) else ty
+            if (tx in (1, 78) and not 3 <= ty_ <= 66) or (dy and tx not in (1, 78)):
+                continue
+            o = setzen(name_, tx * T + 8, ty_, {'spiegeln': tx > 40 and name_ in ('wache/03', 'wache/02', 'wache/04')})
+            if o:
+                break
+        if o and name_ in ('wache/00', 'wache/02', 'wache/03', 'wache/14', 'wache/15'):
+            o['anim'] = 'rotlicht'
+        elif o and name_ == 'wache/09':
+            o['anim'] = 'glimmen'
+        elif o and name_ == 'wache/04':
+            o['anim'] = 'lampe'
     # 1) Festung: Tor mit Auge und Panzertueren in der Bergwand, Reaktoren und Konsolen spiegelgleich zur Achse
     FEST = [
         ('gross2/03', ACHSE_F, 5, {'achse': ACHSE_F, 'an_wand': True}),
