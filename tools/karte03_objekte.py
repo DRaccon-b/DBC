@@ -24,7 +24,7 @@ BEGLEITER = ['klein/02', 'klein/04', 'klein/05', 'klein/08', 'klein/09', 'klein/
 # (sprite, Anker-x Kachel (Mitte), Anker-y = unterste Kachelzeile, Optionen)
 FEST = [
     # Dorf an der Oase
-    ('gross/01', 25, 10, {}), ('gross/00', 10.5, 15, {}), ('gross/02', 29, 15, {}), ('gross/03', 10.5, 34, {}),
+    ('gross/01', 25, 10, {}), ('gross/00', 11.5, 15, {}), ('gross/02', 29, 15, {}), ('gross/03', 10.5, 34, {}),
     ('mittel/09', 11.5, 40, {}), ('klein/29', 21, 33, {}), ('klein/11', 12, 31, {}), ('klein/10', 31.5, 32, {}),
     ('palmen/05', 14.5, 13, {'anim': 'wehen'}), ('palmen/10', 29.5, 19, {'anim': 'wehen'}),
     ('palmen/03', 31, 23, {'anim': 'wehen'}), ('palmen/08', 11.5, 22, {'anim': 'wehen'}),
@@ -193,6 +193,18 @@ def main():
         xs0, ys0, xs1, ys1 = max(0, x), max(0, y), min(MW, x + im.width), min(MH, y + im.height)
         a = a[ys0 - y:ys1 - y, xs0 - x:xs1 - x]
         fy_, fx_ = min(rows - 1, int(ay) // T), min(cols - 1, max(0, int(ax) // T))
+        # ganze Grundflaeche (untere 6 Pixelreihen des Sprites) pruefen, nicht nur die Fussmitte
+        a_g = np.array(im.getchannel('A')) >= 200
+        zl = np.nonzero(a_g.any(axis=1))[0]
+        if len(zl):
+            ys_g, xs_g = np.nonzero(a_g[max(0, zl.max() - 5):zl.max() + 1])
+            gx = (x + xs_g) // T
+            gy = (y + max(0, zl.max() - 5) + ys_g) // T
+            ok_g = (gx >= 0) & (gx < cols) & (gy >= 0) & (gy < rows)
+            nass = sum(1 for xg, yg in zip(gx[ok_g], gy[ok_g]) if cls[yg][xg] in 'xm')
+            if nass > 0.08 * max(1, int(ok_g.sum())):
+                print('  Grundflaeche im Wasser, uebersprungen:', name, int(ax) // T, int(ay) // T)
+                return None
         if cls[fy_][fx_] in 'xm':                          # nie im Wasser (Meer, Teich)
             print('  im Wasser, uebersprungen:', name, int(ax) // T, int(ay) // T)
             return None

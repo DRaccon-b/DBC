@@ -39,7 +39,7 @@ def main():
     kueste = [
         {'art': 'meer', 'r': [0, 0, 7, 79]},
         # natuerliche Kueste links: Buchten ins Land, Landzungen ins Meer (Haeuser, Steg, Teleporter ausgespart)
-        {'art': 'meer', 'e': [8.4, 12, 1.4, 2.6]}, {'art': 'meer', 'e': [8.6, 27, 1.7, 4.5]},
+        {'art': 'meer', 'e': [8.6, 27, 1.7, 4.5]},
         {'art': 'meer', 'e': [8.3, 45, 1.4, 3]}, {'art': 'meer', 'e': [8.5, 70, 1.6, 4]},
         {'art': 'sand', 'e': [6.5, 20, 1.8, 3.5]}, {'art': 'sand', 'e': [6.2, 37, 2.0, 4]},
         {'art': 'sand', 'e': [6.6, 65.5, 1.6, 2.5]}, {'art': 'sand', 'e': [6.8, 76, 1.5, 3]},

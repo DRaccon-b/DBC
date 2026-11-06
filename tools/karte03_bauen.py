@@ -727,7 +727,8 @@ def bauen(frame=None, speichern=True):
         sandwand_oben(L, sw['oben'], random.Random(4))
         ob = sw['oben']
         fu = (ob['kappe'][1] + 1) * T + ob['front']        # Fusslinie der Front
-        if sw.get('rechts'):                               # Innenecke oben rechts: Sand in der Ecke
+        if sw.get('rechts') and ob['x'][1] >= sw['rechts'][0]['x'][0] - 1 and sw['rechts'][0]['y'][0] <= ob['kappe'][1]:
+            # Innenecke oben rechts: Sand in der Ecke (nur wenn sich die Waende dort wirklich treffen)
             sx = sw['rechts'][0]['x'][0] * T + 5 + seiten_kante(fu)
             eck_verwehung(L, sx, fu + 1, 30, 14, links=True)
         nachher = np.array(img)
