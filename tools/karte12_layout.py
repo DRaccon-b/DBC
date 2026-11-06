@@ -122,9 +122,9 @@ def main():
     k[0:3, 12:16] = 'q'                                       # vor dem Teleporter oben
     # ------------------------------------------------------------------ Fluss: Quelle in der Bergwand oben, verbindet die
     # Moorpfuetzen, verschwindet unten in einer Felsspalte der Bergwand; wo er den Pfad kreuzt, kommt eine Bruecke hin
-    FLUSS = [(30, 4.6), (29.6, 9), (27, 13.4), (24.9, 15.0), (20.1, 15.0), (18.4, 17.2), (16.6, 20), (16.3, 24), (18, 27),
+    FLUSS = [(30, 4.6), (29.6, 9), (27, 13.4), (24.9, 14.5), (20.1, 14.5), (18.4, 17.2), (16.6, 20), (16.3, 24), (18, 27),
              (21.5, 29.6), (23.2, 32), (22, 36), (19.6, 40), (18, 44), (17.4, 47), (18.6, 50.2), (22, 53.4), (28, 54.6),
-             (33.1, 51.0), (39.9, 51.0), (41.8, 49.4), (44, 46), (48.4, 40.4), (52, 38.2), (57.5, 38.4), (61.5, 39.6), (68.6, 41.6), (70.4, 46),
+             (33.1, 50.5), (39.9, 50.5), (41.8, 49.0), (44, 46), (48.4, 40.4), (52, 38.2), (57.5, 38.4), (61.5, 39.6), (68.6, 41.6), (70.4, 46),
              (69, 50), (65.6, 53.6), (63.6, 56.2), (60, 57.6), (52.5, 59.6), (50.2, 63), (52, 66), (53.5, 69.5)]
     pfad_vorher = (k == 'q')
     fl = []
@@ -137,11 +137,11 @@ def main():
         fluss |= ((xx + 0.5 - px) ** 2 + (yy + 0.5 - py) ** 2 <= r_ ** 2)
     fluss &= ~np.isin(k, ['v', 'h', 'w', 'b']) & ~((k == 'r') & (yy < 60))
     # Bruecken fest: Fluss laeuft gerade (2 Kacheln) quer unter dem Steg durch, Pfad fuehrt gerade auf beide Enden zu
-    bruecken = [[21, 12, 23, 17, 'ns'], [35, 48, 37, 53, 'ns']]
+    bruecken = [[21, 11, 23, 17, 'ns'], [35, 47, 37, 53, 'ns']]
     k[fluss] = 'x'
     for (x0_, y0_, x1_, y1_, _) in bruecken:
-        k[y0_ + 2:y0_ + 4, x0_ - 2:x1_ + 3] = 'x'                 # gerades Wasserband unter dem Steg
-        for y in list(range(y0_ - 2, y0_ + 2)) + list(range(y0_ + 4, y1_ + 3)):
+        k[y0_ + 2:y0_ + 5, x0_ - 2:x1_ + 3] = 'x'                 # gerades Wasserband (3 Kacheln) unter dem Steg
+        for y in list(range(y0_ - 2, y0_ + 2)) + list(range(y0_ + 5, y1_ + 3)):
             for x in range(x0_, x1_ + 1):
                 if k[y, x] not in 'rvbhw':
                     k[y, x] = 'q'                                 # Brueckenkoepfe und gerade Zufahrt

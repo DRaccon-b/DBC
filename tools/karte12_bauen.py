@@ -263,6 +263,13 @@ def quelle_zeichnen(a, lay, frame):
     fx, fy = lay['fluss'][0]
     cx, yb = int(fx * T), int(fy * T) - 6
     Hh, W = a.shape[:2]
+    pf = os.path.join(OBJ, 'platzierung.json')                     # Becken genau dort, wo der Strahl aufkommt
+    if os.path.exists(pf):
+        for o in json.load(open(pf)):
+            if o.get('quelle'):
+                sa = np.array(Image.open(os.path.join(OBJ, o['datei'])).getchannel('A')) > 0
+                yb = o['y'] + int(np.nonzero(sa.any(axis=1))[0].max()) - 4
+                cx = o['x'] + int(round(np.nonzero(sa[-4:].any(axis=0))[0].mean()))
     for y in range(yb - 2, yb + 12):
         for x in range(cx - 14, cx + 15):
             e = ((x - cx) / 14.0) ** 2 + ((y - yb - 4) / 6.5) ** 2

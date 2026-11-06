@@ -1112,6 +1112,12 @@ OBJEKTGRUPPEN_K12 = {
         'old wooden plank footbridge over a stream, running horizontally from left to right, planks vertical, wooden railing with posts on the far side, mossy dark wood, 3/4 top-down view',
         'old wooden plank footbridge over a stream, running horizontally from left to right, rope railings, weathered dark wood with moss, 3/4 top-down view',
     ]},
+    'k12_bruecke2': {'size': 128, 'items': [
+        'narrow old wooden plank footbridge seen from above, running vertically from top to bottom, the whole bridge fully visible with both ends, planks laid horizontally, thick wooden side beams, a small post at each of the four corners with rope railings between them, mossy weathered dark wood, top-down view, small and centered with empty space around it',
+        'narrow old wooden plank footbridge seen from above, running vertically, complete with both ends visible, planks laid horizontally, side beams, corner posts with rope railings, a little moss, dark weathered wood, top-down view, small and centered with empty space around it',
+        'short old wooden plank footbridge seen from above, vertical, both ends complete with corner posts, rope railings, dark mossy wood, top-down view, small and centered with empty space around it',
+        'old wooden footbridge from above, vertical, planks horizontal, wooden side rails with posts at both ends, mossy dark wood, top-down view, small and centered with empty space around it',
+    ]},
     'k12_quelle': {'size': 96, 'items': [
         'stone cave mouth with a carved stone arch built into a dark rock cliff wall, a small waterfall pouring out of the cave and splashing into a little foaming pool at the bottom, moss and ferns around the arch, ' + FR12,
         'old carved stone water spout shaped like a gaping monster face set into a dark rock wall, a stream of water pouring from its mouth down into a small foaming pool, moss, ' + FR12,
