@@ -34,21 +34,23 @@ def main():
             boden.append({'art': 'weg', 'r': [94, 14, 97, 17]})
         else:
             boden.append(z)
-    # Meer auch oben und rechts bis zum Kartenrand (Sandwaende oben/rechts entfallen), mit Buchten;
-    # die Arena behaelt einen Sandstrand, der Teleporter rechts eine Landzunge
+    # Grenzen nach Nutzer-Skizze: links Meer (bis zum unteren Rand), oben Sandwand bis vor die Lagune,
+    # oben rechts Meer um die Insel bis zum Kartenrand, rechts unterhalb der Lagune wieder Sandwand
     kueste = [
-        {'art': 'meer', 'r': [6, 0, 111, 2]}, {'art': 'meer', 'e': [20, 2.5, 7, 2.6]},
-        {'art': 'meer', 'e': [76, 3, 6, 2.4]}, {'art': 'meer', 'e': [36, 2, 4, 2]},
-        {'art': 'meer', 'r': [107, 0, 111, 79]}, {'art': 'meer', 'e': [105.5, 32, 3, 6]},
-        {'art': 'meer', 'e': [106, 51, 2.6, 5]}, {'art': 'meer', 'e': [106, 75, 2.5, 4]},
-        {'art': 'sand', 'e': [52.5, 13.5, 15, 14.2]},              # Arena mit Strand davor
-        {'art': 'sand', 'e': [106.5, 65.5, 6.5, 4.6]},             # Landzunge zum Teleporter rechts
+        {'art': 'meer', 'r': [0, 0, 7, 79]}, {'art': 'meer', 'e': [7.5, 24, 1.6, 4]}, {'art': 'meer', 'e': [7.5, 70, 1.5, 4]},
+        {'art': 'sand', 'r': [0, 54, 8, 61]},                       # Landzunge zum Teleporter links
+        {'art': 'meer', 'r': [83, 0, 111, 21]}, {'art': 'meer', 'e': [104, 21, 7, 3.2]},
     ]
-    boden = boden[:1] + kueste + boden[1:]
+    for z in boden:                                                 # Pflasterflaechen am Zeltlager nicht ins Meer
+        if z['art'] == 'kies' and z.get('r', [None])[0] == 6:
+            z['r'] = [8] + z['r'][1:]
+    boden = boden[:1] + kueste + [z for z in boden[1:] if not (z['art'] == 'meer' and z.get('r') == [0, 0, 5, 79])
+                                   and not (z['art'] == 'sand' and z.get('r') == [0, 54, 6, 61])]
     neu['boden'] = boden
-    neu['sandwand'].pop('oben', None)
-    neu['sandwand'].pop('rechts', None)
-    neu['sandwand']['unten']['x'] = [0, 111]              # Vordergrund-Duene ueber die ganze Breite
+    neu['sandwand']['oben']['x'] = [8, 82]
+    neu['sandwand']['unten']['x'] = [8, 111]
+    neu['sandwand']['rechts'] = [{'x': [106, 111], 'y': [22, 63], 'front_unten': 20}, {'x': [106, 111], 'y': [69, 79]}]
+    neu['steg'] = {'x': 2, 'y': 50, 'laenge': 6, 'breite': 3}
     # Holzsteg von der Insel nach Sueden (x0, x1, y0, y1 in Kacheln)
     neu['inselsteg'] = [94, 97, 17, 25]
     neu['_v11'] = 'Regeln v1.1 (tools/karte03_v11.py), Original: v1.0/layout_v1.0.json'

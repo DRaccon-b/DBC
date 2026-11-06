@@ -22,10 +22,10 @@ PALMEN = ('mittel/00', 'mittel/01', 'mittel/02', 'klein/25')
 # (sprite, Anker-x Kachel (Mitte), Anker-y = unterste Kachelzeile, Optionen)
 FEST = [
     # Dorf an der Oase
-    ('gross/01', 25, 10, {}), ('gross/00', 8.5, 15, {}), ('gross/02', 29, 15, {}), ('gross/03', 8, 34, {}),
-    ('mittel/09', 10.5, 40, {}), ('klein/29', 21, 33, {}), ('klein/11', 12, 31, {}), ('klein/10', 31.5, 32, {}),
+    ('gross/01', 25, 10, {}), ('gross/00', 10.5, 15, {}), ('gross/02', 29, 15, {}), ('gross/03', 10.5, 34, {}),
+    ('mittel/09', 11.5, 40, {}), ('klein/29', 21, 33, {}), ('klein/11', 12, 31, {}), ('klein/10', 31.5, 32, {}),
     ('mittel/00', 14.5, 13, {'anim': 'wehen'}), ('mittel/01', 29.5, 19, {'anim': 'wehen'}),
-    ('mittel/00', 31, 23, {'anim': 'wehen'}), ('mittel/02', 10.5, 22, {'anim': 'wehen'}),
+    ('mittel/00', 31, 23, {'anim': 'wehen'}), ('mittel/02', 11.5, 22, {'anim': 'wehen'}),
     ('mittel/01', 12.5, 29, {'anim': 'wehen'}), ('mittel/00', 26.5, 30, {'anim': 'wehen'}),
     ('klein/05', 22, 16, {}), ('klein/05', 26, 26, {}), ('klein/04', 11, 26, {}),
     # Bus und Haltestelle
@@ -59,10 +59,10 @@ FEST = [
     ('mittel2/02', 48.5, 70, {}), ('gross2/03', 63, 71, {}), ('mittel2/04', 77, 70, {}), ('mittel2/05', 83.5, 73, {}),
     ('mittel2/11', 57, 72, {}), ('mittel2/15', 19, 72, {}),
     # Zeltlager am Fluss
-    ('gross/04', 9, 54, {}), ('gross/05', 20.5, 54, {}), ('gross/04', 20.5, 66, {}),
-    ('klein/15', 23.5, 49, {'anim': 'feuer'}), ('klein/15', 6.5, 67, {'anim': 'feuer'}), ('klein/16', 12.5, 56, {'anim': 'feuer'}),
-    ('klein/13', 10.5, 62, {}), ('klein/14', 11.7, 62, {}), ('klein/13', 22.5, 62, {}), ('klein/28', 8.5, 64, {}),
-    ('klein/43', 7.5, 57, {}),
+    ('gross/04', 11, 54, {}), ('gross/05', 20.5, 54, {}), ('gross/04', 20.5, 66, {}),
+    ('klein/15', 23.5, 49, {'anim': 'feuer'}), ('klein/15', 9.5, 67, {'anim': 'feuer'}), ('klein/16', 12.5, 56, {'anim': 'feuer'}),
+    ('klein/13', 10.5, 62, {}), ('klein/14', 11.7, 62, {}), ('klein/13', 22.5, 62, {}), ('klein/28', 9.5, 64, {}),
+    ('klein/43', 9.5, 58, {}),
 ]
 ZAUN = [(x, 56) for x in range(58, 85, 3)]   # auf dem Sand oberhalb des Weges
 STREU_BLUETEN = {'blueten/00': 3, 'blueten/01': 3, 'blueten/02': 2, 'blueten/03': 2, 'blueten/04': 1, 'blueten/05': 2,
