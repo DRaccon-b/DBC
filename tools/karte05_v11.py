@@ -166,7 +166,7 @@ def objekte():
     objs = json.load(open(pf))
     gesperrt = set()
     for (x0, x1, y0, y1, _r) in lay.get('treppen', []):
-        gesperrt |= {(x, y) for y in range(y0 - 4, y1 + 5) for x in range(x0 - 2, x1 + 3)}
+        gesperrt |= {(x, y) for y in range(y0 - 2, y1 + 5) for x in range(x0 - 1, x1 + 2)}   # Zugang oben/unten frei
     for tp in lay.get('teleporter', []):
         gesperrt |= {(x, y) for y in range(tp['y'] - 1, tp['y'] + tp['h'] + 1) for x in range(tp['x'] - 1, tp['x'] + tp['b'] + 1)}
     alpha, info = {}, {}
@@ -320,7 +320,7 @@ def objekte():
         o = einrasten({'datei': d, 'basis': name, 'ebene': 1, 'v11': art}, kx, ky)
         bx, by, wt, ht = o['block']
         if pruefen:
-            baum_ = name.startswith('baeume/')
+            baum_ = name.startswith(('baeume/', 'fremd/'))
             for x in range(bx, bx + wt):
                 for y in range(by, by + ht):
                     fuss_ = y >= by + ht - 2
@@ -366,6 +366,31 @@ def objekte():
                 if name.startswith('baeume/'):
                     grosse_oben.append(o)
     print('Oben: %d groessere Objekte (Server, Eiszapfen, Tannen); Hoehle ersetzt' % n_ob)
+    # linkes Plateau (x 15-32): mehr Baeume und Objekte, auch andere Baumarten (verschneite Laubbaeume aus Karte 01,
+    # Schneetanne aus Karte 07 - Regel 3: wiederverwenden)
+    LINKS = [('fremd/laubbaum-00', 'baum', 3), ('fremd/laubbaum-01', 'baum', 3), ('fremd/laubbaum-02', 'baum', 2),
+             ('fremd/laubbaum-15', 'baum', 2), ('fremd/laubbaum-04', 'baum', 2), ('fremd/schneetanne-k7', 'baum', 3),
+             ('baeume/03', 'baum', 3), ('baeume/00', 'baum', 3), ('baeume/01', 'baum', 2), ('natur/24', None, 4), ('natur/02', 'wehen', 3),
+             ('natur/03', 'wehen', 2), ('natur/06', 'glitzern', 2), ('natur/04', None, 2), ('natur/05', None, 2),
+             ('server/15', None, 1)]
+    n_li = 0
+    for (name, anim, anzahl) in LINKS:
+        datei = 'sauber/%s.png' % name.replace('/', '-') if name.startswith('baeume/') else None
+        g_ = 0
+        orte_li = [(x, y) for x in range(1, 35) for y in range(4, 14) if hoehe_t[y][x] == 2]
+        rnd.shuffle(orte_li)
+        for (kx, ky) in orte_li:
+            if g_ >= anzahl:
+                break
+            if any(abs(kx - p_['kachel'][0]) <= 3 and abs(ky - p_['kachel'][1]) <= 1 for p_ in grosse_oben
+                   if anim == 'baum' and p_['kachel'][0] < 36):
+                continue                                   # Baeume nicht in einer Reihe nebeneinander
+            o = neu_setzen(name, kx, ky, anim=anim, datei=datei)
+            if o:
+                g_ += 1; n_li += 1
+                if anim == 'baum':
+                    grosse_oben.append(o)
+    print('Links: %d Baeume/Objekte auf dem linken Plateau' % n_li)
     weg_idx = set()
     n_neu = 0
     for (name, (ax, ay), anzahl, r) in NEU:
