@@ -167,12 +167,22 @@ def sandwand_oben(L, cfg, rnd):
     for y in range(y1 + 1, y1 + fr):
         L.p(x0, y, SANDSTEIN[0]); L.p(x0 + 1, y, SANDSTEIN[1]); L.p(x0 + 2, y, SANDSTEIN[2])
     for y in range(y0, y1 + fr + 1):
+        if cfg.get('enden_am_strand'):                       # v1.1: Wandende steht auf Sand, kein Schaum
+            break
         if (y // 2) % 3 != 2:
             L.p(x0 - 1, y, ind.rgb('#cfe8ff'))
         if y % 5 == 0:
             L.p(x0 - 2, y, ind.rgb('#8cc4f4'))
     for x in range(x0, x0 + 3):
         L.neutral(x, y1 + fr, 0.75); L.neutral(x, y1 + fr + 1, 0.86)
+    if cfg.get('ende_rechts_meer'):                          # v1.1: rechtes Wandende am Meer (gespiegelt,
+        xe = x1 - 1                                          # Stirnseite im Schatten, Licht oben links)
+        for y in range(y0, y1):
+            L.p(xe, y, SANDKAPPE[0]); L.p(xe - 1, y, SANDKAPPE[1]); L.p(xe - 2, y, SANDKAPPE[2])
+        for y in range(y1 + 1, y1 + fr):
+            L.p(xe, y, SANDSTEIN[0]); L.p(xe - 1, y, SANDSTEIN[0]); L.p(xe - 2, y, SANDSTEIN[1])
+        for y in range(y1, y1 + fr + 1):
+            L.neutral(xe + 1, y, 0.8); L.neutral(xe + 2, y, 0.9)   # Schatten der Stirnseite auf den Strand
 
 
 def sandwand_vorne(L, cfg, rnd, rechts_x=None):
@@ -876,8 +886,9 @@ def objekte_zeichnen(img, objs, cache, boden, frame):
                 sp = kp.PROZ[o['proz']](frame)
             elif anim == 'wehen':
                 sp = kb.wehen(sp, kb.wind(frame, o['x']))
-            elif anim == 'flagge':
-                sp = flagge(sp, frame, o['x'])
+            elif anim == 'flagge':                         # nur der Stoff weht, Stange bleibt ruhig (Karte-04-Regel)
+                import karte04_bauen as _k4
+                sp = _k4.fahne_wehen(sp, frame, o['x'] * 0.37)
             elif anim == 'kaktus':
                 sp = kaktus(sp, frame, o['x'], o['y'])
             if o.get('dreh'):

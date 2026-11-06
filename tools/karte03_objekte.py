@@ -218,16 +218,16 @@ def main():
     # --- v1.1: Palmen als Baeume der Karte (Regel 5: Gruppen + Begleiter; Objekte vor Palmen)
     prnd = random.Random(31)
 
-    def begleiter(o_palme, vorher):
+    def begleiter(o_palme, vorher, pflicht=False):
         """kleines Objekt vor den Stamm: darf nur die eigene Palme ueberdecken (vorher = belegt ohne Palme)"""
-        if prnd.random() < 0.3:
+        if not pflicht and prnd.random() < 0.3:
             return
         a_ = np.array(Image.open(os.path.join(OBJ, o_palme['datei'])).getchannel('A')) >= 200
         ys_, xs_ = np.nonzero(a_)
         fx = o_palme['x'] + int(xs_[ys_ >= ys_.max() - 2].mean())
         fy = o_palme['y'] + int(ys_.max())
-        for _ in range(6):
-            bx_ = fx + prnd.choice((-1, 1)) * prnd.randint(6, 14)
+        for _ in range(30 if pflicht else 6):
+            bx_ = fx + prnd.choice((-1, 1)) * prnd.randint(6, 18)
             by_ = fy + prnd.randint(3, 10)
             n_ = prnd.choice(BEGLEITER)
             im_ = lade('varianten/%s_%s' % (n_.replace('/', '-'), boden_bei(bx_, by_))) if os.path.exists(os.path.join(OBJ, 'varianten/%s_%s.png' % (n_.replace('/', '-'), boden_bei(bx_, by_)))) else lade(n_)
@@ -278,6 +278,23 @@ def main():
                 break
             if palme(prnd.randint(x0, x1), prnd.randint(y0, y1)):
                 gesetzt_ += 1
+    # Regel 5: jede Palme ohne Nachbarpalme (3 Kacheln) bekommt sicher einen Begleiter
+    palmen_ = [o for o in objekte if o['basis'] in PALMEN_NEU]
+    for o in palmen_:
+        fx_, fy_ = o['x'] + 30, o['y'] + o['fuss']
+        nachbar = any(q is not o and abs(q['x'] - o['x']) <= 48 and abs(q['y'] + q['fuss'] - fy_) <= 48 for q in palmen_)
+        hat = any(q.get('begleiter') and abs(q['x'] - o['x']) <= 40 and abs(q['y'] + q['fuss'] - fy_) <= 24 for q in objekte)
+        if not nachbar and not hat:
+            vorher = belegt.copy()
+            n_vor = len(objekte)
+            begleiter(o, vorher, pflicht=True)
+            if len(objekte) > n_vor:
+                continue
+            kx_, ky_ = (o['x'] + 30) // T, (o['y'] + o['fuss']) // T
+            if any(palme(kx_ + dx_, ky_ + dy_) for dx_, dy_ in ((2, 0), (-2, 0), (2, 1), (-2, 1), (3, -1), (-3, -1))):
+                continue                                   # Regel 5a: zweiter Baum daneben
+            objekte.remove(o)                              # sonst lieber keine einzelne Palme
+            print('  einzelne Palme ohne Begleitung entfernt:', o['basis'], kx_, ky_)
     for (tx, ty) in ZAUN:
         setze('klein/22', tx * T + 8, ty * T + 12, True)
     rosa = {n: rosa_machen(n) for n in BLUETEN}
@@ -301,5 +318,34 @@ def main():
     print(len(objekte), 'Objekte gesetzt')
 
 
+# Paare exakt symmetrisch zur Achse ihres Bauwerks (Regel 'Symmetrische Plaetze'): (Basis, Achse in px)
+PAARE = [('klein/31', 96 * T), ('abgeleitet/box_monitor', 96 * T), ('mittel3/01', 96 * T)]
+
+
+def symmetrie():
+    pf = os.path.join(OBJ, 'platzierung.json')
+    objs = json.load(open(pf))
+    for basis, achse in PAARE:
+        ps = sorted((o for o in objs if o['basis'] == basis), key=lambda o: o['x'])
+        if len(ps) != 2:
+            print('  Paar unvollstaendig:', basis, len(ps))
+            continue
+        l, r = ps
+        im = Image.open(os.path.join(OBJ, l['datei']))
+        a = np.array(im.getchannel('A')) > 128
+        xs = np.nonzero(a.any(axis=0))[0]
+        ml = (xs.min() + xs.max()) / 2.0                 # Mitte des sichtbaren Sprites
+        l['x'] = int(round(achse - (achse - (l['x'] + ml)) - ml))
+        dist = achse - (l['x'] + ml)
+        im_r = Image.open(os.path.join(OBJ, r['datei']))
+        ar = np.array(im_r.getchannel('A')) > 128
+        xr = np.nonzero(ar.any(axis=0))[0]
+        mr = (xr.min() + xr.max()) / 2.0
+        r['x'] = int(round(achse + dist - mr))
+        r['y'] = l['y'] + l['fuss'] - r['fuss']
+    json.dump(objs, open(pf, 'w'), indent=0)
+    print('Symmetrie: %d Paare' % len(PAARE))
+
+
 if __name__ == '__main__':
-    main()
+    symmetrie() if sys.argv[1:] == ['symmetrie'] else main()
