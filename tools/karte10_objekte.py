@@ -345,7 +345,7 @@ def main():
             if not frei_px(datei, x, y):
                 continue
             o = {'datei': datei, 'basis': name, 'x': x, 'y': y, 'fuss': h, 'kachel': [cx, cy], 'ebene': 1,
-                 'anim': 'baum', 'wald': True}
+                 'wald': True}
             objekte.append(o)
             wald_neu.append(o)
     # Vor den unteren Ecktuermen der Burg stehen Waldbaeume (Fuss unterhalb des Kartenrands) und verdecken die Tueren
@@ -353,7 +353,7 @@ def main():
                        (88 * T + 8 + 10, 'rand/k1-00'), (88 * T + 8 - 12, 'rand/k1-09')):
         datei, h, zu, mitte = sprite(name)
         o = {'datei': datei, 'basis': name, 'x': int(round(cx - mitte)), 'y': rows * T + 6 - zu, 'fuss': h,
-             'kachel': [cx // T, rows - 1], 'ebene': 1, 'anim': 'baum', 'wald': True, 'fest_pos': True}
+             'kachel': [cx // T, rows - 1], 'ebene': 1, 'wald': True, 'fest_pos': True}
         objekte.append(o)
         wald_neu.append(o)
     for o in wald_neu:
