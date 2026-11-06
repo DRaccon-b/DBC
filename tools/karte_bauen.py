@@ -342,7 +342,7 @@ def leuchten(img, frame, objs):
     img.paste(Image.fromarray(a))
 
 
-def bauen(frame=None, speichern=True, objekte=True):
+def bauen(frame=None, speichern=True, objekte=True, saison=None):
     """Baut die Karte. frame=None: statisch; frame=0..N_FRAMES-1: Animationsbild."""
     g = json.load(open(os.path.join(KARTE, 'terrain_grid.json')))
     plan = json.load(open(os.path.join(KARTE, 'hoehenplan.json')))
@@ -583,8 +583,12 @@ def bauen(frame=None, speichern=True, objekte=True):
         if wasser_details.MEER_MASKE[0] is not None:
             np.save(os.path.join(KARTE, 'meer.npy'), np.packbits(wasser_details.MEER_MASKE[0]))
 
+    # --- Jahreszeit (tools/karte01_saison.py): Boden umfaerben, eigene Platzierung mit Jahreszeit-Sprites
+    if saison:
+        import karte01_saison
+        img = karte01_saison.boden(img, cls, saison)
     # --- 3. Objekte
-    pf = os.path.join(OBJ, 'platzierung.json')
+    pf = os.path.join(OBJ, 'platzierung.json' if not saison else 'platzierung_%s.json' % saison)
     if os.path.exists(pf):
         cache = {}
         objs = sorted(json.load(open(pf)), key=lambda o: (o.get('ebene', 1), o['y'] + o.get('fuss', 0)))
