@@ -17,6 +17,10 @@ Neue Fassung nach den Regeln in `CLAUDE.md`. v1.0 liegt in `maps/karte01/v1.0/`.
 - **Regel 5 – Bäume:** Wiesenbäume bekommen Begleitung (zweiter Baum + Pflanze vor dem Sockel, sonst 2–3 Pflanzen);
   Pflanzen aus Karte 01 und den neuen Gras-Sets (Regel 3); Bäume ohne Platz für Begleitung entfernt
   (`tools/karte01_v11_begleiter.py`).
+- **Regel 8 – Bäume:** Bäume überlappen sich nur noch mit ihrer äußersten Spalte (ab 3 Kacheln Breite), schmalere
+  stehen nebeneinander, Sockel überlappen nie. Regelwidrige Bäume entfernt, Wald danach regelkonform dicht neu
+  gepackt (`tools/karte01_v11_baeume.py`, 663 Bäume, 0 Verstöße); Waldboden dunkler wie auf der Startkarte.
+- **Zeichenreihenfolge:** Felsspitzen liegen über Schaum, Brandung und Lichtreflexen (alle Animationsbilder).
 - **Regel 7 – Schatten:** Schatten über Klippe/Wasser verkleinert.
 - **Abschlusskontrolle:** keine Überlappungen, alles auf dem richtigen Untergrund (`tools/karte01_v11_aufraeumen.py`,
   `tools/pruefen.py`: 0/0); Felsen im Wasser nach Tiefe (tiefer = größer, tiefste Stufe nur unter Wasser).
@@ -25,6 +29,7 @@ Neue Fassung nach den Regeln in `CLAUDE.md`. v1.0 liegt in `maps/karte01/v1.0/`.
 ```bash
 python3 tools/karte01_v11_wege.py && python3 tools/karte_bauen.py && python3 tools/objekte_setzen.py
 rm -f assets/objekte/karte01/platzierung_frei.json && python3 tools/karte01_raster.py
+python3 tools/karte01_v11_baeume.py
 python3 tools/karte01_v11_begleiter.py && python3 tools/karte_bauen.py
 python3 tools/karte01_v11_aufraeumen.py && python3 tools/karte_bauen.py
 python3 tools/animation_bauen.py && python3 tools/karte01_ebenen.py

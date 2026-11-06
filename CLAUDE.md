@@ -25,10 +25,9 @@ wird jede Regel einzeln geprüft.
    darf auch einmal unterbrechen und später weitergehen.
 7. **Schatten** ragen nie über Kanten (Klippen, Wände, Wasser) oder über andere Objekte.
 8. **Bäume überlappen sich nur an den äußeren Kachelspalten:**
-   - Ein Baum, der 4 oder 5 Kacheln breit ist, darf einen Nachbarbaum nur mit seiner äußersten Spalte links bzw.
-     rechts überlappen – die inneren Spalten bleiben frei.
-   - Ein Baum, der 2 Kacheln breit ist, überlappt gar nicht – solche Bäume stehen nebeneinander.
-   - 3 Kacheln breit: wie 2 Kacheln, also nebeneinander (bis der Nutzer es anders festlegt).
+   - Ein Baum, der 3 oder mehr Kacheln breit ist, darf einen Nachbarbaum nur mit seiner äußersten Spalte links
+     bzw. rechts überlappen – die inneren Spalten bleiben frei.
+   - Ein Baum, der 1–2 Kacheln breit ist, überlappt gar nicht – solche Bäume stehen nebeneinander.
    - Die Sockelregel (4) gilt auch hier: Sockel (unterste Kachelreihe) zweier Bäume überlappen nie.
 
 ## Abschlusskontrolle (Pflicht)
