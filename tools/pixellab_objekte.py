@@ -1050,6 +1050,36 @@ OBJEKTGRUPPEN_K10 = {
     ]},
 }
 
+STIL_K11 = ("Top-down RPG map object for a dark cursed coast at a sea of darkness, in polished handheld monster-collecting RPG "
+            "pixel art: colored dark outline (darkest shade of the object's own hue, never pure black), light from the upper "
+            "left, desaturated gloomy colors with cold teal and violet accents, clean shapes, no noise, no dithering, "
+            "transparent background, no ground, no cast shadow.")
+PALETTE_K11 = ['#14161e', '#1e2230', '#2a3042', '#3a4256', '#4e5870', '#6a7690', '#8c98b0', '#b4bed0',
+               '#2a1e2a', '#3e2a3e', '#5a3a5a', '#7a4e7a', '#a06aa0', '#1a3a40', '#245058', '#307078', '#40949a',
+               '#5cb8b8', '#8adcd4', '#3a2a1e', '#5a4030', '#7a5a40', '#a07a54', '#c8a070', '#e8d0a0',
+               '#7a1e2e', '#b03a4a', '#e06a80', '#f8a0b0', '#e8702a', '#f8b040', '#fff0a0', '#ffffff']
+OBJEKTGRUPPEN_K11 = {
+    'k11_gross': {'size': 128, 'items': [
+        'giant bleached whale skeleton lying on the ground, long ribcage and spine, big skull, side view, perfectly straight front elevation view, facing the camera head-on, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'old broken wooden shipwreck stranded on land, tilted hull, broken mast with a torn pale sail, perfectly straight front elevation view, facing the camera head-on, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'half sunken old wooden shipwreck in shallow water, only the dark hull and a broken mast stump visible, perfectly straight front elevation view, facing the camera head-on, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'tall jagged dark sea rock spire rising from the water, teal-black stone with a little moss, perfectly straight front elevation view, facing the camera head-on, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+    ]},
+    'k11_meer': {'size': 64, 'items': [
+        'round pink coral cluster', 'tall pink branching coral', 'red fan coral', 'dark green seaweed tuft',
+        'tall dark kelp strands', 'orange starfish', 'black sea urchin', 'pale spiral sea shell',
+        'grey rock with barnacles', 'small dark sea rock', 'purple sea anemone', 'teal glowing sea crystal',
+        'pale pink coral rubble', 'small dark sea rock spire', 'clam shell with a pearl', 'tangle of dark seaweed',
+    ]},
+    'k11_land': {'size': 64, 'items': [
+        'old rusty ship anchor stuck in the ground', 'black iron brazier with burning orange fire', 'broken dark stone obelisk',
+        'tall dark stone pillar with a violet rune', 'pile of rusty chains', 'old broken barrel', 'pale driftwood log',
+        'broken ship mast lying on the ground', 'fish skeleton', 'pile of skulls and bones', 'small withered black bush',
+        'cursed dark lantern on a post with a teal glow', 'old wooden signpost, blank', 'broken wooden crate',
+        'dark stone stairs block', 'small pile of black ooze stones',
+    ]},
+}
+
 
 def call(method, path, body=None, raw=False):
     req = urllib.request.Request(API + path, method=method,
@@ -1103,7 +1133,9 @@ def herunterladen(oid, d):
 
 
 def speichern(gruppe, ims, ids):
-    if gruppe.startswith('k10_'):
+    if gruppe.startswith('k11_'):
+        ziel = os.path.join(ROOT, 'assets', 'objekte', 'karte11', gruppe[4:])
+    elif gruppe.startswith('k10_'):
         ziel = os.path.join(ROOT, 'assets', 'objekte', 'karte10', gruppe[4:])
     elif gruppe.startswith('k9_'):
         ziel = os.path.join(ROOT, 'assets', 'objekte', 'karte09', gruppe[3:])
@@ -1146,6 +1178,17 @@ def erzeugen(gruppe):
     k4 = gruppe.startswith('k4_')
     k5 = gruppe.startswith('k5_')
     k6 = gruppe.startswith('k6_') or gruppe.startswith('k7_')
+    if gruppe.startswith('k11_'):
+        g = OBJEKTGRUPPEN_K11[gruppe]
+        req = {'description': STIL_K11, 'size': g['size'], 'view': 'top-down',
+               'item_descriptions': [it + '. ' + STIL_K11 for it in g['items']],
+               'target_palette': {'colors': PALETTE_K11, 'name': 'Karte11 Dark Ocean'}}
+        d = call('POST', '/v2/create-1-direction-object', req)
+        oid = d['object_id']
+        print(gruppe, 'Objekt', oid)
+        d = warte(oid)
+        speichern(gruppe, *herunterladen(oid, d))
+        return
     if gruppe.startswith('k10_'):
         g = OBJEKTGRUPPEN_K10[gruppe]
         req = {'description': STIL_K10, 'size': g['size'], 'view': 'top-down',
