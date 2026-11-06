@@ -342,7 +342,7 @@ def leuchten(img, frame, objs):
     img.paste(Image.fromarray(a))
 
 
-def bauen(frame=None, speichern=True):
+def bauen(frame=None, speichern=True, objekte=True):
     """Baut die Karte. frame=None: statisch; frame=0..N_FRAMES-1: Animationsbild."""
     g = json.load(open(os.path.join(KARTE, 'terrain_grid.json')))
     plan = json.load(open(os.path.join(KARTE, 'hoehenplan.json')))
@@ -578,6 +578,9 @@ def bauen(frame=None, speichern=True):
         for o in objs:
             if o['datei'].startswith('dschungel/'):
                 waldboden(img, o, Image.open(os.path.join(OBJ, o['datei'])))
+        if not objekte:                          # nur Boden (fuer den Tileset-Export): Waldboden ja, Objekte nein
+            objs = []
+    if os.path.exists(pf) and objekte:
         # weiche Bodenschatten (Ellipse unter dem Fuss), vor allen Sprites
         from PIL import ImageDraw, ImageFilter
         schatten = Image.new('L', img.size, 0)
