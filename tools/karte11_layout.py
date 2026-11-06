@@ -92,8 +92,8 @@ def main():
     lay = {
         'groesse': [C, R], 'klassen': [''.join(r) for r in k], 'hoehe': [''.join(str(c) for c in r) for r in h],
         # Treppen (x0, x1, Ebene): Sued-Treppe des oberen Plateaus; Osttreppen als (y0, y1, x, Ebene)
-        'treppen': [[5, 8, 2]],
-        'treppen_ost': [[12, 14, 9, 2], [44, 46, 9, 2]],
+        # Treppen nach Sueden von beiden lila Plateaus: (x0, x1, Ebene, unterste Plateaureihe)
+        'treppen_sued': [[5, 8, 2, 21], [5, 8, 2, 53]],
         'bruecke': [54, 37, 59, 39],
         'teleporter': [{'x': 29, 'y': 0, 'b': 6, 'h': 2}, {'x': 0, 'y': 30, 'b': 2, 'h': 4}],
     }
