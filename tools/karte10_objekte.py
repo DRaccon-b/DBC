@@ -37,6 +37,8 @@ WIND = {'klein/09', 'klein/10', 'klein/12', 'klein/35', 'baeume/03', 'klein2/04'
 SPIELZEUG = ['klein/02', 'klein/03', 'klein/06', 'klein/07', 'klein/22', 'klein/32', 'klein/41', 'klein/42',
              'klein/43', 'klein/45', 'klein/46', 'klein/53', 'klein/54', 'klein/59', 'klein/14', 'klein/52']
 
+STRASSE = {'spielplatz/04', 'spielplatz/05', 'baeume/09', 'klein2/00', 'klein2/01', 'banner/13', 'bahn2/11_zu',
+           'klein/00', 'klein/01', 'baeume/05', 'banner/12'}   # Strassenmoebel: duerfen auf Gehweg/Strasse
 SCHAUKEL = {'baeume2/08', 'klein2/61', 'klein/06'}
 HAUS_ANIM = {'haeuser/03': 'kamin', 'haeuser/02': 'kamin', 'haeuser2/03': 'glocke'}   # Rauch aus dem Kamin, Glocke
 # (sprite, Mitte x in px, Fussreihe, Optionen)  - grosse Objekte zuerst
@@ -95,8 +97,8 @@ FEST = [
     ('bahn2/02', 66 * T + 8, 31, {}), ('bahn2/13', 85 * T, 31, {}),
     ('bahn2/00', 74 * T, 15, {'ueberlappen': True}), ('bahn2/03', 78 * T + 8, 15, {'ueberlappen': True}),
     # Schranken geschlossen: Pfosten auf dem linken Gehweg, der Arm sperrt quer ueber die Strasse
-    ('bahn2/11_zu', 29 * T + 8, 8, {'ueberlappen': True}), ('bahn2/11_zu', 43 * T + 8, 8, {'ueberlappen': True}),
-    ('bahn2/11_zu', 57 * T + 8, 8, {'ueberlappen': True}),
+    ('bahn2/11_zu', 29 * T + 8, 7, {'ueberlappen': True}), ('bahn2/11_zu', 43 * T + 8, 7, {'ueberlappen': True}),
+    ('bahn2/11_zu', 57 * T + 8, 7, {'ueberlappen': True}),
     ('bahn2/05', 55 * T + 8, 6, {}), ('bahn2/05', 63 * T + 8, 21, {}),
     ('bahn2/02', 9 * T + 8, 6, {}), ('bahn2/03', 37 * T + 8, 6, {}), ('bahn2/09', 26 * T + 8, 6, {}),
     ('bahn2/14', 52 * T + 8, 6, {'anim': 'lampe'}),
@@ -235,6 +237,9 @@ def main():
                 continue                                    # nichts mitten auf die Sandwege
             if 0 <= ky < rows and 0 <= tx < cols and cls[ky][tx] == 'W' and not opt.get('wald'):
                 continue                                    # Waldboden: nur Waldbaeume
+            if name not in STRASSE and 0 <= ky < rows and any(
+                    cls[ky][xx] in 'ap' for xx in range(max(0, int(kx - mitte) // T), min(cols, int(kx + mitte) // T + 1))):
+                continue                                    # Pflanzen/Deko nie auf Strasse oder Gehweg
             x = raster_x(alpha[datei], kx) if not opt.get('achse') else int(round(kx - mitte))
             y = (ky + 1) * T - 1 - zu
             if not pruefen:
@@ -288,17 +293,17 @@ def main():
                         'anim': 'fahnen_tuch', 'an_wand': True, 'kein_schatten': True, 'keine_verdeckung': True,
                         **({'mauer_davor': T} if fy < 70 * T else {})})
         belegen(td, xx, fy - tzu)
-    # Prellboecke an den rechten Gleisenden: gedreht, stehen senkrecht quer zum Gleis, Puffer zum Zug hin
-    pd, ph, pzu, pm = sprite('bahn2/07_gedreht')
+    # Prellboecke an den rechten Gleisenden (PixelLab k10_prellbock/03, Seitenansicht): Puffer zeigt nach links zum
+    # Zug, die Streben stehen auf dem Gleis, der Fuss liegt auf der unteren Schiene
+    pd, ph, pzu, pm = sprite('prellbock/03')
     pa = alpha[pd]
-    pys = np.nonzero(pa.any(axis=1))[0]
     for gl in lay['gleise']:
         yc = gl['y'] * T + 7
-        x_ = gl['x'][1] * T - pa.shape[1] - 2 if gl['x'][1] < cols else cols * T - pa.shape[1] - 2
-        y_ = int(yc - (pys.min() + pys.max()) / 2)
-        objekte.append({'datei': pd, 'basis': 'bahn2/07_gedreht', 'x': int(x_), 'y': y_, 'fuss': ph,
+        x_ = gl['x'][1] * T - pa.shape[1]
+        y_ = yc + 6 - pzu
+        objekte.append({'datei': pd, 'basis': 'prellbock/03', 'x': int(x_), 'y': int(y_), 'fuss': ph,
                         'kachel': [int(x_ // T), gl['y']], 'ebene': 1, 'fest_pos': True, 'vorrang': True})
-        belegen(pd, int(x_), y_)
+        belegen(pd, int(x_), int(y_))
     # 2) Zug auf dem unteren Gleis (Raeder auf der Schiene), Lok vorne links (Schienenraeumer zeigt nach links)
     gy = lay['gleise'][1]['y'] * T + 13
     x = 66 * T

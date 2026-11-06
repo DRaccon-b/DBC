@@ -1024,6 +1024,12 @@ OBJEKTGRUPPEN_K10 = {
         'small blue railway worker toy figure with a lantern, perfectly straight front elevation view, symmetric, facing the camera head-on, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style', 'small pile of coal, perfectly straight front elevation view, symmetric, facing the camera head-on, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style', 'old station lantern on a post, perfectly straight front elevation view, symmetric, facing the camera head-on, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
         'wooden station bench with a red backrest, perfectly straight front elevation view, symmetric, facing the camera head-on, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
     ]},
+    'k10_prellbock': {'size': 64, 'items': [
+        'small red toy railway buffer stop seen exactly from the side in profile: sturdy red wooden frame standing on the rail end, the round black buffer pads on the LEFT side facing left toward an arriving train, slanted support beams on the right, side view, profile view, flat orthographic, classic 2D handheld RPG style',
+        'red and white striped railway buffer stop seen from the side in profile, a vertical bumper beam with two round buffers on the left facing left, triangular support behind it on the right, sitting on short rail ends, side view, flat orthographic, classic 2D handheld RPG style',
+        'small toy railway end stop block seen from the side: a red wooden sleeper block with a yellow striped warning board standing upright, buffer facing left, side view, flat orthographic, classic 2D handheld RPG style',
+        'cute toy railway buffer stop made of red painted wood, side view profile, upright post with a round black buffer facing left and a diagonal brace to the right, flat orthographic, classic 2D handheld RPG style',
+    ]},
     'k10_klein': {'size': 32, 'items': [
         'small red toy car',
         'small blue toy car',
