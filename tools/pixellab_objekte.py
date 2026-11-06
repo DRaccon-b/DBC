@@ -1153,6 +1153,56 @@ OBJEKTGRUPPEN_K12 = {
 }
 
 
+STIL_K13 = ("Top-down RPG map object for a ruined dark machine city, in polished handheld monster-collecting RPG pixel "
+            "art: colored dark outline (darkest shade of the object's own hue, never pure black), light from the upper "
+            "left, dark steel blue-grey and teal metal, rust brown, glowing red lights, clean shapes, no noise, no "
+            "dithering, transparent background, no ground, no cast shadow.")
+PALETTE_K13 = ['#101418', '#1a222a', '#243038', '#2e3e48', '#3a4e5a', '#4a6270', '#5e7886', '#7890a0', '#98aab8', '#c0ccd6',
+               '#2a2e3a', '#3c4250', '#565e6e', '#7a8292', '#a2aab8', '#3a2418', '#5a3622', '#7a4a2c', '#a06438', '#c88a50',
+               '#4a1018', '#7a1c24', '#b02c34', '#e04050', '#ff8090', '#c8a040', '#f0d060', '#2a6a7a', '#3c9aaa', '#70d0dc',
+               '#3a2a50', '#5a4078', '#8060a8', '#e8eef4', '#ffffff']
+FR13 = "perfectly straight front elevation view, facing the camera head-on, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style"
+OBJEKTGRUPPEN_K13 = {
+    'k13_gross': {'size': 128, 'items': [
+        'tall black steel radio antenna tower with glowing red rings and a red eye light on top, sinister machine city landmark, ' + FR13,
+        'tall rusty steel lattice transmission tower, ' + FR13,
+        'wrecked giant purple mechanical dragon robot lying broken on the ground, torn metal wings, sparking cables, ' + FR13,
+        'burnt-out abandoned city bus wreck, rusty and broken windows, side view, ' + FR13,
+    ]},
+    'k13_gross2': {'size': 128, 'items': [
+        'tall ruined glass office tower with many broken blue windows and a glass double door, grey concrete, ' + FR13,
+        'small train station entrance hall with a blue pointed metal roof, metal turnstiles in front, ' + FR13,
+        'collapsed construction crane jib lying on the ground in rubble, rusty steel lattice, ' + FR13,
+        'huge sealed fortress gate machine with a glowing red mechanical eye in the middle, heavy dark steel, ' + FR13,
+    ]},
+    'k13_gebaeude': {'size': 128, 'items': [
+        'abandoned industrial warehouse with a large grey roll-up shutter door with yellow hazard stripes, red warning lights, dark teal metal walls, flat roof with a vent, ' + FR13,
+        'ruined two-storey city building with two small shops below with red and yellow awnings and a door, cracked grey walls, ' + FR13,
+        'abandoned beige apartment block with rows of small windows and balconies, one door, cracked walls, ' + FR13,
+        'small grey office building with blue glass windows, glass double door and a rooftop antenna, ' + FR13,
+    ]},
+    'k13_festung': {'size': 96, 'items': [
+        'cylindrical steel reactor pod with a glowing orange core window and pipes, standing on a base, ' + FR13,
+        'heavy steel blast door with yellow and black hazard stripes and red lights, wall mounted, ' + FR13,
+        'dark machine control console with red blinking lights and screens, ' + FR13,
+        'steel power pylon with thick hanging cables and a red warning light, ' + FR13,
+    ]},
+    'k13_mittel': {'size': 64, 'items': [
+        'tall rusty factory chimney stack with dark holes', 'industrial furnace with glowing fire behind a grate',
+        'teal cylindrical storage tank on legs', 'burnt-out wrecked car, side view', 'broken traffic light on a pole',
+        'old street lamp with a small light', 'giant rusty cogwheel lying half buried', 'dark monument statue on a pedestal with a red gem',
+        'broken glass phone booth', 'pile of concrete rubble and rebar', 'wrecked broken robot slumped on the ground',
+        'rusty oil barrel', 'stack of metal crates', 'humming generator box with a red light', 'bent rusty pipe segment',
+        'broken bench',
+    ]},
+    'k13_klein': {'size': 32, 'items': [
+        'small skull', 'small concrete rubble stones', 'small scrap metal bits', 'small broken pipe', 'screws and bolts',
+        'small black oil puddle', 'tangled wires', 'small warning sign', 'small rusty barrel', 'small purple crystal shard',
+        'small cogwheel', 'old tire', 'traffic cone', 'small bones', 'crushed tin can', 'small dead weed',
+    ]},
+}
+
+
 def call(method, path, body=None, raw=False):
     req = urllib.request.Request(API + path, method=method,
                                  data=json.dumps(body).encode() if body is not None else None,
@@ -1205,7 +1255,9 @@ def herunterladen(oid, d):
 
 
 def speichern(gruppe, ims, ids):
-    if gruppe.startswith('k12_'):
+    if gruppe.startswith('k13_'):
+        ziel = os.path.join(ROOT, 'assets', 'objekte', 'karte13', gruppe[4:])
+    elif gruppe.startswith('k12_'):
         ziel = os.path.join(ROOT, 'assets', 'objekte', 'karte12', gruppe[4:])
     elif gruppe.startswith('k11_'):
         ziel = os.path.join(ROOT, 'assets', 'objekte', 'karte11', gruppe[4:])
@@ -1252,8 +1304,9 @@ def erzeugen(gruppe):
     k4 = gruppe.startswith('k4_')
     k5 = gruppe.startswith('k5_')
     k6 = gruppe.startswith('k6_') or gruppe.startswith('k7_')
-    if gruppe.startswith('k11_') or gruppe.startswith('k12_'):
-        g, stil_, pal_, pn_ = ((OBJEKTGRUPPEN_K12[gruppe], STIL_K12, PALETTE_K12, 'Karte12 Puppet Woods') if gruppe.startswith('k12_')
+    if gruppe.startswith('k11_') or gruppe.startswith('k12_') or gruppe.startswith('k13_'):
+        g, stil_, pal_, pn_ = ((OBJEKTGRUPPEN_K13[gruppe], STIL_K13, PALETTE_K13, 'Karte13 Machine City') if gruppe.startswith('k13_') else
+                               (OBJEKTGRUPPEN_K12[gruppe], STIL_K12, PALETTE_K12, 'Karte12 Puppet Woods') if gruppe.startswith('k12_')
                                else (OBJEKTGRUPPEN_K11[gruppe], STIL_K11, PALETTE_K11, 'Karte11 Dark Ocean'))
         req = {'description': stil_, 'size': g['size'], 'view': 'top-down',
                'item_descriptions': [it + '. ' + stil_ for it in g['items']],

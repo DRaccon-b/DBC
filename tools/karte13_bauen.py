@@ -1,0 +1,208 @@
+"""Karte 13 (Spiral Mountain: Machine City): zerstoerte Maschinenstadt. Ringsum dieselbe Bergwand wie Karte 11/12
+(dunkelberg, 44 px Front), Strassenraster mit Mittellinie, Zebrastreifen und Bordsteinen, Gehwege und Hoefe aus
+Betonplatten, verseuchter Boden, die Maschinenfestung eine Etage hoeher (Metallboden, Front aus Metallpaneelen mit
+Warnstreifen und Leuchten, Metalltreppe) mit Gitterring und Boss-Kreis, Bahnhof mit Gitterrost.
+
+  python3 tools/karte13_layout.py && python3 tools/karte13_kacheln.py
+  python3 tools/karte13_bauen.py && python3 tools/karte13_objekte.py && python3 tools/regeln_v11.py karte13 \\
+    && python3 tools/karte13_objekte.py symmetrie && python3 tools/karte13_bauen.py
+"""
+import json, math, os, random, sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import numpy as np
+from PIL import Image, ImageFilter
+import karte_bauen as kb
+import karte04_bauen as k4
+import karte08_bauen as k8
+import bauwerke
+
+ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
+KARTE = os.path.join(ROOT, 'maps', 'karte13')
+BASIS = os.path.join(ROOT, 'assets', 'karte13', 'basis')
+OBJ = os.path.join(ROOT, 'assets', 'objekte', 'karte13')
+T = 16
+N_FRAMES = 16
+H = k4.H
+weich, zell_maske = k4.weich, k4.zell_maske
+k4.FELS['dunkelberg'] = ['#12141c', '#1a1d28', '#242836', '#303546', '#3e4458', '#50586e', '#666e86']
+k4.FELS['metall'] = ['#10161c', '#18222a', '#203038', '#2a3c46', '#364c58', '#46606e', '#5a7684']
+LIPPE_BERG = ['#3c4050', '#4a4e60', '#585e70', '#686e80', '#7a8092', '#8c92a4']
+FRONT = {2: 32, 5: 44}
+
+
+def textur(art, cols, rows):
+    t = np.zeros((rows * T, cols * T, 3), np.uint8)
+    ks = [np.array(Image.open(os.path.join(BASIS, '%s_%d.png' % (art, v))).convert('RGB')) for v in range(5)]
+    for y in range(rows):
+        for x in range(cols):
+            t[y * T:(y + 1) * T, x * T:(x + 1) * T] = ks[kb.variante(x, y)]
+    return t
+
+
+def kontur(m):
+    return m & ~(np.roll(m, 1, 0) & np.roll(m, -1, 0) & np.roll(m, 1, 1) & np.roll(m, -1, 1))
+
+
+def strasse(a, s, lay):
+    """Asphalt: Bordstein an den Gehwegen (helle Kante, Schatten auf die Fahrbahn), gelbe Mittellinie der
+    Hauptstrasse (gestrichelt, verblasst), Zebrastreifen an den Kreuzungen."""
+    Hh, W = s.shape
+    rand = ~s & (np.roll(s, 1, 0) | np.roll(s, -1, 0) | np.roll(s, 1, 1) | np.roll(s, -1, 1))
+    a[rand] = H('#8a90a0')                                        # Bordsteinkante
+    sch = s & (np.roll(~s, 1, 0) | np.roll(~s, 1, 1))
+    a[sch] = (a[sch] * 0.72).astype(np.uint8)
+    x0, x1 = lay['hauptstrasse']
+    mx = (x0 + x1 + 1) * T // 2
+    for y in range(0, Hh):
+        if s[y, mx] and (y // 8) % 2 == 0:
+            a[y, mx - 1:mx + 1] = H('#b8a040') if (y * 7) % 11 else H('#8a7a3a')
+    for (zx0, zx1, zy, art) in lay.get('zebra', []):
+        for y in range(zy * T, zy * T + 2 * T if art == 'q' else zy * T + 4 * T):
+            for x in range(zx0 * T, (zx1 + 1) * T):
+                if not s[y, x]:
+                    continue
+                if art == 'q' and (y % 6) < 3 and 3 <= (x - zx0 * T) % (4 * T) < 4 * T - 3:
+                    a[y, x] = H('#c8ccd4')
+                if art == 'l' and (x % 6) < 3 and 3 <= (y - zy * T) < 4 * T - 3:
+                    a[y, x] = H('#c8ccd4')
+
+
+def festung_front(a, fest, lay):
+    """Suedfront der Maschinenfestung (32 px): Metallpaneele mit Fugen, Warnstreifen gelb/schwarz oben, rote
+    Leuchten in festem Rhythmus, unten Kontaktschatten. Mittig eine Metalltreppe mit Gelaender."""
+    Hh, W = fest.shape
+    front = np.zeros_like(fest)
+    F = 32
+    sued = fest & ~np.roll(fest, -1, 0)
+    tr = lay['treppen_sued'][0]
+    tx0, tx1 = tr[0] * T, (tr[1] + 1) * T
+    for y, x in zip(*np.nonzero(sued)):
+        for d in range(F + 3):
+            Y = y + 1 + d
+            if Y >= Hh or fest[Y, x]:
+                break
+            if d >= F:
+                a[Y, x] = (a[Y, x] * (0.6 if d == F else 0.8)).astype(np.uint8)
+                continue
+            front[Y, x] = True
+            if tx0 <= x < tx1:
+                continue
+            c = np.array((44, 62, 74) if (x // 16) % 2 else (40, 56, 68), np.float32)
+            if x % 16 == 15 or d in (12, 13):
+                c = np.array((18, 26, 32), np.float32)
+            if d < 4:                                           # Warnstreifen
+                c = np.array((200, 160, 40), np.float32) if ((x + d) // 4) % 2 else np.array((30, 30, 34), np.float32)
+            if d == 4:
+                c = np.array((16, 20, 24), np.float32)
+            c = c * (1 - 0.3 * d / F)
+            a[Y, x] = np.clip(c, 0, 255).astype(np.uint8)
+    # rote Leuchten alle 64 px
+    xs_s = np.nonzero(sued.any(axis=0))[0]
+    ys_s = int(np.nonzero(sued.any(axis=1))[0].max())
+    for x in range(xs_s.min() + 24, xs_s.max() - 8, 64):
+        if tx0 - 12 <= x <= tx1 + 4:
+            continue
+        a[ys_s + 18:ys_s + 22, x:x + 6] = H('#7a1c24')
+        a[ys_s + 18:ys_s + 20, x + 1:x + 5] = H('#e04050')
+    # Metalltreppe
+    y0 = (tr[3] + 1) * T
+    for d in range(F + 2):
+        Y = y0 + d
+        for x in range(tx0 - 3, tx1 + 3):
+            if x < tx0 or x >= tx1:
+                a[Y, x] = H('#1c262e') if x in (tx0 - 3, tx1 + 2) else H('#4a5c68')
+            else:
+                st = d % 6
+                a[Y, x] = H('#7a8c98') if st == 0 else (H('#52626e') if st < 4 else H('#222c34'))
+        front[Y, tx0 - 3:tx1 + 3] = False
+    return front
+
+
+def techkreis(a, cx, cy, r, frame):
+    """Boss-Feld der Festung: technischer Kreis - Ringe in Cyan, rote Leiterbahnen zum Ring, ein Segmentring dreht
+    sich, die Mitte pulsiert (wie der Bannkreis auf Karte 11/12, im Maschinenstil)."""
+    f = frame or 0
+    Hh, W = a.shape[:2]
+    yy, xx = np.mgrid[0:Hh, 0:W]
+    d = np.sqrt((xx - cx) ** 2 + (yy - cy) ** 2)
+    ang = (np.arctan2(yy - cy, xx - cx) + math.pi) / (2 * math.pi)
+    puls = 0.6 + 0.4 * math.sin(2 * math.pi * f / N_FRAMES)
+    a[d <= r] = (a[d <= r] * 0.55).astype(np.uint8)
+    cyan = np.array([60, 200, 220], np.float32)
+    for rr, br in ((r - 2, 1.2), (r * 0.72, 1.0), (r * 0.3, 1.0)):
+        m = np.abs(d - rr) <= br
+        a[m] = np.clip(cyan * (0.7 + 0.3 * puls), 0, 255).astype(np.uint8)
+    seg = (np.abs(d - r * 0.86) <= 2.2) & (((ang * 24 + f / N_FRAMES * 3) % 2) < 1)   # Segmentring dreht sich
+    a[seg] = H('#2a8ca0')
+    for k_ in range(8):                                          # Leiterbahnen
+        w = 2 * math.pi * k_ / 8 + math.pi / 8
+        for t in np.arange(r * 0.32, r * 0.7, 0.5):
+            X, Y = int(cx + math.cos(w) * t), int(cy + math.sin(w) * t)
+            a[Y, X] = H('#c03040')
+        X, Y = int(cx + math.cos(w) * r * 0.7), int(cy + math.sin(w) * r * 0.7)
+        a[Y - 1:Y + 2, X - 1:X + 2] = H('#ff6070')
+    kern = d <= r * 0.18
+    a[kern] = np.clip(np.array([200, 60, 70], np.float32) * (0.6 + 0.4 * puls), 0, 255).astype(np.uint8)
+
+
+def bauen(frame=None, speichern=True):
+    lay = json.load(open(os.path.join(KARTE, 'layout.json')))
+    cols, rows = lay['groesse']
+    cls = lay['klassen']
+    hoehe = np.array([[int(c) for c in r] for r in lay['hoehe']])
+    Wp, Hp = cols * T, rows * T
+    a = textur('g', cols, rows)
+    for art, bl, rausch, seed in (('n', 3.0, 0.4, 3), ('p', 4.0, 0.5, 9)):
+        roh = zell_maske(cls, art, cols, rows)
+        m = weich(roh, bl, rausch, seed)
+        a[m] = textur(art, cols, rows)[m]
+        k4.dunkeln(a, weich(roh, bl, rausch, seed, 0.36) & ~m, 0.86)
+    for art in 'shmz':
+        m = zell_maske(cls, art, cols, rows) > 0
+        a[m] = textur(art, cols, rows)[m]
+    s = zell_maske(cls, 's', cols, rows) > 0
+    strasse(a, s, lay)
+    # --- Ebenen: Festung (2), Berg (5)
+    em = {}
+    em[5] = weich(k8.stufe(hoehe, 5, cols, rows), 5, 0.3, 37)
+    fest = (k8.stufe(hoehe, 2, cols, rows) > 0) & ~(k8.stufe(hoehe, 5, cols, rows) > 0)
+    a[em[5]] = (textur('r', cols, rows)[em[5]] * np.array([0.56, 0.58, 0.66])).astype(np.uint8)
+    a[kontur(fest)] = H('#5a7684')
+    rand_f = fest & ~(np.array(Image.fromarray((fest * 255).astype(np.uint8)).filter(ImageFilter.MinFilter(9))) > 0)
+    a[rand_f & ~kontur(fest)] = (a[rand_f & ~kontur(fest)] * 0.7).astype(np.uint8)
+    b = lay['boss']
+    techkreis(a, b[0] * T, b[1] * T, 3.6 * T, frame)
+    waende = k4.hoehenkanten(a, em[5], 'dunkelberg', FRONT[5], 12, LIPPE_BERG, np.zeros((Hp, Wp), bool), 35, berg=False)
+    lvl = np.ones((Hp, Wp), np.uint8)
+    lvl[fest] = 2
+    lvl[em[5]] = 5
+    lvl[waende] = 9
+    lvl[festung_front(a, fest, lay)] = 9
+    tr = lay['treppen_sued'][0]
+    lvl[(tr[3] + 1) * T:(tr[3] + 1) * T + 34, tr[0] * T - 3:(tr[1] + 1) * T + 3] = 9
+    if speichern and frame is None:
+        np.save(os.path.join(KARTE, 'pixelhoehe.npy'), lvl)
+        np.save(os.path.join(KARTE, 'wasser.npy'), np.packbits(np.zeros((Hp, Wp), bool)))
+    for tp in lay.get('teleporter', []):
+        k4.teleporter_zeichnen(a, tp['x'], tp['y'], tp['b'], tp['h'], frame)
+    img = Image.fromarray(a).convert('RGBA')
+    if speichern and frame is None:
+        img.save(os.path.join(KARTE, 'terrain_basis.png'))
+    pf = os.path.join(OBJ, 'platzierung.json')
+    if os.path.exists(pf):
+        objs = sorted((o for o in json.load(open(pf)) if os.path.exists(os.path.join(OBJ, o['datei']))),
+                      key=lambda o: (0 if o.get('an_wand') else 1, o['y'] + o['fuss']))
+        cache = {o['datei']: Image.open(os.path.join(OBJ, o['datei'])).convert('RGBA') for o in objs}
+        k8.schatten_ebene(img, [o for o in objs if not o.get('an_wand')], cache, lvl)
+        vor_objekten = np.array(img)
+        k4.objekte_zeichnen(img, objs, cache, np.zeros((Hp, Wp), bool), frame)
+        k4.animieren(img, objs, cache, frame or 0, ruhig=frame is None)
+        k8.verdeckung(img, [o for o in objs if not o.get('an_wand')], cache, lvl, vor_objekten)
+    if speichern and frame is None:
+        img.save(os.path.join(KARTE, 'terrain.png'))
+    print('Karte 13 %dx%d gebaut' % (cols, rows))
+    return img
+
+
+if __name__ == '__main__':
+    bauen()
