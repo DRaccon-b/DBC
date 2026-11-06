@@ -17,6 +17,8 @@ Neue Fassung nach den Regeln in `CLAUDE.md`. v1.0 liegt in `maps/karte01/v1.0/`.
 - **Regel 5 – Bäume:** Wiesenbäume bekommen Begleitung (zweiter Baum + Pflanze vor dem Sockel, sonst 2–3 Pflanzen);
   Pflanzen aus Karte 01 und den neuen Gras-Sets (Regel 3); Bäume ohne Platz für Begleitung entfernt
   (`tools/karte01_v11_begleiter.py`).
+- **Waldboden:** Wald-Zellen mit dunklerem Waldboden wie auf der Startkarte (`tools/karte_bauen.py`, Schritt 1d).
+- **Zeichenreihenfolge:** Felsspitzen liegen über Schaum, Brandung und Lichtreflexen (alle Animationsbilder).
 - **Regel 7 – Schatten:** Schatten über Klippe/Wasser verkleinert.
 - **Abschlusskontrolle:** keine Überlappungen, alles auf dem richtigen Untergrund (`tools/karte01_v11_aufraeumen.py`,
   `tools/pruefen.py`: 0/0); Felsen im Wasser nach Tiefe (tiefer = größer, tiefste Stufe nur unter Wasser).
