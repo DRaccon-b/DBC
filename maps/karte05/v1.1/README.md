@@ -22,8 +22,9 @@ Neue Fassung nach den Regeln in `CLAUDE.md`. v1.0 liegt in `maps/karte05/v1.0/` 
   (Kontur + leichter Schatten); die Höhenregel bleibt (man kommt seitlich nicht hoch).
 - **Mehr Deko oben:** kleine Tannen, verschneite Büsche, Eiskristalle, Eisblumen, Beeren, halb eingeschneite Felsen.
 - **Oben mehr Variation:** zwei Server, große Eiszapfen/Eiskristalle, große Tannen (mit Pflanzen vor dem Sockel).
-- **Eishöhle neu:** sauber freigestellte Höhle statt des rechteckig beschnittenen Sprites, links/rechts je eine
-  Tanne als Übergang zur Felswand.
+- **Eishöhle:** ursprüngliche Höhle mit gesäuberten, felsartigen Kanten; links/rechts je eine Tanne als Übergang.
+- **Links oben:** mehr Schneetannen und kahle Frostbäume dieser Karte, Deko unregelmäßig statt in Reihen.
+- **Verdeckung:** Objekte auf dem unteren Boden werden vom seitlich daneben liegenden Plateau abgeschnitten.
 - **Schatten liegender Objekte:** Äste, Knochen usw. werfen den Schatten über ihre ganze Form (leicht nach rechts
   unten versetzt) statt nur vom untersten Punkt aus.
 - **Waldrand oben:** Tannen entlang des oberen Kartenrands (wie links/rechts/unten).

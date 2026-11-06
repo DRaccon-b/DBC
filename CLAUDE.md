@@ -69,4 +69,21 @@ Wenn eine Karte fertig scheint: noch einmal komplett auf **Pixelfehler** und **L
 - **Tilesets:** Statisches Tileset mit allem; animiertes Tileset nur mit den animierten Teilen **am exakt selben
   Platz**. Sauber nach Gruppen geordnet (wie klassische Handheld-Tilesets: Fläche, Ränder, Innenecken, Objekte).
   Boden-Übergänge als kombinierbare Ecken-Kacheln mit sauberen, runden Kanten.
+- **Wasser folgt der Physik:** Wasserfälle nie einfach an eine Wand setzen – oben braucht es eine Quelle (Teich/Bach),
+  unten einen Abfluss (Bach, See). Kreuzt ein Bach einen Weg, kommt eine Brücke hin.
+- **Seitliche Plateaukanten:** Senkrechte (seitliche) Kanten von Plateaus nur als schmale Abgrenzung (Kontur +
+  leichter Schatten), keine sichtbare Seitenwand aus Kacheln. Fronten (Süden) bleiben echte Klippen.
+- **Liegende Objekte werfen flache Schatten:** Äste, Knochen u. Ä. werfen den Schatten über ihre ganze Form (leicht
+  nach rechts unten versetzt), nicht wie stehende Objekte nur vom Fußpunkt aus.
+- **Keine Reihen:** Deko nie in Reihen nebeneinander – unregelmäßig, mit Abständen, eher etwas weniger Kleinkram.
+- **Große Objekte zuerst:** Erst große Bäume, Server, Kristalle usw. setzen, dann Kleinkram in die Lücken – sonst ist
+  kein Platz mehr für Großes. Bei Bäumen müssen nur die unteren zwei Reihen auf passendem Boden stehen.
+- **Baumarten der Karte verwenden:** Neue Baumarten nur, wenn sie zum Stil der Karte passen; vorhandene Schneebäume
+  einer Schneekarte haben Vorrang vor umgefärbten Bäumen anderer Karten.
+- **Bestehendes verbessern statt ersetzen:** Gefällt ein Objekt grundsätzlich und hat nur Fehler (z. B. unsaubere
+  Kanten), wird es repariert – nicht gegen ein anderes ausgetauscht.
+- **Übergänge an Bauwerken in der Wand:** Höhlen, Tore u. Ä. in einer Klippe bekommen links/rechts einen Baum oder
+  Busch als Übergang zur Wand.
+- **Vorschau zuerst:** Änderungen erst als Vorschau-Bild (Ausschnitt) zeigen; GIF und ZIP erst, wenn der Nutzer
+  zufrieden ist.
 - **Ablauf:** Jede Änderung committen und pushen, Bilder/GIFs an den Nutzer schicken, auf Deutsch erklären.
