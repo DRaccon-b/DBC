@@ -134,6 +134,31 @@ def main():
         if y1 > y0 and x1 > x0:
             pixel[y0:y1, x0:x1] |= a[y0 - y:y1 - y, x0 - x:x1 - x]
 
+    def baum_ok(datei, x, y):
+        """Begleiter (Regel 5) verdeckt hoechstens den Sockel eines Baums an der Ecke - nie Stamm oder Krone."""
+        a = alpha[datei]
+        for t in objekte:
+            if 'baeume' not in t['basis']:
+                continue
+            at = alpha[t['datei']]
+            x0, y0 = max(t['x'], x), max(t['y'], y)
+            x1, y1 = min(t['x'] + at.shape[1], x + a.shape[1]), min(t['y'] + at.shape[0], y + a.shape[0])
+            if x1 <= x0 or y1 <= y0:
+                continue
+            ov = at[y0 - t['y']:y1 - t['y'], x0 - t['x']:x1 - t['x']] & a[y0 - y:y1 - y, x0 - x:x1 - x]
+            if not ov.any():
+                continue
+            fuss_t = t['y'] + int(np.nonzero(at.any(axis=1))[0].max())
+            ys_ = np.nonzero(ov.any(axis=1))[0] + y0
+            if ys_.min() < fuss_t - 18 or ov.sum() > 0.2 * a.sum():   # nur unten am Sockel, nur ein kleiner Teil
+                return False
+            xs_t = np.nonzero(at[-20:].any(axis=0))[0]                 # Stammfuss: mittlere Spalten des Sockels
+            mt = t['x'] + (xs_t.min() + xs_t.max() + 1) / 2.0
+            xs_b = np.nonzero(a.any(axis=0))[0]
+            if abs(x + (xs_b.min() + xs_b.max() + 1) / 2.0 - mt) < 0.45 * (xs_b.max() - xs_b.min() + 1) + 6:
+                return False                                            # seitlich an der Ecke, nicht mittig vor dem Stamm
+        return True
+
     def setzen(name, X, fy, opt, suchen=False, arten=None, melden=False):
         opt = dict(opt)
         datei, h, zu, mitte = sprite(name, opt.pop('spiegeln', False))
@@ -149,7 +174,7 @@ def main():
                 continue
             x = raster_x(alpha[datei], kx) if not opt.get('achse') else int(round(kx - mitte))
             y = (ky + 1) * T - 1 - zu
-            if bewerten(lvl, alpha[datei], x, y) and (opt.get('begleiter') or frei_px(datei, x, y)):
+            if bewerten(lvl, alpha[datei], x, y) and (frei_px(datei, x, y) if not opt.get('begleiter') else baum_ok(datei, x, y)):
                 break
         else:
             if melden:
@@ -197,7 +222,7 @@ def main():
     for o in baeume:
         kx, ky = o['kachel']
         if not [p for p in baeume if p is not o and abs(p['kachel'][0] - kx) <= 3 and abs(p['kachel'][1] - ky) <= 3]:
-            setzen(rnd.choice(BEGLEITER), (kx + rnd.choice((-1, 1))) * T + 8, ky, {'begleiter': True}, arten='dmn')
+            setzen(rnd.choice(BEGLEITER), (kx + rnd.choice((-1, 1))) * T + 8, ky, {'begleiter': True}, suchen=True, arten='dmn')
             setzen(rnd.choice(BEGLEITER[:2]), (kx + rnd.choice((-2, 2))) * T + 8, ky + 1, {}, arten='dmn')
     # 4) schwarze Felsen und Kleinkram (unregelmaessig, sparsam)
     for (streu, arten, anzahl, x_lim) in ((dict((f, 2) for f in FELSEN), 'dm', 12, (2, 42)), (LAND_STREU, 'dm', 16, (2, 42)),
@@ -218,6 +243,26 @@ def main():
                 continue                                        # keine gleichen Objekte nebeneinander (keine Reihen)
             if setzen(name_, tx * T + 8, ty, {'spiegeln': rnd.random() < 0.4}, arten=arten):
                 n += 1
+    # 5) Nachlauf: jeder Begleiter gegen alle Baeume (auch spaeter gesetzte) - sonst seitlich umsetzen oder weglassen
+    for o in [o for o in objekte if o.get('begleiter')]:
+        objekte.remove(o)
+        if baum_ok(o['datei'], o['x'], o['y']):
+            objekte.append(o)
+            continue
+        kx, ky = o['kachel']
+        for (dx, dy) in sorted(((dx, dy) for dx in range(-3, 4) for dy in range(-1, 3) if dx or dy),
+                               key=lambda d: abs(d[0]) + abs(d[1])):
+            tx, ty = kx + dx, ky + dy
+            if not (0 <= tx < cols and 0 <= ty < rows) or cls[ty][tx] not in 'dmnv' or (tx, ty) in gesperrt:
+                continue
+            x = raster_x(alpha[o['datei']], tx * T + 8)
+            y = (ty + 1) * T - 1 - int(np.nonzero(alpha[o['datei']].any(axis=1))[0].max())
+            if bewerten(lvl, alpha[o['datei']], x, y) and frei_px(o['datei'], x, y) and baum_ok(o['datei'], x, y):
+                o.update(x=x, y=y, kachel=[tx, ty])
+                objekte.append(o)
+                break
+        else:
+            print('  Begleiter weggelassen (laege auf Baum):', o['basis'], (kx, ky))
     json.dump(objekte, open(os.path.join(OBJ, 'platzierung.json'), 'w'), indent=0)
     print(len(objekte), 'Objekte gesetzt')
 

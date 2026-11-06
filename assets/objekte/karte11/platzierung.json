@@ -645,26 +645,6 @@
 ]
 },
 {
-"datei": "sauber/land-10.png",
-"basis": "land/10",
-"x": 64,
-"y": 136,
-"fuss": 56,
-"kachel": [
-5,
-11
-],
-"ebene": 1,
-"anim": "wehen",
-"begleiter": true,
-"block": [
-4,
-8,
-3,
-4
-]
-},
-{
 "datei": "sauber/k8-baeume-14.png",
 "basis": "k8/baeume/14",
 "x": 36,
@@ -753,25 +733,6 @@
 41,
 5,
 5
-]
-},
-{
-"datei": "sauber/land-15.png",
-"basis": "land/15",
-"x": 64,
-"y": 718,
-"fuss": 34,
-"kachel": [
-5,
-46
-],
-"ebene": 0,
-"begleiter": true,
-"block": [
-4,
-44,
-3,
-3
 ]
 },
 {
@@ -1009,85 +970,6 @@
 ]
 },
 {
-"datei": "sauber/k8-fels-10.png",
-"basis": "k8/fels/10",
-"x": 357,
-"y": 87,
-"fuss": 45,
-"kachel": [
-23,
-7
-],
-"ebene": 1,
-"anim": "glimmen",
-"begleiter": true,
-"block": [
-22,
-5,
-3,
-3
-]
-},
-{
-"datei": "sauber/land-15.png",
-"basis": "land/15",
-"x": 192,
-"y": 126,
-"fuss": 34,
-"kachel": [
-13,
-9
-],
-"ebene": 0,
-"begleiter": true,
-"block": [
-12,
-7,
-3,
-3
-]
-},
-{
-"datei": "sauber/k8-fels-10.png",
-"basis": "k8/fels/10",
-"x": 245,
-"y": 199,
-"fuss": 45,
-"kachel": [
-16,
-14
-],
-"ebene": 1,
-"anim": "glimmen",
-"begleiter": true,
-"block": [
-15,
-12,
-3,
-3
-]
-},
-{
-"datei": "sauber/land-10.png",
-"basis": "land/10",
-"x": 240,
-"y": 584,
-"fuss": 56,
-"kachel": [
-16,
-39
-],
-"ebene": 1,
-"anim": "wehen",
-"begleiter": true,
-"block": [
-15,
-36,
-3,
-4
-]
-},
-{
 "datei": "sauber/land-15.png",
 "basis": "land/15",
 "x": 224,
@@ -1101,124 +983,6 @@
 "block": [
 14,
 38,
-3,
-3
-]
-},
-{
-"datei": "sauber/k8-fels-10.png",
-"basis": "k8/fels/10",
-"x": 453,
-"y": 599,
-"fuss": 45,
-"kachel": [
-29,
-39
-],
-"ebene": 1,
-"anim": "glimmen",
-"begleiter": true,
-"block": [
-28,
-37,
-3,
-3
-]
-},
-{
-"datei": "sauber/k8-fels-03.png",
-"basis": "k8/fels/03",
-"x": 258,
-"y": 674,
-"fuss": 50,
-"kachel": [
-17,
-44
-],
-"ebene": 1,
-"begleiter": true,
-"block": [
-16,
-42,
-4,
-3
-]
-},
-{
-"datei": "sauber/land-10.png",
-"basis": "land/10",
-"x": 192,
-"y": 744,
-"fuss": 56,
-"kachel": [
-13,
-49
-],
-"ebene": 1,
-"anim": "wehen",
-"begleiter": true,
-"block": [
-12,
-46,
-3,
-4
-]
-},
-{
-"datei": "sauber/k8-fels-10.png",
-"basis": "k8/fels/10",
-"x": 341,
-"y": 807,
-"fuss": 45,
-"kachel": [
-22,
-52
-],
-"ebene": 1,
-"anim": "glimmen",
-"begleiter": true,
-"block": [
-21,
-50,
-3,
-3
-]
-},
-{
-"datei": "sauber/k8-fels-03.png",
-"basis": "k8/fels/03",
-"x": 482,
-"y": 194,
-"fuss": 50,
-"kachel": [
-31,
-14
-],
-"ebene": 1,
-"begleiter": true,
-"block": [
-30,
-12,
-4,
-3
-]
-},
-{
-"datei": "sauber/k8-fels-10.png",
-"basis": "k8/fels/10",
-"x": 501,
-"y": 487,
-"fuss": 45,
-"kachel": [
-32,
-32
-],
-"ebene": 1,
-"anim": "glimmen",
-"begleiter": true,
-"block": [
-31,
-30,
 3,
 3
 ]
@@ -2103,6 +1867,203 @@
 18,
 4,
 4
+]
+},
+{
+"datei": "sauber/k8-fels-10.png",
+"basis": "k8/fels/10",
+"x": 325,
+"y": 87,
+"fuss": 45,
+"kachel": [
+21,
+7
+],
+"ebene": 1,
+"anim": "glimmen",
+"begleiter": true,
+"block": [
+20,
+5,
+3,
+3
+]
+},
+{
+"datei": "sauber/land-15.png",
+"basis": "land/15",
+"x": 160,
+"y": 126,
+"fuss": 34,
+"kachel": [
+11,
+9
+],
+"ebene": 0,
+"begleiter": true,
+"block": [
+10,
+7,
+3,
+3
+]
+},
+{
+"datei": "sauber/k8-fels-10.png",
+"basis": "k8/fels/10",
+"x": 277,
+"y": 215,
+"fuss": 45,
+"kachel": [
+18,
+15
+],
+"ebene": 1,
+"anim": "glimmen",
+"begleiter": true,
+"block": [
+17,
+13,
+3,
+3
+]
+},
+{
+"datei": "sauber/land-10.png",
+"basis": "land/10",
+"x": 224,
+"y": 616,
+"fuss": 56,
+"kachel": [
+15,
+41
+],
+"ebene": 1,
+"anim": "wehen",
+"begleiter": true,
+"block": [
+14,
+38,
+3,
+4
+]
+},
+{
+"datei": "sauber/k8-fels-10.png",
+"basis": "k8/fels/10",
+"x": 421,
+"y": 599,
+"fuss": 45,
+"kachel": [
+27,
+39
+],
+"ebene": 1,
+"anim": "glimmen",
+"begleiter": true,
+"block": [
+26,
+37,
+3,
+3
+]
+},
+{
+"datei": "sauber/k8-fels-03.png",
+"basis": "k8/fels/03",
+"x": 290,
+"y": 690,
+"fuss": 50,
+"kachel": [
+19,
+45
+],
+"ebene": 1,
+"begleiter": true,
+"block": [
+18,
+43,
+4,
+3
+]
+},
+{
+"datei": "sauber/land-10.png",
+"basis": "land/10",
+"x": 208,
+"y": 760,
+"fuss": 56,
+"kachel": [
+14,
+50
+],
+"ebene": 1,
+"anim": "wehen",
+"begleiter": true,
+"block": [
+13,
+47,
+3,
+4
+]
+},
+{
+"datei": "sauber/k8-fels-10.png",
+"basis": "k8/fels/10",
+"x": 357,
+"y": 823,
+"fuss": 45,
+"kachel": [
+23,
+53
+],
+"ebene": 1,
+"anim": "glimmen",
+"begleiter": true,
+"block": [
+22,
+51,
+3,
+3
+]
+},
+{
+"datei": "sauber/k8-fels-03.png",
+"basis": "k8/fels/03",
+"x": 514,
+"y": 226,
+"fuss": 50,
+"kachel": [
+33,
+16
+],
+"ebene": 1,
+"begleiter": true,
+"block": [
+32,
+14,
+4,
+3
+]
+},
+{
+"datei": "sauber/k8-fels-10.png",
+"basis": "k8/fels/10",
+"x": 517,
+"y": 519,
+"fuss": 45,
+"kachel": [
+33,
+34
+],
+"ebene": 1,
+"anim": "glimmen",
+"begleiter": true,
+"block": [
+32,
+32,
+3,
+3
 ]
 }
 ]
