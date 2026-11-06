@@ -39,29 +39,38 @@ WAND += [('wand/05', x, 35) for x in (7, 18, 37, 48, 59, 70, 82)]
 WAND += [('wand/04', x, 35) for x in (24, 31)]
 # (sprite, Kachel-x, Fusskachel-y, Optionen)
 FEST = [
-    # Portalhalle
+    # ---- Portalhalle: Portal in der Achse, je Seite Statue, Saeule, Feuerschale, Gargoyle, Kandelaber (symmetrisch)
     ('gross/02', 27.5, 9, {'symm': None}),
-    ('moebel/00', 15, 8, {'symm': 'saeule1'}), ('moebel/00', 40, 8, {'symm': 'saeule1'}),
-    ('moebel/00', 19, 8, {'symm': 'saeule2'}), ('moebel/00', 36, 8, {'symm': 'saeule2'}),
-    ('moebel/06', 23, 8, {'symm': 'schale', 'anim': 'glimmen'}), ('moebel/06', 32, 8, {'symm': 'schale', 'anim': 'glimmen'}),
+    ('einrichtung/13', 16, 9, {'symm': 'statue'}), ('einrichtung/13', 39, 9, {'symm': 'statue', 'spiegeln': True}),
+    ('moebel/00', 19, 8, {'symm': 'saeule1'}), ('moebel/00', 36, 8, {'symm': 'saeule1'}),
+    ('moebel/06', 22, 9, {'symm': 'schale', 'anim': 'glimmen'}), ('moebel/06', 33, 9, {'symm': 'schale', 'anim': 'glimmen'}),
+    ('moebel/13', 23, 13, {'symm': 'garg'}), ('moebel/13', 32, 13, {'symm': 'garg', 'spiegeln': True}),
     ('moebel/01', 14, 13, {'symm': 'kand1', 'anim': 'kerzen'}), ('moebel/01', 41, 13, {'symm': 'kand1', 'anim': 'kerzen'}),
-    ('moebel/13', 24, 13, {'symm': 'garg'}), ('moebel/13', 31, 13, {'symm': 'garg', 'spiegeln': True}),
-    # Ritualsaal
+    # ---- Kreuzung: vier Saeulen um die Teppichkreuzung, Ruestungen am Tor (symmetrisch)
+    ('moebel/00', 24, 25, {'symm': 'saeuleK1'}), ('moebel/00', 31, 25, {'symm': 'saeuleK1'}),
+    ('moebel/09', 24, 33, {'symm': 'ruestung'}), ('moebel/09', 31, 33, {'symm': 'ruestung', 'spiegeln': True}),
+    # ---- grosser Saal West: Thron am Teppichende, Bibliothek mit Kamin, Sitzecke, Weinkeller-Ecke
+    ('moebel/07', 4, 26, {}), ('moebel/01', 3, 30, {'anim': 'kerzen'}),
+    ('einrichtung/02', 7, 21, {}), ('einrichtung/08', 14, 21, {'anim': 'feuer_kamin'}), ('einrichtung/02', 21, 21, {}),
+    ('einrichtung/03', 10, 24, {}), ('einrichtung/07', 18, 24, {}),
+    ('einrichtung/11', 11, 32, {}), ('einrichtung/15', 7, 32, {'anim': 'kerzen'}), ('einrichtung/15', 15, 32, {'anim': 'kerzen'}),
+    ('einrichtung/10', 19, 31, {}), ('einrichtung/09', 22, 33, {}),
+    # ---- grosser Saal Ost: Speisesaal mit zwei Tafeln, Stuehle an den Kopfenden, Kandelaber, Kamin
+    ('einrichtung/00', 41, 23, {}), ('einrichtung/01', 38, 23, {}), ('einrichtung/01', 44, 23, {'spiegeln': True}),
+    ('einrichtung/00', 41, 32, {}), ('einrichtung/01', 38, 32, {}), ('einrichtung/01', 44, 32, {'spiegeln': True}),
+    ('moebel/01', 34, 21, {'anim': 'kerzen'}), ('moebel/01', 51, 21, {'anim': 'kerzen'}),
+    ('moebel/11', 51, 33, {}), ('moebel/05', 50, 25, {}),
+    # ---- Gang zum Ritualsaal
+    ('moebel/13', 58, 22, {}), ('moebel/09', 58, 33, {}),
+    # ---- Ritualsaal: Orgel, Altar, Saerge an den Waenden, Statuen, Baenke, Fledermaus-Teppich im Kreis
     ('gross/00', 75, 6, {}), ('gross/01', 75, 10, {}),
     ('moebel/01', 71, 10, {'symm': 'kandD', 'anim': 'kerzen'}), ('moebel/01', 79, 10, {'symm': 'kandD', 'anim': 'kerzen'}),
-] + [('moebel/02', 64, y, {}) for y in (9, 14, 19, 24)] + [('moebel/02', 86, y, {}) for y in (9, 14, 19, 24)] + [
-    ('moebel/03', 70, 31, {'symm': 'bank1'}), ('moebel/03', 80, 31, {'symm': 'bank1'}),
+    ('einrichtung/04', 75, 22, {'boden': True}),
+    ('einrichtung/13', 69, 17, {'symm': 'statD'}), ('einrichtung/13', 81, 17, {'symm': 'statD', 'spiegeln': True}),
+    ('moebel/03', 70, 30, {'symm': 'bank1'}), ('moebel/03', 80, 30, {'symm': 'bank1'}),
     ('moebel/03', 70, 33, {'symm': 'bank2'}), ('moebel/03', 80, 33, {'symm': 'bank2'}),
-    ('moebel/14', 65, 31, {'anim': 'kerzen'}), ('moebel/14', 86, 31, {'anim': 'kerzen'}),
-    # grosser Saal: Saeulenreihen links und rechts des Teppichs, Kandelaber dazwischen
-] + [('moebel/00', x, 24, {}) for x in (5, 10, 15, 20, 34, 39, 44, 49)] + [
-    ('moebel/00', x, 33, {}) for x in (5, 10, 15, 20, 34, 39, 44, 49)] + [
-    ('moebel/01', x, 24, {'anim': 'kerzen'}) for x in (8, 18, 37, 47)] + [
-    ('moebel/09', 24, 25, {'symm': 'ruestung'}), ('moebel/09', 31, 25, {'symm': 'ruestung', 'spiegeln': True}),
-    ('moebel/05', 4, 21, {}), ('moebel/11', 51, 20, {}), ('moebel/10', 4, 32, {}), ('moebel/12', 51, 33, {}),
-    ('moebel/15', 25, 21, {}), ('moebel/15', 30, 21, {}),
-    # Gang zum Ritualsaal
-    ('moebel/13', 57, 22, {}), ('moebel/09', 59, 33, {}),
+    ('moebel/14', 65, 33, {'anim': 'kerzen'}), ('moebel/14', 86, 33, {'anim': 'kerzen'}),
+] + [('moebel/02', 64, y, {}) for y in (9, 14, 19, 24)] + [('moebel/02', 86, y, {}) for y in (9, 14, 19, 24)] + [
     # Garten links: Grabstaetten im Beet, toter Baum
     ('k8/baeume/02', 6, 7, {}), ('k8/graeber/13', 4, 9, {}), ('k8/mittel/00', 7, 10, {}), ('wand/31', 5, 12, {}),
     ('k8/klein/02', 8, 13, {'anim': 'glimmen'}),
@@ -88,12 +97,41 @@ HAINE = [(3, 44, 10, 47, 0.12), (36, 44, 48, 52, 0.08), (40, 54, 60, 68, 0.06), 
 STREU = {'k8/klein/04': 6, 'k8/klein/12': 5, 'k8/klein/02': 4, 'k8/klein/03': 2, 'k8/klein/00': 3, 'k8/klein/01': 2,
          'k8/klein/05': 3, 'k8/klein/07': 2, 'k8/klein/09': 2, 'k8/klein/10': 2, 'k8/klein/48': 3, 'k8/klein/47': 2,
          'k8/klein/49': 1, 'k8/klein/40': 1, 'k8/fels_klein/02': 1, 'k8/mittel/14': 1}
-STREU_SCHLOSS = {'k8/klein/00': 2, 'k8/klein/01': 1, 'k8/klein/05': 2, 'k8/klein/10': 1, 'k8/fels_klein/11': 2,
-                 'wand/12': 1}
+STREU_SCHLOSS = {'k8/fels_klein/11': 2, 'k8/klein/05': 1}
 LIEGEND = {'k8/klein/00', 'k8/klein/07', 'k8/klein/10', 'k8/klein/49', 'k8/klein/05', 'k8/fels_klein/11'}
 FLACH = LIEGEND | {'k8/klein/02', 'k8/klein/03', 'k8/klein/04', 'k8/klein/09', 'k8/klein/12', 'k8/klein/47',
                    'k8/klein/48', 'k8/klein/40', 'k8/klein/01', 'k8/fels_klein/02', 'wand/12'}
 WIND = {'k8/klein/04', 'k8/klein/12', 'k8/klein/09', 'k8/klein/47', 'k8/klein/48', 'k8/mittel/14'}
+
+
+def groesstes_teil(sp, rechts=False):
+    """Nur die groesste zusammenhaengende Flaeche behalten (PixelLab-Reste vom Nachbarobjekt)."""
+    from collections import deque
+    a = np.array(sp)
+    m = a[..., 3] > 0
+    h, w = m.shape
+    lab = np.zeros((h, w), int); n = 0; gr = {}
+    for y in range(h):
+        for x in range(w):
+            if m[y, x] and not lab[y, x]:
+                n += 1; q = deque([(y, x)]); lab[y, x] = n; c = 0
+                while q:
+                    yy, xx = q.popleft(); c += 1
+                    for dy in (-1, 0, 1):
+                        for dx in (-1, 0, 1):
+                            y2, x2 = yy + dy, xx + dx
+                            if 0 <= y2 < h and 0 <= x2 < w and m[y2, x2] and not lab[y2, x2]:
+                                lab[y2, x2] = n; q.append((y2, x2))
+                gr[n] = c
+    if gr:
+        if rechts:                                       # Teil mit der rechtesten Mitte (ab 15 % der Flaeche)
+            gross_ = [n_ for n_ in gr if gr[n_] >= 0.15 * max(gr.values())]
+            k = max(gross_, key=lambda n_: np.nonzero(lab == n_)[1].mean())
+        else:
+            k = max(gr, key=gr.get)
+        a[lab != k, 3] = 0
+    out = Image.fromarray(a)
+    return out.crop(out.getbbox())
 
 
 def quelle(name):
@@ -159,6 +197,10 @@ def main():
         key = (name, spiegeln)
         if key not in cache:
             sp = saeubern(Image.open(quelle(name)).convert('RGBA'))
+            if name == 'einrichtung/03':
+                sp = groesstes_teil(sp)
+            if name == 'einrichtung/01':
+                sp = groesstes_teil(sp, rechts=True)        # Stuhl steht rechts, links haengt ein Tischrest
             if name in GROSS2:                                   # Wandfenster/Bilder passend zur 3 Kacheln hohen Wand
                 sp = sp.crop(sp.getbbox()).resize((sp.crop(sp.getbbox()).width * 2, sp.crop(sp.getbbox()).height * 2), Image.NEAREST)
             if spiegeln:
@@ -191,7 +233,8 @@ def main():
         opt = dict(opt)
         opt.pop('symm', None) if opt.get('symm') is None else None
         spiegeln = opt.pop('spiegeln', False)
-        art = 'flach' if name in FLACH else 'hoch'
+        boden_ = opt.pop('boden', False)
+        art = 'flach' if name in FLACH or boden_ else 'hoch'
         datei, h, zu, mitte = sprite(name, spiegeln)
         kand = [(tx, ty)]
         if suchen:
@@ -216,6 +259,8 @@ def main():
             o['fest_pos'] = True                         # feste Objekte nicht mehr verschieben (Saeulen, Baenke ...)
         if name in LIEGEND:
             o['liegend'] = True
+        if boden_:
+            o.update({'an_wand': True, 'kein_schatten': True, 'keine_verdeckung': True})   # liegt flach auf dem Boden
         o.update(opt)
         objekte.append(o)
         belegt.add((kx, ky, art))
@@ -237,14 +282,14 @@ def main():
                         'ebene': 1, 'an_wand': True, 'kein_schatten': True, 'keine_verdeckung': True,
                         **({'anim': 'kerzen'} if name == 'wand/04' else {})})
     # Tuerme auf der Aussenmauer und Tore (stehen auf/vor der Mauer, eigene Platzierung)
-    for (name, tx, fuss_px) in [('gross/03', x, 37 * T + 6) for x in (1, 12, 23.5, 31.5, 42, 53, 65, 76, 87)] + \
+    for (name, tx, fuss_px) in [('einrichtung/05', x, 39 * T + 13) for x in (1.5, 12, 22.5, 32.5, 43, 53.5, 64, 75, 86)] + \
                                [('tor/01', 27.5, 39 * T + 15), ('tor/00', 27.5, 19 * T + 15)]:
         datei, h, zu, mitte = sprite(name, False)
         x, y = int(round(tx * T + T / 2 - mitte)), fuss_px - zu
         objekte.append({'datei': datei, 'basis': name, 'x': x, 'y': y, 'fuss': h, 'kachel': [int(tx), fuss_px // T],
-                        'ebene': 1, 'an_wand': name != 'gross/03', 'kein_schatten': True, 'keine_verdeckung': True,
+                        'ebene': 1, 'an_wand': True, 'kein_schatten': True, 'keine_verdeckung': True,
                         'vorrang': True})
-        if name == 'gross/03':
+        if name == 'einrichtung/05':
             belegen(datei, x, y)
         objekte[-1]['fest_pos'] = True
     # 2) feste Objekte
@@ -271,7 +316,7 @@ def main():
             setze(rnd.choice(['k8/mittel/14', 'k8/klein/48', 'k8/klein/04']), kx + rnd.choice((-1, 1)), ky + 1,
                   {'begleiter': True, 'anim': 'wehen'})
     # 5) Streudeko: Friedhof und (sparsam) Schlossboden
-    for (streu, arten, anzahl, y0, y1) in ((STREU, 'gh', 230, 43, rows), (STREU_SCHLOSS, 'i', 40, 2, 40)):
+    for (streu, arten, anzahl, y0, y1) in ((STREU, 'gh', 230, 43, rows), (STREU_SCHLOSS, 'i', 14, 2, 40)):
         namen, gew = list(streu), list(streu.values())
         n = 0
         for _ in range(8000):
@@ -279,6 +324,8 @@ def main():
                 break
             tx, ty = rnd.randrange(2, cols - 2), rnd.randrange(y0, y1 - 1)
             if cls[ty][tx] not in arten or hoehe[ty][tx] != 1:
+                continue
+            if arten == 'i' and any(cls[yy][xx] in 'cv' for yy in range(ty - 1, ty + 2) for xx in range(tx - 1, tx + 2)):
                 continue
             name = rnd.choices(namen, weights=gew)[0]
             opt = {'anim': 'wehen'} if name in WIND else {'anim': 'glimmen'} if name in ('k8/klein/02', 'k8/fels_klein/02') else {}

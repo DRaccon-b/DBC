@@ -54,6 +54,17 @@ def mauern_zeichnen(a, wm):
     a[rand] = H('#1a1c24')
     oben = krone & ~np.roll(wm, 1, 0)
     a[oben] = H('#4a5068')                                   # Lichtkante (Licht oben links)
+    # Zinnen auf der Krone: abwechselnd Merlon (hell, mit Schatten) und Scharte (dunkel), entlang der Oberkante
+    obere = krone & ~np.roll(wm, 1, 0)
+    for y, x in zip(*np.nonzero(obere)):
+        if (x // 8) % 2 == 0:
+            for dd in range(4):
+                if y + dd < Hh and wm[y + dd, x]:
+                    a[y + dd, x] = H('#5a6078') if dd == 0 else H('#40465a')
+        else:
+            for dd in range(3):
+                if y + dd < Hh and wm[y + dd, x]:
+                    a[y + dd, x] = H('#1e2028')
     # Wandflaechen unter jeder Suedkante
     sued = wm & ~np.roll(wm, -1, 0)
     sued[-1] = False
@@ -81,6 +92,21 @@ def mauern_zeichnen(a, wm):
     a[f & (d == WAND_H - 7)] = H('#a07a30')
     a[f & (d >= WAND_H - 6) & (d < WAND_H - 2)] = H('#3a3f50')       # Sockel
     a[f & (d >= WAND_H - 2)] = H('#262a36')
+    # Gesims: Schattenkante direkt unter der Mauerkrone (Krone steht etwas vor)
+    a[f & (d >= 2) & (d <= 4)] = (a[f & (d >= 2) & (d <= 4)] * 0.72).astype(np.uint8)
+    # Pilaster alle 6 Kacheln: vorspringende Pfeiler (links Licht, rechts Schatten), mit Kapitell und Sockel
+    pil = f & ((xx % 96) >= 40) & ((xx % 96) < 48)
+    q = (xx % 96) - 40
+    a[pil] = H('#535a70')
+    a[pil & (q == 0)] = H('#7a83a0')
+    a[pil & (q == 1)] = H('#646c86')
+    a[pil & (q == 7)] = H('#2e3242')
+    a[pil & (q == 6)] = H('#3e4458')
+    a[pil & (d >= 5) & (d <= 7)] = H('#6c7490')                     # Kapitell
+    a[pil & (d == 8)] = H('#3a3f50')
+    a[pil & (d >= WAND_H - 6)] = H('#454b5e')                       # Sockel
+    sch_p = f & ((xx % 96) >= 48) & ((xx % 96) < 51) & (d > 4) & (d < WAND_H - 9)
+    a[sch_p] = (a[sch_p] * 0.8).astype(np.uint8)                     # Schlagschatten des Pfeilers
     # seitliche Enden der Wandflaechen (an Tuer-Oeffnungen): Kontur und Licht/Schatten
     links = f & ~np.roll(f, 1, 1)
     rechts = f & ~np.roll(f, -1, 1)
@@ -105,6 +131,75 @@ def teppich_rand(a, m):
     a[innen] = H('#c8a048')
     aussen = ~m & (np.roll(m, 1, 0) | np.roll(m, -1, 0) | np.roll(m, 1, 1) | np.roll(m, -1, 1))
     a[aussen] = (a[aussen] * 0.6).astype(np.uint8)
+
+
+def boden_variation(a, m):
+    """Steinboden lebendiger: jede 2x2-Kachel-Platte leicht anders getoent, einzelne abgenutzte (hellere) und
+    dunkle Platten, feine Risse; zum Rand der Raeume dunkler (Licht faellt in die Mitte)."""
+    Hh, W = m.shape
+    rs = np.random.RandomState(91)
+    ton = rs.uniform(0.9, 1.08, (Hh // 32 + 1, W // 32 + 1))
+    ton[rs.rand(*ton.shape) < 0.06] = 0.8
+    ton[rs.rand(*ton.shape) < 0.05] = 1.16
+    f = np.kron(ton, np.ones((32, 32)))[:Hh, :W]
+    # Abstand zum Raumrand: Vignette
+    k = Image.fromarray((m * 255).astype(np.uint8)).filter(ImageFilter.MinFilter(9)).filter(ImageFilter.GaussianBlur(10))
+    vig = 0.82 + 0.18 * (np.array(k) / 255.0)
+    fak = (f * vig)[m][:, None]
+    a[m] = np.clip(a[m] * fak, 0, 255).astype(np.uint8)
+    rr = random.Random(92)
+    ys, xs = np.nonzero(m)
+    for _ in range(len(ys) // 3000):
+        i = rr.randrange(len(ys)); y, x = float(ys[i]), float(xs[i])
+        w = rr.uniform(0, 6.28)
+        for _k in range(rr.randint(5, 14)):
+            w += rr.uniform(-0.8, 0.8); y += math.sin(w); x += math.cos(w)
+            yi, xi = int(y), int(x)
+            if not (0 <= yi < Hh - 1 and 0 <= xi < W - 1) or not m[yi, xi]:
+                break
+            a[yi, xi] = H('#3a4050')
+            a[yi + 1, xi + 1] = H('#8e98aa')
+
+
+def fransen(a, tep, boden):
+    """Goldene Fransen an den offenen Enden der Teppiche (wo der Teppich auf Steinboden endet)."""
+    Hh, W = tep.shape
+    for (dy, dx) in ((-1, 0), (1, 0), (0, -1), (0, 1)):
+        rand = tep & np.roll(boden, (dy, dx), (0, 1)) & ~np.roll(tep, (dy, dx), (0, 1))
+        for y, x in zip(*np.nonzero(rand)):
+            if (x + y) % 2:
+                continue
+            for k in (1, 2):
+                Y, X = y + dy * k, x + dx * k
+                if 0 <= Y < Hh and 0 <= X < W and boden[Y, X]:
+                    a[Y, X] = H('#e0c060') if k == 1 else H('#a08038')
+
+
+def lichtkegel(img, objs, flaeche, boden):
+    """Buntglasfenster werfen farbiges Licht schraeg (von oben links) auf den Boden vor der Wand."""
+    a = np.array(img).astype(np.float32)
+    Hh, W = flaeche.shape
+    for o in objs:
+        if o['basis'] not in ('wand/00', 'wand/01', 'wand/02'):
+            continue
+        farbe = {'wand/00': (170, 110, 230), 'wand/01': (110, 230, 170), 'wand/02': (240, 90, 90)}[o['basis']]
+        sp = Image.open(os.path.join(OBJ, o['datei']))
+        cx = o['x'] + sp.width // 2
+        y0 = o['y'] + sp.height
+        unten = y0
+        while unten < Hh - 1 and flaeche[unten, min(W - 1, cx)]:
+            unten += 1
+        for k in range(44):
+            y = unten + k
+            if y >= Hh:
+                break
+            breite = 6 + k // 3
+            x0 = cx - breite // 2 + k // 2
+            for x in range(x0, x0 + breite):
+                if 0 <= x < W and boden[y, x] and not flaeche[y, x]:
+                    t = 0.16 * (1 - k / 44)
+                    a[y, x, :3] = a[y, x, :3] * (1 - t) + np.array(farbe) * t
+    img.paste(Image.fromarray(np.clip(a, 0, 255).astype(np.uint8)))
 
 
 def wasser_dunkel(a, m, frame):
@@ -140,8 +235,10 @@ def bauen(frame=None, speichern=True):
     tx = textur(cls, 'v', cols, rows)
     a[vm] = tx[vm]
     cm = (zell_maske(cls, 'c', cols, rows) > 0) & schloss
+    boden_variation(a, (zell_maske(cls, 'i', cols, rows) > 0) & schloss)
     teppich_rand(a, cm)
     teppich_rand(a, vm)
+    fransen(a, cm | vm, (zell_maske(cls, 'i', cols, rows) > 0) & schloss)
     # --- Ebenen
     mauer = (k8.stufe(hoehe, 3, cols, rows) > 0) & (zell_maske([''.join('1' if c == '3' else '0' for c in r) for r in lay['hoehe']], '1', cols, rows) > 0)
     m2 = weich(k8.stufe(hoehe, 2, cols, rows), 5, 0.2, 31) & ~schloss & ~mauer
@@ -206,6 +303,7 @@ def bauen(frame=None, speichern=True):
         cache = {o['datei']: Image.open(os.path.join(OBJ, o['datei'])).convert('RGBA') for o in objs}
         lvl_s = lvl.copy()
         lvl_s[flaeche] = 9
+        lichtkegel(img, objs, flaeche, (lvl == 1) & schloss)
         k8.schatten_ebene(img, [o for o in objs if not o.get('an_wand')], cache, lvl_s)
         vor_objekten = np.array(img)
         k4.objekte_zeichnen(img, objs, cache, np.zeros((Hp, Wp), bool), frame)
