@@ -535,20 +535,6 @@ def bauen(frame=None, speichern=True, objekte=True):
                 meer_region[max(0, y * T - 2 * T):(y + 2) * T, max(0, x * T - 2 * T):(x + 2) * T] = True
     img = wasser_details.meer_terrassen(img, meer_region, frame, meiden)
 
-    # --- 1d. Waldboden (v1.1): Wald-Zellen (F) dunkler gruen wie auf der Startkarte, weicher Rand, nur auf Gras
-    from PIL import ImageFilter as _IF
-    _f = np.zeros((rows * T, cols * T), np.uint8)
-    for y in range(rows):
-        for x in range(cols):
-            if grid[y][x] == 'F':
-                _f[y * T:(y + 1) * T, x * T:(x + 1) * T] = 255
-    _f = np.array(Image.fromarray(_f).filter(_IF.GaussianBlur(5))) > 128
-    _a = np.array(img.convert('RGB'))
-    _r, _g, _b = [_a[..., i].astype(np.int16) for i in range(3)]
-    _gras = (_g > _r + 25) & (_g > _b + 25)
-    _m = _f & _gras
-    _a[_m] = (_a[_m] * np.array([0.72, 0.8, 0.74])).astype(np.uint8)
-    img = Image.fromarray(_a).convert('RGBA')
     # --- 2. Klippen: handgezeichnete Waende (tools/klippen.py), h Kacheln hoch
     import klippen
     treppen_px = frozenset((tr['x'] * T - T, (tr['x'] + tr['breite']) * T + T) for tr in plan.get('treppen', []))
