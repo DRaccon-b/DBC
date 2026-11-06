@@ -51,6 +51,8 @@ def _umfaerben(sp, ziel_hue, sat_mul=1.15, val_mul=1.0, nur_gruen=True):
 
 def boden(img, klassen, saison):
     """Gras-Pixel des Bodens in die Jahreszeit faerben (Wasser/Meer bleiben unberuehrt)."""
+    if saison == 'winter':
+        return boden_winter(img, klassen)
     if saison != 'herbst':
         return img
     a = np.array(img.convert('RGB')).astype(np.int16)
@@ -69,6 +71,127 @@ def boden(img, klassen, saison):
     neu = f * 0.5 + ziel * 0.5                        # nur halb: gedaempftes Oliv mit goldenem Stich
     a[m] = np.clip(neu, 0, 255).astype(np.int16)
     return Image.fromarray(a.astype(np.uint8)).convert('RGBA')
+
+
+def boden_winter(img, klassen):
+    """Winter: Gras -> Schnee (Kacheln aus Karte 05), Wege -> festgetretener Schnee, Suesswasser -> Eis,
+    Meer bleibt offen."""
+    a = np.array(img.convert('RGB')).astype(np.int16)
+    H, W = a.shape[:2]
+    r, g, b = a[..., 0], a[..., 1], a[..., 2]
+    kl = np.zeros((H, W), 'U1')
+    for y, z in enumerate(klassen):
+        for x, k in enumerate(z):
+            kl[y * T:(y + 1) * T, x * T:(x + 1) * T] = k
+    schnee = np.zeros((H, W, 3), np.int16)
+    ks = [np.array(Image.open(os.path.join(ROOT, 'assets', 'karte05', 'basis', 's_%d.png' % i)).convert('RGB'))
+          for i in range(5)]
+    for ty in range(H // T):
+        for tx in range(W // T):
+            schnee[ty * T:(ty + 1) * T, tx * T:(tx + 1) * T] = ks[(tx * 7 + ty * 13 + tx * ty) % 5]
+    gras = (g > r + 18) & (g > b + 18) & np.isin(kl, ['g', 's'])
+    hell = (r.astype(np.float32) + g + b) / 3.0
+    ref = np.median(hell[gras]) if gras.any() else 120
+    # Schnee hell (auf Weiss angehoben); dunklere Gruentoene (Waldboden, Grasschatten) -> leicht blaeulicher Schatten
+    weiss = np.clip(schnee.astype(np.float32) * 0.55 + np.array([250, 252, 255]) * 0.45, 0, 255)
+    schatten = (hell < ref - 18)[..., None]
+    ziel = np.where(schatten, weiss * np.array([0.86, 0.9, 0.97]), weiss)
+    a[gras] = ziel[gras].astype(np.int16)
+    # Sand (Wege und Strand, inkl. dunkler Wegkante): festgetretener Schnee mit Hauch Sand
+    sand = (r >= g - 4) & (r > b + 15) & (kl != 'm') & (kl != 'w') & (hell > 135)
+    a[sand] = (a[sand] * 0.25 + np.array([232, 234, 240]) * 0.75).astype(np.int16)
+    # Suesswasser (Fluss, Teich) -> Eis: helles Blau, Struktur bleibt schwach sichtbar
+    wasser = (kl == 'w') & (b > r + 20)
+    eis = np.array([196, 226, 242])
+    a[wasser] = (a[wasser] * 0.35 + eis * 0.65).astype(np.int16)
+    return Image.fromarray(np.clip(a, 0, 255).astype(np.uint8)).convert('RGBA')
+
+
+def _schneehaube(sp, dicke=3, laub=None):
+    """Schnee auf alle nach oben offenen Kanten (Licht oben links), optional Laub abdunkeln/entsaettigen."""
+    a = np.array(sp.convert('RGBA')).astype(np.int16)
+    al = a[..., 3] > 0
+    h, w = al.shape
+    if laub is not None:
+        r, g, b = a[..., 0], a[..., 1], a[..., 2]
+        gruen = al & (g >= r) & (g >= b - 5)
+        grau = (r + g + b) // 3
+        for c, f in ((0, laub[0]), (1, laub[1]), (2, laub[2])):
+            a[..., c] = np.where(gruen, (a[..., c] * 0.45 + grau * 0.55) * f, a[..., c])
+    oben = al & ~np.vstack([np.zeros((1, w), bool), al[:-1]])
+    weiss = np.array([244, 248, 255]); blau = np.array([200, 214, 236])
+    for y, x in zip(*np.nonzero(oben)):
+        if y > h * 0.8:
+            continue
+        for d in range(dicke):
+            if y + d < h and al[y + d, x]:
+                a[y + d, x, :3] = weiss if d < dicke - 1 else blau
+    return Image.fromarray(np.clip(a, 0, 255).astype(np.uint8), 'RGBA')
+
+
+def winter():
+    rnd = random.Random(41)
+    objs = json.load(open(os.path.join(OBJ, 'platzierung.json')))
+    os.makedirs(os.path.join(OBJ, 'winter'), exist_ok=True)
+    K7S = os.path.join(ROOT, 'assets', 'objekte', 'karte07', 'deko_schnee')
+    cache = {}
+
+    def variante(o, art):
+        key = (o['datei'], art)
+        if key not in cache:
+            sp = Image.open(os.path.join(OBJ, o['datei'])).convert('RGBA')
+            if art == 'laub':
+                neu = _schneehaube(sp, 4, laub=(0.82, 0.9, 1.05))
+            elif art == 'nadel':
+                neu = _schneehaube(sp, 3)
+            elif art == 'gras':
+                neu = _umfaerben(sp, 205, sat_mul=0.3, val_mul=1.25)
+            else:
+                neu = _schneehaube(sp, 2)
+            name = 'winter/%s_%s.png' % (o['datei'][:-4].replace('/', '-'), art)
+            neu.save(os.path.join(OBJ, name))
+            cache[key] = name
+        return cache[key]
+    deko_cache = {}
+
+    def deko(i):
+        if i not in deko_cache:
+            sp = Image.open(os.path.join(K7S, '%02d.png' % i)).convert('RGBA')
+            basis = 'winter/k7schnee-%02d' % i
+            sp.save(os.path.join(OBJ, basis + '.png'))
+            al = np.array(sp.getchannel('A')) > 0
+            ys, xs = np.nonzero(al)
+            deko_cache[i] = (basis, basis + '.png', sp.height, int(xs.min()), int(ys.min()), int(xs.max()), int(ys.max()))
+        return deko_cache[i]
+    WINTER_DEKO = [5, 9, 28, 30, 36, 41, 44, 45, 0, 34]
+    STEINE = {'deko/08', 'deko/09', 'deko/10', 'deko/11', 'deko/12', 'deko/13', 'deko/51', 'gross/09', 'gross/07'}
+    neu, n = [], {'laub': 0, 'nadel': 0, 'gras': 0, 'deko': 0, 'stein': 0}
+    for o in objs:
+        b = o['basis']
+        if b in ('deko/17', 'deko/18', 'deko/19', 'deko/07'):     # Seerosen/Schilf: Teich ist zugefroren
+            continue
+        o = dict(o)
+        if b in LAUB or b in ('gross/00', 'gross/01', 'gross/02', 'dschungel/00'):
+            o['datei'] = variante(o, 'laub'); n['laub'] += 1
+        elif b in NADEL:
+            o['datei'] = variante(o, 'nadel'); n['nadel'] += 1
+        elif b in GRAESER:
+            o['datei'] = variante(o, 'gras'); n['gras'] += 1
+        elif b in STEINE or b.startswith(('gross/', 'zelt_strand/')) or b == 'laterne':
+            o['datei'] = variante(o, 'haube'); n['stein'] += 1
+        elif b in BLUMEN or b.startswith('deko/') and o.get('untergrund') == 'gras':
+            basis, datei, h, x0, y0, x1, y1 = deko(rnd.choice(WINTER_DEKO))
+            bw, bh = x1 - x0 + 1, y1 - y0 + 1
+            wt, ht = math.ceil(bw / T), math.ceil(bh / T)
+            kx, ky = o['kachel']
+            bx = kx - (wt - 1) // 2
+            o.update(datei=datei, basis=basis, x=bx * T + (wt * T - bw) // 2 - x0, y=(ky + 1) * T - 1 - y1, fuss=h,
+                     block=[bx, ky - ht + 1, wt, ht])
+            o.pop('anim', None); o.pop('untergrund', None)
+            n['deko'] += 1
+        neu.append(o)
+    json.dump(neu, open(os.path.join(OBJ, 'platzierung_winter.json'), 'w'), indent=0)
+    print('Winter:', n)
 
 
 def herbst():
@@ -136,4 +259,4 @@ def herbst():
 
 
 if __name__ == '__main__':
-    {'herbst': herbst}[sys.argv[1]]()
+    {'herbst': herbst, 'winter': winter}[sys.argv[1]]()
