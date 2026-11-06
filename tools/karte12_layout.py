@@ -145,6 +145,10 @@ def main():
             for x in range(x0_, x1_ + 1):
                 if k[y, x] not in 'rvbhw':
                     k[y, x] = 'q'                                 # Brueckenkoepfe und gerade Zufahrt
+        for y in list(range(y0_, y0_ + 2)) + list(range(y0_ + 5, y1_ + 1)):   # Erde unter den aeusseren Pfosten
+            for x in (x0_ - 2, x0_ - 1, x1_ + 1, x1_ + 2):
+                if k[y, x] == 'x':
+                    k[y, x] = 'd'
     h[k == 'x'] = 0
     lay = {
         'groesse': [C, R], 'klassen': [''.join(r) for r in k], 'hoehe': [''.join(str(c) for c in r) for r in h],
