@@ -16,17 +16,19 @@ ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
 KARTE = os.path.join(ROOT, 'maps', 'karte03')
 OBJ = os.path.join(ROOT, 'assets', 'objekte', 'karte03')
 T = 16
-FUSS = {'baeume': 'baum', 'tor': 'stein', 'klein': 'klein', 'mittel': 'stein', 'gross': 'stein', 'pyramide': 'stein', 'pyramide2': 'stein'}
-PALMEN = ('mittel/00', 'mittel/01', 'mittel/02', 'klein/25')
+FUSS = {'palmen': 'baum', 'baeume': 'baum', 'tor': 'stein', 'klein': 'klein', 'mittel': 'stein', 'gross': 'stein', 'pyramide': 'stein', 'pyramide2': 'stein'}
+PALMEN_NEU = ['palmen/%02d' % i for i in range(12)]          # v1.1: neue Palmen (PixelLab k3_palmen_a/b/c)
+PALMEN = ('mittel/00', 'mittel/01', 'mittel/02', 'klein/25') + tuple(PALMEN_NEU)
+BEGLEITER = ['klein/02', 'klein/04', 'klein/05', 'klein/08', 'klein/09', 'klein/10', 'klein/11', 'klein/28', 'klein/03']
 
 # (sprite, Anker-x Kachel (Mitte), Anker-y = unterste Kachelzeile, Optionen)
 FEST = [
     # Dorf an der Oase
     ('gross/01', 25, 10, {}), ('gross/00', 10.5, 15, {}), ('gross/02', 29, 15, {}), ('gross/03', 10.5, 34, {}),
     ('mittel/09', 11.5, 40, {}), ('klein/29', 21, 33, {}), ('klein/11', 12, 31, {}), ('klein/10', 31.5, 32, {}),
-    ('mittel/00', 14.5, 13, {'anim': 'wehen'}), ('mittel/01', 29.5, 19, {'anim': 'wehen'}),
-    ('mittel/00', 31, 23, {'anim': 'wehen'}), ('mittel/02', 11.5, 22, {'anim': 'wehen'}),
-    ('mittel/01', 12.5, 29, {'anim': 'wehen'}), ('mittel/00', 26.5, 30, {'anim': 'wehen'}),
+    ('palmen/05', 14.5, 13, {'anim': 'wehen'}), ('palmen/10', 29.5, 19, {'anim': 'wehen'}),
+    ('palmen/03', 31, 23, {'anim': 'wehen'}), ('palmen/08', 11.5, 22, {'anim': 'wehen'}),
+    ('palmen/01', 12.5, 29, {'anim': 'wehen'}), ('palmen/06', 26.5, 30, {'anim': 'wehen'}),
     ('klein/05', 22, 16, {}), ('klein/05', 26, 26, {}), ('klein/04', 11, 26, {}),
     # Bus und Haltestelle
     ('gross/06', 44, 31, {}), ('klein/18', 48, 31, {'anim': 'flagge'}), ('mittel2/00', 49.8, 31, {'anim': 'schall'}),
@@ -92,8 +94,8 @@ def anim_fuer(name):
 def garten_ring():
     """Ring aus Palmen, Kakteen und Wuestenbaeumen um den Garten (statt Ziegelmauer), offen nach Sueden."""
     import math
-    pflanzen = ['mittel/00', 'baeume/00', 'mittel2/12', 'baeume/02', 'mittel/01', 'baeume/01', 'mittel2/07',
-                'baeume/03', 'mittel/02', 'baeume/05', 'mittel2/06', 'baeume/00']
+    pflanzen = ['palmen/00', 'baeume/00', 'mittel2/12', 'palmen/06', 'palmen/09', 'baeume/01', 'mittel2/07',
+                'palmen/03', 'palmen/10', 'baeume/05', 'mittel2/06', 'palmen/01']
     cx, cy, rx, ry = 95.3, 12.2, 6.2, 4.9           # v1.1: auf dem Sandstrand der Insel
     out = []
     winkel = [w for w in range(-90 + 18, 270 - 18, 30) if not (55 < w < 125)]   # Sueden (90 Grad) offen
@@ -213,6 +215,69 @@ def main():
         if 'anim' not in opt:
             opt = dict(opt, **anim_fuer(name))
         setze(name, tx * T, ty * T + 15, True, opt)
+    # --- v1.1: Palmen als Baeume der Karte (Regel 5: Gruppen + Begleiter; Objekte vor Palmen)
+    prnd = random.Random(31)
+
+    def begleiter(o_palme, vorher):
+        """kleines Objekt vor den Stamm: darf nur die eigene Palme ueberdecken (vorher = belegt ohne Palme)"""
+        if prnd.random() < 0.3:
+            return
+        a_ = np.array(Image.open(os.path.join(OBJ, o_palme['datei'])).getchannel('A')) >= 200
+        ys_, xs_ = np.nonzero(a_)
+        fx = o_palme['x'] + int(xs_[ys_ >= ys_.max() - 2].mean())
+        fy = o_palme['y'] + int(ys_.max())
+        for _ in range(6):
+            bx_ = fx + prnd.choice((-1, 1)) * prnd.randint(6, 14)
+            by_ = fy + prnd.randint(3, 10)
+            n_ = prnd.choice(BEGLEITER)
+            im_ = lade('varianten/%s_%s' % (n_.replace('/', '-'), boden_bei(bx_, by_))) if os.path.exists(os.path.join(OBJ, 'varianten/%s_%s.png' % (n_.replace('/', '-'), boden_bei(bx_, by_)))) else lade(n_)
+            x_, y_ = int(bx_ - im_.width // 2), int(by_ + 3 - im_.height)
+            m_ = np.array(im_.getchannel('A')) >= 200
+            y0_, x0_ = max(0, y_), max(0, x_)
+            teil = m_[y0_ - y_:min(MH, y_ + im_.height) - y_, x0_ - x_:min(MW, x_ + im_.width) - x_]
+            if ((vorher[y0_:y0_ + teil.shape[0], x0_:x0_ + teil.shape[1]] | gesperrt[y0_:y0_ + teil.shape[0], x0_:x0_ + teil.shape[1]]) & teil).any():
+                continue
+            o_ = setze(n_, bx_, by_, True, dict(anim_fuer(n_), begleiter=True))
+            if o_:
+                return
+
+    def palme(tx, ty, fest=False, name=None):
+        name = name or prnd.choice(PALMEN_NEU)
+        vorher = belegt.copy()
+        o_ = setze(name, tx * T + 8, ty * T + 15, fest, {'anim': 'wehen'})
+        if o_:
+            begleiter(o_, vorher)
+        return o_
+
+    # Objekte vor Palmen: hinter Haeusern, Marktstand und Brunnen je eine Palme (Gebaeude ueberdeckt den Stamm)
+    for o in list(objekte):
+        if o['basis'] in ('gross/00', 'gross/01', 'gross/02', 'gross/03', 'mittel/09') or o['basis'].startswith('klein/29'):
+            fx_ = (o['x'] + Image.open(os.path.join(OBJ, o['datei'])).width // 2) // T
+            fy_ = (o['y'] + o['fuss']) // T
+            seite = prnd.choice((-1, 1))
+            # nur die Ueberdeckung mit genau diesem Gebaeude erlauben (Gebaeude steht davor)
+            im_h = Image.open(os.path.join(OBJ, o['datei']))
+            hm = np.zeros_like(belegt)
+            ah = np.array(im_h.getchannel('A')) >= 200
+            y0h, x0h = max(0, o['y']), max(0, o['x'])
+            teil_h = ah[y0h - o['y']:min(MH, o['y'] + im_h.height) - o['y'], x0h - o['x']:min(MW, o['x'] + im_h.width) - o['x']]
+            hm[y0h:y0h + teil_h.shape[0], x0h:x0h + teil_h.shape[1]] = teil_h
+            frei_vorher = belegt & hm
+            belegt[hm] = False
+            for dx_ in (seite * 2, -seite * 2, seite, -seite):
+                if palme(fx_ + dx_, fy_ - 1, fest=False):
+                    break
+            belegt |= frei_vorher
+    # Palmenhaine (x0, y0, x1, y1, Anzahl): Oase, Landzungen, Lagune, Pyramide, Sueden
+    HAINE_P = [(9, 15, 30, 28, 7), (9, 17, 12, 24, 2), (9, 33, 12, 41, 2), (9, 62, 12, 70, 2), (78, 20, 90, 26, 3),
+               (99, 30, 104, 42, 2), (24, 66, 50, 73, 3), (60, 64, 100, 73, 3), (30, 5, 40, 12, 2)]
+    for (x0, y0, x1, y1, n) in HAINE_P:
+        gesetzt_ = 0
+        for _ in range(80):
+            if gesetzt_ >= n:
+                break
+            if palme(prnd.randint(x0, x1), prnd.randint(y0, y1)):
+                gesetzt_ += 1
     for (tx, ty) in ZAUN:
         setze('klein/22', tx * T + 8, ty * T + 12, True)
     rosa = {n: rosa_machen(n) for n in BLUETEN}

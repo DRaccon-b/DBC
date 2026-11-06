@@ -72,24 +72,6 @@
 ]
 },
 {
-"datei": "varianten/mittel-09_sand.png",
-"basis": "mittel/09",
-"x": 145,
-"y": 599,
-"fuss": 60,
-"ebene": 1,
-"kachel": [
-10,
-40
-],
-"block": [
-9,
-37,
-4,
-4
-]
-},
-{
 "datei": "varianten/klein-29_beton.png",
 "basis": "klein/29",
 "x": 319,
@@ -126,11 +108,11 @@
 ]
 },
 {
-"datei": "varianten/mittel-00_sand.png",
-"basis": "mittel/00",
-"x": 206,
-"y": 162,
-"fuss": 65,
+"datei": "varianten/palmen-05_sand.png",
+"basis": "palmen/05",
+"x": 197,
+"y": 154,
+"fuss": 73,
 "ebene": 1,
 "anim": "wehen",
 "kachel": [
@@ -138,56 +120,56 @@
 13
 ],
 "block": [
-13,
-10,
-3,
-4
+12,
+9,
+6,
+5
 ]
 },
 {
-"datei": "varianten/mittel-01_sand.png",
-"basis": "mittel/01",
-"x": 448,
-"y": 258,
-"fuss": 65,
+"datei": "varianten/palmen-10_sand.png",
+"basis": "palmen/10",
+"x": 418,
+"y": 234,
+"fuss": 89,
 "ebene": 1,
 "anim": "wehen",
 "kachel": [
-29,
+28,
 19
 ],
 "block": [
-28,
-16,
-3,
-4
+26,
+14,
+6,
+6
 ]
 },
 {
-"datei": "varianten/mittel-00_sand.png",
-"basis": "mittel/00",
-"x": 478,
-"y": 322,
-"fuss": 65,
+"datei": "varianten/palmen-03_sand.png",
+"basis": "palmen/03",
+"x": 453,
+"y": 297,
+"fuss": 90,
 "ebene": 1,
 "anim": "wehen",
 "kachel": [
-31,
+30,
 23
 ],
 "block": [
-30,
-20,
-3,
-4
+28,
+18,
+6,
+6
 ]
 },
 {
-"datei": "varianten/mittel-02_gras.png",
-"basis": "mittel/02",
-"x": 159,
-"y": 306,
-"fuss": 65,
+"datei": "varianten/palmen-08_gras.png",
+"basis": "palmen/08",
+"x": 146,
+"y": 289,
+"fuss": 82,
 "ebene": 1,
 "anim": "wehen",
 "kachel": [
@@ -195,18 +177,18 @@
 22
 ],
 "block": [
-10,
-19,
-4,
-4
+9,
+18,
+5,
+5
 ]
 },
 {
-"datei": "varianten/mittel-01_sand.png",
-"basis": "mittel/01",
-"x": 176,
-"y": 418,
-"fuss": 65,
+"datei": "varianten/palmen-01_sand.png",
+"basis": "palmen/01",
+"x": 163,
+"y": 392,
+"fuss": 91,
 "ebene": 1,
 "anim": "wehen",
 "kachel": [
@@ -214,18 +196,18 @@
 29
 ],
 "block": [
-11,
-26,
-3,
-4
+10,
+24,
+5,
+6
 ]
 },
 {
-"datei": "varianten/mittel-00_sand.png",
-"basis": "mittel/00",
-"x": 398,
-"y": 434,
-"fuss": 65,
+"datei": "varianten/palmen-06_sand.png",
+"basis": "palmen/06",
+"x": 388,
+"y": 408,
+"fuss": 91,
 "ebene": 1,
 "anim": "wehen",
 "kachel": [
@@ -233,10 +215,10 @@
 30
 ],
 "block": [
+24,
 25,
-27,
-3,
-4
+5,
+6
 ]
 },
 {
@@ -254,25 +236,6 @@
 "block": [
 21,
 15,
-2,
-2
-]
-},
-{
-"datei": "varianten/klein-05_gras.png",
-"basis": "klein/05",
-"x": 404,
-"y": 412,
-"fuss": 23,
-"ebene": 1,
-"anim": "wehen",
-"kachel": [
-25,
-26
-],
-"block": [
-25,
-25,
 2,
 2
 ]
@@ -1279,25 +1242,6 @@
 ]
 },
 {
-"datei": "varianten/klein-15_sand.png",
-"basis": "klein/15",
-"x": 144,
-"y": 1057,
-"fuss": 34,
-"ebene": 1,
-"anim": "feuer",
-"kachel": [
-9,
-67
-],
-"block": [
-9,
-66,
-1,
-2
-]
-},
-{
 "datei": "varianten/klein-16_beton.png",
 "basis": "klein/16",
 "x": 175,
@@ -1407,6 +1351,25 @@
 ]
 },
 {
+"datei": "varianten/palmen-00_sand.png",
+"basis": "palmen/00",
+"x": 1520,
+"y": 57,
+"fuss": 90,
+"ebene": 1,
+"anim": "wehen",
+"kachel": [
+96,
+8
+],
+"block": [
+95,
+3,
+4,
+6
+]
+},
+{
 "datei": "varianten/baeume-00_sand.png",
 "basis": "baeume/00",
 "x": 1567,
@@ -1445,22 +1408,41 @@
 ]
 },
 {
-"datei": "varianten/baeume-02_sand.png",
-"basis": "baeume/02",
+"datei": "varianten/palmen-06_sand.png",
+"basis": "palmen/06",
 "x": 1588,
-"y": 180,
-"fuss": 63,
+"y": 152,
+"fuss": 91,
 "ebene": 1,
 "anim": "wehen",
 "kachel": [
-100,
+101,
 14
 ],
 "block": [
 99,
+9,
+5,
+6
+]
+},
+{
+"datei": "varianten/palmen-09_gras.png",
+"basis": "palmen/09",
+"x": 1555,
+"y": 184,
+"fuss": 91,
+"ebene": 1,
+"anim": "wehen",
+"kachel": [
+99,
+16
+],
+"block": [
+97,
 11,
-4,
-4
+5,
+6
 ]
 },
 {
@@ -1483,11 +1465,11 @@
 ]
 },
 {
-"datei": "varianten/baeume-03_sand.png",
-"basis": "baeume/03",
-"x": 1391,
-"y": 143,
-"fuss": 52,
+"datei": "varianten/palmen-03_sand.png",
+"basis": "palmen/03",
+"x": 1381,
+"y": 105,
+"fuss": 90,
 "ebene": 1,
 "anim": "wehen",
 "kachel": [
@@ -1495,10 +1477,469 @@
 11
 ],
 "block": [
-87,
-8,
+86,
+6,
+6,
+6
+]
+},
+{
+"datei": "varianten/palmen-10_sand.png",
+"basis": "palmen/10",
+"x": 1410,
+"y": 74,
+"fuss": 89,
+"ebene": 1,
+"anim": "wehen",
+"kachel": [
+90,
+9
+],
+"block": [
+88,
 4,
-4
+6,
+6
+]
+},
+{
+"datei": "varianten/palmen-07_sand.png",
+"basis": "palmen/07",
+"x": 352,
+"y": 88,
+"fuss": 91,
+"ebene": 1,
+"anim": "wehen",
+"kachel": [
+23,
+10
+],
+"block": [
+22,
+5,
+3,
+6
+]
+},
+{
+"datei": "varianten/palmen-03_sand.png",
+"basis": "palmen/03",
+"x": 101,
+"y": 569,
+"fuss": 90,
+"ebene": 1,
+"anim": "wehen",
+"kachel": [
+8,
+40
+],
+"block": [
+6,
+35,
+6,
+6
+]
+},
+{
+"datei": "varianten/klein-08_sand.png",
+"basis": "klein/08",
+"x": 147,
+"y": 654,
+"fuss": 21,
+"ebene": 1,
+"begleiter": true,
+"kachel": [
+9,
+41
+],
+"block": [
+9,
+40,
+2,
+2
+]
+},
+{
+"datei": "varianten/palmen-07_sand.png",
+"basis": "palmen/07",
+"x": 160,
+"y": 1048,
+"fuss": 91,
+"ebene": 1,
+"anim": "wehen",
+"kachel": [
+11,
+70
+],
+"block": [
+10,
+65,
+3,
+6
+]
+},
+{
+"datei": "varianten/klein-03_sand.png",
+"basis": "klein/03",
+"x": 176,
+"y": 1123,
+"fuss": 32,
+"ebene": 1,
+"anim": "kaktus",
+"begleiter": true,
+"kachel": [
+11,
+71
+],
+"block": [
+11,
+70,
+2,
+2
+]
+},
+{
+"datei": "varianten/palmen-07_sand.png",
+"basis": "palmen/07",
+"x": 1232,
+"y": 248,
+"fuss": 91,
+"ebene": 1,
+"anim": "wehen",
+"kachel": [
+78,
+20
+],
+"block": [
+77,
+15,
+3,
+6
+]
+},
+{
+"datei": "varianten/klein-11_sand.png",
+"basis": "klein/11",
+"x": 1250,
+"y": 322,
+"fuss": 33,
+"ebene": 1,
+"begleiter": true,
+"kachel": [
+78,
+21
+],
+"block": [
+78,
+20,
+2,
+2
+]
+},
+{
+"datei": "varianten/palmen-10_sand.png",
+"basis": "palmen/10",
+"x": 1586,
+"y": 410,
+"fuss": 89,
+"ebene": 1,
+"anim": "wehen",
+"kachel": [
+101,
+30
+],
+"block": [
+99,
+25,
+6,
+6
+]
+},
+{
+"datei": "varianten/klein-08_sand.png",
+"basis": "klein/08",
+"x": 1635,
+"y": 494,
+"fuss": 21,
+"ebene": 1,
+"begleiter": true,
+"kachel": [
+102,
+31
+],
+"block": [
+102,
+30,
+2,
+2
+]
+},
+{
+"datei": "varianten/palmen-07_sand.png",
+"basis": "palmen/07",
+"x": 1648,
+"y": 536,
+"fuss": 91,
+"ebene": 1,
+"anim": "wehen",
+"kachel": [
+104,
+38
+],
+"block": [
+103,
+33,
+3,
+6
+]
+},
+{
+"datei": "varianten/palmen-00_sand.png",
+"basis": "palmen/00",
+"x": 448,
+"y": 1065,
+"fuss": 90,
+"ebene": 1,
+"anim": "wehen",
+"kachel": [
+29,
+71
+],
+"block": [
+28,
+66,
+4,
+6
+]
+},
+{
+"datei": "varianten/klein-28_sand.png",
+"basis": "klein/28",
+"x": 449,
+"y": 1142,
+"fuss": 29,
+"ebene": 1,
+"begleiter": true,
+"kachel": [
+28,
+72
+],
+"block": [
+28,
+71,
+2,
+2
+]
+},
+{
+"datei": "varianten/palmen-04_sand.png",
+"basis": "palmen/04",
+"x": 337,
+"y": 1066,
+"fuss": 89,
+"ebene": 1,
+"anim": "wehen",
+"kachel": [
+23,
+71
+],
+"block": [
+21,
+66,
+6,
+6
+]
+},
+{
+"datei": "varianten/palmen-06_sand.png",
+"basis": "palmen/06",
+"x": 516,
+"y": 1032,
+"fuss": 91,
+"ebene": 1,
+"anim": "wehen",
+"kachel": [
+34,
+69
+],
+"block": [
+32,
+64,
+5,
+6
+]
+},
+{
+"datei": "varianten/palmen-02_sand.png",
+"basis": "palmen/02",
+"x": 1122,
+"y": 1082,
+"fuss": 89,
+"ebene": 1,
+"anim": "wehen",
+"kachel": [
+72,
+72
+],
+"block": [
+70,
+67,
+5,
+6
+]
+},
+{
+"datei": "varianten/klein-08_sand.png",
+"basis": "klein/08",
+"x": 1123,
+"y": 1166,
+"fuss": 21,
+"ebene": 1,
+"begleiter": true,
+"kachel": [
+70,
+73
+],
+"block": [
+70,
+72,
+2,
+2
+]
+},
+{
+"datei": "varianten/palmen-10_sand.png",
+"basis": "palmen/10",
+"x": 1186,
+"y": 1002,
+"fuss": 89,
+"ebene": 1,
+"anim": "wehen",
+"kachel": [
+76,
+67
+],
+"block": [
+74,
+62,
+6,
+6
+]
+},
+{
+"datei": "varianten/klein-09_sand.png",
+"basis": "klein/09",
+"x": 1215,
+"y": 1089,
+"fuss": 18,
+"ebene": 1,
+"begleiter": true,
+"kachel": [
+76,
+68
+],
+"block": [
+76,
+68,
+2,
+1
+]
+},
+{
+"datei": "varianten/palmen-09_sand.png",
+"basis": "palmen/09",
+"x": 1075,
+"y": 1000,
+"fuss": 91,
+"ebene": 1,
+"anim": "wehen",
+"kachel": [
+69,
+67
+],
+"block": [
+67,
+62,
+5,
+6
+]
+},
+{
+"datei": "varianten/klein-04_sand.png",
+"basis": "klein/04",
+"x": 1088,
+"y": 1079,
+"fuss": 28,
+"ebene": 1,
+"anim": "wehen",
+"begleiter": true,
+"kachel": [
+68,
+68
+],
+"block": [
+68,
+67,
+2,
+2
+]
+},
+{
+"datei": "varianten/palmen-09_sand.png",
+"basis": "palmen/09",
+"x": 531,
+"y": 88,
+"fuss": 91,
+"ebene": 1,
+"anim": "wehen",
+"kachel": [
+35,
+10
+],
+"block": [
+33,
+5,
+5,
+6
+]
+},
+{
+"datei": "varianten/klein-03_sand.png",
+"basis": "klein/03",
+"x": 560,
+"y": 163,
+"fuss": 32,
+"ebene": 1,
+"anim": "kaktus",
+"begleiter": true,
+"kachel": [
+35,
+11
+],
+"block": [
+35,
+10,
+2,
+2
+]
+},
+{
+"datei": "varianten/palmen-02_sand.png",
+"basis": "palmen/02",
+"x": 450,
+"y": 10,
+"fuss": 89,
+"ebene": 1,
+"anim": "wehen",
+"kachel": [
+30,
+5
+],
+"block": [
+28,
+0,
+5,
+6
 ]
 },
 {
@@ -1759,25 +2200,6 @@
 ]
 },
 {
-"datei": "varianten/rosa-blueten-00_sand.png",
-"basis": "rosa/blueten-00",
-"x": 1122,
-"y": 978,
-"fuss": 33,
-"ebene": 1,
-"anim": "kaktus",
-"kachel": [
-70,
-62
-],
-"block": [
-70,
-61,
-2,
-2
-]
-},
-{
 "datei": "varianten/rosa-blueten-05_sand.png",
 "basis": "rosa/blueten-05",
 "x": 626,
@@ -1870,25 +2292,6 @@
 2,
 2
 ]
-},
-{
-"datei": "varianten/klein-07_sand.png",
-"basis": "klein/07",
-"x": 417,
-"y": 1114,
-"fuss": 25,
-"ebene": 1,
-"kachel": [
-26,
-70
-],
-"block": [
-26,
-69,
-2,
-2
-],
-"liegend": true
 },
 {
 "datei": "varianten/klein-00_sand.png",
@@ -2061,25 +2464,6 @@
 ]
 },
 {
-"datei": "varianten/klein-02_sand.png",
-"basis": "klein/02",
-"x": 517,
-"y": 285,
-"fuss": 22,
-"ebene": 1,
-"anim": "kaktus",
-"kachel": [
-32,
-18
-],
-"block": [
-32,
-17,
-2,
-2
-]
-},
-{
 "datei": "varianten/rosa-blueten-00_sand.png",
 "basis": "rosa/blueten-00",
 "x": 498,
@@ -2094,25 +2478,6 @@
 "block": [
 31,
 8,
-2,
-2
-]
-},
-{
-"datei": "varianten/klein-04_sand.png",
-"basis": "klein/04",
-"x": 320,
-"y": 1079,
-"fuss": 28,
-"ebene": 1,
-"anim": "wehen",
-"kachel": [
-20,
-68
-],
-"block": [
-20,
-67,
 2,
 2
 ]
@@ -2231,24 +2596,6 @@
 ]
 },
 {
-"datei": "varianten/klein-27_sand.png",
-"basis": "klein/27",
-"x": 433,
-"y": 477,
-"fuss": 22,
-"ebene": 1,
-"kachel": [
-27,
-30
-],
-"block": [
-27,
-29,
-2,
-2
-]
-},
-{
 "datei": "varianten/rosa-blueten-01_sand.png",
 "basis": "rosa/blueten-01",
 "x": 1123,
@@ -2268,20 +2615,20 @@
 ]
 },
 {
-"datei": "varianten/rosa-blueten-02_sand.png",
-"basis": "rosa/blueten-02",
-"x": 527,
-"y": 210,
-"fuss": 33,
+"datei": "varianten/klein-04_sand.png",
+"basis": "klein/04",
+"x": 384,
+"y": 199,
+"fuss": 28,
 "ebene": 1,
-"anim": "kaktus",
+"anim": "wehen",
 "kachel": [
-33,
-14
+24,
+13
 ],
 "block": [
-33,
-13,
+24,
+12,
 2,
 2
 ]
@@ -2531,81 +2878,6 @@
 ]
 },
 {
-"datei": "varianten/klein-27_sand.png",
-"basis": "klein/27",
-"x": 353,
-"y": 653,
-"fuss": 22,
-"ebene": 1,
-"kachel": [
-22,
-41
-],
-"block": [
-22,
-40,
-2,
-2
-]
-},
-{
-"datei": "varianten/klein-04_sand.png",
-"basis": "klein/04",
-"x": 192,
-"y": 1111,
-"fuss": 28,
-"ebene": 1,
-"anim": "wehen",
-"kachel": [
-12,
-70
-],
-"block": [
-12,
-69,
-2,
-2
-]
-},
-{
-"datei": "varianten/klein-00_sand.png",
-"basis": "klein/00",
-"x": 788,
-"y": 311,
-"fuss": 28,
-"ebene": 1,
-"anim": "kaktus",
-"kachel": [
-49,
-20
-],
-"block": [
-49,
-19,
-2,
-2
-]
-},
-{
-"datei": "varianten/klein-02_sand.png",
-"basis": "klein/02",
-"x": 1605,
-"y": 397,
-"fuss": 22,
-"ebene": 1,
-"anim": "kaktus",
-"kachel": [
-100,
-25
-],
-"block": [
-100,
-24,
-2,
-2
-]
-},
-{
 "datei": "varianten/rosa-blueten-01_sand.png",
 "basis": "rosa/blueten-01",
 "x": 595,
@@ -2620,24 +2892,6 @@
 "block": [
 37,
 5,
-2,
-2
-]
-},
-{
-"datei": "varianten/klein-08_sand.png",
-"basis": "klein/08",
-"x": 1651,
-"y": 494,
-"fuss": 21,
-"ebene": 1,
-"kachel": [
-103,
-31
-],
-"block": [
-103,
-30,
 2,
 2
 ]
@@ -2714,44 +2968,6 @@
 "block": [
 96,
 70,
-2,
-2
-]
-},
-{
-"datei": "varianten/klein-02_sand.png",
-"basis": "klein/02",
-"x": 1125,
-"y": 1069,
-"fuss": 22,
-"ebene": 1,
-"anim": "kaktus",
-"kachel": [
-70,
-67
-],
-"block": [
-70,
-66,
-2,
-2
-]
-},
-{
-"datei": "varianten/klein-26_sand.png",
-"basis": "klein/26",
-"x": 401,
-"y": 1079,
-"fuss": 28,
-"ebene": 1,
-"anim": "wehen",
-"kachel": [
-25,
-68
-],
-"block": [
-25,
-67,
 2,
 2
 ]
@@ -2964,24 +3180,6 @@
 ]
 },
 {
-"datei": "varianten/klein-09_sand.png",
-"basis": "klein/09",
-"x": 1103,
-"y": 241,
-"fuss": 18,
-"ebene": 1,
-"kachel": [
-69,
-15
-],
-"block": [
-69,
-15,
-2,
-1
-]
-},
-{
 "datei": "varianten/klein-26_sand.png",
 "basis": "klein/26",
 "x": 801,
@@ -3114,57 +3312,20 @@
 ]
 },
 {
-"datei": "varianten/klein-08_sand.png",
-"basis": "klein/08",
-"x": 579,
-"y": 190,
-"fuss": 21,
-"ebene": 1,
-"kachel": [
-36,
-12
-],
-"block": [
-36,
-11,
-2,
-2
-]
-},
-{
-"datei": "varianten/klein-04_sand.png",
-"basis": "klein/04",
-"x": 480,
-"y": 1079,
-"fuss": 28,
+"datei": "varianten/klein-05_sand.png",
+"basis": "klein/05",
+"x": 612,
+"y": 220,
+"fuss": 23,
 "ebene": 1,
 "anim": "wehen",
 "kachel": [
-30,
-68
+38,
+14
 ],
 "block": [
-30,
-67,
-2,
-2
-]
-},
-{
-"datei": "varianten/klein-01_sand.png",
-"basis": "klein/01",
-"x": 308,
-"y": 130,
-"fuss": 33,
-"ebene": 1,
-"anim": "kaktus",
-"kachel": [
-19,
-9
-],
-"block": [
-19,
-8,
+38,
+13,
 2,
 2
 ]
@@ -3340,44 +3501,6 @@
 ]
 },
 {
-"datei": "varianten/klein-01_sand.png",
-"basis": "klein/01",
-"x": 532,
-"y": 1042,
-"fuss": 33,
-"ebene": 1,
-"anim": "kaktus",
-"kachel": [
-33,
-66
-],
-"block": [
-33,
-65,
-2,
-2
-]
-},
-{
-"datei": "varianten/klein-07_sand.png",
-"basis": "klein/07",
-"x": 545,
-"y": 186,
-"fuss": 25,
-"ebene": 1,
-"kachel": [
-34,
-12
-],
-"block": [
-34,
-11,
-2,
-2
-],
-"liegend": true
-},
-{
 "datei": "varianten/klein-05_sand.png",
 "basis": "klein/05",
 "x": 676,
@@ -3453,25 +3576,6 @@
 ]
 },
 {
-"datei": "varianten/klein-03_sand.png",
-"basis": "klein/03",
-"x": 1088,
-"y": 1043,
-"fuss": 32,
-"ebene": 1,
-"anim": "kaktus",
-"kachel": [
-68,
-66
-],
-"block": [
-68,
-65,
-2,
-2
-]
-},
-{
 "datei": "varianten/klein-04_sand.png",
 "basis": "klein/04",
 "x": 944,
@@ -3529,6 +3633,25 @@
 ]
 },
 {
+"datei": "varianten/klein-01_sand.png",
+"basis": "klein/01",
+"x": 596,
+"y": 194,
+"fuss": 33,
+"ebene": 1,
+"anim": "kaktus",
+"kachel": [
+37,
+13
+],
+"block": [
+37,
+12,
+2,
+2
+]
+},
+{
 "datei": "varianten/klein-26_sand.png",
 "basis": "klein/26",
 "x": 545,
@@ -3548,20 +3671,57 @@
 ]
 },
 {
-"datei": "varianten/rosa-blueten-01_sand.png",
-"basis": "rosa/blueten-01",
-"x": 307,
-"y": 103,
+"datei": "varianten/klein-06_sand.png",
+"basis": "klein/06",
+"x": 97,
+"y": 327,
 "fuss": 28,
+"ebene": 1,
+"kachel": [
+6,
+21
+],
+"block": [
+6,
+20,
+2,
+2
+],
+"liegend": true
+},
+{
+"datei": "varianten/klein-08_sand.png",
+"basis": "klein/08",
+"x": 419,
+"y": 782,
+"fuss": 21,
+"ebene": 1,
+"kachel": [
+26,
+49
+],
+"block": [
+26,
+48,
+2,
+2
+]
+},
+{
+"datei": "varianten/rosa-blueten-00_sand.png",
+"basis": "rosa/blueten-00",
+"x": 786,
+"y": 1010,
+"fuss": 33,
 "ebene": 1,
 "anim": "kaktus",
 "kachel": [
-19,
-7
+49,
+64
 ],
 "block": [
-19,
-6,
+49,
+63,
 2,
 2
 ]
@@ -3619,44 +3779,6 @@
 "block": [
 72,
 33,
-2,
-2
-]
-},
-{
-"datei": "varianten/klein-04_sand.png",
-"basis": "klein/04",
-"x": 1216,
-"y": 999,
-"fuss": 28,
-"ebene": 1,
-"anim": "wehen",
-"kachel": [
-76,
-63
-],
-"block": [
-76,
-62,
-2,
-2
-]
-},
-{
-"datei": "varianten/klein-05_sand.png",
-"basis": "klein/05",
-"x": 484,
-"y": 300,
-"fuss": 23,
-"ebene": 1,
-"anim": "wehen",
-"kachel": [
-30,
-19
-],
-"block": [
-30,
-18,
 2,
 2
 ]
@@ -3851,25 +3973,6 @@
 ]
 },
 {
-"datei": "varianten/klein-07_sand.png",
-"basis": "klein/07",
-"x": 161,
-"y": 746,
-"fuss": 25,
-"ebene": 1,
-"kachel": [
-10,
-47
-],
-"block": [
-10,
-46,
-2,
-2
-],
-"liegend": true
-},
-{
 "datei": "varianten/klein-02_sand.png",
 "basis": "klein/02",
 "x": 773,
@@ -3945,6 +4048,25 @@
 ]
 },
 {
+"datei": "varianten/rosa-blueten-02_sand.png",
+"basis": "rosa/blueten-02",
+"x": 783,
+"y": 290,
+"fuss": 33,
+"ebene": 1,
+"anim": "kaktus",
+"kachel": [
+49,
+19
+],
+"block": [
+49,
+18,
+2,
+2
+]
+},
+{
 "datei": "varianten/klein-04_sand.png",
 "basis": "klein/04",
 "x": 480,
@@ -3959,6 +4081,229 @@
 "block": [
 30,
 28,
+2,
+2
+]
+},
+{
+"datei": "varianten/rosa-blueten-01_sand.png",
+"basis": "rosa/blueten-01",
+"x": 675,
+"y": 1079,
+"fuss": 28,
+"ebene": 1,
+"anim": "kaktus",
+"kachel": [
+42,
+68
+],
+"block": [
+42,
+67,
+2,
+2
+]
+},
+{
+"datei": "varianten/klein-27_sand.png",
+"basis": "klein/27",
+"x": 1281,
+"y": 1101,
+"fuss": 22,
+"ebene": 1,
+"kachel": [
+80,
+69
+],
+"block": [
+80,
+68,
+2,
+2
+]
+},
+{
+"datei": "varianten/klein-08_sand.png",
+"basis": "klein/08",
+"x": 1267,
+"y": 622,
+"fuss": 21,
+"ebene": 1,
+"kachel": [
+79,
+39
+],
+"block": [
+79,
+38,
+2,
+2
+]
+},
+{
+"datei": "varianten/klein-09_sand.png",
+"basis": "klein/09",
+"x": 911,
+"y": 737,
+"fuss": 18,
+"ebene": 1,
+"kachel": [
+57,
+46
+],
+"block": [
+57,
+46,
+2,
+1
+]
+},
+{
+"datei": "varianten/rosa-blueten-00_sand.png",
+"basis": "rosa/blueten-00",
+"x": 306,
+"y": 738,
+"fuss": 33,
+"ebene": 1,
+"anim": "kaktus",
+"kachel": [
+19,
+47
+],
+"block": [
+19,
+46,
+2,
+2
+]
+},
+{
+"datei": "varianten/rosa-mittel2-08_sand.png",
+"basis": "rosa/mittel2-08",
+"x": 528,
+"y": 214,
+"fuss": 61,
+"ebene": 1,
+"anim": "kaktus",
+"kachel": [
+34,
+16
+],
+"block": [
+33,
+13,
+4,
+4
+]
+},
+{
+"datei": "varianten/klein-27_sand.png",
+"basis": "klein/27",
+"x": 513,
+"y": 1005,
+"fuss": 22,
+"ebene": 1,
+"kachel": [
+32,
+63
+],
+"block": [
+32,
+62,
+2,
+2
+]
+},
+{
+"datei": "varianten/klein-09_sand.png",
+"basis": "klein/09",
+"x": 319,
+"y": 769,
+"fuss": 18,
+"ebene": 1,
+"kachel": [
+20,
+48
+],
+"block": [
+20,
+48,
+2,
+1
+]
+},
+{
+"datei": "varianten/klein-05_sand.png",
+"basis": "klein/05",
+"x": 756,
+"y": 156,
+"fuss": 23,
+"ebene": 1,
+"anim": "wehen",
+"kachel": [
+47,
+10
+],
+"block": [
+47,
+9,
+2,
+2
+]
+},
+{
+"datei": "varianten/klein-05_sand.png",
+"basis": "klein/05",
+"x": 724,
+"y": 668,
+"fuss": 23,
+"ebene": 1,
+"anim": "wehen",
+"kachel": [
+45,
+42
+],
+"block": [
+45,
+41,
+2,
+2
+]
+},
+{
+"datei": "varianten/rosa-blueten-04_sand.png",
+"basis": "rosa/blueten-04",
+"x": 1106,
+"y": 225,
+"fuss": 34,
+"ebene": 1,
+"anim": "kaktus",
+"kachel": [
+69,
+15
+],
+"block": [
+69,
+14,
+1,
+2
+]
+},
+{
+"datei": "varianten/rosa-blueten-01_sand.png",
+"basis": "rosa/blueten-01",
+"x": 1203,
+"y": 1143,
+"fuss": 28,
+"ebene": 1,
+"anim": "kaktus",
+"kachel": [
+75,
+72
+],
+"block": [
+75,
+71,
 2,
 2
 ]
