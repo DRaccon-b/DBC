@@ -20,7 +20,7 @@ KARTE = os.path.join(ROOT, 'maps', 'karte09')
 OBJ = os.path.join(ROOT, 'assets', 'objekte', 'karte09')
 OBJ8 = os.path.join(ROOT, 'assets', 'objekte', 'karte08')
 T = 16
-ACHSE_B = 27 * T + 8 + 8          # Teppichachse Portalhalle / grosser Saal (Teppich x 26-28)
+ACHSE_B = 27 * T + 8              # Teppichachse Portalhalle / grosser Saal (Teppich x 26-28 -> Mitte 440 px)
 ACHSE_D = 75 * T + 8              # Ritualsaal (Rahmen x 66-84)
 
 # Wandobjekte: (sprite, Kachel-x Mitte, Reihe der Mauer-Oberkante der Wandflaeche)
@@ -40,7 +40,7 @@ WAND += [('wand/04', x, 35) for x in (24, 31)]
 # (sprite, Kachel-x, Fusskachel-y, Optionen)
 FEST = [
     # ---- Portalhalle: Portal in der Achse, je Seite Statue, Saeule, Feuerschale, Gargoyle, Kandelaber (symmetrisch)
-    ('gross/02', 27.5, 9, {'symm': None}),
+    ('gross/02', 27, 9, {'symm': None, 'achse': True}),
     ('einrichtung/13', 16, 9, {'symm': 'statue'}), ('einrichtung/13', 39, 9, {'symm': 'statue', 'spiegeln': True}),
     ('moebel/00', 19, 8, {'symm': 'saeule1'}), ('moebel/00', 36, 8, {'symm': 'saeule1'}),
     ('moebel/06', 22, 9, {'symm': 'schale', 'anim': 'glimmen'}), ('moebel/06', 33, 9, {'symm': 'schale', 'anim': 'glimmen'}),
@@ -283,8 +283,11 @@ def main():
                         **({'anim': 'kerzen'} if name == 'wand/04' else {})})
     # Tuerme auf der Aussenmauer und Tore (stehen auf/vor der Mauer, eigene Platzierung)
     for (name, tx, fuss_px) in [('einrichtung/05', x, 39 * T + 13) for x in (1.5, 12, 22.5, 32.5, 43, 53.5, 64, 75, 86)] + \
-                               [('tor/01', 27.5, 39 * T + 15), ('tor/00', 27.5, 19 * T + 15)]:
+                               [('tor/01', 27, 39 * T + 15), ('tor/00', 27, 19 * T + 15)]:
         datei, h, zu, mitte = sprite(name, False)
+        if name.startswith('tor/'):
+            xs_ = np.nonzero(alpha[datei].any(axis=0))[0]
+            mitte = (xs_.min() + xs_.max() + 1) / 2.0             # Tor genau mittig auf der Teppichachse
         x, y = int(round(tx * T + T / 2 - mitte)), fuss_px - zu
         objekte.append({'datei': datei, 'basis': name, 'x': x, 'y': y, 'fuss': h, 'kachel': [int(tx), fuss_px // T],
                         'ebene': 1, 'an_wand': True, 'kein_schatten': True, 'keine_verdeckung': True,
@@ -336,9 +339,14 @@ def main():
 
 
 def symmetrie():
-    """Paare exakt spiegelsymmetrisch zur Achse ihres Saals."""
+    """Paare exakt spiegelsymmetrisch zur Achse ihres Saals; Objekte mit 'achse' genau auf die Achse."""
     pf = os.path.join(OBJ, 'platzierung.json')
     objs = json.load(open(pf))
+    for o in objs:
+        if o.get('achse'):
+            a_ = np.array(Image.open(os.path.join(OBJ, o['datei'])).getchannel('A')) > 128
+            xs_ = np.nonzero(a_.any(axis=0))[0]
+            o['x'] = int(round(ACHSE_B - (xs_.min() + xs_.max() + 1) / 2.0))
     paare = {}
     for o in objs:
         if o.get('symm'):

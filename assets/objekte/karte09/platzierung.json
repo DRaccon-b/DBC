@@ -744,7 +744,7 @@
 {
 "datei": "sauber/tor-01.png",
 "basis": "tor/01",
-"x": 406,
+"x": 398,
 "y": 556,
 "fuss": 84,
 "kachel": [
@@ -761,7 +761,7 @@
 {
 "datei": "sauber/tor-00.png",
 "basis": "tor/00",
-"x": 408,
+"x": 400,
 "y": 236,
 "fuss": 84,
 "kachel": [
@@ -778,16 +778,17 @@
 {
 "datei": "sauber/gross-02.png",
 "basis": "gross/02",
-"x": 400,
+"x": 392,
 "y": 59,
 "fuss": 101,
 "kachel": [
-27,
+26,
 9
 ],
 "ebene": 1,
+"achse": true,
 "block": [
-25,
+24,
 3,
 6,
 7
@@ -810,7 +811,7 @@
 {
 "datei": "sauber/einrichtung-13_m.png",
 "basis": "einrichtung/13",
-"x": 613,
+"x": 597,
 "y": 98,
 "fuss": 62,
 "kachel": [
@@ -838,7 +839,7 @@
 {
 "datei": "sauber/moebel-00.png",
 "basis": "moebel/00",
-"x": 569,
+"x": 553,
 "y": 82,
 "fuss": 62,
 "kachel": [
@@ -867,7 +868,7 @@
 {
 "datei": "sauber/moebel-06.png",
 "basis": "moebel/06",
-"x": 518,
+"x": 502,
 "y": 97,
 "fuss": 63,
 "kachel": [
@@ -896,7 +897,7 @@
 {
 "datei": "sauber/moebel-13_m.png",
 "basis": "moebel/13",
-"x": 498,
+"x": 482,
 "y": 162,
 "fuss": 62,
 "kachel": [
@@ -925,7 +926,7 @@
 {
 "datei": "sauber/moebel-01.png",
 "basis": "moebel/01",
-"x": 651,
+"x": 635,
 "y": 164,
 "fuss": 60,
 "kachel": [
@@ -954,7 +955,7 @@
 {
 "datei": "sauber/moebel-00.png",
 "basis": "moebel/00",
-"x": 489,
+"x": 473,
 "y": 354,
 "fuss": 62,
 "kachel": [
@@ -982,7 +983,7 @@
 {
 "datei": "sauber/moebel-09_m.png",
 "basis": "moebel/09",
-"x": 488,
+"x": 472,
 "y": 480,
 "fuss": 64,
 "kachel": [
@@ -4986,14 +4987,14 @@
 "liegend": true
 },
 {
-"datei": "sauber/k8-klein-05.png",
-"basis": "k8/klein/05",
-"x": 372,
-"y": 93,
-"fuss": 19,
+"datei": "sauber/k8-fels_klein-11.png",
+"basis": "k8/fels_klein/11",
+"x": 366,
+"y": 85,
+"fuss": 11,
 "kachel": [
-24,
-6
+23,
+5
 ],
 "ebene": 0,
 "fest_pos": true,
