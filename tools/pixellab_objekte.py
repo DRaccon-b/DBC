@@ -1106,6 +1106,24 @@ OBJEKTGRUPPEN_K12 = {
         'dark leafy forest shrub', 'small dark thorny shrub', 'tuft of tall dark grass', 'dark ivy-covered bush',
         'big dark green leaves plant', 'dark fern with drooping fronds', 'mossy rock with small ferns', 'dark wild herb bush',
     ]},
+    'k12_bruecke': {'size': 96, 'items': [
+        'narrow old wooden plank footbridge seen from above, running vertically from top to bottom, planks laid horizontally, thick wooden side beams, small posts at the four corners with rope railings, mossy weathered dark wood, top-down view',
+        'narrow old wooden plank footbridge seen from above, running vertically from top to bottom, slightly arched, planks laid horizontally, wooden railings on both sides, one plank missing, mossy dark wood, top-down view',
+        'old wooden plank footbridge over a stream, running horizontally from left to right, planks vertical, wooden railing with posts on the far side, mossy dark wood, 3/4 top-down view',
+        'old wooden plank footbridge over a stream, running horizontally from left to right, rope railings, weathered dark wood with moss, 3/4 top-down view',
+    ]},
+    'k12_quelle': {'size': 96, 'items': [
+        'stone cave mouth with a carved stone arch built into a dark rock cliff wall, a small waterfall pouring out of the cave and splashing into a little foaming pool at the bottom, moss and ferns around the arch, ' + FR12,
+        'old carved stone water spout shaped like a gaping monster face set into a dark rock wall, a stream of water pouring from its mouth down into a small foaming pool, moss, ' + FR12,
+        'dark rocky crevice in a cliff with a spring gushing out as a thin waterfall over mossy stones into a small pool, ferns at the sides, ' + FR12,
+        'mossy stone culvert arch in a cliff wall with water flowing out over stone steps into a small pool, hanging roots and ferns, ' + FR12,
+    ]},
+    'k12_quelle2': {'size': 48, 'items': [
+        'isolated small carved stone water spout shaped like a gaping monster face with moss, water pouring from its mouth straight down, only the spout and the water stream, no wall, no background, ' + FR12,
+        'isolated small carved stone arch outlet with a dark opening and water pouring out of it straight down, moss on the stones, only the arch and the water, no wall, no background, ' + FR12,
+        'isolated small old stone pipe spout with a mossy rim, water pouring out straight down, no wall, no background, ' + FR12,
+        'isolated small carved wooden puppet face spout with a round open mouth, water pouring out straight down, no wall, no background, ' + FR12,
+    ]},
     'k12_wald': {'size': 64, 'items': [
         'gloomy dark green round forest tree', 'gloomy dark green tall forest tree', 'dark green forest tree with a twisted trunk',
         'gloomy dark forest tree with blue-violet leaves', 'dark pine tree', 'small gloomy dark green tree',

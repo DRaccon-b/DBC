@@ -246,58 +246,52 @@ def bruecke(a, b, wasser):
         a[py, px:px + 3] = H('#9a7450')
 
 
+def brueckenschatten(a, b):
+    """Schatten des Holzstegs (Sprite) auf dem Wasser, nach rechts unten versetzt."""
+    x0, y0, x1, y1, art = b
+    X0, Y0, X1, Y1 = x0 * T + 10, y0 * T + 2, (x1 + 1) * T - 4, (y1 + 1) * T + 2
+    a[Y0 + 4:Y1 + 4, X0 + 4:X1 + 4] = (a[Y0 + 4:Y1 + 4, X0 + 4:X1 + 4] * 0.66).astype(np.uint8)
+
+
 def quelle_zeichnen(a, lay, frame):
-    """Quelle des Flusses: gemauertes Hoehlentor in der oberen Bergwand (Bogen aus Steinquadern mit Schlussstein,
-    Moos), aus dem das Wasser ueber die Schwelle als kleiner Wasserfall die Front hinunterstuerzt; unten schaeumt es
-    in ein Becken und fliesst in den Fluss. Strahlen und Gischt wandern mit dem Bild (Quelle oben, Abfluss unten)."""
+    """Fuss der Quelle: Aus dem Wasserspeier (geschnitzte Puppenmaske in der Bergwand, Objekt) faellt das Wasser in
+    ein kleines Becken am Fuss der Wand; Gischt spritzt und wandert mit dem Bild, dann fliesst es in den Fluss."""
     f = frame or 0
     fx, fy = lay['fluss'][0]
-    cx, yb = int(fx * T), int(fy * T) - 6                        # Fuss der Bergfront ueber dem Fluss
+    cx, yb = int(fx * T), int(fy * T) - 6
     Hh, W = a.shape[:2]
-    top = yb - 40                                                  # Torbogen sitzt oben in der 44-px-Front
-    R_, B_ = 12, 10                                                # Bogenradius, halbe Breite der Oeffnung
-    yy, xx = np.mgrid[0:Hh, 0:W]
-    def bogen(b, oben, unten):
-        mitte = oben + b
-        return (np.abs(xx - cx) <= b) & (yy >= oben) & (yy <= unten) & ((yy >= mitte) | ((xx - cx) ** 2 + (yy - mitte) ** 2 <= b * b))
-    oeffnung = bogen(B_, top + 2, top + 26)
-    rahmen = bogen(B_ + 5, top - 3, top + 28) & ~oeffnung
-    # Steinquader des Rahmens: Fugen radial/waagerecht, Licht oben links
-    ang = np.arctan2(yy - (top + 2 + B_), xx - cx)
-    fuge = ((np.round(ang / 0.45) * 0.45 - ang) ** 2 < 0.006) & (yy < top + 2 + B_) | ((yy - top) % 7 == 0) & (yy >= top + 2 + B_)
-    a[rahmen] = H('#4e5466')
-    a[rahmen & (xx < cx)] = H('#5c6478')
-    a[rahmen & fuge] = H('#22252e')
-    a[rahmen & ((xx - cx) ** 2 + (yy - top + 2) ** 2 <= 9)] = H('#7a8296')                  # Schlussstein
-    moos = rahmen & ((xx * 7 + yy * 13) % 11 < 3) & (yy < top + 8)
-    a[moos] = H('#3e5a40')
-    a[oeffnung] = H('#08090c')
-    a[oeffnung & (yy > top + 18)] = H('#10131a')
-    # Wasserfall: aus der Schwelle ueber die Front bis zum Fuss, Strahlen wandern abwaerts
-    versatz = [3, 0, 4, 1, 5, 2, 0, 3, 1, 4, 2, 5, 0, 3, 1]          # je Spalte eigener Strahl (senkrechte Streifen)
-    for x in range(cx - 7, cx + 8):
-        rand_ = abs(x - cx) >= 6
-        for y in range(top + 18, yb + 6):
-            k_ = (y - f * 3 + versatz[x - cx + 7] * 2) % 9 // 1.5
-            if rand_:
-                c = (52, 84, 74) if k_ < 3 else (40, 66, 58)
-            else:
-                c = (150, 186, 170) if k_ == 0 else ((96, 136, 120) if k_ < 3 else (66, 104, 90))
-            a[y, x] = c
-    # Becken und Gischt am Fuss
-    for y in range(yb, yb + 12):
+    for y in range(yb - 2, yb + 12):
         for x in range(cx - 14, cx + 15):
-            e = ((x - cx) / 14.0) ** 2 + ((y - yb - 5) / 6.0) ** 2
+            e = ((x - cx) / 14.0) ** 2 + ((y - yb - 4) / 6.5) ** 2
             if e <= 1:
-                a[y, x] = (58, 92, 78) if e > 0.6 else (72, 110, 94)
+                a[y, x] = (48, 80, 68) if e > 0.55 else (64, 100, 86)
     rs = random.Random(3)
-    for i in range(18):
+    for i in range(20):
         ph = (f / N_FRAMES + rs.random()) % 1.0
         ang_ = rs.random() * math.pi
-        rr = 3 + ph * 11
-        x, y = int(cx + math.cos(ang_) * rr), int(yb + 4 - math.sin(ang_) * rr * 0.4)
+        rr = 2 + ph * 12
+        x, y = int(cx + math.cos(ang_) * rr), int(yb + 3 - math.sin(ang_) * rr * 0.4)
         if ph < 0.7 and 0 <= y < Hh:
             a[y, x] = (210, 226, 214) if ph < 0.35 else (150, 180, 166)
+
+
+def quelle_strahl(img, objs, frame):
+    """Wasserstrahl des Speiers animieren: helle Streifen wandern im Strahl nach unten (nur die Wasserpixel)."""
+    f = frame or 0
+    px = img.load()
+    for o in objs:
+        if not o.get('quelle'):
+            continue
+        sp = Image.open(os.path.join(OBJ, o['datei'])).convert('RGBA')
+        a = np.array(sp).astype(int)
+        w = (a[..., 3] > 0) & (a[..., 1] > a[..., 0] + 12) & (a[..., 2] > a[..., 0] + 6) & (np.arange(a.shape[0])[:, None] > 20)
+        for y, x in zip(*np.nonzero(w)):
+            k_ = (y - f * 3 + (x % 3) * 2) % 8
+            r, g, b, _ = px[o['x'] + x, o['y'] + y]
+            if k_ == 0:
+                px[o['x'] + x, o['y'] + y] = (min(255, r + 60), min(255, g + 60), min(255, b + 55), 255)
+            elif k_ in (4, 5):
+                px[o['x'] + x, o['y'] + y] = (int(r * 0.82), int(g * 0.82), int(b * 0.82), 255)
 
 
 def bauen(frame=None, speichern=True):
@@ -369,7 +363,7 @@ def bauen(frame=None, speichern=True):
     lvl[waende] = 9
     lvl[podest_front(a, arena, lay)] = 9
     for b_ in lay.get('bruecken', []):
-        bruecke(a, b_, mm)
+        brueckenschatten(a, b_)
     if speichern and frame is None:
         np.save(os.path.join(KARTE, 'pixelhoehe.npy'), lvl)
         np.save(os.path.join(KARTE, 'wasser.npy'), np.packbits(mm))   # fuer das Kollisionsraster
@@ -398,6 +392,7 @@ def bauen(frame=None, speichern=True):
         vor_objekten = np.array(img)
         k4.objekte_zeichnen(img, objs, cache, np.zeros((Hp, Wp), bool), frame)
         k4.animieren(img, objs, cache, frame or 0, ruhig=frame is None)
+        quelle_strahl(img, objs, frame)
         k8.verdeckung(img, [o for o in objs if not o.get('an_wand')], cache, lvl, vor_objekten)
     if speichern and frame is None:
         img.save(os.path.join(KARTE, 'terrain.png'))
