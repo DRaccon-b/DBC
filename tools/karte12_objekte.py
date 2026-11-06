@@ -220,7 +220,7 @@ def main():
         belegen(datei, x, y)
     # 0b) Bruecken (PixelLab-Stege) ueber den Fluss und der Wasserspeier (Puppenmaske) in der Bergwand an der Quelle
     for i_, (x0, y0, x1, y1, art) in enumerate(lay.get('bruecken', [])):
-        name_ = 'bruecke/00'                                  # beide Stege wie der obere
+        name_ = 'bruecke/00_enden'                            # beide Stege wie der obere, Endpfosten auch unten
         datei, h, zu, mitte = sprite(name_)
         cx_, cy_ = (x0 + x1 + 1) * T / 2.0, (y0 + y1 + 1) * T / 2.0
         hh_ = alpha[datei].shape[0]
@@ -231,7 +231,7 @@ def main():
     fx_, fy_ = lay['fluss'][0]
     datei, h, zu, mitte = sprite('quelle2/03_fluss')
     objekte.append({'datei': datei, 'basis': 'quelle2/03_fluss', 'x': int(round(fx_ * T - mitte)),
-                    'y': int(fy_ * T) - 6 - zu + 5, 'fuss': h, 'kachel': [int(fx_), 3], 'ebene': 0, 'fest_pos': True,
+                    'y': int(fy_ * T) - 6 - zu + 12, 'fuss': h, 'kachel': [int(fx_), 3], 'ebene': 0, 'fest_pos': True,
                     'an_wand': True, 'kein_schatten': True, 'quelle': True})
     # 1) grosse Objekte zuerst: Baumhaus, Puppentheater an der Arena, Riesen-Eiche, Trauerbaum
     bh = lay['baumhaus']
