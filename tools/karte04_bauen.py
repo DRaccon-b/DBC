@@ -438,6 +438,32 @@ def wasser_zeichnen(a, m, frame, fluss_m):
             a[y, x] = H('#8cc4f4')
 
 
+def klippen_verdeckung(img, objs, cache, hoch, ebene_fuss, grund):
+    """Regel Verdeckung durch Hoehen: Objekt auf tieferem Boden wird von einem seitlich daneben liegenden hoeheren
+    Plateau abgeschnitten (Spalten, in denen das hoehere Gelaende bis zur Fusshoehe reicht)."""
+    Hh, W = hoch.shape
+    a = np.array(img)
+    for o in objs:
+        sp = cache[o['datei']]
+        al = np.array(sp.getchannel('A')) > 0
+        if o.get('spiegeln'):
+            al = al[:, ::-1]
+        ys, xs = np.nonzero(al)
+        if not len(ys):
+            continue
+        fy = min(Hh - 1, max(0, o['y'] + int(ys.max())))
+        fx = min(W - 1, max(0, o['x'] + int(xs.mean())))
+        if hoch[min(Hh - 1, fy + 1), fx] or not ebene_fuss[min(Hh - 1, fy + 1), fx]:
+            continue
+        Y, X = ys + o['y'], xs + o['x']
+        ok = (Y >= 0) & (Y < Hh) & (X >= 0) & (X < W)
+        Y, X = Y[ok], X[ok]
+        m = hoch[np.clip(fy - 2, 0, Hh - 1), X] & hoch[Y, X]
+        if m.any():
+            a[Y[m], X[m]] = grund[Y[m], X[m]]
+    img.paste(Image.fromarray(a))
+
+
 def objekte_zeichnen(img, objs, cache, boden, frame):
     """Kontaktschatten unter der Auflage + Schlagschatten der Silhouette nach rechts unten (2 Stufen),
     nur auf Boden (nicht auf Wasser); dann die Sprites (Wind fuer Akazien und Graeser)."""
@@ -447,6 +473,13 @@ def objekte_zeichnen(img, objs, cache, boden, frame):
         sp = cache[o['datei']]
         a = np.array(sp.getchannel('A')) >= 200
         zeilen = np.nonzero(a.any(axis=1))[0]
+        if o.get('liegend') and len(zeilen):              # liegend: flacher Schatten der ganzen Form
+            ys_, xs_ = np.nonzero(a)
+            for d_, w_ in ((2, 0.83), (1, 1.0)):
+                Y_, X_ = ys_ + o['y'] + d_, xs_ + o['x'] + d_
+                ok_ = (Y_ >= 0) & (Y_ < kern.shape[0]) & (X_ >= 0) & (X_ < kern.shape[1])
+                wurf[Y_[ok_], X_[ok_]] = np.maximum(wurf[Y_[ok_], X_[ok_]], w_)
+            continue
         if len(zeilen) < 4:
             continue
         zu = zeilen.max()
@@ -768,7 +801,7 @@ def bauen(frame=None, speichern=True):
     # --- Waende: Canyon (Erde), Teerbecken (Schiefer), Plateaus (Sandstein)
     waende = hoehenkanten(a, m1 | teer, 'erde', 26, 14, LIPPE['s'], rampen, 11, min_breite=22)
     waende |= hoehenkanten(a, m1 | can, 'schiefer', 20, 8, LIPPE['a'], rampen | frei_t, 12, berg=True)
-    waende |= hoehenkanten(a, m2, 'sandstein', 40, 8, LIPPE['g'], frei_pl, 13, treppen, berg=True)
+    waende |= hoehenkanten(a, m2, 'sandstein', 40, 8, LIPPE['g'], frei_pl, 13, treppen, berg=False)   # Seiten: nur Abgrenzung
     if speichern and frame is None:
         np.save(os.path.join(KARTE, 'waende.npy'), np.packbits(waende))
     wegtex = textur(cls, 'w', cols, rows)
@@ -850,8 +883,10 @@ def bauen(frame=None, speichern=True):
         for o in objs:
             if o['datei'] not in cache:
                 cache[o['datei']] = Image.open(os.path.join(OBJ, o['datei'])).convert('RGBA')
+        vor_objekten = np.array(img)
         objekte_zeichnen(img, objs, cache, ~wm, frame)
         animieren(img, objs, cache, frame or 0)
+        klippen_verdeckung(img, objs, cache, m2, ~m2, vor_objekten)
         blumen = [o for o in objs if o.get('anim') == 'blume']
         rf = random.Random(4)
         falter = []
