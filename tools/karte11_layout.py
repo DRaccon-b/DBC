@@ -88,7 +88,7 @@ def main():
     k[35:42, 52:58] = np.where(np.isin(k[35:42, 52:58], ['d', 'm', 'n']), 'u', k[35:42, 52:58])   # keine Landreste im Riff
     k[37:40, 42:60] = 'q'                          # Steinbruecke vom Strand ueber Riff und Tiefsee zur Plattform
     h[37:40, 42:60] = 1
-    k[36:41, 39:42] = 'q'                          # Brueckenkopf am Strand (gepflastert)
+    k[36:41, 39:42] = np.where(np.isin(k[36:41, 39:42], ['u', 'h']), 'n', k[36:41, 39:42])   # Brueckenkopf steht an Land (Pixelform in karte11_bauen)
     # rund um die Plattform nur Tiefsee (die Vorlage hat am rechten Rand noch einen Streifen Land)
     um = (xx >= 58) & (yy >= 24) & (yy <= 56) & np.isin(k, ['d', 'm', 'n'])
     k[um] = '~'

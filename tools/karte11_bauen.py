@@ -154,12 +154,34 @@ def meer_zeichnen(a, wasser, flach, seetang, frame):
             Y, X = cy - k, cx + (d if k >= 3 else 0)
             if 0 <= Y < Hh and 0 <= X < W and st[Y, X]:
                 neu[Y, X] = (40, 104, 88) if k < 4 else (70, 150, 120)
-    # Uferkante: nasser, dunkler Saum auf dem Land, heller Schaum am Wasserrand (gestrichelt, wandert)
+    # Uferkante weich: im Wasser schimmert am Ufer heller Sand durch (Verlauf ueber ~10 px), dazu unregelmaessiger
+    # Schaum in kleinen Bläschen, der mit dem Bild am Ufer entlang wandert
+    land = ~wasser
+    nah = blur(land, 4)                                              # 0..1, am Ufer hoch
+    sandig = wasser & (nah > 0.04)
+    w_ = np.clip(nah * 1.6, 0, 0.75)[..., None]
+    neu[sandig] = (neu * (1 - w_) + (grund * 0.9 + np.array([18, 26, 24])) * w_)[sandig]
+    rs_s = random.Random(31)
     rand_in = kontur(wasser)
-    neu[rand_in] = neu[rand_in] * 0.7 + np.array([60, 80, 80])
-    schaum = rand_in & (((xx + yy * 2 + f) % 7) < 3)
-    neu[schaum] = (150, 196, 190)
+    ys_r, xs_r = np.nonzero(rand_in)
+    for i in range(0, len(ys_r), 3):
+        if rs_s.random() > 0.45:
+            continue
+        ph_ = rs_s.random()
+        if ((f / N_FRAMES + ph_) % 1.0) > 0.6:
+            continue
+        y_, x_ = int(ys_r[i]), int(xs_r[i])
+        for dy_, dx_ in ((0, 0), (0, 1), (1, 0)) if rs_s.random() < 0.5 else ((0, 0),):
+            Y, X = y_ + dy_ + rs_s.randint(0, 2), x_ + dx_
+            if 0 <= Y < Hh and 0 <= X < W and wasser[Y, X]:
+                neu[Y, X] = (176, 214, 206) if rs_s.random() < 0.6 else (130, 176, 170)
     a[wasser] = np.clip(neu[wasser], 0, 255).astype(np.uint8)
+    # nasser Sand an Land: dunkler Verlauf ueber ~8 px statt einer harten Linie
+    nass = blur(wasser, 3)
+    feucht = ~wasser & (nass > 0.03)
+    fak = (1 - 0.35 * np.clip(nass * 2.2, 0, 1))[..., None]
+    a[feucht] = np.clip(a[feucht] * fak[feucht], 0, 255).astype(np.uint8)
+    return
     aussen = ~wasser & (np.roll(wasser, 1, 0) | np.roll(wasser, -1, 0) | np.roll(wasser, 1, 1) | np.roll(wasser, -1, 1))
     a[aussen] = (a[aussen] * 0.72).astype(np.uint8)
 
@@ -230,6 +252,28 @@ def kaimauer(a, m, tiefe=24, ebene=None):
     return front
 
 
+def brueckenkopf(a, x_ende, y_mitte):
+    """Brueckenkopf am Strand: abgerundeter, gepflasterter Vorplatz (Platten 8x8), dunkler Rand mit Lichtkante oben
+    links, eine niedrige Stufe nach Westen auf den Sand, Kontaktschatten - geht weich ins Ufer ueber."""
+    Hh, W = a.shape[:2]
+    yy, xx = np.mgrid[0:Hh, 0:W]
+    cx, cy, rx, ry = x_ende - 18, y_mitte, 34, 40
+    form = (((xx - cx) / rx) ** 4 + ((yy - cy) / ry) ** 4 <= 1) & (xx <= x_ende + 2)
+    if not form.any():
+        return
+    stufe_ = (((xx - cx + 4) / (rx + 5)) ** 4 + ((yy - cy) / (ry + 5)) ** 4 <= 1) & ~form & (xx <= x_ende + 2)
+    a[stufe_] = (a[stufe_] * 0.55 + np.array([40, 40, 52]) * 0.45).astype(np.uint8)   # niedrige Stufe
+    z = ((yy % 8 == 7) | ((xx + 4 * ((yy // 8) % 2)) % 8 == 7))
+    a[form] = np.where(z[form][:, None], H('#3a3c48'), H('#5e6070'))
+    a[form & (yy % 8 == 0)] = H('#6e7082')
+    rand_ = kontur(form)
+    a[rand_] = H('#23232e')
+    oben_links = rand_ & ((xx < cx) | (yy < cy))
+    a[oben_links] = H('#7a7c90')
+    sch = np.roll(np.roll(form | stufe_, 2, 0), 2, 1) & ~form & ~stufe_
+    a[sch] = (a[sch] * 0.7).astype(np.uint8)
+
+
 def bruecke_zeichnen(a, m, ebene, wasser):
     """Steinbruecke: Deck aus Platten, Bruestungen an Nord- und Suedkante (dunkle Ziegel, helle Oberkante), nach
     Sueden die Bogenreihe - Pfeiler alle 48 px gehen fest bis zum Meeresboden der jeweiligen Wasserstufe, dazwischen
@@ -240,18 +284,25 @@ def bruecke_zeichnen(a, m, ebene, wasser):
         return np.zeros_like(m)
     y0, y1, x0, x1 = ys.min(), ys.max(), xs.min(), xs.max()
     yy, xx = np.mgrid[0:Hh, 0:W]
-    br = m & ((yy <= y0 + 4) | (yy >= y1 - 4))
+    ende = x1 - 14                                                  # ab hier liegt das Deck auf der Plattform
+    br = m & ((yy <= y0 + 4) | (yy >= y1 - 4)) & (xx < ende)
     z = ((yy % 4 == 3) | ((xx + 4 * ((yy // 4) % 2)) % 8 == 7))
     a[br] = np.where(z[br][:, None], H('#16161e'), H('#2e2e3e'))
-    a[m & ((yy == y0) | (yy == y1 - 4))] = H('#5a5a70')                 # Oberkante der Bruestungen im Licht
-    a[m & (yy == y0 + 5)] = (a[m & (yy == y0 + 5)] * 0.7).astype(np.uint8)   # Schatten der Nordbruestung aufs Deck
+    a[m & ((yy == y0) | (yy == y1 - 4)) & (xx < ende)] = H('#5a5a70')    # Oberkante der Bruestungen im Licht
+    sch_ = m & (yy == y0 + 5) & (xx < ende)
+    a[sch_] = (a[sch_] * 0.7).astype(np.uint8)                       # Schatten der Nordbruestung aufs Deck
+    for px_ in (x0, ende - 8):                                       # Endpfosten an beiden Enden der Bruestungen
+        for (ya, yb) in ((y0 - 3, y0 + 5), (y1 - 6, y1 + 1)):
+            a[ya:yb, px_:px_ + 8] = H('#3a3a4c')
+            a[ya:yb, px_] = H('#6a6a82'); a[ya, px_:px_ + 8] = H('#7a7a92')
+            a[ya:yb, px_ + 7] = H('#1c1c26'); a[yb - 1, px_:px_ + 8] = H('#1c1c26')
     front = np.zeros_like(m)
     UEBER = 10
-    for x in range(x0, x1 + 1):
+    for x in range(x0, ende):
         st_ = int(ebene[min(Hh - 1, y1 + 24), x]) if wasser[min(Hh - 1, y1 + 24), x] else 0
         tiefe = UEBER + MAUER_TIEFE[min(st_, len(MAUER_TIEFE) - 1)]
         q = (x - x0) % 48
-        pfeiler = q < 12 or x > x1 - 12
+        pfeiler = q < 12 or x > ende - 12
         if pfeiler:
             bis = tiefe
         else:
@@ -392,7 +443,7 @@ def bauen(frame=None, speichern=True):
     # --- Wasser
     wasser_roh = zell_maske(cls, 'uh~fz', cols, rows)        # um das Achteck herum ist Tiefsee
     wasser = weich(wasser_roh, 6, 0.25, 41, 0.5)
-    flach = weich(zell_maske(cls, 'uh', cols, rows), 6, 0.25, 43, 0.5) & wasser
+    flach = wasser & ~weich(zell_maske(cls, '~fz', cols, rows), 6, 0.25, 43, 0.5)   # am Ufer immer Flachwasser
     seetang = weich(zell_maske(cls, 'h', cols, rows), 7, 0.35, 45, 0.5) & flach
     yy_, xx_ = np.mgrid[0:Hp, 0:Wp]
     dx_, dy_ = np.abs(xx_ - 69.5 * T), np.abs(yy_ - 39.5 * T)
@@ -403,7 +454,7 @@ def bauen(frame=None, speichern=True):
     bruecke_m = np.zeros((Hp, Wp), bool)
     b_ = lay.get('bruecke')
     if b_:
-        bruecke_m[b_[1] * T + 4:(b_[3] + 1) * T - 4, b_[0] * T - 8:(b_[2] + 1) * T + 4] = True
+        bruecke_m[b_[1] * T + 4:(b_[3] + 1) * T - 4, b_[0] * T:(b_[2] + 1) * T + 14] = True
     wasser |= (zell_maske(cls, 'fz', cols, rows) > 0) & ~plattform    # um das Achteck bis zum Rand Wasser
     wasser &= ~plattform & ~bruecke_m & ~em[2]
     flach &= wasser
@@ -433,6 +484,8 @@ def bauen(frame=None, speichern=True):
     a[kreis_m] = textur('z', cols, rows)[kreis_m]
     bt = textur('q', cols, rows)
     a[bruecke_m] = bt[bruecke_m]
+    if b_:
+        brueckenkopf(a, b_[0] * T, (b_[1] + b_[3] + 1) * T // 2)
     ebenen_ = wasser_ebenen(tief)
     front = kaimauer(a, plattform, ebene=ebenen_)
     front |= bruecke_zeichnen(a, bruecke_m, ebenen_, tief | flach)
