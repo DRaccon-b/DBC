@@ -23,6 +23,7 @@ LIEGEND = {
 NICHT_RASTERN = {'karte02': ('schatten', 'abgeleitet/laterne', 'abgeleitet/leer', 'kran'),
                  'karte03': ('abgeleitet/arena_tor', 'abgeleitet/buehne', 'abgeleitet/box_monitor')}
 BAUM = ('baeume/', 'rand/')
+ABSTAND = {'karte03': 1}                             # Pixelpruefung mit Abstand (je Seite 1 px = 2 px Luecke)
 
 
 def umriss(obj_dir, o, cache):
@@ -74,16 +75,21 @@ def main(karte):
             o['liegend'] = True
     # Ueberlappungen nach dem Einrasten: kleinere Objekte entfernen (Baeume untereinander und Feste bleiben)
     alpha = {}
+    abstand = ABSTAND.get(karte, 0)                        # Regel 'Keine Ueberlappungen': 2 px Abstand
     def maske(o):
         if o['datei'] not in alpha:
-            alpha[o['datei']] = np.array(Image.open(os.path.join(obj_dir, o['datei'])).getchannel('A')) >= 200
+            m_ = np.array(Image.open(os.path.join(obj_dir, o['datei'])).getchannel('A')) >= 200
+            if abstand:
+                from PIL import ImageFilter as _IF
+                m_ = np.array(Image.fromarray((m_ * 255).astype(np.uint8)).filter(_IF.MaxFilter(2 * abstand + 1))) > 0
+            alpha[o['datei']] = m_
         a = alpha[o['datei']]
         return a[:, ::-1] if o.get('spiegeln') else a
     W = max(o['x'] + maske(o).shape[1] for o in objs) + 8
     Hh = max(o['y'] + maske(o).shape[0] for o in objs) + 8
     besitzer = -np.ones((Hh, W), np.int32)
     weg = set()
-    reihenfolge = sorted(range(len(objs)), key=lambda i: -maske(objs[i]).sum())
+    reihenfolge = sorted(range(len(objs)), key=lambda i: (0 if objs[i].get('vorrang') else 1, -maske(objs[i]).sum()))
     for i in reihenfolge:
         o = objs[i]
         b = o.get('basis') or ''
@@ -99,7 +105,7 @@ def main(karte):
                     if not (b.startswith(BAUM) and (objs[j].get('basis') or '').startswith(BAUM))]
         if o.get('begleiter'):                    # gewollte Ueberdeckung vor dem Sockel (Regel 5 / Einbettung)
             continue
-        if konflikt and (o.get('ebene', 1) == 0 or b.startswith(('klein/', 'mittel/'))) and not b.startswith(BAUM):
+        if konflikt and (o.get('ebene', 1) == 0 or b.startswith(('klein/', 'mittel/', 'rosa/', 'blueten/'))) and not b.startswith(BAUM) and not o.get('vorrang'):
             weg.add(i)
             continue
         ber[teil] = i

@@ -26,9 +26,9 @@ FEST = [
     # Dorf an der Oase
     ('gross/01', 25, 10, {}), ('gross/00', 11.5, 15, {}), ('gross/02', 29, 15, {}), ('gross/03', 10.5, 34, {}),
     ('mittel/09', 11.5, 40, {}), ('klein/29', 21, 33, {}), ('klein/11', 12, 31, {}), ('klein/10', 31.5, 32, {}),
-    ('palmen/05', 14.5, 13, {'anim': 'wehen'}), ('palmen/10', 29.5, 19, {'anim': 'wehen'}),
-    ('palmen/03', 31, 23, {'anim': 'wehen'}), ('palmen/08', 11.5, 22, {'anim': 'wehen'}),
-    ('palmen/01', 12.5, 29, {'anim': 'wehen'}), ('palmen/06', 26.5, 30, {'anim': 'wehen'}),
+    ('palmen/05', 14.5, 13, {'anim': 'wehen', 'fest_palme': True}), ('palmen/10', 29.5, 19, {'anim': 'wehen', 'fest_palme': True}),
+    ('palmen/03', 31, 23, {'anim': 'wehen', 'fest_palme': True}), ('palmen/08', 11.5, 22, {'anim': 'wehen', 'fest_palme': True}),
+    ('palmen/01', 12.5, 29, {'anim': 'wehen', 'fest_palme': True}), ('palmen/06', 26.5, 30, {'anim': 'wehen', 'fest_palme': True}),
     ('klein/05', 22, 16, {}), ('klein/05', 26, 26, {}), ('klein/04', 11, 26, {}),
     # Bus und Haltestelle
     ('gross/06', 44, 31, {}), ('klein/18', 48, 31, {'anim': 'flagge'}), ('mittel2/00', 49.8, 31, {'anim': 'schall'}),
@@ -315,7 +315,7 @@ def main():
     palmen_ = [o for o in objekte if o['basis'] in PALMEN_NEU]
     for o in palmen_:
         fx_, fy_ = o['x'] + 30, o['y'] + o['fuss']
-        nachbar = any(q is not o and abs(q['x'] - o['x']) <= 48 and abs(q['y'] + q['fuss'] - fy_) <= 48 for q in palmen_)
+        nachbar = any(q is not o and abs(q['x'] - o['x']) <= 80 and abs(q['y'] + q['fuss'] - fy_) <= 80 for q in palmen_)
         hat = any(q.get('begleiter') and abs(q['x'] - o['x']) <= 40 and abs(q['y'] + q['fuss'] - fy_) <= 24 for q in objekte)
         if not nachbar and not hat:
             vorher = belegt.copy()
@@ -326,10 +326,14 @@ def main():
             kx_, ky_ = (o['x'] + 30) // T, (o['y'] + o['fuss']) // T
             if any(palme(kx_ + dx_, ky_ + dy_) for dx_, dy_ in ((2, 0), (-2, 0), (2, 1), (-2, 1), (3, -1), (-3, -1))):
                 continue                                   # Regel 5a: zweiter Baum daneben
+            if o.get('fest_palme'):
+                continue                                   # feste Oasen-/Dorfpalmen bleiben immer
             objekte.remove(o)                              # sonst lieber keine einzelne Palme
             print('  einzelne Palme ohne Begleitung entfernt:', o['basis'], kx_, ky_)
     for (tx, ty) in ZAUN:
-        setze('klein/22', tx * T + 8, ty * T + 12, True)
+        if cls[ty][tx] in 'wkp':
+            continue                                       # Weg kreuzt den Zaun: dort bleibt eine Luecke
+        setze('klein/22', tx * T + 8, ty * T + 12, True, {'vorrang': True})
     rosa = {n: rosa_machen(n) for n in BLUETEN}
     streu = dict(STREU)
     for n, w in STREU_BLUETEN.items():
