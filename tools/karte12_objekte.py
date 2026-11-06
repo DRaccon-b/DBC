@@ -361,6 +361,15 @@ def main():
                 break
         else:
             print('  Begleiter weggelassen (laege auf Baum):', o['basis'], (kx, ky))
+    # 6) Animationen: Marionette pendelt, Lumpen und Vorhang wehen, Kreisel dreht, Frosch blinzelt; etwa jeder dritte
+    #    Baum im Innern wiegt sich (Stamm fest), der Pflanzenrand und die grossen Baeume bleiben starr
+    TEIL = {'puppen/00': 'marionette', 'puppen/12': 'lumpen', 'gross/02': 'vorhang', 'puppen/14': 'kreisel', 'klein/54': 'frosch'}
+    rw = random.Random(21)
+    for o in objekte:
+        if o['basis'] in TEIL:
+            o['anim'] = TEIL[o['basis']]
+        elif o.get('baum') and not o.get('rand') and o['basis'] in WALDBAEUME + OBSTBAEUME + EINZELBAEUME and rw.random() < 0.35:
+            o['anim'] = 'baum'
     json.dump(objekte, open(os.path.join(OBJ, 'platzierung.json'), 'w'), indent=0)
     print(len(objekte), 'Objekte gesetzt')
 

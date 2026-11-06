@@ -304,6 +304,145 @@ def quelle_strahl(img, objs, frame):
                 px[o['x'] + x, o['y'] + y] = (int(r * 0.82), int(g * 0.82), int(b * 0.82), 255)
 
 
+# ---------------------------------------------------------------- Teil-Animationen (nur das bewegliche Teil bewegt sich)
+def marionette(sp, frame, o):
+    """Marionette am Holzgestell: nur die Puppe pendelt an ihren Faeden um den Aufhaengepunkt am Querbalken;
+    Pfosten und Balken des Gestells bleiben vollkommen ruhig."""
+    a = np.array(sp)
+    h, w = a.shape[:2]
+    al = a[..., 3] > 0
+    breit = np.nonzero(al.sum(axis=1) > 0.6 * w)[0]
+    balken = int(breit[breit < h * 0.4].max()) if len(breit[breit < h * 0.4]) else int(h * 0.15)
+    x0, x1 = int(w * 0.26), int(w * 0.74)
+    puppe = np.zeros_like(a)
+    puppe[balken + 1:, x0:x1] = a[balken + 1:, x0:x1]
+    rest = a.copy()
+    rest[balken + 1:, x0:x1] = 0
+    winkel = 7 * math.sin(2 * math.pi * frame / N_FRAMES + o.get('x', 0) * 0.07)
+    gedreht = Image.fromarray(puppe).rotate(winkel, resample=Image.NEAREST, center=(w / 2.0, balken + 1))
+    out = Image.fromarray(rest)
+    out.alpha_composite(gedreht)
+    return out
+
+
+def lumpen(sp, frame, o):
+    """Vogelscheuche: nur die Stofflumpen (Saeume an Aermeln und Rock) flattern 1 px im Wind; Pfahl, Kopf und Hut
+    bleiben ruhig."""
+    a = np.array(sp)
+    ai = a.astype(int)
+    h, w = a.shape[:2]
+    al = ai[..., 3] > 0
+    stoff = al & (ai[..., 1] >= ai[..., 0] - 2) & (ai[..., 1] > ai[..., 2] - 6) & (ai[..., 1] < 140)
+    ys, xs = np.nonzero(stoff)
+    if not len(ys):
+        return sp
+    y0, y1, xa, xb = ys.min(), ys.max(), xs.min(), xs.max()
+    out = a.copy()
+    ph = 2 * math.pi * frame / N_FRAMES + o.get('x', 0) * 0.05
+    bew = []
+    for y, x in zip(ys, xs):
+        aussen = min(x - xa, xb - x) / max(1.0, (xb - xa) / 2.0)        # 0 = Aermelspitze, 1 = Mitte
+        unten = (y - y0) / max(1.0, y1 - y0)
+        k_ = max(1 - aussen * 2.2, unten * 1.4 - 0.5)
+        if k_ > 0.3:
+            d = int(round(1.2 * k_ * math.sin(ph + y * 0.6)))
+            if d:
+                bew.append((y, x, d))
+    for y, x, d in bew:
+        out[y, x] = 0
+    for y, x, d in bew:
+        X = x + d
+        if 0 <= X < w:
+            out[y, X] = a[y, x]
+    return Image.fromarray(out)
+
+
+def vorhang(sp, frame, o):
+    """Puppentheater: nur der rote Vorhang bewegt sich - die unteren Falten schwingen 1 px, Rahmen und Buehne ruhen."""
+    a = np.array(sp)
+    ai = a.astype(int)
+    h, w = a.shape[:2]
+    rot = (ai[..., 3] > 0) & (ai[..., 0] > ai[..., 1] + 40) & (ai[..., 0] > ai[..., 2] + 30)
+    ys, xs = np.nonzero(rot)
+    if not len(ys):
+        return sp
+    y0, y1 = ys.min(), ys.max()
+    out = a.copy()
+    ph = 2 * math.pi * frame / N_FRAMES
+    neu = []
+    for y, x in zip(ys, xs):
+        t = (y - y0) / max(1.0, y1 - y0)
+        d = int(round(1.3 * t * math.sin(ph + x * 0.35)))
+        neu.append((y, x, d))
+    for y, x, d in neu:
+        if d:
+            out[y, x] = a[y, x - 1] if x > 0 and not rot[y, x - 1] else out[y, x]
+    for y, x, d in neu:
+        X = x + d
+        if 0 <= X < w:
+            out[y, X] = a[y, x]
+    return Image.fromarray(out)
+
+
+def kreisel(sp, frame, o):
+    """Kreisel dreht sich auf der Stelle: die Streifen des Koerpers laufen in jeder Zeile seitlich um."""
+    a = np.array(sp)
+    out = a.copy()
+    al = a[..., 3] > 0
+    for y in range(a.shape[0]):
+        xs = np.nonzero(al[y])[0]
+        if len(xs) < 6:
+            continue
+        innen = xs[1:-1]
+        out[y, innen] = np.roll(a[y, innen], frame % len(innen), axis=0)
+    return Image.fromarray(out)
+
+
+def frosch(sp, frame, o):
+    """Frosch blinzelt: kurz (2 von 16 Bildern) werden die hellen Augen zu Lidern."""
+    if (frame + int(o.get('x', 0))) % 16 not in (5, 6):
+        return sp
+    a = np.array(sp)
+    ai = a.astype(int)
+    h = a.shape[0]
+    hell = (ai[..., 3] > 0) & (ai[..., :3].sum(-1) > 420)
+    hell[int(h * 0.55):] = False
+    a[hell, :3] = (52, 74, 44)
+    return Image.fromarray(a)
+
+
+k4.TEILANIM.update({'marionette': marionette, 'lumpen': lumpen, 'vorhang': vorhang, 'kreisel': kreisel, 'frosch': frosch})
+
+
+def fluss_stroemung(a, mm, lay, frame):
+    """Stroemung im Fluss: kurze helle Wellenstriche treiben entlang der Flusslinie (Quelle -> Schlucht)."""
+    f = frame or 0
+    pts = [(x * T, y * T) for (x, y) in lay['fluss']]
+    seg = []
+    for (ax, ay), (bx, by) in zip(pts, pts[1:]):
+        L = math.hypot(bx - ax, by - ay)
+        seg.append((ax, ay, (bx - ax) / max(L, 1), (by - ay) / max(L, 1), L))
+    gesamt = sum(s_[4] for s_ in seg)
+    rs = random.Random(9)
+    Hh, W = mm.shape
+    abstand = 22
+    n = int(gesamt / abstand)
+    for k in range(n):
+        s0 = (k * abstand + f * abstand / N_FRAMES * 1.0) % gesamt
+        quer = rs.uniform(-9, 9)
+        hell = rs.random()
+        for s_ in seg:
+            if s0 <= s_[4]:
+                x, y = s_[0] + s_[2] * s0 - s_[3] * quer, s_[1] + s_[3] * s0 + s_[2] * quer
+                for t in range(4):
+                    X, Y = int(x + s_[2] * t), int(y + s_[3] * t)
+                    if 0 <= X < W and 0 <= Y < Hh and mm[Y, X]:
+                        c = a[Y, X].astype(int)
+                        a[Y, X] = np.minimum(255, c + (34 if hell > 0.5 else 22)).astype(np.uint8)
+                break
+            s0 -= s_[4]
+
+
 def bauen(frame=None, speichern=True):
     lay = json.load(open(os.path.join(KARTE, 'layout.json')))
     cols, rows = lay['groesse']
@@ -350,6 +489,7 @@ def bauen(frame=None, speichern=True):
                                            rand=('#20160f', '#2a1e16', '#34261c', '#3e2e22'),
                                            stufen=[(14, 0.82, 5), (30, 0.68, 4)]).convert('RGB'))
     moor_zeichnen(a, mm, frame)
+    fluss_stroemung(a, mm, lay, frame)
     nass = blur(mm, 3)
     feucht = ~mm & (nass > 0.04) & ~em[2] & ~platz & ~arena
     fak = (1 - 0.3 * np.clip(nass * 2.2, 0, 1))[..., None]
