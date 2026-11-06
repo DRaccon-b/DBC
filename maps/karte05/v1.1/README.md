@@ -18,6 +18,9 @@ Neue Fassung nach den Regeln in `CLAUDE.md`. v1.0 liegt in `maps/karte05/v1.0/` 
 - **Teich, Bach und Wasserfall:** Teich auf dem Mittelplateau, Bach zur Kante, Wasserfall (Stil Karte 01, animiert)
   an der Stelle der früheren mittleren Treppe, unten weiter als Bach mit Holzbrücke über den Weg in den
   zugefrorenen See. Die mittlere Treppe und der gefrorene Wasserfall-Objekt sind entfernt.
+- **Senkrechte Kanten:** Plateaus haben seitlich keine sichtbare Seitenwand mehr, nur eine schmale Abgrenzung
+  (Kontur + leichter Schatten); die Höhenregel bleibt (man kommt seitlich nicht hoch).
+- **Mehr Deko oben:** kleine Tannen, verschneite Büsche, Eiskristalle, Eisblumen, Beeren, halb eingeschneite Felsen.
 - **Waldrand oben:** Tannen entlang des oberen Kartenrands (wie links/rechts/unten).
 - **Eisblumen** (zwei Sorten) verstreut und als Begleitblumen vor Sockeln.
 - **Verschneite Beerensträucher** (Beeren, Stechpalme) verstreut.

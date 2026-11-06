@@ -356,6 +356,25 @@ def objekte():
         anim = 'wehen' if name in ('natur/00', 'natur/01', 'natur/02', 'natur/03') else None
         if neu_setzen(name, kx, ky, anim=anim):
             gesetzt += 1; n_neu += 1
+    # mehr Deko oben auf den Plateaus (Hoehe 2): kleine Tannen, verschneite Buesche, Eiskristalle, Beeren,
+    # Eisblumen, halb eingeschneite Felsen, Schnee-Deko aus Karte 07
+    hoehe_t = [[int(c) for c in r] for r in lay['hoehe']]
+    PLATEAU = {'natur/07': 6, 'natur/17': 6, 'natur/24': 5, 'natur/02': 4, 'natur/03': 3, 'natur/00': 6,
+               'natur/01': 6, 'natur/04': 4, 'natur/05': 4, 'natur/06': 3, 'natur/21': 2, 'natur/50': 3}
+    namen_p, gew_p = list(PLATEAU), list(PLATEAU.values())
+    n_pl = 0
+    for _ in range(9000):
+        if n_pl >= 60:
+            break
+        kx, ky = rnd.randrange(2, cols - 2), rnd.randrange(3, rows - 4)
+        if hoehe_t[ky][kx] != 2:
+            continue
+        name = rnd.choices(namen_p, gew_p)[0]
+        anim = 'baum' if name in ('natur/07', 'natur/17') else 'glitzern' if name in ('natur/06', 'natur/21') else \
+            'wehen' if name in ('natur/00', 'natur/01', 'natur/02', 'natur/03', 'natur/50') else None
+        if neu_setzen(name, kx, ky, anim=anim):
+            n_pl += 1
+    print('Plateaus: %d Deko-Objekte oben' % n_pl)
     print('Neu: Wasserfall, Server, Findlinge + %d Streuobjekte (Eisblumen, Beeren, halb eingeschneite Felsen); '
           '%d alte Objekte am Wasserfall entfernt' % (gesetzt, len(weg_idx)))
 

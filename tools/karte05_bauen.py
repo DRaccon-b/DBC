@@ -263,8 +263,10 @@ def bauen(frame=None, speichern=True):
         frei_pl[ye - 14:ye + 70, px0 - 6:px1 + 6] = True
         treppen_info.append((px0, px1, ye))
     # --- Waende: Meer/Feld (Eisklippe 24 px), Plateau/Feld (Eisklippe 40 px), Fronten + Seiten
-    waende = k4.hoehenkanten(a, m1, 'eis', 40, 14, LIPPE_SCHNEE, np.zeros((Hp, Wp), bool), 11, berg=True)
-    waende |= k4.hoehenkanten(a, m2, 'eis', 64, 14, LIPPE_SCHNEE, frei_pl, 13, (), berg=True)
+    # Seiten (senkrechte Kanten): nur eine schmale Abgrenzung (Kontur + leichter Schatten), keine sichtbare
+    # Seitenwand aus Kacheln (berg=False); Fronten bleiben Eisklippen
+    waende = k4.hoehenkanten(a, m1, 'eis', 40, 14, LIPPE_SCHNEE, np.zeros((Hp, Wp), bool), 11, berg=False)
+    waende |= k4.hoehenkanten(a, m2, 'eis', 64, 14, LIPPE_SCHNEE, frei_pl, 13, (), berg=False)
     km = spalte & (np.array(Image.fromarray((spalte * 255).astype(np.uint8)).resize((Wp, Hp))) > 0)
     km = weich(spalte.astype(np.float32), 3.0, 0.3, 26, 0.42)
     spalten_zeichnen(a, km)
