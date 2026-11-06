@@ -320,11 +320,14 @@ def objekte():
         o = einrasten({'datei': d, 'basis': name, 'ebene': 1, 'v11': art}, kx, ky)
         bx, by, wt, ht = o['block']
         if pruefen:
+            baum_ = name.startswith('baeume/')
             for x in range(bx, bx + wt):
                 for y in range(by, by + ht):
-                    if not (0 <= x < cols and 0 <= y < rows) or (x, y) in gesperrt or cls[y][x] not in 'sl' \
-                            or (x, y) in belegt:
+                    fuss_ = y >= by + ht - 2
+                    if not (0 <= x < cols and 0 <= y < rows) or (x, y) in belegt:
                         return None
+                    if (fuss_ or not baum_) and ((x, y) in gesperrt or cls[y][x] not in 'sl'):
+                        return None           # Baeume: nur die unteren zwei Reihen muessen auf Schnee stehen
             if not bewerten(lvl, alpha[d], o['x'], o['y'])[0]:
                 return None
         if anim:
@@ -334,6 +337,35 @@ def objekte():
             for y in range(by, by + ht):
                 belegt[(x, y)] = len(objs) - 1
         return o
+    hoehe_t = [[int(c) for c in r] for r in lay['hoehe']]
+    # Eishoehle (bisheriges Sprite, Kanten gesaeubert in karte05_objekte): Tannen links/rechts als Uebergang
+    for o in objs:
+        if o['basis'] == 'gross/01':
+            o['kein_schatten'] = True
+    neu_setzen('baeume/00', 59, 13, anim='baum', pruefen=False, datei='sauber/baeume-00.png', art='begleiter')
+    neu_setzen('baeume/01', 69, 13, anim='baum', pruefen=False, datei='sauber/baeume-01.png', art='begleiter')
+    # Variation oben: zwei Server, zwei grosse Eiszapfen, ein paar grosse Tannen (mit Begleitung, Regel 5)
+    OBEN = [('server/00', None, None, 1), ('server/11', None, None, 1),
+            ('mittel/02', 'sauber/mittel-02.png', 'glitzern', 2), ('natur/25', None, 'glitzern', 1),
+            ('baeume/00', 'sauber/baeume-00.png', 'baum', 4), ('baeume/01', 'sauber/baeume-01.png', 'baum', 4),
+            ('baeume/02', 'sauber/baeume-02.png', 'baum', 3), ('baeume/03', 'sauber/baeume-03.png', 'baum', 3),
+            ('natur/24', None, None, 4)]
+    n_ob = 0
+    grosse_oben = []
+    for (name, datei, anim, anzahl) in OBEN:
+        gesetzt = 0
+        for _ in range(3000):
+            if gesetzt >= anzahl:
+                break
+            kx, ky = rnd.randrange(3, cols - 4), rnd.randrange(5, 17)
+            if hoehe_t[ky][kx] != 2:
+                continue
+            o = neu_setzen(name, kx, ky, anim=anim, datei=datei)
+            if o:
+                gesetzt += 1; n_ob += 1
+                if name.startswith('baeume/'):
+                    grosse_oben.append(o)
+    print('Oben: %d groessere Objekte (Server, Eiszapfen, Tannen); Hoehle ersetzt' % n_ob)
     weg_idx = set()
     n_neu = 0
     for (name, (ax, ay), anzahl, r) in NEU:
@@ -356,35 +388,6 @@ def objekte():
         anim = 'wehen' if name in ('natur/00', 'natur/01', 'natur/02', 'natur/03') else None
         if neu_setzen(name, kx, ky, anim=anim):
             gesetzt += 1; n_neu += 1
-    hoehe_t = [[int(c) for c in r] for r in lay['hoehe']]
-    # Eishoehle (bisheriges Sprite, Kanten gesaeubert in karte05_objekte): Tannen links/rechts als Uebergang
-    for o in objs:
-        if o['basis'] == 'gross/01':
-            o['kein_schatten'] = True
-    neu_setzen('baeume/00', 59, 13, anim='baum', pruefen=False, datei='sauber/baeume-00.png', art='begleiter')
-    neu_setzen('baeume/01', 69, 13, anim='baum', pruefen=False, datei='sauber/baeume-01.png', art='begleiter')
-    # Variation oben: zwei Server, zwei grosse Eiszapfen, ein paar grosse Tannen (mit Begleitung, Regel 5)
-    OBEN = [('server/00', None, None, 1), ('server/11', None, None, 1),
-            ('mittel/02', 'sauber/mittel-02.png', 'glitzern', 2), ('natur/25', None, 'glitzern', 1),
-            ('baeume/00', 'sauber/baeume-00.png', 'baum', 2), ('baeume/01', 'sauber/baeume-01.png', 'baum', 2),
-            ('baeume/02', 'sauber/baeume-02.png', 'baum', 2), ('baeume/03', 'sauber/baeume-03.png', 'baum', 2),
-            ('natur/24', None, None, 4), ('baeume/01', 'sauber/baeume-01.png', 'baum', 1)]
-    n_ob = 0
-    grosse_oben = []
-    for (name, datei, anim, anzahl) in OBEN:
-        gesetzt = 0
-        for _ in range(3000):
-            if gesetzt >= anzahl:
-                break
-            kx, ky = rnd.randrange(3, cols - 4), rnd.randrange(4, 16)
-            if hoehe_t[ky][kx] != 2:
-                continue
-            o = neu_setzen(name, kx, ky, anim=anim, datei=datei)
-            if o:
-                gesetzt += 1; n_ob += 1
-                if name.startswith('baeume/'):
-                    grosse_oben.append(o)
-    print('Oben: %d groessere Objekte (Server, Eiszapfen, Tannen); Hoehle ersetzt' % n_ob)
     # mehr Deko oben auf den Plateaus (Hoehe 2): kleine Tannen, verschneite Buesche, Eiskristalle, Beeren,
     # Eisblumen, halb eingeschneite Felsen, Schnee-Deko aus Karte 07
     hoehe_t = [[int(c) for c in r] for r in lay['hoehe']]
