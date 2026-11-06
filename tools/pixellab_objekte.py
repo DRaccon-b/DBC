@@ -355,6 +355,23 @@ OBJEKTGRUPPEN_K5 = {
         'wooden sled with a fur blanket', 'banner flag on a pole, blue cloth with a snowflake emblem',
         'small ice boulder with frost',
     ]},
+    'k5_server': {'size': 64, 'items': [
+        'broken old computer server rack half frozen in ice, cracked dark metal case with snow on top, icicles, a few blinking cyan and red status lights, loose cables frozen to the side, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+    ]},
+    'k5_wasserfall': {'size': 96, 'items': [
+        'tall frozen waterfall of pale blue ice flowing down a cliff face, solid glossy ice columns and icicles, snow on top edge, frozen pool of ice at the bottom, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+    ]},
+    'k5_natur': {'size': 32, 'items': [
+        'small ice flower with glowing pale blue crystal petals in snow, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'frost flower cluster with white and light blue icy petals, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'small snowy berry bush with red berries and white snow on top, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'snow covered holly shrub with red berries, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'grey rock half buried in snow, only top showing with snow cap, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'small mossy boulder half sunk in snow drift, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+    ]},
+    'k5_findling': {'size': 64, 'items': [
+        'large grey granite boulder half buried in a snow drift, thick snow cap on top, a little moss, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+    ]},
     'k5_klein': {'size': 32, 'items': [
         'tuft of frosted grass sticking out of snow', 'small snow covered pebble', 'tiny ice crystal',
         'small frozen twig', 'tiny blue frost flower', 'small snow pile', 'small grey rock with snow cap',

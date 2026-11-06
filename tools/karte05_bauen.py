@@ -144,6 +144,8 @@ def schatten_k5(img, objs, cache, lvl):
     Hh, W = lvl.shape
     sch = np.zeros((Hh, W), np.uint8)
     for o in objs:
+        if o.get('kein_schatten'):                 # z. B. gefrorener Wasserfall: Teil der Klippe, kein Schlagschatten
+            continue
         sp = cache[o['datei']]
         a = np.array(sp.getchannel('A')) >= 200
         zeilen = np.nonzero(a.any(axis=1))[0]

@@ -13,6 +13,14 @@ Neue Fassung nach den Regeln in `CLAUDE.md`. v1.0 liegt in `maps/karte05/v1.0/` 
 - **Wehen nur am Stoff:** Die Dorffahne weht nur noch am Banner, Mast und Querstange bleiben ruhig.
 - **Regel 7 / Kontrolle:** Schatten nur auf der eigenen Ebene (nie über Klippe/Wasser/Spalte); keine ungewollten Überlappungen.
 
+## Neue Objekte (PixelLab, Stil Karte 05)
+- **Kaputte Server** (3×): vereiste Serverschränke mit Kabeln, je mit Eisblume/Frostgras vor dem Sockel.
+- **Gefrorener Wasserfall** an der Ostklippe neben der Treppe, gespeist von einem gefrorenen Bach auf dem Plateau
+  (Physik: Quelle oben), Fuß auf dem Boden davor, glitzert, kein Schlagschatten.
+- **Eisblumen** (zwei Sorten) verstreut und als Begleitblumen vor Sockeln.
+- **Verschneite Beerensträucher** (Beeren, Stechpalme) verstreut.
+- **Halb eingeschneite Felsen** (klein) und **Findlinge** (groß, 3×) – mit Einbettung an den Sockelecken.
+
 ## Neu bauen
 ```bash
 python3 tools/karte05_v11.py wege && python3 tools/karte05_bauen.py

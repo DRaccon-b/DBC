@@ -30,7 +30,13 @@ BAEUME = {'baeume/00', 'baeume/01', 'baeume/02', 'baeume/03', 'klein/27', 'klein
 GROSSE_TANNEN = ['baeume/00', 'baeume/01', 'baeume/02', 'baeume/00', 'baeume/01']
 DECKER = [0, 1, 2, 12, 15, 21, 23, 29, 35, 39, 50, 53]          # Schnee-Set: Frostgras, Farn, Bueschel ...
 BLUMEN = [5, 9, 28, 30, 36, 41, 44, 45, 14]                        # Schneegloeckchen, Winterheide, Eisblume ...
-FELSEN = {'mittel/00', 'mittel/09', 'mittel/15'}
+FELSEN = {'mittel/00', 'mittel/09', 'mittel/15', 'findling/00', 'natur/04', 'natur/05', 'server/00', 'server/11'}
+# v1.1-Ideen (PixelLab k5_server/k5_wasserfall/k5_natur/k5_findling): (sprite, Ankerkachel, Anzahl, Suchradius)
+NEU = [('server/00', (62, 52), 1, 10), ('server/11', (95, 32), 1, 10), ('server/00', (20, 47), 1, 8),
+       ('findling/00', (12, 28), 1, 10), ('findling/00', (88, 44), 1, 10), ('findling/00', (56, 68), 1, 8),
+       ('findling/00', (97, 76), 1, 10), ('findling/00', (40, 30), 1, 10)]
+STREU_NEU = {'natur/04': 5, 'natur/05': 5, 'natur/02': 6, 'natur/03': 5, 'natur/00': 14, 'natur/01': 14}
+WASSERFALL = ('wasserfall/00', 85, 23)                             # Fusskachel: Eisflaeche unter der Ostklippe
 
 
 # ---------------------------------------------------------------- Regel 6: Wege
@@ -105,6 +111,11 @@ def wege():
                 for x in range(x0 - 1, x1 + 2):
                     if 0 <= y < rows and 0 <= x < cols and g[y, x] in ('s', 'l', 'w'):
                         g[y, x] = 'w'
+    # gefrorener Bach auf dem Ostplateau, der als gefrorener Wasserfall ueber die Klippe faellt (Physik: Quelle)
+    bach = [(84, y) for y in range(9, 18)] + [(85, y) for y in range(9, 18)] + [(83, y) for y in range(9, 13)]
+    for (x, y) in bach:
+        if g[y, x] in ('s', 'w') and hoehe[y, x] == 2:
+            g[y, x] = 'l'
     lay['klassen'] = [''.join(r) for r in g]
     json.dump(lay, open(pf, 'w'))
     farbe = {'s': (236, 240, 244), 'w': (150, 170, 190), 'l': (157, 210, 231), 'i': (114, 185, 211),
@@ -279,6 +290,61 @@ def objekte():
                 belegt[(x, y)] = len(objs) - 1
         return o
 
+    # --- neue Objekte (Server, Findlinge, Wasserfall, Streu: Eisblumen, Beerenstraeucher, halb eingeschneite Felsen)
+    def neu_setzen(name, kx, ky, anim=None, pruefen=True):
+        d = name + '.png'
+        lade(d)
+        o = einrasten({'datei': d, 'basis': name, 'ebene': 1, 'v11': 'neu'}, kx, ky)
+        bx, by, wt, ht = o['block']
+        if pruefen:
+            for x in range(bx, bx + wt):
+                for y in range(by, by + ht):
+                    if not (0 <= x < cols and 0 <= y < rows) or (x, y) in gesperrt or cls[y][x] not in 'sl' \
+                            or (x, y) in belegt:
+                        return None
+            if not bewerten(lvl, alpha[d], o['x'], o['y'])[0]:
+                return None
+        if anim:
+            o['anim'] = anim
+        objs.append(o)
+        for x in range(bx, bx + wt):
+            for y in range(by, by + ht):
+                belegt[(x, y)] = len(objs) - 1
+        return o
+    # gefrorener Wasserfall an der Ostklippe: Block ueber der Felswand, Fuss (2 Reihen) auf der Eisflaeche davor
+    wn, wx, wy = WASSERFALL
+    lade(wn + '.png')
+    h_, x0_, y0_, x1_, y1_ = info[wn + '.png']
+    wt_, ht_ = math.ceil((x1_ - x0_ + 1) / T), math.ceil((y1_ - y0_ + 1) / T)
+    bx_ = wx - (wt_ - 1) // 2
+    weg_idx = {belegt[(x, y)] for x in range(bx_, bx_ + wt_) for y in range(wy - ht_ + 1, wy + 1) if (x, y) in belegt}
+    for i in sorted(weg_idx, reverse=True):
+        objs[i]['_weg'] = True
+    neu_setzen(wn, wx, wy, anim='glitzern', pruefen=False)['kein_schatten'] = True
+    n_neu = 1
+    for (name, (ax, ay), anzahl, r) in NEU:
+        orte = sorted(((ax + dx, ay + dy) for dx in range(-r, r + 1) for dy in range(-r, r + 1)),
+                      key=lambda k: abs(k[0] - ax) + abs(k[1] - ay))
+        gesetzt = 0
+        for (kx, ky) in orte:
+            if gesetzt >= anzahl:
+                break
+            if neu_setzen(name, kx, ky):
+                gesetzt += 1; n_neu += 1
+    namen_s, gew_s = list(STREU_NEU), list(STREU_NEU.values())
+    ziel_s = sum(gew_s)
+    gesetzt = 0
+    for _ in range(8000):
+        if gesetzt >= ziel_s:
+            break
+        name = rnd.choices(namen_s, gew_s)[0]
+        kx, ky = rnd.randrange(4, cols - 6), rnd.randrange(6, rows - 6)
+        anim = 'wehen' if name in ('natur/00', 'natur/01', 'natur/02', 'natur/03') else None
+        if neu_setzen(name, kx, ky, anim=anim):
+            gesetzt += 1; n_neu += 1
+    print('Neu: Wasserfall, Server, Findlinge + %d Streuobjekte (Eisblumen, Beeren, halb eingeschneite Felsen); '
+          '%d alte Objekte am Wasserfall entfernt' % (gesetzt, len(weg_idx)))
+
     def vor_sockel(o, anzahl, mit_blume=True):
         bx, by, wt, ht = o['block']
         ty = by + ht - 1
@@ -289,9 +355,12 @@ def objekte():
             if n >= anzahl:
                 break
             liste = DECKER if (k % 2 == 0 or not mit_blume) else BLUMEN
-            for i in rnd.sample(liste, len(liste)):
-                d = k7(i)
-                if setzen(d, 'k7schnee/%02d' % i, sx, ty + 1 if k < 2 else ty, frei_ok=sockel, anim='wehen'):
+            kandidaten = [(k7(i), 'k7schnee/%02d' % i) for i in rnd.sample(liste, len(liste))]
+            if liste is BLUMEN:
+                kandidaten = [('natur/00.png', 'natur/00'), ('natur/01.png', 'natur/01')] + kandidaten
+            for d, b_ in kandidaten:
+                lade(d)
+                if setzen(d, b_, sx, ty + 1 if k < 2 else ty, frei_ok=sockel, anim='wehen'):
                     n += 1
                     break
         return n
