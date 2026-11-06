@@ -994,6 +994,13 @@ OBJEKTGRUPPEN_K10 = {
         'cone shaped toy pine tree made of stacked green wooden rings, perfectly straight front elevation view, symmetric, facing the camera head-on, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
         'round gumdrop bush, glossy green with tiny sugar sparkles, perfectly straight front elevation view, symmetric, facing the camera head-on, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
     ]},
+    'k10_gross1': {'size': 192, 'items': [
+        'big tall wooden toy clock tower, red pointed tiled roof on top, big round white clock face with a gold rim and black hands, small balcony with railing below the clock, small red side roofs, cream walls with brown timber frame, small wooden double door at the bottom, stone base, perfectly straight front elevation view, symmetric, facing the camera head-on, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+    ]},
+    'k10_gross2': {'size': 128, 'items': [
+        'big merry-go-round carousel with a red and yellow striped round canopy, golden center pole, white and brown carousel horses on gold poles, round wooden base with gold trim, perfectly straight front elevation view, symmetric, facing the camera head-on, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'big playground tower with a blue pointed roof, yellow and green wooden tower, blue ladder on the left side, red and yellow slide going down on the right side, perfectly straight front elevation view, symmetric, facing the camera head-on, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+    ]},
     'k10_klein': {'size': 32, 'items': [
         'small red toy car',
         'small blue toy car',

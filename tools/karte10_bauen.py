@@ -83,21 +83,65 @@ def zebra(a, x0, y0, b, h, senkrecht):
                 a[y, x] = H('#f2f2f6') if q % 6 else H('#d8dae4')
 
 
-def gleise(a, gl):
-    """Schienen: Holzschwellen alle 6 px, zwei Stahlschienen mit Lichtkante, Schotterbett dunkler."""
-    for g in gl:
-        y = g['y'] * T
-        x0, x1 = g['x'][0] * T, (g['x'][1]) * T
-        bett = a[y - 1:y + 17, x0:x1]
-        a[y - 1:y + 17, x0:x1] = (bett * 0.84).astype(np.uint8)
-        for x in range(x0, x1):
-            if x % 6 < 3:
-                a[y + 1:y + 15, x] = H('#7a5236') if x % 6 else H('#9c6c44')
-                a[y + 15, x] = H('#4a3222')
-        for ys in (y + 3, y + 11):
-            a[ys, x0:x1] = H('#d8dce8')
-            a[ys + 1, x0:x1] = H('#7c8496')
-            a[ys + 2, x0:x1] = H('#3a3e4c')
+def gleis_pfade(lay):
+    """Mittellinien aller Gleise (Pixel, 1 px Abstand): gerade Gleise und das Verbindungsgleis mit zwei Boegen."""
+    pfade = []
+    for g in lay.get('gleise', []):
+        yc = g['y'] * T + 7
+        pfade.append([(float(x), float(yc)) for x in range(g['x'][0] * T, g['x'][1] * T)])
+    b = lay.get('gleisbogen')
+    if b:
+        x, r, yo, yu = b['x'], b['r'], b['oben_y'], b['unten_y']
+        p = [(float(xx), float(yo)) for xx in range(b['von_x'], x - r)]
+        n = int(math.pi / 2 * r)
+        p += [(x - r + r * math.cos(-math.pi / 2 + math.pi / 2 * i / n), yo + r + r * math.sin(-math.pi / 2 + math.pi / 2 * i / n)) for i in range(n)]
+        p += [(float(x), float(yy)) for yy in range(yo + r, yu - r)]
+        p += [(x + r + r * math.cos(math.pi - math.pi / 2 * i / n), yu - r + r * math.sin(math.pi - math.pi / 2 * i / n)) for i in range(n)]
+        p += [(float(xx), float(yu)) for xx in range(x + r, b['bis_x'] + 8)]
+        pfade.append(p)
+    return pfade
+
+
+def gleise(a, lay):
+    """Schienen entlang der Mittellinien: Schotterbett dunkler, Holzschwellen alle 6 px quer zur Fahrtrichtung,
+    zwei Stahlschienen mit Lichtkante (auch in den Boegen)."""
+    Hh, W = a.shape[:2]
+    pfade = gleis_pfade(lay)
+
+    def setz(x, y, c):
+        xi, yi = int(round(x)), int(round(y))
+        if 0 <= xi < W and 0 <= yi < Hh:
+            a[yi, xi] = c
+    bett = np.zeros((Hh, W), bool)
+    for p in pfade:
+        for (x, y) in p:
+            xi, yi = int(round(x)), int(round(y))
+            bett[max(0, yi - 8):min(Hh, yi + 10), max(0, xi - 8):min(W, xi + 9)] = True
+    a[bett] = (a[bett] * 0.84).astype(np.uint8)
+    rich = []
+    for p in pfade:
+        r_ = []
+        for i in range(len(p)):
+            x0, y0 = p[max(0, i - 2)]
+            x1, y1 = p[min(len(p) - 1, i + 2)]
+            l = math.hypot(x1 - x0, y1 - y0) or 1
+            r_.append(((x1 - x0) / l, (y1 - y0) / l))
+        rich.append(r_)
+    for p, r_ in zip(pfade, rich):                       # Schwellen
+        for i, ((x, y), (tx, ty)) in enumerate(zip(p, r_)):
+            if i % 6 < 3:
+                nx, ny = -ty, tx
+                c = H('#7a5236') if i % 6 else H('#9c6c44')
+                for o in np.arange(-6, 7.5, 0.5):
+                    setz(x + nx * o + tx * 0, y + ny * o, c)
+                setz(x + nx * 8, y + ny * 8, H('#4a3222'))
+    for p, r_ in zip(pfade, rich):                       # Schienen
+        for (x, y), (tx, ty) in zip(p, r_):
+            nx, ny = -ty, tx
+            for o in (-4, 4):
+                setz(x + nx * o, y + ny * o, H('#d8dce8'))
+                setz(x + nx * (o + 1), y + ny * (o + 1), H('#7c8496'))
+                setz(x + nx * (o + 2), y + ny * (o + 2), H('#3a3e4c'))
 
 
 def herz(a, cx, cy, farbe='#e04c6a', hell='#ff9ab0', dunkel='#8a2040'):
@@ -225,7 +269,7 @@ def bauen(frame=None, speichern=True):
                              (44 * T + 2, 39 * T + 2, 28, 12, True), (46 * T + 2, 36 * T + 2, 12, 28, False),
                              (41 * T + 2, 36 * T + 2, 12, 28, False)):
         zebra(a, x, y, b, h_, s)
-    gleise(a, lay.get('gleise', []))
+    gleise(a, lay)
     # --- Wasser (Teich): klares Blau wie Karte 01, vertieft mit Steinrand
     wroh = zell_maske(cls, 'x', cols, rows)
     yy_, xx_ = np.mgrid[0:Hp, 0:Wp]

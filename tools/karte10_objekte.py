@@ -37,15 +37,16 @@ WIND = {'klein/09', 'klein/10', 'klein/12', 'klein/35', 'baeume/03', 'klein2/04'
 SPIELZEUG = ['klein/02', 'klein/03', 'klein/06', 'klein/07', 'klein/22', 'klein/32', 'klein/41', 'klein/42',
              'klein/43', 'klein/45', 'klein/46', 'klein/53', 'klein/54', 'klein/59', 'klein/14', 'klein/52']
 
+HAUS_ANIM = {'haeuser/03': 'kamin', 'haeuser/02': 'kamin', 'haeuser2/03': 'glocke'}   # Rauch aus dem Kamin, Glocke
 # (sprite, Mitte x in px, Fussreihe, Optionen)  - grosse Objekte zuerst
 FEST = [
     # Bahnhof: Gebaeude auf der Bahnsteigachse, Zug auf dem unteren Gleis
-    ('bahnhof/00', ACHSE_BAHNHOF, 12, {'achse': ACHSE_BAHNHOF}),
+    ('bahnhof/00', ACHSE_BAHNHOF, 12, {'achse': ACHSE_BAHNHOF, 'anim': 'uhr'}),
     ('klein/39', ACHSE_BAHNHOF - 96, 13, {'symm': 'bsl', 'anim': 'lampe'}), ('klein/39', ACHSE_BAHNHOF + 96, 13, {'symm': 'bsl', 'anim': 'lampe'}),
     # Uhrenplatz: Uhrturm in der Mitte, Baenke und Laternen symmetrisch
-    ('bahnhof/03', ACHSE_UHR, 55, {'achse': ACHSE_UHR}),
-    (LAMPE, ACHSE_UHR - 64, 52, {'symm': 'ul', 'anim': 'lampe'}), (LAMPE, ACHSE_UHR + 64, 52, {'symm': 'ul', 'anim': 'lampe'}),
-    (BANK, ACHSE_UHR - 56, 57, {'symm': 'ub'}), (BANK, ACHSE_UHR + 56, 57, {'symm': 'ub'}),
+    ('gross1/00', ACHSE_UHR, 55, {'achse': ACHSE_UHR, 'anim': 'uhr'}),
+    (LAMPE, ACHSE_UHR - 72, 52, {'symm': 'ul', 'anim': 'lampe'}), (LAMPE, ACHSE_UHR + 72, 52, {'symm': 'ul', 'anim': 'lampe'}),
+    (BANK, ACHSE_UHR - 72, 57, {'symm': 'ub'}), (BANK, ACHSE_UHR + 72, 57, {'symm': 'ub'}),
     # Brunnenplatz: Brunnen in der Mitte, vier Laternen und zwei Baenke symmetrisch
     ('spielplatz/08', ACHSE_BRUNNEN, 38, {'achse': ACHSE_BRUNNEN, 'anim': 'brunnen'}),
     (LAMPE, ACHSE_BRUNNEN - 96, 33, {'symm': 'bl1', 'anim': 'lampe'}), (LAMPE, ACHSE_BRUNNEN + 96, 33, {'symm': 'bl1', 'anim': 'lampe'}),
@@ -57,13 +58,13 @@ FEST = [
     ('baeume/15', ACHSE_BURG - 72, 50, {'symm': 'f1'}), ('baeume/15', ACHSE_BURG + 72, 50, {'symm': 'f1'}),
     ('spielplatz/15', ACHSE_BURG - 72, 56, {'symm': 'f2'}), ('spielplatz/15', ACHSE_BURG + 72, 56, {'symm': 'f2'}),
     # Burghof unten: Spielzeugecke (Bausteine, Trommel, Teddy, Roboter, Karussell)
-    ('spielplatz/14', 65 * T, 66, {}), ('spielplatz/10', 63 * T, 70, {}), ('spielplatz/11', 68 * T + 8, 70, {}),
+    ('gross2/00', 65 * T + 8, 68, {}), ('spielplatz/10', 63 * T, 70, {}), ('spielplatz/11', 68 * T + 8, 70, {}),
     ('spielplatz/12', 72 * T, 70, {}), ('spielplatz/13', 80 * T, 69, {}), ('spielplatz/10', 83 * T, 62, {'spiegeln': True}),
     ('klein/32', 77 * T, 64, {}), ('klein/55', 82 * T + 8, 70, {}), ('klein/60', 64 * T, 41, {}), ('klein/03', 84 * T, 40, {}),
     # Spielplatz
     ('spielplatz/00', 27 * T, 49, {}), ('spielplatz/01', 35 * T, 48, {}), ('spielplatz/02', 38 * T, 54, {}),
-    ('baeume/12', 30 * T + 8, 63, {}), ('baeume/14', 25 * T, 60, {}), ('klein/26', 27 * T, 66, {}),
-    ('klein/24', 23 * T, 61, {}), ('spielplatz/14', 33 * T, 56, {}),
+    ('gross2/01', 35 * T, 69, {}), ('baeume/14', 21 * T, 57, {'anim': 'schaufel'}), ('klein/26', 27 * T, 66, {}),
+    ('klein/24', 23 * T, 61, {}), ('gross2/00', 29 * T, 62, {}),
     ('baeume/04', 47 * T, 66, {}), ('baeume/05', 21 * T + 8, 44, {}),
     # Garten (Beeterde): Beete, Kuebel, Windmuehle
     ('spielplatz/15', 6 * T + 8, 63, {}), ('baeume/15', 12 * T + 8, 63, {}), ('baeume/13', 9 * T + 8, 67, {}),
@@ -75,10 +76,11 @@ FEST = [
     # Teich: Ente am Ufer
     ('klein/08', 36 * T, 61, {}),
     # Neu (PixelLab k10_banner, k10_klein2, k10_baeume2)
-    ('baeume2/12', 52 * T, 67, {}), ('baeume2/13', 17 * T, 70, {}), ('baeume2/08', 23 * T + 8, 52, {}),
-    ('klein2/63', 33 * T, 52, {}), ('klein2/61', 29 * T, 58, {}),
+    ('baeume2/12', 52 * T, 67, {'anim': 'zirkus'}), ('baeume2/13', 21 * T, 66, {'achse': 21 * T}), ('baeume2/08', 23 * T + 8, 52, {'anim': 'wippen', 'amp': 2, 'fest': 0.3}),
+    ('klein2/63', 33 * T, 52, {}), ('klein2/61', 29 * T, 58, {'anim': 'wippen', 'amp': 1.5, 'fest': 0.45}),
     ('banner/12', 62 * T + 8, 23, {}), ('banner/07', 70 * T, 27, {}), ('banner/09', 86 * T, 26, {}),
-    ('banner/14', 66 * T, 26, {}), ('banner/05', 87 * T + 8, 21, {'anim': 'signal'}),
+    ('banner/14', 66 * T, 26, {}), ('banner/05', 87 * T + 8, 21, {'anim': 'signal'}), ('banner/05', 20 * T + 8, 6, {'anim': 'signal'}),
+    ('banner/05', 46 * T + 8, 6, {'anim': 'signal'}),
     ('banner/13', 32 * T + 8, 23, {'anim': 'ampel'}), ('banner/13', 46 * T + 8, 23, {'anim': 'ampel'}),
     ('banner/13', 43 * T + 8, 34, {'anim': 'ampel'}),
     ('klein2/00', 46 * T + 8, 13, {}), ('klein2/00', 32 * T + 8, 30, {}), ('klein2/00', 60 * T + 8, 28, {}),
@@ -137,7 +139,7 @@ def main():
                 sp = sp.crop(sp.getbbox())
             else:
                 sp = saeubern(Image.open(os.path.join(OBJ, name + '.png')).convert('RGBA'))
-                if name.startswith(('bahnhof/', 'haeuser', 'spielplatz/', 'baeume/')):
+                if name.startswith(('bahnhof/', 'haeuser', 'spielplatz/', 'baeume/', 'gross')):
                     sp = groesstes_teil(sp)                          # PixelLab-Reste (z. B. Glocke unter der Lok)
             if spiegeln:
                 sp = sp.transpose(Image.FLIP_LEFT_RIGHT)
@@ -247,7 +249,7 @@ def main():
         x += alpha[datei].shape[1] + 1
     # 3) Haeuser (Layout: Mitte, Fussreihe)
     for (name, X, fy, _, _) in lay['haeuser']:
-        fest_setzen(name, X, fy, {'vorrang': True}, melden=True)
+        fest_setzen(name, X, fy, {'vorrang': True, **({'anim': HAUS_ANIM[name]} if name in HAUS_ANIM else {})}, melden=True)
     # 4) feste Objekte
     for (name, X, fy, opt) in FEST:
         fest_setzen(name, X, fy, opt, suchen=not opt.get('symm') and not opt.get('achse'), melden=True)
@@ -322,7 +324,8 @@ def main():
         tx, ty = rnd.randrange(61, 85), rnd.randrange(37, 71)
         if any(cls[yy][xx] != 'k' for yy in range(ty - 1, ty + 2) for xx in range(tx - 1, tx + 2)):
             continue
-        if fest_setzen(rnd.choice(SPIELZEUG), tx * T + 8, ty, {}):
+        nm = rnd.choice(SPIELZEUG)
+        if fest_setzen(nm, tx * T + 8, ty, {'anim': 'wippen', 'amp': 1, 'fest': 0.2} if nm in ('klein/06', 'klein/22', 'klein/41') else {}):
             n += 1
     json.dump(objekte, open(os.path.join(OBJ, 'platzierung.json'), 'w'), indent=0)
     print(len(objekte), 'Objekte gesetzt')

@@ -553,6 +553,8 @@ def objekte_zeichnen(img, objs, cache, boden, frame, ebenen=None):
             sp = ampel_schalten(sp, frame, o.get('anim'))
         elif frame is not None and o.get('anim') == 'windrad':
             sp = windrad_drehen(sp, frame)
+        elif frame is not None and o.get('anim') in TEILANIM:
+            sp = TEILANIM[o['anim']](sp, frame, o)
         img.alpha_composite(sp, (o['x'], o['y']))
         if frame is not None and o.get('anim') == 'blume':
             bluete_puls(img, o, sp, frame)
@@ -620,6 +622,140 @@ def windrad_drehen(sp, frame):
     out = Image.fromarray(rest)
     out.alpha_composite(gedreht)
     return out
+
+
+def wippen(sp, frame, o, amp=2.0, fest=0.3):
+    """Wippen/Schaukeln (Karte 10): der obere Teil neigt sich hin und her (oben am staerksten), der Fuss
+    (unterste 'fest'-Anteil, z. B. Feder, Schnur, Boden) bleibt ruhig."""
+    amp = o.get('amp', amp)
+    fest = o.get('fest', fest)
+    a = np.array(sp)
+    h = a.shape[0]
+    zeilen = np.nonzero(a[..., 3].any(axis=1))[0]
+    y0, y1 = zeilen.min(), zeilen.max()
+    grenze = y1 - (y1 - y0) * fest
+    s_ = math.sin(2 * math.pi * frame / N_FRAMES + o.get('x', 0) * 0.13)
+    out = np.zeros_like(a)
+    for y in range(h):
+        if y >= grenze:
+            out[y] = a[y]
+            continue
+        d = int(round(amp * s_ * (grenze - y) / max(1, grenze - y0)))
+        out[y] = np.roll(a[y], d, axis=0)
+        if d > 0:
+            out[y, :d] = 0
+        elif d < 0:
+            out[y, d:] = 0
+    return Image.fromarray(out)
+
+
+def _teil_bewegen(sp, maske, dx, dy):
+    """Teil (maske) um dx/dy verschieben; der freie Platz bekommt die Farbe der Umgebung im Teil-Rahmen."""
+    a = np.array(sp)
+    if not maske.any() or (dx == 0 and dy == 0):
+        return sp
+    ys, xs = np.nonzero(maske)
+    y0, y1, x0, x1 = max(0, ys.min() - 2), ys.max() + 3, max(0, xs.min() - 2), xs.max() + 3
+    rahmen = np.zeros_like(maske)
+    rahmen[y0:y1, x0:x1] = True
+    umg = rahmen & ~maske & (a[..., 3] > 0)
+    out = a.copy()
+    if umg.any():
+        out[maske] = np.median(a[umg], axis=0).astype(np.uint8)
+    else:
+        out[maske, 3] = 0
+    for y, x in zip(ys, xs):
+        Y, X = y + dy, x + dx
+        if 0 <= Y < a.shape[0] and 0 <= X < a.shape[1]:
+            out[Y, X] = a[y, x]
+    return Image.fromarray(out)
+
+
+def glocke_schwingen(sp, frame, o):
+    """Feuerwehr-Glocke (Karte 10): die goldene Glocke im Giebel schwingt 1 px hin und her, Haus bleibt ruhig."""
+    a = np.array(sp).astype(int)
+    h = a.shape[0]
+    m = (a[..., 3] > 0) & (a[..., 0] > 170) & (a[..., 1] > 120) & (a[..., 2] < 100) & (a[..., 0] - a[..., 2] > 90)
+    m[int(h * 0.3):] = False
+    d = (0, 1, 1, 0, 0, -1, -1, 0)[frame % 8]
+    return _teil_bewegen(sp, m, d, 0)
+
+
+def schaufel_buddeln(sp, frame, o):
+    """Sandkasten (Karte 10): die gruene Schaufel buddelt (hebt sich und sinkt wieder), Kasten bleibt ruhig."""
+    a = np.array(sp).astype(int)
+    m = (a[..., 3] > 0) & (a[..., 1] > a[..., 0] + 35) & (a[..., 1] > a[..., 2] + 15)
+    d = (0, -1, -2, -1)[(frame // 2) % 4]
+    return _teil_bewegen(sp, m, 0, d)
+
+
+def zirkus_fahnen(sp, frame, o):
+    """Zirkuszelt (Karte 10): nur die gelben Wimpel oben wehen (Spalten wellen sich), Zelt und Stangen ruhig."""
+    a = np.array(sp)
+    ai = a.astype(int)
+    h = a.shape[0]
+    m = (ai[..., 3] > 0) & (ai[..., 0] > 190) & (ai[..., 1] > 150) & (ai[..., 2] < 110)
+    m[int(h * 0.32):] = False
+    out = a.copy()
+    out[m, 3] = 0
+    ys, xs = np.nonzero(m)
+    for y, x in zip(ys, xs):
+        d = int(round(1.2 * math.sin(2 * math.pi * frame / N_FRAMES + x * 0.7)))
+        Y = y + d
+        if 0 <= Y < h:
+            out[Y, x] = a[y, x]
+    return Image.fromarray(out)
+
+
+def uhr_zeiger(sp, frame, o):
+    """Uhr (Karte 10): auf dem weissen Zifferblatt laufen die Zeiger (Minutenzeiger eine Runde in 16 Bildern,
+    Stundenzeiger langsam); Gehaeuse bleibt ruhig."""
+    a = np.array(sp)
+    ai = a.astype(int)
+    weiss = (ai[..., 3] > 0) & (ai[..., 0] > 205) & (ai[..., 1] > 205) & (ai[..., 2] > 195)
+    weiss[int(a.shape[0] * 0.75):] = False
+    if weiss.sum() < 12:
+        return sp
+    ys, xs = np.nonzero(weiss)
+    cy, cx = (ys.min() + ys.max()) / 2.0, (xs.min() + xs.max()) / 2.0
+    r = min(ys.max() - ys.min(), xs.max() - xs.min()) / 2.0
+    yy, xx = np.mgrid[0:a.shape[0], 0:a.shape[1]]
+    innen = ((yy - cy) ** 2 + (xx - cx) ** 2 <= (r * 0.78) ** 2) & (ai[..., 3] > 0)
+    dunkel = innen & (ai[..., :3].sum(-1) < 300)
+    out = a.copy()
+    out[dunkel, :3] = np.median(a[weiss][:, :3], axis=0).astype(np.uint8)
+    farbe = np.array([40, 34, 44, 255], np.uint8)
+    for laenge, winkel in ((r * 0.72, 2 * math.pi * frame / N_FRAMES), (r * 0.45, 2 * math.pi * (frame / N_FRAMES / 12 + 0.3))):
+        for k in np.arange(0, laenge, 0.5):
+            X, Y = int(round(cx + math.sin(winkel) * k)), int(round(cy - math.cos(winkel) * k))
+            if innen[Y, X]:
+                out[Y, X] = farbe
+    out[int(round(cy)), int(round(cx))] = farbe
+    return Image.fromarray(out)
+
+
+TEILANIM = {'wippen': wippen, 'glocke': glocke_schwingen, 'schaufel': schaufel_buddeln, 'zirkus': zirkus_fahnen,
+            'uhr': uhr_zeiger}
+
+
+def kamin_rauch(gd, o, sp, frame):
+    """Kaminrauch (Karte 10): kleine Woelkchen steigen genau aus der Schornsteinoeffnung (rechts oben am Dach)
+    und treiben mit dem Wind nach rechts, werden groesser und duenner."""
+    a = np.array(sp.getchannel('A')) > 0
+    w = a.shape[1]
+    rechts = a.copy()
+    rechts[:, :int(w * 0.62)] = False
+    ys, xs = np.nonzero(rechts)
+    if not len(ys):
+        return
+    top = ys.min()
+    kx = xs[ys <= top + 1].mean()
+    X0, Y0 = o['x'] + kx, o['y'] + top - 1
+    for i in range(3):
+        ph = ((frame or 0) + i * 5) % 16 / 16.0
+        cx, cy = X0 + ph * 9, Y0 - 2 - ph * 22
+        rr = 2 + ph * 4
+        gd.ellipse((cx - rr, cy - rr, cx + rr, cy + rr), fill=(236, 236, 242, int(200 * (1 - ph))))
 
 
 def rauch_steigen(sp, frame):
@@ -999,7 +1135,7 @@ def animieren(img, objs, cache, frame, ruhig=False):
                 if anim in ('kerzen', 'feuer_kamin', 'feuer'):
                     f_ = 0.55 + 0.45 * ((frame * 7 + i * 3) % 5) / 4.0
                 cx, cy = o['x'] + xs_q.mean(), o['y'] + ys_q.mean()
-                for k_, al in ((1.0, 26), (0.55, 46)):
+                for k_, al in (((1.0, 40), (0.55, 70)) if anim == 'lampe' else ((1.0, 26), (0.55, 46))):
                     gd.ellipse((cx - rad[0] * k_, cy - rad[1] * k_, cx + rad[0] * k_, cy + rad[1] * k_),
                                fill=farbe + (int(al * (0.55 + 0.45 * f_)),))
                 for y_, x_ in zip(ys_q, xs_q):
@@ -1007,6 +1143,8 @@ def animieren(img, objs, cache, frame, ruhig=False):
                     rr, gg, bb, _ = px[X, Y]
                     k_ = 0.85 + 0.3 * f_
                     px[X, Y] = (min(255, int(rr * k_)), min(255, int(gg * k_)), min(255, int(bb * k_)), 255)
+        elif anim == 'kamin':
+            kamin_rauch(gd, o, sp, frame)
         elif anim == 'leuchten':
             cx, cy = o['x'] + sp.width // 2, o['y'] + sp.height // 2
             for r, al in ((14, 30), (7, 50)):

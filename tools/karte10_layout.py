@@ -52,22 +52,21 @@ def main():
     # ------------------------------------------------------------------ Strassen + Gehwege
     for x0 in (30, 44, 58):                          # senkrechte Strassen
         y1 = 47 if x0 == 44 else 38
-        k[3:y1 + 1, x0 - 1:x0 + 3] = 'p'
-        k[3:y1 + 1, x0:x0 + 2] = 'a'
+        k[7:y1 + 1, x0 - 1:x0 + 3] = 'p'
+        k[7:y1 + 1, x0:x0 + 2] = 'a'
     k[19:23, 17:62] = 'p'; k[20:22, 18:62] = 'a'     # obere Querstrasse (bis zum Bahnhof)
     k[35:39, 0:61] = 'p'; k[36:38, 0:61] = 'a'       # untere Querstrasse (bis zum Teleporter)
     for x0 in (30, 44, 58):                          # Kreuzungen frei von Gehweg
         for y0 in (20, 36):
             if x0 == 44 or y0 == 20 or x0 in (30, 58):
                 k[y0:y0 + 2, x0:x0 + 2] = 'a'
-    k[3, :] = np.where(k[3, :] == 'a', 'a', k[3, :])
     # ------------------------------------------------------------------ Brunnenplatz links
     pl = ellipse(k, 10, 37, 8.6, 7.6, 'b')
     k[pl & (yy >= 36) & (yy <= 37)] = 'b'
     ellipse(k, 10, 37, 4.4, 3.6, 's')
     k[36:38, 0:2] = 'a'
     # ------------------------------------------------------------------ Uhrenplatz
-    ellipse(k, 54, 54, 5.6, 5.2, 'b')
+    ellipse(k, 54, 53.5, 6.4, 6.0, 'b')
     # ------------------------------------------------------------------ Sandwege (Boegen, diagonal)
     pfad(k, [(6, 13), (7, 15), (10, 17), (14, 19), (16, 20)], 's', nur='g')     # Haus oben links -> Strasse
     pfad(k, [(7, 27), (7, 29), (8, 30)], 's', nur='g')                           # Feuerwache -> Brunnenplatz
@@ -76,7 +75,7 @@ def main():
             k[fy + 1:bis + 1, tx:tx + 2] = np.where(k[fy + 1:bis + 1, tx:tx + 2] == 'g', 's', k[fy + 1:bis + 1, tx:tx + 2])
     pfad(k, [(9, 45), (9, 50), (10, 54), (9, 58), (9, 60)], 's', nur='gs')       # Brunnenplatz -> Garten
     pfad(k, [(44, 48), (46, 50), (48, 52)], 's', nur='gsp')                      # Strassenende -> Uhrenplatz
-    pfad(k, [(44, 48), (40, 50), (33, 51), (28, 52), (25, 55), (23, 59), (21, 63), (19, 67)], 's', nur='gs')
+    pfad(k, [(44, 48), (40, 50), (33, 51), (28, 52), (25, 55), (23, 59), (24, 59), (24, 63), (23, 66), (20, 67)], 's', nur='gs')   # ... -> Pilzhaus-Tuer
     # ------------------------------------------------------------------ Teich mit Bruecke, Garten
     pfad(k, [(25, 56), (29, 57), (33, 58)], 's', nur='g')                         # Wege zur Bruecke
     pfad(k, [(45, 58), (47, 57), (49, 56)], 's', nur='g')
@@ -85,12 +84,14 @@ def main():
     gm = ellipse(k, 9.5, 64.5, 6.8, 4.6, 'e')
     k[gm & (xx > 14) & (yy < 62)] = 'g'
     # ------------------------------------------------------------------ Bahnhof oben rechts
-    k[3:23, 61:90] = 's'
-    k[5:21, 64:88] = 'm'
+    k[2:7, 0:90] = 'm'                                                          # Bahnstrecke oben (Schotterbett)
+    k[2:23, 61:90] = 's'
+    k[2:21, 61:89] = 'm'                                                        # Bahnhof + Verbindungsgleis links
     k[13:16, 69:83] = 'q'                                                       # Bahnsteig vor dem Bahnhof
     k[20:23, 58:64] = np.where(k[20:23, 58:64] == 'a', 'a', k[20:23, 58:64])
     k[19:23, 60:64] = 'p'                                                       # Strasse endet am Bahnhof
     k[20:22, 58:64] = 'a'
+    k[19, 62:64] = 'm'                                                          # Verbindungsgleis (Bogen) liegt hier
     # ------------------------------------------------------------------ Burg und Burghof
     k[23:36, 61:90] = 's'                                                       # Vorplatz hinter der Burgfront
     k[35:72, 60:86] = 'k'
@@ -106,7 +107,7 @@ def main():
     h[mauer] = 3
     # ------------------------------------------------------------------ Waldrand (wie Karte 01): Waldboden W
     wald = np.zeros((R, C), bool)
-    wald[0:4, :] = True
+    wald[0:2, :] = True
     wald[:, 0:2] = True
     wald[:, 2] = k[:, 2] == 'g'
     wald[72:75, 0:60] = True
@@ -114,7 +115,7 @@ def main():
     wald[34:39, 0:3] = False                       # Durchgang zum Teleporter
     # unregelmaessige Innenkante: Buchten und Vorspruenge
     for (x, y) in ((3, 8), (3, 9), (3, 20), (3, 21), (3, 25), (3, 26), (3, 46), (3, 47), (3, 55), (3, 56),
-                   (3, 69), (14, 4), (15, 4), (23, 4), (24, 4), (37, 4), (51, 4), (52, 4), (20, 70), (21, 70),
+                   (3, 69), (20, 70), (21, 70),
                    (35, 70), (36, 70), (47, 70), (48, 70), (57, 70)):
         if k[y, x] == 'g':
             wald[y, x] = True
@@ -123,7 +124,10 @@ def main():
     lay = {
         'groesse': [C, R], 'klassen': [''.join(r) for r in k], 'hoehe': [''.join(str(c) for c in r) for r in h],
         'achse': ACHSE, 'haeuser': HAEUSER,
-        'gleise': [{'y': 7, 'x': [64, 88]}, {'y': 19, 'x': [64, 88]}],          # Schienen (Kachelreihe der Schwellen)
+        # Gleise als Mittellinien in Pixeln: Strecke oben (durch den Bahnhof), Verbindungsgleis mit Boegen zum
+        # unteren Bahnhofsgleis
+        'gleise': [{'y': 4, 'x': [0, 89]}, {'y': 19, 'x': [64, 88]}],
+        'gleisbogen': {'von_x': 56 * 16, 'oben_y': 4 * 16 + 7, 'x': 62 * 16 + 8, 'unten_y': 19 * 16 + 7, 'bis_x': 64 * 16, 'r': 48},
         'bruecken': [[35, 58, 44, 59]],                                            # (x0, y0, x1, y1)
         'teich': [632, 944, 70, 44],
         'teleporter': [{'x': 0, 'y': 35, 'b': 2, 'h': 4}],

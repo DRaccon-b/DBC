@@ -237,6 +237,8 @@ def sprite_bild(karte, mod, o, sp, frame):
         return k4.ampel_schalten(sp, frame, anim)
     if anim == 'windrad':
         return k4.windrad_drehen(sp, frame)
+    if anim in k4.TEILANIM:
+        return k4.TEILANIM[anim](sp, frame, o)
     return sp
 
 
