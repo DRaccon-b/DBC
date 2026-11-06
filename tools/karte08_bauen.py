@@ -56,6 +56,37 @@ def ebenen_masken(hoehe, cols, rows):
     return m
 
 
+def fels_variation(a, m, cls, cols, rows):
+    """Schwarzer Fels lebendiger: helle Geroellfelder, dunkle Moosflecken, Risse mit Lichtkante (Licht oben links)."""
+    Hh, W = m.shape
+    for art, seed, schwelle in (('R', 51, 0.62), ('M', 52, 0.68)):
+        n = np.random.RandomState(seed).rand(Hh // 40 + 2, W // 40 + 2)
+        n = np.array(Image.fromarray((n * 255).astype(np.uint8)).resize((W + 80, Hh + 80), Image.BICUBIC))[:Hh, :W] / 255.0
+        f = np.random.RandomState(seed + 9).rand(Hh // 10 + 2, W // 10 + 2)
+        f = np.array(Image.fromarray((f * 255).astype(np.uint8)).resize((W + 20, Hh + 20), Image.BICUBIC))[:Hh, :W] / 255.0
+        fleck = m & (n * 0.8 + f * 0.2 > schwelle)
+        fleck = np.array(Image.fromarray((fleck * 255).astype(np.uint8)).filter(ImageFilter.ModeFilter(5))) > 0
+        fleck &= m
+        tx = textur(cls, art, cols, rows)
+        a[fleck] = tx[fleck]
+        rand = fleck & ~(np.roll(fleck, 1, 0) & np.roll(fleck, -1, 0) & np.roll(fleck, 1, 1) & np.roll(fleck, -1, 1))
+        a[rand] = (a[rand] * 0.82).astype(np.uint8)
+    rs = random.Random(53)
+    ys, xs = np.nonzero(m)
+    for _ in range(len(ys) // 2600):                       # Risse
+        i = rs.randrange(len(ys)); y, x = float(ys[i]), float(xs[i])
+        w = rs.uniform(0, 6.28)
+        for _k in range(rs.randint(8, 22)):
+            w += rs.uniform(-0.7, 0.7)
+            y += math.sin(w); x += math.cos(w)
+            yi, xi = int(y), int(x)
+            if not (1 <= yi < Hh - 1 and 1 <= xi < W - 1) or not m[yi, xi]:
+                break
+            a[yi, xi] = H('#0a0a10')
+            if m[yi + 1, xi + 1]:
+                a[yi + 1, xi + 1] = H('#3c3c52')
+
+
 def sumpf_zeichnen(a, m, frame):
     """Sumpfwasser: Wasser aus Karte 01, trueb dunkelgruen getoent, mit Entengruetze-Flecken."""
     k4.wasser_zeichnen(a, m, frame, np.zeros_like(m))
@@ -204,6 +235,7 @@ def bauen(frame=None, speichern=True):
     a[km] = tx[km]
     tx = textur(cls, 'r', cols, rows)
     a[em[7]] = tx[em[7]]
+    fels_variation(a, em[7], cls, cols, rows)
     # --- Sumpf (vertieft wie Karte 01, Schlammrand)
     sumpf = weich(zell_maske(cls, 'x', cols, rows), 9, 0.2, 24, 0.45) & ~em[2]
     sumpf = k4.splitter_weg(sumpf, 200)

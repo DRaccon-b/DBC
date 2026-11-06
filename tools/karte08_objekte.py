@@ -27,10 +27,13 @@ GRAEBER = ['mittel/00', 'mittel/01', 'mittel/02', 'mittel/03', 'mittel/04', 'gra
 # (sprite, Kachel-x, Kachel-y [Fusskachel], Optionen)
 FEST = [
     ('schloss/00', 55, 11, {'keine_verdeckung': True}),
-    ('graeber/09', 47, 14, {}), ('graeber/09', 63, 14, {'spiegeln': True}),                # Gargoyles am Schlossplatz
-    ('mittel/06', 51, 18, {'anim': 'fahne'}), ('mittel/06', 59, 18, {'anim': 'fahne', 'spiegeln': True}),
-    ('mittel/07', 45, 17, {}), ('mittel/07', 65, 17, {'spiegeln': True}),
-    ('mittel/05', 50, 15, {'anim': 'geisterlicht'}), ('mittel/05', 60, 15, {'anim': 'geisterlicht'}),
+    # Schlossplatz: Paare exakt spiegelsymmetrisch zur Schlossachse (symmetrie() nach regeln_v11)
+    ('graeber/09', 48, 14, {'symm': 'garg'}), ('graeber/09', 62, 14, {'spiegeln': True, 'symm': 'garg'}),
+    ('mittel/06', 51, 18, {'anim': 'fahne', 'symm': 'banner'}),
+    ('mittel/06', 59, 18, {'anim': 'fahne', 'spiegeln': True, 'symm': 'banner'}),
+    ('mittel/07', 45, 17, {'symm': 'saeule'}), ('mittel/07', 65, 17, {'spiegeln': True, 'symm': 'saeule'}),
+    ('mittel/05', 51, 13, {'anim': 'geisterlicht', 'symm': 'laterne'}),
+    ('mittel/05', 59, 13, {'anim': 'geisterlicht', 'spiegeln': True, 'symm': 'laterne'}),
     # Mausoleum mit Laternen, Gruften
     ('gross/00', 54, 67, {}),
     ('mittel/05', 49, 68, {'anim': 'geisterlicht'}), ('mittel/05', 59, 68, {'anim': 'geisterlicht'}),
@@ -204,7 +207,8 @@ def main():
 
     # 1) grosse und feste Objekte
     for (name, tx, ty, opt) in FEST:
-        setze(name, tx, ty, opt, suchen=True)
+        if setze(name, tx, ty, opt, suchen='symm' not in opt) is None and 'symm' in opt:
+            print('  Symmetrie-Paar passt nicht:', name, (tx, ty))
     # 2) Grabreihen auf der Graberde: Fuss in der obersten Erdzeile jedes Feldes, unregelmaessige Abstaende
     for ty in range(1, rows):
         for tx in range(cols):
@@ -259,5 +263,32 @@ def main():
     print(len(objekte), 'Objekte am Raster gesetzt')
 
 
+ACHSE = 888                      # Schlossachse in px (Mitte des Schlossplatzes, Kacheln 47-63)
+
+
+def symmetrie():
+    """Gleiche Objekte buendig/symmetrisch: das rechte Objekt jedes Paars wird exakt an der Schlossachse
+    gespiegelt zum linken gesetzt (gleiche Hoehe, gleicher Abstand zur Achse)."""
+    pf = os.path.join(OBJ, 'platzierung.json')
+    objs = json.load(open(pf))
+    paare = {}
+    for o in objs:
+        if o.get('symm'):
+            paare.setdefault(o['symm'], []).append(o)
+    for name, ps in paare.items():
+        if len(ps) != 2:
+            print('  Paar unvollstaendig:', name, len(ps))
+            continue
+        l, r = sorted(ps, key=lambda o: o['x'])
+        w = Image.open(os.path.join(OBJ, l['datei'])).width
+        r['x'], r['y'] = 2 * ACHSE - l['x'] - w, l['y']
+        if 'block' in l:
+            bx, by, wt, ht = l['block']
+            r['block'] = [2 * ACHSE // T - bx - wt, by, wt, ht]
+            r['kachel'] = [2 * ACHSE // T - 1 - l['kachel'][0], l['kachel'][1]]
+    json.dump(objs, open(pf, 'w'), indent=0)
+    print('Symmetrie: %d Paare gespiegelt' % len(paare))
+
+
 if __name__ == '__main__':
-    main()
+    symmetrie() if sys.argv[1:] == ['symmetrie'] else main()

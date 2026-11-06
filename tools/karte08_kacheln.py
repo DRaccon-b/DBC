@@ -27,6 +27,8 @@ RAMPEN = {
     'a': ('sand', ['#62656f', '#6d707a', '#787b85', '#848790', '#91949c']),
     'k': ('sand', ['#2a2634', '#332e3e', '#3c3748', '#464052', '#524b5e']),
     'r': ('sand', ['#1a1a26', '#20202e', '#272736', '#2e2e40', '#37374a']),
+    'R': ('sand', ['#26263a', '#2e2e44', '#37374f', '#41415a', '#4e4e68']),      # helleres Geroell auf dem Fels
+    'M': ('gras', ['#181c18', '#1e241e', '#252c24', '#2c342a', '#343e30', '#3e4838']),  # Moos auf dem Fels
 }
 
 
@@ -69,6 +71,11 @@ def kachel(art, v):
             x, y = r.randint(2, 12), r.randint(2, 13)
             for d in range(4):
                 im.putpixel(((x + d) % 16, (y + d // 2) % 16), H('#3e4250' if art == 'f' else '#545864'))
+    if art == 'R':                                          # Geroell: Steinchen mit Lichtkante oben links
+        for _ in range(4):
+            x, y = r.randint(1, 13), r.randint(1, 13)
+            im.putpixel((x, y), H('#5e5e78')); im.putpixel((x + 1, y), H('#4a4a62'))
+            im.putpixel((x, y + 1), H('#3a3a4e')); im.putpixel((x + 1, y + 1), H('#1e1e2a'))
     if art == 'r':                                          # Geroell: kleine helle Kanten
         for _ in range(2):
             x, y = r.randint(1, 14), r.randint(1, 14)
@@ -76,7 +83,7 @@ def kachel(art, v):
     return im
 
 
-ARTEN = 'ghweqmfakr'
+ARTEN = 'ghweqmfakrRM'
 
 
 def main():
