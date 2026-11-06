@@ -144,10 +144,23 @@ def schatten_k5(img, objs, cache, lvl):
     Hh, W = lvl.shape
     sch = np.zeros((Hh, W), np.uint8)
     for o in objs:
-        if o.get('kein_schatten'):                 # z. B. gefrorener Wasserfall: Teil der Klippe, kein Schlagschatten
+        if o.get('kein_schatten'):                 # z. B. Hoehle in der Klippe: kein Schlagschatten
             continue
         sp = cache[o['datei']]
         a = np.array(sp.getchannel('A')) >= 200
+        if o.get('ebene', 1) == 0 and a.any():   # liegende Objekte (Ast, Knochen ...): Schatten der ganzen Form
+            ys_, xs_ = np.nonzero(a)
+            for dx_, dy_, wert in ((2, 2, 60), (1, 1, 72)):
+                Y = o['y'] + ys_ + dy_; X = o['x'] + xs_ + dx_
+                ok = (Y >= 0) & (Y < Hh) & (X >= 0) & (X < W)
+                Y, X = Y[ok], X[ok]
+                if not len(Y):
+                    continue
+                fy_ = min(Hh - 1, max(0, o['y'] + int(ys_.max()) + 1)); fx_ = min(W - 1, max(0, o['x'] + int(xs_.mean())))
+                eb = lvl[fy_, fx_]
+                gut = lvl[Y, X] == eb
+                sch[Y[gut], X[gut]] = np.maximum(sch[Y[gut], X[gut]], wert)
+            continue
         zeilen = np.nonzero(a.any(axis=1))[0]
         if len(zeilen) < 4:
             continue

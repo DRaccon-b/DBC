@@ -30,7 +30,7 @@ BAEUME = {'baeume/00', 'baeume/01', 'baeume/02', 'baeume/03', 'klein/27', 'klein
 GROSSE_TANNEN = ['baeume/00', 'baeume/01', 'baeume/02', 'baeume/00', 'baeume/01']
 DECKER = [0, 1, 2, 12, 15, 21, 23, 29, 35, 39, 50, 53]          # Schnee-Set: Frostgras, Farn, Bueschel ...
 BLUMEN = [5, 9, 28, 30, 36, 41, 44, 45, 14]                        # Schneegloeckchen, Winterheide, Eisblume ...
-FELSEN = {'mittel/00', 'mittel/09', 'mittel/15', 'findling/00', 'natur/04', 'natur/05', 'server/00', 'server/11'}
+FELSEN = {'wasserfall/02', 'mittel/00', 'mittel/09', 'mittel/15', 'findling/00', 'natur/04', 'natur/05', 'server/00', 'server/11'}
 # v1.1-Ideen (PixelLab k5_server/k5_wasserfall/k5_natur/k5_findling): (sprite, Ankerkachel, Anzahl, Suchradius)
 NEU = [('server/00', (62, 52), 1, 10), ('server/11', (95, 32), 1, 10), ('server/00', (20, 47), 1, 8),
        ('findling/00', (12, 28), 1, 10), ('findling/00', (88, 44), 1, 10), ('findling/00', (56, 68), 1, 8),
@@ -314,10 +314,10 @@ def objekte():
         return o
 
     # --- neue Objekte (Server, Findlinge, Wasserfall, Streu: Eisblumen, Beerenstraeucher, halb eingeschneite Felsen)
-    def neu_setzen(name, kx, ky, anim=None, pruefen=True):
-        d = name + '.png'
+    def neu_setzen(name, kx, ky, anim=None, pruefen=True, datei=None, art='neu'):
+        d = datei or name + '.png'
         lade(d)
-        o = einrasten({'datei': d, 'basis': name, 'ebene': 1, 'v11': 'neu'}, kx, ky)
+        o = einrasten({'datei': d, 'basis': name, 'ebene': 1, 'v11': art}, kx, ky)
         bx, by, wt, ht = o['block']
         if pruefen:
             for x in range(bx, bx + wt):
@@ -356,6 +356,41 @@ def objekte():
         anim = 'wehen' if name in ('natur/00', 'natur/01', 'natur/02', 'natur/03') else None
         if neu_setzen(name, kx, ky, anim=anim):
             gesetzt += 1; n_neu += 1
+    hoehe_t = [[int(c) for c in r] for r in lay['hoehe']]
+    # Eishoehle neu: sauber freigestellte Hoehle (wasserfall/02) statt des rechteckig beschnittenen Sprites,
+    # Fuss 2 Reihen vor der Wand; links eine grosse Tanne, rechts eine kleine als Uebergang zur Wand
+    for o in objs:
+        if o['basis'] == 'gross/01':
+            o['_weg'] = True
+    for (x, y) in [(x, y) for x in range(58, 73) for y in range(6, 14)]:
+        if (x, y) in belegt and objs[belegt[(x, y)]]['basis'] not in ('gross/01',):
+            objs[belegt[(x, y)]]['_weg'] = True
+        belegt.pop((x, y), None)
+    h = neu_setzen('wasserfall/02', 65, 12, pruefen=False)
+    h['kein_schatten'] = True
+    neu_setzen('baeume/00', 60, 12, anim='baum', pruefen=False, datei='sauber/baeume-00.png', art='begleiter')
+    neu_setzen('baeume/01', 70, 13, anim='baum', pruefen=False, datei='sauber/baeume-01.png', art='begleiter')
+    # Variation oben: zwei Server, zwei grosse Eiszapfen, ein paar grosse Tannen (mit Begleitung, Regel 5)
+    OBEN = [('server/00', None, None, 1), ('server/11', None, None, 1),
+            ('mittel/02', 'sauber/mittel-02.png', 'glitzern', 2), ('natur/25', None, 'glitzern', 1),
+            ('baeume/00', 'sauber/baeume-00.png', 'baum', 2), ('baeume/01', 'sauber/baeume-01.png', 'baum', 2),
+            ('baeume/02', 'sauber/baeume-02.png', 'baum', 1)]
+    n_ob = 0
+    grosse_oben = []
+    for (name, datei, anim, anzahl) in OBEN:
+        gesetzt = 0
+        for _ in range(3000):
+            if gesetzt >= anzahl:
+                break
+            kx, ky = rnd.randrange(3, cols - 4), rnd.randrange(4, 16)
+            if hoehe_t[ky][kx] != 2:
+                continue
+            o = neu_setzen(name, kx, ky, anim=anim, datei=datei)
+            if o:
+                gesetzt += 1; n_ob += 1
+                if name.startswith('baeume/'):
+                    grosse_oben.append(o)
+    print('Oben: %d groessere Objekte (Server, Eiszapfen, Tannen); Hoehle ersetzt' % n_ob)
     # mehr Deko oben auf den Plateaus (Hoehe 2): kleine Tannen, verschneite Buesche, Eiskristalle, Beeren,
     # Eisblumen, halb eingeschneite Felsen, Schnee-Deko aus Karte 07
     hoehe_t = [[int(c) for c in r] for r in lay['hoehe']]
@@ -364,7 +399,7 @@ def objekte():
     namen_p, gew_p = list(PLATEAU), list(PLATEAU.values())
     n_pl = 0
     for _ in range(9000):
-        if n_pl >= 60:
+        if n_pl >= 45:
             break
         kx, ky = rnd.randrange(2, cols - 2), rnd.randrange(3, rows - 4)
         if hoehe_t[ky][kx] != 2:
@@ -403,7 +438,7 @@ def objekte():
         return [p for p in objs if p is not o and p['basis'] in BAEUME and abs(p['kachel'][0] - kx) <= r
                 and abs(p['kachel'][1] - ky) <= 3]
     n5a = n5b = n5weg = 0
-    einzel = [o for o in objs if o['basis'] in BAEUME and not wald(o) and len(nah(o)) < 2]
+    einzel = [o for o in objs if o['basis'] in BAEUME and not wald(o) and len(nah(o)) < 2 and not o.get('v11')]
     for o in einzel:
         bx, by, wt, ht = o['block']
         ty = by + ht - 1
@@ -425,7 +460,9 @@ def objekte():
             n5b += 1
         elif not nah(o):
             o['_weg'] = True; n5weg += 1
-    for o in [o for o in objs if o['basis'] in FELSEN]:
+    for o in [o for o in objs if o['basis'] in FELSEN and o['basis'] != 'wasserfall/02']:
+        vor_sockel(o, 2)
+    for o in grosse_oben:                              # Regel 5: grosse Tannen oben mit Pflanzen vor dem Sockel
         vor_sockel(o, 2)
     objs = [o for o in objs if not o.get('_weg')]
     print('Regel 5: %d Einzelbaeume -> %d mit Baum + Pflanze, %d mit 2-3 Pflanzen, %d ohne Platz entfernt'

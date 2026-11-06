@@ -21,6 +21,11 @@ Neue Fassung nach den Regeln in `CLAUDE.md`. v1.0 liegt in `maps/karte05/v1.0/` 
 - **Senkrechte Kanten:** Plateaus haben seitlich keine sichtbare Seitenwand mehr, nur eine schmale Abgrenzung
   (Kontur + leichter Schatten); die Höhenregel bleibt (man kommt seitlich nicht hoch).
 - **Mehr Deko oben:** kleine Tannen, verschneite Büsche, Eiskristalle, Eisblumen, Beeren, halb eingeschneite Felsen.
+- **Oben mehr Variation:** zwei Server, große Eiszapfen/Eiskristalle, große Tannen (mit Pflanzen vor dem Sockel).
+- **Eishöhle neu:** sauber freigestellte Höhle statt des rechteckig beschnittenen Sprites, links/rechts je eine
+  Tanne als Übergang zur Felswand.
+- **Schatten liegender Objekte:** Äste, Knochen usw. werfen den Schatten über ihre ganze Form (leicht nach rechts
+  unten versetzt) statt nur vom untersten Punkt aus.
 - **Waldrand oben:** Tannen entlang des oberen Kartenrands (wie links/rechts/unten).
 - **Eisblumen** (zwei Sorten) verstreut und als Begleitblumen vor Sockeln.
 - **Verschneite Beerensträucher** (Beeren, Stechpalme) verstreut.
