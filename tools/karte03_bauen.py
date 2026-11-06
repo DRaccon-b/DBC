@@ -896,7 +896,7 @@ def objekte_zeichnen(img, objs, cache, boden, frame):
                 sp = schuesseln_drehen(sp, frame, o['x'] + o['y'], o['basis'])
         img.alpha_composite(sp, (o['x'], o['y']))
         if o['datei'].endswith('_sand.png') and not o.get('ohne_fuss'):
-            sandverwehung(img, o, cache[o['datei']])
+            sandverwehung(img, o, cache[o['datei']], sch)
 
 
 _MAST_CACHE = {}
@@ -972,7 +972,7 @@ import basis_kacheln as _bk
 SAND_V = [_bk.RGB[k] + (255,) for k in ('s0', 's1', 's2', 's2', 's3')]   # exakt die Bodensand-Toene
 
 
-def sandverwehung(img, o, sp):
+def sandverwehung(img, o, sp, sch=None):
     """Objekt steckt im Sand: an der Auflagekante liegt ein kleiner Sandwall ueber dem Objektfuss
     (2-5 px, wellig, Licht oben), seitlich auslaufend, auf der Leeseite (rechts) eine Windfahne."""
     a = np.array(sp.getchannel('A')) >= 200
@@ -985,6 +985,9 @@ def sandverwehung(img, o, sp):
     W, H = img.size
     def setz(x, y, c):
         if 0 <= x < W and 0 <= y < H:
+            if sch is not None and sch[y, x]:              # im Schatten: Verwehung mit abdunkeln, damit der
+                t_ = sch[y, x] / 255.0                      # Schatten direkt am Objektfuss anfaengt
+                c = tuple(int(c[i] * (1 - t_) + (64, 36, 30)[i] * t_) for i in range(3)) + (255,)
             px[x, y] = c
     kontakt = [x for x in spalten if np.nonzero(a[:, x])[0].max() >= tief - 3]
     if not kontakt:

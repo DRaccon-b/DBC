@@ -108,4 +108,6 @@ Wenn eine Karte fertig scheint: noch einmal komplett auf **Pixelfehler** und **L
 - **Gebäude stehen ganz auf Land:** Nicht nur der Fuß, sondern die ganze Fläche eines Gebäudes (auch Rückwand und
   Dach) liegt über Land, mit mindestens einer Kachel Strand bis zum Wasser. Gewollte Ausnahmen (Pavillon am Teich)
   werden ausdrücklich markiert.
+- **Schatten beginnen direkt am Objekt:** Der Kontaktschatten liegt unmittelbar am Fuß. Alles, was nach dem Schatten
+  am Fuß gezeichnet wird (Sandverwehung, Bodenfuß, Büschel), wird im Schatten mitschattiert – nie hell darübermalen.
 - **Ablauf:** Jede Änderung committen und pushen, Bilder/GIFs an den Nutzer schicken, auf Deutsch erklären.
