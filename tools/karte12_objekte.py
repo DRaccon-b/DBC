@@ -147,6 +147,19 @@ def main():
                 return False                                            # seitlich an der Ecke, nicht mittig vor dem Stamm
         return True
 
+    pfad_px = np.zeros(lvl.shape, bool)                       # Weg bleibt frei: kein Objektfuss auf dem Pfad
+    for (px_, py_) in pfad:
+        pfad_px[py_ * T:(py_ + 1) * T, px_ * T:(px_ + 1) * T] = True
+
+    def weg_belegt(datei, x, y):
+        a = alpha[datei]
+        zeilen = np.nonzero(a.any(axis=1))[0]
+        unten = int(zeilen.max() - (zeilen.max() - zeilen.min()) * 0.4)
+        ys, xs = np.nonzero(a[unten:])
+        ys, xs = ys + y + unten, xs + x
+        ok = (ys >= 0) & (ys < pfad_px.shape[0]) & (xs >= 0) & (xs < pfad_px.shape[1])
+        return pfad_px[ys[ok], xs[ok]].any()
+
     def setzen(name, X, fy, opt, suchen=False, arten=None, melden=False):
         opt = dict(opt)
         datei, h, zu, mitte = sprite(name, opt.pop('spiegeln', False))
@@ -162,6 +175,8 @@ def main():
                 continue
             x = raster_x(alpha[datei], kx) if not opt.get('achse') else int(round(kx - mitte))
             y = (ky + 1) * T - 1 - zu
+            if weg_belegt(datei, x, y):
+                continue
             if bewerten(lvl, alpha[datei], x, y) and (frei_px(datei, x, y) if not opt.get('begleiter') else baum_ok(datei, x, y)):
                 break
         else:
@@ -265,7 +280,7 @@ def main():
                     continue
                 datei, h, zu, mitte = sprite(rnd.choice(WALDBAEUME), rnd.random() < 0.5)
                 x, y = raster_x(alpha[datei], tx * T + 8), (ty + 1) * T - 1 - zu
-                if not bewerten(lvl, alpha[datei], x, y):
+                if not bewerten(lvl, alpha[datei], x, y) or weg_belegt(datei, x, y):
                     continue
                 if any(abs(o['kachel'][0] - tx) < 2 and o['kachel'][1] == ty for o in objekte):
                     continue
