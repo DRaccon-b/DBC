@@ -28,7 +28,7 @@ FEST = [
     ('gross/00', 21, 66, {}), ('gross/00', 39, 66, {}), ('gross/00', 21, 77, {}),
     ('mittel/08', 24, 70, {'anim': 'leuchten'}), ('mittel/08', 37, 70, {'anim': 'leuchten'}),
     ('mittel/08', 27, 78, {'anim': 'leuchten'}), ('mittel/08', 36, 78, {'anim': 'leuchten'}),
-    ('mittel/07', 30, 73, {'anim': 'feuer'}), ('mittel/14', 35, 67, {'anim': 'wehen'}),
+    ('mittel/07', 30, 73, {'anim': 'feuer'}), ('mittel/14', 35, 67, {'anim': 'fahne'}),
     ('mittel/05', 23, 70, {}), ('mittel/06', 40, 69, {}), ('mittel/06', 40, 77, {}), ('mittel/12', 26, 73, {}),
     ('mittel/13', 33, 76, {}), ('mittel/04', 38, 72, {}), ('klein/63', 28, 70, {}),
     # Wegweiser

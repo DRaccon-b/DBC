@@ -480,11 +480,42 @@ def objekte_zeichnen(img, objs, cache, boden, frame):
             sp = kb.wehen(sp, kb.wind(frame, o['x']))
         elif frame is not None and o.get('anim') == 'baum':
             sp = baum_wind(sp, frame, o['x'] + o['y'] * 0.3)
+        elif frame is not None and o.get('anim') == 'fahne':
+            sp = fahne_wehen(sp, frame, o['x'] * 0.37)
         img.alpha_composite(sp, (o['x'], o['y']))
         if frame is not None and o.get('anim') == 'blume':
             bluete_puls(img, o, sp, frame)
         if not o['basis'].startswith(('rand/', 'klein/0', 'klein/1', 'klein/2', 'klein/5')):
             bodenwall(img, grund, o, cache[o['datei']])
+
+
+def fahne_wehen(sp, frame, phase=0.0):
+    """Nur der Stoff weht (Regel: Mast/Stange bleibt ruhig). Stoff = farbige Flaeche unterhalb der Querstange
+    rechts vom Mast samt Kontur; Zeilen werden nach unten zunehmend seitlich verschoben."""
+    a = np.array(sp.convert('RGBA')).astype(np.int16)
+    al = a[..., 3] > 0
+    r, g, b = a[..., 0], a[..., 1], a[..., 2]
+    bunt = al & ((b > r + 15) | (r > g + 40) & (r > b + 40)) & ~((r > g) & (g > b) & (r - b < 120) & (r < 170))
+    if bunt.sum() < 10:
+        return sp
+    ys, xs = np.nonzero(bunt)
+    y0, x0 = int(ys.min()), int(xs.min()) - 1
+    braun = (r > g) & (g >= b) & (r - b > 25) & (r < 190)
+    stoff = al.copy()
+    stoff[:y0] = False
+    stoff[:, :max(0, x0)] = False
+    stoff &= ~braun
+    h = max(1, int(ys.max()) - y0)
+    out = a.copy()
+    out[stoff] = 0
+    for y in range(y0, a.shape[0]):
+        t = (y - y0) / h
+        d = int(round(1.6 * t * math.sin(2 * math.pi * frame / N_FRAMES + phase + y / 7.0)))
+        for x in np.nonzero(stoff[y])[0]:
+            xn = x + d
+            if 0 <= xn < a.shape[1]:
+                out[y, xn] = a[y, x]
+    return Image.fromarray(np.clip(out, 0, 255).astype(np.uint8), 'RGBA')
 
 
 def bodenwall(img, grund, o, sp):
