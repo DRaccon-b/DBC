@@ -287,21 +287,6 @@
 "keine_verdeckung": true
 },
 {
-"datei": "sauber/wand-01.png",
-"basis": "wand/01",
-"x": 228,
-"y": 277,
-"fuss": 32,
-"kachel": [
-14,
-19
-],
-"ebene": 1,
-"an_wand": true,
-"kein_schatten": true,
-"keine_verdeckung": true
-},
-{
 "datei": "sauber/wand-02.png",
 "basis": "wand/02",
 "x": 292,
@@ -399,21 +384,6 @@
 "fuss": 32,
 "kachel": [
 51,
-19
-],
-"ebene": 1,
-"an_wand": true,
-"kein_schatten": true,
-"keine_verdeckung": true
-},
-{
-"datei": "sauber/banner-02.png",
-"basis": "banner/02",
-"x": 194,
-"y": 278,
-"fuss": 31,
-"kachel": [
-12,
 19
 ],
 "ebene": 1,
@@ -1570,11 +1540,11 @@
 "datei": "sauber/einrichtung-04.png",
 "basis": "einrichtung/04",
 "x": 1184,
-"y": 312,
+"y": 296,
 "fuss": 56,
 "kachel": [
 75,
-22
+21
 ],
 "ebene": 0,
 "an_wand": true,
@@ -1622,18 +1592,18 @@
 {
 "datei": "sauber/moebel-03.png",
 "basis": "moebel/03",
-"x": 1090,
-"y": 449,
+"x": 1074,
+"y": 481,
 "fuss": 47,
 "kachel": [
-69,
-30
+68,
+32
 ],
 "ebene": 1,
 "symm": "bank1",
 "block": [
-68,
-28,
+67,
+30,
 4,
 3
 ]
@@ -1641,56 +1611,56 @@
 {
 "datei": "sauber/moebel-03.png",
 "basis": "moebel/03",
-"x": 1266,
-"y": 449,
+"x": 1282,
+"y": 481,
 "fuss": 47,
 "kachel": [
-79,
-30
+80,
+32
 ],
 "ebene": 1,
 "symm": "bank1",
 "block": [
-78,
-28,
-4,
-3
-]
-},
-{
-"datei": "sauber/moebel-03.png",
-"basis": "moebel/03",
-"x": 1090,
-"y": 497,
-"fuss": 47,
-"kachel": [
-69,
-33
-],
-"ebene": 1,
-"symm": "bank2",
-"block": [
-68,
-31,
-4,
-3
-]
-},
-{
-"datei": "sauber/moebel-03.png",
-"basis": "moebel/03",
-"x": 1266,
-"y": 497,
-"fuss": 47,
-"kachel": [
 79,
-33
+30,
+4,
+3
+]
+},
+{
+"datei": "sauber/moebel-03.png",
+"basis": "moebel/03",
+"x": 1138,
+"y": 481,
+"fuss": 47,
+"kachel": [
+72,
+32
 ],
 "ebene": 1,
 "symm": "bank2",
 "block": [
-78,
-31,
+71,
+30,
+4,
+3
+]
+},
+{
+"datei": "sauber/moebel-03.png",
+"basis": "moebel/03",
+"x": 1218,
+"y": 481,
+"fuss": 47,
+"kachel": [
+76,
+32
+],
+"ebene": 1,
+"symm": "bank2",
+"block": [
+75,
+30,
 4,
 3
 ]
@@ -1699,17 +1669,18 @@
 "datei": "sauber/moebel-14.png",
 "basis": "moebel/14",
 "x": 1010,
-"y": 490,
+"y": 442,
 "fuss": 54,
 "kachel": [
 64,
-33
+30
 ],
 "ebene": 1,
+"symm": "kst",
 "anim": "kerzen",
 "block": [
 63,
-30,
+27,
 4,
 4
 ]
@@ -1718,17 +1689,18 @@
 "datei": "sauber/moebel-14.png",
 "basis": "moebel/14",
 "x": 1346,
-"y": 490,
+"y": 442,
 "fuss": 54,
 "kachel": [
-85,
-33
+84,
+30
 ],
 "ebene": 1,
+"symm": "kst",
 "anim": "kerzen",
 "block": [
-84,
-30,
+83,
+27,
 4,
 4
 ]
@@ -2149,19 +2121,37 @@
 ]
 },
 {
-"datei": "sauber/k8-graeber-09_m.png",
+"datei": "sauber/k8-graeber-09.png",
 "basis": "k8/graeber/09",
-"x": 486,
+"x": 246,
 "y": 659,
 "fuss": 77,
 "kachel": [
-31,
+16,
 45
 ],
 "ebene": 1,
 "block": [
-30,
+15,
 41,
+4,
+5
+]
+},
+{
+"datei": "sauber/k8-graeber-09_m.png",
+"basis": "k8/graeber/09",
+"x": 550,
+"y": 691,
+"fuss": 77,
+"kachel": [
+35,
+47
+],
+"ebene": 1,
+"block": [
+34,
+43,
 4,
 5
 ]
@@ -2241,17 +2231,17 @@
 {
 "datei": "sauber/k8-mittel-04.png",
 "basis": "k8/mittel/04",
-"x": 1123,
-"y": 840,
+"x": 1155,
+"y": 824,
 "fuss": 56,
 "kachel": [
-70,
-55
+72,
+54
 ],
 "ebene": 1,
 "block": [
-70,
-52,
+72,
+51,
 2,
 4
 ]
@@ -2331,17 +2321,17 @@
 {
 "datei": "sauber/wand-35.png",
 "basis": "wand/35",
-"x": 738,
+"x": 754,
 "y": 1153,
 "fuss": 31,
 "kachel": [
-46,
+47,
 73
 ],
 "ebene": 1,
 "anim": "glimmen",
 "block": [
-46,
+47,
 72,
 2,
 2
@@ -2369,17 +2359,17 @@
 {
 "datei": "sauber/wand-60.png",
 "basis": "wand/60",
-"x": 790,
-"y": 1153,
+"x": 806,
+"y": 1169,
 "fuss": 31,
 "kachel": [
-49,
-73
+50,
+74
 ],
 "ebene": 1,
 "block": [
-49,
-72,
+50,
+73,
 2,
 2
 ]
@@ -2482,17 +2472,17 @@
 {
 "datei": "sauber/k8-mittel-05.png",
 "basis": "k8/mittel/05",
-"x": 213,
+"x": 245,
 "y": 1138,
 "fuss": 62,
 "kachel": [
-13,
+15,
 74
 ],
 "ebene": 1,
 "anim": "geisterlicht",
 "block": [
-13,
+15,
 71,
 2,
 4
@@ -2782,24 +2772,6 @@
 "block": [
 43,
 43,
-2,
-2
-]
-},
-{
-"datei": "sauber/wand-38.png",
-"basis": "wand/38",
-"x": 596,
-"y": 707,
-"fuss": 29,
-"kachel": [
-37,
-45
-],
-"ebene": 1,
-"block": [
-37,
-44,
 2,
 2
 ]
@@ -3329,18 +3301,38 @@
 {
 "datei": "sauber/k8-klein-04.png",
 "basis": "k8/klein/04",
-"x": 740,
-"y": 874,
+"x": 644,
+"y": 730,
 "fuss": 22,
 "kachel": [
-46,
+40,
+46
+],
+"ebene": 0,
+"begleiter": true,
+"anim": "wehen",
+"block": [
+40,
+45,
+2,
+2
+]
+},
+{
+"datei": "sauber/k8-klein-48.png",
+"basis": "k8/klein/48",
+"x": 709,
+"y": 873,
+"fuss": 23,
+"kachel": [
+44,
 55
 ],
 "ebene": 0,
 "begleiter": true,
 "anim": "wehen",
 "block": [
-46,
+44,
 54,
 2,
 2
@@ -3349,19 +3341,19 @@
 {
 "datei": "sauber/k8-klein-48.png",
 "basis": "k8/klein/48",
-"x": 789,
-"y": 969,
+"x": 949,
+"y": 1033,
 "fuss": 23,
 "kachel": [
-49,
-61
+59,
+65
 ],
 "ebene": 0,
 "begleiter": true,
 "anim": "wehen",
 "block": [
-49,
-60,
+59,
+64,
 2,
 2
 ]
@@ -3389,38 +3381,18 @@
 {
 "datei": "sauber/k8-klein-48.png",
 "basis": "k8/klein/48",
-"x": 1221,
-"y": 1113,
-"fuss": 23,
-"kachel": [
-76,
-70
-],
-"ebene": 0,
-"begleiter": true,
-"anim": "wehen",
-"block": [
-76,
-69,
-2,
-2
-]
-},
-{
-"datei": "sauber/k8-klein-48.png",
-"basis": "k8/klein/48",
-"x": 1349,
+"x": 1141,
 "y": 1177,
 "fuss": 23,
 "kachel": [
-84,
+71,
 74
 ],
 "ebene": 0,
 "begleiter": true,
 "anim": "wehen",
 "block": [
-84,
+71,
 73,
 2,
 2
@@ -3429,19 +3401,19 @@
 {
 "datei": "sauber/k8-klein-04.png",
 "basis": "k8/klein/04",
-"x": 1236,
-"y": 1226,
+"x": 1316,
+"y": 1178,
 "fuss": 22,
 "kachel": [
-77,
-77
+82,
+74
 ],
 "ebene": 0,
 "begleiter": true,
 "anim": "wehen",
 "block": [
-77,
-76,
+82,
+73,
 2,
 2
 ]
@@ -3449,9 +3421,49 @@
 {
 "datei": "sauber/k8-klein-48.png",
 "basis": "k8/klein/48",
-"x": 1333,
+"x": 1029,
+"y": 1289,
+"fuss": 23,
+"kachel": [
+64,
+81
+],
+"ebene": 0,
+"begleiter": true,
+"anim": "wehen",
+"block": [
+64,
+80,
+2,
+2
+]
+},
+{
+"datei": "sauber/k8-klein-48.png",
+"basis": "k8/klein/48",
+"x": 1141,
 "y": 713,
 "fuss": 23,
+"kachel": [
+71,
+45
+],
+"ebene": 0,
+"begleiter": true,
+"anim": "wehen",
+"block": [
+71,
+44,
+2,
+2
+]
+},
+{
+"datei": "sauber/k8-klein-04.png",
+"basis": "k8/klein/04",
+"x": 1332,
+"y": 714,
+"fuss": 22,
 "kachel": [
 83,
 45
@@ -3462,26 +3474,6 @@
 "block": [
 83,
 44,
-2,
-2
-]
-},
-{
-"datei": "sauber/k8-klein-04.png",
-"basis": "k8/klein/04",
-"x": 516,
-"y": 1034,
-"fuss": 22,
-"kachel": [
-32,
-65
-],
-"ebene": 0,
-"begleiter": true,
-"anim": "wehen",
-"block": [
-32,
-64,
 2,
 2
 ]
@@ -3557,25 +3549,6 @@
 "block": [
 61,
 47,
-2,
-2
-]
-},
-{
-"datei": "sauber/k8-klein-04.png",
-"basis": "k8/klein/04",
-"x": 564,
-"y": 682,
-"fuss": 22,
-"kachel": [
-35,
-43
-],
-"ebene": 0,
-"anim": "wehen",
-"block": [
-35,
-42,
 2,
 2
 ]
@@ -3695,25 +3668,6 @@
 ]
 },
 {
-"datei": "sauber/k8-klein-06.png",
-"basis": "k8/klein/06",
-"x": 579,
-"y": 711,
-"fuss": 25,
-"kachel": [
-36,
-45
-],
-"ebene": 1,
-"anim": "kerzen",
-"block": [
-36,
-44,
-1,
-2
-]
-},
-{
 "datei": "sauber/k8-klein-09.png",
 "basis": "k8/klein/09",
 "x": 324,
@@ -3728,25 +3682,6 @@
 "block": [
 20,
 56,
-2,
-2
-]
-},
-{
-"datei": "sauber/k8-klein-12.png",
-"basis": "k8/klein/12",
-"x": 229,
-"y": 683,
-"fuss": 21,
-"kachel": [
-14,
-43
-],
-"ebene": 0,
-"anim": "wehen",
-"block": [
-14,
-42,
 2,
 2
 ]
@@ -3803,25 +3738,6 @@
 "block": [
 44,
 47,
-2,
-2
-]
-},
-{
-"datei": "sauber/k8-klein-02.png",
-"basis": "k8/klein/02",
-"x": 1172,
-"y": 857,
-"fuss": 23,
-"kachel": [
-73,
-54
-],
-"ebene": 0,
-"anim": "glimmen",
-"block": [
-73,
-53,
 2,
 2
 ]
@@ -4169,44 +4085,6 @@
 ]
 },
 {
-"datei": "sauber/k8-klein-44.png",
-"basis": "k8/klein/44",
-"x": 661,
-"y": 950,
-"fuss": 26,
-"kachel": [
-41,
-60
-],
-"ebene": 1,
-"anim": "kerzen",
-"block": [
-41,
-59,
-2,
-2
-]
-},
-{
-"datei": "sauber/k8-klein-06.png",
-"basis": "k8/klein/06",
-"x": 387,
-"y": 1079,
-"fuss": 25,
-"kachel": [
-24,
-68
-],
-"ebene": 1,
-"anim": "kerzen",
-"block": [
-24,
-67,
-1,
-2
-]
-},
-{
 "datei": "sauber/k8-klein-48.png",
 "basis": "k8/klein/48",
 "x": 357,
@@ -4283,25 +4161,6 @@
 ]
 },
 {
-"datei": "sauber/k8-klein-44.png",
-"basis": "k8/klein/44",
-"x": 581,
-"y": 742,
-"fuss": 26,
-"kachel": [
-36,
-47
-],
-"ebene": 1,
-"anim": "kerzen",
-"block": [
-36,
-46,
-2,
-2
-]
-},
-{
 "datei": "sauber/k8-klein-12.png",
 "basis": "k8/klein/12",
 "x": 1173,
@@ -4354,25 +4213,6 @@
 49,
 66,
 2,
-2
-]
-},
-{
-"datei": "sauber/k8-klein-06.png",
-"basis": "k8/klein/06",
-"x": 675,
-"y": 807,
-"fuss": 25,
-"kachel": [
-42,
-51
-],
-"ebene": 1,
-"anim": "kerzen",
-"block": [
-42,
-50,
-1,
 2
 ]
 },
@@ -4981,6 +4821,25 @@
 ]
 },
 {
+"datei": "sauber/k8-klein-05.png",
+"basis": "k8/klein/05",
+"x": 803,
+"y": 1149,
+"fuss": 19,
+"kachel": [
+50,
+72
+],
+"ebene": 0,
+"liegend": true,
+"block": [
+50,
+71,
+2,
+2
+]
+},
+{
 "datei": "sauber/k8-klein-03.png",
 "basis": "k8/klein/03",
 "x": 103,
@@ -5127,25 +4986,6 @@
 50,
 56,
 1,
-2
-]
-},
-{
-"datei": "sauber/k8-klein-04.png",
-"basis": "k8/klein/04",
-"x": 260,
-"y": 714,
-"fuss": 22,
-"kachel": [
-16,
-45
-],
-"ebene": 0,
-"anim": "wehen",
-"block": [
-16,
-44,
-2,
 2
 ]
 },
@@ -5547,25 +5387,6 @@
 ]
 },
 {
-"datei": "sauber/k8-klein-00.png",
-"basis": "k8/klein/00",
-"x": 804,
-"y": 1130,
-"fuss": 22,
-"kachel": [
-50,
-71
-],
-"ebene": 0,
-"liegend": true,
-"block": [
-50,
-70,
-2,
-2
-]
-},
-{
 "datei": "sauber/k8-klein-07.png",
 "basis": "k8/klein/07",
 "x": 405,
@@ -5585,25 +5406,6 @@
 ]
 },
 {
-"datei": "sauber/k8-klein-06.png",
-"basis": "k8/klein/06",
-"x": 259,
-"y": 1191,
-"fuss": 25,
-"kachel": [
-16,
-75
-],
-"ebene": 1,
-"anim": "kerzen",
-"block": [
-16,
-74,
-1,
-2
-]
-},
-{
 "datei": "sauber/k8-klein-48.png",
 "basis": "k8/klein/48",
 "x": 261,
@@ -5619,25 +5421,6 @@
 16,
 62,
 2,
-2
-]
-},
-{
-"datei": "sauber/k8-klein-06.png",
-"basis": "k8/klein/06",
-"x": 739,
-"y": 1063,
-"fuss": 25,
-"kachel": [
-46,
-67
-],
-"ebene": 1,
-"anim": "kerzen",
-"block": [
-46,
-66,
-1,
 2
 ]
 },
@@ -5714,44 +5497,6 @@
 36,
 76,
 2,
-2
-]
-},
-{
-"datei": "sauber/k8-klein-06.png",
-"basis": "k8/klein/06",
-"x": 1091,
-"y": 1047,
-"fuss": 25,
-"kachel": [
-68,
-66
-],
-"ebene": 1,
-"anim": "kerzen",
-"block": [
-68,
-65,
-1,
-2
-]
-},
-{
-"datei": "sauber/k8-klein-06.png",
-"basis": "k8/klein/06",
-"x": 595,
-"y": 1207,
-"fuss": 25,
-"kachel": [
-37,
-76
-],
-"ebene": 1,
-"anim": "kerzen",
-"block": [
-37,
-75,
-1,
 2
 ]
 },
@@ -6059,39 +5804,20 @@
 ]
 },
 {
-"datei": "sauber/k8-fels_klein-11.png",
-"basis": "k8/fels_klein/11",
-"x": 1333,
-"y": 133,
-"fuss": 11,
+"datei": "sauber/k8-klein-02.png",
+"basis": "k8/klein/02",
+"x": 1316,
+"y": 777,
+"fuss": 23,
 "kachel": [
-83,
-8
+82,
+49
 ],
 "ebene": 0,
-"liegend": true,
+"anim": "glimmen",
 "block": [
-83,
-8,
-2,
-1
-]
-},
-{
-"datei": "sauber/k8-klein-05.png",
-"basis": "k8/klein/05",
-"x": 243,
-"y": 173,
-"fuss": 19,
-"kachel": [
-15,
-11
-],
-"ebene": 0,
-"liegend": true,
-"block": [
-15,
-10,
+82,
+48,
 2,
 2
 ]
@@ -6149,6 +5875,82 @@
 "block": [
 82,
 9,
+2,
+2
+]
+},
+{
+"datei": "sauber/k8-fels_klein-11.png",
+"basis": "k8/fels_klein/11",
+"x": 389,
+"y": 325,
+"fuss": 11,
+"kachel": [
+24,
+20
+],
+"ebene": 0,
+"liegend": true,
+"block": [
+24,
+20,
+2,
+1
+]
+},
+{
+"datei": "sauber/k8-fels_klein-11.png",
+"basis": "k8/fels_klein/11",
+"x": 773,
+"y": 485,
+"fuss": 11,
+"kachel": [
+48,
+30
+],
+"ebene": 0,
+"liegend": true,
+"block": [
+48,
+30,
+2,
+1
+]
+},
+{
+"datei": "sauber/k8-fels_klein-11.png",
+"basis": "k8/fels_klein/11",
+"x": 757,
+"y": 325,
+"fuss": 11,
+"kachel": [
+47,
+20
+],
+"ebene": 0,
+"liegend": true,
+"block": [
+47,
+20,
+2,
+1
+]
+},
+{
+"datei": "sauber/k8-klein-05.png",
+"basis": "k8/klein/05",
+"x": 339,
+"y": 381,
+"fuss": 19,
+"kachel": [
+21,
+24
+],
+"ebene": 0,
+"liegend": true,
+"block": [
+21,
+23,
 2,
 2
 ]

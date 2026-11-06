@@ -106,7 +106,7 @@ def main(karte):
                     if not (b.startswith(BAUM) and (objs[j].get('basis') or '').startswith(BAUM))]
         if o.get('begleiter'):                    # gewollte Ueberdeckung vor dem Sockel (Regel 5 / Einbettung)
             continue
-        if konflikt and (o.get('ebene', 1) == 0 or b.startswith(('klein/', 'mittel/', 'rosa/', 'blueten/'))) and not b.startswith(BAUM) and not o.get('vorrang'):
+        if konflikt and (o.get('ebene', 1) == 0 or (b.startswith(('klein/', 'mittel/', 'rosa/', 'blueten/')) or '/klein/' in b)) and not b.startswith(BAUM) and not o.get('vorrang'):
             weg.add(i)
             continue
         ber[teil] = i

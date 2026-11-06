@@ -250,11 +250,12 @@ def bauen(frame=None, speichern=True):
     a[m7] = tx[m7]
     # --- Wasser: Graben (scharf) und Teiche (weich), vertieft mit Steinrand
     wroh = zell_maske(cls, 'x', cols, rows)
-    graben = (wroh > 0) & schloss
+    graben = (wroh > 0) & schloss & (np.arange(Hp)[:, None] >= 40 * T)
+    gartenteich = weich(wroh * schloss, 6, 0.15, 44, 0.42) & schloss & (np.arange(Hp)[:, None] < 16 * T)  # runder Teich
     graben[40 * T:43 * T, :] = True
     teiche = weich(wroh, 7, 0.2, 41, 0.45) & ~schloss
     teiche = k4.splitter_weg(teiche, 150)
-    wm = graben | teiche
+    wm = graben | teiche | gartenteich
     wasser_dunkel(a, wm, frame)
     import wasser_vertieft
     a = np.array(wasser_vertieft.vertiefen(Image.fromarray(a), np.ones_like(wm), frame, maske=wm,

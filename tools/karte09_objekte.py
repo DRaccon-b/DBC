@@ -35,9 +35,9 @@ for x in (37, 41):
 WAND += [(BANNER_INNEN, 22, 2), (BANNER_INNEN, 33, 2), ('wand/04', 13, 2), ('wand/04', 42, 2)]
 WAND += [('wand/00', 65, 2), ('wand/02', 68, 2), ('banner/01', 71, 2), ('banner/01', 79, 2), ('wand/02', 82, 2), ('wand/00', 85, 2)]
 WAND += [('wand/03', 5, 2), ('wand/03', 50, 2), ('wand/03', 55, 2)]
-WAND += [('wand/02', 4, 17), ('wand/00', 9, 17), ('wand/01', 14, 17), ('wand/02', 19, 17), ('wand/06', 23, 17),
+WAND += [('wand/02', 4, 17), ('wand/00', 9, 17), ('wand/02', 19, 17), ('wand/06', 23, 17),
          ('wand/06', 32, 17), ('wand/02', 36, 17), ('wand/01', 41, 17), ('wand/00', 46, 17), ('wand/02', 51, 17),
-         (BANNER_INNEN, 12, 17), (BANNER_INNEN, 43, 17), ('wand/06', 58, 17)]
+         (BANNER_INNEN, 43, 17), ('wand/06', 58, 17)]
 WAND += [(BANNER_AUSSEN, x, 35) for x in (7, 17, 37, 47, 57, 67, 77, 87)]
 WAND += [('wand/04', x, 35) for x in (24, 30)]
 # (sprite, Kachel-x, Fusskachel-y, Optionen)
@@ -68,11 +68,11 @@ FEST = [
     # ---- Ritualsaal: Orgel, Altar, Saerge an den Waenden, Statuen, Baenke, Fledermaus-Teppich im Kreis
     ('gross/00', 75, 6, {}), ('gross/01', 75, 10, {}),
     ('moebel/01', 71, 10, {'symm': 'kandD', 'anim': 'kerzen'}), ('moebel/01', 79, 10, {'symm': 'kandD', 'anim': 'kerzen'}),
-    ('einrichtung/04', 75, 22, {'boden': True}),
+    ('einrichtung/04', 75, 21, {'boden': True}),
     ('einrichtung/13', 69, 17, {'symm': 'statD'}), ('einrichtung/13', 81, 17, {'symm': 'statD', 'spiegeln': True}),
-    ('moebel/03', 70, 30, {'symm': 'bank1'}), ('moebel/03', 80, 30, {'symm': 'bank1'}),
-    ('moebel/03', 70, 33, {'symm': 'bank2'}), ('moebel/03', 80, 33, {'symm': 'bank2'}),
-    ('moebel/14', 65, 33, {'anim': 'kerzen'}), ('moebel/14', 86, 33, {'anim': 'kerzen'}),
+    ('moebel/03', 69, 32, {'symm': 'bank1'}), ('moebel/03', 81, 32, {'symm': 'bank1'}),
+    ('moebel/03', 73, 32, {'symm': 'bank2'}), ('moebel/03', 77, 32, {'symm': 'bank2'}),
+    ('moebel/14', 65, 30, {'symm': 'kst', 'anim': 'kerzen'}), ('moebel/14', 85, 30, {'symm': 'kst', 'anim': 'kerzen'}),
 ] + [('moebel/02', 64, y, {}) for y in (9, 14, 19, 24)] + [('moebel/02', 86, y, {}) for y in (9, 14, 19, 24)] + [
     # Garten links: Grabstaetten im Beet, toter Baum
     ('k8/baeume/02', 6, 7, {}), ('k8/graeber/13', 4, 9, {}), ('k8/mittel/00', 7, 10, {}), ('wand/31', 5, 12, {}),
@@ -81,13 +81,13 @@ FEST = [
     ('k8/krypta/00', 57, 7, {}), ('k8/baeume/00', 49, 7, {}), ('k8/mittel/02', 53, 12, {}), ('wand/38', 59, 12, {}),
     # Friedhof: Mausoleum, Gruften, Steinkreis, Lager, Statue, grosser toter Baum
     ('k8/krypta/02', 11, 48, {}), ('k8/krypta/00', 21, 48, {}), ('k8/krypta/00', 4, 62, {}), ('k8/krypta/03', 84, 68, {}),
-    ('k8/gross/03', 77, 50, {}), ('wand/32', 38, 76, {}), ('k8/graeber/09', 23, 45, {}), ('k8/graeber/09', 32, 45, {'spiegeln': True}),
+    ('k8/gross/03', 77, 50, {}), ('wand/32', 38, 76, {}), ('k8/graeber/09', 20, 47, {}), ('k8/graeber/09', 36, 47, {'spiegeln': True}),
     ('wand/34', 66, 57, {}),
-] + [('k8/mittel/04', x, y, {}) for (x, y) in ((61, 54), (63, 51), (68, 51), (71, 54), (71, 59), (68, 61), (63, 61), (61, 58))] + [
-    ('wand/35', 45, 76, {'anim': 'glimmen'}), ('k8/mittel/13', 47, 78, {'anim': 'kerzen'}), ('wand/60', 49, 75, {}),
+] + [('k8/mittel/04', x, y, {}) for (x, y) in ((61, 54), (63, 51), (68, 51), (73, 54), (71, 59), (68, 61), (63, 61), (61, 58))] + [
+    ('wand/35', 48, 73, {'anim': 'glimmen'}), ('k8/mittel/13', 47, 78, {'anim': 'kerzen'}), ('wand/60', 49, 75, {}),
     ('k8/mittel/05', 35, 78, {'anim': 'geisterlicht'}), ('k8/mittel/05', 52, 80, {'anim': 'geisterlicht'}),
     ('k8/mittel/05', 24, 50, {'anim': 'geisterlicht'}), ('k8/mittel/05', 34, 50, {'anim': 'geisterlicht'}),
-    ('k8/mittel/05', 57, 75, {'anim': 'geisterlicht'}), ('k8/mittel/05', 14, 74, {'anim': 'geisterlicht'}),
+    ('k8/mittel/05', 57, 75, {'anim': 'geisterlicht'}), ('k8/mittel/05', 16, 74, {'anim': 'geisterlicht'}),
     ('wand/26', 62, 46, {}), ('wand/53', 6, 75, {}), ('k8/mittel/11', 18, 58, {}), ('wand/28', 80, 69, {}),
 ]
 GROSS2 = set()                    # keine Vergroesserung: Wandobjekte passen in Originalgroesse auf die Wand
