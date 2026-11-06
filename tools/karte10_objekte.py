@@ -155,6 +155,8 @@ def main():
         h_, w_ = a.shape
         y0, x0 = max(0, y), max(0, x)
         y1, x1 = min(pixel.shape[0], y + h_), min(pixel.shape[1], x + w_)
+        if y1 <= y0 or x1 <= x0:
+            return True
         return not (pixel[y0:y1, x0:x1] & a[y0 - y:y1 - y, x0 - x:x1 - x]).any()
 
     def belegen(datei, x, y):
@@ -162,7 +164,8 @@ def main():
         h_, w_ = a.shape
         y0, x0 = max(0, y), max(0, x)
         y1, x1 = min(pixel.shape[0], y + h_), min(pixel.shape[1], x + w_)
-        pixel[y0:y1, x0:x1] |= a[y0 - y:y1 - y, x0 - x:x1 - x]
+        if y1 > y0 and x1 > x0:
+            pixel[y0:y1, x0:x1] |= a[y0 - y:y1 - y, x0 - x:x1 - x]
 
     def auf_land(datei, x, y):
         """Regel 'Gebaeude stehen ganz auf Land': jede Spalte des Sprites ueber Boden (nicht Wasser/Mauer/Hecke)."""
@@ -251,12 +254,14 @@ def main():
     # 4b) Waldrand wie Karte 01: dichtes, versetztes Raster einzelner Baeume auf dem Waldboden (Baeume duerfen
     #     sich im dichten Wald ueberlappen), am Waldsaum Buesche und Blumen
     wald_neu = []
-    for ay in range(8, rows * T + 8, 15):
+    # unten laeuft der Wald ueber den Kartenrand hinaus: die suedlichsten Baeume stehen ausserhalb, so dass am
+    # unteren Rand nur Kronen zu sehen sind (keine abgeschnittenen Staemme)
+    for ay in range(8, rows * T + 40, 15):
         versatz = rnd.randint(0, 10)
         for ax in range(versatz, cols * T, 19):
             px_, py_ = ax + rnd.randint(-5, 5), ay + rnd.randint(-4, 4)
             cx, cy = px_ // T, (py_ + 2) // T
-            if not (0 <= cx < cols and 0 <= cy < rows) or cls[cy][cx] != 'W':
+            if not (0 <= cx < cols) or cls[min(cy, rows - 1)][cx] != 'W':
                 continue
             name = rnd.choices(list(WALD), weights=list(WALD.values()))[0]
             datei, h, zu, mitte = sprite(name, rnd.random() < 0.5)
