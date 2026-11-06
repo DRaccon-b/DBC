@@ -46,6 +46,9 @@ Wenn eine Karte fertig scheint: noch einmal komplett auf **Pixelfehler** und **L
   aus dem Wasser, Nebel oder Schnee herausragt (Felsspitzen, Pfähle, Stege, Pflanzen, Objekte), liegt immer
   darüber. Pflicht-Kontrolle: nach jedem neuen oder geänderten Effekt alle Stellen, an denen er auf Felsen oder
   Objekte trifft, vergrößert ansehen – im Standbild **und** in mindestens drei Animationsbildern (Effekte wandern).
+- **Verdeckung durch Höhen:** Ein Objekt auf tieferem Boden ragt nie über ein seitlich daneben liegendes, höheres
+  Plateau – der Berg steht davor und schneidet das Objekt ab. Nur wenn die Klippe hinter dem Objekt liegt (Norden),
+  darf es vor der Wand stehen.
 
 ## Bewährte Regeln aus den bisherigen Runden
 

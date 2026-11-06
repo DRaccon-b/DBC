@@ -250,6 +250,34 @@ def klippen_schatten(img, objs, cache, lvl, laenge=30):
     img.paste(Image.fromarray(np.clip(a, 0, 255).astype(np.uint8)))
 
 
+def klippen_verdeckung(img, objs, cache, lvl, grund):
+    """Ein Objekt auf dem unteren Feld darf nicht ueber ein seitlich daneben liegendes Plateau ragen: der Berg
+    steht davor und schneidet es ab. Abgeschnitten wird in jeder Spalte, in der das hoehere Gelaende (Plateau oder
+    Wand) bis auf die Fusshoehe des Objekts herunterreicht - liegt die Klippe dagegen hinter dem Objekt (Norden),
+    bleibt es davor sichtbar."""
+    Hh, W = lvl.shape
+    hoch = (lvl == 2) | (lvl == 9)
+    a = np.array(img)
+    for o in objs:
+        sp = cache[o['datei']]
+        al = np.array(sp.getchannel('A')) > 0
+        ys, xs = np.nonzero(al)
+        if not len(ys):
+            continue
+        fy = min(Hh - 1, max(0, o['y'] + int(ys.max())))
+        fx = min(W - 1, max(0, o['x'] + int(xs.mean())))
+        if lvl[min(Hh - 1, fy + 1), fx] != 1:
+            continue
+        Y, X = ys + o['y'], xs + o['x']
+        ok = (Y >= 0) & (Y < Hh) & (X >= 0) & (X < W)
+        Y, X = Y[ok], X[ok]
+        seitlich = hoch[np.clip(fy - 2, 0, Hh - 1), X]          # Berg reicht in dieser Spalte bis zum Fuss
+        m = seitlich & hoch[Y, X]
+        if m.any():
+            a[Y[m], X[m]] = grund[Y[m], X[m]]
+    img.paste(Image.fromarray(a))
+
+
 def bauen(frame=None, speichern=True):
     lay = json.load(open(os.path.join(KARTE, 'layout.json')))
     cols, rows = lay['groesse']
@@ -373,9 +401,10 @@ def bauen(frame=None, speichern=True):
         lvl[waende] = 9
         lvl[km] = 8
         schatten_k5(img, objs, cache, lvl)
+        vor_objekten = np.array(img)
         k4.objekte_zeichnen(img, objs, cache, np.zeros((Hp, Wp), bool), frame)
         k4.animieren(img, objs, cache, frame or 0)
-        klippen_schatten(img, objs, cache, lvl)
+        klippen_verdeckung(img, objs, cache, lvl, vor_objekten)
     if frame is not None:
         schneefall(img, frame)
     if speichern and frame is None:
