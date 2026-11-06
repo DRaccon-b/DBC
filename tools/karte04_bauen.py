@@ -539,11 +539,39 @@ def objekte_zeichnen(img, objs, cache, boden, frame, ebenen=None):
             sp = baum_wind(sp, frame, o['x'] + o['y'] * 0.3)
         elif frame is not None and o.get('anim') == 'fahne':
             sp = fahne_wehen(sp, frame, o['x'] * 0.37)
+        elif frame is not None and o.get('anim') == 'reaktor':
+            sp = reaktor_ruetteln(sp, frame, o['x'])
         img.alpha_composite(sp, (o['x'], o['y']))
         if frame is not None and o.get('anim') == 'blume':
             bluete_puls(img, o, sp, frame)
         if not o['basis'].startswith(('rand/', 'klein/0', 'klein/1', 'klein/2', 'klein/5')):
             bodenwall(img, grund, o, cache[o['datei']])
+
+
+RUETTEL_X = (0, 1, 0, -1, 1, 0, -1, 0, 0, 1, -1, 0, 1, 0, 0, -1)
+RUETTEL_Y = (0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, 0, -1, 0, 0, 0)
+FUSS_STILL = 4                      # unterste Pixelreihen (Fuesse, Kabel am Boden) bleiben ruhig
+
+
+def ruettel(frame, phase):
+    """Versatz (dx, dy) des laufenden Gehaeuses in diesem Bild - unregelmaessiges Motorruetteln."""
+    k = (frame + int(phase) * 7) % len(RUETTEL_X)
+    return RUETTEL_X[k], RUETTEL_Y[k]
+
+
+def reaktor_ruetteln(sp, frame, phase):
+    """Gehaeuse ruettelt um 1 px, die Fuesse stehen fest auf dem Boden."""
+    dx, dy = ruettel(frame, phase)
+    if not (dx or dy):
+        return sp
+    zl = np.nonzero(np.array(sp.getchannel('A')).any(axis=1))[0]
+    schnitt = int(zl.max()) + 1 - FUSS_STILL
+    neu = Image.new('RGBA', sp.size, (0, 0, 0, 0))
+    koerper = sp.crop((0, 0, sp.width, schnitt))
+    neu.paste(koerper, (dx, dy), koerper)
+    fuss = sp.crop((0, schnitt - 1, sp.width, sp.height))          # Naht doppelt -> keine Luecke beim Hochruetteln
+    neu.alpha_composite(fuss, (0, schnitt - 1))
+    return neu
 
 
 def fahne_wehen(sp, frame, phase=0.0):
@@ -650,7 +678,7 @@ FEUERFARBE = {'1': (160, 40, 30), '2': (230, 90, 30), '3': (250, 170, 50), '4': 
 ROHRE = {'baeume/04': [(19, 1, -1), (58, 5, 1)], 'rand/08': [(41, 1, 0), (50, 1, 0)]}   # Rohr x, y, Austrittsrichtung
 
 
-def animieren(img, objs, cache, frame):
+def animieren(img, objs, cache, frame, ruhig=False):
     """Lagerfeuer (Flammen + Lichtschein), Monument-Juwel pulsiert, Kristalle glitzern, Laterne glimmt."""
     glut = Image.new('RGBA', img.size, (0, 0, 0, 0))
     gd = ImageDraw.Draw(glut)
@@ -717,17 +745,18 @@ def animieren(img, objs, cache, frame):
             r_, g_, b_ = a[..., 0], a[..., 1], a[..., 2]
             mx, mn = np.maximum(np.maximum(r_, g_), b_), np.minimum(np.minimum(r_, g_), b_)
             licht = (a[..., 3] > 0) & (mx > 150) & (mx - mn > 70) & ((g_ > r_ + 20) | (b_ > r_ + 20) | (r_ > g_ + 90))
+            rdx, rdy = (0, 0) if ruhig else ruettel(frame, o['x'])
             ys_l, xs_l = np.nonzero(licht)
             for y_, x_ in zip(ys_l, xs_l):
                 f = 0.55 + 0.9 * (0.5 + 0.5 * math.sin(2 * math.pi * frame / N_FRAMES * 2 + (x_ // 4) * 1.3 + i))
-                X, Y = o['x'] + x_, o['y'] + y_
+                X, Y = o['x'] + x_ + rdx, o['y'] + y_ + rdy
                 rr, gg, bb, _ = px[X, Y]
                 px[X, Y] = (min(255, int(rr * f)), min(255, int(gg * f)), min(255, int(bb * f)), 255)
             if len(xs_l):
                 # schwacher Lichtschein um die Lampengruppe
                 st = 0.5 + 0.5 * math.sin(2 * math.pi * frame / N_FRAMES * 2 + i)
                 fa = tuple(int(c) for c in a[ys_l, xs_l, :3].mean(axis=0))
-                cx_l, cy_l = o['x'] + xs_l.mean(), o['y'] + ys_l.mean()
+                cx_l, cy_l = o['x'] + rdx + xs_l.mean(), o['y'] + rdy + ys_l.mean()
                 rx, ry = (xs_l.max() - xs_l.min()) / 2 + 4, (ys_l.max() - ys_l.min()) / 2 + 3
                 gd.ellipse((cx_l - rx, cy_l - ry, cx_l + rx, cy_l + ry), fill=fa + (int(55 * st),))
             # Rauch genau aus den Rohroeffnungen (Pixel im Original-Sprite, Variante hat 2 px Rand links)
@@ -736,7 +765,7 @@ def animieren(img, objs, cache, frame):
             for j, (rx_, ry_, seit) in enumerate(ROHRE.get(o['basis'], ())):
                 if o.get('spiegeln') or o['datei'].endswith('_m.png'):
                     rx_, seit = basis.width - 1 - rx_, -seit
-                cx, cy0 = o['x'] + off + rx_, o['y'] + ry_
+                cx, cy0 = o['x'] + off + rx_ + rdx, o['y'] + ry_ + rdy
                 for z in range(4):
                     t = ((frame + z * N_FRAMES / 4 + j * 2) % N_FRAMES) / N_FRAMES
                     cy = cy0 - 1 - t * 30
@@ -954,7 +983,7 @@ def bauen(frame=None, speichern=True):
         ebenen[m2] = 2
         ebenen[waende] = 9
         objekte_zeichnen(img, objs, cache, ~wm, frame, ebenen)
-        animieren(img, objs, cache, frame or 0)
+        animieren(img, objs, cache, frame or 0, ruhig=frame is None)
         for o in objs:
             kx_, ky_ = (o['x'] + cache[o['datei']].width // 2) // T, (o['y'] + o['fuss']) // T
             o['waldrand'] = o['basis'].startswith('rand/') or cls[min(rows - 1, max(0, ky_))][min(cols - 1, max(0, kx_))] == 'h'

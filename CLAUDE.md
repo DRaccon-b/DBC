@@ -86,4 +86,17 @@ Wenn eine Karte fertig scheint: noch einmal komplett auf **Pixelfehler** und **L
   Busch als Übergang zur Wand.
 - **Vorschau zuerst:** Änderungen erst als Vorschau-Bild (Ausschnitt) zeigen; GIF und ZIP erst, wenn der Nutzer
   zufrieden ist.
+- **Verdeckung durch Bauwerke:** Wie bei Höhen: Mauern, Wände, Dächer und Fassaden eines Gebäudes stehen vor
+  Objekten, die daneben auf dem Boden stehen, und schneiden sie ab.
+- **Verdeckung nur, wo sie stimmt:** Objekte, deren Fuß am oder auf dem Plateau steht, und Waldränder werden nie
+  abgeschnitten – sonst fehlen Kacheln am Rand von Bäumen.
+- **Schatten bleiben auf ihrer Höhenebene:** Ein Schatten fällt nur auf die Ebene, auf der der Fuß des Objekts steht
+  (Canyon, Boden, Plateau) – nie über Klippenwände, Canyonränder oder Plateaukanten.
+- **Gleiche Objekte bündig ausrichten:** Zusammengehörige gleichartige Objekte (z. B. Reaktor-Pods untereinander)
+  stehen auf derselben Höhe bzw. Flucht wie ihre Nachbarn.
+- **Sprites auf Schnittkanten prüfen:** Gerade abgeschnittene Kronen- oder Objektkanten und lose Fremdpixel im Sprite
+  selbst reparieren (rund ergänzen), nicht nur die Platzierung ändern.
+- **Maschinen-Animation:** Laufende Maschinen: Rauch steigt genau aus den Rohröffnungen (in Windrichtung treibend),
+  Lampen/Anzeigen pulsieren, das Gehäuse rüttelt leicht (1 px) – Füße und Kabel am Boden bleiben fest. Bei
+  gespiegelten Objekten werden die Animationspunkte mitgespiegelt.
 - **Ablauf:** Jede Änderung committen und pushen, Bilder/GIFs an den Nutzer schicken, auf Deutsch erklären.

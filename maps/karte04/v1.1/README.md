@@ -8,6 +8,9 @@ Regeln aus `CLAUDE.md` angewendet; v1.0 in `maps/karte04/v1.0/`.
 - **Verdeckung durch Höhen:** Objekte auf tieferem Boden werden vom seitlich daneben liegenden Plateau abgeschnitten.
 - **Liegende Objekte:** Knochen, Äste, Ketten, Schrott u. Ä. werfen flachen Schatten der ganzen Form.
 - **Keine Überlappungen:** nach dem Einrasten überlappende Kleinobjekte entfernt.
+- **Schatten:** nur auf der eigenen Höhenebene, nie über Klippenwände, Canyon oder Plateaukanten.
+- **Waldrand:** Bäume am Plateau werden nicht mehr abgeschnitten; Akazie mit gerade abgeschnittener Krone repariert.
+- **4 Reaktoren:** 2 Generatoren und 2 Maschinen, animiert (Rauch aus den Rohren, pulsierende Lampen, rüttelndes Gehäuse).
 - Bäume unverändert (Regel 8 ausgesetzt).
 
 Neu bauen: `python3 tools/regeln_v11.py karte04 wege && python3 tools/karte04_bauen.py && python3 tools/karte04_objekte.py && python3 tools/regeln_v11.py karte04 && python3 tools/karte04_bauen.py && python3 tools/karte04_animation.py`
