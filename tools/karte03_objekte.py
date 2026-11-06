@@ -26,7 +26,7 @@ FEST = [
     # Dorf an der Oase
     ('gross/01', 25, 10, {}), ('gross/00', 11.5, 15, {}), ('gross/02', 29, 15, {}), ('gross/03', 10.5, 34, {}),
     ('mittel/09', 11.5, 40, {}), ('klein/29', 21, 33, {}), ('klein/11', 12, 31, {}), ('klein/10', 31.5, 32, {}),
-    ('palmen/05', 14.5, 13, {'anim': 'wehen', 'fest_palme': True}), ('palmen/10', 29.5, 19, {'anim': 'wehen', 'fest_palme': True}),
+    ('palmen/05', 14.5, 13, {'anim': 'wehen', 'fest_palme': True}), ('palmen/10', 32.5, 20, {'anim': 'wehen', 'fest_palme': True}),
     ('palmen/03', 31, 23, {'anim': 'wehen', 'fest_palme': True}), ('palmen/08', 11.5, 22, {'anim': 'wehen', 'fest_palme': True}),
     ('palmen/01', 12.5, 29, {'anim': 'wehen', 'fest_palme': True}), ('palmen/06', 26.5, 30, {'anim': 'wehen', 'fest_palme': True}),
     ('klein/05', 22, 16, {}), ('klein/05', 26, 26, {}), ('klein/04', 11, 26, {}),
@@ -274,10 +274,10 @@ def main():
             if o_:
                 return
 
-    def palme(tx, ty, fest=False, name=None):
+    def palme(tx, ty, fest=False, name=None, hinten=False):
         name = name or prnd.choice(PALMEN_NEU)
         vorher = belegt.copy()
-        o_ = setze(name, tx * T + 8, ty * T + 15, fest, {'anim': 'wehen'})
+        o_ = setze(name, tx * T + 8, ty * T + 15, fest, dict({'anim': 'wehen'}, **({'hinten': True} if hinten else {})))
         if o_:
             begleiter(o_, vorher)
         return o_
@@ -298,7 +298,7 @@ def main():
             frei_vorher = belegt & hm
             belegt[hm] = False
             for dx_ in (seite * 2, -seite * 2, seite, -seite):
-                if palme(fx_ + dx_, fy_ - 1, fest=False):
+                if palme(fx_ + dx_, fy_ - 1, fest=False, hinten=True):
                     break
             belegt |= frei_vorher
     # Palmenhaine (x0, y0, x1, y1, Anzahl): Oase, Landzungen, Lagune, Pyramide, Sueden

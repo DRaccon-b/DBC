@@ -110,4 +110,9 @@ Wenn eine Karte fertig scheint: noch einmal komplett auf **Pixelfehler** und **L
   werden ausdrücklich markiert.
 - **Schatten beginnen direkt am Objekt:** Der Kontaktschatten liegt unmittelbar am Fuß. Alles, was nach dem Schatten
   am Fuß gezeichnet wird (Sandverwehung, Bodenfuß, Büschel), wird im Schatten mitschattiert – nie hell darübermalen.
+- **Schatten folgen der Objektform:** Kein waagerechter Balken unter dem Objekt. Der Kontaktschatten folgt der echten
+  Fußform (ohne Bodenfuß-Sandhügel), der Schlagschatten ist die Silhouette des Objekts, diagonal nach rechts unten
+  gelegt und nur etwa auf die Hälfte gestaucht, sodass Arme, Kronen und Pfosten erkennbar bleiben.
+- **Hinter Gebäuden:** Objekte, die bewusst hinter einem Gebäude stehen (z. B. Palmen), werden ausdrücklich als
+  „dahinter“ markiert und immer vor dem Gebäude gezeichnet – auch wenn sie nach dem Einrasten auf derselben Reihe stehen.
 - **Ablauf:** Jede Änderung committen und pushen, Bilder/GIFs an den Nutzer schicken, auf Deutsch erklären.

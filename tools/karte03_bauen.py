@@ -783,7 +783,8 @@ def bauen(frame=None, speichern=True):
     pf = os.path.join(OBJ, 'platzierung.json')
     objs = []
     if os.path.exists(pf):
-        objs = sorted(json.load(open(pf)), key=lambda o: (o.get('ebene', 1), o['y'] + o.get('fuss', 0)))
+        objs = sorted(json.load(open(pf)), key=lambda o: (o.get('ebene', 1),       # 'hinten': steht hinter einem
+                                                          o['y'] + o.get('fuss', 0) - (24 if o.get('hinten') else 0)))
         cache = {}
         for o in objs:
             if o['datei'] not in cache:
@@ -815,6 +816,43 @@ def bauen(frame=None, speichern=True):
     return img
 
 
+_KOERPER = {}
+
+
+def koerper_maske(o, sp):
+    """Alpha des eigentlichen Objekts ohne den Bodenfuss der Variante (Variante = Original + 2 px links/rechts,
+    3 px unten)."""
+    key = (o['datei'], o['basis'])
+    if key not in _KOERPER:
+        a = np.array(sp.getchannel('A')) >= 200
+        pf = os.path.join(OBJ, o['basis'] + '.png')
+        if o['datei'].startswith('varianten/') and os.path.exists(pf):
+            b = Image.open(pf).convert('RGBA')
+            if sp.size == (b.width + 4, b.height + 3):
+                m = np.zeros_like(a)
+                m[0:b.height, 2:2 + b.width] = np.array(b.getchannel('A')) >= 200
+                a = m
+        _KOERPER[key] = a
+    return _KOERPER[key]
+
+
+def bodenfuss_schattieren(img, o, sp, sch):
+    """Sandhuegel/Halme des Bodenfusses liegen im Schatten des Objekts: dort mit abdunkeln."""
+    voll = np.array(sp.getchannel('A')) > 0
+    fuss = voll & ~koerper_maske(o, sp)
+    ys, xs = np.nonzero(fuss)
+    if not len(ys):
+        return
+    px = img.load()
+    W, H = img.size
+    for y_, x_ in zip(ys, xs):
+        X, Y = o['x'] + x_, o['y'] + y_
+        if 0 <= X < W and 0 <= Y < H and sch[Y, X]:
+            t_ = sch[Y, X] / 255.0
+            r_, g_, b_, a_ = px[X, Y]
+            px[X, Y] = (int(r_ * (1 - t_) + 64 * t_), int(g_ * (1 - t_) + 36 * t_), int(b_ * (1 - t_) + 30 * t_), a_)
+
+
 def objekte_zeichnen(img, objs, cache, boden, frame):
     """Kantenintegration (Sand angeweht, Steinchen), Fussschatten + Schlagschatten (nur auf Boden),
     dann die Sprites (mit Wind fuer Palmen)."""
@@ -842,7 +880,7 @@ def objekte_zeichnen(img, objs, cache, boden, frame):
     wurf = np.zeros(boden.shape, np.float32)
     for o in objs:
         sp = cache[o['datei']]
-        a = np.array(sp.getchannel('A')) >= 200
+        a = koerper_maske(o, sp)                            # Objekt ohne Bodenfuss: Schatten ab dem echten Fuss
         zeilen = np.nonzero(a.any(axis=1))[0]
         if o.get('ohne_schatten'):
             continue
@@ -857,18 +895,19 @@ def objekte_zeichnen(img, objs, cache, boden, frame):
             continue
         zu = zeilen.max()
         fuss_y = o['y'] + zu
-        fuss = np.nonzero(a[max(0, zu - 3):zu + 1].any(axis=0))[0]       # Auflageflaeche
-        if len(fuss):
-            fx0, fx1 = o['x'] + fuss.min(), o['x'] + fuss.max()
-            for yy in range(fuss_y - 1, fuss_y + 3):
-                if 0 <= yy < kern.shape[0]:
-                    ein = (yy - fuss_y + 1) if yy > fuss_y else 0
-                    kern[yy, max(0, fx0 - 1 + ein):max(0, min(kern.shape[1], fx1 + 3 - ein))] = 1
+        # Kontaktschatten folgt der echten Fussform (nur unter den Spalten, die den Boden beruehren)
+        fuss_sp = [xi for xi in np.nonzero(a[max(0, zu - 3):zu + 1].any(axis=0))[0]]
+        for xi in fuss_sp:
+            for d, w_ in ((1, 1), (2, 1)):
+                X_, Y_ = o['x'] + xi + d - 1, fuss_y + d
+                if 0 <= Y_ < kern.shape[0] and 0 <= X_ < kern.shape[1]:
+                    kern[Y_, X_] = w_
         hoehe = max(1, zu - zeilen.min())
+        # Schlagschatten: Silhouette diagonal nach rechts unten gelegt (nur halb gestaucht, Form bleibt erkennbar)
         for zi in zeilen:
             k = zu - zi
-            ty = int(fuss_y + k * 0.24)
-            dx = int(1 + k * 0.45)
+            ty = int(fuss_y + k * 0.42)
+            dx = int(1 + k * 0.5)
             if 0 <= ty < wurf.shape[0]:
                 xs = np.nonzero(a[zi])[0] + o['x'] + dx
                 xs = xs[(xs >= 0) & (xs < wurf.shape[1])]
@@ -895,6 +934,7 @@ def objekte_zeichnen(img, objs, cache, boden, frame):
             if o.get('dreh'):
                 sp = schuesseln_drehen(sp, frame, o['x'] + o['y'], o['basis'])
         img.alpha_composite(sp, (o['x'], o['y']))
+        bodenfuss_schattieren(img, o, cache[o['datei']], sch)
         if o['datei'].endswith('_sand.png') and not o.get('ohne_fuss'):
             sandverwehung(img, o, cache[o['datei']], sch)
 
@@ -994,8 +1034,8 @@ def sandverwehung(img, o, sp, sch=None):
         return
     k0, k1 = min(kontakt), max(kontakt)
     breit = k1 - k0 + 1
-    hmax = 3 + min(4, breit // 9)
-    for xi in range(k0 - 3, k1 + 4 + min(10, breit // 3)):
+    hmax = 2 + min(2, breit // 16)                         # flacher Sandwall nur am Fuss (kein Streifen daneben)
+    for xi in range(k0, k1 + 1):
         if xi < k0:
             h = max(0, hmax - (k0 - xi))                   # links auslaufend
         elif xi > k1:
