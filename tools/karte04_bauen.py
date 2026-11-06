@@ -464,15 +464,32 @@ def klippen_verdeckung(img, objs, cache, hoch, ebene_fuss, grund):
     img.paste(Image.fromarray(a))
 
 
-def objekte_zeichnen(img, objs, cache, boden, frame):
+def objekte_zeichnen(img, objs, cache, boden, frame, ebenen=None):
     """Kontaktschatten unter der Auflage + Schlagschatten der Silhouette nach rechts unten (2 Stufen),
     nur auf Boden (nicht auf Wasser); dann die Sprites (Wind fuer Akazien und Graeser)."""
-    kern = np.zeros(boden.shape, np.float32)
-    wurf = np.zeros(boden.shape, np.float32)
+    # ebenen (optional): Hoehenstufe je Pixel (9 = Wand). Schatten eines Objekts nur auf seiner eigenen Ebene
+    # (Regel 7: nie ueber Kanten, Waende, Wasser)
+    stufen = {}
+
+    def felder(o, a_):
+        if ebenen is None:
+            k_ = None
+        else:
+            zl = np.nonzero(a_.any(axis=1))[0]
+            fy_ = min(ebenen.shape[0] - 1, max(0, o['y'] + int(zl.max()) + 1)) if len(zl) else 0
+            xs_ = np.nonzero(a_[zl.max()])[0] if len(zl) else [0]
+            fx_ = min(ebenen.shape[1] - 1, max(0, o['x'] + int(np.mean(xs_))))
+            k_ = int(ebenen[fy_, fx_])
+        if k_ not in stufen:
+            stufen[k_] = (np.zeros(boden.shape, np.float32), np.zeros(boden.shape, np.float32))
+        return stufen[k_]
     for o in objs:
         sp = cache[o['datei']]
         a = np.array(sp.getchannel('A')) >= 200
         zeilen = np.nonzero(a.any(axis=1))[0]
+        if not len(zeilen):
+            continue
+        kern, wurf = felder(o, a)
         if o.get('liegend') and len(zeilen):              # liegend: flacher Schatten der ganzen Form
             ys_, xs_ = np.nonzero(a)
             for d_, w_ in ((2, 0.83), (1, 1.0)):
@@ -500,8 +517,13 @@ def objekte_zeichnen(img, objs, cache, boden, frame):
                 xs = np.nonzero(a[zi])[0] + o['x'] + dx
                 xs = xs[(xs >= 0) & (xs < wurf.shape[1])]
                 wurf[ty, xs] = np.maximum(wurf[ty, xs], 1.0 - 0.35 * k / hoehe_)
-    wurf = np.array(Image.fromarray((wurf * 255).astype(np.uint8)).filter(ImageFilter.MaxFilter(3))) / 255.0
-    sch = np.where(kern > 0, 92, np.where(wurf > 0.82, 64, np.where(wurf > 0, 50, 0))).astype(np.float32)
+    sch = np.zeros(boden.shape, np.float32)
+    for k_, (kern, wurf) in stufen.items():
+        wurf = np.array(Image.fromarray((wurf * 255).astype(np.uint8)).filter(ImageFilter.MaxFilter(3))) / 255.0
+        s_ = np.where(kern > 0, 92, np.where(wurf > 0.82, 64, np.where(wurf > 0, 50, 0))).astype(np.float32)
+        if k_ is not None:
+            s_ *= (ebenen == k_)
+        sch = np.maximum(sch, s_)
     sch = (sch * boden).astype(np.uint8)
     dunkel = Image.new('RGBA', img.size, (60, 40, 24, 255))
     dunkel.putalpha(Image.fromarray(sch))
@@ -884,7 +906,11 @@ def bauen(frame=None, speichern=True):
             if o['datei'] not in cache:
                 cache[o['datei']] = Image.open(os.path.join(OBJ, o['datei'])).convert('RGBA')
         vor_objekten = np.array(img)
-        objekte_zeichnen(img, objs, cache, ~wm, frame)
+        ebenen = np.ones((Hp, Wp), np.int16)
+        ebenen[can] = 0
+        ebenen[m2] = 2
+        ebenen[waende] = 9
+        objekte_zeichnen(img, objs, cache, ~wm, frame, ebenen)
         animieren(img, objs, cache, frame or 0)
         klippen_verdeckung(img, objs, cache, m2, ~m2, vor_objekten)
         blumen = [o for o in objs if o.get('anim') == 'blume']
