@@ -453,8 +453,10 @@ def klippen_verdeckung(img, objs, cache, hoch, ebene_fuss, grund):
             continue
         fy = min(Hh - 1, max(0, o['y'] + int(ys.max())))
         fx = min(W - 1, max(0, o['x'] + int(xs.mean())))
-        if hoch[min(Hh - 1, fy + 1), fx] or not ebene_fuss[min(Hh - 1, fy + 1), fx]:
-            continue
+        if hoch[max(0, fy - 4):min(Hh, fy + 3), max(0, fx - 4):fx + 5].any() or not ebene_fuss[min(Hh - 1, fy + 1), fx]:
+            continue                                   # Fuss auf/am Plateau: gehoert zum Plateau, nicht abschneiden
+        if o.get('waldrand'):
+            continue                                   # Waldrand am Kartenrand bleibt ganz (Kronen davor)
         Y, X = ys + o['y'], xs + o['x']
         ok = (Y >= 0) & (Y < Hh) & (X >= 0) & (X < W)
         Y, X = Y[ok], X[ok]
@@ -912,6 +914,9 @@ def bauen(frame=None, speichern=True):
         ebenen[waende] = 9
         objekte_zeichnen(img, objs, cache, ~wm, frame, ebenen)
         animieren(img, objs, cache, frame or 0)
+        for o in objs:
+            kx_, ky_ = (o['x'] + cache[o['datei']].width // 2) // T, (o['y'] + o['fuss']) // T
+            o['waldrand'] = o['basis'].startswith('rand/') or cls[min(rows - 1, max(0, ky_))][min(cols - 1, max(0, kx_))] == 'h'
         klippen_verdeckung(img, objs, cache, m2, ~m2, vor_objekten)
         blumen = [o for o in objs if o.get('anim') == 'blume']
         rf = random.Random(4)
