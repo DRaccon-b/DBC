@@ -123,31 +123,50 @@ def arena_boden(a, arena, rand, lay, frame):
                 y += rs.choice((-1, 1))
             if not (0 <= x < W and 0 <= y < Hh):
                 break
-    # hochgeklappte Dielen: Brett 4 px hoch, 14-22 px lang, ein Ende angehoben
-    for _ in range(9):
-        for _v in range(40):
+    # hochgeklappte Dielen: an einer Stelle fehlt ein Brett (dunkles Loch, darunter ein Querbalken), das Brett ist am
+    # einen Ende noch festgenagelt und steht am anderen schraeg hoch: Oberseite hell, darunter die Stirnseite,
+    # Schatten nach rechts unten auf die Dielen
+    from PIL import ImageDraw
+    lage = Image.new('RGBA', (W, Hh), (0, 0, 0, 0))
+    ld = ImageDraw.Draw(lage)
+    gesetzt = []
+    for n_ in range(7):
+        for _v in range(60):
             i = rs.randrange(len(ys)); y, x = int(ys[i]) // 4 * 4, int(xs[i])
-            L = rs.randint(14, 22)
-            if (arena[y:y + 8, x - 2:x + L + 4] & ~rand[y:y + 8, x - 2:x + L + 4] & ~fleck[y:y + 8, x - 2:x + L + 4]).all():
+            L = rs.randint(22, 30)
+            frei_ = (arena[y - 14:y + 10, x - 4:x + L + 6] & ~rand[y - 14:y + 10, x - 4:x + L + 6]
+                     & ~fleck[y - 14:y + 10, x - 4:x + L + 6])
+            if frei_.size and frei_.all() and all(abs(y - gy) > 18 or abs(x - gx) > 40 for gy, gx in gesetzt):
                 break
         else:
             continue
-        a[y:y + 3, x:x + L] = H('#140a04')                       # Loch, wo das Brett lag
+        gesetzt.append((y, x))
+        a[y:y + 4, x:x + L] = H('#0e0804')                       # Loch, wo das Brett lag
+        a[y + 1, x:x + L] = H('#1a0e06')
+        jx = x + L // 2 + rs.randint(-4, 4)
+        a[y:y + 4, jx:jx + 3] = H('#3a2414')                     # Querbalken darunter
+        a[y, jx:jx + 3] = H('#5a3c24')
         a[y + 3, x:x + L] = H('#2a1a10')
-        links = rs.random() < 0.5
-        for d in range(L):                                       # Brett schraeg angehoben: zum freien Ende hin hoeher
-            hub = int(round((d if links else L - 1 - d) / L * 8))
-            X = x + d
-            for t in range(3):
-                Y = y - hub + t
-                if 0 <= Y < Hh:
-                    a[Y, X] = H('#b88c60') if t == 0 else (H('#94704a') if t == 1 else H('#6e4e32'))
-            for t in range(1, hub + 1):                          # Kante des Bretts (Stirnseite) und Schatten
-                Y = y - hub + 2 + t
-                if 0 <= Y < Hh and Y < y + 3:
-                    a[Y, X] = H('#3e2818')
-        ende = x + L - 1 if links else x
-        a[max(0, y - 8):y - 5, ende] = H('#d8c0a0')                       # Nagel/Splitter am hochstehenden Ende
+        scharnier_rechts = rs.random() < 0.5
+        hub = rs.randint(9, 12)
+        if scharnier_rechts:                                     # rechtes Ende fest, linkes Ende hoch
+            fx_, hx_ = x + 3, x + L
+        else:
+            fx_, hx_ = x + L - 3, x
+        oben = [(hx_, y), (fx_, y - hub)]
+        # Schatten (nach rechts unten versetzt, auf die Dielen und ins Loch)
+        ld.polygon([(hx_ + 3, y + 4), (fx_ + 5, y - hub + 6), (fx_ + 5, y - hub + 10), (hx_ + 3, y + 7)], fill=(0, 0, 0, 90))
+        # Stirnseite (Dicke 2 px) und Oberseite (4 px) als Viereck
+        ld.polygon([(hx_, y + 3), (fx_, y - hub + 3), (fx_, y - hub + 5), (hx_, y + 5)], fill=(52, 32, 18, 255))
+        ld.polygon([(hx_, y), (fx_, y - hub), (fx_, y - hub + 3), (hx_, y + 3)], fill=(168, 126, 84, 255))
+        ld.line([(hx_, y), (fx_, y - hub)], fill=(206, 170, 120, 255))        # Lichtkante oben
+        ld.line([(hx_, y + 2), (fx_, y - hub + 2)], fill=(136, 98, 62, 255))  # Maserung
+        ld.line([(fx_, y - hub), (fx_, y - hub + 4)], fill=(40, 24, 12, 255))  # Bruchkante am freien Ende
+        ld.point([(fx_ + (1 if scharnier_rechts else -1), y - hub)], fill=(230, 210, 170, 255))   # Splitter
+        ld.point([(hx_ + (-2 if scharnier_rechts else 2), y + 1)], fill=(190, 190, 196, 255))     # Nagel am festen Ende
+    la = np.array(lage).astype(np.float32)
+    al = la[..., 3:4] / 255.0
+    a[:] = np.clip(a * (1 - al) + la[..., :3] * al, 0, 255).astype(np.uint8)
     bannkreis(a, cx, cy, 4.8 * T, 4.1 * T, frame)
 
 
@@ -228,25 +247,57 @@ def bruecke(a, b, wasser):
 
 
 def quelle_zeichnen(a, lay, frame):
-    """Quelle des Flusses: Hoehlenmaul in der oberen Bergwand, aus dem das Wasser ueber eine kleine Stufe in den
-    Fluss rinnt (Wasserfall braucht eine Quelle). Wasserstrahlen wandern mit dem Bild."""
+    """Quelle des Flusses: gemauertes Hoehlentor in der oberen Bergwand (Bogen aus Steinquadern mit Schlussstein,
+    Moos), aus dem das Wasser ueber die Schwelle als kleiner Wasserfall die Front hinunterstuerzt; unten schaeumt es
+    in ein Becken und fliesst in den Fluss. Strahlen und Gischt wandern mit dem Bild (Quelle oben, Abfluss unten)."""
     f = frame or 0
     fx, fy = lay['fluss'][0]
-    cx, yb = int(fx * T), int(fy * T) - 6                       # Unterkante der Bergfront ueber dem Fluss
+    cx, yb = int(fx * T), int(fy * T) - 6                        # Fuss der Bergfront ueber dem Fluss
     Hh, W = a.shape[:2]
-    for y in range(yb - 22, yb + 1):                             # dunkles Hoehlenmaul (Bogen)
-        for x in range(cx - 13, cx + 14):
-            dx, dy = (x - cx) / 13.0, (y - (yb - 4)) / 18.0
-            if dx * dx + dy * dy <= 1 and y <= yb:
-                a[y, x] = H('#0c0e14') if dx * dx + dy * dy < 0.7 else H('#1c202a')
-    for x in range(cx - 8, cx + 9):                               # Wasserband aus der Hoehle, Strahlen wandern
-        for y in range(yb - 8, yb + 8):
-            if 0 <= y < Hh:
-                k_ = (y + f + x // 3) % 5
-                a[y, x] = (70, 104, 92) if k_ == 0 else ((46, 72, 60) if k_ < 3 else (36, 58, 48))
-    for x in range(cx - 10, cx + 11):                             # Gischt am Fuss
-        if (x + f) % 3 == 0:
-            a[min(Hh - 1, yb + 8), x] = (150, 170, 150)
+    top = yb - 40                                                  # Torbogen sitzt oben in der 44-px-Front
+    R_, B_ = 12, 10                                                # Bogenradius, halbe Breite der Oeffnung
+    yy, xx = np.mgrid[0:Hh, 0:W]
+    def bogen(b, oben, unten):
+        mitte = oben + b
+        return (np.abs(xx - cx) <= b) & (yy >= oben) & (yy <= unten) & ((yy >= mitte) | ((xx - cx) ** 2 + (yy - mitte) ** 2 <= b * b))
+    oeffnung = bogen(B_, top + 2, top + 26)
+    rahmen = bogen(B_ + 5, top - 3, top + 28) & ~oeffnung
+    # Steinquader des Rahmens: Fugen radial/waagerecht, Licht oben links
+    ang = np.arctan2(yy - (top + 2 + B_), xx - cx)
+    fuge = ((np.round(ang / 0.45) * 0.45 - ang) ** 2 < 0.006) & (yy < top + 2 + B_) | ((yy - top) % 7 == 0) & (yy >= top + 2 + B_)
+    a[rahmen] = H('#4e5466')
+    a[rahmen & (xx < cx)] = H('#5c6478')
+    a[rahmen & fuge] = H('#22252e')
+    a[rahmen & ((xx - cx) ** 2 + (yy - top + 2) ** 2 <= 9)] = H('#7a8296')                  # Schlussstein
+    moos = rahmen & ((xx * 7 + yy * 13) % 11 < 3) & (yy < top + 8)
+    a[moos] = H('#3e5a40')
+    a[oeffnung] = H('#08090c')
+    a[oeffnung & (yy > top + 18)] = H('#10131a')
+    # Wasserfall: aus der Schwelle ueber die Front bis zum Fuss, Strahlen wandern abwaerts
+    versatz = [3, 0, 4, 1, 5, 2, 0, 3, 1, 4, 2, 5, 0, 3, 1]          # je Spalte eigener Strahl (senkrechte Streifen)
+    for x in range(cx - 7, cx + 8):
+        rand_ = abs(x - cx) >= 6
+        for y in range(top + 18, yb + 6):
+            k_ = (y - f * 3 + versatz[x - cx + 7] * 2) % 9 // 1.5
+            if rand_:
+                c = (52, 84, 74) if k_ < 3 else (40, 66, 58)
+            else:
+                c = (150, 186, 170) if k_ == 0 else ((96, 136, 120) if k_ < 3 else (66, 104, 90))
+            a[y, x] = c
+    # Becken und Gischt am Fuss
+    for y in range(yb, yb + 12):
+        for x in range(cx - 14, cx + 15):
+            e = ((x - cx) / 14.0) ** 2 + ((y - yb - 5) / 6.0) ** 2
+            if e <= 1:
+                a[y, x] = (58, 92, 78) if e > 0.6 else (72, 110, 94)
+    rs = random.Random(3)
+    for i in range(18):
+        ph = (f / N_FRAMES + rs.random()) % 1.0
+        ang_ = rs.random() * math.pi
+        rr = 3 + ph * 11
+        x, y = int(cx + math.cos(ang_) * rr), int(yb + 4 - math.sin(ang_) * rr * 0.4)
+        if ph < 0.7 and 0 <= y < Hh:
+            a[y, x] = (210, 226, 214) if ph < 0.35 else (150, 180, 166)
 
 
 def bauen(frame=None, speichern=True):
@@ -284,7 +335,6 @@ def bauen(frame=None, speichern=True):
     plat = weich(zell_maske(cls, 'v', cols, rows), 3, 0, 0)          # Plateau-Ecken gerundet
     em[2] = plat | em[5]
     a[plat] = textur('v', cols, rows)[plat]
-    plateau_struktur(a, plat, cols, rows)
     fels = em[5]
     a[fels] = (textur('r', cols, rows)[fels] * np.array([0.56, 0.58, 0.66])).astype(np.uint8)   # dunkler Fels oben
     # --- Moorpfuetzen (vertieft, mit dunklem Schlammrand)

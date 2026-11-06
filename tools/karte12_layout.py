@@ -68,8 +68,8 @@ def main():
         k[y0:y1 + 1, x0:x1 + 1] = 'a'
     # ------------------------------------------------------------------ Plateaus: organische Form (Hauptkoerper + Ausbuchtungen,
     # Felsnasen), Treppe an einer geraden Stelle der Suedkante
-    PLATEAUS = [(16, 3, 27, 7), (26, 16, 35, 20), (8, 39, 14, 43), (21, 48, 29, 51), (51, 43, 63, 48)]
-    treppen = [[21, 22, 2, 7], [30, 31, 2, 20], [10, 11, 2, 43], [24, 25, 2, 51], [56, 58, 2, 48]]
+    PLATEAUS = [(16, 3, 27, 7), (26, 16, 35, 20), (8, 39, 14, 43), (51, 43, 63, 48)]
+    treppen = [[21, 22, 2, 7], [30, 31, 2, 20], [10, 11, 2, 43], [56, 58, 2, 48]]
     for i, ((x0, y0, x1, y1), (tx0, tx1, e, yb)) in enumerate(zip(PLATEAUS, treppen)):
         rs = np.random.RandomState(70 + i)
         cx, cy, rx, ry = (x0 + x1 + 1) / 2, (y0 + y1 + 1) / 2, (x1 - x0 + 1) / 2, (y1 - y0 + 1) / 2

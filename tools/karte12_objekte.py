@@ -183,6 +183,27 @@ def main():
             belegen(datei, x, y)
         return o
 
+    # 0) Rand der Karte: Farne auf der Bergkuppe, vom Kartenrand angeschnitten (wie der Baumrand auf Karte 01),
+    #    starr; frei bleiben die Teleporter und die Felsschlucht, durch die der Fluss die Karte verlaesst
+    Hp, Wp = lvl.shape
+    frei_x = [(12 * T - 8, 16 * T + 8), (38 * T - 8, 42 * T + 8), (51 * T, 57 * T)]
+    rr = random.Random(5)
+    stellen = []
+    for X in range(-6, Wp + 20, 30):
+        stellen.append((X + rr.randint(-5, 5), 20 + rr.randint(-4, 4), 'oben'))
+        stellen.append((X + rr.randint(-5, 5), Hp + 16 + rr.randint(-4, 4), 'unten'))
+    for Y in range(40, Hp + 10, 28):
+        stellen.append((2 + rr.randint(-4, 4), Y + rr.randint(-4, 4), 'seite'))
+        stellen.append((Wp - 2 + rr.randint(-4, 4), Y + rr.randint(-4, 4), 'seite'))
+    for i_, (X, fussy, seite) in enumerate(stellen):
+        if seite != 'seite' and any(a_ <= X <= b_ for a_, b_ in frei_x if (seite == 'unten' or a_ < 300)):
+            continue
+        datei, h, zu, mitte = sprite('wald/14', i_ % 2 == 1)
+        x, y = int(round(X - mitte)), fussy - zu
+        objekte.append({'datei': datei, 'basis': 'wald/14', 'x': x, 'y': y, 'fuss': h, 'kachel': [max(0, min(cols - 1, X // T)),
+                        max(0, min(rows - 1, fussy // T))], 'ebene': 1, 'fest_pos': True, 'rand': True, 'kein_schatten': True,
+                        'baum': True})
+        belegen(datei, x, y)
     # 1) grosse Objekte zuerst: Baumhaus, Puppentheater an der Arena, Riesen-Eiche, Trauerbaum
     bh = lay['baumhaus']
     FEST = [
@@ -201,7 +222,7 @@ def main():
         # Felder: Vogelscheuchen
         ('puppen/12', 49 * T, 34, {}), ('puppen/12', 67 * T, 33, {}), ('puppen/12', 55 * T, 52, {}),
         # Plateaus: je ein Blickfang
-        ('puppen/02', 30 * T, 18, {}), ('wald/12', 11 * T, 41, {}), ('puppen/11', 26 * T, 49, {}), ('wald/13', 54 * T, 45, {}),
+        ('puppen/02', 30 * T, 18, {}), ('wald/12', 11 * T, 41, {}), ('wald/13', 54 * T, 45, {}),
         ('wald/12', 19 * T, 5, {}), ('klein/46', 24 * T, 6, {}),
     ]
     for (name, X, fy, opt) in FEST:
