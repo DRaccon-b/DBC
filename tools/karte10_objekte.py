@@ -28,11 +28,12 @@ WAND_FUSS = 34 * T + 15          # Unterkante der Burg-Wandflaeche (Reihen 32-34
 
 LAMPE, BANK, BRIEF, HYDRANT, ZAUN = 'spielplatz/04', 'spielplatz/03', 'spielplatz/05', 'spielplatz/06', 'spielplatz/07'
 SOLDAT = 'spielplatz/09'
-BAEUME = ['baeume/00', 'baeume/01', 'baeume/02', 'klein/49', 'klein/48']
-BUESCHE = ['baeume/03', 'klein/35', 'klein/09', 'klein/10', 'klein/12']
+BAEUME = ['baeume/00', 'baeume/01', 'baeume/02', 'klein/49', 'klein/48', 'baeume2/00', 'baeume2/01', 'baeume2/02']
+STARR = {'baeume2/00', 'baeume2/01', 'baeume2/02'}     # Spielzeugbaeume aus Holz/Zucker: bewegen sich nicht im Wind
+BUESCHE = ['baeume2/03', 'baeume/03', 'klein2/58', 'klein2/04', 'klein2/05', 'klein2/11']
 LIEGEND = {'klein/58', 'klein/63', 'klein/15', 'klein/30', 'klein/25'}
-FLACH = LIEGEND | {'klein/09', 'klein/10', 'klein/11', 'klein/12', 'baeume/14'}
-WIND = {'klein/09', 'klein/10', 'klein/12', 'klein/35', 'baeume/03'}
+FLACH = LIEGEND | {'klein/09', 'klein/10', 'klein/11', 'klein/12', 'baeume/14', 'klein2/04', 'klein2/05', 'klein2/11'}
+WIND = {'klein/09', 'klein/10', 'klein/12', 'klein/35', 'baeume/03', 'klein2/04', 'klein2/05', 'klein2/11', 'klein2/58'}
 SPIELZEUG = ['klein/02', 'klein/03', 'klein/06', 'klein/07', 'klein/22', 'klein/32', 'klein/41', 'klein/42',
              'klein/43', 'klein/45', 'klein/46', 'klein/53', 'klein/54', 'klein/59', 'klein/14', 'klein/52']
 
@@ -67,13 +68,25 @@ FEST = [
     ('baeume/04', 47 * T, 66, {}), ('baeume/05', 21 * T + 8, 44, {}),
     # Garten (Beeterde): Beete, Kuebel, Windmuehle
     ('spielplatz/15', 6 * T + 8, 63, {}), ('baeume/15', 12 * T + 8, 63, {}), ('baeume/13', 9 * T + 8, 67, {}),
-    ('klein/40', 4 * T + 8, 66, {}), ('klein/37', 14 * T, 66, {}), ('klein/36', 7 * T + 8, 68, {}),
+    ('banner/10', 4 * T + 8, 67, {}), ('klein/37', 14 * T, 66, {}), ('klein/36', 7 * T + 8, 68, {}),
     # Strasse: geparkte Spielzeugautos, Hydranten, Briefkaesten
     ('klein/00', 31 * T, 12, {}), ('klein/01', 45 * T, 28, {}), ('klein/00', 25 * T, 37, {}), ('klein/01', 59 * T, 9, {}),
     (BRIEF, 43 * T + 8, 15, {}), ('baeume/09', 29 * T + 8, 28, {}),          # Hydranten (zu gross) weggelassen
     ('baeume/09', 46 * T + 8, 46, {}), ('baeume/05', 17 * T + 8, 23, {}),
-    # Teich: Boot am Ufer
+    # Teich: Ente am Ufer
     ('klein/08', 36 * T, 61, {}),
+    # Neu (PixelLab k10_banner, k10_klein2, k10_baeume2)
+    ('baeume2/12', 52 * T, 67, {}), ('baeume2/13', 17 * T, 70, {}), ('baeume2/08', 23 * T + 8, 52, {}),
+    ('klein2/63', 33 * T, 52, {}), ('klein2/61', 29 * T, 58, {}),
+    ('banner/12', 62 * T + 8, 23, {}), ('banner/07', 70 * T, 27, {}), ('banner/09', 86 * T, 26, {}),
+    ('banner/14', 66 * T, 26, {}), ('banner/05', 87 * T + 8, 21, {'anim': 'signal'}),
+    ('banner/13', 32 * T + 8, 23, {'anim': 'ampel'}), ('banner/13', 46 * T + 8, 23, {'anim': 'ampel'}),
+    ('banner/13', 43 * T + 8, 34, {'anim': 'ampel'}),
+    ('klein2/00', 46 * T + 8, 13, {}), ('klein2/00', 32 * T + 8, 30, {}), ('klein2/00', 60 * T + 8, 28, {}),
+    ('klein2/01', 24 * T + 8, 17, {}), ('banner/15', 12 * T + 8, 11, {}),
+    ('banner/11', 35 * T, 33, {}), ('banner/11', 49 * T, 33, {}),
+    ('banner/14', ACHSE_BRUNNEN, 43, {'achse': ACHSE_BRUNNEN}),
+    ('baeume2/07', ACHSE_BURG - 104, 46, {'symm': 'kl', 'anim': 'lampe'}), ('baeume2/07', ACHSE_BURG + 104, 46, {'symm': 'kl', 'anim': 'lampe'}),
 ]
 # Laternen in festem Rhythmus entlang der Gehwege (alle 6 Kacheln), Wegweiser an den Kreuzungen
 for y in (9, 29):
@@ -86,8 +99,8 @@ HAINE = [(2, 4, 28, 10, 0.05), (2, 14, 15, 18, 0.06), (2, 39, 28, 58, 0.06), (11
          (33, 4, 42, 18, 0.04), (47, 4, 56, 18, 0.04), (33, 23, 42, 34, 0.04), (47, 23, 56, 34, 0.04),
          (47, 39, 58, 48, 0.08), (30, 64, 58, 70, 0.07), (46, 58, 58, 66, 0.06), (14, 60, 22, 70, 0.06),
          (2, 70, 10, 71, 0.1)]
-STREU = {'klein/09': 6, 'klein/10': 6, 'klein/12': 8, 'klein/11': 3, 'klein/05': 2, 'klein/56': 2, 'klein/58': 1,
-         'klein/15': 1, 'klein/02': 1, 'klein/43': 1, 'klein/30': 1, 'klein/04': 1}
+STREU = {'klein/09': 4, 'klein/10': 4, 'klein2/04': 3, 'klein2/05': 3, 'klein2/11': 2, 'klein/12': 8, 'klein/11': 3, 'klein/05': 2, 'klein/56': 2, 'klein/58': 1,
+         'klein/15': 1, 'klein/30': 1, 'klein/04': 1}
 
 
 def main():
@@ -169,6 +182,8 @@ def main():
             tx = int(kx // T)
             if (tx, ky) in gesperrt:
                 continue
+            if 0 <= ky < rows and 0 <= tx < cols and tx < 60 and cls[ky][tx] == 's' and not opt.get('achse'):
+                continue                                    # nichts mitten auf die Sandwege
             x = raster_x(alpha[datei], kx) if not opt.get('achse') else int(round(kx - mitte))
             y = (ky + 1) * T - 1 - zu
             if not pruefen:
@@ -236,7 +251,8 @@ def main():
                 if cls[ty][tx] == 'g' and rnd.random() < d and (tx, ty) not in belegt:
                     o = fest_setzen(rnd.choice(BAEUME), tx * T + 8, ty, {'spiegeln': rnd.random() < 0.5})
                     if o:
-                        o['anim'] = 'baum'
+                        if o['basis'] not in STARR:
+                            o['anim'] = 'baum'
                         baeume.append(o)
     for o in baeume:
         kx, ky = o['kachel']

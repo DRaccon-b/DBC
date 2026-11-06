@@ -233,6 +233,10 @@ def sprite_bild(karte, mod, o, sp, frame):
         return k4.brunnen_fliessen(sp, frame)
     if anim == 'rauch':
         return k4.rauch_steigen(sp, frame)
+    if anim in ('ampel', 'signal'):
+        return k4.ampel_schalten(sp, frame, anim)
+    if anim == 'windrad':
+        return k4.windrad_drehen(sp, frame)
     return sp
 
 

@@ -549,6 +549,10 @@ def objekte_zeichnen(img, objs, cache, boden, frame, ebenen=None):
             sp = brunnen_fliessen(sp, frame)
         elif frame is not None and o.get('anim') == 'rauch':
             sp = rauch_steigen(sp, frame)
+        elif frame is not None and o.get('anim') in ('ampel', 'signal'):
+            sp = ampel_schalten(sp, frame, o.get('anim'))
+        elif frame is not None and o.get('anim') == 'windrad':
+            sp = windrad_drehen(sp, frame)
         img.alpha_composite(sp, (o['x'], o['y']))
         if frame is not None and o.get('anim') == 'blume':
             bluete_puls(img, o, sp, frame)
@@ -570,6 +574,52 @@ def brunnen_fliessen(sp, frame):
     hell = w & (((np.arange(a.shape[1])[None, :] + np.arange(a.shape[0])[:, None] * 2 + frame * 2) % 9) == 0)
     out[hell, :3] = np.minimum(255, out[hell, :3].astype(int) + 60)
     return Image.fromarray(out)
+
+
+def ampel_schalten(sp, frame, art='ampel'):
+    """Ampel/Signal (Karte 10): Lampen schalten - Ampel rot (6) gelb (2) gruen (6) gelb (2), Signal rot/gruen;
+    die nicht aktiven Lampen sind abgedunkelt. Gehaeuse und Mast bleiben ruhig."""
+    a = np.array(sp).astype(np.int16)
+    r_, g_, b_ = a[..., 0], a[..., 1], a[..., 2]
+    al = a[..., 3] > 0
+    rot = al & (r_ > 170) & (g_ < 110) & (b_ < 110)
+    gelb = al & (r_ > 180) & (g_ > 140) & (b_ < 110)
+    gruen = al & (g_ > 140) & (r_ < 140) & (b_ < 150) & (g_ > r_ + 40)
+    f = frame % 16
+    if art == 'signal':
+        an = rot if f < 8 else gruen
+    else:
+        an = rot if f < 6 else gelb if f < 8 or f >= 14 else gruen
+    out = a.copy()
+    for m in (rot, gelb, gruen):
+        if m is not an:
+            out[m, :3] = (out[m, :3] * 0.4).astype(np.int16)
+    out[an, :3] = np.minimum(255, out[an, :3] + 30)
+    return Image.fromarray(np.clip(out, 0, 255).astype(np.uint8))
+
+
+def windrad_drehen(sp, frame):
+    """Windmuehle (Karte 10): nur die bunten Fluegel drehen sich um die Nabe (4 Fluegel -> nach 16 Bildern
+    eine Vierteldrehung, nahtlos); Turm bleibt ruhig."""
+    a = np.array(sp)
+    r_, g_, b_ = a[..., 0].astype(int), a[..., 1].astype(int), a[..., 2].astype(int)
+    mx, mn = np.maximum(np.maximum(r_, g_), b_), np.minimum(np.minimum(r_, g_), b_)
+    zeilen = np.nonzero(a[..., 3].any(axis=1))[0]
+    oben = np.zeros(a.shape[:2], bool)
+    oben[:zeilen.min() + int((zeilen.max() - zeilen.min()) * 0.62)] = True
+    fl = (a[..., 3] > 0) & (mx - mn > 90) & oben
+    if fl.sum() < 20:
+        return sp
+    ys, xs = np.nonzero(fl)
+    cx, cy = (xs.min() + xs.max()) / 2.0, (ys.min() + ys.max()) / 2.0
+    teil = np.zeros_like(a)
+    teil[fl] = a[fl]
+    rest = a.copy()
+    rest[fl, 3] = 0
+    gedreht = Image.fromarray(teil).rotate(-90.0 * (frame % 16) / 16, resample=Image.NEAREST, center=(cx, cy))
+    out = Image.fromarray(rest)
+    out.alpha_composite(gedreht)
+    return out
 
 
 def rauch_steigen(sp, frame):

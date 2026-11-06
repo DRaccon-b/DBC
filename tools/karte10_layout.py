@@ -89,7 +89,8 @@ def main():
     k[5:21, 64:88] = 'm'
     k[13:16, 69:83] = 'q'                                                       # Bahnsteig vor dem Bahnhof
     k[20:23, 58:64] = np.where(k[20:23, 58:64] == 'a', 'a', k[20:23, 58:64])
-    k[20:22, 62:64] = 'a'                                                       # Strasse endet am Bahnhof
+    k[19:23, 60:64] = 'p'                                                       # Strasse endet am Bahnhof
+    k[20:22, 58:64] = 'a'
     # ------------------------------------------------------------------ Burg und Burghof
     k[23:36, 61:90] = 's'                                                       # Vorplatz hinter der Burgfront
     k[35:72, 60:86] = 'k'
