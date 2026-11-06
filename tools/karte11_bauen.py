@@ -213,6 +213,36 @@ def kaimauer(a, m, tiefe=24):
     return front
 
 
+def fundament(a, m, wasser):
+    """Fundament der Plattform/Bruecke unter Wasser: das Mauerwerk setzt sich unter der Kaimauer in 5 Absaetzen bis
+    zur tiefsten Stufe fort - jeder Absatz etwas breiter und tiefer, vom Wasser staerker ueberdeckt (zuerst die
+    tiefsten). Rund um das Fundament ist das Wasser am tiefsten und dunkelsten."""
+    Hh, W = m.shape
+    yy, xx = np.mgrid[0:Hh, 0:W]
+    def dil(mm, r):
+        return np.array(Image.fromarray((mm * 255).astype(np.uint8)).filter(ImageFilter.MaxFilter(2 * r + 1))) > 0
+    ring = dil(m, 14) & wasser & ~m
+    a[ring] = (a[ring] * 0.72).astype(np.uint8)
+    stein = np.array([46, 46, 60], np.float32)
+    fuge = np.array([22, 22, 30], np.float32)
+    for k in range(4, -1, -1):                                   # tiefster Absatz zuerst
+        breite = 3 * (k + 1)
+        unten = 24 + 9 * (k + 1)
+        tier = np.roll(dil(m, breite), unten, 0) & wasser & ~m
+        tier[:unten] = False
+        if not tier.any():
+            continue
+        z = ((yy % 6 == 5) | ((xx + 4 * ((yy // 6) % 2)) % 10 == 9))
+        farbe = np.where(z[..., None], fuge, stein)
+        deck = 0.62 - 0.11 * k                                   # tiefer = staerker vom Wasser ueberdeckt
+        a[tier] = np.clip(a[tier] * (1 - deck) + farbe[tier] * deck, 0, 255).astype(np.uint8)
+        kante = tier & ~np.roll(tier, 1, 0)                      # Oberkante des Absatzes: heller Grat
+        a[kante] = np.clip(a[kante] * 0.45 + np.array([88, 100, 140]) * 0.55 * (1 - 0.12 * k), 0, 255).astype(np.uint8)
+        for d_, fa in ((1, 0.78), (2, 0.88)):                      # Schatten unter der Kante des Absatzes darueber
+            sch = np.roll(kante, d_, 0) & tier
+            a[sch] = (a[sch] * fa).astype(np.uint8)
+
+
 def bannkreis(a, cx, cy, rx, ry, frame):
     """Bannkreis auf der Plattform: doppelter Ring mit Runenzeichen und eine dreiarmige Spirale in der Mitte
     (Spiral Mountain), violett leuchtend; das Leuchten pulsiert, die Spirale dreht sich langsam."""
@@ -296,7 +326,7 @@ def bauen(frame=None, speichern=True):
     meer_zeichnen(a, wasser, flach, seetang, frame)
     # Tiefsee im Stil des Flusses von Karte 01: Wassertextur, vertiefte Stufen mit Kanten (5 Stufen ueber die ganze
     # Meeresbreite bis zum Kartenrand), danach fuer das Meer der Finsternis abgedunkelt (Struktur bleibt erhalten)
-    tief = wasser & ~flach
+    tief = (wasser & ~flach) | plattform | bruecke_m          # das Meer laeuft unter Plattform und Bruecke durch
     k4.wasser_zeichnen(a, tief, frame, np.zeros_like(tief))
     import wasser_vertieft as _wv
     a = np.array(_wv.vertiefen(Image.fromarray(a), np.ones_like(tief), frame, maske=tief,
@@ -314,9 +344,12 @@ def bauen(frame=None, speichern=True):
                                            rand=('#16141c', '#201c28', '#2a2434', '#342c40'),
                                            stufen=[(14, 0.8, 5), (28, 0.65, 4)]).convert('RGB'))
     tuempel_zeichnen(a, tm, frame)
-    # --- Plattform und Bruecke: Steinplatten, Ziegelrand, Kaimauer
+    # --- Plattform und Bruecke: Steinplatten, Ziegelrand, Kaimauer, Fundament bis in die tiefste Stufe
+    a[plattform] = textur('f', cols, rows)[plattform]
+    a[kreis_m] = textur('z', cols, rows)[kreis_m]
     bt = textur('q', cols, rows)
     a[bruecke_m] = bt[bruecke_m]
+    fundament(a, plattform | bruecke_m, tief)
     front = kaimauer(a, plattform | bruecke_m)
     bannkreis(a, 69.5 * T, 38.5 * T, 4.4 * T, 3.7 * T, frame)
     # --- Treppen (Suedseite der Plateaus) und Kanten
