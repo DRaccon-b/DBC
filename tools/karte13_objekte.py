@@ -5,7 +5,8 @@
   python3 tools/karte13_bauen.py
 
 Neu (PixelLab, assets/objekte/karte13, alles frontal): gross (Funkturm, Gittermast, Mech-Drachen-Wrack, Buswrack),
-gross2 (Glasturm, Bahnhofshalle, Kranwrack, Festungstor mit Auge), gebaeude (Lagerhalle, Ladenzeile, Wohnblock, Buero),
+gross2 (Bahnhofshalle, Kranwrack, Festungstor mit Auge), haus/haus2/turm (alle Gebaeude mit sichtbarem Dach - Regel
+'Gebaeude mit Dach': Lagerhalle, Fabrik mit Sheddach, Ladenzeilen, Wohnbloecke, Buero, Glastuerme),
 festung (Reaktor, Panzertuer, Konsole, Strommast), mittel (Schornstein, Ofen, Tank, Autowrack, Ampel, Laterne, Zahnrad,
 Statue, Telefonzelle, Schutt, Roboterwrack, Fass, Kisten, Generator, Rohr, Bank), klein (64 Stueck Kleinkram).
 Wiederverwendet (Regel 3, frontal): Karte 02 Schrott, Kabeltrommel (k2/...). Anspielungen nur ueber Stil und Farben.
@@ -187,26 +188,26 @@ def main():
         ('festung/00', ACHSE_F - 144, 22, {'symm': 'f3'}), ('festung/00', ACHSE_F + 144, 22, {'symm': 'f3'}),
         ('festung/02', ACHSE_F - 96, 16, {'symm': 'f4'}), ('festung/02', ACHSE_F + 96, 16, {'symm': 'f4'}),
         # Industriehof links oben: zwei Lagerhallen, Schornsteine, Ofen, Strommast
-        ('gebaeude/00', 8 * T + 8, 8, {}), ('gebaeude/00', 22 * T, 8, {}),
+        ('haus/00', 8 * T + 8, 8, {}), ('haus2/03', 22 * T, 8, {}),
         ('mittel/00', 13 * T + 8, 25, {}), ('mittel/00', 15 * T + 8, 25, {}), ('mittel/01', 6 * T, 26, {}),
         ('festung/03', 22 * T, 20, {}), ('mittel/13', 9 * T, 21, {}),
         # Hof rechts oben: Funkturm, Tanks, Rohr, Schornstein, Kisten
         ('gross/00', 57 * T + 8, 14, {}), ('mittel/02', 61 * T, 7, {}), ('mittel/02', 64 * T, 8, {}), ('mittel/02', 61 * T + 8, 11, {}),
         ('mittel/14', 62 * T, 15, {}), ('mittel/00', 55 * T + 8, 26, {}), ('mittel/12', 63 * T, 27, {}),
         # rechte Spalte oben
-        ('gebaeude/03', 72 * T + 8, 9, {}), ('mittel/03', 71 * T, 27, {}), ('mittel/10', 74 * T, 21, {}),
+        ('haus/03', 72 * T + 8, 9, {}), ('mittel/03', 71 * T, 27, {}), ('mittel/10', 74 * T, 21, {}),
         # Bloecke Reihe 1 (31-38)
-        ('gebaeude/02', 6 * T + 8, 37, {}), ('mittel/08', 9 * T + 8, 37, {}), ('gebaeude/01', 18 * T + 8, 37, {}),
-        ('gross2/02', 32 * T, 37, {}), ('gebaeude/03', 47 * T, 37, {}), ('gross/03', 60 * T, 36, {}), ('gebaeude/01', 72 * T + 8, 37, {}),
+        ('haus/02', 6 * T + 8, 37, {}), ('mittel/08', 9 * T + 8, 37, {}), ('haus/01', 18 * T + 8, 37, {}),
+        ('gross2/02', 32 * T, 37, {}), ('haus/03', 47 * T, 37, {}), ('gross/03', 60 * T, 36, {}), ('haus2/02', 72 * T + 8, 37, {}),
         # Reihe 2 (41-48)
         ('mittel/10', 6 * T, 46, {}), ('mittel/09', 18 * T, 46, {}), ('mittel/07', 32 * T, 46, {}), ('gross/02', 47 * T, 47, {}),
         ('mittel/06', 72 * T, 47, {}), ('mittel/03', 60 * T, 46, {}),
         # Reihe 3 (51-58)
-        ('gebaeude/03', 6 * T + 8, 57, {}), ('gebaeude/01', 18 * T + 8, 57, {'spiegeln': True}), ('gross/01', 32 * T, 57, {}),
-        ('gebaeude/03', 47 * T, 57, {'spiegeln': True}), ('gross2/00', 60 * T, 58, {}), ('mittel/08', 74 * T, 57, {}),
+        ('haus2/01', 6 * T + 8, 57, {}), ('haus2/02', 18 * T + 8, 57, {'spiegeln': True}), ('gross/01', 32 * T, 57, {}),
+        ('turm/02', 47 * T, 57, {}), ('turm/00', 60 * T, 58, {}), ('mittel/08', 74 * T, 57, {}),
         # Reihe 4 (61-66) mit Bahnhof
-        ('gebaeude/02', 6 * T + 8, 66, {'spiegeln': True}), ('mittel/03', 17 * T, 64, {}), ('mittel/03', 21 * T, 66, {}),
-        ('gross2/01', 47 * T + 8, 66, {}), ('festung/02', 31 * T + 8, 64, {}), ('gebaeude/00', 60 * T, 66, {}),
+        ('haus/02', 6 * T + 8, 66, {'spiegeln': True}), ('mittel/03', 17 * T, 64, {}), ('mittel/03', 21 * T, 66, {}),
+        ('gross2/01', 47 * T + 8, 66, {}), ('festung/02', 31 * T + 8, 64, {}), ('haus/01', 60 * T, 66, {'spiegeln': True}),
         ('mittel/09', 72 * T, 66, {}),
     ]
     for (name, X, fy, opt) in FEST:
