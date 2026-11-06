@@ -1253,6 +1253,12 @@ OBJEKTGRUPPEN_K14 = {
     'k14_schloss': {'size': 224, 'items': [
         'sinister jester castle on a mountain summit, dark grey-violet stone with harlequin diamond patterns in red and black, many slender towers with pointed red cone roofs and golden spires, a big arched gate in the middle with a golden playing-card suit emblem above, gothic windows glowing faintly, the whole castle fully visible and centered, ' + DACH14,
     ]},
+    'k14_schloss2': {'size': 128, 'items': [
+        'sinister jester castle on a mountain summit, dark grey-violet stone with red and black harlequin diamond patterns, slender towers with red jester-cap shaped roofs and pointed red cone roofs with golden spires, a big arched gate in the middle with a golden card-suit emblem above, faintly glowing violet gothic windows, the whole castle fully visible and centered, ' + DACH14 + ', ' + FR14,
+        'dark jester castle keep with three towers, red pointed roofs with golden spires, harlequin pattern walls, big arched gate in the middle, the whole castle fully visible and centered, ' + DACH14 + ', ' + FR14,
+        'gothic dark violet castle with a central tall tower and two side towers, red cone roofs, gold trim, a grand arched gate, the whole castle fully visible and centered, ' + DACH14 + ', ' + FR14,
+        'small sinister circus-like castle with striped red and black roofs, golden spires, an arched gate, the whole castle fully visible and centered, ' + DACH14 + ', ' + FR14,
+    ]},
     'k14_bau': {'size': 128, 'items': [
         'straight grey stone castle wall segment with battlements and narrow arrow slits, ' + DACH14 + ', ' + FR14,
         'round grey stone castle tower with a pointed red cone roof and a golden spire, small window and door, ' + DACH14,

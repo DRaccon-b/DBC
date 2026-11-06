@@ -133,6 +133,18 @@ def bossfeld_front(a, feld, tr):
     return front
 
 
+
+def treiben(sp, frame, o):
+    """Wolken am Gipfelrand treiben langsam hin und her (die ganze Wolke, 2 px)."""
+    d = int(round(2 * math.sin(2 * math.pi * frame / N_FRAMES + o.get('x', 0) * 0.02)))
+    out = Image.new('RGBA', sp.size)
+    out.paste(sp, (d, 0))
+    return out
+
+
+k4.TEILANIM['treiben'] = treiben
+
+
 def bauen(frame=None, speichern=True):
     lay = json.load(open(os.path.join(KARTE, 'layout.json')))
     cols, rows = lay['groesse']
