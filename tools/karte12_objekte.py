@@ -32,6 +32,8 @@ OBSTBAEUME = ['wald/06', 'wald/07']
 EINZELBAEUME = ['k8/baeume/00', 'k8/baeume/01', 'k8/baeume/02', 'wald/09', 'wald/03', 'k8/baeume/14']
 BEGLEITER = ['wald/12', 'wald/13', 'wald/10', 'wald/11', 'puppen/13', 'wald/14']
 KUERBIS = ['klein/08']
+BERG_OBJ = ['wald/04', 'wald/05', 'wald/11', 'wald/10', 'k8/baeume/03', 'k8/fels/00', 'k8/fels/02', 'k8/fels/03',
+            'k8/fels/06', 'wald/13', 'wald/09', 'klein/16', 'klein/02', 'wald/14', 'k8/baeume/00']
 LAND_STREU = {'klein/00': 3, 'klein/01': 3, 'klein/41': 2, 'klein/03': 3, 'klein/04': 2, 'klein/05': 2, 'klein/10': 2,
               'klein/17': 1, 'klein/24': 1, 'klein/32': 2, 'klein/57': 2, 'klein/62': 1, 'klein/58': 1, 'klein/35': 1,
               'klein/02': 3, 'klein/20': 2, 'klein/29': 1, 'klein/15': 1, 'klein/06': 1, 'klein/11': 1}
@@ -78,6 +80,15 @@ def main():
             for x in range(x0 - 1, x1 + 2):
                 gesperrt.add((x, y))
     pfad = {(x, y) for y in range(rows) for x in range(cols) if cls[y][x] == 'q'}
+    for (x0, y0, x1, y1, _) in lay.get('bruecken', []):         # Bruecken und Arena-Treppe frei
+        for y in range(y0 - 1, y1 + 2):
+            for x in range(x0 - 1, x1 + 2):
+                gesperrt.add((x, y))
+    tr = lay.get('arena_treppe')
+    if tr:
+        for y in range(tr[2] - 1, tr[2] + 5):
+            for x in range(tr[0] - 1, tr[1] + 2):
+                gesperrt.add((x, y))
 
     def sprite(name, spiegeln=False):
         key = (name, spiegeln)
@@ -177,9 +188,9 @@ def main():
     FEST = [
         ('baumhaus/00', bh[0] * T + 8, bh[1] + 1, {'baum': True}),
         ('gross/02', ACHSE_A, 9, {'achse': ACHSE_A}),                       # Theater am Nordrand der Arena, auf der Achse
-        ('gross/01', 8 * T, 22, {'baum': True}), ('gross/03', 34 * T, 56, {'baum': True}), ('gross/01', 70 * T, 62, {'baum': True}),
+        ('gross/01', 8 * T, 22, {'baum': True}), ('gross/03', 29 * T, 64, {'baum': True}), ('gross/01', 70 * T, 62, {'baum': True}),
         # Arena: Kuerbislaternen an beiden Eingaengen, Zielscheiben links und rechts - spiegelgleich zur Achse
-        ('puppen/03', ACHSE_A - 40, 29, {'symm': 'a1'}), ('puppen/03', ACHSE_A + 40, 29, {'symm': 'a1'}),
+        ('puppen/03', ACHSE_A - 72, 30, {'symm': 'a1'}), ('puppen/03', ACHSE_A + 72, 30, {'symm': 'a1'}),
         ('puppen/10', ACHSE_A - 104, 17, {'symm': 'a2'}), ('puppen/10', ACHSE_A + 104, 17, {'symm': 'a2'}),
         ('puppen/01', ACHSE_A - 120, 11, {'symm': 'a3'}), ('puppen/01', ACHSE_A + 120, 11, {'symm': 'a3'}),
         # Platz am unteren Ausgang: Laternen, Truhe, Wagen, Wegweiser am Pfadbeginn
@@ -190,8 +201,8 @@ def main():
         # Felder: Vogelscheuchen
         ('puppen/12', 49 * T, 34, {}), ('puppen/12', 67 * T, 33, {}), ('puppen/12', 55 * T, 52, {}),
         # Plateaus: je ein Blickfang
-        ('puppen/00', 30 * T, 18, {}), ('wald/12', 11 * T, 41, {}), ('puppen/11', 26 * T, 49, {}), ('wald/13', 54 * T, 45, {}),
-        ('wald/12', 19 * T, 5, {}), ('puppen/02', 24 * T, 6, {}),
+        ('puppen/02', 30 * T, 18, {}), ('wald/12', 11 * T, 41, {}), ('puppen/11', 26 * T, 49, {}), ('wald/13', 54 * T, 45, {}),
+        ('wald/12', 19 * T, 5, {}), ('klein/46', 24 * T, 6, {}),
     ]
     for (name, X, fy, opt) in FEST:
         setzen(name, X, fy, opt, suchen=not (opt.get('symm') or opt.get('achse')), melden=True)
@@ -234,6 +245,19 @@ def main():
         if not [p for p in objekte if p is not o and p.get('baum') and abs(p['kachel'][0] - kx) <= 4 and abs(p['kachel'][1] - ky) <= 3]:
             setzen(rnd.choice(BEGLEITER), (kx + rnd.choice((-1, 1))) * T + 8, ky, {'begleiter': True}, suchen=True, arten='dg')
             setzen(rnd.choice(BEGLEITER[:3]), (kx + rnd.choice((-2, 2))) * T + 8, ky + 1, {}, arten='d')
+    # 4b) Bergwand oben, links, rechts, unten: duestere Baeume, Buesche, Felsen auf der Bergkuppe (nicht leer)
+    oben5 = [(tx, ty) for ty in range(rows) for tx in range(cols)
+             if lvl[min(lvl.shape[0] - 1, ty * T + 15), tx * T + 8] == 5 and lvl[ty * T + 4, tx * T + 8] == 5]
+    rnd.shuffle(oben5)
+    n5 = 0
+    for (tx, ty) in oben5:
+        if n5 >= 70:
+            break
+        name_ = rnd.choice(BERG_OBJ)
+        if any(o['basis'] == name_ and abs(o['kachel'][0] - tx) <= 3 and abs(o['kachel'][1] - ty) <= 3 for o in objekte):
+            continue
+        if setzen(name_, tx * T + 8, ty, {'spiegeln': rnd.random() < 0.5, 'baum': 'wald/0' in name_ or 'baeume' in name_}):
+            n5 += 1
     # 5) Kleinkram: Moorrand, Waldboden, Schlamm, Puppen-Reste (unregelmaessig, sparsam, nie auf dem Pfad)
     moor_nah = lambda tx, ty: any(cls[yy][xx] == 'x' for yy in range(max(0, ty - 1), min(rows, ty + 2))
                                   for xx in range(max(0, tx - 1), min(cols, tx + 2)))
@@ -306,6 +330,14 @@ def symmetrie():
         m_ = (xs_.min() + xs_.max() + 1) / 2.0
         r['x'] = int(round(2 * achse - (l['x'] + m_) - m_))
         r['y'] = l['y']
+        if l['datei'] == r['datei']:                         # spiegelverkehrt: rechter Partner ist das Spiegelbild
+            d_ = l['datei'].replace('.png', '_m.png') if not l['datei'].endswith('_m.png') else l['datei'].replace('_m.png', '.png')
+            if not os.path.exists(os.path.join(OBJ, d_)):
+                Image.open(os.path.join(OBJ, l['datei'])).transpose(Image.FLIP_LEFT_RIGHT).save(os.path.join(OBJ, d_))
+            r['datei'] = d_
+            a2 = np.array(Image.open(os.path.join(OBJ, d_)).getchannel('A')) > 128
+            xs2 = np.nonzero(a2.any(axis=0))[0]
+            r['x'] = int(round(2 * achse - (l['x'] + m_) - (xs2.min() + xs2.max() + 1) / 2.0))
     for name, ps in paare_y.items():
         if len(ps) == 1:                                     # fehlender Partner: an der Brueckenachse gespiegelt
             o0 = ps[0]

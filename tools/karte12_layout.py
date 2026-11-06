@@ -66,14 +66,24 @@ def main():
     # ------------------------------------------------------------------ Kuerbisfelder (Acker)
     for (x0, y0, x1, y1) in ((46, 33, 52, 36), (64, 32, 70, 34), (62, 42, 67, 44), (52, 51, 58, 53)):
         k[y0:y1 + 1, x0:x1 + 1] = 'a'
-    # ------------------------------------------------------------------ Plateaus (Moos oben), Treppen nach Sueden
-    PLATEAUS = [(17, 4, 26, 7), (27, 17, 34, 19), (9, 40, 13, 42), (22, 49, 28, 50), (52, 44, 62, 47)]
-    for (x0, y0, x1, y1) in PLATEAUS:
-        k[y0:y1 + 1, x0:x1 + 1] = 'v'
-        h[y0:y1 + 1, x0:x1 + 1] = 2
-    k[5:8, 16] = 'v'; h[5:8, 16] = 2
-    k[5:8, 27] = 'v'; h[5:8, 27] = 2
-    treppen = [[21, 22, 2, 7], [30, 31, 2, 19], [10, 11, 2, 42], [24, 25, 2, 50], [56, 58, 2, 47]]
+    # ------------------------------------------------------------------ Plateaus: organische Form (Hauptkoerper + Ausbuchtungen,
+    # Felsnasen), Treppe an einer geraden Stelle der Suedkante
+    PLATEAUS = [(16, 3, 27, 7), (26, 16, 35, 20), (8, 39, 14, 43), (21, 48, 29, 51), (51, 43, 63, 48)]
+    treppen = [[21, 22, 2, 7], [30, 31, 2, 20], [10, 11, 2, 43], [24, 25, 2, 51], [56, 58, 2, 48]]
+    for i, ((x0, y0, x1, y1), (tx0, tx1, e, yb)) in enumerate(zip(PLATEAUS, treppen)):
+        rs = np.random.RandomState(70 + i)
+        cx, cy, rx, ry = (x0 + x1 + 1) / 2, (y0 + y1 + 1) / 2, (x1 - x0 + 1) / 2, (y1 - y0 + 1) / 2
+        form = ((xx_ := np.mgrid[0:R, 0:C][1]) * 0).astype(bool)
+        yy_ = np.mgrid[0:R, 0:C][0]
+        for j in range(4):                                      # Hauptkoerper und versetzte Ausbuchtungen
+            ox, oy = (rs.rand() - 0.5) * rx * 1.1, (rs.rand() - 0.5) * ry * 0.8
+            fx, fy = (0.95 if j == 0 else 0.45 + 0.3 * rs.rand()), (0.9 if j == 0 else 0.45 + 0.3 * rs.rand())
+            form |= ((xx_ + 0.5 - cx - (ox if j else 0)) / (rx * fx)) ** 2 + ((yy_ + 0.5 - cy - (oy if j else 0)) / (ry * fy)) ** 2 <= 1
+        form &= (yy_ >= y0 - 1) & (yy_ <= yb) & (k != 'r')
+        form[yb, tx0 - 1:tx1 + 2] = True                        # gerade Kante fuer die Treppe
+        form[yb + 1:, tx0 - 1:tx1 + 2] = False
+        k[form] = 'v'
+        h[form] = 2
     for (x0, x1, e, yb) in treppen:                          # vor der Treppe Schlamm, kein Wald/Moor
         k[yb + 1:yb + 5, x0 - 1:x1 + 2] = np.where(k[yb + 1:yb + 5, x0 - 1:x1 + 2] == 'r', 'r', 'd')
     # ------------------------------------------------------------------ Marionetten-Arena (rechts oben)
@@ -81,14 +91,10 @@ def main():
     dx, dy = np.abs(xx + 0.5 - 60.5), np.abs(yy + 0.5 - 17.0)
     achteck = (dx <= 10.6) & (dy <= 10.6) & (dx + dy <= 14.6)
     innen = (dx <= 9.6) & (dy <= 9.6) & (dx + dy <= 13.6)
-    k[achteck] = 'h'
-    k[innen] = 'f'
-    ring = (np.maximum(dx, dy) <= 5.6) & (np.maximum(dx, dy) > 4.6) & (dx + dy <= 9.6)
-    ring |= ((dx <= 1.6) & (dy > 4.6) & (dy <= 6.6)) | ((dy <= 1.6) & (dx > 4.6) & (dx <= 6.6))   # Kreuzarme
-    ring |= (np.minimum(dx, dy) <= 0.6) & (np.maximum(dx, dy) <= 1.6)                           # Mittelkreuz
-    ring |= (dx <= 1.6) & (dy <= 0.6) | (dy <= 1.6) & (dx <= 0.6)
-    k[ring & innen] = 'z'
-    k[(dx <= 1.6) & (dy > 9.0) & achteck] = 'f'                 # Eingaenge Nord und Sued durch den Holzrand
+    k[achteck] = 'h'                                          # Randbalken des Holzpodests
+    k[innen] = 'w'                                            # Dielenboden (Risse, hochgeklappte Bretter im Bau-Skript)
+    h[achteck] = 2                                            # eine Etage hoeher, Treppe nach Sueden
+    arena_treppe = [58, 62, 27]
     # ------------------------------------------------------------------ Platz am unteren Ausgang
     dxp, dyp = np.abs(xx + 0.5 - 40.0), np.abs(yy + 0.5 - 60.5)
     platz = ((dxp <= 7.2) & (dyp <= 4.8) & ((dxp / 7.2) ** 2 + (dyp / 4.8) ** 2 <= 1.25)) | ((dxp <= 2.1) & (yy >= 60) & (yy <= 69))
@@ -114,10 +120,63 @@ def main():
                         and k[y, x] in 'dgxa':
                     k[y, x] = 'q'
     k[0:3, 12:16] = 'q'                                       # vor dem Teleporter oben
+    # ------------------------------------------------------------------ Fluss: Quelle in der Bergwand oben, verbindet die
+    # Moorpfuetzen, verschwindet unten in einer Felsspalte der Bergwand; wo er den Pfad kreuzt, kommt eine Bruecke hin
+    FLUSS = [(30, 4.6), (29.6, 9), (27, 12.8), (23.5, 14.6), (21, 15.6), (18.6, 17.2), (16.6, 20), (16.3, 24), (18, 27),
+             (21.5, 29.6), (23.2, 32), (22, 36), (19.6, 40), (18, 44), (17.4, 47), (18.6, 50.2), (22, 53.4), (28, 54.8),
+             (33.5, 54), (38, 51), (44, 46), (48.4, 40.4), (52, 38.2), (57.5, 38.4), (61.5, 39.6), (68.6, 41.6), (70.4, 46),
+             (69, 50), (65.6, 53.6), (63.6, 56.2), (60, 57.6), (52.5, 59.6), (50.2, 63), (52, 66), (53.5, 69.5)]
+    pfad_vorher = (k == 'q')
+    fl = []
+    for (ax, ay), (bx, by) in zip(FLUSS, FLUSS[1:]):
+        n = int(max(abs(bx - ax), abs(by - ay)) * 4) + 1
+        fl += [(ax + (bx - ax) * t / n, ay + (by - ay) * t / n, bx - ax, by - ay) for t in range(n)]
+    fluss = np.zeros((R, C), bool)
+    for i, (px, py, _, _) in enumerate(fl):
+        r_ = 1.05 + 0.25 * math.sin(i * 0.13)
+        fluss |= ((xx + 0.5 - px) ** 2 + (yy + 0.5 - py) ** 2 <= r_ ** 2)
+    fluss &= ~np.isin(k, ['v', 'h', 'w', 'b']) & ~((k == 'r') & (yy < 60))
+    kreuz = fluss & pfad_vorher
+    bruecken = []
+    gesehen = np.zeros_like(kreuz)
+    for (y0_, x0_) in zip(*np.nonzero(kreuz)):
+        if gesehen[y0_, x0_]:
+            continue
+        st, teil = [(y0_, x0_)], []
+        gesehen[y0_, x0_] = True
+        while st:
+            a_, b_ = st.pop(); teil.append((a_, b_))
+            for da in (-1, 0, 1):
+                for db in (-1, 0, 1):
+                    p_, q_ = a_ + da, b_ + db
+                    if 0 <= p_ < R and 0 <= q_ < C and kreuz[p_, q_] and not gesehen[p_, q_]:
+                        gesehen[p_, q_] = True; st.append((p_, q_))
+        ys_, xs_ = [t[0] for t in teil], [t[1] for t in teil]
+        my, mx = sum(ys_) / len(ys_), sum(xs_) / len(xs_)
+        d = min(fl, key=lambda f: (f[0] - mx - 0.5) ** 2 + (f[1] - my - 0.5) ** 2)
+        quer = abs(d[2]) > abs(d[3])                          # Fluss laeuft waagerecht -> Bruecke Nord-Sued
+        x0_, x1_, y0_, y1_ = min(xs_), max(xs_), min(ys_), max(ys_)
+        if quer:
+            while y0_ > 0 and fluss[y0_ - 1, x0_:x1_ + 1].any(): y0_ -= 1
+            while y1_ < R - 1 and fluss[y1_ + 1, x0_:x1_ + 1].any(): y1_ += 1
+            y0_, y1_ = y0_ - 1, y1_ + 1
+            x0_, x1_ = min(x0_, int(mx) - 1), max(x1_, int(mx) + 1)
+        else:
+            while x0_ > 0 and fluss[y0_:y1_ + 1, x0_ - 1].any(): x0_ -= 1
+            while x1_ < C - 1 and fluss[y0_:y1_ + 1, x1_ + 1].any(): x1_ += 1
+            x0_, x1_ = x0_ - 1, x1_ + 1
+            y0_, y1_ = min(y0_, int(my) - 1), max(y1_, int(my) + 1)
+        bruecken.append([int(x0_), int(y0_), int(x1_), int(y1_), 'ns' if quer else 'ow'])
+    k[fluss] = 'x'
+    for (x0_, y0_, x1_, y1_, _) in bruecken:                 # Brueckenkoepfe auf festem Pfad
+        for y in (y0_, y1_):
+            for x in range(x0_, x1_ + 1):
+                if k[y, x] == 'x':
+                    pass
     h[k == 'x'] = 0
     lay = {
         'groesse': [C, R], 'klassen': [''.join(r) for r in k], 'hoehe': [''.join(str(c) for c in r) for r in h],
-        'treppen_sued': treppen,
+        'treppen_sued': treppen, 'arena_treppe': arena_treppe, 'bruecken': bruecken, 'fluss': FLUSS,
         'plateaus': PLATEAUS, 'wald': WALD,
         'arena': [60.5, 17.0], 'platz': [40.0, 60.5], 'baumhaus': [43, 14],
         'teleporter': [{'x': 12, 'y': 0, 'b': 4, 'h': 2}, {'x': 38, 'y': 68, 'b': 4, 'h': 2}],
@@ -126,7 +185,7 @@ def main():
     json.dump(lay, open(os.path.join(KARTE, 'layout.json'), 'w'), indent=0)
     F = {'d': (75, 59, 50), 'g': (40, 62, 48), 'q': (110, 90, 70), 'x': (50, 90, 70), 'a': (60, 40, 30),
          'v': (60, 80, 60), 'r': (55, 51, 68), 'b': (68, 74, 90), 'f': (120, 124, 140), 'z': (110, 40, 80),
-         'h': (100, 64, 40)}
+         'h': (100, 64, 40), 'w': (130, 96, 60)}
     out = np.zeros((R, C, 3), np.uint8)
     for kk, c in F.items():
         out[k == kk] = c

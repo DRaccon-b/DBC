@@ -28,6 +28,7 @@ RAMPEN = {
     'f': ['#5c6274', '#666c80', '#70768a', '#7a8296', '#868ea2'],
     'z': ['#3a1a34', '#44203c', '#4e2646', '#5a2c50', '#66345c'],
     'h': ['#3a2416', '#442c1a', '#4e3420', '#5a3c26', '#66462e'],
+    'w': ['#4a3020', '#563a26', '#62442c', '#6e4e34', '#7a583c'],
 }
 
 
@@ -105,6 +106,19 @@ def kachel(art, v):
                     px[x, y] = H('#3e2818')
         for y in (2, 10):
             px[1, y] = H('#9a9aa0'); px[14, y] = H('#9a9aa0')
+    if art == 'w':                                   # Dielenboden: lange Bretter (5 px), versetzte Stoesse, Maserung, Naegel
+        for y in range(16):
+            for x in range(16):
+                reihe = y // 4
+                stoss = (x + reihe * 5 + v * 3) % 16 == 0
+                if y % 4 == 3 or stoss:
+                    px[x, y] = H('#2a1a10')
+                elif y % 4 == 0:
+                    px[x, y] = H('#8a6644') if (x + reihe) % 7 else H('#7a5838')
+                elif (x * 5 + y * 3 + v) % 13 == 0:
+                    px[x, y] = H('#4e3420')
+                elif (x + reihe * 5 + v * 3) % 16 in (1, 15) and y % 4 == 1:
+                    px[x, y] = H('#b0a090')                   # Nagelkoepfe am Brettende
     return im
 
 
@@ -112,7 +126,7 @@ def main():
     os.makedirs(OUT, exist_ok=True)
     for v in range(5):
         shutil.copy(os.path.join(K8, 'f_%d.png' % v), os.path.join(OUT, 'r_%d.png' % v))
-    arten = 'dgqavbfzh'
+    arten = 'dgqavbfzhw'
     vor = Image.new('RGB', ((len(arten) + 1) * 68, 64))
     for i, art in enumerate(arten):
         ks = [kachel(art, v) for v in range(5)]
