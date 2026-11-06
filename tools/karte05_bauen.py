@@ -208,6 +208,48 @@ def schatten_k5(img, objs, cache, lvl):
     img.alpha_composite(dunkel)
 
 
+def klippen_schatten(img, objs, cache, lvl, laenge=30):
+    """Licht von oben links: Plateaus/Klippen werfen ihren Schatten nach rechts unten. Objekte auf dem unteren
+    Feld (Ebene 1), die direkt rechts/unterhalb einer hoeheren Kante stehen, liegen in diesem Schatten - ihre
+    Pixel werden dort abgedunkelt (zur Kante hin staerker, nach aussen auslaufend)."""
+    Hh, W = lvl.shape
+    hoch = (lvl == 2) | (lvl == 9)
+    # Abstand nach rechts unten zum hoeheren Gelaende (diagonale Projektion, 1:1)
+    dist = np.full((Hh, W), 999, np.int32)
+    for d in range(1, laenge + 1):
+        verschoben = np.zeros_like(hoch)
+        verschoben[d // 2:, d:] = hoch[:Hh - d // 2, :W - d]
+        neu = verschoben & (dist == 999)
+        dist[neu] = d
+    staerke = np.where(dist < 999, 0.62 + 0.38 * (dist / laenge), 1.0).astype(np.float32)
+    a = np.array(img).astype(np.float32)
+    for o in objs:
+        sp = cache[o['datei']]
+        al = np.array(sp.getchannel('A')) >= 128
+        ys, xs = np.nonzero(al)
+        if not len(ys):
+            continue
+        fy = min(Hh - 1, max(0, o['y'] + int(ys.max()) + 1)); fx = min(W - 1, max(0, o['x'] + int(xs.mean())))
+        if lvl[fy, fx] != 1:
+            continue
+        # Kante: naechstes hoeheres Gelaende links in der Fusszeile (bis 'laenge' px)
+        links = np.nonzero(hoch[fy, max(0, fx - laenge - 40):fx])[0]
+        if not len(links):
+            continue
+        kante = max(0, fx - laenge - 40) + int(links.max())
+        Y, X = ys + o['y'], xs + o['x']
+        ok = (Y >= 0) & (Y < Hh) & (X >= 0) & (X < W)
+        Y, X = Y[ok], X[ok]
+        # weicher Verlauf ueber das ganze Objekt: an der Kante dunkel, nach rechts heller; oben (Spitze ragt
+        # ueber die Klippe hinaus) etwas weniger Schatten
+        t = np.clip((X - kante) / float(laenge + 20), 0, 1)
+        hoehe_rel = np.clip((Y - (o['y'] + ys.min())) / max(1.0, ys.max() - ys.min()), 0, 1)
+        f = 0.66 + 0.34 * t
+        f = 1 - (1 - f) * (0.55 + 0.45 * hoehe_rel)
+        a[Y, X, :3] *= np.stack([f * 0.98, f, np.minimum(1.0, f * 1.06)], axis=1)
+    img.paste(Image.fromarray(np.clip(a, 0, 255).astype(np.uint8)))
+
+
 def bauen(frame=None, speichern=True):
     lay = json.load(open(os.path.join(KARTE, 'layout.json')))
     cols, rows = lay['groesse']
@@ -333,6 +375,7 @@ def bauen(frame=None, speichern=True):
         schatten_k5(img, objs, cache, lvl)
         k4.objekte_zeichnen(img, objs, cache, np.zeros((Hp, Wp), bool), frame)
         k4.animieren(img, objs, cache, frame or 0)
+        klippen_schatten(img, objs, cache, lvl)
     if frame is not None:
         schneefall(img, frame)
     if speichern and frame is None:
