@@ -29,6 +29,8 @@ LIPPE_BERG = ['#3c4050', '#4a4e60', '#585e70', '#686e80', '#7a8092', '#8c92a4']
 LIPPE_LILA = ['#2a2034', '#34283e', '#3e3048', '#4a3a56', '#564464', '#625072']
 FRONT = {2: 32, 5: 44}
 VIOLETT = (170, 110, 230)
+MAUER_TIEFE = [8, 14, 22, 30, 38, 46]      # Mauer unter Wasser bis zum Grund je Wasserstufe 0..5 (px)
+STUFEN_ABSTAND = [22, 64, 120, 190, 270]
 
 
 def textur(art, cols, rows):
@@ -183,9 +185,11 @@ def tuempel_zeichnen(a, m, frame):
                 a[Y, X] = c
 
 
-def kaimauer(a, m, tiefe=24):
-    """Plattform/Bruecke ueber der Tiefsee: Rand aus dunklen Ziegeln (12 px), nach Sueden eine Kaimauer-Front ins
-    Wasser (Ziegel, unten nass dunkler, Wasserlinie hell), Seitenkanten schmal."""
+def kaimauer(a, m, tiefe=24, ebene=None):
+    """Plattform/Bruecke in der Tiefsee: Rand aus dunklen Ziegeln (12 px), nach Sueden die Mauerfront: 16 px ueber
+    Wasser, an der Wasserlinie ein heller Strich, darunter geht die Mauer fest weiter bis zum Meeresboden der
+    Wasserstufe an dieser Stelle (ebene: Stufe je Pixel, 0..5) - unter Wasser blaeulich, unten Kontaktkante und
+    Schatten auf dem Grund. Seitenkanten schmal."""
     Hh, W = m.shape
     yy, xx = np.mgrid[0:Hh, 0:W]
     ring = m & ~(np.array(Image.fromarray((m * 255).astype(np.uint8)).filter(ImageFilter.MinFilter(9))) > 0)
@@ -195,22 +199,50 @@ def kaimauer(a, m, tiefe=24):
     a[kontur(m)] = H('#4a4a5e')
     front = np.zeros_like(m)
     sued = m & ~np.roll(m, -1, 0)
+    UEBER = 16
     for y, x in zip(*np.nonzero(sued)):
-        for d in range(tiefe):
+        st_ = 0
+        if ebene is not None:
+            yp = min(Hh - 1, y + UEBER + 30)
+            st_ = int(ebene[yp, x])
+        gesamt = UEBER + MAUER_TIEFE[min(st_, len(MAUER_TIEFE) - 1)] if ebene is not None else tiefe
+        for d in range(gesamt + 3):
             Y = y + 1 + d
             if Y >= Hh or m[Y, x]:
                 break
+            if d >= gesamt:                                      # Schatten auf dem Meeresboden
+                a[Y, x] = (a[Y, x] * (0.62 if d == gesamt else 0.8)).astype(np.uint8)
+                continue
             front[Y, x] = True
             reihe = d // 4
             if d % 4 == 3 or (x + 4 * (reihe % 2)) % 8 == 7:
-                c = (22, 22, 30)
+                c = np.array((22, 22, 30), np.float32)
             else:
-                c = (52, 52, 66) if reihe % 2 else (46, 46, 60)
-            fak = 1.0 if d < tiefe - 8 else 0.7
-            a[Y, x] = (np.array(c) * fak).astype(np.uint8)
-            if d == tiefe - 8:
-                a[Y, x] = (90, 120, 140)
+                c = np.array((52, 52, 66) if reihe % 2 else (46, 46, 60), np.float32)
+            if d == UEBER:
+                c = np.array((90, 120, 140), np.float32)         # Wasserlinie
+            elif d > UEBER:
+                tief_ = (d - UEBER) / max(1, gesamt - UEBER)
+                c = c * (0.62 - 0.22 * tief_) + np.array((24, 34, 70), np.float32) * (0.38 + 0.22 * tief_)
+            if d == gesamt - 1:
+                c = np.array((12, 12, 22), np.float32)           # Fuss auf dem Grund
+            a[Y, x] = np.clip(c, 0, 255).astype(np.uint8)
     return front
+
+
+def wasser_ebenen(tief):
+    """Wasserstufe 0..5 je Pixel (wie wasser_vertieft: Abstand zum Ufer >= Schwellen), fest fuer alle Bilder."""
+    pf = os.path.join(KARTE, 'wasser_ebenen.npy')
+    if os.path.exists(pf):
+        e = np.load(pf)
+        if e.shape == tief.shape:
+            return e
+    import wasser_vertieft as _wv
+    e = np.zeros(tief.shape, np.uint8)
+    for ab in STUFEN_ABSTAND:
+        e += _wv._stufe(tief, ab).astype(np.uint8)
+    np.save(pf, e)
+    return e
 
 
 def fundament(a, m, wasser):
@@ -321,6 +353,7 @@ def bauen(frame=None, speichern=True):
     b_ = lay.get('bruecke')
     if b_:
         bruecke_m[b_[1] * T + 4:(b_[3] + 1) * T - 4, b_[0] * T - 8:(b_[2] + 1) * T + 4] = True
+    wasser |= (zell_maske(cls, 'fz', cols, rows) > 0) & ~plattform    # um das Achteck bis zum Rand Wasser
     wasser &= ~plattform & ~bruecke_m & ~em[2]
     flach &= wasser
     meer_zeichnen(a, wasser, flach, seetang, frame)
@@ -349,8 +382,7 @@ def bauen(frame=None, speichern=True):
     a[kreis_m] = textur('z', cols, rows)[kreis_m]
     bt = textur('q', cols, rows)
     a[bruecke_m] = bt[bruecke_m]
-    fundament(a, plattform | bruecke_m, tief)
-    front = kaimauer(a, plattform | bruecke_m)
+    front = kaimauer(a, plattform | bruecke_m, ebene=wasser_ebenen(tief))
     bannkreis(a, 69.5 * T, 38.5 * T, 4.4 * T, 3.7 * T, frame)
     # --- Treppen (Suedseite der Plateaus) und Kanten
     treppen_info = []

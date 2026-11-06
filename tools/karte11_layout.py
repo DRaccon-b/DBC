@@ -87,6 +87,9 @@ def main():
     k[kreis] = 'z'
     k[37:40, 54:60] = 'q'                          # Steinbruecke (liegt ueber der Tiefsee)
     h[37:40, 54:60] = 1
+    # rund um die Plattform nur Tiefsee (die Vorlage hat am rechten Rand noch einen Streifen Land)
+    um = (xx >= 58) & (yy >= 24) & (yy <= 56) & np.isin(k, ['d', 'm', 'n'])
+    k[um] = '~'
     # Tiefe und Hoehe
     h[np.isin(k, ['~', 'x'])] = 0
     lay = {
