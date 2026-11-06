@@ -459,6 +459,20 @@ def bauen(frame=None, speichern=True):
     wasser &= ~plattform & ~bruecke_m & ~em[2]
     flach &= wasser
     meer_zeichnen(a, wasser, flach, seetang, frame)
+    # Wasser minimal tiefer als das Land: an der Nordseite des Wassers zeigt das hoehere Ufer eine kleine Boeschung
+    # (4 px: helle Uferkante, Sandwand, nasser dunkler Fuss), an den Seiten nur eine schmale Kontur
+    land_ = ~wasser
+    boe = np.zeros(wasser.shape, np.int8)
+    for k_ in range(5, 0, -1):
+        boe[wasser & np.roll(land_, k_, 0)] = k_
+    farben_b = {1: (104, 120, 118), 2: (70, 86, 86), 3: (60, 74, 74), 4: (50, 62, 62), 5: (32, 44, 44)}
+    for k_, c_ in farben_b.items():
+        a[boe == k_] = c_
+    for k_, fa in ((1, 0.62), (2, 0.8)):                            # Seiten: schmale Kontur mit Schatten ins Wasser
+        seite = wasser & (np.roll(land_, k_, 1) | np.roll(land_, -k_, 1)) & (boe == 0)
+        a[seite] = (a[seite] * fa).astype(np.uint8)
+    lippe = land_ & (np.roll(wasser, 1, 1) | np.roll(wasser, -1, 1) | np.roll(wasser, -1, 0))   # helle Uferkante an Land
+    a[lippe] = np.clip(a[lippe].astype(int) + 22, 0, 255).astype(np.uint8)
     # Tiefsee im Stil des Flusses von Karte 01: Wassertextur, vertiefte Stufen mit Kanten (5 Stufen ueber die ganze
     # Meeresbreite bis zum Kartenrand), danach fuer das Meer der Finsternis abgedunkelt (Struktur bleibt erhalten)
     tief = (wasser & ~flach) | plattform | bruecke_m          # das Meer laeuft unter Plattform und Bruecke durch
