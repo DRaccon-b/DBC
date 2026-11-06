@@ -324,8 +324,11 @@ def objekte():
             for x in range(bx, bx + wt):
                 for y in range(by, by + ht):
                     fuss_ = y >= by + ht - 2
-                    if not (0 <= x < cols and 0 <= y < rows) or (x, y) in belegt:
+                    if not (0 <= x < cols and 0 <= y < rows):
                         return None
+                    if (x, y) in belegt and (fuss_ or not baum_ or kx >= 36 or
+                                             not objs[belegt[(x, y)]]['basis'].startswith(('baeume/', 'klein/27', 'klein/49'))):
+                        return None           # Baumkronen duerfen hinter andere Baeume (Waldrand) ragen
                     if (fuss_ or not baum_) and ((x, y) in gesperrt or cls[y][x] not in 'sl'):
                         return None           # Baeume: nur die unteren zwei Reihen muessen auf Schnee stehen
             if not bewerten(lvl, alpha[d], o['x'], o['y'])[0]:
@@ -344,6 +347,45 @@ def objekte():
             o['kein_schatten'] = True
     neu_setzen('baeume/00', 59, 13, anim='baum', pruefen=False, datei='sauber/baeume-00.png', art='begleiter')
     neu_setzen('baeume/01', 69, 13, anim='baum', pruefen=False, datei='sauber/baeume-01.png', art='begleiter')
+    grosse_oben = []
+    # linkes Plateau: mehr Baeume und Objekte mit den Schneebaeumen dieser Karte (Tannen, kahler Frostbaum)
+    LINKS = [('baeume/03', 'baum', 2), ('baeume/00', 'baum', 3), ('baeume/01', 'baum', 3), ('baeume/02', 'baum', 2),
+             ('klein/27', 'baum', 4), ('klein/49', 'baum', 4), ('natur/17', 'baum', 2), ('natur/07', 'baum', 2),
+             ('natur/24', None, 4), ('natur/02', 'wehen', 3), ('natur/03', 'wehen', 2), ('natur/06', 'glitzern', 2),
+             ('natur/04', None, 2), ('natur/05', None, 2), ('server/15', None, 1)]
+    n_li = 0
+    for (name, anim, anzahl) in LINKS:
+        datei = 'sauber/%s.png' % name.replace('/', '-') if name.startswith(('baeume/', 'klein/')) else None
+        g_ = 0
+        orte_li = [(x, y) for x in range(1, 35) for y in range(4, 14) if hoehe_t[y][x] == 2]
+        rnd.shuffle(orte_li)
+        for (kx, ky) in orte_li:
+            if g_ >= anzahl:
+                break
+            if any(abs(kx - p_['kachel'][0]) <= 2 and abs(ky - p_['kachel'][1]) <= 0 for p_ in grosse_oben
+                   if anim == 'baum' and p_['kachel'][0] < 36):
+                continue                                   # Baeume nicht in einer Reihe nebeneinander
+            o = neu_setzen(name, kx, ky, anim=anim, datei=datei)
+            if o:
+                g_ += 1; n_li += 1
+                if anim == 'baum':
+                    grosse_oben.append(o)
+    # zusaetzlich gezielt grosse Tannen links: freie Stellen von links nach rechts abtasten, Abstand >= 4 Spalten
+    n_gt = 0
+    for name in ('baeume/01', 'baeume/00', 'baeume/02', 'baeume/01', 'baeume/00'):
+        for ky in (5, 4, 12, 11, 10):
+            erfolg = False
+            for kx in rnd.sample(range(2, 34), 32):
+                if hoehe_t[ky][kx] != 2 or any(abs(kx - p_['kachel'][0]) <= 3 and abs(ky - p_['kachel'][1]) <= 2
+                                                for p_ in grosse_oben if p_['basis'].startswith('baeume/0')):
+                    continue
+                o = neu_setzen(name, kx, ky, anim='baum', datei='sauber/%s.png' % name.replace('/', '-'))
+                if o:
+                    grosse_oben.append(o); n_gt += 1; erfolg = True
+                    break
+            if erfolg:
+                break
+    print('Links: %d Baeume/Objekte auf dem linken Plateau, %d grosse Tannen' % (n_li, n_gt))
     # Variation oben: zwei Server, zwei grosse Eiszapfen, ein paar grosse Tannen (mit Begleitung, Regel 5)
     OBEN = [('server/00', None, None, 1), ('server/11', None, None, 1),
             ('mittel/02', 'sauber/mittel-02.png', 'glitzern', 2), ('natur/25', None, 'glitzern', 1),
@@ -351,7 +393,6 @@ def objekte():
             ('baeume/02', 'sauber/baeume-02.png', 'baum', 3), ('baeume/03', 'sauber/baeume-03.png', 'baum', 3),
             ('natur/24', None, None, 4)]
     n_ob = 0
-    grosse_oben = []
     for (name, datei, anim, anzahl) in OBEN:
         gesetzt = 0
         for _ in range(3000):
@@ -366,31 +407,6 @@ def objekte():
                 if name.startswith('baeume/'):
                     grosse_oben.append(o)
     print('Oben: %d groessere Objekte (Server, Eiszapfen, Tannen); Hoehle ersetzt' % n_ob)
-    # linkes Plateau (x 15-32): mehr Baeume und Objekte, auch andere Baumarten (verschneite Laubbaeume aus Karte 01,
-    # Schneetanne aus Karte 07 - Regel 3: wiederverwenden)
-    LINKS = [('fremd/laubbaum-00', 'baum', 3), ('fremd/laubbaum-01', 'baum', 3), ('fremd/laubbaum-02', 'baum', 2),
-             ('fremd/laubbaum-15', 'baum', 2), ('fremd/laubbaum-04', 'baum', 2), ('fremd/schneetanne-k7', 'baum', 3),
-             ('baeume/03', 'baum', 3), ('baeume/00', 'baum', 3), ('baeume/01', 'baum', 2), ('natur/24', None, 4), ('natur/02', 'wehen', 3),
-             ('natur/03', 'wehen', 2), ('natur/06', 'glitzern', 2), ('natur/04', None, 2), ('natur/05', None, 2),
-             ('server/15', None, 1)]
-    n_li = 0
-    for (name, anim, anzahl) in LINKS:
-        datei = 'sauber/%s.png' % name.replace('/', '-') if name.startswith('baeume/') else None
-        g_ = 0
-        orte_li = [(x, y) for x in range(1, 35) for y in range(4, 14) if hoehe_t[y][x] == 2]
-        rnd.shuffle(orte_li)
-        for (kx, ky) in orte_li:
-            if g_ >= anzahl:
-                break
-            if any(abs(kx - p_['kachel'][0]) <= 3 and abs(ky - p_['kachel'][1]) <= 1 for p_ in grosse_oben
-                   if anim == 'baum' and p_['kachel'][0] < 36):
-                continue                                   # Baeume nicht in einer Reihe nebeneinander
-            o = neu_setzen(name, kx, ky, anim=anim, datei=datei)
-            if o:
-                g_ += 1; n_li += 1
-                if anim == 'baum':
-                    grosse_oben.append(o)
-    print('Links: %d Baeume/Objekte auf dem linken Plateau' % n_li)
     weg_idx = set()
     n_neu = 0
     for (name, (ax, ay), anzahl, r) in NEU:
