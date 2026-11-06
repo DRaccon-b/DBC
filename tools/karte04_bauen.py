@@ -590,6 +590,14 @@ def fahne_wehen(sp, frame, phase=0.0):
     stoff[:y0] = False
     stoff[:, :max(0, x0)] = False
     stoff &= ~braun
+    zeilen_b = np.unique(ys)                                 # laengster zusammenhaengender Zeilenblock = das Tuch
+    laeufe, st_ = [], zeilen_b[0]
+    for i_ in range(1, len(zeilen_b) + 1):
+        if i_ == len(zeilen_b) or zeilen_b[i_] > zeilen_b[i_ - 1] + 2:
+            laeufe.append((st_, zeilen_b[i_ - 1])); st_ = zeilen_b[i_] if i_ < len(zeilen_b) else 0
+    t0_, t1_ = max(laeufe, key=lambda l: l[1] - l[0])
+    stoff[:max(0, int(t0_) - 1)] = False
+    stoff[int(t1_) + 2:] = False                             # unterhalb des Tuchs (Stange in der Mitte, Fuss) bleibt fest
     # Stange/Mast in jeder Farbe (Holz, schwarzes Eisen ...): senkrechte Spalten, die fast ueber die ganze
     # Sprite-Hoehe reichen, plus 1 px Rand - bleiben fest (auch bei gespiegelten Fahnen, Stange rechts)
     zeilen_ = np.nonzero(al.any(axis=1))[0]
