@@ -252,8 +252,12 @@ def main():
     to, _, _, _ = sprite('schloss2/02_ohne_tuer')          # Tuerme ohne Tuer (Nutzer: Tueren ins Nichts weg)
     tw = alpha[td].shape[1]
     W_, O_ = 63 * T + 8, 88 * T + 8                       # Mitte der West- und Ostmauer (symmetrisch zu 1216)
-    tuerme = [(W_, WAND_FUSS, True, to), (O_, WAND_FUSS, True, to),             # Ecken Nordmauer
-              (W_, 55 * T + 15, True, td), (O_, 55 * T + 15, True, to),         # Seitentor (West) / gegenueber (Ost)
+    # Tuerme an Nord- und Seitenmauern stehen innen im Burghof direkt an der Mauer (Fuss auf dem Hofboden, nicht auf
+    # der schmalen Mauerkrone - die Mauer laeuft sichtbar daneben weiter), exakt spiegelgleich zur Achse
+    IW_ = 64 * T + tw // 2 + 1                         # linke Kante des Turms = Innenkante der Westmauer
+    IO_ = 2 * ACHSE_BURG - IW_
+    tuerme = [(IW_, 39 * T + 15, False, to), (IO_, 39 * T + 15, False, to),     # Ecken Nordmauer (im Hof)
+              (IW_, 55 * T + 15, False, td), (IO_, 55 * T + 15, False, to),     # am Seitentor (West) / gegenueber (Ost)
               (W_, 73 * T + 15, True, td), (O_, 73 * T + 15, True, td)]         # Ecken Suedmauer (Baeume davor)
     for (cx, fy, wand, td) in tuerme:
         xx = int(round(cx - tm))
