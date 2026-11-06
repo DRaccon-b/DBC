@@ -330,9 +330,9 @@ def main():
                         **({'anim': 'kerzen'} if name == 'wand/04' else {})})
     # Tuerme auf der Aussenmauer und Tore (stehen auf/vor der Mauer, eigene Platzierung)
     for (name, tx, fuss_px) in [(TURM, x, 39 * T + 13) for x in (2, 12, 22, 32, 42, 52, 62, 72, 82)] + \
-                               [('tor/01', 27, 39 * T + 15), ('tor/00', 27, 19 * T + 15)]:
+                               [('tor2/01', 27, 39 * T + 15), ('tor2/02', 27, 19 * T + 15)]:
         datei, h, zu, mitte = sprite(name, False)
-        if name.startswith('tor/'):
+        if name.startswith(('tor/', 'tor2/')):
             xs_ = np.nonzero(alpha[datei].any(axis=0))[0]
             mitte = (xs_.min() + xs_.max() + 1) / 2.0             # Tor genau mittig auf der Teppichachse
         x, y = int(round(tx * T + T / 2 - mitte)), fuss_px - zu
