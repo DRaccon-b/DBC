@@ -679,6 +679,59 @@ OBJEKTGRUPPEN_K3 = {
 }
 
 
+OUT_K8 = os.path.join(ROOT, 'assets', 'objekte', 'karte08')
+STIL_K8 = ("Top-down RPG map object for a dark gothic graveyard land in polished handheld monster-collecting RPG pixel "
+           "art: colored dark outline (darkest shade of the object's own hue, never pure black), light from the upper "
+           "left, hue-shifted shading (shadows toward deep violet, highlights toward pale bone), muted gloomy colors, "
+           "clean readable shapes, no noise, no dithering, transparent background, no ground, no cast shadow. "
+           "Straight front view, orthographic, not isometric.")
+PALETTE_K8 = [
+    # Stein violett-grau
+    '#1c1a26', '#2a2838', '#3a384c', '#4e4c62', '#64627a', '#7e7c94', '#9a98ae', '#bab8cc',
+    # Totholz / Erde
+    '#2a1e1a', '#3e2c22', '#56402e', '#70563c', '#8c6e4c', '#a88a62',
+    # Moos / Gras gedeckt
+    '#2a3424', '#3c4a2e', '#52603a', '#6a7848',
+    # Knochen
+    '#b8ae98', '#d6ceb8', '#efe8d6',
+    # Akzente: Violett, Blutrot, Geistergruen, Kerzenlicht
+    '#4a2a5e', '#6e3a8a', '#9a5ab8', '#7a1420', '#b82432', '#ff4a4a', '#3a9a6a', '#7af0a8', '#ffb84a', '#fff0a0',
+]
+OBJEKTGRUPPEN_K8 = {
+    'k8_schloss': {'size': 192, 'items': [
+        'huge dark gothic castle of black stone with tall pointed spires and towers, narrow glowing red stained glass windows, large pointed arch gate in the middle, wide stone stairs in front, sinister demon lord fortress, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+    ]},
+    'k8_gross': {'size': 128, 'items': [
+        'gothic stone mausoleum with a pointed roof, a stone cross on top, pillars and a dark arched iron door, pale weathered limestone, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'small dark stone crypt with a slate roof and a small barred door, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'ruined old crypt, cracked grey stone walls, broken roof, moss, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'big twisted dead tree with gnarled bare black branches and a hollow trunk, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+    ]},
+    'k8_baeume': {'size': 80, 'items': [
+        'bare dead tree with twisted dark grey-violet branches, no leaves, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'withered dead tree with brown bark and crooked bare branches, no leaves, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'spooky leafless tree with long thin claw-like branches, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'small dead sapling, bare crooked twigs, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+    ]},
+    'k8_mittel': {'size': 64, 'items': [
+        'rounded grey tombstone with a carved cross, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style', 'stone cross gravestone, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'celtic cross gravestone with moss, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style', 'broken cracked tombstone, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'small stone obelisk grave marker, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style', 'iron lantern post with a ghostly green flame, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'tattered purple banner flag on a black pole, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style', 'broken grey stone pillar, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'dark violet boulder, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style', 'pile of skulls and bones, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'wrought iron graveyard fence segment with spikes, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style', 'old wooden coffin standing upright, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'stone gargoyle statue on a pedestal, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style', 'cluster of melting candles, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'dead thorny bush, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style', 'wooden signpost with a skull, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+    ]},
+    'k8_klein': {'size': 32, 'items': [
+        'white bone lying on the ground', 'small skull', 'cluster of small glowing purple mushrooms',
+        'small brown toadstool', 'tuft of dry dead grass', 'small grey pebbles', 'single lit candle',
+        'small dark twig', 'tiny wooden cross', 'small purple flower', 'crossed bones', 'small dark stone',
+        'pale dry grass sprouts', 'broken small gravestone piece', 'black crow feather', 'small rib cage bones',
+    ]},
+}
+
+
 def call(method, path, body=None, raw=False):
     req = urllib.request.Request(API + path, method=method,
                                  data=json.dumps(body).encode() if body is not None else None,
@@ -731,7 +784,9 @@ def herunterladen(oid, d):
 
 
 def speichern(gruppe, ims, ids):
-    if gruppe.startswith('k7_'):
+    if gruppe.startswith('k8_'):
+        ziel = os.path.join(OUT_K8, gruppe[3:])
+    elif gruppe.startswith('k7_'):
         ziel = os.path.join(OUT_K7, gruppe[3:])
     elif gruppe.startswith('k6_'):
         ziel = os.path.join(OUT_K6, gruppe[3:])
@@ -768,6 +823,17 @@ def erzeugen(gruppe):
     k4 = gruppe.startswith('k4_')
     k5 = gruppe.startswith('k5_')
     k6 = gruppe.startswith('k6_') or gruppe.startswith('k7_')
+    if gruppe.startswith('k8_'):
+        g = OBJEKTGRUPPEN_K8[gruppe]
+        req = {'description': STIL_K8, 'size': g['size'], 'view': 'top-down',
+               'item_descriptions': [it + '. ' + STIL_K8 for it in g['items']],
+               'target_palette': {'colors': PALETTE_K8, 'name': 'Karte08 Overdell'}}
+        d = call('POST', '/v2/create-1-direction-object', req)
+        oid = d['object_id']
+        print(gruppe, 'Objekt', oid)
+        d = warte(oid)
+        speichern(gruppe, *herunterladen(oid, d))
+        return
     g = (OBJEKTGRUPPEN_K7 if gruppe.startswith('k7_') else OBJEKTGRUPPEN_K6 if k6 else OBJEKTGRUPPEN_K5 if k5 else OBJEKTGRUPPEN_K4 if k4 else OBJEKTGRUPPEN_K3 if k3 else OBJEKTGRUPPEN_K2 if k2 else OBJEKTGRUPPEN)[gruppe]
     stil, palette = (STIL, PALETTE) if k6 else (STIL_K5, PALETTE_K5) if k5 else (STIL_K4, PALETTE_K4) if k4 else (STIL_K3, PALETTE_K3) if k3 else (STIL_K2, PALETTE_K2) if k2 else (STIL, PALETTE)
     req = {'description': stil, 'size': g['size'], 'view': 'top-down',

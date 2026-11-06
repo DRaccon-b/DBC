@@ -777,6 +777,34 @@ def animieren(img, objs, cache, frame, ruhig=False):
                     gd.ellipse((x0 - r, y0 - r, x0 + r, y0 + r), fill=(175, 170, 165, int(210 * k_)))
                     if r > 2.5:
                         gd.ellipse((x0 - r + 1, y0 - r + 1, x0, y0), fill=(220, 216, 210, int(200 * k_)))
+        elif anim in ('geisterlicht', 'kerzen', 'glimmen'):
+            # Lichtquelle: hellste gesaettigte Pixel (gruene Flamme / Kerzenflamme / Pilzkappen) pulsieren,
+            # weicher Schein in ihrer Farbe (Karte 08)
+            a = np.array(sp).astype(np.int16)
+            r_, g_, b_ = a[..., 0], a[..., 1], a[..., 2]
+            if anim == 'geisterlicht':
+                q = (a[..., 3] > 0) & (g_ > 150) & (g_ > r_ + 40)
+                farbe, rad = (120, 255, 170), (16, 8)
+            elif anim == 'kerzen':
+                q = (a[..., 3] > 0) & (r_ > 220) & (g_ > 150) & (b_ < 140)
+                farbe, rad = (255, 190, 90), (14, 7)
+            else:
+                q = (a[..., 3] > 0) & (b_ > 150) & (r_ > 120) & (g_ < r_ - 30)
+                farbe, rad = (190, 120, 255), (9, 4)
+            ys_q, xs_q = np.nonzero(q)
+            if len(xs_q):
+                f_ = 0.5 + 0.5 * math.sin(2 * math.pi * frame / N_FRAMES * (3 if anim == 'kerzen' else 1) + i * 1.7)
+                if anim == 'kerzen':
+                    f_ = 0.55 + 0.45 * ((frame * 7 + i * 3) % 5) / 4.0
+                cx, cy = o['x'] + xs_q.mean(), o['y'] + ys_q.mean()
+                for k_, al in ((1.0, 26), (0.55, 46)):
+                    gd.ellipse((cx - rad[0] * k_, cy - rad[1] * k_, cx + rad[0] * k_, cy + rad[1] * k_),
+                               fill=farbe + (int(al * (0.55 + 0.45 * f_)),))
+                for y_, x_ in zip(ys_q, xs_q):
+                    X, Y = o['x'] + x_, o['y'] + y_
+                    rr, gg, bb, _ = px[X, Y]
+                    k_ = 0.85 + 0.3 * f_
+                    px[X, Y] = (min(255, int(rr * k_)), min(255, int(gg * k_)), min(255, int(bb * k_)), 255)
         elif anim == 'leuchten':
             cx, cy = o['x'] + sp.width // 2, o['y'] + sp.height // 2
             for r, al in ((14, 30), (7, 50)):
