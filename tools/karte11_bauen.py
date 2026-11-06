@@ -81,14 +81,14 @@ def meer_stufen(tief_m, n=5):
     return groß
 
 
-def meer_zeichnen(a, wasser, flach, seetang, frame):
+def meer_zeichnen(a, wasser, flach, seetang, frame, kein_ufer=None, flach_blur=None):
     """Meer der Finsternis: Flachwasser (tuerkis, Grund sichtbar, Lichtnetze wandern), Seetangfelder (dunkel,
     Blaetter wiegen sich), zur Tiefsee hin dunkler werdend; Tiefsee dunkel nachtblau-violett mit langsamen Wellen."""
     Hh, W = wasser.shape
     f = frame or 0
     yy, xx = np.mgrid[0:Hh, 0:W]
     grund = a.copy().astype(np.float32)
-    tiefe = 1 - blur(flach, 9)                                   # 0 = Flachwasser, 1 = Tiefsee
+    tiefe = 1 - blur(flach if flach_blur is None else flach_blur, 9)   # 0 = Flachwasser, 1 = Tiefsee (Bruecke zaehlt mit)
     tiefe = np.clip(tiefe * 1.15, 0, 1)
     tuerkis = np.array([46, 128, 122], np.float32)
     nacht = np.array([30, 34, 74], np.float32)
@@ -156,13 +156,15 @@ def meer_zeichnen(a, wasser, flach, seetang, frame):
                 neu[Y, X] = (40, 104, 88) if k < 4 else (70, 150, 120)
     # Uferkante weich: im Wasser schimmert am Ufer heller Sand durch (Verlauf ueber ~10 px), dazu unregelmaessiger
     # Schaum in kleinen Bläschen, der mit dem Bild am Ufer entlang wandert
-    land = ~wasser
+    land = ~wasser if kein_ufer is None else (~wasser & ~kein_ufer)   # Bruecke/Plattform sind kein Strand
     nah = blur(land, 4)                                              # 0..1, am Ufer hoch
     sandig = wasser & (nah > 0.04)
     w_ = np.clip(nah * 1.6, 0, 0.75)[..., None]
     neu[sandig] = (neu * (1 - w_) + (grund * 0.9 + np.array([18, 26, 24])) * w_)[sandig]
     rs_s = random.Random(31)
     rand_in = kontur(wasser)
+    if kein_ufer is not None:
+        rand_in &= ~(np.array(Image.fromarray((kein_ufer * 255).astype(np.uint8)).filter(ImageFilter.MaxFilter(5))) > 0)
     ys_r, xs_r = np.nonzero(rand_in)
     for i in range(0, len(ys_r), 3):
         if rs_s.random() > 0.45:
@@ -178,7 +180,7 @@ def meer_zeichnen(a, wasser, flach, seetang, frame):
     a[wasser] = np.clip(neu[wasser], 0, 255).astype(np.uint8)
     # nasser Sand an Land: dunkler Verlauf ueber ~8 px statt einer harten Linie
     nass = blur(wasser, 3)
-    feucht = ~wasser & (nass > 0.03)
+    feucht = ~wasser & (nass > 0.03) & (land if kein_ufer is not None else True)
     fak = (1 - 0.35 * np.clip(nass * 2.2, 0, 1))[..., None]
     a[feucht] = np.clip(a[feucht] * fak[feucht], 0, 255).astype(np.uint8)
     return
@@ -285,14 +287,16 @@ def bruecke_zeichnen(a, m, ebene, wasser):
     y0, y1, x0, x1 = ys.min(), ys.max(), xs.min(), xs.max()
     yy, xx = np.mgrid[0:Hh, 0:W]
     ende = x1 - 14                                                  # ab hier liegt das Deck auf der Plattform
-    br = m & ((yy <= y0 + 4) | (yy >= y1 - 4)) & (xx < ende)
+    br = m & ((yy <= y0 + 6) | (yy >= y1 - 4)) & (xx < ende)
     z = ((yy % 4 == 3) | ((xx + 4 * ((yy // 4) % 2)) % 8 == 7))
     a[br] = np.where(z[br][:, None], H('#16161e'), H('#2e2e3e'))
-    a[m & ((yy == y0) | (yy == y1 - 4)) & (xx < ende)] = H('#5a5a70')    # Oberkante der Bruestungen im Licht
-    sch_ = m & (yy == y0 + 5) & (xx < ende)
+    a[m & ((yy == y0) | (yy == y0 + 1) | (yy == y1 - 4)) & (xx < ende)] = H('#5a5a70')   # Abdecksteine im Licht
+    a[m & (yy == y0 + 2) & (xx < ende)] = H('#3e3e50')
+    a[y0 - 1, x0:ende] = H('#14141c')                                # Kante der Bruestung zum Wasser
+    sch_ = m & ((yy == y0 + 7) | (yy == y0 + 8)) & (xx < ende)
     a[sch_] = (a[sch_] * 0.7).astype(np.uint8)                       # Schatten der Nordbruestung aufs Deck
     for px_ in (x0, ende - 8):                                       # Endpfosten an beiden Enden der Bruestungen
-        for (ya, yb) in ((y0 - 3, y0 + 5), (y1 - 6, y1 + 1)):
+        for (ya, yb) in ((y0 - 3, y0 + 7), (y1 - 6, y1 + 1)):
             a[ya:yb, px_:px_ + 8] = H('#3a3a4c')
             a[ya:yb, px_] = H('#6a6a82'); a[ya, px_:px_ + 8] = H('#7a7a92')
             a[ya:yb, px_ + 7] = H('#1c1c26'); a[yb - 1, px_:px_ + 8] = H('#1c1c26')
@@ -421,6 +425,9 @@ def bauen(frame=None, speichern=True):
         roh = zell_maske(cls, art, cols, rows)
         if art == 'n':
             roh = zell_maske(cls, 'nuh~', cols, rows)
+            if lay.get('bruecke'):                       # Grund unter der Bruecke wie im Flachwasser
+                bb = lay['bruecke']
+                roh[bb[1] * T:(bb[3] + 1) * T, bb[0] * T:(bb[2] + 1) * T] = 1
         m = weich(roh, bl, rausch, seed)
         tx = textur(art, cols, rows)
         a[m] = tx[m]
@@ -429,6 +436,9 @@ def bauen(frame=None, speichern=True):
     # --- gebaute Flaechen scharf
     for art in 'bqfz':
         m = zell_maske(cls, art, cols, rows) > 0
+        if art == 'q' and lay.get('bruecke'):            # Bruecken-Deck kommt spaeter, darunter Wassergrund
+            bb = lay['bruecke']
+            m[bb[1] * T:(bb[3] + 1) * T, bb[0] * T:(bb[2] + 1) * T] = False
         a[m] = textur(art, cols, rows)[m]
     # --- Ebenen: Plateaus (2), Berg (5)
     em = {}
@@ -442,8 +452,13 @@ def bauen(frame=None, speichern=True):
     a[fels] = (textur('r', cols, rows)[fels] * np.array([0.56, 0.58, 0.66])).astype(np.uint8)   # dunkler Fels
     # --- Wasser
     wasser_roh = zell_maske(cls, 'uh~fz', cols, rows)        # um das Achteck herum ist Tiefsee
+    b_ = lay.get('bruecke')
+    if b_:                                                   # unter der Bruecke ist Wasser (Kacheln 'q' sind nur das Deck)
+        wasser_roh = (wasser_roh > 0)
+        wasser_roh[(b_[1] - 1) * T:(b_[3] + 2) * T, b_[0] * T:(b_[2] + 1) * T] = True
     wasser = weich(wasser_roh, 6, 0.25, 41, 0.5)
-    flach = wasser & ~weich(zell_maske(cls, '~fz', cols, rows), 6, 0.25, 43, 0.5)   # am Ufer immer Flachwasser
+    tiefkern = weich(zell_maske(cls, '~fz', cols, rows), 6, 0.25, 43, 0.5)
+    flach = wasser & ~tiefkern                                 # am Ufer immer Flachwasser
     seetang = weich(zell_maske(cls, 'h', cols, rows), 7, 0.35, 45, 0.5) & flach
     yy_, xx_ = np.mgrid[0:Hp, 0:Wp]
     dx_, dy_ = np.abs(xx_ - 69.5 * T), np.abs(yy_ - 39.5 * T)
@@ -458,10 +473,11 @@ def bauen(frame=None, speichern=True):
     wasser |= (zell_maske(cls, 'fz', cols, rows) > 0) & ~plattform    # um das Achteck bis zum Rand Wasser
     wasser &= ~plattform & ~bruecke_m & ~em[2]
     flach &= wasser
-    meer_zeichnen(a, wasser, flach, seetang, frame)
+    meer_zeichnen(a, wasser, flach, seetang, frame, kein_ufer=bruecke_m | plattform,
+                  flach_blur=flach | (bruecke_m & ~tiefkern))   # unter der Bruecke kein Tiefenschatten im Flachwasser
     # Wasser minimal tiefer als das Land: an der Nordseite des Wassers zeigt das hoehere Ufer eine kleine Boeschung
     # (4 px: helle Uferkante, Sandwand, nasser dunkler Fuss), an den Seiten nur eine schmale Kontur
-    land_ = ~wasser
+    land_ = ~wasser & ~bruecke_m & ~plattform               # Bruecke und Plattform sind kein Ufer
     boe = np.zeros(wasser.shape, np.int8)
     for k_ in range(5, 0, -1):
         boe[wasser & np.roll(land_, k_, 0)] = k_
@@ -472,10 +488,11 @@ def bauen(frame=None, speichern=True):
         seite = wasser & (np.roll(land_, k_, 1) | np.roll(land_, -k_, 1)) & (boe == 0)
         a[seite] = (a[seite] * fa).astype(np.uint8)
     lippe = land_ & (np.roll(wasser, 1, 1) | np.roll(wasser, -1, 1) | np.roll(wasser, -1, 0))   # helle Uferkante an Land
+    lippe &= ~np.roll(bruecke_m | plattform, 1, 0) & ~np.roll(bruecke_m | plattform, -1, 0)
     a[lippe] = np.clip(a[lippe].astype(int) + 22, 0, 255).astype(np.uint8)
     # Tiefsee im Stil des Flusses von Karte 01: Wassertextur, vertiefte Stufen mit Kanten (5 Stufen ueber die ganze
     # Meeresbreite bis zum Kartenrand), danach fuer das Meer der Finsternis abgedunkelt (Struktur bleibt erhalten)
-    tief = (wasser & ~flach) | plattform | bruecke_m          # das Meer laeuft unter Plattform und Bruecke durch
+    tief = (wasser & ~flach) | plattform | (bruecke_m & tiefkern)   # das Meer laeuft unter Plattform und Bruecke durch (nur im Tiefen)
     k4.wasser_zeichnen(a, tief, frame, np.zeros_like(tief))
     import wasser_vertieft as _wv
     a = np.array(_wv.vertiefen(Image.fromarray(a), np.ones_like(tief), frame, maske=tief,
@@ -502,6 +519,8 @@ def bauen(frame=None, speichern=True):
         brueckenkopf(a, b_[0] * T, (b_[1] + b_[3] + 1) * T // 2)
     ebenen_ = wasser_ebenen(tief)
     front = kaimauer(a, plattform, ebene=ebenen_)
+    ueber_ = bruecke_m & plattform                                # Deck laeuft ueber den Plattformrand (keine Naht)
+    a[ueber_] = bt[ueber_]
     front |= bruecke_zeichnen(a, bruecke_m, ebenen_, tief | flach)
     bannkreis(a, 69.5 * T, 38.5 * T, 4.4 * T, 3.7 * T, frame)
     # --- Treppen (Suedseite der Plateaus) und Kanten
