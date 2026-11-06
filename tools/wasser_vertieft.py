@@ -98,17 +98,20 @@ def _stufe(m, abstand):
     return (np.array(k) > 128) & m
 
 
-def vertiefen(img, region, frame=None, meiden=None, maske=None, rand=None):
+def vertiefen(img, region, frame=None, meiden=None, maske=None, rand=None, stufen=None):
     """maske: fertige Wassermaske (sonst Erkennung ueber die Farbe), rand: 4 Farben fuer den Uferrand
-    (dunkel -> hell), Standard Erde."""
-    global ERDE
-    erde_alt = ERDE
+    (dunkel -> hell), Standard Erde. stufen: eigene Tiefenstufen [(Abstand, Helligkeit, Kantenhoehe), ...]
+    fuer kleinere Teiche."""
+    global ERDE, STUFEN
+    erde_alt, stufen_alt = ERDE, STUFEN
     if rand is not None:
         ERDE = [H(c) for c in rand]
+    if stufen is not None:
+        STUFEN = stufen
     try:
         return _vertiefen(img, region, frame, meiden, maske)
     finally:
-        ERDE = erde_alt
+        ERDE, STUFEN = erde_alt, stufen_alt
 
 
 def _vertiefen(img, region, frame, meiden, maske):

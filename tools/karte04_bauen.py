@@ -861,13 +861,23 @@ def bauen(frame=None, speichern=True):
     a[m2] = tx[m2]
     # --- Wasser
     xm = zell_maske(cls, 'x', cols, rows)
-    wm = (weich(xm, 9, 0.1, 24, 0.33) & can) | (weich(xm, 11, 0.35, 26, 0.5) & m1)
+    wm = (weich(xm, 9, 0.1, 24, 0.33) & can) | (weich(xm, 12, 0.12, 26, 0.5) & m1)        # Teiche rund (v1.1)
     wm = splitter_weg(wm, 120)
     fluss = wm & can
     wasser_zeichnen(a, wm, frame, fluss)
     import wasser_vertieft                                  # Stil von Karte 01: vertieftes Wasser
+    import wasser_details                                   # Felsen/Algen in den Tiefenstufen (wie Karte 01)
+    wasser_details.FELSEN_PROTOKOLL.clear()
+    wasser_details.SPITZEN.clear()
+    wasser_meiden = np.zeros((Hp, Wp), bool)                # Bruecke und Objekte: dort keine Felsen/Algen
+    _pf = os.path.join(OBJ, 'platzierung.json')
+    if os.path.exists(_pf):
+        for _o in json.load(open(_pf)):
+            _w, _h = Image.open(os.path.join(OBJ, _o['datei'])).size
+            wasser_meiden[max(0, _o['y'] - 4):_o['y'] + _h + 4, max(0, _o['x'] - 4):_o['x'] + _w + 4] = True
     a = np.array(wasser_vertieft.vertiefen(Image.fromarray(a), np.ones_like(wm), frame, maske=wm,
-                                           rand=('#5e3e26', '#7e5634', '#9c7044', '#b88a58')).convert('RGB'))
+                                           rand=('#5e3e26', '#7e5634', '#9c7044', '#b88a58'),
+                                           meiden=wasser_meiden, stufen=[(20, 0.8, 7), (40, 0.64, 6)]).convert('RGB'))
     for (y0, y1) in lay.get('furten', []):
         stromschnelle(a, fluss, y0 * T, (y1 + 1) * T, frame)
     # --- Rampen (keine Kanten dort)
