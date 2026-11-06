@@ -322,6 +322,7 @@ def bauen(frame=None, speichern=True):
         bruecke(a, b_, mm)
     if speichern and frame is None:
         np.save(os.path.join(KARTE, 'pixelhoehe.npy'), lvl)
+        np.save(os.path.join(KARTE, 'wasser.npy'), np.packbits(mm))   # fuer das Kollisionsraster
     img = Image.fromarray(a).convert('RGBA')
     alt_S = bauwerke.S
     bauwerke.S = [H(c) + (255,) for c in k4.FELS['dunkelberg']]

@@ -570,6 +570,7 @@ def bauen(frame=None, speichern=True):
     lvl[front] = 9
     if speichern and frame is None:
         np.save(os.path.join(KARTE, 'pixelhoehe.npy'), lvl)
+        np.save(os.path.join(KARTE, 'wasser.npy'), np.packbits(wasser | tm))   # fuer das Kollisionsraster
     img = Image.fromarray(a).convert('RGBA')
     alt_S = bauwerke.S
     bauwerke.S = [H(c) + (255,) for c in k4.FELS['nacht']]
