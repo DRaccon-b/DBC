@@ -94,6 +94,7 @@ def main():
     k[19, 62:64] = 'm'                                                          # Verbindungsgleis (Bogen) liegt hier
     # ------------------------------------------------------------------ Burg und Burghof
     k[23:36, 61:90] = 's'                                                       # Vorplatz hinter der Burgfront
+    k[23:30, 64:90] = 'k'                                                       # innerer Burghof (Hallen)
     k[35:72, 60:86] = 'k'
     k[35:47, 74:78] = 's'                                                       # Weg vom Tor zum Rahmen
     rahmen = (xx >= 69) & (xx <= 82) & (yy >= 47) & (yy <= 57)

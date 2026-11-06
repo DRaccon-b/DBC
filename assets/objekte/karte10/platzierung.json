@@ -1,10 +1,41 @@
 [
 {
-"datei": "sauber/burg-00.png",
-"basis": "burg/00",
-"x": 1126,
-"y": 425,
-"fuss": 135,
+"datei": "sauber/schloss2-00.png",
+"basis": "schloss2/00",
+"x": 1024,
+"y": 374,
+"fuss": 106,
+"kachel": [
+67,
+29
+],
+"ebene": 1,
+"vorrang": true,
+"fest_pos": true,
+"hinten": true
+},
+{
+"datei": "sauber/schloss2-00_m.png",
+"basis": "schloss2/00",
+"x": 1288,
+"y": 374,
+"fuss": 106,
+"kachel": [
+84,
+29
+],
+"ebene": 1,
+"vorrang": true,
+"fest_pos": true,
+"hinten": true,
+"spiegeln": true
+},
+{
+"datei": "sauber/schloss-00.png",
+"basis": "schloss/00",
+"x": 1129,
+"y": 322,
+"fuss": 238,
 "kachel": [
 76,
 34
@@ -15,7 +46,7 @@
 "keine_verdeckung": true,
 "vorrang": true,
 "fest_pos": true,
-"anim": "fahne"
+"anim": "fahnen_tuch"
 },
 {
 "datei": "sauber/turm.png",
@@ -33,7 +64,7 @@
 "keine_verdeckung": true,
 "vorrang": true,
 "fest_pos": true,
-"anim": "fahne"
+"anim": "fahnen_tuch"
 },
 {
 "datei": "sauber/turm.png",
@@ -51,7 +82,7 @@
 "keine_verdeckung": true,
 "vorrang": true,
 "fest_pos": true,
-"anim": "fahne"
+"anim": "fahnen_tuch"
 },
 {
 "datei": "sauber/turm.png",
@@ -66,7 +97,7 @@
 "ebene": 1,
 "vorrang": true,
 "fest_pos": true,
-"anim": "fahne"
+"anim": "fahnen_tuch"
 },
 {
 "datei": "sauber/turm.png",
@@ -81,7 +112,7 @@
 "ebene": 1,
 "vorrang": true,
 "fest_pos": true,
-"anim": "fahne"
+"anim": "fahnen_tuch"
 },
 {
 "datei": "sauber/bahnhof-01.png",
@@ -1649,60 +1680,6 @@
 20,
 4,
 4
-]
-},
-{
-"datei": "sauber/banner-07.png",
-"basis": "banner/07",
-"x": 1078,
-"y": 387,
-"fuss": 61,
-"kachel": [
-68,
-27
-],
-"ebene": 1,
-"block": [
-67,
-24,
-4,
-4
-]
-},
-{
-"datei": "sauber/banner-09.png",
-"basis": "banner/09",
-"x": 1344,
-"y": 384,
-"fuss": 48,
-"kachel": [
-85,
-26
-],
-"ebene": 1,
-"block": [
-84,
-24,
-3,
-3
-]
-},
-{
-"datei": "sauber/banner-14.png",
-"basis": "banner/14",
-"x": 1042,
-"y": 396,
-"fuss": 36,
-"kachel": [
-65,
-26
-],
-"ebene": 1,
-"block": [
-65,
-24,
-2,
-3
 ]
 },
 {

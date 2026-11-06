@@ -785,7 +785,44 @@ def schaukeln(sp, frame, o):
     return out
 
 
-TEILANIM = {'wippen': wippen, 'schaukeln': schaukeln, 'glocke': glocke_schwingen, 'schaufel': schaufel_buddeln, 'zirkus': zirkus_fahnen,
+def fahnen_tuch(sp, frame, o):
+    """Wimpel (Karte 10, Burg und Tuerme): nur das rote Fahnentuch weht - kleine rote Flaechen im oberen Teil
+    samt ihrem dunklen Rand; Stangen, Daecher und Mauern bleiben vollkommen ruhig. Die Welle waechst von der
+    Stange (linke Kante des Tuchs) zum freien Ende."""
+    a = np.array(sp)
+    ai = a.astype(int)
+    h = a.shape[0]
+    al = ai[..., 3] > 0
+    rot = al & (ai[..., 0] > 140) & (ai[..., 0] - ai[..., 1] > 70) & (ai[..., 0] - ai[..., 2] > 60)
+    rot |= al & (ai[..., 0] > 190) & (ai[..., 0] - ai[..., 1] > 45) & (ai[..., 2] > 120) & (ai[..., 0] - ai[..., 2] > 15)  # rosa Wimpel
+    gold = al & (ai[..., 0] > 170) & (ai[..., 1] > 130) & (ai[..., 2] < 110)
+    out = a.copy()
+    ph0 = 2 * math.pi * frame / N_FRAMES
+    for ys, xs in _komponenten(rot):
+        if len(ys) > 120 or ys.max() > h * 0.4:
+            continue
+        m = np.zeros_like(rot)
+        m[ys, xs] = True
+        nah = m.copy()
+        for _ in range(2):
+            nah = nah | np.roll(nah, 1, 0) | np.roll(nah, -1, 0) | np.roll(nah, 1, 1) | np.roll(nah, -1, 1)
+        if not (nah & gold).any():
+            continue                                     # nur Tuch, das an einer (goldenen) Stange haengt
+        rand = (np.roll(m, 1, 0) | np.roll(m, -1, 0) | np.roll(m, 1, 1) | np.roll(m, -1, 1)) & al & ~gold & ~rot
+        m |= rand
+        mys, mxs = np.nonzero(m)
+        x0, x1 = mxs.min(), mxs.max()
+        out[m, 3] = 0
+        for y, x in zip(mys, mxs):
+            t = (x - x0) / max(1, x1 - x0)
+            d = int(round(1.6 * t * math.sin(ph0 - (x - x0) * 0.7 + o.get('x', 0) * 0.05)))
+            Y = y + d
+            if 0 <= Y < h:
+                out[Y, x] = a[y, x]
+    return Image.fromarray(out)
+
+
+TEILANIM = {'fahnen_tuch': fahnen_tuch, 'wippen': wippen, 'schaukeln': schaukeln, 'glocke': glocke_schwingen, 'schaufel': schaufel_buddeln, 'zirkus': zirkus_fahnen,
             'uhr': uhr_zeiger}
 
 

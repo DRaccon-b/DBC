@@ -86,8 +86,7 @@ FEST = [
     # Neu (PixelLab k10_banner, k10_klein2, k10_baeume2)
     ('baeume2/12', 52 * T, 67, {'anim': 'zirkus'}), ('baeume2/13', 21 * T, 66, {'achse': 21 * T}), ('baeume2/08', 23 * T + 8, 52, {'anim': 'schaukeln', 'amp': 7, 'fest': 0.32}),
     ('klein2/63', 33 * T, 52, {}), ('klein2/61', 27 * T, 54, {'anim': 'schaukeln', 'amp': 6, 'fest': 0.12}),
-    ('banner/12', 62 * T + 8, 23, {}), ('banner/07', 70 * T, 27, {}), ('banner/09', 86 * T, 26, {}),
-    ('banner/14', 66 * T, 26, {}), ('banner/05', 87 * T + 8, 21, {'anim': 'signal'}), ('banner/05', 20 * T + 8, 6, {'anim': 'signal'}),
+    ('banner/12', 62 * T + 4, 23, {}), ('banner/05', 87 * T + 8, 21, {'anim': 'signal'}), ('banner/05', 20 * T + 8, 6, {'anim': 'signal'}),
     ('banner/05', 46 * T + 8, 6, {'anim': 'signal'}),
     ('banner/13', 32 * T + 8, 23, {'anim': 'ampel'}), ('banner/13', 46 * T + 8, 23, {'anim': 'ampel'}),
     ('banner/13', 43 * T + 8, 34, {'anim': 'ampel'}),
@@ -233,22 +232,35 @@ def main():
             belegen(datei, x, y)
         return o
 
-    # 1) Burg: Front auf der Achse (Wandhoehe passt genau zur rosa Mauer), Ecktuerme in gleichem Abstand
-    datei, h, zu, mitte = sprite('burg/00')
-    objekte.append({'datei': datei, 'basis': 'burg/00', 'x': int(ACHSE_BURG - mitte), 'y': WAND_FUSS - zu, 'fuss': h,
-                    'kachel': [76, 34], 'ebene': 1, 'an_wand': True, 'kein_schatten': True, 'keine_verdeckung': True,
-                    'vorrang': True, 'fest_pos': True, 'anim': 'fahne'})
-    belegen(datei, int(ACHSE_BURG - mitte), WAND_FUSS - zu)
+    # 1) Burg: das Hauptschloss (PixelLab k10_schloss) ist der Torbau in der Mauer, genau auf der Achse; dahinter
+    #    links und rechts je eine Burghalle (gespiegelt, exakt symmetrisch zur Achse) auf dem inneren Burghof.
+    #    Die Ecktuerme sind aus der ersten Burgfront ausgeschnitten (gleicher Stil), Abstand gleich.
+    for (name, X, spieg) in (('schloss2/00', 1084, False), ('schloss2/00', None, True)):
+        datei, h, zu, mitte = sprite(name, spieg)
+        w_ = alpha[datei].shape[1]
+        if X is None:
+            x_ = 2 * ACHSE_BURG - links_halle - w_
+        else:
+            x_ = int(round(X - mitte)); links_halle = x_
+        objekte.append({'datei': datei, 'basis': name, 'x': int(x_), 'y': 29 * T + 15 - zu, 'fuss': h,
+                        'kachel': [int((x_ + w_ // 2) // T), 29], 'ebene': 1, 'vorrang': True, 'fest_pos': True,
+                        'hinten': True, **({'spiegeln': True} if spieg else {})})
+        belegen(datei, int(x_), 29 * T + 15 - zu)
+    datei, h, zu, mitte = sprite('schloss/00')
+    objekte.append({'datei': datei, 'basis': 'schloss/00', 'x': int(round(ACHSE_BURG - mitte)), 'y': WAND_FUSS - zu,
+                    'fuss': h, 'kachel': [76, 34], 'ebene': 1, 'an_wand': True, 'kein_schatten': True,
+                    'keine_verdeckung': True, 'vorrang': True, 'fest_pos': True, 'anim': 'fahnen_tuch'})
+    belegen(datei, int(round(ACHSE_BURG - mitte)), WAND_FUSS - zu)
     td, th, tzu, tm = sprite('turm')
     for x_l in (62 * T,):
         for xx in (x_l, 2 * ACHSE_BURG - x_l - alpha[td].shape[1]):
             objekte.append({'datei': td, 'basis': 'turm', 'x': int(xx), 'y': WAND_FUSS - tzu, 'fuss': th,
                             'kachel': [int(xx // T), 34], 'ebene': 1, 'an_wand': True, 'kein_schatten': True,
-                            'keine_verdeckung': True, 'vorrang': True, 'fest_pos': True, 'anim': 'fahne'})
+                            'keine_verdeckung': True, 'vorrang': True, 'fest_pos': True, 'anim': 'fahnen_tuch'})
             belegen(td, int(xx), WAND_FUSS - tzu)
     for xx in (60 * T, 84 * T):                              # Ecktuerme an der Suedmauer (stehen im Hof davor)
         objekte.append({'datei': td, 'basis': 'turm', 'x': int(xx), 'y': 71 * T + 15 - tzu, 'fuss': th,
-                        'kachel': [xx // T, 71], 'ebene': 1, 'vorrang': True, 'fest_pos': True, 'anim': 'fahne'})
+                        'kachel': [xx // T, 71], 'ebene': 1, 'vorrang': True, 'fest_pos': True, 'anim': 'fahnen_tuch'})
         belegen(td, int(xx), 71 * T + 15 - tzu)
     # 2) Zug auf dem unteren Gleis (Raeder auf der Schiene), Lok vorne links (Schienenraeumer zeigt nach links)
     gy = lay['gleise'][1]['y'] * T + 13
