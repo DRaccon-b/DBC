@@ -590,6 +590,19 @@ def fahne_wehen(sp, frame, phase=0.0):
     stoff[:y0] = False
     stoff[:, :max(0, x0)] = False
     stoff &= ~braun
+    # Stange/Mast in jeder Farbe (Holz, schwarzes Eisen ...): senkrechte Spalten, die fast ueber die ganze
+    # Sprite-Hoehe reichen, plus 1 px Rand - bleiben fest (auch bei gespiegelten Fahnen, Stange rechts)
+    zeilen_ = np.nonzero(al.any(axis=1))[0]
+    hoehe_ = int(zeilen_.max() - zeilen_.min() + 1)
+    hoch_ = np.nonzero(al.sum(axis=0) >= 0.75 * hoehe_)[0]
+    sp_ = np.nonzero(al.any(axis=0))[0]
+    xl, xr = int(sp_.min()), int(sp_.max())
+    stange = np.zeros(al.shape[1], bool)
+    for x_ in hoch_:                                            # nur hohe Spalten am aeusseren Rand (Mast)
+        if x_ - xl <= (xr - xl) * 0.25 or xr - x_ <= (xr - xl) * 0.25:
+            stange[x_] = True
+    stange = stange | np.roll(stange, 1) | np.roll(stange, -1)
+    stoff[:, stange] = False
     h = max(1, int(ys.max()) - y0)
     out = a.copy()
     out[stoff] = 0
