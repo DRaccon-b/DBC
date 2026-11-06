@@ -302,7 +302,10 @@ def bauen(frame=None, speichern=True):
     a = np.array(_wv.vertiefen(Image.fromarray(a), np.ones_like(tief), frame, maske=tief,
                                rand=('#1c3a40', '#24484e', '#2e565c', '#386468'),
                                stufen=[(22, 0.84, 7), (64, 0.72, 6), (120, 0.62, 6), (190, 0.53, 5), (270, 0.45, 5)]).convert('RGB'))
-    a[tief] = np.clip(a[tief].astype(np.float32) * np.array([0.5, 0.56, 0.72]) + np.array([4, 4, 10]), 0, 255).astype(np.uint8)
+    # dunkel wie das uebrige Wasser der Karte (Nachtblau der Vorlage): Helligkeit bleibt als Struktur, Farbe nachtblau
+    lum_t = a[tief].astype(np.float32) @ np.array([0.3, 0.59, 0.11], np.float32)
+    lum_t = lum_t / max(1.0, float(lum_t.mean()))
+    a[tief] = np.clip(lum_t[:, None] * np.array([30, 36, 76], np.float32), 0, 255).astype(np.uint8)
     tm = weich(zell_maske(cls, 'x', cols, rows), 5, 0.2, 47, 0.45) & ~em[2]
     tm = k4.splitter_weg(tm, 60)
     k4.wasser_zeichnen(a, tm, frame, np.zeros_like(tm))
