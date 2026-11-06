@@ -92,6 +92,23 @@ def main():
     # rund um die Plattform nur Tiefsee (die Vorlage hat am rechten Rand noch einen Streifen Land)
     um = (xx >= 58) & (yy >= 24) & (yy <= 56) & np.isin(k, ['d', 'm', 'n'])
     k[um] = '~'
+    # kleine Land-Reste der Vorlage mitten im Meer (graue Flecken, schwarze Klumpen) werden Flachwasser
+    land = np.isin(k, ['d', 'm', 'n'])
+    gesehen = np.zeros_like(land)
+    for y0 in range(R):
+        for x0 in range(C):
+            if land[y0, x0] and not gesehen[y0, x0]:
+                teil, st = [], [(y0, x0)]
+                gesehen[y0, x0] = True
+                while st:
+                    a_, b_ = st.pop(); teil.append((a_, b_))
+                    for da, db in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+                        p_, q_ = a_ + da, b_ + db
+                        if 0 <= p_ < R and 0 <= q_ < C and land[p_, q_] and not gesehen[p_, q_]:
+                            gesehen[p_, q_] = True; st.append((p_, q_))
+                if len(teil) <= 30 and min(b for _, b in teil) >= 44 and min(a for a, _ in teil) >= 8:
+                    for (a_, b_) in teil:
+                        k[a_, b_] = 'u'
     # Tiefe und Hoehe
     h[np.isin(k, ['~', 'x'])] = 0
     lay = {

@@ -51,7 +51,7 @@ FEST = [
     ('land/03', ACHSE_P - 80, 32, {'symm': 'p1'}), ('land/03', ACHSE_P + 80, 32, {'symm': 'p1'}),
     ('land/03', ACHSE_P - 72, 47, {'symm': 'p4'}), ('land/03', ACHSE_P + 72, 47, {'symm': 'p4'}),
     # Brueckenkopf am Strand: zwei Laternen spiegelgleich zur Brueckenachse
-    ('land/11', 40 * T + 8, 36, {'symm_y': 'bk'}), ('land/11', 40 * T + 8, 41, {'symm_y': 'bk'}),
+    ('land/11', 39 * T + 8, 36, {'symm_y': 'bk'}), ('land/11', 39 * T + 8, 41, {'symm_y': 'bk'}),   # mit Abstand zur Bruestung
     # Ruinen-Platz: Kohlenbecken, Laternen, Schild, Kisten
     ('land/01', 3 * T + 8, 27, {'symm': 'r1'}), ('land/01', 12 * T + 8, 27, {'symm': 'r1'}),
     ('land/11', 3 * T + 8, 35, {}), ('land/12', 12 * T, 34, {}), ('land/13', 8 * T, 33, {}), ('land/05', 10 * T, 31, {}),
@@ -65,7 +65,7 @@ FEST = [
     ('k8/baeume/00', 4 * T, 8, {}), ('k8/baeume/02', 7 * T + 8, 10, {}), ('land/10', 5 * T + 8, 11, {'begleiter': True}),
     ('k8/baeume/14', 4 * T, 15, {}), ('k8/baeume/03', 8 * T, 17, {}), ('k8/fels/10', 6 * T, 18, {}),
     ('k8/baeume/01', 4 * T, 43, {}), ('k8/baeume/02', 7 * T + 8, 45, {}), ('land/15', 5 * T + 8, 46, {'begleiter': True}),
-    ('k8/baeume/00', 4 * T, 50, {}), ('k8/baeume/03', 8 * T, 51, {}), ('k8/fels/10', 6 * T, 52, {}),
+    ('k8/baeume/00', 4 * T, 50, {}), ('k8/baeume/03', 8 * T, 51, {}),
 ]
 # Haine auf dem verseuchten Land (tote Baeume)
 HAINE = [(11, 6, 28, 14, 0.035), (11, 38, 30, 56, 0.03), (28, 14, 40, 40, 0.02)]
@@ -209,9 +209,14 @@ def main():
             if n >= anzahl:
                 break
             tx, ty = rnd.randrange(*x_lim), rnd.randrange(4, rows - 4)
-            if any(cls[yy][xx] not in arten for yy in range(ty - 1, ty + 2) for xx in range(tx - 1, tx + 2)):
+            r_ = 2 if arten in ('u', 'h') else 1                # Meeresobjekte ganz im Wasser, nicht am Ufer
+            if any(not (0 <= yy < rows and 0 <= xx < cols) or cls[yy][xx] not in arten
+                   for yy in range(ty - r_, ty + r_ + 1) for xx in range(tx - r_, tx + r_ + 1)):
                 continue
-            if setzen(rnd.choices(namen, weights=gew)[0], tx * T + 8, ty, {'spiegeln': rnd.random() < 0.4}, arten=arten):
+            name_ = rnd.choices(namen, weights=gew)[0]
+            if any(o['basis'] == name_ and abs(o['kachel'][0] - tx) <= 5 and abs(o['kachel'][1] - ty) <= 5 for o in objekte):
+                continue                                        # keine gleichen Objekte nebeneinander (keine Reihen)
+            if setzen(name_, tx * T + 8, ty, {'spiegeln': rnd.random() < 0.4}, arten=arten):
                 n += 1
     json.dump(objekte, open(os.path.join(OBJ, 'platzierung.json'), 'w'), indent=0)
     print(len(objekte), 'Objekte gesetzt')

@@ -326,18 +326,18 @@
 {
 "datei": "sauber/land-11.png",
 "basis": "land/11",
-"x": 642,
+"x": 610,
 "y": 534,
 "fuss": 58,
 "kachel": [
-40,
+38,
 36
 ],
 "ebene": 1,
 "anim": "geisterlicht",
 "symm_y": "bk",
 "block": [
-40,
+38,
 33,
 2,
 4
@@ -346,18 +346,18 @@
 {
 "datei": "sauber/land-11.png",
 "basis": "land/11",
-"x": 642,
+"x": 610,
 "y": 614,
 "fuss": 58,
 "kachel": [
-40,
+38,
 41
 ],
 "ebene": 1,
 "anim": "geisterlicht",
 "symm_y": "bk",
 "block": [
-40,
+38,
 38,
 2,
 4
@@ -808,25 +808,6 @@
 48,
 3,
 4
-]
-},
-{
-"datei": "sauber/k8-fels-10.png",
-"basis": "k8/fels/10",
-"x": 101,
-"y": 839,
-"fuss": 45,
-"kachel": [
-7,
-54
-],
-"ebene": 1,
-"anim": "glimmen",
-"block": [
-6,
-52,
-3,
-3
 ]
 },
 {
@@ -1297,24 +1278,6 @@
 ]
 },
 {
-"datei": "sauber/k8-fels-12.png",
-"basis": "k8/fels/12",
-"x": 385,
-"y": 472,
-"fuss": 59,
-"kachel": [
-25,
-32
-],
-"ebene": 1,
-"block": [
-24,
-29,
-4,
-4
-]
-},
-{
 "datei": "sauber/k8-fels-13.png",
 "basis": "k8/fels/13",
 "x": 483,
@@ -1330,6 +1293,24 @@
 6,
 4,
 4
+]
+},
+{
+"datei": "sauber/k8-fels-11_m.png",
+"basis": "k8/fels/11",
+"x": 323,
+"y": 508,
+"fuss": 36,
+"kachel": [
+21,
+33
+],
+"ebene": 0,
+"block": [
+20,
+31,
+4,
+3
 ]
 },
 {
@@ -1387,6 +1368,24 @@
 ]
 },
 {
+"datei": "sauber/k8-fels-00.png",
+"basis": "k8/fels/00",
+"x": 464,
+"y": 755,
+"fuss": 61,
+"kachel": [
+30,
+50
+],
+"ebene": 1,
+"block": [
+29,
+47,
+3,
+4
+]
+},
+{
 "datei": "sauber/k8-fels-11.png",
 "basis": "k8/fels/11",
 "x": 163,
@@ -1400,24 +1399,6 @@
 "block": [
 10,
 13,
-4,
-3
-]
-},
-{
-"datei": "sauber/k8-fels-03_m.png",
-"basis": "k8/fels/03",
-"x": 450,
-"y": 770,
-"fuss": 50,
-"kachel": [
-29,
-50
-],
-"ebene": 1,
-"block": [
-28,
-48,
 4,
 3
 ]
@@ -1479,42 +1460,6 @@
 ]
 },
 {
-"datei": "sauber/land-15.png",
-"basis": "land/15",
-"x": 496,
-"y": 254,
-"fuss": 34,
-"kachel": [
-32,
-17
-],
-"ebene": 0,
-"block": [
-31,
-15,
-3,
-3
-]
-},
-{
-"datei": "sauber/land-15.png",
-"basis": "land/15",
-"x": 320,
-"y": 526,
-"fuss": 34,
-"kachel": [
-21,
-34
-],
-"ebene": 0,
-"block": [
-20,
-32,
-3,
-3
-]
-},
-{
 "datei": "sauber/land-10.png",
 "basis": "land/10",
 "x": 512,
@@ -1531,6 +1476,43 @@
 14,
 3,
 4
+]
+},
+{
+"datei": "sauber/land-08.png",
+"basis": "land/08",
+"x": 386,
+"y": 490,
+"fuss": 38,
+"kachel": [
+25,
+32
+],
+"ebene": 0,
+"liegend": true,
+"block": [
+24,
+30,
+4,
+3
+]
+},
+{
+"datei": "sauber/land-15.png",
+"basis": "land/15",
+"x": 416,
+"y": 174,
+"fuss": 34,
+"kachel": [
+27,
+12
+],
+"ebene": 0,
+"block": [
+26,
+10,
+3,
+3
 ]
 },
 {
@@ -1553,20 +1535,39 @@
 ]
 },
 {
-"datei": "sauber/land-15_m.png",
-"basis": "land/15",
-"x": 416,
-"y": 238,
-"fuss": 34,
+"datei": "sauber/land-08_m.png",
+"basis": "land/08",
+"x": 258,
+"y": 106,
+"fuss": 38,
 "kachel": [
-27,
-16
+17,
+8
+],
+"ebene": 0,
+"liegend": true,
+"block": [
+16,
+6,
+4,
+3
+]
+},
+{
+"datei": "sauber/land-09.png",
+"basis": "land/09",
+"x": 258,
+"y": 729,
+"fuss": 39,
+"kachel": [
+17,
+47
 ],
 "ebene": 0,
 "block": [
-26,
-14,
-3,
+16,
+45,
+4,
 3
 ]
 },
@@ -1590,6 +1591,25 @@
 ]
 },
 {
+"datei": "sauber/land-04.png",
+"basis": "land/04",
+"x": 388,
+"y": 458,
+"fuss": 38,
+"kachel": [
+25,
+30
+],
+"ebene": 0,
+"liegend": true,
+"block": [
+24,
+28,
+4,
+3
+]
+},
+{
 "datei": "sauber/land-04_m.png",
 "basis": "land/04",
 "x": 548,
@@ -1606,6 +1626,25 @@
 33,
 4,
 3
+]
+},
+{
+"datei": "sauber/land-10.png",
+"basis": "land/10",
+"x": 416,
+"y": 760,
+"fuss": 56,
+"kachel": [
+27,
+50
+],
+"ebene": 1,
+"anim": "wehen",
+"block": [
+26,
+47,
+3,
+4
 ]
 },
 {
@@ -1648,25 +1687,6 @@
 {
 "datei": "sauber/land-06_m.png",
 "basis": "land/06",
-"x": 290,
-"y": 106,
-"fuss": 38,
-"kachel": [
-19,
-8
-],
-"ebene": 0,
-"liegend": true,
-"block": [
-18,
-6,
-4,
-3
-]
-},
-{
-"datei": "sauber/land-06_m.png",
-"basis": "land/06",
 "x": 514,
 "y": 634,
 "fuss": 38,
@@ -1702,6 +1722,24 @@
 ]
 },
 {
+"datei": "sauber/meer-07_m.png",
+"basis": "meer/07",
+"x": 581,
+"y": 367,
+"fuss": 33,
+"kachel": [
+37,
+24
+],
+"ebene": 0,
+"block": [
+36,
+22,
+3,
+3
+]
+},
+{
 "datei": "sauber/land-04.png",
 "basis": "land/04",
 "x": 580,
@@ -1721,57 +1759,21 @@
 ]
 },
 {
-"datei": "sauber/land-04.png",
-"basis": "land/04",
-"x": 580,
-"y": 218,
+"datei": "sauber/land-06.png",
+"basis": "land/06",
+"x": 514,
+"y": 906,
 "fuss": 38,
 "kachel": [
-37,
-15
+33,
+58
 ],
 "ebene": 0,
 "liegend": true,
 "block": [
-36,
-13,
-4,
-3
-]
-},
-{
-"datei": "sauber/meer-07.png",
-"basis": "meer/07",
-"x": 549,
-"y": 911,
-"fuss": 33,
-"kachel": [
-35,
-58
-],
-"ebene": 0,
-"block": [
-34,
+32,
 56,
-3,
-3
-]
-},
-{
-"datei": "sauber/meer-07.png",
-"basis": "meer/07",
-"x": 565,
-"y": 879,
-"fuss": 33,
-"kachel": [
-36,
-56
-],
-"ebene": 0,
-"block": [
-35,
-54,
-3,
+4,
 3
 ]
 },
@@ -1795,218 +1797,37 @@
 ]
 },
 {
-"datei": "sauber/meer-01.png",
-"basis": "meer/01",
-"x": 656,
-"y": 709,
-"fuss": 59,
+"datei": "sauber/meer-07_m.png",
+"basis": "meer/07",
+"x": 485,
+"y": 335,
+"fuss": 33,
 "kachel": [
-42,
-47
-],
-"ebene": 1,
-"block": [
-41,
-44,
-3,
-4
-]
-},
-{
-"datei": "sauber/meer-01.png",
-"basis": "meer/01",
-"x": 800,
-"y": 837,
-"fuss": 59,
-"kachel": [
-51,
-55
-],
-"ebene": 1,
-"block": [
-50,
-52,
-3,
-4
-]
-},
-{
-"datei": "sauber/meer-14_m.png",
-"basis": "meer/14",
-"x": 1010,
-"y": 340,
-"fuss": 44,
-"kachel": [
-64,
-23
+31,
+22
 ],
 "ebene": 0,
 "block": [
-63,
-21,
+30,
+20,
 3,
 3
 ]
 },
 {
-"datei": "sauber/meer-01_m.png",
-"basis": "meer/01",
-"x": 688,
-"y": 133,
-"fuss": 59,
-"kachel": [
-44,
-11
-],
-"ebene": 1,
-"block": [
-43,
-8,
-3,
-4
-]
-},
-{
-"datei": "sauber/meer-02_m.png",
-"basis": "meer/02",
-"x": 609,
-"y": 364,
-"fuss": 52,
-"kachel": [
-39,
-25
-],
-"ebene": 1,
-"block": [
-38,
-22,
-4,
-4
-]
-},
-{
-"datei": "sauber/meer-01.png",
-"basis": "meer/01",
-"x": 624,
-"y": 293,
-"fuss": 59,
-"kachel": [
-40,
-21
-],
-"ebene": 1,
-"block": [
-39,
-18,
-3,
-4
-]
-},
-{
-"datei": "sauber/meer-11_m.png",
-"basis": "meer/11",
-"x": 819,
-"y": 222,
-"fuss": 50,
-"kachel": [
-52,
-16
-],
-"ebene": 1,
-"anim": "geisterlicht",
-"block": [
-51,
-13,
-3,
-4
-]
-},
-{
-"datei": "sauber/meer-00.png",
-"basis": "meer/00",
-"x": 583,
-"y": 661,
-"fuss": 43,
-"kachel": [
-37,
-43
-],
-"ebene": 1,
-"block": [
-36,
-41,
-4,
-3
-]
-},
-{
-"datei": "sauber/meer-08.png",
-"basis": "meer/08",
-"x": 836,
-"y": 310,
-"fuss": 42,
-"kachel": [
-53,
-21
-],
-"ebene": 1,
-"block": [
-52,
-19,
-4,
-3
-]
-},
-{
-"datei": "sauber/meer-14.png",
-"basis": "meer/14",
-"x": 802,
-"y": 500,
-"fuss": 44,
+"datei": "sauber/meer-13.png",
+"basis": "meer/13",
+"x": 806,
+"y": 511,
+"fuss": 49,
 "kachel": [
 51,
-33
+34
 ],
-"ebene": 0,
+"ebene": 1,
 "block": [
 50,
 31,
-3,
-3
-]
-},
-{
-"datei": "sauber/meer-05.png",
-"basis": "meer/05",
-"x": 768,
-"y": 85,
-"fuss": 43,
-"kachel": [
-49,
-7
-],
-"ebene": 0,
-"block": [
-48,
-5,
-3,
-3
-]
-},
-{
-"datei": "sauber/meer-01.png",
-"basis": "meer/01",
-"x": 800,
-"y": 469,
-"fuss": 59,
-"kachel": [
-51,
-32
-],
-"ebene": 1,
-"block": [
-50,
-29,
 3,
 4
 ]
@@ -2014,17 +1835,35 @@
 {
 "datei": "sauber/meer-00_m.png",
 "basis": "meer/00",
-"x": 967,
-"y": 293,
+"x": 1031,
+"y": 309,
 "fuss": 43,
 "kachel": [
-61,
-20
+65,
+21
 ],
 "ebene": 1,
 "block": [
-60,
-18,
+64,
+19,
+4,
+3
+]
+},
+{
+"datei": "sauber/meer-00.png",
+"basis": "meer/00",
+"x": 743,
+"y": 773,
+"fuss": 43,
+"kachel": [
+47,
+50
+],
+"ebene": 1,
+"block": [
+46,
+48,
 4,
 3
 ]
@@ -2032,54 +1871,200 @@
 {
 "datei": "sauber/meer-11_m.png",
 "basis": "meer/11",
-"x": 723,
-"y": 782,
+"x": 835,
+"y": 334,
 "fuss": 50,
 "kachel": [
-46,
-51
+53,
+23
 ],
 "ebene": 1,
 "anim": "geisterlicht",
 "block": [
-45,
-48,
+52,
+20,
 3,
 4
 ]
 },
 {
-"datei": "sauber/meer-02.png",
-"basis": "meer/02",
-"x": 865,
-"y": 780,
-"fuss": 52,
+"datei": "sauber/meer-01.png",
+"basis": "meer/01",
+"x": 816,
+"y": 261,
+"fuss": 59,
 "kachel": [
-55,
-51
+52,
+19
 ],
 "ebene": 1,
 "block": [
-54,
-48,
-4,
+51,
+16,
+3,
 4
 ]
 },
 {
 "datei": "sauber/meer-10_m.png",
 "basis": "meer/10",
-"x": 817,
-"y": 383,
+"x": 897,
+"y": 223,
 "fuss": 49,
 "kachel": [
-52,
-26
+57,
+16
 ],
 "ebene": 1,
 "block": [
+56,
+13,
+3,
+4
+]
+},
+{
+"datei": "sauber/meer-01.png",
+"basis": "meer/01",
+"x": 720,
+"y": 837,
+"fuss": 59,
+"kachel": [
+46,
+55
+],
+"ebene": 1,
+"block": [
+45,
+52,
+3,
+4
+]
+},
+{
+"datei": "sauber/meer-09_m.png",
+"basis": "meer/09",
+"x": 658,
+"y": 388,
+"fuss": 29,
+"kachel": [
+42,
+25
+],
+"ebene": 0,
+"block": [
+41,
+24,
+3,
+2
+]
+},
+{
+"datei": "sauber/meer-00_m.png",
+"basis": "meer/00",
+"x": 679,
+"y": 181,
+"fuss": 43,
+"kachel": [
+43,
+13
+],
+"ebene": 1,
+"block": [
+42,
+11,
+4,
+3
+]
+},
+{
+"datei": "sauber/meer-08_m.png",
+"basis": "meer/08",
+"x": 644,
+"y": 342,
+"fuss": 42,
+"kachel": [
+41,
+23
+],
+"ebene": 1,
+"block": [
+40,
+21,
+4,
+3
+]
+},
+{
+"datei": "sauber/meer-11_m.png",
+"basis": "meer/11",
+"x": 995,
+"y": 334,
+"fuss": 50,
+"kachel": [
+63,
+23
+],
+"ebene": 1,
+"anim": "geisterlicht",
+"block": [
+62,
+20,
+3,
+4
+]
+},
+{
+"datei": "sauber/meer-01.png",
+"basis": "meer/01",
+"x": 768,
+"y": 117,
+"fuss": 59,
+"kachel": [
+49,
+10
+],
+"ebene": 1,
+"block": [
+48,
+7,
+3,
+4
+]
+},
+{
+"datei": "sauber/meer-12.png",
+"basis": "meer/12",
+"x": 804,
+"y": 378,
+"fuss": 39,
+"kachel": [
 51,
+25
+],
+"ebene": 0,
+"block": [
+50,
 23,
+4,
+3
+]
+},
+{
+"datei": "sauber/meer-11.png",
+"basis": "meer/11",
+"x": 1091,
+"y": 238,
+"fuss": 50,
+"kachel": [
+69,
+17
+],
+"ebene": 1,
+"anim": "geisterlicht",
+"block": [
+68,
+14,
 3,
 4
 ]
@@ -2087,111 +2072,35 @@
 {
 "datei": "sauber/meer-08.png",
 "basis": "meer/08",
-"x": 932,
-"y": 182,
+"x": 772,
+"y": 838,
 "fuss": 42,
 "kachel": [
-59,
-13
+49,
+54
 ],
 "ebene": 1,
 "block": [
-58,
-11,
+48,
+52,
 4,
 3
 ]
 },
 {
-"datei": "sauber/meer-01_m.png",
-"basis": "meer/01",
-"x": 1152,
-"y": 261,
-"fuss": 59,
+"datei": "sauber/meer-02_m.png",
+"basis": "meer/02",
+"x": 865,
+"y": 300,
+"fuss": 52,
 "kachel": [
-73,
-19
+55,
+21
 ],
 "ebene": 1,
 "block": [
-72,
-16,
-3,
-4
-]
-},
-{
-"datei": "sauber/meer-03_m.png",
-"basis": "meer/03",
-"x": 723,
-"y": 292,
-"fuss": 44,
-"kachel": [
-46,
-20
-],
-"ebene": 1,
-"anim": "wehen",
-"block": [
-45,
+54,
 18,
-3,
-3
-]
-},
-{
-"datei": "sauber/meer-03_m.png",
-"basis": "meer/03",
-"x": 723,
-"y": 676,
-"fuss": 44,
-"kachel": [
-46,
-44
-],
-"ebene": 1,
-"anim": "wehen",
-"block": [
-45,
-42,
-3,
-3
-]
-},
-{
-"datei": "sauber/meer-04_m.png",
-"basis": "meer/04",
-"x": 996,
-"y": 210,
-"fuss": 62,
-"kachel": [
-63,
-16
-],
-"ebene": 1,
-"anim": "wehen",
-"block": [
-62,
-13,
-3,
-4
-]
-},
-{
-"datei": "sauber/meer-15_m.png",
-"basis": "meer/15",
-"x": 738,
-"y": 333,
-"fuss": 51,
-"kachel": [
-47,
-23
-],
-"ebene": 1,
-"anim": "wehen",
-"block": [
-46,
-20,
 4,
 4
 ]
