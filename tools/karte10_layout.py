@@ -96,22 +96,22 @@ def main():
     # Geschlossene Burganlage, exakt symmetrisch zur Achse 76.0 (Mauern x 63 und 88): Nordmauer mit dem Hauptschloss
     # als Torbau (Krone Reihen 32-33, Wandflaeche 34-36), schlanke Seitenmauern (1 Kachel), Suedmauer (Krone 68-69,
     # Wandflaeche 70-72), Seitentor in der Westmauer zur Stadt. Hinter der Nordmauer liegt der Bahnhofsvorplatz.
-    k[23:32, 61:90] = 's'                                                       # Bahnhofsvorplatz
-    k[32:73, 61:63] = 'g'                                                       # Gruenstreifen vor der Westmauer
-    k[32:73, 89] = 'g'
-    k[37:68, 64:88] = 'k'                                                       # Burghof
-    k[37:47, 74:78] = 's'                                                       # Weg vom Torbau zum Rahmen
-    rahmen = (xx >= 69) & (xx <= 82) & (yy >= 47) & (yy <= 57)
-    innen = (xx >= 70) & (xx <= 81) & (yy >= 48) & (yy <= 56)
+    k[23:33, 61:90] = 's'                                                       # Bahnhofsvorplatz
+    k[33:74, 61:63] = 'g'                                                       # Gruenstreifen vor der Westmauer
+    k[33:74, 89] = 'g'
+    k[38:69, 64:88] = 'k'                                                       # Burghof
+    k[38:48, 74:78] = 's'                                                       # Weg vom Torbau zum Rahmen
+    rahmen = (xx >= 69) & (xx <= 82) & (yy >= 48) & (yy <= 58)
+    innen = (xx >= 70) & (xx <= 81) & (yy >= 49) & (yy <= 57)
     k[rahmen & ~innen] = 'r'
-    ellipse(k, ACHSE, 52.5, 3.2, 2.7, 'b')
-    pfad(k, [(60, 37), (61, 42), (61, 50), (62, 55), (65, 56)], 's', nur='gk')   # Strasse -> Seitentor
+    ellipse(k, ACHSE, 53.5, 3.2, 2.7, 'b')
+    pfad(k, [(60, 37), (61, 42), (61, 51), (62, 56), (65, 57)], 's', nur='gk')   # Strasse -> Seitentor
     mauer = np.zeros((R, C), bool)
-    mauer[32:34, 63:89] = True                     # Nordmauer (Krone), Wandflaeche entsteht darunter (Reihen 34-36)
-    mauer[32:70, 63] = True                        # Westmauer
-    mauer[32:70, 88] = True                        # Ostmauer
-    mauer[68:70, 63:89] = True                     # Suedmauer (Krone), Wandflaeche Reihen 70-72
-    mauer[52:58, 63] = False                       # Seitentor (Wandflaeche des Mauerendes 52-54, Durchgang 55-57)
+    mauer[33:35, 63:89] = True                     # Nordmauer (Krone), Wandflaeche entsteht darunter (Reihen 34-36)
+    mauer[33:71, 63] = True                        # Westmauer
+    mauer[33:71, 88] = True                        # Ostmauer
+    mauer[69:71, 63:89] = True                     # Suedmauer (Krone), Wandflaeche Reihen 70-72
+    mauer[53:59, 63] = False                       # Seitentor (Wandflaeche des Mauerendes 52-54, Durchgang 55-57)
     h[mauer] = 3
     k[mauer] = 'k'
     # ------------------------------------------------------------------ Waldrand (wie Karte 01): Waldboden W
@@ -120,7 +120,7 @@ def main():
     wald[:, 0:2] = True
     wald[:, 2] = k[:, 2] == 'g'
     wald[72:75, 0:60] = True
-    wald[73:75, 60:90] = True                      # Wald unter der Burg-Suedmauer
+    wald[74, 60:90] = True                      # Wald unter der Burg-Suedmauer
     wald[71, 0:60] = k[71, 0:60] == 'g'
     wald[34:39, 0:3] = False                       # Durchgang zum Teleporter
     # unregelmaessige Innenkante: Buchten und Vorspruenge

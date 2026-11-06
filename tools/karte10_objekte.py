@@ -24,7 +24,7 @@ ACHSE_BURG = 76 * T              # Burg, Torweg, Hofrahmen
 ACHSE_BAHNHOF = 76 * T           # Bahnsteig x 69-82
 ACHSE_BRUNNEN = 10 * T           # Brunnenplatz (Mitte x 10.0)
 ACHSE_UHR = 54 * T               # Uhrenplatz (Mitte x 54.0)
-WAND_FUSS = 36 * T + 15          # Unterkante der Wandflaeche der Burg-Nordmauer (Reihen 34-36)
+WAND_FUSS = 37 * T + 15          # Unterkante der Wandflaeche der Burg-Nordmauer (Reihen 35-37)
 
 LAMPE, BANK, BRIEF, HYDRANT, ZAUN = 'spielplatz/04', 'spielplatz/03', 'spielplatz/05', 'spielplatz/06', 'spielplatz/07'
 SOLDAT = 'spielplatz/09'
@@ -53,16 +53,16 @@ FEST = [
     (LAMPE, ACHSE_BRUNNEN - 96, 33, {'symm': 'bl1', 'anim': 'lampe'}), (LAMPE, ACHSE_BRUNNEN + 96, 33, {'symm': 'bl1', 'anim': 'lampe'}),
     (BANK, ACHSE_BRUNNEN - 48, 43, {'symm': 'bb'}), (BANK, ACHSE_BRUNNEN + 48, 43, {'symm': 'bb'}),
     # Burghof: Soldaten am Torweg, Brunnen im Rahmen, Blumenbeete in den Rahmenecken (symmetrisch)
-    (SOLDAT, ACHSE_BURG - 56, 40, {'symm': 's1'}), (SOLDAT, ACHSE_BURG + 56, 40, {'symm': 's1'}),
-    (SOLDAT, ACHSE_BURG - 56, 45, {'symm': 's2'}), (SOLDAT, ACHSE_BURG + 56, 45, {'symm': 's2'}),
-    ('baeume/07', ACHSE_BURG, 53, {'achse': ACHSE_BURG, 'anim': 'brunnen'}),
-    ('baeume/15', ACHSE_BURG - 72, 50, {'symm': 'f1'}), ('baeume/15', ACHSE_BURG + 72, 50, {'symm': 'f1'}),
-    ('spielplatz/15', ACHSE_BURG - 72, 56, {'symm': 'f2'}), ('spielplatz/15', ACHSE_BURG + 72, 56, {'symm': 'f2'}),
+    (SOLDAT, ACHSE_BURG - 56, 41, {'symm': 's1'}), (SOLDAT, ACHSE_BURG + 56, 41, {'symm': 's1'}),
+    (SOLDAT, ACHSE_BURG - 56, 46, {'symm': 's2'}), (SOLDAT, ACHSE_BURG + 56, 46, {'symm': 's2'}),
+    ('baeume/07', ACHSE_BURG, 54, {'achse': ACHSE_BURG, 'anim': 'brunnen'}),
+    ('baeume/15', ACHSE_BURG - 72, 51, {'symm': 'f1'}), ('baeume/15', ACHSE_BURG + 72, 51, {'symm': 'f1'}),
+    ('spielplatz/15', ACHSE_BURG - 72, 57, {'symm': 'f2'}), ('spielplatz/15', ACHSE_BURG + 72, 57, {'symm': 'f2'}),
     # Burghof unten: Kapelle links und Stall rechts an der Suedmauer, dazwischen die Spielzeugecke
-    ('schloss2/01', 67 * T, 67, {}), ('schloss2/03', 84 * T, 67, {}),
-    ('spielplatz/12', 73 * T, 66, {}), ('spielplatz/11', 76 * T + 8, 67, {}), ('spielplatz/10', 79 * T + 8, 66, {}),
-    ('spielplatz/13', 66 * T, 60, {}), ('klein/32', 85 * T, 60, {}),
-    ('klein/55', 72 * T, 61, {}), ('klein/60', 66 * T, 41, {}), ('klein/03', 85 * T + 8, 41, {}),
+    ('schloss2/01', 67 * T, 68, {}), ('schloss2/03', 84 * T, 68, {}),
+    ('spielplatz/12', 73 * T, 67, {}), ('spielplatz/11', 76 * T + 8, 68, {}), ('spielplatz/10', 79 * T + 8, 67, {}),
+    ('spielplatz/13', 66 * T, 61, {}), ('klein/32', 85 * T, 61, {}),
+    ('klein/55', 72 * T, 62, {}), ('klein/60', 66 * T, 42, {}), ('klein/03', 85 * T + 8, 42, {}),
     # Spielplatz
     ('spielplatz/00', 27 * T, 49, {}), ('spielplatz/01', 35 * T, 48, {}), ('spielplatz/02', 38 * T, 54, {}),
     ('gross2/01', 35 * T, 69, {}), ('baeume/14', 21 * T, 57, {}), ('klein/26', 27 * T, 66, {}),
@@ -96,7 +96,7 @@ FEST = [
     ('klein2/01', 24 * T + 8, 17, {}), ('banner/15', 12 * T + 8, 11, {}),
     ('banner/11', 35 * T, 33, {}), ('banner/11', 49 * T, 33, {}),
     ('banner/14', ACHSE_BRUNNEN, 43, {'achse': ACHSE_BRUNNEN}),
-    ('baeume2/07', ACHSE_BURG - 104, 46, {'symm': 'kl', 'anim': 'lampe'}), ('baeume2/07', ACHSE_BURG + 104, 46, {'symm': 'kl', 'anim': 'lampe'}),
+    ('baeume2/07', ACHSE_BURG - 104, 47, {'symm': 'kl', 'anim': 'lampe'}), ('baeume2/07', ACHSE_BURG + 104, 47, {'symm': 'kl', 'anim': 'lampe'}),
 ]
 # Laternen in festem Rhythmus entlang der Gehwege (alle 6 Kacheln), Wegweiser an den Kreuzungen
 # (ausgeduennt: je Strassenzug nur wenige Laternen, versetzt statt in Reihen)
@@ -243,18 +243,19 @@ def main():
     # 1) Burg: das Hauptschloss (PixelLab k10_schloss) ist der Torbau in der Nordmauer, genau auf der Achse.
     datei, h, zu, mitte = sprite('schloss/00')
     objekte.append({'datei': datei, 'basis': 'schloss/00', 'x': int(round(ACHSE_BURG - mitte)), 'y': WAND_FUSS - zu,
-                    'fuss': h, 'kachel': [76, 34], 'ebene': 1, 'an_wand': True, 'kein_schatten': True,
+                    'fuss': h, 'kachel': [76, 37], 'ebene': 1, 'an_wand': True, 'kein_schatten': True,
                     'keine_verdeckung': True, 'vorrang': True, 'fest_pos': True, 'anim': 'fahnen_tuch'})
     belegen(datei, int(round(ACHSE_BURG - mitte)), WAND_FUSS - zu)
     # Rundtuerme (PixelLab k10_schloss2/02, im Stil des Hauptschlosses) in festem Rhythmus: an den Enden der
     # Burgfront (spiegelgleich zur Achse), auf der Ostmauer in gleichen Abstaenden, an den Ecken der Suedmauer
     td, th, tzu, tm = sprite('schloss2/02')
+    to, _, _, _ = sprite('schloss2/02_ohne_tuer')          # Tuerme ohne Tuer (Nutzer: Tueren ins Nichts weg)
     tw = alpha[td].shape[1]
     W_, O_ = 63 * T + 8, 88 * T + 8                       # Mitte der West- und Ostmauer (symmetrisch zu 1216)
-    tuerme = [(W_, WAND_FUSS, True), (O_, WAND_FUSS, True),             # Ecken Nordmauer
-              (W_, 54 * T + 15, True), (O_, 54 * T + 15, True),         # Seitentor (West) / gegenueber (Ost):
-              (W_, 72 * T + 15, True), (O_, 72 * T + 15, True)]         # Ecken Suedmauer
-    for (cx, fy, wand) in tuerme:
+    tuerme = [(W_, WAND_FUSS, True, to), (O_, WAND_FUSS, True, to),             # Ecken Nordmauer
+              (W_, 55 * T + 15, True, td), (O_, 55 * T + 15, True, to),         # Seitentor (West) / gegenueber (Ost)
+              (W_, 73 * T + 15, True, td), (O_, 73 * T + 15, True, td)]         # Ecken Suedmauer (Baeume davor)
+    for (cx, fy, wand, td) in tuerme:
         xx = int(round(cx - tm))
         objekte.append({'datei': td, 'basis': 'schloss2/02', 'x': xx, 'y': fy - tzu, 'fuss': th,
                         'kachel': [int(cx // T), fy // T], 'ebene': 1, 'vorrang': True, 'fest_pos': True,
@@ -296,6 +297,14 @@ def main():
                  'anim': 'baum', 'wald': True}
             objekte.append(o)
             wald_neu.append(o)
+    # Vor den unteren Ecktuermen der Burg stehen Waldbaeume (Fuss unterhalb des Kartenrands) und verdecken die Tueren
+    for (cx, name) in ((63 * T + 8 - 10, 'rand/k1-01'), (63 * T + 8 + 12, 'rand/k1-06'),
+                       (88 * T + 8 + 10, 'rand/k1-00'), (88 * T + 8 - 12, 'rand/k1-09')):
+        datei, h, zu, mitte = sprite(name)
+        o = {'datei': datei, 'basis': name, 'x': int(round(cx - mitte)), 'y': rows * T + 6 - zu, 'fuss': h,
+             'kachel': [cx // T, rows - 1], 'ebene': 1, 'anim': 'baum', 'wald': True, 'fest_pos': True}
+        objekte.append(o)
+        wald_neu.append(o)
     for o in wald_neu:
         belegen(o['datei'], o['x'], o['y'])
     for ty in range(rows):
