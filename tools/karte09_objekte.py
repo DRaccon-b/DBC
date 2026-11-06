@@ -80,7 +80,7 @@ FEST = [
     # Gartenhof: Gruft, toter Baum, Grab
     ('k8/krypta/00', 57, 7, {}), ('k8/baeume/00', 49, 7, {}), ('k8/mittel/02', 53, 12, {}), ('wand/38', 59, 12, {}),
     # Friedhof: Mausoleum, Gruften, Steinkreis, Lager, Statue, grosser toter Baum
-    ('k8/krypta/02', 11, 48, {}), ('k8/krypta/00', 21, 48, {}), ('k8/krypta/00', 4, 62, {}), ('k8/krypta/03', 85, 68, {}),
+    ('k8/krypta/02', 11, 48, {}), ('k8/krypta/00', 21, 48, {}), ('k8/krypta/00', 4, 62, {}), ('k8/krypta/03', 84, 68, {}),
     ('k8/gross/03', 77, 50, {}), ('wand/32', 38, 76, {}), ('k8/graeber/09', 23, 45, {}), ('k8/graeber/09', 32, 45, {'spiegeln': True}),
     ('wand/34', 66, 57, {}),
 ] + [('k8/mittel/04', x, y, {}) for (x, y) in ((61, 54), (63, 51), (68, 51), (71, 54), (71, 59), (68, 61), (63, 61), (61, 58))] + [
@@ -97,9 +97,10 @@ GRABFELDER = [(7, 51, 16, 51), (6, 56, 9, 56), (13, 56, 17, 56), (7, 60, 12, 60)
 TOTE_BAEUME = ['k8/baeume/00', 'k8/baeume/01', 'k8/baeume/02', 'k8/baeume/03', 'k8/baeume/14', 'wand/38']
 HAINE = [(3, 44, 10, 47, 0.12), (36, 44, 48, 52, 0.08), (40, 54, 60, 68, 0.06), (62, 64, 84, 80, 0.07),
          (8, 76, 30, 82, 0.1), (70, 44, 84, 48, 0.08), (26, 60, 40, 70, 0.06)]
-STREU = {'k8/klein/04': 6, 'k8/klein/12': 5, 'k8/klein/02': 4, 'k8/klein/03': 2, 'k8/klein/00': 3, 'k8/klein/01': 2,
-         'k8/klein/05': 3, 'k8/klein/07': 2, 'k8/klein/09': 2, 'k8/klein/10': 2, 'k8/klein/48': 3, 'k8/klein/47': 2,
-         'k8/klein/49': 1, 'k8/klein/40': 1, 'k8/fels_klein/02': 1, 'k8/mittel/14': 1}
+STREU = {'k8/klein/04': 6, 'k8/klein/12': 5, 'k8/klein/02': 4, 'k8/klein/03': 2, 'k8/klein/00': 1, 'k8/klein/01': 1,
+         'k8/klein/06': 4, 'k8/klein/44': 2,                        # kleine Kerzen statt eines Teils der Knochen
+         'k8/klein/05': 3, 'k8/klein/07': 2, 'k8/klein/09': 2, 'k8/klein/48': 3, 'k8/klein/47': 2,
+         'k8/klein/40': 1, 'k8/fels_klein/02': 1, 'k8/mittel/14': 1}
 STREU_SCHLOSS = {'k8/fels_klein/11': 2, 'k8/klein/05': 1}
 LIEGEND = {'k8/klein/00', 'k8/klein/07', 'k8/klein/10', 'k8/klein/49', 'k8/klein/05', 'k8/fels_klein/11'}
 FLACH = LIEGEND | {'k8/klein/02', 'k8/klein/03', 'k8/klein/04', 'k8/klein/09', 'k8/klein/12', 'k8/klein/47',
@@ -108,6 +109,17 @@ WIND = {'k8/klein/04', 'k8/klein/12', 'k8/klein/09', 'k8/klein/47', 'k8/klein/48
 
 
 MAUER_RAMPE = ['#1a1c24', '#22252f', '#353a4a', '#464c60', '#535a70', '#6c7490', '#8a92ac']
+
+
+def raster_x(a, X):
+    """Regel 1b: sichtbares Sprite (Alpha a) im kleinsten Kachelblock zentrieren, Block moeglichst mittig um X.
+    -> linke Kante des Sprite-Bildes."""
+    import math
+    xs = np.nonzero(a.any(axis=0))[0]
+    w = int(xs.max() - xs.min() + 1)
+    wt = math.ceil(w / T)
+    bx = int(round(X / T - wt / 2.0))
+    return bx * T + (wt * T - w) // 2 - int(xs.min())
 
 
 def tor_anpassen(sp):
@@ -296,11 +308,11 @@ def main():
             return None
         o = {'datei': datei, 'basis': name, 'x': x, 'y': y, 'fuss': h, 'kachel': [int(kx), ky],
              'ebene': 0 if art == 'flach' else 1}
-        if not suchen:
-            o['fest_pos'] = True                         # feste Objekte nicht mehr verschieben (Saeulen, Baenke ...)
+
         if name in LIEGEND:
             o['liegend'] = True
         if boden_:
+            o['x'] = raster_x(alpha[datei], kx * T + T / 2)
             o.update({'an_wand': True, 'kein_schatten': True, 'keine_verdeckung': True})   # liegt flach auf dem Boden
         o.update(opt)
         objekte.append(o)
@@ -324,24 +336,27 @@ def main():
         hoehe_w = int(zl_.max() - zl_.min() + 1)
         oben_d = 7 if name.startswith('banner/') else {'wand/04': 12, 'wand/06': 8}.get(name, 5)
         oben_d = min(oben_d, 37 - hoehe_w)
-        x, y = int(round(X - mitte)), oben + oben_d - int(zl_.min())
+        x, y = raster_x(a_w, X), oben + oben_d - int(zl_.min())
         objekte.append({'datei': datei, 'basis': name, 'x': x, 'y': y, 'fuss': h, 'kachel': [tx, oben // T + 2],
                         'ebene': 1, 'an_wand': True, 'kein_schatten': True, 'keine_verdeckung': True,
                         **({'anim': 'kerzen'} if name == 'wand/04' else {})})
     # Tuerme auf der Aussenmauer und Tore (stehen auf/vor der Mauer, eigene Platzierung)
-    for (name, tx, fuss_px) in [(TURM, x, 39 * T + 13) for x in (2, 12, 22, 32, 42, 52, 62, 72, 82)] + \
+    for (name, tx, fuss_px) in [(TURM, x, 39 * T + 15) for x in (2, 12, 22, 32, 42, 52, 62, 72, 82)] + \
                                [('tor2/01', 27, 39 * T + 15), ('tor2/02', 27, 19 * T + 15)]:
         datei, h, zu, mitte = sprite(name, False)
         if name.startswith(('tor/', 'tor2/')):
             xs_ = np.nonzero(alpha[datei].any(axis=0))[0]
             mitte = (xs_.min() + xs_.max() + 1) / 2.0             # Tor genau mittig auf der Teppichachse
         x, y = int(round(tx * T + T / 2 - mitte)), fuss_px - zu
+        if not name.startswith(('tor/', 'tor2/')):          # Tore bleiben exakt auf der Teppichachse (440 px)
+            x = raster_x(alpha[datei], tx * T + T / 2)
         objekte.append({'datei': datei, 'basis': name, 'x': x, 'y': y, 'fuss': h, 'kachel': [int(tx), fuss_px // T],
                         'ebene': 1, 'an_wand': True, 'kein_schatten': True, 'keine_verdeckung': True,
                         'vorrang': True})
         if name == TURM:
             belegen(datei, x, y)
-        objekte[-1]['fest_pos'] = True
+        if not name.startswith(TURM.split('/')[0]):
+            objekte[-1]['fest_pos'] = True              # Tore exakt auf der Teppichachse; Tuerme rastet regeln_v11 ein
     # 2) feste Objekte
     for (name, tx, ty, opt) in FEST:
         setze(name, tx, ty, opt, suchen='symm' not in opt or opt.get('symm') is None)
@@ -378,7 +393,7 @@ def main():
             if arten == 'i' and any(cls[yy][xx] in 'cv' for yy in range(ty - 1, ty + 2) for xx in range(tx - 1, tx + 2)):
                 continue
             name = rnd.choices(namen, weights=gew)[0]
-            opt = {'anim': 'wehen'} if name in WIND else {'anim': 'glimmen'} if name in ('k8/klein/02', 'k8/fels_klein/02') else {}
+            opt = {'anim': 'kerzen'} if name in ('k8/klein/06', 'k8/klein/44') else {'anim': 'wehen'} if name in WIND else {'anim': 'glimmen'} if name in ('k8/klein/02', 'k8/fels_klein/02') else {}
             if setze(name, tx, ty, opt):
                 n += 1
     json.dump(objekte, open(os.path.join(OBJ, 'platzierung.json'), 'w'), indent=0)

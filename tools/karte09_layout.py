@@ -85,6 +85,8 @@ def main():
     h[wasser] = 0
     plateau = aussen & np.isin(v, ['I', '#'])
     plateau = glaetten(plateau)
+    plateau[44:56, 78:] = False                    # Nutzer: graue Wand rechts unter dem roten Fels weg
+    plateau[75:84, 58:76] = False                  # Nutzer: graue Wand unten weg
     h[plateau] = 2
     k[plateau] = 'f'
     fels = aussen & (v == 'r')
@@ -95,7 +97,6 @@ def main():
     fels[43:86, 87:90] = True
     fels[84:86, :] = True
     fels[69:74, 0:3] = False                       # Weg zum Teleporter links
-    fels[46:53, 85:90] &= ~plateau[46:53, 85:90]
     h[fels] = 7
     k[fels] = 'r'
     k[70:74, 0:46] = 'w'
@@ -110,7 +111,7 @@ def main():
         'groesse': [C, R], 'klassen': [''.join(r) for r in k], 'hoehe': [''.join(str(c) for c in r) for r in h],
         'zugbruecke': [26, 40, 28, 42],                 # (x0, y0, x1, y1)
         'bruecken': [],                                 # Holzbruecke in der Mitte entfernt (Nutzer)
-        'stege': [[78, 56, 79, 64]],                    # senkrecht (x0, y0, x1, y1)
+        'stege': [],                                    # Steg rechts entfernt (Nutzer)
         'teleporter': [{'x': 0, 'y': 69, 'b': 2, 'h': 4}],
     }
     os.makedirs(KARTE, exist_ok=True)

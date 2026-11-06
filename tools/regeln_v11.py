@@ -22,7 +22,7 @@ LIEGEND = {
 }
 NICHT_RASTERN = {'karte02': ('schatten', 'abgeleitet/laterne', 'abgeleitet/leer', 'kran'),
                  'karte03': ('abgeleitet/arena_tor', 'abgeleitet/buehne', 'abgeleitet/box_monitor'),
-                 'karte09': ('gross/03', 'tor/00', 'tor/01', 'tor2/01', 'tor2/02', 'einrichtung/05', 'einrichtung/04', 'turm/03')}
+                 'karte09': ('gross/03', 'tor/00', 'tor/01', 'tor2/01', 'tor2/02', 'einrichtung/05', 'einrichtung/04')}
 BAUM = ('baeume/', 'rand/')
 ABSTAND = {'karte03': 1}                             # Pixelpruefung mit Abstand (je Seite 1 px = 2 px Luecke)
 
