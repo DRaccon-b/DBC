@@ -165,8 +165,10 @@ def main():
         return o
 
     # 1) Felsnadeln in der Tiefsee (stehen im Wasser, Fuss in der Tiefe)
+    stufen = np.load(os.path.join(KARTE, 'meer_stufen.npy'))
     for (tx, ty) in SPITZEN:
-        name = 'gross/03' if (tx + ty) % 3 else 'meer/13'
+        st_ = int(stufen[min(stufen.shape[0] - 1, ty * T + 12), tx * T + 8])
+        name = 'gross/03' if st_ <= 2 else 'meer/13'       # tiefe Stufen: nur noch kleine Spitzen ragen heraus
         datei, h, zu, mitte = sprite(name, (tx * 7 + ty) % 2 == 1)
         x, y = raster_x(alpha[datei], tx * T + 8), (ty + 1) * T - 1 - zu
         if not frei_px(datei, x, y):

@@ -48,6 +48,37 @@ def blur(m, r):
     return np.array(Image.fromarray((m * 255).astype(np.uint8)).filter(ImageFilter.GaussianBlur(r))) / 255.0
 
 
+_STUFEN_CACHE = {}
+
+
+def meer_stufen(tief_m, n=5):
+    """Stufe 0..n-1 je Tiefsee-Pixel: Abstand zum Flachwasser/Land (auf 1/4 Aufloesung berechnet), mit leichtem
+    Rauschen fuer natuerliche Kanten, gleichmaessig bis zum Kartenrand verteilt. Fest (fuer alle Animationsbilder gleich)."""
+    key = (tief_m.shape, int(tief_m.sum()))
+    if key in _STUFEN_CACHE:
+        return _STUFEN_CACHE[key]
+    Hh, W = tief_m.shape
+    k = tief_m[::4, ::4]
+    nah = (~k).astype(np.float32)
+    feld = np.zeros(k.shape, np.float32)
+    for r in (3, 6, 12, 24, 48):                                  # weiches Naehe-Feld: gross = nahe am Flachwasser
+        feld += np.array(Image.fromarray((nah * 255).astype(np.uint8)).filter(ImageFilter.GaussianBlur(r))) / 255.0
+    rs = np.random.RandomState(13)
+    rausch = np.array(Image.fromarray((rs.rand(*feld.shape) * 255).astype(np.uint8)).filter(ImageFilter.GaussianBlur(5)))
+    feld = feld + (rausch / 255.0 - 0.5) * 0.12
+    werte = feld[k]
+    grenzen = np.quantile(werte, [1 - (i + 1) / n for i in range(n - 1)]) if len(werte) else [0] * (n - 1)
+    st = np.zeros(k.shape, np.uint8)
+    for g in grenzen:
+        st += (feld < g).astype(np.uint8)
+    st = np.array(Image.fromarray(st).filter(ImageFilter.ModeFilter(5)))
+    groß = np.kron(st, np.ones((4, 4), np.uint8))[:Hh, :W]
+    groß = np.array(Image.fromarray(groß).filter(ImageFilter.ModeFilter(7))).astype(int)
+    groß[~tief_m] = 0
+    _STUFEN_CACHE[key] = groß
+    return groß
+
+
 def meer_zeichnen(a, wasser, flach, seetang, frame):
     """Meer der Finsternis: Flachwasser (tuerkis, Grund sichtbar, Lichtnetze wandern), Seetangfelder (dunkel,
     Blaetter wiegen sich), zur Tiefsee hin dunkler werdend; Tiefsee dunkel nachtblau-violett mit langsamen Wellen."""
@@ -64,6 +95,25 @@ def meer_zeichnen(a, wasser, flach, seetang, frame):
     misch = 0.55 + 0.4 * tiefe                                   # in der Tiefe verschwindet der Grund
     neu = grund * (1 - misch[..., None]) * np.array([0.6, 0.9, 0.95]) + farbe * misch[..., None] \
         + (lum[..., None] - 60) * 0.25 * (1 - tiefe[..., None])
+    # Tiefsee in 5 Stufen bis zum Kartenrand (wie das terrassierte Meer von Karte 01): je weiter vom Flachwasser,
+    # desto tiefer und dunkler; an jeder Stufenkante ein heller Grat auf der hoeheren und Schatten auf der tieferen Seite
+    tief_m = wasser & ~flach
+    stufe = meer_stufen(tief_m)
+    if frame is None:
+        np.save(os.path.join(KARTE, 'meer_stufen.npy'), stufe.astype(np.uint8))
+    farben = np.array([[38, 56, 98], [32, 44, 88], [27, 35, 76], [22, 27, 64], [17, 19, 50]], np.float32)
+    tex = (lum - lum[tief_m].mean()) * 0.18
+    st_f = farben[stufe] + tex[..., None]
+    rand_f = np.clip(blur(flach, 6) * 1.6, 0, 1)[..., None]          # weicher Uebergang zum Flachwasser
+    neu[tief_m] = (neu * rand_f + st_f * (1 - rand_f))[tief_m]
+    for dy, dx in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+        nb = np.roll(np.roll(stufe, dy, 0), dx, 1)
+        kante = tief_m & (nb > stufe)                                   # hoehere Stufe neben tieferer: Grat
+        neu[kante] = neu[kante] * 0.6 + np.array([92, 110, 160]) * 0.4
+    for k_, fa in ((1, 0.7), (2, 0.8), (3, 0.9)):                       # Schatten unter dem Grat (Licht oben links)
+        oben = np.roll(stufe, k_, 0)
+        sch = tief_m & (oben < stufe)
+        neu[sch] *= fa
     # Lichtnetz im Flachwasser: duenne, helle Linien (Kaustik), wandern langsam
     ph = 2 * math.pi * f / N_FRAMES
     kau = np.sin(xx * 0.11 + np.sin(yy * 0.07 + ph) * 2.2) + np.sin(yy * 0.13 + np.sin(xx * 0.05 - ph) * 2.4)
