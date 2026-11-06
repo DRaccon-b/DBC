@@ -77,6 +77,7 @@ STREU_BODEN = {'klein/04': 8, 'klein/12': 6, 'klein/02': 4, 'klein/03': 3, 'klei
                'mittel/14': 2, 'klein/36': 1}
 STREU_TERRASSE = {'klein/00': 4, 'klein/01': 2, 'klein/05': 5, 'klein/11': 3, 'klein/10': 2, 'klein/49': 2,
                   'klein/15': 1, 'klein/04': 3, 'klein/12': 2, 'klein/07': 2, 'mittel/14': 1, 'klein/35': 1}
+KRISTALLE = ['kristall/%02d' % i for i in (0, 1, 4, 6, 7, 8, 9, 10, 11, 14, 15)]   # Auswahl des Nutzers
 STREU_FELS = {'mittel/08': 2, 'fels/00': 3, 'fels/01': 2, 'fels/02': 3, 'fels/03': 3, 'fels/04': 1, 'fels/05': 2,
               'fels/06': 2, 'fels/08': 1, 'fels/09': 1, 'fels/10': 2, 'fels/11': 2, 'fels/12': 2, 'fels/13': 1,
               'fels/14': 1, 'fels/15': 1, 'fels_klein/00': 4, 'fels_klein/01': 4, 'fels_klein/02': 2,
@@ -280,6 +281,27 @@ def main():
         if not nachbarn:
             setze(rnd.choice(['mittel/14', 'klein/48']), kx + rnd.choice((-1, 1)), ky, {'anim': 'wehen'}, suchen=False)
             setze(rnd.choice(['klein/04', 'klein/12', 'klein/05', 'klein/02']), kx, ky + 1, {})
+    # 4) Felsbrocken und Geroell auf dem schwarzen Fels (nicht an der Felskante)
+    STREU_FELS.update({k_: 1.4 for k_ in KRISTALLE})
+    namen, gew = list(STREU_FELS), list(STREU_FELS.values())
+    for ty in range(1, rows - 3):
+        for tx in range(1, cols - 1):
+            if hoehe[ty][tx] == 7 and all(hoehe[ty + k][tx] == 7 for k in range(1, 4)) and rnd.random() < 0.11:
+                name = rnd.choices(namen, weights=gew)[0]
+                opt = {'spiegeln': rnd.random() < 0.5}
+                if name in ('fels/01', 'fels/10', 'fels_klein/02', 'fels_klein/10', 'fels/14') or name.startswith('kristall/'):
+                    opt['anim'] = 'glimmen'
+                setze(name, tx, ty, opt)
+    # jede ausgewaehlte Kristallsorte mindestens einmal
+    vorhanden = {o['basis'] for o in objekte}
+    for k_ in KRISTALLE:
+        for _ in range(400):
+            if k_ in vorhanden:
+                break
+            tx, ty = rnd.randrange(1, cols - 1), rnd.randrange(1, rows - 4)
+            if hoehe[ty][tx] == 7 and all(hoehe[ty + k][tx] == 7 for k in range(1, 4)):
+                if setze(k_, tx, ty, {'anim': 'glimmen', 'spiegeln': rnd.random() < 0.5}):
+                    vorhanden.add(k_)
     # 3b) Einbettung: vor die unteren Ecken groesserer Objekte je ein kleines 1-Kachel-Objekt (Busch, Gras,
     #     Pilz, Unkraut), das den Sockel leicht ueberdeckt - passend zum Boden der Ebene
     BEGLEITER = {'g': ['klein/04', 'klein/12', 'klein/48', 'klein/47', 'klein/02', 'klein/03', 'klein/27', 'klein/09'],
@@ -317,16 +339,6 @@ def main():
             elif n_ == 'klein/02':
                 opt_['anim'] = 'glimmen'
             setze(n_, ex, ty_, opt_)
-    # 4) Felsbrocken und Geroell auf dem schwarzen Fels (nicht an der Felskante)
-    namen, gew = list(STREU_FELS), list(STREU_FELS.values())
-    for ty in range(1, rows - 3):
-        for tx in range(1, cols - 1):
-            if hoehe[ty][tx] == 7 and all(hoehe[ty + k][tx] == 7 for k in range(1, 4)) and rnd.random() < 0.11:
-                name = rnd.choices(namen, weights=gew)[0]
-                opt = {'spiegeln': rnd.random() < 0.5}
-                if name in ('fels/01', 'fels/10', 'fels_klein/02', 'fels_klein/10', 'fels/14'):
-                    opt['anim'] = 'glimmen'
-                setze(name, tx, ty, opt)
     # 5) Streudeko in die Luecken
     for (streu, arten, ebenen, anzahl) in ((STREU_BODEN, 'gh', (1,), 260), (STREU_TERRASSE, 'fa', (2, 3, 4, 5, 6), 120)):
         namen, gew = list(streu), list(streu.values())
