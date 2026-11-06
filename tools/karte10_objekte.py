@@ -53,8 +53,8 @@ FEST = [
     (LAMPE, ACHSE_BRUNNEN - 96, 33, {'symm': 'bl1', 'anim': 'lampe'}), (LAMPE, ACHSE_BRUNNEN + 96, 33, {'symm': 'bl1', 'anim': 'lampe'}),
     (BANK, ACHSE_BRUNNEN - 48, 43, {'symm': 'bb'}), (BANK, ACHSE_BRUNNEN + 48, 43, {'symm': 'bb'}),
     # Burghof: Soldaten am Torweg, Brunnen im Rahmen, Blumenbeete in den Rahmenecken (symmetrisch)
-    (SOLDAT, ACHSE_BURG - 56, 41, {'symm': 's1'}), (SOLDAT, ACHSE_BURG + 56, 41, {'symm': 's1'}),
-    (SOLDAT, ACHSE_BURG - 56, 46, {'symm': 's2'}), (SOLDAT, ACHSE_BURG + 56, 46, {'symm': 's2'}),
+    (SOLDAT, ACHSE_BURG - 56, 43, {'symm': 's1'}), (SOLDAT, ACHSE_BURG + 56, 43, {'symm': 's1'}),
+    (SOLDAT, ACHSE_BURG - 56, 47, {'symm': 's2'}), (SOLDAT, ACHSE_BURG + 56, 47, {'symm': 's2'}),
     ('baeume/07', ACHSE_BURG, 54, {'achse': ACHSE_BURG, 'anim': 'brunnen'}),
     ('baeume/15', ACHSE_BURG - 72, 51, {'symm': 'f1'}), ('baeume/15', ACHSE_BURG + 72, 51, {'symm': 'f1'}),
     ('spielplatz/15', ACHSE_BURG - 72, 57, {'symm': 'f2'}), ('spielplatz/15', ACHSE_BURG + 72, 57, {'symm': 'f2'}),
@@ -242,10 +242,10 @@ def main():
 
     # 1) Burg: das Hauptschloss (PixelLab k10_schloss) ist der Torbau in der Nordmauer, genau auf der Achse.
     datei, h, zu, mitte = sprite('schloss/00')
-    objekte.append({'datei': datei, 'basis': 'schloss/00', 'x': int(round(ACHSE_BURG - mitte)), 'y': WAND_FUSS - zu,
-                    'fuss': h, 'kachel': [76, 37], 'ebene': 1, 'an_wand': True, 'kein_schatten': True,
-                    'keine_verdeckung': True, 'vorrang': True, 'fest_pos': True, 'anim': 'fahnen_tuch'})
-    belegen(datei, int(round(ACHSE_BURG - mitte)), WAND_FUSS - zu)
+    SCHLOSS_FUSS = WAND_FUSS + 2 * T                     # Hauptschloss steht 2 Kacheln vor der Mauer im Hof (Nutzer)
+    objekte.append({'datei': datei, 'basis': 'schloss/00', 'x': int(round(ACHSE_BURG - mitte)), 'y': SCHLOSS_FUSS - zu,
+                    'fuss': h, 'kachel': [76, 39], 'ebene': 1, 'keine_verdeckung': True, 'vorrang': True, 'fest_pos': True, 'anim': 'fahnen_tuch'})
+    belegen(datei, int(round(ACHSE_BURG - mitte)), SCHLOSS_FUSS - zu)
     # Rundtuerme (PixelLab k10_schloss2/02, im Stil des Hauptschlosses) in festem Rhythmus: an den Enden der
     # Burgfront (spiegelgleich zur Achse), auf der Ostmauer in gleichen Abstaenden, an den Ecken der Suedmauer
     td, th, tzu, tm = sprite('schloss2/02')
