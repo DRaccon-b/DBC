@@ -37,7 +37,7 @@ FEST = [
     # Mausoleum mit Laternen, Gruften
     ('krypta/02', 54, 67, {}),
     ('mittel/05', 49, 68, {'anim': 'geisterlicht'}), ('mittel/05', 59, 68, {'anim': 'geisterlicht'}),
-    ('krypta2/02', 12, 64, {}), ('krypta/00', 44, 63, {}), ('krypta/03', 88, 60, {}), ('krypta/01', 82, 63, {}),
+    ('krypta2/02', 12, 64, {}), ('krypta/00', 49, 63, {}), ('krypta/03', 88, 60, {}), ('krypta/01', 82, 63, {}),
     ('mittel/07', 92, 64, {}), ('mittel/07', 79, 59, {'spiegeln': True}),
     # grosser toter Baum oben links, Baum am Sumpf
     ('gross/03', 9, 14, {}), ('gross/03', 66, 66, {'spiegeln': True}),
@@ -49,7 +49,7 @@ FEST = [
     ('mittel/13', 11, 79, {'anim': 'kerzen'}), ('klein/37', 13, 80, {}), ('klein/32', 13, 83, {}),
     ('klein/62', 14, 78, {}), ('klein/38', 9, 77, {}),
     # Laternen an den Wegen
-    ('mittel/05', 37, 61, {'anim': 'geisterlicht'}), ('mittel/05', 44, 77, {'anim': 'geisterlicht'}),
+    ('mittel/05', 34, 62, {'anim': 'geisterlicht'}), ('mittel/05', 44, 77, {'anim': 'geisterlicht'}),
     ('mittel/05', 57, 77, {'anim': 'geisterlicht'}), ('mittel/05', 21, 71, {'anim': 'geisterlicht'}),
     ('mittel/05', 70, 70, {'anim': 'geisterlicht'}), ('mittel/05', 89, 70, {'anim': 'geisterlicht'}),
     ('mittel/05', 73, 85, {'anim': 'geisterlicht'}),
@@ -195,7 +195,7 @@ def main():
                                                           or ky > 0 and cls[ky - 1][kx] == 'w'):
                 continue                                          # keine Grabsteine/Baeume auf Wegen
             x, y = int(round(kx * T + T / 2 - mitte)), int((ky + 1) * T - 1 - zu)
-            if bewerten(lvl, alpha[datei], x, y) and (art == 'flach' or name.startswith('baeume/') or frei_px(datei, x, y)):
+            if bewerten(lvl, alpha[datei], x, y) and (art == 'flach' or frei_px(datei, x, y)):
                 break
         else:
             if suchen:
@@ -216,7 +216,8 @@ def main():
     for (name, tx, ty, opt) in FEST:
         if setze(name, tx, ty, opt, suchen='symm' not in opt) is None and 'symm' in opt:
             print('  Symmetrie-Paar passt nicht:', name, (tx, ty))
-    # 1b) Eisentor geteilt: je ein Fluegel links und rechts oben an jeder Treppe (auf der oberen Terrasse)
+    # 1b) Eisentor geteilt: je ein Fluegel links und rechts am Fuss jeder Treppe (untere Ebene); der obere Teil
+    #     ragt vor die Klippe, auf der die Treppe liegt (Wand dahinter = Norden); unterste 2 Reihen auf dem Boden
     tor = saeubern(Image.open(os.path.join(OBJ, 'graeber/06.png')).convert('RGBA'))
     ta = np.array(tor.getchannel('A')) > 128
     spalten = ta.sum(0)
@@ -226,15 +227,13 @@ def main():
         teil.save(os.path.join(OBJ, 'sauber/gitter-%s.png' % seite))
         alpha['sauber/gitter-%s.png' % seite] = np.array(teil.getchannel('A')) >= 128
     for (px0, px1, ye, f, e) in json.load(open(os.path.join(KARTE, 'treppen_px.json'))):
-        if e == 6:                                                # Schlosstreppe: Platz ist schon geschmueckt
-            continue
-        reihe = (ye - 7 - 15) // T                                # Fuss buendig, >= 7 px vor der Kante
+        reihe = (ye + f + 2) // T + 2                             # zwei volle Reihen unter dem Treppenfuss
         for seite in ('l', 'r'):
             datei = 'sauber/gitter-%s.png' % seite
             a_ = alpha[datei]
             h_, w_ = a_.shape
             wt = -(-w_ // T)
-            bx = px0 // T - wt if seite == 'l' else (px1 + 1) // T          # direkt neben dem Aufgang
+            bx = (px0 - 7) // T - wt + 1 if seite == 'l' else (px1 + 6) // T   # direkt neben den Treppenwangen
             x = bx * T + (wt * T - w_) // 2
             zu = int(np.nonzero(a_.any(axis=1))[0].max())
             y = (reihe + 1) * T - 1 - zu
