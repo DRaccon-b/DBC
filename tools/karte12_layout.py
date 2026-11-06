@@ -122,9 +122,9 @@ def main():
     k[0:3, 12:16] = 'q'                                       # vor dem Teleporter oben
     # ------------------------------------------------------------------ Fluss: Quelle in der Bergwand oben, verbindet die
     # Moorpfuetzen, verschwindet unten in einer Felsspalte der Bergwand; wo er den Pfad kreuzt, kommt eine Bruecke hin
-    FLUSS = [(30, 4.6), (29.6, 9), (27, 12.8), (23.5, 14.6), (21, 15.6), (18.6, 17.2), (16.6, 20), (16.3, 24), (18, 27),
-             (21.5, 29.6), (23.2, 32), (22, 36), (19.6, 40), (18, 44), (17.4, 47), (18.6, 50.2), (22, 53.4), (28, 54.8),
-             (33.5, 54), (38, 51), (44, 46), (48.4, 40.4), (52, 38.2), (57.5, 38.4), (61.5, 39.6), (68.6, 41.6), (70.4, 46),
+    FLUSS = [(30, 4.6), (29.6, 9), (27, 13.4), (24.9, 15.0), (20.1, 15.0), (18.4, 17.2), (16.6, 20), (16.3, 24), (18, 27),
+             (21.5, 29.6), (23.2, 32), (22, 36), (19.6, 40), (18, 44), (17.4, 47), (18.6, 50.2), (22, 53.4), (28, 54.6),
+             (33.1, 51.0), (39.9, 51.0), (41.8, 49.4), (44, 46), (48.4, 40.4), (52, 38.2), (57.5, 38.4), (61.5, 39.6), (68.6, 41.6), (70.4, 46),
              (69, 50), (65.6, 53.6), (63.6, 56.2), (60, 57.6), (52.5, 59.6), (50.2, 63), (52, 66), (53.5, 69.5)]
     pfad_vorher = (k == 'q')
     fl = []
@@ -136,43 +136,15 @@ def main():
         r_ = 1.05 + 0.25 * math.sin(i * 0.13)
         fluss |= ((xx + 0.5 - px) ** 2 + (yy + 0.5 - py) ** 2 <= r_ ** 2)
     fluss &= ~np.isin(k, ['v', 'h', 'w', 'b']) & ~((k == 'r') & (yy < 60))
-    kreuz = fluss & pfad_vorher
-    bruecken = []
-    gesehen = np.zeros_like(kreuz)
-    for (y0_, x0_) in zip(*np.nonzero(kreuz)):
-        if gesehen[y0_, x0_]:
-            continue
-        st, teil = [(y0_, x0_)], []
-        gesehen[y0_, x0_] = True
-        while st:
-            a_, b_ = st.pop(); teil.append((a_, b_))
-            for da in (-1, 0, 1):
-                for db in (-1, 0, 1):
-                    p_, q_ = a_ + da, b_ + db
-                    if 0 <= p_ < R and 0 <= q_ < C and kreuz[p_, q_] and not gesehen[p_, q_]:
-                        gesehen[p_, q_] = True; st.append((p_, q_))
-        ys_, xs_ = [t[0] for t in teil], [t[1] for t in teil]
-        my, mx = sum(ys_) / len(ys_), sum(xs_) / len(xs_)
-        d = min(fl, key=lambda f: (f[0] - mx - 0.5) ** 2 + (f[1] - my - 0.5) ** 2)
-        quer = abs(d[2]) > abs(d[3])                          # Fluss laeuft waagerecht -> Bruecke Nord-Sued
-        x0_, x1_, y0_, y1_ = min(xs_), max(xs_), min(ys_), max(ys_)
-        if quer:
-            while y0_ > 0 and fluss[y0_ - 1, x0_:x1_ + 1].any(): y0_ -= 1
-            while y1_ < R - 1 and fluss[y1_ + 1, x0_:x1_ + 1].any(): y1_ += 1
-            y0_, y1_ = y0_ - 1, y1_ + 1
-            x0_, x1_ = min(x0_, int(mx) - 1), max(x1_, int(mx) + 1)
-        else:
-            while x0_ > 0 and fluss[y0_:y1_ + 1, x0_ - 1].any(): x0_ -= 1
-            while x1_ < C - 1 and fluss[y0_:y1_ + 1, x1_ + 1].any(): x1_ += 1
-            x0_, x1_ = x0_ - 1, x1_ + 1
-            y0_, y1_ = min(y0_, int(my) - 1), max(y1_, int(my) + 1)
-        bruecken.append([int(x0_), int(y0_), int(x1_), int(y1_), 'ns' if quer else 'ow'])
+    # Bruecken fest: Fluss laeuft gerade (2 Kacheln) quer unter dem Steg durch, Pfad fuehrt gerade auf beide Enden zu
+    bruecken = [[21, 12, 23, 17, 'ns'], [35, 48, 37, 53, 'ns']]
     k[fluss] = 'x'
-    for (x0_, y0_, x1_, y1_, _) in bruecken:                 # Brueckenkoepfe auf festem Pfad
-        for y in (y0_, y1_):
+    for (x0_, y0_, x1_, y1_, _) in bruecken:
+        k[y0_ + 2:y0_ + 4, x0_ - 2:x1_ + 3] = 'x'                 # gerades Wasserband unter dem Steg
+        for y in list(range(y0_ - 2, y0_ + 2)) + list(range(y0_ + 4, y1_ + 3)):
             for x in range(x0_, x1_ + 1):
-                if k[y, x] == 'x':
-                    pass
+                if k[y, x] not in 'rvbhw':
+                    k[y, x] = 'q'                                 # Brueckenkoepfe und gerade Zufahrt
     h[k == 'x'] = 0
     lay = {
         'groesse': [C, R], 'klassen': [''.join(r) for r in k], 'hoehe': [''.join(str(c) for c in r) for r in h],

@@ -246,11 +246,14 @@ def bruecke(a, b, wasser):
         a[py, px:px + 3] = H('#9a7450')
 
 
-def brueckenschatten(a, b):
-    """Schatten des Holzstegs (Sprite) auf dem Wasser, nach rechts unten versetzt."""
+def brueckenschatten(a, b, wasser):
+    """Schatten des Holzstegs (Sprite) nur auf dem Wasser, nach rechts unten versetzt."""
     x0, y0, x1, y1, art = b
     X0, Y0, X1, Y1 = x0 * T + 10, y0 * T + 2, (x1 + 1) * T - 4, (y1 + 1) * T + 2
-    a[Y0 + 4:Y1 + 4, X0 + 4:X1 + 4] = (a[Y0 + 4:Y1 + 4, X0 + 4:X1 + 4] * 0.66).astype(np.uint8)
+    m = np.zeros(wasser.shape, bool)
+    m[Y0 + 4:Y1 + 4, X0 + 4:X1 + 4] = True
+    m &= wasser
+    a[m] = (a[m] * 0.66).astype(np.uint8)
 
 
 def quelle_zeichnen(a, lay, frame):
@@ -363,7 +366,7 @@ def bauen(frame=None, speichern=True):
     lvl[waende] = 9
     lvl[podest_front(a, arena, lay)] = 9
     for b_ in lay.get('bruecken', []):
-        brueckenschatten(a, b_)
+        brueckenschatten(a, b_, mm)
     if speichern and frame is None:
         np.save(os.path.join(KARTE, 'pixelhoehe.npy'), lvl)
         np.save(os.path.join(KARTE, 'wasser.npy'), np.packbits(mm))   # fuer das Kollisionsraster
