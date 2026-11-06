@@ -111,8 +111,18 @@ def main():
                 a = np.array(sp)
                 h_, w_ = a.shape[:2]
                 yy, xx = np.mgrid[0:h_, 0:w_]
-                bogen = ((xx - w_ / 2) / (w_ / 2)) ** 2 + ((yy - h_) / (h_ * 0.98)) ** 2 <= 1
+                # Bogen etwas schmaler als das Bild (keine senkrechte Schnittkante unten), Rand unregelmaessig wie Fels
+                rs_ = np.random.RandomState(4)
+                zacke = np.repeat(rs_.randint(0, 4, size=h_ // 3 + 2), 3)[:h_][:, None]
+                rx_ = w_ * 0.47 - zacke
+                bogen = ((xx - w_ / 2) / rx_) ** 2 + ((yy - h_) / (h_ * 0.96)) ** 2 <= 1
                 a[~bogen, 3] = 0
+                # Kontur an der Schnittkante: dunkler Eisrand innen, damit die Kante sauber wie Fels wirkt
+                innen = bogen & ~(np.roll(bogen, 1, 1) & np.roll(bogen, -1, 1) & np.roll(bogen, 1, 0))
+                innen[-1] = False
+                a[innen, :3] = (36, 52, 84)
+                innen2 = bogen & ~innen & ~(np.roll(bogen, 2, 1) & np.roll(bogen, -2, 1))
+                a[innen2, :3] = (a[innen2, :3] * 0.75).astype(np.uint8)
                 sp = Image.fromarray(a)
             if spiegeln:
                 sp = sp.transpose(Image.FLIP_LEFT_RIGHT)

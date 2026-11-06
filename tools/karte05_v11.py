@@ -30,7 +30,7 @@ BAEUME = {'baeume/00', 'baeume/01', 'baeume/02', 'baeume/03', 'klein/27', 'klein
 GROSSE_TANNEN = ['baeume/00', 'baeume/01', 'baeume/02', 'baeume/00', 'baeume/01']
 DECKER = [0, 1, 2, 12, 15, 21, 23, 29, 35, 39, 50, 53]          # Schnee-Set: Frostgras, Farn, Bueschel ...
 BLUMEN = [5, 9, 28, 30, 36, 41, 44, 45, 14]                        # Schneegloeckchen, Winterheide, Eisblume ...
-FELSEN = {'wasserfall/02', 'mittel/00', 'mittel/09', 'mittel/15', 'findling/00', 'natur/04', 'natur/05', 'server/00', 'server/11'}
+FELSEN = {'gross/01', 'wasserfall/02', 'mittel/00', 'mittel/09', 'mittel/15', 'findling/00', 'natur/04', 'natur/05', 'server/00', 'server/11'}
 # v1.1-Ideen (PixelLab k5_server/k5_wasserfall/k5_natur/k5_findling): (sprite, Ankerkachel, Anzahl, Suchradius)
 NEU = [('server/00', (62, 52), 1, 10), ('server/11', (95, 32), 1, 10), ('server/00', (20, 47), 1, 8),
        ('findling/00', (12, 28), 1, 10), ('findling/00', (88, 44), 1, 10), ('findling/00', (56, 68), 1, 8),
@@ -357,24 +357,18 @@ def objekte():
         if neu_setzen(name, kx, ky, anim=anim):
             gesetzt += 1; n_neu += 1
     hoehe_t = [[int(c) for c in r] for r in lay['hoehe']]
-    # Eishoehle neu: sauber freigestellte Hoehle (wasserfall/02) statt des rechteckig beschnittenen Sprites,
-    # Fuss 2 Reihen vor der Wand; links eine grosse Tanne, rechts eine kleine als Uebergang zur Wand
+    # Eishoehle (bisheriges Sprite, Kanten gesaeubert in karte05_objekte): Tannen links/rechts als Uebergang
     for o in objs:
         if o['basis'] == 'gross/01':
-            o['_weg'] = True
-    for (x, y) in [(x, y) for x in range(58, 73) for y in range(6, 14)]:
-        if (x, y) in belegt and objs[belegt[(x, y)]]['basis'] not in ('gross/01',):
-            objs[belegt[(x, y)]]['_weg'] = True
-        belegt.pop((x, y), None)
-    h = neu_setzen('wasserfall/02', 65, 12, pruefen=False)
-    h['kein_schatten'] = True
-    neu_setzen('baeume/00', 60, 12, anim='baum', pruefen=False, datei='sauber/baeume-00.png', art='begleiter')
-    neu_setzen('baeume/01', 70, 13, anim='baum', pruefen=False, datei='sauber/baeume-01.png', art='begleiter')
+            o['kein_schatten'] = True
+    neu_setzen('baeume/00', 59, 13, anim='baum', pruefen=False, datei='sauber/baeume-00.png', art='begleiter')
+    neu_setzen('baeume/01', 69, 13, anim='baum', pruefen=False, datei='sauber/baeume-01.png', art='begleiter')
     # Variation oben: zwei Server, zwei grosse Eiszapfen, ein paar grosse Tannen (mit Begleitung, Regel 5)
     OBEN = [('server/00', None, None, 1), ('server/11', None, None, 1),
             ('mittel/02', 'sauber/mittel-02.png', 'glitzern', 2), ('natur/25', None, 'glitzern', 1),
             ('baeume/00', 'sauber/baeume-00.png', 'baum', 2), ('baeume/01', 'sauber/baeume-01.png', 'baum', 2),
-            ('baeume/02', 'sauber/baeume-02.png', 'baum', 1)]
+            ('baeume/02', 'sauber/baeume-02.png', 'baum', 2), ('baeume/03', 'sauber/baeume-03.png', 'baum', 2),
+            ('natur/24', None, None, 4), ('baeume/01', 'sauber/baeume-01.png', 'baum', 1)]
     n_ob = 0
     grosse_oben = []
     for (name, datei, anim, anzahl) in OBEN:
@@ -398,20 +392,44 @@ def objekte():
                'natur/01': 6, 'natur/04': 4, 'natur/05': 4, 'natur/06': 3, 'natur/21': 2, 'natur/50': 3}
     namen_p, gew_p = list(PLATEAU), list(PLATEAU.values())
     n_pl = 0
+    deko_orte = []
     for _ in range(9000):
-        if n_pl >= 45:
+        if n_pl >= 40:
             break
         kx, ky = rnd.randrange(2, cols - 2), rnd.randrange(3, rows - 4)
         if hoehe_t[ky][kx] != 2:
             continue
+        if any(abs(px - kx) <= 3 and abs(py - ky) <= 0 or abs(px - kx) <= 1 and abs(py - ky) <= 1
+               for (px, py) in deko_orte):
+            continue                                          # keine Reihen: Abstand in derselben Zeile
         name = rnd.choices(namen_p, gew_p)[0]
         anim = 'baum' if name in ('natur/07', 'natur/17') else 'glitzern' if name in ('natur/06', 'natur/21') else \
             'wehen' if name in ('natur/00', 'natur/01', 'natur/02', 'natur/03', 'natur/50') else None
         if neu_setzen(name, kx, ky, anim=anim):
             n_pl += 1
+            deko_orte.append((kx, ky))
     print('Plateaus: %d Deko-Objekte oben' % n_pl)
     print('Neu: Wasserfall, Server, Findlinge + %d Streuobjekte (Eisblumen, Beeren, halb eingeschneite Felsen); '
           '%d alte Objekte am Wasserfall entfernt' % (gesetzt, len(weg_idx)))
+
+    # schmaler Streifen ganz oben (Zeilen 3-7 unter dem Waldrand): keine Reihe aus Deko - je 4 Spalten hoechstens
+    # ein kleines Objekt, unregelmaessig ausgeduennt (grosse Objekte wie Server, Tannen, Kristalle bleiben)
+    gross_oben = ('server/', 'baeume/', 'mittel/02', 'natur/25', 'findling/')
+    behalten_x = []
+    for o in sorted([o for o in objs if o.get('v11') == 'neu' and o['kachel'][1] <= 7
+                     and not o['basis'].startswith(gross_oben)], key=lambda o: rnd.random()):
+        kx = o['kachel'][0]
+        if any(abs(kx - x) <= 5 for x in behalten_x) or rnd.random() < 0.3:
+            o['_weg'] = True
+        else:
+            behalten_x.append(kx)
+    objs[:] = [o for o in objs if not o.get('_weg')]
+    belegt.clear()
+    for i, o in enumerate(objs):
+        bx, by, wt, ht = o['block']
+        for x in range(bx, bx + wt):
+            for y in range(by, by + ht):
+                belegt[(x, y)] = i
 
     def vor_sockel(o, anzahl, mit_blume=True):
         bx, by, wt, ht = o['block']
