@@ -190,6 +190,8 @@ def bauen(frame=None, speichern=True):
     for m in lay.get('mauern', []):
         x0, y0, x1, y1 = m['r']
         boden[max(0, y0 * T - (14 if m['seite'] == 'vorne' else 0)):(y1 + 1) * T, x0 * T:(x1 + 1) * T] = 0
+    # Gebaeude, Daecher, Fassaden, Mauern: hoeher als der Boden -> verdecken Objekte daneben (Regel Verdeckung)
+    hoch_bau = boden == 0
     for k in ('foerderbaender', 'rohre'):
         for l in lay.get(k, []):
             pts = l['pfad'] if 'pfad' in l else [l['von'], l['bis']]
@@ -302,6 +304,7 @@ def bauen(frame=None, speichern=True):
         schatten = Image.fromarray((_np.array(schatten).astype(_np.float32) * boden).astype(_np.uint8))
         dunkel.putalpha(schatten)
         img.alpha_composite(dunkel)
+        vor_objekten = _np.array(img)
         for o in objs:
             sp = cache[o['datei']]
             ox, oy = o['x'], o['y']
@@ -315,6 +318,9 @@ def bauen(frame=None, speichern=True):
                 sp = Image.open(os.path.join(OBJ, o['datei'].replace('abgeleitet-kran_', 'abgeleitet-kran_f%02d_' % frame))).convert('RGBA')
             img.alpha_composite(sp, (ox, oy))
         kb.laternen_licht(img, [o for o in objs if o.get('anim') == 'laterne'], frame)
+        import karte04_bauen as _k4
+        _k4.klippen_verdeckung(img, [o for o in objs if o.get('basis') not in ('schatten',) and 'kran' not in o.get('datei', '')],
+                               cache, hoch_bau, ~hoch_bau, vor_objekten)
     # Vordergrund: suedliche Aussenmauer ueber Objekten und Schatten
     L2 = ind.Leinwand(img)
     for m in lay.get('mauern', []):
