@@ -263,6 +263,8 @@ def bauen(frame=None, speichern=True):
         f = FRONT[e]
         frei[ye - 14:ye + f + 8, px0 - 6:px1 + 6] = True
         treppen_info.append((px0, px1, ye, f, e))
+    if speichern and frame is None:                            # fuer die Objekte (Torfluegel an den Treppen)
+        json.dump([[int(v) for v in t] for t in treppen_info], open(os.path.join(KARTE, 'treppen_px.json'), 'w'))
     # --- Waende: jede Ebene zeichnet ihre Front (Sueden) und schmale Seitenkanten in die tiefere Flaeche
     waende = np.zeros((Hp, Wp), bool)
     for e in range(2, 8):

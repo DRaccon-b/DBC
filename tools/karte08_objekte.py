@@ -37,7 +37,7 @@ FEST = [
     # Mausoleum mit Laternen, Gruften
     ('krypta/02', 54, 67, {}),
     ('mittel/05', 49, 68, {'anim': 'geisterlicht'}), ('mittel/05', 59, 68, {'anim': 'geisterlicht'}),
-    ('krypta/00', 44, 63, {}), ('krypta/03', 88, 60, {}), ('krypta/01', 82, 63, {}),
+    ('krypta2/02', 12, 64, {}), ('krypta/00', 44, 63, {}), ('krypta/03', 88, 60, {}), ('krypta/01', 82, 63, {}),
     ('mittel/07', 92, 64, {}), ('mittel/07', 79, 59, {'spiegeln': True}),
     # grosser toter Baum oben links, Baum am Sumpf
     ('gross/03', 9, 14, {}), ('gross/03', 66, 66, {'spiegeln': True}),
@@ -57,12 +57,12 @@ FEST = [
     ('mittel/15', 21, 60, {}), ('mittel/15', 61, 79, {}), ('mittel/11', 36, 66, {}), ('mittel/09', 92, 41, {}),
     ('mittel/09', 33, 52, {}), ('graeber/08', 19, 66, {}), ('mittel/12', 85, 57, {}),
     # rechter Friedhof auf dem Berg
-    ('graeber/05', 88, 37, {}), ('graeber/12', 84, 41, {}), ('graeber/13', 91, 40, {}), ('mittel/02', 86, 36, {}),
+    ('krypta2/00', 88, 37, {}), ('graeber/12', 84, 41, {}), ('graeber/13', 91, 40, {}), ('mittel/02', 86, 36, {}),
     ('mittel/00', 82, 38, {}), ('mittel/01', 90, 37, {}), ('mittel/04', 93, 37, {}), ('mittel/03', 80, 41, {}),
     ('graeber/10', 87, 42, {}),
     # Terrassen: Saeulen, Knochen, Statue
     ('graeber/09', 74, 26, {'spiegeln': True}), ('mittel/07', 33, 34, {}), ('graeber/07', 60, 41, {}),
-    ('mittel/09', 66, 33, {}), ('graeber/06', 55, 50, {}),
+    ('mittel/09', 61, 33, {}),
 ]
 # Haine toter Baeume (x0, y0, x1, y1, Dichte)
 HAINE = [
@@ -216,6 +216,36 @@ def main():
     for (name, tx, ty, opt) in FEST:
         if setze(name, tx, ty, opt, suchen='symm' not in opt) is None and 'symm' in opt:
             print('  Symmetrie-Paar passt nicht:', name, (tx, ty))
+    # 1b) Eisentor geteilt: je ein Fluegel links und rechts oben an jeder Treppe (auf der oberen Terrasse)
+    tor = saeubern(Image.open(os.path.join(OBJ, 'graeber/06.png')).convert('RGBA'))
+    ta = np.array(tor.getchannel('A')) > 128
+    spalten = ta.sum(0)
+    mitte = int(np.argmin(spalten[len(spalten) // 3:2 * len(spalten) // 3])) + len(spalten) // 3
+    for seite, teil in (('l', tor.crop((0, 0, mitte, tor.height))), ('r', tor.crop((mitte + 1, 0, tor.width, tor.height)))):
+        teil = teil.crop(teil.getbbox())
+        teil.save(os.path.join(OBJ, 'sauber/gitter-%s.png' % seite))
+        alpha['sauber/gitter-%s.png' % seite] = np.array(teil.getchannel('A')) >= 128
+    for (px0, px1, ye, f, e) in json.load(open(os.path.join(KARTE, 'treppen_px.json'))):
+        if e == 6:                                                # Schlosstreppe: Platz ist schon geschmueckt
+            continue
+        reihe = (ye - 7 - 15) // T                                # Fuss buendig, >= 7 px vor der Kante
+        for seite in ('l', 'r'):
+            datei = 'sauber/gitter-%s.png' % seite
+            a_ = alpha[datei]
+            h_, w_ = a_.shape
+            wt = -(-w_ // T)
+            bx = px0 // T - wt if seite == 'l' else (px1 + 1) // T          # direkt neben dem Aufgang
+            x = bx * T + (wt * T - w_) // 2
+            zu = int(np.nonzero(a_.any(axis=1))[0].max())
+            y = (reihe + 1) * T - 1 - zu
+            if not bewerten(lvl, a_, x, y) or not frei_px(datei, x, y):
+                print('  Torfluegel passt nicht:', seite, (bx, reihe))
+                continue
+            o = {'datei': datei, 'basis': 'gitter/' + seite, 'x': x, 'y': y, 'fuss': h_,
+                 'kachel': [bx + (wt - 1) // 2, reihe], 'ebene': 1}
+            objekte.append(o)
+            belegt.add((o['kachel'][0], reihe, 'hoch'))
+            belegen(datei, x, y)
     # 2) Grabreihen auf der Graberde: Fuss in der obersten Erdzeile jedes Feldes, unregelmaessige Abstaende
     for ty in range(1, rows):
         for tx in range(cols):
