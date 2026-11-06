@@ -47,6 +47,9 @@ Wenn eine Karte fertig scheint: noch einmal komplett auf **Pixelfehler** und **L
   sitzen. Im Schnee Schnee-Varianten verwenden.
 - **Animation:** Nur, was sich wirklich bewegt (Wasser, Feuer, Pflanzen im Wind, Leuchten). Keine Steine oder
   Steinflächen animieren. Discord-GIF unter 10 MB (sonst 8 statt 16 Bilder).
+- **Wehen nur am beweglichen Teil:** Ist etwas wehend animiert (z. B. eine Flagge, ein Banner, ein Tuch), bewegt
+  sich nur der Stoff – nie das Objekt, an dem er befestigt ist (Mast, Stange, Ständer aus Holz, Metall o. Ä.
+  bleibt völlig ruhig). Also nicht das ganze Sprite verbiegen, sondern nur die Stoffpixel animieren.
 - **Tilesets:** Statisches Tileset mit allem; animiertes Tileset nur mit den animierten Teilen **am exakt selben
   Platz**. Sauber nach Gruppen geordnet (wie klassische Handheld-Tilesets: Fläche, Ränder, Innenecken, Objekte).
   Boden-Übergänge als kombinierbare Ecken-Kacheln mit sauberen, runden Kanten.
