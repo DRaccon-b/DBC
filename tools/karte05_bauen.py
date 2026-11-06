@@ -228,10 +228,10 @@ def bauen(frame=None, speichern=True):
     m1 = weich(np.maximum(stufe(1), spalte.astype(np.float32)), 6, 0, 21)
     m2 = weich(stufe(2), 6, 0.32, 22)
     tx = textur(cls, 'g', cols, rows)
-    plateau_boden = m2 & ~weich(zell_maske(cls, 'xl', cols, rows), 5, 0.3, 9)
+    plateau_boden = m2 & ~weich(zell_maske(cls, 'xlhq', cols, rows), 5, 0.3, 9)
     a[plateau_boden] = tx[plateau_boden]
     # --- Wasser: Meer (rechts, oben) und Loecher im Eissee
-    meer = weich(zell_maske(cls, 'x', cols, rows), 5, 0.15, 24, 0.45)
+    meer = weich(zell_maske(cls, 'x', cols, rows), 5, 0.15, 24, 0.45) | weich(zell_maske(cls, 'q', cols, rows), 4.5, 0.3, 27, 0.45)
     loch = weich(zell_maske(cls, 'd', cols, rows), 3.0, 0.3, 25, 0.5) & see
     wasser_kalt(a, meer, frame)
     wasser_kalt(a, loch, frame, dunkel=True)
@@ -278,6 +278,12 @@ def bauen(frame=None, speichern=True):
         np.save(os.path.join(KARTE, 'pixelhoehe.npy'), lvl)
     wegtex = textur(cls, 'w', cols, rows)
     img = Image.fromarray(a).convert('RGBA')
+    # Wasserfall (Stil Karte 01) ueber die Plateaufront, wo der Bach ueber die Kante faellt
+    import klippen
+    for (x0, x1) in lay.get('wasserfaelle', []):
+        px0, px1 = x0 * T - 3, (x1 + 1) * T + 3
+        ye = max(int(np.nonzero(m2[:, xc])[0].max()) for xc in range(px0 + 4, px1 - 4) if m2[:, xc].any())
+        klippen.zeichne_wasserfall(img, px0, px1, ye - 4, ye + 70, frame=frame or 0)
     alt_S = bauwerke.S
     bauwerke.S = [H(c) + (255,) for c in k4.FELS['eis']]
     for (px0, px1, ye) in treppen_info:

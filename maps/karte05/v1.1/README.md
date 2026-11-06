@@ -15,8 +15,10 @@ Neue Fassung nach den Regeln in `CLAUDE.md`. v1.0 liegt in `maps/karte05/v1.0/` 
 
 ## Neue Objekte (PixelLab, Stil Karte 05)
 - **Kaputte Server** (3×): vereiste Serverschränke mit Kabeln, je mit Eisblume/Frostgras vor dem Sockel.
-- **Gefrorener Wasserfall** an der Ostklippe neben der Treppe, gespeist von einem gefrorenen Bach auf dem Plateau
-  (Physik: Quelle oben), Fuß auf dem Boden davor, glitzert, kein Schlagschatten.
+- **Teich, Bach und Wasserfall:** Teich auf dem Mittelplateau, Bach zur Kante, Wasserfall (Stil Karte 01, animiert)
+  an der Stelle der früheren mittleren Treppe, unten weiter als Bach mit Holzbrücke über den Weg in den
+  zugefrorenen See. Die mittlere Treppe und der gefrorene Wasserfall-Objekt sind entfernt.
+- **Waldrand oben:** Tannen entlang des oberen Kartenrands (wie links/rechts/unten).
 - **Eisblumen** (zwei Sorten) verstreut und als Begleitblumen vor Sockeln.
 - **Verschneite Beerensträucher** (Beeren, Stechpalme) verstreut.
 - **Halb eingeschneite Felsen** (klein) und **Findlinge** (groß, 3×) – mit Einbettung an den Sockelecken.

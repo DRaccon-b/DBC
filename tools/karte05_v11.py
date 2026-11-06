@@ -36,7 +36,6 @@ NEU = [('server/00', (62, 52), 1, 10), ('server/11', (95, 32), 1, 10), ('server/
        ('findling/00', (12, 28), 1, 10), ('findling/00', (88, 44), 1, 10), ('findling/00', (56, 68), 1, 8),
        ('findling/00', (97, 76), 1, 10), ('findling/00', (40, 30), 1, 10)]
 STREU_NEU = {'natur/04': 5, 'natur/05': 5, 'natur/02': 6, 'natur/03': 5, 'natur/00': 14, 'natur/01': 14}
-WASSERFALL = ('wasserfall/00', 85, 23)                             # Fusskachel: Eisflaeche unter der Ostklippe
 
 
 # ---------------------------------------------------------------- Regel 6: Wege
@@ -52,6 +51,7 @@ def wege():
     if not os.path.exists(alt):
         shutil.copy(pf, alt)
     lay = json.load(open(alt))
+    lay['treppen'] = [t for t in lay['treppen'] if t[0] != 49]          # mittlere Treppe entfernt (Nutzer)
     g = np.array([list(r) for r in lay['klassen']])
     hoehe = np.array([[int(c) for c in r] for r in lay['hoehe']])
     rows, cols = g.shape
@@ -111,11 +111,34 @@ def wege():
                 for x in range(x0 - 1, x1 + 2):
                     if 0 <= y < rows and 0 <= x < cols and g[y, x] in ('s', 'l', 'w'):
                         g[y, x] = 'w'
-    # gefrorener Bach auf dem Ostplateau, der als gefrorener Wasserfall ueber die Klippe faellt (Physik: Quelle)
-    bach = [(84, y) for y in range(9, 18)] + [(85, y) for y in range(9, 18)] + [(83, y) for y in range(9, 13)]
-    for (x, y) in bach:
-        if g[y, x] in ('s', 'w') and hoehe[y, x] == 2:
-            g[y, x] = 'l'
+    # Teich auf dem Mittelplateau -> Bach -> Wasserfall (ueber die Klippe bei x 49-51) -> Bach -> zugefrorener See
+    q = np.zeros((rows, cols), bool)
+    yy_, xx_ = np.mgrid[0:rows, 0:cols]
+    q |= ((xx_ - 49.5) / 5.5) ** 2 + ((yy_ - 6.5) / 3.3) ** 2 <= 1           # Teich
+    for y in range(9, 17):                                                   # Bach oben (leicht geschwungen)
+        x0 = 49 + (1 if 11 <= y <= 13 else 0)
+        q[y, x0:x0 + 3] = True
+    q[16, 49:52] = True
+    for y in range(21, rows):                                                # Bach unten bis zum See
+        if (g[y, 49:52] == 'i').all():
+            break
+        x0 = 49 + (1 if 24 <= y <= 25 else 0)
+        q[y, x0:x0 + 3] = True
+    for y in range(rows):
+        for x in range(cols):
+            if q[y, x] and g[y, x] in ('s', 'l', 'w', 'i'):
+                if not (17 <= y <= 20):                                      # Wandzeilen: dort faellt der Wasserfall
+                    g[y, x] = 'q'
+    lay['wasserfaelle'] = [[49, 51]]
+    # Bruecke, wo der untere Bach den Weg kreuzt
+    wegzeilen = [y for y in range(21, rows) if q[y, 49:52].any() and (g[y, 46:49] == 'w').any() | (g[y, 52:55] == 'w').any()]
+    lay['bruecken'] = [[48, min(wegzeilen), 52, max(wegzeilen)]] if wegzeilen else []
+    # Waldrand oben (Kartenrand Zeilen 0-2), Teleporter oben rechts bleibt frei
+    for y in range(0, 3):
+        for x in range(cols):
+            if x >= 103 or g[y, x] == 'q':
+                continue
+            g[y, x] = 'h'
     lay['klassen'] = [''.join(r) for r in g]
     json.dump(lay, open(pf, 'w'))
     farbe = {'s': (236, 240, 244), 'w': (150, 170, 190), 'l': (157, 210, 231), 'i': (114, 185, 211),
@@ -311,17 +334,8 @@ def objekte():
             for y in range(by, by + ht):
                 belegt[(x, y)] = len(objs) - 1
         return o
-    # gefrorener Wasserfall an der Ostklippe: Block ueber der Felswand, Fuss (2 Reihen) auf der Eisflaeche davor
-    wn, wx, wy = WASSERFALL
-    lade(wn + '.png')
-    h_, x0_, y0_, x1_, y1_ = info[wn + '.png']
-    wt_, ht_ = math.ceil((x1_ - x0_ + 1) / T), math.ceil((y1_ - y0_ + 1) / T)
-    bx_ = wx - (wt_ - 1) // 2
-    weg_idx = {belegt[(x, y)] for x in range(bx_, bx_ + wt_) for y in range(wy - ht_ + 1, wy + 1) if (x, y) in belegt}
-    for i in sorted(weg_idx, reverse=True):
-        objs[i]['_weg'] = True
-    neu_setzen(wn, wx, wy, anim='glitzern', pruefen=False)['kein_schatten'] = True
-    n_neu = 1
+    weg_idx = set()
+    n_neu = 0
     for (name, (ax, ay), anzahl, r) in NEU:
         orte = sorted(((ax + dx, ay + dy) for dx in range(-r, r + 1) for dy in range(-r, r + 1)),
                       key=lambda k: abs(k[0] - ax) + abs(k[1] - ay))
