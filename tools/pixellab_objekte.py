@@ -613,6 +613,12 @@ OBJEKTGRUPPEN_K3 = {
         'palm tree with a double bent trunk and a dense crown, perfectly straight front elevation view, facing the camera head-on, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
         'small palm tree cluster with dry grass at its base, perfectly straight front elevation view, facing the camera head-on, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
     ]},
+    'k3_grab': {'size': 96, 'items': [
+        'small sandstone tomb house with a low pyramid shaped roof, dark arched entrance with an iron gate, hieroglyph carvings, seen from the front and slightly above so the roof surfaces are visible, like a small building in a classic 2D handheld RPG town, facade facing the camera, symmetric, not isometric',
+        'small desert crypt house of sandstone bricks with a sloped tiled roof and a barred arched doorway, seen from the front and slightly above so the roof surfaces are visible, like a small building in a classic 2D handheld RPG town, facade facing the camera, symmetric, not isometric',
+        'small egyptian style shrine house with a stepped sandstone roof and a dark arched iron gate in front, seen from the front and slightly above so the roof surfaces are visible, like a small building in a classic 2D handheld RPG town, facade facing the camera, symmetric, not isometric',
+        'small mud brick tomb house with a domed roof and an arched iron gate, seen from the front and slightly above so the roof surfaces are visible, like a small building in a classic 2D handheld RPG town, facade facing the camera, symmetric, not isometric',
+    ]},
     'k3_klein': {'size': 32, 'items': [
         'small green saguaro cactus', 'tall green saguaro cactus with two arms', 'small round barrel cactus', 'prickly pear cactus',
         'dry desert bush', 'small dry grass tuft', 'animal skull', 'scattered bones', 'small sandstone rock', 'two small desert rocks',

@@ -105,4 +105,7 @@ Wenn eine Karte fertig scheint: noch einmal komplett auf **Pixelfehler** und **L
   Fuß auf Höhe des Treppenfußes, der Flügel ragt vor die Klippe, auf der die Treppe liegt.
 - **Symmetrische Plätze:** Paare auf einem Platz vor einem Bauwerk (Statuen, Banner, Laternen, Säulen) stehen exakt
   spiegelsymmetrisch zur Achse des Bauwerks.
+- **Gebäude stehen ganz auf Land:** Nicht nur der Fuß, sondern die ganze Fläche eines Gebäudes (auch Rückwand und
+  Dach) liegt über Land, mit mindestens einer Kachel Strand bis zum Wasser. Gewollte Ausnahmen (Pavillon am Teich)
+  werden ausdrücklich markiert.
 - **Ablauf:** Jede Änderung committen und pushen, Bilder/GIFs an den Nutzer schicken, auf Deutsch erklären.

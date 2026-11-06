@@ -39,7 +39,7 @@ def main():
     kueste = [
         {'art': 'meer', 'r': [0, 0, 7, 79]},
         # natuerliche Kueste links: Buchten ins Land, Landzungen ins Meer (Haeuser, Steg, Teleporter ausgespart)
-        {'art': 'meer', 'e': [8.6, 27, 1.7, 4.5]},
+        
         {'art': 'meer', 'e': [8.3, 45, 1.4, 3]}, {'art': 'meer', 'e': [8.5, 70, 1.6, 4]},
         {'art': 'sand', 'e': [6.5, 20, 1.8, 3.5]}, {'art': 'sand', 'e': [6.2, 37, 2.0, 4]},
         {'art': 'sand', 'e': [6.6, 65.5, 1.6, 2.5]}, {'art': 'sand', 'e': [6.8, 76, 1.5, 3]},
@@ -61,6 +61,8 @@ def main():
     neu['steg'] = {'x': 2, 'y': 50, 'laenge': 6, 'breite': 3}
     # Holzsteg von der Insel nach Sueden (x0, x1, y0, y1 in Kacheln)
     neu['inselsteg'] = [94, 97, 17, 25]
+    # Kabel vom Server endet an der Querleitung (nicht im Dach des Grabhauses)
+    neu['kabel'] = [[[86, 35], [86, 37]] if k == [[86, 35], [86, 39]] else k for k in neu['kabel']]
     neu['_v11'] = 'Regeln v1.1 (tools/karte03_v11.py), Original: v1.0/layout_v1.0.json'
     json.dump(neu, open(os.path.join(KARTE, 'layout.json'), 'w'), indent=1)
     print('Karte 03 v1.1 Layout geschrieben')

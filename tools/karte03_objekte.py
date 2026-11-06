@@ -38,7 +38,7 @@ FEST = [
     ('mittel/04', 59, 15, {}), ('mittel/05', 77, 9, {}), ('mittel/05', 79.5, 8, {}), ('mittel/05', 71, 23, {}),
     ('klein/20', 70, 11, {}), ('klein/20', 81, 23, {}), ('klein/21', 66, 13, {}), ('klein/21', 47, 13, {}),
     # Garten im Nordosten
-    ('gross/10', 95.2, 12, {}), ('klein/31', 92.2, 25, {}), ('klein/31', 98.8, 25, {}),
+    ('gross/10', 95.2, 12, {'am_wasser': True}), ('klein/31', 92.2, 25, {}), ('klein/31', 98.8, 25, {}),
     # Lautsprechersaeulen an den Wegen
     ('mittel2/00', 66.5, 26, {'anim': 'schall'}), ('mittel2/00', 89.5, 26, {'anim': 'schall'}), ('mittel2/00', 52.3, 40, {'anim': 'schall'}), ('mittel2/00', 25, 56, {'anim': 'schall'}),
     ('mittel2/00', 40.5, 63, {'anim': 'schall'}),
@@ -48,7 +48,7 @@ FEST = [
     ('gross2/00', 78.5, 49, {'anim': 'blinken', 'dreh': True}), ('gross2/01', 82.5, 43, {'anim': 'blinken', 'dreh': True}),
     ('gross/13', 86, 35, {'anim': 'blinken'}),
     # Pyramide, Grabtor, Buehne
-    ('PYRAMIDE', 96, 41, {}), ('mittel/10', 86.5, 41, {}),
+    ('PYRAMIDE', 96, 41, {}), ('grab/00', 86.5, 42, {}),
     ('abgeleitet/buehne', 96, 52, {'roh': True, 'proz': 'buehne', 'anim': 'musik'}),
     ('abgeleitet/box_monitor', 90.5, 56, {'roh': True, 'proz': 'box_monitor', 'anim': 'bass'}),
     ('abgeleitet/box_monitor', 101.5, 56, {'roh': True, 'proz': 'box_monitor', 'anim': 'bass'}),
@@ -193,18 +193,39 @@ def main():
         xs0, ys0, xs1, ys1 = max(0, x), max(0, y), min(MW, x + im.width), min(MH, y + im.height)
         a = a[ys0 - y:ys1 - y, xs0 - x:xs1 - x]
         fy_, fx_ = min(rows - 1, int(ay) // T), min(cols - 1, max(0, int(ax) // T))
-        # ganze Grundflaeche (untere 6 Pixelreihen des Sprites) pruefen, nicht nur die Fussmitte
-        a_g = np.array(im.getchannel('A')) >= 200
-        zl = np.nonzero(a_g.any(axis=1))[0]
-        if len(zl):
-            ys_g, xs_g = np.nonzero(a_g[max(0, zl.max() - 5):zl.max() + 1])
-            gx = (x + xs_g) // T
-            gy = (y + max(0, zl.max() - 5) + ys_g) // T
-            ok_g = (gx >= 0) & (gx < cols) & (gy >= 0) & (gy < rows)
-            nass = sum(1 for xg, yg in zip(gx[ok_g], gy[ok_g]) if cls[yg][xg] in 'xm')
-            if nass > 0.08 * max(1, int(ok_g.sum())):
-                print('  Grundflaeche im Wasser, uebersprungen:', name, int(ax) // T, int(ay) // T)
+        # ganze Grundflaeche (untere 6 Pixelreihen) pruefen; grosse Objekte brauchen ringsum 1 Kachel Abstand
+        # zum Wasser - sonst ruecken feste Objekte vom Ufer weg (statt halb im Wasser zu stehen)
+        rand_ = 1 if gruppe in ('gross', 'abgeleitet', 'mittel', 'pyramide', 'pyramide2') else 0
+
+        def wasser_nah(x_, y_):
+            a_g = np.array(im.getchannel('A')) >= 200
+            zl = np.nonzero(a_g.any(axis=1))[0]
+            if not len(zl):
+                return False
+            oben_g = 0 if gruppe in ('gross', 'abgeleitet', 'pyramide', 'pyramide2') else max(0, zl.max() - 5)
+            ys_g, xs_g = np.nonzero(a_g[oben_g:zl.max() + 1])      # Gebaeude: ganze Flaeche, sonst Grundflaeche
+            gx = (x_ + xs_g) // T
+            gy = (y_ + oben_g + ys_g) // T
+            kach = set(zip(gx.tolist(), gy.tolist()))
+            if rand_:
+                kach = {(kx + dx, ky + dy) for (kx, ky) in kach for dx in (-1, 0, 1) for dy in (0, 1)}
+            kach = [(kx, ky) for (kx, ky) in kach if 0 <= kx < cols and 0 <= ky < rows]
+            nass = sum(1 for (kx, ky) in kach if cls[ky][kx] in 'xm')
+            return nass > (0 if rand_ else 0.08 * max(1, len(kach)))
+        if not opt.pop('am_wasser', False) and wasser_nah(x, y):
+            for dx_, dy_ in ((16, 0), (32, 0), (48, 0), (-16, 0), (-32, 0), (16, -16), (32, -16), (0, -16)) if fest else ():
+                if not wasser_nah(x + dx_, y + dy_):
+                    print('  vom Wasser weggerueckt:', name, int(ax) // T, int(ay) // T, '->', (dx_ // T, dy_ // T))
+                    x, y, ax, ay = x + dx_, y + dy_, ax + dx_, ay + dy_
+                    break
+            else:
+                if fest:
+                    print('  Grundflaeche am/im Wasser, uebersprungen:', name, int(ax) // T, int(ay) // T)
                 return None
+        xs0, ys0, xs1, ys1 = max(0, x), max(0, y), min(MW, x + im.width), min(MH, y + im.height)
+        a = np.array(im.getchannel('A')) >= 200
+        a = a[ys0 - y:ys1 - y, xs0 - x:xs1 - x]
+        fy_, fx_ = min(rows - 1, int(ay) // T), min(cols - 1, max(0, int(ax) // T))
         if cls[fy_][fx_] in 'xm':                          # nie im Wasser (Meer, Teich)
             print('  im Wasser, uebersprungen:', name, int(ax) // T, int(ay) // T)
             return None
