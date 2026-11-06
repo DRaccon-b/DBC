@@ -188,19 +188,33 @@ def main():
     Hp, Wp = lvl.shape
     frei_x = [(12 * T - 8, 16 * T + 8), (38 * T - 8, 42 * T + 8), (51 * T, 57 * T)]
     rr = random.Random(5)
+    RAND = ['wald/14', 'rand/00', 'rand/01', 'rand/02', 'rand/04', 'rand/05', 'rand/13', 'rand/03', 'rand/07',
+            'rand/10', 'rand/08', 'rand/11', 'rand/09', 'rand/15', 'rand/06', 'rand/12']
+    GEW = [4, 4, 3, 3, 2, 3, 2, 2, 2, 2, 1.5, 1.5, 1, 1, 0.6, 0.8]
     stellen = []
-    for X in range(-6, Wp + 20, 30):
-        stellen.append((X + rr.randint(-5, 5), 20 + rr.randint(-4, 4), 'oben'))
-        stellen.append((X + rr.randint(-5, 5), Hp + 16 + rr.randint(-4, 4), 'unten'))
-    for Y in range(40, Hp + 10, 28):
-        stellen.append((2 + rr.randint(-4, 4), Y + rr.randint(-4, 4), 'seite'))
-        stellen.append((Wp - 2 + rr.randint(-4, 4), Y + rr.randint(-4, 4), 'seite'))
+    def kante(laenge, n_start):                              # Tiefe wandert wellenfoermig (keine gerade Linie)
+        pos, tiefe, out = -8, 0.0, []
+        while pos < laenge + 24:
+            tiefe = max(-10, min(14, tiefe * 0.7 + rr.uniform(-7, 7)))
+            out.append((pos, tiefe + rr.uniform(-4, 4)))
+            pos += rr.randint(20, 36)
+        return out
+    for (X, t) in kante(Wp, 0):
+        stellen.append((X, 22 + t, 'oben'))
+    for (X, t) in kante(Wp, 1):
+        stellen.append((X, Hp + 14 - t, 'unten'))
+    for (Y, t) in kante(Hp, 2):
+        stellen.append((t, Y + 24, 'seite'))
+    for (Y, t) in kante(Hp, 3):
+        stellen.append((Wp - t, Y + 24, 'seite'))
     for i_, (X, fussy, seite) in enumerate(stellen):
+        X, fussy = int(round(X)), int(round(fussy))
         if seite != 'seite' and any(a_ <= X <= b_ for a_, b_ in frei_x if (seite == 'unten' or a_ < 300)):
             continue
-        datei, h, zu, mitte = sprite('wald/14', i_ % 2 == 1)
+        name_ = rr.choices(RAND, weights=GEW)[0]
+        datei, h, zu, mitte = sprite(name_, rr.random() < 0.5)
         x, y = int(round(X - mitte)), fussy - zu
-        objekte.append({'datei': datei, 'basis': 'wald/14', 'x': x, 'y': y, 'fuss': h, 'kachel': [max(0, min(cols - 1, X // T)),
+        objekte.append({'datei': datei, 'basis': name_, 'x': x, 'y': y, 'fuss': h, 'kachel': [max(0, min(cols - 1, X // T)),
                         max(0, min(rows - 1, fussy // T))], 'ebene': 1, 'fest_pos': True, 'rand': True, 'kein_schatten': True,
                         'baum': True})
         belegen(datei, x, y)

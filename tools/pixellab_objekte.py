@@ -1100,6 +1100,12 @@ OBJEKTGRUPPEN_K12 = {
     'k12_baumhaus': {'size': 224, 'items': [
         'big wooden treehouse with two floors built into a huge gnarled dark tree with dark blue-violet leaves, red pointed shingle roof with a small spire, warm lit yellow windows, wooden balconies with railings, a wooden stair spiraling down the trunk to the ground, a small wooden door in the trunk, ' + FR12,
     ]},
+    'k12_rand': {'size': 64, 'items': [
+        'large dark green fern', 'tall dark green fern with long fronds', 'wide low dark fern', 'small cluster of dark ferns',
+        'dark fern with curled young fronds', 'bluish dark green fern', 'fern with a few violet flowers', 'dense clump of ferns and grass',
+        'dark leafy forest shrub', 'small dark thorny shrub', 'tuft of tall dark grass', 'dark ivy-covered bush',
+        'big dark green leaves plant', 'dark fern with drooping fronds', 'mossy rock with small ferns', 'dark wild herb bush',
+    ]},
     'k12_wald': {'size': 64, 'items': [
         'gloomy dark green round forest tree', 'gloomy dark green tall forest tree', 'dark green forest tree with a twisted trunk',
         'gloomy dark forest tree with blue-violet leaves', 'dark pine tree', 'small gloomy dark green tree',
