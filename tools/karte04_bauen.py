@@ -545,11 +545,56 @@ def objekte_zeichnen(img, objs, cache, boden, frame, ebenen=None):
             sp = flammen_bewegen(sp, frame, o['x'] + o['y'], lila=o.get('anim') == 'feuer_lila')
         elif frame is not None and o.get('anim') == 'portal':
             sp = portal_drehen(sp, frame)
+        elif frame is not None and o.get('anim') == 'brunnen':
+            sp = brunnen_fliessen(sp, frame)
+        elif frame is not None and o.get('anim') == 'rauch':
+            sp = rauch_steigen(sp, frame)
         img.alpha_composite(sp, (o['x'], o['y']))
         if frame is not None and o.get('anim') == 'blume':
             bluete_puls(img, o, sp, frame)
         if not o['basis'].startswith(('rand/', 'klein/0', 'klein/1', 'klein/2', 'klein/5')) and not o.get('an_wand'):
             bodenwall(img, grund, o, cache[o['datei']])     # Wandobjekte (Fenster, Banner ...) stehen nicht am Boden
+
+
+def brunnen_fliessen(sp, frame):
+    """Brunnen (Karte 10): nur die Wasserpixel bewegen sich - Farben der Fontaene laufen nach unten, das
+    Becken schimmert; Stein bleibt ruhig."""
+    a = np.array(sp)
+    r_, g_, b_ = a[..., 0].astype(int), a[..., 1].astype(int), a[..., 2].astype(int)
+    w = (a[..., 3] > 0) & (b_ > r_ + 40) & (b_ > 120)
+    k = frame % 4
+    gerollt = np.roll(a, k, axis=0)
+    m = w & np.roll(w, k, axis=0)
+    out = a.copy()
+    out[m] = gerollt[m]
+    hell = w & (((np.arange(a.shape[1])[None, :] + np.arange(a.shape[0])[:, None] * 2 + frame * 2) % 9) == 0)
+    out[hell, :3] = np.minimum(255, out[hell, :3].astype(int) + 60)
+    return Image.fromarray(out)
+
+
+def rauch_steigen(sp, frame):
+    """Lok-Rauch (Karte 10): die hellen Rauchwolken steigen aus dem Schornstein, treiben leicht nach rechts
+    und werden duenner; die Lok selbst bleibt ruhig."""
+    a = np.array(sp)
+    r_, g_, b_ = a[..., 0].astype(int), a[..., 1].astype(int), a[..., 2].astype(int)
+    mx, mn = np.maximum(np.maximum(r_, g_), b_), np.minimum(np.minimum(r_, g_), b_)
+    zeilen = np.nonzero(a[..., 3].any(axis=1))[0]
+    oben = np.zeros(a.shape[:2], bool)
+    oben[:zeilen.min() + int((zeilen.max() - zeilen.min()) * 0.3)] = True
+    rauch = (a[..., 3] > 0) & (mn > 150) & (mx - mn < 40) & oben
+    if not rauch.any():
+        return sp
+    k = frame % 8
+    dy, dx = -(k // 2), k // 3
+    out = a.copy()
+    out[rauch, 3] = 0
+    ys, xs = np.nonzero(rauch)
+    al = int(255 * (1 - k / 10.0))
+    for y, x in zip(ys + dy, xs + dx):
+        if 0 <= y < a.shape[0] and 0 <= x < a.shape[1]:
+            out[y, x, :3] = (236, 238, 244)
+            out[y, x, 3] = max(out[y, x, 3], al)
+    return Image.fromarray(out)
 
 
 RUETTEL_X = (0, 1, 0, -1, 1, 0, -1, 0, 0, 1, -1, 0, 1, 0, 0, -1)
@@ -878,7 +923,7 @@ def animieren(img, objs, cache, frame, ruhig=False):
                     gd.ellipse((x0 - r, y0 - r, x0 + r, y0 + r), fill=(175, 170, 165, int(210 * k_)))
                     if r > 2.5:
                         gd.ellipse((x0 - r + 1, y0 - r + 1, x0, y0), fill=(220, 216, 210, int(200 * k_)))
-        elif anim in ('geisterlicht', 'kerzen', 'glimmen', 'feuer_kamin', 'feuer', 'feuer_lila', 'portal', 'kessel'):
+        elif anim in ('geisterlicht', 'kerzen', 'glimmen', 'feuer_kamin', 'feuer', 'feuer_lila', 'portal', 'kessel', 'lampe'):
             # Lichtquelle: hellste gesaettigte Pixel (gruene Flamme / Kerzenflamme / Pilzkappen) pulsieren,
             # weicher Schein in ihrer Farbe (Karte 08)
             a = np.array(sp).astype(np.int16)
@@ -886,6 +931,9 @@ def animieren(img, objs, cache, frame, ruhig=False):
             if anim == 'kessel':                               # gruen brodelnder Kesselinhalt
                 q = (a[..., 3] > 0) & (g_ > r_ + 25) & (g_ > b_)
                 farbe, rad = (120, 255, 140), (12, 6)
+            elif anim == 'lampe':                              # Strassenlaterne: gelbe Glaskugel leuchtet (Karte 10)
+                q = (a[..., 3] > 0) & (r_ > 200) & (g_ > 160) & (b_ < 150)
+                farbe, rad = (255, 220, 120), (14, 10)
             elif anim == 'geisterlicht':
                 q = (a[..., 3] > 0) & (g_ > 150) & (g_ > r_ + 40)
                 farbe, rad = (120, 255, 170), (16, 8)

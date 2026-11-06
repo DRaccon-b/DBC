@@ -16,8 +16,12 @@ ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
 KARTE = os.path.join(ROOT, 'maps', 'karte10')
 C, R = 90, 75
 
-# Burg: Achse der Burg / des Hofes (Kacheln, Mitte zwischen Spalte 75 und 76)
-ACHSE = 75.5
+# Burg: Achse der Burg / des Hofes (Kacheln; Weg 74-77, Rahmen 69-82 -> Mitte 76.0 = 1216 px)
+# Haeuser: (Sprite, Mitte in px, Fussreihe, Tuer-Kachel, Weg bis Reihe) - Tuerweg fuehrt zum Gehweg
+HAEUSER = [('haeuser/00', 128, 12, 6, None), ('haeuser/01', 368, 15, 22, 18), ('haeuser/02', 608, 14, 37, 18),
+           ('haeuser2/00', 832, 14, 51, 18), ('haeuser2/03', 128, 26, 7, None), ('haeuser/03', 368, 31, 22, 34),
+           ('haeuser2/01', 608, 31, 37, 34), ('haeuser2/02', 832, 31, 51, 34)]
+ACHSE = 76.0
 
 
 def ellipse(k, cx, cy, rx, ry, art, raster=True):
@@ -65,20 +69,25 @@ def main():
     # ------------------------------------------------------------------ Uhrenplatz
     ellipse(k, 54, 54, 5.6, 5.2, 'b')
     # ------------------------------------------------------------------ Sandwege (Boegen, diagonal)
-    pfad(k, [(7, 13), (7, 15), (8, 17)], 's')                                   # Haus oben links -> Wohnturm
-    pfad(k, [(7, 27), (7, 29), (8, 30)], 's', nur='g')                           # Wohnturm -> Brunnenplatz
+    pfad(k, [(6, 13), (7, 15), (10, 17), (14, 19), (16, 20)], 's', nur='g')     # Haus oben links -> Strasse
+    pfad(k, [(7, 27), (7, 29), (8, 30)], 's', nur='g')                           # Feuerwache -> Brunnenplatz
+    for (_, _, fy, tx, bis) in HAEUSER:
+        if bis:
+            k[fy + 1:bis + 1, tx:tx + 2] = np.where(k[fy + 1:bis + 1, tx:tx + 2] == 'g', 's', k[fy + 1:bis + 1, tx:tx + 2])
     pfad(k, [(9, 45), (9, 50), (10, 54), (9, 58), (9, 60)], 's', nur='gs')       # Brunnenplatz -> Garten
     pfad(k, [(44, 48), (46, 50), (48, 52)], 's', nur='gsp')                      # Strassenende -> Uhrenplatz
     pfad(k, [(44, 48), (40, 50), (33, 51), (28, 52), (25, 55), (23, 59), (21, 63), (19, 67)], 's', nur='gs')
     # ------------------------------------------------------------------ Teich mit Bruecke, Garten
+    pfad(k, [(25, 56), (29, 57), (33, 58)], 's', nur='g')                         # Wege zur Bruecke
+    pfad(k, [(45, 58), (47, 57), (49, 56)], 's', nur='g')
     t = ellipse(k, 39.5, 59, 4.0, 2.7, 'x')
     h[t] = 0
     gm = ellipse(k, 9.5, 64.5, 6.8, 4.6, 'e')
     k[gm & (xx > 14) & (yy < 62)] = 'g'
     # ------------------------------------------------------------------ Bahnhof oben rechts
-    k[3:23, 62:89] = 's'
+    k[3:23, 61:90] = 's'
     k[5:21, 64:88] = 'm'
-    k[15:17, 69:83] = 'q'                                                       # Bahnsteig vor dem Bahnhof
+    k[13:16, 69:83] = 'q'                                                       # Bahnsteig vor dem Bahnhof
     k[20:23, 58:64] = np.where(k[20:23, 58:64] == 'a', 'a', k[20:23, 58:64])
     k[20:22, 62:64] = 'a'                                                       # Strasse endet am Bahnhof
     # ------------------------------------------------------------------ Burg und Burghof
@@ -88,7 +97,7 @@ def main():
     rahmen = (xx >= 69) & (xx <= 82) & (yy >= 47) & (yy <= 57)
     innen = (xx >= 70) & (xx <= 81) & (yy >= 48) & (yy <= 56)
     k[rahmen & ~innen] = 'r'
-    ellipse(k, ACHSE + 0.5, 52.5, 3.2, 2.7, 'b')
+    ellipse(k, ACHSE, 52.5, 3.2, 2.7, 'b')
     mauer = np.zeros((R, C), bool)
     mauer[30:32, 61:90] = True                     # Burgfront: Krone, darunter 3 Kacheln Wandflaeche (Reihen 32-34)
     mauer[32:72, 86:90] = True                     # Ostmauer
@@ -110,9 +119,10 @@ def main():
     k[36:38, 0:2] = 'a'
     lay = {
         'groesse': [C, R], 'klassen': [''.join(r) for r in k], 'hoehe': [''.join(str(c) for c in r) for r in h],
-        'achse': ACHSE,
+        'achse': ACHSE, 'haeuser': HAEUSER,
         'gleise': [{'y': 7, 'x': [64, 88]}, {'y': 19, 'x': [64, 88]}],          # Schienen (Kachelreihe der Schwellen)
         'bruecken': [[35, 58, 44, 59]],                                            # (x0, y0, x1, y1)
+        'teich': [632, 944, 70, 44],
         'teleporter': [{'x': 0, 'y': 35, 'b': 2, 'h': 4}],
     }
     os.makedirs(KARTE, exist_ok=True)

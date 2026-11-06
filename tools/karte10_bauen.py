@@ -78,7 +78,7 @@ def zebra(a, x0, y0, b, h, senkrecht):
     """Zebrastreifen (Pixel): weisse Balken quer zur Fahrtrichtung."""
     for y in range(y0, y0 + h):
         for x in range(x0, x0 + b):
-            q = (x - x0) if senkrecht else (y - y0)
+            q = (x - x0) if senkrecht else (y - y0)   # senkrecht: Strasse laeuft N-S, Balken wechseln quer (x)
             if q % 6 < 3:
                 a[y, x] = H('#f2f2f6') if q % 6 else H('#d8dae4')
 
@@ -221,14 +221,17 @@ def bauen(frame=None, speichern=True):
         bordstein(a, mm, hell, '#5a6070' if art in 'bm' else '#9a6a5a')
     mittellinien(a, asph, cols, rows)
     # Zebrastreifen vor den Kreuzungen (Gehweg zu Gehweg)
-    for (x, y, b, h_, s) in ((30 * T, 23 * T, 32, 12, False), (44 * T, 23 * T, 32, 12, False),
-                             (44 * T, 39 * T + 4, 32, 12, False), (46 * T + 4, 36 * T, 12, 32, True),
-                             (27 * T + 4, 36 * T, 12, 32, True)):
+    for (x, y, b, h_, s) in ((30 * T + 2, 23 * T + 2, 28, 12, True), (44 * T + 2, 23 * T + 2, 28, 12, True),
+                             (44 * T + 2, 39 * T + 2, 28, 12, True), (46 * T + 2, 36 * T + 2, 12, 28, False),
+                             (41 * T + 2, 36 * T + 2, 12, 28, False)):
         zebra(a, x, y, b, h_, s)
     gleise(a, lay.get('gleise', []))
     # --- Wasser (Teich): klares Blau wie Karte 01, vertieft mit Steinrand
     wroh = zell_maske(cls, 'x', cols, rows)
-    wm = weich(wroh, 5, 0.12, 41, 0.45)
+    yy_, xx_ = np.mgrid[0:Hp, 0:Wp]
+    tc = lay['teich']                                        # runder Teich (Pixel-Ellipse mit leichtem Wellenrand)
+    wink = np.arctan2(yy_ - tc[1], xx_ - tc[0])
+    wm = ((xx_ - tc[0]) / tc[2]) ** 2 + ((yy_ - tc[1]) / tc[3]) ** 2 <= 1 + 0.06 * np.sin(3 * wink) + 0.04 * np.cos(5 * wink)
     k4.wasser_zeichnen(a, wm, frame, np.zeros_like(wm))
     a = np.array(wasser_vertieft.vertiefen(Image.fromarray(a), np.ones_like(wm), frame, maske=wm,
                                            rand=('#6a6e80', '#868aa0', '#a2a6ba', '#c2c6d6'),
@@ -243,7 +246,7 @@ def bauen(frame=None, speichern=True):
     flaeche = burgmauern(a, mauer)
     achse = int(lay['achse'] * T)
     # Herzreihen zwischen Burgfront und Ecktuermen (symmetrisch zur Achse)
-    herzen_auf_wand(a, flaeche, [achse - 196, achse + 196])
+    herzen_auf_wand(a, flaeche, [achse - 141, achse + 141])
     lvl = np.ones((Hp, Wp), np.uint8)
     lvl[wm] = 0
     lvl[mauer] = 3
