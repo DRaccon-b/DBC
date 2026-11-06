@@ -53,8 +53,8 @@ FEST = [
     (LAMPE, ACHSE_BRUNNEN - 96, 33, {'symm': 'bl1', 'anim': 'lampe'}), (LAMPE, ACHSE_BRUNNEN + 96, 33, {'symm': 'bl1', 'anim': 'lampe'}),
     (BANK, ACHSE_BRUNNEN - 48, 43, {'symm': 'bb'}), (BANK, ACHSE_BRUNNEN + 48, 43, {'symm': 'bb'}),
     # Burghof: Soldaten am Torweg, Brunnen im Rahmen, Blumenbeete in den Rahmenecken (symmetrisch)
-    (SOLDAT, ACHSE_BURG - 56, 43, {'symm': 's1'}), (SOLDAT, ACHSE_BURG + 56, 43, {'symm': 's1'}),
-    (SOLDAT, ACHSE_BURG - 56, 47, {'symm': 's2'}), (SOLDAT, ACHSE_BURG + 56, 47, {'symm': 's2'}),
+    (SOLDAT, ACHSE_BURG - 56, 41, {'symm': 's1', 'ueberlappen': True}), (SOLDAT, ACHSE_BURG + 56, 41, {'symm': 's1', 'ueberlappen': True}),
+    (SOLDAT, ACHSE_BURG - 56, 46, {'symm': 's2'}), (SOLDAT, ACHSE_BURG + 56, 46, {'symm': 's2'}),
     ('baeume/07', ACHSE_BURG, 54, {'achse': ACHSE_BURG, 'anim': 'brunnen'}),
     ('baeume/15', ACHSE_BURG - 72, 51, {'symm': 'f1'}), ('baeume/15', ACHSE_BURG + 72, 51, {'symm': 'f1'}),
     ('spielplatz/15', ACHSE_BURG - 72, 57, {'symm': 'f2'}), ('spielplatz/15', ACHSE_BURG + 72, 57, {'symm': 'f2'}),
@@ -218,7 +218,7 @@ def main():
             if not pruefen:
                 break
             gross = name.startswith(('haeuser', 'bahnhof/00'))
-            if bewerten(lvl, alpha[datei], x, y) and frei_px(datei, x, y) and (not gross or auf_land(datei, x, y)) \
+            if bewerten(lvl, alpha[datei], x, y) and (opt.get('ueberlappen') or frei_px(datei, x, y)) and (not gross or auf_land(datei, x, y)) \
                     and lvl[min(lvl.shape[0] - 1, ky * T + 15), min(lvl.shape[1] - 1, int(kx))] == 1:
                 break
         else:
