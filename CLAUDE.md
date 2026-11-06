@@ -102,7 +102,7 @@ Wenn eine Karte fertig scheint: noch einmal komplett auf **Pixelfehler** und **L
 - **Gebäude mit Dach:** Häuser, Krypten, Kapellen u. Ä. nie flach als reine Fassade – Dachflächen und First von
   leicht oben sichtbar (wie die Häuser auf Karte 06).
 - **Tore an Treppen:** Zweiflügelige Tore/Gitter werden geteilt: je ein Flügel links und rechts am Fuß der Treppe,
-  eine Kachel unter dem Treppenfuß, der obere Teil ragt vor die Klippe, auf der die Treppe liegt.
+  Fuß auf Höhe des Treppenfußes, der Flügel ragt vor die Klippe, auf der die Treppe liegt.
 - **Symmetrische Plätze:** Paare auf einem Platz vor einem Bauwerk (Statuen, Banner, Laternen, Säulen) stehen exakt
   spiegelsymmetrisch zur Achse des Bauwerks.
 - **Ablauf:** Jede Änderung committen und pushen, Bilder/GIFs an den Nutzer schicken, auf Deutsch erklären.

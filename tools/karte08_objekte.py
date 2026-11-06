@@ -227,7 +227,7 @@ def main():
         teil.save(os.path.join(OBJ, 'sauber/gitter-%s.png' % seite))
         alpha['sauber/gitter-%s.png' % seite] = np.array(teil.getchannel('A')) >= 128
     for (px0, px1, ye, f, e) in json.load(open(os.path.join(KARTE, 'treppen_px.json'))):
-        reihe = (ye + f + 2) // T + 1                             # Nutzerwunsch: eine Reihe unter dem Treppenfuss
+        reihe = (ye + f + 2) // T                                 # Nutzerwunsch: Fuss auf Hoehe des Treppenfusses
         for seite in ('l', 'r'):
             datei = 'sauber/gitter-%s.png' % seite
             a_ = alpha[datei]
