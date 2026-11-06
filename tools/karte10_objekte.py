@@ -37,6 +37,7 @@ WIND = {'klein/09', 'klein/10', 'klein/12', 'klein/35', 'baeume/03', 'klein2/04'
 SPIELZEUG = ['klein/02', 'klein/03', 'klein/06', 'klein/07', 'klein/22', 'klein/32', 'klein/41', 'klein/42',
              'klein/43', 'klein/45', 'klein/46', 'klein/53', 'klein/54', 'klein/59', 'klein/14', 'klein/52']
 
+SCHAUKEL = {'baeume2/08', 'klein2/61', 'klein/06'}
 HAUS_ANIM = {'haeuser/03': 'kamin', 'haeuser/02': 'kamin', 'haeuser2/03': 'glocke'}   # Rauch aus dem Kamin, Glocke
 # (sprite, Mitte x in px, Fussreihe, Optionen)  - grosse Objekte zuerst
 FEST = [
@@ -63,7 +64,7 @@ FEST = [
     ('klein/32', 77 * T, 64, {}), ('klein/55', 82 * T + 8, 70, {}), ('klein/60', 64 * T, 41, {}), ('klein/03', 84 * T, 40, {}),
     # Spielplatz
     ('spielplatz/00', 27 * T, 49, {}), ('spielplatz/01', 35 * T, 48, {}), ('spielplatz/02', 38 * T, 54, {}),
-    ('gross2/01', 35 * T, 69, {}), ('baeume/14', 21 * T, 57, {'anim': 'schaufel'}), ('klein/26', 27 * T, 66, {}),
+    ('gross2/01', 35 * T, 69, {}), ('baeume/14', 21 * T, 57, {}), ('klein/26', 27 * T, 66, {}),
     ('klein/24', 23 * T, 61, {}), ('gross2/00', 29 * T, 62, {}),
     ('baeume/04', 47 * T, 66, {}), ('baeume/05', 21 * T + 8, 44, {}),
     # Garten (Beeterde): Beete, Kuebel, Windmuehle
@@ -75,9 +76,16 @@ FEST = [
     ('baeume/09', 46 * T + 8, 46, {}), ('baeume/05', 17 * T + 8, 23, {}),
     # Teich: Ente am Ufer
     ('klein/08', 36 * T, 61, {}),
+    # Baeume zwischen Bahnstrecke und den oberen Haeusern (Nutzer-Skizze, gruen), je mit Begleiter (Regel 5)
+    ('klein/49', 11 * T + 8, 8, {'anim': 'baum'}), ('klein2/58', 12 * T + 8, 9, {'begleiter': True, 'anim': 'wehen'}),
+    ('klein/48', 15 * T, 9, {'anim': 'baum'}), ('baeume/01', 19 * T + 8, 10, {'anim': 'baum'}),
+    ('baeume2/03', 21 * T + 8, 11, {'begleiter': True}), ('klein2/11', 17 * T, 10, {'begleiter': True, 'anim': 'wehen'}),
+    ('klein/49', 26 * T + 8, 8, {'anim': 'baum'}), ('klein2/04', 27 * T + 8, 9, {'begleiter': True, 'anim': 'wehen'}),
+    ('baeume/00', 34 * T + 8, 9, {'anim': 'baum'}), ('baeume/03', 32 * T + 8, 10, {'begleiter': True, 'anim': 'wehen'}),
+    ('klein/48', 50 * T, 8, {'anim': 'baum'}), ('klein2/05', 51 * T + 8, 9, {'begleiter': True, 'anim': 'wehen'}),
     # Neu (PixelLab k10_banner, k10_klein2, k10_baeume2)
-    ('baeume2/12', 52 * T, 67, {'anim': 'zirkus'}), ('baeume2/13', 21 * T, 66, {'achse': 21 * T}), ('baeume2/08', 23 * T + 8, 52, {'anim': 'wippen', 'amp': 2, 'fest': 0.3}),
-    ('klein2/63', 33 * T, 52, {}), ('klein2/61', 29 * T, 58, {'anim': 'wippen', 'amp': 1.5, 'fest': 0.45}),
+    ('baeume2/12', 52 * T, 67, {'anim': 'zirkus'}), ('baeume2/13', 21 * T, 66, {'achse': 21 * T}), ('baeume2/08', 23 * T + 8, 52, {'anim': 'schaukeln', 'amp': 7, 'fest': 0.32}),
+    ('klein2/63', 33 * T, 52, {}), ('klein2/61', 27 * T, 54, {'anim': 'schaukeln', 'amp': 6, 'fest': 0.12}),
     ('banner/12', 62 * T + 8, 23, {}), ('banner/07', 70 * T, 27, {}), ('banner/09', 86 * T, 26, {}),
     ('banner/14', 66 * T, 26, {}), ('banner/05', 87 * T + 8, 21, {'anim': 'signal'}), ('banner/05', 20 * T + 8, 6, {'anim': 'signal'}),
     ('banner/05', 46 * T + 8, 6, {'anim': 'signal'}),
@@ -143,6 +151,10 @@ def main():
                     sp = groesstes_teil(sp)                          # PixelLab-Reste (z. B. Glocke unter der Lok)
             if spiegeln:
                 sp = sp.transpose(Image.FLIP_LEFT_RIGHT)
+            if name in SCHAUKEL:                                 # Rand zum Kippen
+                g_ = Image.new('RGBA', (sp.width + 12, sp.height + 4), (0, 0, 0, 0))
+                g_.alpha_composite(sp, (6, 4))
+                sp = g_
             datei = 'sauber/%s%s.png' % (name.replace('/', '-'), '_m' if spiegeln else '')
             sp.save(os.path.join(OBJ, datei))
             a = np.array(sp.getchannel('A')) >= 128
@@ -325,7 +337,7 @@ def main():
         if any(cls[yy][xx] != 'k' for yy in range(ty - 1, ty + 2) for xx in range(tx - 1, tx + 2)):
             continue
         nm = rnd.choice(SPIELZEUG)
-        if fest_setzen(nm, tx * T + 8, ty, {'anim': 'wippen', 'amp': 1, 'fest': 0.2} if nm in ('klein/06', 'klein/22', 'klein/41') else {}):
+        if fest_setzen(nm, tx * T + 8, ty, {'anim': 'schaukeln', 'amp': 4, 'fest': 0.05} if nm == 'klein/06' else {}):
             n += 1
     json.dump(objekte, open(os.path.join(OBJ, 'platzierung.json'), 'w'), indent=0)
     print(len(objekte), 'Objekte gesetzt')

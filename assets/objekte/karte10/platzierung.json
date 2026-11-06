@@ -954,7 +954,6 @@
 57
 ],
 "ebene": 0,
-"anim": "schaufel",
 "block": [
 19,
 55,
@@ -1323,6 +1322,220 @@
 ]
 },
 {
+"datei": "sauber/klein-49.png",
+"basis": "klein/49",
+"x": 165,
+"y": 115,
+"fuss": 29,
+"kachel": [
+10,
+8
+],
+"ebene": 1,
+"anim": "baum",
+"block": [
+10,
+7,
+2,
+2
+]
+},
+{
+"datei": "sauber/klein2-58.png",
+"basis": "klein2/58",
+"x": 195,
+"y": 137,
+"fuss": 23,
+"kachel": [
+12,
+9
+],
+"ebene": 1,
+"anim": "wehen",
+"begleiter": true,
+"block": [
+12,
+8,
+2,
+2
+]
+},
+{
+"datei": "sauber/klein-48.png",
+"basis": "klein/48",
+"x": 230,
+"y": 131,
+"fuss": 29,
+"kachel": [
+14,
+9
+],
+"ebene": 1,
+"anim": "baum",
+"block": [
+14,
+8,
+2,
+2
+]
+},
+{
+"datei": "sauber/baeume-01.png",
+"basis": "baeume/01",
+"x": 289,
+"y": 109,
+"fuss": 67,
+"kachel": [
+19,
+10
+],
+"ebene": 1,
+"anim": "baum",
+"block": [
+18,
+6,
+4,
+5
+]
+},
+{
+"datei": "sauber/klein2-11.png",
+"basis": "klein2/11",
+"x": 258,
+"y": 149,
+"fuss": 27,
+"kachel": [
+16,
+10
+],
+"ebene": 0,
+"anim": "wehen",
+"begleiter": true,
+"block": [
+16,
+9,
+2,
+2
+]
+},
+{
+"datei": "sauber/klein-49.png",
+"basis": "klein/49",
+"x": 421,
+"y": 115,
+"fuss": 29,
+"kachel": [
+26,
+8
+],
+"ebene": 1,
+"anim": "baum",
+"block": [
+26,
+7,
+2,
+2
+]
+},
+{
+"datei": "sauber/klein2-04.png",
+"basis": "klein2/04",
+"x": 421,
+"y": 152,
+"fuss": 24,
+"kachel": [
+26,
+10
+],
+"ebene": 0,
+"anim": "wehen",
+"begleiter": true,
+"block": [
+26,
+9,
+2,
+2
+]
+},
+{
+"datei": "sauber/baeume-00.png",
+"basis": "baeume/00",
+"x": 512,
+"y": 91,
+"fuss": 69,
+"kachel": [
+33,
+9
+],
+"ebene": 1,
+"anim": "baum",
+"block": [
+32,
+5,
+4,
+5
+]
+},
+{
+"datei": "sauber/baeume-03.png",
+"basis": "baeume/03",
+"x": 450,
+"y": 120,
+"fuss": 56,
+"kachel": [
+29,
+10
+],
+"ebene": 1,
+"anim": "wehen",
+"begleiter": true,
+"block": [
+28,
+7,
+4,
+4
+]
+},
+{
+"datei": "sauber/klein-48.png",
+"basis": "klein/48",
+"x": 790,
+"y": 115,
+"fuss": 29,
+"kachel": [
+49,
+8
+],
+"ebene": 1,
+"anim": "baum",
+"block": [
+49,
+7,
+2,
+2
+]
+},
+{
+"datei": "sauber/klein2-05.png",
+"basis": "klein2/05",
+"x": 836,
+"y": 122,
+"fuss": 22,
+"kachel": [
+52,
+8
+],
+"ebene": 0,
+"anim": "wehen",
+"begleiter": true,
+"block": [
+52,
+7,
+2,
+2
+]
+},
+{
 "datei": "sauber/baeume2-12.png",
 "basis": "baeume2/12",
 "x": 804,
@@ -1363,17 +1576,17 @@
 {
 "datei": "sauber/baeume2-08.png",
 "basis": "baeume2/08",
-"x": 357,
-"y": 781,
-"fuss": 67,
+"x": 351,
+"y": 777,
+"fuss": 71,
 "kachel": [
 23,
 52
 ],
 "ebene": 1,
-"anim": "wippen",
-"amp": 2,
-"fest": 0.3,
+"anim": "schaukeln",
+"amp": 7,
+"fest": 0.32,
 "block": [
 22,
 48,
@@ -1395,6 +1608,27 @@
 "block": [
 32,
 52,
+2,
+2
+]
+},
+{
+"datei": "sauber/klein2-61.png",
+"basis": "klein2/61",
+"x": 382,
+"y": 846,
+"fuss": 34,
+"kachel": [
+24,
+54
+],
+"ebene": 1,
+"anim": "schaukeln",
+"amp": 6,
+"fest": 0.12,
+"block": [
+24,
+53,
 2,
 2
 ]
@@ -1494,17 +1728,17 @@
 "datei": "sauber/banner-05.png",
 "basis": "banner/05",
 "x": 323,
-"y": 52,
+"y": 36,
 "fuss": 60,
 "kachel": [
 20,
-6
+5
 ],
 "ebene": 1,
 "anim": "signal",
 "block": [
 20,
-3,
+2,
 2,
 4
 ]
@@ -1661,16 +1895,16 @@
 "datei": "sauber/banner-15.png",
 "basis": "banner/15",
 "x": 178,
-"y": 138,
+"y": 170,
 "fuss": 54,
 "kachel": [
 12,
-11
+13
 ],
 "ebene": 1,
 "block": [
 11,
-8,
+10,
 3,
 4
 ]
@@ -17723,9 +17957,6 @@
 58
 ],
 "ebene": 1,
-"anim": "wippen",
-"amp": 1,
-"fest": 0.2,
 "block": [
 66,
 57,

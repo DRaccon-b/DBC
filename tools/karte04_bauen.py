@@ -707,25 +707,56 @@ def zirkus_fahnen(sp, frame, o):
     return Image.fromarray(out)
 
 
+def _komponenten(m):
+    """Zusammenhaengende Flaechen einer Maske (4er-Nachbarschaft) -> Liste von (ys, xs)."""
+    from collections import deque
+    h, w = m.shape
+    gesehen = np.zeros_like(m)
+    teile = []
+    for y0, x0 in zip(*np.nonzero(m)):
+        if gesehen[y0, x0]:
+            continue
+        q = deque([(y0, x0)]); gesehen[y0, x0] = True; ys, xs = [], []
+        while q:
+            y, x = q.popleft(); ys.append(y); xs.append(x)
+            for dy, dx in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+                Y, X = y + dy, x + dx
+                if 0 <= Y < h and 0 <= X < w and m[Y, X] and not gesehen[Y, X]:
+                    gesehen[Y, X] = True; q.append((Y, X))
+        teile.append((np.array(ys), np.array(xs)))
+    return teile
+
+
 def uhr_zeiger(sp, frame, o):
-    """Uhr (Karte 10): auf dem weissen Zifferblatt laufen die Zeiger (Minutenzeiger eine Runde in 16 Bildern,
-    Stundenzeiger langsam); Gehaeuse bleibt ruhig."""
+    """Uhr (Karte 10): nur auf dem Zifferblatt laufen die Zeiger (Minutenzeiger eine Runde in 16 Bildern,
+    Stundenzeiger langsam). Erkannt wird das Zifferblatt als runde, fast weisse Flaeche samt den Zeigern darin;
+    alles andere (Fachwerk, Rand, Ziffern) bleibt unveraendert - nichts wird heller."""
     a = np.array(sp)
     ai = a.astype(int)
-    weiss = (ai[..., 3] > 0) & (ai[..., 0] > 205) & (ai[..., 1] > 205) & (ai[..., 2] > 195)
-    weiss[int(a.shape[0] * 0.75):] = False
-    if weiss.sum() < 12:
+    mx, mn = ai[..., :3].max(-1), ai[..., :3].min(-1)
+    weiss = (ai[..., 3] > 0) & (mn > 200) & (mx - mn < 30)
+    # Zeiger und Mittelpunkt gehoeren zum Zifferblatt: dunkle Pixel, die ringsum von Weiss umgeben sind
+    dunkel = (ai[..., 3] > 0) & (mx < 110)
+    teile = [t for t in _komponenten(weiss) if len(t[0]) >= 12]
+    if not teile:
         return sp
-    ys, xs = np.nonzero(weiss)
+    def rundheit(t):
+        ys, xs = t
+        hb, wb = ys.max() - ys.min() + 1, xs.max() - xs.min() + 1
+        return len(ys) / (hb * wb) if 0.6 < hb / wb < 1.6 else 0
+    teile = [t for t in teile if rundheit(t) > 0.45]
+    if not teile:
+        return sp
+    ys, xs = max(teile, key=lambda t: len(t[0]))
     cy, cx = (ys.min() + ys.max()) / 2.0, (xs.min() + xs.max()) / 2.0
-    r = min(ys.max() - ys.min(), xs.max() - xs.min()) / 2.0
+    r = (min(ys.max() - ys.min(), xs.max() - xs.min()) + 1) / 2.0
     yy, xx = np.mgrid[0:a.shape[0], 0:a.shape[1]]
-    innen = ((yy - cy) ** 2 + (xx - cx) ** 2 <= (r * 0.78) ** 2) & (ai[..., 3] > 0)
-    dunkel = innen & (ai[..., :3].sum(-1) < 300)
+    innen = (yy - cy) ** 2 + (xx - cx) ** 2 <= (r * 0.72) ** 2
     out = a.copy()
-    out[dunkel, :3] = np.median(a[weiss][:, :3], axis=0).astype(np.uint8)
+    weg = innen & dunkel
+    out[weg, :3] = np.median(a[ys, xs][:, :3], axis=0).astype(np.uint8)
     farbe = np.array([40, 34, 44, 255], np.uint8)
-    for laenge, winkel in ((r * 0.72, 2 * math.pi * frame / N_FRAMES), (r * 0.45, 2 * math.pi * (frame / N_FRAMES / 12 + 0.3))):
+    for laenge, winkel in ((r * 0.68, 2 * math.pi * frame / N_FRAMES), (r * 0.42, 2 * math.pi * (frame / N_FRAMES / 12 + 0.3))):
         for k in np.arange(0, laenge, 0.5):
             X, Y = int(round(cx + math.sin(winkel) * k)), int(round(cy - math.cos(winkel) * k))
             if innen[Y, X]:
@@ -734,7 +765,27 @@ def uhr_zeiger(sp, frame, o):
     return Image.fromarray(out)
 
 
-TEILANIM = {'wippen': wippen, 'glocke': glocke_schwingen, 'schaufel': schaufel_buddeln, 'zirkus': zirkus_fahnen,
+def schaukeln(sp, frame, o):
+    """Schaukeln (Karte 10): der bewegliche obere Teil kippt als Ganzes um den Drehpunkt ueber dem festen Fuss
+    (Feder, Schnur, Standflaeche) hin und her - nichts verbiegt sich. Winkel 'amp' in Grad."""
+    a = np.array(sp)
+    zeilen = np.nonzero(a[..., 3].any(axis=1))[0]
+    y0, y1 = zeilen.min(), zeilen.max()
+    grenze = int(round(y1 - (y1 - y0) * o.get('fest', 0.3)))
+    fuss = np.nonzero(a[grenze:y1 + 1, :, 3].any(axis=0))[0]
+    px_ = (fuss.min() + fuss.max()) / 2.0 if len(fuss) else a.shape[1] / 2.0
+    winkel = o.get('amp', 6) * math.sin(2 * math.pi * frame / N_FRAMES + o.get('x', 0) * 0.13)
+    oben = a.copy()
+    oben[grenze:] = 0
+    unten = a.copy()
+    unten[:grenze] = 0
+    gedreht = Image.fromarray(oben).rotate(winkel, resample=Image.NEAREST, center=(px_, grenze))
+    out = Image.fromarray(unten)
+    out.alpha_composite(gedreht)
+    return out
+
+
+TEILANIM = {'wippen': wippen, 'schaukeln': schaukeln, 'glocke': glocke_schwingen, 'schaufel': schaufel_buddeln, 'zirkus': zirkus_fahnen,
             'uhr': uhr_zeiger}
 
 

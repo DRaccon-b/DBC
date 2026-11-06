@@ -129,6 +129,10 @@ Wenn eine Karte fertig scheint: noch einmal komplett auf **Pixelfehler** und **L
 - **Feuer und Licht animieren:** Alles mit Flamme, Glut oder Leuchten wird animiert; bei Feuer bewegen sich die Flammen
   selbst (züngeln, strecken sich), nicht nur die Helligkeit. Portale drehen ihren Wirbel. Nach dem GIF-Export prüfen,
   dass sich jedes animierte Objekt im GIF tatsächlich bewegt.
+- **Schaukeln statt Verbiegen:** Wipptiere, Schaukeln, Ballons u. Ä. kippen als Ganzes um ihren festen Drehpunkt
+  (Feder, Kette, Knoten) – das Sprite wird nie verbogen oder geschert.
+- **Leuchten nur bei echten Lichtquellen:** Lampen, Feuer, Kristalle leuchten; Uhren, Zifferblätter, helle Wände nie.
+  Bei Teil-Animationen (Uhrzeiger, Glocke …) nur genau dieses Teil verändern, nichts drumherum aufhellen.
 - **Geschützte Designs nicht kopieren:** Anspielungen (z. B. auf die Digiritter) über Farben, Anzahl und Anordnung –
   nie über originalgetreue Wappen, Logos oder Symbole.
 - **Ablauf:** Jede Änderung committen und pushen, Bilder/GIFs an den Nutzer schicken, auf Deutsch erklären.
