@@ -292,6 +292,19 @@ def main():
                 if name in ('fels/01', 'fels/10', 'fels_klein/02', 'fels_klein/10', 'fels/14') or name.startswith('kristall/'):
                     opt['anim'] = 'glimmen'
                 setze(name, tx, ty, opt)
+    # Kristalle auch oben links, links und unten (schmaler Felsrand): eigene Zonen (x0, y0, x1, y1, Anzahl)
+    for (x0, y0, x1, y1, anz) in ((2, 0, 30, 6, 5), (0, 84, 99, 89, 7), (0, 8, 6, 84, 4)):
+        n_ = 0
+        for _ in range(600):
+            if n_ >= anz:
+                break
+            tx, ty = rnd.randint(x0, x1), rnd.randint(y0, y1)
+            if not (0 <= tx < cols and 0 <= ty < rows) or hoehe[ty][tx] != 7:
+                continue
+            if any(ty + k < rows and hoehe[ty + k][tx] != 7 for k in range(1, 3)):
+                continue
+            if setze(rnd.choice(KRISTALLE), tx, ty, {'anim': 'glimmen', 'spiegeln': rnd.random() < 0.5}):
+                n_ += 1
     # jede ausgewaehlte Kristallsorte mindestens einmal
     vorhanden = {o['basis'] for o in objekte}
     for k_ in KRISTALLE:
