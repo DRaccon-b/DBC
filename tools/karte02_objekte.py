@@ -52,7 +52,7 @@ FEST = [
     ('reaktor/00', 75.5, 31, {'anim': 'reaktor'}),
     ('turm/03', 67.5, 30, {'anim': 'reaktor', 'blitze': True}), ('turm/03', 83.5, 30, {'anim': 'reaktor', 'blitze': True}),
     ('mittel/00', 67, 34, {'anim': 'reaktor'}), ('mittel/01', 84.5, 34, {'anim': 'reaktor'}),
-    ('mittel/00', 66.5, 50, {'anim': 'reaktor'}), ('mittel/01', 85, 50, {'anim': 'reaktor'}),
+    ('mittel/00', 67, 50, {'anim': 'reaktor'}), ('mittel/01', 84.5, 50, {'anim': 'reaktor'}),   # buendig unter den oberen
     # Platz links und Strasse
     ('hoch/02', 4.6, 34, {'anim': 'blinken'}), ('hoch/02', 4.6, 46, {'anim': 'blinken'}),
     ('ortho/09', 8, 34, {}), ('klein/22', 5.5, 33, {}),
