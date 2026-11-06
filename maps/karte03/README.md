@@ -22,6 +22,8 @@ python3 tools/karte03_v11.py && python3 tools/karte03_bauen.py && python3 tools/
 ```
 
 - Meer links breiter und terrassiert wie Karte 01 (Flachwasser, Schaumkante, zwei Tiefenstufen, Tiefsee, Felsen, Algen).
+- Sandwaende oben und rechts entfernt: das Meer laeuft oben und rechts mit Buchten bis zum Kartenrand aus; Arena mit
+  Strand, Teleporter rechts auf einer Landzunge; vordere Duene unten ueber die ganze Breite.
 - Oase oben rechts als Insel im Meer: Gras mit Pavillon und Teich, Sandstrand mit Palmen/Kakteen, Holzsteg nach Sueden.
 - Regel 1/1b Raster, Regel 6 Wege in Boegen (Anschluesse an Stegen, Teleportern und Arena-Tor bleiben exakt),
   Regel 7 Schatten nie auf Wasser, liegende Objekte mit flachem Schatten, keine Objekte im Wasser, Ueberlappungen entfernt.

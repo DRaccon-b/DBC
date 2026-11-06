@@ -189,7 +189,7 @@ def sandwand_vorne(L, cfg, rnd, rechts_x=None):
                 u = min(R, x - (xe - R))
                 w -= int(R - math.sqrt(max(0, R * R - u * u)))
         for y in range(k0 + w, L.H):
-            if x < x0 + 6 + int(2 * math.sin(y / 6.0)):
+            if x0 > 0 and x < x0 + 6 + int(2 * math.sin(y / 6.0)):
                 continue                                   # Uferseite: wellige Kante statt Kachelkante
             if rechts_x is not None and x >= rechts_x(y) + 3:
                 continue                                   # dort liegt schon die Seitendecke

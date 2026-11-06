@@ -34,9 +34,21 @@ def main():
             boden.append({'art': 'weg', 'r': [94, 14, 97, 17]})
         else:
             boden.append(z)
+    # Meer auch oben und rechts bis zum Kartenrand (Sandwaende oben/rechts entfallen), mit Buchten;
+    # die Arena behaelt einen Sandstrand, der Teleporter rechts eine Landzunge
+    kueste = [
+        {'art': 'meer', 'r': [6, 0, 111, 2]}, {'art': 'meer', 'e': [20, 2.5, 7, 2.6]},
+        {'art': 'meer', 'e': [76, 3, 6, 2.4]}, {'art': 'meer', 'e': [36, 2, 4, 2]},
+        {'art': 'meer', 'r': [107, 0, 111, 79]}, {'art': 'meer', 'e': [105.5, 32, 3, 6]},
+        {'art': 'meer', 'e': [106, 51, 2.6, 5]}, {'art': 'meer', 'e': [106, 75, 2.5, 4]},
+        {'art': 'sand', 'e': [52.5, 13.5, 15, 14.2]},              # Arena mit Strand davor
+        {'art': 'sand', 'e': [106.5, 65.5, 6.5, 4.6]},             # Landzunge zum Teleporter rechts
+    ]
+    boden = boden[:1] + kueste + boden[1:]
     neu['boden'] = boden
-    neu['sandwand']['oben']['x'] = [6, 111]
-    neu['sandwand']['unten']['x'] = [6, 111]
+    neu['sandwand'].pop('oben', None)
+    neu['sandwand'].pop('rechts', None)
+    neu['sandwand']['unten']['x'] = [0, 111]              # Vordergrund-Duene ueber die ganze Breite
     # Holzsteg von der Insel nach Sueden (x0, x1, y0, y1 in Kacheln)
     neu['inselsteg'] = [94, 97, 17, 25]
     neu['_v11'] = 'Regeln v1.1 (tools/karte03_v11.py), Original: v1.0/layout_v1.0.json'
