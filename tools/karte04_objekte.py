@@ -70,6 +70,9 @@ FEST = [
     # Schrott am Wegesrand (Zahnrad-Thema)
     ('baeume/09', 600, 900, {}), ('baeume/06', 1180, 560, {}), ('mittel/14', 1660, 600, {}), ('baeume/05', 1650, 920, {}),
     ('mittel/00', 272, 862, {}), ('mittel/00', 648, 1222, {}),
+    # Reaktoren/Generatoren (animiert: Lampen pulsieren, Rauch aus den Rohren)
+    ('baeume/04', 690, 980, {'anim': 'reaktor'}), ('rand/08', 1460, 660, {'anim': 'reaktor'}),
+    ('rand/08', 560, 470, {'anim': 'reaktor', 'spiegeln': True}), ('baeume/04', 1240, 1010, {'anim': 'reaktor', 'spiegeln': True}),
 ]
 STREU = {
     's': {'klein/00': 8, 'klein/27': 4, 'klein/02': 3, 'klein/08': 2, 'klein/07': 2, 'klein/03': 1,

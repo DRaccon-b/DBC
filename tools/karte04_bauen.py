@@ -647,6 +647,9 @@ FLAMME = [  # 7x9, f1 dunkelrot .. f4 hellgelb
 FEUERFARBE = {'1': (160, 40, 30), '2': (230, 90, 30), '3': (250, 170, 50), '4': (255, 236, 150)}
 
 
+ROHRE = {'baeume/04': [(19, 1, -1), (58, 5, 1)], 'rand/08': [(41, 1, 0), (50, 1, 0)]}   # Rohr x, y, Austrittsrichtung
+
+
 def animieren(img, objs, cache, frame):
     """Lagerfeuer (Flammen + Lichtschein), Monument-Juwel pulsiert, Kristalle glitzern, Laterne glimmt."""
     glut = Image.new('RGBA', img.size, (0, 0, 0, 0))
@@ -707,6 +710,44 @@ def animieren(img, objs, cache, frame):
                         px[x_ + dx, y_ + dy] = (255, 255, 255, 255)
                 cx, cy = o['x'] + xs.mean(), o['y'] + ys.mean()
                 gd.ellipse((cx - 9, cy - 7, cx + 9, cy + 7), fill=(160, 210, 255, int(22 + 22 * puls)))
+        elif anim == 'reaktor':
+            # Generator/Reaktor: Kontrolllampen und Anzeigen pulsieren (nur helle, gesaettigte Pixel), aus den
+            # Auspuffrohren steigen Rauchwoelkchen auf (nur ueber dem Objekt, nicht auf dem Gehaeuse)
+            a = np.array(sp).astype(np.int16)
+            r_, g_, b_ = a[..., 0], a[..., 1], a[..., 2]
+            mx, mn = np.maximum(np.maximum(r_, g_), b_), np.minimum(np.minimum(r_, g_), b_)
+            licht = (a[..., 3] > 0) & (mx > 150) & (mx - mn > 70) & ((g_ > r_ + 20) | (b_ > r_ + 20) | (r_ > g_ + 90))
+            ys_l, xs_l = np.nonzero(licht)
+            for y_, x_ in zip(ys_l, xs_l):
+                f = 0.55 + 0.9 * (0.5 + 0.5 * math.sin(2 * math.pi * frame / N_FRAMES * 2 + (x_ // 4) * 1.3 + i))
+                X, Y = o['x'] + x_, o['y'] + y_
+                rr, gg, bb, _ = px[X, Y]
+                px[X, Y] = (min(255, int(rr * f)), min(255, int(gg * f)), min(255, int(bb * f)), 255)
+            if len(xs_l):
+                # schwacher Lichtschein um die Lampengruppe
+                st = 0.5 + 0.5 * math.sin(2 * math.pi * frame / N_FRAMES * 2 + i)
+                fa = tuple(int(c) for c in a[ys_l, xs_l, :3].mean(axis=0))
+                cx_l, cy_l = o['x'] + xs_l.mean(), o['y'] + ys_l.mean()
+                rx, ry = (xs_l.max() - xs_l.min()) / 2 + 4, (ys_l.max() - ys_l.min()) / 2 + 3
+                gd.ellipse((cx_l - rx, cy_l - ry, cx_l + rx, cy_l + ry), fill=fa + (int(55 * st),))
+            # Rauch genau aus den Rohroeffnungen (Pixel im Original-Sprite, Variante hat 2 px Rand links)
+            basis = Image.open(os.path.join(OBJ, o['basis'] + '.png'))
+            off = 2 if sp.size == (basis.width + 4, basis.height + 3) else 0
+            for j, (rx_, ry_, seit) in enumerate(ROHRE.get(o['basis'], ())):
+                if o.get('spiegeln') or o['datei'].endswith('_m.png'):
+                    rx_, seit = basis.width - 1 - rx_, -seit
+                cx, cy0 = o['x'] + off + rx_, o['y'] + ry_
+                for z in range(4):
+                    t = ((frame + z * N_FRAMES / 4 + j * 2) % N_FRAMES) / N_FRAMES
+                    cy = cy0 - 1 - t * 30
+                    r = 1.5 + t * 4.5
+                    dx = seit * min(t * 4, 1) * 4 + math.sin(t * 6 + j * 2) * 1.5 + t * 7      # Austritt + Wind
+                    k_ = 1 - t
+                    x0, y0 = round(cx + dx), round(cy)
+                    gd.ellipse((x0 - r - 1, y0 - r - 1, x0 + r + 1, y0 + r + 1), fill=(95, 90, 88, int(170 * k_)))
+                    gd.ellipse((x0 - r, y0 - r, x0 + r, y0 + r), fill=(175, 170, 165, int(210 * k_)))
+                    if r > 2.5:
+                        gd.ellipse((x0 - r + 1, y0 - r + 1, x0, y0), fill=(220, 216, 210, int(200 * k_)))
         elif anim == 'leuchten':
             cx, cy = o['x'] + sp.width // 2, o['y'] + sp.height // 2
             for r, al in ((14, 30), (7, 50)):
