@@ -1041,16 +1041,16 @@
 "datei": "sauber/gitter-l.png",
 "basis": "gitter/l",
 "x": 789,
-"y": 331,
+"y": 315,
 "fuss": 69,
 "kachel": [
 50,
-24
+23
 ],
 "ebene": 1,
 "block": [
 49,
-20,
+19,
 3,
 5
 ]
@@ -1059,16 +1059,16 @@
 "datei": "sauber/gitter-r.png",
 "basis": "gitter/r",
 "x": 901,
-"y": 331,
+"y": 315,
 "fuss": 69,
 "kachel": [
 57,
-24
+23
 ],
 "ebene": 1,
 "block": [
 56,
-20,
+19,
 3,
 5
 ]
@@ -1077,16 +1077,16 @@
 "datei": "sauber/gitter-l.png",
 "basis": "gitter/l",
 "x": 549,
-"y": 459,
+"y": 443,
 "fuss": 69,
 "kachel": [
 35,
-32
+31
 ],
 "ebene": 1,
 "block": [
 34,
-28,
+27,
 3,
 5
 ]
@@ -1095,16 +1095,16 @@
 "datei": "sauber/gitter-r.png",
 "basis": "gitter/r",
 "x": 661,
-"y": 459,
+"y": 443,
 "fuss": 69,
 "kachel": [
 42,
-32
+31
 ],
 "ebene": 1,
 "block": [
 41,
-28,
+27,
 3,
 5
 ]
@@ -1113,16 +1113,16 @@
 "datei": "sauber/gitter-l.png",
 "basis": "gitter/l",
 "x": 1077,
-"y": 587,
+"y": 571,
 "fuss": 69,
 "kachel": [
 68,
-40
+39
 ],
 "ebene": 1,
 "block": [
 67,
-36,
+35,
 3,
 5
 ]
@@ -1131,16 +1131,16 @@
 "datei": "sauber/gitter-r.png",
 "basis": "gitter/r",
 "x": 1189,
-"y": 587,
+"y": 571,
 "fuss": 69,
 "kachel": [
 75,
-40
+39
 ],
 "ebene": 1,
 "block": [
 74,
-36,
+35,
 3,
 5
 ]
@@ -1149,16 +1149,16 @@
 "datei": "sauber/gitter-l.png",
 "basis": "gitter/l",
 "x": 517,
-"y": 715,
+"y": 699,
 "fuss": 69,
 "kachel": [
 33,
-48
+47
 ],
 "ebene": 1,
 "block": [
 32,
-44,
+43,
 3,
 5
 ]
@@ -1167,16 +1167,16 @@
 "datei": "sauber/gitter-r.png",
 "basis": "gitter/r",
 "x": 629,
-"y": 715,
+"y": 699,
 "fuss": 69,
 "kachel": [
 40,
-48
+47
 ],
 "ebene": 1,
 "block": [
 39,
-44,
+43,
 3,
 5
 ]
@@ -1185,16 +1185,16 @@
 "datei": "sauber/gitter-l.png",
 "basis": "gitter/l",
 "x": 581,
-"y": 923,
+"y": 907,
 "fuss": 69,
 "kachel": [
 37,
-61
+60
 ],
 "ebene": 1,
 "block": [
 36,
-57,
+56,
 3,
 5
 ]
@@ -1203,16 +1203,16 @@
 "datei": "sauber/gitter-r.png",
 "basis": "gitter/r",
 "x": 693,
-"y": 923,
+"y": 907,
 "fuss": 69,
 "kachel": [
 44,
-61
+60
 ],
 "ebene": 1,
 "block": [
 43,
-57,
+56,
 3,
 5
 ]
@@ -4463,6 +4463,25 @@
 ]
 },
 {
+"datei": "sauber/klein-12.png",
+"basis": "klein/12",
+"x": 581,
+"y": 987,
+"fuss": 21,
+"kachel": [
+36,
+62
+],
+"ebene": 0,
+"anim": "wehen",
+"block": [
+36,
+61,
+2,
+2
+]
+},
+{
 "datei": "sauber/klein-04.png",
 "basis": "klein/04",
 "x": 164,
@@ -6638,6 +6657,25 @@
 ]
 },
 {
+"datei": "sauber/klein-07.png",
+"basis": "klein/07",
+"x": 805,
+"y": 395,
+"fuss": 21,
+"kachel": [
+50,
+25
+],
+"ebene": 0,
+"liegend": true,
+"block": [
+50,
+24,
+2,
+2
+]
+},
+{
 "datei": "sauber/klein-01.png",
 "basis": "klein/01",
 "x": 822,
@@ -6875,25 +6913,6 @@
 "block": [
 56,
 29,
-2,
-2
-]
-},
-{
-"datei": "sauber/klein-07.png",
-"basis": "klein/07",
-"x": 677,
-"y": 539,
-"fuss": 21,
-"kachel": [
-42,
-34
-],
-"ebene": 0,
-"liegend": true,
-"block": [
-42,
-33,
 2,
 2
 ]
@@ -7252,6 +7271,25 @@
 "block": [
 35,
 9,
+2,
+2
+]
+},
+{
+"datei": "sauber/klein-49.png",
+"basis": "klein/49",
+"x": 1074,
+"y": 650,
+"fuss": 22,
+"kachel": [
+67,
+41
+],
+"ebene": 0,
+"liegend": true,
+"block": [
+67,
+40,
 2,
 2
 ]
@@ -7795,6 +7833,25 @@
 "block": [
 46,
 37,
+2,
+2
+]
+},
+{
+"datei": "sauber/klein-05.png",
+"basis": "klein/05",
+"x": 691,
+"y": 525,
+"fuss": 19,
+"kachel": [
+43,
+33
+],
+"ebene": 0,
+"liegend": true,
+"block": [
+43,
+32,
 2,
 2
 ]

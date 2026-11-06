@@ -227,7 +227,7 @@ def main():
         teil.save(os.path.join(OBJ, 'sauber/gitter-%s.png' % seite))
         alpha['sauber/gitter-%s.png' % seite] = np.array(teil.getchannel('A')) >= 128
     for (px0, px1, ye, f, e) in json.load(open(os.path.join(KARTE, 'treppen_px.json'))):
-        reihe = (ye + f + 2) // T + 2                             # zwei volle Reihen unter dem Treppenfuss
+        reihe = (ye + f + 2) // T + 1                             # Nutzerwunsch: eine Reihe unter dem Treppenfuss
         for seite in ('l', 'r'):
             datei = 'sauber/gitter-%s.png' % seite
             a_ = alpha[datei]
@@ -237,7 +237,7 @@ def main():
             x = bx * T + (wt * T - w_) // 2
             zu = int(np.nonzero(a_.any(axis=1))[0].max())
             y = (reihe + 1) * T - 1 - zu
-            if not bewerten(lvl, a_, x, y) or not frei_px(datei, x, y):
+            if not frei_px(datei, x, y):                          # Wandregel bewusst gelockert (Nutzerwunsch)
                 print('  Torfluegel passt nicht:', seite, (bx, reihe))
                 continue
             o = {'datei': datei, 'basis': 'gitter/' + seite, 'x': x, 'y': y, 'fuss': h_,
