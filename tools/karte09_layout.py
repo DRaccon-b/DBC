@@ -87,6 +87,7 @@ def main():
     plateau = glaetten(plateau)
     plateau[44:56, 78:] = False                    # Nutzer: graue Wand rechts unter dem roten Fels weg
     plateau[75:84, 58:76] = False                  # Nutzer: graue Wand unten weg
+    plateau[44:70, 0:14] = False                   # Nutzer: grauer Fels links hinter der Steinkrypta weg
     h[plateau] = 2
     k[plateau] = 'f'
     fels = aussen & (v == 'r')

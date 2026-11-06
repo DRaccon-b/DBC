@@ -2054,16 +2054,16 @@
 {
 "datei": "sauber/k8-krypta-00.png",
 "basis": "k8/krypta/00",
-"x": 69,
+"x": 53,
 "y": 860,
 "fuss": 116,
 "kachel": [
-6,
+5,
 60
 ],
 "ebene": 1,
 "block": [
-4,
+3,
 53,
 6,
 8
@@ -3446,19 +3446,20 @@
 ]
 },
 {
-"datei": "sauber/k8-klein-01.png",
-"basis": "k8/klein/01",
-"x": 1222,
-"y": 827,
-"fuss": 21,
+"datei": "sauber/k8-klein-44.png",
+"basis": "k8/klein/44",
+"x": 53,
+"y": 854,
+"fuss": 26,
 "kachel": [
-76,
-52
+3,
+54
 ],
-"ebene": 0,
+"ebene": 1,
+"anim": "kerzen",
 "block": [
-76,
-51,
+3,
+53,
 2,
 2
 ]
@@ -3573,6 +3574,25 @@
 "block": [
 66,
 64,
+2,
+2
+]
+},
+{
+"datei": "sauber/k8-klein-07.png",
+"basis": "k8/klein/07",
+"x": 69,
+"y": 827,
+"fuss": 21,
+"kachel": [
+4,
+52
+],
+"ebene": 0,
+"liegend": true,
+"block": [
+4,
+51,
 2,
 2
 ]
@@ -4882,6 +4902,25 @@
 ]
 },
 {
+"datei": "sauber/k8-klein-02.png",
+"basis": "k8/klein/02",
+"x": 148,
+"y": 953,
+"fuss": 23,
+"kachel": [
+9,
+60
+],
+"ebene": 0,
+"anim": "glimmen",
+"block": [
+9,
+59,
+2,
+2
+]
+},
+{
 "datei": "sauber/k8-klein-12.png",
 "basis": "k8/klein/12",
 "x": 821,
@@ -5677,25 +5716,6 @@
 ]
 },
 {
-"datei": "sauber/k8-klein-06.png",
-"basis": "k8/klein/06",
-"x": 163,
-"y": 951,
-"fuss": 25,
-"kachel": [
-10,
-60
-],
-"ebene": 1,
-"anim": "kerzen",
-"block": [
-10,
-59,
-1,
-2
-]
-},
-{
 "datei": "sauber/k8-klein-02.png",
 "basis": "k8/klein/02",
 "x": 1316,
@@ -5715,22 +5735,22 @@
 ]
 },
 {
-"datei": "sauber/k8-fels_klein-11.png",
-"basis": "k8/fels_klein/11",
-"x": 629,
-"y": 485,
-"fuss": 11,
+"datei": "sauber/k8-klein-05.png",
+"basis": "k8/klein/05",
+"x": 243,
+"y": 173,
+"fuss": 19,
 "kachel": [
-39,
-30
+15,
+11
 ],
 "ebene": 0,
 "liegend": true,
 "block": [
-39,
-30,
+15,
+10,
 2,
-1
+2
 ]
 },
 {
@@ -5788,63 +5808,6 @@
 20,
 2,
 1
-]
-},
-{
-"datei": "sauber/k8-fels_klein-11.png",
-"basis": "k8/fels_klein/11",
-"x": 773,
-"y": 485,
-"fuss": 11,
-"kachel": [
-48,
-30
-],
-"ebene": 0,
-"liegend": true,
-"block": [
-48,
-30,
-2,
-1
-]
-},
-{
-"datei": "sauber/k8-fels_klein-11.png",
-"basis": "k8/fels_klein/11",
-"x": 757,
-"y": 325,
-"fuss": 11,
-"kachel": [
-47,
-20
-],
-"ebene": 0,
-"liegend": true,
-"block": [
-47,
-20,
-2,
-1
-]
-},
-{
-"datei": "sauber/k8-klein-05.png",
-"basis": "k8/klein/05",
-"x": 339,
-"y": 381,
-"fuss": 19,
-"kachel": [
-21,
-24
-],
-"ebene": 0,
-"liegend": true,
-"block": [
-21,
-23,
-2,
-2
 ]
 }
 ]
