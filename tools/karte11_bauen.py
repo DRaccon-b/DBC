@@ -226,7 +226,7 @@ def bauen(frame=None, speichern=True):
     fels = em[2] & ~v
     a[fels] = (textur('r', cols, rows)[fels] * np.array([0.56, 0.58, 0.66])).astype(np.uint8)   # dunkler Fels
     # --- Wasser
-    wasser_roh = zell_maske(cls, 'uh~', cols, rows)
+    wasser_roh = zell_maske(cls, 'uh~fz', cols, rows)        # um das Achteck herum ist Tiefsee
     wasser = weich(wasser_roh, 6, 0.25, 41, 0.5)
     flach = weich(zell_maske(cls, 'uh', cols, rows), 6, 0.25, 43, 0.5) & wasser
     seetang = weich(zell_maske(cls, 'h', cols, rows), 7, 0.35, 45, 0.5) & flach
