@@ -26,6 +26,10 @@ def _abdunkeln(px, W, H, x, y, f=0.62):
 
 
 # ---------------------------------------------------------------- Treppe
+MOOS = [(0x5f, 0xbb, 0x58, 255), (0x93, 0xdb, 0x70, 255)]     # Moos auf den Abschlusssteinen (je Karte umstellbar)
+MOOS_STUFE = [(0x45, 0xa0, 0x52, 255), (0x5f, 0xbb, 0x58, 255)]   # Moos an den Stufenenden
+
+
 def zeichne_treppe(img, x0, x1, y_top, y_bot, seed=3):
     """Steintreppe in der Wandoeffnung x0..x1, von der Wiesenkante y_top bis zum Fuss y_bot."""
     rnd = random.Random(seed)
@@ -48,7 +52,7 @@ def zeichne_treppe(img, x0, x1, y_top, y_bot, seed=3):
             _setz(px, W, H, x, y_top - 4, S[5])
             _setz(px, W, H, x, y_top - 3, S[4])
         for k in range(3):                           # kleines Moos/Gras auf dem Stein
-            _setz(px, W, H, xs + 1 + k, y_top - 6, (0x5f, 0xbb, 0x58, 255) if k != 1 else (0x93, 0xdb, 0x70, 255))
+            _setz(px, W, H, xs + 1 + k, y_top - 6, MOOS[0] if k != 1 else MOOS[1])
     # Stufen: Trittflaeche hell (oben), Setzstufe dunkel (vorne), je 6 px
     innen0, innen1 = x0 + wange, x1 - wange
     stufe = 6
@@ -73,8 +77,8 @@ def zeichne_treppe(img, x0, x1, y_top, y_bot, seed=3):
         # etwas Moos in den Ecken
         if rnd.random() < 0.6:
             mx = innen0 + (0 if rnd.random() < 0.5 else innen1 - innen0 - 2)
-            _setz(px, W, H, mx, y + 3, (0x45, 0xa0, 0x52, 255))
-            _setz(px, W, H, mx + 1, y + 2, (0x5f, 0xbb, 0x58, 255))
+            _setz(px, W, H, mx, y + 3, MOOS_STUFE[0])
+            _setz(px, W, H, mx + 1, y + 2, MOOS_STUFE[1])
         y += stufe; n += 1
     # Licht von oben links: die linke Wange wirft einen schmalen Schatten auf die Stufen
     for y in range(y_top - 2, y_bot + 1):

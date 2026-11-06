@@ -95,6 +95,8 @@ def main(karte):
         teil = teil[:ber.shape[0], :ber.shape[1]]
         konflikt = [j for j in set(np.unique(ber[teil & (ber >= 0)]).tolist())
                     if not (b.startswith(BAUM) and (objs[j].get('basis') or '').startswith(BAUM))]
+        if o.get('begleiter'):                    # gewollte Ueberdeckung vor dem Sockel (Regel 5 / Einbettung)
+            continue
         if konflikt and (o.get('ebene', 1) == 0 or b.startswith(('klein/', 'mittel/'))) and not b.startswith(BAUM):
             weg.add(i)
             continue

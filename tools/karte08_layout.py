@@ -84,6 +84,7 @@ def main():
     fels[86:, :] = True
     fels[86:, 9:13] = False
     fels[52:, 96:] = True
+    fels[77:86, 94:] = False                                       # Weg rechts unten bis zum Teleporter am Rand (Felsfront endet ueber dem Weg)
     berg = h >= 2
     fels &= ~berg | (h == 7)
     h[fels] = 7
@@ -118,9 +119,9 @@ def main():
         k[mm & ~m & ((k == 'g') if art in 'whe' else (k == 'f'))] = art
     # Wege ergaenzen: Treppenanschluesse, Weg rechts unten zum Teleporter, Ausgang unten links
     k[59:64, 39:43] = 'w'
-    k[82:86, 74:98] = 'w'
+    k[82:86, 74:100] = 'w'
     k[80:90, 9:13] = 'w'
-    k[(h == 1) & (xx >= 96)] = 'r'
+    k[(h == 1) & (xx >= 96) & ~((yy >= 77) & (yy <= 85))] = 'r'
     lay = {
         'groesse': [C, R], 'klassen': [''.join(r) for r in k], 'hoehe': [''.join(str(c) for c in r) for r in h],
         # Treppen (x0, x1, Ebene oben): abwechselnd links / rechts

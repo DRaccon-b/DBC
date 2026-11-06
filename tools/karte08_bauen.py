@@ -281,6 +281,9 @@ def bauen(frame=None, speichern=True):
     wegtex = textur(cls, 'a', cols, rows)
     alt_S = bauwerke.S
     bauwerke.S = [H(c) + (255,) for c in k4.FELS['terrasse']]
+    alt_moos, alt_moos_st = bauwerke.MOOS, bauwerke.MOOS_STUFE
+    bauwerke.MOOS = [(0x3c, 0x44, 0x2e, 255), (0x52, 0x5c, 0x3e, 255)]   # gedecktes, trockenes Moos
+    bauwerke.MOOS_STUFE = [(0x34, 0x3c, 0x28, 255), (0x46, 0x50, 0x36, 255)]
     for (px0, px1, ye, f, e) in treppen_info:
         for y in range(ye - 12, ye + 1):                         # Wegstueck oben auf der Terrasse
             for x in range(px0 + 4, px1 - 4):
@@ -291,6 +294,7 @@ def bauen(frame=None, speichern=True):
             for x in range(px0 - 6, px1 + 6):
                 lvl[min(Hp - 1, y), x] = 9
     bauwerke.S = alt_S
+    bauwerke.MOOS, bauwerke.MOOS_STUFE = alt_moos, alt_moos_st
     for (x0, y0, x1, y1) in lay.get('bruecken', []):
         vorher = np.array(img)
         bauwerke.zeichne_bruecke(img, x0 * T - 6, (x1 + 1) * T + 6, y0 * T + 1, (y1 + 1) * T - 1,

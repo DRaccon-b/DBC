@@ -86,7 +86,7 @@ STREU_FELS = {'mittel/08': 2, 'fels/00': 3, 'fels/01': 2, 'fels/02': 3, 'fels/03
 LIEGEND = {'fels/03', 'fels/04', 'fels/11', 'fels_klein/00', 'fels_klein/03', 'fels_klein/05', 'fels_klein/06',
            'fels_klein/09', 'fels_klein/11', 'fels_klein/32', 'fels_klein/60', 'klein/00', 'klein/07', 'klein/10', 'klein/14', 'klein/15', 'klein/29', 'klein/49', 'klein/61',
            'klein/26', 'klein/05'}
-FLACH = LIEGEND | {'fels_klein/01', 'fels_klein/02', 'fels_klein/04', 'fels_klein/08', 'fels_klein/10',
+FLACH = LIEGEND | {'fels_klein/07', 'fels_klein/01', 'fels_klein/02', 'fels_klein/04', 'fels_klein/08', 'fels_klein/10',
                    'fels_klein/36', 'klein/02', 'klein/03', 'klein/04', 'klein/09', 'klein/11', 'klein/12', 'klein/27', 'klein/47',
                    'klein/48', 'klein/59', 'klein/36', 'klein/01', 'klein/35'}
 AUF_WEG = {'klein/37', 'klein/38', 'klein/32', 'klein/62', 'mittel/05', 'mittel/15', 'mittel/06', 'mittel/07', 'mittel/13', 'schloss/00', 'graeber/09'}
@@ -143,6 +143,11 @@ def main():
         for y in range(tp['y'] - 2, tp['y'] + tp['h'] + 1):
             for x in range(tp['x'] - 2, tp['x'] + tp['b'] + 1):
                 gesperrt.add((x, y))
+    # Treppenfuss und -kopf frei halten (Weg auf und ab der Treppe), aus den gezeichneten Treppen
+    for (px0, px1, ye, f, e) in json.load(open(os.path.join(KARTE, 'treppen_px.json'))):
+        for ty_ in range((ye - 20) // T, (ye + f + 2) // T + 7):      # auch Kronen duerfen den Fuss nicht verdecken
+            for tx_ in range(px0 // T - 1, px1 // T + 2):
+                gesperrt.add((tx_, ty_))
     cache, alpha = {}, {}
     objekte, belegt = [], set()
     pixel = np.zeros(lvl.shape, bool)                     # deckende Pixel aller hohen Objekte (+2 px Abstand)
@@ -275,6 +280,43 @@ def main():
         if not nachbarn:
             setze(rnd.choice(['mittel/14', 'klein/48']), kx + rnd.choice((-1, 1)), ky, {'anim': 'wehen'}, suchen=False)
             setze(rnd.choice(['klein/04', 'klein/12', 'klein/05', 'klein/02']), kx, ky + 1, {})
+    # 3b) Einbettung: vor die unteren Ecken groesserer Objekte je ein kleines 1-Kachel-Objekt (Busch, Gras,
+    #     Pilz, Unkraut), das den Sockel leicht ueberdeckt - passend zum Boden der Ebene
+    BEGLEITER = {'g': ['klein/04', 'klein/12', 'klein/48', 'klein/47', 'klein/02', 'klein/03', 'klein/27', 'klein/09'],
+                 'h': ['klein/04', 'klein/48', 'klein/47', 'klein/03', 'klein/27'],
+                 'e': ['klein/04', 'klein/12', 'klein/47', 'fels_klein/07'],
+                 'f': ['klein/04', 'klein/12', 'fels_klein/07', 'klein/48'],
+                 'a': ['klein/04', 'klein/12', 'fels_klein/07'],
+                 'q': ['fels_klein/07', 'klein/12'], 'k': ['fels_klein/07'],
+                 'r': ['fels_klein/07', 'klein/48', 'fels_klein/01', 'fels_klein/04']}
+    gross_ = [o for o in objekte if o['ebene'] == 1 and not o['basis'].startswith(('mittel/05', 'mittel/06', 'mittel/15',
+                                                                                 'gitter/', 'schloss/'))]
+    for o in gross_:
+        a_ = alpha[o['datei']]
+        xs_ = np.nonzero(a_.any(axis=0))[0]
+        wt = -(-(xs_.max() - xs_.min() + 1) // T)
+        if wt < 2 and rnd.random() < 0.5:
+            continue
+        kx, ky = o['kachel']
+        links = (o['x'] + int(xs_.min())) // T
+        rechts = (o['x'] + int(xs_.max())) // T
+        ecken = [links, rechts] if wt >= 3 else [rnd.choice((links, rechts))]
+        for ex in ecken:
+            if rnd.random() < 0.3:
+                continue
+            ty_ = ky + 1
+            if not (0 <= ty_ < rows and 0 <= ex < cols):
+                continue
+            namen_ = BEGLEITER.get(cls[ty_][ex])
+            if not namen_ or cls[ty_][ex] in 'w':
+                continue
+            n_ = rnd.choice(namen_)
+            opt_ = {'begleiter': True, 'spiegeln': rnd.random() < 0.5}
+            if n_ in WIND or n_ in ('fels_klein/07', 'klein/27'):
+                opt_['anim'] = 'wehen'
+            elif n_ == 'klein/02':
+                opt_['anim'] = 'glimmen'
+            setze(n_, ex, ty_, opt_)
     # 4) Felsbrocken und Geroell auf dem schwarzen Fels (nicht an der Felskante)
     namen, gew = list(STREU_FELS), list(STREU_FELS.values())
     for ty in range(1, rows - 3):
