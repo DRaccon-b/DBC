@@ -115,4 +115,20 @@ Wenn eine Karte fertig scheint: noch einmal komplett auf **Pixelfehler** und **L
   gelegt und nur etwa auf die Hälfte gestaucht, sodass Arme, Kronen und Pfosten erkennbar bleiben.
 - **Hinter Gebäuden:** Objekte, die bewusst hinter einem Gebäude stehen (z. B. Palmen), werden ausdrücklich als
   „dahinter“ markiert und immer vor dem Gebäude gezeichnet – auch wenn sie nach dem Einrasten auf derselben Reihe stehen.
+- **Offene Durchgänge:** Tore, Bögen und Portale ohne Tür haben einen transparenten Durchgang – Boden und Teppich laufen
+  sichtbar hindurch, nie eine dunkle Fläche.
+- **Achsen in Räumen:** Bauwerke auf einer Raum- oder Teppichachse (Tore, Portal, Orgel, Altar, Teppich-Medaillon) stehen
+  exakt auf der Mitte des Teppichs bzw. Rahmens. Das geht vor Regel 1b; Paare werden an derselben Achse gespiegelt.
+- **Fester Rhythmus:** Wiederkehrende Bauteile (Türme, Banner, Wandpfeiler) stehen in gleichen Abständen, symmetrisch zum
+  Tor; Banner mittig zwischen den Türmen, Pfeiler im selben Raster.
+- **Wandobjekte hängen frei:** Fenster, Banner, Bilder und Fackeln in Originalgröße auf der Wandfläche – mit Abstand zur
+  Mauerkrone, Unterkante über der Leiste, ohne Bodenwall und ohne Bodenschatten.
+- **Räume mit Funktion:** Innenräume bekommen eine erkennbare Aufgabe (Bibliothek, Thron, Speisesaal, Ritualsaal) statt
+  gleichförmiger Säulenreihen; Kleinkram liegt nie auf oder direkt neben Teppichen.
+- **Kein Sprite mit eingebautem Hintergrund** (Mauerstück, Kacheln) frei auf den Boden stellen.
+- **Feuer und Licht animieren:** Alles mit Flamme, Glut oder Leuchten wird animiert; bei Feuer bewegen sich die Flammen
+  selbst (züngeln, strecken sich), nicht nur die Helligkeit. Portale drehen ihren Wirbel. Nach dem GIF-Export prüfen,
+  dass sich jedes animierte Objekt im GIF tatsächlich bewegt.
+- **Geschützte Designs nicht kopieren:** Anspielungen (z. B. auf die Digiritter) über Farben, Anzahl und Anordnung –
+  nie über originalgetreue Wappen, Logos oder Symbole.
 - **Ablauf:** Jede Änderung committen und pushen, Bilder/GIFs an den Nutzer schicken, auf Deutsch erklären.
