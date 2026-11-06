@@ -393,6 +393,60 @@ def objekte_export(karte, mod, out):
     print('  Objekte: %d Varianten, davon %d animiert; Tileset %dx%d Kacheln' % (len(eintraege), len(animierte), breite, gesamt_h))
 
 
+def ueberlagerung_export(karte, mod, out):
+    """Karte 10: Ebene UEBER den Objekten (Telegrafenleitungen, Mauerkrone vor den Turmfuessen) als ganzes Bild,
+    als Kachel-Tileset (jede Kachel einmal) mit Raster und als zweite Ebene 'Ueberlagerung' in der Tiled-Karte."""
+    import re
+    lay = json.load(open(os.path.join(mod.KARTE, 'layout.json')))
+    leer = os.path.join(out, '_keine_objekte')
+    os.makedirs(leer, exist_ok=True)
+    grund = boden_bild(mod, None, leer)
+    shutil.rmtree(leer)
+    objs = json.load(open(os.path.join(mod.OBJ, 'platzierung.json')))
+    cache = {o['datei']: Image.open(os.path.join(mod.OBJ, o['datei'])).convert('RGBA') for o in objs}
+    ov = np.array(mod.ueberlagerung(objs, cache, mod.mauer_maske(lay), grund))
+    Image.fromarray(ov).save(os.path.join(out, 'ueberlagerung_ebene.png'))
+    Hh, W = ov.shape[:2]
+    rows, cols = Hh // T, W // T
+    B = BREITE_BODEN
+    kacheln, index, raster = [], {}, []
+    for y in range(rows):
+        reihe = []
+        for x in range(cols):
+            k = ov[y * T:(y + 1) * T, x * T:(x + 1) * T]
+            if not k[..., 3].any():
+                reihe.append(-1)
+                continue
+            key = k.tobytes()
+            if key not in index:
+                index[key] = len(kacheln)
+                kacheln.append(k)
+            reihe.append(index[key])
+        raster.append(reihe)
+    n_r = max(1, (len(kacheln) + B - 1) // B)
+    ts = np.zeros((n_r * T, B * T, 4), np.uint8)
+    for i, k in enumerate(kacheln):
+        r, c = divmod(i, B)
+        ts[r * T:(r + 1) * T, c * T:(c + 1) * T] = k
+    Image.fromarray(ts).save(os.path.join(out, 'ueberlagerung_tileset.png'))
+    json.dump({'kachel': T, 'breite_kacheln': B, 'kacheln': len(kacheln), 'leer': -1, 'karte_spalten': cols,
+               'karte_zeilen': rows, 'raster': raster}, open(os.path.join(out, 'ueberlagerung_raster.json'), 'w'))
+    tmx_p = os.path.join(out, '%s_boden.tmx' % karte)
+    tmx = open(tmx_p).read()
+    gids = [(int(a), int(b)) for a, b in re.findall(r'firstgid="(\d+)"[^>]*tilecount="(\d+)"', tmx)]
+    first = max(a + b for a, b in gids)
+    daten = '\n'.join(','.join(str(v + first) if v >= 0 else '0' for v in reihe) for reihe in raster)
+    zusatz = (' <tileset firstgid="%d" name="ueberlagerung" tilewidth="16" tileheight="16" tilecount="%d" columns="%d">\n'
+              '  <image source="ueberlagerung_tileset.png" width="%d" height="%d"/>\n </tileset>\n'
+              ' <layer id="2" name="Ueberlagerung (ueber den Objekten)" width="%d" height="%d">\n'
+              '  <data encoding="csv">\n%s\n  </data>\n </layer>\n') % (first, n_r * B, B, B * T, n_r * T, cols, rows, daten)
+    pos = tmx.index(' <layer id="1"')
+    tmx = tmx[:pos] + zusatz.split(' <layer')[0] + tmx[pos:]
+    tmx = tmx.replace('</map>', ' <layer' + zusatz.split(' <layer', 1)[1] + '</map>')
+    open(tmx_p, 'w').write(tmx)
+    print('  Ueberlagerung: %d Kacheln (Telegrafenleitungen, Mauer vor den Turmfuessen)' % len(kacheln))
+
+
 README_TILESET = """
 ## Tilesets (Ordner tileset/)
 
@@ -406,10 +460,13 @@ Aufbau wie bei Karte 06, alles am 16x16-Raster:
 - `objekte_tileset_animiert.png` - nur die animierten Objekte am exakt selben Platz, 16 Bilder untereinander;
   Einzelbilder in `animiert_frames/`.
 - `objekte_tileset.json` - je Objekt: Name, Animation, Platz im Tileset, Objektblock und alle Fundstellen auf der Karte.
-- Vorschauen: `vorschau_boden.png`, `vorschau_raster.png`, `vorschau_animiert.gif`, `vorschau_boden_animiert.gif`.
+- Vorschauen: `vorschau_boden.png`, `vorschau_raster.png`, `vorschau_animiert.gif`, `vorschau_boden_animiert.gif`.%s
 
 Bilddauer 170 ms, 16 Animationsbilder.%s
 """
+README_UEBER = """
+- `ueberlagerung_ebene.png`, `ueberlagerung_tileset.png`, `ueberlagerung_raster.json` - Ebene UEBER den Objekten
+  (Telegrafenleitungen, Mauerkrone vor den Turmfuessen); Raster-Index -1 = leer. In der Tiled-Karte als 2. Ebene."""
 README_SCHNEE = """
 - `wetter_schneefall.png` - der Schneefall als eigene Wetter-Ebene (ueber Boden und Objekten): 1408x64 px,
   wiederholt sich nahtlos ueber die ganze Karte; 16 Bilder untereinander, einzeln in `wetter_schneefall_frames/`."""
@@ -429,7 +486,8 @@ def zip_neu(karte, name, version, out):
                     inhalt[n] = z.read(n)
     readme = inhalt.get('README.md', b'').decode('utf-8')
     if '## Tilesets' not in readme:
-        readme += README_TILESET % (karte, README_SCHNEE if karte == 'karte05' else '')
+        readme += README_TILESET % (karte, README_UEBER if karte == 'karte10' else '',
+                                    README_SCHNEE if karte == 'karte05' else '')
     inhalt['README.md'] = readme.encode('utf-8')
     tmp = ziel + '.tmp'
     with zipfile.ZipFile(tmp, 'w', zipfile.ZIP_DEFLATED) as z:
@@ -459,6 +517,8 @@ def main():
     print(karte, name)
     objekte_export(karte, mod, out)
     boden_export(karte, mod, out)
+    if karte == 'karte10':
+        ueberlagerung_export(karte, mod, out)
     if '--kein-zip' not in sys.argv:
         zip_neu(karte, name, version, out)
 

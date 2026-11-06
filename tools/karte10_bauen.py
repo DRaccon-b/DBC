@@ -306,6 +306,32 @@ def leitungen(img, objs, cache):
                     px[x, y] = (42, 42, 58, 255)
 
 
+def mauer_maske(lay):
+    cols, rows = lay['groesse']
+    return zell_maske([''.join('1' if c == '3' else '0' for c in r) for r in lay['hoehe']], '1', cols, rows) > 0
+
+
+def ueberlagerung(objs, cache, mauer, grund):
+    """Ebene ueber den Objekten (RGBA, sonst transparent): (1) die Mauerkrone der anschliessenden Mauer ueber dem
+    untersten Stueck der Tuerme ('mauer_davor'), (2) die Telegrafenleitungen zwischen den Masten."""
+    Hh, W = mauer.shape
+    ov = np.zeros((Hh, W, 4), np.uint8)
+    for o in objs:
+        n_ = o.get('mauer_davor')
+        if not n_:
+            continue
+        sp_a = np.array(cache[o['datei']].getchannel('A')) > 0
+        unten_ = o['y'] + int(np.nonzero(sp_a.any(axis=1))[0].max())
+        x0_, x1_ = max(0, o['x']), min(W, o['x'] + sp_a.shape[1])
+        y0_ = max(0, unten_ - n_ + 1)
+        m_ = mauer[y0_:unten_ + 1, x0_:x1_]
+        ov[y0_:unten_ + 1, x0_:x1_][m_, :3] = grund[y0_:unten_ + 1, x0_:x1_][m_][:, :3]
+        ov[y0_:unten_ + 1, x0_:x1_][m_, 3] = 255
+    bild = Image.fromarray(ov.copy(), 'RGBA').copy()
+    leitungen(bild, objs, cache)
+    return bild
+
+
 def bauen(frame=None, speichern=True):
     lay = json.load(open(os.path.join(KARTE, 'layout.json')))
     cols, rows = lay['groesse']
@@ -398,22 +424,9 @@ def bauen(frame=None, speichern=True):
         k4.objekte_zeichnen(img, objs, cache, np.zeros((Hp, Wp), bool), frame)
         k4.animieren(img, objs, cache, frame or 0, ruhig=frame is None)
         k8.verdeckung(img, [o for o in objs if not o.get('an_wand')], cache, lvl, vor_objekten)
-        # Mauer ragt in den Turm: die Mauerkrone der anschliessenden Mauer liegt ueber dem untersten Stueck des Turms
-        if any(o.get('mauer_davor') for o in objs):
-            arr = np.array(img)
-            for o in objs:
-                n_ = o.get('mauer_davor')
-                if not n_:
-                    continue
-                sp_a = np.array(cache[o['datei']].getchannel('A')) > 0
-                unten_ = o['y'] + int(np.nonzero(sp_a.any(axis=1))[0].max())
-                x0_, x1_ = max(0, o['x']), min(Wp, o['x'] + sp_a.shape[1])
-                y0_ = max(0, unten_ - n_ + 1)
-                m_ = mauer[y0_:unten_ + 1, x0_:x1_]
-                arr[y0_:unten_ + 1, x0_:x1_][m_] = grund_mauer[y0_:unten_ + 1, x0_:x1_][m_]
-            img = Image.fromarray(arr.copy())
+        # Ueberlagerung ueber den Objekten: Mauerkrone, die in den Turmfuss ragt, und Telegrafenleitungen
         img = img.copy()
-        leitungen(img, objs, cache)
+        img.alpha_composite(ueberlagerung(objs, cache, mauer, grund_mauer))
     if speichern and frame is None:
         img.save(os.path.join(KARTE, 'terrain.png'))
     print('Karte 10 %dx%d gebaut' % (cols, rows))
