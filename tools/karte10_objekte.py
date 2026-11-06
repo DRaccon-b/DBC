@@ -24,7 +24,7 @@ ACHSE_BURG = 76 * T              # Burg, Torweg, Hofrahmen
 ACHSE_BAHNHOF = 76 * T           # Bahnsteig x 69-82
 ACHSE_BRUNNEN = 10 * T           # Brunnenplatz (Mitte x 10.0)
 ACHSE_UHR = 54 * T               # Uhrenplatz (Mitte x 54.0)
-WAND_FUSS = 34 * T + 15          # Unterkante der Burg-Wandflaeche (Reihen 32-34)
+WAND_FUSS = 36 * T + 15          # Unterkante der Wandflaeche der Burg-Nordmauer (Reihen 34-36)
 
 LAMPE, BANK, BRIEF, HYDRANT, ZAUN = 'spielplatz/04', 'spielplatz/03', 'spielplatz/05', 'spielplatz/06', 'spielplatz/07'
 SOLDAT = 'spielplatz/09'
@@ -53,15 +53,16 @@ FEST = [
     (LAMPE, ACHSE_BRUNNEN - 96, 33, {'symm': 'bl1', 'anim': 'lampe'}), (LAMPE, ACHSE_BRUNNEN + 96, 33, {'symm': 'bl1', 'anim': 'lampe'}),
     (BANK, ACHSE_BRUNNEN - 48, 43, {'symm': 'bb'}), (BANK, ACHSE_BRUNNEN + 48, 43, {'symm': 'bb'}),
     # Burghof: Soldaten am Torweg, Brunnen im Rahmen, Blumenbeete in den Rahmenecken (symmetrisch)
-    (SOLDAT, ACHSE_BURG - 56, 38, {'symm': 's1'}), (SOLDAT, ACHSE_BURG + 56, 38, {'symm': 's1'}),
-    (SOLDAT, ACHSE_BURG - 56, 43, {'symm': 's2'}), (SOLDAT, ACHSE_BURG + 56, 43, {'symm': 's2'}),
+    (SOLDAT, ACHSE_BURG - 56, 40, {'symm': 's1'}), (SOLDAT, ACHSE_BURG + 56, 40, {'symm': 's1'}),
+    (SOLDAT, ACHSE_BURG - 56, 45, {'symm': 's2'}), (SOLDAT, ACHSE_BURG + 56, 45, {'symm': 's2'}),
     ('baeume/07', ACHSE_BURG, 53, {'achse': ACHSE_BURG, 'anim': 'brunnen'}),
     ('baeume/15', ACHSE_BURG - 72, 50, {'symm': 'f1'}), ('baeume/15', ACHSE_BURG + 72, 50, {'symm': 'f1'}),
     ('spielplatz/15', ACHSE_BURG - 72, 56, {'symm': 'f2'}), ('spielplatz/15', ACHSE_BURG + 72, 56, {'symm': 'f2'}),
-    # Burghof unten: Spielzeugecke (Bausteine, Trommel, Teddy, Roboter, Karussell)
-    ('gross2/00', 65 * T + 8, 68, {}), ('spielplatz/10', 63 * T, 70, {}), ('spielplatz/11', 68 * T + 8, 70, {}),
-    ('spielplatz/12', 72 * T, 70, {}), ('spielplatz/13', 80 * T, 69, {}), ('spielplatz/10', 83 * T, 62, {'spiegeln': True}),
-    ('klein/32', 77 * T, 64, {}), ('klein/55', 82 * T + 8, 70, {}), ('klein/60', 64 * T, 41, {}), ('klein/03', 84 * T, 40, {}),
+    # Burghof unten: Kapelle links und Stall rechts an der Suedmauer, dazwischen die Spielzeugecke
+    ('schloss2/01', 67 * T, 67, {}), ('schloss2/03', 84 * T, 67, {}),
+    ('spielplatz/12', 73 * T, 66, {}), ('spielplatz/11', 76 * T + 8, 67, {}), ('spielplatz/10', 79 * T + 8, 66, {}),
+    ('spielplatz/13', 66 * T, 60, {}), ('klein/32', 85 * T, 60, {}),
+    ('klein/55', 72 * T, 61, {}), ('klein/60', 66 * T, 41, {}), ('klein/03', 85 * T + 8, 41, {}),
     # Spielplatz
     ('spielplatz/00', 27 * T, 49, {}), ('spielplatz/01', 35 * T, 48, {}), ('spielplatz/02', 38 * T, 54, {}),
     ('gross2/01', 35 * T, 69, {}), ('baeume/14', 21 * T, 57, {}), ('klein/26', 27 * T, 66, {}),
@@ -86,7 +87,8 @@ FEST = [
     # Neu (PixelLab k10_banner, k10_klein2, k10_baeume2)
     ('baeume2/12', 52 * T, 67, {'anim': 'zirkus'}), ('baeume2/13', 21 * T, 66, {'achse': 21 * T}), ('baeume2/08', 23 * T + 8, 52, {'anim': 'schaukeln', 'amp': 7, 'fest': 0.32}),
     ('klein2/63', 33 * T, 52, {}), ('klein2/61', 27 * T, 54, {'anim': 'schaukeln', 'amp': 6, 'fest': 0.12}),
-    ('banner/12', 62 * T + 4, 23, {}), ('banner/05', 87 * T + 8, 21, {'anim': 'signal'}), ('banner/05', 20 * T + 8, 6, {'anim': 'signal'}),
+    ('banner/12', 62 * T + 4, 23, {}), ('banner/07', 70 * T, 28, {}), ('banner/09', 85 * T, 27, {}),
+    ('banner/14', 66 * T, 28, {}), ('banner/05', 87 * T + 8, 21, {'anim': 'signal'}), ('banner/05', 20 * T + 8, 6, {'anim': 'signal'}),
     ('banner/05', 46 * T + 8, 6, {'anim': 'signal'}),
     ('banner/13', 32 * T + 8, 23, {'anim': 'ampel'}), ('banner/13', 46 * T + 8, 23, {'anim': 'ampel'}),
     ('banner/13', 43 * T + 8, 34, {'anim': 'ampel'}),
@@ -238,20 +240,7 @@ def main():
             belegen(datei, x, y)
         return o
 
-    # 1) Burg: das Hauptschloss (PixelLab k10_schloss) ist der Torbau in der Mauer, genau auf der Achse; dahinter
-    #    links und rechts je eine Burghalle (gespiegelt, exakt symmetrisch zur Achse) auf dem inneren Burghof.
-    #    Die Ecktuerme sind aus der ersten Burgfront ausgeschnitten (gleicher Stil), Abstand gleich.
-    for (name, X, spieg) in (('schloss2/00', 1084, False), ('schloss2/00', None, True)):
-        datei, h, zu, mitte = sprite(name, spieg)
-        w_ = alpha[datei].shape[1]
-        if X is None:
-            x_ = 2 * ACHSE_BURG - links_halle - w_
-        else:
-            x_ = int(round(X - mitte)); links_halle = x_
-        objekte.append({'datei': datei, 'basis': name, 'x': int(x_), 'y': 29 * T + 15 - zu, 'fuss': h,
-                        'kachel': [int((x_ + w_ // 2) // T), 29], 'ebene': 1, 'vorrang': True, 'fest_pos': True,
-                        'hinten': True, **({'spiegeln': True} if spieg else {})})
-        belegen(datei, int(x_), 29 * T + 15 - zu)
+    # 1) Burg: das Hauptschloss (PixelLab k10_schloss) ist der Torbau in der Nordmauer, genau auf der Achse.
     datei, h, zu, mitte = sprite('schloss/00')
     objekte.append({'datei': datei, 'basis': 'schloss/00', 'x': int(round(ACHSE_BURG - mitte)), 'y': WAND_FUSS - zu,
                     'fuss': h, 'kachel': [76, 34], 'ebene': 1, 'an_wand': True, 'kein_schatten': True,
@@ -261,9 +250,10 @@ def main():
     # Burgfront (spiegelgleich zur Achse), auf der Ostmauer in gleichen Abstaenden, an den Ecken der Suedmauer
     td, th, tzu, tm = sprite('schloss2/02')
     tw = alpha[td].shape[1]
-    tuerme = [(1016, WAND_FUSS, True), (2 * ACHSE_BURG - 1016, WAND_FUSS, True),
-              (88 * T, 46 * T + 15, True), (88 * T, 59 * T + 15, True),
-              (60 * T + tw // 2, 71 * T + 15, False), (86 * T - tw // 2 - 2, 71 * T + 15, False)]
+    W_, O_ = 63 * T + 8, 88 * T + 8                       # Mitte der West- und Ostmauer (symmetrisch zu 1216)
+    tuerme = [(W_, WAND_FUSS, True), (O_, WAND_FUSS, True),             # Ecken Nordmauer
+              (W_, 54 * T + 15, True), (O_, 54 * T + 15, True),         # Seitentor (West) / gegenueber (Ost):
+              (W_, 72 * T + 15, True), (O_, 72 * T + 15, True)]         # Ecken Suedmauer
     for (cx, fy, wand) in tuerme:
         xx = int(round(cx - tm))
         objekte.append({'datei': td, 'basis': 'schloss2/02', 'x': xx, 'y': fy - tzu, 'fuss': th,
