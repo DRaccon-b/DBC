@@ -24,6 +24,12 @@ wird jede Regel einzeln geprüft.
 6. **Wege** gehen nie nur gerade und müssen nicht durchgängig sein: diagonal erlaubt, natürliche Bögen, ein Weg
    darf auch einmal unterbrechen und später weitergehen.
 7. **Schatten** ragen nie über Kanten (Klippen, Wände, Wasser) oder über andere Objekte.
+8. **Bäume überlappen sich nur an den äußeren Kachelspalten:**
+   - Ein Baum, der 4 oder 5 Kacheln breit ist, darf einen Nachbarbaum nur mit seiner äußersten Spalte links bzw.
+     rechts überlappen – die inneren Spalten bleiben frei.
+   - Ein Baum, der 2 Kacheln breit ist, überlappt gar nicht – solche Bäume stehen nebeneinander.
+   - 3 Kacheln breit: wie 2 Kacheln, also nebeneinander (bis der Nutzer es anders festlegt).
+   - Die Sockelregel (4) gilt auch hier: Sockel (unterste Kachelreihe) zweier Bäume überlappen nie.
 
 ## Abschlusskontrolle (Pflicht)
 
@@ -33,8 +39,11 @@ Wenn eine Karte fertig scheint: noch einmal komplett auf **Pixelfehler** und **L
 - **Physik/Realismus:** Es gelten reale Bedingungen. Beispiel: Ein Fels, der zwei Ebenen unter Wasser steht und
   über die Oberfläche ragt, kann nicht gleich groß aussehen wie derselbe Fels, der nur eine Ebene unter Wasser
   steht. Höhen, Wasserstände, Licht und Schatten müssen zueinander passen.
-- **Zeichenreihenfolge im Wasser:** Was aus dem Wasser ragt (Felsspitzen, Pfähle …), liegt immer über Schaum,
-  Brandung und Lichtreflexen der Oberfläche – auch in jedem Animationsbild.
+- **Zeichenreihenfolge (Ebenen-Logik):** Jeder Effekt, der über eine Fläche gezeichnet wird (Schaum, Brandung,
+  Wellen, Lichtreflexe, Nebel, Schnee, Partikel), darf nur das überdecken, was physikalisch darunter liegt. Was
+  aus dem Wasser, Nebel oder Schnee herausragt (Felsspitzen, Pfähle, Stege, Pflanzen, Objekte), liegt immer
+  darüber. Pflicht-Kontrolle: nach jedem neuen oder geänderten Effekt alle Stellen, an denen er auf Felsen oder
+  Objekte trifft, vergrößert ansehen – im Standbild **und** in mindestens drei Animationsbildern (Effekte wandern).
 
 ## Bewährte Regeln aus den bisherigen Runden
 
