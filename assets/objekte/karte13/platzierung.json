@@ -2,11 +2,11 @@
 {
 "datei": "sauber/berg-00.png",
 "basis": "berg/00",
-"x": -36,
+"x": -71,
 "y": 310,
 "fuss": 107,
 "kachel": [
-1,
+0,
 26
 ],
 "ebene": 1,
@@ -18,7 +18,7 @@
 "datei": "sauber/berg-01.png",
 "basis": "berg/01",
 "x": 214,
-"y": 1058,
+"y": 1076,
 "fuss": 107,
 "kachel": [
 17,
@@ -32,11 +32,11 @@
 {
 "datei": "sauber/berg-02_m.png",
 "basis": "berg/02",
-"x": 1206,
+"x": 1236,
 "y": 638,
 "fuss": 115,
 "kachel": [
-78,
+79,
 47
 ],
 "ebene": 1,
@@ -47,11 +47,11 @@
 {
 "datei": "sauber/berg-03.png",
 "basis": "berg/03",
-"x": 1191,
-"y": 1062,
+"x": 1093,
+"y": 1076,
 "fuss": 111,
 "kachel": [
-78,
+72,
 69
 ],
 "ebene": 1,
@@ -541,13 +541,28 @@
 "kein_schatten": true
 },
 {
-"datei": "sauber/rand-00_m.png",
-"basis": "rand/00",
-"x": 1067,
-"y": 1081,
-"fuss": 56,
+"datei": "sauber/rand-03_m.png",
+"basis": "rand/03",
+"x": 1194,
+"y": 1080,
+"fuss": 48,
 "kachel": [
-68,
+76,
+69
+],
+"ebene": 1,
+"fest_pos": true,
+"rand": true,
+"kein_schatten": true
+},
+{
+"datei": "sauber/rand-14.png",
+"basis": "rand/14",
+"x": 1269,
+"y": 1089,
+"fuss": 52,
+"kachel": [
+79,
 69
 ],
 "ebene": 1,
@@ -1228,17 +1243,17 @@
 {
 "datei": "sauber/mittel-01.png",
 "basis": "mittel/01",
-"x": 85,
+"x": 69,
 "y": 370,
 "fuss": 62,
 "kachel": [
-6,
+5,
 26
 ],
 "ebene": 1,
 "anim": "feuer",
 "block": [
-5,
+4,
 23,
 4,
 4

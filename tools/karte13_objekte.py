@@ -193,10 +193,22 @@ def main():
         objekte.append(o)
         belegen(datei, x, y)
         return o
-    fest_setzen('berg/00', 22, 26 * T, kein_schatten=True)                      # Zahnrad links, Kante am Kartenrand
-    fest_setzen('berg/01', 17 * T, Hp + 44, kein_schatten=True)                 # Panzerkette unten
-    fest_setzen('berg/02', Wp - 18, 47 * T, spiegeln=True, kein_schatten=True)  # Roboterarm rechts
-    fest_setzen('berg/03', Wp - 30, Hp + 52, kein_schatten=True, anim='rotlicht')   # Mech-Kopf unten rechts, rotes Auge
+    KUPPE = 44                                                    # Breite der Bergkuppe innerhalb der Karte (px)
+    def versunken(name, seite, pos, spiegeln=False, **extra):
+        """Maschinenteil im Fels: nur so weit sichtbar, wie die Bergkuppe reicht - ragt nie ueber die Kante."""
+        datei, h, zu, mitte = sprite(name, spiegeln)
+        hh, ww = alpha[datei].shape
+        if seite == 'links':
+            X, fuss = KUPPE - ww + mitte, pos
+        elif seite == 'rechts':
+            X, fuss = Wp - KUPPE + mitte, pos
+        else:                                                     # unten: Oberkante auf der Bergkuppe
+            X, fuss = pos, Hp - KUPPE + zu
+        return fest_setzen(name, X, fuss, spiegeln, **extra)
+    versunken('berg/00', 'links', 26 * T, kein_schatten=True)                    # Zahnrad links
+    versunken('berg/01', 'unten', 17 * T, kein_schatten=True)                    # Panzerkette unten
+    versunken('berg/02', 'rechts', 47 * T, spiegeln=True, kein_schatten=True)    # Roboterarm rechts
+    versunken('berg/03', 'unten', 72 * T, kein_schatten=True, anim='rotlicht')   # Mech-Kopf unten rechts, rotes Auge
     #    b) Schrottrand: vom Kartenrand angeschnitten, Tiefe wellenfoermig, ungleiche Abstaende (wie Karte 12)
     RAND = ['rand/%02d' % i for i in range(16)]
     GEW = [2, 3, 2, 3, 2, 2, 1, 3, 2, 2, 1, 3, 1, 1, 2, 1]
