@@ -76,7 +76,7 @@ FEST = [
     ('klein/08', 36 * T, 61, {}),
 ]
 # Laternen in festem Rhythmus entlang der Gehwege (alle 6 Kacheln), Wegweiser an den Kreuzungen
-for y in (6, 12, 26, 32):
+for y in (9, 29):
     FEST += [(LAMPE, 29 * T + 8, y, {'anim': 'lampe'}), (LAMPE, 43 * T + 8, y, {'anim': 'lampe'}),
              (LAMPE, 57 * T + 8, y, {'anim': 'lampe'})]
 for x in (24, 38, 52):
