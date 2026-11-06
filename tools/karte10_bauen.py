@@ -1,5 +1,5 @@
 """Karte 10 (Toy Town): Spielzeugstadt mit Strassen, rosa Gehwegen, Plaetzen, Bahnhof mit Gleisen, rosa Burg mit
-Burghof, Spielplatz, Teich mit Bruecke, Garten; Rand aus Buschhecke. Baut auf Karte 04/08/09 auf (Hecke, Wasser,
+Burghof, Spielplatz, Teich mit Bruecke, Garten; Rand aus dichtem Wald wie Karte 01. Baut auf Karte 04/08/09 auf (Hecke, Wasser,
 Schatten je Ebene, Verdeckung, Objekte, Animation).
 
   python3 tools/karte10_layout.py && python3 tools/karte10_kacheln.py
@@ -236,12 +236,12 @@ def bauen(frame=None, speichern=True):
     a = np.array(wasser_vertieft.vertiefen(Image.fromarray(a), np.ones_like(wm), frame, maske=wm,
                                            rand=('#6a6e80', '#868aa0', '#a2a6ba', '#c2c6d6'),
                                            stufen=[(16, 0.82, 5), (30, 0.66, 4)]).convert('RGB'))
-    # --- Hecke (Rand) und Burgmauern
-    hm = weich(zell_maske(cls, 'H', cols, rows), 3, 0.35, 8)
-    alt = k4.HECKE
-    k4.HECKE = HECKE_HELL
-    k4.hecke(a, hm, 10)
-    k4.HECKE = alt
+    # --- Waldrand (wie Karte 01): schattiger, moosiger Waldboden, die Baeume kommen als Objekte
+    wroh_ = zell_maske(cls, 'W', cols, rows)
+    hm = weich(wroh_, 5, 0.4, 8)
+    a[hm] = (a[hm] * np.array([0.72, 0.8, 0.7])).astype(np.uint8)
+    saum = weich(wroh_, 5, 0.4, 8, 0.32) & ~hm
+    a[saum] = (a[saum] * 0.86).astype(np.uint8)
     mauer = zell_maske([''.join('1' if c == '3' else '0' for c in r) for r in lay['hoehe']], '1', cols, rows) > 0
     flaeche = burgmauern(a, mauer)
     achse = int(lay['achse'] * T)
@@ -251,10 +251,6 @@ def bauen(frame=None, speichern=True):
     lvl[wm] = 0
     lvl[mauer] = 3
     lvl[flaeche] = 9
-    lvl[hm] = 5
-    unten_h = hm & ~np.roll(hm, -1, 0)
-    for d in range(1, 7):                                   # Blattfront der Hecke
-        lvl[np.roll(unten_h, d, 0) & ~hm & (lvl == 1)] = 9
     if speichern and frame is None:
         np.save(os.path.join(KARTE, 'pixelhoehe.npy'), lvl)
         np.save(os.path.join(KARTE, 'wandflaeche.npy'), np.packbits(flaeche))

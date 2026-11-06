@@ -5,8 +5,8 @@
 Vorlage assets/vorlagen/karte10_vorlage.png (1440x1200 = 90x75 Kacheln a 16 px). Das Raster wird von Hand
 aus der Vorlage nachgezogen (Strassen, Gehwege, Plaetze sind geometrisch), Wege mit Boegen (Regel 6).
 Klassen:  g Gras  a Asphalt  p rosa Gehweg  s Sandweg  b blaues Pflaster (Plaetze)  k Burghof (beige Platten)
-          r rosa Rahmen im Burghof  m Bahnhofsboden (Kies)  q Bahnsteig  e Beeterde  x Wasser  H Hecke
-Hoehen:   0 Wasser, 1 Boden, 3 Burgmauern, 5 Hecke (Rand).
+          r rosa Rahmen im Burghof  m Bahnhofsboden (Kies)  q Bahnsteig  e Beeterde  x Wasser  W Waldboden (Rand)
+Hoehen:   0 Wasser, 1 Boden (auch Waldrand), 3 Burgmauern.
 """
 import json, math, os
 import numpy as np
@@ -104,19 +104,21 @@ def main():
     mauer[32:72, 86:90] = True                     # Ostmauer
     mauer[72:75, 60:90] = True                     # Suedmauer
     h[mauer] = 3
-    # ------------------------------------------------------------------ Hecke (Rand)
-    hecke = np.zeros((R, C), bool)
-    hecke[0:3, :] = True
-    hecke[:, 0:2] = True
-    hecke[72:75, 0:60] = True
-    hecke[34:39, 0:2] = False                      # Durchgang zum Teleporter
-    # unregelmaessige Innenkante (Buchten/Vorspruenge wie in der Vorlage)
-    for (x, y) in ((2, 8), (2, 9), (2, 20), (2, 21), (2, 25), (2, 26), (2, 45), (2, 46), (2, 55), (2, 56), (2, 62),
-                   (2, 63), (2, 68), (14, 3), (15, 3), (23, 3), (24, 3), (36, 3), (50, 3), (51, 3), (72 - 52, 71),
-                   (21, 71), (35, 71), (36, 71), (47, 71), (48, 71), (57, 71)):
-        hecke[y, x] = True
-    k[hecke] = 'H'
-    h[hecke] = 5
+    # ------------------------------------------------------------------ Waldrand (wie Karte 01): Waldboden W
+    wald = np.zeros((R, C), bool)
+    wald[0:4, :] = True
+    wald[:, 0:2] = True
+    wald[:, 2] = k[:, 2] == 'g'
+    wald[72:75, 0:60] = True
+    wald[71, 0:60] = k[71, 0:60] == 'g'
+    wald[34:39, 0:3] = False                       # Durchgang zum Teleporter
+    # unregelmaessige Innenkante: Buchten und Vorspruenge
+    for (x, y) in ((3, 8), (3, 9), (3, 20), (3, 21), (3, 25), (3, 26), (3, 46), (3, 47), (3, 55), (3, 56),
+                   (3, 69), (14, 4), (15, 4), (23, 4), (24, 4), (37, 4), (51, 4), (52, 4), (20, 70), (21, 70),
+                   (35, 70), (36, 70), (47, 70), (48, 70), (57, 70)):
+        if k[y, x] == 'g':
+            wald[y, x] = True
+    k[wald] = 'W'
     k[36:38, 0:2] = 'a'
     lay = {
         'groesse': [C, R], 'klassen': [''.join(r) for r in k], 'hoehe': [''.join(str(c) for c in r) for r in h],

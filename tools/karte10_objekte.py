@@ -49,7 +49,6 @@ FEST = [
     # Brunnenplatz: Brunnen in der Mitte, vier Laternen und zwei Baenke symmetrisch
     ('spielplatz/08', ACHSE_BRUNNEN, 38, {'achse': ACHSE_BRUNNEN, 'anim': 'brunnen'}),
     (LAMPE, ACHSE_BRUNNEN - 96, 33, {'symm': 'bl1', 'anim': 'lampe'}), (LAMPE, ACHSE_BRUNNEN + 96, 33, {'symm': 'bl1', 'anim': 'lampe'}),
-    (LAMPE, ACHSE_BRUNNEN - 96, 42, {'symm': 'bl2', 'anim': 'lampe'}), (LAMPE, ACHSE_BRUNNEN + 96, 42, {'symm': 'bl2', 'anim': 'lampe'}),
     (BANK, ACHSE_BRUNNEN - 48, 43, {'symm': 'bb'}), (BANK, ACHSE_BRUNNEN + 48, 43, {'symm': 'bb'}),
     # Burghof: Soldaten am Torweg, Brunnen im Rahmen, Blumenbeete in den Rahmenecken (symmetrisch)
     (SOLDAT, ACHSE_BURG - 56, 38, {'symm': 's1'}), (SOLDAT, ACHSE_BURG + 56, 38, {'symm': 's1'}),
@@ -89,11 +88,15 @@ FEST = [
     ('baeume2/07', ACHSE_BURG - 104, 46, {'symm': 'kl', 'anim': 'lampe'}), ('baeume2/07', ACHSE_BURG + 104, 46, {'symm': 'kl', 'anim': 'lampe'}),
 ]
 # Laternen in festem Rhythmus entlang der Gehwege (alle 6 Kacheln), Wegweiser an den Kreuzungen
-for y in (9, 29):
-    FEST += [(LAMPE, 29 * T + 8, y, {'anim': 'lampe'}), (LAMPE, 43 * T + 8, y, {'anim': 'lampe'}),
-             (LAMPE, 57 * T + 8, y, {'anim': 'lampe'})]
-for x in (24, 38, 52):
-    FEST += [(LAMPE, x * T + 8, 19, {'anim': 'lampe'}), (LAMPE, x * T + 8, 35, {'anim': 'lampe'})]
+# (ausgeduennt: je Strassenzug nur wenige Laternen, versetzt statt in Reihen)
+FEST += [(LAMPE, 43 * T + 8, 9, {'anim': 'lampe'}), (LAMPE, 43 * T + 8, 29, {'anim': 'lampe'}),
+         (LAMPE, 24 * T + 8, 19, {'anim': 'lampe'}), (LAMPE, 52 * T + 8, 19, {'anim': 'lampe'}),
+         (LAMPE, 38 * T + 8, 35, {'anim': 'lampe'})]
+# Waldrand (Karte 01 wiederverwendet, Regel 3) mit ein paar rosa Bluetenbaeumen passend zur Spielzeugstadt
+WALD = {'rand/k1-00': 5, 'rand/k1-01': 5, 'rand/k1-02': 4, 'rand/k1-06': 4, 'rand/k1-07': 3, 'rand/k1-09': 4,
+        'rand/k1-15': 2, 'rand/k1-04': 1, 'rand/k1-05': 1, 'rand/k1-10': 1}
+WALDSAUM = {'rand/k1-12': 3, 'rand/k1-13': 2, 'baeume2/03': 2, 'baeume/03': 2, 'klein2/58': 2, 'klein/09': 2,
+            'klein/10': 2, 'klein2/04': 1, 'klein2/05': 1}
 # Haine (x0, y0, x1, y1, Dichte): Baeume nur auf Gras
 HAINE = [(2, 4, 28, 10, 0.05), (2, 14, 15, 18, 0.06), (2, 39, 28, 58, 0.06), (11, 23, 17, 34, 0.06),
          (33, 4, 42, 18, 0.04), (47, 4, 56, 18, 0.04), (33, 23, 42, 34, 0.04), (47, 23, 56, 34, 0.04),
@@ -184,6 +187,8 @@ def main():
                 continue
             if 0 <= ky < rows and 0 <= tx < cols and tx < 60 and cls[ky][tx] == 's' and not opt.get('achse'):
                 continue                                    # nichts mitten auf die Sandwege
+            if 0 <= ky < rows and 0 <= tx < cols and cls[ky][tx] == 'W' and not opt.get('wald'):
+                continue                                    # Waldboden: nur Waldbaeume
             x = raster_x(alpha[datei], kx) if not opt.get('achse') else int(round(kx - mitte))
             y = (ky + 1) * T - 1 - zu
             if not pruefen:
@@ -243,6 +248,36 @@ def main():
     # 4) feste Objekte
     for (name, X, fy, opt) in FEST:
         fest_setzen(name, X, fy, opt, suchen=not opt.get('symm') and not opt.get('achse'), melden=True)
+    # 4b) Waldrand wie Karte 01: dichtes, versetztes Raster einzelner Baeume auf dem Waldboden (Baeume duerfen
+    #     sich im dichten Wald ueberlappen), am Waldsaum Buesche und Blumen
+    wald_neu = []
+    for ay in range(8, rows * T + 8, 15):
+        versatz = rnd.randint(0, 10)
+        for ax in range(versatz, cols * T, 19):
+            px_, py_ = ax + rnd.randint(-5, 5), ay + rnd.randint(-4, 4)
+            cx, cy = px_ // T, (py_ + 2) // T
+            if not (0 <= cx < cols and 0 <= cy < rows) or cls[cy][cx] != 'W':
+                continue
+            name = rnd.choices(list(WALD), weights=list(WALD.values()))[0]
+            datei, h, zu, mitte = sprite(name, rnd.random() < 0.5)
+            x, y = int(round(px_ - mitte)), py_ + 2 - zu
+            if not frei_px(datei, x, y):
+                continue
+            o = {'datei': datei, 'basis': name, 'x': x, 'y': y, 'fuss': h, 'kachel': [cx, cy], 'ebene': 1,
+                 'anim': 'baum', 'wald': True}
+            objekte.append(o)
+            wald_neu.append(o)
+    for o in wald_neu:
+        belegen(o['datei'], o['x'], o['y'])
+    for ty in range(rows):
+        for tx in range(cols):
+            if cls[ty][tx] != 'g':
+                continue
+            am_wald = any(0 <= ty + dy < rows and 0 <= tx + dx < cols and cls[ty + dy][tx + dx] == 'W'
+                          for dx in (-1, 0, 1) for dy in (-1, 0, 1))
+            if am_wald and rnd.random() < 0.22:
+                fest_setzen(rnd.choices(list(WALDSAUM), weights=list(WALDSAUM.values()))[0],
+                            tx * T + rnd.randint(4, 12), ty, {})
     # 5) Baeume in Hainen, Regel 5: Einzelbaeume bekommen Begleiter
     baeume = []
     for (x0, y0, x1, y1, d) in HAINE:
