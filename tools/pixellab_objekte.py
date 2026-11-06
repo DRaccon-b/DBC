@@ -1081,6 +1081,45 @@ OBJEKTGRUPPEN_K11 = {
 }
 
 
+STIL_K12 = ("Top-down RPG map object for a gloomy muddy puppet forest, in polished handheld monster-collecting RPG pixel "
+            "art: colored dark outline (darkest shade of the object's own hue, never pure black), light from the upper "
+            "left, dark desaturated greens, violet and warm brown wood, clean shapes, no noise, no dithering, "
+            "transparent background, no ground, no cast shadow.")
+PALETTE_K12 = ['#12161a', '#1c2a22', '#26382c', '#304836', '#3e5a44', '#4e6e52', '#6a8a64', '#8eaa7e',
+               '#2a1e34', '#3c2a4a', '#523a66', '#6c4e86', '#8a68a8', '#2a1a10', '#3e2818', '#5a3c24',
+               '#7a5434', '#9a6e46', '#c08e5e', '#e0b484', '#4a1a1e', '#7a2228', '#b03a3a', '#e05a4a',
+               '#e8702a', '#f8a040', '#ffd870', '#fff4c0', '#2c3242', '#4a5266', '#7a8296', '#b4bccc', '#ffffff']
+FR12 = "perfectly straight front elevation view, facing the camera head-on, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style"
+OBJEKTGRUPPEN_K12 = {
+    'k12_gross': {'size': 128, 'items': [
+        'wooden treehouse built into a huge gnarled dark tree with dark blue-violet leaves, red pointed shingle roof, warm lit windows, wooden balcony and a wooden stair down to the ground, ' + FR12,
+        'huge old gloomy oak tree with a dense dark green crown and a few violet leaves, thick twisted trunk with roots, ' + FR12,
+        'wooden puppet theater booth with a dark red curtain and carved wooden frame, ' + FR12,
+        'huge twisted dark tree with drooping dark violet leaves and thick gnarled roots, ' + FR12,
+    ]},
+    'k12_wald': {'size': 64, 'items': [
+        'gloomy dark green round forest tree', 'gloomy dark green tall forest tree', 'dark green forest tree with a twisted trunk',
+        'gloomy dark forest tree with blue-violet leaves', 'dark pine tree', 'small gloomy dark green tree',
+        'gloomy apple tree with red apples', 'gloomy pear tree with yellow pears', 'gloomy plum tree with dark purple plums',
+        'gnarled black tree with violet leaves', 'dark thorny bramble bush', 'dark green round bush',
+        'cluster of big red spotted mushrooms', 'old mossy tree stump', 'dark fern', 'fallen mossy log',
+    ]},
+    'k12_puppen': {'size': 64, 'items': [
+        'wooden marionette puppet hanging on strings from a wooden frame', 'wooden marionette control cross on a post with dangling strings',
+        'broken wooden puppet sitting slumped on the ground', 'wooden lamp post with a glowing jack-o-lantern',
+        'red wooden toy wagon full of toys', 'wooden treasure chest with iron bands', 'old wooden signpost, blank',
+        'red wooden toy letter block', 'blue wooden toy letter block', 'wooden fence post with a rope',
+        'round wooden archery target on a stand', 'giant wooden toy mallet stuck head-down in the ground',
+        'wooden scarecrow puppet with a straw hat', 'old wooden barrel', 'wooden spinning top toy', 'pile of loose wooden puppet limbs',
+    ]},
+    'k12_klein': {'size': 32, 'items': [
+        'small red spotted mushroom', 'two pale mushrooms', 'small dark grass tuft', 'small dead leaves', 'twig',
+        'small stones', 'small purple flowers', 'fallen red apple', 'small orange pumpkin', 'small dark fern',
+        'small tree root', 'small pink flowers', 'small wooden peg', 'small puddle of mud', 'small yellow flowers', 'acorns',
+    ]},
+}
+
+
 def call(method, path, body=None, raw=False):
     req = urllib.request.Request(API + path, method=method,
                                  data=json.dumps(body).encode() if body is not None else None,
@@ -1133,7 +1172,9 @@ def herunterladen(oid, d):
 
 
 def speichern(gruppe, ims, ids):
-    if gruppe.startswith('k11_'):
+    if gruppe.startswith('k12_'):
+        ziel = os.path.join(ROOT, 'assets', 'objekte', 'karte12', gruppe[4:])
+    elif gruppe.startswith('k11_'):
         ziel = os.path.join(ROOT, 'assets', 'objekte', 'karte11', gruppe[4:])
     elif gruppe.startswith('k10_'):
         ziel = os.path.join(ROOT, 'assets', 'objekte', 'karte10', gruppe[4:])
@@ -1178,11 +1219,12 @@ def erzeugen(gruppe):
     k4 = gruppe.startswith('k4_')
     k5 = gruppe.startswith('k5_')
     k6 = gruppe.startswith('k6_') or gruppe.startswith('k7_')
-    if gruppe.startswith('k11_'):
-        g = OBJEKTGRUPPEN_K11[gruppe]
-        req = {'description': STIL_K11, 'size': g['size'], 'view': 'top-down',
-               'item_descriptions': [it + '. ' + STIL_K11 for it in g['items']],
-               'target_palette': {'colors': PALETTE_K11, 'name': 'Karte11 Dark Ocean'}}
+    if gruppe.startswith('k11_') or gruppe.startswith('k12_'):
+        g, stil_, pal_, pn_ = ((OBJEKTGRUPPEN_K12[gruppe], STIL_K12, PALETTE_K12, 'Karte12 Puppet Woods') if gruppe.startswith('k12_')
+                               else (OBJEKTGRUPPEN_K11[gruppe], STIL_K11, PALETTE_K11, 'Karte11 Dark Ocean'))
+        req = {'description': stil_, 'size': g['size'], 'view': 'top-down',
+               'item_descriptions': [it + '. ' + stil_ for it in g['items']],
+               'target_palette': {'colors': pal_, 'name': pn_}}
         d = call('POST', '/v2/create-1-direction-object', req)
         oid = d['object_id']
         print(gruppe, 'Objekt', oid)
