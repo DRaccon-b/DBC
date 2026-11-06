@@ -226,10 +226,14 @@ def bauen(frame=None, speichern=True):
         saum = weich(roh, blur, rausch, seed, 0.38) & ~m & ~schloss
         k4.dunkeln(a, saum, 0.9)
     # --- Schloss innen: scharfe Kanten (Steinboden, Garten, Beet, Teppiche)
-    for art in 'ihec':
+    for art in 'iec':
         m = (zell_maske(cls, art, cols, rows) > 0) & schloss
         tx = textur(cls, art, cols, rows)
         a[m] = tx[m]
+    garten = (zell_maske(cls, 'gh', cols, rows) > 0) & schloss               # dunkles Gras im Garten weich (wie aussen)
+    m = weich(zell_maske(cls, 'h', cols, rows), 5.0, 0.45, 3) & garten
+    tx = textur(cls, 'h', cols, rows)
+    a[m] = tx[m]
     vm = (zell_maske(cls, 'v', cols, rows) > 0) & schloss
     tx = textur(cls, 'v', cols, rows)
     a[vm] = tx[vm]
