@@ -23,20 +23,23 @@ T = 16
 ACHSE_B = 27 * T + 8              # Teppichachse Portalhalle / grosser Saal (Teppich x 26-28 -> Mitte 440 px)
 ACHSE_D = 75 * T + 8              # Ritualsaal (Rahmen x 66-84)
 
+TURM = 'turm/03'                  # neuer Wachturm (PixelLab k9_turm) mit Fledermaus-Fahne
+BANNER_AUSSEN = 'banner/03'       # neue Banner (PixelLab k9_banner)
+BANNER_INNEN = 'banner/02'
 # Wandobjekte: (sprite, Kachel-x Mitte, Reihe der Mauer-Oberkante der Wandflaeche)
 WAND = []
 for x in (14, 18):
     WAND += [('wand/00', x, 2)]
 for x in (37, 41):
     WAND += [('wand/01', x, 2)]
-WAND += [('wand/05', 22, 2), ('wand/05', 33, 2), ('wand/04', 13, 2), ('wand/04', 42, 2)]
-WAND += [('wand/00', 65, 2), ('wand/02', 68, 2), ('wand/05', 71, 2), ('wand/05', 79, 2), ('wand/02', 82, 2), ('wand/00', 85, 2)]
+WAND += [(BANNER_INNEN, 22, 2), (BANNER_INNEN, 33, 2), ('wand/04', 13, 2), ('wand/04', 42, 2)]
+WAND += [('wand/00', 65, 2), ('wand/02', 68, 2), ('banner/01', 71, 2), ('banner/01', 79, 2), ('wand/02', 82, 2), ('wand/00', 85, 2)]
 WAND += [('wand/03', 5, 2), ('wand/03', 50, 2), ('wand/03', 55, 2)]
 WAND += [('wand/02', 4, 17), ('wand/00', 9, 17), ('wand/01', 14, 17), ('wand/02', 19, 17), ('wand/06', 23, 17),
          ('wand/06', 32, 17), ('wand/02', 36, 17), ('wand/01', 41, 17), ('wand/00', 46, 17), ('wand/02', 51, 17),
-         ('wand/05', 12, 17), ('wand/05', 43, 17), ('wand/06', 58, 17)]
-WAND += [('wand/05', x, 35) for x in (7, 18, 37, 48, 59, 70, 82)]
-WAND += [('wand/04', x, 35) for x in (24, 31)]
+         (BANNER_INNEN, 12, 17), (BANNER_INNEN, 43, 17), ('wand/06', 58, 17)]
+WAND += [(BANNER_AUSSEN, x, 35) for x in (7, 17, 37, 47, 57, 67, 77, 87)]
+WAND += [('wand/04', x, 35) for x in (24, 30)]
 # (sprite, Kachel-x, Fusskachel-y, Optionen)
 FEST = [
     # ---- Portalhalle: Portal in der Achse, je Seite Statue, Saeule, Feuerschale, Gargoyle, Kandelaber (symmetrisch)
@@ -102,6 +105,42 @@ LIEGEND = {'k8/klein/00', 'k8/klein/07', 'k8/klein/10', 'k8/klein/49', 'k8/klein
 FLACH = LIEGEND | {'k8/klein/02', 'k8/klein/03', 'k8/klein/04', 'k8/klein/09', 'k8/klein/12', 'k8/klein/47',
                    'k8/klein/48', 'k8/klein/40', 'k8/klein/01', 'k8/fels_klein/02', 'wand/12'}
 WIND = {'k8/klein/04', 'k8/klein/12', 'k8/klein/09', 'k8/klein/47', 'k8/klein/48', 'k8/mittel/14'}
+
+
+MAUER_RAMPE = ['#1a1c24', '#22252f', '#353a4a', '#464c60', '#535a70', '#6c7490', '#8a92ac']
+
+
+def tor_anpassen(sp):
+    """Tor passend zur Karte: Stein in den Farben der Schlossmauern (nach Helligkeit), Fackeln/Flammen bleiben;
+    der dunkle Durchgang wird transparent (Teppich und Boden scheinen durch, das hochgezogene Gitter bleibt)."""
+    from collections import deque
+    a = np.array(sp.convert('RGBA')).astype(np.int16)
+    al = a[..., 3] > 0
+    r, g, b = a[..., 0], a[..., 1], a[..., 2]
+    mx, mn = np.maximum(np.maximum(r, g), b), np.minimum(np.minimum(r, g), b)
+    lum = (0.3 * r + 0.59 * g + 0.11 * b)
+    stein = al & (mx - mn < 60)
+    h, w = al.shape
+    # Durchgang: dunkle Flaeche, von der Unterkante in der Mitte aus gefuellt
+    dunkel = al & (lum < 50) & (mx - mn < 40)
+    durch = np.zeros_like(al)
+    unten = int(np.nonzero(al.any(axis=1))[0].max())
+    q = deque((unten - k, x) for k in range(12) for x in range(w // 2 - 4, w // 2 + 5) if dunkel[unten - k, x])
+    for (y, x) in q:
+        durch[y, x] = True
+    while q:
+        y, x = q.popleft()
+        for dy, dx in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+            yy, xx = y + dy, x + dx
+            if 0 <= yy < h and 0 <= xx < w and dunkel[yy, xx] and not durch[yy, xx]:
+                durch[yy, xx] = True; q.append((yy, xx))
+    ramp = np.array([[int(c[i:i + 2], 16) for i in (1, 3, 5)] for c in MAUER_RAMPE])
+    out = a.copy()
+    idx = np.clip((lum / 255.0 * 1.25 * (len(ramp) - 1)).astype(int), 0, len(ramp) - 1)
+    m = stein & ~durch
+    out[m, :3] = ramp[idx[m]]
+    out[durch, 3] = 0
+    return Image.fromarray(np.clip(out, 0, 255).astype(np.uint8), 'RGBA')
 
 
 def groesstes_teil(sp, rechts=False):
@@ -197,6 +236,8 @@ def main():
         key = (name, spiegeln)
         if key not in cache:
             sp = saeubern(Image.open(quelle(name)).convert('RGBA'))
+            if name in ('tor/00', 'tor/01'):
+                sp = tor_anpassen(sp)
             if name == 'einrichtung/03':
                 sp = groesstes_teil(sp)
             if name == 'einrichtung/01':
@@ -281,14 +322,14 @@ def main():
         a_w = alpha[datei]
         zl_ = np.nonzero(a_w.any(axis=1))[0]
         hoehe_w = int(zl_.max() - zl_.min() + 1)
-        oben_d = {'wand/05': 9, 'wand/04': 12, 'wand/06': 8}.get(name, 5)
+        oben_d = 7 if name.startswith('banner/') else {'wand/04': 12, 'wand/06': 8}.get(name, 5)
         oben_d = min(oben_d, 37 - hoehe_w)
         x, y = int(round(X - mitte)), oben + oben_d - int(zl_.min())
         objekte.append({'datei': datei, 'basis': name, 'x': x, 'y': y, 'fuss': h, 'kachel': [tx, oben // T + 2],
                         'ebene': 1, 'an_wand': True, 'kein_schatten': True, 'keine_verdeckung': True,
                         **({'anim': 'kerzen'} if name == 'wand/04' else {})})
     # Tuerme auf der Aussenmauer und Tore (stehen auf/vor der Mauer, eigene Platzierung)
-    for (name, tx, fuss_px) in [('einrichtung/05', x, 39 * T + 13) for x in (1.5, 12, 22.5, 32.5, 43, 53.5, 64, 75, 86)] + \
+    for (name, tx, fuss_px) in [(TURM, x, 39 * T + 13) for x in (2, 12, 22, 32, 42, 52, 62, 72, 82)] + \
                                [('tor/01', 27, 39 * T + 15), ('tor/00', 27, 19 * T + 15)]:
         datei, h, zu, mitte = sprite(name, False)
         if name.startswith('tor/'):
@@ -298,7 +339,7 @@ def main():
         objekte.append({'datei': datei, 'basis': name, 'x': x, 'y': y, 'fuss': h, 'kachel': [int(tx), fuss_px // T],
                         'ebene': 1, 'an_wand': True, 'kein_schatten': True, 'keine_verdeckung': True,
                         'vorrang': True})
-        if name == 'einrichtung/05':
+        if name == TURM:
             belegen(datei, x, y)
         objekte[-1]['fest_pos'] = True
     # 2) feste Objekte

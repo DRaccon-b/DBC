@@ -95,8 +95,9 @@ def mauern_zeichnen(a, wm):
     # Gesims: Schattenkante direkt unter der Mauerkrone (Krone steht etwas vor)
     a[f & (d >= 2) & (d <= 4)] = (a[f & (d >= 2) & (d <= 4)] * 0.72).astype(np.uint8)
     # Pilaster alle 6 Kacheln: vorspringende Pfeiler (links Licht, rechts Schatten), mit Kapitell und Sockel
-    pil = f & ((xx % 96) >= 40) & ((xx % 96) < 48)
-    q = (xx % 96) - 40
+    PER, OFF = 80, 78                                                # Raster der Tuerme (160 px) / Banner: Pfeiler dazwischen
+    pil = f & (((xx - OFF) % PER) < 8)
+    q = (xx - OFF) % PER
     a[pil] = H('#535a70')
     a[pil & (q == 0)] = H('#7a83a0')
     a[pil & (q == 1)] = H('#646c86')
@@ -105,7 +106,7 @@ def mauern_zeichnen(a, wm):
     a[pil & (d >= 5) & (d <= 7)] = H('#6c7490')                     # Kapitell
     a[pil & (d == 8)] = H('#3a3f50')
     a[pil & (d >= WAND_H - 6)] = H('#454b5e')                       # Sockel
-    sch_p = f & ((xx % 96) >= 48) & ((xx % 96) < 51) & (d > 4) & (d < WAND_H - 9)
+    sch_p = f & (((xx - OFF) % PER) >= 8) & (((xx - OFF) % PER) < 11) & (d > 4) & (d < WAND_H - 9)
     a[sch_p] = (a[sch_p] * 0.8).astype(np.uint8)                     # Schlagschatten des Pfeilers
     # seitliche Enden der Wandflaechen (an Tuer-Oeffnungen): Kontur und Licht/Schatten
     links = f & ~np.roll(f, 1, 1)
@@ -203,10 +204,8 @@ def lichtkegel(img, objs, flaeche, boden):
 
 
 def wasser_dunkel(a, m, frame):
-    """Graben/Teiche: tiefes, fast schwarzes Wasser mit kaltem Schimmer."""
-    k4.wasser_zeichnen(a, m, frame, np.zeros_like(m))
-    lum = (a[m].astype(np.float32) @ np.array([0.3, 0.59, 0.11], np.float32))[:, None]
-    a[m] = np.clip(lum * np.array([0.22, 0.26, 0.5]) + np.array([4, 6, 22]), 0, 255).astype(np.uint8)
+    """Graben/Teiche: Sumpfwasser wie Overdell (Karte 08)."""
+    k8.sumpf_zeichnen(a, m, frame)
 
 
 def bauen(frame=None, speichern=True):
@@ -259,10 +258,12 @@ def bauen(frame=None, speichern=True):
     wasser_dunkel(a, wm, frame)
     import wasser_vertieft
     a = np.array(wasser_vertieft.vertiefen(Image.fromarray(a), np.ones_like(wm), frame, maske=wm,
-                                           rand=('#1c1e26', '#2a2c36', '#383a46', '#464856'),
+                                           rand=('#241e16', '#30281c', '#3c3224', '#4a3e2e'),
                                            stufen=[(20, 0.78, 6), (40, 0.6, 5)]).convert('RGB'))
+    # Farbe wie das Sumpfwasser auf Overdell (Karte 08): trueb dunkelgruen, mit Entengruetze
     lum = (a[wm].astype(np.float32) @ np.array([0.3, 0.59, 0.11], np.float32))[:, None]
-    a[wm] = np.clip(lum * np.array([0.34, 0.4, 0.72]) + np.array([2, 4, 16]), 0, 255).astype(np.uint8)
+    a[wm] = np.clip(lum * np.array([0.62, 0.86, 0.7]) + np.array([4, 12, 10]), 0, 255).astype(np.uint8)
+    k8.entengruetze(a, wm, frame)
     # --- Kanten: Felsplateaus und Felsrand (wie Karte 08), Schlossmauern eigen
     frei = np.zeros((Hp, Wp), bool)
     waende = k4.hoehenkanten(a, m2, 'terrasse', 26, 12, k8.LIPPE_TERRASSE, frei | schloss, 52, berg=False)
@@ -282,8 +283,15 @@ def bauen(frame=None, speichern=True):
     # --- Zugbruecke, Bruecke, Steg, Teleporter
     zb = lay.get('zugbruecke')
     if zb:
+        vorher = np.array(img)
         bauwerke.zeichne_steg(img, zb[0] * T + 2, (zb[2] + 1) * T - 2, zb[1] * T - 2, (zb[3] + 1) * T + 6,
                               frame=frame or 0, seed=3)
+        nachher = np.array(img)
+        neu_ = (nachher != vorher).any(axis=2)              # dunkles, altes Holz (Eiche/Ebenholz)
+        p_ = nachher[neu_][:, :3].astype(np.float32)
+        grau = p_.mean(axis=1, keepdims=True)
+        nachher[neu_, :3] = np.clip((p_ * 0.7 + grau * 0.3) * np.array([0.5, 0.42, 0.4]), 0, 255).astype(np.uint8)
+        img = Image.fromarray(nachher.copy()).convert('RGBA')
     for (x0, y0, x1, y1) in lay.get('bruecken', []):
         bauwerke.zeichne_bruecke(img, x0 * T - 6, (x1 + 1) * T + 6, y0 * T + 1, (y1 + 1) * T - 1, frame=frame or 0,
                                  seed=x0, wasser=True)

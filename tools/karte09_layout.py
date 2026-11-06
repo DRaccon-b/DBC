@@ -109,7 +109,7 @@ def main():
     lay = {
         'groesse': [C, R], 'klassen': [''.join(r) for r in k], 'hoehe': [''.join(str(c) for c in r) for r in h],
         'zugbruecke': [26, 40, 28, 42],                 # (x0, y0, x1, y1)
-        'bruecken': [[52, 66, 58, 67]],                 # waagerecht (x0, y0, x1, y1)
+        'bruecken': [],                                 # Holzbruecke in der Mitte entfernt (Nutzer)
         'stege': [[78, 56, 79, 64]],                    # senkrecht (x0, y0, x1, y1)
         'teleporter': [{'x': 0, 'y': 69, 'b': 2, 'h': 4}],
     }
