@@ -363,7 +363,7 @@ def main():
             print('  Begleiter weggelassen (laege auf Baum):', o['basis'], (kx, ky))
     # 6) Animationen: Marionette pendelt, Lumpen und Vorhang wehen, Kreisel dreht, Frosch blinzelt; etwa jeder dritte
     #    Baum im Innern wiegt sich (Stamm fest), der Pflanzenrand und die grossen Baeume bleiben starr
-    TEIL = {'puppen/00': 'marionette', 'puppen/12': 'lumpen', 'gross/02': 'vorhang', 'puppen/14': 'kreisel', 'klein/54': 'frosch'}
+    TEIL = {'puppen/00': 'marionette', 'puppen/12': 'lumpen', 'gross/02': 'vorhang', 'klein/54': 'frosch'}   # Kreisel bleiben ruhig
     rw = random.Random(21)
     for o in objekte:
         if o['basis'] in TEIL:
