@@ -14,6 +14,19 @@ python3 tools/karte03_bauen.py      # fertige Karte
 python3 tools/karte03_animation.py  # Animation und Discord-GIF
 ```
 
+## v1.1 (Regeln aus CLAUDE.md)
+
+```bash
+python3 tools/karte03_v11.py && python3 tools/karte03_bauen.py && python3 tools/karte03_objekte.py \
+  && python3 tools/regeln_v11.py karte03 && python3 tools/karte03_bauen.py && python3 tools/karte03_animation.py
+```
+
+- Meer links breiter und terrassiert wie Karte 01 (Flachwasser, Schaumkante, zwei Tiefenstufen, Tiefsee, Felsen, Algen).
+- Oase oben rechts als Insel im Meer: Gras mit Pavillon und Teich, Sandstrand mit Palmen/Kakteen, Holzsteg nach Sueden.
+- Regel 1/1b Raster, Regel 6 Wege in Boegen (Anschluesse an Stegen, Teleportern und Arena-Tor bleiben exakt),
+  Regel 7 Schatten nie auf Wasser, liegende Objekte mit flachem Schatten, keine Objekte im Wasser, Ueberlappungen entfernt.
+- Original v1.0: `maps/karte03/v1.0/`.
+
 ## Wiederverwendet
 
 - Sand-, Gras- und Wasserkacheln aus Karte 01 (`assets/basis/`) samt Wang-Uebergaengen `gras_weg`,

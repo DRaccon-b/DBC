@@ -25,7 +25,7 @@ BASIS3 = os.path.join(ROOT, 'assets', 'karte03', 'basis')
 OBJ = os.path.join(ROOT, 'assets', 'objekte', 'karte03')
 T = 16
 N_FRAMES = kb.N_FRAMES
-CODE = {'sand': 's', 'gras': 'g', 'wasser': 'x', 'weg': 'w', 'kies': 'k', 'platz': 'p', 'lehm': 'l', 'duene': 'd'}
+CODE = {'sand': 's', 'gras': 'g', 'wasser': 'x', 'meer': 'm', 'weg': 'w', 'kies': 'k', 'platz': 'p', 'lehm': 'l', 'duene': 'd'}
 SANDSTEIN = ind.pal('#6a4a2c', '#8a6640', '#a88250', '#c4a066', '#dcbc80', '#ecd49c', '#f8e8c0')
 ZIEGEL = ind.pal('#3e2218', '#5a3020', '#7a4430', '#95553a', '#ae6a48', '#c48460', '#d89a74')
 
@@ -406,6 +406,28 @@ def bauen(frame=None, speichern=True):
             if 0 <= x < cols and 0 <= y < rows:
                 cls[y][x] = CODE[z['art']]
 
+    # --- 0. Regel 6 (v1.1): Wege in natuerlichen Boegen; an Steg, Inselsteg, Teleportern, Arena-Tor und
+    #        Kartenrand bleiben die Anschluesse exakt
+    if lay.get('_v11'):
+        import regeln_v11
+        g = np.array(cls)
+        anker = np.zeros((rows, cols), bool)
+        anker[:, :8] = anker[:, -7:] = True
+        anker[:4, :] = anker[-5:, :] = True
+        st_ = lay.get('steg')
+        if st_:
+            anker[st_['y'] - 2:st_['y'] + st_['breite'] + 2, :st_['x'] + st_['laenge'] + 3] = True
+        if lay.get('inselsteg'):
+            x0_, x1_, y0_, y1_ = lay['inselsteg']
+            anker[y0_ - 3:y1_ + 4, x0_ - 2:x1_ + 3] = True
+        for (tx_, ty_) in lay.get('teleporter', []):
+            anker[ty_ - 3:ty_ + 7, max(0, tx_ - 3):tx_ + 5] = True
+        tor = lay.get('arena', {}).get('tor')
+        if tor:
+            anker[tor[1] - 2:tor[3] + 3, tor[0] - 2:tor[2] + 3] = True
+        g = regeln_v11.boegen(g, anker, np.isin(g, ['s', 'w']), A=3.2, zelle=10)
+        cls = [list(r_) for r_ in g]
+
     # --- 1. Basis: Sand/Gras/Wasser mit Wang-Uebergaengen aus Karte 01
     basis = {k: [r(os.path.join(BASIS1, '%s_%d.png' % (n, i))) for i in range(5)]
              for k, n in (('s', 'sand'), ('g', 'gras'), ('x', 'wasser'))}
@@ -414,7 +436,7 @@ def bauen(frame=None, speichern=True):
     sets = {n: kb.lade_set(n) for n in ('gras_weg', 'wasser_sand', 'wasser_gras')}
     PAARE = {frozenset('gs'): ('gras_weg', 's', 'g'), frozenset('gx'): ('wasser_gras', 'x', 'g'),
              frozenset('sx'): ('wasser_sand', 'x', 's')}
-    grund = lambda k: k if k in 'gx' else 's'
+    grund = lambda k: 'x' if k == 'm' else (k if k in 'gx' else 's')     # Meer: erst Wasser, dann Terrassen
     def zg(x, y):
         return grund(cls[min(max(y, 0), rows - 1)][min(max(x, 0), cols - 1)])
     vk = [[None] * (cols + 1) for _ in range(rows + 1)]
@@ -461,6 +483,32 @@ def bauen(frame=None, speichern=True):
                 region[max(0, y * T - T):(y + 2) * T, max(0, x * T - T):(x + 2) * T] = True
     img = wasser_vertieft.vertiefen(img, region, frame,
                                     rand=('#7a5434', '#a07448', '#c49a64', '#dcb886')).convert('RGBA')
+    # --- 1c. Meer (v1.1) wie Karte 01: Flachwasser, Schaumkante, zwei Stufen, Tiefsee, Felsen, Algen
+    import wasser_details
+    meer_region = np.zeros((rows * T, cols * T), bool)
+    for y in range(rows):
+        for x in range(cols):
+            if cls[y][x] == 'm':
+                meer_region[max(0, y * T - 2 * T):(y + 3) * T, max(0, x * T - 2 * T):(x + 3) * T] = True
+    if meer_region.any():
+        meiden_m = np.zeros_like(meer_region)
+        st_ = lay.get('steg')
+        if st_:
+            meiden_m[st_['y'] * T - 16:(st_['y'] + st_['breite']) * T + 16, : (st_['x'] + st_['laenge']) * T + 16] = True
+        if lay.get('inselsteg'):
+            x0_, x1_, y0_, y1_ = lay['inselsteg']
+            meiden_m[y0_ * T - 16:(y1_ + 1) * T + 16, x0_ * T - 16:(x1_ + 1) * T + 16] = True
+        for (tx_, ty_) in lay.get('teleporter', []):
+            meiden_m[ty_ * T - 16:(ty_ + 4) * T + 16, max(0, tx_ * T - 16):(tx_ + 2) * T + 16] = True
+        wasser_details.FELSEN_PROTOKOLL.clear()
+        wasser_details.SPITZEN.clear()
+        # schmalere Meeresflaechen als auf Karte 01: Stufen naeher am Ufer, damit es tief wird
+        alt_k = (wasser_details.FLACH, wasser_details.SCHAUM_D, wasser_details.STUFE1, wasser_details.STUFE2)
+        wasser_details.FLACH, wasser_details.SCHAUM_D, wasser_details.STUFE1, wasser_details.STUFE2 = 16, (14, 18), 40, 70
+        try:
+            img = wasser_details.meer_terrassen(img, meer_region, frame, meiden_m).convert('RGBA')
+        finally:
+            wasser_details.FLACH, wasser_details.SCHAUM_D, wasser_details.STUFE1, wasser_details.STUFE2 = alt_k
     L = ind.Leinwand(img)
 
     # --- 2. Boden-Overlays auf Sand: Weg, Kies, Platz, Lehm, Duene
@@ -618,6 +666,10 @@ def bauen(frame=None, speichern=True):
         bauwerke.zeichne_bruecke(img, st['x'] * T, (st['x'] + st['laenge']) * T, st['y'] * T,
                                  (st['y'] + st['breite']) * T - 2, frame=frame or 0)
         L = ind.Leinwand(img)
+    if lay.get('inselsteg'):                               # Holzsteg von der Insel nach Sueden zum Festland
+        x0_, x1_, y0_, y1_ = lay['inselsteg']
+        bauwerke.zeichne_steg(img, x0_ * T + 4, (x1_ + 1) * T - 4, y0_ * T, (y1_ + 1) * T - 2, frame=frame or 0)
+        L = ind.Leinwand(img)
     puls = 0.5 + 0.5 * math.sin(2 * math.pi * (frame or 0) / N_FRAMES)
     for (tx, ty) in lay.get('teleporter', []):
         for i in range(2):
@@ -696,6 +748,12 @@ def bauen(frame=None, speichern=True):
 
     # Bodenmaske fuer Schatten: nicht auf Mauerkappen/-fronten, nicht auf Duenen
     boden = np.ones((rows * T, cols * T), np.float32)
+    for y in range(rows):                                  # nie auf Wasser (Regel 7)
+        for x in range(cols):
+            if cls[y][x] in 'xm':
+                boden[y * T:(y + 1) * T, x * T:(x + 1) * T] = 0
+    if meer_region.any():
+        boden[wasser_details.MEER_MASKE[0]] = 0
     for (x, y) in arena:
         boden[max(0, y * T - 24):(y + 1) * T, x * T:(x + 1) * T] = 0
     for (x, y) in garten:
@@ -775,7 +833,16 @@ def objekte_zeichnen(img, objs, cache, boden, frame):
         sp = cache[o['datei']]
         a = np.array(sp.getchannel('A')) >= 200
         zeilen = np.nonzero(a.any(axis=1))[0]
-        if len(zeilen) < 4 or o.get('ohne_schatten'):
+        if o.get('ohne_schatten'):
+            continue
+        if o.get('liegend') and len(zeilen):                 # liegend: flacher Schatten der ganzen Form
+            ys_, xs_ = np.nonzero(a)
+            for d_, w_ in ((2, 0.83), (1, 1.0)):
+                Y_, X_ = ys_ + o['y'] + d_, xs_ + o['x'] + d_
+                ok_ = (Y_ >= 0) & (Y_ < wurf.shape[0]) & (X_ >= 0) & (X_ < wurf.shape[1])
+                wurf[Y_[ok_], X_[ok_]] = np.maximum(wurf[Y_[ok_], X_[ok_]], w_)
+            continue
+        if len(zeilen) < 4:
             continue
         zu = zeilen.max()
         fuss_y = o['y'] + zu

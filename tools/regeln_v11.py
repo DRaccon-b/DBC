@@ -18,8 +18,10 @@ LIEGEND = {
     'karte04': {'klein/%02d' % i for i in (2, 3, 4, 6, 9, 10, 12, 13, 15, 18, 20, 24, 29, 30, 33, 34, 43, 47, 49, 51,
                                           53, 54, 55, 58, 59, 60, 62, 63)},
     'karte02': set(),
+    'karte03': {'klein/%02d' % i for i in (6, 7, 33, 34, 37, 51, 54, 63)},
 }
-NICHT_RASTERN = {'karte02': ('schatten', 'abgeleitet/laterne', 'abgeleitet/leer', 'kran')}
+NICHT_RASTERN = {'karte02': ('schatten', 'abgeleitet/laterne', 'abgeleitet/leer', 'kran'),
+                 'karte03': ('abgeleitet/arena_tor', 'abgeleitet/buehne', 'abgeleitet/box_monitor')}
 BAUM = ('baeume/', 'rand/')
 
 
@@ -105,6 +107,44 @@ def main(karte):
     json.dump(objs, open(pf, 'w'), indent=0)
     print('%s: %d Objekte aufs Raster verschoben, %d liegend markiert, %d wegen Ueberlappung entfernt, %d gesamt'
           % (karte, n, sum(1 for o in objs if o.get('liegend')), len(weg), len(objs)))
+
+
+def boegen(g, anker, erlaubt, A=3.6, zelle=9, weg_klasse='w', ersatz='s', seed=(3, 7)):
+    """Regel 6 allgemein: Wegzellen (weg_klasse) in g (2D-Array Klassen) mit einem weichen Verschiebungsfeld
+    verbiegen; an Ankern (anker=True) bleibt alles wie es ist, nur Zellen mit erlaubt=True aendern sich."""
+    from PIL import ImageFilter
+    g = g.copy()
+    rows, cols = g.shape
+    weg = g == weg_klasse
+    anker = anker | ~erlaubt
+    dist = np.where(anker, 0.0, 99.0)
+    for _ in range(8):
+        dist = np.minimum.reduce([dist, np.roll(dist, 1, 0) + 1, np.roll(dist, -1, 0) + 1,
+                                  np.roll(dist, 1, 1) + 1, np.roll(dist, -1, 1) + 1])
+    SUB = 4
+
+    def glatt(f, s_):
+        im = Image.fromarray((np.clip(f, 0, 1) * 255).astype(np.uint8))
+        return np.array(im.filter(ImageFilter.GaussianBlur(s_))).astype(np.float32) / 255.0
+    gew = glatt(np.kron(np.clip((dist - 1) / 4.0, 0, 1), np.ones((SUB, SUB))), SUB * 1.5)
+
+    def rauschen(sd):
+        rs = np.random.RandomState(sd)
+        n = rs.rand(rows // zelle + 3, cols // zelle + 3).astype(np.float32) * 2 - 1
+        im = Image.fromarray(n, mode='F').resize(((cols // zelle + 3) * zelle * SUB, (rows // zelle + 3) * zelle * SUB),
+                                                 Image.BICUBIC)
+        return np.array(im)[:rows * SUB, :cols * SUB]
+    dx, dy = rauschen(seed[0]) * A * gew, rauschen(seed[1]) * A * gew
+    m = np.kron(weg, np.ones((SUB, SUB))).astype(np.float32)
+    Hs, Ws = m.shape
+    yy, xx = np.mgrid[0:Hs, 0:Ws].astype(np.float32)
+    sy = np.clip(np.round(yy + dy * SUB), 0, Hs - 1).astype(int)
+    sx = np.clip(np.round(xx + dx * SUB), 0, Ws - 1).astype(int)
+    neu = (glatt(m[sy, sx], SUB * 0.9) > 0.42).reshape(rows, SUB, cols, SUB).mean(axis=(1, 3)) > 0.4
+    neu[anker] = weg[anker]
+    g[neu & ~weg & erlaubt] = weg_klasse
+    g[~neu & weg & erlaubt] = ersatz
+    return g
 
 
 def wege(karte, darf=('s', 'w', 'g', 'd'), A=3.6, zelle=9):

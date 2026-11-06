@@ -32,13 +32,13 @@ FEST = [
     ('gross/06', 44, 31, {}), ('klein/18', 48, 31, {'anim': 'flagge'}), ('mittel2/00', 49.8, 31, {'anim': 'schall'}),
     # Ruinen-Arena
     ('abgeleitet/arena_tor', 54.5, 28, {'ueber_mauer': True, 'roh': True}),
-    ('mittel/03', 74, 8, {}), ('mittel/03', 86, 13, {}), ('mittel/03', 74, 19, {}), ('mittel/03', 78, 25, {}),
-    ('mittel/04', 59, 15, {}), ('mittel/05', 77, 9, {}), ('mittel/05', 84.5, 9, {}), ('mittel/05', 71, 23, {}),
+    ('mittel/03', 74, 8, {}), ('mittel/03', 79, 14, {}), ('mittel/03', 74, 19, {}), ('mittel/03', 78, 25, {}),
+    ('mittel/04', 59, 15, {}), ('mittel/05', 77, 9, {}), ('mittel/05', 79.5, 8, {}), ('mittel/05', 71, 23, {}),
     ('klein/20', 70, 11, {}), ('klein/20', 81, 23, {}), ('klein/21', 66, 13, {}), ('klein/21', 47, 13, {}),
     # Garten im Nordosten
-    ('gross/10', 95.2, 13, {}), ('klein/31', 92.2, 21, {}), ('klein/31', 98.8, 21, {}),
+    ('gross/10', 95.2, 12, {}), ('klein/31', 92.2, 25, {}), ('klein/31', 98.8, 25, {}),
     # Lautsprechersaeulen an den Wegen
-    ('mittel2/00', 66.5, 26, {'anim': 'schall'}), ('mittel2/00', 92.5, 26, {'anim': 'schall'}), ('mittel2/00', 52.3, 40, {'anim': 'schall'}), ('mittel2/00', 25, 56, {'anim': 'schall'}),
+    ('mittel2/00', 66.5, 26, {'anim': 'schall'}), ('mittel2/00', 89.5, 26, {'anim': 'schall'}), ('mittel2/00', 52.3, 40, {'anim': 'schall'}), ('mittel2/00', 25, 56, {'anim': 'schall'}),
     ('mittel2/00', 40.5, 63, {'anim': 'schall'}),
     # Server-Feld mit Antennen (auf den Kabelknoten)
     ('gross2/00', 62.5, 41, {'anim': 'blinken', 'dreh': True}), ('gross2/01', 66.5, 48, {'anim': 'blinken', 'dreh': True}),
@@ -94,9 +94,9 @@ def garten_ring():
     import math
     pflanzen = ['mittel/00', 'baeume/00', 'mittel2/12', 'baeume/02', 'mittel/01', 'baeume/01', 'mittel2/07',
                 'baeume/03', 'mittel/02', 'baeume/05', 'mittel2/06', 'baeume/00']
-    cx, cy, rx, ry = 95.5, 12.6, 6.9, 7.2
+    cx, cy, rx, ry = 95.3, 12.2, 6.2, 4.9           # v1.1: auf dem Sandstrand der Insel
     out = []
-    winkel = [w for w in range(-90 + 18, 270 - 18, 26) if not (60 < w < 120)]   # Sueden (90 Grad) offen
+    winkel = [w for w in range(-90 + 18, 270 - 18, 30) if not (55 < w < 125)]   # Sueden (90 Grad) offen
     for i, w in enumerate(winkel):
         n = pflanzen[i % len(pflanzen)]
         if n.startswith('baeume/') and not os.path.exists(os.path.join(OBJ, n + '.png')):
@@ -151,7 +151,7 @@ def main():
     gesperrt = np.zeros((MH, MW), bool)
     for y in range(rows):
         for x in range(cols):
-            if cls[y][x] in 'xwpd':
+            if cls[y][x] in 'xmwpd':
                 gesperrt[y * T:(y + 1) * T, x * T:(x + 1) * T] = True
     mauer = np.zeros((MH, MW), bool)
     for (x, y) in tm.get('arena', []) + tm.get('garten', []):
@@ -190,6 +190,10 @@ def main():
         a = np.array(im.getchannel('A')) >= 200
         xs0, ys0, xs1, ys1 = max(0, x), max(0, y), min(MW, x + im.width), min(MH, y + im.height)
         a = a[ys0 - y:ys1 - y, xs0 - x:xs1 - x]
+        fy_, fx_ = min(rows - 1, int(ay) // T), min(cols - 1, max(0, int(ax) // T))
+        if cls[fy_][fx_] in 'xm':                          # nie im Wasser (Meer, Teich)
+            print('  im Wasser, uebersprungen:', name, int(ax) // T, int(ay) // T)
+            return None
         if fest and not opt.pop('ueber_mauer', False) and (mauer[ys0:ys1, xs0:xs1] & a).any():
             print('  auf Mauer, uebersprungen:', name, ax // T, ay // T)
             return None
