@@ -1097,6 +1097,9 @@ OBJEKTGRUPPEN_K12 = {
         'wooden puppet theater booth with a dark red curtain and carved wooden frame, ' + FR12,
         'huge twisted dark tree with drooping dark violet leaves and thick gnarled roots, ' + FR12,
     ]},
+    'k12_baumhaus': {'size': 224, 'items': [
+        'big wooden treehouse with two floors built into a huge gnarled dark tree with dark blue-violet leaves, red pointed shingle roof with a small spire, warm lit yellow windows, wooden balconies with railings, a wooden stair spiraling down the trunk to the ground, a small wooden door in the trunk, ' + FR12,
+    ]},
     'k12_wald': {'size': 64, 'items': [
         'gloomy dark green round forest tree', 'gloomy dark green tall forest tree', 'dark green forest tree with a twisted trunk',
         'gloomy dark forest tree with blue-violet leaves', 'dark pine tree', 'small gloomy dark green tree',
