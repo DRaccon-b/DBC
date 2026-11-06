@@ -43,7 +43,7 @@ HAUS_ANIM = {'haeuser/03': 'kamin', 'haeuser/02': 'kamin', 'haeuser2/03': 'glock
 FEST = [
     # Bahnhof: Gebaeude auf der Bahnsteigachse, Zug auf dem unteren Gleis
     ('bahnhof/00', ACHSE_BAHNHOF, 12, {'achse': ACHSE_BAHNHOF, 'anim': 'uhr'}),
-    ('klein/39', ACHSE_BAHNHOF - 96, 13, {'symm': 'bsl', 'anim': 'lampe'}), ('klein/39', ACHSE_BAHNHOF + 96, 13, {'symm': 'bsl', 'anim': 'lampe'}),
+    ('klein/39', ACHSE_BAHNHOF - 72, 13, {'symm': 'bsl', 'anim': 'lampe'}), ('klein/39', ACHSE_BAHNHOF + 72, 13, {'symm': 'bsl', 'anim': 'lampe'}),
     # Uhrenplatz: Uhrturm in der Mitte, Baenke und Laternen symmetrisch
     ('gross1/00', ACHSE_UHR, 55, {'achse': ACHSE_UHR, 'anim': 'uhr'}),
     (LAMPE, ACHSE_UHR - 72, 52, {'symm': 'ul', 'anim': 'lampe'}), (LAMPE, ACHSE_UHR + 72, 52, {'symm': 'ul', 'anim': 'lampe'}),
@@ -87,9 +87,20 @@ FEST = [
     # Neu (PixelLab k10_banner, k10_klein2, k10_baeume2)
     ('baeume2/12', 52 * T, 67, {'anim': 'zirkus'}), ('baeume2/13', 21 * T, 66, {'achse': 21 * T}), ('baeume2/08', 23 * T + 8, 52, {'anim': 'schaukeln', 'amp': 7, 'fest': 0.32}),
     ('klein2/63', 33 * T, 52, {}), ('klein2/61', 27 * T, 54, {'anim': 'schaukeln', 'amp': 6, 'fest': 0.12}),
-    ('banner/12', 62 * T + 4, 23, {}), ('banner/07', 70 * T, 28, {}), ('banner/09', 85 * T, 27, {}),
-    ('banner/14', 66 * T, 28, {}), ('banner/05', 87 * T + 8, 21, {'anim': 'signal'}), ('banner/05', 20 * T + 8, 6, {'anim': 'signal'}),
-    ('banner/05', 46 * T + 8, 6, {'anim': 'signal'}),
+    ('banner/12', 62 * T + 4, 23, {}), ('banner/05', 85 * T, 17, {'anim': 'signal'}),
+    # Bahnhof und Strecke (PixelLab k10_bahn, k10_bahn2): Wasserturm und Stellwerk neben dem Bahnhof, Gueterschuppen
+    # und Kohlebunker auf dem Vorplatz, Prellboecke an den Gleisenden, Gepaeck am Bahnsteig, Masten im festen Abstand
+    ('bahn/00', 67 * T, 12, {'achse': 67 * T}), ('bahn/01', 1354, 12, {'achse': 1354}),
+    ('bahn/02', 1050, 29, {'achse': 1050}), ('bahn/03', 1380, 29, {'achse': 1380}),
+    ('bahn2/12', 64 * T + 8, 12, {}), ('bahn2/02', 66 * T + 8, 31, {}), ('bahn2/13', 85 * T, 31, {}),
+    ('bahn2/07', 1410, 19, {'achse': 1410}), ('bahn2/07', 1410, 4, {'achse': 1410}),
+    ('bahn2/00', 74 * T, 15, {'ueberlappen': True}), ('bahn2/03', 78 * T + 8, 15, {'ueberlappen': True}),
+    ('bahn2/11', 32 * T + 8, 6, {}), ('bahn2/11', 42 * T + 8, 6, {}),
+    ('bahn2/05', 55 * T + 8, 6, {}), ('bahn2/05', 63 * T + 8, 21, {}),
+    ('bahn2/02', 9 * T + 8, 6, {}), ('bahn2/03', 37 * T + 8, 6, {}), ('bahn2/09', 26 * T + 8, 6, {}),
+    ('bahn2/12', 13 * T + 8, 6, {}), ('bahn2/14', 52 * T + 8, 6, {'anim': 'lampe'}),
+] + [('bahn2/06', x * T + 8, 3, {}) for x in (6, 18, 30, 42, 54)] + [
+    ('banner/05', 20 * T + 8, 6, {'anim': 'signal'}), ('banner/05', 46 * T + 8, 6, {'anim': 'signal'}),
     ('banner/13', 32 * T + 8, 23, {'anim': 'ampel'}), ('banner/13', 46 * T + 8, 23, {'anim': 'ampel'}),
     ('banner/13', 43 * T + 8, 34, {'anim': 'ampel'}),
     ('klein2/00', 46 * T + 8, 13, {}), ('klein2/00', 32 * T + 8, 30, {}), ('klein2/00', 60 * T + 8, 28, {}),
