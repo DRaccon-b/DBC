@@ -910,6 +910,81 @@ OBJEKTGRUPPEN_K8 = {
 }
 
 
+STIL_K10 = ("Top-down RPG map object for a cheerful children's toy town in polished handheld monster-collecting RPG pixel "
+            "art: colored dark outline (darkest shade of the object's own hue, never pure black), light from the upper left, "
+            "soft pastel and bright toy colors, clean readable shapes, no noise, no dithering, transparent background, no "
+            "ground, no cast shadow. Straight front view, orthographic, not isometric.")
+PALETTE_K10 = ['#2a2a3a', '#4a4a5e', '#7a7a8e', '#b0b0c0', '#e8e8f0', '#ffffff', '#3a2418', '#6a4428', '#9a6a3a', '#c8945a',
+               '#f0d8a8', '#fff2d0', '#2e6a2e', '#4a9a3a', '#78c050', '#a8e070', '#a02a2a', '#d84a3a', '#f07a5a', '#ff9a8a',
+               '#2a4aa0', '#3a7ad8', '#6aa8f0', '#a8d0ff', '#6a3a9a', '#9a5ad0', '#c890f0', '#d06a9a', '#f09ac8', '#ffd0e8',
+               '#e0a020', '#f8d040', '#fff080']
+OBJEKTGRUPPEN_K10 = {
+    'k10_haeuser': {'size': 128, 'items': [
+        'cute toy house with two pointed orange tiled roofs, cream walls, blue shutters, small red door, seen from the front and slightly above so the roof surfaces and ridge are visible, like a house in a classic 2D handheld RPG town, facade facing the camera, symmetric, not isometric',
+        'cute toy house with a blue round dome roof, cream walls, blue windows, small porch, seen from the front and slightly above so the roof surfaces and ridge are visible, like a house in a classic 2D handheld RPG town, facade facing the camera, symmetric, not isometric',
+        'cute toy house with a big red tiled roof, cream walls, blue shutters, chimney, seen from the front and slightly above so the roof surfaces and ridge are visible, like a house in a classic 2D handheld RPG town, facade facing the camera, symmetric, not isometric',
+        'cute toy house with a purple pointed roof and a small chimney, cream walls, blue shutters, seen from the front and slightly above so the roof surfaces and ridge are visible, like a house in a classic 2D handheld RPG town, facade facing the camera, symmetric, not isometric',
+    ]},
+    'k10_haeuser2': {'size': 128, 'items': [
+        'toy apartment building like a small castle, blue-grey walls, purple crenellated roof with a gold star, many windows, seen from the front and slightly above so the roof surfaces and ridge are visible, like a house in a classic 2D handheld RPG town, facade facing the camera, symmetric, not isometric',
+        'cute toy bakery with a pink striped awning and a cake sign, seen from the front and slightly above so the roof surfaces and ridge are visible, like a house in a classic 2D handheld RPG town, facade facing the camera, symmetric, not isometric',
+        'cute toy shop with a yellow roof and a big teddy bear sign, seen from the front and slightly above so the roof surfaces and ridge are visible, like a house in a classic 2D handheld RPG town, facade facing the camera, symmetric, not isometric',
+        'cute toy fire station with a red roof and a big garage door, seen from the front and slightly above so the roof surfaces and ridge are visible, like a house in a classic 2D handheld RPG town, facade facing the camera, symmetric, not isometric',
+    ]},
+    'k10_burg': {'size': 192, 'items': [
+        'big pink toy castle front made of pink bricks, four tall round towers with red cone roofs and gold trim, big wooden arched double door in the middle, heart emblem above the door, small flags, perfectly straight front elevation view, symmetric, facing the camera head-on, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+    ]},
+    'k10_bahnhof': {'size': 128, 'items': [
+        'cute toy train station building with a red roof, cream walls, a big clock in the gable, blue doors, seen from the front and slightly above so the roof surfaces and ridge are visible, like a house in a classic 2D handheld RPG town, facade facing the camera, symmetric, not isometric',
+        'cute toy steam locomotive, red and blue with gold details, seen from the side, facing right, perfectly straight front elevation view, facing the camera head-on, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'cute toy train wagon carrying big letter blocks, red, seen from the side, perfectly straight front elevation view, facing the camera head-on, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'tall wooden toy clock tower with a red roof and a big round clock, perfectly straight front elevation view, symmetric, facing the camera head-on, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+    ]},
+    'k10_spielplatz': {'size': 64, 'items': [
+        'red playground slide with a ladder, perfectly straight front elevation view, symmetric, facing the camera head-on, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'red playground swing set with two swings, perfectly straight front elevation view, symmetric, facing the camera head-on, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'playground seesaw, perfectly straight front elevation view, symmetric, facing the camera head-on, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'wooden park bench, perfectly straight front elevation view, symmetric, facing the camera head-on, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'round yellow street lamp on a thin post, perfectly straight front elevation view, symmetric, facing the camera head-on, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'blue mailbox on a post, perfectly straight front elevation view, symmetric, facing the camera head-on, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'red fire hydrant, perfectly straight front elevation view, symmetric, facing the camera head-on, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'small wooden fence segment painted white, perfectly straight front elevation view, symmetric, facing the camera head-on, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'stone fountain with blue water, perfectly straight front elevation view, symmetric, facing the camera head-on, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'toy soldier guard with a tall black hat and red coat, standing, perfectly straight front elevation view, symmetric, facing the camera head-on, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'stack of big colorful toy letter blocks, perfectly straight front elevation view, symmetric, facing the camera head-on, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'red and blue toy drum, perfectly straight front elevation view, symmetric, facing the camera head-on, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'big brown teddy bear sitting, perfectly straight front elevation view, symmetric, facing the camera head-on, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'small cute toy robot, perfectly straight front elevation view, symmetric, facing the camera head-on, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'small merry-go-round carousel, perfectly straight front elevation view, symmetric, facing the camera head-on, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'flower bed with tulips, perfectly straight front elevation view, symmetric, facing the camera head-on, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+    ]},
+    'k10_baeume': {'size': 80, 'items': [
+        'round pink cherry blossom tree, perfectly straight front elevation view, symmetric, facing the camera head-on, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'round green cartoon tree with a short trunk, perfectly straight front elevation view, symmetric, facing the camera head-on, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'small pink blossom tree, perfectly straight front elevation view, symmetric, facing the camera head-on, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'round green bush with small flowers, perfectly straight front elevation view, symmetric, facing the camera head-on, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+    ]},
+    'k10_klein': {'size': 32, 'items': [
+        'small red toy car',
+        'small blue toy car',
+        'colorful beach ball',
+        'wrapped gift box with a bow',
+        'orange traffic cone',
+        'wrapped candy',
+        'small toy letter block',
+        'spinning top toy',
+        'small yellow rubber duck',
+        'pink flowers',
+        'small white daisy flowers',
+        'small stones',
+        'small grass tuft',
+        'toy sailboat',
+        'small toy airplane',
+        'crayon',
+    ]},
+}
+
+
 def call(method, path, body=None, raw=False):
     req = urllib.request.Request(API + path, method=method,
                                  data=json.dumps(body).encode() if body is not None else None,
@@ -962,7 +1037,9 @@ def herunterladen(oid, d):
 
 
 def speichern(gruppe, ims, ids):
-    if gruppe.startswith('k9_'):
+    if gruppe.startswith('k10_'):
+        ziel = os.path.join(ROOT, 'assets', 'objekte', 'karte10', gruppe[4:])
+    elif gruppe.startswith('k9_'):
         ziel = os.path.join(ROOT, 'assets', 'objekte', 'karte09', gruppe[3:])
     elif gruppe.startswith('k8_'):
         ziel = os.path.join(OUT_K8, gruppe[3:])
@@ -1003,6 +1080,17 @@ def erzeugen(gruppe):
     k4 = gruppe.startswith('k4_')
     k5 = gruppe.startswith('k5_')
     k6 = gruppe.startswith('k6_') or gruppe.startswith('k7_')
+    if gruppe.startswith('k10_'):
+        g = OBJEKTGRUPPEN_K10[gruppe]
+        req = {'description': STIL_K10, 'size': g['size'], 'view': 'top-down',
+               'item_descriptions': [it + '. ' + STIL_K10 for it in g['items']],
+               'target_palette': {'colors': PALETTE_K10, 'name': 'Karte10 Toy Town'}}
+        d = call('POST', '/v2/create-1-direction-object', req)
+        oid = d['object_id']
+        print(gruppe, 'Objekt', oid)
+        d = warte(oid)
+        speichern(gruppe, *herunterladen(oid, d))
+        return
     if gruppe.startswith('k8_') or gruppe.startswith('k9_'):
         g = OBJEKTGRUPPEN_K8[gruppe]
         req = {'description': STIL_K8, 'size': g['size'], 'view': 'top-down',
