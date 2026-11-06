@@ -192,7 +192,15 @@ def objekte():
         for ex in range(x // 8 - 1, x // 8 + 2):
             for ey in range(y // 8 - 1, y // 8 + 2):
                 yield from eimer.get((ex, ey), ())
-    for o in sorted(baeume, key=lambda o: (-o['block'][2] * o['block'][3], o['kachel'][1])):
+    REGEL8 = False                                  # Nutzer: Baum-Aenderungen (Regel 8) verworfen -> Baeume wie v1.0
+    if not REGEL8:
+        behalten = list(baeume)
+        for o in behalten:
+            eintragen(o)
+        baeume_sortiert = []
+    else:
+        baeume_sortiert = sorted(baeume, key=lambda o: (-o['block'][2] * o['block'][3], o['kachel'][1]))
+    for o in baeume_sortiert:
         if all(erlaubt(o['block'], p['block'], wald(o) and wald(p)) for p in nachbarn(*o['kachel'])):
             behalten.append(o); eintragen(o)
     entfernt = vorher - len(behalten)
@@ -202,7 +210,7 @@ def objekte():
         rest_k |= {(x, y) for x in range(bx, bx + wt) for y in range(by, by + ht)}
     datei_von = {o['basis']: o['datei'] for o in baeume}
     gepackt = 0
-    for durchgang in range(2):
+    for durchgang in (range(2) if REGEL8 else ()):
         for y in range(rows):
             for x in range(cols):
                 if cls[y][x] != 'h' or (x, y) in gesperrt:

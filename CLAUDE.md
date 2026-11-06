@@ -24,7 +24,8 @@ wird jede Regel einzeln geprüft.
 6. **Wege** gehen nie nur gerade und müssen nicht durchgängig sein: diagonal erlaubt, natürliche Bögen, ein Weg
    darf auch einmal unterbrechen und später weitergehen.
 7. **Schatten** ragen nie über Kanten (Klippen, Wände, Wasser) oder über andere Objekte.
-8. **Bäume überlappen sich nur an den äußeren Kachelspalten:**
+8. **Bäume überlappen sich nur an den äußeren Kachelspalten:** *(vorerst NICHT anwenden – der Nutzer hat die
+   Baum-Änderungen auf Karte 01 und 05 verworfen; Bäume bleiben wie in der jeweiligen Vorlage/v1.0)*
    - Ein Baum, der 3 oder mehr Kacheln breit ist, darf einen Nachbarbaum nur mit seiner äußersten Spalte links
      bzw. rechts überlappen – die inneren Spalten bleiben frei.
    - Ein Baum, der 1–2 Kacheln breit ist, überlappt gar nicht – solche Bäume stehen nebeneinander.

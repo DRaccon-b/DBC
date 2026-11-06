@@ -6,8 +6,7 @@ Neue Fassung nach den Regeln in `CLAUDE.md`. v1.0 liegt in `maps/karte05/v1.0/` 
 - **Regel 1/1b – Raster:** jedes Objekt im kleinsten Kachelblock, waagerecht zentriert, Fuß bündig auf der Kachelkante.
 - **Regel 6 – Wege:** natürliche Bögen statt eckiger Wege; Treppen, Teleporter, Klippen und Kartenrand bleiben fest.
 - **Regel 2 – Treppen:** unter jeder Treppe ein Wegstück in voller Breite; Treppenzugang frei von Objekten (3× geprüft).
-- **Regel 8 – Bäume:** Überlappung nur an den äußeren Spalten (Waldrand: bis zwei Spalten), Sockel nie auf derselben Kachel;
-  Waldrand danach neu gepackt (am Kartenrand dürfen Kronen über den Rand ragen), Lücken mit kleinen Tannen gefüllt.
+- **Bäume:** unverändert dicht wie in v1.0 (Baum-Änderungen nach Regel 8 auf Wunsch verworfen).
 - **Regel 5 – Einzelbäume:** Begleitung aus den Schnee-Sets (Frostgras, Farn, Schneeglöckchen …) bzw. zweite kleine Tanne;
   Bäume ohne Platz für Begleitung entfernt.
 - **Einbettung:** Felsen bekommen Frostgras/Schneeblumen an den Sockelecken.
