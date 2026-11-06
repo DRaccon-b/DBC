@@ -325,63 +325,47 @@ def marionette(sp, frame, o):
     return out
 
 
-def lumpen(sp, frame, o):
-    """Vogelscheuche: nur die Stofflumpen (Saeume an Aermeln und Rock) flattern 1 px im Wind; Pfahl, Kopf und Hut
-    bleiben ruhig."""
-    a = np.array(sp)
-    ai = a.astype(int)
-    h, w = a.shape[:2]
-    al = ai[..., 3] > 0
-    stoff = al & (ai[..., 1] >= ai[..., 0] - 2) & (ai[..., 1] > ai[..., 2] - 6) & (ai[..., 1] < 140)
+def _stoff_welle(a, stoff, frame, o, staerke):
+    """Nur Stoffpixel aendern: jedes Stoffpixel nimmt die Farbe eines seitlich versetzten Stoffpixels an (Welle,
+    zum freien Ende hin staerker). Alles, was kein Stoff ist (Holz, Pfahl, Rahmen, Kopf), bleibt unveraendert."""
+    out = a.copy()
     ys, xs = np.nonzero(stoff)
     if not len(ys):
-        return sp
+        return out
     y0, y1, xa, xb = ys.min(), ys.max(), xs.min(), xs.max()
-    out = a.copy()
     ph = 2 * math.pi * frame / N_FRAMES + o.get('x', 0) * 0.05
-    bew = []
+    w = a.shape[1]
     for y, x in zip(ys, xs):
-        aussen = min(x - xa, xb - x) / max(1.0, (xb - xa) / 2.0)        # 0 = Aermelspitze, 1 = Mitte
+        k_ = staerke(y, x, y0, y1, xa, xb)
+        d = int(round(1.3 * k_ * math.sin(ph + y * 0.55)))
+        q = x - d
+        if d and 0 <= q < w and stoff[y, q]:
+            out[y, x] = a[y, q]
+    return out
+
+
+def lumpen(sp, frame, o):
+    """Vogelscheuche: nur die Stofflumpen (gruener Kittel, blaue Aermel) flattern - Aermelspitzen und Saum am
+    staerksten; Pfahl, Arme aus Holz, Kopf und Strohhut bleiben ruhig."""
+    a = np.array(sp)
+    ai = a.astype(int)
+    al = ai[..., 3] > 0
+    stoff = al & (((ai[..., 1] > ai[..., 0] + 6) & (ai[..., 1] >= ai[..., 2])) | ((ai[..., 2] > ai[..., 0] + 12) & (ai[..., 2] >= ai[..., 1])))
+    def staerke(y, x, y0, y1, xa, xb):
+        aussen = min(x - xa, xb - x) / max(1.0, (xb - xa) / 2.0)
         unten = (y - y0) / max(1.0, y1 - y0)
-        k_ = max(1 - aussen * 2.2, unten * 1.4 - 0.5)
-        if k_ > 0.3:
-            d = int(round(1.2 * k_ * math.sin(ph + y * 0.6)))
-            if d:
-                bew.append((y, x, d))
-    for y, x, d in bew:
-        out[y, x] = 0
-    for y, x, d in bew:
-        X = x + d
-        if 0 <= X < w:
-            out[y, X] = a[y, x]
-    return Image.fromarray(out)
+        return max(0.0, 1 - aussen * 2.2, unten * 1.4 - 0.5)
+    return Image.fromarray(_stoff_welle(a, stoff, frame, o, staerke))
 
 
 def vorhang(sp, frame, o):
-    """Puppentheater: nur der rote Vorhang bewegt sich - die unteren Falten schwingen 1 px, Rahmen und Buehne ruhen."""
+    """Puppentheater: nur der tiefrote Vorhangstoff schwingt (unten staerker); Holzrahmen und Buehne ruhen."""
     a = np.array(sp)
     ai = a.astype(int)
-    h, w = a.shape[:2]
-    rot = (ai[..., 3] > 0) & (ai[..., 0] > ai[..., 1] + 40) & (ai[..., 0] > ai[..., 2] + 30)
-    ys, xs = np.nonzero(rot)
-    if not len(ys):
-        return sp
-    y0, y1 = ys.min(), ys.max()
-    out = a.copy()
-    ph = 2 * math.pi * frame / N_FRAMES
-    neu = []
-    for y, x in zip(ys, xs):
-        t = (y - y0) / max(1.0, y1 - y0)
-        d = int(round(1.3 * t * math.sin(ph + x * 0.35)))
-        neu.append((y, x, d))
-    for y, x, d in neu:
-        if d:
-            out[y, x] = a[y, x - 1] if x > 0 and not rot[y, x - 1] else out[y, x]
-    for y, x, d in neu:
-        X = x + d
-        if 0 <= X < w:
-            out[y, X] = a[y, x]
-    return Image.fromarray(out)
+    rot = (ai[..., 3] > 0) & (ai[..., 0] > ai[..., 1] + 30) & (ai[..., 0] > ai[..., 2] + 25) & (ai[..., 1] < 60) & (ai[..., 0] > 50)
+    def staerke(y, x, y0, y1, xa, xb):
+        return (y - y0) / max(1.0, y1 - y0)
+    return Image.fromarray(_stoff_welle(a, rot, frame, o, staerke))
 
 
 def kreisel(sp, frame, o):
