@@ -872,12 +872,15 @@ def animieren(img, objs, cache, frame, ruhig=False):
                     gd.ellipse((x0 - r, y0 - r, x0 + r, y0 + r), fill=(175, 170, 165, int(210 * k_)))
                     if r > 2.5:
                         gd.ellipse((x0 - r + 1, y0 - r + 1, x0, y0), fill=(220, 216, 210, int(200 * k_)))
-        elif anim in ('geisterlicht', 'kerzen', 'glimmen', 'feuer_kamin', 'feuer', 'feuer_lila', 'portal'):
+        elif anim in ('geisterlicht', 'kerzen', 'glimmen', 'feuer_kamin', 'feuer', 'feuer_lila', 'portal', 'kessel'):
             # Lichtquelle: hellste gesaettigte Pixel (gruene Flamme / Kerzenflamme / Pilzkappen) pulsieren,
             # weicher Schein in ihrer Farbe (Karte 08)
             a = np.array(sp).astype(np.int16)
             r_, g_, b_ = a[..., 0], a[..., 1], a[..., 2]
-            if anim == 'geisterlicht':
+            if anim == 'kessel':                               # gruen brodelnder Kesselinhalt
+                q = (a[..., 3] > 0) & (g_ > r_ + 25) & (g_ > b_)
+                farbe, rad = (120, 255, 140), (12, 6)
+            elif anim == 'geisterlicht':
                 q = (a[..., 3] > 0) & (g_ > 150) & (g_ > r_ + 40)
                 farbe, rad = (120, 255, 170), (16, 8)
             elif anim in ('kerzen', 'feuer_kamin', 'feuer'):

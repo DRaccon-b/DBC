@@ -84,7 +84,7 @@ FEST = [
     ('k8/gross/03', 77, 50, {}), ('wand/32', 38, 76, {}), ('k8/graeber/09', 20, 47, {}), ('k8/graeber/09', 36, 47, {'spiegeln': True}),
     ('wand/34', 66, 57, {}),
 ] + [('k8/mittel/04', x, y, {}) for (x, y) in ((61, 54), (63, 51), (68, 51), (73, 54), (71, 59), (68, 61), (63, 61), (61, 58))] + [
-    ('wand/35', 48, 73, {'anim': 'glimmen'}), ('k8/mittel/13', 47, 78, {'anim': 'kerzen'}), ('wand/60', 49, 75, {}),
+    ('wand/35', 48, 73, {}), ('k8/mittel/13', 47, 78, {'anim': 'kerzen'}), ('wand/60', 49, 75, {}),
     ('k8/mittel/05', 35, 78, {'anim': 'geisterlicht'}), ('k8/mittel/05', 52, 80, {'anim': 'geisterlicht'}),
     ('k8/mittel/05', 24, 50, {'anim': 'geisterlicht'}), ('k8/mittel/05', 34, 50, {'anim': 'geisterlicht'}),
     ('k8/mittel/05', 57, 75, {'anim': 'geisterlicht'}), ('k8/mittel/05', 16, 74, {'anim': 'geisterlicht'}),
