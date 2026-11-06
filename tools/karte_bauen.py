@@ -533,7 +533,19 @@ def bauen(frame=None, speichern=True, objekte=True, saison=None):
         for x in range(cols):
             if grid[y][x] in 'Dh':
                 meer_region[max(0, y * T - 2 * T):(y + 2) * T, max(0, x * T - 2 * T):(x + 2) * T] = True
-    img = wasser_details.meer_terrassen(img, meer_region, frame, meiden)
+    # feste Meeresflaeche aus dem Standbild: sonst wandern Kueste, Stufen und Felsen in der Animation
+    mf = os.path.join(KARTE, 'meer_maske.npy')
+    if frame is None:
+        img = wasser_details.meer_terrassen(img, meer_region, None, meiden)
+        if saison is None:
+            np.save(mf, np.packbits(wasser_details.MEER_MASKE[0]))
+    else:
+        if os.path.exists(mf):
+            fest_m = np.unpackbits(np.load(mf))[:rows * T * cols * T].reshape(rows * T, cols * T).astype(bool)
+        else:                                              # einmal am unanimierten Bild bestimmen
+            wasser_details.meer_terrassen(img.copy(), meer_region, None, meiden)
+            fest_m = wasser_details.MEER_MASKE[0]
+        img = wasser_details.meer_terrassen(img, meer_region, frame, meiden, maske=fest_m)
 
     # --- 1d. Waldboden (v1.1): Wald-Zellen (F) dunkler gruen wie auf der Startkarte, weicher Rand, nur auf Gras
     from PIL import ImageFilter as _IF

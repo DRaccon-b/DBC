@@ -216,13 +216,18 @@ FARBEN = [H('#5fcfd6'), H('#38a8cc'), H('#2a7cbc'), H('#1d58a0')]   # Wasser je 
 MISCH = [0.45, 0.62, 0.78, 0.9]                                  # Anteil Wasserfarbe ueber dem Grund
 
 
-def meer_terrassen(img, region, frame=None, meiden=None):
+def meer_terrassen(img, region, frame=None, meiden=None, maske=None):
+    """maske: feste Meeresflaeche (z. B. aus dem Standbild) - sonst Erkennung ueber die Farbe. Fuer Animationen
+    immer die feste Maske uebergeben, sonst wandern Kueste, Stufen und Felsen von Bild zu Bild."""
     a = np.array(img.convert('RGB')).astype(np.float32)
     Hh, W = a.shape[:2]
-    r, g, b = a[..., 0], a[..., 1], a[..., 2]
-    roh = region & (b > r + 40) & (b > g + 10)
-    m = np.array(Image.fromarray((roh * 255).astype(np.uint8)).filter(ImageFilter.GaussianBlur(2.5))) > 120
-    m &= region
+    if maske is not None:
+        m = maske & region
+    else:
+        r, g, b = a[..., 0], a[..., 1], a[..., 2]
+        roh = region & (b > r + 40) & (b > g + 10)
+        m = np.array(Image.fromarray((roh * 255).astype(np.uint8)).filter(ImageFilter.GaussianBlur(2.5))) > 120
+        m &= region
     MEER_MASKE[0] = m
     if not m.any():
         return img

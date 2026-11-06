@@ -516,7 +516,14 @@ def bauen(frame=None, speichern=True):
         alt_k = (wasser_details.FLACH, wasser_details.SCHAUM_D, wasser_details.STUFE1, wasser_details.STUFE2)
         wasser_details.FLACH, wasser_details.SCHAUM_D, wasser_details.STUFE1, wasser_details.STUFE2 = 16, (14, 18), 40, 70
         try:
-            img = wasser_details.meer_terrassen(img, meer_region, frame, meiden_m).convert('RGBA')
+            mf = os.path.join(KARTE, 'meer_maske.npy')           # feste Meeresflaeche aus dem Standbild
+            if frame is None or not os.path.exists(mf):
+                img = wasser_details.meer_terrassen(img, meer_region, None if frame is None else frame, meiden_m).convert('RGBA')
+                if frame is None:
+                    np.save(mf, np.packbits(wasser_details.MEER_MASKE[0]))
+            else:
+                fest_m = np.unpackbits(np.load(mf))[:rows * T * cols * T].reshape(rows * T, cols * T).astype(bool)
+                img = wasser_details.meer_terrassen(img, meer_region, frame, meiden_m, maske=fest_m).convert('RGBA')
         finally:
             wasser_details.FLACH, wasser_details.SCHAUM_D, wasser_details.STUFE1, wasser_details.STUFE2 = alt_k
     L = ind.Leinwand(img)
