@@ -28,16 +28,16 @@ GRAEBER = ['mittel/00', 'mittel/01', 'mittel/02', 'mittel/03', 'mittel/04', 'gra
 FEST = [
     ('schloss/00', 55, 11, {'keine_verdeckung': True}),
     # Schlossplatz: Paare exakt spiegelsymmetrisch zur Schlossachse (symmetrie() nach regeln_v11)
-    ('graeber/09', 48, 14, {'symm': 'garg'}), ('graeber/09', 62, 14, {'spiegeln': True, 'symm': 'garg'}),
-    ('mittel/06', 51, 18, {'anim': 'fahne', 'symm': 'banner'}),
-    ('mittel/06', 59, 18, {'anim': 'fahne', 'spiegeln': True, 'symm': 'banner'}),
+    ('graeber/09', 47, 15, {'symm': 'garg'}), ('graeber/09', 63, 15, {'spiegeln': True, 'symm': 'garg'}),
+    ('mittel/06', 49, 17, {'anim': 'fahne', 'symm': 'banner'}),
+    ('mittel/06', 61, 17, {'anim': 'fahne', 'spiegeln': True, 'symm': 'banner'}),
     ('mittel/07', 45, 17, {'symm': 'saeule'}), ('mittel/07', 65, 17, {'spiegeln': True, 'symm': 'saeule'}),
-    ('mittel/05', 51, 13, {'anim': 'geisterlicht', 'symm': 'laterne'}),
-    ('mittel/05', 59, 13, {'anim': 'geisterlicht', 'spiegeln': True, 'symm': 'laterne'}),
+    ('mittel/05', 52, 15, {'anim': 'geisterlicht', 'symm': 'laterne'}),
+    ('mittel/05', 58, 15, {'anim': 'geisterlicht', 'spiegeln': True, 'symm': 'laterne'}),
     # Mausoleum mit Laternen, Gruften
-    ('gross/00', 54, 67, {}),
+    ('krypta/02', 54, 67, {}),
     ('mittel/05', 49, 68, {'anim': 'geisterlicht'}), ('mittel/05', 59, 68, {'anim': 'geisterlicht'}),
-    ('gross/01', 44, 63, {}), ('gross/01', 88, 60, {'spiegeln': True}), ('gross/02', 82, 63, {}),
+    ('krypta/00', 44, 63, {}), ('krypta/03', 88, 60, {}), ('krypta/01', 82, 63, {}),
     ('mittel/07', 92, 64, {}), ('mittel/07', 79, 59, {'spiegeln': True}),
     # grosser toter Baum oben links, Baum am Sumpf
     ('gross/03', 9, 14, {}), ('gross/03', 66, 66, {'spiegeln': True}),
@@ -77,10 +77,17 @@ STREU_BODEN = {'klein/04': 8, 'klein/12': 6, 'klein/02': 4, 'klein/03': 3, 'klei
                'mittel/14': 2, 'klein/36': 1}
 STREU_TERRASSE = {'klein/00': 4, 'klein/01': 2, 'klein/05': 5, 'klein/11': 3, 'klein/10': 2, 'klein/49': 2,
                   'klein/15': 1, 'klein/04': 3, 'klein/12': 2, 'klein/07': 2, 'mittel/14': 1, 'klein/35': 1}
-STREU_FELS = {'mittel/08': 5, 'klein/11': 4, 'klein/05': 3, 'mittel/14': 1, 'klein/48': 1}
-LIEGEND = {'klein/00', 'klein/07', 'klein/10', 'klein/14', 'klein/15', 'klein/29', 'klein/49', 'klein/61',
+STREU_FELS = {'mittel/08': 2, 'fels/00': 3, 'fels/01': 2, 'fels/02': 3, 'fels/03': 3, 'fels/04': 1, 'fels/05': 2,
+              'fels/06': 2, 'fels/08': 1, 'fels/09': 1, 'fels/10': 2, 'fels/11': 2, 'fels/12': 2, 'fels/13': 1,
+              'fels/14': 1, 'fels/15': 1, 'fels_klein/00': 4, 'fels_klein/01': 4, 'fels_klein/02': 2,
+              'fels_klein/03': 1, 'fels_klein/04': 3, 'fels_klein/05': 3, 'fels_klein/06': 2, 'fels_klein/08': 1,
+              'fels_klein/09': 3, 'fels_klein/10': 1, 'fels_klein/11': 2, 'fels_klein/32': 1, 'fels_klein/36': 1,
+              'fels_klein/60': 1, 'klein/48': 1}
+LIEGEND = {'fels/03', 'fels/04', 'fels/11', 'fels_klein/00', 'fels_klein/03', 'fels_klein/05', 'fels_klein/06',
+           'fels_klein/09', 'fels_klein/11', 'fels_klein/32', 'fels_klein/60', 'klein/00', 'klein/07', 'klein/10', 'klein/14', 'klein/15', 'klein/29', 'klein/49', 'klein/61',
            'klein/26', 'klein/05'}
-FLACH = LIEGEND | {'klein/02', 'klein/03', 'klein/04', 'klein/09', 'klein/11', 'klein/12', 'klein/27', 'klein/47',
+FLACH = LIEGEND | {'fels_klein/01', 'fels_klein/02', 'fels_klein/04', 'fels_klein/08', 'fels_klein/10',
+                   'fels_klein/36', 'klein/02', 'klein/03', 'klein/04', 'klein/09', 'klein/11', 'klein/12', 'klein/27', 'klein/47',
                    'klein/48', 'klein/59', 'klein/36', 'klein/01', 'klein/35'}
 AUF_WEG = {'klein/37', 'klein/38', 'klein/32', 'klein/62', 'mittel/05', 'mittel/15', 'mittel/06', 'mittel/07', 'mittel/13', 'schloss/00', 'graeber/09'}
 WIND = {'klein/04', 'klein/12', 'klein/09', 'klein/47', 'klein/48', 'klein/59', 'mittel/14'}
@@ -184,7 +191,7 @@ def main():
                 continue
             if art == 'hoch' and any((kx + dx, ky, 'hoch') in belegt for dx in (-1, 1)):
                 continue
-            if art == 'hoch' and name not in AUF_WEG and (cls[ky][kx] in 'wq' and name != 'gross/00'
+            if art == 'hoch' and name not in AUF_WEG and (cls[ky][kx] in 'wq' and name != 'krypta/02'
                                                           or ky > 0 and cls[ky - 1][kx] == 'w'):
                 continue                                          # keine Grabsteine/Baeume auf Wegen
             x, y = int(round(kx * T + T / 2 - mitte)), int((ky + 1) * T - 1 - zu)
@@ -243,8 +250,12 @@ def main():
     namen, gew = list(STREU_FELS), list(STREU_FELS.values())
     for ty in range(1, rows - 3):
         for tx in range(1, cols - 1):
-            if hoehe[ty][tx] == 7 and all(hoehe[ty + k][tx] == 7 for k in range(1, 4)) and rnd.random() < 0.07:
-                setze(rnd.choices(namen, weights=gew)[0], tx, ty, {'spiegeln': rnd.random() < 0.5})
+            if hoehe[ty][tx] == 7 and all(hoehe[ty + k][tx] == 7 for k in range(1, 4)) and rnd.random() < 0.11:
+                name = rnd.choices(namen, weights=gew)[0]
+                opt = {'spiegeln': rnd.random() < 0.5}
+                if name in ('fels/01', 'fels/10', 'fels_klein/02', 'fels_klein/10', 'fels/14'):
+                    opt['anim'] = 'glimmen'
+                setze(name, tx, ty, opt)
     # 5) Streudeko in die Luecken
     for (streu, arten, ebenen, anzahl) in ((STREU_BODEN, 'gh', (1,), 260), (STREU_TERRASSE, 'fa', (2, 3, 4, 5, 6), 120)):
         namen, gew = list(streu), list(streu.values())
