@@ -33,6 +33,8 @@ Wenn eine Karte fertig scheint: noch einmal komplett auf **Pixelfehler** und **L
 - **Physik/Realismus:** Es gelten reale Bedingungen. Beispiel: Ein Fels, der zwei Ebenen unter Wasser steht und
   über die Oberfläche ragt, kann nicht gleich groß aussehen wie derselbe Fels, der nur eine Ebene unter Wasser
   steht. Höhen, Wasserstände, Licht und Schatten müssen zueinander passen.
+- **Zeichenreihenfolge im Wasser:** Was aus dem Wasser ragt (Felsspitzen, Pfähle …), liegt immer über Schaum,
+  Brandung und Lichtreflexen der Oberfläche – auch in jedem Animationsbild.
 
 ## Bewährte Regeln aus den bisherigen Runden
 

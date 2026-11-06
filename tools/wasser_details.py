@@ -282,7 +282,10 @@ def meer_terrassen(img, region, frame=None, meiden=None):
     algen(a, z1 & (d > FLACH + 8), FARBEN[1], 0.2, 0.0004, fr, 11, meiden)
     algen(a, z2, FARBEN[2], 0.45, 0.0006, fr, 12, meiden)
     algen(a, z3 & (d < STUFE2 + 60), FARBEN[3], 0.8, 0.0002, fr, 13, meiden)
+    vor_felsen = a.copy()
+    n_proto = len(FELSEN_PROTOKOLL)
     felsen_setzen(a, zonen, FARBEN, tiefen, regeln, fr, 21, meiden, anzahl=[14, 12, 16, 6])
+    nach_felsen = a.copy()
     # Schaumkante am Uebergang Flach -> tiefer (wellig, wandert) und Wellen am Strand
     welle = 1.8 * np.sin(xx / 11.0 + 2 * math.pi * fr / N_FRAMES) + 1.2 * np.sin(xx / 5.0 - 2 * math.pi * fr / N_FRAMES)
     schaum = m & (np.abs(d - (SCHAUM_D[0] + SCHAUM_D[1]) / 2 - welle) < 1.6) & (((xx + fr) // 3) % 5 != 0)
@@ -304,6 +307,17 @@ def meer_terrassen(img, region, frame=None, meiden=None):
         sy, sx = h % 13 + 1, (h >> 8) % 11 + 1
         if py_ == sy and sx <= px_ < sx + 4:
             a[y, x] = np.clip(a[y, x] * 0.4 + H('#cfeeff') * 0.6, 0, 255)
+    # herausragende Felsspitzen liegen UEBER Schaum, Brandung und Lichtstrichen (sie ragen aus dem Wasser)
+    for (x0, y0, x1, y1, linie, raus) in FELSEN_PROTOKOLL[n_proto:]:
+        if not raus:
+            continue
+        x0, x1 = max(0, x0), min(W, x1)
+        y0, y1 = max(0, y0), min(Hh, linie + 3)
+        if x1 <= x0 or y1 <= y0:
+            continue
+        fels_px = (np.abs(nach_felsen[y0:y1, x0:x1] - vor_felsen[y0:y1, x0:x1]).sum(axis=2) > 0)
+        teil = a[y0:y1, x0:x1]
+        teil[fels_px] = nach_felsen[y0:y1, x0:x1][fels_px]
     return Image.fromarray(np.clip(a, 0, 255).astype(np.uint8)).convert('RGBA')
 
 
