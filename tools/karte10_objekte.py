@@ -256,7 +256,7 @@ def main():
     # der schmalen Mauerkrone - die Mauer laeuft sichtbar daneben weiter), exakt spiegelgleich zur Achse
     # Tuerme mittig auf der Mauerlinie; die anschliessende Mauer ragt eine Kachel in den Turm hinein (ihre Krone liegt
     # ueber dem untersten Turmstueck), so steht der Turm sichtbar am Boden und nicht auf der Mauer
-    tuerme = [(W_, WAND_FUSS, True, to), (O_, WAND_FUSS, True, to),             # Ecken Nordmauer
+    tuerme = [(W_, WAND_FUSS + T, True, to), (O_, WAND_FUSS + T, True, to),     # Ecken Nordmauer (1 Kachel vor)
               (W_, 55 * T + 15, True, td), (O_, 55 * T + 15, True, to),         # am Seitentor (West) / gegenueber (Ost)
               (W_, 73 * T + 15, True, td), (O_, 73 * T + 15, True, td)]         # Ecken Suedmauer (Baeume davor)
     for (cx, fy, wand, td) in tuerme:
