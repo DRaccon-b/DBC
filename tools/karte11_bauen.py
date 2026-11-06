@@ -301,23 +301,35 @@ def bruecke_zeichnen(a, m, ebene, wasser):
             a[ya:yb, px_] = H('#6a6a82'); a[ya, px_:px_ + 8] = H('#7a7a92')
             a[ya:yb, px_ + 7] = H('#1c1c26'); a[yb - 1, px_:px_ + 8] = H('#1c1c26')
     front = np.zeros_like(m)
-    UEBER = 10
+    UEBER = 16                                                      # wie die Kaimauer der Plattform: 16 px ueber Wasser
+    SCHEITEL = 5                                                    # massive Mauer ueber dem Bogenscheitel
+    SPANNE, PF = 48, 12
     for x in range(x0, ende):
-        st_ = int(ebene[min(Hh - 1, y1 + 24), x]) if wasser[min(Hh - 1, y1 + 24), x] else 0
-        tiefe = UEBER + MAUER_TIEFE[min(st_, len(MAUER_TIEFE) - 1)]
-        q = (x - x0) % 48
-        pfeiler = q < 12 or x > ende - 12
+        yt = min(Hh - 1, y1 + UEBER + 30)
+        st_ = int(ebene[yt, x]) if wasser[yt, x] else 0
+        unter = MAUER_TIEFE[min(st_, len(MAUER_TIEFE) - 1)]        # Pfeiler unter Wasser bis zum Grund
+        q = (x - x0) % SPANNE
+        pfeiler = q < PF or x > ende - PF
         if pfeiler:
-            bis = tiefe
+            bis = UEBER
         else:
-            t = (q - 12) / 36.0                                         # Bogen zwischen zwei Pfeilern
-            bis = UEBER + int(round(8 * (1 - math.sqrt(max(0.0, 1 - (2 * t - 1) ** 2)))))
-        for d in range(bis + (2 if pfeiler else 1)):
+            t = (q - PF + 0.5) / float(SPANNE - PF)                 # runder Bogen, Kaempfer auf der Wasserlinie
+            bis = SCHEITEL + int(round((UEBER - SCHEITEL) * (1 - math.sqrt(max(0.0, 1 - (2 * t - 1) ** 2)))))
+        gesamt = UEBER + unter if pfeiler else UEBER
+        for d in range(gesamt + (2 if pfeiler else 3)):
             Y = y1 + 1 + d
             if Y >= Hh:
                 break
-            if d >= bis:
-                a[Y, x] = (a[Y, x] * (0.62 if pfeiler else 0.5)).astype(np.uint8)   # Fuss-/Bogenschatten
+            if not pfeiler and bis <= d < UEBER:                    # Blick unter den Bogen: Wasser im Schatten
+                a[Y, x] = (a[Y, x] * (0.42 if d < UEBER - 2 else 0.55)).astype(np.uint8)
+                if d == UEBER - 1 and (x + d) % 5 < 2:
+                    a[Y, x] = (70, 96, 116)                         # Wasserspiegel unter dem Bogen
+                continue
+            if d >= gesamt:
+                if pfeiler:                                         # Fuss-Schatten auf dem Grund
+                    a[Y, x] = (a[Y, x] * (0.6 if d == gesamt else 0.8)).astype(np.uint8)
+                else:                                               # Schatten der Bruecke aufs Wasser
+                    a[Y, x] = (a[Y, x] * (0.7 + 0.1 * (d - gesamt))).astype(np.uint8)
                 continue
             front[Y, x] = True
             reihe = d // 4
@@ -325,13 +337,20 @@ def bruecke_zeichnen(a, m, ebene, wasser):
                 c = np.array((22, 22, 30), np.float32)
             else:
                 c = np.array((52, 52, 66) if reihe % 2 else (46, 46, 60), np.float32)
-            if pfeiler and (q in (0, 1)):
-                c = c + 18                                              # Lichtkante am Pfeiler
-            if d > UEBER - 3:
-                tief_ = (d - UEBER + 3) / max(1, tiefe - UEBER + 3)
-                c = c * (0.7 - 0.25 * tief_) + np.array((24, 34, 70), np.float32) * (0.3 + 0.25 * tief_)
-            if d == UEBER - 3:
-                c = np.array((90, 120, 140), np.float32)               # Wasserlinie
+            if pfeiler and q in (0, 1) and d < UEBER:
+                c = c + 16                                          # Lichtkante am Pfeiler (Licht von links)
+            if not pfeiler and d == bis - 1:
+                c = np.array((70, 70, 88), np.float32)              # Bogenstein-Kante
+            if d == UEBER:
+                c = np.array((90, 120, 140), np.float32)            # Wasserlinie am Pfeiler
+            elif d > UEBER:
+                tief_ = (d - UEBER) / max(1, gesamt - UEBER)
+                w_ = a[Y, x].astype(np.float32)                      # Pfeiler unter Wasser: Farbe des Wassers darueber
+                c = c * (0.55 - 0.25 * tief_) + w_ * 0.8 * (0.45 + 0.25 * tief_)
+                if d == UEBER + 1:
+                    c = c * 0.8                                     # Schattenkante direkt unter der Wasserlinie
+                if d == gesamt - 1:
+                    c = w_ * 0.35                                   # Fuss auf dem Grund
             a[Y, x] = np.clip(c, 0, 255).astype(np.uint8)
     return front
 
