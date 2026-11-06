@@ -601,8 +601,14 @@ def flammen_bewegen(sp, frame, phase, lila=False):
     y0, y1 = ys.min(), ys.max()
     for y, x in zip(ys, xs):
         k = (y1 - y) / max(1, y1 - y0)                       # 0 unten ... 1 Spitze
-        dx = int(round(k * 1.4 * math.sin(t * 3 + phase * 0.7 + y * 0.9)))
-        dy = -1 if (k > 0.6 and (frame + int(phase)) % 3 == 0) else 0
+        klein = len(ys) < 40                                 # kleine Flammen (Fackeln, Kerzen): deutlicher zuengeln
+        dx = int(round(k * (1.8 if klein else 1.4) * math.sin(t * 3 + phase * 0.7 + y * 0.9)))
+        hoch = [0, 1, 2, 1, 0, 2, 1, 0][(frame + int(phase)) % 8] if klein else (1 if (frame + int(phase)) % 3 == 0 else 0)
+        dy = -hoch if k > 0.35 else 0
+        if klein and k > 0.35 and hoch:                     # Flamme streckt sich: unteren Teil nach oben fortsetzen
+            for e in range(1, hoch + 1):
+                if 0 <= y - e < a.shape[0] and 0 <= x + dx < a.shape[1] and out[y - e, x + dx, 3] == 0:
+                    out[y - e, x + dx] = a[y, x]
         X, Y = x + dx, y + dy
         if 0 <= X < a.shape[1] and 0 <= Y < a.shape[0]:
             out[Y, X] = a[y, x]

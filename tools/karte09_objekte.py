@@ -340,7 +340,7 @@ def main():
         x, y = raster_x(a_w, X), oben + oben_d - int(zl_.min())
         objekte.append({'datei': datei, 'basis': name, 'x': x, 'y': y, 'fuss': h, 'kachel': [tx, oben // T + 2],
                         'ebene': 1, 'an_wand': True, 'kein_schatten': True, 'keine_verdeckung': True,
-                        **({'anim': 'kerzen'} if name == 'wand/04' else {})})
+                        **({'anim': 'feuer'} if name == 'wand/04' else {})})
     # Tuerme auf der Aussenmauer und Tore (stehen auf/vor der Mauer, eigene Platzierung)
     for (name, tx, fuss_px) in [(TURM, x, 39 * T + 15) for x in (2, 12, 22, 32, 42, 52, 62, 72, 82)] + \
                                [('tor2/01', 27, 39 * T + 15), ('tor3/00', 27, 19 * T + 15)]:
