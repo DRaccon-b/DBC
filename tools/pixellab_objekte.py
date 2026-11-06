@@ -44,6 +44,8 @@ PALETTE = [
     '#ffffff', '#fff2a0', '#f5c842', '#e8702a', '#c83a3a', '#ff8a8a',
     # Sand / Zeltstoff
     '#f2dba6', '#1f7a7a', '#2fa39a',
+    # Kaeferpanzer rot (Hirschkaefer-Stil)
+    '#3a0e10', '#5e1418', '#8a1f22', '#b8302c', '#e0503c',
 ]
 
 OBJEKTGRUPPEN = {
@@ -550,6 +552,10 @@ OBJEKTGRUPPEN_K7 = {
         'cluster of bamboo stalks covered with snow on leaves and tops, front view, flat orthographic, classic 2D handheld RPG style, small ground decoration',
         'small bamboo clump of three stalks, front view, flat orthographic, classic 2D handheld RPG style, small ground decoration',
         'small snowy bamboo clump of three stalks with snow caps, front view, flat orthographic, classic 2D handheld RPG style, small ground decoration',
+    ]},
+    'k7_kuwaga': {'size': 128, 'items': [
+        'giant ancient jungle tree with hanging vines, its trunk and big roots covered in glossy dark red stag beetle armor plates, two huge curved red pincer shaped branches rising from the top of the crown like stag beetle mandibles, sharp claw like roots, green leafy crown, perfectly straight front elevation view, symmetric, facing the camera head-on, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'massive jungle tree with a thick trunk shaped like a red armored stag beetle body with segmented glossy shell plates, crown framed by two giant curved serrated mandible branches, dangling green vines, perfectly straight front elevation view, symmetric, facing the camera head-on, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
     ]},
     'k7_pagode': {'size': 240, 'items': [
         'three story asian pagoda temple with dark blue curved tiled roofs, red wooden walls and pillars, golden ornaments, stone base with steps, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
