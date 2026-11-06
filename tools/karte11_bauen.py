@@ -105,12 +105,13 @@ def meer_zeichnen(a, wasser, flach, seetang, frame):
     tex = (lum - lum[tief_m].mean()) * 0.18
     st_f = farben[stufe] + tex[..., None]
     rand_f = np.clip(blur(flach, 6) * 1.6, 0, 1)[..., None]          # weicher Uebergang zum Flachwasser
-    neu[tief_m] = (neu * rand_f + st_f * (1 - rand_f))[tief_m]
-    for dy, dx in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+    if False:
+        neu[tief_m] = (neu * rand_f + st_f * (1 - rand_f))[tief_m]
+    for dy, dx in (() if True else ((1, 0), (-1, 0), (0, 1), (0, -1))):
         nb = np.roll(np.roll(stufe, dy, 0), dx, 1)
         kante = tief_m & (nb > stufe)                                   # hoehere Stufe neben tieferer: Grat
         neu[kante] = neu[kante] * 0.6 + np.array([92, 110, 160]) * 0.4
-    for k_, fa in ((1, 0.7), (2, 0.8), (3, 0.9)):                       # Schatten unter dem Grat (Licht oben links)
+    for k_, fa in (() if True else ((1, 0.7), (2, 0.8), (3, 0.9))):
         oben = np.roll(stufe, k_, 0)
         sch = tief_m & (oben < stufe)
         neu[sch] *= fa
@@ -293,6 +294,15 @@ def bauen(frame=None, speichern=True):
     wasser &= ~plattform & ~bruecke_m & ~em[2]
     flach &= wasser
     meer_zeichnen(a, wasser, flach, seetang, frame)
+    # Tiefsee im Stil des Flusses von Karte 01: Wassertextur, vertiefte Stufen mit Kanten (5 Stufen ueber die ganze
+    # Meeresbreite bis zum Kartenrand), danach fuer das Meer der Finsternis abgedunkelt (Struktur bleibt erhalten)
+    tief = wasser & ~flach
+    k4.wasser_zeichnen(a, tief, frame, np.zeros_like(tief))
+    import wasser_vertieft as _wv
+    a = np.array(_wv.vertiefen(Image.fromarray(a), np.ones_like(tief), frame, maske=tief,
+                               rand=('#1c3a40', '#24484e', '#2e565c', '#386468'),
+                               stufen=[(22, 0.84, 7), (64, 0.72, 6), (120, 0.62, 6), (190, 0.53, 5), (270, 0.45, 5)]).convert('RGB'))
+    a[tief] = np.clip(a[tief].astype(np.float32) * np.array([0.5, 0.56, 0.72]) + np.array([4, 4, 10]), 0, 255).astype(np.uint8)
     tm = weich(zell_maske(cls, 'x', cols, rows), 5, 0.2, 47, 0.45) & ~em[2]
     tm = k4.splitter_weg(tm, 60)
     k4.wasser_zeichnen(a, tm, frame, np.zeros_like(tm))
