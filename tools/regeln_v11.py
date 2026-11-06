@@ -21,7 +21,8 @@ LIEGEND = {
     'karte03': {'klein/%02d' % i for i in (6, 7, 33, 34, 37, 51, 54, 63)},
 }
 NICHT_RASTERN = {'karte02': ('schatten', 'abgeleitet/laterne', 'abgeleitet/leer', 'kran'),
-                 'karte03': ('abgeleitet/arena_tor', 'abgeleitet/buehne', 'abgeleitet/box_monitor')}
+                 'karte03': ('abgeleitet/arena_tor', 'abgeleitet/buehne', 'abgeleitet/box_monitor'),
+                 'karte09': ('gross/03', 'tor/00', 'tor/01')}
 BAUM = ('baeume/', 'rand/')
 ABSTAND = {'karte03': 1}                             # Pixelpruefung mit Abstand (je Seite 1 px = 2 px Luecke)
 
@@ -54,7 +55,7 @@ def main(karte):
     n = 0
     for o in objs:
         b = o.get('basis') or ''
-        if b in skip or any(s in b for s in skip if s == 'kran'):
+        if b in skip or any(s in b for s in skip if s == 'kran') or o.get('an_wand') or o.get('fest_pos'):
             continue
         u = umriss(obj_dir, o, cache)
         if not u:

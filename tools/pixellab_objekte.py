@@ -747,6 +747,54 @@ OBJEKTGRUPPEN_K8 = {
         'stone gargoyle statue on a pedestal, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style', 'cluster of melting candles, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
         'dead thorny bush, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style', 'wooden signpost with a skull, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
     ]},
+    'k9_wand': {'size': 32, 'items': [
+        'tall gothic arched stained glass window with a purple moon pattern, dark stone frame',
+        'tall gothic arched stained glass window with a cyan pattern, dark stone frame',
+        'tall gothic arched stained glass window with a red bat pattern, dark stone frame',
+        'narrow castle arrow slit window',
+        'iron wall torch sconce with a burning flame',
+        'long red hanging wall banner with a black bat emblem',
+        'gold framed portrait painting of a pale vampire lord',
+        'small gold wall candle sconce with one candle',
+        'stone wall shield crest with crossed swords',
+        'iron wall chain with shackles',
+        'small round stone wall vent',
+        'wall mounted bat head trophy',
+        'cobweb in a corner',
+        'small purple wall lamp glowing',
+        'wooden wall shelf with skulls and candles',
+        'cracked wall mirror',
+    ]},
+    'k9_moebel': {'size': 64, 'items': [
+        'tall dark gothic stone pillar with a carved capital and base, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'tall gold candelabra with three lit candles, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'upright black coffin with a gold cross, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'dark wooden church pew bench, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'large ornate gothic wall mirror with gold frame, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'tall gothic bookshelf with old books and skulls, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'stone brazier bowl with purple flames, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'blood red velvet throne with tall gothic back, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'stone pedestal with a glowing red crystal ball, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'dark suit of armor with a halberd, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'gothic treasure chest with gold trim, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'tall gothic grandfather clock, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'small round table with a red cloth and a wine goblet, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'stone gargoyle on a pedestal, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'wrought iron candle stand with many candles, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'large dark vase with dead roses, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+    ]},
+    'k9_gross': {'size': 128, 'items': [
+        'large gothic pipe organ with tall silver pipes and a dark wooden console, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'gothic altar table with a red velvet cloth, a black coffin on top and two candelabras, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'swirling purple portal in an ornate stone frame decorated with colored gems, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'round castle tower with a dark conical slate roof, red banner with bat emblem, stone bricks, seen from the front and slightly above so the roof is visible, classic 2D handheld RPG style, facing the camera, symmetric, not isometric',
+    ]},
+    'k9_tor': {'size': 96, 'items': [
+        'gothic stone archway doorway with an open iron portcullis and a bat emblem keystone, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'castle main gate in a stone wall with a raised iron portcullis and two torches, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'heavy wooden drawbridge with iron chains, seen from above, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'small gothic stone doorway arch, open, dark inside, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+    ]},
     'k8_krypta': {'size': 128, 'items': [
         'small gothic crypt house of dark grey stone with a steep dark slate tiled roof, arched iron barred door in the middle, two narrow gothic windows, small stone cross on the roof ridge, seen from the front and slightly above so both slopes of the roof and the roof ridge are visible, like a house in a classic 2D handheld RPG town, facade facing the camera, symmetric, not isometric',
         'old ruined crypt house, cracked grey stone walls with moss, partly collapsed slate roof with broken beams, dark open doorway, seen from the front and slightly above so both slopes of the roof and the roof ridge are visible, like a house in a classic 2D handheld RPG town, facade facing the camera, symmetric, not isometric',
@@ -863,7 +911,9 @@ def herunterladen(oid, d):
 
 
 def speichern(gruppe, ims, ids):
-    if gruppe.startswith('k8_'):
+    if gruppe.startswith('k9_'):
+        ziel = os.path.join(ROOT, 'assets', 'objekte', 'karte09', gruppe[3:])
+    elif gruppe.startswith('k8_'):
         ziel = os.path.join(OUT_K8, gruppe[3:])
     elif gruppe.startswith('k7_'):
         ziel = os.path.join(OUT_K7, gruppe[3:])
@@ -902,7 +952,7 @@ def erzeugen(gruppe):
     k4 = gruppe.startswith('k4_')
     k5 = gruppe.startswith('k5_')
     k6 = gruppe.startswith('k6_') or gruppe.startswith('k7_')
-    if gruppe.startswith('k8_'):
+    if gruppe.startswith('k8_') or gruppe.startswith('k9_'):
         g = OBJEKTGRUPPEN_K8[gruppe]
         req = {'description': STIL_K8, 'size': g['size'], 'view': 'top-down',
                'item_descriptions': [it + '. ' + STIL_K8 for it in g['items']],
