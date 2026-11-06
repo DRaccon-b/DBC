@@ -254,16 +254,17 @@ def main():
     W_, O_ = 63 * T + 8, 88 * T + 8                       # Mitte der West- und Ostmauer (symmetrisch zu 1216)
     # Tuerme an Nord- und Seitenmauern stehen innen im Burghof direkt an der Mauer (Fuss auf dem Hofboden, nicht auf
     # der schmalen Mauerkrone - die Mauer laeuft sichtbar daneben weiter), exakt spiegelgleich zur Achse
-    IW_ = 64 * T + tw // 2 + 1                         # linke Kante des Turms = Innenkante der Westmauer
-    IO_ = 2 * ACHSE_BURG - IW_
-    tuerme = [(IW_, 39 * T + 15, False, to), (IO_, 39 * T + 15, False, to),     # Ecken Nordmauer (im Hof)
-              (IW_, 55 * T + 15, False, td), (IO_, 55 * T + 15, False, to),     # am Seitentor (West) / gegenueber (Ost)
+    # Tuerme mittig auf der Mauerlinie; die anschliessende Mauer ragt eine Kachel in den Turm hinein (ihre Krone liegt
+    # ueber dem untersten Turmstueck), so steht der Turm sichtbar am Boden und nicht auf der Mauer
+    tuerme = [(W_, WAND_FUSS, True, to), (O_, WAND_FUSS, True, to),             # Ecken Nordmauer
+              (W_, 55 * T + 15, True, td), (O_, 55 * T + 15, True, to),         # am Seitentor (West) / gegenueber (Ost)
               (W_, 73 * T + 15, True, td), (O_, 73 * T + 15, True, td)]         # Ecken Suedmauer (Baeume davor)
     for (cx, fy, wand, td) in tuerme:
         xx = int(round(cx - tm))
         objekte.append({'datei': td, 'basis': 'schloss2/02', 'x': xx, 'y': fy - tzu, 'fuss': th,
                         'kachel': [int(cx // T), fy // T], 'ebene': 1, 'vorrang': True, 'fest_pos': True,
-                        'anim': 'fahnen_tuch', **({'an_wand': True, 'kein_schatten': True, 'keine_verdeckung': True} if wand else {})})
+                        'anim': 'fahnen_tuch', 'an_wand': True, 'kein_schatten': True, 'keine_verdeckung': True,
+                        **({'mauer_davor': T} if fy < 70 * T else {})})
         belegen(td, xx, fy - tzu)
     # 2) Zug auf dem unteren Gleis (Raeder auf der Schiene), Lok vorne links (Schienenraeumer zeigt nach links)
     gy = lay['gleise'][1]['y'] * T + 13

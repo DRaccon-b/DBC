@@ -358,11 +358,26 @@ def bauen(frame=None, speichern=True):
                       key=lambda o: (0 if o.get('an_wand') else 1, o['y'] + o['fuss']))
         cache = {o['datei']: Image.open(os.path.join(OBJ, o['datei'])).convert('RGBA') for o in objs}
         lvl_s = lvl.copy()
+        grund_mauer = np.array(img)                         # Mauerkrone vor den Objekten (fuer 'mauer_davor')
         k8.schatten_ebene(img, [o for o in objs if not o.get('an_wand')], cache, lvl_s)
         vor_objekten = np.array(img)
         k4.objekte_zeichnen(img, objs, cache, np.zeros((Hp, Wp), bool), frame)
         k4.animieren(img, objs, cache, frame or 0, ruhig=frame is None)
         k8.verdeckung(img, [o for o in objs if not o.get('an_wand')], cache, lvl, vor_objekten)
+        # Mauer ragt in den Turm: die Mauerkrone der anschliessenden Mauer liegt ueber dem untersten Stueck des Turms
+        if any(o.get('mauer_davor') for o in objs):
+            arr = np.array(img)
+            for o in objs:
+                n_ = o.get('mauer_davor')
+                if not n_:
+                    continue
+                sp_a = np.array(cache[o['datei']].getchannel('A')) > 0
+                unten_ = o['y'] + int(np.nonzero(sp_a.any(axis=1))[0].max())
+                x0_, x1_ = max(0, o['x']), min(Wp, o['x'] + sp_a.shape[1])
+                y0_ = max(0, unten_ - n_ + 1)
+                m_ = mauer[y0_:unten_ + 1, x0_:x1_]
+                arr[y0_:unten_ + 1, x0_:x1_][m_] = grund_mauer[y0_:unten_ + 1, x0_:x1_][m_]
+            img = Image.fromarray(arr)
     if speichern and frame is None:
         img.save(os.path.join(KARTE, 'terrain.png'))
     print('Karte 10 %dx%d gebaut' % (cols, rows))

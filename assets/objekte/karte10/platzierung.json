@@ -18,62 +18,78 @@
 {
 "datei": "sauber/schloss2-02_ohne_tuer.png",
 "basis": "schloss2/02",
-"x": 1024,
-"y": 519,
+"x": 994,
+"y": 487,
 "fuss": 121,
 "kachel": [
-65,
-39
+63,
+37
 ],
 "ebene": 1,
 "vorrang": true,
 "fest_pos": true,
-"anim": "fahnen_tuch"
+"anim": "fahnen_tuch",
+"an_wand": true,
+"kein_schatten": true,
+"keine_verdeckung": true,
+"mauer_davor": 16
 },
 {
 "datei": "sauber/schloss2-02_ohne_tuer.png",
 "basis": "schloss2/02",
-"x": 1364,
-"y": 519,
+"x": 1394,
+"y": 487,
 "fuss": 121,
 "kachel": [
-86,
-39
+88,
+37
 ],
 "ebene": 1,
 "vorrang": true,
 "fest_pos": true,
-"anim": "fahnen_tuch"
+"anim": "fahnen_tuch",
+"an_wand": true,
+"kein_schatten": true,
+"keine_verdeckung": true,
+"mauer_davor": 16
 },
 {
 "datei": "sauber/schloss2-02.png",
 "basis": "schloss2/02",
-"x": 1024,
+"x": 994,
 "y": 775,
 "fuss": 121,
 "kachel": [
-65,
+63,
 55
 ],
 "ebene": 1,
 "vorrang": true,
 "fest_pos": true,
-"anim": "fahnen_tuch"
+"anim": "fahnen_tuch",
+"an_wand": true,
+"kein_schatten": true,
+"keine_verdeckung": true,
+"mauer_davor": 16
 },
 {
 "datei": "sauber/schloss2-02_ohne_tuer.png",
 "basis": "schloss2/02",
-"x": 1364,
+"x": 1394,
 "y": 775,
 "fuss": 121,
 "kachel": [
-86,
+88,
 55
 ],
 "ebene": 1,
 "vorrang": true,
 "fest_pos": true,
-"anim": "fahnen_tuch"
+"anim": "fahnen_tuch",
+"an_wand": true,
+"kein_schatten": true,
+"keine_verdeckung": true,
+"mauer_davor": 16
 },
 {
 "datei": "sauber/schloss2-02.png",
@@ -19710,6 +19726,24 @@
 ]
 },
 {
+"datei": "sauber/klein-14.png",
+"basis": "klein/14",
+"x": 1058,
+"y": 859,
+"fuss": 21,
+"kachel": [
+66,
+54
+],
+"ebene": 1,
+"block": [
+66,
+53,
+2,
+2
+]
+},
+{
 "datei": "sauber/klein-02.png",
 "basis": "klein/02",
 "x": 1124,
@@ -19746,6 +19780,24 @@
 ]
 },
 {
+"datei": "sauber/klein-45.png",
+"basis": "klein/45",
+"x": 1060,
+"y": 811,
+"fuss": 21,
+"kachel": [
+66,
+51
+],
+"ebene": 1,
+"block": [
+66,
+50,
+2,
+2
+]
+},
+{
 "datei": "sauber/klein-41.png",
 "basis": "klein/41",
 "x": 1251,
@@ -19759,42 +19811,6 @@
 "block": [
 78,
 65,
-2,
-2
-]
-},
-{
-"datei": "sauber/klein-46.png",
-"basis": "klein/46",
-"x": 1219,
-"y": 1022,
-"fuss": 18,
-"kachel": [
-76,
-64
-],
-"ebene": 1,
-"block": [
-76,
-63,
-2,
-2
-]
-},
-{
-"datei": "sauber/klein-59.png",
-"basis": "klein/59",
-"x": 1186,
-"y": 967,
-"fuss": 25,
-"kachel": [
-74,
-61
-],
-"ebene": 1,
-"block": [
-74,
-60,
 2,
 2
 ]
