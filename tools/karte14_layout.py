@@ -49,7 +49,7 @@ def main():
         berg[y0:, x0:x1 + 1] = True                          # gestufte Unterkante wie in der Vorlage
     for (y0, y1) in ((5, 9), (20, 27), (44, 50)):
         berg[y0:y1 + 1, 76:77] = True
-    berg[66:70, 38:42] = False                               # Ausgang unten (Teleporter)
+    berg[66:70, 38:43] = False                               # Ausgang unten (Teleporter)
     berg[4:8, 19:53] = False                                 # Schlosshof (Schloss/Mauern als Objekte)
     k[berg] = 'r'
     h[berg] = 5
@@ -75,11 +75,11 @@ def main():
     feld[:7] = False
     k[feld] = 'c'
     h[feld] = 2
-    treppen = [[38, 41, 2, 28]]
+    treppen = [[38, 42, 2, 28]]            # 5 Kacheln breit, mittig auf der Achse 40,5
     # ------------------------------------------------------------------ Schachbrettweg, Treppenplatz unten
-    k[30:69, 38:42] = 'z'
+    k[30:69, 38:43] = 'z'
     yy, xx = np.mgrid[0:R, 0:C]
-    platz = (np.abs(xx + 0.5 - 40) <= 8.5 - np.maximum(0, 56 - yy) * 0.9) & (yy >= 52) & (yy <= 64)
+    platz = (np.abs(xx + 0.5 - 40.5) <= 9.0 - np.maximum(0, 56 - yy) * 0.9) & (yy >= 52) & (yy <= 64)
     k[platz & (k != 'r') & (k != 'z')] = 'b'
     # ------------------------------------------------------------------ Portalplatz rechts oben (erhoeht)
     # nicht rechteckig: Kern mit abgeschraegten Ecken, vorne mittig eine runde Apsis unter dem Portal (Treppe dort),
@@ -101,7 +101,7 @@ def main():
     lay = {
         'groesse': [C, R], 'klassen': [''.join(r) for r in k], 'hoehe': [''.join(str(c) for c in r) for r in h],
         'treppen_sued': treppen, 'boss': [40.5, 18.0], 'bossform': form, 'portal': [62.0, 8.0], 'felsnasen': FELS,
-        'teleporter': [{'x': 38, 'y': 68, 'b': 4, 'h': 2}],
+        'teleporter': [{'x': 38, 'y': 68, 'b': 5, 'h': 2}],
     }
     os.makedirs(KARTE, exist_ok=True)
     json.dump(lay, open(os.path.join(KARTE, 'layout.json'), 'w'), indent=0)

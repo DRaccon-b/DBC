@@ -189,7 +189,7 @@ def main():
     stellen += [(t, Y + 20, 'seite') for Y, t in kante(Hp)] + [(Wp - t, Y + 20, 'seite') for Y, t in kante(Hp)]
     for (X, fussy, seite) in stellen:
         X, fussy = int(round(X)), int(round(fussy))
-        if seite == 'unten' and 38 * T - 16 <= X <= 42 * T + 16:
+        if seite == 'unten' and 38 * T - 16 <= X <= 43 * T + 16:
             continue
         if seite == 'oben' and 18 * T <= X <= 54 * T:
             continue                                              # hinter dem Schloss keine Wolken vor den Daechern
@@ -230,10 +230,11 @@ def main():
     # Schachbrettweg: Gauklerstatuen oben, Ritterstatuen, Fluegeldamen unten - Banner dazwischen im festen Rhythmus
     for (y, name_) in ((33, 'statue/01'), (41, 'statue/00'), (49, 'statue/02')):
         FEST += [(name_, ACHSE_S - 72, y, {'symm': 'w%d' % y}), (name_, ACHSE_S + 72, y, {'symm': 'w%d' % y})]
-    for y in (37, 45, 53):
-        FEST += [('mittel/06', ACHSE_S - 60, y, {'symm': 'f%d' % y}), ('mittel/06', ACHSE_S + 60, y, {'symm': 'f%d' % y})]
+    for y in (37, 45):                                            # Banner aussen neben den Statuen, gleicher Takt
+        FEST += [('mittel/06', ACHSE_S - 128, y, {'symm': 'f%d' % y}), ('mittel/06', ACHSE_S + 128, y, {'symm': 'f%d' % y})]
+    FEST += [('mittel/06', ACHSE_S - 60, 53, {'symm': 'f53'}), ('mittel/06', ACHSE_S + 60, 53, {'symm': 'f53'})]
     for (name, X, fy, opt) in FEST:
-        setzen(name, X, fy, opt, suchen=not (opt.get('symm') or opt.get('achse')) or str(opt.get('symm', '')).startswith(('p', 'q')),
+        setzen(name, X, fy, opt, suchen=not (opt.get('symm') or opt.get('achse')) or str(opt.get('symm', '')).startswith(('p', 'q', 'w', 'f')),
                melden=True)
     for o in objekte:                                             # Schloss ganz im Bild (Turmspitze nicht am Rand
         if o['basis'] == 'schloss2/01':                           # abgeschnitten) und vor der Mauer gezeichnet

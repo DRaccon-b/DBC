@@ -34,5 +34,5 @@ def maske(form, xx, yy):
         m = kern | ecken
     else:                                                                     # quadrat
         m = box
-    absatz = (ax <= 3.0 * T) & (dy >= HY - 2.2 * T) & (dy <= HY)             # gerader Absatz fuer die Treppe
+    absatz = (ax <= 3.5 * T) & (dy >= HY - 2.2 * T) & (dy <= HY)             # gerader Absatz fuer die Treppe
     return m | absatz
