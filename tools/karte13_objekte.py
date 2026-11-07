@@ -27,9 +27,9 @@ T = 16
 ACHSE_F = 40 * T                 # Festung (senkrechte Achse)
 
 FLACH = {'klein/%02d' % i for i in (1, 2, 3, 4, 5, 6, 13, 14, 15, 23, 32, 35, 41, 48, 57, 59, 63)}
-LIEGEND = {'klein/03', 'klein/13', 'klein/41', 'klein/32', 'klein/57', 'klein/59', 'gross2/02', 'gross/02', 'mittel/14'}
+LIEGEND = {'eigen/dragondead', 'klein/03', 'klein/13', 'klein/41', 'klein/32', 'klein/57', 'klein/59', 'gross2/02', 'gross/02', 'mittel/14'}
 LEUCHTEN = {'mittel/05': 'lampe', 'mittel/01': 'feuer', 'festung/00': 'glimmen', 'gross/00': 'rotlicht', 'gross2/03': 'rotlicht',
-            'festung/01': 'rotlicht', 'festung/03': 'rotlicht', 'mittel/13': 'rotlicht', 'festung/02': 'konsole', 'gross/02': 'funken',
+            'festung/01': 'rotlicht', 'festung/03': 'rotlicht', 'mittel/13': 'rotlicht', 'festung/02': 'konsole', 'gross/02': 'funken', 'eigen/dragondead': 'funken',
             'mittel/04': 'ampel_blinken', 'klein/09': 'glimmen', 'klein/36': 'glimmen'}
 RAUCH = {'mittel/00', 'mittel/01'}
 WIND = {'klein/15'}
@@ -286,7 +286,7 @@ def main():
         ('haus/02', 6 * T + 8, 37, {}), ('mittel/08', 9 * T + 8, 37, {}), ('haus/01', 18 * T + 8, 37, {}),
         ('gross2/02', 32 * T, 37, {}), ('haus/03', 47 * T, 37, {}), ('gross/03', 60 * T, 36, {}), ('haus2/02', 72 * T + 8, 37, {}),
         # Reihe 2 (41-48)
-        ('mittel/10', 6 * T, 46, {}), ('mittel/09', 18 * T, 46, {}), ('mittel/07', 32 * T, 46, {}), ('gross/02', 47 * T, 47, {}),
+        ('mittel/10', 6 * T, 46, {}), ('mittel/09', 18 * T, 46, {}), ('mittel/07', 32 * T, 46, {}), ('eigen/dragondead', 47 * T, 47, {}),
         ('mittel/06', 72 * T, 47, {}), ('mittel/03', 60 * T, 46, {}),
         # Reihe 3 (51-58)
         ('haus2/01', 6 * T + 8, 57, {}), ('haus2/02', 18 * T + 8, 57, {'spiegeln': True}), ('gross/01', 32 * T, 57, {}),
