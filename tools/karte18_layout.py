@@ -7,7 +7,8 @@ dichter Nebel. Oben die Ladenzeile, der Spielplatz, ein Buerohaus und die grosse
 Wohnblock, Parks und ein Platz mit Marktzelt; in der Mitte Buerohaus und Lagerhallen; rechts der grosse Platz vor der
 Halle mit Mittelweg und Kompass; unten die Hochbahn ueber der Uferstrasse, Gleise am Kai, Meer und Steg.
 
-Klassen:  .  Nebel        s  Asphalt      g  Gehweg (graue Platten)   p  Platz (lavendel, grosse Platten)
+Klassen:  .  Nebel        s  Asphalt      v  Betonvorplatz  e  Heckenbeet (Platz)
+               g  Gehweg (graue Platten)   p  Platz (lavendel, grosse Platten)
           q  Platz links (lavendel, kleine Platten)    c  Mittelweg (Schachbrett)   t  Terrasse vor der Halle
           n  Rasen        d  Sand (Sandkasten)   m  Mittelstreifen (Bordstein + Hecke)   x  Sperrflaeche (schraffiert)
           b  Gleisbett    k  Kaikante     h  Holzsteg     w  Wasser
@@ -54,29 +55,39 @@ def main():
             for yy in range(y, y + 4):
                 k[yy, 126 - t:126] = '.'
     # ---------------------------------------------------------------- Strassen
-    rechteck(k, 3, 20, 82, 24, 's')                              # obere Strasse (verschwindet links im Nebel)
+    rechteck(k, 3, 20, 81, 24, 's')                              # obere Strasse (verschwindet links im Nebel)
+    rechteck(k, 82, 20, 83, 24, 'g')                             # Strassenende mit Pollern vor der Halle
+    rechteck(k, 64, 25, 83, 26, 'g')                             # Gehweg an der Suedseite bis zur Halle
     rechteck(k, 32, 25, 36, 95, 's')                             # Querstrasse
     rechteck(k, 3, 42, 62, 53, 's')                              # mittlere Strasse mit Mittelstreifen
     for (x0, x1) in ((5, 13), (17, 26), (42, 49), (53, 61)):
         rechteck(k, x0, 47, x1, 48, 'm')
     rechteck(k, 41, 29, 61, 37, 's')                             # Parkplatz
     rechteck(k, 37, 32, 40, 35, 's')                             # Einfahrt Parkplatz von der Querstrasse
-    rechteck(k, 62, 80, 125, 83, 'g')                            # Gehweg unter der Hochbahn
-    rechteck(k, 32, 94, 125, 95, 'g')                            # Uferpromenade
-    rechteck(k, 32, 84, 125, 93, 's')                            # Uferstrasse
-    for (x0, x1) in ((62, 97), (102, 125)):
+    rechteck(k, 62, 80, 124, 81, 'g')                            # Gehweg unter der Hochbahn
+    rechteck(k, 32, 94, 124, 95, 'g')                            # Uferpromenade
+    rechteck(k, 32, 82, 124, 93, 's')                            # Uferstrasse (Nordfahrbahn 82-86, Sued 89-93)
+    rechteck(k, 42, 80, 47, 81, 's')                             # Zufahrt vor dem offenen Rolltor
+    for (x0, x1) in ((62, 99), (104, 124)):                      # Luecke 100-103 = Zebra auf der Achse
         rechteck(k, x0, 87, x1, 88, 'm')
     rechteck(k, 38, 87, 61, 88, 'x')                             # Sperrflaeche (schraffiert)
     # ---------------------------------------------------------------- Flaechen
     rechteck(k, 6, 77, 30, 93, 'q')                              # Platz links unten (Marktzelt, Teleporter)
-    rechteck(k, 84, 28, 119, 32, 't')                            # Terrasse vor der Halle (Front in Reihe 33)
+    rechteck(k, 87, 28, 116, 31, 't')                            # Terrasse vor der Halle (Front Reihen 32-33)
     rechteck(k, ACHSE - 4, 34, ACHSE + 3, 79, 'c')               # Mittelweg (8 Kacheln, Achse 102)
-    for (x0, y0, x1, y1) in ((47, 6, 52, 8), (56, 6, 61, 12), (47, 13, 52, 16), (8, 58, 14, 66), (19, 57, 27, 65),
+    for (x0, y0, x1, y1) in ((47, 7, 52, 9), (56, 6, 61, 13), (8, 58, 14, 66), (19, 57, 27, 65),
                              (6, 71, 12, 76), (20, 70, 27, 76), (12, 89, 15, 93), (24, 89, 29, 93)):
         rechteck(k, x0, y0, x1, y1, 'n')
-    rechteck(k, 47, 9, 52, 12, 'd')                              # Sandkasten
-    rechteck(k, 4, 96, 125, 97, 'b')                             # Gleise am Kai
-    rechteck(k, 4, 98, 125, 99, 'k')                             # Kaikante
+    rechteck(k, 47, 10, 52, 13, 'd')                             # Sandkasten
+    rechteck(k, 46, 8, 46, 16, 'm')                              # Hecke an der Westkante des Spielplatzes
+    rechteck(k, 39, 68, 63, 70, 'v')                             # heller Betonvorplatz zwischen Buero und Lagerhallen
+    for (x0, y0, x1, y1) in ((80, 38, 85, 40), (118, 38, 123, 40), (80, 50, 85, 52), (118, 50, 123, 52),
+                             (80, 62, 85, 64), (118, 62, 123, 64), (80, 74, 85, 76), (118, 74, 123, 76),
+                             (66, 28, 71, 29), (68, 44, 73, 46), (66, 67, 71, 69)):
+        rechteck(k, x0, y0, x1, y1, 'e')                         # Heckenbeete auf dem Platz (Paare gespiegelt an 102)
+    rechteck(k, 4, 96, 124, 97, 'b')                             # Holzpromenade am Kai (Laengsplanken)
+    rechteck(k, 4, 98, 124, 99, 'k')                             # Kaikante
+    rechteck(k, 125, 78, 125, 99, 'k')                           # Kaikante am Kanal (Ostrand)
     # Meer: unter dem Kai, Rand gestuft in den Nebel
     for x in range(8, 126):
         tief = 100 + [2, 3, 3, 4, 5][rs.randint(0, 5)] if x % 3 == 0 else None
@@ -87,6 +98,8 @@ def main():
     for y in range(100, 104):
         k[y, 126:131 - (y - 100)] = 'w'
     rechteck(k, 104, 100, 109, 106, 'h')                         # Holzsteg (beginnt an der Kaimauer)
+    k[33:39, 4] = '.'                                            # kein loser Gehwegstreifen neben dem Wohnblock
+    rechteck(k, 4, 78, 6, 81, 'n')                               # kleiner Rasen an der SW-Ecke (wie die Vorlage)
     hoehe = np.ones((R, C), int)
     hoehe[k == 'w'] = 0
     hoehe[k == '.'] = 0
@@ -100,22 +113,22 @@ def main():
     lay = {
         'groesse': [C, R], 'klassen': [''.join(r) for r in k], 'hoehe': [''.join(str(c) for c in r) for r in hoehe],
         'achse': ACHSE, 'gebaeude': gebaeude,
-        'treppe_terrasse': [ACHSE - 6, ACHSE + 5, 33],          # x0, x1, Reihe der Front/Stufen (12 breit, Achse 102)
+        'treppe_terrasse': [ACHSE - 6, ACHSE + 5, 32],          # x0, x1, erste Reihe der Front/Stufen (2 Reihen hoch)
         'kompass': [ACHSE, 64],
-        'treppen_sued': [[ACHSE - 6, ACHSE + 5, 2, 32]],      # fuer die Kollision: Treppe als Durchgang
+        'treppen_sued': [[ACHSE - 6, ACHSE + 5, 2, 31]],      # fuer die Kollision: Treppe als Durchgang
         'zebra': [[27, 29, 20, 24, 'v'], [39, 41, 20, 24, 'v'], [32, 36, 27, 29, 'h'], [32, 36, 37, 39, 'h'],
                   [14, 16, 42, 53, 'v'], [27, 29, 42, 53, 'v'], [39, 41, 42, 53, 'v'], [50, 52, 42, 53, 'v'],
-                  [32, 36, 55, 57, 'h'], [32, 36, 69, 71, 'h'], [ACHSE - 2, ACHSE + 1, 84, 93, 'v']],
-        'hochbahn': {'x0': 60, 'x1': 135, 'y0': 80, 'y1': 83, 'pfeiler': [62, 78, 94, 110, 126], 'zug': [86, 107]},
+                  [32, 36, 55, 57, 'h'], [32, 36, 77, 79, 'h'], [ACHSE - 2, ACHSE + 1, 82, 93, 'v']],
+        'hochbahn': {'x0': 62, 'x1': 135, 'y0': 80, 'y1': 83, 'pfeiler': [62, 78, 94, 110, 126], 'zug': [86, 107]},
         'teleporter': [{'x': 8, 'y': 85, 'b': 3, 'h': 2, 'farbe': 'violett'},
-                       {'x': 132, 'y': 40, 'b': 2, 'h': 4, 'farbe': 'violett'}],
+                       {'x': 134, 'y': 40, 'b': 2, 'h': 4, 'farbe': 'violett'}],
         'steg': [104, 100, 109, 106],
     }
     os.makedirs(KARTE, exist_ok=True)
     json.dump(lay, open(os.path.join(KARTE, 'layout.json'), 'w'), indent=0)
     F = {'.': (152, 146, 177), 's': (48, 53, 69), 'g': (96, 102, 118), 'p': (118, 110, 134), 'q': (128, 118, 140),
          'c': (140, 134, 156), 't': (150, 146, 166), 'n': (44, 72, 52), 'd': (170, 150, 110), 'm': (70, 110, 60),
-         'x': (70, 74, 88), 'b': (60, 48, 44), 'k': (150, 150, 160), 'h': (120, 84, 50), 'w': (20, 26, 72)}
+         'x': (70, 74, 88), 'e': (60, 100, 60), 'v': (140, 144, 150), 'b': (120, 84, 50), 'k': (150, 150, 160), 'h': (120, 84, 50), 'w': (20, 26, 72)}
     out = np.zeros((R, C, 3), np.uint8)
     for kk, c in F.items():
         out[k == kk] = c

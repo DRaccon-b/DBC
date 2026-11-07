@@ -1,0 +1,1441 @@
+{
+ "funde": {
+  "pixel-1": {
+   "id": "pixel-1",
+   "kachel": "yellow line under cars (5-8,21), (49-52,21), bus (70-73,21); grey kerb strip under car (56-59,24); jagged strip along the bottom edge of every building: shops (4-45,17), apartment block (5-28,39), office (42-59,67), warehouses (38-63,79), hall (84-119,27), each sticking 2 px past the outer wall, e.g. lavender pixels in the fog at (3-4,17); dark teeth in the base plates of all 5 pillars (62,78,94,110,126 / row 88); brown rail-coloured smear on the promenade under the lamps/bins (14..122,95), e.g. (38,95), (64,95), (100,95), (122,95); containers (20-24,99), (86-96,99)",
+   "kategorie": "fremdpixel",
+   "problem": "k4.objekte_zeichnen runs bodenwall() on every K18 object. Its exclusion list only matches bases like 'rand/' or 'klein/0', never 'karte02/klein/..', 'gebaeude/..' or 'k18/..'. bodenwall copies the ground texture from 4-6 px below the foot and paints it 1-3 px high around the foot, so it copies road markings (the yellow centre line at y=357 lands at y=350 under the cars), kerbs, rails and fog onto asphalt, paving and building bases.",
+   "fix": "In karte18_objekte.py set extra 'an_wand': True on all objects that stand on hard ground (the flag only switches bodenwall off): cars, bus, buildings, pillars, bollards, planters, lamps, traffic lights, bins, hydrants, containers, benches, barriers, clock. Keep the embedding only for trees and bushes on lawn ('n').",
+   "regel": "Pixel errors / stray pixels; shadows start right at the object (nothing painted bright on top)",
+   "schwere": 4
+  },
+  "pixel-2": {
+   "id": "pixel-2",
+   "kachel": "trees in planters, trunk base: (68,32), (75,46), (67,58), (74,70), (83,40), (83,52), (83,64), (83,76), (119,40), (119,52), (119,64), (119,76)",
+   "problem": "Because of the bodenwall, every tree in a planter (its foot sits 10 px above the planter bottom) gets a grey-lavender mound of stone-front pixels around the trunk. It is painted over the green hedge and the inner rim of the planter (seen at 10x zoom at 68.4-69.6 / 32.25-32.4).",
+   "fix": "Set 'an_wand': True on the im_kuebel trees, or have bodenwall sample the ground directly under the foot (the hedge) instead of 4-6 px lower. Then use a few dark-green hedge clumps at the trunk base as the embedding.",
+   "regel": "Embedding with tufts (not foreign stone pixels); stray pixels",
+   "schwere": 3
+  },
+  "pixel-3": {
+   "id": "pixel-3",
+   "kachel": "whole fog area, vertical seams at x = 4, 8, 12 ... 132 (every 64 px), weaker every 2 tiles; e.g. clearly visible in (0-60, 0-11) and (120-135, 14-27)",
+   "problem": "nebel_feld() is not seamlessly periodic: the noise grid is only closed with n[:, :1] and then resized BICUBIC, so the wrap point gets no correct neighbours. Measured: mean brightness jump between columns 63/64 (and every 64 px) is 10.3, against about 1.2 elsewhere, which shows as straight vertical lines. In the 4-frame animation the seams move 16 px per frame (marching stripes). On top of that the 64-px period makes the fog repeat visibly every 4 tiles.",
+   "fix": "Make the noise periodic. Wrap-pad the grid on both sides (np.concatenate([n[:, -3:], n, n[:, :3]], 1)), scale it, then cut exactly one period out of the middle. Better still, use a period of 256 px (shift 64 px per frame) and 128 px for the second layer so the repetition no longer shows.",
+   "regel": "Seams between tiles / pixel errors",
+   "schwere": 4
+  },
+  "pixel-4": {
+   "id": "pixel-4",
+   "kachel": "land/fog edge: road end (3,20-24) with hard edges at y=20 and y=25; (3,42-53)/(3-5,54); notches (4-5,57-59), (5,78-80), (4,93-95), (4,74); 1-tile sliver (4,33-38) next to the apartment block; rails (4,96-97); plaza steps (125,18-19), (124,20-23), (124,28-31), (123,32-38), (125,60-63); water/fog stair steps along rows 102-105 (x 9-125), e.g. (9-11,104), (120-122,104), (126-131,98-102); top end of the water channel (126-131,78) as a straight rectangle; vertical line (132,84-99); pier (104-109,106) with hard edges at x=104/110 and y=107",
+   "problem": "nebel() blurs the tile-shaped land mask but then forces fog to at least 0.82 everywhere outside land (dichte[~land] = max(..., 0.82)). Every staircase step of the tile mask therefore shows as a sharp, straight fog edge. Measured at (9,104/105): a jump from RGB 117,114,145 to 148,143,172 within 1 px. Water and fog therefore end in rectangular blocks, and the lone sidewalk sliver (4,33-38) looks like a glitch.",
+   "fix": "Apply the 0.82 clamp before the blur, or blur the finished density field again (GaussianBlur 4-6 px) so no step is left; optionally round the land mask (rounded corners) before blurring, as in the template. Set (4,33-38) to fog in the layout.",
+   "regel": "Cut-off/straight edges, seams; template has rounded edges",
+   "schwere": 4
+  },
+  "pixel-5": {
+   "id": "pixel-5",
+   "kachel": "hall entrance (98-105,25)",
+   "problem": "Between the canopy's shadow line (h-49..h-48) and the top of the door frames (h-45) there is a 2-px gap where the facade's window grid shows: dark-blue panes, mullions, the pillars at 97.6/101.6/105.6, and a yellow lit-window strip at (103.7-104.3, 25.0-25.15). The building parts are misaligned.",
+   "fix": "In karte18_gebaeude.py (halle), extend b.r(ex0-4, h-49, ex1+4, h-48) to h-46, or make the glass doors 42 px tall so they meet the canopy. Do not draw lit windows inside the entrance area ex0-6..ex1+6.",
+   "regel": "Misaligned building parts / pixel errors",
+   "schwere": 3
+  },
+  "pixel-6": {
+   "id": "pixel-6",
+   "kachel": "car park (42-44,29-32), (48-50,29-32), (51-53,29-32), (45-47,34-37), (57-59,34-37)",
+   "problem": "The bay lines are drawn at x*T+7 (42.44, 45.44, 48.44 ...), but the cars are centred on 3-tile blocks (n=3, centre e.g. 43.5). Every parked car is therefore 7 px off its bay, and its left mirror or side covers the white bay line (car 678..713 vs line at x=679).",
+   "fix": "In markierungen() draw the bay lines at x*T (tile edge) so the bays match the cars' 3-tile blocks, or shift the cars +7 px to the bay centre. The cars then stand clear between the lines.",
+   "regel": "Rule 1b (centred in its block), objects do not touch other drawn elements",
+   "schwere": 3
+  },
+  "pixel-7": {
+   "id": "pixel-7",
+   "kachel": "southbound car (34-36,32-35), northbound car (32-34,63-66)",
+   "problem": "The cars on the vertical road sit with cx=35.5 and cx=33.5 tiles. The southbound car spans x 550..585 and the northbound one 520..551, so both cover the yellow dashed centre line at x=551-552 with a mirror and body edge. The yellow dashes stick out right beside the body.",
+   "fix": "Southbound cx = 35.75*T (554..589), northbound cx = 33.25*T (516..547); both then sit fully in their lane (east lane for southbound under left-hand traffic).",
+   "regel": "Left-hand traffic: lanes; overlap with markings",
+   "schwere": 3
+  },
+  "pixel-8": {
+   "id": "pixel-8",
+   "kachel": "junction (32-36,42-53) and T-junction with the waterfront road (34,84-93)",
+   "problem": "linie_v draws the yellow centre line from 25*T to 96*T straight through the 4-way junction with the middle road, crossing its white lane dashes at (34-35,44) and (34-35,51). It also runs across the whole waterfront road to the far kerb at row 93, crossing the three white lane lines (85.4 / 90.4 / 91.9). Markings sit on top of each other and touch.",
+   "fix": "Leave the yellow line out of the junction boxes (draw it only y 25..41 and 54..83). Interrupt the white lane dashes of the middle road and the waterfront road over x 32..36.",
+   "regel": "Stripe glitches (markings crossing)",
+   "schwere": 3
+  },
+  "pixel-9": {
+   "id": "pixel-9",
+   "kachel": "stubs beside zebra crossings: (39,44), (42,44), (50,44), (53,44), the same in row 51; waterfront road (104,85), (104,90), (104,92)",
+   "problem": "The dashed lines are only cut where zebra and asphalt meet, so 2-5 px stubs of a dash remain directly at the edge of the crossing. They look like stray pixels.",
+   "fix": "In linie_h, skip or shorten a dash that would be shorter than the full dash length (12 px), and leave at least 4 px gap before and after each zebra crossing.",
+   "regel": "Stripe glitches / stray pixels",
+   "schwere": 2
+  },
+  "pixel-10": {
+   "id": "pixel-10",
+   "kachel": "bench (118-119,62) under the planter tree (119-122,60-63)",
+   "problem": "The bench at (118,62) is half covered by the crown of the planter tree at A+16, row 64 (217 px real overlap). The tree is placed with begleiter=True and is never entered in the collision mask, so the 2-px check let the bench through. Z-order: the tree is drawn after the bench and covers its right half.",
+   "fix": "Move the bench (e.g. to (112,62) or (114,58)), or enter the planter trees into P.pixel after placement so the later 2-px check sees them.",
+   "regel": "No overlaps (pixel check with 2 px gap)",
+   "schwere": 3
+  },
+  "pixel-11": {
+   "id": "pixel-11",
+   "kachel": "barriers on the terrace (90-93,29-31) and (111-114,29-31)",
+   "problem": "The pair is placed at A-12 and A+9 with n=4. Its centres sit at -160 px and +176 px from the axis (x=1632), so the right barrier is 1 tile too far right. Visible: the left one runs 90.4..93.5, the right one 111.4..114.5.",
+   "fix": "Place the right barrier at A+8 (tiles 110-113), then it is exactly mirror-symmetric to A-12.",
+   "regel": "Symmetric squares (pairs mirror-symmetric to the building axis)",
+   "schwere": 3
+  },
+  "pixel-12": {
+   "id": "pixel-12",
+   "kachel": "terrace stairs (96-107,33), foot (96-97,34) and (106-107,34)",
+   "problem": "The stairs are 12 tiles wide, but the checker path ('c') starting at the foot is only 8 tiles (98-105). The two outer stair columns on each side land on ordinary plaza slabs. The stairs also have no cheeks: the steps butt straight against the terrace front with a 1-px line (x=96.0 / 108.0).",
+   "fix": "Either narrow the stairs to x 98..105 and give them cheeks at 97/106 (front stone with contour), or widen the path to 96..107 (layout row 34+). Then check the stairs 3x at 8x zoom (top/bottom connection, cheeks).",
+   "regel": "Rule 2 (stairs 3x: cheeks, edges, path matches the stairs exactly)",
+   "schwere": 3
+  },
+  "pixel-13": {
+   "id": "pixel-13",
+   "kachel": "east edge (125/126, 84-100): road, median hedge, promenade, rails and quay",
+   "problem": "Land ends at x=125.95 with only a 1-px light line, straight into the water channel. Road, hedge, rails and quay bricks are cut off flat, with no quay edge or contour. The template has a 1-tile stone quay strip at x=126 (rows 84-99) with an edge there, and the quay wall has no side end at (125,98-100) either.",
+   "fix": "Set column x=126, rows 84-99, to quay ('k' or its own quay edge) as in the template, with a narrow contour plus light shadow to the water ('Seitliche Plateaukanten' rule). Give the quay's south front face a side end there too.",
+   "regel": "Cut-off edges; side plateau edges as contour + shadow; template",
+   "schwere": 3
+  },
+  "pixel-14": {
+   "id": "pixel-14",
+   "kachel": "hydrant (40-41,69-70) on the warehouse roof edge (row 71); dumpster (51-52,69-70) and bin (60,69-70) on the shed roof edge; lamps (48,55) and (60,55) on the office roof edge (row 56)",
+   "problem": "Objects stand 0-1 px from the top outline of a building behind them: the foot rests on the dark roof edge line. The 2-px check found 16/17/22 and 28 contact pixels. It looks as if they stand on the roof.",
+   "fix": "Keep these sidewalk objects at least 2 px from the building edge: hydrant/dumpster/bin one row higher (row 69) or to a free spot. On the narrow south sidewalk (rows 54-55), put the lamps at 48 and 60 at x positions without a building behind (e.g. 41, 61), or on row 54.",
+   "regel": "No overlaps / objects do not touch (2 px)",
+   "schwere": 2
+  },
+  "pixel-15": {
+   "id": "pixel-15",
+   "kachel": "bollards (88,79), (92,79), (96,79) above the train",
+   "problem": "The monorail train (y 79.5-81.4) is drawn last and cuts off the feet of the bollards standing on row 79. Each shows only the upper part with a straight bottom edge, as if it were standing on the train roof.",
+   "fix": "Leave the bollards out between x 86..107 (train position), or move the whole bollard row to row 78 so there is at least 2 px between the bollard foot and the train roof.",
+   "regel": "Cut-off sprites / z-order",
+   "schwere": 2
+  },
+  "pixel-16": {
+   "id": "pixel-16",
+   "kachel": "west end of the monorail (60-61,80-83)",
+   "problem": "The monorail deck starts at x=60 with a straight vertical cut (only a 2-px dark end strip) above the sidewalk, and touches the bottom of the shed at y=80 without a gap. The template shows a closed end frame with an outline and buffer stop (red marks at about x 62).",
+   "fix": "Give the deck end in hochbahn() an end face with outline and a buffer stop (as in the template), or start x0 at 62 directly above the first pillar, and leave 2 px of air to the building.",
+   "regel": "Cut-off edges; template",
+   "schwere": 2
+  },
+  "pixel-17": {
+   "id": "pixel-17",
+   "kachel": "cars in the fog fade zone (4-7,42-44) and (5-8,20-21)",
+   "problem": "The fog goes into terrain_basis before the objects are drawn. Low cars standing where the asphalt is already about 40-60 % fogged are therefore fully sharp and unfogged on top of the fog layer (seen at (4.2-5.5,43-44) and (5.3-6,20-21)). The road is cut by fog, the car on it is not.",
+   "fix": "Move the cars out of the fade zone (bx >= 8), or after drawing the objects lay the fog density field again over objects with a low foot height (cars, benches, bollards), at about 0.8x the ground value.",
+   "regel": "Draw order: an effect covers what lies below it, and the car does not rise out of the fog",
+   "schwere": 2
+  },
+  "pixel-18": {
+   "id": "pixel-18",
+   "kachel": "cars on the north carriageways: (4-7,44), taxi (55-58,44), (69-72,85), taxi (106-109,85)",
+   "problem": "These cars have their foot at y=719 or 1375; the white lane line at y=711-712 or 1367-1368 runs right through the lower body just above the wheels. Visually they drive on the lane line (dashes left and right of the car line up with the door sill).",
+   "fix": "Middle road: foot row 43 (car fully inside the upper lane 672-710). Waterfront road: foot row 86, so the wheels are clearly in the lower lane. Alternatively move the lane line.",
+   "regel": "Left-hand traffic / lane logic; markings vs objects",
+   "schwere": 2
+  },
+  "pixel-19": {
+   "id": "pixel-19",
+   "kachel": "side shadows of the buildings: (120,22), (29,34), (60,62), (51,74), (84,12)",
+   "problem": "gebaeude_schatten() starts the 12-px shadow strip right of each building at Y1-hoch with a straight horizontal cut in the middle of the facade height (e.g. a hard top edge at (120,22.0) next to the hall), with no fade.",
+   "fix": "Fade the strip in over 6-8 px at the top (alpha 0 -> 0.3), or let it start at the building's top edge and fade out downwards.",
+   "regel": "Straight cut edges / shadow follows the object",
+   "schwere": 1
+  },
+  "logik-1": {
+   "id": "logik-1",
+   "kachel": "100-103,84-93 (Zebra) / 98-103,87-88 (Mittelstreifen)",
+   "kategorie": "Strasse/Fussweg",
+   "problem": "Der Zebrastreifen am Ufer liegt bei x 100-103, die Lücke im Mittelstreifen aber bei x 98-101. Die rechte Hälfte des Zebras (x 102-103) läuft in Reihe 87-88 direkt in die Hecke, die Asphaltlücke bei x 98-99 hat dagegen keinen Zebrastreifen. In der Vorlage liegen Zebra und Lücke beide bei x 98-101.",
+   "fix": "In layout.json in Reihe 87 und 88 x 98-99 auf 'm' und x 100-103 auf 's' setzen, dann liegt die Lücke auf der Achse wie das Zebra. Alternativ das Zebra wie in der Vorlage auf x 98-101 zurücksetzen.",
+   "regel": "Logik Wege/Übergänge (Regel 2), Vorlage",
+   "schwere": 4
+  },
+  "logik-2": {
+   "id": "logik-2",
+   "kachel": "32-36,42-53 (Kreuzung Mitte) und 32-36,84-93 (Einmündung Uferstrasse)",
+   "kategorie": "Markierung",
+   "problem": "Die Markierungen kreuzen sich mitten in den Kreuzungen. Die gelbe Mittellinie der Querstrasse (x 34.5) läuft ohne Unterbrechung durch die mittlere Kreuzung und durch die ganze Uferstrasse bis zum Südbordstein in Reihe 93. Die weissen Fahrstreifenlinien der Mittelstrasse (Reihe 44.5/51.5) laufen quer durch x 30-38, die der Uferstrasse (85.5/90.5/92.0) beginnen schon bei x 32 in der Ecke. Die Vorlage hat in beiden Kreuzungen keine Markierung.",
+   "fix": "In markierungen() die Linie der Querstrasse nur in Reihe 25-41 und 54-83 zeichnen. Die waagerechten Linien der Mittelstrasse bei x 30-38 aussparen, die der Uferstrasse erst ab x 37 beginnen. Optional Haltelinien vor den Zebras setzen.",
+   "regel": "Logik Strassen, Vorlage",
+   "schwere": 3
+  },
+  "logik-3": {
+   "id": "logik-3",
+   "kachel": "5-8,21 / 49-52,21 / 71-74,21 (Autos, Bus); 62-63,88 und 126-127,88 (Pfeiler); 20-24 / 86-90 / 92-96,99 (Container); Laternen Reihe 95; 96-107,27 (Hallenfuss)",
+   "kategorie": "Ebenen/Pixel",
+   "problem": "bodenwall() in k4.objekte_zeichnen läuft für jedes Objekt und kopiert den Boden 4-6 px unter dem Fuss als Wall an den Fuss. Folgen: Unter dem weissen Auto, dem roten Auto und dem Bus auf der oberen Strasse liegt bei y=350 ein falscher gelber Strichstreifen (kopierte Mittellinie). Die Pfeiler bekommen Asphalt- bzw. Wasserpixel auf den Sockel, die Container einen Wall aus Kaimauersteinen, die Laternen in Reihe 95 braune Gleisbett-Pixel. Der Glasfuss der Halle hat eine zackige Pflasterkante. Autos, Gebäude, Pfeiler, Container und Laternen auf Pflaster sitzen in keinem Erdwall.",
+   "fix": "bodenwall nur für Objekte auf natürlichem Boden ausführen (Bäume und Büsche auf Rasen 'n'). Ausschliessen, z. B. über das Flag 'kein_wall' oder die basis-Prüfung: auto, gebaeude, pfeiler, kuebel, Container, Laterne, Poller und k18/strasse.",
+   "regel": "Einbettung (nur Bäume/Felsen), Abschlusskontrolle Pixelfehler",
+   "schwere": 3
+  },
+  "logik-4": {
+   "id": "logik-4",
+   "kachel": "60-135,84",
+   "kategorie": "Schatten/Hochbahn",
+   "problem": "Der Hochbahnschatten ist ein Band in Reihe 84 direkt unter der Frontkante, als läge die Fahrbahn auf der Strasse. Laut Pfeilern (Fuss Reihe 88, 80 px hoch) liegt die Bahn aber über dem Mittelstreifen in Reihe 87-88. Der Schatten liegt damit nördlich der Grundfläche, also zum Licht hin. Bei Licht von oben links müsste er nach rechts unten fallen.",
+   "fix": "In schatten_hochbahn das Band von Reihe 84 entfernen. Den Schatten auf den Boden südöstlich der Grundfläche legen (ca. Reihe 89-91, 8-12 px nach rechts versetzt, nur auf Boden), an den Pfeilerstellen mit deren Schattenstreifen.",
+   "regel": "Licht von oben links; Schatten beginnen am Fuss",
+   "schwere": 3
+  },
+  "logik-5": {
+   "id": "logik-5",
+   "kachel": "62-63,84-88; 78-79; 94-95; 110-111; 126-127 (Pfeiler); 9,48 / 21,48 / 45,48 / 57,48 / 70,88 / 86,88 / 118,88 (Mittelstreifen-Bäume)",
+   "kategorie": "Schatten",
+   "problem": "Pfeiler und Bäume auf den Mittelstreifen werfen gar keinen Schatten. Ihr Fuss steht auf lvl 9 (Hecke als nicht begehbar markiert), und schatten_ebene überspringt alles mit ebene > 7. Alle anderen Bäume und Laternen der Karte haben Schlagschatten, ein 5 Kacheln hoher Pfeiler nicht.",
+   "fix": "Für die Schattenberechnung den Mittelstreifen als Ebene 1 behandeln, z. B. eine eigene Schatten-Ebenenkarte mit lvl[m]=1, die Kollision getrennt lassen. Dann fallen Pfeiler- und Baumschatten nach rechts unten auf Hecke und Fahrbahn.",
+   "regel": "Licht von oben links, Schatten am Objektfuss",
+   "schwere": 3
+  },
+  "logik-6": {
+   "id": "logik-6",
+   "kachel": "125-126,80-99 (Ostende am Kanal)",
+   "kategorie": "Kai/Wasser",
+   "problem": "Beide Fahrbahnen, Gehweg (94-95), Gleise (96-97) und Kai (98-99) enden bei x 125 offen am Wasser, nur mit 1 px Kontur. Autos fahren ins Wasser, das Gleis endet ohne Prellbock. Die Vorlage hat bei x 126 in Reihe 79-99 eine Kai-Steinkante. Ausserdem steht der Pfeiler bei 126-127,84-88 ohne Fundament und Wasserlinie auf dem Wasser (mit kopiertem Wasser-Wall, siehe logik-3).",
+   "fix": "Entlang x 125, Reihe 80-99, eine Kaikante wie in der Vorlage (Stein-Bordstein mit Geländer bzw. Leitplanke) setzen. Prellbock auf 124-125,96-97. Vor dem Strassenende Sperrfläche oder Haltelinie markieren. Dem Wasser-Pfeiler einen nassen Betonsockel mit dunkler Wasserlinie geben.",
+   "regel": "Physik/Realismus, Wasser folgt der Physik, Vorlage",
+   "schwere": 3
+  },
+  "logik-7": {
+   "id": "logik-7",
+   "kachel": "42-47,79-83 (LKW)",
+   "kategorie": "Zufahrt",
+   "problem": "Der LKW steht vor dem offenen Rolltor auf dem Gehweg (Reihe 80-83). Dorthin führt keine Zufahrt, der Bordstein zwischen Reihe 83 und 84 ist durchgehend. Er kann physisch nicht dort hingekommen sein.",
+   "fix": "Die Fläche 42-47,80-83 als Ladezone anlegen (Asphalt 's' oder schraffiert 'x', mit abgesenktem Bordstein zur Uferstrasse). Alternativ den LKW auf die Nordfahrbahn (Reihe 84-86) als Lieferhalt stellen oder entfernen.",
+   "regel": "Logik Zufahrten",
+   "schwere": 3
+  },
+  "logik-8": {
+   "id": "logik-8",
+   "kachel": "82-83,20-24",
+   "kategorie": "Strasse",
+   "problem": "Die obere Strasse endet bei x 82 offen am Platzstreifen bzw. an der Hallenwand, ohne Abschluss. Die Vorlage schliesst sie mit einer Reihe aus 5 Pollern bei x 82, Reihe 20-24.",
+   "fix": "Poller (gebaeude-poller oder Vorlagen-Poller) auf x 82 bzw. 83 in Reihe 20, 21, 22, 23, 24 setzen.",
+   "regel": "Vorlage, Logik Strassenende",
+   "schwere": 2
+  },
+  "logik-9": {
+   "id": "logik-9",
+   "kachel": "4-7,43-44 (rotes Auto); 55-59,43-44 (Taxi); 69-72,84-85 (weisses Auto); 106-109,84-85 (Taxi); 34-36,31-34 und 32-34,63-66 (Querstrasse)",
+   "kategorie": "Fahrspur",
+   "problem": "Autos stehen auf den Fahrstreifenlinien. In der Mittelstrasse läuft die Strichlinie y=711 unter der Aufstandsfläche von rotem Auto und Taxi (Räder bei 712-719). Die nördliche Uferfahrbahn ist nur 3 Kacheln breit, ihre Mittellinie y=1367 liegt bei beiden Autos dort unter der Karosserie. Die Südfahrbahn der Uferstrasse hat ungleiche Spuren (23/24/32 px). Die Autos auf der Querstrasse berühren die gelbe Mittellinie (550 bzw. 552 px).",
+   "fix": "Mittelstrasse: rotes Auto und Taxi um ca. 10 px nach unten (y 688 auf 698, 687 auf 697), dann stehen sie ganz auf Spur 2. Uferstrasse Nord: Strichlinie bei 85.5 entfernen (einspurig). Süd: Linien auf 90.67 und 92.33 setzen. Querstrassen-Autos um 3 px von der Mittellinie weg schieben.",
+   "regel": "Linksverkehr/Spurlogik",
+   "schwere": 2
+  },
+  "logik-10": {
+   "id": "logik-10",
+   "kachel": "42-61,29-37 (Parkplatz)",
+   "kategorie": "Parkplatz",
+   "problem": "Die geparkten Autos (43,32), (49,32), (52,32), (46,37) und (58,37) stehen auf der linken Buchtlinie statt mittig in der Bucht. Die Linien liegen bei x*16+7, die Autos sind auf Kachelblöcke zentriert (7 px Versatz). Ausserdem sind die Buchtlinien 42 px lang, die Autos 54 px, sie ragen 11-19 px in die Fahrgasse.",
+   "fix": "Autos um +7 px verschieben (x 678 auf 685, 776 auf 783, 822 auf 829, 728 auf 735, 918 auf 925) oder die Linien auf x*16 setzen. Buchtlinien auf Autolänge verlängern: oben 29*16+2 bis 32*16+14, unten 34*16+8 bis 38*16-2.",
+   "regel": "Logik Parkplatz, Raster",
+   "schwere": 2
+  },
+  "logik-11": {
+   "id": "logik-11",
+   "kachel": "118-119,61-62",
+   "kategorie": "Überlappung",
+   "problem": "Die Bank bei (119,62) steht direkt hinter dem Kübelbaum (120,64). Ihre rechte Hälfte wird von der Krone verdeckt, ihr Fuss stösst an die Kübelkante.",
+   "fix": "Bank in eine freie Fläche verschieben, z. B. auf (113,62), oder entfernen.",
+   "regel": "Keine Überlappungen (2 px)",
+   "schwere": 2
+  },
+  "logik-12": {
+   "id": "logik-12",
+   "kachel": "88,79 / 92,79 / 96,79",
+   "kategorie": "Überlappung/Hochbahn",
+   "problem": "Das Zugdach (y 1274) liegt über den Füssen der Platzpoller (Fuss y 1279). Die drei Poller hinter dem Zug sehen aus, als stünden sie auf dem Zugdach.",
+   "fix": "Die Pollerreihe am Platzrand eine Reihe höher setzen (Reihe 78) oder die Poller bei x 86-107 hinter dem Zug weglassen.",
+   "regel": "Keine Überlappungen (2 px Abstand)",
+   "schwere": 2
+  },
+  "logik-13": {
+   "id": "logik-13",
+   "kachel": "92,31 vs 113,31 (Absperrungen); 89/91/93,35 vs 112/114/116,35 (Fahnen)",
+   "kategorie": "Symmetrie",
+   "problem": "Die Paare vor der Halle stehen nicht spiegelsymmetrisch zur Achse x=102 (1632 px). Absperrung links bei 1445-1499, ihr Spiegelbild läge bei 1765, die rechte steht bei 1781 (16 px zu weit östlich). Fahnen links bei 1414/1446/1478, gespiegelt 1832/1800/1768, die rechten stehen bei 1846/1814/1782 (14 px zu weit östlich).",
+   "fix": "Rechte Absperrung (karte10-banner-04) auf x=1765 setzen, die gespiegelten Fahnen (k18-strasse-10_m) auf x 1768, 1800, 1832.",
+   "regel": "Symmetrische Plätze",
+   "schwere": 2
+  },
+  "logik-14": {
+   "id": "logik-14",
+   "kachel": "3-4,19-25 / 3-4,41-54 (Strassenenden West); 9,100-103; 56-57,103; 48-49,104; 125-130,101-104",
+   "kategorie": "Nebel",
+   "problem": "Wo Land oder Wasser an Nebelkacheln '.' grenzt, hat der Nebel harte, kachelförmige Kanten. Gemessene Helligkeitssprünge: 15-17 bei (3,24/25), 18-22 bei (3-4,41/42), 49 bei (56/57,103). Die Strassenenden im Westen erscheinen als scharfe Rechtecke, der Wasserrand im Süden als Treppenstufen. Ursache ist dichte[~land] = max(dichte, 0.82), das an der Klassengrenze einen Sprung erzeugt.",
+   "fix": "In nebel() nach dem max() das Dichtefeld noch einmal weichzeichnen (GaussianBlur ca. 8-10 px), oder die 0.82 erst ab ca. 1 Kachel Abstand zum Land erzwingen. Dann läuft der Nebel über ca. 2 Kacheln weich aus.",
+   "regel": "Nebel weich über den Rand (Bau-Doku), Abschlusskontrolle Pixelfehler",
+   "schwere": 2
+  },
+  "logik-15": {
+   "id": "logik-15",
+   "kachel": "5-8,20-21 (weisses Auto); 4-7,43-44 (rotes Auto); 105,105 / 109,105 / 106,105 (Poller und Rettungsring am Stegende)",
+   "kategorie": "Nebel-Ebenen",
+   "problem": "Niedrige Objekte im Nebelsaum werden scharf über den Bodennebel gezeichnet, obwohl der Boden unter ihnen zu etwa 50 % vernebelt ist. Betroffen sind das Heck beider Autos am Westrand und die Festmacher-Poller samt Rettungsring auf dem vernebelten Stegende (Reihe 104-106), dort auch ihre Schatten. Nur Hohes darf aus dem Bodennebel ragen.",
+   "fix": "Die Autos mindestens 2 Kacheln nach Osten schieben (x ≥ 8), die Stegpoller auf Reihe 103 setzen. Oder allgemein: nach den Objekten den Nebel noch einmal auf die untersten ca. 12 px jedes Sprites legen, gewichtet mit der Nebeldichte am Fuss.",
+   "regel": "Zeichenreihenfolge (Nebel), Fog layering",
+   "schwere": 2
+  },
+  "logik-16": {
+   "id": "logik-16",
+   "kachel": "110,100-107",
+   "kategorie": "Schatten",
+   "problem": "Der Stegschatten (steg(): 6 px Streifen rechts vom Steg) liegt auf dem Wasser und dunkelt auch die Front der Kaimauer bei (110,100) ab. Die Wandpixel liegen auf Wasserkacheln und werden von der Maske 'wasser' mit erfasst.",
+   "fix": "Die Schattenmaske zusätzlich auf lvl==0 beschränken, damit die Mauerfront frei bleibt. Wörtlich nach Regel 7 (nie über Wasser) den Wasserschatten auf einen schmalen Kontaktstreifen von 1-2 px reduzieren.",
+   "regel": "Regel 7 / Schatten nie über Wände/Wasser",
+   "schwere": 1
+  },
+  "logik-17": {
+   "id": "logik-17",
+   "kachel": "84-119,28 (Hallenfuss auf der Terrasse)",
+   "kategorie": "Schatten",
+   "problem": "Die Halle hat auf der Terrasse keinen Kontaktschatten. gebaeude_schatten setzt m[lvl != 1] = 0 und löscht damit den Schatten auf Ebene 2. Die Fassade steht ohne Schatten auf dem Terrassenpflaster, bei allen anderen Gebäuden liegt einer.",
+   "fix": "Die Maske nach der Ebene am Gebäudefuss wählen (lvl[Y1, X0..X1]), nicht fest auf 1. Bei der Halle also Kontaktschatten auf Ebene 2 zeichnen.",
+   "regel": "Schatten beginnen direkt am Objekt; Schatten auf der eigenen Höhenebene",
+   "schwere": 1
+  },
+  "regeln-1": {
+   "id": "regeln-1",
+   "kachel": "126-127,84-88",
+   "kategorie": "Gebaeude auf Land / Physik",
+   "regel": "Gebaeude stehen ganz auf Land; Physik/Realismus; Ebenen-Logik bei Wasser",
+   "problem": "Der 5. Hochbahn-Pfeiler (platzierung #11, gebaeude-pfeiler.png, x=2016) steht mitten im Wasser (layout: Spalten 126..131 = 'w'). Er hat kein Fundament, keine Wasserkante und keinen Schaum oder Ring am Fuss. Die Strassensaeule mit Zierplinthe steht einfach auf der Wasseroberflaeche. Die Ursache steht in karte18_objekte.py: boden=set('mwsg') erlaubt 'w', ausserdem ist pruefen=False gesetzt.",
+   "fix": "In layout.json hochbahn.pfeiler 126 -> 122 setzen. Der Pfeiler steht dann auf Spalten 122-123 (x=1952) am Ende des Mittelstreifens (m bis Spalte 125). 'w' aus boden entfernen. Soll der 16er-Rhythmus bleiben, braucht der Pfeiler stattdessen einen echten Brueckenpfeiler-Sockel aus Beton mit Wasserring bzw. animiertem Schaum, und die Uferkante bei Spalte 126 muss ausgebildet werden.",
+   "schwere": 4
+  },
+  "regeln-2": {
+   "id": "regeln-2",
+   "kachel": "98-103,87-88",
+   "kategorie": "Achse / Layout",
+   "regel": "Achsen: Bauwerke auf der Achse exakt mittig; Logik (Zebrastreifen muss frei begehbar sein)",
+   "problem": "Der Zebrastreifen der Uferstrasse liegt korrekt auf der Achse (Spalten 100..103 = ACHSE-2..ACHSE+1, Mitte x=1632). Die Luecke im Mittelstreifen liegt aber bei Spalten 98..101 (karte18_layout.py: Mittelstreifen ((62,97),(102,125))). Deshalb laeuft die rechte Haelfte des Zebrastreifens in Reihen 87-88 in die Hecke (Spalten 102-103). Links neben dem Streifen bleibt ein 2 Kacheln breites Asphaltloch (98-99).",
+   "fix": "In karte18_layout.py die Mittelstreifen-Segmente auf ((62, 99), (104, 125)) aendern, damit die Luecke genau 100..103 ist. Danach karte18_bauen.py neu laufen lassen. Die Pfeiler 94-95 und der Baum 85-87 bleiben in der Hecke.",
+   "schwere": 4
+  },
+  "regeln-3": {
+   "id": "regeln-3",
+   "kachel": "90-93,29-31 / 111-114,29-31",
+   "kategorie": "Symmetrie / Massstab",
+   "regel": "Symmetrische Plaetze (exakt spiegelsymmetrisch zur Achse); Physik/Realismus",
+   "problem": "Das Absperrungs-Paar auf der Terrasse ist nicht spiegelsymmetrisch. Links steht bx=A-12 mit cx=1472 (160 px von der Achse), rechts bx=A+9 mit cx=1808 (176 px), die rechte Absperrung steht also 16 px zu weit rechts. Der Spiegel von Block 90..93 waere 110..113, nicht 111..114. Ausserdem ist das Sprite (karte10-banner-04, 54x50 px) im Verhaeltnis zu den Autos (59 px lang, etwa 12.8 px/m) rund 4 m breit und 4 m hoch. Es ist fast so hoch wie eine Laterne und hoeher als ein Auto. Die Vorlage zeigt an dieser Stelle niedrige, 1 Kachel hohe Gitter (3 Segmente je Seite).",
+   "fix": "In karte18_objekte.py den Eintrag (A + 9, 31) -> (A + 8, 31) setzen (x=1765, cx=1792). Besser: die grosse Bauabsperrung durch niedrige rot-weisse Gitter (ca. 16-20 px hoch, 4 Kacheln breit) ersetzen, wie in der Vorlage 3 Stueck je Seite in Reihe 31, an Blöcken gespiegelt mit t' = 2*A-1-t.",
+   "schwere": 4
+  },
+  "regeln-4": {
+   "id": "regeln-4",
+   "kachel": "110-116,34-35",
+   "kategorie": "Symmetrie",
+   "regel": "Symmetrische Plaetze: Paare exakt spiegelsymmetrisch zur Achse",
+   "problem": "Die rechte Fahnengruppe an der Terrasse steht 15-16 px zu weit rechts. Die linken Masten stehen bei x=1416/1448/1480, der Spiegel waere 1847/1815/1783, tatsaechlich stehen sie bei 1863/1831/1800. Die rechte Gruppe klebt dadurch an der Laterne (117,36) mit 10 px Abstand, links sind es 26 px. Die Ursache steht in karte18_objekte.py: A - dx - 1 bei einem 2 Kacheln breiten Sprite, richtig ist A - dx - 2. Die Fahnen-Sprites werden zwar neu generiert, die Koordinaten bleiben aber dieselben.",
+   "fix": "Spiegel-Block mit Breite n=2 berechnen: P.setzen(STR(10), A - dx - 2, 35, spiegel=True, ...). Damit stehen die rechten Fahnen auf den Bloecken 114-115/112-113/110-111 (cx 1840/1808/1776).",
+   "schwere": 3
+  },
+  "regeln-5": {
+   "id": "regeln-5",
+   "kachel": "96,79 / 108-124,79",
+   "kategorie": "Symmetrie",
+   "regel": "Symmetrische Plaetze; Fester Rhythmus symmetrisch zum Tor",
+   "problem": "Die Pollerreihe am Suedrand des Platzes ist nicht symmetrisch zum Mittelweg. Der letzte linke Poller steht bei Spalte 96 (cx 1544, 24 px vor dem Mittelweg), der erste rechte bei Spalte 108 (cx 1736, 40 px nach dem Mittelweg). Die ganze rechte Reihe 108/112/116/120/124 liegt 16 px neben dem Spiegelbild. Die Ursache ist range(64,126,4), das nur den Mittelweg auslaesst.",
+   "fix": "Linke Reihe x in range(64, A-4, 4) setzen, die rechte gespiegelt mit x' = 2*A-1-x, also Spalten 107, 111, 115, 119, 123. Damit stehen beide Reihen jeweils 24 px vom Mittelweg entfernt.",
+   "schwere": 3
+  },
+  "regeln-6": {
+   "id": "regeln-6",
+   "kachel": "118-119,61-62",
+   "kategorie": "Ueberlappung",
+   "regel": "Keine Ueberlappungen (2 px Abstand)",
+   "problem": "Die Holzbank #156 (karte10-klein-38, x=1889..1919, y=986..1008) steckt zur Haelfte hinter der Krone des Kuebelbaums (120,64) (#46, x=1898..1942, y=987..1030), 287 px Ueberdeckung. Die Ursache: kuebel_baum() setzt den Baum mit begleiter=True. Seine Pixel kommen deshalb nicht in P.pixel, und spaeter gesetzte Objekte bestehen die Ueberlappungspruefung trotzdem.",
+   "fix": "Bank nach (114,62) setzen (x=1825..1855, frei von Laterne 117 und Kuebel 118-121). Zusaetzlich in kuebel_baum() die Baumpixel nach dem Setzen in P.pixel eintragen, damit die Pruefung kuenftig greift.",
+   "schwere": 4
+  },
+  "regeln-7": {
+   "id": "regeln-7",
+   "kachel": "120-121,48-49",
+   "kategorie": "Ueberlappung",
+   "regel": "Keine Ueberlappungen (2 px Abstand)",
+   "problem": "Die Beine der Infotafel #134 (k18-strasse-06, y bis 799) werden von der Krone des Kuebelbaums (120,52) (#42, Kronenoberkante y=795) ueberdeckt, etwa 5 px. Die Ursache ist dieselbe wie bei regeln-6. Die Tafel wird zwar neu generiert, die Position bleibt aber dieselbe.",
+   "fix": "Tafel eine Reihe hoeher setzen, P.setzen(STR(6), 120, 47) (Fuss y=767, 28 px Abstand zur Krone). Oder die Kuebelbaum-Pixel in P.pixel eintragen, dann lehnt das Skript die Position selbst ab.",
+   "schwere": 3
+  },
+  "regeln-8": {
+   "id": "regeln-8",
+   "kachel": "42-60,29-37",
+   "kategorie": "Raster 1b",
+   "regel": "Regel 1 (16x16-Raster) und 1b (mittig)",
+   "problem": "Die Parkbuchten-Linien liegen nicht auf dem Raster. markierungen() zeichnet sie bei x*T+7 (x=679, 727, 775, ...), die Buchten sind also um 7 px verschoben. Die Autos stehen regelkonform auf Kachelmitten (cx 696, 744, 792, 840, 936) und kleben deshalb alle am linken Buchtstrich, ihre Spiegel ragen ueber die Linie. Betroffen sind die Autos bei (42-44,29-32), (48-50,29-32), (51-53,29-32), (45-47,34-37) und (57-59,34-37).",
+   "fix": "In tools/karte18_bauen.py, markierungen(): linie_v(a, frei, x * T, ...) statt x * T + 7 (beide Reihen). Die Buchten laufen dann von 672..720 usw. und die Autos stehen mittig mit 6 px Rand zu jeder Linie.",
+   "schwere": 3
+  },
+  "regeln-9": {
+   "id": "regeln-9",
+   "kachel": "10-13,72-76",
+   "kategorie": "Boden unter Baum",
+   "regel": "Grosse Objekte: untere zwei Reihen eines Baums auf passendem Boden; Einbettung",
+   "problem": "Der grosse Ginkgo #20 (ginkgo_gross, x=162..223) auf Rasen C (Spalten 6..12) ragt in seinen unteren Reihen 75-76 ueber die Rasenkante hinaus auf den Gehweg (Spalte 13), etwa 14 px. Der Stamm steht genau auf dem Randstein der Rasenunterkante (y=1231). Die Fusspruefung prueft nur die unteren 4 Pixelzeilen am Stamm.",
+   "fix": "Beide Baeume auf Rasen C nach links ruecken: GRUEN bx 6 (x=98..142) und GINKGO2 bx 9 (x=146..207), dazwischen 4 px Abstand. Den Ginkgo zusaetzlich mit Fuss in Reihe 75 statt 76 setzen, damit der Stamm im Gras steht.",
+   "schwere": 3
+  },
+  "regeln-10": {
+   "id": "regeln-10",
+   "kachel": "22-24,72-74 / 12-13,91-92 / 25-27,90-92 / 29-31,29-31 / 29-31,56-58 / 29-31,70-72 / 37-40,61-64",
+   "kategorie": "Einzelbaum",
+   "regel": "Regel 5 (einzeln platzierte Baeume brauchen Begleitung, 5a/5b)",
+   "problem": "Sieben Baeume stehen voellig allein, ohne zweiten Baum und ohne Begleitobjekte am Sockel. Drei stehen auf Rasen: Rasen D (#21), Rasen E (#22) und Rasen F (#23). Vier sind Strassen-Ginkgos an der Querstrasse (#31, #32, #34 und ginkgo_gross #33).",
+   "fix": "Je Baum nach 5b 2-3 passende Objekte setzen, eines davon zwei Kacheln hoch und so, dass es den Sockel ueberdeckt. Auf Rasen eignen sich Busch bzw. Hecke, Steinlaterne oder Blumenbeet. Fuer die Strassenbaeume eignen sich Baumscheibe mit Gitter, niedriger Strauch und Poller bzw. Fahrradbuegel. Alternativ 5a: einen zweiten Baum plus 1-2 Objekte (z. B. auf Rasen D einen kleinen Baum karte01-baeume-03 bei 25-26,75 und einen Busch vor dem Sockel).",
+   "schwere": 3
+  },
+  "regeln-11": {
+   "id": "regeln-11",
+   "kachel": "9-13,58-66 / 21-26,57-65 / 7-13,72-76 / 47-52,6-8",
+   "kategorie": "Einbettung / Begleitung",
+   "regel": "Einbettung (Bueschel/Blumen an den Sockelecken); Regel 5a (Baum + anderer Baum + 1-2 Objekte)",
+   "problem": "Kein einziger Rasenbaum der Karte (11 Stueck) hat Bueschel oder Blumen an den Sockelecken, die Staemme stehen nackt auf dem Gras. Die Baumpaare auf Rasen A, B und C und das Paar am Spielplatz (47-49/50-52, Reihe 8, die Staemme genau auf der Kante Rasen/Sand) haben zwar einen zweiten Baum, aber nicht die von 5a geforderten 1-2 Begleitobjekte.",
+   "fix": "An jedem Rasenbaum links und rechts am Stammfuss Grasbueschel oder Blumen setzen (Karte-01-Bueschel wiederverwenden). Je Baumpaar 1-2 Begleitobjekte ergaenzen (Busch vor einem Sockel, Steinlaterne, Blumenbeet). Die Spielplatzbaeume eine Reihe hoeher setzen (Fuss Reihe 7), damit der Stamm im Gras und nicht auf der Sandkante steht.",
+   "schwere": 3
+  },
+  "regeln-12": {
+   "id": "regeln-12",
+   "kachel": "42-46,79-82",
+   "kategorie": "Ansicht frontal",
+   "regel": "Ansicht frontal (keine diagonalen/isometrischen Sprites)",
+   "problem": "Beim Lkw #69 (karte02-ortho-14) ist das Fahrerhaus in 3/4-Ansicht gezeichnet: Frontflaeche mit Scheinwerfer und Seitenflaeche sind gleichzeitig schraeg sichtbar. Die Ladeflaeche ist dagegen reine Seitenansicht. Alle anderen Fahrzeuge der Karte sind reine Seitenansichten.",
+   "fix": "Den Lkw per PixelLab mit dem Frontal-Zusatz neu erzeugen (reine Seitenansicht wie die k18-autos) oder das Fahrerhaus reparieren (Front als schmale senkrechte Kante). Position x=674, Fuss Reihe 82 beibehalten.",
+   "schwere": 3
+  },
+  "regeln-13": {
+   "id": "regeln-13",
+   "kachel": "21-22,82-83",
+   "kategorie": "Ansicht frontal",
+   "regel": "Ansicht frontal (keine isometrischen Sprites)",
+   "problem": "Die Kisten am Marktstand #62 (karte02-klein-61) sind isometrisch gezeichnet: Deckel als Raute, zwei schraege Seitenflaechen. Sie passen nicht zur frontalen Ansicht von Marktstand, Saecken und Containern daneben.",
+   "fix": "Durch einen frontalen Kistenstapel ersetzen (z. B. die Kisten am Marktstand-Sprite als Vorbild oder per PixelLab mit Frontal-Zusatz), gleiche Position bx 21, Reihe 83.",
+   "schwere": 2
+  },
+  "regeln-14": {
+   "id": "regeln-14",
+   "kachel": "26-29,82-85",
+   "kategorie": "Gebaeude mit Dach",
+   "regel": "Gebaeude mit Dach (nie flach als reine Fassade)",
+   "problem": "Die Polizeiwache #159 (k18-frontal-08) ist eine reine Frontfassade mit einer flachen Gesimsplatte oben. Es ist keine Dachflaeche von leicht oben sichtbar, anders als bei allen anderen Gebaeuden der Karte (Halle, Bueros, Wohnblock, Lager).",
+   "fix": "Die Wache mit sichtbarer Dachflaeche neu erzeugen, z. B. ein flaches Walmdach bzw. Flachdach mit Attika von leicht oben, etwa 1 Kachel tief wie die Haeuser auf Karte 06. Oder prozedural wie die anderen Gebaeude in karte18_gebaeude.py ein Dachband ueber die Fassade setzen (Fuss Reihe 85 bleibt).",
+   "schwere": 3
+  },
+  "regeln-15": {
+   "id": "regeln-15",
+   "kachel": "95-96,45-46 / 107-108,45-46 / 95-96,57-58 / 107-108,57-58 / 95-96,69-70 / 107-108,69-70",
+   "kategorie": "Beruehrung",
+   "regel": "Keine Ueberlappungen: Objekte beruehren sich nicht ungewollt (2 px Abstand)",
+   "problem": "Alle sechs modernen Baenke (k18-strasse-14) stehen direkt neben dem Laternenkopf der Laternen 94/109, rechts mit etwa 1 px Abstand, links mit 2 px. Die Bank steht 2 Reihen hinter dem Laternenfuss und auf Hoehe der Laterne, sie wirkt dadurch wie an den Laternenkopf geklebt.",
+   "fix": "Baenke eine Kachel Richtung Mittelweg ruecken und symmetrisch halten: BANK_P bei A-6 und A+4 (Bloecke 96-97 und 106-107, x=1537 und 1697). Damit entstehen etwa 17 px Abstand zur Laterne, die Baenke liegen ausserhalb der Mittelweg-Sperre 98..105.",
+   "schwere": 2
+  },
+  "regeln-16": {
+   "id": "regeln-16",
+   "kachel": "12-13,80 / 24-25,80",
+   "kategorie": "Symmetrie",
+   "regel": "Symmetrische Plaetze: Paare vor einem Bauwerk spiegelsymmetrisch zu dessen Achse",
+   "problem": "Das gespiegelte Sandsack-Paar (#60, #61 '_m') flankiert den Marktstand (Achse cx=296), steht aber asymmetrisch: links 88 px von der Achse (cx 208), rechts 104 px (cx 400).",
+   "fix": "Den gespiegelten Sack auf bx 23 setzen (x=369, cx=384), dann stehen beide 88 px von der Standachse entfernt. Oder den linken auf bx 13 (cx 224), dann sind es beide 104 px.",
+   "schwere": 2
+  },
+  "regeln-17": {
+   "id": "regeln-17",
+   "kachel": "5,28-29 / 5,39-41 / 4,18-19",
+   "kategorie": "Gebaeude auf Land",
+   "regel": "Gebaeude stehen ganz auf Land",
+   "problem": "Die linke Spalte 5 des Wohnblocks (Rechteck 5..28 x 28..39) liegt in den Reihen 28-29 und in der Fussreihe 39 auf Nebelkacheln ('.'). Davor (Reihen 40-41, Spalte 5) gibt es keinen Gehweg. Genauso hat die linke Ladenspalte 4 (Reihen 12-17) in den Reihen 18-19 keinen Gehweg davor, dort ist Nebel.",
+   "fix": "In karte18_layout.py die Gehwegflaeche erweitern: Spalte 5 von Reihe 28 bis 41 als 'g' und Spalte 4 in Reihen 18-19 als 'g'. Den Nebelrand entsprechend 1 Kachel nach links schieben. Alternativ die Gebaeude 1 Kachel schmaler machen.",
+   "schwere": 2
+  },
+  "regeln-18": {
+   "id": "regeln-18",
+   "kachel": "26,92-95",
+   "kategorie": "Fester Rhythmus",
+   "regel": "Fester Rhythmus (wiederkehrende Bauteile in gleichen Abstaenden)",
+   "problem": "Die Laternenreihe der Uferpromenade (Abstand 12: 14, 38, 50, ... 122) hat eine Luecke bei Spalte 26. Die Laterne (26,95) wurde verworfen, weil ihr Kopf mit der Krone des Rasen-F-Baums (#23, x=402..446) kollidiert.",
+   "fix": "Den Rasen-F-Baum auf bx 27 setzen (x=434..478, Spalten 27-29, noch auf Rasen 24..29). Danach passt die Laterne (26,95) mit 3 px Abstand und der Rhythmus 14/26/38 ist geschlossen.",
+   "schwere": 1
+  },
+  "regeln-19": {
+   "id": "regeln-19",
+   "kachel": "69-71,86-88 / 85-87,86-88 / 117-119,86-88 / 20-22,46-48 / 44-46,46-48",
+   "kategorie": "Fester Rhythmus",
+   "regel": "Fester Rhythmus (mittig zwischen den Pfeilern); Gleiche Objekte buendig",
+   "problem": "Die Mittelstreifen-Baeume unter der Hochbahn stehen je 8 px links der Mitte zwischen zwei Pfeilern (cx 1128/1384/1896 statt 1136/1392/1904). Ebenso stehen die Baeume in den Heckensegmenten 17..26 und 42..49 je 8 px links der Segmentmitte (cx 344 statt 352 und 728 statt 736). In den Segmenten 5..13 und 53..61 stehen sie exakt mittig.",
+   "fix": "Diese Baeume mit n=4 (Block 4 Kacheln) setzen, damit cx auf der Kachelgrenze und genau mittig liegt: P.setzen(GRUEN, 69, 88, n=4), (85,88,n=4), (117,88,n=4), (20,48,n=4), (44,48,n=4).",
+   "schwere": 1
+  },
+  "regeln-20": {
+   "id": "regeln-20",
+   "kachel": "40-41,69-70 / 51-52,69-70 / 60,69-70",
+   "kategorie": "Beruehrung",
+   "regel": "Keine Ueberlappungen: Objekte beruehren sich nicht ungewollt (2 px Abstand)",
+   "problem": "Hydrant #173, Muellcontainer #174 und Muelleimer #167 stehen mit dem Fuss (y=1135) direkt auf der Oberkante der Lagerhallen-Daecher (y=1136), 0 px Abstand. Sie wirken, als stuenden sie auf der Dachkante.",
+   "fix": "Die drei Objekte eine Reihe hoeher setzen (Fuss Reihe 69, Gehweg 'g'). Der Hydrant kann auch neben die Laterne an der Querstrasse ruecken. So entsteht mindestens 16 px Abstand zum Dach.",
+   "schwere": 1
+  },
+  "regeln-21": {
+   "id": "regeln-21",
+   "kachel": "100-103,62-65 / 109,117 Laternen",
+   "kategorie": "Achse",
+   "regel": "Achsen in Raeumen: exakt auf der Achse; Symmetrische Plaetze",
+   "problem": "Die Windrose ist um ein Pixel (49 px Durchmesser, 1608..1656) um Pixel 1632 gezeichnet. Ihre Mitte liegt damit bei 1632.5 statt auf der Achsgrenze 1632.0, der rote Kern (1630..1634) und das Highlight (1631..1632) sind gegeneinander versetzt. Ebenso stehen alle rechten Platzlaternen (Spalten 109 und 117) 1 px neben dem exakten Spiegelbild (x=1744/1872 statt 1745/1873).",
+   "fix": "In kompass() mit halben Pixeln rechnen (xx+0.5, Bereich cx-24..cx+23, 48 px), Kern cx-2..cx+1. Bei rechten Laternen x = 2*1632 - x_links - Breite setzen (bzw. das Sprite spiegeln).",
+   "schwere": 1
+  },
+  "regeln-22": {
+   "id": "regeln-22",
+   "kachel": "71-74,19-21",
+   "kategorie": "Logik Platzierung",
+   "regel": "Abschlusskontrolle Logik (Bus an der Haltestelle)",
+   "problem": "Laut Code steht der Bus (#216, x=1137..1199) 'an der Haltestelle'. Tatsaechlich steht er 2-5 Kacheln oestlich hinter Haltestellenschild (65,19) und Wartehaeuschen (66-69,19), vor der Buerofassade. Fahrgaeste koennten an der Haltestelle nicht einsteigen.",
+   "fix": "Den Bus neben das Wartehaeuschen setzen (Block 66-69, x≈1057, Fuss Reihe 21), damit die vordere Tuer am Schild bzw. Haeuschen liegt. Auf 2 px Abstand zur Laterne (70,19) pruefen.",
+   "schwere": 2
+  },
+  "vorlage-1": {
+   "id": "vorlage-1",
+   "kachel": "x 46-62, y 6-17 (Spielplatz)",
+   "kategorie": "vorlage-fehlend/aufteilung",
+   "problem": "Die Aufteilung des Spielplatzes weicht von der Vorlage ab, und ein Spielgerät fehlt. Vorlage: Rasen x 47-53/y 7-9 mit Rutsche (x 48-50), darunter Sandkasten mit Holzrahmen x 47-52/y 10-13, darunter Pflaster x 47-61/y 14-17 mit der Wippe (x 47-49, y 15). Rechter Rasen x 56-61/y 6-13 mit Schaukel (x 57-60/y 8-10) und darunter einer Kletterkuppel (x 57-60/y 12-13). Karte: Rasen y 6-8 ganz mit zwei Bäumen gefüllt, Sand y 9-12 ohne Holzrahmen. Ein zusätzlicher Rasen x 47-52/y 13-16 (Klasse n) liegt dort, wo die Vorlage Pflaster hat; die Wippe steht darauf. Die Rutsche steht rechts neben der Schaukel (x 60-61, Fuß y 12), die Kletterkuppel fehlt ganz.",
+   "fix": "In layout.json die Reihen 13-16, x 47-52 von 'n' auf 'g' setzen und die Wippe (karte10-spielplatz-02) aufs Pflaster stellen (x 47-49, Fuß y 15). Die Rutsche (karte10-spielplatz-00) auf den oberen linken Rasen x 48-50, Fuß y 8/9 versetzen. Den Sandkasten y 9-12 mit einem Holzrand einfassen (1 px heller Holzrand und dunkle Innenfuge, wie bei rasen_kanten, nur in Braun). Eine Kletterkuppel (Klettergerüst als Halbkugel, frontal, z. B. per PixelLab, Regel 3b) auf den rechten Rasen x 57-60, Fuß y 12 setzen; die Schaukel bleibt, wo sie ist.",
+   "regel": "Vorlagentreue, Regel 3/3b (fehlendes Objekt neu erzeugen)",
+   "schwere": 4
+  },
+  "vorlage-2": {
+   "id": "vorlage-2",
+   "kachel": "x 46-62, y 3-17 (Spielplatz-Ränder)",
+   "kategorie": "vorlage-fehlend",
+   "problem": "Bäume und Randobjekte des Spielplatzes fehlen oder stehen falsch. Vorlage: grüner Baum außen an der NW-Ecke (x 46-48, Fuß y 7), gelber Ginkgo an der NO-Ecke des rechten Rasens (x 59-61, Fuß y 6), eine schmale Hecke entlang der Westkante x 46/y 8-16, eine Laterne x 61/y 11-13 zwischen Rasen und Bürohaus, Trinkbrunnen x 52/y 17, Holzbank x 58-59/y 17 und eine Taubenfigur x 60/y 15. Karte: Beide Bäume stehen nebeneinander im Rasen x 47-52/y 6-8 (sie verdrängen die Rutsche), die NO-Ecke ist leer, und Hecke, Laterne, Brunnen und Bank fehlen.",
+   "fix": "Grünen Baum (karte01-baeume-00) auf x 46-48, Fuß y 7 setzen. Den Ginkgo-Platzhalter auf x 59-61, Fuß y 6 setzen. Die Spalte x 46, y 8-16 als Heckenstreifen ('m') eintragen (das ist Klasse g, kein Laden). Eine Laterne bei x 61, Fuß y 13 setzen, eine Bank (karte10-klein-38) bei x 58-59, Fuß y 17, und einen Trinkbrunnen (vorhandenes Objekt prüfen, sonst neu) bei x 52, Fuß y 17. Büschel an die Baumsockel setzen (Einbettung).",
+   "regel": "Vorlagentreue, Regel 5 (Baum mit Begleitung), Einbettung",
+   "schwere": 2
+  },
+  "vorlage-3": {
+   "id": "vorlage-3",
+   "kachel": "x 5-61, y 44-48 (Mittelstreifen der mittleren Straße)",
+   "kategorie": "vorlage-fehlend/versetzt",
+   "problem": "In der Vorlage steht in jedem Heckenabschnitt des Mittelstreifens eine zweiarmige Straßenleuchte (x 8, 20, 44, 56; Fuß y 48), und die Bäume stehen jeweils am Ostende der Hecke (x 11-13, 23-25, 47-49, 59-61). In der Karte gibt es auf dem Mittelstreifen keine einzige Leuchte. Die Bäume stehen genau auf den Leuchtenplätzen (x 8-10, 20-22, 44-46, 56-58).",
+   "fix": "Eine zweiarmige Mastleuchte erstellen (zwei Köpfe der karte02-abgeleitet-laterne an einem T-Mast, frontal, mit Leuchtanimation wie die übrigen Laternen) und bei x 8, 20, 44 und 56, Fuß y 48 setzen. Die vier Mittelstreifen-Bäume jeweils um 3 Kacheln nach Osten versetzen (x 11-13, 23-25, 47-49, 59-61, Fuß y 48), mit mindestens 2 px Abstand zur Leuchte.",
+   "regel": "Vorlagentreue; Feuer und Licht animieren; Keine Überlappungen",
+   "schwere": 3
+  },
+  "vorlage-4": {
+   "id": "vorlage-4",
+   "kachel": "West-Platz x 64-84/y 25-79; Ostrand x 119-125/y 28-78; SW-Park x 5-31/y 56-77; q-Platz x 6-30/y 84-93",
+   "kategorie": "vorlage-fehlend",
+   "problem": "Abseits der Achse fehlen fast alle Laternen der Vorlage, sodass diese Bereiche im Nebel unbeleuchtet wirken. Vorlage West-Platz: Laternen (x 70, y 33), (80, 33), (79, 38), (68, 45), (68, 52), (68, 62), (79, 72). Vorlage Ostrand: x 124 bei y 34, 47, 66, 76. Vorlage SW-Park: (17, 57), (31, 62), (31, 70), (17, 72), (29, 76). Vorlage q-Platz: (13, 88), (28, 88). Karte: Auf x 64-84/y 25-79 und auf x 119-125 steht keine Laterne, im SW-Park nur eine (x 30, y 66), auf dem q-Platz nur eine (x 14, Fuß y 95, halb im Rasen).",
+   "fix": "Laternen (karte02-abgeleitet-laterne) an diese Kacheln setzen, Fuß jeweils in der angegebenen untersten Reihe, alle mit derselben Leucht-Animation. Am Platz vor der Halle Paare spiegelsymmetrisch zur Achse 102 bilden (Spiegel: x' = 203 - x, also West x 80 zu Ost x 123, bei y 33, 47, 66 und 76). Die Laternen x 68/70 im Westen bleiben einzeln, weil ihr Spiegelort im Nebel läge. Die q-Platz-Laterne x 14 aus dem Rasen auf das Pflaster x 13, Fuß y 88 versetzen.",
+   "regel": "Vorlagentreue; Symmetrische Plätze; Feuer und Licht animieren",
+   "schwere": 3
+  },
+  "vorlage-5": {
+   "id": "vorlage-5",
+   "kachel": "Platz x 64-125, y 18-79 (alle Pflanzbeete)",
+   "kategorie": "vorlage-proportion",
+   "problem": "Die Baumbeete der Vorlage sind flache, breite Heckenbeete von etwa 6×3 Kacheln mit Randstein und einem Baum, zum Beispiel x 69-74/y 36-39, x 80-85/y 44-46, x 69-74/y 66-69, x 118-123/y 38-40, x 118-123/y 57-60, x 118-122/y 70-73 und x 66-71/y 27-29. Die Karte nutzt stattdessen 12 kleine, erhöhte Steinkübel von 4×2 Kacheln (gebaeude-kuebel) in einem starren Raster bei x 82-85 und x 118-121. Dadurch wirkt der Platz grau und kleinteilig statt grün gegliedert. Außerdem fehlt das Beet mit Baum am östlichen Platzstreifen x 121-123/y 20-23 (rechts neben der Halle) ganz.",
+   "fix": "Ein flaches Heckenbeet als Bodenfläche anlegen (Hecke wie beim Mittelstreifen mit Randstein, 6×3 Kacheln, kein Kübelkörper und keine Kübelschatten) und an den Vorlagenpositionen einsetzen. Wo die Achsen-Symmetrie gilt, Paare mit x' = 203 - x spiegeln, etwa West x 80-85 zu Ost x 118-123. Die Zahl auf etwa 7-8 Beete senken, die Kübelreihe x 82-85 ersetzen. Zusätzlich ein Beet mit Baum bei x 121-123, Fuß y 23 setzen.",
+   "regel": "Vorlagentreue (Proportionen); Symmetrische Plätze; Keine Reihen",
+   "schwere": 3
+  },
+  "vorlage-6": {
+   "id": "vorlage-6",
+   "kachel": "Platz x 64-125, y 25-79 (Bodenbelag)",
+   "kategorie": "vorlage-fehlend/boden",
+   "problem": "Der Platz der Vorlage hat ein deutliches Großraster aus dunklen Fugenbändern: senkrecht bei x 70, 79, 88, 115 und 124, waagerecht bei y 32, 40, 48, 56, 64 und 72. Dazu kommt ein dunkler Rahmen um die Achse (Bänder x 90 und x 113 von y 35 bis 76) mit einem Querband bei y 52-53. In terrain_basis.png ist der Platz gleichförmig gekachelt, nur mit dunkleren Kachelspalten neben dem Schachbrettweg. Ohne das Raster fehlt dem Platz die Gliederung der Vorlage.",
+   "fix": "In karte18_bauen.py auf Klasse 'p' 2 px breite dunkle Fugenlinien zeichnen (Farbe etwa #4a4560, wie in der Vorlage) an den genannten Spalten und Reihen. Den Achsrahmen symmetrisch zu x 102 ziehen (x 90 und x 113, denn 90 + 113 = 203; y 35-76) samt Querband y 52-53. Die Linien sind Boden und werden nicht animiert.",
+   "regel": "Vorlagentreue; Achsen in Räumen/Plätzen (Rahmen exakt symmetrisch)",
+   "schwere": 2
+  },
+  "vorlage-7": {
+   "id": "vorlage-7",
+   "kachel": "x 84-119, y 4-19 (Dach der Halle)",
+   "kategorie": "vorlage-proportion/gebaeude",
+   "problem": "In der Vorlage sieht man das Dach der Halle von leicht oben: helle Attika, abgeschrägte Ecken bei x 84-85 und x 118-119, eine Dachfläche mit Plattenraster und drei Dachlüfter (x 87, 100, 116 bei y 13-15). Die umgedrehten Pyramiden sind zweistufig, mit einem waagerechten Gesims bei y 8 zwischen oberem Block (y 4-8) und unterem Trichter (y 8-17). In der Karte ist y 12-19 eine flache, senkrecht gefugte graue Wandfläche mit zwei Fensterschlitzen; sie liest sich als Fassade, nicht als Dach. Die Pyramiden sind einstufige glatte Trapeze.",
+   "fix": "In karte18_gebaeude.py die Fläche y 12-19 als Dachaufsicht zeichnen: helle Attika-Kante oben und seitlich, abgeschrägte Ecken, Plattenraster in der Draufsicht und 2-3 Dachlüfter. Die Fensterschlitze entfernen. Jeder Pyramide ein Gesims bzw. einen Absatz bei y 8 geben (oberer Block etwas schmaler und hell, darunter der Trichter). Licht von oben links.",
+   "regel": "Gebäude mit Dach; Vorlagentreue",
+   "schwere": 3
+  },
+  "vorlage-8": {
+   "id": "vorlage-8",
+   "kachel": "x 84-119, y 28-33 (Terrasse vor der Halle)",
+   "kategorie": "vorlage-proportion",
+   "problem": "Vorlage: Die Terrasse reicht nur von x 87 bis 116 (seitlich bleibt Platzbelag x 84-86 und x 117-119) und trägt das Schachbrettmuster des Achswegs. Ihre Front ist eine 2 Reihen hohe Stützmauer (y 31-32) mit Lüftungsschlitzen, die Treppe x 96-107 ist 2 Reihen hoch. Auf der Terrasse stehen zwei Laternen (x 92 und x 111, y 28-30) und je Seite drei kleine rot-weiße Absperrgitter von 2×1 Kacheln (x 88-93 und x 110-115, y 31). Karte: Die Terrasse geht über die volle Hallenbreite x 84-119, der Belag ist einfarbig, die Kante nur etwa eine halbe Reihe hoch, die Treppe 1 Reihe (y 33). Statt der Gitter steht je Seite ein übergroßer Absperrbock (karte10-banner-04, 3,4×3 Kacheln); die Laternen stehen unterhalb der Terrasse.",
+   "fix": "Den Bereich 'treppe_terrasse' bzw. 't' auf x 87-116 begrenzen. Den Terrassenbelag im Schachbrettmuster der Klasse 'c' zeichnen und die Front als 2 Reihen hohe Mauer mit Schlitzen ausführen (y 31-32), die Treppe x 96-107 über y 31-33. Die großen Absperrböcke durch je 2-3 Absperrgitter in Vorlagengröße (2×1) ersetzen, mit Abstand und spiegelsymmetrisch zu x 102. Je eine Laterne auf die Terrasse stellen (x 92 und x 111, Fuß y 30).",
+   "regel": "Vorlagentreue; Symmetrische Plätze; Treppen 3× prüfen (Regel 2)",
+   "schwere": 2
+  },
+  "vorlage-9": {
+   "id": "vorlage-9",
+   "kachel": "x 32-125, y 80-93 (Uferstraße)",
+   "kategorie": "vorlage-proportion/logik",
+   "problem": "Die Fahrbahn der Uferstraße beginnt in der Vorlage bei y 82 (Gehweg unter den Lagerhallen nur y 80-81), die Hochbahn liegt über der nördlichen Fahrspur. Jede Richtungsfahrbahn hat genau eine Leitlinie (y 84,5 und y 91,5). Karte: Die Fahrbahn beginnt erst bei y 84, und der Gehweg x 37-63 ist 4 Reihen breit (y 80-83). Die Nordfahrbahn ist nur 3 Reihen breit und wird bei y 85,5 in zwei 1,5 Reihen schmale Spuren geteilt. Die Südfahrbahn hat zwei Leitlinien (y 90,5 und y 92,0, karte18_bauen.py Zeile 137-138), also drei Spuren. Die Autos x 41-44, x 76-79 und x 116-119 (Fuß etwa y 92,9) fahren genau auf der Linie y 92.",
+   "fix": "In layout.json die Reihen 82-83 für x 37-125 auf 's' setzen; unter dem Hochbahnträger y 80-83 liegt dann Asphalt. Leitlinien: Nord eine Linie bei y 84,5, Süd eine Linie bei y 91,5 (die Schleife 'for yc in (90.5, 92.0)' durch 91.5 ersetzen). Die Autos auf die Spurmitten setzen (Süd etwa y 89,5-91 und 92-93,5). Den Lieferwagen (karte02-ortho-14, x 42-46) in die offene Torbucht der lager_rolltor stellen, Fuß auf y 81, nicht quer über Gehweg und Fahrbahn.",
+   "regel": "Vorlagentreue; Logik (Linksverkehr, Autos in Spurmitte)",
+   "schwere": 3
+  },
+  "vorlage-10": {
+   "id": "vorlage-10",
+   "kachel": "x 4-125, y 96-99 (Kai)",
+   "kategorie": "vorlage-fehlinterpretation",
+   "problem": "Das braune Band y 96-97 ist in der Vorlage eine Holzpromenade: Planken in Längsrichtung im 4-px-Raster, ohne Stahlschienen. Zur Wasserseite hin (y 98) folgt ein durchgehendes Geländer, darunter die Kaimauer y 98,6-99,6 mit dunkler Algenkante. Die Karte zeichnet dort ein Gleis mit zwei Stahlschienen und lässt das Geländer weg. Die Container (karte02-abgeleitet-container_*, x 20-25, 86-91, 92-97, y 97,2-99,9) stehen dadurch mitten auf dem Gleis; in der Vorlage stehen sie auf Steinband und Promenade (y 95-96,8).",
+   "fix": "Klasse 'b' als Holzpromenade zeichnen: braune Planken längs, alle 4 px eine dunkle Fuge, Nagelpunkte, Licht von oben links. Entlang y 98 (Oberkante der Kaimauer) ein niedriges Geländer zeichnen, mit Lücken am Steg x 104-109. Die Container auf y 95-96 verschieben, Fuß auf der Promenade, mit 2 px Abstand zu Laternen und Mülleimern. Bleibt das Gleis gewollt, müssen die Container mindestens vom Gleis herunter (Fuß auf y 99, Oberkante unter y 98).",
+   "regel": "Vorlagentreue; Keine Überlappungen; Physik/Logik",
+   "schwere": 3
+  },
+  "vorlage-11": {
+   "id": "vorlage-11",
+   "kachel": "x 82-83, y 20-24 (Ostende der Nordstraße)",
+   "kategorie": "vorlage-fehlend",
+   "problem": "In der Vorlage endet die Nordstraße bei x 82 an einer Reihe von 5 Pollern (x 82, je einer pro Reihe y 20-24) auf einem grauen Gehwegstück x 82-83 vor der Halle. In der Karte endet der Asphalt ohne jede Absperrung direkt am Platzbelag; nichts trennt die Sackgasse vom Fußgängerbereich.",
+   "fix": "Fünf gebaeude-poller bei x 82 (Fuß y 20, 21, 22, 23, 24) setzen und x 82-83, y 20-24 in layout.json als 'g' (grauer Gehweg) statt 's' bzw. 'p' eintragen. Kontaktschatten am Fuß.",
+   "regel": "Vorlagentreue; Logik (Sackgasse absichern)",
+   "schwere": 2
+  },
+  "vorlage-12": {
+   "id": "vorlage-12",
+   "kachel": "x 64-83, y 25-26",
+   "kategorie": "vorlage-boden",
+   "problem": "In der Vorlage begleitet ein 2 Reihen breiter grauer Gehweg die Südseite der Nordstraße bis zur Halle (x 37-84, y 25-26); der lila Platzbelag beginnt erst bei y 27. In der Karte sind x 64-83, y 25-27 schon Platz ('p'), der Platz stößt also direkt an die Bordsteinkante. Dadurch sind Straße und Platz anders gegliedert als in der Vorlage.",
+   "fix": "In layout.json die Reihen 25-26 für x 64-83 von 'p' auf 'g' setzen; der Platz beginnt bei y 27. Die Laternen x 64, 76 (Fuß y 25/26) und den Mülleimer x 77 stehen dann richtig auf dem Gehweg.",
+   "regel": "Vorlagentreue",
+   "schwere": 2
+  },
+  "vorlage-13": {
+   "id": "vorlage-13",
+   "kachel": "x 86-108, y 79-83 (Hochbahnzug)",
+   "kategorie": "vorlage-proportion",
+   "problem": "In der Vorlage liegt der Zug mittig auf dem Träger (x 88-108, Körper y 80,5-82,5, gut 2 Kacheln hoch). Im Render reicht der Zug von y 79,6 bis 81,1 (Pixel 1274-1298). Er ist also nur 1,5 Kacheln hoch und ragt 6 px über die Trägeroberkante in die Pollerreihe des Platzes (y 79), während die untere Hälfte des Trägers leer bleibt. Er wirkt dadurch zu klein und schwebend.",
+   "fix": "In karte18_objekte.py (Zeile 163-165) den Zug so setzen, dass seine sichtbare Oberkante bei Pixel-y ≈ 1288 (y 80,5) und die Unterkante bei ≈ 1320 (y 82,5) liegt. Das heißt: 14 px nach unten verschieben und den Sprite auf etwa 32 px Höhe bringen (Länge etwa 20,5 Kacheln, x 88-108). Danach prüfen, dass kein Zugpixel über y 80 hinausragt.",
+   "regel": "Vorlagentreue (Proportion); Keine Überlappungen",
+   "schwere": 2
+  },
+  "vorlage-14": {
+   "id": "vorlage-14",
+   "kachel": "x 12-29, y 78-88 (SW-Platz, Lagerszene)",
+   "kategorie": "vorlage-abweichung",
+   "problem": "Die Vorlage zeigt hier ein Notlager: blaues Zelt x 18-21/y 80-82 mit Kiste und Truhe, Säcke x 22-23/y 81-82, Sandsäcke x 13-15 und x 24-26 (y 79), ein Absperrgitter x 26-27/y 82, eine Feuerschale x 17/y 84 und eine Laterne bzw. Lampe x 20/y 84. Dazu kommen Bänke x 14-15/y 84 und x 22-23/y 88. Die Karte hat stattdessen einen rot-weißen Marktstand x 16-20/y 78-82 und ein Polizeihäuschen x 26-29/y 82-85. Feuerschale, Lampe und Bänke fehlen, und der Eindruck eines Lagers im Nebel geht verloren.",
+   "fix": "Den Marktstand (karte02-ortho-09) durch ein blaues Zelt in Frontalansicht ersetzen (Wiederverwendung prüfen, sonst PixelLab), Fuß y 82, x 18-21. Eine Feuerschale bei x 17, Fuß y 84 mit animierten Flammen (Flammen züngeln, nicht nur die Helligkeit) und eine Lampe x 20, Fuß y 84 mit Leuchtpuls setzen, außerdem Bänke x 14-15/y 84 und x 22-23/y 88. Das Polizeihäuschen von x 26-29 wegnehmen oder an den Platzrand x 27-29, Fuß y 80 setzen, an seine Stelle das Absperrgitter x 26-27, Fuß y 82.",
+   "regel": "Vorlagentreue; Feuer und Licht animieren; Regel 3/3b",
+   "schwere": 2
+  },
+  "vorlage-15": {
+   "id": "vorlage-15",
+   "kachel": "x 125-126, y 78-99 (Osthafenbecken)",
+   "kategorie": "vorlage-fehlend/kante",
+   "problem": "In der Vorlage begrenzt eine senkrechte helle Kaimauer (x 126, y 78-99) das östliche Hafenbecken x 127-130; Straße, Hecke und Kai enden mit Randstein davor. In der Karte stoßen Platz (y 78-79), Uferstraße und Mittelstreifen (y 84-93) sowie das Kaiband (y 96-99) bei x 125/126 ohne Mauer oder Kante direkt ans Wasser. Die Straße endet wie abgeschnitten im Meer.",
+   "fix": "In karte18_bauen.py an der Grenze Land/Wasser (x 125 auf x 126) eine 1 Kachel breite Kaimauer zeichnen: helle Steinkrone mit Fugen, an der Wasserseite dunkle Algenkante wie bei y 99/100. Wasser erst ab x 127. Die Fahrbahn bei x 125 mit Bordstein abschließen. Den Pfeiler x 126-127 entsprechend nach x 127-128 ins Wasser setzen (Vorlage x 128-129).",
+   "regel": "Vorlagentreue; Wasser folgt der Physik (Kante zwischen Land und Wasser)",
+   "schwere": 2
+  },
+  "vorlage-16": {
+   "id": "vorlage-16",
+   "kachel": "x 32-36, y 69-71 und y 77-79 (Querstraße Süd)",
+   "kategorie": "vorlage-versetzt",
+   "problem": "Den südlichen Zebrastreifen der Querstraße hat die Vorlage bei y 77-79, genau an der Ecke, wo der SW-Platz (q, ab y 77/78) und der Gehweg südlich der Lagerhallen (y 80-81) aufeinandertreffen. In der Karte liegt er bei y 69-71 (layout.json 'zebra' [32,36,69,71,'h']). Er führt dort auf die Ostseite neben die lager_rolltor-Wand (x 38, y 71), statt zwei Fußwege zu verbinden.",
+   "fix": "Den Zebra-Eintrag auf [32, 36, 77, 79, 'h'] ändern. Die gelbe Mittellinie dort aussparen; die Ampel bzw. Fußgängerampel an die Ecke x 37-38, Fuß y 80-81 setzen (in der Vorlage x 39, y 79-81).",
+   "regel": "Vorlagentreue; Logik (Überweg verbindet Gehwege)",
+   "schwere": 2
+  },
+  "vorlage-17": {
+   "id": "vorlage-17",
+   "kachel": "x 4-45, y 12-17 (Ladenzeile)",
+   "kategorie": "vorlage-proportion",
+   "problem": "Die Ladenzeile der Vorlage besteht aus 10 schmalen Läden von je 4 Kacheln (Grenzen bei x 5, 9, 13, 17, 21, 25, 29, 33, 37, 41, 45) mit wechselnden Fassaden. Zwei davon haben geschlossene Rollläden (x 13-16 und x 29-32), dazu rote Papierlaternen. Die Karte hat nur 7 breite Läden von je 6 Kacheln mit sehr ähnlichem Aufbau (zwei Fenster, Markise, Glasfront). Der typische Shotengai-Rhythmus aus vielen kleinen Läden geht verloren.",
+   "fix": "In karte18_gebaeude.py (laeden) die Ladenbreite auf 4 Kacheln setzen (10 Einheiten x 5-44, Endstück x 4). Fassaden stärker variieren: 2 Einheiten mit heruntergelassenem Rollladen, verschiedene Reklameschilder, an 2-3 Läden rote Laternen (mit Leuchtpuls, wie Reklame). Fuß bleibt y 17.",
+   "regel": "Vorlagentreue (Proportion)",
+   "schwere": 2
+  },
+  "vorlage-18": {
+   "id": "vorlage-18",
+   "kachel": "x 104-109, y 100-106 (Steg)",
+   "kategorie": "vorlage-fehlend",
+   "problem": "Auf dem Steg der Vorlage steht mittig eine Laterne (x 106, y 103-105) neben Pollern und Rettungsring. Der Steg der Karte hat keine Laterne und bleibt im Nebel dunkel.",
+   "fix": "Eine Laterne (karte02-abgeleitet-laterne) bei x 106, Fuß y 105 auf den Steg setzen, mit Leuchtanimation und 2 px Abstand zu den Pollern (k18-strasse-21 bei x 104/108, y 104).",
+   "regel": "Vorlagentreue; Feuer und Licht animieren",
+   "schwere": 1
+  },
+  "vorlage-19": {
+   "id": "vorlage-19",
+   "kachel": "x 132-135, y 40-43 (Teleporter Ost)",
+   "kategorie": "vorlage-versetzt",
+   "problem": "Der östliche Teleporter (2×4 violette Scheiben) sitzt in der Vorlage ganz am Ende des Korridors bei x 134-135. In der Karte steht er bei x 132-133 (layout.json teleporter x 132), sodass am Kartenrand 2 leere Kacheln Korridor übrig bleiben.",
+   "fix": "In layout.json den Teleporter auf 'x': 134 setzen (b 2, h 4, y 40 bleiben).",
+   "regel": "Vorlagentreue",
+   "schwere": 1
+  },
+  "vorlage-20": {
+   "id": "vorlage-20",
+   "kachel": "x 4-6, y 76-81 (SW-Ecke am q-Platz)",
+   "kategorie": "vorlage-fehlend",
+   "problem": "In der Vorlage ragt an der Westkante des SW-Platzes ein kleiner Rasen x 4-6/y 76-81 mit einem grünen Baum (x 4-6, Fuß y 80) in den Nebel. Er bricht die gerade Landkante auf. In der Karte ist dort Nebel ('.'), die Kante verläuft gerade.",
+   "fix": "In layout.json x 4-6, y 76-81 als 'n' (Rasen mit Steinkante) eintragen und dort einen karte01-baeume-00 setzen, Fuß y 80. Nach Regel 5 mit 1-2 Begleitobjekten (Büschel/Busch am Sockel).",
+   "regel": "Vorlagentreue; Regel 5",
+   "schwere": 1
+  },
+  "vorlage-21": {
+   "id": "vorlage-21",
+   "kachel": "x 39-63, y 68-70 (Vorplatz buero_mitte)",
+   "kategorie": "vorlage-boden",
+   "problem": "Zwischen buero_mitte und den Lagerhallen liegt in der Vorlage ein heller Betonvorplatz aus großen Platten (x 39-63, y 68-70), der sich vom Klinkergehweg abhebt. In der Karte ist dort gewöhnlicher Gehweg ('g').",
+   "fix": "Eine eigene Bodenklasse (z. B. 'v' = Betonplatten, hell, 1 Kachel je Platte, feine Fugen und Risse) anlegen und x 39-63, y 68-70 damit belegen.",
+   "regel": "Vorlagentreue",
+   "schwere": 1
+  },
+  "vorlage-22": {
+   "id": "vorlage-22",
+   "kachel": "x 6-28, y 39 (Sockel wohnblock)",
+   "kategorie": "vorlage-fehlend",
+   "problem": "Am Sockel des Wohnblocks verlaufen in der Vorlage zwei grüne Blumen- bzw. Heckenkästen (x 6-14 und x 16-28, y 39) links und rechts des Eingangs x 15. In der Karte fehlen sie; die Fassade steht kahl auf dem Gehweg.",
+   "fix": "In karte18_gebaeude.py (wohnblock) an der untersten Fassadenreihe zwei schmale Pflanzkästen x 6-14 und x 16-28 zeichnen (Hecke wie HECKE18, 6-8 px hoch, Steinkante), mit Aussparung am Eingang.",
+   "regel": "Vorlagentreue; Einbettung",
+   "schwere": 1
+  },
+  "licht-1": {
+   "id": "licht-1",
+   "kategorie": "Nebelrand",
+   "kachel": "(3-5,20-24), (3-4,42-53), (4,28-40), (4-6,56-60), (120-125,18-19), (123-125,54-66) mit Kasten (124-125,60-63), Kanaltasche (126-131,78-79), Meeresrand y103-105 z. B. (57-59,103) und (60-65,104), Kaiende (2-9,100) und (9,100-104)",
+   "problem": "Der Nebelrand zeigt das Kachelraster. Über den '.'-Kacheln deckt der Nebel nur 0,57 bis 0,92 (dichte max 0,82 mal schwade 0,62 bis 1,0), also scheint die Grundtextur durch. Wo dunkler Asphalt oder Wasser an die helle 'nebel'-Kachel grenzt, entstehen harte, rechteckige Stufen genau an den Kachelkanten, dazu dunkle Schmutzflecken (Nebel über Asphalt ergibt etwa (105,100,123), dunkler als der Nebel selbst). Am Meer sieht man Nebel-Rechtecke mit Lichthof statt eines weichen Rands.",
+   "fix": "In nebel() den Alphawert auf allen '.'-Pixeln ab etwa 4 px Abstand zum Land auf 1,0 setzen. schwade nur auf die Nebelfarbe wirken lassen, nicht auf die Deckkraft. Den weichen Übergang nur durch eine nach außen weichgezeichnete Landmaske erzeugen (GaussianBlur auf die um 1 Kachel erweiterte Nebelmaske). Danach jeden Randabschnitt vergrößert prüfen, ob keine Kachelkante mehr sichtbar ist.",
+   "regel": "Abschlusskontrolle (Pixelfehler); Zeichenreihenfolge (Nebel deckt, was darunter liegt); Qualität des Nebelrands",
+   "schwere": 5
+  },
+  "licht-2": {
+   "id": "licht-2",
+   "kategorie": "Nebel-Animation",
+   "kachel": "ganze Nebelfläche, z. B. (0-135,0-11), (0-135,104-111), (126-135,28-79); Nähte bei x = 0,4,8,12 ... (alle 4 Kacheln) und schwächer alle 2 Kacheln",
+   "problem": "nebel_feld() ist nicht nahtlos. Das bikubisch skalierte 5-Spalten-Rauschen wird auf 64 px zugeschnitten, dadurch springt die Helligkeit an jeder Spalte x=64k: gemessen 3,4 gegenüber im Mittel 0,45 (n2 mit 32 px Periode ebenso). Zusätzlich wiederholt sich dasselbe Wolkenmuster alle 4 Kacheln über die ganze Kartenbreite: sichtbare senkrechte Tapetenstreifen. In der Animation springen die Nähte je Bild um 16 px (eine Kachel pro 250 ms), der Nebel ruckelt statt zu ziehen.",
+   "fix": "Rauschen kachelbar erzeugen (vor dem Skalieren mit np.pad(mode='wrap') erweitern und danach mittig schneiden, oder periodisches FFT- bzw. Value-Noise). Periode deutlich verlängern (z. B. 512 px oder volle Breite 2176; Verschiebung je Bild Periode/4 bleibt nahtlos). Zwei bis drei Oktaven mit nicht teilbaren Perioden mischen, Zug langsamer (4 bis 8 px je Bild). Nach dem Export in drei Animationsbildern auf Streifen prüfen.",
+   "regel": "Animation (nur echte Bewegung, sauber); Abschlusskontrolle Pixelfehler",
+   "schwere": 4
+  },
+  "licht-3": {
+   "id": "licht-3",
+   "kategorie": "Leuchtreklame",
+   "kachel": "Ladenzeile (4-45,15): Markisenblenden (5-9,15), (16-21,15), (22-27,15), (28-33,15), (34-39,15), (40-45,15); nicht animiert: weißes Schild (16-19,12), Apothekenkreuz (14,14)",
+   "problem": "reklame() animiert die Sprite-Zeilen 44 bis 54. Das sind die Stoff-Markisen, keine Schilder. Die rosa, gelbe und blaue Blende von sechs Läden pulsiert in allen vier Bildern wie Neon (Frame-Diff geprüft), obwohl der Docstring sagt 'Markisen bleiben ruhig'. Gleichzeitig bleiben echte Leuchtschilder statisch: das weiße Dachschild von Laden 3 und das grüne Apothekenkreuz. Bei der grünen Markise von Laden 2 greift die Maske nicht, das Bild ist also auch noch uneinheitlich.",
+   "fix": "Die Zone yy 44 bis 54 aus der Maske entfernen. Stattdessen feste Rechtecke der Leuchtschilder je Haus angeben (Dachschilder yy<17, Apothekenkreuz, weißes Schild von Laden 3) und nur diese Pixel pulsieren lassen. Markisen, Fenster und Wände bleiben völlig ruhig.",
+   "regel": "Leuchten nur bei echten Lichtquellen; bei Teil-Animationen nur genau dieses Teil verändern",
+   "schwere": 4
+  },
+  "licht-4": {
+   "id": "licht-4",
+   "kategorie": "Ampeln",
+   "kachel": "(30-31,23-26), (37-38,23-26), (37-38,38-41), (30-31,51-54); Fußgängerampel (26,25-26)",
+   "problem": "An allen vier Ampeln (karte10/banner/13) leuchten Rot, Gelb und Grün gleichzeitig, und leuchten18 lässt alle drei gemeinsam pulsieren (Frame-Diff: alle drei Lampen magenta). Das ist physikalisch unmöglich und wirkt wie Spielzeug. Die Richtungen sind auch nicht aufeinander abgestimmt.",
+   "fix": "Pro Ampelkopf nur eine Lampe hell lassen, die beiden anderen auf eine dunkle, unbeleuchtete Variante abdunkeln (etwa 35 % Helligkeit, ohne Glanz). Kreuzung stimmig schalten: Querstraße x 32-36 grün, waagerechte Straßen rot (oder umgekehrt), Fußgängerampel passend dazu. In der Animation pulsiert nur die leuchtende Lampe.",
+   "regel": "Physik/Realismus; Leuchten nur bei echten Lichtquellen",
+   "schwere": 4
+  },
+  "licht-5": {
+   "id": "licht-5",
+   "kategorie": "Lichtkegel",
+   "kachel": "alle 50 Laternen, z. B. (22,19), (46,19), (6,41), (30,37), (90,35), (110,95), (122,95)",
+   "problem": "Die Lichtkreise am Boden sind kaum zu sehen. lichtkegel() blendet mit 0,34*(1-d)^1.4, im Mittel nur etwa 0,14 Deckkraft, und die Mitte liegt unter dem Laternenfuß. Sichtbar bleibt ein schwacher Schmierfleck von etwa 1,5 Kacheln. In der Vorlage sind die Lichtkreise deutliche zweistufige Ellipsen von etwa 44x24 px: Boden (165,167,176), äußerer Ring (188,181,167), innerer Ring (201,189,162), also rund 0,27 und 0,42. Gerade diese Lichtpunkte tragen die Abendstimmung der Vorlage.",
+   "fix": "Lichtkreis wie in der Vorlage: Ellipse um den Fuß mit Radius etwa 22x12 px und Deckkraft 0,25, innen 13x7 px mit 0,40, Farbe etwa (250,214,150), harte, im Pixelraster gestufte Ringe statt eines Verlaufs. Das Atmen (±6 %) bleibt.",
+   "regel": "Treue zur Vorlage; Licht und Schatten müssen zueinander passen",
+   "schwere": 3
+  },
+  "licht-6": {
+   "id": "licht-6",
+   "kategorie": "Begehbarkeit/Nebel",
+   "kachel": "Steg (104-109,105-106) mit Pollern (104-105,104-105), (108-109,104-105) und Rettungsring-Platz (106-107,105-106); außerdem (3,20-24), (4-7,99), (123-125,54-66)",
+   "problem": "Begehbare Kacheln liegen unter dichtem Nebel: 93 begehbare Kacheln haben mehr als 50 % Nebel, 318 mehr als 30 %. Die untere Stegreihe 106 hat 0,41 bis 0,72 Nebel, die Planken sind kaum zu erkennen. Objekte werden aber erst nach dem Nebel gezeichnet, deshalb schweben die Festmacher und der Rettungsring (Fuß-Nebel 0,77) gestochen scharf über den vernebelten Planken. In der Vorlage ist der ganze Steg frei.",
+   "fix": "Die Nebel-Abnahme nur auf der Nebelseite erzeugen (siehe licht-1), damit die äußerste begehbare Reihe nicht mehr vernebelt ist, oder die Klassen h, k und g als nebelfrei markieren. Falls ein Objekt im Übergang stehen bleibt, das Objekt mit der Nebeldichte an seinem Fuß mitvernebeln (Nebelmaske nach den niedrigen Objekten anwenden).",
+   "regel": "Zeichenreihenfolge (Ebenen-Logik); Lesbarkeit begehbar/gesperrt",
+   "schwere": 3
+  },
+  "licht-7": {
+   "id": "licht-7",
+   "kategorie": "Farbharmonie",
+   "kachel": "Spielplatz: Rutsche (60-61,9-12), Schaukel (56-59,7-10), Wippe (47-50,15-16), Sandkasten (47-52,9-12)",
+   "problem": "Die Spielgeräte aus Toy Town (Karte 10) haben grelle Spielzeugfarben (reines Rot, Blau, Gelb; mittlere Sättigung 0,48 bis 0,70). Der Sandkasten 'd' ist im Mittel (166,142,102), die Vorlage (112,107,86). Beides leuchtet in der Nebel- und Abenddämmerung heraus. Die Vorlage hat gedämpftes Lachsrot und Blassblau mit violettem Abendton.",
+   "fix": "Spielgeräte in die Abendpalette umfärben: etwa 40 % entsättigen, zum Violett verschieben, rund 15 % abdunkeln (Werte wie in der Vorlage). Sandkachel graubraun (etwa #706a56) mit dunklem Holzrahmen.",
+   "regel": "Farbharmonie Objekte und Kacheln; Stimmung Abend im Nebel",
+   "schwere": 3
+  },
+  "licht-8": {
+   "id": "licht-8",
+   "kategorie": "Farbharmonie/Leuchten",
+   "kachel": "Uhren (56-58,14-17) und (16-17,52-55)",
+   "problem": "Die goldene, verzierte Toy-Town-Uhr (karte10/banner/06): 31 % der Pixel haben eine Helligkeit über 0,9 und der Goldton ist stark gesättigt (S90 0,76). Das weiße Zifferblatt ist das hellste Element in der Umgebung und wirkt beleuchtet, obwohl eine Uhr keine Lichtquelle ist. Die Vorlage zeigt an beiden Stellen eine schlichte graue Mastuhr.",
+   "fix": "Durch eine schlichte graue Mastuhr ersetzen (wie in der Vorlage) oder umfärben: Metall dunkelgrau, Zifferblatt auf etwa #b8b4c4 abdunkeln, kein Gold. Nicht animieren.",
+   "regel": "Leuchten nur bei echten Lichtquellen (Uhren, Zifferblätter nie); Treue zur Vorlage",
+   "schwere": 2
+  },
+  "licht-9": {
+   "id": "licht-9",
+   "kategorie": "Farbharmonie",
+   "kachel": "weiße Autos (5-8,20-21), (69-72,84-85), (41-44,91-92); Parkplatz und Querstraße (42-44,29-31), (51-53,29-31), (57-59,34-37), (34-36,31-34)",
+   "problem": "Die weißen PixelLab-Autos (k18/autos/00 und 06): 28 % bzw. 38 % der Pixel sind heller als 0,9, bis reines 255-Weiß. Damit sind sie die hellsten Flächen der Karte, heller als die Laternenköpfe (Laternen-Sprite nur 4,6 % über 0,9). In Dämmerung und Nebel dürfen unbeleuchtete Flächen nicht heller sein als die Lichtquellen. Die Vorlage hat gedämpfte Autos (Creme, Graublau, etwa 0,75).",
+   "fix": "Lichter der Karosserie auf etwa #c8c8d4 begrenzen und die Schatten leicht ins Violett tönen. Hell bleiben nur Scheinwerfer und Rücklichter.",
+   "regel": "Licht/Stimmung; Leuchten nur bei echten Lichtquellen",
+   "schwere": 2
+  },
+  "licht-10": {
+   "id": "licht-10",
+   "kategorie": "Animation Licht",
+   "kachel": "Polizeiwache rote Lampen (26-27,83) und (29-30,83); Wandlampen der Lagerhallen (48,77) und (60,77); Downlights unter dem Vordach von buero_mitte (49-51,66); Geldautomat (61,25-26)",
+   "problem": "Diese Lichtquellen sind statisch (Frame-Diff ohne Änderung). Die rote Lampe des Koban, die Türlampen und der Bildschirm des Geldautomaten leuchten, pulsieren aber nicht. Die Automaten nebenan sind animiert, das Bild ist also uneinheitlich. Die Türlampen werfen auch keinen Lichtschein auf den Boden.",
+   "fix": "In LEUCHTEN aufnehmen: Polizeiwache und Geldautomat mit Puls nur auf den Lampen- bzw. Bildschirmpixeln. Wandlampen und Downlights der Gebäude im Gebäude-Sprite als Teil-Animation (laterne18-Faktor), dazu ein kleiner Lichtkreis (etwa 10x5 px) vor den Türen.",
+   "regel": "Feuer und Licht animieren (alles mit Leuchten); Lichtquellen einheitlich",
+   "schwere": 2
+  },
+  "licht-11": {
+   "id": "licht-11",
+   "kategorie": "Fremdpixel/Palette",
+   "kachel": "Fuß aller 50 Laternen, z. B. (22,19), (28,26), (64,26), (30,37)",
+   "problem": "Das Laternen-Sprite aus Karte 02 hat in den Zeilen 55 bis 57 ein Grasbüschel aus 17 grellgrünen Pixeln (#93db70, #78cc60, #5fbb58). Auf Pflaster und Bordstein wirkt das wie Neon-Fremdpixel und liegt außerhalb der Karten-Palette (die hellste Hecke ist #6e905e). Auf versiegeltem Boden wächst kein Gras.",
+   "fix": "Die grünen Büschelpixel aus sauber/karte02-abgeleitet-laterne.png entfernen und durch eine graue Fußplatte bzw. einen dunklen Kontaktschatten ersetzen. Nur Laternen auf Rasen dürfen ein dunkles Büschel aus der K18-Heckenpalette bekommen.",
+   "regel": "Abschlusskontrolle Pixelfehler; Einbettung passend zum Boden",
+   "schwere": 2
+  },
+  "licht-12": {
+   "id": "licht-12",
+   "kategorie": "Wasser-Animation",
+   "kachel": "Meer (9-131,101-104), Kanal (126-131,84-99)",
+   "problem": "wasser_wellen() verschiebt jeden Wellenstrich um 4*f px, ohne Umbruch. In Bild 3 stehen die Striche 12 px weiter rechts, beim Schleifensprung springen alle 12 px zurück. Der Kommentar 'Periode 16 px nahtlos' stimmt nicht, weil die Striche zufällig verteilt sind. Die ganze Wasserfläche ruckt in jeder Schleife sichtbar zurück.",
+   "fix": "Die Strichposition innerhalb einer 16-px-Zelle modulo bilden (X = x0 + ((x - x0 + k_ + 4*f) % 16)) oder die Striche nicht wandern, sondern auf- und abblenden bzw. 1 px wippen lassen. Danach die Schleife Bild 3 → Bild 0 prüfen.",
+   "regel": "Animation: nur echte Bewegung, nahtlos; Wasser animiert",
+   "schwere": 2
+  },
+  "licht-13": {
+   "id": "licht-13",
+   "kategorie": "Portal-Animation",
+   "kachel": "Teleporter (8-10,85-86) und (132-133,40-43)",
+   "problem": "Die Teleporter-Ringe ändern nur ihre Helligkeit (0,75 bis 1,05), es dreht sich nichts. CLAUDE.md verlangt: 'Portale drehen ihren Wirbel'. Die Vorlage hat um jeden Ring kleine blaue Lichtpunkte, die sich als drehendes Element anbieten.",
+   "fix": "Vier bis acht helle blaue Punkte (wie in der Vorlage) auf den Ring setzen, die je Bild um 45° weiterwandern (bei 4 Bildern nahtlos über die Symmetrie), dazu ein kleiner Spiralstrich im Kern. Der Helligkeitspuls darf bleiben.",
+   "regel": "Feuer und Licht animieren: Portale drehen ihren Wirbel",
+   "schwere": 2
+  },
+  "licht-14": {
+   "id": "licht-14",
+   "kategorie": "Fensterlicht",
+   "kachel": "Glasfassade der Halle (85-119,20-27); Lichtstreifen unter dem Vordach etwa (104,24)",
+   "problem": "In der Vorhangfassade der Messehalle leuchten einzelne Scheiben zufällig gelb wie Bürofenster. Hinter der Glasfront liegt aber ein einziger hoher Hallenraum; einzelne beleuchtete Scheiben sind unlogisch. Die Vorlage zeigt spiegelndes blaues Glas ohne beleuchtete Scheiben. Unter dem Eingangsvordach schaut außerdem ein Streifen einer gelben Scheibe hervor.",
+   "fix": "Fassade wie in der Vorlage als spiegelndes Glas mit diagonalen Lichtkanten zeichnen. Falls die Halle beleuchtet sein soll, dann gleichmäßig (z. B. ein durchgehend warmes Band der unteren Glasreihen 25-27 über dem Foyer), nicht einzelne Scheiben.",
+   "regel": "Physik/Realismus; Leuchten nur bei echten Lichtquellen; Treue zur Vorlage",
+   "schwere": 2
+  },
+  "licht-15": {
+   "id": "licht-15",
+   "kategorie": "Schatten",
+   "kachel": "(120,22-28), rechts neben der Halle",
+   "problem": "gebaeude_schatten() begrenzt den Seitenschatten auf 6 Kacheln (hoch). Der dunkle Streifen (12 px breit) rechts der Halle beginnt deshalb mit harter waagerechter Oberkante bei Reihe 22, obwohl die Hallenwand ab Reihe 4 steht und der Platz schon ab Reihe 18 daneben liegt. Bei Reihe 28 hat er eine zweite Stufe. Er wirkt wie ein aufgemaltes Rechteck.",
+   "fix": "Den Seitenschatten über die ganze Bodenlänge neben der Wand ziehen (ab der ersten Bodenreihe 18) oder oben weich auslaufen lassen. Die Stufe bei Reihe 28 sauber abschrägen.",
+   "regel": "Schatten folgen der Objektform; Licht oben links",
+   "schwere": 2
+  },
+  "licht-16": {
+   "id": "licht-16",
+   "kategorie": "Lichtverteilung",
+   "kachel": "Park und unterer Platz (4-28,56-95); in der Vorlage Laternen bei (17,55-57), (17,70-72), (29,73-76), (31,60-63), (31,68-71), (13,86-89), (28,86-89), (30,92-95)",
+   "problem": "Der ganze Park und der untere linke Platz sind bis auf zwei Laternen, (30,63-66) und (14,92-95), unbeleuchtet. In der Vorlage stehen dort acht Laternen mit Lichtkreis. Das große Feld liegt dunkel und fällt aus der Abendstimmung heraus, die überall sonst von Laternen getragen wird.",
+   "fix": "Laternen nach der Vorlage an den genannten Kacheln setzen (Fuß auf Weg- bzw. Pflasterkachel, nicht auf Rasen), jeweils mit Lichtkreis wie in licht-5.",
+   "regel": "Treue zur Vorlage; Stimmung",
+   "schwere": 2
+  },
+  "licht-17": {
+   "id": "licht-17",
+   "kategorie": "Farbharmonie",
+   "kachel": "Marktstand (16-20,78-83)",
+   "problem": "Der Marktstand aus Karte 02 (ortho/09) hat eine grelle orange-weiß gestreifte Markise (13,5 % der Pixel heller als 0,9, S90 0,82) und ist neben den Ladenmarkisen das grellste Objekt im unteren linken Bereich. Die Vorlage zeigt an dieser Stelle ein gedämpftes dunkelblaues Zeltdach.",
+   "fix": "Markise in die Kartenpalette umfärben (gedämpftes Dunkelblau wie in der Vorlage oder entsättigtes Rotviolett) und die weißen Streifen auf etwa #b8b4c8 abdunkeln.",
+   "regel": "Farbharmonie Objekte und Kacheln; Treue zur Vorlage",
+   "schwere": 1
+  }
+ },
+ "urteile": {
+  "pixel-1": {
+   "id": "pixel-1",
+   "echt": true,
+   "begruendung": "Confirmed. I rebuilt the map in the scratchpad: bauen(speichern=False) gives a 0-pixel diff to terrain.png. I then rebuilt it again with k4.bodenwall switched off and compared. bodenwall changes 22,124 pixels. With 6x side-by-side crops I saw every listed defect: yellow dashes at y=350 under the cars (5-8,21) and (49-52,21) and under the bus (70-73,21), sampled from the centre line at y=357; a grey kerb band under car (56-59,24); dark teeth in the pillar base plate (62-63,88); a brown rail smear at the lamp foot (38,95); a jagged grey strip under the containers (20-24,99); a noisy band replacing the dark base line of the shops, the apartment block and the hall (96-104,27); lavender pixels 2 px past the outer wall in the fog at (3,17) and (4,39). Cause: k4.objekte_zeichnen line 561 excludes only bases starting with rand/ or klein/0-2,5. In the K18 pipeline 'an_wand' is read only there (not by k8.schatten_ebene or karte18_bauen), so the flag only switches bodenwall off.",
+   "fix_praezisiert": "In tools/karte18_objekte.py Platz.setzen(), after building o: set o['an_wand'] = True unless the object is a tree or bush standing on lawn (extra.baum and boden == set('n')). That covers buildings, pillars, the train, cars, bus, planters, lamps, traffic lights, bins, hydrants, containers, benches, barriers, clocks, bollards, mooring posts, the truck and sandbags. Median trees on 'm' (e.g. (8,48)) and ginkgos on 'g' also get dark asphalt or brick pixels at the trunk, so set an_wand on those too. Leave the shared function k4.bodenwall unchanged (other maps use it). Rebuild and re-check the crops above at 6x."
+  },
+  "pixel-2": {
+   "id": "pixel-2",
+   "echt": true,
+   "begruendung": "Confirmed with an 8x side-by-side, with and without bodenwall (scratchpad .../review/verify/s_kuebel1.png). Around the trunk of the planter tree at (68-69,31-32) there is a grey-lavender mound painted over the dark hedge and the inner planter rim. The tree foot is at y=645, the planter bottom at 655. bodenwall samples y 649-651 from the pre-object image, i.e. plaza paving under the planter, and paints it at y 643-646. The same code path runs for all 12 im_kuebel trees (planters at x 82-85 / 118-121 in rows 40/52/64/76, plus 67/74/66/73).",
+   "fix_praezisiert": "In kuebel_baum() (karte18_objekte.py) pass extra={'baum': True, 'im_kuebel': True, 'an_wand': True}. Do not change the sampling in k4.bodenwall, which is shared with other maps. Optional embedding: 2-3 dark-green hedge clumps from HECKE18 ('#24382a', '#2e4632') of 2-3 px at the left and right of the trunk base, drawn after the tree."
+  },
+  "pixel-3": {
+   "id": "pixel-3",
+   "echt": true,
+   "begruendung": "Confirmed. In pure fog (rows 0-3) the mean brightness jump between columns 63 and 64 (and every 64 px) is 3.2, against 0.3-0.5 for all other column pairs. There is a weaker seam every 32 px (2.1). At 3x (p3_fog.png) the straight vertical lines are clearly visible, and the same blob pattern repeats every 64 px (4 tiles). Cause in nebel_feld(): n is closed only with n[:, :1], and the BICUBIC resize clamps at the image edge, so the wrap point gets the wrong neighbours. I tested the proposed wrap-pad version: the field jump at 63/64 drops from 0.164 to 0.0235 (0.019 elsewhere). The second part of the fix (period 256 with a 64-px shift per frame) is not good: at 250 ms per frame the fog would jump 4 tiles per frame.",
+   "fix_praezisiert": "nebel_feld(): n = np.concatenate([n[:, -3:], n, n[:, :3]], 1); resize to (n.shape[1]*gross_, Hh+2*gross_) BICUBIC; then m = m[:Hh, 3*gross_:3*gross_+periode] and tile as before. This is verified seamless. To break the 4-tile repetition, keep periods 64/32 and shifts 16/8 px per frame (the 4-frame loop needs them). Add a third, static, non-periodic field n0 over the whole map (rs.rand(Hh//128+2, W//128+2), BICUBIC to (W, Hh), never rolled). Use it as schwade = 0.62 + 0.18*n1 + 0.08*n2 + 0.14*n0 and farbe *= (0.92 + 0.12*n0). Check frames 0-3 for marching stripes afterwards."
+  },
+  "pixel-4": {
+   "id": "pixel-4",
+   "echt": true,
+   "begruendung": "The visible problem is real, but the diagnosis and the proposed fix are wrong. Real: hard straight fog edges along the tile mask, e.g. at (9,104)/(9,105) RGB 117,114,145 -> 148,143,172 within 1 px; road end (3,20-24) as a rectangular block; water ending in rectangular steps (rows 100-105); sidewalk sliver (4,33-38), which the template does not have (fog right next to the apartment block at x=5). Wrong cause: I debugged nebel(). The 0.82 clamp changes only 317 pixels, and the density is 1.00 on both sides of the step. The step comes from schwade (0.62-1.02): the fog never becomes fully opaque, so 20-38% of the tile-shaped base shows through (water 20,26,60 vs fog tile 152,146,176). I tested the proposed fix (blur the finished density 5 px): the step stays exactly 116 -> 148.",
+   "fix_praezisiert": "In nebel() (karte18_bauen.py), make the fog opaque where it is dense, after computing schwade: k = np.clip((dichte - 0.7) / 0.3, 0, 1); schwade = schwade + (1 - schwade) * k. Tested: the step at (9,104/105) drops from 116 -> 148 to 147 -> 148, and road ends and water edges fade softly. The swirls stay visible through farbe. Also set layout cells (4,33..38) to '.' as in the template. Optional: round the land mask's corners before the GaussianBlur(10). Check the edges at 4x, and also in frames 0-3."
+  },
+  "pixel-5": {
+   "id": "pixel-5",
+   "echt": true,
+   "begruendung": "Confirmed at 8x (p5_entr.png). The dark line under the canopy is b.r(ex0-4, h-49, ex1+4, h-48). The door frames start at y1-h-1 = h-45 (tuer(..., h-4, 14, 40)). That leaves a 2-px gap at h-47..h-46 where the glass facade shows through: blue panes, mullions, the pillars at ex0-6 and ex1+... and a yellow lit-window piece at about (104.6,25.0).",
+   "fix_praezisiert": "In karte18_gebaeude.py (halle), change b.r(ex0 - 4, h - 49, ex1 + 4, h - 48, H('#2a2c36')) to b.r(ex0 - 4, h - 49, ex1 + 4, h - 46, H('#2a2c36')), so it meets the door frames at h-45. In the 'Reflexe / Licht innen' loop, skip boxes that intersect x ex0-6..ex1+6, y >= h-58."
+  },
+  "pixel-6": {
+   "id": "pixel-6",
+   "echt": true,
+   "begruendung": "Confirmed (p6_park.png). The bay lines sit at x*T+7 = 679, 727, 775, 823, 871, 919, 967. The cars are centred on 3-tile blocks: 678..713, 776..807, 822..857, 728..759, 918..953. Each car lies on or right next to the left line of its bay, e.g. car 678..713 covers line 679 and car 822..857 covers 823.",
+   "fix_praezisiert": "In markierungen(), draw linie_v at x*T instead of x*T+7, i.e. lines at 672, 720, 768, 816, 864, 912, 960. They then frame the cars' blocks 42-44, 45-47, 48-50, 51-53 and 57-59 exactly, with 6-8 px clearance on each side. Keep the car positions."
+  },
+  "pixel-7": {
+   "id": "pixel-7",
+   "echt": true,
+   "begruendung": "Confirmed at 6x. The yellow dashed line is at x 551-552 (int(34.5*16)-1). The southbound car (34-36,32-35) spans 550..585, so its left mirror covers the line and the body sits right next to it. The northbound car (32-34,63-66) spans 520..551, so its right body edge covers x=551 and the dashes stick out at 552. The directions match left-hand traffic (southbound with headlights down in the east lane, northbound in the west lane).",
+   "fix_praezisiert": "In karte18_objekte.py, the autos 06/07 loop: cx 35.5 -> 35.75 (car 554..589; lane 553..591) and cx 33.5 -> 33.25 (car 516..547; lane 512..550). The cars then sit centred in their lanes and are clear of the centre line."
+  },
+  "pixel-8": {
+   "id": "pixel-8",
+   "echt": true,
+   "begruendung": "Confirmed (p8_j1.png, p8_j2.png). linie_v runs from 25*T to 96*T. The yellow centre line goes straight through the 4-way junction box (32-36,42-53) and, at the west end of the waterfront road, through the corner box (32-36,84-93) down to the south kerb. The upper T-junction (rows 20-24) is done correctly: the line only starts at row 25. Small correction: the yellow does not cross the white dashes pixel for pixel. There is 1 px of air (x=553) at y 711/823, and 3 px in the waterfront road. The markings overlap in the junction boxes, which is a logic error.",
+   "fix_praezisiert": "markierungen(): replace the single linie_v call with two calls, linie_v(a, frei, int(34.5*T)-1, 25*T, 42*T, gelb, strich=10, luecke=8) and linie_v(a, frei, int(34.5*T)-1, 54*T, 84*T, gelb, strich=10, luecke=8). Interrupt the white lane lines of the middle road (yc 44.5/51.5) over x 32*T..37*T, i.e. draw 3*T..32*T and 37*T..63*T. Start the waterfront road lines (85.5/90.5/92.0) at 37*T instead of 32*T."
+  },
+  "pixel-9": {
+   "id": "pixel-9",
+   "echt": true,
+   "begruendung": "Confirmed by measuring the white runs per row and at 5x (p9_z.png). Next to the zebra crossings there are 4-px dash stubs at x 620-623 (tile 38), 672-675 (42), 796-799 (49) and 848-851 (53), in rows 711 and 823 (tile rows 44 and 51). In the waterfront road there are 4-px stubs at 1664-1667 (tile 104) in rows 1367, 1447 and 1471 (tile rows 85, 90, 92). The coordinates in the finding are off by one tile in places (38/49 instead of 39/50). Shorter partial dashes of 8-10 px also sit directly at the crossings: 272-279 (17), 422-431 (26) and 1590-1599 (99).",
+   "fix_praezisiert": "In linie_h()/markierungen(): find each dash interval [s, s+strich), and draw it only if all of it lies on frei and it is at least 4 px from every zebra rectangle (dilate the zebra mask by 4 px in x before the test). Otherwise drop the whole dash. Re-check tiles 17, 26, 38, 42, 49, 53, 99 and 104 at 5x."
+  },
+  "pixel-10": {
+   "id": "pixel-10",
+   "echt": true,
+   "begruendung": "Confirmed (p10.png, 6x). The bench karte10/klein/38 at x=1889 (tile 119, row 62) is covered over about half its width by the crown of the planter tree (x=1898, y=987, drawn later). Cause: kuebel_baum() places the tree with begleiter=True and pruefen=False, so it never enters P.pixel, and the later 2-px check cannot see it.",
+   "fix_praezisiert": "In kuebel_baum(), after t['y'] -= 10, write the tree's dilated alpha (MaxFilter(5)) into P.pixel at the shifted position (t['x'], t['y']), so later objects are checked against it. Move the bench to (113,62), clear of the planter at 118-121 and the lamps at 109/117 in row 60, and confirm with the 2-px check (watch P.fehl)."
+  },
+  "pixel-11": {
+   "id": "pixel-11",
+   "echt": true,
+   "begruendung": "Confirmed by measuring the sprite extents. Barrier left 1445..1498, centre -160 px from the axis (1632). Barrier right 1781..1834, centre +176 px. That is 1 tile too far right, and it is visible next to the stairs (gap 38 px left vs 53 px right). The same logic error affects the flag pairs on row 35: A+dx and A-dx-1 with n=2 give -208.5/+223.5, -176.5/+191.5 and -144.5/+159.5, i.e. 15 px asymmetric each.",
+   "fix_praezisiert": "Barriers: (A - 12, 31) and (A + 8, 31). Flags: P.setzen(STR(10), A - dx - 2, 35, spiegel=True, ...) instead of A - dx - 1. Then all pairs sit within 1 px of mirror symmetry to x=1632. The benches (A-7/A+5) and lamps (A-16/-8 and A+15/+7) are already symmetric and stay as they are."
+  },
+  "pixel-12": {
+   "id": "pixel-12",
+   "echt": false,
+   "begruendung": "Refuted. The user's template (karte18_vorlage.png, p12_tmpl.png) has exactly this configuration: stairs 96-107 (12 tiles), below them a checker path only 98-105 (8 tiles) with plaza slabs at 96-97 and 106-107, and stairs set flush into the terrace front without cheeks. The map follows the template to the tile. The foot of the stairs lies entirely on walkable plaza paving, so there is no gap, no foreign pixel and no dead end. Rule 2 (path matches the stairs, no gaps) is met, because at the foot the path is the plaza itself. At 5x the stairs are clean: dark contour at x 96.0/107.9, light top edge running through, no contact shadow under the steps."
+  },
+  "pixel-13": {
+   "id": "pixel-13",
+   "echt": true,
+   "begruendung": "Confirmed (p13.png vs p13_tmpl.png). In the template, column x=126 in rows 84-99 is a stone quay edge strip with an outline, and the quay front at rows 99-100 turns the corner at x=126. In the map, road, median hedge, sidewalk, rails and quay paving end at x=2015 with only the 1-px contour from kaimauer() ('seite'), straight into the channel (x 126-131). The south front of the quay (row 100) also ends straight without a side end.",
+   "fix_praezisiert": "karte18_layout.py: set column 126, rows 84-99, to 'k' (quay), as in the template. kaimauer() will then draw the south front at row 100 up to x=126 automatically. For the east edge of the strip: a 1-px light kerb ('#9aa0ae') on the land side and a 1-px dark contour ('#3a3e4a'), plus a light shadow of 3-4 px (dunkeln 0.75) on the water. For the corner: a 1-px dark contour on the east end of the front pixels (lvl 9, x=2031, y 1600-1613). No sidewall made of tiles."
+  },
+  "pixel-14": {
+   "id": "pixel-14",
+   "echt": true,
+   "begruendung": "Confirmed by a pixel check (each object's alpha dilated 2 px, intersected with building alpha) and at 4x (p14a/p14b). Contact without overlap: hydrant (41,70) 24 px, dumpster (52,70) 21 px, bin (60,70) 30 px. Their feet are at y=1135, and the roof edge of the warehouses starts at y=1136. The lamp at (48,55) has 38 px contact (foot 895, office from 896). The lamp at (60,55) has only 4 px at the building corner, but that is still under 2 px. Buildings are not entered in P.pixel and the door Sperrfelder cover only the footprint, so none of these was caught.",
+   "fix_praezisiert": "Hydrant to (40,69) and bin to (60,69). Dumpster to (54,69): (49-52,68-69) is a door Sperrfeld. At row 69 the tops are at about 1092, 4 px below the office bottom edge (1087). To keep the rhythm, move the whole lamp series on the south side of the middle road from row 55 to row 54 (x 12/24/36/48/60; P.setzen(LAT, x + 6, 54)). Optionally, put the building silhouettes into P.pixel after placement (dilated) so the 2-px check catches this."
+  },
+  "pixel-15": {
+   "id": "pixel-15",
+   "echt": true,
+   "begruendung": "Confirmed (p15.png). The bollards (88,79), (92,79) and (96,79) have their feet at 1279. The monorail train is drawn after everything else in hochbahn(), with its top at about 1274, so only the top 5-6 px of each bollard stick up over the train roof, with a straight cut edge. They look like stray pixels on the roof. The occlusion itself is geometrically correct (the high deck is in front), but the bollards and the train overlap unintentionally, which breaks the 2-px rule.",
+   "fix_praezisiert": "Move the whole bollard row (x 64..124 step 4, without A-4..A+3) from row 79 to row 78. P.setzen('gebaeude/poller', x, 78, boden=set('pc')): feet at 1263, about 10 px from the train roof, rhythm kept, row 78 is free plaza. Alternatively skip only the bollards at 88/92/96 (train x 86-107)."
+  },
+  "pixel-16": {
+   "id": "pixel-16",
+   "echt": true,
+   "begruendung": "Confirmed (p16.png vs p16_tmpl.png). The deck in hochbahn() starts at x0=60 with only a 2-px dark strip (X0:X0+2). There is no outline along the bottom edge of the front and no buffer stop. The template has a closed end frame with dark outline and red buffer stops at x 62. Small correction: the deck touching the shed bottom (y 1279/1280) is a result of the projection (the higher deck stands in front), and in the template the deck top also adjoins the ground directly. That is not a separate fault.",
+   "fix_praezisiert": "layout hochbahn.x0 60 -> 62 as in the template (first pillar 62-63 stays below). In hochbahn(): west face as a closed end with a 2-px dark outline '#2a2c36' over y0..y0+64, a 1-px light top edge, a 1-px dark outline under the front (y0+63). On the deck top at X0+4..X0+12, 3 red-white buffer bars ('#b03a40' / '#e0e0e8', 2 px high, at d=4, 8, 12) like the template. Re-check at 6x."
+  },
+  "pixel-17": {
+   "id": "pixel-17",
+   "echt": false,
+   "begruendung": "Refuted. I recomputed the fog density from nebel() (blur radius 10 of the land mask). It reaches 0 at x>=70 on row 700 and x>=82 on row 340. The cars start at x=70 (car 03, (4,44)) and x=82 (car 00, (5,21)). In terrain_basis.png the asphalt is 50,54,65 at x=68 and 48,52,63 from x=72 (clean asphalt). The fogged fade zone is x 48-70 (tiles 3-4.4), and no car stands in it. The cars are not drawn sharp over fog; they stand on unfogged road (p17a.png). The hard edge at the road end is pixel-4."
+  },
+  "pixel-18": {
+   "id": "pixel-18",
+   "echt": true,
+   "begruendung": "Confirmed (p17a.png, p18a.png, p18b.png). Middle road, north carriageway rows 42-46: the cars (4-7,44) and taxi (55-58,44) have their foot at 719, and the lane line at y 711-712 runs through the lower body just above the wheels. The car's ground footprint (about foot-12..foot) straddles the line. Waterfront road, north carriageway rows 84-86: the cars (69-72,85) and taxi (106-109,85) have their foot at 1375, and the line at 1367-1368 runs through the same part of the body. Visually they drive on the lane line.",
+   "fix_praezisiert": "karte18_objekte.py, car list: (3, 4, 43, True) and (4, 55, 43, True). Car then 672..703, fully in the upper lane 672-710. (0, 69, 86, True) and (4, 106, 86, True): foot 1391, footprint about 1376..1391, fully in the lower lane 1369-1391. Afterwards check with the 2-px check, e.g. the cone at (59,43)."
+  },
+  "pixel-19": {
+   "id": "pixel-19",
+   "echt": true,
+   "begruendung": "Confirmed at 6x for (120,22) hall, (29,34) apartment block and (60,62) office (p19a/b/c). In gebaeude_schatten() the 12-px strip starts at Y1-hoch with constant alpha 0.3 and a hard horizontal top edge in the middle of the facade height. (51,74) is the same code path (gap between the warehouses). Exception: (84,12) is not visible. The strip lies under the hall sprite there, and on fog it is set to 0 by lvl!=1.",
+   "fix_praezisiert": "In gebaeude_schatten(), fade the right strip in over 8 px: alpha = 0.3 * min(1, (y - (Y1 - hoch)) / 8.0) for y in the first 8 rows, otherwise 0.3. Keep the downward fade-out and the contact shadow."
+  },
+  "logik-1": {
+   "id": "logik-1",
+   "echt": true,
+   "begruendung": "Bestätigt. In layout.json ist die Mittelstreifen-Lücke in Reihe 87/88 bei x 98-101 ('s'), das Zebra (lay['zebra'] [100,103,84,93]) liegt bei x 100-103. Im 4x-Ausschnitt laufen die Streifen in Reihe 87-88 nur bei x 100-101 durch, bei x 102-103 schneidet die Hecke das Zebra ab. Bei x 98-99 liegt blanker Asphalt ohne Zebra. In der Vorlage liegen Zebra und Lücke beide bei x 98-101. Das neue Zebra (Mitte 102 = Achse 1632 px) liegt aber genau auf der Hallenachse, deshalb ist es besser, die Lücke zu verschieben, als das Zebra zurückzusetzen.",
+   "fix_praezisiert": "layout.json, Reihe 87 und 88: x 98-99 von 's' auf 'm', x 100-103 von 'm' bzw. 's' auf 's' (Lücke = 100-103, deckungsgleich mit dem Zebra und auf der Achse x=102). Danach neu bauen und die Bordsteinkanten der Lücke bei x 99/100 und 103/104 vergrößert prüfen (Regel 2, 3x)."
+  },
+  "logik-2": {
+   "id": "logik-2",
+   "echt": true,
+   "begruendung": "Bestätigt. In markierungen() läuft linie_v für die Querstraße von 25*T bis 96*T. Im Ausschnitt 27-41/40-55 geht die gelbe Strichlinie mitten durch die Kreuzung, in 27-41/82-95 bis Reihe 93, also durch die Südfahrbahn der Uferstraße. Die weißen Linien der Mittelstraße (y 711 und 823) sind bei x 30-38 in der Kreuzung sichtbar, die der Uferstraße beginnen bei x 32 (32*T). Dazu kommt, nicht im Fund genannt: Die gelbe Doppellinie der oberen Straße (y 357/362) läuft ebenfalls durch die T-Kreuzung bei x 30-38, Reihe 20-24. Die Vorlage hat in allen Kreuzungen keine Markierung.",
+   "fix_praezisiert": "In markierungen(): (1) Querstraße: linie_v nur für y 25*T..42*T und 54*T..84*T zeichnen (zwei Aufrufe statt 25*T..96*T). (2) Mittelstraße: die beiden linie_h für 44.5/51.5 in zwei Abschnitten zeichnen, 3*T..27*T und 42*T..63*T (die Zebras 27-29 und 39-41 maskieren ohnehin). (3) Uferstraße: alle drei linie_h erst ab 42*T statt 32*T beginnen (Zebra/Kreuzung x 32-41 frei). (4) Obere Straße: die gelbe Doppellinie in zwei Abschnitten, 3*T..27*T und 42*T..83*T."
+  },
+  "logik-3": {
+   "id": "logik-3",
+   "echt": true,
+   "begruendung": "Bestätigt. k4.objekte_zeichnen ruft bodenwall() für jedes Objekt auf, dessen basis nicht mit 'rand/' oder 'klein/0..5' beginnt. Das trifft in Karte 18 alle 224 Objekte, an_wand ist nirgends gesetzt. Gesehen bei 8x: unter dem weißen Auto (5-8,21) und dem Bus (71-74,21) je ein gelber Strichstreifen bei y≈350, kopiert von der Mittellinie y 357. Der Sockel des Wasser-Pfeilers (126-127,88) hat blaue Wasserpixel. Die Container (20-24 und 86-96, Reihe 99) haben einen grauen Zackenwall aus der Kaimauer. Die Laternen und der Mülleimer in Reihe 95 haben braune Gleisbett-Pixel. Der Glasfuß der Halle (Reihe 27/28) hat eine gezackte Pflasterkante (Diff −71 in y 448). Auch die Mittelstreifen-Bäume bekommen dabei Asphalt aus Reihe 89 auf die Hecke.",
+   "fix_praezisiert": "Ohne Änderung am gemeinsamen Modul karte04_bauen.py: In tools/karte18_objekte.py beim Schreiben von platzierung.json für alle Objekte o['an_wand']=True setzen (dieses Flag überspringt in k4.objekte_zeichnen nur bodenwall, sonst nichts). Ausgenommen sind nur Bäume und Büsche, deren Fuß (y+fuss+1) auf Rasen 'n' oder Sand 'd' steht. Damit fallen Autos, Bus, LKW, Gebäude, Pfeiler, Poller, Kübel(-bäume), Mittelstreifen-Bäume, Container, Laternen, Bänke, Fahnen und alle k18/strasse-Objekte heraus. Danach neu bauen und die genannten Füße bei 8x prüfen."
+  },
+  "logik-4": {
+   "id": "logik-4",
+   "echt": true,
+   "begruendung": "Bestätigt. schatten_hochbahn dunkelt y 1344-1357 (Reihe 84) direkt unter der Front ab, gemessen in terrain_basis: Helligkeit ca. 134 gegenüber 189 in Reihe 85. Die Pfeiler (Fuß y 1423, 80 px hoch) zeigen, dass die Unterkante der Front in 80 px Höhe über y≈1424 liegt. Die Grundfläche der Bahn ist also der Mittelstreifen in Reihe 87-88. Ein Band in Reihe 84 liegt nördlich davon, also zum Licht (oben links) hin, und beginnt nicht am Objekt. In der Vorlage gibt es dort kein Schattenband.",
+   "fix_praezisiert": "In schatten_hochbahn das Band ab y=(y1+1)*T entfernen. Stattdessen den Boden unter und südöstlich der Grundfläche abdunkeln: Maske y 1400..1447 (Reihe 87.5-90.4) und x ab hb['x0']*T+40 bis Kartenrand, Faktor ca. 0.75, unten 4-6 px weich auslaufend. Die Maske gilt auf Hecke und Asphalt, nicht auf Wasser (& ~wasser). Die vorhandenen Pfeilerschatten auf Reihe 89-90 bleiben, sie liegen schon richtig."
+  },
+  "logik-5": {
+   "id": "logik-5",
+   "echt": false,
+   "begruendung": "Widerlegt. schatten_ebene nimmt die Ebene bei fy = o['y']+zu+1. Für die Pfeiler (y 1344, letzte Alphazeile 79) und die Mittelstreifen-Bäume (y 1381, zu 42) ist das y=1424, also Reihe 89. Diese Reihe ist Asphalt mit lvl 1 (pixelhoehe.npy geprüft: y 1423 = 9, y 1424 = 1). Es wird also nichts übersprungen. Der Diff terrain minus terrain_basis zeigt unter Pfeiler 62, Pfeiler 78, Baum 70,88 und Baum 9,48 jeweils einen Kontaktstreifen in y 1424-1425 und einen nach rechts unten verschobenen Schlagschatten in y 1430-1442 (bzw. 784-794). Das ist auch im 8x-Ausschnitt als dunkler Streifen unter der Hecke zu sehen. Nur der Teil über der Hecke selbst fehlt, und der ist nur 1 px hoch, weil die Schatten-Silhouette ab der Fußzeile nach unten fällt.",
+   "fix_praezisiert": ""
+  },
+  "logik-6": {
+   "id": "logik-6",
+   "echt": true,
+   "begruendung": "Bestätigt. Im 6x-Ausschnitt 121-128/83-101 enden Nordfahrbahn, Mittelstreifen, Südfahrbahn, Gehweg 94-95, Gleis 96-97 (Schienen bis 126*T) und Kai 98-99 bei x 125 mit nur 1 px Kontur (kaimauer 'seite') direkt am Wasser. In der Vorlage ist Spalte 126 von Reihe 79 bis 99 ein Kai-Bordstein mit Nieten, das Wasser beginnt dort erst bei 127. Ein Gleis ohne Prellbock und Fahrbahnen ohne Abschluss am Kanal sind ein Logikfehler. Einschränkung: Der Pfeiler im Wasser hat auch in der Vorlage kein Fundament, das ist also nur eine Verbesserung. Eine echte Seitenwand darf nach der Regel 'Seitliche Plateaukanten' nicht entstehen.",
+   "fix_praezisiert": "Die Spalte 126 nicht zu Land machen, sonst steht Pfeiler 126-127 halb auf dem Kai und der 16er-Pfeilerrhythmus bricht. Stattdessen in kaimauer() oder einer neuen Funktion auf der Landseite einen Kai-Bordstein als Draufsicht zeichnen: x 2006-2015 (rechte 10 px von Spalte 125), y 1280-1599 (Reihe 80-99), heller Stein mit Fugen und Nieten wie in der Vorlage. Die 1-px-Kontur als Seitenkante bleibt, dazu 1-2 px leichter Schatten auf dem Wasser. Prellbock (Sprite oder prozedural) auf 124-125, Reihe 96-97, Fuß unten in Reihe 97. Am Fahrbahnende eine Poller- oder Leitplankenreihe auf x 124-125, Reihe 84-86 und 89-93 (oder eine Sperrfläche 'x' auf x 124-125). Optional bekommt der Wasser-Pfeiler an seinem Fuß (y 1416-1423) eine 2 px dunkle, nasse Wasserlinie mit einer hellen Wellenkante darunter. Vorher bodenwall entfernen (logik-3)."
+  },
+  "logik-7": {
+   "id": "logik-7",
+   "echt": true,
+   "begruendung": "Bestätigt. Der LKW (karte02-ortho-14 bei 674,1268, Fuß y 1327) steht auf dem Gehweg in Reihe 80-82 vor dem offenen Rolltor. Die Bordsteinkante zwischen Reihe 83 und 84 ist im 4x-Ausschnitt über x 37-59 durchgehend (heller 2-px-Bordstein). Es gibt keine Zufahrt, also kann er physisch nicht dort stehen.",
+   "fix_praezisiert": "In layout.json Reihe 80-83, x 42-47 von 'g' auf 's' setzen. bordsteine() erzeugt dann automatisch die seitlichen Bordsteine bei x 41/42 und 47/48, und die Kante zu Reihe 84 entfällt. Das ergibt eine echte Zufahrt vor dem Rolltor (Tor bei x≈45-47). Den LKW so lassen und den Schatten nach dem Neubau prüfen. Alternativ, wenn der Gehweg Pflaster bleiben soll, nur den Bordstein x 42*16..48*16 an der Kante 83/84 als abgesenkten Bordstein zeichnen (flach, nur 1 px dunkle Fuge, ohne helle Kante und ohne Fahrbahnschatten)."
+  },
+  "logik-8": {
+   "id": "logik-8",
+   "echt": true,
+   "begruendung": "Bestätigt. Die obere Straße ('s' bis x 82, Reihe 20-24) endet an einem 1 Kachel breiten 'p'-Streifen (x 83) vor der Hallenwand (ab x 84), nur mit dem 2-px-Bordstein. In der Vorlage schließt eine Reihe aus 5 Pollern das Straßenende ab (Pollerreihe direkt am Asphaltende, Reihe 20-24). In platzierung.json gibt es dort keinen Poller.",
+   "fix_praezisiert": "Fünf gebaeude-poller.png (8x14) auf den 'p'-Streifen x 83 setzen, waagerecht zentriert und mit dem Fuß bündig auf der Kachelunterkante: x=1332, y=r*16+2 für r = 20, 21, 22, 23, 24. Das ist dieselbe Pollerart wie am Platzrand. Danach prüfen, dass der Laternenschatten von (82,19) die Poller nicht überdeckt."
+  },
+  "logik-9": {
+   "id": "logik-9",
+   "echt": true,
+   "begruendung": "Bestätigt. Mittelstraße: Die weiße Strichlinie y 711-712 läuft genau unter den Rädern von rotem Auto (y 688-719) und Taxi (687-719), im 6x-Bild klar zu sehen. Uferstraße Nord (y 1344-1391): Mit der Linie y 1367 bleiben zwei Spuren zu 23 px, ein 31-33 px hohes Auto passt in keine. Weißes Auto (1345-1375) und Taxi (1343-1375) stehen auf der Linie. Uferstraße Süd (1424-1503): Linien bei 1447/1471 ergeben Spuren von 23/22/31 px, und die drei Autos dort (y 1456-1487) überdecken ebenfalls die Linie 1471. Querstraße: Das weiße Auto (x 550-585) liegt mit dem linken Spiegel auf der gelben Linie 551-552, das graue (520-551) berührt sie rechts. Die Lösung mit drei Spuren für die Südfahrbahn ist schlecht, weil die Autos höher als 26.7 px sind. Die Vorlage hat je Fahrbahn nur eine Linie (Nord 84.5, Süd 91.5).",
+   "fix_praezisiert": "Mittelstraße: Autos ganz in eine Spur, wie auf der oberen Straße (Sprite vollständig innerhalb der Spur). Rotes Auto (k18-autos-03_m) y 688 → 716, Taxi (k18-autos-04_m) y 687 → 715. Alternativ beide in Spur 1 mit y 676/675. Uferstraße Nord: Linie 85.5 entfernen (eine Spur, 48 px). Weißes Auto auf y 1353, Taxi auf y 1351 (mittig in der Spur). Uferstraße Süd: statt zwei Linien eine bei int(91.5*T)-1 = 1463 (zwei Spuren zu 39 px, wie in der Vorlage). Autos 76,92 / 116,92 / 41,92 auf y 1468-1469 (Unterkante ≤ 1500) oder in Spur 1 auf y 1428. Querstraße: weißes k18-autos-06 x 550 → 554, graues k18-autos-07 x 520 → 516 (je mittig in der 39-px-Spur, ≥2 px Abstand zur Linie)."
+  },
+  "logik-10": {
+   "id": "logik-10",
+   "echt": true,
+   "begruendung": "Bestätigt. Die Buchtlinien liegen bei x*16+7 (679, 727, 775, 823, 871, 919, 967). Die Autos sind auf Kachelblöcke zentriert (678-713, 776-807, 822-857, 728-759, 918-953). Im 3x-Ausschnitt liegt die linke Linie jeder Bucht unter der linken Wagenseite. Die Linien sind 42 px lang (466-508 bzw. 564-606), die Autos 54-55 px (oben 473/474-527, unten 553/554-607), sie ragen also in die Fahrgasse.",
+   "fix_praezisiert": "Einfachste Lösung: in markierungen() bei beiden linie_v-Aufrufen 'x * T + 7' durch 'x * T' ersetzen. Linien dann bei 672, 720, …, 960, und alle fünf Autos stehen ohne Verschiebung exakt mittig (Bucht 48 px, Auto 36 → 6 px Rand, Auto 32 → 8 px Rand). Länge: obere Linien von 29*T+2 bis 32*T+15 (466-527), untere von 34*T+8 bis 38*T-1 (552-607), damit sie die Autos voll einfassen. Abstand zur gelben Mittelgasse (y 535) bleibt 7 px."
+  },
+  "logik-11": {
+   "id": "logik-11",
+   "echt": true,
+   "begruendung": "Bestätigt. Die Bank karte10-klein-38 (1889,986, 30x22, Fuß y 1007) liegt im Bereich der Kübelbaum-Krone (1898-1941 / 987-1029). Sie wird früher gezeichnet (Fuß 1007 < 1029), im 5x-Ausschnitt verdeckt die Krone die rechte Hälfte der Bank, und der Fuß stößt an den Kübelrand (y 1008). Das verletzt 'Keine Überlappungen (2 px)'.",
+   "fix_praezisiert": "Bank an die Stelle der Vorlage setzen: unter den Kübel auf die Kacheln 119-120, Reihe 66, also x=1905, y=1050 (Fuß 1071 bündig auf der Kachelunterkante, 11 px Abstand zum Kübel bei y 1039, keine Kollision mit Laterne 117 bei x 1872-1886). Alternativ frei auf x=1809, y=986 (Kachel 113-114, Reihe 62)."
+  },
+  "logik-12": {
+   "id": "logik-12",
+   "echt": true,
+   "begruendung": "Bestätigt. hochbahn() setzt den Zug bei y = y0+22-30 = 1272 (nicht bei y 1285 aus platzierung.json). Die Poller in Reihe 79 (y 1266-1279) bei x 1412, 1476 und 1540 liegen im Zugbereich x 1376-1713. Damit verdeckt das Zugdach 8 px ihrer Füße. Im 7x-Ausschnitt sitzen die Pollerstummel genau auf der Dachkante und wirken wie Aufbauten auf dem Dach. Das verletzt die 2-px-Regel.",
+   "fix_praezisiert": "Die ganze Pollerreihe am Platzrand (14 Stück, y 1266) eine Kachel höher setzen: y=1250, Fuß 1263 bündig auf der Unterkante von Reihe 78, 8 px Abstand zum Zugdach. So bleibt die Flucht gleich ('Gleiche Objekte bündig ausrichten'). Bei der Gelegenheit: Die Reihe ist um 16 px asymmetrisch zur Achse 1632 (Pollermitten 1544 und 1736). Die östlichen Poller müssen um 16 px nach links (1732 → 1716, 1796 → 1780, …, 1988 → 1972) oder die Lücke wird mittig auf 100-103 gelegt."
+  },
+  "logik-13": {
+   "id": "logik-13",
+   "echt": true,
+   "begruendung": "Bestätigt anhand der sichtbaren Alphazentren: Absperrung links −160 px, rechts +176 px zur Achse 1632. Fahnen links −208.5 / −176.5 / −144.5, rechts +223.5 / +191.5 / +159.5, also je 15-16 px zu weit östlich. Die Laternen 94/109 sind dagegen symmetrisch (±120). Im 3x-Ausschnitt sieht man, dass die rechten Fahnen näher an der Laterne 117 stehen als die linken an Laterne 86. Kleine Korrektur zum Fund: Das Fahnen-Sprite ist 19 px breit, die gespiegelten x-Werte sind also 1831/1799/1767, nicht 1832/1800/1768.",
+   "fix_praezisiert": "platzierung.json: rechte karte10-banner-04 x 1781 → 1765. k18-strasse-10_m x 1846 → 1831, 1814 → 1799, 1782 → 1767 (Formel x_r = 3264 − x_l − Breite). Danach Abstand Fahne 1767-1785 zu Laterne 109 (1744-1758) prüfen: 9 px, in Ordnung."
+  },
+  "logik-14": {
+   "id": "logik-14",
+   "echt": true,
+   "begruendung": "Bestätigt. dichte[~land] = max(dichte, 0.82) erzeugt an jeder '.'-Grenze einen Sprung von ca. 0.1-0.4 auf 0.82. Gesehen: am Westende der oberen Straße eine harte waagerechte Nebelkante an Reihe 24/25 bei x 3-5. An der Mittelstraße eine harte Oberkante an Reihe 41/42 bei x 3-4. Am Südwasser zwischen x 56 und 57 in Reihe 103 eine senkrechte und waagerechte Stufenkante (Wasser-'.'-Grenze). Der Nebel ist sonst weich, an diesen Klassengrenzen aber kachelförmig.",
+   "fix_praezisiert": "In nebel() die Zeile 'dichte[~land] = np.maximum(dichte[~land], 0.82)' ersetzen durch eine weiche Untergrenze: fern = GaussianBlur(10) der Maske ~land (0..1), dann dichte = np.maximum(dichte, 0.82 * np.clip(fern * 1.6, 0, 1)). Alternativ nach dem max() das ganze dichte-Feld mit GaussianBlur(radius 6-8) glätten. Danach die drei Stellen und den Südrand 9-14/100-104 und 125-130/101-104 in mindestens 3 Animationsbildern vergrößert prüfen."
+  },
+  "logik-15": {
+   "id": "logik-15",
+   "echt": true,
+   "begruendung": "Teilweise bestätigt. Widerlegt für die Autos: Aus dem Code nachgerechnet ist die Nebeldichte unter dem weißen Auto (x 82-140, y 349) und dem roten Auto (x 70-122, y 717) 0.00-0.01, der Fadebereich endet bei x≈70. Bestätigt für das Stegende: Die zwei unteren Poller k18-strasse-21 (1670,1671 und 1734,1671, Fuß y 1695) stehen bei Dichte 0.09-0.37, direkt darunter (y 1700-1711) steigt sie auf 0.3-1.0. Der Rettungsring (1702,1686, Fuß 1711) steht vollständig im Nebel (Dichte 1.0). Beide werden nach dem Nebel scharf gezeichnet, und ihre Schatten (schatten_ebene läuft nach nebel()) liegen auf dem vernebelten Steg, siehe 6x-Ausschnitt 101-113/98-108. Hinweis: Der Ring wird neu erzeugt, seine Position bleibt aber in platzierung.json.",
+   "fix_praezisiert": "Autos nicht verschieben. Untere Stegpoller auf y 1652 setzen (Fuß 1676, Dichte 0), x bleibt 1670/1734. Den Rettungsring aus dem Nebel holen, z. B. wie in der Vorlage an den Steganfang rechts: x=1741, y=1574 (neben dem oberen rechten Poller; vorher Abstand ≥2 px prüfen), oder auf y ≤ 1650. Allgemein: Objekte, deren Fuß bei Nebeldichte > 0.15 liegt, nicht scharf platzieren und keinen Schatten auf Nebel zeichnen (in schatten_ebene die Maske mit dichte < 0.15 multiplizieren)."
+  },
+  "logik-16": {
+   "id": "logik-16",
+   "echt": true,
+   "begruendung": "Bestätigt. In steg() ist die Schattenmaske sch[y0*T+4:Y1+10, X1:X1+6] & wasser. Die Kaimauerfront (y 1600-1613) ist in der Klasse 'w' gezeichnet, deshalb sind die Wandpixel x 1760-1765, y 1604-1613 auf 0.65 abgedunkelt (gemessen 58,61,70 statt 90,94,108). Im 6x-Ausschnitt ist ein dunkler Block auf der Mauerfront rechts am Steg sichtbar. Das ist Schatten über einer Wand und verletzt Regel 7. Dass der Steg auf das Wasser schattet, auf dem er steht, ist dagegen auf seiner Ebene und kein Fehler. Die Kürzung auf 1-2 px ist also nicht nötig.",
+   "fix_praezisiert": "In steg(): dunkeln(a, sch & wasser & (lvl != 9), 0.65). kaimauer() läuft vorher und setzt die Wandpixel auf lvl 9, damit bleibt die Mauerfront frei. Den Wasserschatten selbst unverändert lassen."
+  },
+  "logik-17": {
+   "id": "logik-17",
+   "echt": true,
+   "begruendung": "Bestätigt. Der Hallenfuß liegt bei Y1 = 448 (Reihe 28 = Terrasse, lvl 2). gebaeude_schatten setzt m[lvl != 1] = 0. Der Diff terrain minus basis ist in y 449-453 unter der Halle 0. Die −71 in y 448 stammt nur vom bodenwall, siehe logik-3. Unter Wohnblock, Lager und Büro liegt ein Kontaktschatten (−65 bis −190). Der Seitenstreifen rechts der Halle (x 1921-1930, lvl 1) ist vorhanden. Würde man die Maske wie vorgeschlagen pauschal auf die Fußebene 2 umstellen, verschwände dieser Seitenstreifen, weil der Platzstreifen rechts lvl 1 hat.",
+   "fix_praezisiert": "In gebaeude_schatten die beiden Teile getrennt maskieren. Die Kontaktschatten-Streifen unter der Fassade (Y1..Y1+5) nur auf lvl == lvl[Y1, X0+4] zeichnen, das ist 2 bei der Halle und 1 bei den übrigen. Den rechten Seitenstreifen weiter nur auf lvl == 1 bzw. auf der Ebene bei (Y1-1, X1). Zum Beispiel zwei Masken m_fuss und m_seite mit je eigener Ebenenprüfung und danach np.maximum."
+  },
+  "regeln-1": {
+   "id": "regeln-1",
+   "echt": true,
+   "begruendung": "Bestätigt mit 8x-Ausschnitt (124-130, 83-89). Pfeiler #11 (x=2016, Spalten 126-127) steht im Kanal. Unten hat er dieselbe Zierplinthe wie die Pfeiler auf dem Mittelstreifen, mit ausgefransten dunklen Kontaktpixeln direkt auf der dunklen Wasserfläche. Es gibt keine Wasserlinie, keinen Ring und keinen Schaum, und er klebt 3 px neben der Uferkontur bei x=2015. Das ist ein echter Physik-Fehler. Den vorgeschlagenen Fix weise ich aber zurück: In der Vorlage steht ebenfalls ein Pfeiler im Kanal (Spalten 128-129), dazu einer auf dem Mittelstreifen bei 122-123. 'Pfeiler im Wasser' ist also gewollt, und 'w' im boden-Set ist für diesen Pfeiler richtig. Eine ausgebaute Uferwand bei Spalte 126 ist ebenfalls nicht nötig: Nach der Regel 'Seitliche Plateaukanten' ist die schmale Kontur an der westlichen Kanalseite korrekt.",
+   "fix_praezisiert": "Pfeiler im Kanal lassen und besser auf die Vorlagenposition 128-129 rücken (layout.json hochbahn.pfeiler 126 -> 128, x=2048). Dann ist rundum Wasser und er klebt nicht am Ufer. Für Pfeiler auf 'w' eine Wasservariante des Sprites verwenden. Dafür die Zierplinthe (Sprite-Zeilen 72-79 in karte18_gebaeude.pfeiler()) weglassen und den Schaft gerade in das Wasser laufen lassen. An der Wasserlinie einen 1 px hellen Schaum- bzw. Wellenring um den Schaft zeichnen, darunter 2-3 px dunkle Spiegelung bzw. Schatten auf dem Wasser. Den Ring im animierten Tileset am exakt selben Platz wandern lassen. Pflichtkontrolle: Die Wellen aus wasser_wellen() dürfen den Schaft in keinem Animationsbild überdecken; mindestens 3 Bilder vergrößert prüfen. Optional nach der Vorlage einen weiteren Pfeiler auf den Mittelstreifen bei 122-123 setzen."
+  },
+  "regeln-2": {
+   "id": "regeln-2",
+   "echt": true,
+   "begruendung": "Bestätigt (5x-Ausschnitt 94-108, 83-95). Der Zebrastreifen liegt auf 100-103 (Achse 102), die Hecken-Lücke aber auf 98-101. In den Reihen 87-88 laufen die Streifen der Spalten 102-103 unter bzw. in die Hecke, und links bleiben 98-99 als leerer Asphalt in der Lücke. Ursache in karte18_layout.py: Mittelstreifen ((62,97),(102,125)). Nebenbefund: Mülleimer #170 (karte02-klein-16, x=1600..1615, y=1513..1535) steht genau am Südende des Zebrastreifens auf Spalte 100. Die Sperre gilt nur für Reihe 94, die Fußprüfung prüft nur Reihe 95, deshalb ist er durchgerutscht.",
+   "fix_praezisiert": "tools/karte18_layout.py: for (x0, x1) in ((62, 99), (104, 125)) setzen, damit die Hecken-Lücke genau 100..103 ist. Die Achse geht vor der Vorlage, die den Streifen bei 98-101 hat. Danach karte18_layout.py, karte18_bauen.py, karte18_objekte.py und karte18_bauen.py neu laufen lassen. Zusätzlich den Mülleimer (100,95) aus dem Zebra-Ausgang nehmen, z. B. nach (106,95) (x=1696). Die Sperre für Zebra-Enden in karte18_objekte.py auf 2 Reihen erweitern (y1+1..y1+2), damit so etwas abgelehnt wird."
+  },
+  "regeln-3": {
+   "id": "regeln-3",
+   "echt": true,
+   "begruendung": "Nachgemessen: Alpha-Box links 1445..1498 (cx 1472, 160 px von der Achse 1632), rechts 1781..1834 (cx 1808, 176 px), also 16 px asymmetrisch. Der Spiegel von Block 90..93 ist 2*102-1-93 = 110, also A+8. Auch der Maßstab stimmt sichtbar nicht: Die Bauabsperrung ist 54x50 px, etwa 3 Kacheln hoch, und damit höher als jedes Auto (31-33 px). Die Vorlage zeigt in Reihe 31 drei niedrige, 1 Kachel hohe rot-weiße Gitter je Seite auf 88-93 und 110-115, exakt gespiegelt.",
+   "fix_praezisiert": "Mindestens: In karte18_objekte.py (A + 9, 31) -> (A + 8, 31) setzen (rechts x=1765, cx=1792). Besser wie in der Vorlage: Die große Absperrung durch niedrige rot-weiße Gitter ersetzen, z. B. karte02/klein/26 (28x21, rot-weiß umgefärbt) oder ein neues PixelLab-Gitter mit etwa 16-20 px Höhe. Je Seite 3 Stück in Reihe 31 auf den Blöcken 88-89, 90-91, 92-93 und gespiegelt 114-115, 112-113, 110-111 (t' = 2*A-1-t). Das rechte x direkt als 2*A*T - x_links - breite berechnen, damit auch bei ungerader Breite kein Rundungspixel entsteht."
+  },
+  "regeln-4": {
+   "id": "regeln-4",
+   "echt": true,
+   "begruendung": "Nachgemessen: Links liegen die Boxen bei 1414-1432, 1446-1464 und 1478-1496. Der Spiegel wäre 1831-1849, 1799-1817 und 1767-1785, tatsächlich stehen sie bei 1846-1864, 1814-1832 und 1782-1800, also 15 px zu weit rechts. Sichtbar im 3x-Ausschnitt: Links sind 24 px Luft zur Laterne 86, rechts nur 9 px zur Laterne 117. Ursache: A - dx - 1 bei einem 19 px breiten Sprite (n=2), richtig ist 2A-1-(bx+n-1) = A - dx - 2.",
+   "fix_praezisiert": "karte18_objekte.py: P.setzen(STR(10), A - dx - 2, 35, spiegel=True, anim='fahne18'). Die rechten Fahnen kommen damit auf die Blöcke 114-115, 112-113 und 110-111 (cx 1840/1808/1776). Wegen round(x.5) liegt dann noch 1 px Rest. Deshalb x_rechts = 3264 - x_links - 19 direkt setzen (1831, 1799, 1767). Das gilt auch, wenn die Fahnen-Sprites neu erzeugt werden."
+  },
+  "regeln-5": {
+   "id": "regeln-5",
+   "echt": true,
+   "begruendung": "Bestätigt (3x-Ausschnitt 86-126, 74-81). Der letzte linke Poller #198 hat cx 1544 und liegt damit 24 px vor dem Mittelweg (x=1568). Der erste rechte #199 hat cx 1736 und liegt 40 px hinter dessen rechtem Rand (x=1696). Die ganze rechte Reihe 108..124 ist 16 px gegen das Spiegelbild versetzt. Ursache ist range(64,126,4) mit einem Loch nur am Mittelweg. Die Reihe steht am Südrand des Platzes vor der Halle, deshalb gelten 'Symmetrische Plätze' und 'Fester Rhythmus symmetrisch zum Tor'.",
+   "fix_praezisiert": "Links for x in range(64, A - 4, 4) (64..96), rechts gespiegelt x' = 2*A - 1 - x, also die Spalten 107, 111, 115, 119 und 123 (alle 'p' in Reihe 79, frei von Kübel 118-121 in Reihe 75-76). Für 64 fällt der Spiegel 139 weg, links bleibt 64 trotzdem stehen, das ist nach der Vorlage erlaubt. Alternativ links mit 68 beginnen, dann sind beide Reihen gleich lang. Beide Reihen stehen dann je 24 px vom Mittelweg entfernt."
+  },
+  "regeln-6": {
+   "id": "regeln-6",
+   "echt": true,
+   "begruendung": "Bestätigt (5x-Ausschnitt 110-126, 56-66). Bank #156 (x 1889..1918, y 986..1007) wird zur Hälfte von der Krone des Kübelbaums #46 überdeckt. Pixelgenau sind es 217 px Überdeckung, Abstand 0. Die Ursache im Code stimmt: kuebel_baum() setzt den Baum mit begleiter=True, deshalb kommen seine Pixel nicht in P.pixel.",
+   "fix_praezisiert": "BANK (118,62) -> (114,62): x=1825..1854, y=986..1007, Boden 'p'. Abstand 17 px zur Laterne 117 (x 1872) und frei vom Kübel 1888+. In kuebel_baum() nach dem Setzen des Baums die gedehnte Baum-Maske in P.pixel eintragen. Eine Begleiter-Ausnahme gilt nur gegenüber dem eigenen Kübel, also den Baum mit begleiter=True prüfen und danach P.pixel |= Maske ergänzen. So lehnt das Skript künftige Überlappungen selbst ab."
+  },
+  "regeln-7": {
+   "id": "regeln-7",
+   "echt": true,
+   "begruendung": "Bestätigt (6x-Ausschnitt 115-124, 45-54). Das linke Bein der Infotafel #134 (y bis 799) verschwindet hinter der Krone von Kübelbaum #42 (Oberkante y=795), pixelgenau 5 px Überdeckung, Abstand 0. Die Ursache ist dieselbe wie bei regeln-6. Die Position bleibt auch beim neu erzeugten Sprite gleich.",
+   "fix_praezisiert": "P.setzen(STR(6), 120, 47): x=1922..1949, y=738..767, Boden 'p' (Reihe 47, Spalten 120-121). Abstand 28 px zur Krone und 36 px zur Laterne 117. Zusätzlich gilt der P.pixel-Fix aus regeln-6."
+  },
+  "regeln-8": {
+   "id": "regeln-8",
+   "echt": true,
+   "begruendung": "Bestätigt (4x-Ausschnitt 40-62, 28-38). Die Buchtlinien liegen bei x*T+7 (679, 727, 775 …), die Autos (n=3) dagegen auf cx 696/744/792/840/936. Jedes Auto hängt am linken Strich, beim Auto auf 42-44 ragt der Spiegel über die Linie (Autokante x=678, Linie 679). Die Buchtmitte wäre 703, die Autos stehen also 7 px daneben.",
+   "fix_praezisiert": "tools/karte18_bauen.py, markierungen(): In beiden linie_v-Aufrufen der Parkbuchten x * T statt x * T + 7 setzen. Die Linien liegen dann auf 672, 720, 768 …, und ein 36 px breites Auto hat 6 px Rand je Seite (32 px Autos 8 px). Die Autoplätze in karte18_objekte.py bleiben unverändert."
+  },
+  "regeln-9": {
+   "id": "regeln-9",
+   "echt": true,
+   "begruendung": "Bestätigt (4x-Ausschnitt 3-30, 68-78). Der große Ginkgo #20 (x 162..222) ragt mit der Krone in den Reihen 73-76 etwa 14 px über die Rasenkante (x=207) auf den Gehweg in Spalte 13. Die unteren zwei Reihen stehen damit nicht ganz auf passendem Boden. Die Wurzeln sitzen genau auf dem Randstein der Rasenunterkante (y=1231), und der Schatten fällt auf den Gehweg.",
+   "fix_praezisiert": "karte18_objekte.py: (GRUEN, 6, 74, RASEN) -> x=98..141 und (GINKGO2, 9, 75, RASEN) -> x=146..206, y=1149..1215. Damit liegt der Stamm in Reihe 75 im Gras, die Krone bleibt innerhalb der Rasenfläche 96..207 und zwischen beiden Kronen sind 4 px Abstand. Danach mit Büscheln am Stammfuß einbetten (siehe regeln-11)."
+  },
+  "regeln-10": {
+   "id": "regeln-10",
+   "echt": true,
+   "begruendung": "Alle sieben Stellen in vergrößerten Ausschnitten bestätigt. Rasen D #21, Rasen E #22 und Rasen F #23 tragen je einen Baum ohne zweiten Baum und ohne Begleitobjekt. Die Querstraßen-Ginkgos #31 (29-31,29-31), #32 (29-31,56-58), #34 (29-31,70-72) und #33 (37-40,61-64) stehen nackt auf dem Gehweg. Laternen in der Nähe sind keine Begleitobjekte am Sockel. Die Vorlage setzt diese Straßenbäume zusätzlich in eine Gras-Baumscheibe (z. B. 30-31, Reihe 32-33) mit Büscheln daneben.",
+   "fix_praezisiert": "Für die Straßenbäume nach der Vorlage je eine 2x2-Baumscheibe ('n' bzw. Gitter) unter den Stamm legen. Dazu nach 5b einen niedrigen, 2 Kacheln hohen Strauch vor bzw. halb über den Sockel (begleiter=True) und 1-2 Büschel an die Sockelecken setzen (Karte-01-Büschel wiederverwenden). Auf den Rasen D/E/F nach 5a einen zweiten Baum ergänzen, z. B. auf Rasen D karte01-baeume-03 bei 25-26 mit Fuß Reihe 75. Dazu einen Busch vor dem Sockel des Hauptbaums sowie Büschel bzw. Blumen. Alles mit 2 px Abstand und nicht in Reihen."
+  },
+  "regeln-11": {
+   "id": "regeln-11",
+   "echt": true,
+   "begruendung": "Bestätigt (Ausschnitte von Rasen A/B, C, D, E/F und Spielplatz). Kein Rasenbaum hat Büschel oder Blumen an den Sockelecken, die Stämme stehen nackt im Gras. Die Baumpaare auf Rasen A, B und C sowie das Spielplatz-Paar haben keines der von 5a verlangten 1-2 Begleitobjekte. Am Spielplatz (#13, #14, Fuß Reihe 8) sitzen die Wurzeln genau auf der Kante Rasen/Sandkasten, der Schatten fällt in den Sand. Nebenbefund: Auch #16 (11,66) auf Rasen A und #18 (24,65) auf Rasen B stehen mit den Wurzeln auf dem unteren Randstein des Rasens, und ihr Schatten fällt auf den Gehweg.",
+   "fix_praezisiert": "An jedem Rasenbaum links und rechts am Stammfuß 1-2 Grasbüschel bzw. Blumen setzen (Karte-01-Büschel, begleiter=True, mit Sockelecken überlappend). Je Baumpaar 1-2 Begleitobjekte ergänzen: Busch vor einem Sockel, Steinlaterne oder Blumenbeet. Spielplatzbäume auf Fuß Reihe 7 setzen (Stamm im Gras, Krone darf in die g-Reihe 5 ragen). #16 auf Fuß Reihe 65 setzen (6 px Abstand zu #15) und #18 auf Fuß Reihe 64 (6 px Abstand zu #17), damit die Stämme im Gras stehen und der Schatten auf dem Rasen bleibt."
+  },
+  "regeln-12": {
+   "id": "regeln-12",
+   "echt": false,
+   "begruendung": "Im 8x-Sprite und im Kartenausschnitt (36-64, 76-86) geprüft. Der Lkw ist dieselbe Seitenansicht mit leicht sichtbarer Front-Ecke (Scheinwerfer, Stoßstange), wie sie auch die k18-Autos haben: Auch dort sind Dach und vordere Ecke mit Scheinwerfer leicht sichtbar. Die Behauptung 'alle anderen Fahrzeuge sind reine Seitenansichten' stimmt also nicht. Räder stehen kreisrund auf einer Linie, die Ladefläche ist eine gerade Seitenansicht, und die schräge Linie am Fahrerhaus ist die Windschutzscheibe im Profil. Isometrische oder diagonale Verzerrung gibt es nicht, ein Regelverstoß liegt nicht vor.",
+   "fix_praezisiert": ""
+  },
+  "regeln-13": {
+   "id": "regeln-13",
+   "echt": true,
+   "begruendung": "Im 10x-Sprite bestätigt. karte02-klein-61 zeigt die Kisten schräg von vorne-links-oben: Deckelflächen als schiefe Parallelogramme und dunkle rechte Seitenflächen bei der oberen und rechten Kiste. Marktstand, Sandsäcke und Container daneben sind frontal. Das widerspricht 'Ansicht frontal, nicht diagonal/isometrisch' und fällt neben dem frontalen Stand auf.",
+   "fix_praezisiert": "#62 (bx 21, Reihe 83) durch einen frontalen Kistenstapel ersetzen: reine Front plus schmaler Deckelstreifen von leicht oben, keine Seitenfläche. Entweder per PixelLab mit dem Frontal-Zusatz, etwa 30x27 px, oder aus den frontalen Kisten am Marktstand-Sprite karte02-ortho-09 zusammensetzen. Position und Fuß Reihe 83 beibehalten."
+  },
+  "regeln-14": {
+   "id": "regeln-14",
+   "echt": true,
+   "begruendung": "Im 6x-Sprite bestätigt. k18-frontal-08 ist eine reine Fassade mit einer flachen hellgrauen Gesimsplatte oben, von oben ist keine Dachfläche zu sehen. Die Polizeiwache ist ein kleines Gebäude und steht nicht auf der Liste der Teile, die gerade neu erzeugt werden. Das widerspricht der Regel 'Gebäude mit Dach (nie flach als reine Fassade)', die prozeduralen Gebäude der Karte haben dagegen Dachflächen.",
+   "fix_praezisiert": "Die Wache mit sichtbarem Dach neu erzeugen (PixelLab mit Frontal-Zusatz und 'roof visible from slightly above') oder in karte18_gebaeude.py prozedural ein etwa 12-16 px tiefes Flachdach mit Attika bzw. ein flaches Walmdach über die Fassade setzen, wie die Häuser auf Karte 06. Das Sprite wird dafür um etwa 1 Kachel höher, der Fuß bleibt in Reihe 85 bei bx 26. Danach den Abstand zum Kartenrand und zu Spalte 30 prüfen."
+  },
+  "regeln-15": {
+   "id": "regeln-15",
+   "echt": false,
+   "begruendung": "Pixelgenau nachgemessen. Der kleinste Abstand Bank–Laterne beträgt 5 px (links, #146/#111 usw.) bzw. 4 px (rechts, #147/#112 usw.), Chebyshev-Abstand der echten Alpha-Pixel. Nur die Bounding-Boxen liegen 1-2 px auseinander. Die 2-px-Regel ist damit eingehalten, im 6x-Ausschnitt berühren sich Bank und Laternenkopf nicht. Das Bankpaar ist exakt spiegelsymmetrisch (cx 1536/1728). Ein konkreter Regelverstoß liegt nicht vor.",
+   "fix_praezisiert": ""
+  },
+  "regeln-16": {
+   "id": "regeln-16",
+   "echt": true,
+   "begruendung": "Nachgemessen: Achse des Marktstands cx=296 (x 263..328). Linker Sandsack #60 bei cx 208 (88 px Abstand), gespiegelter #61 bei cx 400 (104 px). Im 4x-Ausschnitt ist links 2,5 Kacheln Luft, rechts 3,4. Die Säcke sind als Spiegelpaar angelegt (spiegel=True), also gilt die Symmetrie-Regel. Leichter Befund.",
+   "fix_praezisiert": "karte18_objekte.py: P.setzen('karte03/klein/43', 23, 80, boden=set('q'), spiegel=True). Das ergibt x=369..398 und cx 384, beide Säcke stehen dann 88 px von der Standachse. Die Kisten #62 (x 337..366) sind dann nur noch 2 px entfernt; sie müssen ohnehin ersetzt werden (regeln-13), dabei auf mindestens 2 px Abstand achten oder sie z. B. nach bx 20, Reihe 84 setzen."
+  },
+  "regeln-17": {
+   "id": "regeln-17",
+   "echt": false,
+   "begruendung": "Geprüft (3x, Spalten 0-12, Reihen 10-44, Karte und Vorlage). Die Regel 'Gebäude stehen ganz auf Land' betrifft Wasser bzw. Strand. Der Nebel ist hier der Kartenrand, unter dem die Stadt weitergeht. Die Vorlage zeigt genau dasselbe: Die linke Kante des Wohnblocks bei Spalte 5 grenzt direkt an den Nebel, und in den Reihen 40-41 sowie 18-19 liegt vor Spalte 5 bzw. 4 Nebel statt Gehweg. Im Render überdeckt das Gebäude die Nebelstufe in den Reihen 28-29, sichtbar ist kein Fehler. Das entspricht der Vorlage und ist kein Regelverstoß.",
+   "fix_praezisiert": ""
+  },
+  "regeln-18": {
+   "id": "regeln-18",
+   "echt": true,
+   "begruendung": "Bestätigt: In der Promenadenreihe range(14,126,12) fehlt die Laterne bei 26 (in platzierung.json stehen 14, 38, 50 … 122). Die Laterne (26,95) mit x 416..430 und Kopf y 1478..1497 kollidiert mit der Krone des Rasen-F-Baums #23 (x 402..445, y bis 1487) und wurde deshalb verworfen. Im Ausschnitt 8-32/86-96 ist die Lücke zwischen 14 und 38 klar zu sehen. Das verletzt 'Fester Rhythmus'.",
+   "fix_praezisiert": "(GRUEN, 25, 92, RASEN) -> (GRUEN, 27, 92, RASEN): x=434..477, noch auf Rasen F (bis x=479). Danach passt die Laterne (26,95) mit 3 px Abstand. Robuster: zusätzlich den Fuß des Baums auf Reihe 91 setzen (Krone y 1429..1471, 7 px Luft über dem Laternenkopf). Anschließend prüfen, dass der Laternenkopf über dem Rasen den Baum nicht berührt."
+  },
+  "regeln-19": {
+   "id": "regeln-19",
+   "echt": true,
+   "begruendung": "Nachgerechnet. Die Pfeiler-Mitten liegen bei 1008, 1264, 1520, 1776 und 2032, die Mitten dazwischen bei 1136, 1392 und 1904. Die Bäume #28, #29 und #30 stehen bei cx 1128, 1384 und 1896, also je 8 px links. Heckensegment 17..26 hat die Mitte 352, Baum #25 steht bei 344; Segment 42..49 hat die Mitte 736, Baum #26 steht bei 728. Bei den Segmenten 5..13 (152) und 53..61 (920) stimmt es. Mit n=3 fällt die Mitte bei ungerader Blockbreite auf eine Kachelmitte statt auf eine Kachelgrenze. Kleiner, aber messbarer Rhythmusfehler.",
+   "fix_praezisiert": "karte18_objekte.py: Diese fünf Bäume mit n=4 setzen, also P.setzen(GRUEN, 69, 88, n=4, ...), dann (85,88), (117,88), (20,48) und (44,48), jeweils mit n=4. Das ergibt cx 1136/1392/1904/352/736, genau mittig. Ausnahme von 1b wie bei den Achsen (Rhythmus geht vor), im Kommentar vermerken."
+  },
+  "regeln-20": {
+   "id": "regeln-20",
+   "echt": true,
+   "begruendung": "Bestätigt (4x-Ausschnitt 37-64, 66-73). Hydrant #173, Müllcontainer #174 und Mülleimer #167 enden mit dem Fuß bei y=1135, direkt auf der Dach-Oberkante der Lagerhallen (y=1136), pixelgenau 1 px Abstand. Sie wirken, als stünden sie auf der Dachkante. Das verletzt die 2-px-Regel gegenüber dem Gebäude. Am vorgeschlagenen Fix ist eine Stelle falsch: Den Container eine Reihe höher auf (51,69) zu setzen geht nicht, dort liegt die Türsperre der Bürotür (50/51,68 sperrt die Spalten 49..52 in den Reihen 68-69). Er stünde dann vor der Tür.",
+   "fix_praezisiert": "Hydrant (40,70) -> (40,69) und Mülleimer (60,70) -> (60,69), beide auf 'g'. Den Container karte02/klein/31 nicht nach (51,69), sondern nach (54,69) setzen: x≈865..894, y 1092..1119, außerhalb der Türsperre 49..52, 16 px über dem Shed-Dach. Danach mit 2 px Abstand gegen Laterne 38/69 und die Bürofassade (Unterkante y=1087) prüfen."
+  },
+  "regeln-21": {
+   "id": "regeln-21",
+   "echt": true,
+   "begruendung": "Nachgemessen. Linke Platzlaternen x 1504..1518 bzw. 1376..1390, rechte 1744..1758 bzw. 1872..1886. Der exakte Spiegel wäre 1745 bzw. 1873, rechts liegt also 1 px zu wenig. Ursache ist round(x.5) (Banker's Rounding) bei der 15 px breiten Laterne. Die Windrose ist mit 49 px um Pixel 1632 gezeichnet (Mitte 1632,5 statt Achsgrenze 1632,0). Das ist nur ein halbes Pixel und bei einem ungeraden Durchmesser nicht anders lösbar. Echter, aber nur pixelgenau sichtbarer Befund; für die Symmetrie zählt vor allem der 1-px-Laternenfehler.",
+   "fix_praezisiert": "In Platz.setzen bzw. bei den Paaren das rechte x direkt spiegeln: x_rechts = 2*A*T - x_links - sprite_breite (Laternen 1745/1873, gilt genauso für Fahnen, Absperrungen und Poller). Kompass optional auf geraden Durchmesser umstellen: np.mgrid[-24:24, -24:24] + 0.5 für die Distanz, Fläche cx-24..cx+23, Kern a[cy-2:cy+2, cx-2:cx+2], Glanzpunkt a[cy-2:cy, cx-2:cx], Spitzen symmetrisch um die Pixelgrenze cx-1/cx."
+  },
+  "regeln-22": {
+   "id": "regeln-22",
+   "echt": true,
+   "begruendung": "Bestätigt (4x-Ausschnitt 60-80, 15-25). Der ostwärts fahrende Bus #216 (x 1137..1199) steht auf 71-74, hinter Laterne 70 und 1,3 Kacheln östlich am Wartehäuschen (66-69) vorbei; das Haltestellenschild steht auf 65. Seine Türen (Sprite-relativ 15-22 und 34-40 px) liegen bei x≈1152-1176, vor der Bürofassade und nicht an der Haltestelle. In der Vorlage steht der Bus direkt vor dem Häuschen. Der vorgeschlagene Fix x≈1057 ist knapp: Abstand zur Laterne 2 px, und das 40 px hohe Bus-Sprite überdeckt bei Fuß Reihe 21 zwangsläufig den Fuß des Häuschens um 7 px. Die Überlappungsprüfung würde die Position also ablehnen.",
+   "fix_praezisiert": "Bus nach x=1049 (cx 1080, Fuß Reihe 21, gespiegelt): Front bei 1110, 10 px Abstand zur Laterne 70. Beide Türen liegen dann bei x≈1064-1071 und 1083-1089 genau vor dem Häuschen (1058..1117). Die 7 px Überdeckung des Bus-Dachs über dem Häuschen-Fuß ist eine gewollte Verdeckung (der Bus steht davor, sein Fuß liegt tiefer). Den Bus daher mit begleiter=True setzen und das im Code als gewollt markieren. Nebenbei: Das Bus-Sprite k18-autos-12 zeigt die Front als eigene Fläche (3/4-Ansicht) und sollte mit der Seitenansicht der Autos abgeglichen werden."
+  },
+  "licht-1": {
+   "id": "licht-1",
+   "echt": true,
+   "begruendung": "Geprüft und bestätigt, 3-4x vergrößert (Ausschnitte e_links2, e_rechts, e_rechts2, e_meer, e_meer2, nebel_links). Harte rechteckige Stufen genau an den Kachelkanten bei (3,20-24) (Kasten mit senkrechter Kante bei x=3 und waagerechten Kanten bei y=20/25), (4,25-28), (120-125,18-19), (124-125,54-63) mit Kasten (124-127,60-63) und am Meer (57-59,103), (60-65,104) sowie (9-11,101-104). Aus dem Code nachgerechnet: Die Nebel-Deckkraft auf '.' liegt bei 0,566 bis 1,0 (Mittel 0,81), weil dichte*schwade auch die Deckkraft steuert. Am Landrand ist die Deckkraft kleiner als 1, deshalb schlägt der dunkle Asphalt bzw. das Wasser durch, und die helle 'nebel'-Kachel daneben bildet die Stufe. Die Vorlage hat dagegen einen deckenden Nebel mit runden Ausbuchtungen und 1 px Kontur.",
+   "fix_praezisiert": "In tools/karte18_bauen.py nebel(): (1) Deckkraft und Farbe trennen: s_ = dichte (ohne schwade); n1/n2 nur in 'farbe'. (2) dichte neu berechnen: auf allen '.'-Pixeln 1,0. Auf Land nur ein schmaler Saum: d = Abstand in px zum nächsten '.'-Pixel (ohne scipy, z. B. Landmaske 8x mit ImageFilter.MinFilter(3) erodieren und mitzählen), dichte_land = clip(1 - (d - b)/6, 0, 1), dabei b = 0..4 px wolkige Ausbuchtung aus n1. Ab etwa 8 px im Land ist der Nebel 0. Damit ist die Deckkraft an der Kachelkante beidseitig etwa 1, und die Kante wird rund statt kachelgerade. (3) Wie in der Vorlage eine 1 px dunklere Nebelkontur (etwa #7e7898) auf der Isolinie dichte=0,5. (4) Danach (3,20-24), (4,25-40), (3-4,42-53), (4-6,56-60), (120-125,18-19), (123-127,54-66), (126-131,78-79), (9-70,101-105) und das Kaiende (2-9,100) 4x vergrößert im Standbild und in 3 Animationsbildern prüfen."
+  },
+  "licht-2": {
+   "id": "licht-2",
+   "echt": true,
+   "begruendung": "Nachgemessen: Im Rauschfeld n1 (Periode 64) springt der Wert an den Spalten x=64k im Mittel um 41,8 gegenüber 4,5 an den übrigen Spalten (n2, Periode 32: 53,2 gegenüber 8,7). In der fertigen terrain.png (unterer Nebel, y 1700-1792) beträgt der Sprung an x=64k 5,8 Graustufen gegenüber 0,6, also etwa das Zehnfache. Im Bild sind senkrechte Tapetenstreifen alle 4 Kacheln zu sehen (z. B. bei x=126/130/134 in (126-135,14-22) und im Meeresnebel (0-20,104-111)). Ursache: Die angehängte Wrap-Spalte wird mit auf 80 px skaliert, deshalb liegt die Periode nicht bei 64. Im Fix des Befunds steckt aber ein Widerspruch: Bei nur 4 Bildern muss eine reine Verschiebung pro Bild Periode/4 betragen. 'Periode 512' plus '4-8 px je Bild' ist so nicht nahtlos.",
+   "fix_praezisiert": "nebel_feld() kachelbar machen: n = rs.rand(rows, k); n = np.concatenate([n[:, -2:], n, n[:, :2]], 1); bikubisch auf ((k+4)*g, Hh+2g) skalieren und [:, 2g:2g+periode] schneiden. Periode = volle Kartenbreite W=2176 (n1 mit g=16, n2 mit g=8). Dann ist auch die Naht von np.roll am Kartenrand unsichtbar, und es gibt keine Wiederholung alle 4 Kacheln. Für langsamen Zug in 4 Bildern mit Überblendschleife arbeiten: N(f) = (1-f/4)*roll(n, v*f) + (f/4)*roll(n, v*(f-4)), mit v = 6 px (n1) bzw. 3 px (n2). Bei f=4 ergibt sich wieder N(0), die Schleife ist also nahtlos. Danach 3 Animationsbilder auf Streifen prüfen."
+  },
+  "licht-3": {
+   "id": "licht-3",
+   "echt": true,
+   "begruendung": "Mit einem Frame-Diff aus 4 selbst gerenderten Bildern bestätigt (reklame_diff.png). Es pulsieren die Markisen-Oberbänder in den Reihen 14-15 bei den Läden (4-9), (22-27), (28-33), (34-39) und (40-45), bei (16-21) nur teilweise (92 px). Nicht animiert sind die grüne Markise (10-15), das weiße Dachschild von Laden 3 bei (17-19,12) und das Apothekenkreuz bei (15,14) (im Befund steht 14,14). Ursache ist die Zone yy 44-54 in reklame(), denn das sind Stoffmarkisen. Das weiße Schild fällt wegen der Bedingung mx-mn>60 heraus. Das widerspricht 'Leuchten nur bei echten Lichtquellen'.",
+   "fix_praezisiert": "reklame() in tools/karte18_bauen.py: Zone nur noch yy < 17 (Dachschilder), die Bedingung (yy>=44)&(yy<=54) entfällt. Zusätzlich feste Leuchtrechtecke in Sprite-Koordinaten von sauber/gebaeude-laeden.png ohne Sättigungsbedingung (nur a>0 & mx>150): weißes Schild Laden 3 x 220-258, y 2-11; Apothekenkreuz x 178-190, y 35-47. Jedes Haus behält seinen eigenen Takt. Markisen, Fenster und Wände bleiben unverändert. Danach per Frame-Diff prüfen, dass in den Reihen 14-15 kein Pixel mehr pulsiert."
+  },
+  "licht-4": {
+   "id": "licht-4",
+   "echt": true,
+   "begruendung": "Bestätigt (ampel.png, ampel_sprite.png): Im Sprite sauber/karte10-banner-13.png leuchten Rot, Gelb und Grün voll. Im Frame-Diff pulsieren alle drei Lampen gemeinsam an (30-31,23-26) und (37-38,23-26), ebenso an (37-38,38-41) und (30-31,51-54). Die Fußgängerampel (26,25-26) zeigt dagegen nur Rot. Das ist physikalisch unmöglich. In tools/karte04_bauen.py gibt es mit ampel_schalten() schon eine passende Maskenlogik (rot/gelb/grün), die hier nicht benutzt wird.",
+   "fix_praezisiert": "Eine eigene Variante sauber/ampel18-gruen.png erzeugen, mit den Masken aus k4.ampel_schalten: Rot und Gelb auf RGB*0,35, Glanzpixel entfernen, Grün bleibt. Alle vier Kfz-Ampeln darauf umstellen, sodass die Ost-West-Straßen Grün haben. Das passt zur Fußgängerampel (26,25-26), die am Zebrastreifen über die waagerechte Straße Rot zeigt. Optional jede Kreuzung für sich stimmig schalten (obere Kreuzung Grün, mittlere Rot), aber an einer Kreuzung nie gemischt. leuchten18 lässt dann automatisch nur die helle Lampe pulsieren, weil die abgedunkelten unter mx>170 fallen. Gilt für Standbild und alle 4 Bilder."
+  },
+  "licht-5": {
+   "id": "licht-5",
+   "echt": true,
+   "begruendung": "Bestätigt (lk1.png, lk2.png): An (22,19) und (90/96,35) bleibt nur ein schwacher, verwischter Schein von etwa 1,5 Kacheln. In der Vorlage nachgemessen (Laterne bei 24,19): Boden (104,114,132), äußerer Ring (142,141,135), innerer Ring (164,158,136). Mit der Lichtfarbe (250,214,150) ergibt das eine Deckkraft von 0,26 bzw. 0,41, also klar gestufte Ellipsen von etwa 44x26 px. Im Code: 0,34*(1-d)^1,4 mit Radius 22x10, also nach außen schnell verlaufend.",
+   "fix_praezisiert": "lichtkegel(): Statt des Verlaufs zwei harte Ellipsen um (cx, fuss-1): außen rx=22, ry=12 mit Deckkraft 0,26; innen rx=13, ry=7 mit 0,41; Farbe (250,214,150), jeweils mal k_ (Atmen 0,94/1,0/1,06/1,0). Nur auf Pixel mit lvl==1 zeichnen (nicht auf Hecke/Mittelstreifen lvl 9, Wasser, Terrassenfront). Danach 3 Laternen 4x vergrößert mit der Vorlage vergleichen."
+  },
+  "licht-6": {
+   "id": "licht-6",
+   "echt": true,
+   "begruendung": "Bestätigt (e_steg.png). Aus dem Code die Nebel-Deckkraft je Kachel nachgerechnet: Stegreihe 106 liegt bei 0,41 bis 0,72 (104:0,56, 105:0,51, 106:0,43, 107:0,41, 108:0,41, 109:0,72), Reihe 105 bei 0,02 bis 0,13. 95 begehbare Kacheln haben mehr als 50 % Nebel, 322 mehr als 30 %. Die Poller (104-105,104-105) und (108-109,104-105) und der Rettungsring (106-107,105-106) werden nach dem Nebel gezeichnet und stehen scharf auf vernebelten Planken. Außerdem liegen die Stegfront und die Pfähle (Reihe 107, Y1..Y1+10) auf '.'-Kacheln und verschwinden im Nebel. In der Vorlage ist der ganze Steg samt Front frei.",
+   "fix_praezisiert": "Zusammen mit licht-1 beheben: Der Nebelsaum liegt höchstens 6-8 px im Land, so bleibt die äußerste begehbare Reihe zu über 75 % frei. Zusätzlich die Stegfront-Pixel (X0..X1, Y1..Y1+10 aus steg()) und die Kaimauerfront in die Landmaske für nebel() aufnehmen, damit sie nicht vernebelt werden. Danach an jedem Objektfuß in der Randzone die Nebel-Deckkraft prüfen: Liegt sie über 0,1, das Objekt eine Kachel nach innen setzen oder mit der Fußdichte mitvernebeln (Nebelmaske nach den niedrigen Objekten anwenden). Prüfen an (104-109,104-107), (3,20-24), (4-7,99), (123-125,54-66)."
+  },
+  "licht-7": {
+   "id": "licht-7",
+   "echt": true,
+   "begruendung": "Bestätigt (spiel.png): Schaukel (56-59,7-10), Rutsche (60-61,9-12) und Wippe (48-51,15-16) haben reines Spielzeug-Rot, -Blau und -Gelb (mittlere Sättigung 0,48 bis 0,70, S90 0,74). Die Vorlage zeigt an derselben Stelle gedämpftes Lachsrot und Blassblau im Abendton. Sandkasten 'd' nachgemessen: Karte (161,138,100), Vorlage (112,106,85). In der Vorlage ist er graubraun mit dunklen Körnern und deutlichem Holzrahmen, auf der Karte flach warm-hellbraun mit nur 1 px Rahmen. Unter derselben Dämmerung und demselben Nebel wirken diese Objekte wie bei Tageslicht beleuchtet, Licht und Stimmung passen also nicht zusammen.",
+   "fix_praezisiert": "sauber/karte10-spielplatz-00/01/02.png in K18-Varianten umfärben: Sättigung x0,6, Helligkeit x0,85, Farbton etwa 8-10° Richtung Violett (Rot etwa #c06a62, Blau etwa #6a84b0, Gelb etwa #b8a468). Kachel 'd' (assets/karte18/basis/d_*.png): Grundton #706a56, Körner #4e4a3c. Rahmen in bauen() von #8a6a44 auf 2 px #4a3a2a mit 1 px Lichtkante #6a5a44 oben und links."
+  },
+  "licht-8": {
+   "id": "licht-8",
+   "echt": true,
+   "begruendung": "Bestätigt (uhr2.png, spiel.png): Die Uhr sauber/karte10-banner-06.png bei (56-58,14-17) und (16-17,52-55) ist eine goldene Spielzeuguhr: 35 % der Pixel haben einen Max-Kanal über 0,9, S90 0,76, das Zifferblatt ist reines 255-Weiß. Sie ist das hellste Objekt der Umgebung und deutlich größer und verzierter als die schlichte graue Mastuhr der Vorlage bei (17,55-57). Eine Uhr ist keine Lichtquelle (CLAUDE.md). Die Wiederverwendung an sich ist erlaubt (Regel 3), deshalb ist Umfärben besser als Austauschen.",
+   "fix_praezisiert": "Eine K18-Variante von sauber/karte10-banner-06.png anlegen: Goldtöne auf eine Metallrampe #3a3e4a / #5a5e6c / #8a8e9a, Zifferblatt von 255-Weiß auf #b8b4c4, Zeiger und Ziffern #2a2c36. Kein Glanz, keine Animation. Wer näher an der Vorlage sein will, setzt einen schlichten grauen Mast mit rundem Kopf von etwa 14 px. Beide Plätze bleiben."
+  },
+  "licht-9": {
+   "id": "licht-9",
+   "echt": true,
+   "begruendung": "Bestätigt (autos.png, nebel_links.png): sauber/k18-autos-00(_m).png und -06.png haben großflächig reines 255-Weiß (28 % bzw. 39 % der Pixel mit V>0,9) auf (5-8,20-21), (69-72,84-85), (41-44,91-92) und auf dem Parkplatz (42-44,29-31), (51-53,29-31), (57-59,34-37), (34-36,31-34). Damit sind sie heller als die Laternenköpfe und die Zebrastreifen. In der Vorlage sind die Autos gedämpft (Creme, Graublau). Bei Dämmerung und Nebel ist eine unbeleuchtete Karosserie nicht heller als die Lichtquellen.",
+   "fix_praezisiert": "In den K18-Autosprites 00, 00_m und 06 die Karosserie-Lichter begrenzen: Pixel mit V>0,8 und S<0,15 auf die Rampe #c8c8d4 (höchstens) / #a8a8b8 / #7a7a90 abbilden, Schatten leicht ins Violett (#5a5a74). Ausgenommen sind Scheinwerfer und Rücklichter (gelbe bzw. rote Pixel), die hell bleiben."
+  },
+  "licht-10": {
+   "id": "licht-10",
+   "echt": true,
+   "begruendung": "Per Frame-Diff bestätigt: Koban k18/frontal/08 (Sprite bei 418,1319) mit roten Rundlampen bei (26,83) und (29,83), Geldautomat k18/strasse/40 bei (61,25-26) und die Türlampen der Lagerhallen bei (48,77) (lager_rolltor) und (60,77) (lager_shed) haben 0 animierte Pixel. Die Automaten derselben Karte pulsieren, das Bild ist also uneinheitlich. Das verstößt gegen 'Alles mit Leuchten wird animiert'. Die Downlights unter dem Vordach von buero_mitte (49-51,66) sind nur 1-2 px große Punkte, hier ist die Animation optional.",
+   "fix_praezisiert": "In LEUCHTEN (tools/karte18_objekte.py) 'k18/frontal/08' und 'k18/strasse/40' eintragen. Nicht die allgemeine leuchten18-Maske verwenden, denn sie erfasst beim Koban auch Plakat und Emblem. Stattdessen feste Rechtecke: Koban-Lampen im Sprite x 4-15 und 48-55, y 12-19; Geldautomat nur das Bildschirmrechteck. Bei den Lagerhallen eine Teil-Animation nur auf den Lampenrechtecken (Karten-px 772-779/1242-1247 und 964-971/1242-1247) mit dem laterne18-Faktor. Nicht die laterne18-Farbmaske auf das ganze Gebäude anwenden, sonst pulsieren die gelben Fenster mit. Vor beiden Türen einen kleinen Lichtkreis von etwa 10x5 px mit Deckkraft 0,25 auf Reihe 79."
+  },
+  "licht-11": {
+   "id": "licht-11",
+   "echt": true,
+   "begruendung": "Bestätigt: sauber/karte02-abgeleitet-laterne.png (15x58) hat in den Zeilen 55-57 insgesamt 19 grüne Büschelpixel (#5fbb58 x7, #45a052 x6, #93db70 x2, #78cc60 x2, #2e7a4c x2). In lk1.png, lk2.png, uhr2.png und atm.png sind sie an jeder Laterne auf Pflaster und Gehweg als grellgrüne Fremdpixel zu sehen, z. B. (22,19), (64,26), (90,35), (12,55). Gras wächst nicht auf versiegeltem Boden.",
+   "fix_praezisiert": "In sauber/karte02-abgeleitet-laterne.png alle grünen Pixel der Zeilen 55-57 entfernen: außen (Spalten 0-1 und 13-14) transparent, innen (Spalten 2-12) im Grau der Fußplatte (#4a4e5a / #3a3e4a). Den Kontaktschatten liefert objekte_zeichnen. Für Laternen auf Rasenkacheln 'n' (falls es welche gibt) eine eigene Variante mit 2-3 dunklen Büschelpixeln aus HECKE18 (#2e4632, #3a563c)."
+  },
+  "licht-12": {
+   "id": "licht-12",
+   "echt": true,
+   "begruendung": "Nachgemessen (Meer 40-90,101-103): Die beste Verschiebung der Wellenstriche ist Bild 0 nach 1 +4 px, 1 nach 2 +4 px, 2 nach 3 +4 px, 3 nach 0 aber -12 px. Bei jeder Schleife springt also die ganze Wasserfläche zurück. Im Code ist die Modulo-Zeile mit 'if False' abgeschaltet: X = (X - x) % 16 + x if False else X. Die Striche liegen zufällig, deshalb stimmt der Kommentar 'Periode 16 px nahtlos' nicht. Betroffen sind Meer und Kanal.",
+   "fix_praezisiert": "wasser_wellen(): Je Strich die Zellgrenze cx0 = int(xs[i])*16 merken und X = cx0 + ((x - cx0) + k_ + 4*f) % 16 setzen. Damit ist Bild 4 gleich Bild 0, die Schleife ist nahtlos. Alternativ und näher an der Vorlage (regelmäßige Strichreihen): Striche je 4-px-Wellenreihe 16-px-periodisch mit reihenabhängiger Phase anordnen und die ganze Ebene um 4*f px verschieben. Oder die Striche nur 1 px wippen bzw. auf- und abblenden lassen. Danach Bild 3 gegen Bild 0 am Meer (9-131,101-104) und am Kanal (126-131,84-99) prüfen."
+  },
+  "licht-13": {
+   "id": "licht-13",
+   "echt": true,
+   "begruendung": "Bestätigt (tp1.png, tpv.png, tpv2.png): teleporter() verändert nur die Helligkeit (0,75/0,9/1,05/0,9), im Frame-Diff ändern sich Ring und Kern gleichmäßig, nichts dreht sich. CLAUDE.md verlangt aber 'Portale drehen ihren Wirbel'. Die Vorlage hat an jedem Ring kleine hellblaue Punkte auf der Fassung. Der Fix im Befund geht so nicht: 8 Punkte, die je Bild um 45° weiterrücken, ergeben 4 identische Bilder, also keine sichtbare Drehung.",
+   "fix_praezisiert": "In teleporter() 8 Punktplätze auf der Fassung setzen (Radius etwa 6,5 px, Winkel 22,5° + k*45°, wie in der Vorlage). Helligkeitsmuster je Platz [hell #8ad0ff, mittel #4a90d0, dunkel #2a5a90, dunkel #2a5a90], zweimal um den Ring. Je Bild das Muster um einen Platz (45°) weiterschieben. Nach 4 Bildern sind es 180°, also genau die Musterperiode, und die Lauflicht-Drehung ist nahtlos. Optional im Kern eine 2-armige Spirale (1 px, #d0b0ff), je Bild um 45° gedreht, wegen der 180°-Symmetrie ebenfalls nahtlos. Der Helligkeitspuls darf bleiben. Gilt für (8-10,85-86) und (132-133,40-43)."
+  },
+  "licht-14": {
+   "id": "licht-14",
+   "echt": true,
+   "begruendung": "Bestätigt (halle.png) und im Code belegt: halle() in tools/karte18_gebaeude.py füllt in der Schleife 'Reflexe / Licht innen' 22 % der Scheiben per rs.random() mit #e8c070. Die gelben Scheiben liegen deshalb zufällig und nicht spiegelsymmetrisch zur Achse x=102 in der Vorhangfassade (85-119,20-27). Eine davon schaut unter dem Eingangsvordach bei etwa (104-105,25) als Streifen hervor. Die Vorlage zeigt durchgehend spiegelndes blaues Glas mit diagonalen Lichtkanten. Einzelne erleuchtete Scheiben passen nicht zu einer einzigen hohen Halle und brechen die Symmetrie des Bauwerks.",
+   "fix_praezisiert": "In halle() die Zufallsschleife ersetzen: keine #e8c070-Scheiben. Jede Scheibe (16x24 zwischen den Sprossen): Grund #2c3a58, obere Hälfte #34466c, in jeder zweiten Scheibe zwei parallele 1-px-Diagonalen von unten links nach oben rechts (#6a86b8 und #4e6894), x gespiegelt an mx (x' = 2*mx - x), damit die Fassade symmetrisch ist. Soll die Halle beleuchtet wirken, nur ein durchgehendes warmes Band in der untersten Glasreihe (Reihen 25-27) über die ganze Breite, nicht scheibenweise."
+  },
+  "licht-15": {
+   "id": "licht-15",
+   "echt": true,
+   "begruendung": "Bestätigt (schatten_halle.png, 5x): Rechts der Halle bei x=120 liegt ein 12 px breiter dunkler Streifen mit harter waagerechter Oberkante bei Reihe 22 (Y1 - 6*T = 352 px) bis Reihe 28, darunter eine Stufe. Daneben liegt ab Reihe 18 schon Bodenpflaster an der Hallenwand, das unbeschattet bleibt. Ursache: hoch = min(6*T, ...) in gebaeude_schatten(). Der Schatten wirkt wie ein aufgemaltes Rechteck.",
+   "fix_praezisiert": "gebaeude_schatten(): hoch = (y1 - y0 + 1) * T, die Begrenzung auf 6 Kacheln entfällt. Die Maske m[lvl != 1] = 0 lässt den Schatten dann automatisch an der ersten Bodenreihe beginnen (bei der Halle Reihe 18, darüber Nebel). An der Oberkante die ersten 4 px weich von 0,15 auf 0,3 auslaufen lassen. Unten die Schräge (ende = X1 + 12 - (y - Y1)) bis X1 weiterführen, damit bei Reihe 28 eine saubere 45°-Fase statt einer Stufe entsteht. Danach die anderen Gebäude mit Schatten (buero_oben, buero_mitte, lager_*) auf neue Kanten prüfen."
+  },
+  "licht-16": {
+   "id": "licht-16",
+   "echt": true,
+   "begruendung": "Bestätigt (park.png, parkv1-3.png): Zwischen Reihe 56 und 96 westlich der Querstraße stehen nur 2 Laternen mit Fuß (30,66) und (14,95). In der Vorlage sind es 7: (31,61-63) und (31,69-71) mit Lichtkreis, (17,70-73), (29,74-77), (13,86-88) mit Lichtkreis, (28,86-88), (30,92-94) mit Lichtkreis. Korrektur zum Befund: (17,55-57) ist in der Vorlage die Mastuhr, keine Laterne. Es fehlen also 7, nicht 8, und nur 4 davon haben in der Vorlage einen Lichtkreis.",
+   "fix_praezisiert": "Laternen (sauber/karte02-abgeleitet-laterne.png, anim laterne18) mit dem Fuß auf Pflaster bzw. Gehweg setzen, zentriert nach Regel 1b: Fuß (31,63) statt (30,66), dazu (31,71), (17,73), (29,77), (13,88), (28,88) und (30,94). Bei Konflikten um eine Kachel ausweichen, statt zu überlappen: Ginkgo (29-31,70-73) und Koban (26-30,82-86), dann z. B. (28,89) unter dem Koban. Danach die Laterne (14,95) prüfen, ob sie gegenüber (13,88) doppelt ist. Lichtkreis wie bei licht-5."
+  },
+  "licht-17": {
+   "id": "licht-17",
+   "echt": true,
+   "begruendung": "Bestätigt (markt.png): Der Marktstand sauber/karte02-ortho-09.png bei (16-20,78-82) hat eine grelle orange-weiße Streifenmarkise (S90 0,82, Weiß bis #f2ecee) und ist das grellste Objekt im unteren linken Platz. Die Vorlage zeigt an dieser Stelle ein gedämpftes dunkelblaues Zeltdach. Das ist ein kleiner Befund, aber dieselbe Logik wie bei licht-7 und licht-9.",
+   "fix_praezisiert": "Eine K18-Variante von karte02-ortho-09.png anlegen: Orange auf gedämpftes Dunkelblau (#3a5a8a / #2a4470, wie in der Vorlage) oder entsättigtes Rotviolett (#8a5a6a), weiße Streifen auf #b8b4c8, Holz um etwa 15 % abdunkeln. Den Platz (16,78) beibehalten."
+  },
+  "vorlage-1": {
+   "id": "vorlage-1",
+   "echt": true,
+   "begruendung": "Geprüft (review/verify/v1.png, v1b.png, sand.png). In der Vorlage liegt ein Pflasterstreifen auf y 6 (x 48-52), darunter Rasen y 7-9 mit Rutsche x 48-50, ein Sandkasten mit 3-4 px dunklem Holzrahmen auf x 47-52/y 10-13 und Pflaster y 14-17 mit der Wippe x 47-49/y 15. Der rechte Rasen reicht von x 56-61/y 6 bis y 13, mit Schaukel x 57-60/y 8-10 und Kletterkuppel x 57-60/y 12-13. In der Karte liegt Rasen auf y 6-8 mit beiden Bäumen, Sand auf y 9-12 und ein zusätzlicher Rasen x 47-52/y 13-16, auf dem die Wippe steht. Die Rutsche steht bei x 60-61 (Fuß 12), die Kuppel fehlt, und der rechte Rasen endet bei y 12. Eine kleine Korrektur zum Befund: Ganz ohne Rahmen ist der Sand nicht, er hat eine Einfassung aus 1 px #8a6a44 (karte18_bauen.py Z. 562). Sie ist aber zu dünn, um als Holzrahmen lesbar zu sein.",
+   "fix_praezisiert": "layout.json: In Reihe 6 x 47-52 auf 'g' setzen, Reihen 7-9 x 47-52 auf 'n', Reihen 10-13 x 47-52 auf 'd' und Reihen 14-16 x 47-52 auf 'g'. Reihe 13 x 56-61 auf 'n' setzen, damit der rechte Rasen wie in der Vorlage bis y 13 reicht. In karte18_bauen.py Z. 562 den Rahmen auf 3 px verbreitern: 2 px dunkles Holz (#5e3e24) und 1 px helle Kante (#9a7448) oben und links, Licht von oben links. Die Wippe karte10-spielplatz-02 auf px-x 753 (x 47) stellen, Fuß y 15. Als Rutsche besser die flache karte10-klein2-24 (2×2) auf x 48-49, Fuß y 9. Der hohe Frontal-Sprite spielplatz-00 (1,6×3,8 Kacheln) würde in die Krone des neuen NW-Baums (vorlage-2) ragen; wenn er bleiben soll, auf x 49-50 setzen, mindestens 2 px rechts vom Baum. Eine Kletterkuppel neu erzeugen (PixelLab, frontal) und auf x 57-60, Fuß y 13 setzen; die Schaukel endet bei y 11,0, der Abstand reicht. Voraussetzung ist vorlage-2: beide Bäume kommen aus dem linken Rasen heraus."
+  },
+  "vorlage-2": {
+   "id": "vorlage-2",
+   "echt": true,
+   "begruendung": "Bestätigt (v1b.png gegen Karte). Die Vorlage zeigt einen grünen Baum an der NW-Ecke (x 46-48, Fuß 7), einen Ginkgo an der NO-Ecke (x 59-61, Fuß 6) und eine Hecke x 46/y 8-16. Dazu kommen eine Laterne x 61/y 11-13, ein Trinkbrunnen x 52/y 17, eine Bank x 58-59/y 17 und eine Taube x 60/y 15. In der Karte stehen beide Bäume nebeneinander bei x 47-52/y 6-8, die NO-Ecke ist leer, x 46 ist Gehweg 'g', und Hecke, Laterne, Brunnen und Bank fehlen. Ein Haken im vorgeschlagenen Fix: Auf x 58 steht schon die Straßenlaterne #77 (x 58,0-58,94, y 16,4-20). Eine Bank bei x 58-59, Fuß 17, würde sie überlappen.",
+   "fix_praezisiert": "Den Baum karte01-baeume-00 auf px-x 738 setzen (x 46,12-48,88), Fuß y 7, Sprite y 5,31-8,0. Den Ginkgo-Platzhalter auf x 59,12-61,88, Fuß y 6; Reihe 6 x 59-61 ist 'n', der Abstand zur Schaukel (ab y 7,88) beträgt 14 px. layout.json: x 46, Reihen 8-16 auf 'm' (Hecke mit Randstein, nicht begehbar); der Baumfuß bei x 46/y 7 bleibt auf 'g'. Eine Laterne bei x 61, Fuß y 13, auf px-x 975 setzen, damit 2 px Abstand zu buero_oben (ab px 992) bleiben; die Rutsche ist dann dort schon weg (vorlage-1). Die Bank karte10-klein-38 nicht auf x 58, sondern auf px-x ≥ 945 (x 59,1-61,0), Fuß y 17. Einen Trinkbrunnen bei x 52, Fuß y 17 (vorhandenes Objekt prüfen, sonst neu), und optional eine Taube bei x 60, Fuß y 15. Büschel an beide Baumsockel setzen. Regel 5 ist erfüllt: NW-Baum mit Hecke und Rutsche, Ginkgo mit Schaukel und Büschel."
+  },
+  "vorlage-3": {
+   "id": "vorlage-3",
+   "echt": true,
+   "begruendung": "Bestätigt (mid1.png, mid2.png). In der Vorlage steht in jedem Heckenabschnitt eine zweiarmige Mastleuchte (Mast bei x 8, 20, 44, 56, etwa 2,5 Kacheln breit, y 46-48), und der Baum steht jeweils am Ostende (x 11-13, 23-25, 47-49, 59-61). In der Karte gibt es auf dem Mittelstreifen keine Leuchte, und die Bäume stehen auf x 8,1-10,9, 20,1-22,9, 44,1-46,9 und 56,1-58,9, also auf den Leuchtenplätzen. Die verschobenen Bäume passen in die Hecken der Karte: Hecke 2 endet bei x 26, Hecke 3 bei x 49, Hecke 4 bei x 61. Im Katalog gibt es keine zweiarmige Leuchte, Regel 3b greift.",
+   "fix_praezisiert": "Die zweiarmige Leuchte aus zwei Köpfen von karte02-abgeleitet-laterne an einem T-Mast ableiten (frontal, etwa 40×46 px). Nur die Köpfe leuchten (Animation laterne18), der Mast bleibt ruhig. Mast-Mitte auf x 8, 20, 44 und 56, Sprite also etwa x 7,3-9,7, Fuß y 48. Die Bäume auf x 11,12-13,88, 23,12-25,88, 47,12-49,88 und 59,12-61,88 setzen, Fuß y 48; zur Leuchte bleiben mindestens 20 px."
+  },
+  "vorlage-4": {
+   "id": "vorlage-4",
+   "echt": true,
+   "begruendung": "Weitgehend bestätigt (plaza_v0/plaza_t0.png, bed1.png, sw.png, q.png). Auf dem West-Platz x 64-84/y 27-79 steht in der Karte keine Laterne, ebenso wenig am Ostrand x 119-125. Die Vorlagenpositionen stimmen: (70,33), (80,33), (79,38), (68,44/45), (68,52), (68,62), (79,72) und Ost x 124 mit Fuß 34, 47, 66, 76. Drei Korrekturen am Befund: (1) Bei (17,57) steht im SW-Park keine Laterne, sondern eine Uhr; die gibt es in der Karte schon (karte10-banner-06, x 16-18, Fuß 55). (2) Die Laterne x 14, Fuß 95, steht nicht „halb im Rasen“, sondern auf dem Uferpromenaden-Gehweg (Reihe 95 = 'g'). Sie gehört zur Promenadenreihe und darf nicht weg; der q-Platz hat also gar keine Laterne. (3) Einige Zielplätze kollidieren mit vorhandenen Objekten. (70,33) trifft den Kübel x 67-71/y 31-33. (31,70) trifft den Ginkgo x 29,1-31,9/y 70,3-73. (28,88) trifft das Polizeihäuschen x 26,1-29,9/y 82,4-86. Bei x 124 ist Reihe 34 Nebel, der Platz endet dort bei x 123.",
+   "fix_praezisiert": "Alles mit karte02-abgeleitet-laterne und anim laterne18. Paare spiegelsymmetrisch zu x' = 203 - x: Ost x 123 und West x 80, jeweils Fuß y 34, 47, 66 und 76. Die Kübel x 82-86 und x 118-122 haben dazu mindestens 1 Kachel Abstand. West-Einzellaternen, deren Spiegel im Nebel läge: (68, Fuß 44), (68, Fuß 52), (68, Fuß 62) und (70, Fuß 33). (70,33) erst setzen, wenn der Kübel x 67-71/y 31-33 versetzt ist (vorlage-5: Beet x 66-71/y 28-29). SW-Park: Die vorhandene Laterne (x 30, Fuß 66) auf (31, Fuß 62) versetzen; zum Ginkgo mit Fuß 58 bleiben 6 px. Neu dazu: (17, Fuß 72) und (29, Fuß 76), 6 px unter dem Ginkgo mit Fuß 72. (31,70) nur setzen, wenn der Ginkgo x 29-31 wie in der Vorlage auf Fuß 75 rückt; dann (29,76) auf x 28 verschieben. q-Platz: neu (13, Fuß 88) und (28, Fuß 88), Letztere erst nach dem Versetzen des Polizeihäuschens (vorlage-14). Die Laterne x 14/Fuß 95 bleibt stehen."
+  },
+  "vorlage-5": {
+   "id": "vorlage-5",
+   "echt": true,
+   "begruendung": "Bestätigt (plaza_v0/plaza_t0.png, bed1.png). Die Beete der Vorlage sind flache Heckenbeete mit hellem Randstein und je einem großen Baum. Gemessen: x 66-71/y 28-29, x 69-74/y 37-39, x 80-85/y 44-46, x 69-74/y 67-69, x 118-123/y 38-40, x 118-123/y 58-60, x 118-122/y 70-72 und x 121-124/y 20-23, also 8 Beete. Die Karte setzt 12 erhöhte graue Kübel von 4×2 Kacheln mit kleinem Baum. Acht davon stehen in starren Spalten x 82-85 und x 118-121 im 12-Reihen-Takt (y 39, 51, 63, 75), vier im Westen. Der Platz wirkt dadurch deutlich grauer und kleinteiliger als die Vorlage. Das Beet rechts neben der Halle fehlt (Reihen 20-23 bei x 120-124 sind 'p').",
+   "fix_praezisiert": "Die 12 gebaeude-kuebel samt Bäumen (Einträge 35-58 in platzierung.json) entfernen. Die Beete als Bodenfläche anlegen, z. B. mit Klasse 'm' über mittelstreifen(): Hecke mit Randstein, lvl 9, nicht begehbar, kein Kübelkörper, kein Kübelschatten. Positionen: West x 66-71/y 28-29, x 69-74/y 37-39, x 69-74/y 67-69. Achsnahes Paar spiegelsymmetrisch: x 80-85 und x 118-123 auf denselben Reihen (y 44-46, ein zweites Paar y 58-60). Dazu Ost x 118-122/y 70-72 und neu x 121-123/y 20-23 neben der Halle (1 Kachel Abstand zur Halle bei x 120). In jedes Beet einen Baum karte01-baeume-00 bzw. den Ginkgo-Platzhalter setzen, Fuß in der untersten Beetreihe, horizontal mittig. Insgesamt 8 Beete."
+  },
+  "vorlage-6": {
+   "id": "vorlage-6",
+   "echt": true,
+   "begruendung": "Echt, aber der Befund beschreibt die Karte zu schwach. platz_raster() zeichnet schon Bänder: 2 px, Faktor 0,82, bei x 70, 78, 86, 94, 110, 118 und y 28, 36, 44, 52 … Sie sind aber kaum von den normalen Kachelfugen zu unterscheiden (Spaltenmittel 102 gegen Fuge 97,6 bei Grundton 123) und liegen im falschen Abstand. Gemessen in der Vorlage: kräftige Bänder, etwa 4 px breit, Helligkeit etwa 0,68 (83 gegen 123). Senkrecht liegen sie bei x 70,5, 79,5, 88,5, 97,5, 106,5, 115,5 und 124,5 (9-Kachel-Takt, symmetrisch zu 102), waagerecht bei y 32,5, 40,5, 48,5, 56,5, 64,5 und 72,5 (8er-Takt). Der Achsrahmen ist schwächer (etwa 0,88) und kachelbreit. Er liegt nicht durchgehend bei x 90/113: oben ein Band y 35 (x 93-110) mit Seiten x 93 und x 110 (y 35-52), dann ein Querband y 52-53 (x 90-113) mit Seiten x 90 und x 113 (y 53-76) und ein Abschluss y 76 (x 90-113).",
+   "fix_praezisiert": "platz_raster() in karte18_bauen.py ersetzen. Hauptraster: auf Klasse 'p' 4 px breite Bänder (Pixel 6-9 der Kachel) mit Faktor etwa 0,68 (≈ #4a4560). Senkrecht in den Kachelspalten 70, 79, 88, 97, 106, 115 und 124, waagerecht in den Reihen 32, 40, 48, 56, 64 und 72. Achsrahmen als ganze Kachel mit Faktor 0,88: Reihe 35 für x 93-110, Spalten 93 und 110 für y 35-52, Reihen 52-53 für x 90-113, Spalten 90 und 113 für y 53-76, Reihe 76 für x 90-113. Alles nur auf 'p' (nicht auf 'c'), Paare jeweils x + x' = 203. Statisch, keine Animation."
+  },
+  "vorlage-7": {
+   "id": "vorlage-7",
+   "echt": true,
+   "begruendung": "Bestätigt (halle.png). In der Vorlage sieht man die Dachfläche der Halle von leicht oben: helle Attika, abgeschrägte Ecken x 84-85 und x 118-119, Plattenraster und drei Dachlüfter. Gemessen liegen sie bei x 88, 101 und 116, y 13-15, nicht ganz bei 87/100/116. Die Pyramiden sind zweistufig: oberer Block y 4-7, Gesims y 8, Trichter y 8-17. In der Karte ist y 12-19 eine flache graue Wand mit zwei dunklen Schlitzen (x 84-87 und x 114-117, y 13), und die Pyramiden sind einstufige Trapeze (y 4-13). Das verstößt gegen die Regel „Gebäude mit Dach“.",
+   "fix_praezisiert": "In karte18_gebaeude.py (halle) die Fläche y 12-19 als Dachaufsicht zeichnen: Attika-Kante hell oben und seitlich, Ecken bei x 84-85 und x 118-119 abgeschrägt, Platten in Draufsicht, Dachlüfter bei x 88, 101 und 116 auf y 13-15. Die beiden Fensterschlitze entfernen. Jede Pyramide zweistufig ausführen: oberer Block y 4-7, bei y 8 ein waagerechtes Gesims etwa 1 px breiter als der Block, darunter der Trichter bis y 17 auf die vorhandenen Fensterpfosten. Licht von oben links: linke Flächen hell, rechte im Schatten."
+  },
+  "vorlage-8": {
+   "id": "vorlage-8",
+   "echt": true,
+   "begruendung": "Bestätigt (terr.png, halle.png), allerdings mit falschen Reihen im Befund. Vorlage: Die Terrasse reicht von x 87 bis 116 (x 84-86 und 117-119 bleiben Platzbelag) und trägt auf y 28-31 Schachbrett. Die Front ist eine 2 Reihen hohe Mauer auf y 32-33 (nicht 31-32) mit Lüftungsschlitzen in Reihe 33, die Treppe x 96-107 liegt ebenfalls auf y 32-33. Dazu je drei Absperrgitter 2×1 auf y 31 (x 88-93 und x 110-115) und Laternen auf der Terrasse bei x 92 und x 111, Fuß y 30. Karte: 't' über x 84-119 (y 28-32), einfarbiger Belag, Front nur Reihe 33 mit 16 px, Treppe 1 Reihe. Dazu je ein Absperrbock karte10-banner-04 von 3,4×3 Kacheln. Die Laternen stehen bei x 86/94/109/117, Fuß 36, also unterhalb der Terrasse.",
+   "fix_praezisiert": "layout.json: 't' nur noch auf x 87-116, Reihen 28-31. x 84-86 und x 117-119 in den Reihen 28-33 auf 'p'. treppe_terrasse auf [96, 107, 32] setzen. In terrasse() die Front auf 32 px Höhe bringen (Reihen 32-33), Schlitze in Reihe 33 wie in der Vorlage, Treppe x 96-107 mit 8 Stufen über die Reihen 32-33. Die Terrassenfläche im Schachbrettmuster der Klasse 'c' zeichnen. Die beiden karte10-banner-04 entfernen. Je drei kleine rot-weiße Gitter 2×1 setzen (z. B. karte02/klein/26 rot-weiß umgefärbt): x 88-89, 90-91 und 92-93 sowie spiegelbildlich x 110-111, 112-113 und 114-115, Fuß y 31, mit 2 px Abstand untereinander. Laternen bei x 92 und x 111, Fuß y 30, mindestens 2 px über den Gittern. Danach die Treppe dreimal vergrößert prüfen (Regel 2)."
+  },
+  "vorlage-9": {
+   "id": "vorlage-9",
+   "echt": true,
+   "begruendung": "Bestätigt (ufer1/ufer2/ufer3.png). In der Vorlage ist der Gehweg unter den Lagerhallen nur y 80-81 breit, der Asphalt beginnt bei y 82. Die Nordfahrbahn y 82-86 hat eine Leitlinie bei 84,5, die Südfahrbahn y 89-93 eine bei 91,5. Der Hochbahnträger y 80-83 liegt über der inneren Nordspur. In der Karte ist der Gehweg x 37-59 vier Reihen breit (y 80-83) und die Nordfahrbahn nur y 84-86 mit einer Linie bei 85,5. Die Südfahrbahn hat zwei Linien bei 90,5 und 92,0 (karte18_bauen.py Z. 136-138). Die Südautos #213, #214 und #215 (y 91,0-93,0) liegen genau auf der Linie 92,0. Nach der Änderung lägen auch die Nordautos #211 und #212 (y 84,06-86) auf der neuen Linie 84,5, und der Pfeil bei (70, 84,8) bzw. (118, 91,4) läge auf einer Linie.",
+   "fix_praezisiert": "layout.json: Reihen 82-83 für x 37-125 auf 's' setzen (Gehweg bleibt y 80-81). In markierungen(): Nordlinie bei int(84.5*T)-1, Südlinie nur noch bei int(91.5*T)-1; die Schleife (90.5, 92.0) entfällt. Pfeile versetzen: (70, 85,7) für die Nord-Außenspur und (118, 90,3) bzw. 92,7 statt 91,4. Die Nordautos #211 und #212 auf Fuß y 86 setzen (Körper etwa 84,7-86,7). Die Südautos #213, #214 und #215 entweder auf Fuß y 90 (Spur 89-91,5) oder Fuß y 93 mit Körper etwa 91,8-93,8 (Spur 91,5-94); Linksverkehr beachten, Süd fährt nach Westen. Den Lieferwagen #69 (karte02-ortho-14) auf Fuß y 81 vor das Tor der lager_rolltor setzen (Sprite etwa y 77,3-81, vor der Fassade) oder ganz entfernen; er darf nicht auf der neuen Fahrbahn y 82-83 stehen."
+  },
+  "vorlage-10": {
+   "id": "vorlage-10",
+   "echt": true,
+   "begruendung": "Teilweise bestätigt (kai.png bei 5x). Echt ist: In der Vorlage ist y 96-97 eine Holzpromenade mit Längsplanken (etwa 3-4 px Takt) und Nagelpunkten, ohne Schienen. Auf y 98,0-98,6 läuft ein Geländer mit Pfosten, darunter die Kaimauer bis 99,6 mit Algenkante. Die Karte zeichnet dort Stahlschienen (gleise(), y 96,4 und 97,4) und kein Geländer. Nicht korrekt ist die Behauptung, die Container stünden „mitten auf dem Gleis“. Ihr Fuß liegt auf dem Kaiband y 99 (Unterkante 99,94), und ihre Oberkante verdeckt die Südschiene tiefenrichtig. Sie stehen aber anders als in der Vorlage (y 95-96,8) direkt an der Wasserkante. Mit einem Geländer auf y 98 würden sie es überdecken, ebenso die Poller k18-strasse-21 und die Rettungsringe auf y 98,4-100.",
+   "fix_praezisiert": "gleise() ersetzen: Klasse 'b' (y 96-97, x 4-125) als Holzpromenade zeichnen. Braune Längsplanken, alle 4 px eine dunkle Fuge, versetzte Stoßfugen, Nagelpunkte, Oberkante hell (Licht oben links). An der Oberkante des Kais (y 98, px 0-9) ein niedriges Geländer mit hellem Handlauf und Pfosten alle 16 px über x 4-125, mit Lücke am Steg x 104-109. Die Poller #176-#181 und die Rettungsringe #136-#138 nördlich des Geländers auf die Planken stellen (Fuß y 97). Die Container auf die Promenade setzen, Fuß y 96, mit mindestens 2 px Abstand zu den Promenadenlaternen (x 14, 38, … 98). blau_1 bleibt bei x 20-25. rot_0 nach x 80,5-85,5 (zwischen den Laternen x 74 und x 86), blau_0 bei x 92-97 (zwischen x 86 und x 98); rot_0 bei x 86-91 würde die Laterne x 86 treffen."
+  },
+  "vorlage-11": {
+   "id": "vorlage-11",
+   "echt": true,
+   "begruendung": "Bestätigt (nost.png). In der Vorlage endet der Asphalt bei x 81; auf einem grauen Gehwegstück x 82-83 stehen 5 Poller (x 82, je einer pro Reihe y 20-24). In der Karte reicht 's' bis x 82, x 83 ist 'p', und es gibt keine Absperrung: Die Sackgasse geht ungesichert in den Fußgängerbereich vor der Halle über.",
+   "fix_praezisiert": "layout.json: Reihen 20-24 bei x 82 und x 83 auf 'g' setzen. Fünf gebaeude-poller auf px-x 1316 (x 82,25), Fuß y 20, 21, 22, 23 und 24. Der oberste liegt 2 px unter der Laterne #79 (x 82, Fuß 19). Kontaktschatten am Fuß."
+  },
+  "vorlage-12": {
+   "id": "vorlage-12",
+   "echt": true,
+   "begruendung": "Bestätigt (nost.png). In der Vorlage begleitet ein grauer Gehweg auf y 25-26 die Südseite der Nordstraße bis x 83; der lila Platzbelag beginnt erst bei y 27. In der Karte sind x 64-83, Reihen 25-27 schon 'p', der Platz stößt also direkt an die Bordsteinkante.",
+   "fix_praezisiert": "layout.json: Reihen 25-26 für x 64-83 von 'p' auf 'g'. Die Laternen #84 (x 64) und #85 (x 76) mit Fuß 26 sowie der Mülleimer #171 (x 77) stehen dann auf dem Gehweg. Der Bordstein zwischen 'g' und 'p' bei y 26/27 wird von bordsteine() bzw. der Klassengrenze erzeugt; prüfen, dass dort eine saubere Kante entsteht."
+  },
+  "vorlage-13": {
+   "id": "vorlage-13",
+   "echt": true,
+   "begruendung": "Bestätigt und verschärft (zug.png plus Pixelmessung). Im Render reicht der Zug von px-y 1274 bis etwa 1300 (y 79,6-81,25, etwa 26 px). Er ragt 6 px über die Trägeroberkante (px 1280) und verdeckt dabei die unteren 6 px der Poller #196, #197 und #198 (x 88, 92, 96): Bei px-x 1415 enden die Poller bei Zeile 1273, beim freien Poller x 108 erst bei 1279. Das verstößt gegen die Regel „Keine Überlappungen“ (2 px). In der Vorlage sitzt der Zug mit etwa 34 px Höhe ganz im Trägerband (y 80,4-82,5, x 88-108). Die Platzierung entsteht in karte18_bauen.py hochbahn() Z. ~411: (zx0*T, y0 + 22 - zug_sp.height). Die Zeilen 163-165 in objekte.py setzen nur den Eintrag.",
+   "fix_praezisiert": "Den Zug-Sprite auf etwa 32 px Höhe skalieren (NEAREST, Länge etwa 21 Kacheln, x 86/88-107/108). In hochbahn() so einsetzen, dass die Oberkante bei px-y ≥ 1282 liegt, also mindestens 2 px unter dem Pollerfuß bei 1279, und die Unterkante bei etwa 1314-1316 auf der Oberkante der Trägerfront (y0+32 = 1312). Damit der Zug in der Führung sitzt und nicht vor der Front schwebt, die obere Frontlippe (Zeilen y0+32 bis y0+35) nach dem Zug noch einmal über ihn zeichnen. Danach prüfen: kein Zugpixel über px 1281 und alle Poller vollständig."
+  },
+  "vorlage-14": {
+   "id": "vorlage-14",
+   "echt": true,
+   "begruendung": "Bestätigt (q.png). Die Vorlage zeigt ein Notlager: blaues Zelt x 18-21/y 80-82 mit Kiste und Truhe, Säcke x 22-23, Sandsäcke x 13-15 und x 24-26 auf y 79, ein Absperrgitter x 26-27/y 82, eine rote Feuerschale x 17/y 84, eine kleine Lampe x 20/y 84 und Bänke x 14-15/y 84 und x 22-23/y 88. Die Karte hat stattdessen den Marktstand karte02-ortho-09 (x 16,4-20,6, Fuß 82) und das Polizeihäuschen k18-frontal-08 (x 26,1-29,9, y 82,4-86). Feuerschale, Lampe und Bänke fehlen. Sandsäcke und Kisten sind vorhanden.",
+   "fix_praezisiert": "Den Marktstand #59 durch ein blaues Pavillonzelt in Frontalansicht ersetzen (Katalog: nur das türkise karte01/zelt_strand; sonst per PixelLab), x 18-21, Fuß y 82, mit Kiste und Truhe darunter. Eine Feuerschale bei x 17, Fuß y 84, mit echt züngelnden Flammen und Glut-Leuchten. Eine kleine Bodenlaterne bei x 20, Fuß y 84, mit Leuchtpuls. Bänke karte10-klein-38 bei x 14-15, Fuß 84, und x 22-23, Fuß 88. Das Polizeihäuschen #159 entfernen oder an den Platzrand x 27-29, Fuß y 80 setzen, mit 2 px Abstand zum Sandsack #61 (x 24-26). An seine Stelle das Absperrgitter x 26-27, Fuß y 82. Dadurch wird auch (28, Fuß 88) für die q-Platz-Laterne aus vorlage-4 frei."
+  },
+  "vorlage-15": {
+   "id": "vorlage-15",
+   "echt": true,
+   "begruendung": "Bestätigt (ost.png). In der Vorlage begrenzt eine helle senkrechte Kaimauer in Spalte x 126 (y 78-99) das Becken; Wasser liegt erst ab x 127, und der Pfeiler steht bei x 128-129 im Wasser. In der Karte ist x 126-131 'w': Platz, Fahrbahn, Hecke und Kaiband enden bei x 125 ohne Mauer oder Bordstein direkt im Wasser, und der Pfeiler #11 (x 126-128) steht im Wasser.",
+   "fix_praezisiert": "In layout.json oder karte18_bauen.py Spalte x 126, Reihen 78-99, als Kaimauer anlegen: helle Steinkrone mit Fugen in Draufsicht, an der Ostseite zum Wasser eine schmale dunkle Kontur mit Algenkante wie die Front bei y 99/100 (seitliche Kante nur als Kontur plus leichter Schatten). Wasser ab x 127. Fahrbahn und Mittelstreifen bei x 125 mit Bordstein abschließen. Den Pfeiler #11 auf x 127-128 setzen, ganz im Wasser. Der Abstand zum vorigen Pfeiler (110) wird dann 17 statt 16 Kacheln. Wenn der 16er-Takt bleiben soll, die Mauer stattdessen in Spalte x 125 legen; der Asphalt endet dann bei x 124."
+  },
+  "vorlage-16": {
+   "id": "vorlage-16",
+   "echt": true,
+   "begruendung": "Die Abweichung von der Vorlage ist echt (sw.png, q.png): Der südliche Zebrastreifen der Querstraße liegt in der Vorlage bei y 77-79, in der Karte bei y 69-71 (layout zebra [32,36,69,71,'h']), und bei y 77-79 gibt es keinen. Die Logik-Begründung trifft dagegen nicht zu. Auch der Überweg y 69-71 verbindet zwei Gehwege: West x 28-31 mit dem Vorplatz x 37-63 in den Reihen 68-70. Der Vorlagenort landet ebenfalls auf dem schmalen Streifen x 37 neben der Lagerwand. Der Fix gilt daher wegen der Vorlagentreue, nicht wegen eines Logikfehlers.",
+   "fix_praezisiert": "In layout.json den Zebra-Eintrag [32,36,69,71,'h'] durch [32,36,77,79,'h'] ersetzen. Die gelbe Mittellinie wird automatisch ausgespart (frei = asphalt & ~zebra). Eine Ampel (karte10-banner-13, anim ampel18) an die Ostecke x 37, Fuß y 80, setzen, mit 2 px Abstand zur Fassade lager_rolltor ab x 38. Die Laterne #97 (x 38, Fuß 69) bleibt stehen."
+  },
+  "vorlage-17": {
+   "id": "vorlage-17",
+   "echt": true,
+   "begruendung": "Bestätigt (laeden.png). Die Vorlage zeigt 10 Läden zu je 4 Kacheln (x 5-8, 9-12, … 41-44) mit Endstücken bei x 4 und x 45. Geschlossene Rollläden haben x 13-16 und x 29-32, rote Papierlaternen hängen bei x 11, 23, 35 und 43. Die Karte hat 7 Läden zu je 6 Kacheln (x 4-9, … 40-45), alle nach demselben Schema (Fenster, Markise, Glasfront), und keinen Rollladen.",
+   "fix_praezisiert": "In karte18_gebaeude.py (laeden), Gebäude x 4-45: Endstücke x 4 und x 45, dazwischen 10 Einheiten zu je 4 Kacheln, x 5-44, Fuß y 17. Zwei Einheiten mit heruntergelassenem Rollladen (x 13-16 und x 29-32). Reklameschilder und Markisen variieren; an etwa 3 Läden rote Papierlaternen (x 11, 23, 35 oder 43, Reihe 16) mit Leuchtpuls über die vorhandene anim 'reklame'."
+  },
+  "vorlage-18": {
+   "id": "vorlage-18",
+   "echt": true,
+   "begruendung": "Bestätigt (steg.png). Auf dem Steg der Vorlage steht eine Laterne bei x 106, y 103-105; die Karte hat dort keine. Der vorgeschlagene Fuß y 105 kollidiert aber: Der Laternen-Sprite (58 px) reicht dann bis y 106,0, und der Rettungsring #139 liegt bei x 106,38-107,56/y 105,38-107. Das ergibt eine Überlappung von etwa 10 px.",
+   "fix_praezisiert": "Eine Laterne karte02-abgeleitet-laterne auf x 106 (px 1696), Fuß y 104 setzen, Sprite y 101,38-105,0. Zum Rettungsring (ab y 105,38) bleiben 6 px, zu den Pollern #182 und #184 (rechte Kante x 105,62) ebenfalls 6 px. Leuchtanimation laterne18. Alternativ Fuß y 105 lassen und dafür den Rettungsring verschieben."
+  },
+  "vorlage-19": {
+   "id": "vorlage-19",
+   "echt": true,
+   "begruendung": "Bestätigt (tele.png). In der Vorlage liegen die 2×4 Scheiben bei x 134-135, y 40-43, ganz am Korridorende; in der Karte bei x 132-133, und rechts bleiben x 134-135 leer. Die Reihen 40-43 sind bis x 135 'p'.",
+   "fix_praezisiert": "In layout.json den Teleporter auf {'x': 134, 'y': 40, 'b': 2, 'h': 4} setzen."
+  },
+  "vorlage-20": {
+   "id": "vorlage-20",
+   "echt": true,
+   "begruendung": "Bestätigt (q.png, sw.png) mit kleiner Korrektur der Reihen: Der Rasen der Vorlage liegt auf x 4-6, y 78-81 (nicht 76-81), mit einem grünen Baum, Fuß y 80. In der Karte sind x 4-5 in den Reihen 78-80 Nebel und x 6 ist 'q'; die Westkante springt dort sogar nach innen.",
+   "fix_praezisiert": "layout.json: x 4-6 in den Reihen 78-81 auf 'n' setzen (rasen_kanten erzeugt die Steinkante). Den Baum karte01-baeume-00 auf x 4,12-6,88, Fuß y 80 setzen. Nach Regel 5 ein bis zwei Büsche bzw. Büschel an den Sockel, z. B. karte07/neu/02 verkleinert, mit 2 px Abstand zur Bank #154 nicht nötig (die steht weit weg)."
+  },
+  "vorlage-21": {
+   "id": "vorlage-21",
+   "echt": true,
+   "begruendung": "Bestätigt (vorpl.png). Zwischen buero_mitte und den Lagerhallen liegt in der Vorlage auf x 39-63, y 68-70 ein heller Vorplatz aus großen Betonplatten mit feinen Rissen. Er hebt sich klar vom Klinkergehweg ab; in der Karte ist dort gewöhnlicher Gehweg 'g'.",
+   "fix_praezisiert": "Eine neue Bodenklasse 'v' anlegen: helle graue Betonplatten, 1 Platte je Kachel, 1 px Fuge, ab und zu ein feiner Riss, statisch. In layout.json x 39-63, Reihen 68-70 von 'g' auf 'v' setzen. bordsteine() bzw. die Übergänge so prüfen, dass zwischen 'v' und 'g' keine Bordsteinkante entsteht, sondern nur eine Fugenlinie."
+  },
+  "vorlage-22": {
+   "id": "vorlage-22",
+   "echt": true,
+   "begruendung": "Echt (wohn.png), aber die Eingangsposition im Fix stimmt nicht. In der Vorlage laufen an der untersten Fassadenreihe y 39 zwei Heckenkästen, x 6-13 und x 16-28, links und rechts des Eingangs x 14-15. In der Karte fehlen sie, und der Eingang des Wohnblocks liegt woanders, nämlich bei x 18-20 (Vordach x 17,7-20,3, y 38,3-39,9), nicht bei x 15. Kästen bei x 6-14 und x 16-28 würden den Eingang der Karte zubauen.",
+   "fix_praezisiert": "In karte18_gebaeude.py (wohnblock) an der Unterkante der Fassade (Reihe 39, untere 6-8 px) zwei Pflanzkästen zeichnen: Hecke wie HECKE18 mit heller Steinkante, Licht oben links. Positionen x 6-17 (bis px 17,5) und x 20,5-28, also mit Lücke am vorhandenen Eingang x 18-20. Alternativ den Eingang wie in der Vorlage auf x 14-15 verlegen und die Kästen dann auf x 6-13 und x 16-28 setzen."
+  }
+ }
+}

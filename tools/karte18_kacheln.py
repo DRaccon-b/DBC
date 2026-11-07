@@ -101,23 +101,41 @@ def kachel(art, v):
             px[x, y] = H('#3a5a40'); px[x, y - 1] = H('#456848') if r.random() < 0.5 else H('#3a5a40')
         for _ in range(5):
             px[r.randint(0, 15), r.randint(0, 15)] = H('#263e2c')
-    elif art == 'd':                                 # Sand (Sandkasten)
-        fl(H('#a89068'))
+    elif art == 'd':                                 # Sand (Sandkasten), gedaempft fuer Abend und Nebel
+        fl(H('#706a56'))
         for _ in range(12):
-            px[r.randint(0, 15), r.randint(0, 15)] = H('#b8a078') if r.random() < 0.6 else H('#94805a')
+            px[r.randint(0, 15), r.randint(0, 15)] = H('#7e7862') if r.random() < 0.6 else H('#4e4a3c')
+    elif art == 'v':                                 # Betonvorplatz: helle Platten, 1 px Fuge, selten ein Riss
+        fl(H('#8c909c'))
+        for i in range(16):
+            px[i, 15] = H('#6a6e7a'); px[15, i] = H('#6a6e7a')
+        for i in range(15):
+            px[i, 0] = H('#a2a6b0'); px[0, i] = H('#9a9eaa')
+        for _ in range(4):
+            px[r.randint(2, 13), r.randint(2, 13)] = H('#82868f')
+        if v == 3:
+            x, y = r.randint(3, 10), 2
+            for _ in range(6):
+                px[x, y] = H('#70747e'); x += r.choice((0, 1)); y += 2
     elif art == 'x':                                 # Sperrflaeche: Asphalt mit diagonalen weissen Streifen
         for y in range(16):
             for x in range(16):
                 px[x, y] = H('#b8bcc6') if (x + y) % 8 < 2 else H('#30343f')
-    elif art == 'b':                                 # Gleisbett: Schotter, Holzschwellen quer (Schienen im Bau)
-        fl(H('#4a4246'))
-        for _ in range(26):
-            px[r.randint(0, 15), r.randint(0, 15)] = r.choice((H('#58505a'), H('#3c3438'), H('#625a62')))
-        for x0 in (1, 9):
-            for x in range(x0, x0 + 5):
-                for y in range(1, 15):
-                    px[x, y] = H('#5a4434') if y not in (1, 14) else H('#3e2e24')
-                px[x, 1] = H('#6e5640')
+    elif art == 'b':                                 # Holzpromenade: Laengsplanken 4 px, versetzte Stossfugen, Naegel
+        for y in range(16):
+            reihe = y // 4
+            for x in range(16):
+                c = [H('#6e4c30'), H('#76533a'), H('#684830'), H('#7a5a3c')][(reihe + v) % 4]
+                if y % 4 == 3:
+                    c = H('#3e2a1a')
+                elif y % 4 == 0:
+                    c = mix(c, H('#9a7450'), 0.5)
+                stoss = (5 + reihe * 7 + v * 3) % 16
+                if x == stoss and y % 4 != 3:
+                    c = H('#4a3220')
+                if x == (stoss + 2) % 16 and y % 4 == 1:
+                    c = H('#a8865e')
+                px[x, y] = c
     elif art == 'k':                                 # Kaikante: grosse graue Quader, Licht oben
         for y in range(16):
             for x in range(16):
@@ -148,7 +166,7 @@ def kachel(art, v):
 
 def main():
     os.makedirs(OUT, exist_ok=True)
-    arten = ['s', 'g', 'p', 'q', 'c', 't', 'n', 'd', 'x', 'b', 'k', 'h', 'w', 'nebel', 'm']
+    arten = ['s', 'g', 'p', 'q', 'c', 't', 'n', 'd', 'x', 'b', 'k', 'h', 'w', 'nebel', 'm', 'v']
     vor = Image.new('RGB', (len(arten) * 68, 64))
     for i, art in enumerate(arten):
         ks = [kachel(art, v) for v in range(5)]
