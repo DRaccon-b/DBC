@@ -6,7 +6,7 @@ darunter. Rechte Insel: 6x5 Aufstellplaetze und zwei cyan Teleporter. Animation:
 
   python3 tools/karte17_bauen.py
 """
-import json, math, os, sys
+import json, math, os, random, sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import numpy as np
 from PIL import Image
@@ -65,6 +65,88 @@ def ring(a, cx, cy, frame):
         a[int(cy) - 9 + dy, int(cx) - 9 + dx] = np.clip(np.array([200, 225, 245]) * p, 0, 255).astype(np.uint8)
 
 
+ROT = np.array([230, 40, 60], np.float32)
+
+
+def befall_karte(lay):
+    """Welche Kacheln sind befallen (0 rein, 1 leicht, 2 schwer): Wolken aus Rauschen, nach rechts immer staerker
+    (linke Insel: fruehe Stufen, rechte Insel: spaete Stufen). Aufstellplaetze, Teleporter und Ring bleiben frei."""
+    cols, rows = lay['groesse']
+    rs = np.random.RandomState(1717)
+    n = np.array(Image.fromarray((rs.rand(rows // 3 + 2, cols // 3 + 2) * 255).astype(np.uint8))
+                 .resize((cols, rows), Image.BICUBIC)).astype(np.float32) / 255
+    xs = np.arange(cols)[None, :] / cols
+    wert = n * 0.75 + xs * 0.55
+    st = np.zeros((rows, cols), int)
+    st[wert > 0.78] = 1
+    st[wert > 0.98] = 2
+    kl = np.array([list(r) for r in lay['klassen']])
+    st[kl == '.'] = 0
+    frei = np.zeros_like(st, bool)
+    for (x0, y0, b, h) in lay['plaetze']:
+        frei[y0 - 1:y0 + h + 1, x0 - 1:x0 + b + 1] = True
+    for tp in lay['teleporter']:
+        frei[tp['y'] - 1:tp['y'] + tp['h'] + 1, tp['x'] - 1:tp['x'] + tp['b'] + 1] = True
+    rx, ry = lay['ring']
+    frei[int(ry) - 2:int(ry) + 2, int(rx) - 2:int(rx) + 2] = True
+    st[frei] = 0
+    return st
+
+
+def befall_zeichnen(a, st, frame):
+    """Befallene Kacheln: leicht = rot verfaerbt mit Glitch-Pixeln, schwer = schwarz mit rot pulsierenden Adern;
+    Glitch-Bloecke flackern (4 Bilder)."""
+    f = frame or 0
+    rows, cols = st.shape
+    for y in range(rows):
+        for x in range(cols):
+            if not st[y, x]:
+                continue
+            rs = random.Random(y * 131 + x * 7)
+            sub = a[y * T:(y + 1) * T, x * T:(x + 1) * T].astype(np.float32)
+            if st[y, x] == 1:
+                sub = sub * np.array([1.05, 0.55, 0.62])
+            else:
+                sub = sub * np.array([0.42, 0.22, 0.28])
+            a[y * T:(y + 1) * T, x * T:(x + 1) * T] = np.clip(sub, 0, 255).astype(np.uint8)
+            p = 0.55 + 0.45 * math.sin(2 * math.pi * (f / N_FRAMES + rs.random()))
+            X, Y = x * T + rs.randint(2, 13), y * T + rs.randint(2, 13)        # Ader (Riss mit Licht)
+            for i in range(rs.randint(8, 16) if st[y, x] == 2 else rs.randint(4, 8)):
+                if x * T <= X < (x + 1) * T and y * T <= Y < (y + 1) * T:
+                    a[Y, X] = np.clip(ROT * (0.5 + 0.5 * p) if st[y, x] == 2 else ROT * 0.6, 0, 255).astype(np.uint8)
+                X += rs.choice((-1, 0, 1)); Y += rs.choice((-1, 0, 1))
+            for k_ in range(2 if st[y, x] == 1 else 3):                       # Glitch-Bloecke flackern
+                if (f + k_ + x + y) % 4 == 0:
+                    continue
+                gx, gy = x * T + rs.randint(1, 12), y * T + rs.randint(1, 12)
+                c = rs.choice(((230, 40, 90), (20, 10, 16), (200, 30, 40), (230, 40, 90), (20, 10, 16), (250, 240, 240)))
+                a[gy:gy + 2, gx:gx + rs.choice((2, 3))] = c
+
+
+def kabelnetz(a, lay, leer, frame):
+    """Netz aus schwarzen Kabeln zwischen den Inseln (an den Kanten verankert, haengt leicht durch), rote Knoten;
+    ein roter Lichtpunkt laeuft in 4 Bildern von rechts (Befall) nach links."""
+    f = frame or 0
+    (lx, ly_, lb, lh), (rx, _, _, _) = lay['inseln']
+    xa, xb = (lx + lb) * T, rx * T - 1
+    for k_, (ya, yb, durch) in enumerate(((RAND + 4, RAND + 6, 10), (RAND + 9, RAND + 8, 14), (RAND + 14, RAND + 16, 12),
+                                          (RAND + 19, RAND + 18, 8))):
+        pts = []
+        for i in range(xb - xa + 1):
+            t = i / (xb - xa)
+            y = (ya + (yb - ya) * t) * T + 8 + durch * 4 * t * (1 - t)
+            pts.append((xa + i, int(round(y))))
+        for (x, y) in pts:
+            if leer[y, x]:
+                a[y, x] = H('#06060c'); a[y + 1, x] = H('#2a1a24')
+        j = int((N_FRAMES - 1 - f) / N_FRAMES * len(pts) + k_ * 7) % len(pts)
+        for jj in range(max(0, j - 3), min(len(pts), j + 1)):
+            x, y = pts[jj]
+            a[y, x] = np.clip(ROT * 1.1, 0, 255).astype(np.uint8)
+        for (x, y) in (pts[len(pts) // 3], pts[2 * len(pts) // 3]):              # Knoten
+            a[y - 1:y + 2, x - 1:x + 2] = H('#a01c2a'); a[y, x] = H('#ff6070')
+
+
 def bauen(frame=None, speichern=True):
     lay = layout()
     cols, rows = lay['groesse']
@@ -81,7 +163,7 @@ def bauen(frame=None, speichern=True):
             for x in range(x0 * T, (x0 + b) * T):
                 c = np.array(H('#1a2840') if d < 2 else H('#24344e') if d < 9 else H('#141c30'), np.float32)
                 if d == 4:
-                    c = k16.CYAN * (0.55 + 0.3 * (0.5 + 0.5 * math.sin(2 * math.pi * ((frame or 0) / N_FRAMES))))
+                    c = (k16.CYAN if x0 == INSELN[0] else ROT) * (0.55 + 0.3 * (0.5 + 0.5 * math.sin(2 * math.pi * ((frame or 0) / N_FRAMES))))
                 if (x - x0 * T) % 32 == 0 and d >= 5:
                     c = np.array(H('#0e1424'), np.float32)
                 a[yf + d, x] = np.clip(c, 0, 255).astype(np.uint8)
@@ -91,7 +173,12 @@ def bauen(frame=None, speichern=True):
     leer = ~boden & ~front
     k16.leere_zeichnen(a, leer, frame, seed=17)
     puls = 0.5 + 0.5 * math.sin(2 * math.pi * (frame or 0) / N_FRAMES)
-    k16.mischen(a, k16.kontur(boden), k16.CYAN, 0.45 + 0.3 * puls)
+    kante = k16.kontur(boden)
+    rechts = np.zeros_like(kante); rechts[:, lay['inseln'][1][0] * T:] = True
+    k16.mischen(a, kante & ~rechts, k16.CYAN, 0.45 + 0.3 * puls)
+    k16.mischen(a, kante & rechts, ROT, 0.5 + 0.3 * puls)           # rechte Insel: Kante vom Virus rot gefaerbt
+    befall_zeichnen(a, befall_karte(lay), frame)
+    kabelnetz(a, lay, leer, frame)
     for (x0, y0, b, h) in lay['plaetze']:
         for j in range(h):
             for i in range(b):

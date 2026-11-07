@@ -1358,6 +1358,26 @@ OBJEKTGRUPPEN_K16 = {
         'glowing orange data mailbox, a small terminal with an envelope icon screen',
         'small cyber tree made of glowing cyan circuit lines on a metal base',
     ]},
+    'k17_virus': {'size': 48, 'items': [   # Anspielungen auf die Virus-Linie nur ueber Farben und Motive
+        'cracked white digital egg with red and yellow spots, glowing red data leaking from the crack, on a small pile of corrupted pixel blocks',
+        'small cluster of round red and white virus bug eggs with tiny dark eyes, glitching pixels around them',
+        'grey silken cocoon made of tangled data cables hanging from a broken cable mast, faint red glow inside',
+        'tangle of dark cables forming a spider web with a glowing red node in the center, anchored on the floor',
+        'black bone-like spike pillar with red glowing markings and jagged white bone tips',
+        'big curved red-brown horn shard sticking out of the floor, cracked, red glow in the cracks',
+        'corrupted dark server tower with a red glitching screen and black tendrils growing out of it',
+        'broken network pylon wrapped in black thorny data tendrils with red glow',
+        'pile of corrupted pixel blocks in red, magenta and black',
+        'red warning hologram with a glitching virus symbol floating above a small emitter',
+        'black cable tentacles bursting out of a floor crack with red light',
+        'grey cocoon shell of cables broken open and empty',
+    ]},
+    'k17_gross': {'size': 96, 'items': [
+        'huge black and red corrupted data crystal formation with white bone spikes, red glowing veins',
+        'giant broken cocoon made of grey data cables with a red glowing core, cables spreading on the floor',
+        'large web of black data cables stretched between two broken network pylons, glowing red nodes',
+        'giant red-brown horn pair rising from a corrupted floor crater, black and red glitch blocks around',
+    ]},
     'k16_klein': {'size': 32, 'items': [
         'small golden data chip item lying on the floor, glowing softly',
         'small coil of dark cable lying on the floor',
@@ -1423,7 +1443,9 @@ def herunterladen(oid, d):
 
 
 def speichern(gruppe, ims, ids):
-    if gruppe.startswith('k16_'):
+    if gruppe.startswith('k17_'):
+        ziel = os.path.join(ROOT, 'assets', 'objekte', 'karte17', gruppe[4:])
+    elif gruppe.startswith('k16_'):
         ziel = os.path.join(ROOT, 'assets', 'objekte', 'karte16', gruppe[4:])
     elif gruppe.startswith('k15_'):
         ziel = os.path.join(ROOT, 'assets', 'objekte', 'karte15', gruppe[4:])
@@ -1478,8 +1500,8 @@ def erzeugen(gruppe):
     k4 = gruppe.startswith('k4_')
     k5 = gruppe.startswith('k5_')
     k6 = gruppe.startswith('k6_') or gruppe.startswith('k7_')
-    if gruppe.startswith(('k11_', 'k12_', 'k13_', 'k14_', 'k15_', 'k16_')):
-        g, stil_, pal_, pn_ = ((OBJEKTGRUPPEN_K16[gruppe], STIL_K16, PALETTE_K16, 'Karte16 Network') if gruppe.startswith('k16_') else
+    if gruppe.startswith(('k11_', 'k12_', 'k13_', 'k14_', 'k15_', 'k16_', 'k17_')):
+        g, stil_, pal_, pn_ = ((OBJEKTGRUPPEN_K16[gruppe], STIL_K16, PALETTE_K16, 'Karte16 Network') if gruppe.startswith(('k16_', 'k17_')) else
                                (OBJEKTGRUPPEN_K15[gruppe], STIL_K15, PALETTE_K15, 'Karte15 Realm') if gruppe.startswith('k15_') else
                                (OBJEKTGRUPPEN_K14[gruppe], STIL_K14, PALETTE_K14, 'Karte14 Summit') if gruppe.startswith('k14_') else
                                (OBJEKTGRUPPEN_K13[gruppe], STIL_K13, PALETTE_K13, 'Karte13 Machine City') if gruppe.startswith('k13_') else
