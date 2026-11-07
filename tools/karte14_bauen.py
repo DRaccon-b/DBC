@@ -178,36 +178,95 @@ k4.TEILANIM['treiben'] = treiben
 
 
 def banner(sp, frame, o):
-    """Banner am Weg: nur das Tuch weht (unten staerker), Stange und Querstange bleiben ruhig."""
+    """Banner am Weg: das Tuch schwingt als Ganzes - jede Zeile des Tuchs verschiebt sich seitlich (oben fest an der
+    Querstange, unten bis 2 px), die Goldkanten bleiben geschlossen; dazu wandert eine weiche Faltenschattierung
+    ueber das Tuch. Stange, Querstange und Spitze bleiben ruhig."""
     a = np.array(sp)
     ai = a.astype(int)
     h, w = a.shape[:2]
     al = ai[..., 3] > 0
     breite = al.sum(axis=1)
-    zeilen = np.nonzero(breite >= max(6, int(w * 0.4)))[0]
-    stoff = np.zeros_like(al)
-    if len(zeilen):
-        y0, y1 = zeilen.min() + 3, zeilen.max()
-        stoff[y0:y1 + 1] = al[y0:y1 + 1]
-        stoff &= ~((ai[..., 0] > 150) & (ai[..., 1] > 110) & (ai[..., 2] < 90) & (np.arange(h)[:, None] < y0 + 2))
-    out = a.copy()
-    ys, xs = np.nonzero(stoff)
-    if not len(ys):
+    zeilen = np.nonzero(breite >= max(10, int(w * 0.5)))[0]
+    if not len(zeilen):
         return sp
+    y0 = zeilen.min() + 3                                        # unter der Querstange
+    y1 = int(np.nonzero(breite >= 8)[0].max())                   # unteres Ende des Tuchs (Stange darunter ist schmaler)
+    while y1 > y0 and breite[y1] < 8:
+        y1 -= 1
+    out = a.copy()
     ph = 2 * math.pi * frame / N_FRAMES + o.get('x', 0) * 0.05
-    yt, yb = ys.min(), ys.max()
-    for y, x in zip(ys, xs):
-        d = int(round(1.3 * (y - yt) / max(1, yb - yt) * math.sin(ph + y * 0.45)))
-        q = x - d
-        if d and 0 <= q < w and stoff[y, q]:
-            out[y, x] = a[y, q]
+    for y in range(y0, y1 + 1):
+        t = (y - y0) / max(1, y1 - y0)
+        d = int(round(2.0 * t * t * math.sin(ph - t * 2.2)))
+        zeile = a[y].copy()
+        xs = np.nonzero(zeile[:, 3] > 0)[0]
+        if not len(xs):
+            continue
+        x0, x1 = xs.min(), xs.max()
+        stoff = zeile[x0:x1 + 1].copy()
+        # Falte: helle/dunkle Welle quer ueber das Tuch
+        for k_ in range(len(stoff)):
+            f_ = 1.0 + 0.12 * math.sin(ph * 1.0 + k_ * 0.5 - t * 3.0)
+            if stoff[k_, 3]:
+                stoff[k_, :3] = np.clip(stoff[k_, :3] * f_, 0, 255)
+        out[y, x0:x1 + 1] = 0
+        n0, n1 = max(0, x0 + d), min(w, x1 + 1 + d)
+        out[y, n0:n1] = stoff[n0 - (x0 + d):n1 - (x0 + d)]
     return Image.fromarray(out)
 
 
 def portalwirbel(sp, frame, o):
-    return k4.portal_drehen(sp, frame)
+    """Portal: die ganze innere Wirbelscheibe dreht sich (eine volle Umdrehung pro Schleife), Steinring und
+    Kristalle bleiben fest."""
+    a = np.array(sp)
+    h, w = a.shape[:2]
+    al = a[..., 3] > 0
+    ys, xs = np.nonzero(al[: int(h * 0.85)])
+    cx, cy = (xs.min() + xs.max()) / 2.0, h * 0.47
+    r = min(w, h) * 0.33
+    yy, xx = np.mgrid[0:h, 0:w]
+    innen = ((xx - cx) ** 2 + (yy - cy) ** 2 <= r * r) & al
+    gedreht = np.array(sp.rotate(-360.0 * frame / N_FRAMES, resample=Image.NEAREST, center=(cx, cy)))
+    out = a.copy()
+    ok = innen & (gedreht[..., 3] > 0)
+    out[ok] = gedreht[ok]
+    return Image.fromarray(out)
 
 
+def auge(sp, frame, o):
+    """Obelisk: das Leere-Auge leuchtet und blinzelt - das Lid schliesst sich kurz (halb, zu, halb) und oeffnet
+    sich wieder; nur die Augenpixel aendern sich."""
+    a = np.array(sp)
+    ai = a.astype(int)
+    h = a.shape[0]
+    hell = (ai[..., 3] > 0) & (ai[..., 2] > 120) & (ai[..., 0] > 90)
+    hell[: int(h * 0.25)] = False
+    hell[int(h * 0.55):] = False
+    ys, xs = np.nonzero(hell)
+    if not len(ys):
+        return sp
+    y0, y1, x0, x1 = ys.min() - 1, ys.max() + 1, xs.min() - 1, xs.max() + 1
+    out = a.copy()
+    puls = 0.8 + 0.25 * math.sin(2 * math.pi * frame / N_FRAMES)
+    out[hell, :3] = np.clip(ai[hell, :3] * puls, 0, 255).astype(np.uint8)
+    phase = (frame + int(o.get('x', 0)) // 7) % N_FRAMES
+    zu = {6: 0.5, 7: 1.0, 8: 1.0, 9: 0.5}.get(phase, 0.0)        # halb - zu - zu - halb
+    if zu:
+        mitte = (y0 + y1) / 2.0
+        halb = (y1 - y0) / 2.0 * zu
+        lid = np.array([30, 24, 40, 255], np.uint8)
+        kante = np.array([16, 12, 22, 255], np.uint8)
+        for y in range(y0, y1 + 1):
+            if abs(y - mitte) >= (y1 - y0) / 2.0 - halb:
+                for x in range(x0, x1 + 1):
+                    if ai[y, x, 3] > 0 and (hell[y, x] or abs(y - mitte) <= (y1 - y0) / 2.0):
+                        out[y, x] = lid
+        if zu == 1.0:
+            out[int(round(mitte)), x0 + 1:x1] = kante                 # geschlossene Lidlinie
+    return Image.fromarray(out)
+
+
+k4.TEILANIM['auge'] = auge
 k4.TEILANIM['banner'] = banner
 k4.TEILANIM['portalwirbel'] = portalwirbel
 
