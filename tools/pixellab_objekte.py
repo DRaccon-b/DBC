@@ -1320,6 +1320,16 @@ OBJEKTGRUPPEN_K15 = {
         'floating broken stone pillar piece', 'floating glitching violet data cube cluster', 'floating broken chain links',
         'floating dark tentacle-like void tendril', 'floating cracked digital egg shell',
     ]},
+    'k15_inseln2': {'size': 64, 'items': [   # je zwei Varianten fuer Karte 02, 04, 08, 09
+        'small floating chunk of industrial steelworks ground with a tiny smokestack and a shipping container, broken rocky bottom',
+        'small floating chunk of rusty steel plates with a tiny yellow crane and oil barrels, broken rocky bottom',
+        'small floating chunk of dry golden savanna grass with a tiny acacia tree and a bronze gear half buried, broken orange canyon rock bottom',
+        'small floating chunk of savanna ground with big bronze gears and a small rock, broken orange canyon rock bottom',
+        'small floating chunk of dark graveyard grass with a tiny tombstone and a dead tree, broken rocky bottom',
+        'small floating chunk of foggy grey graveyard ground with a tiny crypt and a crooked cross, broken rocky bottom',
+        'small floating chunk of a gothic castle ruin with a tiny dark tower with red windows and a bat flag, broken stone bottom',
+        'small floating chunk of dark castle wall with a tiny red-roofed gothic tower and dark moat water, broken stone bottom',
+    ]},
 }
 
 

@@ -46,7 +46,7 @@ EINBETTEN = {'leere/05': ('klein/01', 'r'), 'leere/11': ('klein/08', 'l')}
 INSELN = [
     ('inseln/00', 3 * T + 8, 3), ('inseln/07', 33 * T, 2), ('inseln/03', 37 * T + 8, 9), ('inseln/02', 2 * T + 8, 12),
     ('inseln/05', 37 * T, 21), ('inseln/04', 3 * T + 8, 25), ('inseln/06', 36 * T + 8, 33), ('inseln/01', 5 * T + 8, 37),
-('inseln/12', 27 * T + 8, 3), ('inseln/13', 10 * T + 8, 38), 
+('inseln/13', 10 * T + 8, 38), 
 ]
 INSEL_OBJEKTE = False           # Nutzerwunsch: keine Objekte auf der Plattform
 ANIM_INSEL = {'inseln/10': 'schweben', 'inseln/12': 'schweben'}
