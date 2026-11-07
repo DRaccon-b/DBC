@@ -165,8 +165,7 @@ def main():
     z['x'] = lay['hochbahn']['zug'][0] * T
     # ------------------------------------------------------------------ Baeume (gross zuerst)
     GRUEN, KLEIN_B, GROSS_B = 'karte01/baeume/00', 'karte01/baeume/03', 'karte10/baeume/01'
-    GINKGO = 'k18/baum/00' if os.path.exists(pfad('k18/baum/00')) else 'karte01/baeume/15'
-    GINKGO2 = 'k18/baum/01' if os.path.exists(pfad('k18/baum/01')) else GINKGO
+    GINKGO, GINKGO2 = 'gebaeude/ginkgo', 'gebaeude/ginkgo_gross'     # umgefaerbte Baeume aus Karte 01/10
     RASEN = set('n')
     baeume = [  # Parks und Spielplatz (Rasen)
         (GRUEN, 47, 8, RASEN), (GINKGO, 50, 8, RASEN), (GROSS_B, 9, 62, RASEN), (GRUEN, 11, 66, RASEN),
@@ -176,7 +175,7 @@ def main():
         (GRUEN, 8, 48, set('m')), (GRUEN, 20, 48, set('m')), (GRUEN, 44, 48, set('m')), (GRUEN, 56, 48, set('m')),
         (GRUEN, 69, 88, set('m')), (GRUEN, 85, 88, set('m')), (GRUEN, 117, 88, set('m')),
         # Ginkgos an der Querstrasse
-        (GINKGO, 29, 31, set('g')), (GINKGO2, 38, 39, set('g')),
+        (GINKGO, 29, 31, set('g')),
         (GINKGO, 29, 58, set('g')), (GINKGO2, 37, 64, set('g')), (GINKGO, 29, 72, set('g')), (GINKGO2, 37, 76, set('g')),
     ]
     for (n, bx, r, bd) in baeume:
@@ -211,7 +210,7 @@ def main():
     P.setzen('karte02/ortho/10', 50, 81, boden=set('g')) if os.path.exists(os.path.join(ROOT, 'assets/objekte/karte02/ortho/10.png')) else None
     if os.path.exists(pfad('k18/frontal/02')):               # Bushaltestellen (frontal)
         P.setzen('k18/frontal/02', 66, 19)
-        P.setzen('k18/frontal/03', 20, 41)
+        P.setzen('k18/frontal/03', 21, 41)
     if os.path.exists(pfad('k18/frontal/00')):               # Boot am Steg (frontal, schaukelt)
         P.setzen('k18/frontal/00', 111, 103, boden=set('w'), anim='boot', extra={'kein_schatten': True})
     # ------------------------------------------------------------------ Laternen (fester Rhythmus, je Strassenseite)
@@ -223,9 +222,8 @@ def main():
     for x in range(6, 62, 12):
         P.setzen(LAT, x, 41)
         P.setzen(LAT, x + 6, 55)
-    for y in range(30, 80, 10):
-        P.setzen(LAT, 30, y)
-        P.setzen(LAT, 38, y + 5)
+    for (bx, r) in ((30, 37), (30, 66), (38, 30), (38, 60), (38, 69)):   # Querstrasse (zwischen den Ginkgos)
+        P.setzen(LAT, bx, r)
     for x in range(14, 126, 12):
         P.setzen(LAT, x, 95)                                  # Uferpromenade
     for r in (40, 52, 64, 76):                                # Platz: Paare symmetrisch zur Achse
@@ -237,10 +235,10 @@ def main():
         P.setzen(AMP, bx, r)
     # ------------------------------------------------------------------ Stadtmoebel
     STR = lambda i: 'k18/strasse/%02d' % i
-    for (n, bx, r, sp) in [(STR(0), 44, 19, False), (STR(1), 45, 19, False), (STR(2), 47, 19, False), (STR(3), 63, 26, False),
-                           (STR(0), 25, 41, False), (STR(1), 26, 41, False), (STR(4), 22, 41, False), (STR(4), 23, 41, True),
-                           (STR(6), 76, 41, False), (STR(6), 120, 49, False), (STR(5), 70, 19, False),
-                           (STR(11), 24, 99, False), (STR(11), 56, 99, False), (STR(11), 116, 99, False),
+    for (n, bx, r, sp) in [(STR(0), 45, 19, False), (STR(1), 47, 19, False), (STR(2), 49, 19, False), (STR(3), 62, 26, False),
+                           (STR(0), 25, 41, False), (STR(4), 9, 41, False), (STR(4), 11, 41, True),
+                           (STR(6), 76, 41, False), (STR(6), 120, 49, False), (STR(5), 65, 19, False),
+                           (STR(11), 28, 99, False), (STR(11), 56, 99, False), (STR(11), 116, 99, False),
                            (STR(11), 106, 106, False)]:
         if os.path.exists(pfad(n)):
             P.setzen(n, bx, r, spiegel=sp)
@@ -249,15 +247,16 @@ def main():
         for dx in (-14, -12, -10):
             P.setzen(STR(10), A + dx, 35, anim='fahne18')
             P.setzen(STR(10), A - dx - 1, 35, spiegel=True, anim='fahne18')
-    BANK = 'karte10/klein/38'
-    for r in (46, 58, 70):                                    # Baenke am Mittelweg (Paare)
-        P.setzen(BANK, A - 7, r)
-        P.setzen(BANK, A + 5, r)
-    for (bx, r) in ((16, 60), (23, 67), (8, 69), (26, 86), (70, 52), (118, 62)):
+    BANK, BANK_P = 'karte10/klein/38', 'k18/strasse/14'
+    for r in (46, 58, 70):                                    # moderne Baenke am Mittelweg (Paare A-7/-6 <-> A+5/+6)
+        P.setzen(BANK_P, A - 7, r)
+        P.setzen(BANK_P, A + 5, r)
+    for (bx, r) in ((16, 60), (23, 67), (8, 69), (70, 52), (118, 62)):
         P.setzen(BANK, bx, r, boden=set('gpqn'))
     for (bx, r) in ((A - 12, 31), (A + 9, 31)):              # Absperrungen auf der Terrasse (Paar)
         P.setzen('karte10/banner/04', bx, r, boden=set('t'))
-    P.setzen('karte10/banner/04', 27, 85, boden=set('q'))
+    if os.path.exists(pfad('k18/frontal/08')):               # kleine Polizeiwache am Platz links unten
+        P.setzen('k18/frontal/08', 26, 85, boden=set('q'))
     for (bx, r) in ((60, 41), (61, 41)):
         P.setzen('karte13/klein/12', bx, r)
     P.setzen('karte13/klein/12', 59, 43, boden=set('s'))
@@ -265,10 +264,19 @@ def main():
     P.setzen('karte10/banner/06', 16, 55)
     for (bx, r) in ((35, 19), (57, 26), (28, 55), (60, 70), (13, 41), (64, 95), (100, 95), (77, 26)):
         P.setzen('karte02/klein/16', bx, r)                   # Muelleimer
-    for (bx, r) in ((27, 26), (52, 41), (40, 70)):
+    for (bx, r) in ((24, 26), (53, 41), (40, 70)):
         P.setzen('karte02/klein/17', bx, r)                   # Hydranten
     P.setzen('karte02/klein/31', 51, 70)                      # Container (Muell) neben der Lagerhalle
     P.setzen('karte10/klein2/02', 63, 44, boden=set('gp'))    # Durchfahrt verboten (Strassenende am Platz)
+    for x in range(14, 126, 16):                              # Festmacher-Poller an der Kaikante (Rhythmus 16)
+        P.setzen('k18/strasse/21', x, 99, boden=set('k'))
+    for (bx, r) in ((104, 101), (108, 101), (104, 105), (108, 105)):   # Poller auf dem Steg (an den Ecken)
+        P.setzen('k18/strasse/21', bx, r, boden=set('h'))
+    for bx in (16, 30):                                       # Nobori-Fahnen vor Buchladen und Ramen-Laden (nur Tuch weht)
+        P.setzen('k18/strasse/50', bx, 19, anim='fahne18')
+    for (bx, r) in ((26, 19), (30, 19), (38, 19), (26, 26), (30, 26), (38, 41), (41, 41)):   # Fussgaengerampeln an Zebrastreifen
+        P.setzen('k18/strasse/17', bx, r, anim='ampel18')
+    P.setzen('k18/strasse/40', 61, 26)                        # Geldautomat an der Ecke zum Platz
     for x in range(64, 126, 4):                               # Poller am Rand des Platzes (Rhythmus)
         if not (A - 4 <= x <= A + 3):
             P.setzen('gebaeude/poller', x, 79, boden=set('pc'))
@@ -276,7 +284,7 @@ def main():
     AUTO = lambda i: 'k18/autos/%02d' % i
     fahr = set('s')
     for (i, bx, r, ost) in [(0, 5, 21, True), (2, 49, 21, True), (1, 56, 24, False), (3, 4, 44, True), (4, 55, 44, True),
-                            (5, 8, 52, False), (1, 47, 52, False), (0, 69, 85, True), (4, 106, 85, True),
+                            (5, 8, 52, False), (1, 44, 52, False), (0, 69, 85, True), (4, 106, 85, True),
                             (5, 76, 92, False), (1, 116, 92, False), (0, 41, 92, False)]:
         if os.path.exists(pfad(AUTO(i))):
             P.setzen(AUTO(i), bx, r, spiegel=ost, boden=fahr, extra={'auto': True})

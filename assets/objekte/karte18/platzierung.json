@@ -226,11 +226,11 @@
 "baum": true
 },
 {
-"datei": "sauber/karte01-baeume-15.png",
-"basis": "karte01/baeume/15",
-"x": 807,
-"y": 104,
-"fuss": 39,
+"datei": "sauber/gebaeude-ginkgo.png",
+"basis": "gebaeude/ginkgo",
+"x": 802,
+"y": 101,
+"fuss": 42,
 "kachel": [
 51,
 8
@@ -304,13 +304,13 @@
 "baum": true
 },
 {
-"datei": "sauber/karte01-baeume-15.png",
-"basis": "karte01/baeume/15",
-"x": 167,
-"y": 1192,
-"fuss": 39,
+"datei": "sauber/gebaeude-ginkgo_gross.png",
+"basis": "gebaeude/ginkgo_gross",
+"x": 162,
+"y": 1165,
+"fuss": 66,
 "kachel": [
-11,
+12,
 76
 ],
 "ebene": 1,
@@ -447,11 +447,11 @@
 "baum": true
 },
 {
-"datei": "sauber/karte01-baeume-15.png",
-"basis": "karte01/baeume/15",
-"x": 471,
-"y": 472,
-"fuss": 39,
+"datei": "sauber/gebaeude-ginkgo.png",
+"basis": "gebaeude/ginkgo",
+"x": 466,
+"y": 469,
+"fuss": 42,
 "kachel": [
 30,
 31
@@ -460,24 +460,11 @@
 "baum": true
 },
 {
-"datei": "sauber/karte01-baeume-15.png",
-"basis": "karte01/baeume/15",
-"x": 615,
-"y": 600,
-"fuss": 39,
-"kachel": [
-39,
-39
-],
-"ebene": 1,
-"baum": true
-},
-{
-"datei": "sauber/karte01-baeume-15.png",
-"basis": "karte01/baeume/15",
-"x": 471,
-"y": 904,
-"fuss": 39,
+"datei": "sauber/gebaeude-ginkgo.png",
+"basis": "gebaeude/ginkgo",
+"x": 466,
+"y": 901,
+"fuss": 42,
 "kachel": [
 30,
 58
@@ -486,24 +473,24 @@
 "baum": true
 },
 {
-"datei": "sauber/karte01-baeume-15.png",
-"basis": "karte01/baeume/15",
-"x": 599,
-"y": 1000,
-"fuss": 39,
+"datei": "sauber/gebaeude-ginkgo_gross.png",
+"basis": "gebaeude/ginkgo_gross",
+"x": 594,
+"y": 973,
+"fuss": 66,
 "kachel": [
-38,
+39,
 64
 ],
 "ebene": 1,
 "baum": true
 },
 {
-"datei": "sauber/karte01-baeume-15.png",
-"basis": "karte01/baeume/15",
-"x": 471,
-"y": 1128,
-"fuss": 39,
+"datei": "sauber/gebaeude-ginkgo.png",
+"basis": "gebaeude/ginkgo",
+"x": 466,
+"y": 1125,
+"fuss": 42,
 "kachel": [
 30,
 72
@@ -777,11 +764,11 @@
 "kuebel": true
 },
 {
-"datei": "sauber/karte01-baeume-15.png",
-"basis": "karte01/baeume/15",
-"x": 1199,
-"y": 702,
-"fuss": 39,
+"datei": "sauber/gebaeude-ginkgo.png",
+"basis": "gebaeude/ginkgo",
+"x": 1194,
+"y": 699,
+"fuss": 42,
 "kachel": [
 76,
 46
@@ -833,11 +820,11 @@
 "kuebel": true
 },
 {
-"datei": "sauber/karte01-baeume-15.png",
-"basis": "karte01/baeume/15",
-"x": 1183,
-"y": 1086,
-"fuss": 39,
+"datei": "sauber/gebaeude-ginkgo_gross.png",
+"basis": "gebaeude/ginkgo_gross",
+"x": 1170,
+"y": 1059,
+"fuss": 66,
 "kachel": [
 75,
 70
@@ -988,6 +975,18 @@
 "kachel": [
 68,
 19
+],
+"ebene": 1
+},
+{
+"datei": "sauber/k18-frontal-03.png",
+"basis": "k18/frontal/03",
+"x": 338,
+"y": 628,
+"fuss": 43,
+"kachel": [
+23,
+41
 ],
 "ebene": 1
 },
@@ -1281,12 +1280,51 @@
 {
 "datei": "sauber/karte02-abgeleitet-laterne.png",
 "basis": "karte02/abgeleitet/laterne",
+"x": 480,
+"y": 550,
+"fuss": 57,
+"kachel": [
+30,
+37
+],
+"ebene": 1,
+"anim": "laterne18"
+},
+{
+"datei": "sauber/karte02-abgeleitet-laterne.png",
+"basis": "karte02/abgeleitet/laterne",
+"x": 480,
+"y": 1014,
+"fuss": 57,
+"kachel": [
+30,
+66
+],
+"ebene": 1,
+"anim": "laterne18"
+},
+{
+"datei": "sauber/karte02-abgeleitet-laterne.png",
+"basis": "karte02/abgeleitet/laterne",
 "x": 608,
-"y": 838,
+"y": 438,
 "fuss": 57,
 "kachel": [
 38,
-55
+30
+],
+"ebene": 1,
+"anim": "laterne18"
+},
+{
+"datei": "sauber/karte02-abgeleitet-laterne.png",
+"basis": "karte02/abgeleitet/laterne",
+"x": 608,
+"y": 1062,
+"fuss": 57,
+"kachel": [
+38,
+69
 ],
 "ebene": 1,
 "anim": "laterne18"
@@ -1645,6 +1683,19 @@
 {
 "datei": "sauber/karte10-banner-13.png",
 "basis": "karte10/banner/13",
+"x": 599,
+"y": 613,
+"fuss": 58,
+"kachel": [
+38,
+41
+],
+"ebene": 1,
+"anim": "ampel18"
+},
+{
+"datei": "sauber/karte10-banner-13.png",
+"basis": "karte10/banner/13",
 "x": 487,
 "y": 821,
 "fuss": 58,
@@ -1656,11 +1707,249 @@
 "anim": "ampel18"
 },
 {
-"datei": "sauber/karte10-klein-38.png",
-"basis": "karte10/klein/38",
-"x": 1521,
-"y": 730,
+"datei": "sauber/k18-strasse-01.png",
+"basis": "k18/strasse/01",
+"x": 758,
+"y": 288,
+"fuss": 31,
+"kachel": [
+48,
+19
+],
+"ebene": 1,
+"anim": "automat"
+},
+{
+"datei": "sauber/k18-strasse-02.png",
+"basis": "k18/strasse/02",
+"x": 785,
+"y": 288,
+"fuss": 31,
+"kachel": [
+49,
+19
+],
+"ebene": 1
+},
+{
+"datei": "sauber/k18-strasse-03.png",
+"basis": "k18/strasse/03",
+"x": 999,
+"y": 402,
+"fuss": 29,
+"kachel": [
+63,
+26
+],
+"ebene": 1
+},
+{
+"datei": "sauber/k18-strasse-00.png",
+"basis": "k18/strasse/00",
+"x": 406,
+"y": 640,
+"fuss": 31,
+"kachel": [
+26,
+41
+],
+"ebene": 1,
+"anim": "automat"
+},
+{
+"datei": "sauber/k18-strasse-04.png",
+"basis": "k18/strasse/04",
+"x": 144,
+"y": 650,
 "fuss": 21,
+"kachel": [
+10,
+41
+],
+"ebene": 1
+},
+{
+"datei": "sauber/k18-strasse-04_m.png",
+"basis": "k18/strasse/04",
+"x": 176,
+"y": 650,
+"fuss": 21,
+"kachel": [
+12,
+41
+],
+"ebene": 1
+},
+{
+"datei": "sauber/k18-strasse-06.png",
+"basis": "k18/strasse/06",
+"x": 1218,
+"y": 642,
+"fuss": 29,
+"kachel": [
+77,
+41
+],
+"ebene": 1,
+"anim": "automat"
+},
+{
+"datei": "sauber/k18-strasse-06.png",
+"basis": "k18/strasse/06",
+"x": 1922,
+"y": 770,
+"fuss": 29,
+"kachel": [
+121,
+49
+],
+"ebene": 1,
+"anim": "automat"
+},
+{
+"datei": "sauber/k18-strasse-05.png",
+"basis": "k18/strasse/05",
+"x": 1040,
+"y": 290,
+"fuss": 29,
+"kachel": [
+65,
+19
+],
+"ebene": 1
+},
+{
+"datei": "sauber/k18-strasse-11.png",
+"basis": "k18/strasse/11",
+"x": 454,
+"y": 1574,
+"fuss": 25,
+"kachel": [
+29,
+99
+],
+"ebene": 1
+},
+{
+"datei": "sauber/k18-strasse-11.png",
+"basis": "k18/strasse/11",
+"x": 902,
+"y": 1574,
+"fuss": 25,
+"kachel": [
+57,
+99
+],
+"ebene": 1
+},
+{
+"datei": "sauber/k18-strasse-11.png",
+"basis": "k18/strasse/11",
+"x": 1862,
+"y": 1574,
+"fuss": 25,
+"kachel": [
+117,
+99
+],
+"ebene": 1
+},
+{
+"datei": "sauber/k18-strasse-11.png",
+"basis": "k18/strasse/11",
+"x": 1702,
+"y": 1686,
+"fuss": 25,
+"kachel": [
+107,
+106
+],
+"ebene": 1
+},
+{
+"datei": "sauber/k18-strasse-10.png",
+"basis": "k18/strasse/10",
+"x": 1414,
+"y": 546,
+"fuss": 29,
+"kachel": [
+89,
+35
+],
+"ebene": 1,
+"anim": "fahne18"
+},
+{
+"datei": "sauber/k18-strasse-10_m.png",
+"basis": "k18/strasse/10",
+"x": 1846,
+"y": 546,
+"fuss": 29,
+"kachel": [
+116,
+35
+],
+"ebene": 1,
+"anim": "fahne18"
+},
+{
+"datei": "sauber/k18-strasse-10.png",
+"basis": "k18/strasse/10",
+"x": 1446,
+"y": 546,
+"fuss": 29,
+"kachel": [
+91,
+35
+],
+"ebene": 1,
+"anim": "fahne18"
+},
+{
+"datei": "sauber/k18-strasse-10_m.png",
+"basis": "k18/strasse/10",
+"x": 1814,
+"y": 546,
+"fuss": 29,
+"kachel": [
+114,
+35
+],
+"ebene": 1,
+"anim": "fahne18"
+},
+{
+"datei": "sauber/k18-strasse-10.png",
+"basis": "k18/strasse/10",
+"x": 1478,
+"y": 546,
+"fuss": 29,
+"kachel": [
+93,
+35
+],
+"ebene": 1,
+"anim": "fahne18"
+},
+{
+"datei": "sauber/k18-strasse-10_m.png",
+"basis": "k18/strasse/10",
+"x": 1782,
+"y": 546,
+"fuss": 29,
+"kachel": [
+112,
+35
+],
+"ebene": 1,
+"anim": "fahne18"
+},
+{
+"datei": "sauber/k18-strasse-14.png",
+"basis": "k18/strasse/14",
+"x": 1521,
+"y": 729,
+"fuss": 22,
 "kachel": [
 96,
 46
@@ -1668,11 +1957,11 @@
 "ebene": 1
 },
 {
-"datei": "sauber/karte10-klein-38.png",
-"basis": "karte10/klein/38",
+"datei": "sauber/k18-strasse-14.png",
+"basis": "k18/strasse/14",
 "x": 1713,
-"y": 730,
-"fuss": 21,
+"y": 729,
+"fuss": 22,
 "kachel": [
 108,
 46
@@ -1680,11 +1969,11 @@
 "ebene": 1
 },
 {
-"datei": "sauber/karte10-klein-38.png",
-"basis": "karte10/klein/38",
+"datei": "sauber/k18-strasse-14.png",
+"basis": "k18/strasse/14",
 "x": 1521,
-"y": 922,
-"fuss": 21,
+"y": 921,
+"fuss": 22,
 "kachel": [
 96,
 58
@@ -1692,11 +1981,11 @@
 "ebene": 1
 },
 {
-"datei": "sauber/karte10-klein-38.png",
-"basis": "karte10/klein/38",
+"datei": "sauber/k18-strasse-14.png",
+"basis": "k18/strasse/14",
 "x": 1713,
-"y": 922,
-"fuss": 21,
+"y": 921,
+"fuss": 22,
 "kachel": [
 108,
 58
@@ -1704,11 +1993,11 @@
 "ebene": 1
 },
 {
-"datei": "sauber/karte10-klein-38.png",
-"basis": "karte10/klein/38",
+"datei": "sauber/k18-strasse-14.png",
+"basis": "k18/strasse/14",
 "x": 1521,
-"y": 1114,
-"fuss": 21,
+"y": 1113,
+"fuss": 22,
 "kachel": [
 96,
 70
@@ -1716,11 +2005,11 @@
 "ebene": 1
 },
 {
-"datei": "sauber/karte10-klein-38.png",
-"basis": "karte10/klein/38",
+"datei": "sauber/k18-strasse-14.png",
+"basis": "k18/strasse/14",
 "x": 1713,
-"y": 1114,
-"fuss": 21,
+"y": 1113,
+"fuss": 22,
 "kachel": [
 108,
 70
@@ -1760,18 +2049,6 @@
 "kachel": [
 9,
 69
-],
-"ebene": 1
-},
-{
-"datei": "sauber/karte10-klein-38.png",
-"basis": "karte10/klein/38",
-"x": 417,
-"y": 1370,
-"fuss": 21,
-"kachel": [
-27,
-86
 ],
 "ebene": 1
 },
@@ -1820,6 +2097,18 @@
 "kachel": [
 113,
 31
+],
+"ebene": 1
+},
+{
+"datei": "sauber/k18-frontal-08.png",
+"basis": "k18/frontal/08",
+"x": 418,
+"y": 1319,
+"fuss": 56,
+"kachel": [
+28,
+85
 ],
 "ebene": 1
 },
@@ -1970,6 +2259,18 @@
 {
 "datei": "sauber/karte02-klein-17.png",
 "basis": "karte02/klein/17",
+"x": 391,
+"y": 404,
+"fuss": 27,
+"kachel": [
+25,
+26
+],
+"ebene": 1
+},
+{
+"datei": "sauber/karte02-klein-17.png",
+"basis": "karte02/klein/17",
 "x": 647,
 "y": 1108,
 "fuss": 27,
@@ -2000,6 +2301,177 @@
 "kachel": [
 63,
 44
+],
+"ebene": 1
+},
+{
+"datei": "sauber/k18-strasse-21.png",
+"basis": "k18/strasse/21",
+"x": 230,
+"y": 1575,
+"fuss": 24,
+"kachel": [
+15,
+99
+],
+"ebene": 1
+},
+{
+"datei": "sauber/k18-strasse-21.png",
+"basis": "k18/strasse/21",
+"x": 486,
+"y": 1575,
+"fuss": 24,
+"kachel": [
+31,
+99
+],
+"ebene": 1
+},
+{
+"datei": "sauber/k18-strasse-21.png",
+"basis": "k18/strasse/21",
+"x": 742,
+"y": 1575,
+"fuss": 24,
+"kachel": [
+47,
+99
+],
+"ebene": 1
+},
+{
+"datei": "sauber/k18-strasse-21.png",
+"basis": "k18/strasse/21",
+"x": 998,
+"y": 1575,
+"fuss": 24,
+"kachel": [
+63,
+99
+],
+"ebene": 1
+},
+{
+"datei": "sauber/k18-strasse-21.png",
+"basis": "k18/strasse/21",
+"x": 1254,
+"y": 1575,
+"fuss": 24,
+"kachel": [
+79,
+99
+],
+"ebene": 1
+},
+{
+"datei": "sauber/k18-strasse-21.png",
+"basis": "k18/strasse/21",
+"x": 1766,
+"y": 1575,
+"fuss": 24,
+"kachel": [
+111,
+99
+],
+"ebene": 1
+},
+{
+"datei": "sauber/k18-strasse-21.png",
+"basis": "k18/strasse/21",
+"x": 1670,
+"y": 1607,
+"fuss": 24,
+"kachel": [
+105,
+101
+],
+"ebene": 1
+},
+{
+"datei": "sauber/k18-strasse-21.png",
+"basis": "k18/strasse/21",
+"x": 1734,
+"y": 1607,
+"fuss": 24,
+"kachel": [
+109,
+101
+],
+"ebene": 1
+},
+{
+"datei": "sauber/k18-strasse-21.png",
+"basis": "k18/strasse/21",
+"x": 1670,
+"y": 1671,
+"fuss": 24,
+"kachel": [
+105,
+105
+],
+"ebene": 1
+},
+{
+"datei": "sauber/k18-strasse-21.png",
+"basis": "k18/strasse/21",
+"x": 1734,
+"y": 1671,
+"fuss": 24,
+"kachel": [
+109,
+105
+],
+"ebene": 1
+},
+{
+"datei": "sauber/k18-strasse-50.png",
+"basis": "k18/strasse/50",
+"x": 256,
+"y": 289,
+"fuss": 30,
+"kachel": [
+16,
+19
+],
+"ebene": 1,
+"anim": "fahne18"
+},
+{
+"datei": "sauber/k18-strasse-50.png",
+"basis": "k18/strasse/50",
+"x": 480,
+"y": 289,
+"fuss": 30,
+"kachel": [
+30,
+19
+],
+"ebene": 1,
+"anim": "fahne18"
+},
+{
+"datei": "sauber/k18-strasse-17.png",
+"basis": "k18/strasse/17",
+"x": 418,
+"y": 402,
+"fuss": 29,
+"kachel": [
+26,
+26
+],
+"ebene": 1,
+"anim": "ampel18"
+},
+{
+"datei": "sauber/k18-strasse-40.png",
+"basis": "k18/strasse/40",
+"x": 976,
+"y": 401,
+"fuss": 30,
+"kachel": [
+61,
+26
 ],
 "ebene": 1
 },
@@ -2244,6 +2716,19 @@
 "fuss": 31,
 "kachel": [
 10,
+52
+],
+"ebene": 1,
+"auto": true
+},
+{
+"datei": "sauber/k18-autos-01.png",
+"basis": "k18/autos/01",
+"x": 706,
+"y": 817,
+"fuss": 30,
+"kachel": [
+46,
 52
 ],
 "ebene": 1,

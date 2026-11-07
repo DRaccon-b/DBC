@@ -535,6 +535,24 @@ def poller():
     return b
 
 
+def ginkgo(quelle, name):
+    """Ginkgo im Herbst: Krone eines vorhandenen Baums (Karte 01/10) nach Helligkeit auf eine goldgelbe Rampe
+    umgefaerbt, Stamm und Umriss bleiben (Wiederverwenden zuerst, Regel 3)."""
+    im = np.array(Image.open(os.path.join(ROOT, 'assets', 'objekte', quelle + '.png')).convert('RGBA')).astype(int)
+    r_, g_, b_, a_ = im[..., 0], im[..., 1], im[..., 2], im[..., 3]
+    gruen = (a_ > 0) & (g_ > r_ + 8) & (g_ > b_ + 8)
+    kontur = (a_ > 0) & ~gruen & (0.3 * r_ + 0.59 * g_ + 0.11 * b_ < 60) & ~(r_ > g_ + 10)   # dunkle Kontur -> dunkles Braun
+    lum = (0.3 * r_ + 0.59 * g_ + 0.11 * b_)
+    rampe = np.array([[96, 62, 22], [150, 98, 26], [196, 140, 34], [226, 178, 52], [244, 210, 96], [252, 236, 156]])
+    t = np.clip((lum - lum[gruen].min()) / max(1, np.ptp(lum[gruen])), 0, 0.999) if gruen.any() else lum * 0
+    idx = (t * len(rampe)).astype(int)
+    out = im.copy()
+    out[gruen, :3] = rampe[idx[gruen]]
+    out[kontur, :3] = [58, 36, 14]
+    os.makedirs(OUT, exist_ok=True)
+    Image.fromarray(out.astype(np.uint8)).save(os.path.join(OUT, name + '.png'))
+
+
 def main():
     lay = json.load(open(os.path.join(KARTE, 'layout.json')))
     os.makedirs(OUT, exist_ok=True)
@@ -561,6 +579,9 @@ def main():
         teile.append((art, Image.fromarray(b.a)))
     for name, fn in (('pfeiler', pfeiler), ('poller', poller), ('zug', zug), ('kuebel', kuebel)):
         b = fn(); b.save(name); teile.append((name, Image.fromarray(b.a)))
+    for q, n in (('karte01/baeume/00', 'ginkgo'), ('karte10/baeume/01', 'ginkgo_gross'), ('karte01/baeume/03', 'ginkgo_klein')):
+        ginkgo(q, n)
+        teile.append((n, Image.open(os.path.join(OUT, n + '.png'))))
     W = max(im.width for _, im in teile)
     Hs = sum(im.height + 8 for _, im in teile)
     sheet = Image.new('RGBA', (W, Hs), (90, 96, 110, 255))
