@@ -39,6 +39,25 @@ BAHNEN = [[(15, 9.5), (11.5, 9.5), (9.5, 11.5), (5.5, 11.5)],
           [(15, 8.0), (13.5, 8.0), (11.5, 6.0), (6.5, 6.0), (4.5, 4.0)]]
 
 
+def netzlicht(sp, frame, o):
+    """Lichter der Netzwerk-Objekte (cyan Anzeigen, orange Leitungen, roter Schirm, gelber Chip) pulsieren weich in
+    4 Bildern; Gehaeuse bleibt unveraendert."""
+    a = np.array(sp)
+    ai = a.astype(int)
+    r_, g_, b_ = ai[..., 0], ai[..., 1], ai[..., 2]
+    sicht = ai[..., 3] > 0
+    cyan = (g_ > 150) & (b_ > 150) & (r_ < 140)
+    warm = (r_ > 170) & (g_ < 140) & (b_ < 110)
+    gelb = (r_ > 190) & (g_ > 150) & (b_ < 110)
+    m = sicht & (cyan | warm | gelb)
+    k_ = (0.78, 0.95, 1.12, 0.95)[(frame + int(o.get('x', 0)) // 48) % 4]
+    a[m, :3] = np.clip(ai[m, :3] * k_, 0, 255).astype(np.uint8)
+    return Image.fromarray(a)
+
+
+k4.TEILANIM['netzlicht'] = netzlicht
+
+
 def layout():
     k = np.full((R, C), '.')
     h = np.zeros((R, C), int)

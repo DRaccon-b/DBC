@@ -68,6 +68,20 @@ def ring(a, cx, cy, frame):
 ROT = np.array([230, 40, 60], np.float32)
 
 
+def virusglut(sp, frame, o):
+    """Rot glimmende Teile der Virus-Objekte (Adern, Kerne, Augen) pulsieren in 4 Bildern, der Rest bleibt ruhig."""
+    a = np.array(sp)
+    ai = a.astype(int)
+    r_, g_, b_ = ai[..., 0], ai[..., 1], ai[..., 2]
+    m = (ai[..., 3] > 0) & (r_ > 150) & (g_ < 110) & (b_ < 120) & (r_ > g_ + 70)
+    k_ = (0.75, 0.95, 1.15, 0.95)[(frame + int(o.get('x', 0)) // 40) % 4]
+    a[m, :3] = np.clip(ai[m, :3] * k_, 0, 255).astype(np.uint8)
+    return Image.fromarray(a)
+
+
+k4.TEILANIM['virusglut'] = virusglut
+
+
 def befall_karte(lay):
     """Welche Kacheln sind befallen (0 rein, 1 leicht, 2 schwer): Wolken aus Rauschen, nach rechts immer staerker
     (linke Insel: fruehe Stufen, rechte Insel: spaete Stufen). Aufstellplaetze, Teleporter und Ring bleiben frei."""

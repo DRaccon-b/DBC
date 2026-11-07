@@ -45,14 +45,14 @@ def platzieren(karte, eintraege, achse):
 
 ACHSE = 256
 EINTRAEGE = [
-    ('tor/00', ACHSE, 5, 'glimmen', False),            # Firewall-Tor oben auf der Achse
-    ('tor/04', 5.5 * T, 12, 'glimmen', True),          # Server auf den Endknoten der Leiterbahnen
-    ('tor/07', 4.5 * T, 4, 'glimmen', True),           # Antennenknoten
-    ('tor/03', 7.5 * T, 16, 'glimmen', True),          # Datentank
+    ('tor/00', ACHSE, 5, 'netzlicht', False),            # Firewall-Tor oben auf der Achse
+    ('tor/04', 5.5 * T, 12, 'netzlicht', True),          # Server auf den Endknoten der Leiterbahnen
+    ('tor/07', 4.5 * T, 4, 'netzlicht', True),           # Antennenknoten
+    ('tor/03', 7.5 * T, 16, 'netzlicht', True),          # Datentank
 ]
 
 if __name__ == '__main__':
     eintraege = list(EINTRAEGE)
     if os.path.exists(os.path.join(ROOT, 'assets', 'objekte', 'karte16', 'klein', '00.png')):
-        eintraege.append(('klein/00', 19.5 * T, 7, 'glimmen', False))   # gelber Datenchip (wie die Vorlage)
+        eintraege.append(('klein/00', 19.5 * T, 7, 'netzlicht', False))   # gelber Datenchip (wie die Vorlage)
     platzieren('karte16', eintraege, ACHSE)
