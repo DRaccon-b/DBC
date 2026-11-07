@@ -13,8 +13,11 @@ Klassen:  d Gipfelstein (Pflaster)  k dunkler Schotter  p Kristallboden (violett
 Hoehen:   1 Boden, 2 Boss-Feld/Portalplatz/Felsnasen, 5 Bergwand.
 """
 import json, os
+import sys
 import numpy as np
 from PIL import Image
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import karte14_form
 
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
 KARTE = os.path.join(ROOT, 'maps', 'karte14')
@@ -66,14 +69,12 @@ def main():
         blob(k, *f, 'v', 60 + i, 0.45, nur='dkp')
     h[k == 'v'] = 2
     # ------------------------------------------------------------------ Boss-Feld (eine Etage hoeher) mit Schachbrett
-    k[7:29, 29:52] = 'c'
-    h[7:29, 29:52] = 2
-    k[7, 34:46] = 'z'                                        # Streifen vor dem Schloss
-    k[27:29, 29:52] = 'z'                                    # Schachbrett-Saum vorne
-    for y in range(11, 25):
-        for x in range(33, 48):
-            if y in (11, 24) or x in (33, 47):
-                k[y, x] = 'z'
+    form = os.environ.get('BOSSFORM', 'quadrat')             # Form siehe karte14_form.py (Saum/Ring im Bau-Skript)
+    yy, xx = np.mgrid[0:R, 0:C]
+    feld = karte14_form.maske(form, (xx + 0.5) * 16, (yy + 0.5) * 16)
+    feld[:7] = False
+    k[feld] = 'c'
+    h[feld] = 2
     treppen = [[38, 41, 2, 28]]
     # ------------------------------------------------------------------ Schachbrettweg, Treppenplatz unten
     k[30:69, 38:42] = 'z'
@@ -86,7 +87,7 @@ def main():
     treppen.append([60, 62, 2, 13])
     lay = {
         'groesse': [C, R], 'klassen': [''.join(r) for r in k], 'hoehe': [''.join(str(c) for c in r) for r in h],
-        'treppen_sued': treppen, 'boss': [40.5, 18.0], 'portal': [62.0, 8.0], 'felsnasen': FELS,
+        'treppen_sued': treppen, 'boss': [40.5, 18.0], 'bossform': form, 'portal': [62.0, 8.0], 'felsnasen': FELS,
         'teleporter': [{'x': 38, 'y': 68, 'b': 4, 'h': 2}],
     }
     os.makedirs(KARTE, exist_ok=True)

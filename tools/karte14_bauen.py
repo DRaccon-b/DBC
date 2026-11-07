@@ -16,6 +16,7 @@ import karte_bauen as kb
 import karte04_bauen as k4
 import karte08_bauen as k8
 import bauwerke
+import karte14_form
 
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
 KARTE = os.path.join(ROOT, 'maps', 'karte14')
@@ -157,7 +158,7 @@ def bauen(frame=None, speichern=True):
         m = weich(roh, bl, rausch, seed)
         a[m] = textur(art, cols, rows)[m]
         k4.dunkeln(a, weich(roh, bl, rausch, seed, 0.36) & ~m, 0.84)
-    for art in 'czbf':
+    for art in 'zbf':
         m = zell_maske(cls, art, cols, rows) > 0
         a[m] = textur(art, cols, rows)[m]
     platz = zell_maske(cls, 'b', cols, rows) > 0
@@ -169,13 +170,29 @@ def bauen(frame=None, speichern=True):
     felsn = weich(zell_maske(cls, 'v', cols, rows), 3, 0.25, 11) & ~em[5]
     a[felsn] = textur('v', cols, rows)[felsn]
     portal = zell_maske(cls, 'f', cols, rows) > 0
-    feld = (zell_maske(cls, 'cz', cols, rows) > 0) & (k8.stufe(hoehe, 2, cols, rows) > 0)
+    yy_, xx_ = np.mgrid[0:Hp, 0:Wp]                               # Boss-Feld pixelgenau in der gewaehlten Form
+    feld = karte14_form.maske(lay.get('bossform', 'quadrat'), xx_ + 0.5, yy_ + 0.5) & (yy_ >= 7 * T)
+    tiefe_ = np.zeros((Hp, Wp), np.int16)                         # Abstand zum Rand (in px, bis 70)
+    m_ = feld.copy()
+    for d_ in range(1, 71):
+        m_ = np.array(Image.fromarray((m_ * 255).astype(np.uint8)).filter(ImageFilter.MinFilter(3))) > 0
+        tiefe_[m_] = d_
+        if not m_.any():
+            break
+    a[feld] = textur('c', cols, rows)[feld]
+    zt = textur('z', cols, rows)
+    saum = feld & (tiefe_ < 12)
+    ring = feld & (tiefe_ >= 48) & (tiefe_ < 62)
+    a[saum | ring] = zt[saum | ring]
+    a[feld & ((tiefe_ == 12) | (tiefe_ == 47) | (tiefe_ == 62))] = H('#b08a40')   # Goldlinien an Saum und Ring
     a[em[5]] = (textur('r', cols, rows)[em[5]] * np.array([0.56, 0.58, 0.66])).astype(np.uint8)
     # Boss-Feld: Goldkante, Pfosten in den Ecken des Rahmens, Kartenzeichen, Spirale
     a[kontur(feld)] = H('#b08a40')
     for (sx, sy, nm) in ((35, 13, 'herz'), (45, 13, 'pik'), (35, 22, 'karo'), (45, 22, 'kreuz'),
                          (31, 9, 'pik'), (49, 9, 'herz'), (31, 26, 'kreuz'), (49, 26, 'karo')):
-        symbol(a, nm, sx * T + 4, sy * T + 4, (210, 170, 70))
+        px_, py_ = sx * T + 7, sy * T + 7
+        if 20 <= tiefe_[py_, px_] < 46 or tiefe_[py_, px_] >= 66:         # nur auf rotem Teppich, nicht im Saum/Ring
+            symbol(a, nm, sx * T + 4, sy * T + 4, (210, 170, 70))
     b = lay['boss']
     spirale(a, b[0] * T, b[1] * T, 4.6 * T, frame)
     treppen_info = []
