@@ -15,8 +15,8 @@ def maske(form, xx, yy):
     dx, dy = (xx - CX), (yy - CY)
     ax, ay = np.abs(dx), np.abs(dy)
     box = (ax <= HX) & (ay <= HY)
-    if form == 'achteck':
-        m = box & (ax / HX + ay / HY <= 1.5)
+    if form == 'achteck':                                                     # hinten gerade ueber die ganze Front,
+        m = box & ((dy <= 0) | (ax / HX + ay / HY <= 1.5))                    # nur vorne abgeschraegt
     elif form == 'rund':
         m = (dx / HX) ** 2 + (dy / HY) ** 2 <= 1.0
     elif form == 'raute':
