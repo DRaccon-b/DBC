@@ -210,6 +210,84 @@ def rotlicht(sp, frame, o):
 k4.TEILANIM['rotlicht'] = rotlicht
 
 
+def konsole(sp, frame, o):
+    """Konsole: kleine bunte Lampen und Bildschirmpixel blinken in eigenem Takt; Gehaeuse bleibt ruhig."""
+    a = np.array(sp)
+    ai = a.astype(int)
+    al = ai[..., 3] > 0
+    mx = ai[..., :3].max(axis=2); mn = ai[..., :3].min(axis=2)
+    bunt = al & (mx > 140) & (mx - mn > 70)
+    ys, xs = np.nonzero(bunt)
+    out = a.copy()
+    for y, x in zip(ys, xs):
+        t = (frame * 3 + x * 7 + y * 13) % 16
+        if t < 5:
+            out[y, x, :3] = (ai[y, x, :3] * 0.35).astype(np.uint8)
+        elif t > 13:
+            out[y, x, :3] = np.minimum(255, ai[y, x, :3] + 60).astype(np.uint8)
+    return Image.fromarray(out)
+
+
+def funken(sp, frame, o):
+    """Wrack: aus gerissenen Kabeln sprueht es - einzelne gelb-weisse Funken flackern an wechselnden Stellen."""
+    a = np.array(sp)
+    ai = a.astype(int)
+    al = ai[..., 3] > 0
+    hell = al & (ai[..., 0] > 170) & (ai[..., 1] > 120)
+    ys, xs = np.nonzero(hell)
+    out = a.copy()
+    out[hell, :3] = (ai[hell, :3] * 0.6).astype(np.uint8)
+    rs = random.Random(frame * 31 + int(o.get('x', 0)))
+    if len(ys):
+        for _ in range(3):
+            i = rs.randrange(len(ys)); y, x = ys[i], xs[i]
+            for dy, dx in ((0, 0), (-1, 0), (0, 1), (-1, -1), (-2, 1)):
+                Y, X = y + dy, x + dx
+                if 0 <= Y < a.shape[0] and 0 <= X < a.shape[1] and rs.random() < 0.8:
+                    out[Y, X] = (255, 240, 150, 255)
+    return Image.fromarray(out)
+
+
+def ampel_blinken(sp, frame, o):
+    """Kaputte Ampel: nur die Lampen blinken gelb (halbe Zeit an), Mast und Gehaeuse ruhig."""
+    a = np.array(sp)
+    ai = a.astype(int)
+    al = ai[..., 3] > 0
+    lampe = al & (ai[..., 0] > 150) & (ai[..., 0] > ai[..., 2] + 50)
+    out = a.copy()
+    if (frame // 4) % 2:
+        out[lampe, :3] = (ai[lampe, :3] * 0.35).astype(np.uint8)
+    else:
+        out[lampe, :3] = np.clip(np.array([240, 190, 60]) * 0.6 + ai[lampe, :3] * 0.4, 0, 255).astype(np.uint8)
+    return Image.fromarray(out)
+
+
+k4.TEILANIM.update({'konsole': konsole, 'funken': funken, 'ampel_blinken': ampel_blinken})
+
+
+def rauch(img, objs, frame):
+    """Schornsteine: graue Woelkchen steigen genau aus der Oeffnung oben, wachsen, treiben nach rechts und verblassen."""
+    from PIL import ImageDraw
+    f = frame or 0
+    lage = Image.new('RGBA', img.size, (0, 0, 0, 0))
+    d = ImageDraw.Draw(lage)
+    for o in objs:
+        if not o.get('rauch'):
+            continue
+        al = np.array(Image.open(os.path.join(OBJ, o['datei'])).getchannel('A')) > 0
+        top = int(np.nonzero(al.any(axis=1))[0].min())
+        xs = np.nonzero(al[top:top + 3].any(axis=0))[0]
+        cx, cy = o['x'] + (xs.min() + xs.max()) / 2.0, o['y'] + top
+        for k_ in range(5):
+            t = ((f / N_FRAMES) + k_ / 5.0) % 1.0
+            r = 2 + t * 6
+            x, y = cx + t * 14 + math.sin(t * 6 + k_) * 1.5, cy - 3 - t * 34
+            al_ = int(150 * (1 - t))
+            d.ellipse((x - r, y - r, x + r, y + r), fill=(70, 70, 82, al_))
+            d.ellipse((x - r * 0.6, y - r * 0.8, x + r * 0.3, y), fill=(110, 110, 124, int(al_ * 0.8)))
+    img.alpha_composite(lage)
+
+
 def bauen(frame=None, speichern=True):
     lay = json.load(open(os.path.join(KARTE, 'layout.json')))
     cols, rows = lay['groesse']
@@ -263,6 +341,8 @@ def bauen(frame=None, speichern=True):
         vor_objekten = np.array(img)
         k4.objekte_zeichnen(img, objs, cache, np.zeros((Hp, Wp), bool), frame)
         k4.animieren(img, objs, cache, frame or 0, ruhig=frame is None)
+        if frame is not None:
+            rauch(img, objs, frame)
         k8.verdeckung(img, [o for o in objs if not o.get('an_wand')], cache, lvl, vor_objekten)
     if speichern and frame is None:
         img.save(os.path.join(KARTE, 'terrain.png'))

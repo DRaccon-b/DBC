@@ -28,7 +28,10 @@ ACHSE_F = 40 * T                 # Festung (senkrechte Achse)
 
 FLACH = {'klein/%02d' % i for i in (1, 2, 3, 4, 5, 6, 13, 14, 15, 23, 32, 35, 41, 48, 57, 59, 63)}
 LIEGEND = {'klein/03', 'klein/13', 'klein/41', 'klein/32', 'klein/57', 'klein/59', 'gross2/02', 'gross/02', 'mittel/14'}
-LEUCHTEN = {'mittel/05': 'lampe', 'mittel/01': 'feuer', 'festung/00': 'glimmen'}
+LEUCHTEN = {'mittel/05': 'lampe', 'mittel/01': 'feuer', 'festung/00': 'glimmen', 'gross/00': 'rotlicht', 'gross2/03': 'rotlicht',
+            'festung/01': 'rotlicht', 'festung/03': 'rotlicht', 'mittel/13': 'rotlicht', 'festung/02': 'konsole', 'gross/02': 'funken',
+            'mittel/04': 'ampel_blinken', 'klein/09': 'glimmen', 'klein/36': 'glimmen'}
+RAUCH = {'mittel/00', 'mittel/01'}
 WIND = {'klein/15'}
 BLOCK_STREU = {'klein/00': 3, 'klein/01': 4, 'klein/02': 3, 'klein/04': 2, 'klein/05': 2, 'klein/06': 2, 'klein/11': 2,
                'klein/12': 1, 'klein/13': 2, 'klein/14': 2, 'klein/15': 2, 'klein/23': 1, 'klein/32': 1, 'klein/35': 1,
@@ -209,6 +212,35 @@ def main():
     versunken('berg/01', 'unten', 17 * T, kein_schatten=True)                    # Panzerkette unten
     versunken('berg/02', 'rechts', 47 * T, spiegeln=True, kein_schatten=True)    # Roboterarm rechts
     versunken('berg/03', 'unten', 72 * T, kein_schatten=True, anim='rotlicht')   # Mech-Kopf unten rechts, rotes Auge
+    #    c) Wachtechnik auf der Bergkuppe: Funkmasten an den Ecken, Warnleuchten im festen Abstand, Kameras und
+    #       Scheinwerfer zur Stadt, Zaun mit Luecken, Stacheldraht, Warnschilder, Kristalle, Kabel- und Rohrenden
+    WACHE = [('wache/00', 1, 4), ('wache/00', 78, 4), ('wache/00', 1, 66), ('wache/00', 78, 66),
+             ('wache/04', 25, 2), ('wache/04', 55, 2), ('wache/11', 9, 2), ('wache/15', 47, 68), ('wache/13', 30, 68),
+             ('wache/12', 1, 27), ('wache/12', 78, 33), ('wache/08', 1, 38), ('wache/08', 78, 57), ('wache/08', 59, 68),
+             ('wache/09', 1, 51), ('wache/10', 78, 21), ('wache/09', 23, 68), ('wache/10', 69, 68), ('wache/07', 1, 15),
+             ('wache/07', 78, 44), ('wache/07', 12, 68)]
+    for y in range(8, 66, 12):                                    # Warnleuchten links/rechts im festen Rhythmus
+        WACHE += [('wache/02', 1, y), ('wache/02', 78, y)]
+    for y in (20, 44):                                            # Kameras zur Stadt hin (rechts gespiegelt)
+        WACHE += [('wache/03', 1, y), ('wache/03', 78, y + 1)]
+    for x in range(6, 76, 9):                                     # Zaun entlang der unteren Bergkante, mit Luecken
+        if rr.random() < 0.7 and not (36 <= x <= 43):
+            WACHE.append(('wache/05' if rr.random() < 0.75 else 'wache/06', x, 68))
+    for (name_, tx, ty) in WACHE:
+        o = None
+        for d in (0, 1, -1, 2, -2, 3, -3):                        # nur entlang der Bergkuppe ausweichen, nie in die Stadt
+            tx_, ty_ = (tx, ty + d) if tx in (1, 78) else (tx + d, ty)
+            if tx in (1, 78) and not 3 <= ty_ <= 66:
+                continue
+            o = setzen(name_, tx_ * T + 8, ty_, {'spiegeln': tx > 40 and name_ in ('wache/03', 'wache/02', 'wache/04')})
+            if o:
+                break
+        if o and name_ in ('wache/00', 'wache/02', 'wache/03', 'wache/14', 'wache/15'):
+            o['anim'] = 'rotlicht'
+        elif o and name_ == 'wache/09':
+            o['anim'] = 'glimmen'
+        elif o and name_ == 'wache/04':
+            o['anim'] = 'lampe'
     #    b) Schrottrand: vom Kartenrand angeschnitten, Tiefe wellenfoermig, ungleiche Abstaende (wie Karte 12)
     RAND = ['rand/%02d' % i for i in range(16)]
     GEW = [2, 3, 2, 3, 2, 2, 1, 3, 2, 2, 1, 3, 1, 1, 2, 1]
@@ -234,35 +266,6 @@ def main():
         objekte.append({'datei': datei, 'basis': name_, 'x': x, 'y': y, 'fuss': h, 'kachel': [max(0, min(cols - 1, X // T)),
                         max(0, min(rows - 1, fussy // T))], 'ebene': 1, 'fest_pos': True, 'rand': True, 'kein_schatten': True})
         belegen(datei, x, y)
-    #    c) Wachtechnik auf der Bergkuppe: Funkmasten an den Ecken, Warnleuchten im festen Abstand, Kameras und
-    #       Scheinwerfer zur Stadt, Zaun mit Luecken, Stacheldraht, Warnschilder, Kristalle, Kabel- und Rohrenden
-    WACHE = [('wache/00', 1, 4), ('wache/00', 78, 4), ('wache/00', 1, 66), ('wache/00', 78, 66),
-             ('wache/04', 25, 2), ('wache/04', 55, 2), ('wache/11', 9, 2), ('wache/15', 47, 68), ('wache/13', 30, 68),
-             ('wache/12', 1, 27), ('wache/12', 78, 33), ('wache/08', 1, 38), ('wache/08', 78, 57), ('wache/08', 59, 68),
-             ('wache/09', 1, 51), ('wache/10', 78, 21), ('wache/09', 23, 68), ('wache/10', 69, 68), ('wache/07', 1, 15),
-             ('wache/07', 78, 44), ('wache/07', 12, 68)]
-    for y in range(8, 66, 12):                                    # Warnleuchten links/rechts im festen Rhythmus
-        WACHE += [('wache/02', 1, y), ('wache/02', 78, y)]
-    for y in (20, 44):                                            # Kameras zur Stadt hin (rechts gespiegelt)
-        WACHE += [('wache/03', 1, y), ('wache/03', 78, y + 1)]
-    for x in range(6, 76, 9):                                     # Zaun entlang der unteren Bergkante, mit Luecken
-        if rr.random() < 0.7 and not (36 <= x <= 43):
-            WACHE.append(('wache/05' if rr.random() < 0.75 else 'wache/06', x, 68))
-    for (name_, tx, ty) in WACHE:
-        o = None
-        for dy in (0, 1, -1, 2, -2, 3, -3):                       # nur entlang der Bergkuppe ausweichen, nie in die Stadt
-            ty_ = ty + dy if tx in (1, 78) else ty
-            if (tx in (1, 78) and not 3 <= ty_ <= 66) or (dy and tx not in (1, 78)):
-                continue
-            o = setzen(name_, tx * T + 8, ty_, {'spiegeln': tx > 40 and name_ in ('wache/03', 'wache/02', 'wache/04')})
-            if o:
-                break
-        if o and name_ in ('wache/00', 'wache/02', 'wache/03', 'wache/14', 'wache/15'):
-            o['anim'] = 'rotlicht'
-        elif o and name_ == 'wache/09':
-            o['anim'] = 'glimmen'
-        elif o and name_ == 'wache/04':
-            o['anim'] = 'lampe'
     # 1) Festung: Tor mit Auge und Panzertueren in der Bergwand, Reaktoren und Konsolen spiegelgleich zur Achse
     FEST = [
         ('gross2/03', ACHSE_F, 5, {'achse': ACHSE_F, 'an_wand': True}),
@@ -317,6 +320,9 @@ def main():
                 continue
             if setzen(name_, tx * T + 8, ty, {'spiegeln': rnd.random() < 0.4}, arten=arten):
                 n += 1
+    for o in objekte:
+        if o['basis'] in RAUCH:
+            o['rauch'] = True
     json.dump(objekte, open(os.path.join(OBJ, 'platzierung.json'), 'w'), indent=0)
     print(len(objekte), 'Objekte gesetzt')
 
