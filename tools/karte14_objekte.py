@@ -226,6 +226,9 @@ def main():
         FEST += [('mittel/06', ACHSE_S - 60, y, {'symm': 'f%d' % y}), ('mittel/06', ACHSE_S + 60, y, {'symm': 'f%d' % y})]
     for (name, X, fy, opt) in FEST:
         setzen(name, X, fy, opt, suchen=not (opt.get('symm') or opt.get('achse')), melden=True)
+    for o in objekte:                                             # Schloss ganz im Bild (Turmspitze nicht am Rand
+        if o['basis'] == 'schloss2/01':                           # abgeschnitten) und vor der Mauer gezeichnet
+            o['y'] = max(o['y'], 0)
     # 2) Kristalle auf dem Kristallboden, Spielkarten und Deko auf dem Gipfel, Kleinkram (sparsam, unregelmaessig)
     for (streu, arten, anzahl) in ((KRISTALL, 'p', 14), (STREU, 'dk', 22), (KLEIN, 'dkv', 52)):
         namen, gew = list(streu), list(streu.values())
