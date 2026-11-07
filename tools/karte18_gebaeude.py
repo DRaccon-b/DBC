@@ -68,15 +68,15 @@ def dach(b, x0, x1, y0, y1, c, rs, aufbauten=True, schraeg=0):
         return
     x = x0 + 8 + rs.randint(0, 10)
     while x < x1 - 24:
-        art = rs.choice(('klima', 'luefter', 'klima', 'leer'))
+        art = rs.choice(('klima', 'luefter', 'leer', 'leer'))
         if art == 'klima' and y1 - y0 > 10:
-            yy = y0 + 4 + rs.randint(0, max(0, y1 - y0 - 14))
+            yy = y0 + 4 + rs.choice((0, max(0, y1 - y0 - 14) // 2, max(0, y1 - y0 - 14)))
             b.kasten(x, yy, x + 11, yy + 7, H('#9aa0ac'), H('#c4c8d2'), H('#5a5e6a'))
             b.r(x + 3, yy + 2, x + 8, yy + 5, H('#4a4e5a'))
             b.r(x, yy + 8, x + 12, yy + 8, H('#3a3c48'))
             x += 18 + rs.randint(4, 22)
         elif art == 'luefter':
-            yy = y0 + 4 + rs.randint(0, max(0, y1 - y0 - 10))
+            yy = y0 + 4 + rs.choice((0, max(0, y1 - y0 - 10)))
             b.kasten(x, yy, x + 5, yy + 4, H('#7a808c'), H('#a4aab4'), H('#4a4e5a'))
             x += 14 + rs.randint(4, 24)
         else:

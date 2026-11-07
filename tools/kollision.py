@@ -96,7 +96,9 @@ def main(karte):
         if flach:
             continue
         f = np.zeros_like(a)
-        if o.get('liegend') or o.get('basis') in LIEGEND_GROSS.get(karte, ()):   # liegende Objekte: untere Haelfte
+        if o.get('gebaeude'):                                # Gebaeude (Karte 18): ganze Flaeche ist fest
+            f = a.copy()
+        elif o.get('liegend') or o.get('basis') in LIEGEND_GROSS.get(karte, ()):   # liegende Objekte: untere Haelfte
             f[(oben + zu) // 2:zu + 1] = a[(oben + zu) // 2:zu + 1]
         else:
             f[max(0, zu - FUSS + 1):zu + 1] = a[max(0, zu - FUSS + 1):zu + 1]
@@ -107,6 +109,9 @@ def main(karte):
             ys, xs = ys + y, xs + x
             ok = (ys >= 0) & (ys < Hh) & (xs >= 0) & (xs < W)
             ziel[ys[ok], xs[ok]] = True
+    hb = lay.get('hochbahn')                                 # Hochbahn: darunter begehbar, aber verdeckt
+    if hb:
+        deckt_px[hb['y0'] * T:(hb['y1'] + 1) * T, hb['x0'] * T:(hb['x1'] + 1) * T] = True
     klasse = np.ones((rows, cols), int)
     for y in range(rows):
         for x in range(cols):

@@ -76,6 +76,18 @@ def bordsteine(a, asphalt, boden):
     dunkeln(a, sch2, 0.85)
 
 
+def risse(a, asphalt, seed=1818):
+    """Vereinzelte feine Risse im Asphalt (etwa jede 70. Kachel), unregelmaessig verteilt."""
+    rs = random.Random(seed)
+    ys, xs = np.nonzero(asphalt[::T, ::T])
+    for i in rs.sample(range(len(ys)), len(ys) // 70):
+        x, y = int(xs[i]) * T + rs.randint(2, 12), int(ys[i]) * T + rs.randint(1, 4)
+        for _ in range(rs.randint(6, 12)):
+            if asphalt[y, x]:
+                a[y, x] = H('#22242c')
+            x += rs.choice((-1, 0, 1)); y += 1
+
+
 def linie_h(a, asphalt, y, x0, x1, farbe, strich=0, luecke=0, dicke=2):
     for x in range(x0, x1):
         if strich and (x - x0) % (strich + luecke) >= strich:
@@ -472,6 +484,47 @@ def leuchten18(sp, frame, o):
     return Image.fromarray(a)
 
 
+def reklame(sp, frame, o):
+    """Ladenzeile: nur die Leuchtschilder (Dachschilder und Schildbaender, kraeftige Farben) flackern sanft in
+    4 Bildern, jedes Haus im eigenen Takt; Markisen, Fenster und Waende bleiben ruhig."""
+    a = np.array(sp)
+    ai = a.astype(int)
+    h, w = a.shape[:2]
+    mx, mn = ai[..., :3].max(axis=2), ai[..., :3].min(axis=2)
+    yy = np.arange(h)[:, None]
+    zone = (yy < 17) | ((yy >= 44) & (yy <= 54))
+    m = (ai[..., 3] > 0) & zone & (mx > 150) & (mx - mn > 60)
+    out = a.copy()
+    for i in range(w // 96):
+        k_ = (0.85, 1.0, 1.12, 0.95)[((frame or 0) + i) % 4]
+        sub = m[:, i * 96:(i + 1) * 96]
+        blk = out[:, i * 96:(i + 1) * 96]
+        blk[sub, :3] = np.clip(ai[:, i * 96:(i + 1) * 96][sub, :3] * k_, 0, 255).astype(np.uint8)
+    return Image.fromarray(out)
+
+
+def fahne18(sp, frame, o):
+    """Fahne: nur das Tuch weht (Zeilen des Tuchs verschieben sich wellenfoermig um bis 1 px, am Mast fest);
+    der graue Mast bleibt unveraendert."""
+    a = np.array(sp)
+    ai = a.astype(int)
+    mx, mn = ai[..., :3].max(axis=2), ai[..., :3].min(axis=2)
+    tuch = (ai[..., 3] > 0) & (mx - mn > 40)
+    out = a.copy()
+    out[tuch] = 0
+    h = a.shape[0]
+    for y in range(h):
+        xs = np.nonzero(tuch[y])[0]
+        if not len(xs):
+            continue
+        d = int(round(math.sin(2 * math.pi * ((frame or 0) / 4.0) + y * 0.5)))
+        for x in xs:
+            X = x + (d if abs(x - xs.min()) > 2 else 0)
+            if 0 <= X < a.shape[1]:
+                out[y, X] = a[y, x]
+    return Image.fromarray(out)
+
+
 def boot(sp, frame, o):
     """Boot schaukelt auf dem Wasser: hebt und senkt sich als Ganzes um 1 px."""
     d = (0, 1, 0, -1)[(frame or 0) % 4]
@@ -480,8 +533,8 @@ def boot(sp, frame, o):
     return out
 
 
-k4.TEILANIM.update({'laterne18': laterne18, 'automat': leuchten18, 'ampel18': leuchten18, 'reklame': leuchten18,
-                    'boot': boot})
+k4.TEILANIM.update({'laterne18': laterne18, 'automat': leuchten18, 'ampel18': leuchten18, 'reklame': reklame,
+                    'boot': boot, 'fahne18': fahne18})
 
 
 # ---------------------------------------------------------------------------------------------- Bau
@@ -501,6 +554,7 @@ def bauen(frame=None, speichern=True):
     lvl = np.zeros((Hp, Wp), np.uint8)
     lvl[land] = 1
     lvl[gross(kl == 't')] = 2
+    risse(a, gross(kl == 's'))
     bordsteine(a, asphalt, land)
     markierungen(a, asphalt, lay)
     rasen_kanten(a, gross(np.isin(kl, ['n', 'd'])))

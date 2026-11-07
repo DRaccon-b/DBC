@@ -102,6 +102,7 @@ def main():
         'achse': ACHSE, 'gebaeude': gebaeude,
         'treppe_terrasse': [ACHSE - 6, ACHSE + 5, 33],          # x0, x1, Reihe der Front/Stufen (12 breit, Achse 102)
         'kompass': [ACHSE, 64],
+        'treppen_sued': [[ACHSE - 6, ACHSE + 5, 2, 32]],      # fuer die Kollision: Treppe als Durchgang
         'zebra': [[27, 29, 20, 24, 'v'], [39, 41, 20, 24, 'v'], [32, 36, 27, 29, 'h'], [32, 36, 37, 39, 'h'],
                   [14, 16, 42, 53, 'v'], [27, 29, 42, 53, 'v'], [39, 41, 42, 53, 'v'], [50, 52, 42, 53, 'v'],
                   [32, 36, 55, 57, 'h'], [32, 36, 69, 71, 'h'], [ACHSE - 2, ACHSE + 1, 84, 93, 'v']],

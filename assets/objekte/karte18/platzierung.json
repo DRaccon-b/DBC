@@ -980,39 +980,25 @@
 "ebene": 1
 },
 {
-"datei": "sauber/k18-gross-03.png",
-"basis": "k18/gross/03",
-"x": 1064,
-"y": 219,
-"fuss": 100,
+"datei": "sauber/k18-frontal-02.png",
+"basis": "k18/frontal/02",
+"x": 1058,
+"y": 276,
+"fuss": 43,
 "kachel": [
-70,
+68,
 19
 ],
-"ebene": 1,
-"anim": "automat"
+"ebene": 1
 },
 {
-"datei": "sauber/k18-gross-03.png",
-"basis": "k18/gross/03",
-"x": 328,
-"y": 571,
-"fuss": 100,
+"datei": "sauber/k18-frontal-00.png",
+"basis": "k18/frontal/00",
+"x": 1779,
+"y": 1636,
+"fuss": 27,
 "kachel": [
-24,
-41
-],
-"ebene": 1,
-"anim": "automat"
-},
-{
-"datei": "sauber/k18-gross-02.png",
-"basis": "k18/gross/02",
-"x": 1784,
-"y": 1594,
-"fuss": 69,
-"kachel": [
-115,
+113,
 103
 ],
 "ebene": 1,
@@ -1079,6 +1065,19 @@
 "fuss": 57,
 "kachel": [
 58,
+19
+],
+"ebene": 1,
+"anim": "laterne18"
+},
+{
+"datei": "sauber/karte02-abgeleitet-laterne.png",
+"basis": "karte02/abgeleitet/laterne",
+"x": 1120,
+"y": 262,
+"fuss": 57,
+"kachel": [
+70,
 19
 ],
 "ebene": 1,
@@ -2311,6 +2310,19 @@
 "kachel": [
 43,
 92
+],
+"ebene": 1,
+"auto": true
+},
+{
+"datei": "sauber/k18-autos-12_m.png",
+"basis": "k18/autos/12",
+"x": 1137,
+"y": 312,
+"fuss": 39,
+"kachel": [
+73,
+21
 ],
 "ebene": 1,
 "auto": true

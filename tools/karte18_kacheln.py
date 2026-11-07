@@ -41,12 +41,7 @@ def kachel(art, v):
             for y in range(y0, y0 + 6):
                 for x in range(x0, x0 + 7):
                     px[x, y] = H('#2b2e38')
-        if v == 4:                                   # feiner Riss
-            x, y = r.randint(3, 12), 1
-            for _ in range(10):
-                if 0 <= x < 16 and 0 <= y < 16:
-                    px[x, y] = H('#22242c')
-                x += r.choice((-1, 0, 1)); y += 1
+        # Risse kommen nur vereinzelt als Overlay in karte18_bauen dazu (sonst wirkt der Asphalt gemustert)
     elif art == 'g':                                 # Gehweg: Pflaster 8x4, versetzt, Licht oben
         grund, licht, fuge = H('#5c6676'), H('#6a7484'), H('#3e4654')
         for y in range(16):

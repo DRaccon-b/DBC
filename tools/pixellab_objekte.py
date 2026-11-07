@@ -1415,6 +1415,12 @@ OBJEKTGRUPPEN_K18 = {
         'small white motor boat seen from the side, floating, slightly from above',
         'blue bus stop shelter with a glass back wall, a bench inside and a round bus stop sign',
     ]},
+    'k18_frontal': {'size': 64, 'items': [   # zweiter Versuch, streng frontal (die ersten waren isometrisch)
+        'small white motor boat, pure side view flat 2D profile, camera exactly perpendicular to the hull side, bow pointing right, no perspective, no isometric, floating',
+        'small white motor boat with a blue stripe, pure side view flat 2D profile, bow pointing left, no perspective, no isometric',
+        'blue bus stop shelter seen exactly from the front, flat 2D front elevation, glass back wall, flat roof, bench inside, symmetric, no perspective, no isometric',
+        'grey bus stop shelter seen exactly from the front, flat 2D front elevation, glass back wall, flat roof with a route sign, bench inside, symmetric, no perspective, no isometric',
+    ]},
     'k18_strasse': {'size': 32, 'items': [
         'red japanese drink vending machine with glowing display of bottles',
         'blue drink vending machine with glowing display of bottles',

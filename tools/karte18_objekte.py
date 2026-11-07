@@ -209,11 +209,11 @@ def main():
         P.setzen(n, bx, r, boden=set('k'))
     P.setzen('karte02/ortho/14', 42, 82, boden=set('g'))     # Lkw vor dem offenen Rolltor
     P.setzen('karte02/ortho/10', 50, 81, boden=set('g')) if os.path.exists(os.path.join(ROOT, 'assets/objekte/karte02/ortho/10.png')) else None
-    if os.path.exists(pfad('k18/gross/03')):                 # Bushaltestellen
-        P.setzen('k18/gross/03', 66, 19)
-        P.setzen('k18/gross/03', 20, 41)
-    if os.path.exists(pfad('k18/gross/02')):                 # Boot am Steg (schwebt im Wasser, wippt)
-        P.setzen('k18/gross/02', 111, 103, boden=set('w'), anim='boot', extra={'kein_schatten': True})
+    if os.path.exists(pfad('k18/frontal/02')):               # Bushaltestellen (frontal)
+        P.setzen('k18/frontal/02', 66, 19)
+        P.setzen('k18/frontal/03', 20, 41)
+    if os.path.exists(pfad('k18/frontal/00')):               # Boot am Steg (frontal, schaukelt)
+        P.setzen('k18/frontal/00', 111, 103, boden=set('w'), anim='boot', extra={'kein_schatten': True})
     # ------------------------------------------------------------------ Laternen (fester Rhythmus, je Strassenseite)
     LAT = 'karte02/abgeleitet/laterne'
     for x in (10, 22, 34, 46, 58, 70, 82):                    # Nordseite obere Strasse (zwischen den Ladentueren)
@@ -280,8 +280,8 @@ def main():
                             (5, 76, 92, False), (1, 116, 92, False), (0, 41, 92, False)]:
         if os.path.exists(pfad(AUTO(i))):
             P.setzen(AUTO(i), bx, r, spiegel=ost, boden=fahr, extra={'auto': True})
-    if os.path.exists(pfad('k18/gross/00')):                 # Bus an der Haltestelle (ostwaerts)
-        P.setzen('k18/gross/00', 64, 22, spiegel=True, boden=fahr, extra={'auto': True})
+    if os.path.exists(pfad('k18/autos/12')):                 # Bus an der Haltestelle (ostwaerts, Seitenansicht)
+        P.setzen('k18/autos/12', 71, 21, spiegel=True, boden=fahr, extra={'auto': True})
     for (i, cx, r) in ((6, 35.5, 34), (7, 33.5, 66)):         # Querstrasse von oben (Sued auf Ostspur, Nord auf Westspur)
         if os.path.exists(pfad(AUTO(i))):
             P.setzen(AUTO(i), 0, r, boden=fahr, cx=cx * T, extra={'auto': True})
