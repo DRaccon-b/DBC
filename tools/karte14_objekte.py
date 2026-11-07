@@ -28,7 +28,7 @@ ACHSE_P = 62 * T                 # Portalplatz
 
 FLACH = {'klein/%02d' % i for i in (0, 1, 2, 4, 5, 6, 7, 9, 10, 11, 13, 15, 19, 20, 21, 30, 58)} | {'leere/08', 'leere/14'}
 LIEGEND = {'mittel/08', 'klein/02', 'klein/04', 'klein/10', 'klein/13', 'klein/19', 'klein/21', 'klein/58'}
-LEUCHTEN = {'mittel/06': 'banner', 'bau/02': 'portalwirbel', 'leere/05': 'glimmen', 'leere/02': 'glimmen', 'leere/07': 'glimmen', 'leere/08': 'glimmen',
+LEUCHTEN = {'mittel/06': 'banner', 'bau/02': 'portalwirbel', 'leere/05': 'auge', 'leere/02': 'glimmen', 'leere/07': 'glimmen', 'leere/08': 'glimmen',
             'leere/00': 'glimmen', 'leere/04': 'glimmen', 'mittel/05': 'feuer_lila', 'mittel/12': 'kerzen', 'mittel/04': 'glimmen', 'klein/12': 'kerzen',
             'klein/14': 'glimmen', 'klein/08': 'glimmen', 'wolken/10': 'feuer_lila', 'klein/55': 'glimmen'}
 WIND = {'klein/09'}
