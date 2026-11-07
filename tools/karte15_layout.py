@@ -31,7 +31,7 @@ def main():
     h[platt | steg] = 2
     dx, dy = np.abs(xx + 0.5 - CX), np.abs(yy + 0.5 - CY)
     riss = ((dx <= 1.5) & (dy <= 3.5)) | ((dx <= 3.5) & (dy <= 1.5)) | ((dx <= 2.5) & (dy <= 2.5))   # Kreuz, gestuft
-    k[riss] = 'v'
+    # k[riss] = 'v'   (Mitte auf Wunsch mit Pflaster gefuellt; Boss-Spawn bleibt 'boss')
     lay = {'groesse': [C, R], 'klassen': [''.join(r) for r in k], 'hoehe': [''.join(str(c) for c in r) for r in h],
            'platte': [CX, CY, RAD], 'steg': [18, 21, 30], 'boss': [CX, CY],
            'teleporter': [{'x': 18, 'y': 38, 'b': 4, 'h': 2}]}

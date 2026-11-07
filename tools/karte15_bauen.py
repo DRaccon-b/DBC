@@ -332,7 +332,7 @@ def bauen(frame=None, speichern=True):
     a[innen & np.roll(ring, 1, 0)] = H('#7a7890')                 # oben Licht
     a[innen & (np.roll(ring, 1, 1) | np.roll(ring, -1, 1))] = H('#4e4c60')
     riss = gross(kl == 'v')
-    boden = innen & ~riss
+    boden = innen                                                 # Mitte mit Pflaster gefuellt (Nutzerwunsch)
     bodenzeichen(a, boden, cx, cy, frame)
     # ------------------------------------------------------------------ Steg mit Bordsteinen
     st = textur('s', cols, rows)
@@ -359,7 +359,7 @@ def bauen(frame=None, speichern=True):
     a[aussenkante] = H('#14121c')
     innen1 = kontur(land & ~aussenkante)
     mischen(a, innen1, MAGENTA, 0.5 + 0.3 * p)                   # magenta glimmende Inselkante (wie die Vorlage)
-    wand_riss = riss_zeichnen(a, riss, cx, cy, frame, textur('v', cols, rows))
+    wand_riss = np.zeros_like(riss)                              # kein Riss mehr: Mitte ist Pflaster
     leer_rest = leer & ~bauch
     sterne(a, leer_rest, frame)
     datenstriche(a, leer_rest, frame)
