@@ -77,7 +77,7 @@ def main():
     lay = {
         'groesse': [C, R], 'klassen': [''.join(r) for r in k], 'hoehe': [''.join(str(c) for c in r) for r in h],
         'treppen_sued': treppen, 'boss': [40.0, 15.0], 'hauptstrasse': [38, 41],
-        'zebra': [[38, 41, 28, 'q'], [38, 41, 38, 'q'], [42, 43, 31, 'l'], [36, 37, 31, 'l'], [42, 43, 41, 'l'],
+        'zebra': [[42, 43, 31, 'l'], [36, 37, 31, 'l'], [42, 43, 41, 'l'],
                   [36, 37, 41, 'l'], [36, 37, 51, 'l'], [42, 43, 51, 'l']],
         'teleporter': [{'x': 66, 'y': 0, 'b': 3, 'h': 2}, {'x': 38, 'y': 68, 'b': 4, 'h': 2}],
     }
