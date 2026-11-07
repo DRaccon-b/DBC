@@ -49,6 +49,7 @@ INSELN = [
     ('inseln/08', 10 * T + 8, 2), ('inseln/12', 27 * T + 8, 3), ('inseln/15', 1 * T + 8, 31), ('inseln/09', 30 * T + 8, 38),
     ('inseln/13', 10 * T + 8, 38), ('inseln/10', 38 * T + 8, 15),
 ]
+INSEL_OBJEKTE = False           # Nutzerwunsch: keine Objekte auf der Plattform
 ANIM_INSEL = {'inseln/10': 'schweben', 'inseln/12': 'schweben'}
 
 
@@ -132,7 +133,7 @@ def main():
     # Plattform: fuer Objekte gilt - ganze Figur ueber der Insel (Boden oder Randring), Fuss nicht im Sperrfeld
     platz = land
     frei_leer_ref = [None]
-    for i, (name, mx, reihe, anim) in enumerate(PAARE):          # grosse Objekte zuerst, exakt gespiegelt
+    for i, (name, mx, reihe, anim) in enumerate(PAARE if INSEL_OBJEKTE else []):          # grosse Objekte zuerst, exakt gespiegelt
         o1 = setzen(name, mx, reihe, anim, False, platz, 'p%d' % i)
         o2 = setzen(name, 2 * ACHSE - mx, reihe, anim, True, platz, 'p%d' % i)
         for o, seite in ((o1, 1), (o2, -1)):
@@ -141,9 +142,9 @@ def main():
                 w_ = alpha[o['datei']].shape[1]
                 ecke = o['x'] + (w_ if (s_ == 'r') == (seite == 1) else 0)
                 setzen(kl, ecke + (4 if (s_ == 'r') == (seite == 1) else -4), reihe, None, seite == -1, platz, pruefen=False)
-    for name, mx, reihe, anim in EINZELN:
+    for name, mx, reihe, anim in (EINZELN if INSEL_OBJEKTE else []):
         setzen(name, mx, reihe, anim, False, land)
-    for (name, w, r), (_, mx, reihe) in zip(POLAR, KLEIN):
+    for (name, w, r), (_, mx, reihe) in (zip(POLAR, KLEIN) if INSEL_OBJEKTE else []):
         anim = 'glimmen' if name in ('klein/55', 'klein/08', 'leere/02', 'leere/04') else None
         ok = None
         for dw, dr in ((0, 0), (8, 0), (-8, 0), (0, 16), (0, -16), (14, 12), (-14, 12), (14, -12), (-14, -12)):

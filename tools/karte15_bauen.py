@@ -243,50 +243,29 @@ def unterseite(a, insel, steg_px, cx, cy_, r, frame, seed=15):
     return bauch
 
 
-def riss_zeichnen(a, riss, cx, cy, frame):
-    """Riss in die Leere: Innenwand unter den Nordkanten (Fels faellt ins Dunkle), in der Tiefe Sterne und ein
-    langsam drehender violetter Wirbel, die Mitte pulsiert; am Rand magenta glimmende Bruchkante."""
+def riss_zeichnen(a, riss, cx, cy, frame, vtex):
+    """Boss-Feld in der Mitte: fester, begehbarer Boden aus dunklem Leere-Gestein (Kreuz, am 16er-Raster gestuft).
+    Darin dreht sich langsam ein violetter Wirbel, die Mitte pulsiert, Funken glitzern; am Rand eine magenta
+    glimmende Kante mit dunklem Saum."""
     f = frame or 0
     Hh, W = riss.shape
     yy, xx = np.mgrid[0:Hh, 0:W]
     d = np.hypot(xx + 0.5 - cx, yy + 0.5 - cy)
     w = np.arctan2(yy + 0.5 - cy, xx + 0.5 - cx)
-    tief = np.array(H('#08060e'), np.float32)
-    a[riss] = tief
-    # Wirbel: drei Arme, eine Drittelumdrehung pro Schleife
-    dreh = 2 * math.pi * f / N_FRAMES / 3
+    a[riss] = vtex[riss]
+    dreh = 2 * math.pi * f / N_FRAMES / 3                         # Drittelumdrehung pro Schleife
     arm = (np.sin(3 * (w - dreh) + d * 0.11) + 1) / 2
-    s_ = (arm ** 3) * np.clip(1 - d / 62.0, 0, 1) * 0.75
-    farbe = np.array([110, 50, 170], np.float32)
+    s_ = (arm ** 3) * np.clip(1 - d / 64.0, 0, 1) * 0.7
     m = riss & (s_ > 0.02)
-    a[m] = np.clip(a[m] * (1 - s_[m, None]) + farbe * s_[m, None], 0, 255).astype(np.uint8)
+    a[m] = np.clip(a[m] * (1 - s_[m, None]) + np.array([120, 56, 180], np.float32) * s_[m, None], 0, 255).astype(np.uint8)
     p = puls(frame)
-    kern = riss & (d <= 7 + 2 * p)
-    mischen(a, kern, (200, 150, 255), 0.45 + 0.35 * p)
+    mischen(a, riss & (d <= 7 + 2 * p), (200, 150, 255), 0.45 + 0.35 * p)
     mischen(a, riss & (d <= 3), (240, 220, 255), 0.6 + 0.3 * p)
-    sterne(a, riss & (d > 9), frame, seed=1616, dichte=3)
-    # Innenwand unter den Nordkanten des Risses (sichtbare Felswand, die ins Dunkle faellt)
-    tex = k4.fels_textur('leerfels', W, 20, 41)
-    F = [np.array(H(c), np.float32) for c in k4.FELS['leerfels']]
-    nord = riss & ~np.roll(riss, 1, 0)
-    wand = np.zeros_like(riss)
-    for y, x in zip(*np.nonzero(nord)):
-        for k_ in range(16):
-            Y = y + k_
-            if not riss[Y, x]:
-                break
-            c = tex[k_, x].astype(np.float32) if k_ > 1 else F[4]
-            s_ = k_ / 16.0
-            a[Y, x] = np.clip(c * (1 - s_) + tief * s_, 0, 255).astype(np.uint8)
-            wand[Y, x] = True
-    # Bruchkante: dunkler Saum aussen, magenta Glimmen an der Kante
+    sterne(a, riss & (d > 9), frame, seed=1616, dichte=14)
     aussen = kontur(np.array(Image.fromarray((riss * 255).astype(np.uint8)).filter(ImageFilter.MaxFilter(3))) > 0) & ~riss
     a[aussen] = (a[aussen] * 0.55).astype(np.uint8)
-    kante = kontur(riss)
-    glut = 0.45 + 0.4 * p
-    mischen(a, kante & ~wand, MAGENTA, glut)
-    mischen(a, kante & wand, MAGENTA, glut * 0.8)
-    return wand
+    mischen(a, kontur(riss), MAGENTA, 0.45 + 0.4 * p)
+    return np.zeros_like(riss)
 
 
 def bodenzeichen(a, boden, cx, cy, frame):
@@ -335,24 +314,25 @@ def bauen(frame=None, speichern=True):
     sx0, sx1, sy0 = lay['steg']
     # ------------------------------------------------------------------ Leere
     a = textur('leer', cols, rows)
-    insel = insel_maske(Wp, Hp, cx, cy, rad)
-    steg = np.zeros((Hp, Wp), bool)
-    steg[sy0 * T:, sx0 * T:(sx1 + 1) * T] = True
-    steg &= ~insel | (np.mgrid[0:Hp, 0:Wp][0] > cy)
+    kl = np.array([list(r) for r in lay['klassen']])
+    gross = lambda m: np.kron(m, np.ones((T, T), int)).astype(bool)   # Kachelraster -> Pixel (Rand am 16er-Raster)
+    ty, tx = np.mgrid[0:rows, 0:cols]
+    im_kreis = np.hypot(tx + 0.5 - lay['platte'][0], ty + 0.5 - lay['platte'][1]) <= lay['platte'][2]
+    insel = gross(np.isin(kl, list('prv')) | ((kl == 's') & im_kreis))
+    steg = gross(kl == 's')
     leer = ~(insel | steg)
     nebel(a, leer, 150)
     # ------------------------------------------------------------------ Insel: Boden, Randring, Kante
-    tiefe = abstand_innen(insel, 30)
     a[insel] = textur('p', cols, rows)[insel]
     bx0, bx1 = sx0 * T, (sx1 + 1) * T
-    mund = np.zeros((Hp, Wp), bool)
-    mund[int(cy):, bx0 + 6:bx1 - 6] = True                        # Stegmuendung: Steg laeuft durch den Randring
-    ring = insel & (tiefe < 22) & ~mund
+    ring = gross(kl == 'r')
     a[ring] = textur('r', cols, rows)[ring]
-    a[insel & (tiefe == 22)] = H('#7a7890')                       # Lichtkante zwischen Ring und Boden
-    a[insel & (tiefe == 21)] = H('#22202c')
-    riss = riss_maske(Wp, Hp, cx, cy)
-    boden = insel & ~ring & ~riss & (tiefe > 22)
+    innen = insel & ~ring & ~steg
+    a[innen & np.roll(ring, -1, 0)] = H('#22202c')                # Stufe Ring -> Boden: Kante unten dunkel,
+    a[innen & np.roll(ring, 1, 0)] = H('#7a7890')                 # oben Licht
+    a[innen & (np.roll(ring, 1, 1) | np.roll(ring, -1, 1))] = H('#4e4c60')
+    riss = gross(kl == 'v')
+    boden = innen & ~riss
     bodenzeichen(a, boden, cx, cy, frame)
     # ------------------------------------------------------------------ Steg mit Bordsteinen
     st = textur('s', cols, rows)
@@ -362,8 +342,7 @@ def bauen(frame=None, speichern=True):
     bord = np.zeros((Hp, Wp), bool)
     for x0, x1 in ((bx0, bx0 + 6), (bx1 - 6, bx1)):
         bord[:, x0:x1] = True
-    bord &= steg & ~insel | (steg & insel & (tiefe < 22))
-    a[insel & mund & (tiefe < 23)] = textur('s', cols, rows)[insel & mund & (tiefe < 23)]
+    bord &= steg
     rt = textur('r', cols, rows)
     a[bord] = rt[bord]
     zeilen = np.nonzero(bord[:, bx0])[0]
@@ -380,7 +359,7 @@ def bauen(frame=None, speichern=True):
     a[aussenkante] = H('#14121c')
     innen1 = kontur(land & ~aussenkante)
     mischen(a, innen1, MAGENTA, 0.5 + 0.3 * p)                   # magenta glimmende Inselkante (wie die Vorlage)
-    wand_riss = riss_zeichnen(a, riss, cx, cy, frame)
+    wand_riss = riss_zeichnen(a, riss, cx, cy, frame, textur('v', cols, rows))
     leer_rest = leer & ~bauch
     sterne(a, leer_rest, frame)
     datenstriche(a, leer_rest, frame)
@@ -389,8 +368,6 @@ def bauen(frame=None, speichern=True):
     lvl = np.zeros((Hp, Wp), np.uint8)
     lvl[land] = 2
     lvl[bauch & ~steg] = 9
-    lvl[riss] = 0
-    lvl[wand_riss] = 9
     lvl[bord & ~insel] = 9
     if speichern and frame is None:
         np.save(os.path.join(KARTE, 'pixelhoehe.npy'), lvl)
