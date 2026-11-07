@@ -1391,6 +1391,53 @@ OBJEKTGRUPPEN_K16 = {
 }
 
 
+STIL_K18 = ("Top-down RPG object for a modern Japanese bay-side city at dusk in light fog, in polished handheld monster-collecting "
+            "RPG pixel art: colored dark outline (darkest shade of the object's own hue, never pure black), light from the upper "
+            "left, slightly muted cool evening colors, clean shapes, no noise, no dithering, transparent background, no ground, "
+            "no cast shadow, " + FR14 + ".")
+PALETTE_K18 = ['#16182a', '#222638', '#30364a', '#40485e', '#566078', '#727c94', '#98a2b8', '#c4cad8', '#eef0f6', '#ffffff',
+               '#5a2a2e', '#8a3a3c', '#c04a44', '#e87a5a', '#f0b070', '#f6d890', '#2a3a2c', '#3e5a40', '#5a8a50', '#8ab868',
+               '#c89a2a', '#e8c040', '#f8e070', '#2a3a5a', '#3a5a8a', '#5a86c0', '#8ab6e0', '#6a5a7a', '#9a8aae', '#4a3a2a']
+OBJEKTGRUPPEN_K18 = {
+    'k18_autos': {'size': 64, 'items': [
+        'small white sedan car seen from the side, facing right, slightly from above so the roof is visible, headlights',
+        'small silver grey sedan car seen from the side, facing left, slightly from above so the roof is visible',
+        'small red compact car seen from the side, facing right, slightly from above so the roof is visible',
+        'small orange compact car seen from the side, facing left, slightly from above so the roof is visible',
+        'yellow taxi car with a roof sign seen from the side, facing right, slightly from above',
+        'light blue small car seen from the side, facing left, slightly from above',
+        'small white car seen from directly above, facing down, roof and windshield visible',
+        'small grey car seen from directly above, facing up, roof and rear window visible',
+    ]},
+    'k18_gross': {'size': 128, 'items': [
+        'white and green modern city bus seen from the side, facing right, slightly from above so the roof is visible',
+        'white monorail train car with a dark blue window band seen from the side, long and sleek, slightly from above',
+        'small white motor boat seen from the side, floating, slightly from above',
+        'blue bus stop shelter with a glass back wall, a bench inside and a round bus stop sign',
+    ]},
+    'k18_strasse': {'size': 32, 'items': [
+        'red japanese drink vending machine with glowing display of bottles',
+        'blue drink vending machine with glowing display of bottles',
+        'red cylindrical japanese post box on a short pillar',
+        'small grey public telephone booth with glass and a green phone',
+        'parked bicycle seen from the side',
+        'round blue bus stop sign on a pole',
+        'modern street information map board on two legs with a glowing city map',
+        'red and white striped road barrier on two feet',
+        'grey metal pedestrian guard rail piece',
+        'short grey bollard post',
+        'tall flag pole with a light blue banner flag',
+        'orange life buoy ring on a small post',
+    ]},
+    'k18_baum': {'size': 64, 'items': [
+        'round ginkgo tree with bright golden yellow autumn leaves and a slim brown trunk, full crown fully visible',
+        'round ginkgo tree with golden yellow and orange autumn leaves, slim trunk, full crown fully visible',
+        'round deciduous street tree with dark green leaves and a slim trunk, full crown fully visible',
+        'square stone planter box filled with a trimmed green hedge',
+    ]},
+}
+
+
 def call(method, path, body=None, raw=False):
     req = urllib.request.Request(API + path, method=method,
                                  data=json.dumps(body).encode() if body is not None else None,
@@ -1443,7 +1490,9 @@ def herunterladen(oid, d):
 
 
 def speichern(gruppe, ims, ids):
-    if gruppe.startswith('k17_'):
+    if gruppe.startswith('k18_'):
+        ziel = os.path.join(ROOT, 'assets', 'objekte', 'karte18', gruppe[4:])
+    elif gruppe.startswith('k17_'):
         ziel = os.path.join(ROOT, 'assets', 'objekte', 'karte17', gruppe[4:])
     elif gruppe.startswith('k16_'):
         ziel = os.path.join(ROOT, 'assets', 'objekte', 'karte16', gruppe[4:])
@@ -1500,8 +1549,9 @@ def erzeugen(gruppe):
     k4 = gruppe.startswith('k4_')
     k5 = gruppe.startswith('k5_')
     k6 = gruppe.startswith('k6_') or gruppe.startswith('k7_')
-    if gruppe.startswith(('k11_', 'k12_', 'k13_', 'k14_', 'k15_', 'k16_', 'k17_')):
-        g, stil_, pal_, pn_ = ((OBJEKTGRUPPEN_K16[gruppe], STIL_K16, PALETTE_K16, 'Karte16 Network') if gruppe.startswith(('k16_', 'k17_')) else
+    if gruppe.startswith(('k11_', 'k12_', 'k13_', 'k14_', 'k15_', 'k16_', 'k17_', 'k18_')):
+        g, stil_, pal_, pn_ = ((OBJEKTGRUPPEN_K18[gruppe], STIL_K18, PALETTE_K18, 'Karte18 Fog City') if gruppe.startswith('k18_') else
+                               (OBJEKTGRUPPEN_K16[gruppe], STIL_K16, PALETTE_K16, 'Karte16 Network') if gruppe.startswith(('k16_', 'k17_')) else
                                (OBJEKTGRUPPEN_K15[gruppe], STIL_K15, PALETTE_K15, 'Karte15 Realm') if gruppe.startswith('k15_') else
                                (OBJEKTGRUPPEN_K14[gruppe], STIL_K14, PALETTE_K14, 'Karte14 Summit') if gruppe.startswith('k14_') else
                                (OBJEKTGRUPPEN_K13[gruppe], STIL_K13, PALETTE_K13, 'Karte13 Machine City') if gruppe.startswith('k13_') else
