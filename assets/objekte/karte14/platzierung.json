@@ -2279,11 +2279,11 @@
 ]
 },
 {
-"datei": "sauber/wolken-15.png",
-"basis": "wolken/15",
-"x": 885,
-"y": 83,
-"fuss": 61,
+"datei": "sauber/leere-01.png",
+"basis": "leere/01",
+"x": 886,
+"y": 99,
+"fuss": 45,
 "kachel": [
 56,
 8
@@ -2292,28 +2292,46 @@
 "symm": "p1",
 "block": [
 55,
-5,
+6,
 3,
-4
+3
 ]
 },
 {
-"datei": "sauber/wolken-15_m.png",
-"basis": "wolken/15",
-"x": 1061,
-"y": 83,
-"fuss": 61,
+"datei": "sauber/leere-01_m.png",
+"basis": "leere/01",
+"x": 1063,
+"y": 99,
+"fuss": 45,
 "kachel": [
-67,
+68,
 8
 ],
 "ebene": 1,
 "symm": "p1",
 "block": [
-66,
-5,
+67,
+6,
 3,
-4
+3
+]
+},
+{
+"datei": "sauber/leere-12.png",
+"basis": "leere/12",
+"x": 1143,
+"y": 87,
+"fuss": 41,
+"kachel": [
+71,
+7
+],
+"ebene": 1,
+"block": [
+71,
+5,
+2,
+3
 ]
 },
 {
@@ -2413,22 +2431,21 @@
 ]
 },
 {
-"datei": "sauber/leere-08.png",
-"basis": "leere/08",
-"x": 930,
-"y": 309,
-"fuss": 59,
+"datei": "sauber/leere-14.png",
+"basis": "leere/14",
+"x": 899,
+"y": 310,
+"fuss": 26,
 "kachel": [
-59,
-22
+57,
+20
 ],
 "ebene": 0,
-"anim": "glimmen",
 "block": [
-58,
+56,
 19,
-4,
-4
+3,
+2
 ]
 },
 {
@@ -2448,24 +2465,6 @@
 17,
 4,
 2
-]
-},
-{
-"datei": "sauber/leere-10.png",
-"basis": "leere/10",
-"x": 1120,
-"y": 148,
-"fuss": 60,
-"kachel": [
-71,
-12
-],
-"ebene": 1,
-"block": [
-70,
-9,
-3,
-4
 ]
 },
 {
@@ -2521,24 +2520,6 @@
 13,
 3,
 4
-]
-},
-{
-"datei": "sauber/leere-11.png",
-"basis": "leere/11",
-"x": 774,
-"y": 212,
-"fuss": 45,
-"kachel": [
-49,
-15
-],
-"ebene": 1,
-"block": [
-48,
-13,
-4,
-3
 ]
 },
 {

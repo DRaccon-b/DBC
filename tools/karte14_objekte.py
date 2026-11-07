@@ -211,14 +211,15 @@ def main():
         ('mittel/12', ACHSE_S - 96, 26, {'symm': 'b3'}), ('mittel/12', ACHSE_S + 96, 26, {'symm': 'b3'}),
         # Portalplatz: Portal, Wasserspeier-Paar, Kandelaber
         ('bau/02', ACHSE_P, 10, {'achse': ACHSE_P}),
-        ('wolken/15', ACHSE_P - 104, 8, {'symm': 'p1'}), ('wolken/15', ACHSE_P + 104, 8, {'symm': 'p1'}),
+        ('leere/01', ACHSE_P - 104, 8, {'symm': 'p1'}), ('leere/01', ACHSE_P + 104, 8, {'symm': 'p1'}),   # schwarze Kristallsplitter am Portal
+        ('leere/12', 72 * T, 7, {}), ('leere/10', 74 * T + 8, 8, {}), ('leere/11', 70 * T, 8, {}),          # rechte Schulter
         ('leere/05', ACHSE_P - 48, 18, {'symm': 'q2'}), ('leere/05', ACHSE_P + 48, 18, {'symm': 'q2'}),   # Obelisken mit Leere-Auge
         ('leere/13', ACHSE_P - 44, 11, {'symm': 'p3'}), ('leere/13', ACHSE_P + 44, 11, {'symm': 'p3'}),   # Kettendorne vor dem Portal
-        ('leere/02', ACHSE_P - 56, 10, {}), ('leere/12', ACHSE_P + 34, 6, {}), ('leere/01', ACHSE_P - 46, 6, {}),
+        ('leere/02', ACHSE_P - 56, 10, {}), 
         # rund um den Eingang: Schattenklauen, Skelettklaue, Risse, Eierschalen, Saeulenrest, Steinkreis, Leere-Kugel
-        ('leere/00', 56 * T, 17, {}), ('leere/06', 67 * T, 16, {}), ('leere/08', 60 * T, 20, {}), ('leere/14', 58 * T, 19, {}),
-        ('leere/04', 69 * T, 18, {}), ('leere/10', 72 * T, 12, {}), ('leere/15', 73 * T, 20, {}), ('leere/07', 54 * T, 21, {}),
-        ('leere/09', 71 * T, 16, {}), ('leere/11', 52 * T, 15, {}), ('leere/03', 66 * T, 20, {}),
+        ('leere/00', 56 * T, 17, {}), ('leere/06', 67 * T, 16, {}), ('leere/14', 58 * T, 19, {}),
+        ('leere/04', 69 * T, 18, {}), ('leere/15', 73 * T, 20, {}), ('leere/07', 54 * T, 21, {}),
+        ('leere/09', 71 * T, 16, {}), ('leere/03', 66 * T, 20, {}),
         # Treppenplatz unten: Feuerschalen, Stacheltruhe, Zylinder
         ('mittel/05', ACHSE_S - 104, 58, {'symm': 'u1'}), ('mittel/05', ACHSE_S + 104, 58, {'symm': 'u1'}),
         ('wolken/11', 34 * T, 62, {}), ('mittel/15', 46 * T, 62, {}),

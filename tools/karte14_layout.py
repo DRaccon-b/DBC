@@ -86,11 +86,12 @@ def main():
     # dazu ein paar ausgebrochene Kanten und Felsnasen
     pc = (yy + 0.5 - 9.5) ** 2 / 5.6 ** 2 + (xx + 0.5 - 62.0) ** 2 / 5.6 ** 2 <= 1        # Apsis
     kern = (xx >= 54) & (xx <= 69) & (yy >= 4) & (yy <= 11)
-    kern &= ~(((69 - xx) + (yy - 4) < 2) | ((xx - 54) + (11 - yy) < 3) | ((69 - xx) + (11 - yy) < 3))  # Ecken schraeg
+    kern &= ~(((xx - 54) + (11 - yy) < 3) | ((69 - xx) + (11 - yy) < 3))  # vordere Ecken schraeg
+    kern |= (xx >= 69) & (xx <= 75) & (yy >= 4) & (yy <= 8) & ~((75 - xx) + (8 - yy) < 2)   # Schulter bis zur Bergwand rechts
     platz_p = (kern | (pc & (yy >= 4))) & (yy <= 14)
     platz_p[14, 60:64] = True                                            # gerader Absatz fuer die Treppe
     rs_p = np.random.RandomState(77)
-    for (y_, x_) in ((6, 54), (9, 54), (5, 69), (8, 69), (10, 69)):     # ausgebrochene Kanten
+    for (y_, x_) in ((6, 54), (9, 54), (10, 69)):     # ausgebrochene Kanten
         platz_p[y_:y_ + rs_p.randint(1, 3), x_] = False
     platz_p[7:9, 53] = True                                              # Felsnase links
     platz_p &= (k != 'r') | (yy >= 4)
