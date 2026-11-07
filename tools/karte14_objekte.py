@@ -28,10 +28,10 @@ ACHSE_P = 62 * T                 # Portalplatz
 
 FLACH = {'klein/%02d' % i for i in (0, 1, 2, 4, 5, 6, 7, 9, 10, 11, 13, 15, 19, 20, 21, 30, 58)} | {'leere/08', 'leere/14'}
 LIEGEND = {'mittel/08', 'klein/02', 'klein/04', 'klein/10', 'klein/13', 'klein/19', 'klein/21', 'klein/58'}
-LEUCHTEN = {'leere/05': 'glimmen', 'leere/02': 'glimmen', 'leere/07': 'glimmen', 'leere/08': 'glimmen',
+LEUCHTEN = {'mittel/06': 'banner', 'bau/02': 'portalwirbel', 'leere/05': 'glimmen', 'leere/02': 'glimmen', 'leere/07': 'glimmen', 'leere/08': 'glimmen',
             'leere/00': 'glimmen', 'leere/04': 'glimmen', 'mittel/05': 'feuer_lila', 'mittel/12': 'kerzen', 'mittel/04': 'glimmen', 'klein/12': 'kerzen',
             'klein/14': 'glimmen', 'klein/08': 'glimmen', 'wolken/10': 'feuer_lila', 'klein/55': 'glimmen'}
-WIND = {'klein/09', 'mittel/06'}
+WIND = {'klein/09'}
 STREU = {'mittel/00': 2, 'mittel/01': 2, 'mittel/02': 2, 'mittel/03': 2, 'mittel/07': 2, 'mittel/08': 1, 'mittel/09': 1,
          'mittel/11': 1, 'mittel/13': 1, 'mittel/14': 2, 'mittel/15': 1, 'wolken/08': 2, 'wolken/14': 2, 'klein/44': 1}
 KLEIN = {'klein/00': 4, 'klein/01': 3, 'klein/02': 3, 'klein/03': 2, 'klein/04': 2, 'klein/05': 2, 'klein/06': 1,
@@ -206,8 +206,8 @@ def main():
         ('bau/01', ACHSE_S - 176, 8, {'symm': 's2', 'an_wand': True, 'hinter_feld': True}), ('bau/01', ACHSE_S + 176, 8, {'symm': 's2', 'an_wand': True, 'hinter_feld': True}),   # aeussere Tuerme 2 Kacheln vor der Mauer
         ('bau/03', ACHSE_S, 13, {'achse': ACHSE_S, 'vorrang': True}),
         # Boss-Feld: Feuerschalen in den vier Ecken, Kandelaber am Rahmen
-        ('mittel/05', ACHSE_S - 152, 10, {'symm': 'b1'}), ('mittel/05', ACHSE_S + 152, 10, {'symm': 'b1'}),
-        ('mittel/05', ACHSE_S - 152, 26, {'symm': 'b2'}), ('mittel/05', ACHSE_S + 152, 26, {'symm': 'b2'}),
+        ('mittel/05', ACHSE_S - 120, 12, {'symm': 'b1'}), ('mittel/05', ACHSE_S + 120, 12, {'symm': 'b1'}),
+        ('mittel/05', ACHSE_S - 152, 22, {'symm': 'b2'}), ('mittel/05', ACHSE_S + 152, 22, {'symm': 'b2'}),
         ('mittel/12', ACHSE_S - 96, 26, {'symm': 'b3'}), ('mittel/12', ACHSE_S + 96, 26, {'symm': 'b3'}),
         # Portalplatz: Portal, Wasserspeier-Paar, Kandelaber
         ('bau/02', ACHSE_P, 10, {'achse': ACHSE_P}),

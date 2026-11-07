@@ -177,6 +177,41 @@ def treiben(sp, frame, o):
 k4.TEILANIM['treiben'] = treiben
 
 
+def banner(sp, frame, o):
+    """Banner am Weg: nur das Tuch weht (unten staerker), Stange und Querstange bleiben ruhig."""
+    a = np.array(sp)
+    ai = a.astype(int)
+    h, w = a.shape[:2]
+    al = ai[..., 3] > 0
+    breite = al.sum(axis=1)
+    zeilen = np.nonzero(breite >= max(6, int(w * 0.4)))[0]
+    stoff = np.zeros_like(al)
+    if len(zeilen):
+        y0, y1 = zeilen.min() + 3, zeilen.max()
+        stoff[y0:y1 + 1] = al[y0:y1 + 1]
+        stoff &= ~((ai[..., 0] > 150) & (ai[..., 1] > 110) & (ai[..., 2] < 90) & (np.arange(h)[:, None] < y0 + 2))
+    out = a.copy()
+    ys, xs = np.nonzero(stoff)
+    if not len(ys):
+        return sp
+    ph = 2 * math.pi * frame / N_FRAMES + o.get('x', 0) * 0.05
+    yt, yb = ys.min(), ys.max()
+    for y, x in zip(ys, xs):
+        d = int(round(1.3 * (y - yt) / max(1, yb - yt) * math.sin(ph + y * 0.45)))
+        q = x - d
+        if d and 0 <= q < w and stoff[y, q]:
+            out[y, x] = a[y, q]
+    return Image.fromarray(out)
+
+
+def portalwirbel(sp, frame, o):
+    return k4.portal_drehen(sp, frame)
+
+
+k4.TEILANIM['banner'] = banner
+k4.TEILANIM['portalwirbel'] = portalwirbel
+
+
 def bauen(frame=None, speichern=True):
     lay = json.load(open(os.path.join(KARTE, 'layout.json')))
     cols, rows = lay['groesse']
