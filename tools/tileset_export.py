@@ -45,6 +45,7 @@ KARTEN = {
     'karte08': ('karte08_bauen', 'Overdell', 'v1.0'),
     'karte09': ('karte09_bauen', 'Vamdemons_Keep', 'v1.0'),
     'karte10': ('karte10_bauen', 'Toy_Town', 'v1.0'),
+    'karte14': ('karte14_bauen', 'Spiral_Mountain_Summit', 'v1.0'),
 }
 
 
