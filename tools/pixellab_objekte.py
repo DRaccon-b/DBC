@@ -1333,6 +1333,44 @@ OBJEKTGRUPPEN_K15 = {
 }
 
 
+STIL_K16 = ("Top-down RPG object in a glowing digital cyberspace network world, in polished handheld monster-collecting RPG pixel "
+            "art: colored dark outline (darkest shade of the object's own hue, never pure black), light from the upper left, "
+            "clean shapes, no noise, no dithering, transparent background, no ground, no cast shadow, " + FR14 + ".")
+PALETTE_K16 = ['#080c1c', '#0e1630', '#16223e', '#1e2e50', '#283c64', '#34507a', '#466892', '#6a8cb0', '#a0bcd4', '#e0ecf6',
+               '#0a3a48', '#10586a', '#1a8094', '#2cb4c8', '#5ae0ec', '#b0f6fa', '#4a1418', '#7a1c22', '#b02a2c', '#e04a3c',
+               '#f08a50', '#f0d060', '#fff0a0', '#c8c0b4', '#f0ece4', '#3a2a5a', '#6a4aa0', '#a070e0', '#3a3a44', '#ffffff']
+OBJEKTGRUPPEN_K16 = {
+    'k16_tor': {'size': 64, 'items': [
+        'digital firewall gate, a thick dark steel frame with orange glowing circuit lines around a deep red glowing screen with a red target crosshair symbol, two curved white horn-like bolts on the upper and lower corners, standing upright',
+        'cyber boss gate, square dark blue steel frame with orange neon edges, red glowing data screen in the middle with a glitching red eye-like target mark, white claw-like clamps at the four corners, standing upright',
+    ]},
+    'k16_netz': {'size': 48, 'items': [
+        'tall dark blue server tower with rows of small blinking cyan and green lights and a cable at the bottom',
+        'holographic computer terminal on a slim stand with a floating cyan screen showing code',
+        'network antenna node, slim metal mast with a glowing cyan orb on top and small blinking lights',
+        'cyber data pylon, dark steel pillar with a vertical glowing cyan energy stripe',
+        'floating glowing cyan data cube with circuit pattern above a small metal base',
+        'small metal cable junction box with glowing cyan ports and cables',
+        'glowing cyan data crystal growing from a small metal socket',
+        'holographic warning sign floating above a small emitter, orange exclamation mark',
+        'big round radar dish on a metal stand with a red blinking light',
+        'stack of two small dark server boxes with green blinking lights',
+        'glowing orange data mailbox, a small terminal with an envelope icon screen',
+        'small cyber tree made of glowing cyan circuit lines on a metal base',
+    ]},
+    'k16_klein': {'size': 32, 'items': [
+        'small golden data chip item lying on the floor, glowing softly',
+        'small coil of dark cable lying on the floor',
+        'small glowing cyan floor vent grate',
+        'small broken pixel glitch block, magenta and cyan',
+        'tiny blinking cyan sensor lamp on the floor',
+        'small dark metal crate with a cyan stripe',
+        'small orange warning floor marker',
+        'small floating binary code hologram, green digits',
+    ]},
+}
+
+
 def call(method, path, body=None, raw=False):
     req = urllib.request.Request(API + path, method=method,
                                  data=json.dumps(body).encode() if body is not None else None,
@@ -1385,7 +1423,9 @@ def herunterladen(oid, d):
 
 
 def speichern(gruppe, ims, ids):
-    if gruppe.startswith('k15_'):
+    if gruppe.startswith('k16_'):
+        ziel = os.path.join(ROOT, 'assets', 'objekte', 'karte16', gruppe[4:])
+    elif gruppe.startswith('k15_'):
         ziel = os.path.join(ROOT, 'assets', 'objekte', 'karte15', gruppe[4:])
     elif gruppe.startswith('k14_'):
         ziel = os.path.join(ROOT, 'assets', 'objekte', 'karte14', gruppe[4:])
@@ -1438,8 +1478,9 @@ def erzeugen(gruppe):
     k4 = gruppe.startswith('k4_')
     k5 = gruppe.startswith('k5_')
     k6 = gruppe.startswith('k6_') or gruppe.startswith('k7_')
-    if gruppe.startswith(('k11_', 'k12_', 'k13_', 'k14_', 'k15_')):
-        g, stil_, pal_, pn_ = ((OBJEKTGRUPPEN_K15[gruppe], STIL_K15, PALETTE_K15, 'Karte15 Realm') if gruppe.startswith('k15_') else
+    if gruppe.startswith(('k11_', 'k12_', 'k13_', 'k14_', 'k15_', 'k16_')):
+        g, stil_, pal_, pn_ = ((OBJEKTGRUPPEN_K16[gruppe], STIL_K16, PALETTE_K16, 'Karte16 Network') if gruppe.startswith('k16_') else
+                               (OBJEKTGRUPPEN_K15[gruppe], STIL_K15, PALETTE_K15, 'Karte15 Realm') if gruppe.startswith('k15_') else
                                (OBJEKTGRUPPEN_K14[gruppe], STIL_K14, PALETTE_K14, 'Karte14 Summit') if gruppe.startswith('k14_') else
                                (OBJEKTGRUPPEN_K13[gruppe], STIL_K13, PALETTE_K13, 'Karte13 Machine City') if gruppe.startswith('k13_') else
                                (OBJEKTGRUPPEN_K12[gruppe], STIL_K12, PALETTE_K12, 'Karte12 Puppet Woods') if gruppe.startswith('k12_')
