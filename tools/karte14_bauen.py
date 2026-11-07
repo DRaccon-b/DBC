@@ -234,8 +234,9 @@ def portalwirbel(sp, frame, o):
 
 
 def auge(sp, frame, o):
-    """Obelisk: das Leere-Auge leuchtet und blinzelt - das Lid schliesst sich kurz (halb, zu, halb) und oeffnet
-    sich wieder; nur die Augenpixel aendern sich."""
+    """Obelisk: das Leere-Auge leuchtet leicht pulsierend und blinzelt. Die Lider (Steinfarbe des Obelisken) schliessen
+    sich Spalte fuer Spalte genau entlang der Mandelform des Auges - von oben und unten zur Mitte, mit dunkler
+    Lidkante; geschlossen bleibt eine geschwungene Lidlinie. Ausserhalb der Augenform aendert sich nichts."""
     a = np.array(sp)
     ai = a.astype(int)
     h = a.shape[0]
@@ -245,24 +246,46 @@ def auge(sp, frame, o):
     ys, xs = np.nonzero(hell)
     if not len(ys):
         return sp
-    y0, y1, x0, x1 = ys.min() - 1, ys.max() + 1, xs.min() - 1, xs.max() + 1
+    y0b, y1b, x0b, x1b = ys.min() - 2, ys.max() + 3, xs.min() - 2, xs.max() + 3
+    violett = np.zeros_like(hell)                               # auch dunkle Irisrand-Pixel gehoeren zum Auge
+    sub = ai[y0b:y1b, x0b:x1b]
+    violett[y0b:y1b, x0b:x1b] = (sub[..., 3] > 0) & (sub[..., 2] > sub[..., 1] + 18) & (sub[..., 0] > sub[..., 1] + 8) & (sub[..., 2] > 70)
+    form = hell | violett                                       # Augenform: Iris + Pupille (dunkle Pixel dazwischen)
+    for x in range(x0b, x1b):
+        sp_ = np.nonzero(form[:, x])[0]
+        if len(sp_):
+            form[sp_.min():sp_.max() + 1, x] = True
     out = a.copy()
-    puls = 0.8 + 0.25 * math.sin(2 * math.pi * frame / N_FRAMES)
+    puls = 0.94 + 0.08 * math.sin(2 * math.pi * frame / N_FRAMES)
     out[hell, :3] = np.clip(ai[hell, :3] * puls, 0, 255).astype(np.uint8)
     phase = (frame + int(o.get('x', 0)) // 7) % N_FRAMES
-    zu = {6: 0.5, 7: 1.0, 8: 1.0, 9: 0.5}.get(phase, 0.0)        # halb - zu - zu - halb
-    if zu:
-        mitte = (y0 + y1) / 2.0
-        halb = (y1 - y0) / 2.0 * zu
-        lid = np.array([30, 24, 40, 255], np.uint8)
-        kante = np.array([16, 12, 22, 255], np.uint8)
-        for y in range(y0, y1 + 1):
-            if abs(y - mitte) >= (y1 - y0) / 2.0 - halb:
-                for x in range(x0, x1 + 1):
-                    if ai[y, x, 3] > 0 and (hell[y, x] or abs(y - mitte) <= (y1 - y0) / 2.0):
-                        out[y, x] = lid
-        if zu == 1.0:
-            out[int(round(mitte)), x0 + 1:x1] = kante                 # geschlossene Lidlinie
+    zu = {5: 0.35, 6: 0.7, 7: 1.0, 8: 1.0, 9: 0.6, 10: 0.3}.get(phase, 0.0)
+    if not zu:
+        return Image.fromarray(out)
+    my = (ys.min() + ys.max()) / 2.0
+    stein = np.median(ai[int(my) - 1:int(my) + 2, max(0, xs.min() - 4):xs.min() - 1, :3].reshape(-1, 3), axis=0)
+    stein_hell = np.clip(stein * 1.25 + 6, 0, 255)
+    kante = np.array([14, 10, 20])
+    fx = np.nonzero(form.any(axis=0))[0]
+    for x in fx:
+        sp_ = np.nonzero(form[:, x])[0]
+        t0, t1 = sp_.min(), sp_.max()
+        hoehe = t1 - t0 + 1
+        n_oben = int(math.ceil(hoehe * zu * 0.55)) if zu < 1 else hoehe
+        n_unten = int(math.ceil(hoehe * zu * 0.45)) if zu < 1 else 0
+        for y in range(t0, t0 + n_oben):                         # Oberlid (etwas heller, Licht von oben)
+            out[y, x, :3] = stein_hell if y == t0 else stein
+            out[y, x, 3] = 255
+        for y in range(t1 - n_unten + 1, t1 + 1):                # Unterlid
+            out[y, x, :3] = stein * 0.85
+            out[y, x, 3] = 255
+        if zu < 1:
+            out[t0 + n_oben - 1, x, :3] = kante                  # Lidkante oben
+            if n_unten:
+                out[t1 - n_unten + 1, x, :3] = kante
+        else:
+            lid = int(round(t0 + hoehe * 0.6))                   # geschwungene Lidlinie, Mitte etwas tiefer
+            out[min(t1, lid), x, :3] = kante
     return Image.fromarray(out)
 
 
