@@ -288,6 +288,50 @@ def rauch(img, objs, frame):
     img.alpha_composite(lage)
 
 
+def giftbecken(a, m, frame):
+    """Giftwasser im Laborbecken: der Laborboden bleibt sichtbar (Wasser halbdurchsichtig giftgruen, am Rand flacher
+    und heller), Lichtnetz und Wellenlinien wandern, Blasen steigen auf und platzen; Beckenrand aus Metall mit
+    gelb-schwarzem Warnstreifen, innen ein dunkler Wasserrand. Alles Bewegte nur innerhalb des Wassers."""
+    f = frame or 0
+    Hh, W = m.shape
+    yy, xx = np.mgrid[0:Hh, 0:W]
+    tief = np.array(Image.fromarray((m * 255).astype(np.uint8)).filter(ImageFilter.GaussianBlur(5))) / 255.0
+    boden = a[m].astype(np.float32)
+    gruen = np.array([70, 196, 58], np.float32)
+    al = (0.38 + 0.3 * tief[m])[:, None]                        # Mitte etwas tiefer -> etwas gruener
+    farbe = boden * (1 - al) * np.array([0.5, 0.78, 0.5]) + gruen * al
+    ph = 2 * math.pi * f / N_FRAMES
+    netz = np.abs(np.sin(xx * 0.16 + np.sin(yy * 0.11 + ph) * 2.0) + np.sin(yy * 0.19 + np.sin(xx * 0.07 - ph) * 2.2))
+    linie = (netz < 0.09)[m]
+    farbe[linie] = farbe[linie] * 0.7 + np.array([200, 255, 150]) * 0.3
+    a[m] = np.clip(farbe, 0, 255).astype(np.uint8)
+    rand_in = m & ~(np.array(Image.fromarray((m * 255).astype(np.uint8)).filter(ImageFilter.MinFilter(5))) > 0)
+    a[rand_in] = (a[rand_in] * 0.75).astype(np.uint8)
+    # Beckenrand: Metallkante mit Warnstreifen (2 px) direkt um das Wasser
+    aussen = (np.array(Image.fromarray((m * 255).astype(np.uint8)).filter(ImageFilter.MaxFilter(7))) > 0) & ~m
+    streifen = ((xx + yy) // 4) % 2 == 0
+    a[aussen & streifen] = H('#d0a830')
+    a[aussen & ~streifen] = H('#26282e')
+    a[kontur(aussen | m) & aussen] = H('#4a5058')
+    # Blasen
+    rs = random.Random(13)
+    ys, xs = np.nonzero(m & ~rand_in)
+    for _ in range(max(3, len(ys) // 350)):
+        i = rs.randrange(len(ys)); y, x = int(ys[i]), int(xs[i])
+        t = (f / N_FRAMES + rs.random()) % 1.0
+        if t < 0.55:
+            r = 1 if t < 0.3 else 2
+            for dy in range(-r, r + 1):
+                for dx in range(-r, r + 1):
+                    if abs(dx) + abs(dy) == r and m[y + dy, x + dx]:
+                        a[y + dy, x + dx] = (210, 255, 170)
+            a[y, x] = (150, 240, 120)
+        elif t < 0.65:                                            # platzt: kleiner Spritzring
+            for dx, dy in ((-2, 0), (2, 0), (0, -2), (0, 2)):
+                if m[y + dy, x + dx]:
+                    a[y + dy, x + dx] = (190, 250, 160)
+
+
 def bauen(frame=None, speichern=True):
     lay = json.load(open(os.path.join(KARTE, 'layout.json')))
     cols, rows = lay['groesse']
@@ -295,7 +339,9 @@ def bauen(frame=None, speichern=True):
     hoehe = np.array([[int(c) for c in r] for r in lay['hoehe']])
     Wp, Hp = cols * T, rows * T
     a = textur('g', cols, rows)
-    for art, bl, rausch, seed in (('n', 3.0, 0.4, 3), ('p', 4.0, 0.5, 9)):
+    gift = weich(zell_maske(cls, 'n', cols, rows), 3.0, 0.4, 3)          # Giftwasser-Becken (aus den gruenen Flecken)
+    labor = np.array(Image.fromarray((gift * 255).astype(np.uint8)).filter(ImageFilter.MaxFilter(25))) > 0
+    for art, bl, rausch, seed in (('p', 4.0, 0.5, 9),):
         roh = zell_maske(cls, art, cols, rows)
         m = weich(roh, bl, rausch, seed)
         a[m] = textur(art, cols, rows)[m]
@@ -303,6 +349,10 @@ def bauen(frame=None, speichern=True):
     for art in 'shmz':
         m = zell_maske(cls, art, cols, rows) > 0
         a[m] = textur(art, cols, rows)[m]
+    labor &= ~(zell_maske(cls, 's', cols, rows) > 0)
+    a[labor] = textur('l', cols, rows)[labor]                      # Laborboden um und unter dem Becken
+    a[kontur(labor)] = H('#5a626c')
+    giftbecken(a, gift, frame)
     s = zell_maske(cls, 's', cols, rows) > 0
     strasse(a, s, lay)
     # --- Ebenen: Festung (2), Berg (5)
@@ -319,6 +369,7 @@ def bauen(frame=None, speichern=True):
     bergkuppe(a, em[5] & ~waende)
     lvl = np.ones((Hp, Wp), np.uint8)
     lvl[fest] = 2
+    lvl[gift] = 0
     lvl[em[5]] = 5
     lvl[waende] = 9
     lvl[festung_front(a, fest, lay)] = 9
@@ -326,7 +377,7 @@ def bauen(frame=None, speichern=True):
     lvl[(tr[3] + 1) * T:(tr[3] + 1) * T + 34, tr[0] * T - 3:(tr[1] + 1) * T + 3] = 9
     if speichern and frame is None:
         np.save(os.path.join(KARTE, 'pixelhoehe.npy'), lvl)
-        np.save(os.path.join(KARTE, 'wasser.npy'), np.packbits(np.zeros((Hp, Wp), bool)))
+        np.save(os.path.join(KARTE, 'wasser.npy'), np.packbits(gift))
     for tp in lay.get('teleporter', []):
         k4.teleporter_zeichnen(a, tp['x'], tp['y'], tp['b'], tp['h'], frame)
     img = Image.fromarray(a).convert('RGBA')

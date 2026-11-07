@@ -24,6 +24,7 @@ RAMPEN = {
     'm': ['#243440', '#2a3c48', '#304450', '#364c58', '#3e5662'],
     'z': ['#3a424c', '#424a56', '#4a5260', '#545c6a', '#5e6676'],
     'n': ['#2e4630', '#344e36', '#3a563c', '#425e42', '#4a684a'],
+    'l': ['#9aa2aa', '#a4acb4', '#aeb6be', '#b8c0c8', '#c4ccd4'],
     'p': ['#3a3048', '#403652', '#463c5a', '#4e4464', '#584c6e'],
 }
 
@@ -76,6 +77,18 @@ def kachel(art, v):
                     px[x, y] = hell
                 if y % 8 == 7:
                     px[x, y] = H('#2a3038')
+    if art == 'l':                                   # Laborboden: glatte helle Platten 8x8, feine Fugen, Gully
+        for y in range(16):
+            for x in range(16):
+                px[x, y] = H('#b4bcc4') if ((x // 8) + (y // 8)) % 2 else H('#aab2ba')
+                if x % 8 == 7 or y % 8 == 7:
+                    px[x, y] = H('#7a828c')
+                elif x % 8 == 0 or y % 8 == 0:
+                    px[x, y] = H('#cfd6dc')
+        if v == 2:                                   # Bodenablauf
+            for y in range(5, 11):
+                for x in range(5, 11):
+                    px[x, y] = H('#5a626c') if (x + y) % 2 else H('#3e444c')
     if art == 'n':                                   # verwildertes Gras: Halme
         for _ in range(6):
             x, y = r.randint(0, 15), r.randint(1, 15)
@@ -91,7 +104,7 @@ def main():
     os.makedirs(OUT, exist_ok=True)
     for v in range(5):
         shutil.copy(os.path.join(K8, 'f_%d.png' % v), os.path.join(OUT, 'r_%d.png' % v))
-    arten = 'sghmznp'
+    arten = 'sghmznpl'
     vor = Image.new('RGB', ((len(arten) + 1) * 68, 64))
     for i, art in enumerate(arten):
         ks = [kachel(art, v) for v in range(5)]

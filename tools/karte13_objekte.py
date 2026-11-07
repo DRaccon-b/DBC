@@ -74,6 +74,12 @@ def main():
             for x in range(x0 - 1, x1 + 2):
                 gesperrt.add((x, y))
     pfad = {(x, y) for y in range(rows) for x in range(cols) if cls[y][x] == 's'}     # Fahrbahn bleibt frei
+    for y in range(rows):                                         # Giftbecken und Laborrand frei
+        for x in range(cols):
+            if cls[y][x] == 'n':
+                for dy in range(-2, 3):
+                    for dx in range(-2, 3):
+                        gesperrt.add((x + dx, y + dy))
 
     def sprite(name, spiegeln=False):
         key = (name, spiegeln)
@@ -216,7 +222,7 @@ def main():
     #       Scheinwerfer zur Stadt, Zaun mit Luecken, Stacheldraht, Warnschilder, Kristalle, Kabel- und Rohrenden
     WACHE = [('wache/00', 1, 4), ('wache/00', 78, 4), ('wache/00', 1, 66), ('wache/00', 78, 66),
              ('wache/04', 25, 2), ('wache/04', 55, 2), ('wache/11', 9, 2), ('wache/15', 47, 68), ('wache/13', 30, 68),
-             ('wache/12', 1, 27), ('wache/12', 78, 33), ('wache/08', 1, 38), ('wache/08', 78, 57), ('wache/08', 59, 68),
+             ('wache/12', 1, 27), ('wache/12', 78, 33), ('wache/08', 1, 38), ('wache/08', 78, 57), ('wache/08', 26, 68),
              ('wache/09', 1, 51), ('wache/10', 78, 21), ('wache/09', 23, 68), ('wache/10', 69, 68), ('wache/07', 1, 15),
              ('wache/07', 78, 44), ('wache/07', 12, 68)]
     for y in range(8, 66, 12):                                    # Warnleuchten links/rechts im festen Rhythmus
@@ -276,10 +282,10 @@ def main():
         # Industriehof links oben: zwei Lagerhallen, Schornsteine, Ofen, Strommast
         ('haus/00', 8 * T + 8, 8, {}), ('haus2/03', 22 * T, 8, {}),
         ('mittel/00', 13 * T + 8, 25, {}), ('mittel/00', 15 * T + 8, 25, {}), ('mittel/01', 6 * T, 26, {}),
-        ('festung/03', 22 * T, 20, {}), ('mittel/13', 9 * T, 21, {}),
+        ('festung/03', 22 * T, 20, {}), ('mittel/13', 13 * T, 20, {}),
         # Hof rechts oben: Funkturm, Tanks, Rohr, Schornstein, Kisten
         ('gross/00', 57 * T + 8, 14, {}), ('mittel/02', 61 * T, 7, {}), ('mittel/02', 64 * T, 8, {}), ('mittel/02', 61 * T + 8, 11, {}),
-        ('mittel/14', 62 * T, 15, {}), ('mittel/00', 55 * T + 8, 26, {}), ('mittel/12', 63 * T, 27, {}),
+        ('mittel/14', 62 * T, 15, {}), ('mittel/00', 55 * T + 8, 26, {}), ('mittel/12', 57 * T, 27, {}),
         # rechte Spalte oben
         ('haus/03', 72 * T + 8, 9, {}), ('mittel/03', 71 * T, 27, {}), ('mittel/10', 74 * T, 21, {}),
         # Bloecke Reihe 1 (31-38)
