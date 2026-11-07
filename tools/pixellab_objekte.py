@@ -1300,6 +1300,29 @@ OBJEKTGRUPPEN_K14 = {
 }
 
 
+STIL_K15 = ("Top-down RPG object floating in a dark starry void, in polished handheld monster-collecting RPG pixel art: "
+            "colored dark outline (darkest shade of the object's own hue, never pure black), light from the upper left, "
+            "clean shapes, no noise, no dithering, transparent background, no ground, no cast shadow.")
+PALETTE_K15 = ['#0a0c18', '#141830', '#1e2440', '#2a3256', '#3a446c', '#505c86', '#6c78a2', '#9aa4c4', '#c8d0e4', '#ffffff',
+               '#2a1a3a', '#40265a', '#5c3684', '#7c4cb0', '#a070e0', '#c8a0f8', '#e070c0', '#3a5a2a', '#5a8a3a', '#8ac050',
+               '#c8a060', '#e8d090', '#a0d8f0', '#e0f4ff', '#5a3a24', '#8a5a34', '#c03040', '#40c8d8', '#f0d040', '#606878']
+OBJEKTGRUPPEN_K15 = {
+    'k15_inseln': {'size': 64, 'items': [
+        'small floating rock island chunk with green grass and a tiny tree on top, broken rocky bottom with dangling roots',
+        'small floating rock chunk with desert sand and a tiny cactus, broken rocky bottom',
+        'small floating ice chunk with snow and a tiny pine tree, broken icy bottom',
+        'small floating chunk of rusty machine scrap with pipes and gears, cables dangling below',
+        'small floating chunk of colorful toy blocks and a tiny toy house',
+        'small floating chunk of dark ocean water with coral, water dripping from the broken bottom',
+        'small floating chunk of muddy forest ground with a tiny dark tree and mushrooms',
+        'small floating chunk of red carpet and checkered floor, broken stone bottom',
+        'floating grey asteroid rock', 'small floating grey rock pieces', 'floating dark crystal shard with violet glow',
+        'floating broken stone pillar piece', 'floating glitching violet data cube cluster', 'floating broken chain links',
+        'floating dark tentacle-like void tendril', 'floating cracked digital egg shell',
+    ]},
+}
+
+
 def call(method, path, body=None, raw=False):
     req = urllib.request.Request(API + path, method=method,
                                  data=json.dumps(body).encode() if body is not None else None,
@@ -1352,7 +1375,9 @@ def herunterladen(oid, d):
 
 
 def speichern(gruppe, ims, ids):
-    if gruppe.startswith('k14_'):
+    if gruppe.startswith('k15_'):
+        ziel = os.path.join(ROOT, 'assets', 'objekte', 'karte15', gruppe[4:])
+    elif gruppe.startswith('k14_'):
         ziel = os.path.join(ROOT, 'assets', 'objekte', 'karte14', gruppe[4:])
     elif gruppe.startswith('k13_'):
         ziel = os.path.join(ROOT, 'assets', 'objekte', 'karte13', gruppe[4:])
@@ -1403,8 +1428,9 @@ def erzeugen(gruppe):
     k4 = gruppe.startswith('k4_')
     k5 = gruppe.startswith('k5_')
     k6 = gruppe.startswith('k6_') or gruppe.startswith('k7_')
-    if gruppe.startswith('k11_') or gruppe.startswith('k12_') or gruppe.startswith('k13_') or gruppe.startswith('k14_'):
-        g, stil_, pal_, pn_ = ((OBJEKTGRUPPEN_K14[gruppe], STIL_K14, PALETTE_K14, 'Karte14 Summit') if gruppe.startswith('k14_') else
+    if gruppe.startswith(('k11_', 'k12_', 'k13_', 'k14_', 'k15_')):
+        g, stil_, pal_, pn_ = ((OBJEKTGRUPPEN_K15[gruppe], STIL_K15, PALETTE_K15, 'Karte15 Realm') if gruppe.startswith('k15_') else
+                               (OBJEKTGRUPPEN_K14[gruppe], STIL_K14, PALETTE_K14, 'Karte14 Summit') if gruppe.startswith('k14_') else
                                (OBJEKTGRUPPEN_K13[gruppe], STIL_K13, PALETTE_K13, 'Karte13 Machine City') if gruppe.startswith('k13_') else
                                (OBJEKTGRUPPEN_K12[gruppe], STIL_K12, PALETTE_K12, 'Karte12 Puppet Woods') if gruppe.startswith('k12_')
                                else (OBJEKTGRUPPEN_K11[gruppe], STIL_K11, PALETTE_K11, 'Karte11 Dark Ocean'))
