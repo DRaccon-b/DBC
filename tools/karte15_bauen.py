@@ -25,7 +25,7 @@ T = 16
 N_FRAMES = 4                     # Regel: hoechstens 4 Animationsbilder
 k4.N_FRAMES = k14.N_FRAMES = N_FRAMES
 BILDDAUER = 250                  # ms je Bild
-MIT_LOCH = False                 # True: Variante mit violettem Loch in der Mitte (nur fuer das Extra-GIF)
+MIT_LOCH = os.environ.get('K15_LOCH') == '1'   # Variante mit violettem Loch in der Mitte (K15_LOCH=1)
 H = k4.H
 k4.FELS['leerfels'] = ['#0e0c16', '#16131f', '#1e1a2a', '#282338', '#332d46', '#403a56', '#504a68']
 MAGENTA = np.array([226, 70, 200], np.float32)
