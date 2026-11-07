@@ -22,7 +22,8 @@ KARTE = os.path.join(ROOT, 'maps', 'karte15')
 BASIS = os.path.join(ROOT, 'assets', 'karte15', 'basis')
 OBJ = os.path.join(ROOT, 'assets', 'objekte', 'karte15')
 T = 16
-N_FRAMES = 16
+N_FRAMES = 4                     # Regel: hoechstens 4 Animationsbilder
+k4.N_FRAMES = k14.N_FRAMES = N_FRAMES
 H = k4.H
 k4.FELS['leerfels'] = ['#0e0c16', '#16131f', '#1e1a2a', '#282338', '#332d46', '#403a56', '#504a68']
 MAGENTA = np.array([226, 70, 200], np.float32)
@@ -64,7 +65,7 @@ def puls(frame, ph=0.0, takt=1):
 
 def schweben(sp, frame, o):
     """Schwebende Brocken in der Leere heben und senken sich langsam als Ganzes (bis 2 px), jeder im eigenen Takt."""
-    d = int(round(2 * math.sin(2 * math.pi * frame / N_FRAMES + o.get('x', 0) * 0.07 + o.get('y', 0) * 0.03)))
+    d = (0, 1, 0, -1)[(frame + (o.get('x', 0) // 37)) % 4]       # 4 Bilder: Mitte, oben... 1 px auf und ab
     out = Image.new('RGBA', sp.size)
     out.paste(sp, (0, d))
     return out

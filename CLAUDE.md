@@ -62,7 +62,8 @@ Wenn eine Karte fertig scheint: noch einmal komplett auf **Pixelfehler** und **L
 - **Einbettung:** Bäume, Felsen, Kristalle usw. bekommen Büschel/Blumen an den Sockelecken, damit sie im Boden
   sitzen. Im Schnee Schnee-Varianten verwenden.
 - **Animation:** Nur, was sich wirklich bewegt (Wasser, Feuer, Pflanzen im Wind, Leuchten). Keine Steine oder
-  Steinflächen animieren. Discord-GIF unter 10 MB (sonst 8 statt 16 Bilder).
+  Steinflächen animieren. Discord-GIF unter 10 MB.
+- **Höchstens 4 Animationsbilder (neue Regel ab Karte 15):** Jede Animation läuft mit maximal 4 Frames.
 - **Wehen nur am beweglichen Teil:** Ist etwas wehend animiert (z. B. eine Flagge, ein Banner, ein Tuch), bewegt
   sich nur der Stoff – nie das Objekt, an dem er befestigt ist (Mast, Stange, Ständer aus Holz, Metall o. Ä.
   bleibt völlig ruhig). Also nicht das ganze Sprite verbiegen, sondern nur die Stoffpixel animieren.
