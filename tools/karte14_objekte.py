@@ -200,12 +200,12 @@ def main():
                         'anim': 'treiben', 'an_wand': True})
     # 1) Schloss, Mauern und Tuerme spiegelgleich zur Achse, Thron vor dem Tor, Portalplatz
     FEST = [
-        ('schloss2/01', ACHSE_S, 6, {'achse': ACHSE_S, 'an_wand': True}),
-        ('bau/00', ACHSE_S - 104, 6, {'symm': 's1', 'an_wand': True}), ('bau/00', ACHSE_S + 104, 6, {'symm': 's1', 'an_wand': True}),
-        ('bau/01', ACHSE_S - 176, 8, {'symm': 's2', 'an_wand': True}), ('bau/01', ACHSE_S + 176, 8, {'symm': 's2', 'an_wand': True}),   # aeussere Tuerme 2 Kacheln vor der Mauer
+        ('schloss2/01', ACHSE_S, 6, {'achse': ACHSE_S, 'an_wand': True, 'hinter_feld': True}),
+        ('bau/00', ACHSE_S - 104, 6, {'symm': 's1', 'an_wand': True, 'hinter_feld': True}), ('bau/00', ACHSE_S + 104, 6, {'symm': 's1', 'an_wand': True, 'hinter_feld': True}),
+        ('bau/01', ACHSE_S - 176, 8, {'symm': 's2', 'an_wand': True, 'hinter_feld': True}), ('bau/01', ACHSE_S + 176, 8, {'symm': 's2', 'an_wand': True, 'hinter_feld': True}),   # aeussere Tuerme 2 Kacheln vor der Mauer
         ('bau/03', ACHSE_S, 13, {'achse': ACHSE_S, 'vorrang': True}),
         # Boss-Feld: Feuerschalen in den vier Ecken, Kandelaber am Rahmen
-        ('mittel/05', ACHSE_S - 128, 11, {'symm': 'b1'}), ('mittel/05', ACHSE_S + 128, 11, {'symm': 'b1'}),
+        ('mittel/05', ACHSE_S - 152, 10, {'symm': 'b1'}), ('mittel/05', ACHSE_S + 152, 10, {'symm': 'b1'}),
         ('mittel/05', ACHSE_S - 152, 26, {'symm': 'b2'}), ('mittel/05', ACHSE_S + 152, 26, {'symm': 'b2'}),
         ('mittel/12', ACHSE_S - 96, 26, {'symm': 'b3'}), ('mittel/12', ACHSE_S + 96, 26, {'symm': 'b3'}),
         # Portalplatz: Portal, Wasserspeier-Paar, Kandelaber

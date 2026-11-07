@@ -206,6 +206,7 @@ def bauen(frame=None, speichern=True):
     waende |= k4.hoehenkanten(a, felsn | portal | em[5], 'dunkelberg', FRONT[2], 12, LIPPE_FELS, frei | em[5], 31, berg=False)
     waende |= k4.hoehenkanten(a, em[5], 'dunkelberg', FRONT[5], 12, LIPPE_BERG, frei, 35, berg=False)
     front_b = bossfeld_front(a, feld, lay['treppen_sued'][0])
+    feld_px = feld.copy()
     lvl = np.ones((Hp, Wp), np.uint8)
     lvl[felsn | portal | feld] = 2
     lvl[em[5]] = 5
@@ -237,6 +238,26 @@ def bauen(frame=None, speichern=True):
         k8.schatten_ebene(img, [o for o in objs if not o.get('an_wand')], cache, lvl)
         vor_objekten = np.array(img)
         k4.objekte_zeichnen(img, objs, cache, np.zeros((Hp, Wp), bool), frame)
+        # Ebenen: das erhoehte Boss-Feld liegt vor der Burg - wo Schloss, Mauern oder Tuerme ins Feld ragen,
+        # wird das Feld (samt Saum) darueber gezeichnet; Objekte auf dem Feld (Thron, Feuerschalen) bleiben oben
+        burg = np.zeros((Hp, Wp), bool)
+        for o in objs:
+            if o.get('hinter_feld'):
+                al_ = np.array(cache[o['datei']].getchannel('A')) > 0
+                y0_, x0_ = max(0, o['y']), max(0, o['x'])
+                y1_, x1_ = min(Hp, o['y'] + al_.shape[0]), min(Wp, o['x'] + al_.shape[1])
+                burg[y0_:y1_, x0_:x1_] |= al_[y0_ - o['y']:y1_ - o['y'], x0_ - o['x']:x1_ - o['x']]
+        auf_feld = np.zeros((Hp, Wp), bool)
+        for o in objs:
+            if not o.get('hinter_feld') and not o.get('rand'):
+                al_ = np.array(cache[o['datei']].getchannel('A')) > 0
+                y0_, x0_ = max(0, o['y']), max(0, o['x'])
+                y1_, x1_ = min(Hp, o['y'] + al_.shape[0]), min(Wp, o['x'] + al_.shape[1])
+                auf_feld[y0_:y1_, x0_:x1_] |= al_[y0_ - o['y']:y1_ - o['y'], x0_ - o['x']:x1_ - o['x']]
+        deck = burg & feld_px & ~auf_feld
+        ia = np.array(img)
+        ia[deck] = vor_objekten[deck]
+        img = Image.fromarray(ia).copy()
         k4.animieren(img, objs, cache, frame or 0, ruhig=frame is None)
         k8.verdeckung(img, [o for o in objs if not o.get('an_wand')], cache, lvl, vor_objekten)
     if speichern and frame is None:
