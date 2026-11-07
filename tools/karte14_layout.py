@@ -69,7 +69,7 @@ def main():
         blob(k, *f, 'v', 60 + i, 0.45, nur='dkp')
     h[k == 'v'] = 2
     # ------------------------------------------------------------------ Boss-Feld (eine Etage hoeher) mit Schachbrett
-    form = os.environ.get('BOSSFORM', 'quadrat')             # Form siehe karte14_form.py (Saum/Ring im Bau-Skript)
+    form = os.environ.get('BOSSFORM', 'achteck')             # Form siehe karte14_form.py (Saum/Ring im Bau-Skript)
     yy, xx = np.mgrid[0:R, 0:C]
     feld = karte14_form.maske(form, (xx + 0.5) * 16, (yy + 0.5) * 16)
     feld[:7] = False

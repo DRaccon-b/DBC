@@ -202,7 +202,7 @@ def main():
     FEST = [
         ('schloss2/01', ACHSE_S, 6, {'achse': ACHSE_S, 'an_wand': True}),
         ('bau/00', ACHSE_S - 104, 6, {'symm': 's1', 'an_wand': True}), ('bau/00', ACHSE_S + 104, 6, {'symm': 's1', 'an_wand': True}),
-        ('bau/01', ACHSE_S - 192, 6, {'symm': 's2', 'an_wand': True}), ('bau/01', ACHSE_S + 192, 6, {'symm': 's2', 'an_wand': True}),
+        ('bau/01', ACHSE_S - 176, 8, {'symm': 's2', 'an_wand': True}), ('bau/01', ACHSE_S + 176, 8, {'symm': 's2', 'an_wand': True}),   # aeussere Tuerme 2 Kacheln vor der Mauer
         ('bau/03', ACHSE_S, 13, {'achse': ACHSE_S, 'vorrang': True}),
         # Boss-Feld: Feuerschalen in den vier Ecken, Kandelaber am Rahmen
         ('mittel/05', ACHSE_S - 152, 10, {'symm': 'b1'}), ('mittel/05', ACHSE_S + 152, 10, {'symm': 'b1'}),
@@ -250,7 +250,7 @@ def symmetrie():
     waagerechten Brueckenachse; 'achse' genau auf die Achse."""
     pf = os.path.join(OBJ, 'platzierung.json')
     objs = json.load(open(pf))
-    achsen = {}
+    achsen = {'p1': ACHSE_P, 'p2': ACHSE_P}      # Portalplatz-Paare an der Portalachse
     paare, paare_y = {}, {}
     for o in objs:
         if o.get('achse'):
