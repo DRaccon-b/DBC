@@ -248,6 +248,9 @@ def main():
         elif o and name_ == 'wache/04':
             o['anim'] = 'lampe'
     #    b) Schrottrand: vom Kartenrand angeschnitten, Tiefe wellenfoermig, ungleiche Abstaende (wie Karte 12)
+    SPERRZONEN = [(ACHSE_F - 200, -40, ACHSE_F + 200, 6 * T)]          # Festungstor und Panzertueren (+ Abstand)
+    for tp in lay.get('teleporter', []):
+        SPERRZONEN.append((tp['x'] * T - 24, tp['y'] * T - 40, (tp['x'] + tp['b']) * T + 24, (tp['y'] + tp['h']) * T + 40))
     RAND = ['rand/%02d' % i for i in range(16)]
     GEW = [2, 3, 2, 3, 2, 2, 1, 3, 2, 2, 1, 3, 1, 1, 2, 1]
     frei_x = [(66 * T - 8, 69 * T + 8), (38 * T - 8, 42 * T + 8)]
@@ -269,6 +272,9 @@ def main():
         x, y = int(round(X - mitte)), fussy - zu
         if not frei_px(datei, x, y):
             continue
+        hh_, ww_ = alpha[datei].shape
+        if any(x < zx1 and x + ww_ > zx0 and y < zy1 and y + hh_ > zy0 for (zx0, zy0, zx1, zy1) in SPERRZONEN):
+            continue                                                  # nie ueber Tor, Panzertueren oder Teleporter
         objekte.append({'datei': datei, 'basis': name_, 'x': x, 'y': y, 'fuss': h, 'kachel': [max(0, min(cols - 1, X // T)),
                         max(0, min(rows - 1, fussy // T))], 'ebene': 1, 'fest_pos': True, 'rand': True, 'kein_schatten': True})
         belegen(datei, x, y)
