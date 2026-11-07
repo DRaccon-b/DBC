@@ -26,9 +26,10 @@ T = 16
 ACHSE_S = int(40.5 * T)          # Schloss, Boss-Feld und Schachbrettweg
 ACHSE_P = 62 * T                 # Portalplatz
 
-FLACH = {'klein/%02d' % i for i in (0, 1, 2, 4, 5, 6, 7, 9, 10, 11, 13, 15, 19, 20, 21, 30, 58)}
+FLACH = {'klein/%02d' % i for i in (0, 1, 2, 4, 5, 6, 7, 9, 10, 11, 13, 15, 19, 20, 21, 30, 58)} | {'leere/08', 'leere/14'}
 LIEGEND = {'mittel/08', 'klein/02', 'klein/04', 'klein/10', 'klein/13', 'klein/19', 'klein/21', 'klein/58'}
-LEUCHTEN = {'mittel/05': 'feuer_lila', 'mittel/12': 'kerzen', 'mittel/04': 'glimmen', 'klein/12': 'kerzen',
+LEUCHTEN = {'leere/05': 'glimmen', 'leere/02': 'glimmen', 'leere/07': 'glimmen', 'leere/08': 'glimmen',
+            'leere/00': 'glimmen', 'leere/04': 'glimmen', 'mittel/05': 'feuer_lila', 'mittel/12': 'kerzen', 'mittel/04': 'glimmen', 'klein/12': 'kerzen',
             'klein/14': 'glimmen', 'klein/08': 'glimmen', 'wolken/10': 'feuer_lila', 'klein/55': 'glimmen'}
 WIND = {'klein/09', 'mittel/06'}
 STREU = {'mittel/00': 2, 'mittel/01': 2, 'mittel/02': 2, 'mittel/03': 2, 'mittel/07': 2, 'mittel/08': 1, 'mittel/09': 1,
@@ -211,7 +212,13 @@ def main():
         # Portalplatz: Portal, Wasserspeier-Paar, Kandelaber
         ('bau/02', ACHSE_P, 10, {'achse': ACHSE_P}),
         ('wolken/15', ACHSE_P - 104, 8, {'symm': 'p1'}), ('wolken/15', ACHSE_P + 104, 8, {'symm': 'p1'}),
-        ('mittel/12', ACHSE_P - 56, 11, {'symm': 'p2'}), ('mittel/12', ACHSE_P + 56, 11, {'symm': 'p2'}),
+        ('leere/05', ACHSE_P - 48, 18, {'symm': 'q2'}), ('leere/05', ACHSE_P + 48, 18, {'symm': 'q2'}),   # Obelisken mit Leere-Auge
+        ('leere/13', ACHSE_P - 44, 11, {'symm': 'p3'}), ('leere/13', ACHSE_P + 44, 11, {'symm': 'p3'}),   # Kettendorne vor dem Portal
+        ('leere/02', ACHSE_P - 56, 10, {}), ('leere/12', ACHSE_P + 34, 6, {}), ('leere/01', ACHSE_P - 46, 6, {}),
+        # rund um den Eingang: Schattenklauen, Skelettklaue, Risse, Eierschalen, Saeulenrest, Steinkreis, Leere-Kugel
+        ('leere/00', 56 * T, 17, {}), ('leere/06', 67 * T, 16, {}), ('leere/08', 60 * T, 20, {}), ('leere/14', 58 * T, 19, {}),
+        ('leere/04', 69 * T, 18, {}), ('leere/10', 72 * T, 12, {}), ('leere/15', 73 * T, 20, {}), ('leere/07', 54 * T, 21, {}),
+        ('leere/09', 71 * T, 16, {}), ('leere/11', 52 * T, 15, {}), ('leere/03', 66 * T, 20, {}),
         # Treppenplatz unten: Feuerschalen, Stacheltruhe, Zylinder
         ('mittel/05', ACHSE_S - 104, 58, {'symm': 'u1'}), ('mittel/05', ACHSE_S + 104, 58, {'symm': 'u1'}),
         ('wolken/11', 34 * T, 62, {}), ('mittel/15', 46 * T, 62, {}),
@@ -225,7 +232,8 @@ def main():
     for y in (37, 45, 53):
         FEST += [('mittel/06', ACHSE_S - 60, y, {'symm': 'f%d' % y}), ('mittel/06', ACHSE_S + 60, y, {'symm': 'f%d' % y})]
     for (name, X, fy, opt) in FEST:
-        setzen(name, X, fy, opt, suchen=not (opt.get('symm') or opt.get('achse')), melden=True)
+        setzen(name, X, fy, opt, suchen=not (opt.get('symm') or opt.get('achse')) or str(opt.get('symm', '')).startswith(('p', 'q')),
+               melden=True)
     for o in objekte:                                             # Schloss ganz im Bild (Turmspitze nicht am Rand
         if o['basis'] == 'schloss2/01':                           # abgeschnitten) und vor der Mauer gezeichnet
             o['y'] = max(o['y'], 0)
@@ -253,7 +261,7 @@ def symmetrie():
     waagerechten Brueckenachse; 'achse' genau auf die Achse."""
     pf = os.path.join(OBJ, 'platzierung.json')
     objs = json.load(open(pf))
-    achsen = {'p1': ACHSE_P, 'p2': ACHSE_P}      # Portalplatz-Paare an der Portalachse
+    achsen = {'p1': ACHSE_P, 'p2': ACHSE_P, 'p3': ACHSE_P, 'q2': ACHSE_P}      # Portalplatz-Paare an der Portalachse
     paare, paare_y = {}, {}
     for o in objs:
         if o.get('achse'):

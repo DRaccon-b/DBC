@@ -82,9 +82,21 @@ def main():
     platz = (np.abs(xx + 0.5 - 40) <= 8.5 - np.maximum(0, 56 - yy) * 0.9) & (yy >= 52) & (yy <= 64)
     k[platz & (k != 'r') & (k != 'z')] = 'b'
     # ------------------------------------------------------------------ Portalplatz rechts oben (erhoeht)
-    k[4:14, 53:71] = 'f'
-    h[4:14, 53:71] = 2
-    treppen.append([60, 62, 2, 13])
+    # nicht rechteckig: Kern mit abgeschraegten Ecken, vorne mittig eine runde Apsis unter dem Portal (Treppe dort),
+    # dazu ein paar ausgebrochene Kanten und Felsnasen
+    pc = (yy + 0.5 - 9.5) ** 2 / 5.6 ** 2 + (xx + 0.5 - 62.0) ** 2 / 5.6 ** 2 <= 1        # Apsis
+    kern = (xx >= 54) & (xx <= 69) & (yy >= 4) & (yy <= 11)
+    kern &= ~(((69 - xx) + (yy - 4) < 2) | ((xx - 54) + (11 - yy) < 3) | ((69 - xx) + (11 - yy) < 3))  # Ecken schraeg
+    platz_p = (kern | (pc & (yy >= 4))) & (yy <= 14)
+    platz_p[14, 60:64] = True                                            # gerader Absatz fuer die Treppe
+    rs_p = np.random.RandomState(77)
+    for (y_, x_) in ((6, 54), (9, 54), (5, 69), (8, 69), (10, 69)):     # ausgebrochene Kanten
+        platz_p[y_:y_ + rs_p.randint(1, 3), x_] = False
+    platz_p[7:9, 53] = True                                              # Felsnase links
+    platz_p &= (k != 'r') | (yy >= 4)
+    k[platz_p] = 'f'
+    h[platz_p] = 2
+    treppen.append([61, 62, 2, 14])
     lay = {
         'groesse': [C, R], 'klassen': [''.join(r) for r in k], 'hoehe': [''.join(str(c) for c in r) for r in h],
         'treppen_sued': treppen, 'boss': [40.5, 18.0], 'bossform': form, 'portal': [62.0, 8.0], 'felsnasen': FELS,

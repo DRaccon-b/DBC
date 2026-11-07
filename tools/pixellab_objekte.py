@@ -1259,6 +1259,16 @@ OBJEKTGRUPPEN_K14 = {
         'gothic dark violet castle with a central tall tower and two side towers, red cone roofs, gold trim, a grand arched gate, the whole castle fully visible and centered, ' + DACH14 + ', ' + FR14,
         'small sinister circus-like castle with striped red and black roofs, golden spires, an arched gate, the whole castle fully visible and centered, ' + DACH14 + ', ' + FR14,
     ]},
+    'k14_leere': {'size': 64, 'items': [
+        'dark shadowy claw-like tendrils rising out of a crack in the ground, violet glow at the base', 'cluster of floating black crystal shards with violet light',
+        'small floating glitching purple data cubes breaking apart into pixels', 'heavy dark iron chain anchored in the ground with a big ring',
+        'broken dark eggshell halves with faint violet glow inside', 'black stone obelisk with a single glowing violet void eye',
+        'dark skeletal claw reaching out of the ground', 'small dark void orb floating above a cracked stone base',
+        'cracked ground fissure with violet light shining out', 'dark thorny vine twisting out of the ground',
+        'tilted broken black stone pillar wrapped in chains', 'pile of dark broken data crystals',
+        'floating single black shard with violet glow', 'dark iron spike stuck in the ground with chains', 'small dark void rift crack floating in the air',
+        'ring of small dark standing stones',
+    ]},
     'k14_bau': {'size': 128, 'items': [
         'straight grey stone castle wall segment with battlements and narrow arrow slits, ' + DACH14 + ', ' + FR14,
         'round grey stone castle tower with a pointed red cone roof and a golden spire, small window and door, ' + DACH14,

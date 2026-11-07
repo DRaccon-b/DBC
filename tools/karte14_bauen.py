@@ -135,6 +135,37 @@ def bossfeld_front(a, feld, tr):
 
 
 
+def siegel(a, platz, cx, cy, frame):
+    """Siegel vor dem Portal: zwei violett glimmende Ringe mit Zeichen, Risse im Stein strahlen davon weg; aus den
+    Rissen dringt violettes Licht, das langsam pulsiert (die Leere hinter dem Portal)."""
+    f = frame or 0
+    Hh, W = platz.shape
+    puls = 0.55 + 0.45 * math.sin(2 * math.pi * f / N_FRAMES)
+    yy, xx = np.mgrid[0:Hh, 0:W]
+    d = np.sqrt(((xx - cx) / 1.0) ** 2 + ((yy - cy) / 0.62) ** 2)
+    hell = np.array([170, 110, 240], np.float32) * (0.6 + 0.4 * puls)
+    for rr in (66, 56):
+        m = (np.abs(d - rr) <= 1.0) & platz
+        a[m] = np.clip(hell, 0, 255).astype(np.uint8)
+    for k_ in range(10):                                            # Zeichen zwischen den Ringen
+        w = 2 * math.pi * k_ / 10
+        X, Y = int(cx + math.cos(w) * 61), int(cy + math.sin(w) * 61 * 0.62)
+        if platz[Y, X]:
+            a[Y - 1:Y + 2, X] = np.clip(hell, 0, 255).astype(np.uint8)
+            a[Y, X - 1:X + 2] = np.clip(hell * 0.7, 0, 255).astype(np.uint8)
+    rs = random.Random(66)
+    for k_ in range(9):                                             # Risse mit Licht
+        w = 2 * math.pi * k_ / 9 + rs.uniform(-0.2, 0.2)
+        x, y = cx + math.cos(w) * 70, cy + math.sin(w) * 70 * 0.62
+        for t in range(rs.randint(16, 34)):
+            X, Y = int(x), int(y)
+            if 0 <= X < W and 0 <= Y < Hh and platz[Y, X]:
+                a[Y, X] = H('#160e20')
+                if t % 3 == 0:
+                    a[Y, X] = np.clip(hell * (0.9 - t / 60.0), 0, 255).astype(np.uint8)
+            x += math.cos(w) + rs.uniform(-0.6, 0.6); y += math.sin(w) * 0.62 + rs.uniform(-0.6, 0.6)
+
+
 def treiben(sp, frame, o):
     """Wolken am Gipfelrand treiben langsam hin und her (die ganze Wolke, 2 px)."""
     d = int(round(2 * math.sin(2 * math.pi * frame / N_FRAMES + o.get('x', 0) * 0.02)))
@@ -158,7 +189,7 @@ def bauen(frame=None, speichern=True):
         m = weich(roh, bl, rausch, seed)
         a[m] = textur(art, cols, rows)[m]
         k4.dunkeln(a, weich(roh, bl, rausch, seed, 0.36) & ~m, 0.84)
-    for art in 'zbf':
+    for art in 'zb':
         m = zell_maske(cls, art, cols, rows) > 0
         a[m] = textur(art, cols, rows)[m]
     platz = zell_maske(cls, 'b', cols, rows) > 0
@@ -169,7 +200,7 @@ def bauen(frame=None, speichern=True):
     em[5] = weich(k8.stufe(hoehe, 5, cols, rows), 5, 0.3, 37)
     felsn = weich(zell_maske(cls, 'v', cols, rows), 3, 0.25, 11) & ~em[5]
     a[felsn] = textur('v', cols, rows)[felsn]
-    portal = zell_maske(cls, 'f', cols, rows) > 0
+    portal = weich(zell_maske(cls, 'f', cols, rows), 2.5, 0.35, 23) & ~em[5]          # Portalplatz mit weichen, unregelmaessigen Kanten
     yy_, xx_ = np.mgrid[0:Hp, 0:Wp]                               # Boss-Feld pixelgenau in der gewaehlten Form
     feld = karte14_form.maske(lay.get('bossform', 'quadrat'), xx_ + 0.5, yy_ + 0.5) & (yy_ >= 7 * T)
     tiefe_ = np.zeros((Hp, Wp), np.int16)                         # Abstand zum Rand (in px, bis 70)
@@ -193,6 +224,8 @@ def bauen(frame=None, speichern=True):
         px_, py_ = sx * T + 7, sy * T + 7
         if 20 <= tiefe_[py_, px_] < 46 or tiefe_[py_, px_] >= 66:         # nur auf rotem Teppich, nicht im Saum/Ring
             symbol(a, nm, sx * T + 4, sy * T + 4, (210, 170, 70))
+    a[portal] = textur('f', cols, rows)[portal]
+    siegel(a, portal, lay['portal'][0] * T, (lay['portal'][1] + 2.2) * T, frame)
     b = lay['boss']
     spirale(a, b[0] * T, b[1] * T, 4.6 * T, frame)
     treppen_info = []
