@@ -28,9 +28,9 @@ ACHSE_F = 40 * T                 # Festung (senkrechte Achse)
 
 FLACH = {'klein/%02d' % i for i in (1, 2, 3, 4, 5, 6, 13, 14, 15, 23, 32, 35, 41, 48, 57, 59, 63)}
 LIEGEND = {'eigen/dragondead', 'klein/03', 'klein/13', 'klein/41', 'klein/32', 'klein/57', 'klein/59', 'gross2/02', 'gross/02', 'mittel/14'}
-LEUCHTEN = {'mittel/05': 'lampe', 'mittel/01': 'feuer', 'festung/00': 'glimmen', 'gross/00': 'rotlicht', 'gross2/03': 'rotlicht',
+LEUCHTEN = {'mittel/05': 'pulsieren', 'mittel/01': 'feuer', 'festung/00': 'pulsieren', 'gross/00': 'rotlicht', 'gross2/03': 'rotlicht',
             'festung/01': 'rotlicht', 'festung/03': 'rotlicht', 'mittel/13': 'rotlicht', 'festung/02': 'konsole', 'gross/02': 'funken', 'eigen/dragondead': 'funken',
-            'mittel/04': 'ampel_blinken', 'klein/09': 'glimmen', 'klein/36': 'glimmen'}
+            'klein/09': 'pulsieren', 'klein/36': 'pulsieren'}
 RAUCH = {'mittel/00', 'mittel/01'}
 WIND = {'klein/15'}
 BLOCK_STREU = {'klein/00': 3, 'klein/01': 4, 'klein/02': 3, 'klein/04': 2, 'klein/05': 2, 'klein/06': 2, 'klein/11': 2,
@@ -203,12 +203,12 @@ def main():
         belegen(datei, x, y)
         return o
     KUPPE = 44                                                    # Breite der Bergkuppe innerhalb der Karte (px)
-    def versunken(name, seite, pos, spiegeln=False, **extra):
+    def versunken(name, seite, pos, spiegeln=False, versatz=0, **extra):
         """Maschinenteil im Fels: nur so weit sichtbar, wie die Bergkuppe reicht - ragt nie ueber die Kante."""
         datei, h, zu, mitte = sprite(name, spiegeln)
         hh, ww = alpha[datei].shape
         if seite == 'links':
-            X, fuss = KUPPE - ww + mitte, pos
+            X, fuss = KUPPE - ww + mitte + versatz, pos
         elif seite == 'rechts':
             X, fuss = Wp - KUPPE + mitte, pos
         else:                                                     # unten: Oberkante auf der Bergkuppe
@@ -217,7 +217,7 @@ def main():
     versunken('berg/00', 'links', 26 * T, kein_schatten=True)                    # Zahnrad links
     versunken('berg/01', 'unten', 17 * T, kein_schatten=True)                    # Panzerkette unten
     versunken('berg/02', 'rechts', 47 * T, spiegeln=True, kein_schatten=True)    # Roboterarm rechts
-    versunken('berg/03', 'unten', 72 * T, kein_schatten=True, anim='rotlicht')   # Mech-Kopf unten rechts, rotes Auge
+    versunken('berg/03', 'links', 54 * T, versatz=4, kein_schatten=True, anim='rotlicht')   # Mech-Kopf links, rotes Auge an der Kante sichtbar
     #    c) Wachtechnik auf der Bergkuppe: Funkmasten an den Ecken, Warnleuchten im festen Abstand, Kameras und
     #       Scheinwerfer zur Stadt, Zaun mit Luecken, Stacheldraht, Warnschilder, Kristalle, Kabel- und Rohrenden
     WACHE = [('wache/00', 1, 4), ('wache/00', 78, 4), ('wache/00', 1, 66), ('wache/00', 78, 66),

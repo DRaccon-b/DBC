@@ -265,6 +265,35 @@ def ampel_blinken(sp, frame, o):
 k4.TEILANIM.update({'konsole': konsole, 'funken': funken, 'ampel_blinken': ampel_blinken})
 
 
+def _lichtpixel(ai):
+    al = ai[..., 3] > 0
+    mx = ai[..., :3].max(axis=2); mn = ai[..., :3].min(axis=2)
+    return al & (mx > 150) & ((mx - mn > 55) | (mn > 200))
+
+
+def pulsieren(sp, frame, o):
+    """Echte Lichtquellen (Reaktorkern, Laternenglas, Kristall): die hellen, farbigen Pixel pulsieren weich."""
+    a = np.array(sp)
+    ai = a.astype(int)
+    m = _lichtpixel(ai)
+    k_ = 0.72 + 0.4 * (0.5 + 0.5 * math.sin(2 * math.pi * frame / N_FRAMES + o.get('x', 0) * 0.05))
+    a[m, :3] = np.clip(ai[m, :3] * k_, 0, 255).astype(np.uint8)
+    return Image.fromarray(a)
+
+
+def blinken(sp, frame, o):
+    """Kaputte Ampel / Warnlicht: die Lampenpixel sind abwechselnd an und aus."""
+    a = np.array(sp)
+    ai = a.astype(int)
+    m = _lichtpixel(ai)
+    if ((frame + int(o.get('x', 0)) // 16) // 4) % 2:
+        a[m, :3] = (ai[m, :3] * 0.3).astype(np.uint8)
+    return Image.fromarray(a)
+
+
+k4.TEILANIM.update({'pulsieren': pulsieren, 'blinken': blinken})
+
+
 def rauch(img, objs, frame):
     """Schornsteine: graue Woelkchen steigen genau aus der Oeffnung oben, wachsen, treiben nach rechts und verblassen."""
     from PIL import ImageDraw

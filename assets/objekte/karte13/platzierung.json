@@ -47,12 +47,12 @@
 {
 "datei": "sauber/berg-03.png",
 "basis": "berg/03",
-"x": 1093,
-"y": 1076,
+"x": -70,
+"y": 754,
 "fuss": 111,
 "kachel": [
-72,
-69
+0,
+54
 ],
 "ebene": 1,
 "fest_pos": true,
@@ -230,25 +230,6 @@
 {
 "datei": "sauber/wache-09.png",
 "basis": "wache/09",
-"x": 1,
-"y": 780,
-"fuss": 52,
-"kachel": [
-1,
-51
-],
-"ebene": 1,
-"anim": "glimmen",
-"block": [
-0,
-48,
-3,
-4
-]
-},
-{
-"datei": "sauber/wache-09.png",
-"basis": "wache/09",
 "x": 353,
 "y": 1052,
 "fuss": 52,
@@ -268,16 +249,16 @@
 {
 "datei": "sauber/wache-10.png",
 "basis": "wache/10",
-"x": 1061,
+"x": 1093,
 "y": 1058,
 "fuss": 46,
 "kachel": [
-67,
+69,
 68
 ],
 "ebene": 1,
 "block": [
-66,
+68,
 66,
 4,
 3
@@ -438,17 +419,17 @@
 "datei": "sauber/wache-02.png",
 "basis": "wache/02",
 "x": 6,
-"y": 850,
+"y": 866,
 "fuss": 62,
 "kachel": [
 1,
-56
+57
 ],
 "ebene": 1,
 "anim": "rotlicht",
 "block": [
 0,
-53,
+54,
 3,
 4
 ]
@@ -774,6 +755,21 @@
 "kein_schatten": true
 },
 {
+"datei": "sauber/rand-01.png",
+"basis": "rand/01",
+"x": 1164,
+"y": 1087,
+"fuss": 53,
+"kachel": [
+74,
+69
+],
+"ebene": 1,
+"fest_pos": true,
+"rand": true,
+"kein_schatten": true
+},
+{
 "datei": "sauber/rand-06_m.png",
 "basis": "rand/06",
 "x": 1228,
@@ -949,7 +945,7 @@
 11
 ],
 "ebene": 1,
-"anim": "glimmen",
+"anim": "pulsieren",
 "symm": "f2",
 "block": [
 28,
@@ -969,7 +965,7 @@
 11
 ],
 "ebene": 1,
-"anim": "glimmen",
+"anim": "pulsieren",
 "symm": "f2",
 "block": [
 46,
@@ -989,7 +985,7 @@
 22
 ],
 "ebene": 1,
-"anim": "glimmen",
+"anim": "pulsieren",
 "symm": "f3",
 "block": [
 28,
@@ -1009,7 +1005,7 @@
 22
 ],
 "ebene": 1,
-"anim": "glimmen",
+"anim": "pulsieren",
 "symm": "f3",
 "block": [
 46,
@@ -1838,7 +1834,6 @@
 42
 ],
 "ebene": 1,
-"anim": "ampel_blinken",
 "block": [
 22,
 39,
@@ -1857,7 +1852,6 @@
 62
 ],
 "ebene": 1,
-"anim": "ampel_blinken",
 "block": [
 13,
 59,
@@ -1876,7 +1870,6 @@
 32
 ],
 "ebene": 1,
-"anim": "ampel_blinken",
 "block": [
 50,
 29,
@@ -1895,7 +1888,7 @@
 34
 ],
 "ebene": 1,
-"anim": "lampe",
+"anim": "pulsieren",
 "block": [
 36,
 31,
@@ -1914,7 +1907,7 @@
 34
 ],
 "ebene": 1,
-"anim": "lampe",
+"anim": "pulsieren",
 "block": [
 42,
 31,
@@ -1933,7 +1926,7 @@
 44
 ],
 "ebene": 1,
-"anim": "lampe",
+"anim": "pulsieren",
 "block": [
 36,
 41,
@@ -1952,7 +1945,7 @@
 54
 ],
 "ebene": 1,
-"anim": "lampe",
+"anim": "pulsieren",
 "block": [
 36,
 51,
@@ -1971,7 +1964,7 @@
 54
 ],
 "ebene": 1,
-"anim": "lampe",
+"anim": "pulsieren",
 "block": [
 42,
 51,
@@ -1990,7 +1983,7 @@
 64
 ],
 "ebene": 1,
-"anim": "lampe",
+"anim": "pulsieren",
 "block": [
 36,
 61,
@@ -2009,7 +2002,7 @@
 64
 ],
 "ebene": 1,
-"anim": "lampe",
+"anim": "pulsieren",
 "block": [
 42,
 61,
@@ -2280,7 +2273,7 @@
 43
 ],
 "ebene": 1,
-"anim": "glimmen",
+"anim": "pulsieren",
 "block": [
 6,
 42,
@@ -2299,7 +2292,7 @@
 44
 ],
 "ebene": 1,
-"anim": "glimmen",
+"anim": "pulsieren",
 "block": [
 8,
 43,
@@ -2318,7 +2311,7 @@
 45
 ],
 "ebene": 1,
-"anim": "glimmen",
+"anim": "pulsieren",
 "block": [
 64,
 44,
@@ -2355,7 +2348,7 @@
 47
 ],
 "ebene": 1,
-"anim": "glimmen",
+"anim": "pulsieren",
 "block": [
 74,
 46,
@@ -2393,7 +2386,7 @@
 31
 ],
 "ebene": 1,
-"anim": "glimmen",
+"anim": "pulsieren",
 "block": [
 46,
 30,
@@ -2412,7 +2405,7 @@
 62
 ],
 "ebene": 1,
-"anim": "glimmen",
+"anim": "pulsieren",
 "block": [
 70,
 61,
@@ -2485,7 +2478,7 @@
 61
 ],
 "ebene": 1,
-"anim": "glimmen",
+"anim": "pulsieren",
 "block": [
 18,
 60,
@@ -2504,7 +2497,7 @@
 56
 ],
 "ebene": 1,
-"anim": "glimmen",
+"anim": "pulsieren",
 "block": [
 34,
 55,
