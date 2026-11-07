@@ -1,0 +1,382 @@
+{
+ "kachel": 16,
+ "breite_kacheln": 40,
+ "hoehe_kacheln": 9,
+ "animationsbereich_hoehe_kacheln": 9,
+ "animationsbilder": 4,
+ "bilddauer_ms": 250,
+ "objekte": [
+  {
+   "name": "inseln2/00",
+   "datei": "sauber/inseln2-00.png",
+   "animation": "schweben",
+   "slot_kacheln": {
+    "x": 0,
+    "y": 0,
+    "breite": 5,
+    "hoehe": 5
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 5,
+    "hoehe": 4
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      8,
+      0,
+      5,
+      4
+     ],
+     "fusskachel": [
+      10,
+      3
+     ]
+    }
+   ]
+  },
+  {
+   "name": "inseln2/02",
+   "datei": "sauber/inseln2-02.png",
+   "animation": "schweben",
+   "slot_kacheln": {
+    "x": 5,
+    "y": 0,
+    "breite": 5,
+    "hoehe": 5
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 5,
+    "hoehe": 4
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      24,
+      1,
+      5,
+      4
+     ],
+     "fusskachel": [
+      26,
+      4
+     ]
+    }
+   ]
+  },
+  {
+   "name": "inseln/05",
+   "datei": "sauber/inseln-05.png",
+   "animation": "schweben",
+   "slot_kacheln": {
+    "x": 10,
+    "y": 0,
+    "breite": 4,
+    "hoehe": 5
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 4,
+    "hoehe": 4
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      35,
+      18,
+      4,
+      4
+     ],
+     "fusskachel": [
+      37,
+      21
+     ]
+    }
+   ]
+  },
+  {
+   "name": "inseln2/05",
+   "datei": "sauber/inseln2-05.png",
+   "animation": "schweben",
+   "slot_kacheln": {
+    "x": 14,
+    "y": 0,
+    "breite": 4,
+    "hoehe": 5
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 4,
+    "hoehe": 4
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      35,
+      12,
+      4,
+      4
+     ],
+     "fusskachel": [
+      37,
+      15
+     ]
+    }
+   ]
+  },
+  {
+   "name": "inseln2/06",
+   "datei": "sauber/inseln2-06.png",
+   "animation": "schweben",
+   "slot_kacheln": {
+    "x": 18,
+    "y": 0,
+    "breite": 4,
+    "hoehe": 5
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 4,
+    "hoehe": 4
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      29,
+      35,
+      4,
+      4
+     ],
+     "fusskachel": [
+      31,
+      38
+     ]
+    }
+   ]
+  },
+  {
+   "name": "inseln/00",
+   "datei": "sauber/inseln-00.png",
+   "animation": "schweben",
+   "slot_kacheln": {
+    "x": 22,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 5
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 4
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      2,
+      0,
+      3,
+      4
+     ],
+     "fusskachel": [
+      3,
+      3
+     ]
+    }
+   ]
+  },
+  {
+   "name": "inseln/02",
+   "datei": "sauber/inseln-02.png",
+   "animation": "schweben",
+   "slot_kacheln": {
+    "x": 25,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 5
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 4
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      1,
+      9,
+      3,
+      4
+     ],
+     "fusskachel": [
+      2,
+      12
+     ]
+    }
+   ]
+  },
+  {
+   "name": "inseln/03",
+   "datei": "sauber/inseln-03.png",
+   "animation": "schweben",
+   "slot_kacheln": {
+    "x": 28,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 5
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 4
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      36,
+      6,
+      3,
+      4
+     ],
+     "fusskachel": [
+      37,
+      9
+     ]
+    }
+   ]
+  },
+  {
+   "name": "inseln/04",
+   "datei": "sauber/inseln-04.png",
+   "animation": "schweben",
+   "slot_kacheln": {
+    "x": 31,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 5
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 4
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      2,
+      22,
+      3,
+      4
+     ],
+     "fusskachel": [
+      3,
+      25
+     ]
+    }
+   ]
+  },
+  {
+   "name": "inseln/06",
+   "datei": "sauber/inseln-06.png",
+   "animation": "schweben",
+   "slot_kacheln": {
+    "x": 34,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 5
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 4
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      35,
+      30,
+      3,
+      4
+     ],
+     "fusskachel": [
+      36,
+      33
+     ]
+    }
+   ]
+  },
+  {
+   "name": "inseln/07",
+   "datei": "sauber/inseln-07.png",
+   "animation": "schweben",
+   "slot_kacheln": {
+    "x": 0,
+    "y": 5,
+    "breite": 4,
+    "hoehe": 4
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 4,
+    "hoehe": 3
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      31,
+      0,
+      4,
+      3
+     ],
+     "fusskachel": [
+      33,
+      2
+     ]
+    }
+   ]
+  },
+  {
+   "name": "inseln/01",
+   "datei": "sauber/inseln-01.png",
+   "animation": "schweben",
+   "slot_kacheln": {
+    "x": 4,
+    "y": 5,
+    "breite": 3,
+    "hoehe": 4
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      4,
+      35,
+      3,
+      3
+     ],
+     "fusskachel": [
+      5,
+      37
+     ]
+    }
+   ]
+  }
+ ]
+}

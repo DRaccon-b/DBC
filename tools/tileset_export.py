@@ -49,6 +49,7 @@ KARTEN = {
     'karte12': ('karte12_bauen', 'Spiral_Mountain_Puppet_Woods', 'v1.0'),
     'karte13': ('karte13_bauen', 'Spiral_Mountain_Machine_City', 'v1.0'),
     'karte14': ('karte14_bauen', 'Spiral_Mountain_Summit', 'v1.0'),
+    'karte15': ('karte15_bauen', 'Apocalymons_Realm', 'v1.0'),
 }
 
 
@@ -514,6 +515,8 @@ def main():
     mod = importlib.import_module(modname)
     global N
     N = getattr(mod, 'N_FRAMES', 16)
+    global DAUER
+    DAUER = getattr(mod, 'BILDDAUER', DAUER)
     out = os.path.join(ROOT, 'maps', karte, 'tileset')
     if os.path.isdir(out):
         shutil.rmtree(out)

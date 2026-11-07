@@ -20,10 +20,11 @@ MIN_FUSS = 4       # ab so vielen Fusspixeln ist eine Kachel blockiert
 MIN_DECKT = 12     # ab so vielen deckenden Pixeln verdeckt eine Kachel den Spieler
 LIEGEND_GROSS = {'karte11': {'gross/00', 'gross/01'}}    # liegen breit am Boden (Walskelett, gestrandetes Wrack)
 FARBEN = {'wand': (230, 40, 40), 'wasser': (40, 90, 230), 'kante': (250, 200, 40), 'objekt': (255, 120, 20),
-          'bruestung': (200, 60, 200), 'verdeckt': (60, 200, 255), 'durchgang': (60, 220, 90), 'teleporter': (255, 60, 255)}
+          'bruestung': (200, 60, 200), 'verdeckt': (60, 200, 255), 'durchgang': (60, 220, 90), 'teleporter': (255, 60, 255),
+          'leere': (120, 60, 200)}
 NAMEN = {'wand': 'Bergwand / Klippe / Front', 'wasser': 'Wasser', 'kante': 'Plateaukante', 'objekt': 'Objektfuss (Sockel)',
          'bruestung': 'Bruestung', 'verdeckt': 'begehbar, verdeckt Spieler', 'durchgang': 'Treppe / Bruecke',
-         'teleporter': 'Teleporter'}
+         'teleporter': 'Teleporter', 'leere': 'Leere (Abgrund)'}
 
 
 def main(karte):
@@ -46,6 +47,8 @@ def main(karte):
                 grund[y, x] = 'wand'
             elif kach(wasser, x, y).mean() > 0.5:
                 grund[y, x] = 'wasser'
+            elif os.path.exists(os.path.join(K, 'leere.npy')) and (l_ == 0).mean() >= 0.5:
+                grund[y, x] = 'leere'                         # Karte 15: Leere um die schwebende Insel
             ebene[y, x] = int(np.bincount(l_.ravel()).argmax())
     # Durchgaenge: Treppen (Front 32 px = 2 Kacheln unter der Kante), Bruecken, Arena-Treppe
     durch = np.zeros((rows, cols), bool)
