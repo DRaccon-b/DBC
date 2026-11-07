@@ -46,9 +46,13 @@ EINBETTEN = {'leere/05': ('klein/01', 'r'), 'leere/11': ('klein/08', 'l')}
 INSELN = [
     ('inseln/00', 3 * T + 8, 3), ('inseln/07', 33 * T, 2), ('inseln/03', 37 * T + 8, 9), ('inseln/02', 2 * T + 8, 12),
     ('inseln/05', 37 * T, 21), ('inseln/04', 3 * T + 8, 25), ('inseln/06', 36 * T + 8, 33), ('inseln/01', 5 * T + 8, 37),
-('inseln/13', 10 * T + 8, 38), 
+
 ]
 INSEL_OBJEKTE = False           # Nutzerwunsch: keine Objekte auf der Plattform
+# neue Brocken (k15_inseln2): Karte 02 Industrie, 04 Gear Savanna, 08 Overdell, 09 Vamdemon's Keep - je mehrere Plaetze
+INSELN2 = [('inseln2/00', [(10 * T + 8, 3), (11 * T, 4)]), ('inseln2/02', [(26 * T + 8, 4), (27 * T, 3)]),
+           ('inseln2/05', [(37 * T, 15), (37 * T + 8, 15), (36 * T + 8, 16)]),
+           ('inseln2/06', [(31 * T, 38), (32 * T, 38), (2 * T + 8, 31), (2 * T, 32)])]
 ANIM_INSEL = {'inseln/10': 'schweben', 'inseln/12': 'schweben'}
 
 
@@ -161,6 +165,15 @@ def main():
     for name, mx, reihe in INSELN:
         setzen(name, mx, reihe, ANIM_INSEL.get(name, 'schweben'), False, frei_leer,
                extra={'schwebt': True, 'kein_schatten': True, 'keine_verdeckung': True})
+    for name, plaetze in INSELN2:
+        for mx, reihe in plaetze:
+            datei, zu, m = sprite(name, False, 3)
+            if passt(datei, int(round(mx - m)), (reihe + 1) * T - 1 - zu, frei_leer):
+                setzen(name, mx, reihe, 'schweben', False, frei_leer,
+                       extra={'schwebt': True, 'kein_schatten': True, 'keine_verdeckung': True})
+                break
+        else:
+            print('  kein Platz:', name)
     json.dump(objekte, open(os.path.join(OBJ, 'platzierung.json'), 'w'), indent=0)
     print('Karte 15: %d Objekte' % len(objekte))
 
