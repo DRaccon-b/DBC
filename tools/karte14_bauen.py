@@ -166,6 +166,38 @@ def siegel(a, platz, cx, cy, frame):
             x += math.cos(w) + rs.uniform(-0.6, 0.6); y += math.sin(w) * 0.62 + rs.uniform(-0.6, 0.6)
 
 
+def sterne(a, himmel, frame):
+    """Funkelnde Sterne auf dem dunklen Gipfelrand: Punkte, kleine Kreuze und vierzackige Funkelsterne in Weiss,
+    Violett und Gold; jeder Stern blinkt in eigenem Takt (an, hell, aus). Die schwarzen Wolken liegen darueber."""
+    f = frame or 0
+    Hh, W = himmel.shape
+    rs = random.Random(1414)
+    ys, xs = np.nonzero(himmel[::5, ::5])
+    farben = [(240, 240, 255), (200, 170, 255), (255, 220, 140), (170, 200, 255)]
+    for _ in range(len(ys) // 9):
+        i = rs.randrange(len(ys)); y, x = int(ys[i]) * 5 + rs.randint(0, 4), int(xs[i]) * 5 + rs.randint(0, 4)
+        art = rs.choices(('punkt', 'kreuz', 'funkel'), weights=(6, 3, 1))[0]
+        farbe = np.array(rs.choice(farben), np.float32)
+        takt = rs.choice((1, 1, 2))
+        ph = (f * takt / N_FRAMES + rs.random()) % 1.0
+        k_ = max(0.0, math.sin(ph * 2 * math.pi)) ** 1.5           # Funkeln: an - hell - aus
+        if k_ < 0.08:
+            continue
+        def setz(X, Y, s_):
+            if 0 <= X < W and 0 <= Y < Hh and himmel[Y, X]:
+                a[Y, X] = np.clip(a[Y, X] * (1 - s_) + farbe * s_, 0, 255).astype(np.uint8)
+        setz(x, y, 0.5 + 0.5 * k_)
+        if art == 'kreuz' and k_ > 0.4:
+            for d in (-1, 1):
+                setz(x + d, y, 0.45 * k_); setz(x, y + d, 0.45 * k_)
+        if art == 'funkel':
+            lang = 1 + int(round(2 * k_))
+            for d in range(1, lang + 1):
+                s_ = (0.75 - 0.2 * d) * k_
+                setz(x + d, y, s_); setz(x - d, y, s_); setz(x, y + d, s_); setz(x, y - d, s_)
+            setz(x + 1, y + 1, 0.25 * k_); setz(x - 1, y - 1, 0.25 * k_); setz(x + 1, y - 1, 0.25 * k_); setz(x - 1, y + 1, 0.25 * k_)
+
+
 def treiben(sp, frame, o):
     """Wolken am Gipfelrand treiben langsam hin und her (die ganze Wolke, 2 px)."""
     d = int(round(2 * math.sin(2 * math.pi * frame / N_FRAMES + o.get('x', 0) * 0.02)))
@@ -375,6 +407,7 @@ def bauen(frame=None, speichern=True):
                 lvl[min(Hp - 1, y), x] = 9
     bauwerke.S = alt_S
     a = np.array(img.convert('RGB'))
+    sterne(a, em[5] & ~waende & ~front_b, frame)                  # Sterne auf dem dunklen Rand (Bergkuppe)
     for tp in lay.get('teleporter', []):
         k4.teleporter_zeichnen(a, tp['x'], tp['y'], tp['b'], tp['h'], frame)
     img = Image.fromarray(a).convert('RGBA')

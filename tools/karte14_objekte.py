@@ -38,7 +38,7 @@ KLEIN = {'klein/00': 4, 'klein/01': 3, 'klein/02': 3, 'klein/03': 2, 'klein/04':
          'klein/07': 1, 'klein/09': 3, 'klein/10': 1, 'klein/11': 2, 'klein/13': 1, 'klein/19': 1, 'klein/21': 1,
          'klein/30': 1, 'klein/39': 1, 'klein/53': 1, 'klein/58': 2, 'klein/12': 1}
 KRISTALL = {'mittel/04': 3, 'klein/08': 3, 'klein/55': 2, 'klein/14': 1}
-WOLKEN = ['wolken/%02d' % i for i in range(8)]
+WOLKEN = ['wolken_dunkel/%02d' % i for i in range(8)]   # schwarze Wolken (umgefaerbt aus wolken/)
 
 
 def quelle(name):
