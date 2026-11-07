@@ -25,6 +25,7 @@ T = 16
 N_FRAMES = 4                     # Regel: hoechstens 4 Animationsbilder
 k4.N_FRAMES = k14.N_FRAMES = N_FRAMES
 BILDDAUER = 250                  # ms je Bild
+MIT_LOCH = False                 # True: Variante mit violettem Loch in der Mitte (nur fuer das Extra-GIF)
 H = k4.H
 k4.FELS['leerfels'] = ['#0e0c16', '#16131f', '#1e1a2a', '#282338', '#332d46', '#403a56', '#504a68']
 MAGENTA = np.array([226, 70, 200], np.float32)
@@ -333,8 +334,13 @@ def bauen(frame=None, speichern=True):
     a[innen & np.roll(ring, -1, 0)] = H('#22202c')                # Stufe Ring -> Boden: Kante unten dunkel,
     a[innen & np.roll(ring, 1, 0)] = H('#7a7890')                 # oben Licht
     a[innen & (np.roll(ring, 1, 1) | np.roll(ring, -1, 1))] = H('#4e4c60')
-    riss = gross(kl == 'v')
-    boden = innen                                                 # Mitte mit Pflaster gefuellt (Nutzerwunsch)
+    if MIT_LOCH:                                                  # Variante: violettes Loch (gestuftes Kreuz) in der Mitte
+        dx_, dy_ = np.abs(tx + 0.5 - lay['platte'][0]), np.abs(ty + 0.5 - lay['platte'][1])
+        riss = gross(((dx_ <= 1.5) & (dy_ <= 3.5)) | ((dx_ <= 3.5) & (dy_ <= 1.5)) | ((dx_ <= 2.5) & (dy_ <= 2.5)))
+        boden = innen & ~riss
+    else:
+        riss = gross(kl == 'v')
+        boden = innen                                             # Mitte mit Pflaster gefuellt (Nutzerwunsch)
     bodenzeichen(a, boden, cx, cy, frame)
     # ------------------------------------------------------------------ Steg mit Bordsteinen
     st = textur('s', cols, rows)
@@ -361,7 +367,10 @@ def bauen(frame=None, speichern=True):
     a[aussenkante] = H('#14121c')
     innen1 = kontur(land & ~aussenkante)
     mischen(a, innen1, MAGENTA, 0.5 + 0.3 * p)                   # magenta glimmende Inselkante (wie die Vorlage)
-    wand_riss = np.zeros_like(riss)                              # kein Riss mehr: Mitte ist Pflaster
+    if MIT_LOCH:
+        wand_riss = riss_zeichnen(a, riss, cx, cy, frame, textur('v', cols, rows))
+    else:
+        wand_riss = np.zeros_like(riss)                          # kein Riss mehr: Mitte ist Pflaster
     leer_rest = leer & ~bauch
     sterne(a, leer_rest, frame)
     datenstriche(a, leer_rest, frame)
