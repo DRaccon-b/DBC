@@ -240,47 +240,118 @@ def wasser_klassik(a, wasser, frame):
 
 
 def ueberlauf(a, wasser, land, frame):
-    """Wo die Mauer auf Wasserhoehe fehlt (linke und rechte Seite des Beckens), laeuft das Wasser ueber die Kante:
-    an der Kante ein heller Ueberlaufsaum, dann faellt es als schmaler Wasserfall seitlich an der Plattform entlang
-    nach unten in die Leere und loest sich dort in Datenpixel auf. Quelle = Becken, Abfluss = Leere (Regel Wasser)."""
+    """Wo die Mauer auf Wasserhoehe fehlt (linke und rechte Seite des Beckens), laeuft das Wasser ueber die Kante
+    und faellt seitlich an der Plattform hinab in die Leere (Quelle = Becken, Abfluss = Leere):
+      - Stroemung: im Becken ziehen kurze helle Striche zur offenen Kante hin
+      - Lippe: das Wasser woelbt sich ueber die Kante (heller, unregelmaessiger Saum, 2-4 px nach aussen)
+      - Vorhang: oben breit (die ganze offene Kante), unten schmaler; hinten dunkles Blau, davor helle Straehnen in
+        verschiedenen Laengen und Geschwindigkeiten, Raender leicht gewellt, schwacher cyan Schein in der Leere
+      - Ende: unter der Plattform zerfaellt das Wasser in Tropfen und Datenpixel, die weiter fallen und verloeschen
+    4 Bilder: alles ist auf 4 Bilder abgestimmt (Straehnen 4 px/Bild, Periode 16 px)."""
     f = frame or 0
     Hp, Wp = wasser.shape
     ys, xs = np.nonzero(wasser)
     y0, y1, x0, x1 = ys.min(), ys.max() + 1, xs.min(), xs.max() + 1
-    unten = np.nonzero(land[:, x0])[0].max() + 1                  # Unterkante der Plattform
+    oy = y0 + 6                                                    # Wasser beginnt unter der Nordmauerfront
+    unten = int(np.nonzero(land[:, x0 + 20])[0].max()) + 1         # Unterkante der Plattform
     rs = np.random.RandomState(1921)
+    dunkel, mittel = np.array((20, 78, 128), np.float32), np.array((36, 128, 178), np.float32)
+    hell, weiss = np.array((150, 230, 250), np.float32), np.array((225, 250, 255), np.float32)
+
+    def mix(Y, X, c, s_):
+        if 0 <= Y < Hp and 0 <= X < Wp and not land[Y, X]:
+            a[Y, X] = np.clip(a[Y, X] * (1 - s_) + c * s_, 0, 255).astype(np.uint8)
+
     for seite in (-1, 1):
         kante = x0 if seite < 0 else x1 - 1
-        for dd in range(3):                                       # Ueberlaufsaum an der offenen Kante
-            X = kante - seite * dd
-            a[y0 + 6:y1, X] = np.clip(a[y0 + 6:y1, X] * 0.4 + np.array((200, 245, 255)) * 0.6 * (1 - dd / 3), 0, 255)
-        breite = 10
-        xa = kante + seite                                         # Fall direkt neben der Plattform (in der Leere)
-        cols = [xa + seite * i for i in range(breite)]
-        laenge = unten + 70 - (y0 + 6)
-        for i, X in enumerate(cols):
-            if not (0 <= X < Wp):
-                continue
+        aussen = lambda d: kante + seite * d                       # d px ausserhalb der Plattform
+        # --- Stroemung im Becken zur Kante hin
+        for _ in range(9):
+            Y = rs.randint(oy + 3, y1 - 2)
             ph = rs.randint(16)
-            for t in range(laenge):
-                Y = y0 + 6 + t
-                if Y >= Hp or land[Y, X]:
-                    continue
-                q = t / laenge
-                if q > 0.8 and rs.rand() < (q - 0.8) * 4:          # unten loest es sich in Pixel auf
-                    continue
-                c = np.array((40, 140, 190), np.float32) if i not in (0, breite - 1) else np.array((24, 90, 140), np.float32)
-                if (t - ph - 6 * f) % 14 < 4 and 0 < i < breite - 1:
-                    c = np.array((190, 245, 255), np.float32)       # Wasserstraehnen laufen nach unten
-                s_ = 0.92 * (1 - max(0.0, q - 0.6) / 0.4 * 0.8)
-                a[Y, X] = np.clip(a[Y, X] * (1 - s_) + c * s_, 0, 255).astype(np.uint8)
-        # Gischt an der Kante: kleine helle Tropfen (wechseln je Bild)
-        for _ in range(10):
-            Y, dx = y0 + 6 + rs.randint(0, y1 - y0 - 6), rs.randint(0, breite)
-            if (rs.randint(4) + f) % 4 == 0:
-                X = xa + seite * dx
+            for t in range(5):
+                d_in = (ph + 4 * f + t) % 40                       # 0 = an der Kante
+                X = kante - seite * (40 - d_in)
+                if wasser[Y, X] and t < 3:
+                    a[Y, X] = np.clip(a[Y, X] * 0.4 + hell * 0.6, 0, 255).astype(np.uint8)
+        # --- Schein in der Leere
+        for Y in range(oy, min(Hp, unten + 60)):
+            for d in range(1, 22):
+                X = aussen(d)
                 if 0 <= X < Wp and not land[Y, X]:
-                    a[Y, X] = (230, 250, 255)
+                    q = (Y - oy) / max(1, unten + 60 - oy)
+                    mix(Y, X, np.array((40, 160, 220), np.float32), 0.10 * (1 - d / 22) * (1 - q))
+        # --- Vorhang: oben 20 px breit (Bogen nach aussen), unten 12 px; Licht von links oben
+        laenge = unten + 44 - oy
+        for t in range(laenge):
+            Y = oy + t
+            q = t / laenge
+            aus = max(0.0, (t - (laenge - 40)) / 40.0)                # unten blendet der Strahl aus
+            bogen = 6 * max(0.0, 1 - t / 18.0)                     # oben woelbt sich der Strahl nach aussen
+            breite = int(round(12 + 8 * (1 - q) ** 2 + bogen * 0.3 + 1.0 * np.sin(Y / 7.0 + seite * 1.7)
+                               + 0.8 * np.sin(Y / 3.0 + 2 * np.pi * f / N_FRAMES)))
+            for d in range(1, breite + 1):
+                X = aussen(d)
+                r_ = d / breite                                    # 0 = an der Plattform, 1 = aussen
+                c = mittel * (1 - abs(r_ - 0.45)) + dunkel * abs(r_ - 0.45)
+                if d <= 2:
+                    c = dunkel * 0.8                               # Schattenseite zur Plattform
+                if d == breite:
+                    c = hell if seite < 0 else dunkel * 0.9        # Aussenkante: links im Licht, rechts im Schatten
+                if aus > 0 and rs.rand() < aus * 0.7:
+                    continue                                       # zerfaellt in einzelne Pixel
+                mix(Y, X, c, 0.95 * (1 - aus))
+        # Straehnen: durchgehende feine Linien, darauf helle Abschnitte, die nach unten laufen (4 px je Bild)
+        for k in range(20):
+            d = 3 + rs.randint(0, 14)
+            lang, gap = rs.randint(5, 14), rs.choice((10, 18, 26))
+            ph = rs.randint(gap + lang)
+            for t in range(laenge):
+                Y = oy + t
+                q = t / laenge
+                breite_ = 12 + 8 * (1 - q) ** 2
+                if d >= breite_ - 1:
+                    continue
+                aus = max(0.0, (t - (laenge - 40)) / 40.0)
+                mix(Y, aussen(d), mittel * 1.15, 0.35 * (1 - aus))
+                if (t - ph - 4 * f) % (gap + lang) < lang:
+                    mix(Y, aussen(d), weiss if k % 4 == 0 else hell, 0.8 * (1 - aus))
+        # Gischtwolke unter der Plattform: weiche Tropfen und Datenpixel breiten sich aus, fallen und verloeschen
+        for k in range(70):
+            d0 = rs.randint(0, 16)
+            start = unten + rs.randint(-10, 6)
+            weg = rs.randint(24, 80)
+            pos = ((rs.randint(32) + 4 * f) % 32) / 32.0
+            Y = int(start + pos * weg)
+            X = aussen(d0 + int(pos * rs.randint(-6, 14)))
+            s_ = 0.85 * (1 - pos) ** 1.3
+            gr = 2 if (k % 7 == 0 and pos < 0.5) else 1
+            farbe = weiss if k % 3 == 0 else (hell if k % 3 == 1 else np.array((80, 220, 255), np.float32))
+            for yy_ in range(gr):
+                for xx_ in range(gr):
+                    mix(Y + yy_, X + seite * xx_, farbe, s_)
+        for d in range(0, 26):                                     # Nebel um den Aufprall (weich, statisch)
+            for t in range(-8, 40):
+                Y, X = unten + t, aussen(d - 4)
+                w_ = max(0.0, 1 - (((d - 9) / 13.0) ** 2 + ((t - 10) / 28.0) ** 2))
+                mix(Y, X, np.array((120, 200, 235), np.float32), 0.22 * w_)
+        # --- Lippe: Wasser woelbt sich ueber die Kante
+        for Y in range(oy, y1):
+            w_ = 3 + int(1.5 + 1.5 * np.sin(Y / 5.0 + 2 * np.pi * f / N_FRAMES + seite))
+            for d in range(0, w_ + 1):
+                X = aussen(d)
+                c = weiss if d >= w_ - 1 else hell
+                if d == 0:
+                    a[Y, X] = np.clip(a[Y, X] * 0.3 + hell * 0.7, 0, 255).astype(np.uint8)
+                else:
+                    mix(Y, X, c, 0.9)
+        for Y in (oy, y1 - 1):                                      # Enden der Lippe weich
+            mix(Y, aussen(1), weiss, 0.6)
+        # Gischt an der Lippe (wechselt je Bild)
+        for _ in range(14):
+            Y, d = rs.randint(oy, y1), rs.randint(3, 8)
+            if (rs.randint(4) + f) % 4 == 0:
+                mix(Y, aussen(d), weiss, 0.9)
 
 
 def kaikante(a, kai, wasser=None):
@@ -429,8 +500,8 @@ def bauen(frame=None, speichern=True):
     rest = leer & ~front
     k16.straenge(a, rest & ~nah, frame, seed=1919, zonen=((8, 88), (552, 664), (1128, 1208), (100, 1100)), n=6,
                  y_bereich=(60, 440))
-    stellen = [(20, 40), (40, 300), (16, 500), (300, 18), (720, 30), (1000, 20), (580, 140), (600, 320),
-               (590, 500), (1140, 120), (1150, 340), (1130, 530), (220, 540), (860, 545)]
+    stellen = [(20, 40), (40, 300), (16, 500), (300, 18), (720, 30), (1000, 20), (556, 140), (560, 330),
+               (556, 500), (1172, 150), (1172, 340), (1160, 540), (220, 540), (860, 545)]
     k16.fragmente(a, rest & ~nah, frame, seed=1920, stellen=stellen)
     ueberlauf(a, wasser, land, frame)
     lvl = np.zeros((Hp, Wp), np.uint8)
