@@ -1633,9 +1633,18 @@ OBJEKTGRUPPEN_K20 = {   # Karte 20 (A02-Startdorf), Stil wie Karte 06 (Primary V
         'small cozy village cottage with a thick golden straw thatched roof, cream plaster walls with light timber beams, '
         'a wooden front door in the middle, two small windows with flower boxes, a small stone chimney, grey stone base, ' + FR14,
     ]},
+    'k20_muehle2': {'size': 128, 'items': [
+        'tall white stone windmill tower with a dark blue conical roof and four large red wooden lattice sails in an X shape, a small wooden door at the bottom, ' + FR14,
+    ]},
     'k20_muehle': {'size': 96, 'items': [
         'small white stone windmill tower with a dark conical roof and four red wooden sails in an X shape, a small '
         'wooden door at the bottom, ' + FR14,
+    ]},
+    'k20_beet': {'size': 32, 'items': [
+        'small carrot plant growing in soil, green leafy top and an orange carrot shoulder, tiny farm crop, ' + FR14,
+        'small green cabbage head growing in soil, tiny farm crop, ' + FR14,
+        'small bundle of ripe golden wheat stalks growing in soil, tiny farm crop, ' + FR14,
+        'small young green sprout seedling in soil, tiny farm crop, ' + FR14,
     ]},
     'k20_klein': {'size': 48, 'items': [
         'round golden hay bale, ' + FR14,

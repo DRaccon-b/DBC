@@ -125,9 +125,9 @@ def bauen(frame=None, speichern=True):
     tx0, tx1 = lay['treppe']
     ye = (y1 + 1) * T - 1
     frei = np.zeros((Hp, Wp), bool)
-    frei[ye - 14:ye + 40, tx0 * T - 5:(tx1 + 1) * T + 5] = True
+    frei[ye - 14:ye + 40, tx0 * T:(tx1 + 1) * T] = True          # Treppe schliesst buendig an die Felsfront an
     k4.hoehenkanten(a, hoch, 'erde', 32, 8, lippe_aus_gras(gras), frei, 31, berg=False)
-    k4.treppe(a, tx0 * T + 1, (tx1 + 1) * T - 1, ye, 's', 32, 'erde', sand)
+    k4.treppe(a, tx0 * T, (tx1 + 1) * T, ye, 's', 32, 'erde', sand)
     # Fluss: vertieftes Wasser wie der Teich von Karte 06
     import wasser_vertieft
     xm = weich(zell_maske(cls, 'xb', cols, rows), 4, 0.15, 8, 0.45)

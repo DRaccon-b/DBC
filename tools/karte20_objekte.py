@@ -23,7 +23,7 @@ FREMD = {
     'k06/tv_treppe': 'karte06/front_gebaeude/tv_treppe.png', 'k06/stand': 'karte06/stand/00.png', 'k03/stand': 'karte03/mittel/09.png',
     'k06/schild': 'karte06/front_mittel/08.png', 'k06/kiste': 'karte06/front_mittel/15.png',
     'k01/laterne': 'karte01/laterne.png', 'k01/kirsche': 'karte01/gross/01.png',
-    'k10/bank': 'karte10/spielplatz/03.png', 'k10/faesser': 'karte10/bahn2/09.png', 'k10/saecke': 'karte10/bahn2/03.png',
+    'k10/bank': 'karte02/klein/22.png',          # kleine Parkbank (Nutzer: Baenke zu gross) 'k10/faesser': 'karte10/bahn2/09.png', 'k10/saecke': 'karte10/bahn2/03.png',
     'k10/milch': 'karte10/bahn2/02.png',
 }
 for i in range(16):
@@ -34,7 +34,7 @@ for i in range(4, 62):
 WALD = ['k01/baum%02d' % i for i in (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 12, 13, 14)]
 DEKO = ['k01/deko%02d' % i for i in (5, 6, 8, 10, 14, 26, 27, 31, 33)]
 DEKO_PFLANZE = {'k01/deko05', 'k01/deko06', 'k01/deko26', 'k01/deko27'}
-HAUS, MUEHLE = 'haus/00', 'muehle/00'
+HAUS, MUEHLE = 'haus/00', 'muehle2/00'                 # Muehle in 128 px (Nutzer: war zu klein)
 HEU, VOGEL, BRETT, BRUNNEN = 'klein/00', 'klein/01', 'klein/02', 'klein/03'
 SCHUBKARRE, HOLZ, FASS2 = 'klein/06', 'klein/05', 'klein/13'
 ACHSE = 28.0                                   # Achse des Dorfplatzes (Kacheln)
@@ -43,7 +43,7 @@ ACHSE = 28.0                                   # Achse des Dorfplatzes (Kacheln)
 FEST = [
     # Fernseher (exakt wie Karte 06) und Haeuser
     ('k06/tv_treppe', 9.0, 17, {'anim': 'portal'}),
-    (HAUS, 5.5, 7, {}), (HAUS, 26.0, 10, {}), (HAUS, 34.0, 10, {'spiegeln': True}), (HAUS, 8.5, 29, {'spiegeln': True}),
+    (HAUS, 5.5, 7, {}), (HAUS, 26.0, 10, {}), (HAUS, 34.0, 10, {'spiegeln': True}), (HAUS, 8.5, 28, {'spiegeln': True}),
     # Dorfplatz: Brunnen auf dem Rasen, Laternen und Baenke paarweise zur Achse, Marktstaende unten
     (BRUNNEN, ACHSE - 0.5, 21, {}),
     ('k01/laterne', ACHSE - 6.5, 15, {'anim': 'laterne'}), ('k01/laterne', ACHSE + 5.5, 15, {'anim': 'laterne'}),
@@ -66,19 +66,23 @@ FEST = [
     (VOGEL, 19, 42, {}), (VOGEL, 47, 21, {}),
     (SCHUBKARRE, 54, 35, {}), (HOLZ, 56, 26, {}),
     # Plateau oben rechts: Baenke links und rechts vom Weg, Wegweiser
-    ('k10/bank', 45.5, 6, {}), ('k10/bank', 54.5, 6, {}), ('k06/schild', 47.5, 8, {}),
+    ('k10/bank', 45.5, 6, {}), ('k10/bank', 54.5, 6, {}), ('k06/schild', 46.5, 8, {}),
     # Wegweiser am Fernseher
-    ('k06/schild', 11.5, 23, {}),
+    ('k06/schild', 8.5, 23, {}),
 ]
-for x in range(43, 52, 2):                                   # Moehren im oberen Beet
-    FEST.append(('k07/gemuese04', x, 18, {}))
-for x in (43, 45):                                           # Kohl links unten
-    for y in (23, 25):
-        FEST.append(('k07/gemuese01', x, y, {}))
-for x in (49, 51):                                           # Weizen rechts unten
-    for y in (23, 25):
-        FEST.append(('k07/gemuese10', x, y, {'anim': 'wehen'}))
+# Gemuese in den Beeten (Nutzer: besser platzieren): gleichmaessiges Raster, je Beet eine Sorte, Reihen buendig
+# auf den Furchen, mittig im Beet; ohne Bodenfuss (die Pflanzen haben eigene Erde)
+def _beet(sorte, x0, x1, y0, y1, opt=None):
+    xs = list(range(x0 + 1, x1, 2))
+    rand = (x1 - x0 + 1 - 2 * len(xs)) / 2.0
+    for y in range(y0 + 1, y1 + 1, 2):
+        for x in xs:
+            FEST.append((sorte, x + rand - 0.5 + 0.5, y, dict(opt or {})))
 
+
+_beet('beet/00', 42, 52, 16, 19)                                 # Moehren oben (2 Reihen), kleine Beetpflanzen (k20_beet)
+_beet('beet/01', 42, 46, 22, 26)                                 # Kohl links
+_beet('beet/02', 48, 52, 22, 26, {'anim': 'wehen'})            # Weizen rechts
 
 def main():
     rnd = random.Random(20)
@@ -100,6 +104,10 @@ def main():
         for y in range(y0 - 1, y1 + 2):
             for d in (-1, 0, 1):
                 gesperrt |= {(x0 + d, y), (x1 + d, y)}
+    x0, y0, x1, y1 = lay['plateau']                          # Felsfront, Treppe und Plateaukante frei halten
+    for x in range(x0 - 1, x1 + 2):
+        for y in (y1, y1 + 1, y1 + 2, y1 + 3):
+            gesperrt.add((x, y))
     for tp in lay['teleporter']:
         for y in range(tp['y'] - 1, tp['y'] + tp['h'] + 1):
             for x in range(tp['x'] - 1, tp['x'] + tp['b'] + 1):
@@ -130,7 +138,7 @@ def main():
             ys, xs = np.nonzero(aa)
             ux0, uy0, ux1, uy1 = int(xs.min()), int(ys.min()), int(xs.max()), int(ys.max())
             art = 'baum' if 'baum' in name or 'kirsche' in name else 'klein' if flach else 'stein'
-            ohne_fuss = name in ('k01/laterne', 'k06/tv_treppe')
+            ohne_fuss = name in ('k01/laterne', 'k06/tv_treppe') or name.startswith(('k07/gemuese', 'beet/'))
             v = sp if ohne_fuss else bauwerke.bodenfuss(sp, b, art)
             off = 0 if ohne_fuss else 2
             datei = 'varianten/%s_%s%s.png' % (name.replace('/', '-'), b, '_m' if spiegeln else '')
@@ -163,6 +171,9 @@ def main():
             break
         tx, ty = rnd.randrange(3, cols - 3), rnd.randrange(3, rows - 3)
         if cls[ty][tx] not in 'go':
+            continue
+        if any(cls[min(rows - 1, max(0, ty + dy))][min(cols - 1, max(0, tx + dx))] in 'xb'
+               for dx in (-1, 0, 1) for dy in (-1, 0, 1, 2)):      # nichts am/im Wasser (Nutzer)
             continue
         n_ = rnd.choice(DEKO)
         if setze(n_, tx, ty, {'anim': 'wehen'} if n_ in DEKO_PFLANZE and rnd.random() < 0.6 else {}, frei=True):
