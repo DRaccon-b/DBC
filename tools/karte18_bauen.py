@@ -340,15 +340,57 @@ def kaimauer(a, wasser, land, lvl):
     a[seite] = H('#4a4e5a')
 
 
+def boden_details(a, kl):
+    """Handgemachte Details wie auf den Kacheln von Karte 01: Moos und Graskeime in den Plattenfugen, kleine Steinchen
+    (heller Punkt mit Schatten unten rechts), feine Haarrisse, vereinzelt Laub. Fest je Kachel (kein Flimmern), nur
+    auf Gehweg, Platz, Vorplatz und Terrasse; etwas aufgehellt (Daemmerung statt Nacht)."""
+    rs = np.random.RandomState(1801)
+    R_, C_ = kl.shape
+    boden = gross(np.isin(kl, list('gpqvct')))
+    af = a.astype(np.float32)
+    af[boden] = af[boden] * 1.07 + 4
+    a[:] = np.clip(af, 0, 255).astype(np.uint8)
+    MOOS = (H('#3e5a34'), H('#4e6e3e'), H('#62844a'))
+    for ty in range(R_):
+        for tx in range(C_):
+            if kl[ty, tx] not in 'gpqvct':
+                continue
+            x0, y0 = tx * T, ty * T
+            r = rs.rand()
+            if r < 0.22:                                           # Moos in der Fuge (Kachelrand unten/links)
+                for k in range(rs.randint(2, 6)):
+                    if rs.rand() < 0.5:
+                        x, y = x0 + rs.randint(0, 16), y0 + 15
+                    else:
+                        x, y = x0, y0 + rs.randint(0, 16)
+                    a[y, x] = MOOS[rs.randint(0, 3)]
+                    if rs.rand() < 0.4 and y - 1 >= y0:
+                        a[y - 1, x] = MOOS[2]
+            elif r < 0.34:                                         # Steinchen
+                for k in range(rs.randint(1, 3)):
+                    x, y = x0 + rs.randint(2, 13), y0 + rs.randint(2, 13)
+                    hell = np.clip(a[y, x].astype(int) + 45, 0, 255)
+                    a[y, x] = hell; a[y, x + 1] = np.clip(hell - 20, 0, 255)
+                    a[y + 1, x + 1] = (a[y + 1, x + 1] * 0.6).astype(np.uint8)
+            elif r < 0.40:                                         # Haarriss
+                x, y = x0 + rs.randint(3, 12), y0 + rs.randint(3, 12)
+                for k in range(rs.randint(3, 6)):
+                    a[y, x] = (a[y, x] * 0.62).astype(np.uint8)
+                    x += rs.choice([0, 1]); y += rs.choice([0, 1])
+                    if x >= x0 + 15 or y >= y0 + 15:
+                        break
+
+
 def meer_wie_karte01(a, kl, wasser, frame):
     """Meer im Stil von Karte 01 (gleiche Funktion wasser_details.meer_terrassen): Flachwasser mit durchscheinendem
     Sandgrund, zwei Stufenwaende mit Lichtkante und dunklem Fuss, tiefer Grund, Felsen (kleine ragen im Flachen heraus),
     Algen, Schaumkante und Lichtstriche. Nur die Wasserfarben sind an den Abend im Nebel angepasst (gedaempftes
     Blaugruen statt Karibik-Tuerkis); 4 Bilder statt 16. Steg, Mole, Boot und Pfeiler bleiben frei von Felsen."""
     import wasser_details as wd
-    alt = (wd.FARBEN, wd.N_FRAMES)
-    wd.FARBEN = [wd.H('#4e8e9c'), wd.H('#356e8c'), wd.H('#25527a'), wd.H('#1a3a62')]
+    alt = (wd.FARBEN, wd.N_FRAMES, wd.FLACH, wd.SCHAUM_D, wd.STUFE1, wd.STUFE2)
+    wd.FARBEN = [f * 0.9 for f in wd.FARBEN]                       # Farben von Karte 01, nur leicht abendlich
     wd.N_FRAMES = N_FRAMES
+    wd.FLACH, wd.SCHAUM_D, wd.STUFE1, wd.STUFE2 = 20, (18, 22), 50, 100   # Stufen enger: beide vor dem Nebel sichtbar
     meiden = gross(np.isin(kl, ['h', 'k']))
     for (x0, y0, x1, y1) in ((103, 99, 115, 107), (124, 82, 129, 90), (124, 38, 135, 46)):   # Steg+Boot, Pfeiler, Mole
         meiden[y0 * T:y1 * T, x0 * T:x1 * T] = True
@@ -362,7 +404,7 @@ def meer_wie_karte01(a, kl, wasser, frame):
     see |= steg_
     vorher = a.copy()
     img = wd.meer_terrassen(Image.fromarray(a), see, frame, meiden, maske=see)
-    wd.FARBEN, wd.N_FRAMES = alt
+    wd.FARBEN, wd.N_FRAMES, wd.FLACH, wd.SCHAUM_D, wd.STUFE1, wd.STUFE2 = alt
     out = np.array(img.convert('RGB'))
     out[steg_] = vorher[steg_]                                     # Planken wieder obenauf
     return out
@@ -810,6 +852,7 @@ def bauen(frame=None, speichern=True):
     wasser = gross(kl == 'w')
     a[wasser] = textur('w', cols, rows)[wasser]
     a = meer_wie_karte01(a, kl, wasser, frame)
+    boden_details(a, kl)
     land = gross(kl != '.') & ~wasser
     asphalt = gross(np.isin(kl, ['s', 'x']))
     lvl = np.zeros((Hp, Wp), np.uint8)

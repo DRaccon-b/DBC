@@ -83,7 +83,7 @@ def main():
     rechteck(k, 125, 78, 125, 99, 'k')                            # Kaikante am Kanal
     rechteck(k, 125, 18, 125, 99, 'k')                            # Kaikante am Ostrand des Platzes
     for x in range(4, C, 3):                                      # Meer unten, Rand gestuft in den Nebel
-        tief = 106 + int(rs.choice([0, 1, 1, 2, 3]))
+        tief = 108 + int(rs.choice([0, 1, 1, 2]))                # Nebel erst ganz unten (2-4 Reihen)
         k[100:tief + 1, x:min(C, x + 3)] = 'w'
     for y in range(2, 100, 3):                                    # Meer rechts bis an den Kartenrand
         k[y:y + 3, 126 + int(rs.choice([0, 0, 1])):C] = 'w'

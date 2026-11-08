@@ -904,6 +904,30 @@ def ginkgo(quelle, name):
     Image.fromarray(out.astype(np.uint8)).save(os.path.join(OUT, name + '.png'))
 
 
+def gemalt(b, seed):
+    """Malerische Oberflaeche wie bei den Objekten von Karte 01: feine, feste Struktur (helle/dunkle Tupfer je 2x2,
+    +-6 Helligkeit) auf grossen einfarbigen Flaechen, Verschattung im unteren Viertel jeder Wandflaeche und unter
+    jeder hellen Kante (Gesims/Fensterbank wirft einen 1-px-Schatten). Umriss und Lichter bleiben unveraendert."""
+    a = b.a.astype(np.int16)
+    al = b.a[..., 3] > 0
+    rs = np.random.RandomState(seed % 100000)
+    h, w = al.shape
+    tupf = rs.randint(-6, 7, size=((h + 1) // 2, (w + 1) // 2))
+    tupf = np.kron(tupf, np.ones((2, 2), int))[:h, :w]
+    lum = a[..., :3].mean(axis=2)
+    flach = al & (np.abs(np.roll(lum, 1, 1) - lum) < 6) & (np.abs(np.roll(lum, 1, 0) - lum) < 6) & (lum > 50)
+    a[flach, :3] += tupf[flach, None]
+    hell = al & (lum > np.roll(lum, -1, 0) + 25)                   # helle Kante ueber dunklerer Flaeche
+    unter = np.roll(hell, 1, 0) & al & ~hell
+    a[unter, :3] = (a[unter, :3] * 0.86).astype(np.int16)
+    ys = np.arange(h)[:, None]
+    unten = al & (ys > h * 0.8)
+    fak = np.clip(1 - 0.12 * (ys - h * 0.8) / (h * 0.2), 0.88, 1.0)
+    a[..., :3] = np.where(unten[..., None], (a[..., :3] * fak[..., None]).astype(np.int16), a[..., :3])
+    b.a[..., :3] = np.clip(a[..., :3], 0, 255).astype(np.uint8)
+    b.umriss()
+
+
 def main():
     lay = json.load(open(os.path.join(KARTE, 'layout.json')))
     os.makedirs(OUT, exist_ok=True)
@@ -926,6 +950,7 @@ def main():
             b = lager(w, h, rs, 'shed')
         elif art == 'halle':
             b = halle(w, h, rs)
+        gemalt(b, zlib.crc32(art.encode()))
         b.save(art)
         teile.append((art, Image.fromarray(b.a)))
     for name, fn in (('bus', bus), ('lkw', lkw), ('kletterkuppel', kletterkuppel), ('feuerschale', feuerschale),
