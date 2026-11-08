@@ -20,7 +20,7 @@ RX, RY = 42, 6                                   # linke obere Ecke des Hafenrau
 MITTE = (RX + 14) * T                            # Raumachse (x = 896 px)
 KAI = RY + 8                                     # Fussreihe: erste Pflasterreihe hinter der Kaikante (Sockel ganz auf Stein)
 # (Quelle, Mitte x in px, Fussreihe, Animation)
-OBJEKTE = [('hafen/poller', MITTE + dx, KAI, None) for dx in (-152, -56, 56, 152)]
+OBJEKTE = [('hafen/poller', MITTE + dx, KAI, None) for dx in (-136, -48, 48, 136)]
 
 
 def main():

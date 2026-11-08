@@ -182,14 +182,15 @@ def wasser_netz(a, wasser, frame):
     p = 0.5 + 0.5 * np.sin(2 * np.pi * f / N_FRAMES)
     # zweite, tiefere Ebene (Nutzerwunsch): Becken im Becken, 1 Kachel vom Rand (oben unter der Mauerfront 1,5),
     # am 16er-Raster; dort ist der Grund dunkler, das Datenraster schwaecher und um 8 px versetzt (liegt tiefer)
-    tief = (yy >= 24) & (yy < h - 16) & (xx >= 16) & (xx < w - 16)
+    hb = min(h, 6 * T)                                             # Hoehe des oberen Beckens (Kanaele darunter bleiben flach)
+    tief = (yy >= 24) & (yy < hb - 16) & (xx >= 16) & (xx < w - 16)
     sub[tief] = g[tief] * 0.22 + np.array((10, 62, 102), np.float32) * 0.78
     raster_t = tief & (((xx + 8) % 16 == 0) | ((yy + 8) % 16 == 0))
     raster &= ~tief
     sub[raster] = sub[raster] * (0.6 - 0.15 * p) + np.array((80, 230, 255), np.float32) * (0.4 + 0.15 * p)
     sub[raster_t] = sub[raster_t] * (0.72 - 0.1 * p) + np.array((60, 170, 220), np.float32) * (0.28 + 0.1 * p)
     # Stufe: Nordwand der Vertiefung ist sichtbar (zeigt zum Betrachter, 5 px), Kanten mit Licht, Fuss dunkel
-    ty0, ty1 = 24, h - 16
+    ty0, ty1 = 24, hb - 16
     sub[ty0:ty0 + 5, 16:w - 16] = [(40, 150, 190), (30, 126, 168), (24, 106, 148), (18, 88, 128), (10, 56, 92)][0]
     for d, c in enumerate([(40, 150, 190), (30, 126, 168), (24, 106, 148), (18, 88, 128), (10, 56, 92)]):
         sub[ty0 + d, 16:w - 16] = c
@@ -198,9 +199,17 @@ def wasser_netz(a, wasser, frame):
     sub[ty0:ty1, w - 16] = sub[ty0:ty1, w - 16] * 0.55 + np.array((14, 70, 110), np.float32) * 0.45
     sub[ty1, 16:w - 16] = sub[ty1, 16:w - 16] * 0.45 + np.array((110, 215, 240), np.float32) * 0.55          # Suedkante
     sub[ty0 + 5:ty0 + 8, 16:w - 16] *= 0.8                                                                    # Schatten unter der Stufe
+    if h > hb:                                                     # Kanaele: das Wasser laeuft nach unten (Bitstriche
+        for kx in range(0, w, 6):                                  # wandern je Bild 4 px abwaerts)
+            if not wasser[y0 + hb + 4, x0 + kx]:
+                continue
+            ph = (kx * 7) % 16
+            for Y in range(hb - 8, h):
+                if (Y - ph - 4 * f) % 16 < 4 and wasser[y0 + Y, x0 + kx]:
+                    sub[Y, kx] = sub[Y, kx] * 0.3 + np.array((200, 250, 255), np.float32) * 0.7
     rs = np.random.RandomState(77)
     for _ in range(18):                                            # Bitreihen (helle Striche), treiben nach rechts
-        gy, gx, lang = rs.randint(9, h - 2), rs.randint(0, w), rs.randint(4, 10)
+        gy, gx, lang = rs.randint(9, hb - 2), rs.randint(0, w), rs.randint(4, 10)
         for k_ in range(lang):
             X = (gx + k_ + 3 * f) % w
             if k_ % 3 != 2:
@@ -230,18 +239,33 @@ def wasser_klassik(a, wasser, frame):
     return _nordmauer(a, wasser, frame)
 
 
-def kaikante(a, kai):
-    """Kaikante: Reihe aus hellem Stein an der Wasserseite (oben), mit Fugen alle 16 px und Schatten zum Pflaster."""
-    ys, xs = np.nonzero(kai)
-    if not len(ys):
+def kaikante(a, kai, wasser=None):
+    """Kaikante: heller Stein an jeder Wasserseite des Pflasters (6 px breit, Licht zur Wasserseite, Fugen alle
+    16 px, Schatten zum Pflaster). Laeuft auch an den Kanaelen entlang (Kanal-Variante)."""
+    if wasser is None or not kai.any():
         return
-    y0, x0, x1 = ys.min(), xs.min(), xs.max() + 1
-    stein = [(206, 210, 200), (186, 190, 182), (170, 174, 166), (170, 174, 166), (156, 160, 152), (120, 124, 118)]
-    for d, c in enumerate(stein):
-        a[y0 + d, x0:x1] = c
-    a[y0 + 6, x0:x1] = (a[y0 + 6, x0:x1] * 0.72).astype(np.uint8)  # Schatten der Kante auf dem Pflaster
-    for x in range(x0, x1, 16):
-        a[y0 + 1:y0 + 6, x] = (128, 132, 124)
+    Hp, Wp = wasser.shape
+    pfl = np.zeros_like(wasser)
+    ys, xs = np.nonzero(kai)
+    pfl[ys.min():, xs.min() - 48:xs.max() + 49] = True
+    pfl &= ~wasser
+    rechts = np.zeros_like(wasser); rechts[:, xs.min() - 48:] = True
+    pfl &= rechts
+    d = np.zeros((Hp, Wp), np.int16)
+    cur = wasser.copy()
+    for i in range(1, 8):
+        cur = np.array(Image.fromarray((cur * 255).astype(np.uint8)).filter(ImageFilter.MaxFilter(3))) > 0
+        neu = cur & pfl & (d == 0)
+        d[neu] = i
+    stein = {1: (206, 210, 200), 2: (186, 190, 182), 3: (170, 174, 166), 4: (170, 174, 166), 5: (156, 160, 152),
+             6: (120, 124, 118)}
+    for i, c in stein.items():
+        a[d == i] = c
+    yy, xx = np.mgrid[0:Hp, 0:Wp]
+    fuge = (d >= 2) & (d <= 5) & (((xx % 16 == 0) & (np.roll(d, 1, 0) > 0)) | ((yy % 16 == 0) & (np.roll(d, 1, 1) > 0)))
+    a[fuge & (np.roll(d, 1, 0) == d)] = (128, 132, 124)
+    a[fuge & (np.roll(d, 1, 1) == d)] = (128, 132, 124)
+    a[d == 7] = (a[d == 7] * 0.72).astype(np.uint8)
 
 
 def rand_hafen(a, land, ring, front, rechts, frame):
@@ -329,14 +353,15 @@ def bauen(frame=None, speichern=True):
     a[innen & np.roll(ring, -1, 0)] = (18, 26, 46)
     a[innen & np.roll(ring, 1, 0) & ~rechts] = (78, 104, 140)
     a[innen & np.roll(ring, 1, 0) & rechts] = (150, 166, 168)
+    kaikante(a, gross(kl == 'k'), wasser)
     for i, (x0, y0) in enumerate(lay['raeume']):
-        k17.feld_marken(a, x0 + 1, y0 + 18, 6, 5, frame)
+        fy, fx = np.nonzero(kl[y0:y0 + lay['raum'][1], x0:x0 + lay['raum'][0]] == 'f')   # Aufstellfeld laut Layout
+        k17.feld_marken(a, x0 + fx.min(), y0 + fy.min(), fx.max() - fx.min() + 1, fy.max() - fy.min() + 1, frame)
         if i == 0:
             for (px, py) in lay['platten']:
                 bodenplatte(a, x0 + px, y0 + py)
         else:
             k17.ringmarke(a, x0 + 14, y0 + 8, frame)
-    kaikante(a, gross(kl == 'k'))
     a = WASSER_STILE[WASSER](a, wasser, frame)
     sch = wasser & (np.roll(ring, 2, 1) | np.roll(ring, 1, 1))     # Westmauer: Schatten aufs Wasser (Licht oben links)
     a[sch] = (a[sch] * 0.75).astype(np.uint8)
