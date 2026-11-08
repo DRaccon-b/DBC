@@ -71,6 +71,25 @@ k4.TEILANIM['tor16'] = tor16
 k4.TEILANIM['bildschirm16'] = bildschirm16
 
 
+def pfeil_marke(a, tx, ty, farbe, frame, ph):
+    """Pfeilfeld passend zum Aufstellfeld: vier Eckklammern (wie feld_marken) und ein Doppel-Chevron nach Norden,
+    beides direkt auf dem Boden, 1 px dunkler Schlagschatten rechts unten, Leuchten pulsiert."""
+    p = 0.55 + 0.45 * puls(frame, ph)
+    farbe = np.array(farbe, np.float32)
+    X, Y = tx * T, ty * T
+    pix = []
+    for (ex, ey, sx, sy) in ((2, 2, 1, 1), (13, 2, -1, 1), (2, 13, 1, -1), (13, 13, -1, -1)):
+        for d in range(3):
+            pix += [(Y + ey, X + ex + sx * d), (Y + ey + sy * d, X + ex)]
+    for oy in (4, 8):                                           # zwei Chevrons uebereinander
+        for d in range(4):
+            pix += [(Y + oy + d, X + 7 - d), (Y + oy + d, X + 8 + d)]
+    for (yy, xx) in pix:                                        # Schatten zuerst
+        a[yy + 1, xx + 1] = (a[yy + 1, xx + 1] * 0.75).astype(np.uint8)
+    for (yy, xx) in pix:
+        a[yy, xx] = np.clip(a[yy, xx] * (1 - 0.8 * p) + farbe * 0.8 * p, 0, 255).astype(np.uint8)
+
+
 def kachel(n):
     return np.array(Image.open(os.path.join(BASIS, n)).convert('RGB'))
 
@@ -299,12 +318,11 @@ def bauen(frame=None, speichern=True):
     for X in (x0 + 2, x1 - 3):
         m = np.zeros_like(pfad); m[:, X] = True
         mischen(a, m & pfad, CYAN, 0.35 + 0.3 * p)
-    # Pfeilkacheln (Ankunft/Teleporter), leuchten im Takt
-    pf = kachel('pfeil.png').astype(np.float32)
+    # Pfeilmarken (Ankunft/Teleporter) im Stil des Sammelplatzes wie auf Karte 17/19: Eckklammern + Doppelpfeil
+    # direkt auf dem Boden, cyan, leuchten nacheinander
     px0, px1, py = lay['pfeile']
     for i, X in enumerate(range(px0, px1 + 1)):
-        q = puls(frame, i * 0.25)
-        a[py * T:(py + 1) * T, X * T:(X + 1) * T] = np.clip(pf * (0.9 + 0.25 * q), 0, 255).astype(np.uint8)
+        pfeil_marke(a, X, py, (110, 225, 250), frame, i * 0.25)
     # Kanten: aussen dunkle Kontur, innen cyan glimmende Kante (wie Apocalymon's Realm, nur blau)
     front = front_und_faeden(a, land, frame)
     ak = kontur(land)
