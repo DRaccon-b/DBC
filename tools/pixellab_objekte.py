@@ -1633,6 +1633,11 @@ OBJEKTGRUPPEN_K20 = {   # Karte 20 (A02-Startdorf), Stil wie Karte 06 (Primary V
         'small cozy village cottage with a thick golden straw thatched roof, cream plaster walls with light timber beams, '
         'a wooden front door in the middle, two small windows with flower boxes, a small stone chimney, grey stone base, ' + FR14,
     ]},
+    'k20_turm': {'size': 128, 'items': [
+        'tall round white stone windmill tower WITHOUT any sails or blades, white brick walls with light blue shading, '
+        'a dark blue shingled conical roof, a small brown wooden hub on the front of the roof base, a small dark arched '
+        'window in the middle and a small wooden door at the bottom, ' + FR14,
+    ]},
     'k20_muehle2': {'size': 128, 'items': [
         'tall white stone windmill tower with a dark blue conical roof and four large red wooden lattice sails in an X shape, a small wooden door at the bottom, ' + FR14,
     ]},

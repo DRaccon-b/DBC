@@ -30,7 +30,7 @@ weich, zell_maske = k4.weich, k4.zell_maske
 _MUEHLE_CACHE = {}
 
 
-def _muehle_ohne_fluegel(sp):
+def _muehle_ohne_fluegel(sp, ohne_fluegel=False):
     """Turm ohne Fluegel: Fluegelpixel (alle Rottoene und ihre braunen Konturen) entfernen und den Turm samt Dach
     dahinter auffuellen - zuerst vom gespiegelten Turmpixel (der Turm ist symmetrisch), sonst vom naechsten
     Turmpixel derselben Spalte. Die Turmbreite je Zeile wird ebenfalls gespiegelt ergaenzt.
@@ -43,6 +43,14 @@ def _muehle_ohne_fluegel(sp):
     h, w = a.shape[:2]
     r_, g_, b_, al = a[..., 0], a[..., 1], a[..., 2], a[..., 3]
     kern = (al > 0) & (r_ > 45) & (g_ < 0.55 * r_) & (b_ < 0.62 * r_)
+    if ohne_fluegel or kern.sum() < 20:                          # fluegelloser Turm (k20_turm): Nabe = Holzscheibe am Dach
+        holz = (al > 0) & (r_ > g_ + 15) & (g_ > b_) & (r_ > 70)
+        holz[int(h * 0.6):] = False
+        holz[:, :int(w * 0.3)] = False; holz[:, int(w * 0.7):] = False
+        hy, hx = np.nonzero(holz)
+        res = (sp.copy(), (float(hx.mean()), float(hy.mean())), 56.0)
+        _MUEHLE_CACHE[key] = res
+        return res
     ys, xs = np.nonzero(kern)
     cy, cx = (ys.min() + ys.max()) / 2.0, (xs.min() + xs.max()) / 2.0
     nabe = (al > 0) & (np.abs(r_ - 90) < 18) & (np.abs(g_ - 58) < 18) & (np.abs(b_ - 44) < 18)   # Nabenfarbe
@@ -89,7 +97,7 @@ def muehle20(sp, frame, o):
     und um 22,5 Grad je Bild weitergedreht (4 Bilder = 90 Grad, 4-fach symmetrisch -> nahtlos). Der Turm hinter
     den Fluegeln ist aufgefuellt; Turm, Dach und Tuer bleiben ruhig."""
     from PIL import ImageDraw
-    turm, (cx, cy), R = _muehle_ohne_fluegel(sp)
+    turm, (cx, cy), R = _muehle_ohne_fluegel(sp, 'turm/' in o.get('basis', ''))
     img = turm.copy()
     d = ImageDraw.Draw(img)
     DUNKEL, ROT, HELL = (94, 20, 24, 255), (138, 31, 34, 255), (200, 58, 58, 255)

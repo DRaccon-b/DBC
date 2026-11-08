@@ -34,7 +34,7 @@ for i in range(4, 62):
 WALD = ['k01/baum%02d' % i for i in (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 12, 13, 14)]
 DEKO = ['k01/deko%02d' % i for i in (5, 6, 8, 10, 14, 26, 27, 31, 33)]
 DEKO_PFLANZE = {'k01/deko05', 'k01/deko06', 'k01/deko26', 'k01/deko27'}
-HAUS, MUEHLE = 'haus/00', 'muehle2/00_rand'            # mit transparentem Rand: Platz fuer die drehenden Fluegel                 # Muehle in 128 px (Nutzer: war zu klein)
+HAUS, MUEHLE = 'haus/00', 'turm/00_rand'               # fluegelloser Turm (k20_turm) mit Rand; Fluegel werden gezeichnet                 # Muehle in 128 px (Nutzer: war zu klein)
 HEU, VOGEL, BRETT, BRUNNEN = 'klein/00', 'klein/01', 'klein/02', 'klein/03'
 SCHUBKARRE, HOLZ, FASS2 = 'klein/06', 'klein/05', 'klein/13'
 ACHSE = 28.0                                   # Achse des Dorfplatzes (Kacheln)
