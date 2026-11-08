@@ -517,6 +517,59 @@ def fall_speier(a, wasser, land, frame):
 FALL_STILE = {}
 
 
+def pfeil_marke(a, tx, ty, farbe, frame, ph):
+    """Pfeilfeld passend zum Aufstellfeld: vier Eckklammern (wie feld_marken) und ein Doppel-Chevron nach Norden,
+    beides direkt auf dem Boden, 1 px dunkler Schlagschatten rechts unten, Leuchten pulsiert."""
+    p = 0.55 + 0.45 * puls(frame, ph)
+    farbe = np.array(farbe, np.float32)
+    X, Y = tx * T, ty * T
+    pix = []
+    for (ex, ey, sx, sy) in ((2, 2, 1, 1), (13, 2, -1, 1), (2, 13, 1, -1), (13, 13, -1, -1)):
+        for d in range(3):
+            pix += [(Y + ey, X + ex + sx * d), (Y + ey + sy * d, X + ex)]
+    for oy in (4, 8):                                           # zwei Chevrons uebereinander
+        for d in range(4):
+            pix += [(Y + oy + d, X + 7 - d), (Y + oy + d, X + 8 + d)]
+    for (yy, xx) in pix:                                        # Schatten zuerst
+        a[yy + 1, xx + 1] = (a[yy + 1, xx + 1] * 0.75).astype(np.uint8)
+    for (yy, xx) in pix:
+        a[yy, xx] = np.clip(a[yy, xx] * (1 - 0.8 * p) + farbe * 0.8 * p, 0, 255).astype(np.uint8)
+
+
+def schatten19(img, objs, cache, boden):
+    """Schatten nach den Regeln: Kontaktschatten direkt am Fuss (folgt der echten Fussform), Schlagschatten = die
+    Silhouette diagonal nach rechts unten gelegt und auf die Haelfte gestaucht; nur auf dem Boden der Fussebene."""
+    a = np.array(img).astype(np.float32)
+    Hp, Wp = boden.shape
+    kontakt = np.zeros((Hp, Wp), bool)
+    wurf = np.zeros((Hp, Wp), bool)
+    for o in objs:
+        m = np.array(cache[o['datei']].getchannel('A')) >= 128
+        zeilen = np.nonzero(m.any(axis=1))[0]
+        breite = m.sum(axis=1)
+        zu = int(max(r for r in zeilen if breite[r] >= 0.45 * breite.max()))   # Unterkante des Sockels (nicht Seilende)
+        for r in zeilen:
+            k = max(0, zu - r)                                    # Hoehe ueber dem Fuss
+            xs = np.nonzero(m[r])[0]
+            ty = o['y'] + zu + int(round(k * 0.30))
+            tx = o['x'] + xs + int(round(k * 0.45)) + 1
+            ok = (tx >= 0) & (tx < Wp) & (0 <= ty < Hp)
+            if 0 <= ty < Hp:
+                wurf[ty, tx[ok]] = True
+        fuss = m[max(0, zu - 2):zu + 1].any(axis=0)
+        xs = np.nonzero(fuss)[0]
+        for dy in (0, 1):
+            Y = o['y'] + zu + dy
+            if 0 <= Y < Hp:
+                kontakt[Y, o['x'] + xs.min() + dy:o['x'] + xs.max() + 2] = True
+    wurf = np.array(Image.fromarray((wurf * 255).astype(np.uint8)).filter(ImageFilter.MaxFilter(3))) > 0
+    wurf &= boden & ~kontakt
+    kontakt &= boden
+    a[wurf, :3] *= 0.72
+    a[kontakt, :3] *= 0.55
+    return Image.fromarray(np.clip(a, 0, 255).astype(np.uint8))
+
+
 def kaikante(a, kai, wasser=None):
     """Kaikante: heller Stein an jeder Wasserseite des Pflasters (6 px breit, Licht zur Wasserseite, Fugen alle
     16 px, Schatten zum Pflaster). Laeuft auch an den Kanaelen entlang (Kanal-Variante)."""
@@ -647,16 +700,14 @@ def bauen(frame=None, speichern=True):
     a = WASSER_STILE[WASSER](a, wasser, frame)
     sch = wasser & (np.roll(ring, 2, 1) | np.roll(ring, 1, 1))     # Westmauer: Schatten aufs Wasser (Licht oben links)
     a[sch] = (a[sch] * 0.75).astype(np.uint8)
-    # Pfeilkacheln
-    pf = k16.kachel('pfeil.png').astype(np.float32)
-    gp = k17.gold_pfeil()
+    # Pfeile im Stil des Sammelplatzes (Nutzerwunsch): keine dunkle Kachel, sondern Eckklammern wie beim
+    # Aufstellfeld plus ein Doppelpfeil direkt auf dem Boden; cyan = Ankunft, gold = weiter. Leuchten nacheinander.
     n = 0
     for y in range(rows):
         for x in range(cols):
             if kl[y, x] in 'zg':
-                q = puls(frame, n * 0.25); n += 1
-                src = pf if kl[y, x] == 'z' else gp
-                a[y * T:(y + 1) * T, x * T:(x + 1) * T] = np.clip(src * (0.9 + 0.25 * q), 0, 255).astype(np.uint8)
+                pfeil_marke(a, x, y, (110, 225, 250) if kl[y, x] == 'z' else (250, 200, 90), frame, n * 0.25)
+                n += 1
     # ------------------------------------------------------------------ Kanten, Front, Leere
     front = k16.front_und_faeden(a, land, frame)
     ak = kontur(land)
@@ -688,7 +739,7 @@ def bauen(frame=None, speichern=True):
                       key=lambda o: o['y'] + o['fuss'])
         if objs:
             cache = {o['datei']: Image.open(os.path.join(OBJ, o['datei'])).convert('RGBA') for o in objs}
-            k8.schatten_ebene(img, objs, cache, lvl)
+            img = schatten19(img, objs, cache, lvl == 2)
             vor = np.array(img)
             k4.objekte_zeichnen(img, objs, cache, np.zeros((Hp, Wp), bool), frame)
             img = img.copy()
