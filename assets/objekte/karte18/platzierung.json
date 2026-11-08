@@ -756,22 +756,6 @@
 "an_wand": true
 },
 {
-"datei": "sauber/karte01-deko-06.png",
-"basis": "karte01/deko/06",
-"x": 258,
-"y": 1489,
-"fuss": 14,
-"kachel": [
-16,
-93
-],
-"ebene": 1,
-"pflanze": true,
-"begleiter": true,
-"kein_schatten": true,
-"an_wand": true
-},
-{
 "datei": "sauber/karte01-deko-50_m.png",
 "basis": "karte01/deko/50",
 "x": 226,
@@ -1324,7 +1308,7 @@
 {
 "datei": "sauber/karte01-deko-06.png",
 "basis": "karte01/deko/06",
-"x": 594,
+"x": 606,
 "y": 1153,
 "fuss": 14,
 "kachel": [
@@ -1354,7 +1338,7 @@
 {
 "datei": "sauber/karte01-deko-06.png",
 "basis": "karte01/deko/06",
-"x": 594,
+"x": 606,
 "y": 1217,
 "fuss": 14,
 "kachel": [
@@ -1945,12 +1929,27 @@
 {
 "datei": "sauber/k18-boot-00.png",
 "basis": "k18/boot/00",
-"x": 1778,
+"x": 1586,
 "y": 1609,
 "fuss": 38,
 "kachel": [
-113,
+101,
 102
+],
+"ebene": 1,
+"anim": "boot",
+"kein_schatten": true,
+"an_wand": true
+},
+{
+"datei": "sauber/k18-schiff-00.png",
+"basis": "k18/schiff/00",
+"x": 1776,
+"y": 1589,
+"fuss": 122,
+"kachel": [
+121,
+106
 ],
 "ebene": 1,
 "anim": "boot",
@@ -3913,8 +3912,8 @@
 "an_wand": true
 },
 {
-"datei": "sauber/karte01-baeume-01.png",
-"basis": "karte01/baeume/01",
+"datei": "sauber/gebaeude-gold_01.png",
+"basis": "gebaeude/gold_01",
 "x": 994,
 "y": 229,
 "fuss": 42,
@@ -3939,8 +3938,8 @@
 "baum": true
 },
 {
-"datei": "sauber/karte01-baeume-02.png",
-"basis": "karte01/baeume/02",
+"datei": "sauber/gebaeude-gold_02.png",
+"basis": "gebaeude/gold_02",
 "x": 1716,
 "y": 1383,
 "fuss": 40,
@@ -3966,8 +3965,8 @@
 "baum": true
 },
 {
-"datei": "sauber/karte01-baeume-03.png",
-"basis": "karte01/baeume/03",
+"datei": "sauber/gebaeude-gold_03.png",
+"basis": "gebaeude/gold_03",
 "x": 1091,
 "y": 581,
 "fuss": 26,
@@ -3993,8 +3992,8 @@
 "baum": true
 },
 {
-"datei": "sauber/karte01-baeume-02.png",
-"basis": "karte01/baeume/02",
+"datei": "sauber/gebaeude-gold_02.png",
+"basis": "gebaeude/gold_02",
 "x": 148,
 "y": 455,
 "fuss": 40,
@@ -4047,8 +4046,8 @@
 "baum": true
 },
 {
-"datei": "sauber/karte01-baeume-02.png",
-"basis": "karte01/baeume/02",
+"datei": "sauber/gebaeude-gold_02.png",
+"basis": "gebaeude/gold_02",
 "x": 1300,
 "y": 215,
 "fuss": 40,
@@ -4074,8 +4073,8 @@
 "an_wand": true
 },
 {
-"datei": "sauber/karte01-baeume-03.png",
-"basis": "karte01/baeume/03",
+"datei": "sauber/gebaeude-gold_03.png",
+"basis": "gebaeude/gold_03",
 "x": 67,
 "y": 261,
 "fuss": 26,
@@ -4223,8 +4222,8 @@
 "an_wand": true
 },
 {
-"datei": "sauber/karte01-baeume-03.png",
-"basis": "karte01/baeume/03",
+"datei": "sauber/gebaeude-gold_03.png",
+"basis": "gebaeude/gold_03",
 "x": 147,
 "y": 1477,
 "fuss": 26,
@@ -4276,8 +4275,8 @@
 "baum": true
 },
 {
-"datei": "sauber/karte01-baeume-02.png",
-"basis": "karte01/baeume/02",
+"datei": "sauber/gebaeude-gold_02.png",
+"basis": "gebaeude/gold_02",
 "x": 84,
 "y": 519,
 "fuss": 40,
@@ -4289,8 +4288,8 @@
 "baum": true
 },
 {
-"datei": "sauber/karte01-baeume-03.png",
-"basis": "karte01/baeume/03",
+"datei": "sauber/gebaeude-gold_03.png",
+"basis": "gebaeude/gold_03",
 "x": 1347,
 "y": 325,
 "fuss": 26,
@@ -4302,8 +4301,8 @@
 "baum": true
 },
 {
-"datei": "sauber/karte01-baeume-03.png",
-"basis": "karte01/baeume/03",
+"datei": "sauber/gebaeude-gold_03.png",
+"basis": "gebaeude/gold_03",
 "x": 1187,
 "y": 1061,
 "fuss": 26,
@@ -4329,8 +4328,8 @@
 "baum": true
 },
 {
-"datei": "sauber/karte01-baeume-03.png",
-"basis": "karte01/baeume/03",
+"datei": "sauber/gebaeude-gold_03.png",
+"basis": "gebaeude/gold_03",
 "x": 291,
 "y": 757,
 "fuss": 26,
@@ -4370,8 +4369,8 @@
 "baum": true
 },
 {
-"datei": "sauber/karte01-baeume-01.png",
-"basis": "karte01/baeume/01",
+"datei": "sauber/gebaeude-gold_01.png",
+"basis": "gebaeude/gold_01",
 "x": 1330,
 "y": 661,
 "fuss": 42,
@@ -4411,8 +4410,8 @@
 "baum": true
 },
 {
-"datei": "sauber/karte01-baeume-02.png",
-"basis": "karte01/baeume/02",
+"datei": "sauber/gebaeude-gold_02.png",
+"basis": "gebaeude/gold_02",
 "x": 1188,
 "y": 567,
 "fuss": 40,
@@ -4425,8 +4424,8 @@
 "an_wand": true
 },
 {
-"datei": "sauber/karte01-baeume-02.png",
-"basis": "karte01/baeume/02",
+"datei": "sauber/gebaeude-gold_02.png",
+"basis": "gebaeude/gold_02",
 "x": 420,
 "y": 1143,
 "fuss": 40,
@@ -4438,8 +4437,8 @@
 "baum": true
 },
 {
-"datei": "sauber/karte01-baeume-00.png",
-"basis": "karte01/baeume/00",
+"datei": "sauber/gebaeude-gold_00.png",
+"basis": "gebaeude/gold_00",
 "x": 322,
 "y": 421,
 "fuss": 42,
@@ -4478,8 +4477,8 @@
 "baum": true
 },
 {
-"datei": "sauber/karte01-baeume-02.png",
-"basis": "karte01/baeume/02",
+"datei": "sauber/gebaeude-gold_02.png",
+"basis": "gebaeude/gold_02",
 "x": 1300,
 "y": 167,
 "fuss": 40,
@@ -4544,8 +4543,8 @@
 "baum": true
 },
 {
-"datei": "sauber/karte01-baeume-02.png",
-"basis": "karte01/baeume/02",
+"datei": "sauber/gebaeude-gold_02.png",
+"basis": "gebaeude/gold_02",
 "x": 1972,
 "y": 935,
 "fuss": 40,
@@ -4638,8 +4637,8 @@
 "baum": true
 },
 {
-"datei": "sauber/karte01-baeume-00.png",
-"basis": "karte01/baeume/00",
+"datei": "sauber/gebaeude-gold_00.png",
+"basis": "gebaeude/gold_00",
 "x": 418,
 "y": 517,
 "fuss": 42,
@@ -4651,8 +4650,8 @@
 "baum": true
 },
 {
-"datei": "sauber/karte01-baeume-01.png",
-"basis": "karte01/baeume/01",
+"datei": "sauber/gebaeude-gold_01.png",
+"basis": "gebaeude/gold_01",
 "x": 882,
 "y": 917,
 "fuss": 42,
@@ -4784,8 +4783,8 @@
 "baum": true
 },
 {
-"datei": "sauber/karte01-baeume-03.png",
-"basis": "karte01/baeume/03",
+"datei": "sauber/gebaeude-gold_03.png",
+"basis": "gebaeude/gold_03",
 "x": 723,
 "y": 757,
 "fuss": 26,
@@ -4798,8 +4797,8 @@
 "an_wand": true
 },
 {
-"datei": "sauber/karte01-baeume-01.png",
-"basis": "karte01/baeume/01",
+"datei": "sauber/gebaeude-gold_01.png",
+"basis": "gebaeude/gold_01",
 "x": 1362,
 "y": 293,
 "fuss": 42,
@@ -4811,8 +4810,8 @@
 "baum": true
 },
 {
-"datei": "sauber/karte01-baeume-00.png",
-"basis": "karte01/baeume/00",
+"datei": "sauber/gebaeude-gold_00.png",
+"basis": "gebaeude/gold_00",
 "x": 1218,
 "y": 101,
 "fuss": 42,
@@ -4850,8 +4849,8 @@
 "baum": true
 },
 {
-"datei": "sauber/karte01-baeume-03.png",
-"basis": "karte01/baeume/03",
+"datei": "sauber/gebaeude-gold_03.png",
+"basis": "gebaeude/gold_03",
 "x": 419,
 "y": 485,
 "fuss": 26,
@@ -4971,8 +4970,8 @@
 "baum": true
 },
 {
-"datei": "sauber/karte01-baeume-01.png",
-"basis": "karte01/baeume/01",
+"datei": "sauber/gebaeude-gold_01.png",
+"basis": "gebaeude/gold_01",
 "x": 338,
 "y": 1461,
 "fuss": 42,
@@ -4998,8 +4997,8 @@
 "baum": true
 },
 {
-"datei": "sauber/karte01-baeume-02.png",
-"basis": "karte01/baeume/02",
+"datei": "sauber/gebaeude-gold_02.png",
+"basis": "gebaeude/gold_02",
 "x": 404,
 "y": 1351,
 "fuss": 40,
@@ -5011,8 +5010,8 @@
 "baum": true
 },
 {
-"datei": "sauber/karte01-baeume-03.png",
-"basis": "karte01/baeume/03",
+"datei": "sauber/gebaeude-gold_03.png",
+"basis": "gebaeude/gold_03",
 "x": 371,
 "y": 1157,
 "fuss": 26,
@@ -5024,8 +5023,8 @@
 "baum": true
 },
 {
-"datei": "sauber/karte01-baeume-02.png",
-"basis": "karte01/baeume/02",
+"datei": "sauber/gebaeude-gold_02.png",
+"basis": "gebaeude/gold_02",
 "x": 1348,
 "y": 407,
 "fuss": 40,
@@ -5038,8 +5037,8 @@
 "an_wand": true
 },
 {
-"datei": "sauber/karte01-baeume-01.png",
-"basis": "karte01/baeume/01",
+"datei": "sauber/gebaeude-gold_01.png",
+"basis": "gebaeude/gold_01",
 "x": 1090,
 "y": 133,
 "fuss": 42,
@@ -5280,8 +5279,8 @@
 "an_wand": true
 },
 {
-"datei": "sauber/karte01-baeume-03.png",
-"basis": "karte01/baeume/03",
+"datei": "sauber/gebaeude-gold_03.png",
+"basis": "gebaeude/gold_03",
 "x": 1315,
 "y": 261,
 "fuss": 26,
@@ -5294,8 +5293,8 @@
 "an_wand": true
 },
 {
-"datei": "sauber/karte01-baeume-03.png",
-"basis": "karte01/baeume/03",
+"datei": "sauber/gebaeude-gold_03.png",
+"basis": "gebaeude/gold_03",
 "x": 339,
 "y": 1237,
 "fuss": 26,
@@ -5308,8 +5307,8 @@
 "an_wand": true
 },
 {
-"datei": "sauber/karte01-baeume-02.png",
-"basis": "karte01/baeume/02",
+"datei": "sauber/gebaeude-gold_02.png",
+"basis": "gebaeude/gold_02",
 "x": 1540,
 "y": 1367,
 "fuss": 40,
@@ -5335,8 +5334,8 @@
 "baum": true
 },
 {
-"datei": "sauber/karte01-baeume-02.png",
-"basis": "karte01/baeume/02",
+"datei": "sauber/gebaeude-gold_02.png",
+"basis": "gebaeude/gold_02",
 "x": 1876,
 "y": 599,
 "fuss": 40,
@@ -5376,8 +5375,8 @@
 "an_wand": true
 },
 {
-"datei": "sauber/karte01-baeume-00.png",
-"basis": "karte01/baeume/00",
+"datei": "sauber/gebaeude-gold_00.png",
+"basis": "gebaeude/gold_00",
 "x": 1346,
 "y": 357,
 "fuss": 42,
@@ -5430,8 +5429,8 @@
 "baum": true
 },
 {
-"datei": "sauber/karte01-baeume-03.png",
-"basis": "karte01/baeume/03",
+"datei": "sauber/gebaeude-gold_03.png",
+"basis": "gebaeude/gold_03",
 "x": 323,
 "y": 485,
 "fuss": 26,
@@ -5483,8 +5482,8 @@
 "baum": true
 },
 {
-"datei": "sauber/karte01-baeume-02.png",
-"basis": "karte01/baeume/02",
+"datei": "sauber/gebaeude-gold_02.png",
+"basis": "gebaeude/gold_02",
 "x": 996,
 "y": 183,
 "fuss": 40,
@@ -5496,8 +5495,8 @@
 "baum": true
 },
 {
-"datei": "sauber/karte01-baeume-03.png",
-"basis": "karte01/baeume/03",
+"datei": "sauber/gebaeude-gold_03.png",
+"basis": "gebaeude/gold_03",
 "x": 419,
 "y": 437,
 "fuss": 26,
@@ -5509,8 +5508,8 @@
 "baum": true
 },
 {
-"datei": "sauber/karte01-baeume-03.png",
-"basis": "karte01/baeume/03",
+"datei": "sauber/gebaeude-gold_03.png",
+"basis": "gebaeude/gold_03",
 "x": 723,
 "y": 1141,
 "fuss": 26,
@@ -5522,8 +5521,8 @@
 "baum": true
 },
 {
-"datei": "sauber/karte01-baeume-03.png",
-"basis": "karte01/baeume/03",
+"datei": "sauber/gebaeude-gold_03.png",
+"basis": "gebaeude/gold_03",
 "x": 1907,
 "y": 1397,
 "fuss": 26,
@@ -5562,8 +5561,8 @@
 "baum": true
 },
 {
-"datei": "sauber/karte01-baeume-03.png",
-"basis": "karte01/baeume/03",
+"datei": "sauber/gebaeude-gold_03.png",
+"basis": "gebaeude/gold_03",
 "x": 179,
 "y": 437,
 "fuss": 26,
@@ -5589,8 +5588,8 @@
 "an_wand": true
 },
 {
-"datei": "sauber/karte01-baeume-03.png",
-"basis": "karte01/baeume/03",
+"datei": "sauber/gebaeude-gold_03.png",
+"basis": "gebaeude/gold_03",
 "x": 1139,
 "y": 149,
 "fuss": 26,
@@ -5602,8 +5601,8 @@
 "baum": true
 },
 {
-"datei": "sauber/karte01-baeume-03.png",
-"basis": "karte01/baeume/03",
+"datei": "sauber/gebaeude-gold_03.png",
+"basis": "gebaeude/gold_03",
 "x": 1235,
 "y": 149,
 "fuss": 26,
@@ -5629,8 +5628,8 @@
 "an_wand": true
 },
 {
-"datei": "sauber/karte01-baeume-03.png",
-"basis": "karte01/baeume/03",
+"datei": "sauber/gebaeude-gold_03.png",
+"basis": "gebaeude/gold_03",
 "x": 1891,
 "y": 357,
 "fuss": 26,
@@ -5656,8 +5655,8 @@
 "an_wand": true
 },
 {
-"datei": "sauber/karte01-baeume-03.png",
-"basis": "karte01/baeume/03",
+"datei": "sauber/gebaeude-gold_03.png",
+"basis": "gebaeude/gold_03",
 "x": 1059,
 "y": 133,
 "fuss": 26,
@@ -5669,8 +5668,8 @@
 "baum": true
 },
 {
-"datei": "sauber/karte01-baeume-03.png",
-"basis": "karte01/baeume/03",
+"datei": "sauber/gebaeude-gold_03.png",
+"basis": "gebaeude/gold_03",
 "x": 627,
 "y": 1141,
 "fuss": 26,
@@ -5750,8 +5749,8 @@
 "an_wand": true
 },
 {
-"datei": "sauber/karte01-baeume-03.png",
-"basis": "karte01/baeume/03",
+"datei": "sauber/gebaeude-gold_03.png",
+"basis": "gebaeude/gold_03",
 "x": 1363,
 "y": 741,
 "fuss": 26,
@@ -5804,6 +5803,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": true,
 "an_wand": true,
 "begleiter": false
 },
@@ -5820,6 +5820,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "begleiter": false
 },
 {
@@ -5835,6 +5836,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "begleiter": false
 },
 {
@@ -5850,6 +5852,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "an_wand": true,
 "begleiter": false
 },
@@ -5866,6 +5869,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "begleiter": false
 },
 {
@@ -5881,6 +5885,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "begleiter": false
 },
 {
@@ -5896,6 +5901,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "begleiter": false
 },
 {
@@ -5911,6 +5917,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "begleiter": false
 },
 {
@@ -5926,6 +5933,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "begleiter": false
 },
 {
@@ -5941,6 +5949,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "an_wand": true,
 "begleiter": false
 },
@@ -5957,6 +5966,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "begleiter": false
 },
 {
@@ -5972,6 +5982,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "begleiter": false
 },
 {
@@ -5987,6 +5998,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": true,
 "an_wand": true,
 "begleiter": false
 },
@@ -6003,6 +6015,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "begleiter": false
 },
 {
@@ -6018,6 +6031,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "begleiter": false
 },
 {
@@ -6033,6 +6047,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "begleiter": false
 },
 {
@@ -6048,6 +6063,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "begleiter": false
 },
 {
@@ -6063,6 +6079,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "begleiter": false
 },
 {
@@ -6078,6 +6095,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": true,
 "an_wand": true,
 "begleiter": false
 },
@@ -6094,6 +6112,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": true,
 "an_wand": true,
 "begleiter": false
 },
@@ -6110,6 +6129,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "begleiter": false
 },
 {
@@ -6125,6 +6145,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": true,
 "an_wand": true,
 "begleiter": false
 },
@@ -6141,6 +6162,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "an_wand": true,
 "begleiter": false
 },
@@ -6157,6 +6179,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "an_wand": true,
 "begleiter": false
 },
@@ -6173,6 +6196,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "begleiter": false
 },
 {
@@ -6188,6 +6212,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "begleiter": false
 },
 {
@@ -6203,6 +6228,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "begleiter": false
 },
 {
@@ -6218,6 +6244,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "an_wand": true,
 "begleiter": false
 },
@@ -6234,6 +6261,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "begleiter": false
 },
 {
@@ -6249,6 +6277,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": true,
 "an_wand": true,
 "begleiter": false
 },
@@ -6265,6 +6294,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "begleiter": false
 },
 {
@@ -6280,6 +6310,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "begleiter": false
 },
 {
@@ -6295,6 +6326,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "begleiter": false
 },
 {
@@ -6310,6 +6342,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "begleiter": false
 },
 {
@@ -6325,6 +6358,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "begleiter": false
 },
 {
@@ -6340,6 +6374,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "begleiter": false
 },
 {
@@ -6355,6 +6390,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "begleiter": false
 },
 {
@@ -6370,6 +6406,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "begleiter": false
 },
 {
@@ -6385,6 +6422,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": true,
 "an_wand": true,
 "begleiter": false
 },
@@ -6401,6 +6439,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "an_wand": true,
 "begleiter": false
 },
@@ -6417,6 +6456,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "begleiter": false
 },
 {
@@ -6432,6 +6472,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "an_wand": true,
 "begleiter": false
 },
@@ -6448,6 +6489,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "begleiter": false
 },
 {
@@ -6463,6 +6505,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "begleiter": false
 },
 {
@@ -6478,6 +6521,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "an_wand": true,
 "begleiter": false
 },
@@ -6494,6 +6538,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": true,
 "an_wand": true,
 "begleiter": false
 },
@@ -6510,6 +6555,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "begleiter": false
 },
 {
@@ -6525,6 +6571,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "begleiter": false
 },
 {
@@ -6540,6 +6587,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "begleiter": false
 },
 {
@@ -6555,6 +6603,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "begleiter": false
 },
 {
@@ -6570,6 +6619,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "begleiter": false
 },
 {
@@ -6585,6 +6635,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "begleiter": false
 },
 {
@@ -6600,6 +6651,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "begleiter": false
 },
 {
@@ -6615,6 +6667,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "an_wand": true,
 "begleiter": false
 },
@@ -6631,6 +6684,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "begleiter": false
 },
 {
@@ -6646,6 +6700,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "begleiter": false
 },
 {
@@ -6661,6 +6716,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "an_wand": true,
 "begleiter": false
 },
@@ -6677,6 +6733,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "begleiter": false
 },
 {
@@ -6692,6 +6749,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "an_wand": true,
 "begleiter": false
 },
@@ -6708,6 +6766,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": true,
 "an_wand": true,
 "begleiter": false
 },
@@ -6724,6 +6783,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "begleiter": false
 },
 {
@@ -6739,6 +6799,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "an_wand": true,
 "begleiter": false
 },
@@ -6755,6 +6816,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "an_wand": true,
 "begleiter": false
 },
@@ -6771,6 +6833,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "an_wand": true,
 "begleiter": false
 },
@@ -6787,6 +6850,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": true,
 "an_wand": true,
 "begleiter": false
 },
@@ -6803,6 +6867,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "an_wand": true,
 "begleiter": false
 },
@@ -6819,6 +6884,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "an_wand": true,
 "begleiter": false
 },
@@ -6835,6 +6901,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "begleiter": false
 },
 {
@@ -6850,6 +6917,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "an_wand": true,
 "begleiter": false
 },
@@ -6866,6 +6934,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "begleiter": false
 },
 {
@@ -6881,6 +6950,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "an_wand": true,
 "begleiter": false
 },
@@ -6897,6 +6967,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "begleiter": false
 },
 {
@@ -6912,6 +6983,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "begleiter": false
 },
 {
@@ -6927,6 +6999,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "begleiter": false
 },
 {
@@ -6942,6 +7015,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "begleiter": false
 },
 {
@@ -6957,6 +7031,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "an_wand": true,
 "begleiter": false
 },
@@ -6973,6 +7048,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "an_wand": true,
 "begleiter": false
 },
@@ -6989,6 +7065,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "an_wand": true,
 "begleiter": false
 },
@@ -7005,6 +7082,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "begleiter": false
 },
 {
@@ -7020,6 +7098,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "an_wand": true,
 "begleiter": false
 },
@@ -7036,6 +7115,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "begleiter": false
 },
 {
@@ -7051,6 +7131,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "an_wand": true,
 "begleiter": false
 },
@@ -7067,6 +7148,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "begleiter": false
 },
 {
@@ -7082,6 +7164,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "begleiter": false
 },
 {
@@ -7097,6 +7180,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "begleiter": false
 },
 {
@@ -7112,6 +7196,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": true,
 "an_wand": true,
 "begleiter": false
 },
@@ -7128,6 +7213,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "begleiter": false
 },
 {
@@ -7143,6 +7229,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "begleiter": false
 },
 {
@@ -7158,6 +7245,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "begleiter": false
 },
 {
@@ -7173,6 +7261,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "an_wand": true,
 "begleiter": false
 },
@@ -7189,6 +7278,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "begleiter": false
 },
 {
@@ -7204,6 +7294,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": true,
 "an_wand": true,
 "begleiter": false
 },
@@ -7220,6 +7311,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "begleiter": false
 },
 {
@@ -7235,6 +7327,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "begleiter": false
 },
 {
@@ -7250,6 +7343,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "begleiter": false
 },
 {
@@ -7265,6 +7359,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "begleiter": false
 },
 {
@@ -7280,6 +7375,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": true,
 "an_wand": true,
 "begleiter": false
 },
@@ -7296,6 +7392,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "an_wand": true,
 "begleiter": false
 },
@@ -7312,6 +7409,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "begleiter": false
 },
 {
@@ -7327,6 +7425,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "begleiter": false
 },
 {
@@ -7342,6 +7441,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": true,
 "an_wand": true,
 "begleiter": false
 },
@@ -7358,6 +7458,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "begleiter": false
 },
 {
@@ -7373,6 +7474,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "an_wand": true,
 "begleiter": false
 },
@@ -7389,6 +7491,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "begleiter": false
 },
 {
@@ -7404,6 +7507,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "an_wand": true,
 "begleiter": false
 },
@@ -7420,6 +7524,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "an_wand": true,
 "begleiter": false
 },
@@ -7436,6 +7541,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": true,
 "an_wand": true,
 "begleiter": false
 },
@@ -7452,6 +7558,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "begleiter": false
 },
 {
@@ -7467,6 +7574,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "an_wand": true,
 "begleiter": false
 },
@@ -7483,6 +7591,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": true,
 "an_wand": true,
 "begleiter": false
 },
@@ -7499,6 +7608,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "begleiter": false
 },
 {
@@ -7514,6 +7624,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": true,
 "an_wand": true,
 "begleiter": false
 },
@@ -7530,6 +7641,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "begleiter": false
 },
 {
@@ -7545,6 +7657,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "an_wand": true,
 "begleiter": false
 },
@@ -7561,6 +7674,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": true,
 "an_wand": true,
 "begleiter": false
 },
@@ -7577,6 +7691,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "begleiter": false
 },
 {
@@ -7592,6 +7707,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "an_wand": true,
 "begleiter": false
 },
@@ -7608,6 +7724,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "begleiter": false
 },
 {
@@ -7623,6 +7740,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": true,
 "an_wand": true,
 "begleiter": false
 },
@@ -7639,6 +7757,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "begleiter": false
 },
 {
@@ -7654,6 +7773,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "begleiter": false
 },
 {
@@ -7669,6 +7789,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "begleiter": false
 },
 {
@@ -7684,6 +7805,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "an_wand": true,
 "begleiter": false
 },
@@ -7700,6 +7822,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "begleiter": false
 },
 {
@@ -7715,6 +7838,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "an_wand": true,
 "begleiter": false
 },
@@ -7731,6 +7855,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "an_wand": true,
 "begleiter": false
 },
@@ -7747,6 +7872,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "begleiter": false
 },
 {
@@ -7762,6 +7888,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "begleiter": false
 },
 {
@@ -7777,6 +7904,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "begleiter": false
 },
 {
@@ -7792,6 +7920,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "begleiter": false
 },
 {
@@ -7807,6 +7936,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "an_wand": true,
 "begleiter": false
 },
@@ -7823,6 +7953,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": true,
 "an_wand": true,
 "begleiter": false
 },
@@ -7839,6 +7970,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "begleiter": false
 },
 {
@@ -7854,6 +7986,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "an_wand": true,
 "begleiter": false
 },
@@ -7870,6 +8003,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "an_wand": true,
 "begleiter": false
 },
@@ -7886,6 +8020,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": true,
 "an_wand": true,
 "begleiter": false
 },
@@ -7902,6 +8037,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": true,
 "an_wand": true,
 "begleiter": false
 },
@@ -7918,6 +8054,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": true,
 "an_wand": true,
 "begleiter": false
 },
@@ -7934,6 +8071,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": true,
 "an_wand": true,
 "begleiter": false
 },
@@ -7950,6 +8088,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "begleiter": false
 },
 {
@@ -7965,6 +8104,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": true,
 "an_wand": true,
 "begleiter": false
 },
@@ -7981,6 +8121,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": true,
 "an_wand": true,
 "begleiter": false
 },
@@ -7997,6 +8138,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "begleiter": false
 },
 {
@@ -8012,6 +8154,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": true,
 "an_wand": true,
 "begleiter": false
 },
@@ -8028,6 +8171,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": true,
 "an_wand": true,
 "begleiter": false
 },
@@ -8044,6 +8188,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "begleiter": false
 },
 {
@@ -8059,6 +8204,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "begleiter": false
 },
 {
@@ -8074,6 +8220,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "begleiter": false
 },
 {
@@ -8089,6 +8236,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "an_wand": true,
 "begleiter": false
 },
@@ -8105,6 +8253,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "an_wand": true,
 "begleiter": false
 },
@@ -8121,6 +8270,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": true,
 "an_wand": true,
 "begleiter": false
 },
@@ -8137,6 +8287,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "begleiter": false
 },
 {
@@ -8152,6 +8303,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "an_wand": true,
 "begleiter": false
 },
@@ -8168,6 +8320,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": true,
 "an_wand": true,
 "begleiter": false
 },
@@ -8184,6 +8337,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "begleiter": false
 },
 {
@@ -8199,6 +8353,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "an_wand": true,
 "begleiter": false
 },
@@ -8215,6 +8370,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": true,
 "an_wand": true,
 "begleiter": false
 },
@@ -8231,6 +8387,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "begleiter": false
 },
 {
@@ -8246,6 +8403,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": true,
 "an_wand": true,
 "begleiter": false
 },
@@ -8262,6 +8420,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "begleiter": false
 },
 {
@@ -8277,6 +8436,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "an_wand": true,
 "begleiter": false
 },
@@ -8293,6 +8453,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": true,
 "an_wand": true,
 "begleiter": false
 },
@@ -8309,6 +8470,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": true,
 "an_wand": true,
 "begleiter": false
 },
@@ -8325,6 +8487,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "begleiter": false
 },
 {
@@ -8340,6 +8503,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "begleiter": false
 },
 {
@@ -8355,6 +8519,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": true,
 "an_wand": true,
 "begleiter": false
 },
@@ -8371,6 +8536,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "an_wand": true,
 "begleiter": false
 },
@@ -8387,6 +8553,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "an_wand": true,
 "begleiter": false
 },
@@ -8403,6 +8570,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": true,
 "an_wand": true,
 "begleiter": false
 },
@@ -8419,6 +8587,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "begleiter": false
 },
 {
@@ -8434,6 +8603,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": true,
 "an_wand": true,
 "begleiter": false
 },
@@ -8450,6 +8620,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": true,
 "an_wand": true,
 "begleiter": false
 },
@@ -8466,6 +8637,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": true,
 "an_wand": true,
 "begleiter": false
 },
@@ -8482,6 +8654,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": true,
 "an_wand": true,
 "begleiter": false
 },
@@ -8498,6 +8671,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": true,
 "an_wand": true,
 "begleiter": false
 },
@@ -8514,6 +8688,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "begleiter": false
 },
 {
@@ -8529,6 +8704,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": true,
 "an_wand": true,
 "begleiter": false
 },
@@ -8545,6 +8721,7 @@
 "ebene": 1,
 "pflanze": true,
 "kein_schatten": true,
+"unkraut": false,
 "an_wand": true,
 "begleiter": false
 }

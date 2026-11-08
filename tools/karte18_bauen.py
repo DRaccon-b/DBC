@@ -392,7 +392,7 @@ def meer_wie_karte01(a, kl, wasser, frame):
     wd.N_FRAMES = N_FRAMES
     wd.FLACH, wd.SCHAUM_D, wd.STUFE1, wd.STUFE2 = 20, (18, 22), 50, 100   # Stufen enger: beide vor dem Nebel sichtbar
     meiden = gross(np.isin(kl, ['h', 'k']))
-    for (x0, y0, x1, y1) in ((103, 99, 115, 107), (124, 82, 129, 90), (124, 38, 135, 46)):   # Steg+Boot, Pfeiler, Mole
+    for (x0, y0, x1, y1) in ((96, 99, 134, 109), (124, 82, 129, 90), (124, 38, 135, 46)):   # Steg, Boot, Faehre, Pfeiler, Mole
         meiden[y0 * T:y1 * T, x0 * T:x1 * T] = True
     meiden = np.array(Image.fromarray((meiden * 255).astype(np.uint8)).filter(ImageFilter.MaxFilter(9))) > 0
     wd.FELSEN_PROTOKOLL.clear()
@@ -931,6 +931,28 @@ def bauen(frame=None, speichern=True):
         d_ = dichte[..., None]
         nach[..., :3] = vor[..., :3] * d_ + nach[..., :3] * (1 - d_)
         img = Image.fromarray(np.clip(nach, 0, 255).astype(np.uint8))
+        ia_ = np.array(img)                                           # Unkraut im Pflaster: weicher Uebergang -
+        for o in objs:                                                # dunklere Erdfuge + Moospixel unter dem Fuss
+            if not o.get('unkraut'):
+                continue
+            al_ = np.array(cache[o['datei']].getchannel('A')) > 0
+            xs_ = np.nonzero(al_[o['fuss']])[0]
+            if not len(xs_):
+                continue
+            cx_, fy_ = o['x'] + xs_.mean(), o['y'] + o['fuss']
+            rx_ = max(4.0, (xs_.max() - xs_.min()) * 0.75)
+            for yy_ in range(int(fy_ - 3), int(fy_ + 3)):
+                for xx_ in range(int(cx_ - rx_ - 2), int(cx_ + rx_ + 3)):
+                    if not (0 <= yy_ < ia_.shape[0] and 0 <= xx_ < ia_.shape[1]):
+                        continue
+                    d_ = ((xx_ - cx_) / (rx_ + 2)) ** 2 + ((yy_ - fy_) / 3.0) ** 2
+                    if d_ > 1:
+                        continue
+                    k_ = 0.72 + 0.2 * d_
+                    ia_[yy_, xx_, :3] = (ia_[yy_, xx_, :3] * k_).astype(np.uint8)
+                    if d_ > 0.35 and (xx_ * 7 + yy_ * 13) % 5 == 0:
+                        ia_[yy_, xx_, :3] = (88, 112, 62) if (xx_ + yy_) % 2 else (70, 92, 52)
+        img = Image.fromarray(ia_)
         boden_vor_objekten = np.array(img)
         k4.objekte_zeichnen(img, [o for o in objs if not o.get('hochbahn')], cache, np.zeros((Hp, Wp), bool),
                             frame if frame is not None else 0)          # Standbild = Bild 0 (Flammen, Fahnen sichtbar)

@@ -912,7 +912,7 @@ def ginkgo(quelle, name):
     umgefaerbt, Stamm und Umriss bleiben (Wiederverwenden zuerst, Regel 3)."""
     im = np.array(Image.open(os.path.join(ROOT, 'assets', 'objekte', quelle + '.png')).convert('RGBA')).astype(int)
     r_, g_, b_, a_ = im[..., 0], im[..., 1], im[..., 2], im[..., 3]
-    gruen = (a_ > 0) & (g_ > r_ + 8) & (g_ > b_ + 8)
+    gruen = (a_ > 0) & (g_ > r_ + 8) & (g_ >= b_ - 12)                 # Gruen und Blaugruen (Schatten)
     kontur = (a_ > 0) & ~gruen & (0.3 * r_ + 0.59 * g_ + 0.11 * b_ < 60) & ~(r_ > g_ + 10)   # dunkle Kontur -> dunkles Braun
     lum = (0.3 * r_ + 0.59 * g_ + 0.11 * b_)
     rampe = np.array([[96, 62, 22], [150, 98, 26], [196, 140, 34], [226, 178, 52], [244, 210, 96]])
@@ -988,6 +988,8 @@ def main():
             continue
         b.save(name); teile.append((name, Image.fromarray(b.a)))
     json.dump({k: [[int(v) for v in r] for r in l] for k, l in LICHT.items()}, open(os.path.join(OUT, 'lichter.json'), 'w'), indent=0)
+    for i_ in range(4):                                       # goldgelbe Herbstbaeume aus den Baeumen von Karte 01
+        ginkgo('karte01/baeume/%02d' % i_, 'gold_%02d' % i_)
     for q, n in (('karte18/gebaeude/stadtbaum', 'ginkgo_beet'), ('karte01/baeume/00', 'ginkgo'), ('karte10/baeume/01', 'ginkgo_gross'), ('karte01/baeume/03', 'ginkgo_klein')):
         ginkgo(q, n)
         teile.append((n, Image.open(os.path.join(OUT, n + '.png'))))

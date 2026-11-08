@@ -26,7 +26,7 @@ RASEN = set('n')
 LEUCHTEN = {'karte02/abgeleitet/laterne': 'laterne18', 'gebaeude/doppellaterne': 'laterne18',
             'karte10/banner/13': 'ampel18', 'k18/strasse/17': 'ampel18',
             'k18/strasse/01': 'automat', 'k18/strasse/40': 'automat'}
-PAD = {'k18/frontal/00': 1, 'k18/boot/00': 1}                              # Boot: 1 px Luft oben/unten fuer das Schaukeln
+PAD = {'k18/frontal/00': 1, 'k18/boot/00': 1, 'k18/schiff/00': 1}                              # Boot: 1 px Luft oben/unten fuer das Schaukeln
 TONUNG = {'karte10/spielplatz/00': 'gedaempft', 'karte10/spielplatz/01': 'gedaempft', 'karte10/spielplatz/02': 'gedaempft',
           'karte10/banner/06': 'metall', 'k18/autos/00': 'weiss', 'k18/autos/06': 'weiss', 'k18/autos/12': 'weiss',
           'karte02/ortho/09': 'zelt_blau',                    # Gras/Blumen von Karte 01 in Originalfarbe
@@ -528,7 +528,8 @@ def main():
     P.setzen('k18/platz/11', 21, 71, boden=set('q'), n=4, anim='rechtecke', extra={'licht_rects': LAT_YATAI})   # Imbissstand (Laternen leuchten)
     P.setzen('k18/frontal/02', 66, 19)                        # Bushaltestellen
     P.setzen('k18/frontal/03', 21, 41)
-    P.setzen('k18/boot/00', 111, 102, boden=set('w'), anim='boot', extra={'kein_schatten': True})   # neues Boot (PixelLab)
+    P.setzen('k18/boot/00', 99, 102, boden=set('w'), anim='boot', extra={'kein_schatten': True})    # kleines Boot links vom Steg
+    P.setzen('k18/schiff/00', 0, 106, boden=set('w'), x=111 * T, anim='boot', extra={'kein_schatten': True})   # Faehre (Zuglaenge)
     # ------------------------------------------------------------------ Laternen (fester Rhythmus, Vorlage)
     LAT, DLAT = 'karte02/abgeleitet/laterne', 'gebaeude/doppellaterne'
     for x in (13, 37, 60):                                    # Laternen auf moderatem Minimum: Nordseite obere Strasse
@@ -623,6 +624,8 @@ def main():
             continue
         for j in range(len(SORTEN)):
             n_ = SORTEN[(tx * 7 + ty * 3 + j) % len(SORTEN)]
+            if (tx * 5 + ty * 11) % 3 == 0:                    # etwa jeder dritte Baum goldgelb (Herbst)
+                n_ = 'gebaeude/gold_' + n_[-2:]
             n_fehl = len(P.fehl)
             t_ = P.setzen(n_, tx, ty, boden=set(k_), extra={'baum': True})
             del P.fehl[n_fehl:]
@@ -653,7 +656,7 @@ def main():
             art_, n_ = 'unkraut', UNKRAUT_[rs2.randint(0, 3)]
         n_fehl = len(P.fehl)
         o_ = P.setzen(n_, 0, ty, cx=tx * T + 8 + rs2.randint(-4, 5), boden=set(k_), begleiter=True,
-                      extra={'pflanze': True, 'kein_schatten': True})
+                      extra={'pflanze': True, 'kein_schatten': True, 'unkraut': art_ == 'unkraut'})
         del P.fehl[n_fehl:]
         if not o_:
             continue
