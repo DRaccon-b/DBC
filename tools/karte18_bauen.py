@@ -118,17 +118,29 @@ def pfeil(a, cx, cy, richtung):
 def striche(a, frei, sperre, festy, von, bis, farbe, strich, luecke, dicke=2, senkrecht=False):
     """Strichlinie: nur ganze Striche, die vollstaendig auf freiem Asphalt und >= 4 px neben Zebrastreifen liegen
     (keine Stummel an Kreuzungen)."""
-    p = von
-    while p + strich <= bis:
-        if senkrecht:
-            ok = frei[p:p + strich, festy:festy + dicke].all() and not sperre[p:p + strich, festy:festy + dicke].any()
-            if ok:
-                a[p:p + strich, festy:festy + dicke] = farbe
-        else:
-            ok = frei[festy:festy + dicke, p:p + strich].all() and not sperre[festy:festy + dicke, p:p + strich].any()
-            if ok:
-                a[festy:festy + dicke, p:p + strich] = farbe
-        p += strich + luecke
+    # erlaubte Abschnitte entlang der Linie bestimmen, je 8 px Abstand zu Kreuzung/Zebra, nur wenn >= 2 Striche passen
+    if senkrecht:
+        ok = frei[von:bis, festy:festy + dicke].all(axis=1) & ~sperre[von:bis, festy:festy + dicke].any(axis=1)
+    else:
+        ok = frei[festy:festy + dicke, von:bis].all(axis=0) & ~sperre[festy:festy + dicke, von:bis].any(axis=0)
+    i = 0
+    while i < len(ok):
+        if not ok[i]:
+            i += 1
+            continue
+        j = i
+        while j < len(ok) and ok[j]:
+            j += 1
+        s0, s1 = von + i + (8 if i > 0 else 0), von + j - (8 if j < len(ok) else 0)
+        if s1 - s0 >= 2 * strich + luecke:
+            p = s0
+            while p + strich <= s1:
+                if senkrecht:
+                    a[p:p + strich, festy:festy + dicke] = farbe
+                else:
+                    a[festy:festy + dicke, p:p + strich] = farbe
+                p += strich + luecke
+        i = j
 
 
 def markierungen(a, asphalt, lay):
@@ -147,6 +159,8 @@ def markierungen(a, asphalt, lay):
     y = int(22.5 * T)
     for yy in (y - 3, y + 2):
         for x in range(3 * T, 82 * T):
+            if 27 * T - 4 <= x < 42 * T + 4:                     # Zebras und Einmuendung der Querstrasse frei
+                continue
             if frei[yy, x] and not sperre[yy, x]:
                 a[yy, x] = gelb
     # Querstrasse: gelbe Strichlinie nur zwischen den Kreuzungen
@@ -174,13 +188,11 @@ def markierungen(a, asphalt, lay):
                 if art == 'h' and (x % 8) < 5 and 3 <= y - y0 * T < (y1 - y0 + 1) * T - 3:
                     a[y, x] = weiss
     # Parkplatz: Buchten je 3 Kacheln (Linien auf den Kachelkanten 42, 45, ... 60), Mittelgasse
-    for x in range(42, 61, 3):
+    for x in range(42, 61, 3):                                  # Buchten nur im Norden, breite Fahrgasse (Reihen 33-37)
         for y in range(29 * T + 2, 32 * T + 15):
             a[y, x * T] = weiss
-        for y in range(34 * T + 8, 38 * T - 1):
-            a[y, x * T] = weiss
     for x in range(42 * T, 60 * T, 16):
-        a[33 * T + 7, x:x + 8] = (GELB * 0.8).astype(np.uint8)
+        a[35 * T + 7, x:x + 8] = (GELB * 0.8).astype(np.uint8)
 
 
 # ---------------------------------------------------------------------------------------------- Flaechen
@@ -197,14 +209,19 @@ def mittelstreifen(a, m):
     rand = kontur(m)
     a[m] = H('#3a3a30')
     a[rand] = H('#9aa0ae')
-    innen = m & ~rand & ~kontur(m & ~rand)
+    fuge = kontur(m & ~rand)
+    innen = m & ~rand & ~fuge
     alt = k4.HECKE
     k4.HECKE = HECKE18
-    k4.hecke(a, innen, 18)
+    sicher = a.copy()
+    k4.hecke(a, innen & np.roll(innen, -6, 0), 18)              # Blattfront landet innerhalb der Hecke, nicht darunter
     k4.HECKE = alt
+    a[~m] = sicher[~m]                                           # nichts ausserhalb des Beets veraendern
     unten = innen & ~np.roll(innen, -1, 0)
     for d in range(2):
         dunkeln(a, np.roll(unten, -d, 0) & innen, 0.7)
+    a[rand] = H('#9aa0ae')
+    a[fuge] = (sicher[fuge] * 0.6).astype(np.uint8)
 
 
 def platz_raster(a, platz, achse):
@@ -213,7 +230,8 @@ def platz_raster(a, platz, achse):
     Rahmen um den Mittelweg (Spalten 93 und 110, Reihe 35, Querband 52-53)."""
     for c in (70, 79, 88, 97, 106, 115, 124):
         m = np.zeros_like(platz); m[:, c * T + 6:c * T + 10] = True
-        dunkeln(a, m & platz, 0.7)
+        rechts = np.roll(platz, -T, 1)                           # nie in der aeussersten Platzspalte am Nebelrand
+        dunkeln(a, m & platz & rechts, 0.7)
     for r in (32, 40, 48, 56, 64, 72):
         m = np.zeros_like(platz); m[r * T + 6:r * T + 10, :] = True
         dunkeln(a, m & platz, 0.7)
@@ -266,7 +284,9 @@ def terrasse(a, lay, lvl):
                 c = H('#8a84a2') if d < 2 else H('#6e6888') if d < 28 else H('#4c4664')
                 if d in (14, 15):
                     c = H('#625c7c')                            # Gesimsfuge
-                if (x - xs.min()) % 32 in range(10, 22) and 19 <= d <= 23:
+                dd = (tx0 - 1 - x) if x < tx0 else (x - tx1)     # Schlitze im 32-px-Raster ab der Treppenwange
+                laenge = (tx0 - xs.min()) if x < tx0 else (xs.max() + 1 - tx1)
+                if dd % 32 in range(10, 22) and dd - dd % 32 + 21 <= laenge - 1 and 19 <= d <= 23:
                     c = H('#3a3450')                            # Lueftungsschlitz
                 lvl[Y, x] = 9
             a[Y, x] = c
@@ -411,11 +431,15 @@ def nebel(a, land, frame):
     fern = np.array(Image.fromarray(((~land) * 255).astype(np.uint8)).filter(ImageFilter.GaussianBlur(6))).astype(np.float32) / 255
     dichte = np.clip(fern * 1.9 - 0.12 + 0.3 * (n0 - 0.5), 0, 1)
     dichte[~land] = np.maximum(dichte[~land], np.clip(0.75 + fern[~land], 0, 1))
+    dichte = np.array(Image.fromarray((dichte * 255).astype(np.uint8)).filter(ImageFilter.GaussianBlur(2))).astype(np.float32) / 255
+    tief = np.array(Image.fromarray((land * 255).astype(np.uint8)).filter(ImageFilter.MaxFilter(7))) == 0
+    dichte[tief] = np.maximum(dichte[tief], 0.95)                # Nebelinneres (>= 3 px vom Land) deckend
     n1 = np.roll(nebel_feld(Hh, W, 64, 81, 16), 16 * f, axis=1)
     n2 = np.roll(nebel_feld(Hh, W, 32, 82, 8), 8 * f, axis=1)
     s_ = dichte[..., None]
     farbe = NEBEL[None, None, :] * (0.86 + 0.12 * n0[..., None] + 0.08 * n1[..., None] + 0.04 * n2[..., None])
     a[:] = np.clip(a * (1 - s_) + farbe * s_, 0, 255).astype(np.uint8)
+    return dichte
 
 
 # ---------------------------------------------------------------------------------------------- Hochbahn
@@ -495,10 +519,11 @@ def gebaeude_schatten(img, geb, lvl):
             st = 0.3 * min(1.0, (y - (Y1 - hoch)) / 8.0)
             ms[y, X1:min(W, ende)] = np.maximum(ms[y, X1:min(W, ende)], st)
         ms[lvl != 1] = 0
-        mf = np.zeros((Hh, W), np.float32)                         # Kontaktschatten auf der Ebene des Gebaeudefusses
-        mf[Y1:min(Hh, Y1 + 5), X0 + 4:min(W, X1 + 8)] = 0.32
-        mf[Y1:min(Hh, Y1 + 2), X0 + 2:min(W, X1 + 10)] = 0.42
-        mf[lvl != ebene_fuss] = 0
+        mf = np.zeros((Hh, W), np.float32)                         # Kontaktschatten direkt an der Wand, je Spalte auf
+        mf[Y1:min(Hh, Y1 + 5), X0:min(W, X1 + 8)] = 0.32           # der Ebene des Bodens vor der Fassade
+        mf[Y1:min(Hh, Y1 + 2), X0:min(W, X1 + 10)] = 0.42
+        fl = lvl[min(Hh - 1, Y1 + 1), :]
+        mf[(lvl != fl[None, :]) | (lvl == 0) | (lvl == 9)] = 0
         m = np.maximum(m, np.maximum(ms, mf))
     a[..., :3] *= (1 - m[..., None])
     img.paste(Image.fromarray(np.clip(a, 0, 255).astype(np.uint8)))
@@ -515,13 +540,21 @@ def lichtkegel(img, lampen, cache, frame, lvl):
         cx = o['x'] + (np.nonzero(al[o['fuss']])[0].mean() if al[o['fuss']].any() else sp.width / 2.0)
         cy = o['y'] + o['fuss'] - 1
         k_ = (0.94, 1.0, 1.06, 1.0)[(f + int(o['x']) // 40) % 4]
+        if o['basis'] == 'gebaeude/doppellaterne':
+            cy = 48 * T                                          # Mitte des Mittelstreifens: Licht auf beide Fahrbahnen
+        e = int(lvl[min(lvl.shape[0] - 1, int(o['y'] + o['fuss'] - 1)), min(lvl.shape[1] - 1, int(round(cx)))])
         x0, x1, y0, y1 = int(cx - 23), int(cx + 24), int(cy - 13), int(cy + 14)
         yy, xx = np.mgrid[y0:y1, x0:x1]
         aussen = ((xx - cx) / 22.0) ** 2 + ((yy - cy) / 12.0) ** 2 <= 1
         innen = ((xx - cx) / 13.0) ** 2 + ((yy - cy) / 7.0) ** 2 <= 1
         s_ = np.where(innen, 0.41, np.where(aussen, 0.26, 0.0)) * k_
         ok = (yy >= 0) & (yy < a.shape[0]) & (xx >= 0) & (xx < a.shape[1])
-        ok[ok] &= (lvl[yy[ok], xx[ok]] == 1)
+        if e == 9:
+            erl = np.isin(lvl[yy[ok], xx[ok]], (1, 9))
+            s_[ok] = s_[ok] * np.where(lvl[yy[ok], xx[ok]] == 9, 0.6, 1.0)
+        else:
+            erl = lvl[yy[ok], xx[ok]] == e
+        ok[ok] &= erl
         Y, X, S = yy[ok], xx[ok], s_[ok][:, None]
         a[Y, X, :3] = a[Y, X, :3] * (1 - S) + np.array([250, 214, 150]) * S
     img.paste(Image.fromarray(np.clip(a, 0, 255).astype(np.uint8)))
@@ -575,25 +608,54 @@ def ampel18(sp, frame, o):
 
 
 def fahne18(sp, frame, o):
-    """Fahne: nur das Tuch weht (Zeilen des Tuchs verschieben sich wellenfoermig um bis 1 px, am Mast fest);
-    der graue Mast bleibt unveraendert."""
+    """Fahne: nur das Tuch weht. Der Mast (Spalten, die fast die ganze Hoehe decken) bleibt fest; jede Tuchzeile wird
+    als Ganzes um hoechstens 1 px zum Mast hin verschoben (keine Loecher), die Befestigung am Mast bleibt stehen."""
     a = np.array(sp)
-    ai = a.astype(int)
-    mx, mn = ai[..., :3].max(axis=2), ai[..., :3].min(axis=2)
-    tuch = (ai[..., 3] > 0) & (mx - mn > 40)
+    h, w = a.shape[:2]
+    al = a[..., 3] > 0
+    mast = np.nonzero(al.sum(axis=0) >= 0.75 * h)[0]
+    if not len(mast):
+        return sp
+    mast_l, mast_r = mast.min(), mast.max()
     out = a.copy()
-    out[tuch] = 0
-    h = a.shape[0]
     for y in range(h):
-        xs = np.nonzero(tuch[y])[0]
+        xs = np.nonzero(al[y])[0]
         if not len(xs):
             continue
-        d = int(round(math.sin(2 * math.pi * ((frame or 0) / 4.0) + y * 0.5)))
-        for x in xs:
-            X = x + (d if abs(x - xs.min()) > 2 else 0)
-            if 0 <= X < a.shape[1]:
-                out[y, X] = a[y, x]
+        d = 1 if math.sin(2 * math.pi * (frame or 0) / 4.0 + y * 0.5) < -0.3 else 0
+        if not d:
+            continue
+        rechts_tuch = xs.max() > mast_r + 1
+        if rechts_tuch:                                        # Tuch rechts vom Mast: freies Ende ruckt nach links
+            s0, s1 = mast_r + 4, xs.max()
+            if s1 > s0:
+                out[y, s0:s1] = a[y, s0 + 1:s1 + 1]
+                out[y, s1] = 0
+        elif xs.min() < mast_l - 1:                            # Tuch links vom Mast: freies Ende ruckt nach rechts
+            s0, s1 = xs.min(), mast_l - 4
+            if s1 > s0:
+                out[y, s0 + 1:s1 + 1] = a[y, s0:s1]
+                out[y, s0] = 0
     return Image.fromarray(out)
+
+
+def flammen18(sp, frame, o):
+    """Feuerschale: drei Flammenzungen ueber der Glut, Hoehe und Neigung wechseln in 4 Bildern (die Flammen selbst
+    bewegen sich, nicht nur die Helligkeit); die Schale bleibt ruhig."""
+    a = np.array(sp)
+    f = (frame or 0) % 4
+    hoehen = [(7, 10, 6), (9, 7, 8), (6, 11, 7), (8, 8, 10)][f]
+    neig = [0, 1, 0, -1][f]
+    for k_, (fx, hmax) in enumerate(zip((6, 10, 15), hoehen)):
+        for d in range(hmax):
+            y = 11 - d
+            breite = max(0, 2 - d * 2 // hmax)
+            x0 = fx + (neig if d > hmax // 2 else 0)
+            for dx in range(-breite, breite + 1):
+                c = H('#fff0a0') if d < hmax // 3 and abs(dx) < 1 else H('#f0a040') if d < 2 * hmax // 3 else H('#c84a30')
+                if 0 <= y < a.shape[0] and 0 <= x0 + dx < a.shape[1]:
+                    a[y, x0 + dx] = list(c) + [255]
+    return Image.fromarray(a)
 
 
 def boot(sp, frame, o):
@@ -620,7 +682,7 @@ def wasserring(img, pfeiler, frame):
 
 
 k4.TEILANIM.update({'laterne18': laterne18, 'automat': leuchten18, 'ampel18': ampel18, 'rechtecke': rechtecke,
-                    'boot': boot, 'fahne18': fahne18})
+                    'boot': boot, 'fahne18': fahne18, 'flammen18': flammen18})
 
 
 # ---------------------------------------------------------------------------------------------- Bau
@@ -645,7 +707,10 @@ def bauen(frame=None, speichern=True):
     markierungen(a, asphalt, lay)
     rasen_kanten(a, gross(np.isin(kl, ['n', 'd'])))
     sand = gross(kl == 'd')
-    a[kontur(sand)] = H('#8a6a44')                                 # Holzeinfassung des Sandkastens
+    r1 = kontur(sand); r2 = kontur(sand & ~r1); r3 = kontur(sand & ~r1 & ~r2)   # 3 px Holzrahmen
+    a[r1 | r2] = H('#5a4228')
+    a[(r1 | r2) & (np.roll(~sand, 1, 0) | np.roll(~sand, 2, 0) | np.roll(~sand, 1, 1) | np.roll(~sand, 2, 1))] = H('#8a6a44')
+    a[r3] = H('#3a2a1a')
     mittelstreifen(a, gross(np.isin(kl, ['m', 'e'])))
     lvl[gross(np.isin(kl, ['m', 'e']))] = 9                        # Hecken (Mittelstreifen, Beete): nicht begehbar
     platz_raster(a, gross(kl == 'p'), lay['achse'])
@@ -653,12 +718,19 @@ def bauen(frame=None, speichern=True):
     terrasse(a, lay, lvl)
     promenade(a, lay, lvl)
     kaimauer(a, wasser, land, lvl)
-    ost = gross(kl == 'k') & np.roll(wasser, -1, 1)                  # Kaikante am Kanal: Bordstein und Kontur
-    a[ost] = H('#3a3e4a')
-    a[np.roll(ost, -1, 1) & ~wasser] = H('#9aa0ae')
-    sch_k = np.roll(ost, 1, 1) | np.roll(ost, 2, 1) | np.roll(ost, 3, 1)
-    dunkeln(a, sch_k & wasser, 0.75)
+    kanal = np.zeros_like(wasser); kanal[78 * T:100 * T, 125 * T:126 * T] = True   # Kaikante am Kanal: Bruestung
+    for y in range(78 * T, 100 * T):
+        for x in range(125 * T, 126 * T):
+            c = H('#9aa0ae') if x - 125 * T < 2 else H('#7a7e8c') if x - 125 * T < 13 else H('#3a3e4a')
+            if (y % 8) == 3 and 5 <= x - 125 * T <= 9:
+                c = H('#c4c8d2')                                # Nietpunkte
+            a[y, x] = c
+    lvl[kanal] = 9
+    lvl[99 * T:100 * T, 4 * T:104 * T] = 9                       # Kaistreifen hinter dem Gelaender: nicht erreichbar
+    lvl[99 * T:100 * T, 110 * T:125 * T] = 9
+    sch_k = np.zeros_like(wasser); sch_k[78 * T:100 * T, 126 * T:126 * T + 3] = True
     wasser_wellen(a, wasser & (lvl != 9), frame)
+    dunkeln(a, sch_k & wasser, 0.75)
     steg(a, lay, wasser, lvl)
     for tp in lay['teleporter']:
         teleporter(a, tp, frame)
@@ -669,7 +741,7 @@ def bauen(frame=None, speichern=True):
         np.save(os.path.join(KARTE, 'pixelhoehe.npy'), lvl)
         np.save(os.path.join(KARTE, 'wasser.npy'), np.packbits(wasser & (lvl == 0)))
         np.save(os.path.join(KARTE, 'leere.npy'), np.packbits(gross(kl == '.')))
-    nebel(a, land | wasser, frame)                                 # Nebel liegt am Boden: Hohes ragt heraus
+    dichte = nebel(a, land | wasser, frame)                        # Nebel liegt am Boden: Hohes ragt heraus
     img = Image.fromarray(a).convert('RGBA')
     if speichern and frame is None:
         img.save(os.path.join(KARTE, 'terrain_basis.png'))
@@ -679,13 +751,39 @@ def bauen(frame=None, speichern=True):
         objs = sorted((o for o in json.load(open(pf)) if os.path.exists(os.path.join(OBJ, o['datei']))),
                       key=lambda o: o.get('sortier', o['y'] + o['fuss']))
         cache = {o['datei']: Image.open(os.path.join(OBJ, o['datei'])).convert('RGBA') for o in objs}
-        k8.schatten_ebene(img, [o for o in objs if not o.get('kein_schatten')], cache, lvl)
+        vor = np.array(img).astype(np.float32)
+        lvl_s = lvl.copy()
+        lvl_s[gross(np.isin(kl, ['m', 'e']))] = 1                    # Objekte auf Hecken werfen Schatten auf den Boden
+        k8.schatten_ebene(img, [o for o in objs if not o.get('kein_schatten')], cache, lvl_s)
         gebaeude_schatten(img, [o for o in objs if o.get('gebaeude')], lvl)
-        lichtkegel(img, [o for o in objs if o.get('anim') == 'laterne18'], cache, frame, lvl)
-        k4.objekte_zeichnen(img, [o for o in objs if not o.get('hochbahn')], cache, np.zeros((Hp, Wp), bool), frame)
+        lichtkegel(img, [o for o in objs if o.get('anim') in ('laterne18', 'flammen18')], cache, frame, lvl)
+        nach = np.array(img).astype(np.float32)                      # Schatten/Licht verblassen im Nebelsaum
+        d_ = dichte[..., None]
+        nach[..., :3] = vor[..., :3] * d_ + nach[..., :3] * (1 - d_)
+        img = Image.fromarray(np.clip(nach, 0, 255).astype(np.uint8))
+        boden_vor_objekten = np.array(img)
+        k4.objekte_zeichnen(img, [o for o in objs if not o.get('hochbahn')], cache, np.zeros((Hp, Wp), bool),
+                            frame if frame is not None else 0)          # Standbild = Bild 0 (Flammen, Fahnen sichtbar)
         img = img.copy()
         k4.animieren(img, [o for o in objs if not o.get('hochbahn')], cache, frame or 0, ruhig=frame is None)
         wasserring(img, [o for o in objs if o.get('im_wasser')], frame)
+        hecke = gross(np.isin(kl, ['m', 'e']))                       # Stamm-/Mastfuss in der Hecke: Laub davor
+        hecke_innen = hecke & np.roll(hecke, -3, 0) & np.roll(hecke, 1, 1) & np.roll(hecke, -1, 1)
+        ia = np.array(img)
+        for o in objs:
+            if not (o.get('baum') or o['basis'] == 'gebaeude/doppellaterne'):
+                continue
+            fy, sp_ = o['y'] + o['fuss'], cache[o['datei']]
+            al = np.array(sp_.getchannel('A')) > 0
+            for dy in range(5):
+                Y = fy - dy
+                if not (0 <= Y < ia.shape[0]):
+                    continue
+                xs_ = np.nonzero(al[o['fuss'] - dy])[0] + o['x']
+                for X in xs_:
+                    if 0 <= X < ia.shape[1] and hecke_innen[Y, X] and (X * 7 + Y * 3 + dy) % 5 != 0:
+                        ia[Y, X] = boden_vor_objekten[Y, X]
+        img = Image.fromarray(ia)
         zuege = [o for o in objs if o.get('hochbahn')]
         if zuege:
             zug = cache[zuege[0]['datei']]

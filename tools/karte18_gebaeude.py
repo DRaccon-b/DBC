@@ -236,22 +236,21 @@ def buero(w, h, rs, glas=('#2a3654', '#3a4a6e', '#56709c'), wand='#3e4454', dach
     g0, g1, g2 = H(glas[0]), H(glas[1]), H(glas[2])
     for s in range(stockwerke):
         ys = y + 6 + s * hoehe
-        b.r(4, ys, w - 5, ys + hoehe - 9, g0)                  # Fensterband
-        for x in range(4, w - 4):
-            if (x - 4) % 16 == 0:
-                b.r(x, ys, x, ys + hoehe - 9, H('#7a8294'))     # Pfosten
-        for x in range(8, w - 8, 16):                          # Reflexe / Licht
+        b.r(8, ys, w - 9, ys + hoehe - 9, g0)                  # Fensterband: nur volle 15-px-Scheiben, 8 px Rand
+        for x in range(8, w - 7, 16):
+            b.r(x, ys, x, ys + hoehe - 9, H('#7a8294'))         # Pfosten
+        for x in range(9, w - 8, 16):                          # Reflexe / Licht
             if rs.random() < 0.25:
-                b.r(x - 3, ys + 1, x + 10, ys + hoehe - 10, rs.choice(WARM))
+                b.r(x, ys + 1, x + 14, ys + hoehe - 10, rs.choice(WARM))
             else:
-                b.r(x - 3, ys + 1, x + 3, ys + 2, g2)
-                b.px(x - 3, ys + 3, g1)
-        b.r(4, ys + hoehe - 8, w - 5, ys + hoehe - 8, H('#8a8e9c'))   # Bruestung Licht
-        b.r(4, ys + hoehe - 7, w - 5, ys + hoehe - 5, H(wand))
+                b.r(x, ys + 1, x + 6, ys + 2, g2)
+                b.px(x, ys + 3, g1)
+        b.r(8, ys + hoehe - 8, w - 9, ys + hoehe - 8, H('#8a8e9c'))   # Bruestung Licht
+        b.r(8, ys + hoehe - 7, w - 9, ys + hoehe - 5, H(wand))
     # Erdgeschoss: Glasfront, Vordach, Tuer (2 Kacheln) auf dem Raster
     ye = h - eg
-    b.r(4, ye + 6, w - 5, h - 5, g0)
-    for x in range(4, w - 4, 16):
+    b.r(8, ye + 6, w - 9, h - 5, g0)
+    for x in range(8, w - 7, 16):
         b.r(x, ye + 6, x, h - 5, H('#7a8294'))
     tx = tuer_x if tuer_x is not None else (w // 2 - 16)
     b.kasten(tx - 10, ye, tx + 41, ye + 5, H('#9aa0ac'), H('#c8ccd6'), H('#4a4e5a'))   # Vordach
@@ -282,8 +281,8 @@ def wohnblock(w, h, rs):
         ys = y + 3 + s * hs
         for u in range(w // 64):
             ux = u * 64
-            if s == stock - 1 and u == (w // 64) // 2:
-                continue                                       # Eingang in der Mitte
+            if 144 - 64 < ux < 176:
+                pass
             fenster(b, ux + 8, ys + 6, 16, 14, rs, licht=0.35)
             # Balkontuer + Balkon mit Gelaender
             b.r(ux + 30, ys + 4, ux + 54, ys + 22, H('#3a4050'))
@@ -300,15 +299,19 @@ def wohnblock(w, h, rs):
             if rs.random() < 0.4:
                 b.kasten(ux + 47, ys + 16, ux + 54, ys + 21, H('#b8bcc4'), H('#dcdfe4'), H('#6a6e78'))
         b.r(0, ys + hs - 1, w - 1, ys + hs - 1, H('#8a8884'))
-    # Eingang (2 Kacheln, mittig auf Kachelgrenze), Vordach, Briefkaesten
-    mx = (w // 64) // 2 * 64
-    tx = mx + 16
-    b.kasten(tx - 6, h - 34, tx + 37, h - 30, H('#8a8e98'), H('#b8bcc6'), H('#4a4e58'))
+    # Treppenhaus (wie Vorlage) als helles senkrechtes Band x 14-15, schmale Querfenster je Geschoss, Eingang unten
+    tx = 144
+    b.r(tx, y, tx + 31, h - 4, H('#c4c2bc'))
+    b.r(tx, y, tx + 31, y + 1, H('#dcdad4'))
+    b.r(tx, y, tx, h - 4, H('#dcdad4')); b.r(tx + 31, y, tx + 31, h - 4, H('#8a8884'))
+    for s_ in range(stock - 1):
+        ys = y + 3 + s_ * hs
+        fenster(b, tx + 6, ys + 10, 20, 6, rs, licht=0.6, sprosse=False)
+    b.kasten(tx - 4, h - 34, tx + 35, h - 30, H('#8a8e98'), H('#b8bcc6'), H('#4a4e58'))
     tuer(b, tx, h - 4, 15, 24, glas=True)
     tuer(b, tx + 16, h - 4, 15, 24, glas=True)
-    b.r(tx - 4, h - 26, tx - 1, h - 12, H('#6a6e78'))
     sockel(b, h - 3, 0, w - 1, H('#6a6660'))
-    for (kx0, kx1) in ((8, tx - 12), (tx + 44, w - 8)):        # Pflanzkaesten am Sockel links/rechts des Eingangs
+    for (kx0, kx1) in ((8, tx - 6), (tx + 38, w - 8)):        # Pflanzkaesten am Sockel links/rechts des Eingangs
         b.r(kx0, h - 9, kx1, h - 1, H('#8a8e98'))
         b.r(kx0, h - 9, kx1, h - 9, H('#b4b8c2'))
         for x in range(kx0 + 1, kx1):
@@ -445,43 +448,43 @@ def halle(w, h, rs):
         tuer(b, tx + 1, h - 4, 14, 40, glas=True)
     sockel(b, h - 3, 0, w - 1, H('#6a6e7c'))
     # Pyramiden: oben breit (224), unten schmal (96), Hoehe 150; Deckflaeche 14 px von oben sichtbar
-    for cx in (mx - 128, mx + 128):
-        top, hoch, ob, ub, deck = 4, 132, 112, 44, 20
-        stufe_y = top + deck + 40                                  # zweistufig: Gesims zwischen oberem Block und Trichter
-        ky0 = top + deck + hoch
+    for cx in (mx - 128, mx + 128):                            # Pyramiden: oberer Block, Gesimsplatte, Trichter
+        top, ob, ub = 4, 112, 44
+        ky0 = 186                                                  # Unterkante des Trichters
         for (kx0, kx1) in ((cx - 40, cx - 17), (cx + 16, cx + 39)):      # zwei Kerne (Stuetzen) bis aufs Dach
             b.kasten(kx0, ky0 - 6, kx1, 214, H('#a8acb8'), H('#ccd0da'), H('#62667a'))
             for y in range(ky0 + 4, 206, 12):
                 b.r(kx0 + 6, y, kx1 - 6, y + 5, H('#3a4a6a'))
-            b.r(kx0 - 2, 215, kx1 + 3, 217, H('#5a5e6c'))                   # Kontaktschatten auf dem Dach
-        b.r(cx - 16, ky0 - 6, cx + 15, ky0 + 30, H('#7a7e8c'))                # Bruecke zwischen den Kernen
-        b.r(cx - 16, ky0 - 6, cx + 15, ky0 - 6, H('#a4a8b4'))
-        for x in range(cx - 14, cx + 13, 8):
-            b.r(x, ky0 + 2, x + 4, ky0 + 14, H('#3a4a6a'))
-        for y in range(top, top + deck):                                   # Deckflaeche von oben (Trapez)
-            einzug = (top + deck - y) // 4
+            b.r(kx0 - 2, 215, kx1 + 3, 217, H('#5a5e6c'))
+        for y in range(top, top + 18):                                     # Deckflaeche von oben
+            einzug = (top + 18 - y) // 4
             for x in range(cx - ob + einzug, cx + ob - einzug):
-                c = H('#ccd0da') if (y - top) < deck - 3 else H('#e6e8ee')
-                if (x - cx) % 32 == 0 or (y - top) % 7 == 0:
+                c = H('#ccd0da') if (y - top) < 15 else H('#e6e8ee')
+                if (x - cx) % 32 == 0 or (y - top) % 6 == 0:
                     c = H('#aeb2be')
                 b.px(x, y, c)
-        b.r(cx - ob + 5, top, cx + ob - 6, top, H('#9aa0ac'))
-        for y in range(top + deck, top + deck + hoch):
-            t = (y - top - deck) / hoch
-            halb = int(round(ob + (ub - ob) * t))
+        for y in range(top + 18, 64):                                      # oberer Block: fast gerade
+            t = (y - top - 18) / (64 - top - 18)
+            halb = int(round(ob - 8 * t))
             for x in range(cx - halb, cx + halb):
-                u = (x - (cx - halb)) / (2 * halb)
-                c = H('#b4b8c4') if u < 0.55 else H('#8e92a0')          # links Licht, rechts Schatten
-                if (y - top - deck) % 18 == 0:
-                    c = H('#7a7e8c')
-                if abs(x - cx) % 32 == 0:
+                c = H('#b4b8c4') if (x - (cx - halb)) / (2 * halb) < 0.55 else H('#8e92a0')
+                if (y - top) % 12 == 0 or abs(x - cx) % 32 == 0:
                     c = (c.astype(int) * 0.86).astype(np.uint8) | np.array([0, 0, 0, 255], np.uint8)
                 b.px(x, y, c)
             b.px(cx - halb, y, H('#d8dce4')); b.px(cx + halb - 1, y, H('#5a5e6c'))
-        hs = int(round(ob + (ub - ob) * ((stufe_y - top - deck) / hoch)))
-        b.r(cx - hs - 2, stufe_y, cx + hs + 1, stufe_y + 2, H('#c8ccd6'))     # Gesims
-        b.r(cx - hs - 2, stufe_y + 3, cx + hs + 1, stufe_y + 3, H('#5a5e6c'))
-        b.r(cx - ub, top + deck + hoch - 2, cx + ub - 1, top + deck + hoch - 1, H('#5a5e6c'))   # Unterkante
+        b.r(cx - ob, 64, cx + ob - 1, 70, H('#c8ccd6'))                     # Gesimsplatte, 8 px ueber den Block
+        b.r(cx - ob, 64, cx + ob - 1, 64, H('#e6e8ee'))                     # hinaus; zwischen den Pyramiden frei
+        b.r(cx - ob, 71, cx + ob - 1, 72, H('#5a5e6c'))
+        for y in range(73, ky0):                                           # Trichter nach unten
+            t = (y - 73) / (ky0 - 73)
+            halb = int(round((ob - 8) + (ub - (ob - 8)) * t))
+            for x in range(cx - halb, cx + halb):
+                c = H('#b4b8c4') if (x - (cx - halb)) / (2 * halb) < 0.55 else H('#8e92a0')
+                if (y - 73) % 16 == 0 or abs(x - cx) % 32 == 0:
+                    c = (c.astype(int) * 0.86).astype(np.uint8) | np.array([0, 0, 0, 255], np.uint8)
+                b.px(x, y, c)
+            b.px(cx - halb, y, H('#d8dce4')); b.px(cx + halb - 1, y, H('#5a5e6c'))
+        b.r(cx - ub, ky0 - 2, cx + ub - 1, ky0 - 1, H('#5a5e6c'))
     b.umriss()
     return b
 
@@ -507,42 +510,42 @@ def pfeiler():
 def zug(wagen=3, laenge=112):
     """Hochbahn-Zug frontal von der Seite: weisse Wagen mit dunkelblauem Fensterband, Fenster, Tueren, Schuerze;
     vorn (Osten) eine runde Nase mit Scheibe, hinten (Westen) gerade. 3 Wagen, Kupplungen dazwischen."""
-    w, h = wagen * laenge + 2, 30
+    w, h = wagen * laenge + 2, 36
     b = Bild(w, h)
     for i in range(wagen):
         x0, x1 = i * laenge + 1, (i + 1) * laenge - 2
         nase = (i == wagen - 1)
-        for y in range(2, 27):
+        for y in range(2, 34):
             xe = x1
             if nase:                                          # Nase: Rundung nach vorn
-                einzug = int(round(10 * (1 - math.sqrt(max(0.0, 1 - ((y - 16) / 15.0) ** 2)))))
+                einzug = int(round(12 * (1 - math.sqrt(max(0.0, 1 - ((y - 19) / 17.0) ** 2)))))
                 xe = x1 - einzug
             for x in range(x0, xe + 1):
                 c = H('#e8eaf0')
-                if y < 4:
+                if y < 5:
                     c = H('#f6f8fc')                          # Dach (Licht)
-                elif 8 <= y <= 15:
-                    c = H('#24345a')                          # Fensterband
-                elif y == 16:
+                elif 9 <= y <= 19:
+                    c = H('#24345a')                          # Fensterband (11 px)
+                elif y == 20:
                     c = H('#3a5aa0')
-                elif y >= 22:
-                    c = H('#9aa0b0') if y < 25 else H('#5a6070')   # Schuerze
+                elif y >= 28:
+                    c = H('#9aa0b0') if y < 31 else H('#5a6070')   # Schuerze
                 b.px(x, y, c)
         for fx in range(x0 + 6, x1 - 12, 14):                 # Fenster
-            if nase and fx > x1 - 26:
+            if nase and fx > x1 - 28:
                 continue
-            b.r(fx, 9, fx + 9, 14, H('#5a78b0'))
-            b.r(fx, 9, fx + 3, 9, H('#a8c0e8'))
+            b.r(fx, 10, fx + 9, 18, H('#5a78b0'))
+            b.r(fx, 10, fx + 3, 10, H('#a8c0e8'))
         for tx in (x0 + 24, x0 + 80):                          # Tueren
-            b.r(tx, 7, tx + 9, 21, H('#c8ccd6'))
-            b.r(tx + 4, 7, tx + 5, 21, H('#8a90a0'))
-            b.r(tx + 1, 9, tx + 3, 14, H('#3a4a70')); b.r(tx + 6, 9, tx + 8, 14, H('#3a4a70'))
+            b.r(tx, 8, tx + 9, 27, H('#c8ccd6'))
+            b.r(tx + 4, 8, tx + 5, 27, H('#8a90a0'))
+            b.r(tx + 1, 10, tx + 3, 18, H('#3a4a70')); b.r(tx + 6, 10, tx + 8, 18, H('#3a4a70'))
         if nase:
-            b.r(x1 - 18, 8, x1 - 6, 15, H('#1a2440'))         # Frontscheibe
-            b.r(x1 - 18, 8, x1 - 14, 8, H('#7a9ad0'))
-            b.r(x1 - 5, 18, x1 - 3, 19, H('#fff0b0'))         # Scheinwerfer
+            b.r(x1 - 20, 9, x1 - 7, 19, H('#1a2440'))         # Frontscheibe
+            b.r(x1 - 20, 9, x1 - 15, 9, H('#7a9ad0'))
+            b.r(x1 - 6, 23, x1 - 4, 24, H('#fff0b0'))         # Scheinwerfer
         if i < wagen - 1:
-            b.r(x1 + 1, 12, x1 + 3, 22, H('#3a3e4c'))         # Kupplung / Faltenbalg
+            b.r(x1 + 1, 14, x1 + 3, 28, H('#3a3e4c'))         # Kupplung / Faltenbalg
     b.umriss()
     return b
 
@@ -629,7 +632,101 @@ def koban_mit_dach():
     b.r(x0 + 4, 5, x1 - 4, 12, H('#5a5e6c'))
     b.kasten(x0 + 8, 6, x0 + 17, 10, H('#9aa0ac'), H('#c4c8d2'), H('#4a4e5a'))
     b.umriss()
-    LICHT['koban'] = [[x0, 12, x0 + 14, 34, 0], [x1 - 14, 12, x1, 34, 2]]
+    LICHT['koban'] = [[x0 + 6, 27, x0 + 11, 31, 0], [x1 - 11, 27, x1 - 7, 31, 2]]   # nur die roten Lampen
+    return b
+
+
+def bus():
+    """Stadtbus als reiner Seitenaufriss (Front nach rechts = Osten), 128x34: weiss mit gruenem Band, Fensterreihe,
+    senkrechte Frontscheibe mit Zielanzeige, zwei Raeder; Einstieg auf der (nicht sichtbaren) linken Seite."""
+    w, h = 128, 34
+    b = Bild(w, h)
+    b.r(1, 2, w - 2, 27, H('#e4e6ec'))
+    b.r(1, 2, w - 2, 3, H('#f6f8fc'))
+    b.r(1, 20, w - 2, 23, H('#3e7a4a'))                       # gruenes Band
+    b.r(1, 24, w - 2, 27, H('#9aa0ae'))
+    for fx in range(6, w - 24, 12):
+        b.r(fx, 7, fx + 9, 16, H('#2a3a5a')); b.r(fx, 7, fx + 3, 7, H('#6a86b8'))
+    b.r(w - 18, 5, w - 4, 18, H('#1a2440'))                  # Frontscheibe
+    b.r(w - 17, 3, w - 5, 5, H('#f0c060'))                   # Zielanzeige (leuchtet)
+    b.r(w - 4, 21, w - 3, 23, H('#fff0b0'))                  # Scheinwerfer
+    b.r(2, 21, 3, 23, H('#c04040'))                          # Ruecklicht
+    for wx in (22, w - 30):                                   # Raeder
+        b.r(wx - 2, 24, wx + 13, 27, H('#2a2c36'))
+        for dy in range(9):
+            for dx in range(11):
+                if (dx - 5) ** 2 + (dy - 4) ** 2 <= 20:
+                    b.px(wx + dx, 25 + dy, H('#1c1e26') if (dx - 5) ** 2 + (dy - 4) ** 2 > 6 else H('#8a8e9a'))
+    b.umriss()
+    LICHT['bus'] = [[w - 17, 3, w - 5, 5, 0]]
+    return b
+
+
+def lkw():
+    """Kastenwagen als reiner Seitenaufriss, 80x46: Fuehrerhaus links (Westen), Kofferaufbau rechts, Raeder."""
+    w, h = 80, 46
+    b = Bild(w, h)
+    b.kasten(26, 2, w - 2, 34, H('#d8d4cc'), H('#f0ece4'), H('#8a8680'))   # Koffer
+    for x in range(30, w - 4, 12):
+        b.r(x, 4, x, 32, H('#b8b4ac'))
+    b.r(30, 14, w - 6, 20, H('#3a6aa0'))                      # Firmenstreifen
+    b.kasten(2, 12, 25, 36, H('#c84a44'), H('#e07060'), H('#7a2a26'))       # Fuehrerhaus
+    b.r(4, 14, 16, 22, H('#2a3a5a')); b.r(4, 14, 8, 14, H('#6a86b8'))
+    b.r(2, 30, 4, 32, H('#fff0b0'))
+    b.r(2, 34, w - 2, 37, H('#3a3c48'))
+    for wx in (6, 52):
+        for dy in range(10):
+            for dx in range(12):
+                if (dx - 5.5) ** 2 + (dy - 4.5) ** 2 <= 25:
+                    b.px(wx + dx, 35 + dy, H('#1c1e26') if (dx - 5.5) ** 2 + (dy - 4.5) ** 2 > 7 else H('#8a8e9a'))
+    b.umriss()
+    return b
+
+
+def kletterkuppel():
+    """Klettergeruest-Kuppel (Spielplatz): Halbkugel aus gedaempft roten/blauen Stangen, frontal, 44x26."""
+    w, h = 44, 26
+    b = Bild(w, h)
+    cx, cy, r = 22, 24, 20
+    for y in range(h):
+        for x in range(w):
+            d = math.hypot((x - cx) / r, (y - cy) / (r * 1.05))
+            if d <= 1 and y <= cy:
+                ring = abs(d - 1) < 0.06 or abs(d - 0.66) < 0.06 or abs(d - 0.33) < 0.08
+                speiche = abs(math.atan2(cy - y, x - cx) % (math.pi / 4)) < 0.07
+                if ring or speiche:
+                    b.px(x, y, H('#a8605a') if (x + y) % 2 else H('#6a84b0'))
+    b.r(0, 24, w - 1, 25, H('#4a4e5a'))
+    b.umriss()
+    return b
+
+
+def feuerschale():
+    """Feuerschale fuer das Notlager: Metallschale auf drei Beinen, Glut; die Flammen zeichnet die Animation."""
+    w, h = 22, 28
+    b = Bild(w, h)
+    for y in range(12, 18):
+        einzug = (y - 12) // 2
+        b.r(2 + einzug, y, w - 3 - einzug, y, H('#5a5e6c') if y > 12 else H('#8a8e9a'))
+    b.r(4, 12, w - 5, 12, H('#c8603a'))                       # Glut
+    for lx in (5, 10, 16):
+        b.r(lx, 18, lx, h - 1, H('#3a3c48'))
+    b.umriss()
+    return b
+
+
+def banner_hoch():
+    """Hohes senkrechtes Banner (Nobori-Art) fuer den Vorplatz der Halle: Mast 58 px, Querarm oben, Tuch 8x24 hellblau."""
+    w, h = 14, 58
+    b = Bild(w, h)
+    b.r(2, 2, 3, h - 2, H('#6a6e7c')); b.r(2, 2, 2, h - 2, H('#9aa0ae'))
+    b.r(2, 2, 12, 3, H('#6a6e7c'))
+    b.r(5, 4, 12, 27, H('#8ab6e0'))
+    b.r(5, 4, 12, 5, H('#c4dcf0'))
+    for y in range(9, 25, 4):
+        b.r(7, y, 10, y + 1, H('#3a5a8a'))
+    b.r(0, h - 3, 5, h - 1, H('#4a4e5a'))
+    b.umriss()
     return b
 
 
@@ -650,8 +747,9 @@ def ginkgo(quelle, name):
     gruen = (a_ > 0) & (g_ > r_ + 8) & (g_ > b_ + 8)
     kontur = (a_ > 0) & ~gruen & (0.3 * r_ + 0.59 * g_ + 0.11 * b_ < 60) & ~(r_ > g_ + 10)   # dunkle Kontur -> dunkles Braun
     lum = (0.3 * r_ + 0.59 * g_ + 0.11 * b_)
-    rampe = np.array([[96, 62, 22], [150, 98, 26], [196, 140, 34], [226, 178, 52], [244, 210, 96], [252, 236, 156]])
-    t = np.clip((lum - lum[gruen].min()) / max(1, np.ptp(lum[gruen])), 0, 0.999) if gruen.any() else lum * 0
+    rampe = np.array([[96, 62, 22], [150, 98, 26], [196, 140, 34], [226, 178, 52], [244, 210, 96]])
+    lo, hi = np.percentile(lum[gruen], (2, 98)) if gruen.any() else (0, 1)
+    t = np.clip((lum - lo) / max(1.0, hi - lo), 0, 0.999)
     idx = (t * len(rampe)).astype(int)
     out = im.copy()
     out[gruen, :3] = rampe[idx[gruen]]
@@ -684,7 +782,8 @@ def main():
             b = halle(w, h, rs)
         b.save(art)
         teile.append((art, Image.fromarray(b.a)))
-    for name, fn in (('pfeiler', pfeiler), ('pfeiler_wasser', pfeiler_wasser), ('poller', poller), ('zug', zug),
+    for name, fn in (('bus', bus), ('lkw', lkw), ('kletterkuppel', kletterkuppel), ('feuerschale', feuerschale),
+                     ('banner_hoch', banner_hoch), ('pfeiler', pfeiler), ('pfeiler_wasser', pfeiler_wasser), ('poller', poller), ('zug', zug),
                      ('kuebel', kuebel), ('doppellaterne', doppellaterne), ('koban', koban_mit_dach)):
         b = fn()
         if b is None:

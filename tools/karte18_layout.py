@@ -67,7 +67,7 @@ def main():
     rechteck(k, 62, 80, 124, 81, 'g')                            # Gehweg unter der Hochbahn
     rechteck(k, 32, 94, 124, 95, 'g')                            # Uferpromenade
     rechteck(k, 32, 82, 124, 93, 's')                            # Uferstrasse (Nordfahrbahn 82-86, Sued 89-93)
-    rechteck(k, 42, 80, 47, 81, 's')                             # Zufahrt vor dem offenen Rolltor
+    rechteck(k, 44, 80, 48, 81, 's')                             # Zufahrt vor dem offenen Rolltor
     for (x0, x1) in ((62, 99), (104, 124)):                      # Luecke 100-103 = Zebra auf der Achse
         rechteck(k, x0, 87, x1, 88, 'm')
     rechteck(k, 38, 87, 61, 88, 'x')                             # Sperrflaeche (schraffiert)
@@ -81,9 +81,9 @@ def main():
     rechteck(k, 47, 10, 52, 13, 'd')                             # Sandkasten
     rechteck(k, 46, 8, 46, 16, 'm')                              # Hecke an der Westkante des Spielplatzes
     rechteck(k, 39, 68, 63, 70, 'v')                             # heller Betonvorplatz zwischen Buero und Lagerhallen
-    for (x0, y0, x1, y1) in ((80, 38, 85, 40), (118, 38, 123, 40), (80, 50, 85, 52), (118, 50, 123, 52),
-                             (80, 62, 85, 64), (118, 62, 123, 64), (80, 74, 85, 76), (118, 74, 123, 76),
-                             (66, 28, 71, 29), (68, 44, 73, 46), (66, 67, 71, 69)):
+    for (x0, y0, x1, y1) in ((80, 38, 85, 40), (118, 38, 123, 40), (80, 58, 85, 60), (118, 58, 123, 60),
+                             (80, 70, 85, 72), (118, 70, 123, 72),
+                             (66, 28, 71, 29), (69, 46, 74, 48), (66, 67, 71, 69)):
         rechteck(k, x0, y0, x1, y1, 'e')                         # Heckenbeete auf dem Platz (Paare gespiegelt an 102)
     rechteck(k, 4, 96, 124, 97, 'b')                             # Holzpromenade am Kai (Laengsplanken)
     rechteck(k, 4, 98, 124, 99, 'k')                             # Kaikante
@@ -99,6 +99,13 @@ def main():
         k[y, 126:131 - (y - 100)] = 'w'
     rechteck(k, 104, 100, 109, 106, 'h')                         # Holzsteg (beginnt an der Kaimauer)
     k[33:39, 4] = '.'                                            # kein loser Gehwegstreifen neben dem Wohnblock
+    k[28:30, 5] = 'g'; k[39:42, 5] = 'g'                          # Gehweg unter den Fassaden bis an die Hausecke
+    rechteck(k, 37, 71, 38, 72, 'n'); rechteck(k, 37, 75, 38, 76, 'n')   # Baumscheiben (Ginkgo-Allee Ostseite)
+    rechteck(k, 15, 74, 16, 76, 'n')                             # kleiner Rasen mit Ginkgo im SW-Park
+    rechteck(k, 6, 90, 7, 93, 'n')                               # Rasenstueck mit Ginkgo am SW-Platz
+    k[84:93, 4:6] = '.'; k[82:84, 5] = '.'; k[93:96, 5] = '.'     # SW-Platz beginnt bei x 6 (Vorlage)
+    k[20:24, 124] = '.'                                          # Nebel-Einbuchtung rechts neben der Halle
+    rechteck(k, 121, 21, 123, 23, 'e')                           # Heckenbeet mit Baum neben der Halle
     rechteck(k, 4, 78, 6, 81, 'n')                               # kleiner Rasen an der SW-Ecke (wie die Vorlage)
     hoehe = np.ones((R, C), int)
     hoehe[k == 'w'] = 0
@@ -107,7 +114,7 @@ def main():
     hoehe[k == 'h'] = 1
     gebaeude = [
         [4, 12, 45, 17, 'laeden'], [62, 8, 83, 17, 'buero_oben'], [84, 4, 119, 27, 'halle'],
-        [5, 28, 28, 39, 'wohnblock'], [42, 56, 59, 67, 'buero_mitte'], [38, 71, 50, 79, 'lager_rolltor'],
+        [5, 28, 28, 39, 'wohnblock'], [42, 56, 59, 67, 'buero_mitte'], [39, 71, 50, 79, 'lager_rolltor'],
         [52, 71, 63, 79, 'lager_shed'],
     ]
     lay = {

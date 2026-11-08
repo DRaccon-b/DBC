@@ -70,6 +70,8 @@ def main(karte):
                 else:
                     grund[y, x] = 'bruestung'
     grund[durch] = ''
+    for (gx0, gy0, gx1, gy1, _a) in lay.get('gebaeude', []):   # Gebaeude (Karte 18) vor der Kantenpruefung eintragen
+        grund[gy0:gy1 + 1, gx0:gx1 + 1] = 'objekt'
     # Plateaukanten: begehbare hoehere Kachel neben begehbarer tieferer (ausser an Treppe/Bruecke)
     for y in range(rows):
         for x in range(cols):
@@ -86,6 +88,8 @@ def main(karte):
     deckt_px = np.zeros((Hh, W), bool)
     flach_namen = set()
     for o in json.load(open(os.path.join(OBJ, 'platzierung.json'))):
+        if o.get('hochbahn') or o.get('begleiter'):          # Zug oben auf der Hochbahn, Bueschel: kein Bodensockel
+            continue
         a = np.array(Image.open(os.path.join(OBJ, o['datei'])).getchannel('A')) >= 128
         zeilen = np.nonzero(a.any(axis=1))[0]
         if not len(zeilen):
