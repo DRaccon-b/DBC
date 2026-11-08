@@ -354,6 +354,169 @@ def ueberlauf(a, wasser, land, frame):
                 mix(Y, aussen(d), weiss, 0.9)
 
 
+FALL = os.environ.get('K19_FALL', 'vorhang')
+
+
+def _fall_basis(a, wasser, land):
+    ys, xs = np.nonzero(wasser)
+    y0, y1, x0, x1 = ys.min(), ys.max() + 1, xs.min(), xs.max() + 1
+    unten = int(np.nonzero(land[:, x0 + 20])[0].max()) + 1
+    Hp, Wp = wasser.shape
+
+    def mix(Y, X, c, s_):
+        if 0 <= Y < Hp and 0 <= X < Wp and not land[Y, X]:
+            a[Y, X] = np.clip(a[Y, X] * (1 - s_) + np.array(c, np.float32) * s_, 0, 255).astype(np.uint8)
+    return y0 + 6, y1, x0, x1, unten, mix
+
+
+def fall_klassik(a, wasser, land, frame):
+    """Klassischer Handheld-Wasserfall: 16 px breites Band am Kachelraster, senkrechte helle/dunkle Streifen, helle
+    Querwellen laufen 4 px je Bild nach unten; unten ein Schaumkranz, der pulsiert."""
+    f = frame or 0
+    oy, y1, x0, x1, unten, mix = _fall_basis(a, wasser, land)
+    for seite in (-1, 1):
+        kante = x0 if seite < 0 else x1 - 1
+        for t in range(unten + 8 - oy):
+            Y = oy + t
+            for d in range(1, 17):
+                X = kante + seite * d
+                c = (46, 128, 196)
+                if d in (4, 9, 13):
+                    c = (96, 180, 230)                             # senkrechte helle Bahnen
+                if d in (1, 16):
+                    c = (225, 248, 255)                            # Schaumraender
+                elif d in (2, 15):
+                    c = (120, 200, 240)
+                bahn = (t * 1 + d * 5 - 4 * f) % 24
+                if 3 <= d <= 14 and bahn < 5 and d % 3 != 0:
+                    c = (200, 240, 255)                            # helle Abschnitte laufen nach unten
+                mix(Y, X, c, 0.97)
+        p = 0.5 + 0.5 * np.sin(2 * np.pi * f / N_FRAMES)
+        for d in range(-3, 21):                                   # Schaumkranz
+            for t in range(0, 10):
+                X, Y = kante + seite * d, unten + 4 + t
+                w_ = 1 - ((d - 8.5) / (14 + 2 * p)) ** 2 - ((t - 3) / 8.0) ** 2
+                if w_ > 0:
+                    mix(Y, X, (235, 250, 255) if (d + t + f) % 3 else (160, 220, 245), min(1, w_ * 1.6))
+        for d in range(3):                                         # Kante oben
+            mix(oy - 1, kante + seite * (d + 1), (220, 250, 255), 0.8)
+
+
+def fall_daten(a, wasser, land, frame):
+    """Datenstrom: an der Kante zerfaellt das Wasser in Datenpixel - senkrechte Spalten aus cyan Bits (wie
+    Daten-Regen), die nach unten rauschen und in der Leere verloeschen. Passt zur Netzwelt."""
+    f = frame or 0
+    oy, y1, x0, x1, unten, mix = _fall_basis(a, wasser, land)
+    rs = np.random.RandomState(1931)
+    for seite in (-1, 1):
+        kante = x0 if seite < 0 else x1 - 1
+        for Y in range(oy, y1):                                    # leuchtende Abbruchkante
+            mix(Y, kante, (160, 245, 255), 0.7)
+            mix(Y, kante + seite, (90, 220, 255), 0.6)
+        for spalte in range(30):
+            d = 1 + spalte % 16 + rs.randint(0, 2)
+            Y0 = oy + rs.randint(0, y1 - oy)
+            lang = unten + 90 - Y0
+            ph = rs.randint(12)
+            for t in range(0, lang, 1):
+                Y = Y0 + t
+                q = t / lang
+                if (t % 3 == 2) or rs.rand() < q * 0.8:
+                    continue
+                kopf = (t - ph - 4 * f) % 12 < 2
+                c = (225, 255, 255) if kopf else ((70, 210, 250) if (t // 2) % 3 else (40, 140, 220))
+                mix(Y, kante + seite * d, c, (0.98 if kopf else 0.85) * (1 - q * 0.8))
+
+
+def fall_schleier(a, wasser, land, frame):
+    """Feiner Schleier: das Wasser rinnt als breiter, durchscheinender Film an der Plattform herab (man sieht die
+    Leere durch), mit feinen Linien und wenigen hellen Tropfen; unten weich ausgeblendet."""
+    f = frame or 0
+    oy, y1, x0, x1, unten, mix = _fall_basis(a, wasser, land)
+    rs = np.random.RandomState(1932)
+    for seite in (-1, 1):
+        kante = x0 if seite < 0 else x1 - 1
+        laenge = unten + 60 - oy
+        for t in range(laenge):
+            Y, q = oy + t, t / laenge
+            breite = int(22 - 8 * q)
+            for d in range(1, breite):
+                s_ = 0.6 * (1 - q) * (1 - d / breite * 0.4)
+                mix(Y, kante + seite * d, (90, 190, 230), s_)
+                if d % 4 == 1:
+                    mix(Y, kante + seite * d, (180, 240, 255), 0.45 * (1 - q))
+        for _ in range(60):
+            d, ph = rs.randint(2, 18), rs.randint(32)
+            Y = oy + (ph * 7 + 8 * f) % laenge
+            mix(Y, kante + seite * d, (235, 252, 255), 0.9 * (1 - (Y - oy) / laenge))
+            mix(Y - 1, kante + seite * d, (170, 230, 250), 0.5 * (1 - (Y - oy) / laenge))
+        for Y in range(oy, y1):
+            mix(Y, kante + seite, (200, 245, 255), 0.6)
+
+
+def fall_tropfen(a, wasser, land, frame):
+    """Tropfen-Kaskade: statt eines geschlossenen Strahls fallen einzelne Wasserbrocken (runde Pixeltropfen mit
+    Glanzpunkt) in Reihen hinab, oben dicht, unten vereinzelt; an der Kante kleine Wellen."""
+    f = frame or 0
+    oy, y1, x0, x1, unten, mix = _fall_basis(a, wasser, land)
+    rs = np.random.RandomState(1933)
+    form = [(0, 1), (0, 2), (1, 0), (1, 1), (1, 2), (1, 3), (2, 0), (2, 1), (2, 2), (2, 3), (3, 1), (3, 2)]
+    for seite in (-1, 1):
+        kante = x0 if seite < 0 else x1 - 1
+        for Y in range(oy, y1):
+            mix(Y, kante + seite, (150, 225, 250), 0.8 if (Y + f) % 4 else 0.4)
+        for k in range(140):
+            d = rs.randint(1, 18)
+            Y0 = oy + rs.randint(0, y1 - oy)
+            weg = unten + 70 - Y0
+            pos = ((rs.randint(40) + 4 * f) % 40) / 40.0
+            Y = int(Y0 + pos * pos * weg)                          # beschleunigt (Schwerkraft)
+            s_ = 0.95 * (1 - pos ** 2)
+            if s_ < 0.1:
+                continue
+            X = kante + seite * d
+            for (dy, dx) in form:
+                mix(Y + dy, X + seite * dx, (50, 150, 210), s_)
+            mix(Y + 1, X + seite * 1, (220, 250, 255), s_)
+            mix(Y + 3, X + seite * 2, (24, 90, 150), s_ * 0.8)
+
+
+def fall_speier(a, wasser, land, frame):
+    """Wasserspeier: die Mauer bleibt offen, aber das Wasser schiesst in drei Strahlen im Bogen aus der Kante und
+    faellt dann senkrecht hinab (Parabel), unten Gischt."""
+    f = frame or 0
+    oy, y1, x0, x1, unten, mix = _fall_basis(a, wasser, land)
+    for seite in (-1, 1):
+        kante = x0 if seite < 0 else x1 - 1
+        for i, Ys in enumerate((oy + 14, oy + 44, oy + 74)):
+            v = 2.6 + 0.3 * i
+            pts = []
+            for t in range(0, 400):
+                tt = t / 10.0
+                X = kante + seite * int(v * tt)
+                Y = int(Ys + 0.12 * tt * tt * 10)
+                if Y > unten + 50:
+                    break
+                pts.append((Y, X))
+            for j, (Y, X) in enumerate(pts):
+                q = (Y - Ys) / max(1, unten + 50 - Ys)
+                for w_ in range(-3, 4):
+                    c = (60, 165, 220) if abs(w_) < 2 else ((150, 225, 250) if w_ == -2 else (30, 100, 160))
+                    mix(Y, X + w_, c, 0.9 * (1 - q * 0.7))
+                if (j - 3 * f) % 9 < 2:
+                    mix(Y, X, (225, 250, 255), 0.9 * (1 - q))
+            Y, X = pts[-1]
+            for k in range(14):                                    # Gischt am Ende
+                r = 2 + (k * 7 + f * 3) % 9
+                w = k * 0.9 + f
+                mix(Y - int(r * abs(np.sin(w))) , X + int(r * np.cos(w)), (230, 250, 255), 0.7)
+        for Y in range(oy, y1):
+            mix(Y, kante + seite, (170, 235, 255), 0.6)
+
+
+FALL_STILE = {}
+
+
 def kaikante(a, kai, wasser=None):
     """Kaikante: heller Stein an jeder Wasserseite des Pflasters (6 px breit, Licht zur Wasserseite, Fugen alle
     16 px, Schatten zum Pflaster). Laeuft auch an den Kanaelen entlang (Kanal-Variante)."""
@@ -444,6 +607,10 @@ WASSER_STILE.update(terrassen=hafenbecken, sand=wasser_sand, kaustik=wasser_kaus
                     netz=wasser_netz, klassik=wasser_klassik)
 
 
+FALL_STILE.update(vorhang=ueberlauf, klassik=fall_klassik, daten=fall_daten, schleier=fall_schleier,
+                  tropfen=fall_tropfen, speier=fall_speier)
+
+
 def bauen(frame=None, speichern=True):
     lay = json.load(open(os.path.join(KARTE, 'layout.json')))
     cols, rows = lay['groesse']
@@ -503,7 +670,7 @@ def bauen(frame=None, speichern=True):
     stellen = [(20, 40), (40, 300), (16, 500), (300, 18), (720, 30), (1000, 20), (556, 140), (560, 330),
                (556, 500), (1172, 150), (1172, 340), (1160, 540), (220, 540), (860, 545)]
     k16.fragmente(a, rest & ~nah, frame, seed=1920, stellen=stellen)
-    ueberlauf(a, wasser, land, frame)
+    FALL_STILE.get(FALL, ueberlauf)(a, wasser, land, frame)
     lvl = np.zeros((Hp, Wp), np.uint8)
     lvl[land] = 2
     lvl[wasser] = 1
