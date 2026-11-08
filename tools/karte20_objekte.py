@@ -72,12 +72,19 @@ FEST = [
 ]
 # Gemuese in den Beeten (Nutzer: besser platzieren): gleichmaessiges Raster, je Beet eine Sorte, Reihen buendig
 # auf den Furchen, mittig im Beet; ohne Bodenfuss (die Pflanzen haben eigene Erde)
-def _beet(sorte, x0, x1, y0, y1, opt=None):
-    xs = list(range(x0 + 1, x1, 2))
-    rand = (x1 - x0 + 1 - 2 * len(xs)) / 2.0
-    for y in range(y0 + 1, y1 + 1, 2):
-        for x in xs:
-            FEST.append((sorte, x + rand - 0.5 + 0.5, y, dict(opt or {})))
+def _beet(sorte, x0, x1, y0, y1, opt=None, n_x=None, n_y=2):
+    """Pflanzen gleichmaessig im Beet (Nutzer): gleiche Abstaende zum Rand und untereinander, pixelgenau."""
+    bx0, bx1 = x0 * T + 2, (x1 + 1) * T - 2                 # Beetflaeche in px (wie in karte20_bauen.beete)
+    by0, by1 = y0 * T + 2, (y1 + 1) * T - 2
+    n_x = n_x or max(1, (x1 - x0 + 1) // 2)
+    for j in range(n_y):
+        fuss = by0 + (j + 1) * (by1 - by0) / (n_y + 0.35) + 4  # Fusslinie der Reihe
+        for i in range(n_x):
+            mitte = bx0 + (i + 0.5) * (bx1 - bx0) / n_x
+            o = dict(opt or {})
+            o['an_wand'] = True                                  # kein Gras-Bodenwall auf der Beeterde
+            o['px'] = int(round(mitte)); o['py'] = int(round(fuss))
+            FEST.append((sorte, mitte / T, int(fuss // T), o))
 
 
 _beet('beet/00', 42, 52, 16, 19)                                 # Moehren oben (2 Reihen), kleine Beetpflanzen (k20_beet)
@@ -151,6 +158,10 @@ def main():
         bx = int(round(fx + 0.5 - wt / 2.0))
         o = {'datei': datei, 'basis': name, 'x': bx * T + (wt * T - bw) // 2 - ux0, 'y': (ty + 1) * T - 1 - uy1,
              'fuss': h, 'kachel': [tx, ty], 'block': [bx, ty - ht + 1, wt, ht], 'ebene': 0 if flach else 1}
+        px_, py_ = opt.pop('px', None), opt.pop('py', None)
+        if px_ is not None:                                      # pixelgenaue Lage (Beetpflanzen)
+            o['x'] = px_ - (ux0 + bw // 2)
+            o['y'] = py_ - uy1
         o.update(opt)
         objekte.append(o)
         belegt[(tx, ty, flach)] = True

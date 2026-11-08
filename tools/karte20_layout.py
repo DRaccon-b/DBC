@@ -33,7 +33,8 @@ TREPPE = (49, 51)                        # Spalten der Treppe in der Front
 BRUECKEN = [(14, 18, 18, 20), (14, 23, 18, 25)]
 AUSGAENGE = [(28, 46, 31, 47), (58, 37, 59, 39)]   # unten Mitte, rechts
 # Fluss (von Hand, nach der Vorlage): Quellteich oben, dann nach Sueden, unten nach Westen aus der Karte
-FLUSS = [(12.0, 4.5), (14.0, 6.0), (16.0, 8.5), (16.0, 14.0), (16.0, 20.0), (16.0, 26.0), (15.5, 29.0),
+FLUSS = [(12.5, -2.0), (12.5, 3.0), (14.0, 6.0),   # Nutzer: Wasser laeuft oben aus der Karte
+         (16.0, 8.5), (16.0, 14.0), (16.0, 20.0), (16.0, 26.0), (15.5, 29.0),
          (13.0, 30.8), (9.5, 32.2), (5.5, 33.6), (1.5, 34.6), (-1.0, 35.0)]
 FLUSS_BREITE = 1.45                       # Radius in Kacheln (ca. 3 Kacheln breit)
 TEICH = (12.0, 4.6, 3.4, 1.9)             # Quellteich (Ellipse)
@@ -90,9 +91,10 @@ def main():
         for t in np.linspace(0, 1, 40):
             px, py = ax + (bx - ax) * t, ay + (by - ay) * t
             fl |= np.hypot(xx + 0.5 - px, yy + 0.5 - py) <= FLUSS_BREITE
-    cx, cy, rx, ry = TEICH
-    fl |= ((xx + 0.5 - cx) / rx) ** 2 + ((yy + 0.5 - cy) / ry) ** 2 <= 1
-    k[fl & (k != 'h') | (fl & (xx < 3))] = 'x'
+    for (bx0, by0, bx1, by1) in BRUECKEN:                       # Nutzer: an den Bruecken so breit wie die Bruecke
+        fl |= (xx >= bx0) & (xx <= bx1) & (yy >= by0 - 1) & (yy <= by1 + 1)
+    fl |= (xx >= BRUECKEN[0][0]) & (xx <= BRUECKEN[0][2]) & (yy >= BRUECKEN[0][1]) & (yy <= BRUECKEN[1][3])
+    k[fl & (k != 'h') | (fl & ((xx < 3) | (yy < 4)))] = 'x'      # auch durch den Waldrand oben und links
     # Platz mit gerundeten Ecken und Rasen in der Mitte
     x0, y0, x1, y1 = PLATZ
     m = (xx >= x0) & (xx <= x1) & (yy >= y0) & (yy <= y1)

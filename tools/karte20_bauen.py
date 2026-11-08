@@ -134,7 +134,7 @@ def bauen(frame=None, speichern=True):
     a = np.array(wasser_vertieft.vertiefen(Image.fromarray(a), np.ones_like(xm), frame, maske=xm).convert('RGB'))
     img = Image.fromarray(a).convert('RGBA')
     for (bx0, by0, bx1, by1) in lay['bruecken']:
-        bauwerke.zeichne_bruecke(img, bx0 * T, (bx1 + 1) * T, by0 * T, (by1 + 1) * T - 4, frame=frame or 0)
+        bauwerke.zeichne_bruecke(img, bx0 * T - 6, (bx1 + 1) * T + 6, by0 * T, (by1 + 1) * T - 4, frame=frame or 0)   # Enden auf dem Ufer
     k6.zaun(img, lay['acker_zaun'], (-9, -9))                   # geschlossen wie in der Vorlage
     k6.zaun(img, lay['feld_zaun'], (-9, -9))
     a = np.array(img.convert('RGB'))
