@@ -26,7 +26,7 @@ RASEN = set('n')
 LEUCHTEN = {'karte02/abgeleitet/laterne': 'laterne18', 'gebaeude/doppellaterne': 'laterne18',
             'karte10/banner/13': 'ampel18', 'k18/strasse/17': 'ampel18',
             'k18/strasse/01': 'automat', 'k18/strasse/40': 'automat'}
-PAD = {'k18/frontal/00': 1, 'k18/boot/00': 1, 'k18/schiff/00': 1}                              # Boot: 1 px Luft oben/unten fuer das Schaukeln
+PAD = {'k18/frontal/00': 1, 'k18/boot/00': 1, 'k18/schiff/00': 1, 'k18/faehre/00': 1}                              # Boot: 1 px Luft oben/unten fuer das Schaukeln
 TONUNG = {'karte10/spielplatz/00': 'gedaempft', 'karte10/spielplatz/01': 'gedaempft', 'karte10/spielplatz/02': 'gedaempft',
           'karte10/banner/06': 'metall', 'k18/autos/00': 'weiss', 'k18/autos/06': 'weiss', 'k18/autos/12': 'weiss',
           'karte02/ortho/09': 'zelt_blau',                    # Gras/Blumen von Karte 01 in Originalfarbe
@@ -528,8 +528,7 @@ def main():
     P.setzen('k18/platz/11', 21, 71, boden=set('q'), n=4, anim='rechtecke', extra={'licht_rects': LAT_YATAI})   # Imbissstand (Laternen leuchten)
     P.setzen('k18/frontal/02', 66, 19)                        # Bushaltestellen
     P.setzen('k18/frontal/03', 21, 41)
-    P.setzen('k18/boot/00', 99, 102, boden=set('w'), anim='boot', extra={'kein_schatten': True})    # kleines Boot links vom Steg
-    P.setzen('k18/schiff/00', 0, 106, boden=set('w'), x=111 * T, anim='boot', extra={'kein_schatten': True})   # Faehre (Zuglaenge)
+    P.setzen('k18/faehre/00', 0, 106, boden=set('w'), x=110 * T + 6, anim='boot', extra={'kein_schatten': True})   # Faehre (Objekt-Creator)
     # ------------------------------------------------------------------ Laternen (fester Rhythmus, Vorlage)
     LAT, DLAT = 'karte02/abgeleitet/laterne', 'gebaeude/doppellaterne'
     for x in (13, 37, 60):                                    # Laternen auf moderatem Minimum: Nordseite obere Strasse
@@ -597,7 +596,7 @@ def main():
     HB = lambda i: 'k18/boot/%02d' % i                    # Hafen-Objekte (PixelLab, Boots-Durchgang), sparsam verteilt
     for (n_, bx, r, bd) in ((HB(14), 34, 97, 'b'), (HB(7), 72, 97, 'b'), (HB(9), 54, 97, 'b'), (HB(8), 112, 97, 'b'),
                             (HB(5), 80, 99, 'k'), (HB(6), 93, 103, 'w'), (HB(15), 20, 102, 'w'), (HB(15), 64, 103, 'w')):
-        P.setzen(n_, bx, r, boden=set(bd), extra={'kein_schatten': bd == 'w'})
+        P.setzen(n_, bx, r, boden=set(bd), extra={'kein_schatten': bd == 'w', 'eingetaucht': bd == 'w'})
     for bx in (30, 56, 116):
         P.setzen(STR(11), bx, 97, boden=set('b'))             # Rettungsringe
     P.setzen(STR(11), 108, 103, boden=set('h'))

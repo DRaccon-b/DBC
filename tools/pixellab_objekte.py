@@ -1477,6 +1477,9 @@ OBJEKTGRUPPEN_K18 = {
     'k18_lager2b': {'size': 192, 'items': [
         'large harbor warehouse with a sawtooth roof edge, beige corrugated walls, orange stripe, big roll-up door, small side door with a lamp and a window, flat facade exactly parallel to the camera, absolutely no side wall visible, strict front elevation like a building in a classic handheld town, roof only as a thin strip on top, ground line straight, no perspective, no isometric, no 3/4 view',
     ]},
+    'k18_faehre': {'size': 256, 'items': [
+        'long harbor passenger ferry ship, pure side view flat 2D profile, bow pointing right, white hull with a dark blue stripe and round portholes, two decks with windows and railings, small bridge with a mast and a red-white funnel, the complete ship from stern to bow visible, floating, no perspective, no isometric, cozy handheld RPG style',
+    ]},
     'k18_zug': {'size': 128, 'items': [
         'front car of a modern white monorail commuter train, dark blue window band, rounded nose with windshield and headlight pointing right, pure side view flat 2D profile, long and low, no perspective, no isometric, cozy handheld RPG style',
         'middle car of a modern white monorail commuter train, dark blue window band with windows, two sliding doors, pure side view flat 2D profile, long and low, no perspective, no isometric, cozy handheld RPG style',

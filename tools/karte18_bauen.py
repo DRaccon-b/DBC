@@ -807,6 +807,40 @@ def boot(sp, frame, o):
     return out
 
 
+def eintauchen(img, objs, cache, boden, frame):
+    """Objekte, die im Wasser stehen (Pfaehle, Tetrapoden): das untere Drittel liegt unter der Wasserlinie - dort
+    scheinen Grund und Wasserfarbe durch (65 % Boden, 35 % Objekt, nach unten zunehmend). An der Wasserlinie liegt
+    ein heller Schaumring, etwas breiter als das Objekt, mit Luecken, die in 4 Bildern wandern."""
+    a = np.array(img).astype(np.float32)
+    f = (frame or 0) % 4
+    SCH = np.array([226, 242, 250], np.float32)
+    for o in objs:
+        al = np.array(cache[o['datei']].getchannel('A')) > 0
+        ys = np.nonzero(al.any(axis=1))[0]
+        if not len(ys):
+            continue
+        hoehe = ys.max() - ys.min() + 1
+        wl = o['y'] + o['fuss'] - int(hoehe * 0.32)              # Wasserlinie
+        for yy in range(wl, o['y'] + o['fuss'] + 1):
+            ly = yy - o['y']
+            if not (0 <= yy < a.shape[0]) or ly >= al.shape[0]:
+                continue
+            xs = np.nonzero(al[ly])[0] + o['x']
+            xs = xs[(xs >= 0) & (xs < a.shape[1])]
+            t = min(1.0, 0.55 + 0.45 * (yy - wl) / max(1, o['y'] + o['fuss'] - wl))
+            a[yy, xs, :3] = a[yy, xs, :3] * (1 - t) + boden[yy, xs, :3].astype(np.float32) * t
+        ly = wl - o['y']
+        if 0 <= ly < al.shape[0]:
+            xs = np.nonzero(al[ly])[0]
+            if len(xs):
+                for X in range(o['x'] + xs.min() - 3, o['x'] + xs.max() + 4):
+                    for dy, s_ in ((0, 0.8), (1, 0.45)):
+                        Y = wl + dy
+                        if 0 <= Y < a.shape[0] and 0 <= X < a.shape[1] and (X + f * 2 + dy) % 5 != 0:
+                            a[Y, X, :3] = a[Y, X, :3] * (1 - s_) + SCH * s_
+    img.paste(Image.fromarray(np.clip(a, 0, 255).astype(np.uint8)))
+
+
 def wasserring(img, pfeiler, frame, wasser):
     """Wasserkontakt am Pfeiler im Kanal: feste 1-px-Schaumlinie entlang der Unterkante und ein heller Ring aus kurzen
     Schaumstrichen (2-3 px), der in 4 Bildern um den Pfeiler wandert; der Teil hinter dem Pfeiler bleibt verdeckt.
@@ -960,6 +994,7 @@ def bauen(frame=None, speichern=True):
         img = img.copy()
         k4.animieren(img, [o for o in objs if not o.get('hochbahn')], cache, frame or 0, ruhig=frame is None)
         wasserring(img, [o for o in objs if o.get('im_wasser')], frame, wasser)
+        eintauchen(img, [o for o in objs if o.get('eingetaucht')], cache, boden_vor_objekten, frame)
         hecke = gross(np.isin(kl, ['m', 'e']))                       # Stamm-/Mastfuss in der Hecke: Laub davor
         hecke_innen = hecke & np.roll(hecke, -3, 0) & np.roll(hecke, 1, 1) & np.roll(hecke, -1, 1)
         ia = np.array(img)
