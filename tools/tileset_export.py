@@ -50,6 +50,7 @@ KARTEN = {
     'karte13': ('karte13_bauen', 'Spiral_Mountain_Machine_City', 'v1.0'),
     'karte14': ('karte14_bauen', 'Spiral_Mountain_Summit', 'v1.0'),
     'karte15': ('karte15_bauen', 'Apocalymons_Realm', 'v1.0'),
+    'karte18': ('karte18_bauen', 'The_Fog_Bound_City', 'v1.0'),
 }
 
 
