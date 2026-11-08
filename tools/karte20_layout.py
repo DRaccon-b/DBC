@@ -137,7 +137,7 @@ def main():
            'platz': PLATZ, 'platz_rasen': PLATZ_RASEN, 'acker_zaun': ACKER_ZAUN, 'beete': BEETE,
            'feld_zaun': FELD_ZAUN, 'plateau': PLATEAU, 'treppe': TREPPE, 'bruecken': BRUECKEN,
            'treppen_sued': [[TREPPE[0], TREPPE[1], 2, PLATEAU[3]]],
-           'zaun_tore': [[ACKER_ZAUN[0], 19, 20], [FELD_ZAUN[2], 36, 37]],   # Seitentore an den Wegen   # Durchgang fuer die Kollision
+           'zaun_tore': [],                         # Nutzer: Zaeune bleiben geschlossen   # Durchgang fuer die Kollision
            'teleporter': [{'x': 28, 'y': 46, 'b': 4, 'h': 2}, {'x': 58, 'y': 37, 'b': 2, 'h': 3}]}
     json.dump(lay, open(os.path.join(KARTE, 'layout.json'), 'w'), indent=0)
     F = {'h': (30, 80, 30), 'g': (84, 132, 60), 'w': (192, 168, 108), 'p': (120, 132, 144), 'r': (108, 156, 60),
