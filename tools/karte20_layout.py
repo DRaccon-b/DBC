@@ -94,7 +94,11 @@ def main():
     # Nutzer: an den Bruecken so breit wie die Bruecke - weich als Ellipse aufgeweitet (keine harten Kastenecken)
     bx_m = (BRUECKEN[0][0] + BRUECKEN[0][2] + 1) / 2.0
     by_m = (BRUECKEN[0][1] + BRUECKEN[1][3] + 1) / 2.0
-    fl |= ((xx + 0.5 - bx_m) / 3.3) ** 2 + ((yy + 0.5 - by_m) / 6.4) ** 2 <= 1
+    fl |= ((((xx + 0.5 - bx_m) / 3.3) ** 2 + ((yy + 0.5 - by_m) / 6.4) ** 2 <= 1)
+           & (xx >= BRUECKEN[0][0]) & (xx <= BRUECKEN[0][2]))          # nie breiter als die Bruecken (Zugang bleibt Land)
+    for (bx0, by0, bx1, by1) in BRUECKEN:                       # Brueckenkoepfe links/rechts sind Weg (begehbar)
+        fl[by0:by1 + 1, bx0 - 1] = False
+        fl[by0:by1 + 1, bx1 + 1] = False
     k[fl & (k != 'h') | (fl & ((xx < 3) | (yy < 4)))] = 'x'      # auch durch den Waldrand oben und links
     # Platz mit gerundeten Ecken und Rasen in der Mitte
     x0, y0, x1, y1 = PLATZ
