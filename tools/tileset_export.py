@@ -53,6 +53,7 @@ KARTEN = {
     'karte16': ('karte16_bauen', 'The_Network', 'v1.0'),
     'karte17': ('karte17_bauen', 'Our_War_Game', 'v1.0'),
     'karte18': ('karte18_bauen', 'The_Fog_Bound_City', 'v1.0'),
+    'karte19': ('karte19_bauen', 'Revenge', 'v1.0'),
 }
 
 

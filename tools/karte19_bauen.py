@@ -726,6 +726,8 @@ def bauen(frame=None, speichern=True):
     lvl[land] = 2
     lvl[wasser] = 1
     lvl[front] = 9
+    hx, hy = lay['raeume'][1]                                    # Mauerkrone oben am Hafen: Mauer, nicht begehbar
+    lvl[hy * T:(hy + 1) * T, hx * T:(hx + lay['raum'][0]) * T] = 9
     if speichern and frame is None:
         np.save(os.path.join(KARTE, 'pixelhoehe.npy'), lvl)
         np.save(os.path.join(KARTE, 'wasser.npy'), np.packbits(wasser))

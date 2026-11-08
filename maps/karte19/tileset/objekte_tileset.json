@@ -1,0 +1,77 @@
+{
+ "kachel": 16,
+ "breite_kacheln": 40,
+ "hoehe_kacheln": 3,
+ "animationsbereich_hoehe_kacheln": 0,
+ "animationsbilder": 4,
+ "bilddauer_ms": 250,
+ "objekte": [
+  {
+   "name": "hafen/poller",
+   "datei": "sauber/hafen-poller.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 0,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      43,
+      12,
+      3,
+      3
+     ],
+     "fusskachel": [
+      44,
+      14
+     ]
+    },
+    {
+     "block": [
+      51,
+      12,
+      3,
+      3
+     ],
+     "fusskachel": [
+      52,
+      14
+     ]
+    },
+    {
+     "block": [
+      58,
+      12,
+      3,
+      3
+     ],
+     "fusskachel": [
+      59,
+      14
+     ]
+    },
+    {
+     "block": [
+      66,
+      12,
+      3,
+      3
+     ],
+     "fusskachel": [
+      67,
+      14
+     ]
+    }
+   ]
+  }
+ ]
+}
