@@ -480,28 +480,28 @@ def main():
     P.setzen('k18/frontal/00', 111, 102, boden=set('w'), anim='boot', extra={'kein_schatten': True})
     # ------------------------------------------------------------------ Laternen (fester Rhythmus, Vorlage)
     LAT, DLAT = 'karte02/abgeleitet/laterne', 'gebaeude/doppellaterne'
-    for x in (5, 13, 31, 37, 51, 60, 78):                     # Nordseite obere Strasse, zwischen den Ladentueren
+    for x in (13, 37, 60):                                    # Nordseite obere Strasse (weniger Laternen)
         P.setzen(LAT, x, 19)
-    for x in (10, 19, 46, 55, 64, 73):                        # Suedseite obere Strasse
+    for x in (19, 46, 73):                                    # Suedseite obere Strasse
         P.setzen(LAT, x, 26)
-    for x in (7, 17, 46, 54, 61):                             # Gehweg vor dem Wohnblock / Parkplatz
+    for x in (17, 54):                                        # Gehweg vor dem Wohnblock / Parkplatz
         P.setzen(LAT, x, 41)
-    for x in (12, 24, 44, 58):                                # Suedseite mittlere Strasse
+    for x in (24, 58):                                        # Suedseite mittlere Strasse
         P.setzen(LAT, x, 54)
-    for cx in (8, 20, 44, 56):                                # zweiarmige Leuchten auf dem Mittelstreifen
+    for cx in (20, 44):                                       # zweiarmige Leuchten auf dem Mittelstreifen
         P.setzen(DLAT, 0, 48, boden=set('m'), cx=cx * T + 8)   # Mittelstreifen jetzt Rasen
-    for r in (36, 64, 76):                                    # Querstrasse Westseite / Ostseite
+    for r in (64,):                                           # Querstrasse Westseite / Ostseite
         P.setzen(LAT, 31, r)
-    for r in (31, 61, 69):
+    for r in (31,):
         P.setzen(LAT, 37, r)
-    for (bx, r) in ((17, 73), (16, 89), (29, 90), (10, 59), (13, 67), (26, 70), (61, 13)):
+    for (bx, r) in ((16, 89), (10, 59), (26, 70), (61, 13)):
         P.setzen(LAT, bx, r, boden=GEHEN | RASEN)
-    for x in (14, 28, 38, 50, 62, 74, 86, 96, 110, 122):      # Uferpromenade (Zebra 98-101 frei)
+    for x in (14, 38, 62, 86, 110):                           # Uferpromenade (Zebra 98-101 frei)
         P.setzen(LAT, x, 95)
     P.setzen(LAT, 0, 103, boden=set('h'), cx=107 * T)          # Steglaterne (Reihe 104 bleibt frei)
-    for r in (40, 48, 64, 72):                                # Platz: Paare am Mittelweg (gespiegelt an der Achse)
+    for r in (44, 68):                                        # Platz: Paare am Mittelweg (gespiegelt an der Achse)
         P.paar(LAT, 88, r)
-    for r in (34, 56):
+    for r in (56,):
         P.paar(LAT, 79, r)
     P.paar(LAT, 92, 30, boden=set('t'))                       # Terrasse
     AMP = 'karte10/banner/13'                                 # Ampeln an den Kreuzungen

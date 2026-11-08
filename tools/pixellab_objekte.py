@@ -1435,6 +1435,30 @@ OBJEKTGRUPPEN_K18 = {
         'tall flag pole with a light blue banner flag',
         'orange life buoy ring on a small post',
     ]},
+    'k18_laeden': {'size': 128, 'items': [
+        'small japanese town convenience store building, two stories, red and white awning over a big glowing shop window, sign on the facade, flat roof visible from slightly above, cozy hand painted handheld RPG town style, perfectly straight front view',
+        'small japanese ramen restaurant building, two stories, red paper lanterns and a short noren curtain at the door, wooden sign, flat roof visible from slightly above, cozy handheld RPG town style, perfectly straight front view',
+        'small cafe building, two stories, pink striped awning, flower boxes under the windows, flat roof visible from slightly above, cozy handheld RPG town style, perfectly straight front view',
+        'small pharmacy building, two stories, green cross sign, green awning, flat roof visible from slightly above, cozy handheld RPG town style, perfectly straight front view',
+    ]},
+    'k18_laeden2': {'size': 128, 'items': [
+        'small bakery building, two stories, orange awning, bread in the window, flat roof visible from slightly above, cozy handheld RPG town style, perfectly straight front view',
+        'small bookstore building, two stories, dark blue awning, stacks of books in the window, flat roof visible from slightly above, cozy handheld RPG town style, perfectly straight front view',
+        'small japanese izakaya bar building, two stories, red lanterns, wooden facade, flat roof visible from slightly above, cozy handheld RPG town style, perfectly straight front view',
+        'small closed shop building, two stories, grey metal roller shutter pulled down, flat roof visible from slightly above, cozy handheld RPG town style, perfectly straight front view',
+    ]},
+    'k18_haeuser': {'size': 128, 'items': [
+        'modern office building, four stories, rows of blue glass windows, some windows warmly lit, glass entrance door at the bottom, flat roof with small ac units visible from slightly above, cozy handheld RPG town style, perfectly straight front view',
+        'japanese apartment block, five stories, balconies with railings and hanging laundry, some windows warmly lit, entrance at the bottom, flat roof visible from slightly above, cozy handheld RPG town style, perfectly straight front view',
+        'harbor warehouse, light grey corrugated walls, red white blue stripe, one big roll-up door half open, small side door with a lamp, flat corrugated roof visible from slightly above, cozy handheld RPG town style, perfectly straight front view',
+        'harbor warehouse with a sawtooth roof with skylights, beige walls, orange stripe, roll-up door, small side door with a lamp, cozy handheld RPG town style, perfectly straight front view',
+    ]},
+    'k18_boot': {'size': 64, 'items': [
+        'small white fishing motor boat, pure side view flat 2D profile, bow pointing right, small cabin with windows, blue stripe along the hull, floating, no perspective, cozy handheld RPG style',
+        'small wooden rowing boat with oars, pure side view flat 2D profile, floating, no perspective, cozy handheld RPG style',
+        'small red and white harbor tug boat, pure side view flat 2D profile, bow pointing right, floating, no perspective, cozy handheld RPG style',
+        'small sail boat with a white sail, pure side view flat 2D profile, floating, no perspective, cozy handheld RPG style',
+    ]},
     'k18_baum2': {'size': 64, 'items': [
         'lush round city park tree with dense dark green leaf clusters, bright highlights on the upper left of each cluster, short visible brown trunk with spreading roots at the base, full crown fully visible, perfectly straight front view',
         'lush round city park tree with dense mid green leaf clusters, slightly irregular crown, short visible brown trunk with roots, full crown fully visible, perfectly straight front view',
