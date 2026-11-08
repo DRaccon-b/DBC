@@ -23,7 +23,7 @@ FUSS = 9                                   # Fussreihe von Tor und Computer
 # (Quelle, Mitte x in px, Fussreihe, Animation)
 OBJEKTE = [
     ('tor/00', ACHSE, FUSS, 'tor16'),
-    ('computer/00', ACHSE + 8, 15, 'bildschirm16'),   # Nutzerwunsch: tiefer, auf halber Hoehe der Plattform
+    ('computer/00', ACHSE - 108, 15, 'bildschirm16'),   # Nutzerwunsch: auf halber Hoehe, mittig auf den Leuchtringen (r 104-112)
 ]
 
 
