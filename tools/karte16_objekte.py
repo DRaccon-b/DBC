@@ -6,7 +6,7 @@
 - Firewall-Tor (wiederverwendet, PixelLab k16_tor/00 - entspricht dem Tor der Vorlage) oben auf der Plattform,
   exakt auf der Achse (x = 512 px), 4 Kacheln breit wie das Pfeilfeld.
 - Computer 'Dungeon Records' (neu, PixelLab Objekt-Creator k16_computer/00, nach dem Bild des Nutzers) links vom Tor,
-  Fuss buendig auf derselben Reihe wie das Tor.
+  tiefer gesetzt (Nutzerwunsch): Fuss auf halber Hoehe der runden Plattform (Reihe 15).
 """
 import json, os, sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -23,7 +23,7 @@ FUSS = 9                                   # Fussreihe von Tor und Computer
 # (Quelle, Mitte x in px, Fussreihe, Animation)
 OBJEKTE = [
     ('tor/00', ACHSE, FUSS, 'tor16'),
-    ('computer/00', ACHSE - 32 - 12 - 30, FUSS, 'bildschirm16'),   # 12 px Luft zum Tor
+    ('computer/00', ACHSE - 56, 15, 'bildschirm16'),   # Nutzerwunsch: tiefer, auf halber Hoehe der Plattform
 ]
 
 
