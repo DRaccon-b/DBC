@@ -517,23 +517,7 @@ def fall_speier(a, wasser, land, frame):
 FALL_STILE = {}
 
 
-def pfeil_marke(a, tx, ty, farbe, frame, ph):
-    """Pfeilfeld passend zum Aufstellfeld: vier Eckklammern (wie feld_marken) und ein Doppel-Chevron nach Norden,
-    beides direkt auf dem Boden, 1 px dunkler Schlagschatten rechts unten, Leuchten pulsiert."""
-    p = 0.55 + 0.45 * puls(frame, ph)
-    farbe = np.array(farbe, np.float32)
-    X, Y = tx * T, ty * T
-    pix = []
-    for (ex, ey, sx, sy) in ((2, 2, 1, 1), (13, 2, -1, 1), (2, 13, 1, -1), (13, 13, -1, -1)):
-        for d in range(3):
-            pix += [(Y + ey, X + ex + sx * d), (Y + ey + sy * d, X + ex)]
-    for oy in (4, 8):                                           # zwei Chevrons uebereinander
-        for d in range(4):
-            pix += [(Y + oy + d, X + 7 - d), (Y + oy + d, X + 8 + d)]
-    for (yy, xx) in pix:                                        # Schatten zuerst
-        a[yy + 1, xx + 1] = (a[yy + 1, xx + 1] * 0.75).astype(np.uint8)
-    for (yy, xx) in pix:
-        a[yy, xx] = np.clip(a[yy, xx] * (1 - 0.8 * p) + farbe * 0.8 * p, 0, 255).astype(np.uint8)
+pfeil_marke = k17.pfeil_marke                                     # gemeinsam mit Karte 17
 
 
 def schatten19(img, objs, cache, boden):

@@ -49,6 +49,25 @@ def feld_marken(a, x0, y0, w, h, frame):
                         a[yy, xx] = np.clip(a[yy, xx] * (1 - 0.7 * p) + farbe * 0.7 * p, 0, 255).astype(np.uint8)
 
 
+def pfeil_marke(a, tx, ty, farbe, frame, ph):
+    """Pfeilfeld passend zum Aufstellfeld: vier Eckklammern (wie feld_marken) und ein Doppel-Chevron nach Norden,
+    beides direkt auf dem Boden, 1 px dunkler Schlagschatten rechts unten, Leuchten pulsiert."""
+    p = 0.55 + 0.45 * puls(frame, ph)
+    farbe = np.array(farbe, np.float32)
+    X, Y = tx * T, ty * T
+    pix = []
+    for (ex, ey, sx, sy) in ((2, 2, 1, 1), (13, 2, -1, 1), (2, 13, 1, -1), (13, 13, -1, -1)):
+        for d in range(3):
+            pix += [(Y + ey, X + ex + sx * d), (Y + ey + sy * d, X + ex)]
+    for oy in (4, 8):                                           # zwei Chevrons uebereinander
+        for d in range(4):
+            pix += [(Y + oy + d, X + 7 - d), (Y + oy + d, X + 8 + d)]
+    for (yy, xx) in pix:                                        # Schatten zuerst
+        a[yy + 1, xx + 1] = (a[yy + 1, xx + 1] * 0.75).astype(np.uint8)
+    for (yy, xx) in pix:
+        a[yy, xx] = np.clip(a[yy, xx] * (1 - 0.8 * p) + farbe * 0.8 * p, 0, 255).astype(np.uint8)
+
+
 def ringmarke(a, tx, ty, frame):
     """Kleine Ringmarke in der Raummitte (Vorlage: heller Kreis)."""
     cx, cy = tx * T + 8, ty * T + 8
@@ -85,16 +104,14 @@ def bauen(frame=None, speichern=True):
         feld_marken(a, x0 + 1, y0 + 16, 6, 5, frame)
         if i == 0:
             ringmarke(a, x0 + 14, y0 + 10, frame)
-    # Pfeilkacheln: cyan (Ankunft) und gold (Ausgang), leuchten nacheinander
-    pf = k16.kachel('pfeil.png').astype(np.float32)
-    gp = gold_pfeil()
+    # Pfeile im Stil des Sammelplatzes (wie Karte 19): Eckklammern + Doppel-Chevron direkt auf dem Boden,
+    # cyan = Ankunft, gold = weiter; leuchten nacheinander
     n = 0
     for y in range(rows):
         for x in range(cols):
             if kl[y, x] in 'zg':
-                q = puls(frame, n * 0.25); n += 1
-                src = pf if kl[y, x] == 'z' else gp
-                a[y * T:(y + 1) * T, x * T:(x + 1) * T] = np.clip(src * (0.9 + 0.25 * q), 0, 255).astype(np.uint8)
+                pfeil_marke(a, x, y, (110, 225, 250) if kl[y, x] == 'z' else (250, 200, 90), frame, n * 0.25)
+                n += 1
     # ------------------------------------------------------------------ Kanten, Front, Leere
     front = k16.front_und_faeden(a, land, frame)
     ak = kontur(land)

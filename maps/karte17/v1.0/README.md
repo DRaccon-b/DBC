@@ -8,8 +8,8 @@ des Netzes. Anspielungen nur über Farben und Motive, nichts nachgebaut.
 - **Zwei Räume** als schwebende Plattformen (je 28 × 22 Kacheln, Ecken gestuft), Bodenplatten der Vorlage, dunkler
   Randring mit cyan glimmender Kante, schmale Metallfront mit hängenden Lichtfäden.
 - **Aufstellfeld** in beiden Räumen unten links: 6 × 5 Kacheln mit Eckklammern (wie in der Vorlage).
-- **Ankunft:** je 2 cyan Pfeilkacheln unten links.
-- **Linker Raum:** Ringmarke in der Mitte, 2 × 2 goldene Pfeilkacheln am rechten Rand (Weg in den zweiten Raum).
+- **Ankunft:** je 2 cyan Pfeilmarken unten links (Eckklammern + Doppelpfeil direkt auf dem Boden, wie das Aufstellfeld).
+- **Linker Raum:** Ringmarke in der Mitte, 2 × 2 goldene Pfeilmarken am rechten Rand (Weg in den zweiten Raum).
 - **Leere:** Netzraster, blauer Nebel, blaue Datenstränge mit laufenden Datenpaketen, schwebende Datenfragmente
   (links, rechts und zwischen den Räumen).
 
