@@ -354,7 +354,7 @@ def ueberlauf(a, wasser, land, frame):
                 mix(Y, aussen(d), weiss, 0.9)
 
 
-FALL = os.environ.get('K19_FALL', 'vorhang')
+FALL = os.environ.get('K19_FALL', 'daten')                     # gewaehlt: Datenstrom (Nutzer)
 
 
 def _fall_basis(a, wasser, land):
