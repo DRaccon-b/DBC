@@ -50,43 +50,39 @@ def bodenplatte(a, tx, ty):
 
 
 def hafenbecken(a, wasser, frame):
-    """Hafenbecken: tiefes Wasser direkt an den Mauern (kein Strand). Grundfarbe wie die Vorlage, zur Mitte etwas
-    dunkler; Wellenzeichen wie in der Vorlage (kleine Boegen, versetzt je Reihe), die je Bild 2 px nach rechts
-    treiben; an der Nordmauer die sichtbare Mauerfront (Stein, nass, mit Wasserlinie), an allen Mauern ein feiner
-    heller Wellensaum, vereinzelt Lichtglitzer."""
+    """Hafenbecken wie das Meer von Karte 01 (wasser_details.meer_terrassen): klares Wasser, der Grund ist sichtbar.
+    Der Grund sind hier die versunkenen Pflasterplatten (statt Sand): an den Mauern ein flacher Sims, dann eine
+    Stufe mit Lichtkante und dunklem Fuss ins tiefere Becken; Algen, Lichtstriche, feine Wasserlinie an den Mauern.
+    Kein Strand-Schaum (Hafenmauern statt Ufer), keine Felsen. An der Nordmauer bleibt die nasse Mauerfront sichtbar."""
+    import wasser_details as wd
     f = frame or 0
+    Hp, Wp = wasser.shape
+    pt = pflaster_textur(Wp // T, Hp // T).astype(np.float32)
+    alt = (wd.FARBEN, wd.N_FRAMES, wd.FLACH, wd.SCHAUM_D, wd.STUFE1, wd.STUFE2, wd.MISCH, wd._kacheln)
+    wd.FARBEN = [c * 0.88 for c in wd.FARBEN]
+    wd.N_FRAMES = N_FRAMES
+    wd.FLACH, wd.SCHAUM_D, wd.STUFE1, wd.STUFE2 = 12, (900, 900), 18, 900
+    wd.MISCH = [0.38, 0.52, 0.7, 0.85]
+    wd._kacheln = lambda name, Hh, W: (pt[:Hh, :W] * (1.0 if name == 'sand' else 0.8)).copy()
+    wd.FELSEN_PROTOKOLL.clear()
+    meiden = np.ones_like(wasser)                                  # keine Felsen im Becken
+    try:
+        img = wd.meer_terrassen(Image.fromarray(a), wasser, frame, meiden, maske=wasser)
+    finally:
+        wd.FARBEN, wd.N_FRAMES, wd.FLACH, wd.SCHAUM_D, wd.STUFE1, wd.STUFE2, wd.MISCH, wd._kacheln = alt
+    a = np.array(img.convert('RGB'))
+    # Nordmauer: sichtbare Front (6 px nasser Stein) mit Wasserlinie darunter
     ys, xs = np.nonzero(wasser)
-    y0, y1, x0, x1 = ys.min(), ys.max() + 1, xs.min(), xs.max() + 1
-    h, w = y1 - y0, x1 - x0
-    yy, xx = np.mgrid[0:h, 0:w]
-    rand = np.minimum(np.minimum(yy, h - 1 - yy), np.minimum(xx, w - 1 - xx)).astype(np.float32)
-    tief = np.clip(rand / 40.0, 0, 1)[..., None]
-    flach, dunkel = np.array((62, 108, 140), np.float32), np.array((34, 70, 104), np.float32)
-    sub = flach * (1 - tief) + dunkel * tief
-    # Wellenzeichen: Bogen aus 4 px (oben 2 hell, Enden 1 tiefer), Raster 16x8, jede 2. Reihe um 8 px versetzt
-    for gy in range(2, h, 8):
-        for gx in range(-16, w, 16):
-            X = gx + (8 if (gy // 8) % 2 else 0) + (2 * f) % 16 + (3 if (gy // 8) % 3 == 1 else 0)
-            for dx, dy, c in ((1, 0, (104, 150, 178)), (2, 0, (104, 150, 178)), (0, 1, (84, 128, 160)), (3, 1, (84, 128, 160))):
-                X_, Y_ = X + dx, gy + dy
-                if 0 <= X_ < w and 0 <= Y_ < h:
-                    sub[Y_, X_] = sub[Y_, X_] * 0.35 + np.array(c, np.float32) * 0.65
-    # Nordmauer: sichtbare Front (6 px Stein, nass und dunkel nach unten), darunter Wasserlinie
+    y0, x0, x1 = ys.min(), xs.min(), xs.max() + 1
     stein = [(120, 126, 124), (104, 110, 110), (92, 98, 100), (80, 88, 92), (66, 76, 84), (54, 66, 78)]
     for d, c in enumerate(stein):
-        sub[d, :] = c
-    for x in range(0, w, 16):
-        sub[1:5, x] = (70, 78, 82)
-    p = 0.5 + 0.5 * np.sin(2 * np.pi * (f / N_FRAMES))
-    saum = (yy == 6) | ((xx <= 1) & (yy > 6)) | ((xx >= w - 2) & (yy > 6)) | (yy == h - 1)
-    sub[saum] = sub[saum] * (0.55 - 0.15 * p) + np.array((170, 210, 225), np.float32) * (0.45 + 0.15 * p)
-    rs = np.random.RandomState(1919)                            # Glitzer, jedes im eigenen Takt
-    for _ in range(26):
-        gx, gy, ph = rs.randint(4, w - 4), rs.randint(10, h - 3), rs.randint(4)
-        if (f + ph) % 4 == 0:
-            sub[gy, gx] = (230, 245, 250)
-            sub[gy, gx - 1] = sub[gy, gx + 1] = sub[gy, gx] * 0.5 + sub[gy, gx - 1] * 0.5
-    a[y0:y1, x0:x1][wasser[y0:y1, x0:x1]] = np.clip(sub, 0, 255).astype(np.uint8)[wasser[y0:y1, x0:x1]]
+        a[y0 + d, x0:x1] = c
+    for x in range(x0, x1, 16):
+        a[y0 + 1:y0 + 5, x] = (70, 78, 82)
+    p = 0.5 + 0.5 * np.sin(2 * np.pi * f / N_FRAMES)
+    linie = np.zeros_like(wasser)
+    linie[y0 + 6, x0:x1] = True
+    mischen(a, linie, (190, 225, 235), 0.45 + 0.2 * p)
     return a
 
 
