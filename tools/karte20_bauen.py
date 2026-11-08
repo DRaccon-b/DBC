@@ -263,12 +263,23 @@ def bauen(frame=None, speichern=True):
     # Fluss: vertieftes Wasser wie der Teich von Karte 06
     import wasser_vertieft
     xm = weich(zell_maske(cls, 'xb', cols, rows), 4, 0.15, 8, 0.45)
-    a = np.array(wasser_vertieft.vertiefen(Image.fromarray(a), np.ones_like(xm), frame, maske=xm).convert('RGB'))
+    # Fluss laeuft oben und links aus der Karte: Bild dort 24 px erweitern (Wasser laeuft weiter), damit am Kartenrand
+    # keine Uferkante entsteht; danach wieder zuschneiden
+    P = 24
+    ag = np.pad(a, ((P, 0), (P, 0), (0, 0)), mode='edge')
+    mg = np.pad(xm, ((P, 0), (P, 0)), mode='edge')
+    ag = np.array(wasser_vertieft.vertiefen(Image.fromarray(ag), np.ones_like(mg), frame, maske=mg).convert('RGB'))
+    a = ag[P:, P:]
     img = Image.fromarray(a).convert('RGBA')
     for (bx0, by0, bx1, by1) in lay['bruecken']:
         bauwerke.zeichne_bruecke(img, bx0 * T - 6, (bx1 + 1) * T + 6, by0 * T, (by1 + 1) * T - 4, frame=frame or 0)   # Enden auf dem Ufer
-    k6.zaun(img, lay['acker_zaun'], (-9, -9))                   # geschlossen wie in der Vorlage
+    vor_zaun = img.copy()
+    k6.zaun(img, lay['acker_zaun'], (-9, -9))
     k6.zaun(img, lay['feld_zaun'], (-9, -9))
+    # Seitentore, wo die Wege auf die Zaeune treffen (Weg endet nicht mehr stumpf am Zaun)
+    for (tx, ty0, ty1) in lay.get('zaun_tore', []):
+        box = (tx * T - 2, ty0 * T + 2, (tx + 1) * T + 6, (ty1 + 1) * T - 1)
+        img.paste(vor_zaun.crop(box), box[:2])
     a = np.array(img.convert('RGB'))
     for tp in lay.get('teleporter', []):
         k4.teleporter_zeichnen(a, tp['x'], tp['y'], tp['b'], tp['h'], frame)

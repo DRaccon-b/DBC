@@ -91,9 +91,10 @@ def main():
         for t in np.linspace(0, 1, 40):
             px, py = ax + (bx - ax) * t, ay + (by - ay) * t
             fl |= np.hypot(xx + 0.5 - px, yy + 0.5 - py) <= FLUSS_BREITE
-    for (bx0, by0, bx1, by1) in BRUECKEN:                       # Nutzer: an den Bruecken so breit wie die Bruecke
-        fl |= (xx >= bx0) & (xx <= bx1) & (yy >= by0 - 1) & (yy <= by1 + 1)
-    fl |= (xx >= BRUECKEN[0][0]) & (xx <= BRUECKEN[0][2]) & (yy >= BRUECKEN[0][1]) & (yy <= BRUECKEN[1][3])
+    # Nutzer: an den Bruecken so breit wie die Bruecke - weich als Ellipse aufgeweitet (keine harten Kastenecken)
+    bx_m = (BRUECKEN[0][0] + BRUECKEN[0][2] + 1) / 2.0
+    by_m = (BRUECKEN[0][1] + BRUECKEN[1][3] + 1) / 2.0
+    fl |= ((xx + 0.5 - bx_m) / 3.3) ** 2 + ((yy + 0.5 - by_m) / 6.4) ** 2 <= 1
     k[fl & (k != 'h') | (fl & ((xx < 3) | (yy < 4)))] = 'x'      # auch durch den Waldrand oben und links
     # Platz mit gerundeten Ecken und Rasen in der Mitte
     x0, y0, x1, y1 = PLATZ
@@ -131,7 +132,8 @@ def main():
     lay = {'groesse': [C, R], 'klassen': [''.join(z) for z in k], 'hoehe': [''.join(str(c) for c in z) for z in h],
            'platz': PLATZ, 'platz_rasen': PLATZ_RASEN, 'acker_zaun': ACKER_ZAUN, 'beete': BEETE,
            'feld_zaun': FELD_ZAUN, 'plateau': PLATEAU, 'treppe': TREPPE, 'bruecken': BRUECKEN,
-           'treppen_sued': [[TREPPE[0], TREPPE[1], 2, PLATEAU[3]]],   # Durchgang fuer die Kollision
+           'treppen_sued': [[TREPPE[0], TREPPE[1], 2, PLATEAU[3]]],
+           'zaun_tore': [[ACKER_ZAUN[0], 19, 20], [FELD_ZAUN[2], 36, 37]],   # Seitentore an den Wegen   # Durchgang fuer die Kollision
            'teleporter': [{'x': 28, 'y': 46, 'b': 4, 'h': 2}, {'x': 58, 'y': 37, 'b': 2, 'h': 3}]}
     json.dump(lay, open(os.path.join(KARTE, 'layout.json'), 'w'), indent=0)
     F = {'h': (30, 80, 30), 'g': (84, 132, 60), 'w': (192, 168, 108), 'p': (120, 132, 144), 'r': (108, 156, 60),
