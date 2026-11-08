@@ -26,6 +26,7 @@ BILDDAUER = k16.BILDDAUER
 CYAN, LEER = k16.CYAN, k16.LEER
 kontur, mischen, puls = k16.kontur, k16.mischen, k16.puls
 PFLASTER = np.array((137, 154, 155), np.float32)              # Pflasterfarbe der Vorlage
+RAND = os.environ.get('K19_RAND', 'netz')                       # Rand der Hafen-Plattform: netz | kai | bunt | warn
 
 
 def pflaster_textur(cols, rows):
@@ -100,6 +101,63 @@ def kaikante(a, kai):
         a[y0 + 1:y0 + 6, x] = (128, 132, 124)
 
 
+def rand_hafen(a, land, ring, front, rechts, frame):
+    """Rand der Hafen-Plattform (rechts), Varianten zum Vergleich (K19_RAND):
+      netz  - wie bisher: dunkler Randring aus Pflaster, cyan glimmende Kante, Metallfront
+      kai   - Kaimauer: Ring aus hellem Granit (Bloecke 16x8, Licht oben), Front aus Steinquadern, keine cyan Kante
+      bunt  - wie die linke Plattform: blauer Network-Randring mit cyan Kante (Pflaster nur innen)
+      warn  - Hafenkante: dunkler Beton mit gelb-schwarzer Warnmarkierung innen, Metallfront, keine cyan Kante"""
+    if RAND == 'netz':
+        return
+    Hp, Wp = land.shape
+    r = ring & rechts
+    yy, xx = np.mgrid[0:Hp, 0:Wp]
+    ak = kontur(land)
+    if RAND == 'bunt':
+        bt = k16.boden_textur(Wp // T, Hp // T)
+        a[r & ~ak] = (bt[r & ~ak] * 0.72).astype(np.uint8)
+        mischen(a, kontur(land & ~ak) & rechts, CYAN, 0.4 + 0.3 * puls(frame, 0.6))
+        return
+    if RAND == 'kai':
+        c = np.zeros((Hp, Wp, 3), np.float32)
+        c[:] = (176, 180, 170)
+        versatz = np.where((yy // 8) % 2 == 1, 8, 0)
+        c[((xx + versatz) % 16 == 15)] = (128, 132, 124)          # Stossfugen
+        c[(yy % 8 == 7)] = (120, 124, 116)                         # Lagerfugen
+        c[(yy % 8 == 0)] = (206, 210, 200)                         # Licht oben
+        c[((xx + versatz) % 16 == 0) & (yy % 8 != 7)] = (196, 200, 190)
+        a[r] = c[r].astype(np.uint8)
+        a[r & ak] = (40, 44, 48)
+        innen = land & ~ring & rechts
+        a[innen & np.roll(r, 1, 0)] = (a[innen & np.roll(r, 1, 0)] * 0.7).astype(np.uint8)   # Schatten der Mauerkrone
+        a[innen & np.roll(r, 1, 1)] = (a[innen & np.roll(r, 1, 1)] * 0.8).astype(np.uint8)
+        fr_ = front & (xx >= np.nonzero(rechts.any(axis=0))[0].min() - 2)
+        oben = fr_ & ~np.roll(fr_, 1, 0)
+        tiefe = np.zeros((Hp, Wp), np.int16)
+        cur = oben.copy(); d = 0
+        while cur.any() and d < 12:
+            tiefe[cur] = d + 1; d += 1
+            cur = np.roll(cur, 1, 0) & fr_ & (tiefe == 0)
+        st = np.zeros((Hp, Wp, 3), np.float32)
+        st[:] = (132, 136, 128)
+        st[(xx % 16 == 15)] = (96, 100, 94)
+        st[tiefe == 1] = (170, 174, 164)
+        st[tiefe >= 8] = (92, 96, 90)
+        st[tiefe >= 10] = (40, 44, 46)
+        a[fr_] = st[fr_].astype(np.uint8)
+        return
+    if RAND == 'warn':
+        beton = a.copy()
+        g = np.array((96, 100, 104), np.float32)
+        a[r] = np.clip(beton[r] * 0.35 + g * 0.65, 0, 255).astype(np.uint8)
+        innenkante = r & ~np.roll(r, 3, 0) | r & ~np.roll(r, -3, 0) | r & ~np.roll(r, 3, 1) | r & ~np.roll(r, -3, 1)
+        band = r & ~ak & ~(r & ~np.roll(r, 6, 0) & ~np.roll(r, -6, 0) & ~np.roll(r, 6, 1) & ~np.roll(r, -6, 1))
+        streifen = ((xx + yy) // 4) % 2 == 0
+        a[band & innenkante & streifen] = (236, 196, 60)
+        a[band & innenkante & ~streifen] = (30, 30, 34)
+        a[r & ak] = (20, 22, 26)
+
+
 def bauen(frame=None, speichern=True):
     lay = json.load(open(os.path.join(KARTE, 'layout.json')))
     cols, rows = lay['groesse']
@@ -150,6 +208,7 @@ def bauen(frame=None, speichern=True):
     ak = kontur(land)
     a[ak] = (8, 14, 30)
     mischen(a, kontur(land & ~ak), CYAN, 0.4 + 0.3 * puls(frame, 0.6))
+    rand_hafen(a, land, ring, front, rechts & ~wasser, frame)
     nah = np.array(Image.fromarray(((land | front) * 255).astype(np.uint8)).filter(ImageFilter.MaxFilter(25))) > 0
     rest = leer & ~front
     k16.straenge(a, rest & ~nah, frame, seed=1919, zonen=((8, 88), (552, 664), (1128, 1208), (100, 1100)), n=6,
