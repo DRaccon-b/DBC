@@ -74,8 +74,6 @@ def main():
                              (16, 91, 17, 93),                    # (Reihen 79-84 frei: Hochbahn darueber)
                              (37, 71, 38, 72), (37, 75, 38, 76)):  # Baumscheiben der Ginkgo-Allee
         rechteck(k, x0, y0, x1, y1, 'n')
-    rechteck(k, 6, 27, 27, 30, 'n')                               # Rasen vor den Wohnhaeusern (Town-Map-Haeuser
-    rechteck(k, 43, 56, 58, 59, 'n')                              # sind niedriger als die alten Bloecke)
     rechteck(k, 47, 10, 52, 13, 'd')                              # Sandkasten
     rechteck(k, 46, 8, 46, 16, 'm')                               # Hecke am Spielplatz
     for (x0, y0, x1, y1) in BEETE:                                # Rasenbeete mit Bordstein (Baum + Blumen)

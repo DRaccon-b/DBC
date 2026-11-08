@@ -340,39 +340,7 @@ def main():
     P.sperren(A - 4, 34, A + 3, 79)                           # Mittelweg frei
     P.sperren(37, 32, 40, 35)                                 # Parkplatz-Einfahrt
     # ------------------------------------------------------------------ Gebaeude
-    def haeuserzeile(namen, tx0, tx1, reihe):
-        """Haeuser im Town-Map-Stil (PixelLab) nebeneinander im Kachelraster: jedes Haus mittig in seinem kleinsten
-        Kachelblock, Fuss auf der Reihe, die freien Kacheln gleichmaessig als Luecken verteilt. Ganzes Haus sperrt,
-        die Kachel vor der Tuer (Hausmitte) bleibt frei."""
-        breiten = []
-        for n_ in namen:
-            datei, al, zu, xa, xb = P.sprite(n_)
-            breiten.append(math.ceil((xb - xa + 1) / T))
-        frei = (tx1 - tx0 + 1) - sum(breiten)
-        luecken = [frei // max(1, len(namen) - 1) + (1 if i < frei % max(1, len(namen) - 1) else 0)
-                   for i in range(len(namen) - 1)] + [0]
-        x = tx0
-        for n_, b_, l_ in zip(namen, breiten, luecken):
-            o = P.setzen(n_, x, reihe, pruefen=False, n=b_, extra={'gebaeude': True})   # Fassade = Hintergrund
-            datei, al, zu, xa, xb = P.sprite(n_)
-            y0 = (o['y'] + int(np.nonzero(al.any(axis=1))[0].min())) // T
-            o['gebaeude'] = [x, max(0, y0), x + b_ - 1, reihe]
-            o['kein_schatten'] = True
-            P.sperren(x, max(0, y0), x + b_ - 1, reihe)
-            mitte = x + b_ // 2
-            P.sperren(mitte - 1, reihe + 1, mitte, reihe + 1)          # vor der Tuer frei
-            x += b_ + l_
-
-    haeuserzeile(['k18/laeden/01', 'k18/laeden/03', 'k18/laeden2/00', 'k18/laeden2/01', 'k18/laeden2/02',
-                  'k18/laeden2/03'], 4, 45, 17)                          # Ladenzeile
-    haeuserzeile(['k18/haeuser/00', 'k18/laeden/02', 'k18/laeden/00'], 62, 83, 17)   # Buero, Cafe, Konbini
-    haeuserzeile(['k18/haeuser/01', 'k18/haeuser/00', 'k18/haeuser/01'], 5, 28, 39)  # Wohnblock-Zeile
-    haeuserzeile(['k18/haeuser/00', 'k18/haeuser/01'], 42, 59, 67)                   # Buero / Wohnhaus Mitte
-    haeuserzeile(['k18/haeuser/02'], 39, 50, 79)                                      # Lagerhallen
-    haeuserzeile(['k18/haeuser/03'], 52, 63, 79)
     for (x0, y0, x1, y1, art) in lay['gebaeude']:
-        if art != 'halle':
-            continue                                              # Messehalle bleibt (Vorlage, symmetrisch)
         o = P.setzen('gebaeude/' + art, x0, y1, pruefen=False, n=x1 - x0 + 1, extra={'gebaeude': [x0, y0, x1, y1]})
         o['x'], o['y'] = x0 * T, y0 * T
         o['kein_schatten'] = True
@@ -390,7 +358,7 @@ def main():
                  extra={'hochbahn': True, 'kein_schatten': True})
     z['x'] = lay['hochbahn']['zug'][0] * T
     # ------------------------------------------------------------------ Baeume (gross zuerst) mit Begleitern (Regel 5)
-    GRUEN, KLEIN_B, GROSS_B = 'k18/baum2/01', 'karte01/baeume/03', 'k18/baum2/00'   # PixelLab-Stadtbaeume
+    GRUEN, KLEIN_B, GROSS_B = 'karte01/baeume/01', 'karte01/baeume/03', 'karte01/baeume/00'   # Baeume von Karte 01
     GINKGO, GINKGO2, GINKGO_K = 'gebaeude/ginkgo', 'gebaeude/ginkgo_gross', 'gebaeude/ginkgo_klein'
     BUESCHEL, BLUMEN, BUSCH, LAUB = 'karte01/deko/06', 'karte01/deko/00', 'karte01/deko/25', 'karte01/deko/50'
 
@@ -466,9 +434,7 @@ def main():
         baum(n_, bx, r, RASEN)
     baum(GINKGO, 0, 93, RASEN, cx=17 * T)                     # Ginkgo auf dem kleinen Rasen
     # Mittelstreifen: Baum am Ostende jeder Hecke (Vorlage), Uferstrasse: vier Baeume auf der Hecke
-    SB = ('k18/baum2/00', 'k18/baum2/01')        # Stadtbaeume wie Vorlage: Wurzeln in der Hecke
-    for (n_, bx, r) in ((SB[0], 8, 30), ('k18/baum2/02', 18, 29), (SB[1], 24, 30), (SB[1], 45, 59), (SB[0], 55, 58)):
-        baum(n_, bx, r, RASEN)                                # Rasen vor Wohn- und Buerohaeusern
+    SB = ('karte01/baeume/00', 'karte01/baeume/02')   # gruene Laubbaeume von Karte 01
     for i, (bx, r) in enumerate(((11, 48), (23, 48), (47, 48), (59, 48))):
         baum(SB[i % 2], bx, r, set('m'), nn=3)                # Rasen-Mittelstreifen: Baum mit Bueschel/Blumen
     for i, cx in enumerate((71 * T, 87 * T, 104 * T, 117 * T)):
@@ -514,9 +480,9 @@ def main():
     P.setzen('k18/boot/00', 111, 102, boden=set('w'), anim='boot', extra={'kein_schatten': True})   # neues Boot (PixelLab)
     # ------------------------------------------------------------------ Laternen (fester Rhythmus, Vorlage)
     LAT, DLAT = 'karte02/abgeleitet/laterne', 'gebaeude/doppellaterne'
-    for x in (13, 37, 60):                                    # Nordseite obere Strasse (weniger Laternen)
+    for x in (13, 37, 60):                                    # Laternen auf moderatem Minimum: Nordseite obere Strasse
         P.setzen(LAT, x, 19)
-    for x in (19, 46, 73):                                    # Suedseite obere Strasse
+    for x in (19, 64):                                        # Suedseite obere Strasse
         P.setzen(LAT, x, 26)
     for x in (17, 54):                                        # Gehweg vor dem Wohnblock / Parkplatz
         P.setzen(LAT, x, 41)
@@ -524,19 +490,16 @@ def main():
         P.setzen(LAT, x, 54)
     for cx in (20, 44):                                       # zweiarmige Leuchten auf dem Mittelstreifen
         P.setzen(DLAT, 0, 48, boden=set('m'), cx=cx * T + 8)   # Mittelstreifen jetzt Rasen
-    for r in (64,):                                           # Querstrasse Westseite / Ostseite
-        P.setzen(LAT, 31, r)
-    for r in (31,):
-        P.setzen(LAT, 37, r)
-    for (bx, r) in ((16, 89), (10, 59), (26, 70), (61, 13)):
+    P.setzen(LAT, 31, 64)                                     # Querstrasse (je Seite eine)
+    P.setzen(LAT, 37, 31)
+    for (bx, r) in ((16, 89), (13, 67), (61, 13)):
         P.setzen(LAT, bx, r, boden=GEHEN | RASEN)
-    for x in (14, 38, 62, 86, 110):                           # Uferpromenade (Zebra 98-101 frei)
+    for x in (28, 62, 96, 122):                               # Uferpromenade (Zebra 98-101 frei)
         P.setzen(LAT, x, 95)
     P.setzen(LAT, 0, 103, boden=set('h'), cx=107 * T)          # Steglaterne (Reihe 104 bleibt frei)
     for r in (44, 68):                                        # Platz: Paare am Mittelweg (gespiegelt an der Achse)
         P.paar(LAT, 88, r)
-    for r in (56,):
-        P.paar(LAT, 79, r)
+    P.paar(LAT, 79, 56)
     P.paar(LAT, 92, 30, boden=set('t'))                       # Terrasse
     AMP = 'karte10/banner/13'                                 # Ampeln an den Kreuzungen
     for (bx, r) in ((30, 26), (37, 26), (30, 41), (37, 41), (30, 54), (37, 54)):
@@ -546,7 +509,7 @@ def main():
     STR = lambda i: 'k18/strasse/%02d' % i
     for (n_, bx, r) in ((STR(1), 47, 19), (STR(2), 54, 19), (STR(40), 61, 26), (STR(5), 64, 19)):
         P.setzen(n_, bx, r)
-    P.setzen(STR(0), 11, 40, anim='rechtecke', extra={'licht_rects': [[2, 5, 17, 16, 0]]})
+    P.setzen(STR(0), 25, 40, anim='rechtecke', extra={'licht_rects': [[2, 5, 17, 16, 0]]})
     for xb in (128, 162):                                     # Fahrraeder
         P.setzen(STR(4), 0, 41, x=xb, dy=-3)
     P.paar(STR(6), 82, 52)                                    # Infotafeln (Paar)
