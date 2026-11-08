@@ -20,6 +20,7 @@ ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
 KARTE = os.path.join(ROOT, 'maps', 'karte18')
 C, R = 136, 112
 ACHSE = 102                         # Achse der Messehalle: Kachelgrenze 102 (x = 1632 px)
+BEET = os.environ.get('K18_BEET', 'hecke')   # Platzbaeume: 'hecke', 'rasen' oder 'gitter' (Baum im Pflaster)
 
 
 def rechteck(k, x0, y0, x1, y1, art):
@@ -76,7 +77,10 @@ def main():
     rechteck(k, 46, 8, 46, 16, 'm')                               # Hecke am Spielplatz
     for (x0, y0, x1, y1) in ((66, 28, 71, 29), (69, 37, 74, 39), (80, 44, 85, 46), (69, 67, 74, 69),
                              (118, 38, 123, 40), (118, 58, 123, 60), (118, 70, 123, 72), (121, 21, 123, 23)):
-        rechteck(k, x0, y0, x1, y1, 'e')                          # Heckenbeete wie in der Vorlage
+        if BEET == 'hecke':
+            rechteck(k, x0, y0, x1, y1, 'e')                      # Heckenbeete wie in der Vorlage
+        elif BEET == 'rasen':
+            rechteck(k, x0, y0, x1, y1, 'n')                      # Rasenbeet mit Bordstein
     rechteck(k, 4, 96, 124, 97, 'b')                              # Holzpromenade
     rechteck(k, 4, 98, 124, 99, 'k')                              # Kaikante
     rechteck(k, 125, 78, 125, 99, 'k')                            # Kaikante am Kanal

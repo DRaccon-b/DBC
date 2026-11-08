@@ -436,8 +436,16 @@ def main():
     for (x0, y0, x1, y1) in ((66, 28, 71, 29), (69, 37, 74, 39), (80, 44, 85, 46), (69, 67, 74, 69),
                              (118, 38, 123, 40), (118, 58, 123, 60), (118, 70, 123, 72), (121, 21, 123, 23)):
         n_ = 'k18/baum2/02' if (x0, y0) in ((66, 28), (118, 58)) else SB[(x0 + y0) % 2]
-        P.setzen(n_, 0, y1, boden=set('e'), cx=(x0 + x1 + 1) / 2.0 * T, dy=-6 if y1 > y0 + 1 else -3,
-                 extra={'baum': True})
+        cx_ = (x0 + x1 + 1) / 2.0 * T
+        beet = os.environ.get('K18_BEET', 'hecke')
+        if beet == 'hecke':
+            P.setzen(n_, 0, y1, boden=set('e'), cx=cx_, dy=-6 if y1 > y0 + 1 else -3, extra={'baum': True})
+        elif beet == 'rasen':
+            baum(n_, 0, y1, RASEN, cx=cx_)
+        else:                                                 # Baum im Pflaster mit runder Baumscheibe (Gitter)
+            P.setzen('gebaeude/baumgitter', 0, y1, boden=set('pt'), cx=cx_, pruefen=False, begleiter=True,
+                     extra={'kein_schatten': True, 'sortier': 0})
+            P.setzen(n_, 0, y1, boden=set('pt'), cx=cx_, dy=-8, extra={'baum': True})
     # ------------------------------------------------------------------ Grosse Einzelobjekte
     P.setzen('k18/platz/00', 18, 61, boden=set('q'), n=4)        # Notlager (jetzt oben): Spitzzelt, Sandsaecke symmetrisch
     P.setzen('karte03/klein/43', 0, 61, boden=set('q'), cx=16.5 * T)
