@@ -1,0 +1,72 @@
+{
+ "kachel": 16,
+ "breite_kacheln": 40,
+ "hoehe_kacheln": 4,
+ "animationsbereich_hoehe_kacheln": 4,
+ "animationsbilder": 4,
+ "bilddauer_ms": 250,
+ "objekte": [
+  {
+   "name": "computer/00",
+   "datei": "sauber/computer-00.png",
+   "animation": "bildschirm16",
+   "slot_kacheln": {
+    "x": 0,
+    "y": 0,
+    "breite": 5,
+    "hoehe": 4
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 5,
+    "hoehe": 4
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      23,
+      12,
+      5,
+      4
+     ],
+     "fusskachel": [
+      25,
+      15
+     ]
+    }
+   ]
+  },
+  {
+   "name": "tor/00",
+   "datei": "sauber/tor-00.png",
+   "animation": "tor16",
+   "slot_kacheln": {
+    "x": 5,
+    "y": 0,
+    "breite": 4,
+    "hoehe": 4
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 4,
+    "hoehe": 4
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      30,
+      6,
+      4,
+      4
+     ],
+     "fusskachel": [
+      32,
+      9
+     ]
+    }
+   ]
+  }
+ ]
+}
