@@ -94,13 +94,11 @@ def kachel(art, v):
                 elif y == 0 or x == 0:
                     c = H('#aea8c2')
                 px[x, y] = c
-    elif art == 'n':                                 # Rasen: dunkles Abendgruen, Halme
-        fl(H('#2f4a36'))
-        for _ in range(14):
-            x, y = r.randint(0, 15), r.randint(1, 15)
-            px[x, y] = H('#3a5a40'); px[x, y - 1] = H('#456848') if r.random() < 0.5 else H('#3a5a40')
-        for _ in range(5):
-            px[r.randint(0, 15), r.randint(0, 15)] = H('#263e2c')
+    elif art == 'n':                                 # Rasen: das Gras von Karte 01 (assets/basis/gras_*), nur
+        g_ = Image.open(os.path.join(ROOT, 'assets', 'basis', 'gras_%d.png' % v)).convert('RGB')   # leicht abendlich
+        g_ = g_.crop((0, 0, 16, 16)) if g_.size != (16, 16) else g_
+        g_ = Image.eval(g_, lambda c: int(c * 0.86))
+        im.paste(g_, (0, 0))
     elif art == 'd':                                 # Sand (Sandkasten), gedaempft fuer Abend und Nebel
         fl(H('#706a56'))
         for _ in range(12):

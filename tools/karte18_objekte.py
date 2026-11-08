@@ -29,8 +29,7 @@ LEUCHTEN = {'karte02/abgeleitet/laterne': 'laterne18', 'gebaeude/doppellaterne':
 PAD = {'k18/frontal/00': 1}                              # Boot: 1 px Luft oben/unten fuer das Schaukeln
 TONUNG = {'karte10/spielplatz/00': 'gedaempft', 'karte10/spielplatz/01': 'gedaempft', 'karte10/spielplatz/02': 'gedaempft',
           'karte10/banner/06': 'metall', 'k18/autos/00': 'weiss', 'k18/autos/06': 'weiss', 'k18/autos/12': 'weiss',
-          'karte02/ortho/09': 'zelt_blau', 'karte01/deko/06': 'abend', 'karte01/deko/00': 'abend',
-          'karte01/deko/02': 'abend', 'karte01/deko/25': 'abend', 'karte01/deko/44': 'abend', 'karte01/deko/50': 'abend',
+          'karte02/ortho/09': 'zelt_blau',                    # Gras/Blumen von Karte 01 in Originalfarbe
           'karte02/abgeleitet/laterne': 'ohne_gras', 'karte10/banner/13': 'nur_gruen'}
 
 
