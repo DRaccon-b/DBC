@@ -1645,6 +1645,14 @@ OBJEKTGRUPPEN_K20 = {   # Karte 20 (A02-Startdorf), Stil wie Karte 06 (Primary V
         'small white stone windmill tower with a dark conical roof and four red wooden sails in an X shape, a small '
         'wooden door at the bottom, ' + FR14,
     ]},
+    'k20_camp': {'size': 64, 'items': [   # Nutzer-Vorlage: Camp-Objekte
+        'cream white drink vending machine with a light blue top panel, a glass front with rows of colorful cans and bottles '
+        '(red, blue, green, yellow), a dark coin slot panel on the right side and a dispenser slot at the bottom, ' + FR14,
+        'tall red public phone booth kiosk with rounded top, a white display panel showing a small face icon at the top, a '
+        'black handheld digital device (digital phone) docked in a blue cradle in the middle, small red base, ' + FR14,
+        'retro beige computer archive console: a boxy cream CRT monitor with a cyan screen showing three small icons, '
+        'a cream keyboard in front, standing on a grey metal computer base unit with a drive slot, ' + FR14,
+    ]},
     'k20_beet': {'size': 32, 'items': [
         'small carrot plant growing in soil, green leafy top and an orange carrot shoulder, tiny farm crop, ' + FR14,
         'small green cabbage head growing in soil, tiny farm crop, ' + FR14,
