@@ -35,9 +35,9 @@ def main():
     # ---------------------------------------------------------------- Land (Grundflaeche Gehweg), Raender gestuft
     rechteck(k, 4, 18, 63, 99, 'g')                              # linker Stadtteil
     rechteck(k, 64, 20, 125, 99, 'p')                            # rechter Teil (Platz, unten Strasse)
-    rechteck(k, 46, 5, 61, 17, 'g')                              # Spielplatz-Block
+    rechteck(k, 46, 6, 61, 17, 'g')                              # Spielplatz-Block (Land ab Reihe 6 wie Vorlage)
     rechteck(k, 62, 8, 83, 19, 'g')                              # Buerohaus oben
-    rechteck(k, 84, 12, 119, 27, 'g')                            # Messehalle (Grund; die Pyramiden ragen in den Nebel)
+    rechteck(k, 84, 13, 119, 27, 'g')                            # Messehalle (Dach ab Reihe 13; die Pyramiden ragen in den Nebel)
     rechteck(k, 120, 18, 125, 27, 'p')
     rechteck(k, 4, 12, 45, 17, 'g')                              # Ladenzeile (Grund)
     rechteck(k, 120, 39, 135, 44, 'p')                           # Ausgang rechts (Teleporter)
@@ -83,7 +83,7 @@ def main():
     rechteck(k, 39, 68, 63, 70, 'v')                             # heller Betonvorplatz zwischen Buero und Lagerhallen
     for (x0, y0, x1, y1) in ((80, 38, 85, 40), (118, 38, 123, 40), (80, 58, 85, 60), (118, 58, 123, 60),
                              (80, 70, 85, 72), (118, 70, 123, 72),
-                             (66, 28, 71, 29), (69, 46, 74, 48), (66, 67, 71, 69)):
+                             (66, 28, 71, 29), (69, 44, 74, 46), (69, 67, 74, 69)):
         rechteck(k, x0, y0, x1, y1, 'e')                         # Heckenbeete auf dem Platz (Paare gespiegelt an 102)
     rechteck(k, 4, 96, 124, 97, 'b')                             # Holzpromenade am Kai (Laengsplanken)
     rechteck(k, 4, 98, 124, 99, 'k')                             # Kaikante
@@ -105,6 +105,7 @@ def main():
     rechteck(k, 6, 90, 7, 93, 'n')                               # Rasenstueck mit Ginkgo am SW-Platz
     k[84:93, 4:6] = '.'; k[82:84, 5] = '.'; k[93:96, 5] = '.'     # SW-Platz beginnt bei x 6 (Vorlage)
     k[20:24, 124] = '.'                                          # Nebel-Einbuchtung rechts neben der Halle
+    k[13:18, 119] = '.'                                          # Nebel neben der Dachschraege (Ostseite, wie Vorlage)
     rechteck(k, 121, 21, 123, 23, 'e')                           # Heckenbeet mit Baum neben der Halle
     rechteck(k, 4, 78, 6, 81, 'n')                               # kleiner Rasen an der SW-Ecke (wie die Vorlage)
     hoehe = np.ones((R, C), int)

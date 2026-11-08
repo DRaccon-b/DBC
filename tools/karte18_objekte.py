@@ -171,7 +171,7 @@ class Platz:
                 self.fehl.append((name, bx, reihe, grund))
                 return None
         o = {'datei': datei, 'basis': name, 'x': x, 'y': y, 'fuss': zu,
-             'kachel': [int((x + (xa + xb + 1) / 2) // T), reihe], 'ebene': 1}
+             'kachel': [int((x + (xa + xb + 1) / 2) // T), reihe], 'ebene': 1, '_key': (name, spiegel)}
         if anim or LEUCHTEN.get(name):
             o['anim'] = anim or LEUCHTEN[name]
         if extra:
@@ -186,9 +186,10 @@ class Platz:
             self.eintragen(al, x, y)
         return o
 
-    def paar(self, name, bx, reihe, sprite_spiegeln=False, **kw):
-        """Links normal setzen, rechts pixelgenau an der Achse spiegeln: x_r = 2*A*T - x_l - Breite.
-        Passt der Partner nicht, wird auch das linke Objekt wieder entfernt (nie halbe Paare)."""
+    def paar(self, name, bx, reihe, sprite_spiegeln=False, anker=None, **kw):
+        """Links normal setzen, rechts pixelgenau an der Achse spiegeln. Gespiegeltes Sprite: x_r = 2*A*T - x_l - Breite.
+        Ungespiegeltes Sprite: der Ankerpunkt (Standard Mitte der sichtbaren Pixel, bei Bannern die Mastmitte) wird
+        gespiegelt, x_r = 2*A*T - x_l - 2*anker. Passt der Partner nicht, wird auch das linke Objekt wieder entfernt."""
         pixel_vorher = self.pixel.copy()
         links = self.setzen(name, bx, reihe, **kw)
         if not links:
@@ -198,7 +199,12 @@ class Platz:
         datei, al, zu, xa, xb = self.sprite(name, sp2)
         kw2 = dict(kw)
         kw2['spiegel'] = sp2
-        rechts = self.setzen(name, 2 * self.A - bx - 1, reihe, x=2 * self.A * T - links['x'] - al.shape[1], **kw2)
+        if sp2 != sp:
+            xr = 2 * self.A * T - links['x'] - al.shape[1]
+        else:
+            a_ = anker if anker is not None else (xa + xb + 1) / 2.0
+            xr = int(round(2 * self.A * T - links['x'] - 2 * a_))
+        rechts = self.setzen(name, 2 * self.A - bx - 1, reihe, x=xr, **kw2)
         if not rechts:
             self.objekte.remove(links)
             self.pixel = pixel_vorher
@@ -229,6 +235,69 @@ class Platz:
 
     def sperren(self, x0, y0, x1, y1):
         self.sperr[max(0, y0):y1 + 1, max(0, x0):x1 + 1] = True
+
+
+def begleiter_nachpruefen(P):
+    """Begleiter (Bueschel, Blumen, Laub) duerfen nur ihren eigenen Baum ueberdecken. Zu allen anderen Objekten (auch
+    fremden Baumkronen und anderen Begleitern) halten sie 2 px Abstand; sonst werden sie um bis zu 10 px seitlich
+    verschoben (Boden wird dabei neu geprueft) oder entfernt."""
+    Hh, W = P.pixel.shape
+    zahl = np.zeros((Hh, W), np.int16)
+
+    def maske(o, dil=True):
+        al = P.cache[o['_key']][1]
+        if dil:
+            al = np.array(Image.fromarray((al * 255).astype(np.uint8)).filter(ImageFilter.MaxFilter(5))) > 0
+        return al
+
+    def addieren(o, w_):
+        m = maske(o)
+        h_, w2 = m.shape
+        y0, x0 = max(0, o['y']), max(0, o['x'])
+        y1, x1 = min(Hh, o['y'] + h_), min(W, o['x'] + w2)
+        zahl[y0:y1, x0:x1] += w_ * m[y0 - o['y']:y1 - o['y'], x0 - o['x']:x1 - o['x']]
+
+    for o in P.objekte:
+        if not (o.get('gebaeude') or o.get('hochbahn') or o.get('begleiter')):
+            addieren(o, 1)
+    for c in [o for o in P.objekte if o.get('begleiter')]:
+        t = c.get('_eltern')
+        if t is not None:
+            addieren(t, -1)
+        al = maske(c, False)
+        datei, _, zu, xa, xb = P.cache[c['_key']]
+        h_, w2 = al.shape
+
+        def frei(x):
+            y0, x0 = max(0, c['y']), max(0, x)
+            y1, x1 = min(Hh, c['y'] + h_), min(W, x + w2)
+            return not (zahl[y0:y1, x0:x1] > 0)[al[y0 - c['y']:y1 - c['y'], x0 - x:x1 - x]].any()
+
+        ziel = None
+        breite_ = (xa + xb + 1) / 2.0
+        x_m = int(round(2 * c.get('_mitte', c['x'] + breite_) - (c['x'] + breite_) - breite_))   # andere Stammseite
+        for x in [c['x'] + dx for dx in (0, 2, -2, 4, -4, 6, -6, 8, -8, 10, -10)] + \
+                 [x_m + dx for dx in (0, 2, -2, 4, -4, 6, -6)]:
+            if not frei(x):
+                continue
+            fy, fx = np.nonzero(al[max(0, zu - 3):zu + 1])
+            boden = set(P.kl[np.clip((fy + max(0, zu - 3) + c['y']) // T, 0, P.R - 1),
+                             np.clip((fx + x) // T, 0, P.C - 1)].tolist())
+            if c['basis'] != 'karte01/deko/50' and not boden <= set('n'):
+                continue
+            if not boden <= set('ngqpe'):
+                continue
+            ziel = x
+            break
+        if t is not None:
+            addieren(t, 1)
+        if ziel is None:
+            P.objekte.remove(c)
+            P.fehl.append((c['basis'], c['kachel'][0], c['kachel'][1], 'Begleiter entfernt (Abstand)',
+                           'frei' if frei(c['x']) else 'belegt'))
+            continue
+        c['x'] = ziel
+        addieren(c, 1)
 
 
 def main():
@@ -281,19 +350,67 @@ def main():
     GINKGO, GINKGO2, GINKGO_K = 'gebaeude/ginkgo', 'gebaeude/ginkgo_gross', 'gebaeude/ginkgo_klein'
     BUESCHEL, BLUMEN, BUSCH, LAUB = 'karte01/deko/06', 'karte01/deko/00', 'karte01/deko/25', 'karte01/deko/50'
 
+    def begleiter_versuch(nm, sx, rr, rasen, t, spiegel=False, mitte=None):
+        """Ein Begleiter an der Stelle sx (Mitte) mit Fuss in Reihe rr. Bueschel/Blumen (rasen) liegen ganz auf dem
+        Rasen des Baums (2 px innerhalb, nie auf Pflaster/Randstein), Laub darf auf Gehweg/Pflaster liegen. Nie im
+        Nebel und nie naeher als 2 px an einer Nebelkachel."""
+        if not (0 <= rr < P.R):
+            return None
+        datei, al, zu, xa, xb = P.sprite(nm, spiegel)
+        breite = xb - xa + 1
+        if rasen:
+            tx_ = int(sx // T)
+            if not (0 <= tx_ < P.C) or P.kl[rr, tx_] not in rasen:
+                tx_ = int(mitte // T) if mitte is not None else -1   # sonst in den Rasen des Stamms ruecken
+                if not (0 <= tx_ < P.C) or P.kl[rr, tx_] not in rasen:
+                    return None
+            a_ = tx_
+            while a_ - 1 >= 0 and P.kl[rr, a_ - 1] in rasen:
+                a_ -= 1
+            b_ = tx_
+            while b_ + 1 < P.C and P.kl[rr, b_ + 1] in rasen:
+                b_ += 1
+            lo, hi = a_ * T + 2, (b_ + 1) * T - 3
+            if hi - lo + 1 < breite:
+                return None
+            x0 = min(max(sx - breite / 2.0, lo), hi - breite + 1)
+            sx = x0 + breite / 2.0
+        x0, x1 = int(sx - breite / 2.0) - 2, int(sx + breite / 2.0) + 2
+        if '.' in ''.join(P.kl[max(0, rr - 1):rr + 1, max(0, x0 // T):min(P.C, x1 // T + 1)].ravel()):
+            return None
+        n_fehl = len(P.fehl)
+        o = P.setzen(nm, 0, rr, cx=sx, spiegel=spiegel, boden=rasen if rasen else (t['_boden'] | set('gqn')),
+                     begleiter=True, extra={'pflanze': True, 'begleiter': True, 'kein_schatten': True})
+        del P.fehl[n_fehl:]                                   # Fehlversuche nicht melden (naechster Kandidat folgt)
+        if o:
+            o['_eltern'] = t
+            o['_mitte'] = mitte if mitte is not None else sx
+        return o
+
     def baum(n_, bx, r, bd, cx=None, begleit=True, nn=None):
         t = P.setzen(n_, bx, r, boden=bd, cx=cx, n=nn, extra={'baum': True})
-        if t and begleit:                                     # Bueschel/Laub an beiden Sockelecken (Einbettung)
+        if t and begleit:                                     # Begleiter an beiden Sockelecken (Einbettung, Regel 5b)
+            t['_boden'] = set(bd)
             datei, al, zu, xa, xb = P.sprite(n_)
             fz = np.nonzero(al[zu - 1])[0]
             mitte = t['x'] + (fz.mean() if len(fz) else (xa + xb) / 2)
-            zweit = LAUB if 'ginkgo' in n_ else BLUMEN
-            for sx, nm in ((mitte - 12, BUESCHEL), (mitte + 12, zweit)):
-                tx_ = int(sx // T)
-                if '.' in ''.join(P.kl[max(0, r - 1):r + 2, max(0, tx_ - 1):tx_ + 2].ravel()):
-                    continue                                  # keine scharfen Begleiter im Nebelsaum
-                P.setzen(nm, 0, r, cx=sx, boden=bd | set('gq'), begleiter=True,
-                         extra={'pflanze': True, 'begleiter': True, 'kein_schatten': True})
+            rasen = set(bd) & set('n')
+            if rasen:
+                paar_ = ((BUESCHEL, rasen), (LAUB if 'ginkgo' in n_ else BLUMEN, None if 'ginkgo' in n_ else rasen))
+            else:                                             # Strassenbaum auf dem Gehweg: herabgefallenes Laub
+                paar_ = ((LAUB, None), (LAUB, None))
+            for seite, (nm, rs_) in zip((-1, 1), paar_):
+                if nm == LAUB:                                # Laub ist breit (28 px): weiter aussen, sonst vor
+                    kand = ((mitte + 18 * seite, r), (mitte + 26 * seite, r), (mitte + 4 * seite, r + 1),
+                            (mitte - 50 * seite, r))          # den Stamm auf den Gehweg
+                else:                                         # Nebelseite: andere Seite oder vor den Stamm
+                    kand = ((mitte + 12 * seite, r), (mitte + 20 * seite, r), (mitte - 28 * seite, r),
+                            (mitte + 6 * seite, r + 1))
+                for (sx, rr) in kand:
+                    if begleiter_versuch(nm, sx, rr, rs_, t, spiegel=(nm == LAUB and seite > 0), mitte=mitte):
+                        break
+                else:
+                    P.fehl.append((nm, int(mitte // T), r, 'Begleiter ohne Platz'))
         return t
     baum(GRUEN, 47, 8, set('gn'))                             # Spielplatz: NW-Rasen (wie Vorlage) ...
     baum(GINKGO, 59, 7, RASEN)                                # ... und Ginkgo NO-Ecke
@@ -302,25 +419,26 @@ def main():
                         (GRUEN, 26, 91), (GINKGO_K, 24, 91), (GRUEN, 4, 80)):
         baum(n_, bx, r, RASEN)
     baum(GINKGO, 0, 76, RASEN, cx=16 * T)                     # Ginkgo auf eigenem kleinem Rasen (SW-Park)
-    baum(GINKGO, 6, 93, RASEN)                                # Ginkgo am SW-Platz
-    for (bx, r) in ((19, 62), (8, 72), (14, 91)):             # Buesche vor einem Sockel (Regel 5a)
-        P.setzen(BUSCH, bx, r, boden=RASEN, begleiter=True, extra={'pflanze': True})
+    baum(GINKGO, 0, 93, RASEN, cx=7 * T)                      # Ginkgo mittig auf dem Rasenstueck 6-7 am SW-Platz
+    for (bx, r) in ((19, 62), (10, 72), (14, 91)):            # einzelne Buesche neben den Baeumen (2 px Abstand)
+        P.setzen(BUSCH, bx, r, boden=RASEN, extra={'pflanze': True})
     for (bx, r) in ((11, 48), (23, 48), (47, 48), (59, 48)):  # Mittelstreifen: Baeume am Ostende der Hecken
         baum(GRUEN, bx, r, set('m'), begleit=False)
     for cx in (71 * T, 87 * T, 107.5 * T, 114.5 * T):         # Uferstrasse: Baeume auf der Hecke (wie Vorlage)
         baum(GRUEN, 0, 88, set('m'), cx=cx, begleit=False)
     for (n_, bx, r) in ((GINKGO, 29, 31), (GINKGO, 29, 58), (GINKGO, 29, 72)):
         baum(n_, bx, r, set('g'))                             # Strassenbaeume an der Querstrasse (West)
-    for r in (72, 76):                                        # Ostseite: kleine Ginkgos auf Baumscheiben (Allee)
-        baum(GINKGO_K, 0, r, RASEN, cx=38 * T)
+    for r in (72, 76):                                        # Ostseite: Ginkgos wie gegenueber (Allee), Krone ueber
+        baum(GINKGO, 0, r, RASEN, cx=601)                     # dem Bordstein, 2 px vor der Lagerwand
     for r in (39, 59, 71):                                    # Platz: Baum mittig im Heckenbeet, Paare gespiegelt
         P.paar(GRUEN, 0, r, boden=set('e'), cx=83 * T, extra={'baum': True})
-    for (n_, cx, r) in ((GINKGO, 69 * T, 29), (GRUEN, 72 * T, 47), (GINKGO2, 69 * T, 68), (GRUEN, 122.5 * T, 23)):
+    for (n_, cx, r) in ((GINKGO, 69 * T, 29), (GRUEN, 72 * T, 45), (GINKGO2, 72 * T, 68), (GRUEN, 122.5 * T, 23)):
         P.setzen(n_, 0, r, boden=set('e'), cx=cx, extra={'baum': True})
     # ------------------------------------------------------------------ Grosse Einzelobjekte
-    P.setzen('karte02/ortho/09', 18, 82, boden=set('q'))     # Zelt (Marktstand, dunkelblau getoent)
-    P.setzen('karte03/klein/43', 16, 80, boden=set('q'))     # Sandsaecke, symmetrisch zum Zelt
-    P.setzen('karte03/klein/43', 23, 80, boden=set('q'), spiegel=True)
+    P.setzen('gebaeude/zelt', 18, 82, boden=set('q'))        # dunkelblaues Spitzzelt mit Kuehlbox und Truhe (Vorlage)
+    P.setzen('karte03/klein/43', 0, 82, boden=set('q'), cx=16.5 * T)              # Sandsaecke, symmetrisch zum Zelt
+    P.setzen('karte03/klein/43', 0, 82, boden=set('q'), cx=23.5 * T, spiegel=True)
+    P.setzen('k18/strasse/01', 29, 80, boden=set('q'))       # Getraenkeautomat (blau, wie Vorlage)
     P.setzen('k18/strasse/32', 24, 84, boden=set('q'))       # Kisten (frontal)
     P.setzen('gebaeude/feuerschale', 17, 84, boden=set('q'), anim='flammen18')   # Feuerschale (Flammen zuengeln)
     P.setzen('k18/strasse/18', 20, 84, boden=set('q'), anim='laterne18')         # kleine Lagerlaterne
@@ -328,9 +446,11 @@ def main():
     P.setzen('karte10/spielplatz/01', 57, 11, boden=RASEN)   # Schaukel rechts
     P.setzen('gebaeude/kletterkuppel', 57, 13, boden=RASEN)  # Kletterkuppel (wie Vorlage)
     P.setzen('karte10/spielplatz/02', 47, 15, boden=set('g'))   # Wippe auf dem Pflaster
-    for (n_, bx, r) in (('karte02/abgeleitet/container_rot_0', 88, 97), ('karte02/abgeleitet/container_blau_0', 65, 97),
-                        ('karte02/abgeleitet/container_blau_1', 77, 97)):
-        P.setzen(n_, bx, r, boden=set('b'))
+    P.setzen('gebaeude/trinkbrunnen', 52, 17, boden=set('g'))   # Trinkbrunnen, Bank und Taube (wie Vorlage)
+    P.setzen('karte10/klein/38', 54, 17, boden=set('g'))
+    P.setzen('gebaeude/taube', 60, 15, boden=set('gn'))
+    for (n_, bx) in (('gebaeude/container_blau', 65), ('gebaeude/container_rot', 88), ('gebaeude/container_blau2', 92)):
+        P.setzen(n_, bx, 96, boden=set('b'), n=4)             # Container 62x28 auf Reihe 95-96, Reihe 97 bleibt frei
     P.setzen('gebaeude/lkw', 44, 81, boden=set('s'), n=5)    # Kastenwagen (Seitenaufriss) vor dem offenen Rolltor
     P.setzen('k18/frontal/02', 66, 19)                        # Bushaltestellen (frontal)
     P.setzen('k18/frontal/03', 21, 41)
@@ -340,20 +460,20 @@ def main():
     LAT, DLAT = 'karte02/abgeleitet/laterne', 'gebaeude/doppellaterne'
     for x in (14, 30, 46, 58, 70, 82):                        # Nordseite obere Strasse (zwischen den Ladentueren)
         P.setzen(LAT, x, 19)
-    for x in (4, 16, 22, 46, 52, 64, 76):                     # Suedseite obere Strasse (nicht in Zebra-Flucht)
+    for x in (7, 16, 22, 46, 52, 64, 76):                     # Suedseite obere Strasse (nicht in Zebra-Flucht)
         P.setzen(LAT, x, 26)
-    for x in (6, 16, 42, 54):
+    for x in (6, 17, 42, 54):
         P.setzen(LAT, x, 41)
-    for x in (12, 24, 40, 48, 60):
+    for x in (12, 24, 42, 48, 60):
         P.setzen(LAT, x, 54)
     for cx in (8, 20, 44, 56):                                # zweiarmige Leuchten auf dem Mittelstreifen
         P.setzen(DLAT, 0, 48, boden=set('m'), cx=cx * T + 8)
-    for (bx, r) in ((30, 37), (38, 30), (38, 60), (38, 69), (31, 63), (17, 73), (13, 88), (28, 89), (61, 13), (58, 81),
+    for (bx, r) in ((30, 36), (38, 30), (38, 60), (38, 69), (31, 63), (17, 73), (13, 88), (30, 89), (61, 13), (58, 81),
                     (51, 81)):
         P.setzen(LAT, bx, r, boden=GEHEN | RASEN)
     for x in range(14, 125, 12):
         P.setzen(LAT, x, 95)                                  # Uferpromenade
-    P.setzen(LAT, 0, 104, boden=set('h'), cx=107 * T)          # Laterne auf dem Steg (Stegmitte)
+    P.setzen(LAT, 0, 103, boden=set('h'), cx=107 * T)          # Laterne auf dem Steg (Reihe 104 bleibt frei)
     for r in (40, 52, 64, 76):                                # Platz: Paare innen am Mittelweg ...
         P.paar(LAT, 90, r)
     for r in (34, 46, 54, 66, 76):                            # ... und aussen zwischen den Beeten
@@ -367,20 +487,20 @@ def main():
     P.setzen('k18/strasse/17', 26, 26, anim='rechtecke', extra={'licht_rects': [[7, 6, 10, 9, 0]]})
     # ------------------------------------------------------------------ Stadtmoebel
     STR = lambda i: 'k18/strasse/%02d' % i
-    for (n_, bx, r, sp) in [(STR(1), 47, 19, False), (STR(2), 49, 19, False), (STR(3), 62, 26, False),
+    for (n_, bx, r, sp) in [(STR(1), 47, 19, False), (STR(2), 49, 19, False), (STR(3), 70, 26, False),
                             (STR(6), 76, 41, False), (STR(5), 65, 19, False), (STR(40), 61, 26, False)]:
         P.setzen(n_, bx, r, spiegel=sp)
     P.setzen(STR(0), 25, 40, anim='rechtecke', extra={'licht_rects': [[2, 5, 17, 16, 0]]})   # Automat an der Wand
-    for xb in (128, 162):                                     # Fahrraeder mit Abstand
-        P.setzen(STR(4), 0, 41, x=xb)
+    for xb in (128, 162):                                     # Fahrraeder mit Abstand (3 px vom Autodach)
+        P.setzen(STR(4), 0, 41, x=xb, dy=-3)
     P.paar(STR(6), 82, 47)                                    # Infotafeln am Platz (Paar)
     for bx in (84, 86, 88, 90):                               # hohe Banner vor der Terrasse (Paare, Wind von einer Seite)
-        P.paar('gebaeude/banner_hoch', bx, 36, anim='fahne18')
+        P.paar('gebaeude/banner_hoch', bx, 36, anim='fahne18', anker=3.0)   # Mastmitte gespiegelt
     for bx in (20, 44):
         P.setzen(STR(50), bx, 19, anim='fahne18')             # Nobori vor Ramen-Laden und Izakaya (nur Tuch weht)
     for r in (44, 56, 68):                                    # moderne Baenke am Mittelweg (Paare)
         P.paar(STR(14), 95, r)
-    for (bx, r) in ((16, 60), (23, 67), (8, 69), (14, 84), (22, 88), (70, 52), (113, 62)):
+    for (bx, r) in ((16, 60), (23, 67), (8, 69), (14, 84), (22, 88), (70, 52), (115, 62)):
         P.setzen('karte10/klein/38', bx, r, boden=set('gpqn'))
     BAKE = {'anim': 'rechtecke', 'extra': {'licht_rects': [[4, 1, 5, 2, 0], [22, 1, 23, 2, 2]]}}
     for bx in (87, 89, 93):                                   # rot-weisse Absperrungen an der Terrassenkante
@@ -390,9 +510,9 @@ def main():
     P.setzen('karte13/klein/12', 59, 43, boden=set('s'))
     P.setzen('karte10/banner/06', 56, 17, boden=set('g'))     # Uhr (dunkles Metall)
     P.setzen('karte10/banner/06', 16, 57)
-    for (bx, r) in ((37, 19), (57, 26), (26, 55), (60, 69), (13, 41), (60, 95), (106, 95), (77, 26)):
+    for (bx, r) in ((37, 19), (57, 26), (26, 55), (60, 69), (19, 41), (60, 95), (106, 95), (77, 26)):
         P.setzen('karte02/klein/16', bx, r)                   # Muelleimer
-    for (bx, r) in ((24, 26), (49, 41), (40, 69)):
+    for (bx, r) in ((24, 26), (47, 41), (40, 69)):
         P.setzen('karte02/klein/17', bx, r)                   # Hydranten
     P.setzen('karte02/klein/31', 54, 69)                      # Muellcontainer am Vorplatz
     P.setzen('karte10/klein2/02', 63, 44, boden=set('gp'))    # Durchfahrt verboten (Strassenende am Platz)
@@ -408,7 +528,7 @@ def main():
         P.setzen(STR(21), bx, r, boden=set('h'))
     for bx in (30, 56, 116):
         P.setzen(STR(11), bx, 97, boden=set('b'))             # Rettungsringe an der Promenade
-    P.setzen(STR(11), 105, 103, boden=set('h'))
+    P.setzen(STR(11), 108, 103, boden=set('h'))              # Rettungsring rechts der Steglaterne
     # ------------------------------------------------------------------ Autos (Linksverkehr, ganz in der Spur)
     AUTO = lambda i: 'k18/autos/%02d' % i
     fahr = set('s')
@@ -423,6 +543,10 @@ def main():
         P.setzen(AUTO(i), 0, r, boden=fahr, cx=cx * T, extra={'auto': True})
     for (i, bx, r) in ((6, 42, 32), (7, 48, 32), (6, 51, 32), (7, 57, 32)):   # Parkplatz: nur Nordbuchten
         P.setzen(AUTO(i), bx, r, boden=fahr, n=3, extra={'auto': True})
+    begleiter_nachpruefen(P)
+    for o in P.objekte:
+        for k in [k for k in o if k.startswith('_')]:
+            del o[k]
     json.dump(P.objekte, open(os.path.join(OBJ, 'platzierung.json'), 'w'), indent=0)
     print('Karte 18: %d Objekte, %d nicht gesetzt' % (len(P.objekte), len(P.fehl)))
     for f in P.fehl:

@@ -16,6 +16,14 @@ DAUER = k3.BILDDAUER
 AUSSCHNITTE = {'halle_platz': (80, 0, 128, 40), 'kai_hochbahn': (60, 76, 120, 108), 'laeden': (0, 8, 48, 30)}
 
 
+def gemeinsame_palette(bilder):
+    """Eine Palette fuer alle Bilder (aus Bild 0 und Bild 2), ohne Dithering: was sich nicht bewegt, bleibt im GIF
+    pixelgleich (kein Flimmern statischer Flaechen)."""
+    probe = Image.new('RGB', (bilder[0].width * 2, bilder[0].height))
+    probe.paste(bilder[0], (0, 0)); probe.paste(bilder[len(bilder) // 2], (bilder[0].width, 0))
+    pal = probe.quantize(colors=255, method=Image.Quantize.MEDIANCUT)
+    return [b.quantize(palette=pal, dither=Image.Dither.NONE) for b in bilder]
+
 
 def main():
     os.makedirs(OUT, exist_ok=True)
@@ -33,8 +41,8 @@ def main():
     ab.OUT, ab.DAUER = alt, alt_dauer
     for name, (x0, y0, x1, y1) in AUSSCHNITTE.items():
         box = (x0 * 16, y0 * 16, x1 * 16, y1 * 16)
-        teil = [fr.crop(box).resize(((x1 - x0) * 32, (y1 - y0) * 32), Image.NEAREST)
-                .quantize(colors=255, method=Image.Quantize.MAXCOVERAGE) for fr in frames]
+        roh = [fr.crop(box).resize(((x1 - x0) * 32, (y1 - y0) * 32), Image.NEAREST) for fr in frames]
+        teil = gemeinsame_palette(roh)
         teil[0].save(os.path.join(OUT, 'detail_%s.gif' % name), save_all=True, append_images=teil[1:],
                      duration=DAUER, loop=0, disposal=1)
     print('fertig')

@@ -57,6 +57,8 @@ def main():
             dg.text((gx + 6, gy + 4), t, fill=(240, 240, 240))
             g.paste(aus, (gx + (B - aus.width) // 2, gy + 20 + (B - aus.height) // 2))
         bilder.append(g)
+    from karte18_animation import gemeinsame_palette
+    bilder = gemeinsame_palette(bilder)                     # gemeinsame Palette: Statisches flimmert nicht
     bilder[0].save(os.path.join(OUT, 'animationen_einzeln.gif'), save_all=True, append_images=bilder[1:],
                    duration=kb.BILDDAUER, loop=0)
     print('Animationsplan ->', OUT)

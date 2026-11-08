@@ -8,7 +8,7 @@ zum Gehweg. Licht von oben links: linke/obere Kanten hell, rechte/untere dunkel;
 Abendstimmung: einzelne Fenster sind warm erleuchtet (echte Lichtquelle -> 'fensterlicht'), Reklame leuchtet.
 Anspielung bei der Messehalle nur ueber die Form (zwei umgedrehte Pyramiden), kein Nachbau.
 """
-import json, math, os, random
+import json, math, os, random, zlib
 import numpy as np
 from PIL import Image, ImageDraw
 
@@ -56,7 +56,7 @@ class Bild:
         Image.fromarray(self.a).save(os.path.join(OUT, name + '.png'))
 
 
-def dach(b, x0, x1, y0, y1, c, rs, aufbauten=True, schraeg=0):
+def dach(b, x0, x1, y0, y1, c, rs, aufbauten=True, schraeg=0, frei=None):
     """Flachdach mit Attika: aussen 2 px Rand (oben/links hell), innen Dachpappe, Aufbauten (Lueftung, Klimageraete,
     Treppenhaus) unregelmaessig verteilt."""
     hell, mittel, dunkel = c
@@ -69,6 +69,9 @@ def dach(b, x0, x1, y0, y1, c, rs, aufbauten=True, schraeg=0):
     x = x0 + 8 + rs.randint(0, 10)
     while x < x1 - 24:
         art = rs.choice(('klima', 'luefter', 'leer', 'leer'))
+        if frei and x + 12 >= frei[0] and x <= frei[1]:         # Platz fuer einen grossen Dachaufbau freihalten
+            x = frei[1] + 4
+            continue
         if art == 'klima' and y1 - y0 > 10:
             yy = y0 + 4 + rs.choice((0, max(0, y1 - y0 - 14) // 2, max(0, y1 - y0 - 14)))
             b.kasten(x, yy, x + 11, yy + 7, H('#9aa0ac'), H('#c4c8d2'), H('#5a5e6a'))
@@ -267,9 +270,10 @@ def buero(w, h, rs, glas=('#2a3654', '#3a4a6e', '#56709c'), wand='#3e4454', dach
 def wohnblock(w, h, rs):
     b = Bild(w, h)
     dh = 22
-    dach(b, 0, w - 1, 0, dh, (H('#8a8478'), H('#6e685e'), H('#4e4a44')), rs)
-    b.kasten(20, 3, 60, dh - 5, H('#a49e94'), H('#c8c2b8'), H('#6a645c'))           # Treppenhaus
-    b.r(34, 8, 42, dh - 5, H('#3a3a40'))
+    tx = 144                                                    # Treppenhaus x 14-15 (wie Vorlage)
+    dach(b, 0, w - 1, 0, dh, (H('#8a8478'), H('#6e685e'), H('#4e4a44')), rs, frei=(tx - 8, tx + 39))
+    b.kasten(tx - 4, 3, tx + 35, dh - 5, H('#a49e94'), H('#c8c2b8'), H('#6a645c'))   # Dachaufbau ueber dem Treppenhaus
+    b.r(tx + 12, 8, tx + 19, dh - 5, H('#3a3a40'))
     b.kasten(w - 52, 4, w - 32, dh - 7, H('#8a9098'), H('#b0b6be'), H('#5a6068'))    # Wassertank
     y = dh + 1
     wand = H('#a8a6a2')
@@ -281,8 +285,8 @@ def wohnblock(w, h, rs):
         ys = y + 3 + s * hs
         for u in range(w // 64):
             ux = u * 64
-            if 144 - 64 < ux < 176:
-                pass
+            if ux < tx + 32 and ux + 64 > tx:                    # Einheit am Treppenhaus auslassen (keine Anschnitte)
+                continue
             fenster(b, ux + 8, ys + 6, 16, 14, rs, licht=0.35)
             # Balkontuer + Balkon mit Gelaender
             b.r(ux + 30, ys + 4, ux + 54, ys + 22, H('#3a4050'))
@@ -300,7 +304,6 @@ def wohnblock(w, h, rs):
                 b.kasten(ux + 47, ys + 16, ux + 54, ys + 21, H('#b8bcc4'), H('#dcdfe4'), H('#6a6e78'))
         b.r(0, ys + hs - 1, w - 1, ys + hs - 1, H('#8a8884'))
     # Treppenhaus (wie Vorlage) als helles senkrechtes Band x 14-15, schmale Querfenster je Geschoss, Eingang unten
-    tx = 144
     b.r(tx, y, tx + 31, h - 4, H('#c4c2bc'))
     b.r(tx, y, tx + 31, y + 1, H('#dcdad4'))
     b.r(tx, y, tx, h - 4, H('#dcdad4')); b.r(tx + 31, y, tx + 31, h - 4, H('#8a8884'))
@@ -392,24 +395,27 @@ def halle(w, h, rs):
     Pyramiden auf Kernen, exakt spiegelsymmetrisch zur Achse (w/2)."""
     b = Bild(w, h)
     mx = w // 2
-    dach_y0, fass_y0 = 124, 256                              # Dach ab Reihe 12, Fassade ab Reihe 20
-    # Dach der Halle (leicht von oben): Attika, Oberlichtbaender, Kanten
-    b.r(0, dach_y0, w - 1, fass_y0 - 1, H('#9aa0ae'))
-    b.r(0, dach_y0, w - 1, dach_y0 + 2, H('#c4c8d4'))
-    b.r(0, dach_y0, 2, fass_y0 - 1, H('#b4b8c4'))
-    b.r(w - 3, dach_y0, w - 1, fass_y0 - 1, H('#6a6e7c'))
-    b.r(6, dach_y0 + 6, w - 7, fass_y0 - 12, H('#868a98'))
-    for x in range(6, w - 7):                                  # Dachbahnen (Fugen alle 32 px, symmetrisch)
+    dach_y0, fass_y0 = 144, 256                              # Dach ab Reihe 13 (wie Vorlage), Fassade ab Reihe 20
+    # Dach der Halle (leicht von oben): Seitenkanten als durchgehende Schraege (oben 12 px eingerueckt, unten buendig),
+    # Attika mit Lichtkante oben/links, Dachplatten, drei Luefter; alles spiegelsymmetrisch zur Achse mx
+    dy_ = fass_y0 - 11 - dach_y0
+    for y in range(dach_y0, fass_y0 - 11):
+        ein = int(round(12 * (1 - (y - dach_y0) / dy_)))
+        b.r(ein, y, w - 1 - ein, y, H('#9aa0ae'))
+        b.r(ein, y, ein + 2, y, H('#b4b8c4'))                  # linke Schraege im Licht
+        b.r(w - 3 - ein, y, w - 1 - ein, y, H('#6a6e7c'))      # rechte Schraege im Schatten
+        if y >= dach_y0 + 6 and y <= fass_y0 - 13:
+            b.r(ein + 6, y, w - 7 - ein, y, H('#868a98'))
+    b.r(12, dach_y0, w - 13, dach_y0 + 2, H('#c4c8d4'))
+    for x in range(18, w - 18):                                # Dachbahnen (Fugen alle 32 px, symmetrisch)
         if (x - mx) % 32 == 0:
             b.r(x, dach_y0 + 7, x, fass_y0 - 13, H('#7a7e8c'))
     for y in range(dach_y0 + 8, fass_y0 - 13, 16):             # Dachplatten in Draufsicht
-        b.r(6, y, w - 7, y, H('#7a7e8c'))
-    for (cx_, cy_) in ((72, dach_y0 + 22), (mx, dach_y0 + 22), (w - 72, dach_y0 + 22)):   # Dachluefter, symmetrisch
+        ein = int(round(12 * (1 - (y - dach_y0) / dy_)))
+        b.r(ein + 6, y, w - 7 - ein, y, H('#7a7e8c'))
+    for (cx_, cy_) in ((72, dach_y0 + 14), (mx, dach_y0 + 14), (w - 72, dach_y0 + 14)):   # Dachluefter, symmetrisch
         b.kasten(cx_ - 8, cy_, cx_ + 7, cy_ + 9, H('#9aa0ac'), H('#c4c8d2'), H('#5a5e6a'))
         b.r(cx_ - 5, cy_ + 3, cx_ + 4, cy_ + 6, H('#4a4e5a'))
-    for k in range(6):                                         # abgeschraegte Ecken der Attika
-        b.r(0, dach_y0 + k, 5 - k, dach_y0 + k, H('#6a6e7c'))
-        b.r(w - 6 + k, dach_y0 + k, w - 1, dach_y0 + k, H('#6a6e7c'))
     b.r(0, fass_y0 - 11, w - 1, fass_y0 - 2, H('#aeb2be'))       # Gesims ueber der Fassade
     b.r(0, fass_y0 - 11, w - 1, fass_y0 - 11, H('#d4d8e2'))
     b.r(0, fass_y0 - 2, w - 1, fass_y0 - 1, H('#5a5e6c'))
@@ -450,12 +456,15 @@ def halle(w, h, rs):
     # Pyramiden: oben breit (224), unten schmal (96), Hoehe 150; Deckflaeche 14 px von oben sichtbar
     for cx in (mx - 128, mx + 128):                            # Pyramiden: oberer Block, Gesimsplatte, Trichter
         top, ob, ub = 4, 112, 44
-        ky0 = 186                                                  # Unterkante des Trichters
-        for (kx0, kx1) in ((cx - 40, cx - 17), (cx + 16, cx + 39)):      # zwei Kerne (Stuetzen) bis aufs Dach
-            b.kasten(kx0, ky0 - 6, kx1, 214, H('#a8acb8'), H('#ccd0da'), H('#62667a'))
-            for y in range(ky0 + 4, 206, 12):
-                b.r(kx0 + 6, y, kx1 - 6, y + 5, H('#3a4a6a'))
-            b.r(kx0 - 2, 215, kx1 + 3, 217, H('#5a5e6c'))
+        ky0 = 202                                                  # Unterkante des Trichters (Reihe 16,6)
+        ku = fass_y0 - 12                                          # Saeulen reichen bis aufs Fassadengesims
+        b.r(cx - 25, ky0, cx + 24, ku, H('#1e2434'))                # dunkle Oeffnung zwischen den Saeulen
+        b.r(cx - 25, ky0, cx + 24, ky0 + 3, H('#141824'))
+        for gx in (cx - 9, cx + 8):                                # schlanke Pfosten in der Oeffnung
+            b.r(gx, ky0 + 4, gx, ku, H('#3a4256'))
+        for (kx0, kx1) in ((cx - 40, cx - 26), (cx + 25, cx + 39)):      # zwei Saeulen (Stuetzen) bis zum Gesims
+            b.kasten(kx0, ky0 - 4, kx1, ku, H('#a8acb8'), H('#ccd0da'), H('#62667a'))
+            b.r(kx0 + 3, ky0, kx0 + 3, ku - 2, H('#bcc0cc'))
         for y in range(top, top + 18):                                     # Deckflaeche von oben
             einzug = (top + 18 - y) // 4
             for x in range(cx - ob + einzug, cx + ob - einzug):
@@ -730,6 +739,88 @@ def banner_hoch():
     return b
 
 
+def container(name, basis, hell, dunkel, dach):
+    """Schiffscontainer als reiner Seitenaufriss (frontal), 62x28 (4 Kacheln breit mit je 1 px Luft): Dach von leicht
+    oben, Wellblech-Rippen (Licht links), Eckpfosten, Bodenrahmen mit Eckbeschlaegen."""
+    w, h = 62, 28
+    b = Bild(w, h)
+    b.r(0, 0, w - 1, 3, H(dach)); b.r(0, 0, w - 1, 0, H('#d8dce4'))
+    for x in range(0, w):
+        c = (H(hell), H(basis), H(basis), H(dunkel))[x % 4]
+        b.r(x, 4, x, 23, c)
+    b.r(0, 4, w - 1, 5, H(dunkel))
+    for (x0, x1) in ((0, 3), (w - 4, w - 1)):                  # Eckpfosten
+        b.r(x0, 4, x1, 25, H(dunkel)); b.r(x0, 4, x0, 25, H(hell))
+    b.r(0, 24, w - 1, 25, H('#3a3c48'))
+    for x0 in (0, w - 6):
+        b.r(x0, 26, x0 + 5, 27, H('#2a2c36'))                  # Eckbeschlaege als Fuesse
+    b.r(8, 8, 15, 10, H('#d8d8dc')); b.r(8, 12, 12, 12, H('#d8d8dc'))   # Kennzeichnung
+    b.umriss()
+    return b
+
+
+def zelt():
+    """Dunkelblaues Spitzzelt (Pavillon) fuer das Notlager, frontal 64x44: Spitzdach (links im Licht), gewellte Blende,
+    zwei Stangen links/rechts, Rueckwand aus Zeltstoff; darunter Kuehlbox und Truhe."""
+    w, h = 64, 44
+    b = Bild(w, h)
+    for y in range(1, 17):                                     # Spitzdach
+        halb = 2 + (y - 1) * 30 / 15.0
+        x0, x1 = int(round(31.5 - halb)), int(round(31.5 + halb))
+        b.r(x0, y, 31, y, H('#4a6a9e'))
+        b.r(32, y, x1, y, H('#2e4878'))
+        b.px(x0, y, H('#6a8abe'))
+    for k in (1, 3):                                           # Naehte vom First zur Traufe
+        for y in range(2, 17):
+            t = (y - 1) / 15.0
+            b.px(int(round(31.5 - t * 30 * k / 4)), y, H('#3a5888'))
+            b.px(int(round(31.5 + t * 30 * k / 4)), y, H('#243a66'))
+    b.r(0, 17, w - 1, 19, H('#3a5888')); b.r(0, 17, w - 1, 17, H('#5a7ab0'))
+    for x in range(0, w, 8):                                   # gewellte Blende
+        b.r(x + 2, 20, x + 5, 20, H('#3a5888'))
+    b.r(5, 20, w - 6, h - 2, H('#1e2a44'))                    # Rueckwand (Zeltstoff im Schatten)
+    for x in range(9, w - 8, 8):
+        b.r(x, 21, x, h - 3, H('#26345a'))
+    for px_ in (2, w - 5):                                     # Stangen
+        b.r(px_, 18, px_ + 2, h - 1, H('#8a8e9a')); b.r(px_, 18, px_, h - 1, H('#c4c8d2'))
+    b.kasten(10, 30, 26, h - 2, H('#c8d0dc'), H('#eef0f6'), H('#7a8496'))   # Kuehlbox
+    b.r(10, 30, 26, 32, H('#3a6aa0')); b.r(16, 33, 20, 33, H('#5a6070'))
+    b.kasten(35, 29, 54, h - 2, H('#7a5236'), H('#a07450'), H('#4a3222'))   # Truhe
+    b.r(35, 33, 54, 33, H('#4a3222'))
+    for x in (39, 50):
+        b.r(x, 29, x + 1, h - 2, H('#4a3222'))
+    b.r(44, 35, 45, 37, H('#c8b060'))
+    b.r(0, h - 1, w - 1, h - 1, H('#2a2c36'))
+    b.umriss()
+    return b
+
+
+def trinkbrunnen():
+    """Trinkbrunnen (Spielplatz): Steinsaeule mit Becken und kleinem Hahn, frontal 12x24."""
+    w, h = 12, 24
+    b = Bild(w, h)
+    b.kasten(1, 2, 10, 6, H('#9aa0ac'), H('#c4c8d2'), H('#5a5e6a'))
+    b.r(3, 3, 8, 4, H('#4a6a9a')); b.r(3, 3, 5, 3, H('#8aaad0'))   # Wasser im Becken
+    b.r(6, 0, 7, 1, H('#6a6e7c'))                              # Hahn
+    b.kasten(3, 7, 8, h - 3, H('#8a8e9a'), H('#b0b4be'), H('#5a5e6a'))
+    b.kasten(1, h - 3, 10, h - 1, H('#6a6e7c'), H('#8a8e9a'), H('#3a3e4a'))
+    b.umriss()
+    return b
+
+
+def taube():
+    """Stadttaube von der Seite, 10x8: grau, dunkle Fluegelbinden, schillernder Hals, rote Fuesse."""
+    b = Bild(10, 8)
+    b.r(2, 3, 7, 5, H('#8a8e9e')); b.r(3, 2, 6, 2, H('#9aa0b0'))
+    b.r(7, 1, 8, 3, H('#9aa0b0')); b.px(8, 2, H('#1c1e2a')); b.px(9, 2, H('#c8b8a0'))
+    b.px(7, 3, H('#5a8a7a')); b.px(6, 3, H('#7a5a8a'))
+    b.r(3, 4, 5, 4, H('#5a5e6c')); b.r(0, 3, 1, 4, H('#5a5e6c'))
+    b.px(4, 6, H('#c86a5a')); b.px(6, 6, H('#c86a5a'))
+    b.umriss()
+    b.px(4, 6, H('#c86a5a')); b.px(6, 6, H('#c86a5a'))
+    return b
+
+
 def poller():
     b = Bild(8, 14)
     b.kasten(1, 2, 6, 13, H('#8a8e9a'), H('#c4c8d2'), H('#4a4e5c'))
@@ -764,7 +855,7 @@ def main():
     teile = []
     for (x0, y0, x1, y1, art) in lay['gebaeude']:
         w, h = (x1 - x0 + 1) * T, (y1 - y0 + 1) * T
-        rs = random.Random(hash(art) % 1000 + 18)
+        rs = random.Random(zlib.crc32(art.encode()) % 1000 + 18)   # fest (hash() wechselt je Lauf)
         if art == 'laeden':
             b = ladenzeile(w, h, rs)
         elif art == 'buero_oben':
@@ -784,7 +875,11 @@ def main():
         teile.append((art, Image.fromarray(b.a)))
     for name, fn in (('bus', bus), ('lkw', lkw), ('kletterkuppel', kletterkuppel), ('feuerschale', feuerschale),
                      ('banner_hoch', banner_hoch), ('pfeiler', pfeiler), ('pfeiler_wasser', pfeiler_wasser), ('poller', poller), ('zug', zug),
-                     ('kuebel', kuebel), ('doppellaterne', doppellaterne), ('koban', koban_mit_dach)):
+                     ('kuebel', kuebel), ('doppellaterne', doppellaterne), ('koban', koban_mit_dach),
+                     ('zelt', zelt), ('trinkbrunnen', trinkbrunnen), ('taube', taube),
+                     ('container_rot', lambda: container('rot', '#8e4038', '#ac5a4c', '#5e2a26', '#b86e60')),
+                     ('container_blau', lambda: container('blau', '#3a5a86', '#5274a2', '#24405e', '#6a88b0')),
+                     ('container_blau2', lambda: container('blau2', '#3e6478', '#587e92', '#284656', '#7094a8'))):
         b = fn()
         if b is None:
             continue
