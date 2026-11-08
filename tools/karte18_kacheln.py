@@ -30,91 +30,56 @@ def kachel(art, v):
             for x in range(16):
                 px[x, y] = c
 
-    if art == 's':                                   # Asphalt: dunkles Blaugrau, helle und dunkle Koerner
-        fl(H('#30343f'))
-        for _ in range(10):
-            px[r.randint(0, 15), r.randint(0, 15)] = H('#3a3e4b')
-        for _ in range(6):
-            px[r.randint(0, 15), r.randint(0, 15)] = H('#272a33')
-        if v == 2:                                   # Flicken
-            x0, y0 = r.randint(1, 7), r.randint(1, 7)
-            for y in range(y0, y0 + 6):
-                for x in range(x0, x0 + 7):
-                    px[x, y] = H('#2b2e38')
-        # Risse kommen nur vereinzelt als Overlay in karte18_bauen dazu (sonst wirkt der Asphalt gemustert)
-    elif art == 'g':                                 # Gehweg: Pflaster 8x4, versetzt, Licht oben
-        grund, licht, fuge = H('#5c6676'), H('#6a7484'), H('#3e4654')
+    def platten(gw, gh, basis, licht, schatten, fuge, versatz=0):
+        """GBA-Handheld-Stil: saubere Platten gw x gh, je Platte 1 px Licht oben/links, 1 px Schatten
+        unten/rechts innen, Fuge 1 px unten/rechts; kein Rauschen."""
         for y in range(16):
             for x in range(16):
-                xo = (x + (4 if (y // 4) % 2 else 0)) % 8
-                if y % 4 == 3 or xo == 7:
+                xo = (x + (versatz if (y // gh) % 2 else 0)) % gw
+                yo = y % gh
+                if yo == gh - 1 or xo == gw - 1:
                     c = fuge
-                elif y % 4 == 0:
+                elif yo == gh - 2 or xo == gw - 2:
+                    c = schatten
+                elif yo == 0 or xo == 0:
                     c = licht
                 else:
-                    c = grund
+                    c = basis
                 px[x, y] = c
-        if v in (1, 3):                              # einzelner dunklerer Stein
-            sx, sy = r.choice((0, 8)), r.choice((0, 4, 8, 12))
-            for y in range(sy, sy + 3):
-                for x in range(sx + (4 if (sy // 4) % 2 else 0), sx + (4 if (sy // 4) % 2 else 0) + 7):
-                    if 0 <= x < 16 and (y % 4) != 0:
-                        px[x, y] = H('#56606f')
-    elif art in 'pq':                                # Platz: lavendel, p grosse Platten, q kleine
-        g = 16 if art == 'p' else 8
-        basis = [H('#776f8a'), H('#7b738e'), H('#736b86'), H('#7e7691'), H('#787089')][v]
+
+    if art == 's':                                   # Asphalt: ruhig, nur ein feines festes Korn
+        fl(H('#3c4150'))
+        for (x, y) in ((3, 2), (11, 5), (6, 9), (14, 12), (1, 13), (9, 15))[:3 + v % 4]:
+            px[x, y] = H('#474c5c')
+    elif art == 'g':                                 # Gehweg: helle quadratische Platten 8x8
+        platten(8, 8, H('#a9adbb'), H('#c9ccd8'), H('#9498a8'), H('#73778a'))
+    elif art == 'p':                                 # grosser Platz: Lavendel-Platten 16x16 mit Einlage
+        platten(16, 16, H('#a79fbe'), H('#c6bfd9'), H('#958dad'), H('#716a8a'))
+        if v % 2 == 0:                               # kleines Rautenmuster in der Mitte (wie GBA-Plaetze)
+            for (x, y) in ((7, 5), (6, 6), (8, 6), (5, 7), (9, 7), (6, 8), (8, 8), (7, 9)):
+                px[x, y] = H('#b8b0cd')
+    elif art == 'q':                                 # Platz links: kleine rosa-lavendel Platten 8x8
+        platten(8, 8, H('#b3a3bf'), H('#cebfd9'), H('#9f8fad'), H('#776886'))
+    elif art == 'c':                                 # Mittelweg: Schachbrett, je Feld mit Kante
         for y in range(16):
             for x in range(16):
-                c = basis
-                if art == 'q' and ((x // 8) + (y // 8)) % 2:
-                    c = mix(basis, H('#6c6480'), 0.5)
-                if y % g == g - 1 or x % g == g - 1:
-                    c = H('#5e5672')
-                elif y % g == 0 or x % g == 0:
-                    c = mix(basis, H('#958daa'), 0.5)
+                hell = ((x // 8) + (y // 8)) % 2 == 0
+                b_, l_, s_ = ((H('#bab3cf'), H('#d4cee4'), H('#a39bb9')) if hell else
+                              (H('#9c94b4'), H('#b0a9c6'), H('#8a82a2')))
+                xo, yo = x % 8, y % 8
+                c = s_ if (xo == 7 or yo == 7) else l_ if (xo == 0 or yo == 0) else b_
                 px[x, y] = c
-        if v == 3:                                   # Fleck
-            x0, y0 = r.randint(2, 8), r.randint(2, 8)
-            for y in range(y0, y0 + 4):
-                for x in range(x0, x0 + 5):
-                    if (x - x0 - 2) ** 2 + (y - y0 - 1.5) ** 2 < 6:
-                        px[x, y] = mix(px[x, y], H('#5a5270'), 0.35)
-    elif art == 'c':                                 # Mittelweg: Schachbrett hell/dunkel lavendel
-        for y in range(16):
-            for x in range(16):
-                px[x, y] = H('#8e87a4') if ((x // 8) + (y // 8)) % 2 == 0 else H('#7c7592')
-                if x % 8 == 0 or y % 8 == 0:
-                    px[x, y] = mix(px[x, y], H('#a49dba'), 0.4)
-    elif art == 't':                                 # Terrasse: helle Platten 16x16 mit Mittelfuge 8
-        for y in range(16):
-            for x in range(16):
-                c = H('#9790ac') if ((x // 8) + (y // 8)) % 2 == 0 else H('#8f88a4')
-                if y == 15 or x == 15:
-                    c = H('#6e6886')
-                elif y == 0 or x == 0:
-                    c = H('#aea8c2')
-                px[x, y] = c
-    elif art == 'n':                                 # Rasen: das Gras von Karte 01 (assets/basis/gras_*), nur
-        g_ = Image.open(os.path.join(ROOT, 'assets', 'basis', 'gras_%d.png' % v)).convert('RGB')   # leicht abendlich
-        g_ = g_.crop((0, 0, 16, 16)) if g_.size != (16, 16) else g_
+    elif art == 't':                                 # Terrasse: helle Platten 16x8, versetzt
+        platten(16, 8, H('#c2bed2'), H('#dcd8e8'), H('#aca8be'), H('#86829a'), versatz=8)
+    elif art == 'n':                                 # Rasen: das Gras von Karte 01 (assets/basis/gras_*)
+        g_ = Image.open(os.path.join(ROOT, 'assets', 'basis', 'gras_%d.png' % v)).convert('RGB')
         g_ = Image.eval(g_, lambda c: int(c * 0.86))
         im.paste(g_, (0, 0))
-    elif art == 'd':                                 # Sand (Sandkasten), gedaempft fuer Abend und Nebel
-        fl(H('#706a56'))
-        for _ in range(12):
-            px[r.randint(0, 15), r.randint(0, 15)] = H('#7e7862') if r.random() < 0.6 else H('#4e4a3c')
-    elif art == 'v':                                 # Betonvorplatz: helle Platten, 1 px Fuge, selten ein Riss
-        fl(H('#8c909c'))
-        for i in range(16):
-            px[i, 15] = H('#6a6e7a'); px[15, i] = H('#6a6e7a')
-        for i in range(15):
-            px[i, 0] = H('#a2a6b0'); px[0, i] = H('#9a9eaa')
-        for _ in range(4):
-            px[r.randint(2, 13), r.randint(2, 13)] = H('#82868f')
-        if v == 3:
-            x, y = r.randint(3, 10), 2
-            for _ in range(6):
-                px[x, y] = H('#70747e'); x += r.choice((0, 1)); y += 2
+    elif art == 'd':                                 # Sand (Sandkasten): der Sand von Karte 01
+        g_ = Image.open(os.path.join(ROOT, 'assets', 'basis', 'sand_%d.png' % v)).convert('RGB')
+        im.paste(Image.eval(g_, lambda c: int(c * 0.86)), (0, 0))
+    elif art == 'v':                                 # Betonvorplatz: grosse helle Platten 16x16
+        platten(16, 16, H('#b9bcc6'), H('#d2d4dc'), H('#a4a7b2'), H('#7f8290'))
     elif art == 'x':                                 # Sperrflaeche: Asphalt mit diagonalen weissen Streifen
         for y in range(16):
             for x in range(16):
@@ -123,11 +88,11 @@ def kachel(art, v):
         for y in range(16):
             reihe = y // 4
             for x in range(16):
-                c = [H('#6e4c30'), H('#76533a'), H('#684830'), H('#7a5a3c')][(reihe + v) % 4]
+                c = [H('#8a6440'), H('#916a45'), H('#86603c'), H('#8e6842')][(reihe + v) % 4]
                 if y % 4 == 3:
-                    c = H('#3e2a1a')
+                    c = H('#5a3e26')
                 elif y % 4 == 0:
-                    c = mix(c, H('#9a7450'), 0.5)
+                    c = H('#b08a5e')
                 stoss = (5 + reihe * 7 + v * 3) % 16
                 if x == stoss and y % 4 != 3:
                     c = H('#4a3220')
@@ -138,11 +103,13 @@ def kachel(art, v):
         for y in range(16):
             for x in range(16):
                 xo = (x + (8 if (y // 8) % 2 else 0)) % 16
-                c = H('#8a8e9c')
+                c = H('#9a9eac')
                 if y % 8 == 7 or xo == 15:
                     c = H('#5c606e')
-                elif y % 8 == 0:
-                    c = H('#a2a6b2')
+                elif y % 8 == 6 or xo == 14:
+                    c = H('#7c8090')
+                elif y % 8 == 0 or xo == 0:
+                    c = H('#b8bcc8')
                 px[x, y] = c
     elif art == 'h':                                 # Holzsteg: Planken senkrecht 4 px, Fugen, Naegel
         for y in range(16):

@@ -852,13 +852,12 @@ def bauen(frame=None, speichern=True):
     wasser = gross(kl == 'w')
     a[wasser] = textur('w', cols, rows)[wasser]
     a = meer_wie_karte01(a, kl, wasser, frame)
-    boden_details(a, kl)
+    # (keine Moos-/Riss-Details mehr: sauberer Handheld-Stil)
     land = gross(kl != '.') & ~wasser
     asphalt = gross(np.isin(kl, ['s', 'x']))
     lvl = np.zeros((Hp, Wp), np.uint8)
     lvl[land] = 1
     lvl[gross(kl == 't')] = 2
-    risse(a, gross(kl == 's'))
     bordsteine(a, asphalt, land)
     markierungen(a, asphalt, lay)
     rasen_kanten(a, gross(np.isin(kl, ['n', 'd'])))
