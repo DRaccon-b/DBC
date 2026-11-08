@@ -375,8 +375,18 @@ def main():
             continue
         if art != 'halle' and not art.startswith('lager'):
             continue                                              # durch PixelLab-Haeuser ersetzt
-        name_ = 'k18/halle_pl/halle' if art == 'halle' else 'gebaeude/' + art   # Messehalle im PixelLab-Stil
-        o = P.setzen(name_, x0, y1, pruefen=False, n=x1 - x0 + 1, extra={'gebaeude': [x0, y0, x1, y1]})
+        if art == 'halle':                                    # Messehalle (PixelLab Pro, Anspielung Tokyo Big Sight),
+            n_h = 'k18/halle_pro/02_repariert'                # mittig auf der Achse, Fuss Reihe y1
+            datei, al, zu, xa, xb = P.sprite(n_h)
+            xh = A * T - al.shape[1] // 2
+            o = P.setzen(n_h, 0, y1, x=xh, pruefen=False, extra={'gebaeude': True})
+            gx0, gx1 = xh // T, (xh + al.shape[1] - 1) // T
+            gy0 = o['y'] // T
+            o['gebaeude'] = [gx0, gy0, gx1, y1]
+            o['kein_schatten'] = True
+            P.sperren(gx0, gy0, gx1, y1)
+            continue
+        o = P.setzen('gebaeude/' + art, x0, y1, pruefen=False, n=x1 - x0 + 1, extra={'gebaeude': [x0, y0, x1, y1]})
         o['x'], o['y'] = x0 * T, y0 * T
         o['kein_schatten'] = True
         rects = lichter.get(art) or lichter.get('lager_' + art.split('_')[-1])
