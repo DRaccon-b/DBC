@@ -32,10 +32,41 @@ LEER = np.array([8, 15, 32], np.float32)          # Hintergrund der Vorlage
 kontur, mischen, puls = k15.kontur, k15.mischen, k15.puls
 
 
+def fadenkreuz_drehen(a, f):
+    """Das rote Fadenkreuz auf dem Tor dreht sich (Nutzerwunsch): der Kreis bleibt, die vier Striche werden je Bild
+    um 22,5 Grad weitergedreht neu gezeichnet (nach 4 Bildern 90 Grad = nahtlos, da das Kreuz 4-fach symmetrisch
+    ist). Nur diese Pixel aendern sich, der Bildschirm drumherum bleibt."""
+    h, w = a.shape[:2]
+    r_, g_, b_, al = a[..., 0], a[..., 1], a[..., 2], a[..., 3]
+    yy, xx = np.mgrid[0:h, 0:w]
+    box = (np.abs(yy - h / 2) < 13) & (np.abs(xx - w / 2) < 13)
+    kreuz = box & (al > 0) & (r_ > 150) & (g_ < 120) & (b_ < 110)
+    if kreuz.sum() < 10:
+        return
+    ys, xs = np.nonzero(kreuz)
+    cy, cx = (ys.min() + ys.max()) / 2.0, (xs.min() + xs.max()) / 2.0
+    d = np.hypot(yy - cy, xx - cx)
+    ring_d = np.median(d[kreuz & (np.abs(yy - cy) > 2) & (np.abs(xx - cx) > 2)])
+    kreis = kreuz & (np.abs(d - ring_d) <= 1.0)
+    striche = kreuz & ~kreis
+    hinter = np.array((74, 20, 24), np.float32)               # Bildschirmgrund
+    a[striche, :3] = hinter
+    r_max = d[striche].max()
+    winkel = math.radians(22.5 * (f % 4))
+    for k in range(4):
+        w_ = winkel + k * math.pi / 2
+        for t in np.arange(1.5, r_max + 0.5, 0.5):
+            X, Y = int(round(cx + math.cos(w_) * t)), int(round(cy + math.sin(w_) * t))
+            if 0 <= X < w and 0 <= Y < h:
+                a[Y, X, :3] = (224, 74, 60) if abs(t - ring_d) > 1.2 else a[Y, X, :3]
+    a[int(round(cy)), int(round(cx)), :3] = (224, 74, 60)
+
+
 def tor16(sp, frame, o):
     """Firewall-Tor: nur der rote Bildschirm mit Fadenkreuz pulsiert, die orangen Leiterbahnen laufen als Lichtwelle
     um den Rahmen. Rahmen und Hoerner bleiben unveraendert."""
     a = np.array(sp).astype(np.float32)
+    fadenkreuz_drehen(a, frame or 0)
     r_, g_, b_, al = a[..., 0], a[..., 1], a[..., 2], a[..., 3]
     p = puls(frame)
     rot = (al > 0) & (r_ > 90) & (g_ < 70) & (b_ < 70)

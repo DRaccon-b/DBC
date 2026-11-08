@@ -16,7 +16,7 @@ Ein Raum im digitalen Netz: Eine runde Plattform schwebt in der Leere, oben das 
 
 ## Animation (4 Bilder, 250 ms – Regel: höchstens 4 Animationsbilder)
 Datenpakete auf den Strängen, Fragmente schweben (1 px), Kanten und Leuchtringe glimmen, Pfeilmarken leuchten
-nacheinander, Lichtfäden unter der Plattform, Tor (roter Bildschirm pulsiert, Lichtimpuls auf den Leiterbahnen),
+nacheinander, Lichtfäden unter der Plattform, Tor (roter Bildschirm pulsiert, das Fadenkreuz dreht sich, Lichtimpuls auf den Leiterbahnen),
 Computer (Balken flackern, gelbe Punkte blinken). Rahmen, Gehäuse und Boden bleiben ruhig.
 
 ## Dateien
