@@ -406,8 +406,8 @@
 "datei": "sauber/gebaeude-zug.png",
 "basis": "gebaeude/zug",
 "x": 1376,
-"y": 1278,
-"fuss": 33,
+"y": 1249,
+"fuss": 62,
 "kachel": [
 96,
 81
@@ -802,11 +802,183 @@
 {
 "datei": "sauber/karte01-deko-50_m.png",
 "basis": "karte01/deko/50",
-"x": 289,
+"x": 226,
 "y": 1481,
 "fuss": 22,
 "kachel": [
 18,
+93
+],
+"ebene": 1,
+"pflanze": true,
+"begleiter": true,
+"kein_schatten": true,
+"an_wand": true
+},
+{
+"datei": "sauber/karte01-baeume-02.png",
+"basis": "karte01/baeume/02",
+"x": 196,
+"y": 1175,
+"fuss": 40,
+"kachel": [
+13,
+75
+],
+"ebene": 1,
+"baum": true
+},
+{
+"datei": "sauber/karte01-deko-06.png",
+"basis": "karte01/deko/06",
+"x": 192,
+"y": 1201,
+"fuss": 14,
+"kachel": [
+12,
+75
+],
+"ebene": 1,
+"pflanze": true,
+"begleiter": true,
+"kein_schatten": true
+},
+{
+"datei": "sauber/karte01-deko-00.png",
+"basis": "karte01/deko/00",
+"x": 167,
+"y": 1196,
+"fuss": 19,
+"kachel": [
+14,
+75
+],
+"ebene": 1,
+"pflanze": true,
+"begleiter": true,
+"kein_schatten": true
+},
+{
+"datei": "sauber/karte01-baeume-02.png",
+"basis": "karte01/baeume/02",
+"x": 388,
+"y": 1175,
+"fuss": 40,
+"kachel": [
+25,
+75
+],
+"ebene": 1,
+"baum": true
+},
+{
+"datei": "sauber/karte01-deko-06.png",
+"basis": "karte01/deko/06",
+"x": 384,
+"y": 1201,
+"fuss": 14,
+"kachel": [
+24,
+75
+],
+"ebene": 1,
+"pflanze": true,
+"begleiter": true,
+"kein_schatten": true
+},
+{
+"datei": "sauber/karte01-deko-00.png",
+"basis": "karte01/deko/00",
+"x": 424,
+"y": 1196,
+"fuss": 19,
+"kachel": [
+26,
+75
+],
+"ebene": 1,
+"pflanze": true,
+"begleiter": true,
+"kein_schatten": true
+},
+{
+"datei": "sauber/karte01-baeume-01.png",
+"basis": "karte01/baeume/01",
+"x": 162,
+"y": 1381,
+"fuss": 42,
+"kachel": [
+11,
+88
+],
+"ebene": 1,
+"baum": true
+},
+{
+"datei": "sauber/karte01-deko-06.png",
+"basis": "karte01/deko/06",
+"x": 152,
+"y": 1409,
+"fuss": 14,
+"kachel": [
+10,
+88
+],
+"ebene": 1,
+"pflanze": true,
+"begleiter": true,
+"kein_schatten": true
+},
+{
+"datei": "sauber/karte01-baeume-02.png",
+"basis": "karte01/baeume/02",
+"x": 420,
+"y": 1399,
+"fuss": 40,
+"kachel": [
+27,
+89
+],
+"ebene": 1,
+"baum": true
+},
+{
+"datei": "sauber/karte01-deko-06.png",
+"basis": "karte01/deko/06",
+"x": 416,
+"y": 1425,
+"fuss": 14,
+"kachel": [
+26,
+89
+],
+"ebene": 1,
+"pflanze": true,
+"begleiter": true,
+"kein_schatten": true
+},
+{
+"datei": "sauber/karte01-baeume-03.png",
+"basis": "karte01/baeume/03",
+"x": 307,
+"y": 1477,
+"fuss": 26,
+"kachel": [
+20,
+93
+],
+"ebene": 1,
+"baum": true,
+"an_wand": true
+},
+{
+"datei": "sauber/karte01-deko-06.png",
+"basis": "karte01/deko/06",
+"x": 329,
+"y": 1489,
+"fuss": 14,
+"kachel": [
+19,
 93
 ],
 "ebene": 1,

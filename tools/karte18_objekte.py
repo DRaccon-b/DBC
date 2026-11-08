@@ -354,7 +354,7 @@ def main():
         im_wasser = P.kl[88, px_] == 'w'
         P.setzen('gebaeude/pfeiler_wasser' if im_wasser else 'gebaeude/pfeiler', px_, 88, n=2, pruefen=False,
                  extra={'pfeiler': True, 'im_wasser': bool(im_wasser), 'kein_schatten': bool(im_wasser)})
-    z = P.setzen('gebaeude/zug', lay['hochbahn']['zug'][0], 81, pruefen=False, n=21,
+    z = P.setzen('gebaeude/zug', lay['hochbahn']['zug'][0], 81, pruefen=False, n=21, begleiter=True,
                  extra={'hochbahn': True, 'kein_schatten': True})
     z['x'] = lay['hochbahn']['zug'][0] * T
     # ------------------------------------------------------------------ Baeume (gross zuerst) mit Begleitern (Regel 5)
@@ -433,6 +433,12 @@ def main():
                         (GROSS_B, 8, 91), (KLEIN_B, 11, 93), (GRUEN, 21, 90), (GROSS_B, 24, 93)):
         baum(n_, bx, r, RASEN)
     baum(GINKGO, 0, 93, RASEN, cx=17 * T)                     # Ginkgo auf dem kleinen Rasen
+    zusatz = []                                               # mehr Baeume auf den Rasenflaechen (nur wo Platz ist)
+    for (n_, bx, r) in (('karte01/baeume/02', 12, 75), ('karte01/baeume/02', 24, 75), (KLEIN_B, 27, 76),
+                        ('karte01/baeume/01', 10, 88), ('karte01/baeume/02', 26, 89), (KLEIN_B, 19, 93),
+                        (KLEIN_B, 13, 90)):
+        zusatz.append(baum(n_, bx, r, RASEN))
+    print('  zusaetzliche Baeume gesetzt:', sum(1 for z in zusatz if z))
     # Mittelstreifen: Baum am Ostende jeder Hecke (Vorlage), Uferstrasse: vier Baeume auf der Hecke
     SB = ('karte01/baeume/00', 'karte01/baeume/02')   # gruene Laubbaeume von Karte 01
     for i, (bx, r) in enumerate(((11, 48), (23, 48), (47, 48), (59, 48))):

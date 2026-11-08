@@ -516,6 +516,26 @@ def pfeiler():
     return b
 
 
+def zug_pixellab():
+    """Hochbahn-Zug aus den PixelLab-Wagen (assets/objekte/karte18/zug): Endwagen (Ruecklichter links), Mittelwagen,
+    Triebkopf (Nase rechts); die Faltenbaelge greifen ineinander, Unterkanten buendig."""
+    q = os.path.join(ROOT, 'assets', 'objekte', 'karte18', 'zug')
+    teile = [Image.open(os.path.join(q, '%02d.png' % i)).convert('RGBA') for i in (2, 1, 0)]
+    if any(t is None for t in teile):
+        return None
+    h = max(t.height for t in teile)
+    ueberlapp = 10
+    w = sum(t.width for t in teile) - ueberlapp * (len(teile) - 1)
+    out = Image.new('RGBA', (w, h))
+    x = 0
+    for t in teile:
+        out.alpha_composite(t, (x, h - t.height))
+        x += t.width - ueberlapp
+    b = Bild(w, h)
+    b.a = np.array(out)
+    return b
+
+
 def zug(wagen=3, laenge=112):
     """Hochbahn-Zug frontal von der Seite: weisse Wagen mit dunkelblauem Fensterband, Fenster, Tueren, Schuerze;
     vorn (Osten) eine runde Nase mit Scheibe, hinten (Westen) gerade. 3 Wagen, Kupplungen dazwischen."""
@@ -954,7 +974,7 @@ def main():
         b.save(art)
         teile.append((art, Image.fromarray(b.a)))
     for name, fn in (('bus', bus), ('lkw', lkw), ('kletterkuppel', kletterkuppel), ('feuerschale', feuerschale),
-                     ('banner_hoch', banner_hoch), ('pfeiler', pfeiler), ('pfeiler_wasser', pfeiler_wasser), ('poller', poller), ('zug', zug),
+                     ('banner_hoch', banner_hoch), ('pfeiler', pfeiler), ('pfeiler_wasser', pfeiler_wasser), ('poller', poller), ('zug', lambda: zug_pixellab() or zug()),
                      ('kuebel', kuebel), ('doppellaterne', doppellaterne), ('koban', koban_mit_dach), ('stadtbaum', stadtbaum),
                      ('stadtbaum2', lambda: stadtbaum(23)),
                      ('zelt', zelt), ('trinkbrunnen', trinkbrunnen), ('taube', taube),

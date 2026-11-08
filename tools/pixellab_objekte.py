@@ -1453,6 +1453,12 @@ OBJEKTGRUPPEN_K18 = {
         'harbor warehouse, light grey corrugated walls, red white blue stripe, one big roll-up door half open, small side door with a lamp, flat corrugated roof visible from slightly above, cozy handheld RPG town style, perfectly straight front view',
         'harbor warehouse with a sawtooth roof with skylights, beige walls, orange stripe, roll-up door, small side door with a lamp, cozy handheld RPG town style, perfectly straight front view',
     ]},
+    'k18_zug': {'size': 128, 'items': [
+        'front car of a modern white monorail commuter train, dark blue window band, rounded nose with windshield and headlight pointing right, pure side view flat 2D profile, long and low, no perspective, no isometric, cozy handheld RPG style',
+        'middle car of a modern white monorail commuter train, dark blue window band with windows, two sliding doors, pure side view flat 2D profile, long and low, no perspective, no isometric, cozy handheld RPG style',
+        'rear car of a modern white monorail commuter train, dark blue window band, flat rear end on the left with red tail light, pure side view flat 2D profile, long and low, no perspective, no isometric, cozy handheld RPG style',
+        'complete short white monorail train with three cars, dark blue window band, pure side view flat 2D profile, nose pointing right, no perspective, cozy handheld RPG style',
+    ]},
     'k18_boot': {'size': 64, 'items': [
         'small white fishing motor boat, pure side view flat 2D profile, bow pointing right, small cabin with windows, blue stripe along the hull, floating, no perspective, cozy handheld RPG style',
         'small wooden rowing boat with oars, pure side view flat 2D profile, floating, no perspective, cozy handheld RPG style',
