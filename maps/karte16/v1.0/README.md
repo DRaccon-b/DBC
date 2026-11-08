@@ -5,7 +5,7 @@ Ein Raum im digitalen Netz: Eine runde Plattform schwebt in der Leere, oben das 
 über Farben und Motive, nichts nachgebaut.
 
 ## Inhalt der Karte
-- **Ankunft:** unten auf 4 Pfeilkacheln (Teleporter, Kacheln aus der Vorlage), kleines Ankunftsfeld.
+- **Ankunft:** unten auf 4 cyan Pfeilmarken (Teleporter; Eckklammern + Doppelpfeil direkt auf dem Boden, wie auf Karte 17/19), kleines Ankunftsfeld.
 - **Pfad:** schmaler Pfad (2 Kacheln) mit cyan Leitlinien nach Norden zur Plattform.
 - **Plattform:** kreisrund am 16er-Raster gestuft, Bodenplatten der Vorlage, dunkler Randring mit cyan glimmender
   Kante, zwei Leuchtringe im Boden; unter der Südkante eine schmale Metallfront mit hängenden Lichtfäden.
@@ -15,7 +15,7 @@ Ein Raum im digitalen Netz: Eine runde Plattform schwebt in der Leere, oben das 
   und schwebende Datenfragmente (losgerissene Bodenplatten, Datenwürfel).
 
 ## Animation (4 Bilder, 250 ms – Regel: höchstens 4 Animationsbilder)
-Datenpakete auf den Strängen, Fragmente schweben (1 px), Kanten und Leuchtringe glimmen, Pfeilfelder leuchten
+Datenpakete auf den Strängen, Fragmente schweben (1 px), Kanten und Leuchtringe glimmen, Pfeilmarken leuchten
 nacheinander, Lichtfäden unter der Plattform, Tor (roter Bildschirm pulsiert, Lichtimpuls auf den Leiterbahnen),
 Computer (Balken flackern, gelbe Punkte blinken). Rahmen, Gehäuse und Boden bleiben ruhig.
 
