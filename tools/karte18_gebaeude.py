@@ -517,10 +517,12 @@ def pfeiler():
 
 
 def zug_pixellab():
-    """Hochbahn-Zug aus den PixelLab-Wagen (assets/objekte/karte18/zug): Endwagen (Ruecklichter links), Mittelwagen,
+    """Hochbahn-Zug aus den PixelLab-Wagen (assets/objekte/karte18/zug): Triebkopf (Nase links), Mittelwagen,
     Triebkopf (Nase rechts); die Faltenbaelge greifen ineinander, Unterkanten buendig."""
     q = os.path.join(ROOT, 'assets', 'objekte', 'karte18', 'zug')
-    teile = [Image.open(os.path.join(q, '%02d.png' % i)).convert('RGBA') for i in (2, 1, 0)]
+    kopf = Image.open(os.path.join(q, '00.png')).convert('RGBA')
+    teile = [kopf.transpose(Image.FLIP_LEFT_RIGHT), Image.open(os.path.join(q, '01.png')).convert('RGBA'), kopf]
+    # Pendelzug: an beiden Enden ein Triebkopf in reiner Seitenansicht (der alte Endwagen zeigte schraeg seine Stirn)
     if any(t is None for t in teile):
         return None
     h = max(t.height for t in teile)

@@ -100,6 +100,9 @@ def main():
     for y in range(0, R, 3):                                      # Wolkenrand ganz rechts ueber dem Meer
         k[y:y + 3, C - int(rs.choice([1, 2, 2, 3])):] = '.'
 
+    for (x0, y0, x1, y1, art) in [[4, 12, 45, 17, 'laeden'], [62, 8, 83, 17, 'buero_oben'], [5, 27, 28, 39, 'wohnblock'],
+                                  [42, 56, 59, 67, 'buero_mitte'], [39, 71, 50, 79, 'lager'], [52, 71, 63, 79, 'lager']]:
+        rechteck(k, x0, y0, x1, y1, 'n')                          # Restflaechen der alten Gebaeude: Rasen (wird bepflanzt)
     hoehe = np.ones((R, C), int)
     hoehe[np.isin(k, ['w', '.'])] = 0
     hoehe[k == 't'] = 2

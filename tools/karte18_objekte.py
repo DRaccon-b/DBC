@@ -375,7 +375,8 @@ def main():
             continue
         if art != 'halle' and not art.startswith('lager'):
             continue                                              # durch PixelLab-Haeuser ersetzt
-        o = P.setzen('gebaeude/' + art, x0, y1, pruefen=False, n=x1 - x0 + 1, extra={'gebaeude': [x0, y0, x1, y1]})
+        name_ = 'k18/halle_pl/halle' if art == 'halle' else 'gebaeude/' + art   # Messehalle im PixelLab-Stil
+        o = P.setzen(name_, x0, y1, pruefen=False, n=x1 - x0 + 1, extra={'gebaeude': [x0, y0, x1, y1]})
         o['x'], o['y'] = x0 * T, y0 * T
         o['kein_schatten'] = True
         rects = lichter.get(art) or lichter.get('lager_' + art.split('_')[-1])
@@ -621,8 +622,8 @@ def main():
     print('  Gruenflaechen aufgefuellt:', gesetzt_, 'Baeume')
     # Blumen und Graeser/Unkraut (Deko von Karte 01) in die Luecken: auf Gruenflaechen dicht, im Pflaster vereinzelt
     BLUMEN_ = ['karte01/deko/%02d' % i for i in (0, 1, 2, 3, 4, 27, 30, 38)]
-    GRAS_ = ['karte01/deko/%02d' % i for i in (5, 6, 24, 26, 29, 43, 61)]
-    UNKRAUT_ = ['karte01/deko/06', 'karte01/deko/05', 'karte01/deko/43']
+    GRAS_ = ['karte01/deko/%02d' % i for i in (5, 6, 24, 26, 29, 61)]
+    UNKRAUT_ = ['karte01/deko/06', 'karte01/deko/05', 'karte01/deko/24']   # keine liegenden Ranken im Pflaster
     rs2 = np.random.RandomState(4242)
     deko_ = {'blumen': 0, 'gras': 0, 'unkraut': 0}
     felder = [(ty, tx) for ty in range(P.R) for tx in range(P.C) if P.kl[ty, tx] in 'nemgpq']
@@ -634,7 +635,7 @@ def main():
             continue
         if k_ in 'nem':
             art_ = 'blumen' if rs2.rand() < 0.6 else 'gras'
-            n_ = (BLUMEN_ if art_ == 'blumen' else GRAS_)[rs2.randint(0, 8 if art_ == 'blumen' else 7)]
+            n_ = (BLUMEN_ if art_ == 'blumen' else GRAS_)[rs2.randint(0, len(BLUMEN_) if art_ == 'blumen' else len(GRAS_))]
         else:                                                 # Unkraut im Pflaster: selten, nur an Kanten
             nb = P.kl[max(0, ty - 1):ty + 2, max(0, tx - 1):tx + 2]
             if rs2.rand() > 0.06 or not (set(nb.ravel()) - set('gpq')):
