@@ -26,6 +26,7 @@ BILDDAUER = k16.BILDDAUER
 CYAN, LEER = k16.CYAN, k16.LEER
 kontur, mischen, puls = k16.kontur, k16.mischen, k16.puls
 PFLASTER = np.array((137, 154, 155), np.float32)              # Pflasterfarbe der Vorlage
+WASSER_STILE = {}
 RAND = os.environ.get('K19_RAND', 'kai')                           # Rand der Hafen-Plattform: kai (gewaehlt) | netz | bunt | warn
 
 
@@ -85,6 +86,130 @@ def hafenbecken(a, wasser, frame):
     linie[y0 + 6, x0:x1] = True
     mischen(a, linie, (190, 225, 235), 0.45 + 0.2 * p)
     return a
+
+
+WASSER = os.environ.get('K19_WASSER', 'terrassen')
+
+
+def _becken(wasser):
+    ys, xs = np.nonzero(wasser)
+    return ys.min(), ys.max() + 1, xs.min(), xs.max() + 1
+
+
+def _nordmauer(a, wasser, frame):
+    y0, y1, x0, x1 = _becken(wasser)
+    stein = [(120, 126, 124), (104, 110, 110), (92, 98, 100), (80, 88, 92), (66, 76, 84), (54, 66, 78)]
+    for d, c in enumerate(stein):
+        a[y0 + d, x0:x1] = c
+    for x in range(x0, x1, 16):
+        a[y0 + 1:y0 + 5, x] = (70, 78, 82)
+    p = 0.5 + 0.5 * np.sin(2 * np.pi * (frame or 0) / N_FRAMES)
+    linie = np.zeros_like(wasser); linie[y0 + 6, x0:x1] = True
+    mischen(a, linie, (190, 225, 235), 0.45 + 0.2 * p)
+    return a
+
+
+def _grund(wasser):
+    Hp, Wp = wasser.shape
+    return pflaster_textur(Wp // T, Hp // T).astype(np.float32)
+
+
+def wasser_sand(a, wasser, frame):
+    """Wie Karte 01 genau: Sandgrund (Kacheln von Karte 01), Flachwasser, Stufe, Lichtstriche (ohne Strand-Schaum)."""
+    import wasser_details as wd
+    alt = (wd.FARBEN, wd.N_FRAMES, wd.FLACH, wd.SCHAUM_D, wd.STUFE1, wd.STUFE2)
+    wd.N_FRAMES = N_FRAMES
+    wd.FLACH, wd.SCHAUM_D, wd.STUFE1, wd.STUFE2 = 12, (900, 900), 18, 900
+    wd.FELSEN_PROTOKOLL.clear()
+    try:
+        img = wd.meer_terrassen(Image.fromarray(a), wasser, frame, np.ones_like(wasser), maske=wasser)
+    finally:
+        wd.FARBEN, wd.N_FRAMES, wd.FLACH, wd.SCHAUM_D, wd.STUFE1, wd.STUFE2 = alt
+    return _nordmauer(np.array(img.convert('RGB')), wasser, frame)
+
+
+def wasser_kaustik(a, wasser, frame):
+    """Klar und flach: ueberall sieht man die Pflasterplatten, darueber ein wanderndes Lichtnetz (Kaustik)."""
+    f = frame or 0
+    y0, y1, x0, x1 = _becken(wasser)
+    g = _grund(wasser)[y0:y1, x0:x1]
+    yy, xx = np.mgrid[0:y1 - y0, 0:x1 - x0].astype(np.float32)
+    ph = 2 * np.pi * f / N_FRAMES
+    u = np.sin(xx / 6.0 + 1.3 * np.sin(yy / 9.0 + ph) + ph)
+    v = np.sin(yy / 5.5 - 1.3 * np.sin(xx / 8.0 - ph) - ph)
+    netz = ((np.abs(u) < 0.13) | (np.abs(v) < 0.13)).astype(np.float32)[..., None]   # feine Lichtlinien (Kaustik)
+    farbe = np.array((70, 170, 190), np.float32)
+    sub = g * 0.55 + farbe * 0.45
+    sub = sub * (1 - 0.55 * netz) + np.array((210, 245, 250), np.float32) * 0.55 * netz
+    m = wasser[y0:y1, x0:x1]
+    a[y0:y1, x0:x1][m] = np.clip(sub, 0, 255).astype(np.uint8)[m]
+    return _nordmauer(a, wasser, frame)
+
+
+def wasser_tief(a, wasser, frame):
+    """Tiefes Hafenbecken: Grund nur nahe der Mauern sichtbar, zur Mitte dunkles Blau; Wellenzeichen der Vorlage."""
+    f = frame or 0
+    y0, y1, x0, x1 = _becken(wasser)
+    g = _grund(wasser)[y0:y1, x0:x1]
+    h, w = y1 - y0, x1 - x0
+    yy, xx = np.mgrid[0:h, 0:w]
+    rand = np.minimum(np.minimum(yy - 6, h - 1 - yy), np.minimum(xx, w - 1 - xx)).clip(0).astype(np.float32)
+    t = (np.clip(rand / 8, 0, 3).astype(int) / 3.0).astype(np.float32)[..., None]   # 4 Tiefenstufen (Pixelart)
+    flach, tief = np.array((70, 140, 160), np.float32), np.array((22, 52, 92), np.float32)
+    sub = g * (0.45 * (1 - t)) + (flach * (1 - t) + tief * t) * (0.55 + 0.45 * t)
+    for gy in range(10, h, 8):
+        for gx in range(-16, w, 16):
+            X = gx + (8 if (gy // 8) % 2 else 0) + (2 * f) % 16
+            for dx, dy in ((1, 0), (2, 0), (0, 1), (3, 1)):
+                if 0 <= X + dx < w and gy + dy < h:
+                    sub[gy + dy, X + dx] = sub[gy + dy, X + dx] * 0.4 + np.array((120, 170, 195), np.float32) * 0.6
+    m = wasser[y0:y1, x0:x1]
+    a[y0:y1, x0:x1][m] = np.clip(sub, 0, 255).astype(np.uint8)[m]
+    return _nordmauer(a, wasser, frame)
+
+
+def wasser_netz(a, wasser, frame):
+    """Netz-Wasser: klares Cyan ueber den Platten, unter Wasser ein leuchtendes Datenraster, Lichtwellen laufen als
+    Bitreihen ueber die Oberflaeche (passt zur Netzwelt)."""
+    f = frame or 0
+    y0, y1, x0, x1 = _becken(wasser)
+    g = _grund(wasser)[y0:y1, x0:x1]
+    h, w = y1 - y0, x1 - x0
+    yy, xx = np.mgrid[0:h, 0:w]
+    sub = g * 0.45 + np.array((20, 110, 150), np.float32) * 0.55
+    raster = ((xx % 16 == 0) | (yy % 16 == 0))
+    p = 0.5 + 0.5 * np.sin(2 * np.pi * f / N_FRAMES)
+    sub[raster] = sub[raster] * (0.6 - 0.15 * p) + np.array((80, 230, 255), np.float32) * (0.4 + 0.15 * p)
+    rs = np.random.RandomState(77)
+    for _ in range(18):                                            # Bitreihen (helle Striche), treiben nach rechts
+        gy, gx, lang = rs.randint(9, h - 2), rs.randint(0, w), rs.randint(4, 10)
+        for k_ in range(lang):
+            X = (gx + k_ + 3 * f) % w
+            if k_ % 3 != 2:
+                sub[gy, X] = sub[gy, X] * 0.3 + np.array((200, 250, 255), np.float32) * 0.7
+    m = wasser[y0:y1, x0:x1]
+    a[y0:y1, x0:x1][m] = np.clip(sub, 0, 255).astype(np.uint8)[m]
+    return _nordmauer(a, wasser, frame)
+
+
+def wasser_klassik(a, wasser, frame):
+    """Handheld-Klassik: Wasserkacheln wie in klassischen Handheld-RPGs (Blau mit hellen Wellenboegen im
+    16er-Raster), leicht durchscheinend, damit die Platten durchschimmern."""
+    f = frame or 0
+    y0, y1, x0, x1 = _becken(wasser)
+    g = _grund(wasser)[y0:y1, x0:x1]
+    h, w = y1 - y0, x1 - x0
+    yy, xx = np.mgrid[0:h, 0:w]
+    sub = g * 0.25 + np.array((56, 128, 208), np.float32) * 0.75
+    ky, kx = yy % 16, (xx + (2 * f if True else 0)) % 16
+    hell = ((ky == 4) & (kx >= 2) & (kx <= 6)) | ((ky == 3) & (kx >= 3) & (kx <= 5)) | \
+           ((ky == 12) & (kx >= 10) & (kx <= 14)) | ((ky == 11) & (kx >= 11) & (kx <= 13))
+    dunkel = ((ky == 5) & (kx >= 2) & (kx <= 6)) | ((ky == 13) & (kx >= 10) & (kx <= 14))
+    sub[hell] = (176, 224, 248)
+    sub[dunkel] = sub[dunkel] * 0.8
+    m = wasser[y0:y1, x0:x1]
+    a[y0:y1, x0:x1][m] = np.clip(sub, 0, 255).astype(np.uint8)[m]
+    return _nordmauer(a, wasser, frame)
 
 
 def kaikante(a, kai):
@@ -158,6 +283,10 @@ def rand_hafen(a, land, ring, front, rechts, frame):
         a[r & ak] = (20, 22, 26)
 
 
+WASSER_STILE.update(terrassen=hafenbecken, sand=wasser_sand, kaustik=wasser_kaustik, tief=wasser_tief,
+                    netz=wasser_netz, klassik=wasser_klassik)
+
+
 def bauen(frame=None, speichern=True):
     lay = json.load(open(os.path.join(KARTE, 'layout.json')))
     cols, rows = lay['groesse']
@@ -190,7 +319,7 @@ def bauen(frame=None, speichern=True):
         else:
             k17.ringmarke(a, x0 + 14, y0 + 8, frame)
     kaikante(a, gross(kl == 'k'))
-    a = hafenbecken(a, wasser, frame)
+    a = WASSER_STILE[WASSER](a, wasser, frame)
     sch = wasser & (np.roll(ring, 2, 1) | np.roll(ring, 1, 1))     # Westmauer: Schatten aufs Wasser (Licht oben links)
     a[sch] = (a[sch] * 0.75).astype(np.uint8)
     # Pfeilkacheln
