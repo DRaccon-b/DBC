@@ -564,6 +564,25 @@ def main():
         P.setzen(AUTO(i), 0, r, boden=fahr, cx=cx * T, extra={'auto': True})
     for (i, bx, r) in ((6, 42, 32), (7, 48, 32), (6, 54, 32)):   # Parkplatz: Nordbuchten, mit Luecken
         P.setzen(AUTO(i), bx, r, boden=fahr, n=3, extra={'auto': True})
+    # Gruenflaechen auffuellen: versetztes Raster (alle 3 Kacheln, jede 2. Zeile um 1-2 verschoben), Baeume von
+    # Karte 01 im Wechsel; jeder Baum muss alle Pruefungen bestehen (Boden, 2 px Abstand, Sperrfelder)
+    SORTEN = ('karte01/baeume/00', 'karte01/baeume/02', 'karte01/baeume/01', 'karte01/baeume/03')
+    gesetzt_ = 0
+    kandidaten = [(ty, tx) for ty in range(P.R) for tx in range(P.C)
+                  if P.kl[ty, tx] in 'nem' and not (46 <= tx <= 61 and ty <= 17)]
+    rs_ = np.random.RandomState(1818)
+    rs_.shuffle(kandidaten)
+    for (ty, tx) in kandidaten:
+        k_ = P.kl[ty, tx]
+        for j in range(len(SORTEN)):
+            n_ = SORTEN[(tx * 7 + ty * 3 + j) % len(SORTEN)]
+            n_fehl = len(P.fehl)
+            t_ = P.setzen(n_, tx, ty, boden=set(k_), extra={'baum': True})
+            del P.fehl[n_fehl:]
+            if t_:
+                gesetzt_ += 1
+                break
+    print('  Gruenflaechen aufgefuellt:', gesetzt_, 'Baeume')
     begleiter_nachpruefen(P)
     for o in P.objekte:
         for k in [k for k in o if k.startswith('_')]:
