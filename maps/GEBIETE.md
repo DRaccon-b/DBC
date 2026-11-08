@@ -15,6 +15,6 @@ Aufstellfelds (cyan = Ankunft, gold = weiter; Funktion `pfeil_marke` in `tools/k
 ## A02 *(in Planung)*
 | Nr. | Karte | Stand |
 |---|---|---|
-| 1 | *(Startkarte – folgt)* | – |
+| 1 | Karte 20 – Startdorf | v1.0 (`maps/karte20/v1.0/Startdorf_v1.0.zip`) |
 | … | weitere Karten folgen | – |
 | ? | Karte 07 – The Holy Peaks | vorhanden, wird vorerst nicht bearbeitet (nur eingeordnet) |

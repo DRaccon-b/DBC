@@ -1,0 +1,6122 @@
+{
+ "kachel": 16,
+ "breite_kacheln": 40,
+ "hoehe_kacheln": 29,
+ "animationsbereich_hoehe_kacheln": 13,
+ "animationsbilder": 4,
+ "bilddauer_ms": 250,
+ "objekte": [
+  {
+   "name": "turm/00_rand",
+   "datei": "varianten/turm-00_rand_gras.png",
+   "animation": "muehle20",
+   "slot_kacheln": {
+    "x": 0,
+    "y": 0,
+    "breite": 7,
+    "hoehe": 10
+   },
+   "objektblock_im_slot": {
+    "x": 1,
+    "y": 1,
+    "breite": 5,
+    "hoehe": 8
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      46,
+      27,
+      5,
+      8
+     ],
+     "fusskachel": [
+      48,
+      34
+     ]
+    }
+   ]
+  },
+  {
+   "name": "k06/tv_treppe",
+   "datei": "varianten/k06-tv_treppe_gras.png",
+   "animation": "portal",
+   "slot_kacheln": {
+    "x": 7,
+    "y": 0,
+    "breite": 6,
+    "hoehe": 8
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 6,
+    "hoehe": 8
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      6,
+      10,
+      6,
+      8
+     ],
+     "fusskachel": [
+      9,
+      17
+     ]
+    }
+   ]
+  },
+  {
+   "name": "haus/00",
+   "datei": "varianten/haus-00_gras.png",
+   "animation": "rauch20",
+   "slot_kacheln": {
+    "x": 13,
+    "y": 0,
+    "breite": 6,
+    "hoehe": 7
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 6,
+    "hoehe": 6
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      3,
+      2,
+      6,
+      6
+     ],
+     "fusskachel": [
+      5,
+      7
+     ]
+    },
+    {
+     "block": [
+      24,
+      5,
+      6,
+      6
+     ],
+     "fusskachel": [
+      26,
+      10
+     ]
+    }
+   ]
+  },
+  {
+   "name": "haus/00",
+   "datei": "varianten/haus-00_gras_m.png",
+   "animation": "rauch20",
+   "slot_kacheln": {
+    "x": 19,
+    "y": 0,
+    "breite": 6,
+    "hoehe": 7
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 6,
+    "hoehe": 6
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      32,
+      5,
+      6,
+      6
+     ],
+     "fusskachel": [
+      34,
+      10
+     ]
+    },
+    {
+     "block": [
+      6,
+      23,
+      6,
+      6
+     ],
+     "fusskachel": [
+      8,
+      28
+     ]
+    }
+   ]
+  },
+  {
+   "name": "k01/kirsche",
+   "datei": "varianten/k01-kirsche_beton.png",
+   "animation": "wehen",
+   "slot_kacheln": {
+    "x": 25,
+    "y": 0,
+    "breite": 4,
+    "hoehe": 5
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 4,
+    "hoehe": 4
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      19,
+      20,
+      4,
+      4
+     ],
+     "fusskachel": [
+      20,
+      23
+     ]
+    },
+    {
+     "block": [
+      34,
+      20,
+      4,
+      4
+     ],
+     "fusskachel": [
+      35,
+      23
+     ]
+    }
+   ]
+  },
+  {
+   "name": "k01/kirsche",
+   "datei": "varianten/k01-kirsche_gras.png",
+   "animation": "wehen",
+   "slot_kacheln": {
+    "x": 29,
+    "y": 0,
+    "breite": 4,
+    "hoehe": 5
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 4,
+    "hoehe": 4
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      18,
+      29,
+      4,
+      4
+     ],
+     "fusskachel": [
+      19,
+      32
+     ]
+    },
+    {
+     "block": [
+      34,
+      36,
+      4,
+      4
+     ],
+     "fusskachel": [
+      35,
+      39
+     ]
+    },
+    {
+     "block": [
+      52,
+      37,
+      4,
+      4
+     ],
+     "fusskachel": [
+      53,
+      40
+     ]
+    },
+    {
+     "block": [
+      40,
+      6,
+      4,
+      4
+     ],
+     "fusskachel": [
+      41,
+      9
+     ]
+    }
+   ]
+  },
+  {
+   "name": "k01/laterne",
+   "datei": "varianten/k01-laterne_beton.png",
+   "animation": "laterne",
+   "slot_kacheln": {
+    "x": 33,
+    "y": 0,
+    "breite": 1,
+    "hoehe": 4
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 1,
+    "hoehe": 4
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      22,
+      12,
+      1,
+      4
+     ],
+     "fusskachel": [
+      21,
+      15
+     ]
+    },
+    {
+     "block": [
+      34,
+      12,
+      1,
+      4
+     ],
+     "fusskachel": [
+      33,
+      15
+     ]
+    },
+    {
+     "block": [
+      22,
+      23,
+      1,
+      4
+     ],
+     "fusskachel": [
+      21,
+      26
+     ]
+    },
+    {
+     "block": [
+      34,
+      23,
+      1,
+      4
+     ],
+     "fusskachel": [
+      33,
+      26
+     ]
+    }
+   ]
+  },
+  {
+   "name": "beet/02",
+   "datei": "varianten/beet-02_gras.png",
+   "animation": "wehen",
+   "slot_kacheln": {
+    "x": 34,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "objektblock_im_slot": {
+    "x": 1,
+    "y": 1,
+    "breite": 2,
+    "hoehe": 2
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      49,
+      23,
+      2,
+      2
+     ],
+     "fusskachel": [
+      49,
+      24
+     ]
+    },
+    {
+     "block": [
+      51,
+      23,
+      2,
+      2
+     ],
+     "fusskachel": [
+      51,
+      24
+     ]
+    },
+    {
+     "block": [
+      49,
+      25,
+      2,
+      2
+     ],
+     "fusskachel": [
+      49,
+      26
+     ]
+    },
+    {
+     "block": [
+      51,
+      25,
+      2,
+      2
+     ],
+     "fusskachel": [
+      51,
+      26
+     ]
+    }
+   ]
+  },
+  {
+   "name": "k01/deko05",
+   "datei": "varianten/k01-deko05_gras.png",
+   "animation": "wehen",
+   "slot_kacheln": {
+    "x": 37,
+    "y": 0,
+    "breite": 2,
+    "hoehe": 3
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 2,
+    "hoehe": 2
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      26,
+      35,
+      2,
+      2
+     ],
+     "fusskachel": [
+      27,
+      36
+     ]
+    },
+    {
+     "block": [
+      20,
+      11,
+      2,
+      2
+     ],
+     "fusskachel": [
+      20,
+      12
+     ]
+    },
+    {
+     "block": [
+      44,
+      4,
+      2,
+      2
+     ],
+     "fusskachel": [
+      44,
+      5
+     ]
+    },
+    {
+     "block": [
+      20,
+      5,
+      2,
+      2
+     ],
+     "fusskachel": [
+      21,
+      6
+     ]
+    },
+    {
+     "block": [
+      18,
+      10,
+      2,
+      2
+     ],
+     "fusskachel": [
+      19,
+      11
+     ]
+    },
+    {
+     "block": [
+      22,
+      3,
+      2,
+      2
+     ],
+     "fusskachel": [
+      22,
+      4
+     ]
+    },
+    {
+     "block": [
+      28,
+      2,
+      2,
+      2
+     ],
+     "fusskachel": [
+      28,
+      3
+     ]
+    }
+   ]
+  },
+  {
+   "name": "k01/deko26",
+   "datei": "varianten/k01-deko26_gras.png",
+   "animation": "wehen",
+   "slot_kacheln": {
+    "x": 0,
+    "y": 10,
+    "breite": 2,
+    "hoehe": 3
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 2,
+    "hoehe": 2
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      22,
+      5,
+      2,
+      2
+     ],
+     "fusskachel": [
+      23,
+      6
+     ]
+    },
+    {
+     "block": [
+      34,
+      10,
+      2,
+      2
+     ],
+     "fusskachel": [
+      34,
+      11
+     ]
+    },
+    {
+     "block": [
+      26,
+      2,
+      2,
+      2
+     ],
+     "fusskachel": [
+      27,
+      3
+     ]
+    },
+    {
+     "block": [
+      42,
+      40,
+      2,
+      2
+     ],
+     "fusskachel": [
+      42,
+      41
+     ]
+    },
+    {
+     "block": [
+      22,
+      2,
+      2,
+      2
+     ],
+     "fusskachel": [
+      22,
+      3
+     ]
+    },
+    {
+     "block": [
+      38,
+      27,
+      2,
+      2
+     ],
+     "fusskachel": [
+      38,
+      28
+     ]
+    },
+    {
+     "block": [
+      26,
+      41,
+      2,
+      2
+     ],
+     "fusskachel": [
+      26,
+      42
+     ]
+    }
+   ]
+  },
+  {
+   "name": "k01/deko27",
+   "datei": "varianten/k01-deko27_gras.png",
+   "animation": "wehen",
+   "slot_kacheln": {
+    "x": 2,
+    "y": 10,
+    "breite": 2,
+    "hoehe": 3
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 2,
+    "hoehe": 2
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      8,
+      7,
+      2,
+      2
+     ],
+     "fusskachel": [
+      8,
+      8
+     ]
+    },
+    {
+     "block": [
+      30,
+      29,
+      2,
+      2
+     ],
+     "fusskachel": [
+      31,
+      30
+     ]
+    },
+    {
+     "block": [
+      38,
+      17,
+      2,
+      2
+     ],
+     "fusskachel": [
+      38,
+      18
+     ]
+    },
+    {
+     "block": [
+      30,
+      8,
+      2,
+      2
+     ],
+     "fusskachel": [
+      31,
+      9
+     ]
+    },
+    {
+     "block": [
+      32,
+      10,
+      2,
+      2
+     ],
+     "fusskachel": [
+      33,
+      11
+     ]
+    },
+    {
+     "block": [
+      54,
+      12,
+      2,
+      2
+     ],
+     "fusskachel": [
+      54,
+      13
+     ]
+    },
+    {
+     "block": [
+      52,
+      6,
+      2,
+      2
+     ],
+     "fusskachel": [
+      52,
+      7
+     ]
+    }
+   ]
+  },
+  {
+   "name": "k01/deko06",
+   "datei": "varianten/k01-deko06_gras.png",
+   "animation": "wehen",
+   "slot_kacheln": {
+    "x": 4,
+    "y": 10,
+    "breite": 2,
+    "hoehe": 2
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 2,
+    "hoehe": 1
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      12,
+      11,
+      2,
+      1
+     ],
+     "fusskachel": [
+      12,
+      11
+     ]
+    },
+    {
+     "block": [
+      16,
+      32,
+      2,
+      1
+     ],
+     "fusskachel": [
+      17,
+      32
+     ]
+    },
+    {
+     "block": [
+      44,
+      40,
+      2,
+      1
+     ],
+     "fusskachel": [
+      45,
+      40
+     ]
+    },
+    {
+     "block": [
+      4,
+      22,
+      2,
+      1
+     ],
+     "fusskachel": [
+      5,
+      22
+     ]
+    },
+    {
+     "block": [
+      2,
+      18,
+      2,
+      1
+     ],
+     "fusskachel": [
+      3,
+      18
+     ]
+    }
+   ]
+  },
+  {
+   "name": "k03/stand",
+   "datei": "varianten/k03-stand_beton.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 0,
+    "y": 13,
+    "breite": 4,
+    "hoehe": 5
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 4,
+    "hoehe": 4
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      29,
+      25,
+      4,
+      4
+     ],
+     "fusskachel": [
+      30,
+      28
+     ]
+    }
+   ]
+  },
+  {
+   "name": "k06/schild",
+   "datei": "varianten/k06-schild_gras.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 4,
+    "y": 13,
+    "breite": 4,
+    "hoehe": 5
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 4,
+    "hoehe": 4
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      45,
+      5,
+      4,
+      4
+     ],
+     "fusskachel": [
+      46,
+      8
+     ]
+    },
+    {
+     "block": [
+      7,
+      20,
+      4,
+      4
+     ],
+     "fusskachel": [
+      8,
+      23
+     ]
+    }
+   ]
+  },
+  {
+   "name": "k06/stand",
+   "datei": "varianten/k06-stand_beton.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 8,
+    "y": 13,
+    "breite": 4,
+    "hoehe": 5
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 4,
+    "hoehe": 4
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      23,
+      25,
+      4,
+      4
+     ],
+     "fusskachel": [
+      24,
+      28
+     ]
+    }
+   ]
+  },
+  {
+   "name": "k10/faesser",
+   "datei": "varianten/k10-faesser_beton.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 12,
+    "y": 13,
+    "breite": 4,
+    "hoehe": 4
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 4,
+    "hoehe": 3
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      19,
+      26,
+      4,
+      3
+     ],
+     "fusskachel": [
+      20,
+      28
+     ]
+    }
+   ]
+  },
+  {
+   "name": "k10/saecke",
+   "datei": "varianten/k10-saecke_beton.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 16,
+    "y": 13,
+    "breite": 4,
+    "hoehe": 4
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 4,
+    "hoehe": 3
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      33,
+      26,
+      4,
+      3
+     ],
+     "fusskachel": [
+      34,
+      28
+     ]
+    }
+   ]
+  },
+  {
+   "name": "k01/baum00",
+   "datei": "varianten/k01-baum00_gras.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 20,
+    "y": 13,
+    "breite": 3,
+    "hoehe": 4
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      4,
+      19,
+      3,
+      3
+     ],
+     "fusskachel": [
+      5,
+      21
+     ]
+    },
+    {
+     "block": [
+      23,
+      30,
+      3,
+      3
+     ],
+     "fusskachel": [
+      24,
+      32
+     ]
+    },
+    {
+     "block": [
+      36,
+      39,
+      3,
+      3
+     ],
+     "fusskachel": [
+      37,
+      41
+     ]
+    },
+    {
+     "block": [
+      40,
+      -1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      41,
+      1
+     ]
+    },
+    {
+     "block": [
+      1,
+      8,
+      3,
+      3
+     ],
+     "fusskachel": [
+      2,
+      10
+     ]
+    },
+    {
+     "block": [
+      58,
+      17,
+      3,
+      3
+     ],
+     "fusskachel": [
+      59,
+      19
+     ]
+    },
+    {
+     "block": [
+      57,
+      30,
+      3,
+      3
+     ],
+     "fusskachel": [
+      58,
+      32
+     ]
+    },
+    {
+     "block": [
+      55,
+      38,
+      3,
+      3
+     ],
+     "fusskachel": [
+      56,
+      40
+     ]
+    },
+    {
+     "block": [
+      49,
+      44,
+      3,
+      3
+     ],
+     "fusskachel": [
+      50,
+      46
+     ]
+    },
+    {
+     "block": [
+      57,
+      44,
+      3,
+      3
+     ],
+     "fusskachel": [
+      58,
+      46
+     ]
+    },
+    {
+     "block": [
+      18,
+      45,
+      3,
+      3
+     ],
+     "fusskachel": [
+      19,
+      47
+     ]
+    }
+   ]
+  },
+  {
+   "name": "k01/baum00",
+   "datei": "varianten/k01-baum00_gras_m.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 23,
+    "y": 13,
+    "breite": 3,
+    "hoehe": 4
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      -1,
+      -2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      0,
+      0
+     ]
+    },
+    {
+     "block": [
+      33,
+      -2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      34,
+      0
+     ]
+    },
+    {
+     "block": [
+      39,
+      -2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      40,
+      0
+     ]
+    },
+    {
+     "block": [
+      30,
+      -1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      31,
+      1
+     ]
+    },
+    {
+     "block": [
+      39,
+      0,
+      3,
+      3
+     ],
+     "fusskachel": [
+      40,
+      2
+     ]
+    },
+    {
+     "block": [
+      -1,
+      2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      0,
+      4
+     ]
+    },
+    {
+     "block": [
+      -1,
+      38,
+      3,
+      3
+     ],
+     "fusskachel": [
+      0,
+      40
+     ]
+    },
+    {
+     "block": [
+      58,
+      41,
+      3,
+      3
+     ],
+     "fusskachel": [
+      59,
+      43
+     ]
+    },
+    {
+     "block": [
+      42,
+      43,
+      3,
+      3
+     ],
+     "fusskachel": [
+      43,
+      45
+     ]
+    }
+   ]
+  },
+  {
+   "name": "k01/baum01",
+   "datei": "varianten/k01-baum01_gras.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 26,
+    "y": 13,
+    "breite": 3,
+    "hoehe": 4
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      12,
+      7,
+      3,
+      3
+     ],
+     "fusskachel": [
+      13,
+      9
+     ]
+    },
+    {
+     "block": [
+      3,
+      25,
+      3,
+      3
+     ],
+     "fusskachel": [
+      4,
+      27
+     ]
+    },
+    {
+     "block": [
+      48,
+      39,
+      3,
+      3
+     ],
+     "fusskachel": [
+      49,
+      41
+     ]
+    },
+    {
+     "block": [
+      15,
+      -2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      16,
+      0
+     ]
+    },
+    {
+     "block": [
+      57,
+      -2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      58,
+      0
+     ]
+    },
+    {
+     "block": [
+      14,
+      -1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      15,
+      1
+     ]
+    },
+    {
+     "block": [
+      36,
+      -1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      37,
+      1
+     ]
+    },
+    {
+     "block": [
+      31,
+      0,
+      3,
+      3
+     ],
+     "fusskachel": [
+      32,
+      2
+     ]
+    },
+    {
+     "block": [
+      47,
+      0,
+      3,
+      3
+     ],
+     "fusskachel": [
+      48,
+      2
+     ]
+    },
+    {
+     "block": [
+      0,
+      3,
+      3,
+      3
+     ],
+     "fusskachel": [
+      1,
+      5
+     ]
+    },
+    {
+     "block": [
+      58,
+      5,
+      3,
+      3
+     ],
+     "fusskachel": [
+      59,
+      7
+     ]
+    },
+    {
+     "block": [
+      0,
+      13,
+      3,
+      3
+     ],
+     "fusskachel": [
+      1,
+      15
+     ]
+    },
+    {
+     "block": [
+      -1,
+      18,
+      3,
+      3
+     ],
+     "fusskachel": [
+      0,
+      20
+     ]
+    },
+    {
+     "block": [
+      0,
+      21,
+      3,
+      3
+     ],
+     "fusskachel": [
+      1,
+      23
+     ]
+    },
+    {
+     "block": [
+      1,
+      24,
+      3,
+      3
+     ],
+     "fusskachel": [
+      2,
+      26
+     ]
+    },
+    {
+     "block": [
+      57,
+      28,
+      3,
+      3
+     ],
+     "fusskachel": [
+      58,
+      30
+     ]
+    },
+    {
+     "block": [
+      56,
+      29,
+      3,
+      3
+     ],
+     "fusskachel": [
+      57,
+      31
+     ]
+    },
+    {
+     "block": [
+      0,
+      43,
+      3,
+      3
+     ],
+     "fusskachel": [
+      1,
+      45
+     ]
+    },
+    {
+     "block": [
+      44,
+      43,
+      3,
+      3
+     ],
+     "fusskachel": [
+      45,
+      45
+     ]
+    },
+    {
+     "block": [
+      47,
+      44,
+      3,
+      3
+     ],
+     "fusskachel": [
+      48,
+      46
+     ]
+    }
+   ]
+  },
+  {
+   "name": "k01/baum01",
+   "datei": "varianten/k01-baum01_gras_m.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 29,
+    "y": 13,
+    "breite": 3,
+    "hoehe": 4
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      56,
+      1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      57,
+      3
+     ]
+    },
+    {
+     "block": [
+      1,
+      -2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      2,
+      0
+     ]
+    },
+    {
+     "block": [
+      58,
+      1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      59,
+      3
+     ]
+    },
+    {
+     "block": [
+      56,
+      19,
+      3,
+      3
+     ],
+     "fusskachel": [
+      57,
+      21
+     ]
+    },
+    {
+     "block": [
+      58,
+      19,
+      3,
+      3
+     ],
+     "fusskachel": [
+      59,
+      21
+     ]
+    },
+    {
+     "block": [
+      56,
+      25,
+      3,
+      3
+     ],
+     "fusskachel": [
+      57,
+      27
+     ]
+    },
+    {
+     "block": [
+      58,
+      27,
+      3,
+      3
+     ],
+     "fusskachel": [
+      59,
+      29
+     ]
+    },
+    {
+     "block": [
+      41,
+      42,
+      3,
+      3
+     ],
+     "fusskachel": [
+      42,
+      44
+     ]
+    },
+    {
+     "block": [
+      55,
+      42,
+      3,
+      3
+     ],
+     "fusskachel": [
+      56,
+      44
+     ]
+    },
+    {
+     "block": [
+      54,
+      43,
+      3,
+      3
+     ],
+     "fusskachel": [
+      55,
+      45
+     ]
+    },
+    {
+     "block": [
+      -1,
+      44,
+      3,
+      3
+     ],
+     "fusskachel": [
+      0,
+      46
+     ]
+    },
+    {
+     "block": [
+      37,
+      44,
+      3,
+      3
+     ],
+     "fusskachel": [
+      38,
+      46
+     ]
+    },
+    {
+     "block": [
+      24,
+      45,
+      3,
+      3
+     ],
+     "fusskachel": [
+      25,
+      47
+     ]
+    }
+   ]
+  },
+  {
+   "name": "k01/baum02",
+   "datei": "varianten/k01-baum02_gras.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 32,
+    "y": 13,
+    "breite": 3,
+    "hoehe": 4
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      10,
+      24,
+      3,
+      3
+     ],
+     "fusskachel": [
+      11,
+      26
+     ]
+    },
+    {
+     "block": [
+      38,
+      34,
+      3,
+      3
+     ],
+     "fusskachel": [
+      39,
+      36
+     ]
+    },
+    {
+     "block": [
+      44,
+      1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      45,
+      3
+     ]
+    },
+    {
+     "block": [
+      52,
+      1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      53,
+      3
+     ]
+    },
+    {
+     "block": [
+      56,
+      7,
+      3,
+      3
+     ],
+     "fusskachel": [
+      57,
+      9
+     ]
+    },
+    {
+     "block": [
+      49,
+      -2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      50,
+      0
+     ]
+    },
+    {
+     "block": [
+      8,
+      -1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      9,
+      1
+     ]
+    },
+    {
+     "block": [
+      50,
+      -1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      51,
+      1
+     ]
+    },
+    {
+     "block": [
+      -1,
+      0,
+      3,
+      3
+     ],
+     "fusskachel": [
+      0,
+      2
+     ]
+    },
+    {
+     "block": [
+      1,
+      0,
+      3,
+      3
+     ],
+     "fusskachel": [
+      2,
+      2
+     ]
+    },
+    {
+     "block": [
+      58,
+      7,
+      3,
+      3
+     ],
+     "fusskachel": [
+      59,
+      9
+     ]
+    },
+    {
+     "block": [
+      0,
+      15,
+      3,
+      3
+     ],
+     "fusskachel": [
+      1,
+      17
+     ]
+    },
+    {
+     "block": [
+      -1,
+      26,
+      3,
+      3
+     ],
+     "fusskachel": [
+      0,
+      28
+     ]
+    },
+    {
+     "block": [
+      56,
+      31,
+      3,
+      3
+     ],
+     "fusskachel": [
+      57,
+      33
+     ]
+    },
+    {
+     "block": [
+      57,
+      42,
+      3,
+      3
+     ],
+     "fusskachel": [
+      58,
+      44
+     ]
+    },
+    {
+     "block": [
+      58,
+      45,
+      3,
+      3
+     ],
+     "fusskachel": [
+      59,
+      47
+     ]
+    }
+   ]
+  },
+  {
+   "name": "k01/baum02",
+   "datei": "varianten/k01-baum02_gras_m.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 35,
+    "y": 13,
+    "breite": 3,
+    "hoehe": 4
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      46,
+      -1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      47,
+      1
+     ]
+    },
+    {
+     "block": [
+      9,
+      0,
+      3,
+      3
+     ],
+     "fusskachel": [
+      10,
+      2
+     ]
+    },
+    {
+     "block": [
+      0,
+      1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      1,
+      3
+     ]
+    },
+    {
+     "block": [
+      0,
+      9,
+      3,
+      3
+     ],
+     "fusskachel": [
+      1,
+      11
+     ]
+    },
+    {
+     "block": [
+      56,
+      13,
+      3,
+      3
+     ],
+     "fusskachel": [
+      57,
+      15
+     ]
+    },
+    {
+     "block": [
+      56,
+      17,
+      3,
+      3
+     ],
+     "fusskachel": [
+      57,
+      19
+     ]
+    },
+    {
+     "block": [
+      55,
+      18,
+      3,
+      3
+     ],
+     "fusskachel": [
+      56,
+      20
+     ]
+    },
+    {
+     "block": [
+      -1,
+      22,
+      3,
+      3
+     ],
+     "fusskachel": [
+      0,
+      24
+     ]
+    },
+    {
+     "block": [
+      57,
+      22,
+      3,
+      3
+     ],
+     "fusskachel": [
+      58,
+      24
+     ]
+    },
+    {
+     "block": [
+      55,
+      26,
+      3,
+      3
+     ],
+     "fusskachel": [
+      56,
+      28
+     ]
+    },
+    {
+     "block": [
+      56,
+      33,
+      3,
+      3
+     ],
+     "fusskachel": [
+      57,
+      35
+     ]
+    },
+    {
+     "block": [
+      57,
+      40,
+      3,
+      3
+     ],
+     "fusskachel": [
+      58,
+      42
+     ]
+    },
+    {
+     "block": [
+      40,
+      43,
+      3,
+      3
+     ],
+     "fusskachel": [
+      41,
+      45
+     ]
+    },
+    {
+     "block": [
+      48,
+      43,
+      3,
+      3
+     ],
+     "fusskachel": [
+      49,
+      45
+     ]
+    }
+   ]
+  },
+  {
+   "name": "k01/baum04",
+   "datei": "varianten/k01-baum04_gras.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 0,
+    "y": 18,
+    "breite": 3,
+    "hoehe": 4
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      51,
+      -2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      52,
+      0
+     ]
+    },
+    {
+     "block": [
+      -1,
+      16,
+      3,
+      3
+     ],
+     "fusskachel": [
+      0,
+      18
+     ]
+    },
+    {
+     "block": [
+      56,
+      21,
+      3,
+      3
+     ],
+     "fusskachel": [
+      57,
+      23
+     ]
+    },
+    {
+     "block": [
+      -1,
+      24,
+      3,
+      3
+     ],
+     "fusskachel": [
+      0,
+      26
+     ]
+    },
+    {
+     "block": [
+      0,
+      27,
+      3,
+      3
+     ],
+     "fusskachel": [
+      1,
+      29
+     ]
+    },
+    {
+     "block": [
+      58,
+      33,
+      3,
+      3
+     ],
+     "fusskachel": [
+      59,
+      35
+     ]
+    },
+    {
+     "block": [
+      0,
+      39,
+      3,
+      3
+     ],
+     "fusskachel": [
+      1,
+      41
+     ]
+    },
+    {
+     "block": [
+      56,
+      43,
+      3,
+      3
+     ],
+     "fusskachel": [
+      57,
+      45
+     ]
+    },
+    {
+     "block": [
+      41,
+      44,
+      3,
+      3
+     ],
+     "fusskachel": [
+      42,
+      46
+     ]
+    },
+    {
+     "block": [
+      14,
+      45,
+      3,
+      3
+     ],
+     "fusskachel": [
+      15,
+      47
+     ]
+    },
+    {
+     "block": [
+      52,
+      45,
+      3,
+      3
+     ],
+     "fusskachel": [
+      53,
+      47
+     ]
+    },
+    {
+     "block": [
+      56,
+      45,
+      3,
+      3
+     ],
+     "fusskachel": [
+      57,
+      47
+     ]
+    }
+   ]
+  },
+  {
+   "name": "k01/baum04",
+   "datei": "varianten/k01-baum04_gras_m.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 3,
+    "y": 18,
+    "breite": 3,
+    "hoehe": 4
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      53,
+      1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      54,
+      3
+     ]
+    },
+    {
+     "block": [
+      43,
+      -2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      44,
+      0
+     ]
+    },
+    {
+     "block": [
+      16,
+      -1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      17,
+      1
+     ]
+    },
+    {
+     "block": [
+      33,
+      0,
+      3,
+      3
+     ],
+     "fusskachel": [
+      34,
+      2
+     ]
+    },
+    {
+     "block": [
+      0,
+      5,
+      3,
+      3
+     ],
+     "fusskachel": [
+      1,
+      7
+     ]
+    },
+    {
+     "block": [
+      23,
+      44,
+      3,
+      3
+     ],
+     "fusskachel": [
+      24,
+      46
+     ]
+    },
+    {
+     "block": [
+      40,
+      45,
+      3,
+      3
+     ],
+     "fusskachel": [
+      41,
+      47
+     ]
+    }
+   ]
+  },
+  {
+   "name": "k01/baum05",
+   "datei": "varianten/k01-baum05_gras.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 6,
+    "y": 18,
+    "breite": 3,
+    "hoehe": 4
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      56,
+      3,
+      3,
+      3
+     ],
+     "fusskachel": [
+      57,
+      5
+     ]
+    },
+    {
+     "block": [
+      55,
+      14,
+      3,
+      3
+     ],
+     "fusskachel": [
+      56,
+      16
+     ]
+    },
+    {
+     "block": [
+      1,
+      26,
+      3,
+      3
+     ],
+     "fusskachel": [
+      2,
+      28
+     ]
+    },
+    {
+     "block": [
+      34,
+      43,
+      3,
+      3
+     ],
+     "fusskachel": [
+      35,
+      45
+     ]
+    },
+    {
+     "block": [
+      42,
+      45,
+      3,
+      3
+     ],
+     "fusskachel": [
+      43,
+      47
+     ]
+    },
+    {
+     "block": [
+      54,
+      45,
+      3,
+      3
+     ],
+     "fusskachel": [
+      55,
+      47
+     ]
+    }
+   ]
+  },
+  {
+   "name": "k01/baum05",
+   "datei": "varianten/k01-baum05_gras_m.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 9,
+    "y": 18,
+    "breite": 3,
+    "hoehe": 4
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      3,
+      -2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      4,
+      0
+     ]
+    },
+    {
+     "block": [
+      13,
+      -2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      14,
+      0
+     ]
+    },
+    {
+     "block": [
+      2,
+      -1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      3,
+      1
+     ]
+    },
+    {
+     "block": [
+      34,
+      -1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      35,
+      1
+     ]
+    },
+    {
+     "block": [
+      0,
+      7,
+      3,
+      3
+     ],
+     "fusskachel": [
+      1,
+      9
+     ]
+    },
+    {
+     "block": [
+      -1,
+      40,
+      3,
+      3
+     ],
+     "fusskachel": [
+      0,
+      42
+     ]
+    },
+    {
+     "block": [
+      2,
+      43,
+      3,
+      3
+     ],
+     "fusskachel": [
+      3,
+      45
+     ]
+    },
+    {
+     "block": [
+      50,
+      43,
+      3,
+      3
+     ],
+     "fusskachel": [
+      51,
+      45
+     ]
+    }
+   ]
+  },
+  {
+   "name": "k01/baum06",
+   "datei": "varianten/k01-baum06_gras.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 12,
+    "y": 18,
+    "breite": 3,
+    "hoehe": 4
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      55,
+      -2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      56,
+      0
+     ]
+    },
+    {
+     "block": [
+      0,
+      11,
+      3,
+      3
+     ],
+     "fusskachel": [
+      1,
+      13
+     ]
+    },
+    {
+     "block": [
+      58,
+      21,
+      3,
+      3
+     ],
+     "fusskachel": [
+      59,
+      23
+     ]
+    },
+    {
+     "block": [
+      0,
+      29,
+      3,
+      3
+     ],
+     "fusskachel": [
+      1,
+      31
+     ]
+    },
+    {
+     "block": [
+      55,
+      30,
+      3,
+      3
+     ],
+     "fusskachel": [
+      56,
+      32
+     ]
+    },
+    {
+     "block": [
+      56,
+      39,
+      3,
+      3
+     ],
+     "fusskachel": [
+      57,
+      41
+     ]
+    },
+    {
+     "block": [
+      35,
+      44,
+      3,
+      3
+     ],
+     "fusskachel": [
+      36,
+      46
+     ]
+    },
+    {
+     "block": [
+      39,
+      44,
+      3,
+      3
+     ],
+     "fusskachel": [
+      40,
+      46
+     ]
+    }
+   ]
+  },
+  {
+   "name": "k01/baum06",
+   "datei": "varianten/k01-baum06_gras_m.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 15,
+    "y": 18,
+    "breite": 3,
+    "hoehe": 4
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      19,
+      -2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      20,
+      0
+     ]
+    },
+    {
+     "block": [
+      53,
+      -2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      54,
+      0
+     ]
+    },
+    {
+     "block": [
+      57,
+      16,
+      3,
+      3
+     ],
+     "fusskachel": [
+      58,
+      18
+     ]
+    },
+    {
+     "block": [
+      53,
+      44,
+      3,
+      3
+     ],
+     "fusskachel": [
+      54,
+      46
+     ]
+    }
+   ]
+  },
+  {
+   "name": "k01/baum09",
+   "datei": "varianten/k01-baum09_gras.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 18,
+    "y": 18,
+    "breite": 3,
+    "hoehe": 4
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      57,
+      12,
+      3,
+      3
+     ],
+     "fusskachel": [
+      58,
+      14
+     ]
+    },
+    {
+     "block": [
+      58,
+      29,
+      3,
+      3
+     ],
+     "fusskachel": [
+      59,
+      31
+     ]
+    },
+    {
+     "block": [
+      1,
+      40,
+      3,
+      3
+     ],
+     "fusskachel": [
+      2,
+      42
+     ]
+    },
+    {
+     "block": [
+      36,
+      43,
+      3,
+      3
+     ],
+     "fusskachel": [
+      37,
+      45
+     ]
+    },
+    {
+     "block": [
+      0,
+      45,
+      3,
+      3
+     ],
+     "fusskachel": [
+      1,
+      47
+     ]
+    },
+    {
+     "block": [
+      34,
+      45,
+      3,
+      3
+     ],
+     "fusskachel": [
+      35,
+      47
+     ]
+    },
+    {
+     "block": [
+      36,
+      45,
+      3,
+      3
+     ],
+     "fusskachel": [
+      37,
+      47
+     ]
+    }
+   ]
+  },
+  {
+   "name": "k01/baum09",
+   "datei": "varianten/k01-baum09_gras_m.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 21,
+    "y": 18,
+    "breite": 3,
+    "hoehe": 4
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      56,
+      5,
+      3,
+      3
+     ],
+     "fusskachel": [
+      57,
+      7
+     ]
+    },
+    {
+     "block": [
+      5,
+      -2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      6,
+      0
+     ]
+    },
+    {
+     "block": [
+      21,
+      -2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      22,
+      0
+     ]
+    },
+    {
+     "block": [
+      31,
+      -2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      32,
+      0
+     ]
+    },
+    {
+     "block": [
+      4,
+      -1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      5,
+      1
+     ]
+    },
+    {
+     "block": [
+      35,
+      0,
+      3,
+      3
+     ],
+     "fusskachel": [
+      36,
+      2
+     ]
+    },
+    {
+     "block": [
+      1,
+      4,
+      3,
+      3
+     ],
+     "fusskachel": [
+      2,
+      6
+     ]
+    },
+    {
+     "block": [
+      1,
+      44,
+      3,
+      3
+     ],
+     "fusskachel": [
+      2,
+      46
+     ]
+    },
+    {
+     "block": [
+      4,
+      45,
+      3,
+      3
+     ],
+     "fusskachel": [
+      5,
+      47
+     ]
+    },
+    {
+     "block": [
+      32,
+      45,
+      3,
+      3
+     ],
+     "fusskachel": [
+      33,
+      47
+     ]
+    },
+    {
+     "block": [
+      46,
+      45,
+      3,
+      3
+     ],
+     "fusskachel": [
+      47,
+      47
+     ]
+    }
+   ]
+  },
+  {
+   "name": "k01/baum12",
+   "datei": "varianten/k01-baum12_gras.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 24,
+    "y": 18,
+    "breite": 3,
+    "hoehe": 4
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      43,
+      1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      44,
+      3
+     ]
+    },
+    {
+     "block": [
+      54,
+      1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      55,
+      3
+     ]
+    },
+    {
+     "block": [
+      55,
+      1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      56,
+      3
+     ]
+    },
+    {
+     "block": [
+      9,
+      -2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      10,
+      0
+     ]
+    },
+    {
+     "block": [
+      41,
+      -2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      42,
+      0
+     ]
+    },
+    {
+     "block": [
+      18,
+      -1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      19,
+      1
+     ]
+    },
+    {
+     "block": [
+      20,
+      -1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      21,
+      1
+     ]
+    },
+    {
+     "block": [
+      48,
+      -1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      49,
+      1
+     ]
+    },
+    {
+     "block": [
+      37,
+      0,
+      3,
+      3
+     ],
+     "fusskachel": [
+      38,
+      2
+     ]
+    },
+    {
+     "block": [
+      57,
+      14,
+      3,
+      3
+     ],
+     "fusskachel": [
+      58,
+      16
+     ]
+    },
+    {
+     "block": [
+      56,
+      15,
+      3,
+      3
+     ],
+     "fusskachel": [
+      57,
+      17
+     ]
+    },
+    {
+     "block": [
+      1,
+      22,
+      3,
+      3
+     ],
+     "fusskachel": [
+      2,
+      24
+     ]
+    },
+    {
+     "block": [
+      45,
+      42,
+      3,
+      3
+     ],
+     "fusskachel": [
+      46,
+      44
+     ]
+    },
+    {
+     "block": [
+      24,
+      43,
+      3,
+      3
+     ],
+     "fusskachel": [
+      25,
+      45
+     ]
+    },
+    {
+     "block": [
+      33,
+      44,
+      3,
+      3
+     ],
+     "fusskachel": [
+      34,
+      46
+     ]
+    },
+    {
+     "block": [
+      2,
+      45,
+      3,
+      3
+     ],
+     "fusskachel": [
+      3,
+      47
+     ]
+    }
+   ]
+  },
+  {
+   "name": "k01/baum12",
+   "datei": "varianten/k01-baum12_gras_m.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 27,
+    "y": 18,
+    "breite": 3,
+    "hoehe": 4
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      45,
+      -2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      46,
+      0
+     ]
+    },
+    {
+     "block": [
+      26,
+      -1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      27,
+      1
+     ]
+    },
+    {
+     "block": [
+      23,
+      0,
+      3,
+      3
+     ],
+     "fusskachel": [
+      24,
+      2
+     ]
+    },
+    {
+     "block": [
+      -1,
+      4,
+      3,
+      3
+     ],
+     "fusskachel": [
+      0,
+      6
+     ]
+    },
+    {
+     "block": [
+      58,
+      9,
+      3,
+      3
+     ],
+     "fusskachel": [
+      59,
+      11
+     ]
+    },
+    {
+     "block": [
+      0,
+      19,
+      3,
+      3
+     ],
+     "fusskachel": [
+      1,
+      21
+     ]
+    },
+    {
+     "block": [
+      -1,
+      30,
+      3,
+      3
+     ],
+     "fusskachel": [
+      0,
+      32
+     ]
+    },
+    {
+     "block": [
+      58,
+      39,
+      3,
+      3
+     ],
+     "fusskachel": [
+      59,
+      41
+     ]
+    },
+    {
+     "block": [
+      0,
+      41,
+      3,
+      3
+     ],
+     "fusskachel": [
+      1,
+      43
+     ]
+    },
+    {
+     "block": [
+      32,
+      43,
+      3,
+      3
+     ],
+     "fusskachel": [
+      33,
+      45
+     ]
+    }
+   ]
+  },
+  {
+   "name": "k01/baum13",
+   "datei": "varianten/k01-baum13_gras.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 30,
+    "y": 18,
+    "breite": 3,
+    "hoehe": 4
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      42,
+      1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      43,
+      3
+     ]
+    },
+    {
+     "block": [
+      -1,
+      8,
+      3,
+      3
+     ],
+     "fusskachel": [
+      0,
+      10
+     ]
+    },
+    {
+     "block": [
+      56,
+      11,
+      3,
+      3
+     ],
+     "fusskachel": [
+      57,
+      13
+     ]
+    },
+    {
+     "block": [
+      58,
+      11,
+      3,
+      3
+     ],
+     "fusskachel": [
+      59,
+      13
+     ]
+    },
+    {
+     "block": [
+      1,
+      12,
+      3,
+      3
+     ],
+     "fusskachel": [
+      2,
+      14
+     ]
+    },
+    {
+     "block": [
+      58,
+      13,
+      3,
+      3
+     ],
+     "fusskachel": [
+      59,
+      15
+     ]
+    },
+    {
+     "block": [
+      55,
+      32,
+      3,
+      3
+     ],
+     "fusskachel": [
+      56,
+      34
+     ]
+    },
+    {
+     "block": [
+      57,
+      32,
+      3,
+      3
+     ],
+     "fusskachel": [
+      58,
+      34
+     ]
+    },
+    {
+     "block": [
+      0,
+      35,
+      3,
+      3
+     ],
+     "fusskachel": [
+      1,
+      37
+     ]
+    },
+    {
+     "block": [
+      44,
+      45,
+      3,
+      3
+     ],
+     "fusskachel": [
+      45,
+      47
+     ]
+    }
+   ]
+  },
+  {
+   "name": "k01/baum13",
+   "datei": "varianten/k01-baum13_gras_m.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 33,
+    "y": 18,
+    "breite": 3,
+    "hoehe": 4
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      29,
+      -2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      30,
+      0
+     ]
+    },
+    {
+     "block": [
+      47,
+      -2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      48,
+      0
+     ]
+    },
+    {
+     "block": [
+      32,
+      -1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      33,
+      1
+     ]
+    },
+    {
+     "block": [
+      56,
+      27,
+      3,
+      3
+     ],
+     "fusskachel": [
+      57,
+      29
+     ]
+    },
+    {
+     "block": [
+      0,
+      37,
+      3,
+      3
+     ],
+     "fusskachel": [
+      1,
+      39
+     ]
+    },
+    {
+     "block": [
+      51,
+      44,
+      3,
+      3
+     ],
+     "fusskachel": [
+      52,
+      46
+     ]
+    },
+    {
+     "block": [
+      12,
+      45,
+      3,
+      3
+     ],
+     "fusskachel": [
+      13,
+      47
+     ]
+    },
+    {
+     "block": [
+      48,
+      45,
+      3,
+      3
+     ],
+     "fusskachel": [
+      49,
+      47
+     ]
+    }
+   ]
+  },
+  {
+   "name": "klein/00",
+   "datei": "varianten/klein-00_gras.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 36,
+    "y": 18,
+    "breite": 3,
+    "hoehe": 4
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      43,
+      29,
+      3,
+      3
+     ],
+     "fusskachel": [
+      44,
+      31
+     ]
+    },
+    {
+     "block": [
+      54,
+      29,
+      3,
+      3
+     ],
+     "fusskachel": [
+      55,
+      31
+     ]
+    },
+    {
+     "block": [
+      55,
+      2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      56,
+      4
+     ]
+    }
+   ]
+  },
+  {
+   "name": "klein/00",
+   "datei": "varianten/klein-00_sand.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 0,
+    "y": 22,
+    "breite": 3,
+    "hoehe": 4
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      7,
+      35,
+      3,
+      3
+     ],
+     "fusskachel": [
+      8,
+      37
+     ]
+    },
+    {
+     "block": [
+      6,
+      41,
+      3,
+      3
+     ],
+     "fusskachel": [
+      7,
+      43
+     ]
+    }
+   ]
+  },
+  {
+   "name": "klein/01",
+   "datei": "varianten/klein-01_gras.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 3,
+    "y": 22,
+    "breite": 3,
+    "hoehe": 4
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      46,
+      19,
+      3,
+      3
+     ],
+     "fusskachel": [
+      47,
+      21
+     ]
+    }
+   ]
+  },
+  {
+   "name": "klein/01",
+   "datei": "varianten/klein-01_sand.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 6,
+    "y": 22,
+    "breite": 3,
+    "hoehe": 4
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      8,
+      37,
+      3,
+      3
+     ],
+     "fusskachel": [
+      9,
+      39
+     ]
+    },
+    {
+     "block": [
+      12,
+      37,
+      3,
+      3
+     ],
+     "fusskachel": [
+      13,
+      39
+     ]
+    },
+    {
+     "block": [
+      16,
+      37,
+      3,
+      3
+     ],
+     "fusskachel": [
+      17,
+      39
+     ]
+    },
+    {
+     "block": [
+      10,
+      40,
+      3,
+      3
+     ],
+     "fusskachel": [
+      11,
+      42
+     ]
+    },
+    {
+     "block": [
+      14,
+      40,
+      3,
+      3
+     ],
+     "fusskachel": [
+      15,
+      42
+     ]
+    },
+    {
+     "block": [
+      18,
+      40,
+      3,
+      3
+     ],
+     "fusskachel": [
+      19,
+      42
+     ]
+    }
+   ]
+  },
+  {
+   "name": "klein/02",
+   "datei": "varianten/klein-02_beton.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 9,
+    "y": 22,
+    "breite": 3,
+    "hoehe": 4
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      18,
+      15,
+      3,
+      3
+     ],
+     "fusskachel": [
+      19,
+      17
+     ]
+    }
+   ]
+  },
+  {
+   "name": "klein/03",
+   "datei": "varianten/klein-03_gras.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 12,
+    "y": 22,
+    "breite": 3,
+    "hoehe": 4
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      26,
+      19,
+      3,
+      3
+     ],
+     "fusskachel": [
+      27,
+      21
+     ]
+    }
+   ]
+  },
+  {
+   "name": "klein/05",
+   "datei": "varianten/klein-05_gras.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 15,
+    "y": 22,
+    "breite": 3,
+    "hoehe": 4
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      55,
+      24,
+      3,
+      3
+     ],
+     "fusskachel": [
+      56,
+      26
+     ]
+    }
+   ]
+  },
+  {
+   "name": "klein/06",
+   "datei": "varianten/klein-06_gras.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 18,
+    "y": 22,
+    "breite": 3,
+    "hoehe": 4
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      53,
+      33,
+      3,
+      3
+     ],
+     "fusskachel": [
+      54,
+      35
+     ]
+    }
+   ]
+  },
+  {
+   "name": "k01/baum07",
+   "datei": "varianten/k01-baum07_gras.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 21,
+    "y": 22,
+    "breite": 2,
+    "hoehe": 4
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 2,
+    "hoehe": 3
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      22,
+      -1,
+      2,
+      3
+     ],
+     "fusskachel": [
+      23,
+      1
+     ]
+    },
+    {
+     "block": [
+      28,
+      -1,
+      2,
+      3
+     ],
+     "fusskachel": [
+      29,
+      1
+     ]
+    },
+    {
+     "block": [
+      44,
+      42,
+      2,
+      3
+     ],
+     "fusskachel": [
+      44,
+      44
+     ]
+    },
+    {
+     "block": [
+      26,
+      44,
+      2,
+      3
+     ],
+     "fusskachel": [
+      26,
+      46
+     ]
+    }
+   ]
+  },
+  {
+   "name": "k01/baum07",
+   "datei": "varianten/k01-baum07_gras_m.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 23,
+    "y": 22,
+    "breite": 2,
+    "hoehe": 4
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 2,
+    "hoehe": 3
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      58,
+      3,
+      2,
+      3
+     ],
+     "fusskachel": [
+      59,
+      5
+     ]
+    },
+    {
+     "block": [
+      0,
+      6,
+      2,
+      3
+     ],
+     "fusskachel": [
+      0,
+      8
+     ]
+    },
+    {
+     "block": [
+      58,
+      8,
+      2,
+      3
+     ],
+     "fusskachel": [
+      58,
+      10
+     ]
+    },
+    {
+     "block": [
+      58,
+      10,
+      2,
+      3
+     ],
+     "fusskachel": [
+      58,
+      12
+     ]
+    },
+    {
+     "block": [
+      0,
+      14,
+      2,
+      3
+     ],
+     "fusskachel": [
+      0,
+      16
+     ]
+    },
+    {
+     "block": [
+      56,
+      20,
+      2,
+      3
+     ],
+     "fusskachel": [
+      56,
+      22
+     ]
+    },
+    {
+     "block": [
+      0,
+      36,
+      2,
+      3
+     ],
+     "fusskachel": [
+      0,
+      38
+     ]
+    },
+    {
+     "block": [
+      56,
+      41,
+      2,
+      3
+     ],
+     "fusskachel": [
+      57,
+      43
+     ]
+    },
+    {
+     "block": [
+      16,
+      45,
+      2,
+      3
+     ],
+     "fusskachel": [
+      17,
+      47
+     ]
+    },
+    {
+     "block": [
+      50,
+      45,
+      2,
+      3
+     ],
+     "fusskachel": [
+      51,
+      47
+     ]
+    }
+   ]
+  },
+  {
+   "name": "k01/baum08",
+   "datei": "varianten/k01-baum08_gras.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 25,
+    "y": 22,
+    "breite": 2,
+    "hoehe": 4
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 2,
+    "hoehe": 3
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      0,
+      12,
+      2,
+      3
+     ],
+     "fusskachel": [
+      0,
+      14
+     ]
+    },
+    {
+     "block": [
+      0,
+      17,
+      2,
+      3
+     ],
+     "fusskachel": [
+      1,
+      19
+     ]
+    },
+    {
+     "block": [
+      58,
+      20,
+      2,
+      3
+     ],
+     "fusskachel": [
+      58,
+      22
+     ]
+    },
+    {
+     "block": [
+      0,
+      28,
+      2,
+      3
+     ],
+     "fusskachel": [
+      0,
+      30
+     ]
+    },
+    {
+     "block": [
+      2,
+      42,
+      2,
+      3
+     ],
+     "fusskachel": [
+      2,
+      44
+     ]
+    },
+    {
+     "block": [
+      40,
+      42,
+      2,
+      3
+     ],
+     "fusskachel": [
+      40,
+      44
+     ]
+    },
+    {
+     "block": [
+      46,
+      44,
+      2,
+      3
+     ],
+     "fusskachel": [
+      46,
+      46
+     ]
+    },
+    {
+     "block": [
+      10,
+      45,
+      2,
+      3
+     ],
+     "fusskachel": [
+      11,
+      47
+     ]
+    }
+   ]
+  },
+  {
+   "name": "k01/baum08",
+   "datei": "varianten/k01-baum08_gras_m.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 27,
+    "y": 22,
+    "breite": 2,
+    "hoehe": 4
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 2,
+    "hoehe": 3
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      0,
+      10,
+      2,
+      3
+     ],
+     "fusskachel": [
+      0,
+      12
+     ]
+    },
+    {
+     "block": [
+      56,
+      16,
+      2,
+      3
+     ],
+     "fusskachel": [
+      56,
+      18
+     ]
+    },
+    {
+     "block": [
+      0,
+      20,
+      2,
+      3
+     ],
+     "fusskachel": [
+      0,
+      22
+     ]
+    },
+    {
+     "block": [
+      2,
+      38,
+      2,
+      3
+     ],
+     "fusskachel": [
+      2,
+      40
+     ]
+    },
+    {
+     "block": [
+      48,
+      42,
+      2,
+      3
+     ],
+     "fusskachel": [
+      48,
+      44
+     ]
+    },
+    {
+     "block": [
+      46,
+      43,
+      2,
+      3
+     ],
+     "fusskachel": [
+      47,
+      45
+     ]
+    },
+    {
+     "block": [
+      56,
+      44,
+      2,
+      3
+     ],
+     "fusskachel": [
+      56,
+      46
+     ]
+    },
+    {
+     "block": [
+      8,
+      45,
+      2,
+      3
+     ],
+     "fusskachel": [
+      9,
+      47
+     ]
+    }
+   ]
+  },
+  {
+   "name": "k10/bank",
+   "datei": "varianten/k10-bank_beton.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 29,
+    "y": 22,
+    "breite": 4,
+    "hoehe": 3
+   },
+   "objektblock_im_slot": {
+    "x": 1,
+    "y": 0,
+    "breite": 2,
+    "hoehe": 2
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      24,
+      15,
+      2,
+      2
+     ],
+     "fusskachel": [
+      24,
+      16
+     ]
+    },
+    {
+     "block": [
+      30,
+      15,
+      2,
+      2
+     ],
+     "fusskachel": [
+      30,
+      16
+     ]
+    }
+   ]
+  },
+  {
+   "name": "k10/bank",
+   "datei": "varianten/k10-bank_gras.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 33,
+    "y": 22,
+    "breite": 4,
+    "hoehe": 3
+   },
+   "objektblock_im_slot": {
+    "x": 1,
+    "y": 0,
+    "breite": 2,
+    "hoehe": 2
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      45,
+      5,
+      2,
+      2
+     ],
+     "fusskachel": [
+      45,
+      6
+     ]
+    },
+    {
+     "block": [
+      54,
+      5,
+      2,
+      2
+     ],
+     "fusskachel": [
+      54,
+      6
+     ]
+    }
+   ]
+  },
+  {
+   "name": "beet/00",
+   "datei": "varianten/beet-00_gras.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 37,
+    "y": 22,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "objektblock_im_slot": {
+    "x": 1,
+    "y": 0,
+    "breite": 2,
+    "hoehe": 2
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      43,
+      16,
+      2,
+      2
+     ],
+     "fusskachel": [
+      43,
+      17
+     ]
+    },
+    {
+     "block": [
+      45,
+      16,
+      2,
+      2
+     ],
+     "fusskachel": [
+      45,
+      17
+     ]
+    },
+    {
+     "block": [
+      47,
+      16,
+      2,
+      2
+     ],
+     "fusskachel": [
+      47,
+      17
+     ]
+    },
+    {
+     "block": [
+      49,
+      16,
+      2,
+      2
+     ],
+     "fusskachel": [
+      49,
+      17
+     ]
+    },
+    {
+     "block": [
+      51,
+      16,
+      2,
+      2
+     ],
+     "fusskachel": [
+      51,
+      17
+     ]
+    },
+    {
+     "block": [
+      43,
+      18,
+      2,
+      2
+     ],
+     "fusskachel": [
+      43,
+      19
+     ]
+    },
+    {
+     "block": [
+      45,
+      18,
+      2,
+      2
+     ],
+     "fusskachel": [
+      45,
+      19
+     ]
+    },
+    {
+     "block": [
+      47,
+      18,
+      2,
+      2
+     ],
+     "fusskachel": [
+      47,
+      19
+     ]
+    },
+    {
+     "block": [
+      49,
+      18,
+      2,
+      2
+     ],
+     "fusskachel": [
+      49,
+      19
+     ]
+    },
+    {
+     "block": [
+      51,
+      18,
+      2,
+      2
+     ],
+     "fusskachel": [
+      51,
+      19
+     ]
+    }
+   ]
+  },
+  {
+   "name": "k01/baum14",
+   "datei": "varianten/k01-baum14_gras.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 0,
+    "y": 26,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 2
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      45,
+      2,
+      3,
+      2
+     ],
+     "fusskachel": [
+      46,
+      3
+     ]
+    },
+    {
+     "block": [
+      17,
+      -1,
+      3,
+      2
+     ],
+     "fusskachel": [
+      18,
+      0
+     ]
+    },
+    {
+     "block": [
+      0,
+      0,
+      3,
+      2
+     ],
+     "fusskachel": [
+      1,
+      1
+     ]
+    },
+    {
+     "block": [
+      24,
+      0,
+      3,
+      2
+     ],
+     "fusskachel": [
+      25,
+      1
+     ]
+    },
+    {
+     "block": [
+      58,
+      24,
+      3,
+      2
+     ],
+     "fusskachel": [
+      59,
+      25
+     ]
+    },
+    {
+     "block": [
+      43,
+      45,
+      3,
+      2
+     ],
+     "fusskachel": [
+      44,
+      46
+     ]
+    },
+    {
+     "block": [
+      20,
+      46,
+      3,
+      2
+     ],
+     "fusskachel": [
+      21,
+      47
+     ]
+    },
+    {
+     "block": [
+      22,
+      46,
+      3,
+      2
+     ],
+     "fusskachel": [
+      23,
+      47
+     ]
+    }
+   ]
+  },
+  {
+   "name": "k01/baum14",
+   "datei": "varianten/k01-baum14_gras_m.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 3,
+    "y": 26,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 2
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      44,
+      2,
+      3,
+      2
+     ],
+     "fusskachel": [
+      45,
+      3
+     ]
+    },
+    {
+     "block": [
+      27,
+      -1,
+      3,
+      2
+     ],
+     "fusskachel": [
+      28,
+      0
+     ]
+    },
+    {
+     "block": [
+      38,
+      0,
+      3,
+      2
+     ],
+     "fusskachel": [
+      39,
+      1
+     ]
+    },
+    {
+     "block": [
+      1,
+      7,
+      3,
+      2
+     ],
+     "fusskachel": [
+      2,
+      8
+     ]
+    },
+    {
+     "block": [
+      58,
+      16,
+      3,
+      2
+     ],
+     "fusskachel": [
+      59,
+      17
+     ]
+    },
+    {
+     "block": [
+      57,
+      27,
+      3,
+      2
+     ],
+     "fusskachel": [
+      58,
+      28
+     ]
+    },
+    {
+     "block": [
+      58,
+      32,
+      3,
+      2
+     ],
+     "fusskachel": [
+      59,
+      33
+     ]
+    },
+    {
+     "block": [
+      1,
+      37,
+      3,
+      2
+     ],
+     "fusskachel": [
+      2,
+      38
+     ]
+    },
+    {
+     "block": [
+      -1,
+      43,
+      3,
+      2
+     ],
+     "fusskachel": [
+      0,
+      44
+     ]
+    },
+    {
+     "block": [
+      52,
+      44,
+      3,
+      2
+     ],
+     "fusskachel": [
+      53,
+      45
+     ]
+    }
+   ]
+  },
+  {
+   "name": "k01/baum03",
+   "datei": "varianten/k01-baum03_gras.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 6,
+    "y": 26,
+    "breite": 2,
+    "hoehe": 3
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 2,
+    "hoehe": 2
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      16,
+      30,
+      2,
+      2
+     ],
+     "fusskachel": [
+      17,
+      31
+     ]
+    },
+    {
+     "block": [
+      22,
+      8,
+      2,
+      2
+     ],
+     "fusskachel": [
+      23,
+      9
+     ]
+    },
+    {
+     "block": [
+      36,
+      -1,
+      2,
+      2
+     ],
+     "fusskachel": [
+      36,
+      0
+     ]
+    },
+    {
+     "block": [
+      38,
+      -1,
+      2,
+      2
+     ],
+     "fusskachel": [
+      38,
+      0
+     ]
+    },
+    {
+     "block": [
+      50,
+      1,
+      2,
+      2
+     ],
+     "fusskachel": [
+      50,
+      2
+     ]
+    },
+    {
+     "block": [
+      2,
+      3,
+      2,
+      2
+     ],
+     "fusskachel": [
+      2,
+      4
+     ]
+    },
+    {
+     "block": [
+      58,
+      19,
+      2,
+      2
+     ],
+     "fusskachel": [
+      58,
+      20
+     ]
+    },
+    {
+     "block": [
+      58,
+      25,
+      2,
+      2
+     ],
+     "fusskachel": [
+      58,
+      26
+     ]
+    },
+    {
+     "block": [
+      0,
+      26,
+      2,
+      2
+     ],
+     "fusskachel": [
+      1,
+      27
+     ]
+    },
+    {
+     "block": [
+      58,
+      26,
+      2,
+      2
+     ],
+     "fusskachel": [
+      59,
+      27
+     ]
+    },
+    {
+     "block": [
+      58,
+      44,
+      2,
+      2
+     ],
+     "fusskachel": [
+      59,
+      45
+     ]
+    }
+   ]
+  },
+  {
+   "name": "k01/baum03",
+   "datei": "varianten/k01-baum03_gras_m.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 8,
+    "y": 26,
+    "breite": 2,
+    "hoehe": 3
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 2,
+    "hoehe": 2
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      8,
+      -1,
+      2,
+      2
+     ],
+     "fusskachel": [
+      8,
+      0
+     ]
+    },
+    {
+     "block": [
+      24,
+      -1,
+      2,
+      2
+     ],
+     "fusskachel": [
+      24,
+      0
+     ]
+    },
+    {
+     "block": [
+      26,
+      -1,
+      2,
+      2
+     ],
+     "fusskachel": [
+      26,
+      0
+     ]
+    },
+    {
+     "block": [
+      6,
+      0,
+      2,
+      2
+     ],
+     "fusskachel": [
+      7,
+      1
+     ]
+    },
+    {
+     "block": [
+      58,
+      0,
+      2,
+      2
+     ],
+     "fusskachel": [
+      59,
+      1
+     ]
+    },
+    {
+     "block": [
+      2,
+      11,
+      2,
+      2
+     ],
+     "fusskachel": [
+      2,
+      12
+     ]
+    },
+    {
+     "block": [
+      0,
+      24,
+      2,
+      2
+     ],
+     "fusskachel": [
+      1,
+      25
+     ]
+    },
+    {
+     "block": [
+      6,
+      46,
+      2,
+      2
+     ],
+     "fusskachel": [
+      7,
+      47
+     ]
+    },
+    {
+     "block": [
+      38,
+      46,
+      2,
+      2
+     ],
+     "fusskachel": [
+      39,
+      47
+     ]
+    }
+   ]
+  },
+  {
+   "name": "k01/deko05",
+   "datei": "varianten/k01-deko05_gras.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 10,
+    "y": 26,
+    "breite": 2,
+    "hoehe": 3
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 2,
+    "hoehe": 2
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      40,
+      2,
+      2,
+      2
+     ],
+     "fusskachel": [
+      41,
+      3
+     ]
+    },
+    {
+     "block": [
+      30,
+      9,
+      2,
+      2
+     ],
+     "fusskachel": [
+      31,
+      10
+     ]
+    },
+    {
+     "block": [
+      54,
+      41,
+      2,
+      2
+     ],
+     "fusskachel": [
+      54,
+      42
+     ]
+    }
+   ]
+  },
+  {
+   "name": "k01/deko10",
+   "datei": "varianten/k01-deko10_gras.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 12,
+    "y": 26,
+    "breite": 2,
+    "hoehe": 3
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 2,
+    "hoehe": 2
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      10,
+      6,
+      2,
+      2
+     ],
+     "fusskachel": [
+      11,
+      7
+     ]
+    },
+    {
+     "block": [
+      36,
+      3,
+      2,
+      2
+     ],
+     "fusskachel": [
+      37,
+      4
+     ]
+    },
+    {
+     "block": [
+      20,
+      7,
+      2,
+      2
+     ],
+     "fusskachel": [
+      20,
+      8
+     ]
+    },
+    {
+     "block": [
+      20,
+      2,
+      2,
+      2
+     ],
+     "fusskachel": [
+      21,
+      3
+     ]
+    },
+    {
+     "block": [
+      12,
+      11,
+      2,
+      2
+     ],
+     "fusskachel": [
+      13,
+      12
+     ]
+    },
+    {
+     "block": [
+      32,
+      34,
+      2,
+      2
+     ],
+     "fusskachel": [
+      33,
+      35
+     ]
+    },
+    {
+     "block": [
+      44,
+      19,
+      2,
+      2
+     ],
+     "fusskachel": [
+      45,
+      20
+     ]
+    },
+    {
+     "block": [
+      30,
+      10,
+      2,
+      2
+     ],
+     "fusskachel": [
+      30,
+      11
+     ]
+    },
+    {
+     "block": [
+      38,
+      3,
+      2,
+      2
+     ],
+     "fusskachel": [
+      38,
+      4
+     ]
+    }
+   ]
+  },
+  {
+   "name": "k01/deko14",
+   "datei": "varianten/k01-deko14_gras.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 14,
+    "y": 26,
+    "breite": 2,
+    "hoehe": 3
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 2,
+    "hoehe": 2
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      22,
+      32,
+      2,
+      2
+     ],
+     "fusskachel": [
+      22,
+      33
+     ]
+    },
+    {
+     "block": [
+      18,
+      3,
+      2,
+      2
+     ],
+     "fusskachel": [
+      19,
+      4
+     ]
+    },
+    {
+     "block": [
+      34,
+      30,
+      2,
+      2
+     ],
+     "fusskachel": [
+      34,
+      31
+     ]
+    },
+    {
+     "block": [
+      18,
+      7,
+      2,
+      2
+     ],
+     "fusskachel": [
+      18,
+      8
+     ]
+    },
+    {
+     "block": [
+      4,
+      7,
+      2,
+      2
+     ],
+     "fusskachel": [
+      4,
+      8
+     ]
+    },
+    {
+     "block": [
+      56,
+      35,
+      2,
+      2
+     ],
+     "fusskachel": [
+      56,
+      36
+     ]
+    },
+    {
+     "block": [
+      38,
+      10,
+      2,
+      2
+     ],
+     "fusskachel": [
+      38,
+      11
+     ]
+    },
+    {
+     "block": [
+      18,
+      9,
+      2,
+      2
+     ],
+     "fusskachel": [
+      19,
+      10
+     ]
+    },
+    {
+     "block": [
+      38,
+      6,
+      2,
+      2
+     ],
+     "fusskachel": [
+      39,
+      7
+     ]
+    },
+    {
+     "block": [
+      14,
+      32,
+      2,
+      2
+     ],
+     "fusskachel": [
+      14,
+      33
+     ]
+    },
+    {
+     "block": [
+      50,
+      32,
+      2,
+      2
+     ],
+     "fusskachel": [
+      51,
+      33
+     ]
+    },
+    {
+     "block": [
+      48,
+      34,
+      2,
+      2
+     ],
+     "fusskachel": [
+      48,
+      35
+     ]
+    },
+    {
+     "block": [
+      52,
+      7,
+      2,
+      2
+     ],
+     "fusskachel": [
+      52,
+      8
+     ]
+    }
+   ]
+  },
+  {
+   "name": "k01/deko26",
+   "datei": "varianten/k01-deko26_gras.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 16,
+    "y": 26,
+    "breite": 2,
+    "hoehe": 3
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 2,
+    "hoehe": 2
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      30,
+      33,
+      2,
+      2
+     ],
+     "fusskachel": [
+      31,
+      34
+     ]
+    },
+    {
+     "block": [
+      40,
+      3,
+      2,
+      2
+     ],
+     "fusskachel": [
+      40,
+      4
+     ]
+    },
+    {
+     "block": [
+      44,
+      35,
+      2,
+      2
+     ],
+     "fusskachel": [
+      45,
+      36
+     ]
+    },
+    {
+     "block": [
+      22,
+      9,
+      2,
+      2
+     ],
+     "fusskachel": [
+      22,
+      10
+     ]
+    }
+   ]
+  },
+  {
+   "name": "k01/deko27",
+   "datei": "varianten/k01-deko27_gras.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 18,
+    "y": 26,
+    "breite": 2,
+    "hoehe": 3
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 2,
+    "hoehe": 2
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      24,
+      33,
+      2,
+      2
+     ],
+     "fusskachel": [
+      25,
+      34
+     ]
+    },
+    {
+     "block": [
+      32,
+      36,
+      2,
+      2
+     ],
+     "fusskachel": [
+      32,
+      37
+     ]
+    },
+    {
+     "block": [
+      46,
+      39,
+      2,
+      2
+     ],
+     "fusskachel": [
+      47,
+      40
+     ]
+    }
+   ]
+  },
+  {
+   "name": "k01/deko31",
+   "datei": "varianten/k01-deko31_gras.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 20,
+    "y": 26,
+    "breite": 2,
+    "hoehe": 3
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 2,
+    "hoehe": 2
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      34,
+      3,
+      2,
+      2
+     ],
+     "fusskachel": [
+      35,
+      4
+     ]
+    },
+    {
+     "block": [
+      30,
+      36,
+      2,
+      2
+     ],
+     "fusskachel": [
+      31,
+      37
+     ]
+    },
+    {
+     "block": [
+      42,
+      39,
+      2,
+      2
+     ],
+     "fusskachel": [
+      42,
+      40
+     ]
+    },
+    {
+     "block": [
+      52,
+      40,
+      2,
+      2
+     ],
+     "fusskachel": [
+      53,
+      41
+     ]
+    },
+    {
+     "block": [
+      36,
+      29,
+      2,
+      2
+     ],
+     "fusskachel": [
+      37,
+      30
+     ]
+    },
+    {
+     "block": [
+      40,
+      9,
+      2,
+      2
+     ],
+     "fusskachel": [
+      40,
+      10
+     ]
+    },
+    {
+     "block": [
+      4,
+      22,
+      2,
+      2
+     ],
+     "fusskachel": [
+      4,
+      23
+     ]
+    },
+    {
+     "block": [
+      30,
+      34,
+      2,
+      2
+     ],
+     "fusskachel": [
+      31,
+      35
+     ]
+    },
+    {
+     "block": [
+      12,
+      12,
+      2,
+      2
+     ],
+     "fusskachel": [
+      13,
+      13
+     ]
+    },
+    {
+     "block": [
+      26,
+      30,
+      2,
+      2
+     ],
+     "fusskachel": [
+      27,
+      31
+     ]
+    },
+    {
+     "block": [
+      38,
+      31,
+      2,
+      2
+     ],
+     "fusskachel": [
+      39,
+      32
+     ]
+    },
+    {
+     "block": [
+      12,
+      14,
+      2,
+      2
+     ],
+     "fusskachel": [
+      12,
+      15
+     ]
+    }
+   ]
+  },
+  {
+   "name": "k01/deko33",
+   "datei": "varianten/k01-deko33_gras.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 22,
+    "y": 26,
+    "breite": 2,
+    "hoehe": 3
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 2,
+    "hoehe": 2
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      38,
+      39,
+      2,
+      2
+     ],
+     "fusskachel": [
+      39,
+      40
+     ]
+    },
+    {
+     "block": [
+      38,
+      42,
+      2,
+      2
+     ],
+     "fusskachel": [
+      39,
+      43
+     ]
+    },
+    {
+     "block": [
+      40,
+      31,
+      2,
+      2
+     ],
+     "fusskachel": [
+      40,
+      32
+     ]
+    },
+    {
+     "block": [
+      10,
+      7,
+      2,
+      2
+     ],
+     "fusskachel": [
+      11,
+      8
+     ]
+    },
+    {
+     "block": [
+      32,
+      39,
+      2,
+      2
+     ],
+     "fusskachel": [
+      33,
+      40
+     ]
+    },
+    {
+     "block": [
+      52,
+      30,
+      2,
+      2
+     ],
+     "fusskachel": [
+      52,
+      31
+     ]
+    },
+    {
+     "block": [
+      36,
+      25,
+      2,
+      2
+     ],
+     "fusskachel": [
+      37,
+      26
+     ]
+    },
+    {
+     "block": [
+      30,
+      2,
+      2,
+      2
+     ],
+     "fusskachel": [
+      30,
+      3
+     ]
+    },
+    {
+     "block": [
+      18,
+      12,
+      2,
+      2
+     ],
+     "fusskachel": [
+      18,
+      13
+     ]
+    }
+   ]
+  },
+  {
+   "name": "beet/01",
+   "datei": "varianten/beet-01_gras.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 24,
+    "y": 26,
+    "breite": 3,
+    "hoehe": 2
+   },
+   "objektblock_im_slot": {
+    "x": 1,
+    "y": 0,
+    "breite": 2,
+    "hoehe": 2
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      43,
+      23,
+      2,
+      2
+     ],
+     "fusskachel": [
+      43,
+      24
+     ]
+    },
+    {
+     "block": [
+      45,
+      23,
+      2,
+      2
+     ],
+     "fusskachel": [
+      45,
+      24
+     ]
+    },
+    {
+     "block": [
+      43,
+      25,
+      2,
+      2
+     ],
+     "fusskachel": [
+      43,
+      26
+     ]
+    },
+    {
+     "block": [
+      45,
+      25,
+      2,
+      2
+     ],
+     "fusskachel": [
+      45,
+      26
+     ]
+    }
+   ]
+  },
+  {
+   "name": "k01/deko06",
+   "datei": "varianten/k01-deko06_gras.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 27,
+    "y": 26,
+    "breite": 2,
+    "hoehe": 2
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 2,
+    "hoehe": 1
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      20,
+      11,
+      2,
+      1
+     ],
+     "fusskachel": [
+      20,
+      11
+     ]
+    },
+    {
+     "block": [
+      38,
+      6,
+      2,
+      1
+     ],
+     "fusskachel": [
+      39,
+      6
+     ]
+    },
+    {
+     "block": [
+      20,
+      4,
+      2,
+      1
+     ],
+     "fusskachel": [
+      20,
+      4
+     ]
+    }
+   ]
+  },
+  {
+   "name": "k01/deko08",
+   "datei": "varianten/k01-deko08_gras.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 29,
+    "y": 26,
+    "breite": 2,
+    "hoehe": 2
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 2,
+    "hoehe": 1
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      48,
+      36,
+      2,
+      1
+     ],
+     "fusskachel": [
+      49,
+      36
+     ]
+    },
+    {
+     "block": [
+      36,
+      31,
+      2,
+      1
+     ],
+     "fusskachel": [
+      37,
+      31
+     ]
+    },
+    {
+     "block": [
+      42,
+      21,
+      2,
+      1
+     ],
+     "fusskachel": [
+      43,
+      21
+     ]
+    },
+    {
+     "block": [
+      52,
+      36,
+      2,
+      1
+     ],
+     "fusskachel": [
+      52,
+      36
+     ]
+    },
+    {
+     "block": [
+      30,
+      6,
+      2,
+      1
+     ],
+     "fusskachel": [
+      30,
+      6
+     ]
+    },
+    {
+     "block": [
+      40,
+      39,
+      2,
+      1
+     ],
+     "fusskachel": [
+      41,
+      39
+     ]
+    },
+    {
+     "block": [
+      46,
+      41,
+      2,
+      1
+     ],
+     "fusskachel": [
+      47,
+      41
+     ]
+    },
+    {
+     "block": [
+      46,
+      36,
+      2,
+      1
+     ],
+     "fusskachel": [
+      47,
+      36
+     ]
+    }
+   ]
+  }
+ ]
+}

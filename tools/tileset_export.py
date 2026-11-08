@@ -54,6 +54,7 @@ KARTEN = {
     'karte17': ('karte17_bauen', 'Our_War_Game', 'v1.0'),
     'karte18': ('karte18_bauen', 'The_Fog_Bound_City', 'v1.0'),
     'karte19': ('karte19_bauen', 'Revenge', 'v1.0'),
+    'karte20': ('karte20_bauen', 'Startdorf', 'v1.0'),
 }
 
 
@@ -202,6 +203,8 @@ def boden_export(karte, mod, out):
 def sprite_bild(karte, mod, o, sp, frame):
     """Sprite eines Objekts in einem Animationsbild - dieselben Umformungen wie beim Kartenbau."""
     if frame is None:
+        if o.get('anim') == 'muehle20':                      # Karte 20: Muehlenfluegel gehoeren auch ins Standbild
+            return k4.TEILANIM['muehle20'](sp, 0, o)
         return sp
     anim = o.get('anim')
     if karte == 'karte03':
