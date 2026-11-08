@@ -1653,6 +1653,12 @@ OBJEKTGRUPPEN_K20 = {   # Karte 20 (A02-Startdorf), Stil wie Karte 06 (Primary V
         'retro beige computer archive console: a boxy cream CRT monitor with a cyan screen showing three small icons, '
         'a cream keyboard in front, standing on a grey metal computer base unit with a drive slot, ' + FR14,
     ]},
+    'k20_konsole': {'size': 64, 'items': [   # Archive Console, streng frontal (Nutzer)
+        'retro beige computer archive console seen exactly from the front, perfectly symmetric: a boxy cream CRT monitor '
+        'centered with a cyan screen showing three small icons in a row, a flat cream keyboard directly below it seen '
+        'from the front as a thin strip, all standing on a grey metal computer base unit with a horizontal drive slot, '
+        'no side faces visible, no three-quarter view, flat 2d front elevation, ' + FR14,
+    ]},
     'k20_beet': {'size': 32, 'items': [
         'small carrot plant growing in soil, green leafy top and an orange carrot shoulder, tiny farm crop, ' + FR14,
         'small green cabbage head growing in soil, tiny farm crop, ' + FR14,
