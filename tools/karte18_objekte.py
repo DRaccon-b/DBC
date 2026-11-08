@@ -340,7 +340,41 @@ def main():
     P.sperren(A - 4, 34, A + 3, 79)                           # Mittelweg frei
     P.sperren(37, 32, 40, 35)                                 # Parkplatz-Einfahrt
     # ------------------------------------------------------------------ Gebaeude
+    def haeuser_buendig(namen, tx0, tx1, reihe):
+        """Haeuser (PixelLab, streng frontal) ohne Abstand nebeneinander: die Fassadenwaende stossen direkt aneinander
+        (Kabel/Schilder duerfen ueber die Nachbarfassade ragen), die ganze Zeile mittig im Bereich tx0..tx1, Fuss auf
+        der Reihe. Das Haus sperrt seine Flaeche, die Kachel vor der Tuer (Hausmitte) bleibt frei."""
+        waende = []
+        for n_ in namen:
+            datei, al, zu, xa, xb = P.sprite(n_)
+            dichte = al.sum(axis=0) / float(al.shape[0])
+            sp_ = np.nonzero(dichte > 0.5)[0]
+            waende.append((int(sp_.min()), int(sp_.max())))
+        gesamt = sum(b_ - a_ + 1 for a_, b_ in waende)
+        x = tx0 * T + ((tx1 - tx0 + 1) * T - gesamt) // 2
+        for n_, (a_, b_) in zip(namen, waende):
+            o = P.setzen(n_, 0, reihe, x=x - a_, pruefen=False, extra={'gebaeude': True})
+            datei, al, zu, xa, xb = P.sprite(n_)
+            gx0, gx1 = x // T, (x + b_ - a_) // T
+            gy0 = (o['y'] + int(np.nonzero(al.any(axis=1))[0].min())) // T
+            o['gebaeude'] = [gx0, max(0, gy0), gx1, reihe]
+            o['kein_schatten'] = True
+            P.sperren(gx0, max(0, gy0), gx1, reihe)
+            m_ = (gx0 + gx1) // 2
+            P.sperren(m_ - 1, reihe + 1, m_ + 1, reihe + 1)        # vor der Tuer frei
+            x += b_ - a_ + 1
+
+    haeuser_buendig(['k18/laeden3/01', 'k18/laeden3/03', 'k18/laeden4/00', 'k18/laeden3/00', 'k18/laeden4/02',
+                     'k18/laeden3/02'], 4, 45, 17)                       # Ladenzeile
+    haeuser_buendig(['k18/haeuser2/00', 'k18/laeden4/01', 'k18/laeden4/03'], 62, 83, 17)
+    haeuser_buendig(['k18/haeuser2/01', 'k18/haeuser2/03', 'k18/haeuser2/02'], 5, 28, 39)
+    haeuser_buendig(['k18/haeuser2/00', 'k18/haeuser2/01'], 42, 59, 67)
     for (x0, y0, x1, y1, art) in lay['gebaeude']:
+        if art.startswith('lager') and os.path.exists(os.path.join(OBJ, 'lager2' + ('a' if art == 'lager_rolltor' else 'b'), '00.png')):
+            haeuser_buendig(['k18/lager2' + ('a' if art == 'lager_rolltor' else 'b') + '/00'], x0, x1, y1)
+            continue
+        if art != 'halle' and not art.startswith('lager'):
+            continue                                              # durch PixelLab-Haeuser ersetzt
         o = P.setzen('gebaeude/' + art, x0, y1, pruefen=False, n=x1 - x0 + 1, extra={'gebaeude': [x0, y0, x1, y1]})
         o['x'], o['y'] = x0 * T, y0 * T
         o['kein_schatten'] = True

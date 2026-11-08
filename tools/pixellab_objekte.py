@@ -1471,8 +1471,10 @@ OBJEKTGRUPPEN_K18 = {
         'small grey office building, three stories, square windows, some warmly lit, entrance at the bottom center, flat facade exactly parallel to the camera, absolutely no side wall visible, strict front elevation like a building in a classic handheld town, roof only as a thin strip on top, ground line straight, no perspective, no isometric, no 3/4 view',
         'beige apartment house, four stories, small balconies, warmly lit windows, entrance at the bottom center, flat facade exactly parallel to the camera, absolutely no side wall visible, strict front elevation like a building in a classic handheld town, roof only as a thin strip on top, ground line straight, no perspective, no isometric, no 3/4 view',
     ]},
-    'k18_lager2': {'size': 256, 'items': [
+    'k18_lager2a': {'size': 192, 'items': [
         'large harbor warehouse, light grey corrugated metal walls, red white blue stripe, two big roll-up doors (one half open, dark inside), small side door with a lamp, flat facade exactly parallel to the camera, absolutely no side wall visible, strict front elevation like a building in a classic handheld town, roof only as a thin strip on top, ground line straight, no perspective, no isometric, no 3/4 view',
+    ]},
+    'k18_lager2b': {'size': 192, 'items': [
         'large harbor warehouse with a sawtooth roof edge, beige corrugated walls, orange stripe, big roll-up door, small side door with a lamp and a window, flat facade exactly parallel to the camera, absolutely no side wall visible, strict front elevation like a building in a classic handheld town, roof only as a thin strip on top, ground line straight, no perspective, no isometric, no 3/4 view',
     ]},
     'k18_zug': {'size': 128, 'items': [
