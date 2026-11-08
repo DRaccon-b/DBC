@@ -88,7 +88,7 @@ def hafenbecken(a, wasser, frame):
     return a
 
 
-WASSER = os.environ.get('K19_WASSER', 'terrassen')
+WASSER = os.environ.get('K19_WASSER', 'netz')                  # gewaehlt: Netz-Wasser (Nutzer)
 
 
 def _becken(wasser):
