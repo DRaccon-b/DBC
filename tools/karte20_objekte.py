@@ -34,7 +34,7 @@ for i in range(4, 62):
 WALD = ['k01/baum%02d' % i for i in (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 12, 13, 14)]
 DEKO = ['k01/deko%02d' % i for i in (5, 6, 8, 10, 14, 26, 27, 31, 33)]
 DEKO_PFLANZE = {'k01/deko05', 'k01/deko06', 'k01/deko26', 'k01/deko27'}
-HAUS, MUEHLE = 'haus/00', 'muehle2/00'                 # Muehle in 128 px (Nutzer: war zu klein)
+HAUS, MUEHLE = 'haus/00', 'muehle2/00_rand'            # mit transparentem Rand: Platz fuer die drehenden Fluegel                 # Muehle in 128 px (Nutzer: war zu klein)
 HEU, VOGEL, BRETT, BRUNNEN = 'klein/00', 'klein/01', 'klein/02', 'klein/03'
 SCHUBKARRE, HOLZ, FASS2 = 'klein/06', 'klein/05', 'klein/13'
 ACHSE = 28.0                                   # Achse des Dorfplatzes (Kacheln)
@@ -43,7 +43,8 @@ ACHSE = 28.0                                   # Achse des Dorfplatzes (Kacheln)
 FEST = [
     # Fernseher (exakt wie Karte 06) und Haeuser
     ('k06/tv_treppe', 9.0, 17, {'anim': 'portal'}),
-    (HAUS, 5.5, 7, {}), (HAUS, 26.0, 10, {}), (HAUS, 34.0, 10, {'spiegeln': True}), (HAUS, 8.5, 28, {'spiegeln': True}),
+    (HAUS, 5.5, 7, {'anim': 'rauch20'}), (HAUS, 26.0, 10, {'anim': 'rauch20'}), (HAUS, 34.0, 10, {'spiegeln': True, 'anim': 'rauch20'}),
+    (HAUS, 8.5, 28, {'spiegeln': True, 'anim': 'rauch20'}),
     # Dorfplatz: Brunnen auf dem Rasen, Laternen und Baenke paarweise zur Achse, Marktstaende unten
     (BRUNNEN, ACHSE - 0.5, 21, {}),
     ('k01/laterne', ACHSE - 6.5, 15, {'anim': 'laterne'}), ('k01/laterne', ACHSE + 5.5, 15, {'anim': 'laterne'}),

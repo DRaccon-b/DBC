@@ -27,23 +27,125 @@ H = k4.H
 weich, zell_maske = k4.weich, k4.zell_maske
 
 
+_MUEHLE_CACHE = {}
+
+
+def _muehle_ohne_fluegel(sp):
+    """Turm ohne Fluegel: Fluegelpixel (alle Rottoene und ihre braunen Konturen) entfernen und den Turm samt Dach
+    dahinter auffuellen - zuerst vom gespiegelten Turmpixel (der Turm ist symmetrisch), sonst vom naechsten
+    Turmpixel derselben Spalte. Die Turmbreite je Zeile wird ebenfalls gespiegelt ergaenzt.
+    Gibt (Bild, Nabe, Fluegellaenge) zurueck."""
+    key = id(sp)
+    if key in _MUEHLE_CACHE:
+        return _MUEHLE_CACHE[key]
+    from PIL import ImageFilter as _IF
+    a = np.array(sp).astype(np.int16)
+    h, w = a.shape[:2]
+    r_, g_, b_, al = a[..., 0], a[..., 1], a[..., 2], a[..., 3]
+    kern = (al > 0) & (r_ > 45) & (g_ < 0.55 * r_) & (b_ < 0.62 * r_)
+    ys, xs = np.nonzero(kern)
+    cy, cx = (ys.min() + ys.max()) / 2.0, (xs.min() + xs.max()) / 2.0
+    nabe = (al > 0) & (np.abs(r_ - 90) < 18) & (np.abs(g_ - 58) < 18) & (np.abs(b_ - 44) < 18)   # Nabenfarbe
+    ny, nx = np.nonzero(nabe & (np.abs(np.mgrid[0:a.shape[0], 0:a.shape[1]][0] - cy) < 14)
+                        & (np.abs(np.mgrid[0:a.shape[0], 0:a.shape[1]][1] - cx) < 14))
+    if len(ny):
+        cy, cx = float(np.median(ny)), float(np.median(nx))
+    laenge = float(np.percentile(np.hypot(ys - cy, xs - cx), 99))
+    nah = np.array(Image.fromarray((kern * 255).astype(np.uint8)).filter(_IF.MaxFilter(7))) > 0
+    fl = kern | (nah & (al > 0) & (r_ > b_ + 6))
+    yy, xx = np.mgrid[0:h, 0:w]
+    fl &= np.hypot(yy - cy, xx - cx) > 3.5                      # Nabe bleibt
+    turm = (al > 0) & ~fl
+    out = a.copy()
+    out[fl, 3] = 0
+    for y in range(h):
+        z = np.nonzero(turm[y])[0]
+        if len(z) < 2:
+            continue
+        lo = int(min(z.min(), round(2 * cx - z.max())))
+        hi = int(max(z.max(), round(2 * cx - z.min())))
+        for x in range(max(0, lo), min(w, hi + 1)):
+            if turm[y, x]:
+                continue
+            xm = int(round(2 * cx - x))
+            if 0 <= xm < w and turm[y, xm]:
+                out[y, x] = a[y, xm]
+                continue
+            for d in range(1, 14):
+                for y2 in (y - d, y + d):
+                    if 0 <= y2 < h and turm[y2, x]:
+                        out[y, x] = a[y2, x]
+                        break
+                else:
+                    continue
+                break
+    res = (Image.fromarray(out.astype(np.uint8)), (cx, cy), laenge)
+    _MUEHLE_CACHE[key] = res
+    return res
+
+
 def muehle20(sp, frame, o):
-    """Windmuehle: nur die roten Fluegel drehen sich um die Nabe, 22,5 Grad je Bild (4 Bilder = 90 Grad, die vier
-    Fluegel sind 4-fach symmetrisch -> nahtlos). Turm und Dach bleiben ruhig."""
-    a = np.array(sp)
-    r_, g_, b_ = a[..., 0].astype(int), a[..., 1].astype(int), a[..., 2].astype(int)
-    fl = (a[..., 3] > 0) & (r_ > 120) & (r_ > g_ + 50) & (r_ > b_ + 50)
-    fl |= (a[..., 3] > 0) & (r_ > 70) & (r_ > g_ + 30) & (r_ > b_ + 30) & (g_ < 60)   # dunkle Fluegelkanten
-    if fl.sum() < 20:
-        return sp
-    ys, xs = np.nonzero(fl)
-    cx, cy = (xs.min() + xs.max()) / 2.0, (ys.min() + ys.max()) / 2.0
-    teil = np.zeros_like(a); teil[fl] = a[fl]
-    rest = a.copy(); rest[fl, 3] = 0
-    dreh = Image.fromarray(teil).rotate(-22.5 * ((frame or 0) % 4), resample=Image.NEAREST, center=(cx, cy))
-    out = Image.fromarray(rest)
-    out.alpha_composite(dreh)
-    return out
+    """Windmuehle: die vier Gitterfluegel werden in jedem Bild sauber neu gezeichnet (statt das Pixelbild zu drehen)
+    und um 22,5 Grad je Bild weitergedreht (4 Bilder = 90 Grad, 4-fach symmetrisch -> nahtlos). Der Turm hinter
+    den Fluegeln ist aufgefuellt; Turm, Dach und Tuer bleiben ruhig."""
+    from PIL import ImageDraw
+    turm, (cx, cy), R = _muehle_ohne_fluegel(sp)
+    img = turm.copy()
+    d = ImageDraw.Draw(img)
+    DUNKEL, ROT, HELL = (94, 20, 24, 255), (138, 31, 34, 255), (200, 58, 58, 255)
+    breite = 6.5                                                  # halbe Fluegelbreite
+    r0, r1 = 7.0, R - 1
+    import math as m_
+    for k in range(4):
+        w = m_.radians(45 + 90 * k + 22.5 * ((frame or 0) % 4))
+        ux, uy = m_.cos(w), m_.sin(w)                            # entlang des Fluegels
+        nx, ny = -uy, ux                                          # quer
+        P = lambda r, q: (cx + ux * r + nx * q, cy + uy * r + ny * q)
+        ecken = [P(r0, -breite), P(r1, -breite), P(r1, breite), P(r0, breite)]
+        d.line([P(0, 0), P(r1, 0)], fill=DUNKEL, width=3)         # Rute (Holm)
+        for q in (-breite, breite):                               # Laengslatten
+            d.line([P(r0, q), P(r1, q)], fill=DUNKEL, width=2)
+        r = r0
+        while r <= r1 + 0.1:                                      # Querlatten
+            d.line([P(r, -breite), P(r, breite)], fill=DUNKEL, width=2)
+            r += 7.0
+        d.line([P(0, 0), P(r1, 0)], fill=ROT, width=1)            # Licht auf den Latten
+        for q in (-breite, breite):
+            d.line([P(r0, q), P(r1, q)], fill=HELL if q < 0 else ROT, width=1)
+        r = r0
+        while r <= r1 + 0.1:
+            d.line([P(r, -breite), P(r, breite)], fill=ROT, width=1)
+            r += 7.0
+    d.ellipse((cx - 3, cy - 3, cx + 3, cy + 3), fill=(90, 58, 44, 255))   # Nabe
+    d.point((cx - 1, cy - 1), fill=(192, 140, 88, 255))
+    return img
+
+
+def rauch20(img, objs, cache, frame):
+    """Kaminrauch der Strohdachhaeuser: kleine Woelkchen steigen genau aus der Schornsteinoeffnung (hoechster
+    Punkt des Sprites = Schornstein) und treiben mit dem Wind nach rechts, werden groesser und blasser.
+    3 Woelkchen im Abstand eines Drittels, je Bild ein Viertel weiter -> nach 4 Bildern nahtlos."""
+    from PIL import ImageDraw
+    lage = Image.new('RGBA', img.size, (0, 0, 0, 0))
+    d = ImageDraw.Draw(lage)
+    f = frame or 0
+    for o in objs:
+        if o.get('anim') != 'rauch20':
+            continue
+        a = np.array(cache[o['datei']].getchannel('A')) > 0
+        ys, xs = np.nonzero(a)
+        top = ys.min()
+        kx = xs[ys <= top + 1].mean()
+        X0, Y0 = o['x'] + kx, o['y'] + top - 1
+        for i in range(3):                                        # 3 Woelkchen, je Bild 1/4 weiter -> sichtbare Bewegung
+            ph = (f / 4.0 + i / 3.0) % 1.0
+            cx, cy = X0 + 1 + ph * 12, Y0 - 2 - ph * 24
+            rr = 2.5 + ph * 3.5
+            al = int(235 * (1 - ph) ** 0.8)
+            d.ellipse((cx - rr + 1, cy - rr + 1, cx + rr + 1, cy + rr + 1), fill=(170, 172, 182, int(al * 0.7)))   # Schattenseite
+            d.ellipse((cx - rr, cy - rr, cx + rr, cy + rr), fill=(232, 233, 240, al))
+            d.point((cx - rr + 1.5, cy - rr + 1.5), fill=(255, 255, 255, al))
+    img.alpha_composite(lage)
 
 
 k4.TEILANIM['muehle20'] = muehle20
@@ -179,6 +281,7 @@ def bauen(frame=None, speichern=True):
             k4.animieren(img, objs, cache, frame or 0)
             k6.animieren_k6(img, objs, cache, frame or 0)
             kb.laternen_licht(img, [o for o in objs if o.get('anim') == 'laterne'], frame)
+            rauch20(img, objs, cache, frame)
     if speichern and frame is None:
         img.save(os.path.join(KARTE, 'terrain.png'))
     print('Karte 20 %dx%d gebaut' % (cols, rows))
