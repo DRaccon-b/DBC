@@ -136,4 +136,6 @@ Wenn eine Karte fertig scheint: noch einmal komplett auf **Pixelfehler** und **L
   Bei Teil-Animationen (Uhrzeiger, Glocke …) nur genau dieses Teil verändern, nichts drumherum aufhellen.
 - **Geschützte Designs nicht kopieren:** Anspielungen (z. B. auf die Digiritter) über Farben, Anzahl und Anordnung –
   nie über originalgetreue Wappen, Logos oder Symbole.
+- **PixelLab nur Objekt-Creator:** Neue Objekte ausschließlich mit dem Objekt-Creator (`create-1-direction-object`,
+  höchstens 256 px) erzeugen – nicht mit dem Pro-Generator (`generate-image-v2`) oder Pixflux für größere Bilder.
 - **Ablauf:** Jede Änderung committen und pushen, Bilder/GIFs an den Nutzer schicken, auf Deutsch erklären.

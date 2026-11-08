@@ -594,6 +594,10 @@ def main():
         P.setzen(STR(21), x, 99, boden=set('k'))
     for (bx, r) in ((104, 101), (108, 101), (104, 105), (108, 105)):
         P.setzen(STR(21), bx, r, boden=set('h'))
+    HB = lambda i: 'k18/boot/%02d' % i                    # Hafen-Objekte (PixelLab, Boots-Durchgang), sparsam verteilt
+    for (n_, bx, r, bd) in ((HB(14), 34, 97, 'b'), (HB(7), 72, 97, 'b'), (HB(9), 54, 97, 'b'), (HB(8), 112, 97, 'b'),
+                            (HB(5), 80, 99, 'k'), (HB(6), 93, 103, 'w'), (HB(15), 20, 102, 'w'), (HB(15), 64, 103, 'w')):
+        P.setzen(n_, bx, r, boden=set(bd), extra={'kein_schatten': bd == 'w'})
     for bx in (30, 56, 116):
         P.setzen(STR(11), bx, 97, boden=set('b'))             # Rettungsringe
     P.setzen(STR(11), 108, 103, boden=set('h'))

@@ -392,7 +392,8 @@ def meer_wie_karte01(a, kl, wasser, frame):
     wd.N_FRAMES = N_FRAMES
     wd.FLACH, wd.SCHAUM_D, wd.STUFE1, wd.STUFE2 = 20, (18, 22), 50, 100   # Stufen enger: beide vor dem Nebel sichtbar
     meiden = gross(np.isin(kl, ['h', 'k']))
-    for (x0, y0, x1, y1) in ((96, 99, 134, 109), (124, 82, 129, 90), (124, 38, 135, 46)):   # Steg, Boot, Faehre, Pfeiler, Mole
+    for (x0, y0, x1, y1) in ((96, 99, 134, 109), (124, 82, 129, 90), (124, 38, 135, 46), (91, 100, 97, 105),
+                             (18, 99, 25, 104), (62, 100, 69, 105)):   # Steg, Boote, Pfeiler, Mole, Pfaehle, Tetrapoden
         meiden[y0 * T:y1 * T, x0 * T:x1 * T] = True
     meiden = np.array(Image.fromarray((meiden * 255).astype(np.uint8)).filter(ImageFilter.MaxFilter(9))) > 0
     wd.FELSEN_PROTOKOLL.clear()
