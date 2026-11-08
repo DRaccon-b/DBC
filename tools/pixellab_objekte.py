@@ -1573,7 +1573,9 @@ def herunterladen(oid, d):
 
 
 def speichern(gruppe, ims, ids):
-    if gruppe.startswith('k18_'):
+    if gruppe.startswith('k20_'):
+        ziel = os.path.join(ROOT, 'assets', 'objekte', 'karte20', gruppe[4:])
+    elif gruppe.startswith('k18_'):
         ziel = os.path.join(ROOT, 'assets', 'objekte', 'karte18', gruppe[4:])
     elif gruppe.startswith('k17_'):
         ziel = os.path.join(ROOT, 'assets', 'objekte', 'karte17', gruppe[4:])
@@ -1626,7 +1628,35 @@ def speichern(gruppe, ims, ids):
     print(gruppe, len(ims), 'Kandidaten ->', os.path.relpath(ziel, ROOT))
 
 
+OBJEKTGRUPPEN_K20 = {   # Karte 20 (A02-Startdorf), Stil wie Karte 06 (Primary Village) / Karte 01
+    'k20_haus': {'size': 96, 'items': [
+        'small cozy village cottage with a thick golden straw thatched roof, cream plaster walls with light timber beams, '
+        'a wooden front door in the middle, two small windows with flower boxes, a small stone chimney, grey stone base, ' + FR14,
+    ]},
+    'k20_muehle': {'size': 96, 'items': [
+        'small white stone windmill tower with a dark conical roof and four red wooden sails in an X shape, a small '
+        'wooden door at the bottom, ' + FR14,
+    ]},
+    'k20_klein': {'size': 48, 'items': [
+        'round golden hay bale, ' + FR14,
+        'friendly farm scarecrow with a straw hat, a red plaid shirt and straw hands on a wooden cross post, ' + FR14,
+        'small wooden village notice board with a little red tiled roof and paper notes pinned on it, ' + FR14,
+    ]},
+}
+
+
 def erzeugen(gruppe):
+    if gruppe.startswith('k20_'):
+        g = OBJEKTGRUPPEN_K20[gruppe]
+        req = {'description': STIL, 'size': g['size'], 'view': 'top-down',
+               'item_descriptions': [it + '. ' + STIL for it in g['items']],
+               'target_palette': {'colors': PALETTE, 'name': 'Karte01 handheld'}}
+        d = call('POST', '/v2/create-1-direction-object', req)
+        oid = d['object_id']
+        print(gruppe, 'Objekt', oid)
+        d = warte(oid)
+        speichern(gruppe, *herunterladen(oid, d))
+        return
     k2 = gruppe.startswith('k2_')
     k3 = gruppe.startswith('k3_')
     k4 = gruppe.startswith('k4_')
