@@ -254,11 +254,15 @@ def bauen(frame=None, speichern=True):
     hm = np.zeros((Hp, Wp), bool)
     hm[(y0 + 1) * T:(y1 + 1) * T, x0 * T:(x1 + 1) * T] = True
     hoch = hm & (zell_maske(cls, 'h', cols, rows) < 0.5)
+    # Wald oben und rechts am Plateau liegt auf gleicher Hoehe: dort keine Kantenlinie (Baeume ragen ueber die Kante)
+    wald_um = np.zeros((Hp, Wp), bool)
+    wald_um[:(y1 + 1) * T, x0 * T:] = True
+    hoch_k = hoch | (wald_um & (zell_maske(cls, 'h', cols, rows) > 0.5))
     tx0, tx1 = lay['treppe']
     ye = (y1 + 1) * T - 1
     frei = np.zeros((Hp, Wp), bool)
     frei[ye - 14:ye + 40, tx0 * T:(tx1 + 1) * T] = True          # Treppe schliesst buendig an die Felsfront an
-    k4.hoehenkanten(a, hoch, 'erde', 32, 8, lippe_aus_gras(gras), frei, 31, berg=False)
+    k4.hoehenkanten(a, hoch_k, 'erde', 32, 8, lippe_aus_gras(gras), frei, 31, berg=False)
     k4.treppe(a, tx0 * T, (tx1 + 1) * T, ye, 's', 32, 'erde', sand)
     # Fluss: vertieftes Wasser wie der Teich von Karte 06
     import wasser_vertieft
@@ -273,21 +277,6 @@ def bauen(frame=None, speichern=True):
     img = Image.fromarray(a).convert('RGBA')
     for (bx0, by0, bx1, by1) in lay['bruecken']:
         bauwerke.zeichne_bruecke(img, bx0 * T - 6, (bx1 + 1) * T + 6, by0 * T, (by1 + 1) * T - 4, frame=frame or 0)   # Enden auf dem Ufer
-    # Zaun auf der Felskante des Plateaus links und rechts der Treppe (wie in der Vorlage): Vorderseite des Zauns von
-    # Karte 06, nur die vordere Reihe
-    x0p, y0p, x1p, y1p = lay['plateau']
-    tx0, tx1 = lay['treppe']
-    for (za, zb) in ((x0p, tx0 - 1), (tx1 + 1, x1p)):
-        tmp = Image.new('RGBA', img.size, (0, 0, 0, 0))
-        k6.zaun(tmp, (za, y1p, zb, y1p + 3), (-9, -9))
-        box = (za * T, y1p * T - 6, (zb + 1) * T, y1p * T + 14)
-        teil = tmp.crop(box)
-        sch = Image.new('RGBA', teil.size, (0, 0, 0, 0))            # Schatten nach rechts unten auf die Kante
-        al = np.array(teil.getchannel('A'))
-        sa = np.zeros_like(al); sa[2:, 2:] = (al[:-2, :-2] > 0) * 70
-        sch.putalpha(Image.fromarray(sa.astype(np.uint8)))
-        img.alpha_composite(sch, box[:2])
-        img.alpha_composite(teil, box[:2])
     vor_zaun = img.copy()
     k6.zaun(img, lay['acker_zaun'], (-9, -9))
     k6.zaun(img, lay['feld_zaun'], (-9, -9))

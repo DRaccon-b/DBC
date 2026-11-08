@@ -67,7 +67,7 @@ FEST = [
     (VOGEL, 19, 42, {}), (VOGEL, 47, 21, {}),
     (SCHUBKARRE, 54, 35, {}), (HOLZ, 56, 26, {}),
     # Plateau oben rechts: Baenke links und rechts vom Weg, Wegweiser
-    ('k10/bank', 45.5, 6, {}), ('k10/bank', 54.5, 6, {}), ('k06/schild', 46.5, 7, {}),
+    ('k10/bank', 45.5, 6, {}), ('k10/bank', 54.5, 6, {}), ('k06/schild', 46.5, 8, {}),
     # Wegweiser am Fernseher
     ('k06/schild', 8.5, 23, {}),
 ]
@@ -173,6 +173,13 @@ def main():
 
     for (name, fx, fy, opt) in FEST:
         setze(name, fx, fy, opt)
+    x0p, y0p, x1p, y1p = lay['plateau']                          # Waldbaeume ragen oben/rechts ueber die Plateaukante
+    for tx in range(x0p, x1p + 2):
+        if cls[y0p][min(cols - 1, tx)] == 'h' and abs(tx - 49.5) > 2.5:       # Weg oben bleibt offen
+            setze(rnd.choice(WALD), tx + (0.5 if tx % 2 else 0), y0p + 1, {'spiegeln': tx % 3 == 0}, frei=False, wald=True)
+    for ty in range(y0p + 1, y1p):
+        if cls[ty][min(cols - 1, x1p + 1)] == 'h' and ty % 2 == 0:
+            setze(rnd.choice(WALD), x1p + 1, ty + 1, {'spiegeln': ty % 3 == 0}, frei=False, wald=True)
     for ty in range(rows):                                       # Waldrand wie Karte 06
         for tx in range(cols):
             if cls[ty][tx] == 'h' and (tx + ty) % 2 == 0:
