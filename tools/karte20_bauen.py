@@ -262,7 +262,7 @@ def bauen(frame=None, speichern=True):
     ye = (y1 + 1) * T - 1
     frei = np.zeros((Hp, Wp), bool)
     frei[ye - 14:ye + 40, tx0 * T:(tx1 + 1) * T] = True          # Treppe schliesst buendig an die Felsfront an
-    k4.hoehenkanten(a, hoch_k, 'erde', 32, 8, lippe_aus_gras(gras), frei, 31, berg=False)
+    wand = k4.hoehenkanten(a, hoch_k, 'erde', 32, 8, lippe_aus_gras(gras), frei, 31, berg=False)
     k4.treppe(a, tx0 * T, (tx1 + 1) * T, ye, 's', 32, 'erde', sand)
     # Fluss: vertieftes Wasser wie der Teich von Karte 06
     import wasser_vertieft
@@ -289,7 +289,7 @@ def bauen(frame=None, speichern=True):
         k4.teleporter_zeichnen(a, tp['x'], tp['y'], tp['b'], tp['h'], frame)
     img = Image.fromarray(a).convert('RGBA')
     lvl = np.ones((Hp, Wp), np.uint8)
-    lvl[hoch] = 2
+    lvl[hoch_k] = 2                                              # Wald oben/rechts liegt auf Plateauhoehe
     if speichern and frame is None:
         img.save(os.path.join(KARTE, 'terrain_basis.png'))
         np.save(os.path.join(KARTE, 'wasser.npy'), np.packbits(xm))
@@ -300,7 +300,10 @@ def bauen(frame=None, speichern=True):
                       key=lambda o: o['y'] + o['fuss'])
         if objs:
             cache = {o['datei']: Image.open(os.path.join(OBJ, o['datei'])).convert('RGBA') for o in objs}
-            k4.objekte_zeichnen(img, objs, cache, ~xm, frame)
+            ebenen = lvl.copy().astype(np.int16)                 # Schatten nur auf der Ebene des Fusses:
+            ebenen[wand] = 9                                      # nie auf die Felsfront, nie vom Plateau nach unten
+            ebenen[xm] = 7                                        # oder umgekehrt, nie aufs Wasser
+            k4.objekte_zeichnen(img, objs, cache, ~xm & ~wand, frame, ebenen=ebenen)
             k4.animieren(img, objs, cache, frame or 0)
             k6.animieren_k6(img, objs, cache, frame or 0)
             kb.laternen_licht(img, [o for o in objs if o.get('anim') == 'laterne'], frame)
