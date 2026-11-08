@@ -629,6 +629,8 @@ def main():
             n_ = SORTEN[(tx * 7 + ty * 3 + j) % len(SORTEN)]
             if (tx * 5 + ty * 11) % 3 == 0:                    # etwa jeder dritte Baum goldgelb (Herbst)
                 n_ = 'gebaeude/gold_' + n_[-2:]
+            elif (tx * 7 + ty * 3) % 5 == 0:                   # ein paar rot-orange
+                n_ = 'gebaeude/rot_' + n_[-2:]
             n_fehl = len(P.fehl)
             t_ = P.setzen(n_, tx, ty, boden=set(k_), extra={'baum': True})
             del P.fehl[n_fehl:]

@@ -907,7 +907,7 @@ def poller():
     return b
 
 
-def ginkgo(quelle, name):
+def ginkgo(quelle, name, rampe=None):
     """Ginkgo im Herbst: Krone eines vorhandenen Baums (Karte 01/10) nach Helligkeit auf eine goldgelbe Rampe
     umgefaerbt, Stamm und Umriss bleiben (Wiederverwenden zuerst, Regel 3)."""
     im = np.array(Image.open(os.path.join(ROOT, 'assets', 'objekte', quelle + '.png')).convert('RGBA')).astype(int)
@@ -915,7 +915,7 @@ def ginkgo(quelle, name):
     gruen = (a_ > 0) & (g_ > r_ + 8) & (g_ >= b_ - 12)                 # Gruen und Blaugruen (Schatten)
     kontur = (a_ > 0) & ~gruen & (0.3 * r_ + 0.59 * g_ + 0.11 * b_ < 60) & ~(r_ > g_ + 10)   # dunkle Kontur -> dunkles Braun
     lum = (0.3 * r_ + 0.59 * g_ + 0.11 * b_)
-    rampe = np.array([[96, 62, 22], [150, 98, 26], [196, 140, 34], [226, 178, 52], [244, 210, 96]])
+    rampe = np.array(rampe if rampe is not None else [[96, 62, 22], [150, 98, 26], [196, 140, 34], [226, 178, 52], [244, 210, 96]])
     lo, hi = np.percentile(lum[gruen], (2, 98)) if gruen.any() else (0, 1)
     t = np.clip((lum - lo) / max(1.0, hi - lo), 0, 0.999)
     idx = (t * len(rampe)).astype(int)
@@ -990,6 +990,8 @@ def main():
     json.dump({k: [[int(v) for v in r] for r in l] for k, l in LICHT.items()}, open(os.path.join(OUT, 'lichter.json'), 'w'), indent=0)
     for i_ in range(4):                                       # goldgelbe Herbstbaeume aus den Baeumen von Karte 01
         ginkgo('karte01/baeume/%02d' % i_, 'gold_%02d' % i_)
+        ginkgo('karte01/baeume/%02d' % i_, 'rot_%02d' % i_,          # rot-orange Herbstbaeume
+               [[92, 30, 22], [140, 42, 28], [186, 66, 36], [214, 104, 50], [236, 148, 80]])
     for q, n in (('karte18/gebaeude/stadtbaum', 'ginkgo_beet'), ('karte01/baeume/00', 'ginkgo'), ('karte10/baeume/01', 'ginkgo_gross'), ('karte01/baeume/03', 'ginkgo_klein')):
         ginkgo(q, n)
         teile.append((n, Image.open(os.path.join(OUT, n + '.png'))))
