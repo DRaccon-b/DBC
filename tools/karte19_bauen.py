@@ -170,7 +170,8 @@ def wasser_tief(a, wasser, frame):
 
 def wasser_netz(a, wasser, frame):
     """Netz-Wasser: klares Cyan ueber den Platten, unter Wasser ein leuchtendes Datenraster, Lichtwellen laufen als
-    Bitreihen ueber die Oberflaeche (passt zur Netzwelt)."""
+    Bitreihen ueber die Oberflaeche (passt zur Netzwelt). In der Mitte eine zweite, tiefere Ebene mit sichtbarer
+    Stufe (Nordwand), dunklerem Grund und schwaecherem, versetztem Raster."""
     f = frame or 0
     y0, y1, x0, x1 = _becken(wasser)
     g = _grund(wasser)[y0:y1, x0:x1]
@@ -179,7 +180,24 @@ def wasser_netz(a, wasser, frame):
     sub = g * 0.45 + np.array((20, 110, 150), np.float32) * 0.55
     raster = ((xx % 16 == 0) | (yy % 16 == 0))
     p = 0.5 + 0.5 * np.sin(2 * np.pi * f / N_FRAMES)
+    # zweite, tiefere Ebene (Nutzerwunsch): Becken im Becken, 1 Kachel vom Rand (oben unter der Mauerfront 1,5),
+    # am 16er-Raster; dort ist der Grund dunkler, das Datenraster schwaecher und um 8 px versetzt (liegt tiefer)
+    tief = (yy >= 24) & (yy < h - 16) & (xx >= 16) & (xx < w - 16)
+    sub[tief] = g[tief] * 0.22 + np.array((10, 62, 102), np.float32) * 0.78
+    raster_t = tief & (((xx + 8) % 16 == 0) | ((yy + 8) % 16 == 0))
+    raster &= ~tief
     sub[raster] = sub[raster] * (0.6 - 0.15 * p) + np.array((80, 230, 255), np.float32) * (0.4 + 0.15 * p)
+    sub[raster_t] = sub[raster_t] * (0.72 - 0.1 * p) + np.array((60, 170, 220), np.float32) * (0.28 + 0.1 * p)
+    # Stufe: Nordwand der Vertiefung ist sichtbar (zeigt zum Betrachter, 5 px), Kanten mit Licht, Fuss dunkel
+    ty0, ty1 = 24, h - 16
+    sub[ty0:ty0 + 5, 16:w - 16] = [(40, 150, 190), (30, 126, 168), (24, 106, 148), (18, 88, 128), (10, 56, 92)][0]
+    for d, c in enumerate([(40, 150, 190), (30, 126, 168), (24, 106, 148), (18, 88, 128), (10, 56, 92)]):
+        sub[ty0 + d, 16:w - 16] = c
+    sub[ty0 - 1, 15:w - 15] = sub[ty0 - 1, 15:w - 15] * 0.3 + np.array((150, 245, 255), np.float32) * 0.7   # Lichtkante oben
+    sub[ty0:ty1, 15] = sub[ty0:ty1, 15] * 0.4 + np.array((120, 225, 245), np.float32) * 0.6                  # Seitenkanten
+    sub[ty0:ty1, w - 16] = sub[ty0:ty1, w - 16] * 0.55 + np.array((14, 70, 110), np.float32) * 0.45
+    sub[ty1, 16:w - 16] = sub[ty1, 16:w - 16] * 0.45 + np.array((110, 215, 240), np.float32) * 0.55          # Suedkante
+    sub[ty0 + 5:ty0 + 8, 16:w - 16] *= 0.8                                                                    # Schatten unter der Stufe
     rs = np.random.RandomState(77)
     for _ in range(18):                                            # Bitreihen (helle Striche), treiben nach rechts
         gy, gx, lang = rs.randint(9, h - 2), rs.randint(0, w), rs.randint(4, 10)
