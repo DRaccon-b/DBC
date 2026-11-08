@@ -357,6 +357,34 @@ def kaimauer(a, wasser, land, lvl):
     a[seite] = H('#4a4e5a')
 
 
+def meer_wie_karte01(a, kl, wasser, frame):
+    """Meer im Stil von Karte 01 (gleiche Funktion wasser_details.meer_terrassen): Flachwasser mit durchscheinendem
+    Sandgrund, zwei Stufenwaende mit Lichtkante und dunklem Fuss, tiefer Grund, Felsen (kleine ragen im Flachen heraus),
+    Algen, Schaumkante und Lichtstriche. Nur die Wasserfarben sind an den Abend im Nebel angepasst (gedaempftes
+    Blaugruen statt Karibik-Tuerkis); 4 Bilder statt 16. Steg, Mole, Boot und Pfeiler bleiben frei von Felsen."""
+    import wasser_details as wd
+    alt = (wd.FARBEN, wd.N_FRAMES)
+    wd.FARBEN = [wd.H('#4e8e9c'), wd.H('#356e8c'), wd.H('#25527a'), wd.H('#1a3a62')]
+    wd.N_FRAMES = N_FRAMES
+    meiden = gross(np.isin(kl, ['h', 'k']))
+    for (x0, y0, x1, y1) in ((103, 99, 115, 107), (124, 82, 129, 90), (124, 38, 135, 46)):   # Steg+Boot, Pfeiler, Mole
+        meiden[y0 * T:y1 * T, x0 * T:x1 * T] = True
+    meiden = np.array(Image.fromarray((meiden * 255).astype(np.uint8)).filter(ImageFilter.MaxFilter(9))) > 0
+    wd.FELSEN_PROTOKOLL.clear()
+    see = wasser.copy()                                            # Meer laeuft unter dem Nebel weiter (unten/rechts),
+    nebel_ = gross(kl == '.')                                      # damit nur der Kai als Ufer zaehlt
+    see[99 * T:, :] |= nebel_[99 * T:, :]
+    see[:, 126 * T:] |= nebel_[:, 126 * T:]
+    steg_ = gross(kl == 'h')                                       # der Steg steht UEBER dem Wasser
+    see |= steg_
+    vorher = a.copy()
+    img = wd.meer_terrassen(Image.fromarray(a), see, frame, meiden, maske=see)
+    wd.FARBEN, wd.N_FRAMES = alt
+    out = np.array(img.convert('RGB'))
+    out[steg_] = vorher[steg_]                                     # Planken wieder obenauf
+    return out
+
+
 def wasser_stufen(a, kl):
     """Meer in drei Tiefenstufen wie auf den anderen Karten (Kachelraster): bis 2 Kacheln vom Land flach (heller,
     leicht tuerkis), bis 5 Kacheln mittel, dahinter tief (dunkel). An jeder Stufe eine Unterwasserkante: 1 px heller
@@ -798,7 +826,7 @@ def bauen(frame=None, speichern=True):
         a[m] = textur(art, cols, rows)[m]
     wasser = gross(kl == 'w')
     a[wasser] = textur('w', cols, rows)[wasser]
-    wasser_stufen(a, kl)
+    a = meer_wie_karte01(a, kl, wasser, frame)
     land = gross(kl != '.') & ~wasser
     asphalt = gross(np.isin(kl, ['s', 'x']))
     lvl = np.zeros((Hp, Wp), np.uint8)
@@ -836,7 +864,6 @@ def bauen(frame=None, speichern=True):
     lvl[99 * T:100 * T, 4 * T:104 * T] = 9                       # Kaistreifen hinter dem Gelaender: nicht erreichbar
     lvl[99 * T:100 * T, 110 * T:125 * T] = 9
     sch_k = np.zeros_like(wasser); sch_k[18 * T:100 * T, 126 * T:126 * T + 3] = True
-    wasser_wellen(a, wasser & (lvl != 9), frame)
     dunkeln(a, sch_k & wasser, 0.75)
     steg(a, lay, wasser, lvl)
     for tp in lay['teleporter']:

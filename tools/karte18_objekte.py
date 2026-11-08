@@ -346,7 +346,7 @@ def main():
                  extra={'hochbahn': True, 'kein_schatten': True})
     z['x'] = lay['hochbahn']['zug'][0] * T
     # ------------------------------------------------------------------ Baeume (gross zuerst) mit Begleitern (Regel 5)
-    GRUEN, KLEIN_B, GROSS_B = 'karte01/baeume/00', 'karte01/baeume/03', 'karte10/baeume/01'
+    GRUEN, KLEIN_B, GROSS_B = 'k18/baum2/01', 'karte01/baeume/03', 'k18/baum2/00'   # PixelLab-Stadtbaeume
     GINKGO, GINKGO2, GINKGO_K = 'gebaeude/ginkgo', 'gebaeude/ginkgo_gross', 'gebaeude/ginkgo_klein'
     BUESCHEL, BLUMEN, BUSCH, LAUB = 'karte01/deko/06', 'karte01/deko/00', 'karte01/deko/25', 'karte01/deko/50'
 
@@ -413,8 +413,8 @@ def main():
                     P.fehl.append((nm, int(mitte // T), r, 'Begleiter ohne Platz'))
         return t
     # Spielplatz: gruener Baum NW, Ginkgo NO (Vorlage)
-    baum(GRUEN, 47, 8, RASEN)
-    baum(GINKGO, 59, 7, RASEN)
+    baum('karte01/baeume/00', 47, 8, RASEN)
+    baum('k18/baum2/02', 59, 7, RASEN)
     # Park SW: je Rasen zwei Baeume versetzt (nie in einer Reihe), dazu Begleiter
     # Park SW (jetzt unten, Reihen 73-93; unter der Hochbahn 80-83 nichts Hohes)
     for (n_, bx, r) in ((GROSS_B, 9, 78), (KLEIN_B, 13, 75), (GRUEN, 20, 76), (KLEIN_B, 25, 78),
@@ -422,24 +422,24 @@ def main():
         baum(n_, bx, r, RASEN)
     baum(GINKGO, 0, 93, RASEN, cx=17 * T)                     # Ginkgo auf dem kleinen Rasen
     # Mittelstreifen: Baum am Ostende jeder Hecke (Vorlage), Uferstrasse: vier Baeume auf der Hecke
-    SB = ('gebaeude/stadtbaum', 'gebaeude/stadtbaum2')        # Stadtbaeume wie Vorlage: Wurzeln in der Hecke
+    SB = ('k18/baum2/00', 'k18/baum2/01')        # Stadtbaeume wie Vorlage: Wurzeln in der Hecke
     for i, (bx, r) in enumerate(((11, 48), (23, 48), (47, 48), (59, 48))):
         P.setzen(SB[i % 2], bx, r, boden=set('m'), n=3, dy=-5, extra={'baum': True})
     for i, cx in enumerate((71 * T, 87 * T, 104 * T, 117 * T)):
         P.setzen(SB[i % 2], 0, 88, boden=set('m'), cx=cx, dy=-5, extra={'baum': True})
     # Ginkgos an der Querstrasse: Westseite auf dem Gehweg, Ostseite in Baumscheiben (Allee)
     for r in (31, 58, 72):
-        baum(GINKGO, 29, r, set('gq'))
+        baum('k18/baum2/02', 29, r, set('gq'))
     for r in (72, 76):
         baum(GINKGO, 0, r, RASEN, cx=601)
     # Platz: je ein Baum mittig im Heckenbeet (Beete wie Vorlage)
     for (x0, y0, x1, y1) in ((66, 28, 71, 29), (69, 37, 74, 39), (80, 44, 85, 46), (69, 67, 74, 69),
                              (118, 38, 123, 40), (118, 58, 123, 60), (118, 70, 123, 72), (121, 21, 123, 23)):
-        n_ = 'gebaeude/ginkgo_beet' if (x0, y0) in ((66, 28), (118, 58)) else SB[(x0 + y0) % 2]
+        n_ = 'k18/baum2/02' if (x0, y0) in ((66, 28), (118, 58)) else SB[(x0 + y0) % 2]
         P.setzen(n_, 0, y1, boden=set('e'), cx=(x0 + x1 + 1) / 2.0 * T, dy=-6 if y1 > y0 + 1 else -3,
                  extra={'baum': True})
     # ------------------------------------------------------------------ Grosse Einzelobjekte
-    P.setzen('gebaeude/zelt', 18, 61, boden=set('q'))        # Notlager (jetzt oben): Spitzzelt, Sandsaecke symmetrisch
+    P.setzen('k18/platz/00', 18, 61, boden=set('q'), n=4)        # Notlager (jetzt oben): Spitzzelt, Sandsaecke symmetrisch
     P.setzen('karte03/klein/43', 0, 61, boden=set('q'), cx=16.5 * T)
     P.setzen('karte03/klein/43', 0, 61, boden=set('q'), cx=23.5 * T, spiegel=True)
     P.setzen('gebaeude/feuerschale', 17, 64, boden=set('q'), anim='flammen18')
@@ -450,12 +450,16 @@ def main():
     P.setzen('karte10/spielplatz/01', 57, 11, boden=RASEN)
     P.setzen('gebaeude/kletterkuppel', 57, 13, boden=RASEN)
     P.setzen('karte10/spielplatz/02', 47, 15, boden=set('g'))
-    P.setzen('gebaeude/trinkbrunnen', 52, 17, boden=set('g'))
+    P.setzen('k18/platz/05', 52, 17, boden=set('g'))
     P.setzen('karte10/banner/06', 56, 17, boden=set('g'))     # Uhr
     P.setzen('karte10/klein/38', 54, 17, boden=set('g'))     # Bank
-    P.setzen('gebaeude/taube', 60, 15, boden=set('gn'))
-    for (n_, bx) in (('gebaeude/container_blau', 65), ('gebaeude/container_rot', 87), ('gebaeude/container_blau2', 91)):
-        P.setzen(n_, bx, 96, boden=set('b'), n=4)
+    P.setzen('k18/platz/06', 60, 15, boden=set('gn'))
+    for (n_, bx, sp) in (('k18/platz/02', 65, False), ('k18/platz/01', 87, False), ('k18/platz/02', 91, True)):
+        P.setzen(n_, bx, 96, boden=set('b'), n=4, spiegel=sp)
+    P.setzen('k18/platz/13', 44, 97, boden=set('b'))           # Fischkisten am Kai
+    P.setzen('k18/platz/03', 54, 36, boden=set('s'), n=4)     # Lieferwagen auf dem Parkplatz
+    LAT_YATAI = [[0, 14, 9, 26, 0], [50, 14, 59, 26, 2]]
+    P.setzen('k18/platz/11', 21, 71, boden=set('q'), n=4, anim='rechtecke', extra={'licht_rects': LAT_YATAI})   # Imbissstand (Laternen leuchten)
     P.setzen('k18/frontal/02', 66, 19)                        # Bushaltestellen
     P.setzen('k18/frontal/03', 21, 41)
     P.setzen('k18/frontal/00', 111, 102, boden=set('w'), anim='boot', extra={'kein_schatten': True})
@@ -475,7 +479,7 @@ def main():
         P.setzen(LAT, 31, r)
     for r in (31, 61, 69):
         P.setzen(LAT, 37, r)
-    for (bx, r) in ((17, 73), (16, 89), (29, 90), (10, 59), (13, 67), (29, 69), (61, 13)):
+    for (bx, r) in ((17, 73), (16, 89), (29, 90), (10, 59), (13, 67), (26, 70), (61, 13)):
         P.setzen(LAT, bx, r, boden=GEHEN | RASEN)
     for x in (14, 28, 38, 50, 62, 74, 86, 96, 110, 122):      # Uferpromenade (Zebra 98-101 frei)
         P.setzen(LAT, x, 95)
@@ -498,12 +502,12 @@ def main():
         P.setzen(STR(4), 0, 41, x=xb, dy=-3)
     P.paar(STR(6), 82, 52)                                    # Infotafeln (Paar)
     for bx in (84, 86, 88, 90):                               # hohe Banner vor der Terrasse, Masten gespiegelt
-        P.paar('gebaeude/banner_hoch', bx, 36, anim='fahne18', anker=3.0)
+        P.paar('k18/platz/07', bx, 36, anim='fahne18', anker=3.5)
     for bx in (20, 44):
         P.setzen(STR(50), bx, 19, anim='fahne18')             # Nobori vor Ramen-Laden und Izakaya
     for r in (44, 56, 68):                                    # Baenke am Mittelweg (Paare)
         P.paar(STR(14), 95, r)
-    for (bx, r) in ((14, 64), (22, 68), (16, 78), (73, 52), (116, 52)):
+    for (bx, r) in ((14, 64), (9, 71), (16, 78), (73, 52), (116, 52)):
         P.setzen('karte10/klein/38', bx, r, boden=set('gpqn'))
     BAKE = {'anim': 'rechtecke', 'extra': {'licht_rects': [[4, 1, 5, 2, 0], [22, 1, 23, 2, 2]]}}
     for bx in (87, 89, 93):                                   # Absperrungen an der Terrassenkante (Paare)
