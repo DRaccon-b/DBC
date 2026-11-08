@@ -131,6 +131,7 @@ def main():
     lay = {'groesse': [C, R], 'klassen': [''.join(z) for z in k], 'hoehe': [''.join(str(c) for c in z) for z in h],
            'platz': PLATZ, 'platz_rasen': PLATZ_RASEN, 'acker_zaun': ACKER_ZAUN, 'beete': BEETE,
            'feld_zaun': FELD_ZAUN, 'plateau': PLATEAU, 'treppe': TREPPE, 'bruecken': BRUECKEN,
+           'treppen_sued': [[TREPPE[0], TREPPE[1], 2, PLATEAU[3]]],   # Durchgang fuer die Kollision
            'teleporter': [{'x': 28, 'y': 46, 'b': 4, 'h': 2}, {'x': 58, 'y': 37, 'b': 2, 'h': 3}]}
     json.dump(lay, open(os.path.join(KARTE, 'layout.json'), 'w'), indent=0)
     F = {'h': (30, 80, 30), 'g': (84, 132, 60), 'w': (192, 168, 108), 'p': (120, 132, 144), 'r': (108, 156, 60),

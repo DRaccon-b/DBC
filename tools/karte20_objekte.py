@@ -60,7 +60,7 @@ FEST = [
     ('k01/baum03', 17, 31, {}), ('k01/baum00', 24, 32, {}), ('k01/baum02', 39, 36, {}), ('k01/baum00', 37, 41, {}),
     ('k01/baum01', 49, 41, {}), ('k01/baum02', 45, 3, {}), ('k01/baum03', 23, 9, {}),
     # Felder: Windmuehle, Heu, Vogelscheuchen, Gemuese
-    (MUEHLE, 48, 34, {}),
+    (MUEHLE, 48, 34, {'anim': 'muehle20'}),
     (HEU, 44, 31, {}), (HEU, 55, 31, {}), (HEU, 56, 4, {}), (HEU, 8, 37, {}), (HEU, 7, 43, {}),
     (VOGEL, 9, 39, {}), (VOGEL, 13, 39, {}), (VOGEL, 17, 39, {}), (VOGEL, 11, 42, {}), (VOGEL, 15, 42, {}),
     (VOGEL, 19, 42, {}), (VOGEL, 47, 21, {}),

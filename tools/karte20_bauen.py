@@ -27,6 +27,28 @@ H = k4.H
 weich, zell_maske = k4.weich, k4.zell_maske
 
 
+def muehle20(sp, frame, o):
+    """Windmuehle: nur die roten Fluegel drehen sich um die Nabe, 22,5 Grad je Bild (4 Bilder = 90 Grad, die vier
+    Fluegel sind 4-fach symmetrisch -> nahtlos). Turm und Dach bleiben ruhig."""
+    a = np.array(sp)
+    r_, g_, b_ = a[..., 0].astype(int), a[..., 1].astype(int), a[..., 2].astype(int)
+    fl = (a[..., 3] > 0) & (r_ > 120) & (r_ > g_ + 50) & (r_ > b_ + 50)
+    fl |= (a[..., 3] > 0) & (r_ > 70) & (r_ > g_ + 30) & (r_ > b_ + 30) & (g_ < 60)   # dunkle Fluegelkanten
+    if fl.sum() < 20:
+        return sp
+    ys, xs = np.nonzero(fl)
+    cx, cy = (xs.min() + xs.max()) / 2.0, (ys.min() + ys.max()) / 2.0
+    teil = np.zeros_like(a); teil[fl] = a[fl]
+    rest = a.copy(); rest[fl, 3] = 0
+    dreh = Image.fromarray(teil).rotate(-22.5 * ((frame or 0) % 4), resample=Image.NEAREST, center=(cx, cy))
+    out = Image.fromarray(rest)
+    out.alpha_composite(dreh)
+    return out
+
+
+k4.TEILANIM['muehle20'] = muehle20
+
+
 def flaeche(ks, cols, rows):
     t = np.zeros((rows * T, cols * T, 3), np.uint8)
     for y in range(rows):
