@@ -26,7 +26,7 @@ BILDDAUER = k16.BILDDAUER
 CYAN, LEER = k16.CYAN, k16.LEER
 kontur, mischen, puls = k16.kontur, k16.mischen, k16.puls
 PFLASTER = np.array((137, 154, 155), np.float32)              # Pflasterfarbe der Vorlage
-RAND = os.environ.get('K19_RAND', 'netz')                       # Rand der Hafen-Plattform: netz | kai | bunt | warn
+RAND = os.environ.get('K19_RAND', 'kai')                           # Rand der Hafen-Plattform: kai (gewaehlt) | netz | bunt | warn
 
 
 def pflaster_textur(cols, rows):

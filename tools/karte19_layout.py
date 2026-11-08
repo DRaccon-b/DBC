@@ -34,10 +34,12 @@ def main():
         innen = 'p' if i == 0 else 'h'
         k[y0:y0 + RH, x0:x0 + RW] = 'r'
         k[y0 + 1:y0 + RH - 1, x0 + 1:x0 + RW - 1] = innen
-        for (cx, cy) in ((x0, y0), (x0 + RW - 1, y0), (x0, y0 + RH - 1), (x0 + RW - 1, y0 + RH - 1)):
-            k[cy, cx] = '.'
-        for (cx, cy) in ((x0 + 1, y0 + 1), (x0 + RW - 2, y0 + 1), (x0 + 1, y0 + RH - 2), (x0 + RW - 2, y0 + RH - 2)):
-            k[cy, cx] = 'r'
+        if i == 0:                                              # Network-Raum: Ecken gestuft
+            for (cx, cy) in ((x0, y0), (x0 + RW - 1, y0), (x0, y0 + RH - 1), (x0 + RW - 1, y0 + RH - 1)):
+                k[cy, cx] = '.'
+            for (cx, cy) in ((x0 + 1, y0 + 1), (x0 + RW - 2, y0 + 1), (x0 + 1, y0 + RH - 2), (x0 + RW - 2, y0 + RH - 2)):
+                k[cy, cx] = 'r'
+        # Hafen (Nutzerwunsch): Kaimauer ringsum geschlossen, volle Ecken
         k[y0 + 18:y0 + 23, x0 + 1:x0 + 7] = 'f'
         k[y0 + 23, x0 + 1:x0 + 3] = 'z'
         if i == 0:
