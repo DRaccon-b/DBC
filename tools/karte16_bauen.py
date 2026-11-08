@@ -104,17 +104,17 @@ def leere(a, leer, frame):
     mischen(a, raster & leer, (40, 80, 140), 0.25)
 
 
-def straenge(a, leer, frame, seed=1616):
+def straenge(a, leer, frame, seed=1616, zonen=((16, 300), (720, 1008)), n=9, y_bereich=None):
     """Blaue Datenstraenge in der Leere: senkrechte Lichtfaeden (teils mit einem Knick), auf denen Datenpakete nach
     unten laufen. 4 Bilder: jedes Paket wandert je Bild 1/4 seines Abstands weiter -> nahtlose Schleife."""
     f = frame or 0
     Hh, W = leer.shape
     rs = random.Random(seed)
-    zonen = [(16, 300), (720, 1008)]                              # links und rechts der Plattform
     for zi, (xa, xb) in enumerate(zonen):
-        for i in range(9):
+        for i in range(n):
             x = rs.randint(xa, xb)
-            y0, y1 = rs.randint(0, 200), rs.randint(380, Hh)
+            y0, y1 = (rs.randint(0, 200), rs.randint(380, Hh)) if y_bereich is None else \
+                (rs.randint(0, y_bereich[0]), rs.randint(y_bereich[1], Hh))
             knick = rs.random() < 0.5
             ky, kd = rs.randint(y0 + 40, y1 - 40), rs.choice((-24, -16, 16, 24))
             pfad = []
@@ -143,7 +143,7 @@ def straenge(a, leer, frame, seed=1616):
                         blend(a, Y, X - 1, farbe, 0.35 * s_)
 
 
-def fragmente(a, leer, frame, seed=1617):
+def fragmente(a, leer, frame, seed=1617, stellen=None):
     """Schwebende Datenfragmente: losgerissene Bodenplatten (1-3 Kacheln, an den Ecken stufig ausgebrochen, am
     4-px-Raster) mit schmaler Front und cyan glimmender Bruchkante, dazu kleine Datenwuerfel. Jedes schwebt 1 px
     auf und ab (eigener Takt)."""
@@ -152,7 +152,7 @@ def fragmente(a, leer, frame, seed=1617):
     rs = random.Random(seed)
     tex = boden_textur(4, 3)
     belegt = ~leer.copy()
-    stellen = [(56, 64), (190, 36), (120, 190), (236, 292), (48, 404), (196, 500), (100, 580),
+    stellen = stellen or [(56, 64), (190, 36), (120, 190), (236, 292), (48, 404), (196, 500), (100, 580),
                (790, 56), (912, 150), (816, 262), (950, 340), (770, 430), (900, 500), (968, 584)]
     for i, (x, y) in enumerate(stellen):
         x += rs.randint(-8, 8); y += rs.randint(-8, 8)
