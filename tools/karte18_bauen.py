@@ -204,24 +204,40 @@ def rasen_kanten(a, rasen):
     dunkeln(a, innen, 0.72)
 
 
+OLIV = np.array([H(c) for c in ('#2e3a1a', '#3e4e22', '#50642c', '#647a36', '#788e42', '#8ca050')], np.float32)
+
+
 def mittelstreifen(a, m):
-    """Mittelstreifen: Bordstein ringsum, darin eine niedrige Hecke (Licht oben links, unten dunkle Blattfront)."""
+    """Mittelstreifen und Beete wie in der Vorlage: heller Bordstein ringsum, darin eine niedrige, kastenfoermig
+    geschnittene Hecke in Olivgruen - je Kachel ein weich gewoelbter Block (Licht oben links, Schatten unten rechts,
+    feine Blattstruktur), dunkle Fugen zwischen den Bloecken, unten eine schmale dunkle Blattfront."""
     rand = kontur(m)
-    a[m] = H('#3a3a30')
-    a[rand] = H('#9aa0ae')
-    fuge = kontur(m & ~rand)
-    innen = m & ~rand & ~fuge
-    alt = k4.HECKE
-    k4.HECKE = HECKE18
-    sicher = a.copy()
-    k4.hecke(a, innen & np.roll(innen, -6, 0), 18)              # Blattfront landet innerhalb der Hecke, nicht darunter
-    k4.HECKE = alt
-    a[~m] = sicher[~m]                                           # nichts ausserhalb des Beets veraendern
-    unten = innen & ~np.roll(innen, -1, 0)
-    for d in range(2):
-        dunkeln(a, np.roll(unten, -d, 0) & innen, 0.7)
-    a[rand] = H('#9aa0ae')
-    a[fuge] = (sicher[fuge] * 0.6).astype(np.uint8)
+    innen = m & ~rand
+    rs = np.random.RandomState(1818)
+    wert = np.full(m.shape, 0.6, np.float32)                       # dunkler Grund zwischen den Ballen
+    ys, xs = np.nonzero(innen)
+    if len(ys):
+        y0_, y1_, x0_, x1_ = ys.min(), ys.max(), xs.min(), xs.max()
+        mitten = [(y + rs.randint(-2, 3), x + rs.randint(-2, 3), rs.uniform(3.2, 4.6))
+                  for y in range(y0_, y1_ + 1, 5) for x in range(x0_ + (y // 5 % 2) * 3, x1_ + 1, 6)]
+        for (cy, cx, r) in sorted(mitten):                         # hintere Ballen zuerst, vordere decken
+            ri = int(r) + 1
+            ya, yb, xa, xb = max(0, cy - ri), min(m.shape[0], cy + ri + 1), max(0, cx - ri), min(m.shape[1], cx + ri + 1)
+            gy, gx = np.mgrid[ya:yb, xa:xb]
+            d = ((gy - cy) ** 2 + (gx - cx) ** 2) / (r * r)
+            sel = (d <= 1) & innen[ya:yb, xa:xb]
+            v = 3.2 - 1.5 * ((gx - cx) + (gy - cy)) / r * 0.6 - 2.2 * d * d
+            v = v + ((gx * 7 + gy * 13) % 5 == 0) * 0.5            # einzelne Blattlichter
+            blk = wert[ya:yb, xa:xb]
+            blk[sel] = v[sel]
+    idx = np.clip(np.round(wert), 0, len(OLIV) - 1).astype(int)
+    a[innen] = OLIV[idx[innen]].astype(np.uint8)
+    unten = innen & ~np.roll(innen, -1, 0)                         # Blattfront
+    for d in range(3):
+        dunkeln(a, np.roll(unten, -d, 0) & innen, 0.62 + 0.1 * d)
+    a[rand] = H('#a4a8b4')
+    a[rand & ~np.roll(m, -1, 0)] = H('#6a6e7a')                    # Bordstein unten im Schatten
+    a[rand & ~np.roll(m, 1, 0)] = H('#c4c8d2')                     # oben im Licht
 
 
 def platz_raster(a, platz, achse, nebel_m=None):
@@ -339,6 +355,41 @@ def kaimauer(a, wasser, land, lvl):
             lvl[Y, x] = 9
     seite = land & (np.roll(wasser, 1, 1) | np.roll(wasser, -1, 1))
     a[seite] = H('#4a4e5a')
+
+
+def wasser_stufen(a, kl):
+    """Meer in drei Tiefenstufen wie auf den anderen Karten (Kachelraster): bis 2 Kacheln vom Land flach (heller,
+    leicht tuerkis), bis 5 Kacheln mittel, dahinter tief (dunkel). An jeder Stufe eine Unterwasserkante: 1 px heller
+    Grat auf der flachen Seite, 2 px Schatten auf der tiefen Seite."""
+    w = kl == 'w'
+    land = ~np.isin(kl, ['w', '.'])
+    dist = np.full(kl.shape, 99)
+    dist[land] = 0
+    for d in range(1, 9):                                          # Kachelabstand (Chebyshev) zum Land
+        nb = np.zeros_like(land)
+        cur = dist == d - 1
+        for dy in (-1, 0, 1):
+            for dx in (-1, 0, 1):
+                nb |= np.roll(np.roll(cur, dy, 0), dx, 1)
+        dist[nb & (dist == 99)] = d
+    stufe = np.where(dist <= 2, 0, np.where(dist <= 5, 1, 2))
+    st = np.kron(stufe, np.ones((T, T), int))
+    W_ = gross(w)
+    af = a.astype(np.float32)
+    flach, tief = W_ & (st == 0), W_ & (st == 2)
+    af[flach] = af[flach] * 1.25 + np.array([4, 14, 18], np.float32)
+    af[tief] = af[tief] * 0.84
+    a[:] = np.clip(af, 0, 255).astype(np.uint8)
+    for s0 in (0, 1):                                              # Kanten zwischen Stufe s0 und s0+1
+        hoeher = W_ & (st == s0)
+        tiefer = W_ & (st == s0 + 1)
+        for dy, dx in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+            sch = lambda m, k: np.roll(np.roll(m, k * dy, 0), k * dx, 1)
+            kante = tiefer & sch(hoeher, 1)
+            zweite = tiefer & sch(hoeher, 2) & ~kante
+            dunkeln(a, kante, 0.6)
+            dunkeln(a, zweite, 0.82)
+            mischen(a, hoeher & sch(tiefer, 1), (120, 150, 190), 0.35)
 
 
 def wasser_wellen(a, wasser, frame, seed=18):
@@ -480,12 +531,17 @@ def hochbahn(img, lay, frame, zug_sp=None):
                 c = H('#6e7284')
             a[y, x, :3] = c
             a[y, x, 3] = 255
-    a[y0:y0 + 64, X0:X0 + 2, :3] = H('#2a2c36')                   # westlicher Abschluss: geschlossene Stirn
-    a[y0:y0 + 64, X0 + 2, :3] = H('#c4c8d2')
     a[y0 + 63, X0:X1, :3] = H('#2a2c36')
-    for d in (4, 8, 12):                                          # Prellbock: rot-weisse Balken auf der Fahrbahn
-        for x in range(X0 + 4, X0 + 13):
-            a[y0 + d:y0 + d + 2, x, :3] = H('#b03a40') if ((x - X0) // 3) % 2 == 0 else H('#e0e0e8')
+    if X0 > 0:
+        a[y0:y0 + 64, X0:X0 + 2, :3] = H('#2a2c36')               # westlicher Abschluss: geschlossene Stirn
+        a[y0:y0 + 64, X0 + 2, :3] = H('#c4c8d2')
+        for d in (4, 8, 12):                                      # Prellbock
+            for x in range(X0 + 4, X0 + 13):
+                a[y0 + d:y0 + d + 2, x, :3] = H('#b03a40') if ((x - X0) // 3) % 2 == 0 else H('#e0e0e8')
+    else:                                                         # Bahn kommt im Westen aus dem Nebel
+        for x in range(0, 6 * T):
+            s_ = 0.92 * (1 - x / (6.0 * T)) ** 1.5
+            a[y0:y0 + 64, x, :3] = (a[y0:y0 + 64, x, :3] * (1 - s_) + NEBEL[:3] * s_).astype(np.uint8)
     img = Image.fromarray(a)
     if zug_sp is not None:
         zx0, zx1 = hb['zug']
@@ -742,6 +798,7 @@ def bauen(frame=None, speichern=True):
         a[m] = textur(art, cols, rows)[m]
     wasser = gross(kl == 'w')
     a[wasser] = textur('w', cols, rows)[wasser]
+    wasser_stufen(a, kl)
     land = gross(kl != '.') & ~wasser
     asphalt = gross(np.isin(kl, ['s', 'x']))
     lvl = np.zeros((Hp, Wp), np.uint8)
@@ -763,17 +820,22 @@ def bauen(frame=None, speichern=True):
     terrasse(a, lay, lvl)
     promenade(a, lay, lvl)
     kaimauer(a, wasser, land, lvl)
-    kanal = np.zeros_like(wasser); kanal[78 * T:100 * T, 125 * T:126 * T] = True   # Kaikante am Kanal: Bruestung
-    for y in range(78 * T, 100 * T):
+    kanal = np.zeros_like(wasser); kanal[18 * T:100 * T, 125 * T:126 * T] = True   # Kaikante Ostrand: Bruestung
+    kanal[40 * T:45 * T] = False                                  # Mole zum Teleporter bleibt offen
+    for y in range(18 * T, 100 * T):
+        if 40 * T <= y < 45 * T:
+            continue
         for x in range(125 * T, 126 * T):
             c = H('#9aa0ae') if x - 125 * T < 2 else H('#7a7e8c') if x - 125 * T < 13 else H('#3a3e4a')
             if (y % 8) == 3 and 5 <= x - 125 * T <= 9:
                 c = H('#c4c8d2')                                # Nietpunkte
             a[y, x] = c
     lvl[kanal] = 9
+    lvl[40 * T:41 * T, 125 * T:134 * T] = 9                      # Molenraender (Reihe 40/44): nicht begehbar
+    lvl[44 * T:45 * T, 125 * T:134 * T] = 9
     lvl[99 * T:100 * T, 4 * T:104 * T] = 9                       # Kaistreifen hinter dem Gelaender: nicht erreichbar
     lvl[99 * T:100 * T, 110 * T:125 * T] = 9
-    sch_k = np.zeros_like(wasser); sch_k[78 * T:100 * T, 126 * T:126 * T + 3] = True
+    sch_k = np.zeros_like(wasser); sch_k[18 * T:100 * T, 126 * T:126 * T + 3] = True
     wasser_wellen(a, wasser & (lvl != 9), frame)
     dunkeln(a, sch_k & wasser, 0.75)
     steg(a, lay, wasser, lvl)
@@ -827,7 +889,7 @@ def bauen(frame=None, speichern=True):
         hecke_innen = hecke & np.roll(hecke, -3, 0) & np.roll(hecke, 1, 1) & np.roll(hecke, -1, 1)
         ia = np.array(img)
         for o in objs:
-            if not (o.get('baum') or o['basis'] == 'gebaeude/doppellaterne'):
+            if o['basis'] != 'gebaeude/doppellaterne':
                 continue
             fy, sp_ = o['y'] + o['fuss'], cache[o['datei']]
             al = np.array(sp_.getchannel('A')) > 0

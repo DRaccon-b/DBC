@@ -31,11 +31,6 @@ def nebelrand(k, rs):
     for y in range(18, 100, 3):                                   # Westrand
         t = int(rs.choice([0, 0, 1, 1, 2]))
         k[y:y + 3, 4:4 + t] = '.'
-    for y in range(20, 80, 4):                                    # Ostrand des Platzes (Ausgang bleibt frei)
-        if 38 <= y <= 44:
-            continue
-        t = int(rs.choice([0, 1, 1, 2]))
-        k[y:y + 4, 126 - t:126] = '.'
 
 
 def main():
@@ -49,7 +44,6 @@ def main():
     rechteck(k, 62, 8, 83, 19, 'g')                               # Buerohaus oben
     rechteck(k, 84, 13, 119, 27, 'g')                             # Messehalle (Dach ab Reihe 13)
     rechteck(k, 120, 18, 125, 27, 'p')
-    rechteck(k, 120, 40, 135, 44, 'p')                            # Ausgang Ost (Teleporter)
     nebelrand(k, rs)
     # ------------------------------------------------------------ Strassen
     rechteck(k, 3, 20, 81, 24, 's')                               # obere Strasse
@@ -69,13 +63,13 @@ def main():
     rechteck(k, 38, 87, 61, 88, 'x')                              # Sperrflaeche
     rechteck(k, 32, 94, 124, 95, 'g')                             # Uferpromenade
     # ------------------------------------------------------------ Flaechen
-    rechteck(k, 6, 77, 30, 93, 'q')                               # Platz links unten (Notlager, Teleporter)
+    rechteck(k, 6, 56, 30, 72, 'q')                               # Platz links (Notlager, Teleporter)
     rechteck(k, 87, 28, 116, 31, 't')                             # Terrasse vor der Halle
     rechteck(k, ACHSE - 4, 34, ACHSE + 3, 79, 'c')                # Mittelweg (8 Kacheln auf der Achse)
     rechteck(k, 39, 68, 63, 70, 'v')                              # Betonvorplatz
     for (x0, y0, x1, y1) in ((47, 6, 52, 9), (56, 6, 61, 13),    # Spielplatz
-                             (8, 57, 14, 66), (19, 57, 27, 65), (6, 71, 12, 76), (20, 70, 27, 76),   # Park SW
-                             (15, 74, 16, 76), (4, 78, 6, 81), (12, 89, 15, 93), (24, 89, 29, 93), (6, 90, 7, 93),
+                             (8, 73, 14, 78), (19, 73, 27, 78), (7, 86, 12, 93), (19, 86, 27, 93),  # Park SW
+                             (16, 91, 17, 93),                    # (Reihen 79-84 frei: Hochbahn darueber)
                              (37, 71, 38, 72), (37, 75, 38, 76)):  # Baumscheiben der Ginkgo-Allee
         rechteck(k, x0, y0, x1, y1, 'n')
     rechteck(k, 47, 10, 52, 13, 'd')                              # Sandkasten
@@ -86,19 +80,20 @@ def main():
     rechteck(k, 4, 96, 124, 97, 'b')                              # Holzpromenade
     rechteck(k, 4, 98, 124, 99, 'k')                              # Kaikante
     rechteck(k, 125, 78, 125, 99, 'k')                            # Kaikante am Kanal
-    for x in range(8, 126, 3):                                    # Meer, Rand gestuft in den Nebel
-        tief = 100 + int(rs.choice([2, 3, 3, 4, 5]))
-        k[100:tief + 1, x:min(126, x + 3)] = 'w'
-    rechteck(k, 126, 78, 131, 99, 'w')                            # Kanal unter der Hochbahn
-    for y in range(100, 104):
-        k[y, 126:131 - (y - 100)] = 'w'
+    rechteck(k, 125, 18, 125, 99, 'k')                            # Kaikante am Ostrand des Platzes
+    for x in range(4, C, 3):                                      # Meer unten, Rand gestuft in den Nebel
+        tief = 106 + int(rs.choice([0, 1, 1, 2, 3]))
+        k[100:tief + 1, x:min(C, x + 3)] = 'w'
+    for y in range(2, 100, 3):                                    # Meer rechts bis an den Kartenrand
+        k[y:y + 3, 126 + int(rs.choice([0, 0, 1])):C] = 'w'
+    rechteck(k, 126, 18, 126, 99, 'w')
+    rechteck(k, 125, 40, 133, 44, 'p')                            # Mole nach Osten mit Teleporter
+    rechteck(k, 125, 40, 133, 40, 'k'); rechteck(k, 125, 44, 133, 44, 'k')
     rechteck(k, 104, 100, 109, 106, 'h')                          # Holzsteg
     # ------------------------------------------------------------ Feinkorrekturen am Rand
     k[33:39, 4] = '.'
-    k[84:93, 4:6] = '.'; k[82:84, 5] = '.'; k[93:96, 5] = '.'      # Platz links beginnt bei x 6
     k[20:24, 124] = '.'
     k[13:18, 119] = '.'                                           # Nebel neben der Dachschraege der Halle
-    rechteck(k, 4, 78, 6, 81, 'n')
 
     hoehe = np.ones((R, C), int)
     hoehe[np.isin(k, ['w', '.'])] = 0
@@ -114,9 +109,10 @@ def main():
         'zebra': [[27, 29, 20, 24, 'v'], [39, 41, 20, 24, 'v'], [32, 36, 27, 29, 'h'], [32, 36, 37, 39, 'h'],
                   [14, 16, 42, 53, 'v'], [27, 29, 42, 53, 'v'], [39, 41, 42, 53, 'v'], [50, 52, 42, 53, 'v'],
                   [32, 36, 55, 57, 'h'], [32, 36, 77, 79, 'h'], [98, 101, 82, 93, 'v']],
-        'hochbahn': {'x0': 62, 'x1': 135, 'y0': 80, 'y1': 83, 'pfeiler': [62, 78, 94, 110, 126], 'zug': [86, 107]},
-        'teleporter': [{'x': 8, 'y': 84, 'b': 3, 'h': 2, 'farbe': 'violett'},
-                       {'x': 132, 'y': 40, 'b': 2, 'h': 4, 'farbe': 'violett'}],
+        'hochbahn': {'x0': 0, 'x1': 135, 'y0': 80, 'y1': 83, 'pfeiler': [14, 30, 46, 62, 78, 94, 110, 126],
+                     'zug': [86, 107]},
+        'teleporter': [{'x': 8, 'y': 63, 'b': 3, 'h': 2, 'farbe': 'violett'},
+                       {'x': 131, 'y': 41, 'b': 2, 'h': 3, 'farbe': 'violett'}],
         'steg': [104, 100, 109, 106],
     }
     os.makedirs(KARTE, exist_ok=True)

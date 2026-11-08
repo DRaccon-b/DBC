@@ -416,37 +416,36 @@ def main():
     baum(GRUEN, 47, 8, RASEN)
     baum(GINKGO, 59, 7, RASEN)
     # Park SW: je Rasen zwei Baeume versetzt (nie in einer Reihe), dazu Begleiter
-    for (n_, bx, r) in ((GROSS_B, 9, 61), (GRUEN, 11, 65), (GROSS_B, 20, 60), (GRUEN, 24, 64),
-                        (GRUEN, 7, 74), (GRUEN, 21, 75), (KLEIN_B, 24, 72), (GRUEN, 4, 80),
-                        (KLEIN_B, 12, 92), (GRUEN, 26, 91), (GINKGO_K, 24, 91)):
+    # Park SW (jetzt unten, Reihen 73-93; unter der Hochbahn 80-83 nichts Hohes)
+    for (n_, bx, r) in ((GROSS_B, 9, 78), (KLEIN_B, 13, 75), (GRUEN, 20, 76), (KLEIN_B, 25, 78),
+                        (GROSS_B, 8, 91), (KLEIN_B, 11, 93), (GRUEN, 21, 90), (GROSS_B, 24, 93)):
         baum(n_, bx, r, RASEN)
-    baum(GINKGO, 0, 76, RASEN, cx=16 * T)                     # Ginkgo auf dem kleinen Rasen (Vorlage x 15-16)
-    baum(GINKGO, 0, 93, RASEN, cx=7 * T)                      # Ginkgo am SW-Platz
-    for (bx, r) in ((13, 59), (10, 72)):                      # einzelne Buesche (2 px Abstand)
-        P.setzen(BUSCH, bx, r, boden=RASEN, extra={'pflanze': True})
+    baum(GINKGO, 0, 93, RASEN, cx=17 * T)                     # Ginkgo auf dem kleinen Rasen
     # Mittelstreifen: Baum am Ostende jeder Hecke (Vorlage), Uferstrasse: vier Baeume auf der Hecke
-    for (bx, r) in ((11, 48), (23, 48), (47, 48), (59, 48)):
-        baum(GRUEN, bx, r, set('m'), begleit=False)
-    for cx in (71 * T, 87 * T, 107.5 * T, 114.5 * T):
-        baum(GRUEN, 0, 88, set('m'), cx=cx, begleit=False)
+    SB = ('gebaeude/stadtbaum', 'gebaeude/stadtbaum2')        # Stadtbaeume wie Vorlage: Wurzeln in der Hecke
+    for i, (bx, r) in enumerate(((11, 48), (23, 48), (47, 48), (59, 48))):
+        P.setzen(SB[i % 2], bx, r, boden=set('m'), n=3, dy=-5, extra={'baum': True})
+    for i, cx in enumerate((71 * T, 87 * T, 104 * T, 117 * T)):
+        P.setzen(SB[i % 2], 0, 88, boden=set('m'), cx=cx, dy=-5, extra={'baum': True})
     # Ginkgos an der Querstrasse: Westseite auf dem Gehweg, Ostseite in Baumscheiben (Allee)
     for r in (31, 58, 72):
-        baum(GINKGO, 29, r, set('g'))
+        baum(GINKGO, 29, r, set('gq'))
     for r in (72, 76):
         baum(GINKGO, 0, r, RASEN, cx=601)
     # Platz: je ein Baum mittig im Heckenbeet (Beete wie Vorlage)
     for (x0, y0, x1, y1) in ((66, 28, 71, 29), (69, 37, 74, 39), (80, 44, 85, 46), (69, 67, 74, 69),
                              (118, 38, 123, 40), (118, 58, 123, 60), (118, 70, 123, 72), (121, 21, 123, 23)):
-        n_ = GINKGO if (x0, y0) in ((66, 28), (118, 58)) else GRUEN
-        P.setzen(n_, 0, y1, boden=set('e'), cx=(x0 + x1 + 1) / 2.0 * T, extra={'baum': True})
+        n_ = 'gebaeude/ginkgo_beet' if (x0, y0) in ((66, 28), (118, 58)) else SB[(x0 + y0) % 2]
+        P.setzen(n_, 0, y1, boden=set('e'), cx=(x0 + x1 + 1) / 2.0 * T, dy=-6 if y1 > y0 + 1 else -3,
+                 extra={'baum': True})
     # ------------------------------------------------------------------ Grosse Einzelobjekte
-    P.setzen('gebaeude/zelt', 18, 82, boden=set('q'))        # Notlager: Spitzzelt, Sandsaecke symmetrisch
-    P.setzen('karte03/klein/43', 0, 82, boden=set('q'), cx=16.5 * T)
-    P.setzen('karte03/klein/43', 0, 82, boden=set('q'), cx=23.5 * T, spiegel=True)
-    P.setzen('gebaeude/feuerschale', 17, 85, boden=set('q'), anim='flammen18')
-    P.setzen('k18/strasse/32', 24, 85, boden=set('q'))       # Kisten
-    P.setzen('k18/strasse/01', 29, 80, boden=set('q'))       # Getraenkeautomat
-    P.setzen('gebaeude/koban', 26, 86, boden=set('q'), anim='rechtecke', extra={'licht_rects': lichter.get('koban', [])})
+    P.setzen('gebaeude/zelt', 18, 61, boden=set('q'))        # Notlager (jetzt oben): Spitzzelt, Sandsaecke symmetrisch
+    P.setzen('karte03/klein/43', 0, 61, boden=set('q'), cx=16.5 * T)
+    P.setzen('karte03/klein/43', 0, 61, boden=set('q'), cx=23.5 * T, spiegel=True)
+    P.setzen('gebaeude/feuerschale', 17, 64, boden=set('q'), anim='flammen18')
+    P.setzen('k18/strasse/32', 24, 64, boden=set('q'))       # Kisten
+    P.setzen('k18/strasse/01', 11, 57, boden=set('q'))       # Getraenkeautomat
+    P.setzen('gebaeude/koban', 26, 65, boden=set('q'), anim='rechtecke', extra={'licht_rects': lichter.get('koban', [])})
     P.setzen('karte10/spielplatz/00', 50, 9, boden=RASEN)    # Spielplatz (Vorlage)
     P.setzen('karte10/spielplatz/01', 57, 11, boden=RASEN)
     P.setzen('gebaeude/kletterkuppel', 57, 13, boden=RASEN)
@@ -457,7 +456,6 @@ def main():
     P.setzen('gebaeude/taube', 60, 15, boden=set('gn'))
     for (n_, bx) in (('gebaeude/container_blau', 65), ('gebaeude/container_rot', 87), ('gebaeude/container_blau2', 91)):
         P.setzen(n_, bx, 96, boden=set('b'), n=4)
-    P.setzen('gebaeude/lkw', 44, 81, boden=set('s'), n=5)    # Kastenwagen vor dem offenen Rolltor
     P.setzen('k18/frontal/02', 66, 19)                        # Bushaltestellen
     P.setzen('k18/frontal/03', 21, 41)
     P.setzen('k18/frontal/00', 111, 102, boden=set('w'), anim='boot', extra={'kein_schatten': True})
@@ -477,9 +475,9 @@ def main():
         P.setzen(LAT, 31, r)
     for r in (31, 61, 69):
         P.setzen(LAT, 37, r)
-    for (bx, r) in ((17, 73), (13, 88), (30, 90), (10, 80), (61, 13), (58, 81), (51, 81)):
+    for (bx, r) in ((17, 73), (16, 89), (29, 90), (10, 59), (13, 67), (29, 69), (61, 13)):
         P.setzen(LAT, bx, r, boden=GEHEN | RASEN)
-    for x in (14, 26, 38, 50, 62, 74, 86, 96, 110, 122):      # Uferpromenade (Zebra 98-101 frei)
+    for x in (14, 28, 38, 50, 62, 74, 86, 96, 110, 122):      # Uferpromenade (Zebra 98-101 frei)
         P.setzen(LAT, x, 95)
     P.setzen(LAT, 0, 103, boden=set('h'), cx=107 * T)          # Steglaterne (Reihe 104 bleibt frei)
     for r in (40, 48, 64, 72):                                # Platz: Paare am Mittelweg (gespiegelt an der Achse)
@@ -488,12 +486,12 @@ def main():
         P.paar(LAT, 79, r)
     P.paar(LAT, 92, 30, boden=set('t'))                       # Terrasse
     AMP = 'karte10/banner/13'                                 # Ampeln an den Kreuzungen
-    for (bx, r) in ((30, 26), (37, 26), (30, 41), (37, 41), (30, 54), (37, 54), (37, 81)):
+    for (bx, r) in ((30, 26), (37, 26), (30, 41), (37, 41), (30, 54), (37, 54)):
         P.setzen(AMP, bx, r)
     P.setzen('k18/strasse/17', 26, 26, anim='rechtecke', extra={'licht_rects': [[7, 6, 10, 9, 0]]})
     # ------------------------------------------------------------------ Stadtmoebel (sparsam, nie in Reihen)
     STR = lambda i: 'k18/strasse/%02d' % i
-    for (n_, bx, r) in ((STR(1), 47, 19), (STR(2), 54, 19), (STR(40), 61, 26), (STR(3), 70, 26), (STR(5), 64, 19)):
+    for (n_, bx, r) in ((STR(1), 47, 19), (STR(2), 54, 19), (STR(40), 61, 26), (STR(5), 64, 19)):
         P.setzen(n_, bx, r)
     P.setzen(STR(0), 25, 40, anim='rechtecke', extra={'licht_rects': [[2, 5, 17, 16, 0]]})
     for xb in (128, 162):                                     # Fahrraeder
@@ -505,14 +503,13 @@ def main():
         P.setzen(STR(50), bx, 19, anim='fahne18')             # Nobori vor Ramen-Laden und Izakaya
     for r in (44, 56, 68):                                    # Baenke am Mittelweg (Paare)
         P.paar(STR(14), 95, r)
-    for (bx, r) in ((16, 68), (24, 68), (14, 85), (22, 89), (73, 52), (116, 52)):
+    for (bx, r) in ((14, 64), (22, 68), (16, 78), (73, 52), (116, 52)):
         P.setzen('karte10/klein/38', bx, r, boden=set('gpqn'))
     BAKE = {'anim': 'rechtecke', 'extra': {'licht_rects': [[4, 1, 5, 2, 0], [22, 1, 23, 2, 2]]}}
     for bx in (87, 89, 93):                                   # Absperrungen an der Terrassenkante (Paare)
         P.paar(STR(7), bx, 31, boden=set('t'), **BAKE)
-    P.setzen(STR(7), 26, 80, boden=set('q'), **BAKE)
+    P.setzen(STR(7), 26, 59, boden=set('q'), **BAKE)
     P.setzen('karte13/klein/12', 58, 41)                      # Pylone
-    P.setzen('karte10/banner/06', 16, 56)                     # Uhr im Park
     for (bx, r) in ((58, 26), (22, 55), (60, 69), (19, 41), (60, 95), (106, 95)):
         P.setzen('karte02/klein/16', bx, r)                   # Muelleimer
     for (bx, r) in ((24, 26), (47, 41), (40, 69)):
@@ -536,7 +533,7 @@ def main():
     AUTO = lambda i: 'k18/autos/%02d' % i
     fahr = set('s')
     for (i, bx, r, ost) in [(0, 7, 21, True), (2, 45, 21, True), (1, 58, 24, False), (3, 6, 43, True),
-                            (5, 8, 53, False), (1, 46, 50, False), (0, 65, 86, True), (4, 117, 86, True),
+                            (5, 8, 53, False), (1, 46, 50, False), (0, 65, 86, True), (4, 120, 86, True),
                             (5, 76, 93, False), (1, 118, 90, False), (0, 41, 93, False)]:
         P.setzen(AUTO(i), bx, r, spiegel=ost, boden=fahr, extra={'auto': True})
     P.setzen('gebaeude/bus', 0, 21, boden=fahr, cx=1080, dy=4, anim='rechtecke',

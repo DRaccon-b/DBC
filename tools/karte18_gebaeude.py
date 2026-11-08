@@ -821,6 +821,61 @@ def taube():
     return b
 
 
+def stadtbaum(seed=7):
+    """Stadtbaum wie in der Vorlage, frontal 48x58: luftige Krone aus vielen Blattbuescheln (Licht oben links, einzelne
+    Luecken), darunter sichtbarer Stamm mit zwei Aesten und Wurzeln, die sich am Boden spreizen."""
+    w, h = 56, 64
+    rs = random.Random(seed)
+    b = Bild(w, h)
+    cx, fuss = 28, h - 2
+    GR = [H(c) for c in ('#16280e', '#24441a', '#33601f', '#467e26', '#5e9a2e', '#7cb63a', '#9ccc4c')]
+    BR = (H('#3a2616'), H('#5a3c22'), H('#7a5632'))
+    # Wurzeln und Stamm
+    for (dx, l) in ((-1, 6), (1, 6), (-1, 3), (1, 4)):
+        for k in range(l):
+            x = cx + dx * (2 + k)
+            y = fuss - (1 if k < l // 2 else 0)
+            b.px(x, y, BR[0] if k > l // 2 else BR[1])
+    for y in range(34, fuss + 1):
+        breite = 3 if y < fuss - 4 else 4
+        for x in range(cx - breite // 2 - 1, cx + breite - breite // 2):
+            t = (x - (cx - breite // 2 - 1)) / max(1, breite)
+            b.px(x, y, BR[2] if t < 0.3 else BR[1] if t < 0.75 else BR[0])
+    for (sx, sy, ex, ey) in ((cx, 46, cx - 11, 34), (cx, 43, cx + 10, 33), (cx, 39, cx - 1, 28)):   # Aeste
+        n = max(abs(ex - sx), abs(ey - sy))
+        for i in range(n + 1):
+            x = int(round(sx + (ex - sx) * i / n)); y = int(round(sy + (ey - sy) * i / n))
+            b.px(x, y, BR[1]); b.px(x + 1, y, BR[0])
+    # Krone: viele kleine Bueschel in einer Ellipse um (cx, 21), rx 21, ry 19
+    wert = np.full((h, w), -1.0)
+    bueschel = []
+    for _ in range(160):
+        while True:
+            px_, py_ = rs.uniform(-1, 1), rs.uniform(-1, 1)
+            if px_ * px_ + py_ * py_ <= 1:
+                break
+        bueschel.append((24 + py_ * 18, cx + px_ * 22, rs.uniform(2.8, 4.6)))
+    for (by_, bx_, r) in sorted(bueschel):                      # hintere (obere) Bueschel zuerst, vordere decken
+        for y in range(int(by_ - r), int(by_ + r) + 1):
+            for x in range(int(bx_ - r), int(bx_ + r) + 1):
+                d = ((x - bx_) ** 2 + (y - by_) ** 2) / (r * r)
+                if d <= 1 and 0 <= x < w and 0 <= y < h:
+                    lokal = -((x - bx_) + (y - by_)) / r            # Licht oben links im Bueschel
+                    glob = -((x - cx) / 24.0 + (y - 24) / 21.0)     # und auf der ganzen Krone
+                    v = 3.4 + 1.6 * lokal + 1.0 * glob - 2.6 * d * d
+                    wert[y, x] = max(0.0, v)
+    krone = wert >= 0
+    idx = np.clip(np.round(wert), 1, len(GR) - 1).astype(int)
+    for y, x in zip(*np.nonzero(krone)):
+        b.a[y, x] = GR[idx[y, x]]
+    rand = krone & ~(np.roll(krone, 1, 0) & np.roll(krone, -1, 0) & np.roll(krone, 1, 1) & np.roll(krone, -1, 1))
+    b.a[rand] = GR[0]
+    stamm = (b.a[..., 3] > 0) & ~krone
+    rand2 = stamm & ~(np.roll(stamm | krone, 1, 1) & np.roll(stamm | krone, -1, 1))
+    b.a[rand2] = H('#22160c')
+    return b
+
+
 def poller():
     b = Bild(8, 14)
     b.kasten(1, 2, 6, 13, H('#8a8e9a'), H('#c4c8d2'), H('#4a4e5c'))
@@ -875,7 +930,8 @@ def main():
         teile.append((art, Image.fromarray(b.a)))
     for name, fn in (('bus', bus), ('lkw', lkw), ('kletterkuppel', kletterkuppel), ('feuerschale', feuerschale),
                      ('banner_hoch', banner_hoch), ('pfeiler', pfeiler), ('pfeiler_wasser', pfeiler_wasser), ('poller', poller), ('zug', zug),
-                     ('kuebel', kuebel), ('doppellaterne', doppellaterne), ('koban', koban_mit_dach),
+                     ('kuebel', kuebel), ('doppellaterne', doppellaterne), ('koban', koban_mit_dach), ('stadtbaum', stadtbaum),
+                     ('stadtbaum2', lambda: stadtbaum(23)),
                      ('zelt', zelt), ('trinkbrunnen', trinkbrunnen), ('taube', taube),
                      ('container_rot', lambda: container('rot', '#8e4038', '#ac5a4c', '#5e2a26', '#b86e60')),
                      ('container_blau', lambda: container('blau', '#3a5a86', '#5274a2', '#24405e', '#6a88b0')),
@@ -885,7 +941,7 @@ def main():
             continue
         b.save(name); teile.append((name, Image.fromarray(b.a)))
     json.dump({k: [[int(v) for v in r] for r in l] for k, l in LICHT.items()}, open(os.path.join(OUT, 'lichter.json'), 'w'), indent=0)
-    for q, n in (('karte01/baeume/00', 'ginkgo'), ('karte10/baeume/01', 'ginkgo_gross'), ('karte01/baeume/03', 'ginkgo_klein')):
+    for q, n in (('karte18/gebaeude/stadtbaum', 'ginkgo_beet'), ('karte01/baeume/00', 'ginkgo'), ('karte10/baeume/01', 'ginkgo_gross'), ('karte01/baeume/03', 'ginkgo_klein')):
         ginkgo(q, n)
         teile.append((n, Image.open(os.path.join(OUT, n + '.png'))))
     W = max(im.width for _, im in teile)
