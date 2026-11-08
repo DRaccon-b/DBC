@@ -273,6 +273,21 @@ def bauen(frame=None, speichern=True):
     img = Image.fromarray(a).convert('RGBA')
     for (bx0, by0, bx1, by1) in lay['bruecken']:
         bauwerke.zeichne_bruecke(img, bx0 * T - 6, (bx1 + 1) * T + 6, by0 * T, (by1 + 1) * T - 4, frame=frame or 0)   # Enden auf dem Ufer
+    # Zaun auf der Felskante des Plateaus links und rechts der Treppe (wie in der Vorlage): Vorderseite des Zauns von
+    # Karte 06, nur die vordere Reihe
+    x0p, y0p, x1p, y1p = lay['plateau']
+    tx0, tx1 = lay['treppe']
+    for (za, zb) in ((x0p, tx0 - 1), (tx1 + 1, x1p)):
+        tmp = Image.new('RGBA', img.size, (0, 0, 0, 0))
+        k6.zaun(tmp, (za, y1p, zb, y1p + 3), (-9, -9))
+        box = (za * T, y1p * T - 6, (zb + 1) * T, y1p * T + 14)
+        teil = tmp.crop(box)
+        sch = Image.new('RGBA', teil.size, (0, 0, 0, 0))            # Schatten nach rechts unten auf die Kante
+        al = np.array(teil.getchannel('A'))
+        sa = np.zeros_like(al); sa[2:, 2:] = (al[:-2, :-2] > 0) * 70
+        sch.putalpha(Image.fromarray(sa.astype(np.uint8)))
+        img.alpha_composite(sch, box[:2])
+        img.alpha_composite(teil, box[:2])
     vor_zaun = img.copy()
     k6.zaun(img, lay['acker_zaun'], (-9, -9))
     k6.zaun(img, lay['feld_zaun'], (-9, -9))

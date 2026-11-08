@@ -67,7 +67,7 @@ FEST = [
     (VOGEL, 19, 42, {}), (VOGEL, 47, 21, {}),
     (SCHUBKARRE, 54, 35, {}), (HOLZ, 56, 26, {}),
     # Plateau oben rechts: Baenke links und rechts vom Weg, Wegweiser
-    ('k10/bank', 45.5, 6, {}), ('k10/bank', 54.5, 6, {}), ('k06/schild', 46.5, 8, {}),
+    ('k10/bank', 45.5, 6, {}), ('k10/bank', 54.5, 6, {}), ('k06/schild', 46.5, 7, {}),
     # Wegweiser am Fernseher
     ('k06/schild', 8.5, 23, {}),
 ]
