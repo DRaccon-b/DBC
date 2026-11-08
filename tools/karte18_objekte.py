@@ -574,6 +574,8 @@ def main():
     rs_.shuffle(kandidaten)
     for (ty, tx) in kandidaten:
         k_ = P.kl[ty, tx]
+        if rs_.rand() < 0.4:                                  # Luecken fuer Blumen und Gras lassen
+            continue
         for j in range(len(SORTEN)):
             n_ = SORTEN[(tx * 7 + ty * 3 + j) % len(SORTEN)]
             n_fehl = len(P.fehl)
@@ -583,6 +585,67 @@ def main():
                 gesetzt_ += 1
                 break
     print('  Gruenflaechen aufgefuellt:', gesetzt_, 'Baeume')
+    # Blumen und Graeser/Unkraut (Deko von Karte 01) in die Luecken: auf Gruenflaechen dicht, im Pflaster vereinzelt
+    BLUMEN_ = ['karte01/deko/%02d' % i for i in (0, 1, 2, 3, 4, 27, 30, 38)]
+    GRAS_ = ['karte01/deko/%02d' % i for i in (5, 6, 24, 26, 29, 43, 61)]
+    UNKRAUT_ = ['karte01/deko/06', 'karte01/deko/05', 'karte01/deko/43']
+    rs2 = np.random.RandomState(4242)
+    deko_ = {'blumen': 0, 'gras': 0, 'unkraut': 0}
+    felder = [(ty, tx) for ty in range(P.R) for tx in range(P.C) if P.kl[ty, tx] in 'nemgpq']
+    felder = felder + [(ty, tx) for (ty, tx) in felder if P.kl[ty, tx] in 'nem'] * 2   # 3 Versuche je Grasfeld
+    rs2.shuffle(felder)
+    for (ty, tx) in felder:
+        k_ = P.kl[ty, tx]
+        if (tx, ty) in ((22, 77),):                          # haelt einen Durchgang im Baumhain frei (Erreichbarkeit)
+            continue
+        if k_ in 'nem':
+            art_ = 'blumen' if rs2.rand() < 0.6 else 'gras'
+            n_ = (BLUMEN_ if art_ == 'blumen' else GRAS_)[rs2.randint(0, 8 if art_ == 'blumen' else 7)]
+        else:                                                 # Unkraut im Pflaster: selten, nur an Kanten
+            nb = P.kl[max(0, ty - 1):ty + 2, max(0, tx - 1):tx + 2]
+            if rs2.rand() > 0.06 or not (set(nb.ravel()) - set('gpq')):
+                continue
+            art_, n_ = 'unkraut', UNKRAUT_[rs2.randint(0, 3)]
+        n_fehl = len(P.fehl)
+        o_ = P.setzen(n_, 0, ty, cx=tx * T + 8 + rs2.randint(-4, 5), boden=set(k_), begleiter=True,
+                      extra={'pflanze': True, 'kein_schatten': True})
+        del P.fehl[n_fehl:]
+        if not o_:
+            continue
+        # erlaubt: hinter einem Baum stehen (dessen Krone deckt die Blume). Verboten: ueber etwas gemalt werden
+        al_d = P.cache[o_['_key']][1]
+        hd, wd = al_d.shape
+        fuss_d = o_['y'] + o_['fuss']
+        schlecht = False
+        for q in P.objekte:
+            if q is o_ or q.get('gebaeude') or q.get('hochbahn') or '_key' not in q:
+                continue
+            aq = P.cache[q['_key']][1]
+            hq, wq = aq.shape
+            if q['x'] > o_['x'] + wd + 2 or q['x'] + wq < o_['x'] - 2 or q['y'] > o_['y'] + hd + 2 or q['y'] + hq < o_['y'] - 2:
+                continue
+            if q['y'] + q['fuss'] > fuss_d and q.get('baum'):
+                continue                                      # Baum steht davor: seine Krone verdeckt die Blume
+            x0, x1 = max(o_['x'], q['x'] - 2), min(o_['x'] + wd, q['x'] + wq + 2)
+            y0, y1 = max(o_['y'], q['y'] - 2), min(o_['y'] + hd, q['y'] + hq + 2)
+            if x1 <= x0 or y1 <= y0:
+                continue
+            qm = np.zeros((y1 - y0, wq + 4 + 0), bool)
+            sub = np.zeros((hq + 4, wq + 4), bool)
+            for dy in range(5):
+                for dx in range(5):
+                    sub[dy:dy + hq, dx:dx + wq] |= aq
+            qa = sub[y0 - (q['y'] - 2):y1 - (q['y'] - 2), x0 - (q['x'] - 2):x1 - (q['x'] - 2)]
+            da = al_d[y0 - o_['y']:y1 - o_['y'], x0 - o_['x']:x1 - o_['x']]
+            if (qa & da).any():
+                schlecht = True
+                break
+        if schlecht:
+            P.objekte.remove(o_)
+            continue
+        o_['begleiter'] = False
+        deko_[art_] += 1
+    print('  Deko:', deko_)
     begleiter_nachpruefen(P)
     for o in P.objekte:
         for k in [k for k in o if k.startswith('_')]:
