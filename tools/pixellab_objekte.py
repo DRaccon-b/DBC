@@ -1378,6 +1378,10 @@ OBJEKTGRUPPEN_K16 = {
         'large web of black data cables stretched between two broken network pylons, glowing red nodes',
         'giant red-brown horn pair rising from a corrupted floor crater, black and red glitch blocks around',
     ]},
+    'k16_computer': {'size': 64, 'items': [   # Nutzer-Vorlage 'Dungeon Records'
+        'retro computer records terminal: a boxy light grey-blue CRT monitor with a thick bezel, the screen glows dark blue and shows a small white trophy cup icon on the left and three list rows with yellow bullet points and cyan bars, the monitor sits on a short teal neck on a wide dark navy console base with cyan glowing stripes and a small yellow light, standing upright',
+        'data archive computer: square pale steel monitor with dark blue screen showing a trophy icon and a list of records with yellow dots, mounted on a low dark teal pedestal with glowing cyan trim, standing upright',
+    ]},
     'k16_klein': {'size': 32, 'items': [
         'small golden data chip item lying on the floor, glowing softly',
         'small coil of dark cable lying on the floor',

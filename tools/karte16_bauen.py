@@ -32,6 +32,45 @@ LEER = np.array([8, 15, 32], np.float32)          # Hintergrund der Vorlage
 kontur, mischen, puls = k15.kontur, k15.mischen, k15.puls
 
 
+def tor16(sp, frame, o):
+    """Firewall-Tor: nur der rote Bildschirm mit Fadenkreuz pulsiert, die orangen Leiterbahnen laufen als Lichtwelle
+    um den Rahmen. Rahmen und Hoerner bleiben unveraendert."""
+    a = np.array(sp).astype(np.float32)
+    r_, g_, b_, al = a[..., 0], a[..., 1], a[..., 2], a[..., 3]
+    p = puls(frame)
+    rot = (al > 0) & (r_ > 90) & (g_ < 70) & (b_ < 70)
+    a[rot, :3] *= 0.82 + 0.3 * p
+    orange = (al > 0) & (r_ > 180) & (g_ > 70) & (g_ < 190) & (b_ < 110)
+    ys, xs = np.nonzero(orange)
+    if len(ys):
+        cy, cx = a.shape[0] / 2, a.shape[1] / 2
+        w = (np.arctan2(ys - cy, xs - cx) / (2 * math.pi) + 0.5 - (frame or 0) / N_FRAMES) % 1.0
+        k = 0.8 + 0.4 * (w < 0.25)
+        a[ys, xs, :3] *= k[:, None]
+    return Image.fromarray(np.clip(a, 0, 255).astype(np.uint8))
+
+
+def bildschirm16(sp, frame, o):
+    """Computer 'Dungeon Records': nur der Bildschirm lebt - die cyan Balken flackern leicht nacheinander, die gelben
+    Punkte und das Gehaeuse-Laempchen blinken. Gehaeuse und Sockel bleiben ruhig."""
+    a = np.array(sp).astype(np.float32)
+    r_, g_, b_, al = a[..., 0], a[..., 1], a[..., 2], a[..., 3]
+    f = frame or 0
+    cyan = (al > 0) & (b_ > 170) & (g_ > 150) & (r_ < 140)
+    ys, xs = np.nonzero(cyan)
+    if len(ys):
+        zeile = (ys // 4) % 4
+        k = np.where(zeile == f % 4, 1.18, 0.95)
+        a[ys, xs, :3] *= k[:, None]
+    gelb = (al > 0) & (r_ > 190) & (g_ > 150) & (b_ < 110)
+    a[gelb, :3] *= (1.12, 0.85, 1.0, 0.9)[f % 4]
+    return Image.fromarray(np.clip(a, 0, 255).astype(np.uint8))
+
+
+k4.TEILANIM['tor16'] = tor16
+k4.TEILANIM['bildschirm16'] = bildschirm16
+
+
 def kachel(n):
     return np.array(Image.open(os.path.join(BASIS, n)).convert('RGB'))
 
