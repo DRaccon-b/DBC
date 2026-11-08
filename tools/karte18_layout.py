@@ -20,7 +20,8 @@ ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
 KARTE = os.path.join(ROOT, 'maps', 'karte18')
 C, R = 136, 112
 ACHSE = 102                         # Achse der Messehalle: Kachelgrenze 102 (x = 1632 px)
-BEET = os.environ.get('K18_BEET', 'hecke')   # Platzbaeume: 'hecke', 'rasen' oder 'gitter' (Baum im Pflaster)
+BEETE = [(65, 27, 72, 30), (68, 36, 75, 40), (79, 43, 86, 47), (68, 66, 75, 70),     # Rasenbeete auf dem Platz,
+         (117, 37, 124, 41), (117, 57, 124, 61), (117, 69, 124, 73), (121, 21, 123, 23)]  # je 1 Kachel groesser
 
 
 def rechteck(k, x0, y0, x1, y1, art):
@@ -75,12 +76,8 @@ def main():
         rechteck(k, x0, y0, x1, y1, 'n')
     rechteck(k, 47, 10, 52, 13, 'd')                              # Sandkasten
     rechteck(k, 46, 8, 46, 16, 'm')                               # Hecke am Spielplatz
-    for (x0, y0, x1, y1) in ((66, 28, 71, 29), (69, 37, 74, 39), (80, 44, 85, 46), (69, 67, 74, 69),
-                             (118, 38, 123, 40), (118, 58, 123, 60), (118, 70, 123, 72), (121, 21, 123, 23)):
-        if BEET == 'hecke':
-            rechteck(k, x0, y0, x1, y1, 'e')                      # Heckenbeete wie in der Vorlage
-        elif BEET == 'rasen':
-            rechteck(k, x0, y0, x1, y1, 'n')                      # Rasenbeet mit Bordstein
+    for (x0, y0, x1, y1) in BEETE:                                # Rasenbeete mit Bordstein (Baum + Blumen)
+        rechteck(k, x0, y0, x1, y1, 'e')
     rechteck(k, 4, 96, 124, 97, 'b')                              # Holzpromenade
     rechteck(k, 4, 98, 124, 99, 'k')                              # Kaikante
     rechteck(k, 125, 78, 125, 99, 'k')                            # Kaikante am Kanal
@@ -98,6 +95,8 @@ def main():
     k[33:39, 4] = '.'
     k[20:24, 124] = '.'
     k[13:18, 119] = '.'                                           # Nebel neben der Dachschraege der Halle
+    for y in range(0, R, 3):                                      # Wolkenrand ganz rechts ueber dem Meer
+        k[y:y + 3, C - int(rs.choice([1, 2, 2, 3])):] = '.'
 
     hoehe = np.ones((R, C), int)
     hoehe[np.isin(k, ['w', '.'])] = 0
@@ -115,6 +114,7 @@ def main():
                   [32, 36, 55, 57, 'h'], [32, 36, 77, 79, 'h'], [98, 101, 82, 93, 'v']],
         'hochbahn': {'x0': 0, 'x1': 135, 'y0': 80, 'y1': 83, 'pfeiler': [14, 30, 46, 62, 78, 94, 110, 126],
                      'zug': [86, 107]},
+        'beete': BEETE,
         'teleporter': [{'x': 8, 'y': 63, 'b': 3, 'h': 2, 'farbe': 'violett'},
                        {'x': 131, 'y': 41, 'b': 2, 'h': 3, 'farbe': 'violett'}],
         'steg': [104, 100, 109, 106],

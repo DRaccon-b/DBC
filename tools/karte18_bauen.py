@@ -207,37 +207,20 @@ def rasen_kanten(a, rasen):
 OLIV = np.array([H(c) for c in ('#2e3a1a', '#3e4e22', '#50642c', '#647a36', '#788e42', '#8ca050')], np.float32)
 
 
-def mittelstreifen(a, m):
-    """Mittelstreifen und Beete wie in der Vorlage: heller Bordstein ringsum, darin eine niedrige, kastenfoermig
-    geschnittene Hecke in Olivgruen - je Kachel ein weich gewoelbter Block (Licht oben links, Schatten unten rechts,
-    feine Blattstruktur), dunkle Fugen zwischen den Bloecken, unten eine schmale dunkle Blattfront."""
+def mittelstreifen(a, m, gras):
+    """Mittelstreifen und Beete: heller Bordstein ringsum, darin Rasen (Grastiles wie im Park) mit leichter Kante;
+    unten eine 2 px dunklere Rasenkante (Licht oben links)."""
     rand = kontur(m)
     innen = m & ~rand
-    rs = np.random.RandomState(1818)
-    wert = np.full(m.shape, 0.6, np.float32)                       # dunkler Grund zwischen den Ballen
-    ys, xs = np.nonzero(innen)
-    if len(ys):
-        y0_, y1_, x0_, x1_ = ys.min(), ys.max(), xs.min(), xs.max()
-        mitten = [(y + rs.randint(-2, 3), x + rs.randint(-2, 3), rs.uniform(3.2, 4.6))
-                  for y in range(y0_, y1_ + 1, 5) for x in range(x0_ + (y // 5 % 2) * 3, x1_ + 1, 6)]
-        for (cy, cx, r) in sorted(mitten):                         # hintere Ballen zuerst, vordere decken
-            ri = int(r) + 1
-            ya, yb, xa, xb = max(0, cy - ri), min(m.shape[0], cy + ri + 1), max(0, cx - ri), min(m.shape[1], cx + ri + 1)
-            gy, gx = np.mgrid[ya:yb, xa:xb]
-            d = ((gy - cy) ** 2 + (gx - cx) ** 2) / (r * r)
-            sel = (d <= 1) & innen[ya:yb, xa:xb]
-            v = 3.2 - 1.5 * ((gx - cx) + (gy - cy)) / r * 0.6 - 2.2 * d * d
-            v = v + ((gx * 7 + gy * 13) % 5 == 0) * 0.5            # einzelne Blattlichter
-            blk = wert[ya:yb, xa:xb]
-            blk[sel] = v[sel]
-    idx = np.clip(np.round(wert), 0, len(OLIV) - 1).astype(int)
-    a[innen] = OLIV[idx[innen]].astype(np.uint8)
-    unten = innen & ~np.roll(innen, -1, 0)                         # Blattfront
-    for d in range(3):
-        dunkeln(a, np.roll(unten, -d, 0) & innen, 0.62 + 0.1 * d)
+    a[innen] = gras[innen]
+    unten = innen & ~np.roll(innen, -1, 0)
+    for d in range(2):
+        dunkeln(a, np.roll(unten, -d, 0) & innen, 0.78 + 0.1 * d)
+    links = innen & ~np.roll(innen, 1, 1)
+    mischen(a, (innen & ~np.roll(innen, 1, 0)) | links, (150, 190, 110), 0.25)
     a[rand] = H('#a4a8b4')
-    a[rand & ~np.roll(m, -1, 0)] = H('#6a6e7a')                    # Bordstein unten im Schatten
-    a[rand & ~np.roll(m, 1, 0)] = H('#c4c8d2')                     # oben im Licht
+    a[rand & ~np.roll(m, -1, 0)] = H('#6a6e7a')
+    a[rand & ~np.roll(m, 1, 0)] = H('#c4c8d2')
 
 
 def platz_raster(a, platz, achse, nebel_m=None):
@@ -841,7 +824,7 @@ def bauen(frame=None, speichern=True):
     a[r1 | r2] = H('#5a4228')
     a[(r1 | r2) & (np.roll(~sand, 1, 0) | np.roll(~sand, 2, 0) | np.roll(~sand, 1, 1) | np.roll(~sand, 2, 1))] = H('#8a6a44')
     a[r3] = H('#3a2a1a')
-    mittelstreifen(a, gross(np.isin(kl, ['m', 'e'])))
+    mittelstreifen(a, gross(np.isin(kl, ['m', 'e'])), textur('n', cols, rows))
     lvl[gross(np.isin(kl, ['m', 'e']))] = 9                        # Hecken (Mittelstreifen, Beete): nicht begehbar
     platz_raster(a, gross(kl == 'p'), lay['achse'], gross(kl == '.'))
     kompass(a, lay['kompass'][0] * T, lay['kompass'][1] * T)

@@ -283,7 +283,7 @@ def begleiter_nachpruefen(P):
             fy, fx = np.nonzero(al[max(0, zu - 3):zu + 1])
             boden = set(P.kl[np.clip((fy + max(0, zu - 3) + c['y']) // T, 0, P.R - 1),
                              np.clip((fx + x) // T, 0, P.C - 1)].tolist())
-            if c['basis'] != 'karte01/deko/50' and not boden <= set('n'):
+            if c['basis'] != 'karte01/deko/50' and not boden <= set('ne'):
                 continue
             if not boden <= set('ngqpe'):
                 continue
@@ -394,7 +394,7 @@ def main():
             datei, al, zu, xa, xb = P.sprite(n_)
             fz = np.nonzero(al[zu - 1])[0]
             mitte = t['x'] + (fz.mean() if len(fz) else (xa + xb) / 2)
-            rasen = set(bd) & set('n')
+            rasen = set(bd) & set('ne')
             if rasen:
                 paar_ = ((BUESCHEL, rasen), (LAUB if 'ginkgo' in n_ else BLUMEN, None if 'ginkgo' in n_ else rasen))
             else:                                             # Strassenbaum auf dem Gehweg: herabgefallenes Laub
@@ -432,20 +432,15 @@ def main():
         baum('k18/baum2/02', 29, r, set('gq'))
     for r in (72, 76):
         baum(GINKGO, 0, r, RASEN, cx=601)
-    # Platz: je ein Baum mittig im Heckenbeet (Beete wie Vorlage)
-    for (x0, y0, x1, y1) in ((66, 28, 71, 29), (69, 37, 74, 39), (80, 44, 85, 46), (69, 67, 74, 69),
-                             (118, 38, 123, 40), (118, 58, 123, 60), (118, 70, 123, 72), (121, 21, 123, 23)):
-        n_ = 'k18/baum2/02' if (x0, y0) in ((66, 28), (118, 58)) else SB[(x0 + y0) % 2]
+    # Platz: je ein Baum mittig im Rasenbeet, dazu Bueschel am Stamm und ein paar Blumen im Gras
+    BL = ('karte01/deko/00', 'karte01/deko/02')
+    for i, (x0, y0, x1, y1) in enumerate(lay['beete']):
+        n_ = 'k18/baum2/02' if (x0, y0) in ((65, 27), (117, 57)) else SB[i % 2]
         cx_ = (x0 + x1 + 1) / 2.0 * T
-        beet = os.environ.get('K18_BEET', 'hecke')
-        if beet == 'hecke':
-            P.setzen(n_, 0, y1, boden=set('e'), cx=cx_, dy=-6 if y1 > y0 + 1 else -3, extra={'baum': True})
-        elif beet == 'rasen':
-            baum(n_, 0, y1, RASEN, cx=cx_)
-        else:                                                 # Baum im Pflaster mit runder Baumscheibe (Gitter)
-            P.setzen('gebaeude/baumgitter', 0, y1, boden=set('pt'), cx=cx_, pruefen=False, begleiter=True,
-                     extra={'kein_schatten': True, 'sortier': 0})
-            P.setzen(n_, 0, y1, boden=set('pt'), cx=cx_, dy=-8, extra={'baum': True})
+        baum(n_, 0, y1 - 1 if y1 - y0 >= 3 else y1, set('e'), cx=cx_)
+        for (fx, fy) in ((x0 + 1.2, y1), (x1 - 0.2, y0 + 1)) if y1 - y0 >= 3 else ():
+            P.setzen(BL[(i + int(fx)) % 2], 0, int(fy), cx=fx * T, boden=set('e'), begleiter=True,
+                     extra={'pflanze': True, 'begleiter': True, 'kein_schatten': True})
     # ------------------------------------------------------------------ Grosse Einzelobjekte
     P.setzen('k18/platz/00', 18, 61, boden=set('q'), n=4)        # Notlager (jetzt oben): Spitzzelt, Sandsaecke symmetrisch
     P.setzen('karte03/klein/43', 0, 61, boden=set('q'), cx=16.5 * T)
@@ -482,7 +477,7 @@ def main():
     for x in (12, 24, 44, 58):                                # Suedseite mittlere Strasse
         P.setzen(LAT, x, 54)
     for cx in (8, 20, 44, 56):                                # zweiarmige Leuchten auf dem Mittelstreifen
-        P.setzen(DLAT, 0, 48, boden=set('m'), cx=cx * T + 8)
+        P.setzen(DLAT, 0, 48, boden=set('m'), cx=cx * T + 8)   # Mittelstreifen jetzt Rasen
     for r in (36, 64, 76):                                    # Querstrasse Westseite / Ostseite
         P.setzen(LAT, 31, r)
     for r in (31, 61, 69):
