@@ -264,6 +264,18 @@ def begleiter_nachpruefen(P):
         t = c.get('_eltern')
         if t is not None:
             addieren(t, -1)
+            ka = P.cache[t['_key']][1].copy()                      # Sockel = unterste Kachelreihe: dort darf der
+            rgb = np.array(Image.open(os.path.join(OBJ, t['datei'])).convert('RGB')).astype(int)   # Begleiter Stamm
+            r_, g_, b_ = rgb[..., 0], rgb[..., 1], rgb[..., 2]                                       # und Wurzeln
+            laub = ((g_ > r_ + 10) & (g_ > b_ + 10)) | ((r_ > 150) & (g_ > 110) & (b_ < 100))       # decken, nie Laub
+            unten = np.zeros_like(ka); unten[max(0, t['fuss'] - 15):] = True
+            ka &= ~(unten & ~laub)
+            hk, wk = ka.shape
+            y0k, x0k = max(0, t['y']), max(0, t['x'])
+            y1k, x1k = min(Hh, t['y'] + hk), min(W, t['x'] + wk)
+            krone = np.zeros((Hh, W), bool)
+            krone[y0k:y1k, x0k:x1k] = ka[y0k - t['y']:y1k - t['y'], x0k - t['x']:x1k - t['x']]
+            zahl[krone] += 100
         al = maske(c, False)
         datei, _, zu, xa, xb = P.cache[c['_key']]
         h_, w2 = al.shape
@@ -276,20 +288,21 @@ def begleiter_nachpruefen(P):
         ziel = None
         breite_ = (xa + xb + 1) / 2.0
         x_m = int(round(2 * c.get('_mitte', c['x'] + breite_) - (c['x'] + breite_) - breite_))   # andere Stammseite
-        for x in [c['x'] + dx for dx in (0, 2, -2, 4, -4, 6, -6, 8, -8, 10, -10)] + \
-                 [x_m + dx for dx in (0, 2, -2, 4, -4, 6, -6)]:
+        weg = 1 if c['x'] + (xa + xb + 1) / 2.0 >= c.get('_mitte', 0) else -1   # vom Stamm weg rutschen
+        for x in [c['x'] + weg * dx for dx in range(0, 31, 2)] + [x_m - weg * dx for dx in range(0, 31, 2)]:
             if not frei(x):
                 continue
             fy, fx = np.nonzero(al[max(0, zu - 3):zu + 1])
             boden = set(P.kl[np.clip((fy + max(0, zu - 3) + c['y']) // T, 0, P.R - 1),
                              np.clip((fx + x) // T, 0, P.C - 1)].tolist())
-            if c['basis'] != 'karte01/deko/50' and not boden <= set('ne'):
+            if c['basis'] != 'karte01/deko/50' and not boden <= set('nem'):
                 continue
-            if not boden <= set('ngqpe'):
+            if not boden <= set('ngqpem'):
                 continue
             ziel = x
             break
         if t is not None:
+            zahl[krone] -= 100
             addieren(t, 1)
         if ziel is None:
             P.objekte.remove(c)
@@ -394,7 +407,7 @@ def main():
             datei, al, zu, xa, xb = P.sprite(n_)
             fz = np.nonzero(al[zu - 1])[0]
             mitte = t['x'] + (fz.mean() if len(fz) else (xa + xb) / 2)
-            rasen = set(bd) & set('ne')
+            rasen = set(bd) & set('nem')
             if rasen:
                 paar_ = ((BUESCHEL, rasen), (LAUB if 'ginkgo' in n_ else BLUMEN, None if 'ginkgo' in n_ else rasen))
             else:                                             # Strassenbaum auf dem Gehweg: herabgefallenes Laub
@@ -417,16 +430,16 @@ def main():
     baum('k18/baum2/02', 59, 7, RASEN)
     # Park SW: je Rasen zwei Baeume versetzt (nie in einer Reihe), dazu Begleiter
     # Park SW (jetzt unten, Reihen 73-93; unter der Hochbahn 80-83 nichts Hohes)
-    for (n_, bx, r) in ((GROSS_B, 9, 78), (KLEIN_B, 13, 75), (GRUEN, 20, 76), (KLEIN_B, 25, 78),
+    for (n_, bx, r) in ((GROSS_B, 9, 78), (GRUEN, 20, 76), (KLEIN_B, 25, 78),
                         (GROSS_B, 8, 91), (KLEIN_B, 11, 93), (GRUEN, 21, 90), (GROSS_B, 24, 93)):
         baum(n_, bx, r, RASEN)
     baum(GINKGO, 0, 93, RASEN, cx=17 * T)                     # Ginkgo auf dem kleinen Rasen
     # Mittelstreifen: Baum am Ostende jeder Hecke (Vorlage), Uferstrasse: vier Baeume auf der Hecke
     SB = ('k18/baum2/00', 'k18/baum2/01')        # Stadtbaeume wie Vorlage: Wurzeln in der Hecke
     for i, (bx, r) in enumerate(((11, 48), (23, 48), (47, 48), (59, 48))):
-        P.setzen(SB[i % 2], bx, r, boden=set('m'), n=3, dy=-5, extra={'baum': True})
+        baum(SB[i % 2], bx, r, set('m'), nn=3)                # Rasen-Mittelstreifen: Baum mit Bueschel/Blumen
     for i, cx in enumerate((71 * T, 87 * T, 104 * T, 117 * T)):
-        P.setzen(SB[i % 2], 0, 88, boden=set('m'), cx=cx, dy=-5, extra={'baum': True})
+        baum(SB[i % 2], 0, 88, set('m'), cx=cx)
     # Ginkgos an der Querstrasse: Westseite auf dem Gehweg, Ostseite in Baumscheiben (Allee)
     for r in (31, 58, 72):
         baum('k18/baum2/02', 29, r, set('gq'))
