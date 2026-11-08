@@ -14,7 +14,7 @@ des Netzes. Anspielungen nur über Farben und Motive, nichts nachgebaut.
   (links, rechts und zwischen den Räumen).
 
 ## Animation (4 Bilder, 250 ms – Regel: höchstens 4 Animationsbilder)
-Datenpakete auf den Strängen, Fragmente schweben (1 px), Kanten glimmen, Pfeilkacheln (cyan und gold) leuchten
+Datenpakete auf den Strängen, Fragmente schweben (1 px), Kanten glimmen, Pfeilmarken (cyan und gold) leuchten
 nacheinander, Aufstellfelder und Ringmarke glimmen, Lichtfäden unter den Plattformen.
 
 ## Dateien
