@@ -1435,6 +1435,22 @@ OBJEKTGRUPPEN_K18 = {
         'tall flag pole with a light blue banner flag',
         'orange life buoy ring on a small post',
     ]},
+    'k18_baum2': {'size': 64, 'items': [
+        'lush round city park tree with dense dark green leaf clusters, bright highlights on the upper left of each cluster, short visible brown trunk with spreading roots at the base, full crown fully visible, perfectly straight front view',
+        'lush round city park tree with dense mid green leaf clusters, slightly irregular crown, short visible brown trunk with roots, full crown fully visible, perfectly straight front view',
+        'lush round ginkgo tree with dense golden yellow autumn leaf clusters, bright highlights upper left, short visible brown trunk with roots, full crown fully visible, perfectly straight front view',
+        'small slim street tree with a compact round green crown and a thin brown trunk, full crown fully visible, perfectly straight front view',
+    ]},
+    'k18_platz': {'size': 64, 'items': [
+        'dark navy blue pointed canopy tent pavilion with four thin metal poles, open front, a white cooler box and a wooden chest underneath, perfectly straight front elevation view, symmetric',
+        'red steel shipping container, pure side view flat 2D, corrugated side panels, corner posts, perfectly straight front elevation, no perspective',
+        'blue steel shipping container, pure side view flat 2D, corrugated side panels, corner posts, perfectly straight front elevation, no perspective',
+        'white delivery box truck, pure side view flat 2D profile, red cab on the left, white cargo box with a blue stripe, two wheels, no perspective',
+        'stacked burlap sandbags pile, front view',
+        'small grey stone drinking fountain on a pillar with a little basin, front view',
+        'grey city pigeon standing, side view, tiny',
+        'tall thin metal pole with a long vertical light blue cloth banner hanging from a top arm, front view',
+    ]},
     'k18_baum': {'size': 64, 'items': [
         'round ginkgo tree with bright golden yellow autumn leaves and a slim brown trunk, full crown fully visible',
         'round ginkgo tree with golden yellow and orange autumn leaves, slim trunk, full crown fully visible',
