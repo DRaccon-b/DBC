@@ -183,7 +183,8 @@ def wasser_netz(a, wasser, frame):
     # zweite, tiefere Ebene (Nutzerwunsch): Becken im Becken, 1 Kachel vom Rand (oben unter der Mauerfront 1,5),
     # am 16er-Raster; dort ist der Grund dunkler, das Datenraster schwaecher und um 8 px versetzt (liegt tiefer)
     hb = min(h, 6 * T)                                             # Hoehe des oberen Beckens (Kanaele darunter bleiben flach)
-    tief = (yy >= 24) & (yy < hb - 16) & (xx >= 16) & (xx < w - 16)
+    ex = 32 if w > 26 * T else 16                                  # offene Seiten: Sims 1 Kachel breiter
+    tief = (yy >= 24) & (yy < hb - 16) & (xx >= ex) & (xx < w - ex)
     sub[tief] = g[tief] * 0.22 + np.array((10, 62, 102), np.float32) * 0.78
     raster_t = tief & (((xx + 8) % 16 == 0) | ((yy + 8) % 16 == 0))
     raster &= ~tief
@@ -191,14 +192,13 @@ def wasser_netz(a, wasser, frame):
     sub[raster_t] = sub[raster_t] * (0.72 - 0.1 * p) + np.array((60, 170, 220), np.float32) * (0.28 + 0.1 * p)
     # Stufe: Nordwand der Vertiefung ist sichtbar (zeigt zum Betrachter, 5 px), Kanten mit Licht, Fuss dunkel
     ty0, ty1 = 24, hb - 16
-    sub[ty0:ty0 + 5, 16:w - 16] = [(40, 150, 190), (30, 126, 168), (24, 106, 148), (18, 88, 128), (10, 56, 92)][0]
     for d, c in enumerate([(40, 150, 190), (30, 126, 168), (24, 106, 148), (18, 88, 128), (10, 56, 92)]):
-        sub[ty0 + d, 16:w - 16] = c
-    sub[ty0 - 1, 15:w - 15] = sub[ty0 - 1, 15:w - 15] * 0.3 + np.array((150, 245, 255), np.float32) * 0.7   # Lichtkante oben
-    sub[ty0:ty1, 15] = sub[ty0:ty1, 15] * 0.4 + np.array((120, 225, 245), np.float32) * 0.6                  # Seitenkanten
-    sub[ty0:ty1, w - 16] = sub[ty0:ty1, w - 16] * 0.55 + np.array((14, 70, 110), np.float32) * 0.45
-    sub[ty1, 16:w - 16] = sub[ty1, 16:w - 16] * 0.45 + np.array((110, 215, 240), np.float32) * 0.55          # Suedkante
-    sub[ty0 + 5:ty0 + 8, 16:w - 16] *= 0.8                                                                    # Schatten unter der Stufe
+        sub[ty0 + d, ex:w - ex] = c
+    sub[ty0 - 1, ex - 1:w - ex + 1] = sub[ty0 - 1, ex - 1:w - ex + 1] * 0.3 + np.array((150, 245, 255), np.float32) * 0.7
+    sub[ty0:ty1, ex - 1] = sub[ty0:ty1, ex - 1] * 0.4 + np.array((120, 225, 245), np.float32) * 0.6          # Seitenkanten
+    sub[ty0:ty1, w - ex] = sub[ty0:ty1, w - ex] * 0.55 + np.array((14, 70, 110), np.float32) * 0.45
+    sub[ty1, ex:w - ex] = sub[ty1, ex:w - ex] * 0.45 + np.array((110, 215, 240), np.float32) * 0.55          # Suedkante
+    sub[ty0 + 5:ty0 + 8, ex:w - ex] *= 0.8                                                                    # Schatten unter der Stufe
     if h > hb:                                                     # Kanaele: das Wasser laeuft nach unten (Bitstriche
         for kx in range(0, w, 6):                                  # wandern je Bild 4 px abwaerts)
             if not wasser[y0 + hb + 4, x0 + kx]:
@@ -237,6 +237,50 @@ def wasser_klassik(a, wasser, frame):
     m = wasser[y0:y1, x0:x1]
     a[y0:y1, x0:x1][m] = np.clip(sub, 0, 255).astype(np.uint8)[m]
     return _nordmauer(a, wasser, frame)
+
+
+def ueberlauf(a, wasser, land, frame):
+    """Wo die Mauer auf Wasserhoehe fehlt (linke und rechte Seite des Beckens), laeuft das Wasser ueber die Kante:
+    an der Kante ein heller Ueberlaufsaum, dann faellt es als schmaler Wasserfall seitlich an der Plattform entlang
+    nach unten in die Leere und loest sich dort in Datenpixel auf. Quelle = Becken, Abfluss = Leere (Regel Wasser)."""
+    f = frame or 0
+    Hp, Wp = wasser.shape
+    ys, xs = np.nonzero(wasser)
+    y0, y1, x0, x1 = ys.min(), ys.max() + 1, xs.min(), xs.max() + 1
+    unten = np.nonzero(land[:, x0])[0].max() + 1                  # Unterkante der Plattform
+    rs = np.random.RandomState(1921)
+    for seite in (-1, 1):
+        kante = x0 if seite < 0 else x1 - 1
+        for dd in range(3):                                       # Ueberlaufsaum an der offenen Kante
+            X = kante - seite * dd
+            a[y0 + 6:y1, X] = np.clip(a[y0 + 6:y1, X] * 0.4 + np.array((200, 245, 255)) * 0.6 * (1 - dd / 3), 0, 255)
+        breite = 10
+        xa = kante + seite                                         # Fall direkt neben der Plattform (in der Leere)
+        cols = [xa + seite * i for i in range(breite)]
+        laenge = unten + 70 - (y0 + 6)
+        for i, X in enumerate(cols):
+            if not (0 <= X < Wp):
+                continue
+            ph = rs.randint(16)
+            for t in range(laenge):
+                Y = y0 + 6 + t
+                if Y >= Hp or land[Y, X]:
+                    continue
+                q = t / laenge
+                if q > 0.8 and rs.rand() < (q - 0.8) * 4:          # unten loest es sich in Pixel auf
+                    continue
+                c = np.array((40, 140, 190), np.float32) if i not in (0, breite - 1) else np.array((24, 90, 140), np.float32)
+                if (t - ph - 6 * f) % 14 < 4 and 0 < i < breite - 1:
+                    c = np.array((190, 245, 255), np.float32)       # Wasserstraehnen laufen nach unten
+                s_ = 0.92 * (1 - max(0.0, q - 0.6) / 0.4 * 0.8)
+                a[Y, X] = np.clip(a[Y, X] * (1 - s_) + c * s_, 0, 255).astype(np.uint8)
+        # Gischt an der Kante: kleine helle Tropfen (wechseln je Bild)
+        for _ in range(10):
+            Y, dx = y0 + 6 + rs.randint(0, y1 - y0 - 6), rs.randint(0, breite)
+            if (rs.randint(4) + f) % 4 == 0:
+                X = xa + seite * dx
+                if 0 <= X < Wp and not land[Y, X]:
+                    a[Y, X] = (230, 250, 255)
 
 
 def kaikante(a, kai, wasser=None):
@@ -388,6 +432,7 @@ def bauen(frame=None, speichern=True):
     stellen = [(20, 40), (40, 300), (16, 500), (300, 18), (720, 30), (1000, 20), (580, 140), (600, 320),
                (590, 500), (1140, 120), (1150, 340), (1130, 530), (220, 540), (860, 545)]
     k16.fragmente(a, rest & ~nah, frame, seed=1920, stellen=stellen)
+    ueberlauf(a, wasser, land, frame)
     lvl = np.zeros((Hp, Wp), np.uint8)
     lvl[land] = 2
     lvl[wasser] = 1

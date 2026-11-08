@@ -51,9 +51,12 @@ def main():
         else:
             k[y0 + 1:y0 + 7, x0 + 1:x0 + RW - 1] = 'w'          # Hafenbecken (der Randring ist die Beckenmauer)
             k[y0 + 7, x0 + 1:x0 + RW - 1] = 'k'
-            if KANAL:                                           # Kanaele (2 Kacheln) an der West- und Ostmauer bis unten
+            if KANAL:                                           # (verworfen) Kanaele an West- und Ostmauer bis unten
                 k[y0 + 1:y0 + RH - 1, x0 + 1:x0 + 3] = 'w'
                 k[y0 + 1:y0 + RH - 1, x0 + RW - 3:x0 + RW - 1] = 'w'
+            # Nutzerwunsch: auf Wasserhoehe fehlt die Mauer links und rechts - das Wasser laeuft dort ueber die Kante
+            k[y0 + 1:y0 + 7, x0] = 'w'
+            k[y0 + 1:y0 + 7, x0 + RW - 1] = 'w'
             k[y0 + 8, x0 + 14] = 'o'
     h = np.where(k == '.', 0, np.where(k == 'w', 1, 2))
     lay = {'groesse': [C, R], 'klassen': [''.join(z) for z in k], 'hoehe': [''.join(str(c) for c in z) for z in h],
