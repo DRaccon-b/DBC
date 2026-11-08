@@ -1,16 +1,16 @@
-"""Karte 16 (The Network), Neuaufbau Schritt 1: Kachelraster nach der Vorlage -> maps/karte16/layout.json
+"""Karte 16 (The Network), Neuaufbau nach Nutzer-Idee -> maps/karte16/layout.json
 
   python3 tools/karte16_layout.py
 
-Vorlage assets/vorlagen/karte16_vorlage.png: 1024x640 px = 64x40 Kacheln a 16 px (echtes 16er-Raster,
-Plattenfugen alle 16 px gemessen). Netzwerkraum: eine flache Bodenflaeche, ringsum die Leere.
+Groesse wie die Vorlage assets/vorlagen/karte16_vorlage.png: 1024x640 px = 64x40 Kacheln a 16 px (echtes 16er-Raster).
+Aufbau (Nutzer): Ankunft unten auf den Pfeilfeldern, ein schmaler Pfad fuehrt nach Norden zu einer kreisrunden
+Plattform (wie Apocalymon's Realm), oben auf der Plattform das Firewall-Tor, links davon ein Computer
+('Dungeon Records'). Ringsum die Leere des Netzes mit blauen Datenstraengen und schwebenden Datenfragmenten.
 
-Klassen:  .  Leere (dunkler Datenraum)     b  Bodenplatten (60x36 Kacheln, x 2-61, y 2-37)
-Marken (Vorlage, Kachelkoordinaten):
-  tor      Firewall-Tor   x 30-32, y 5-6   (3x2)
-  pfeile   Pfeilfeld oben x 30-32, y 7     (3x1, zeigt nach Norden zum Tor)
-  start    Pfeilfeld unten x 30-33, y 35   (4x1, Eingang/Teleporter)
-  item     Datenchip      x 35, y 9
+Achse: Kachelgrenze 32 (x = 512 px) - Tor (4 breit), Pfad (2 breit), Pfeilfeld (4 breit) liegen spiegelgleich darauf.
+Klassen:  .  Leere   p  Plattform (Bodenplatten der Vorlage)   r  Randring der Plattform
+          s  Pfad    a  Ankunftsfeld   z  Pfeilkachel (Ankunft/Teleporter)
+Hoehen:   0 Leere, 2 Plattform/Pfad/Ankunft.
 """
 import json, os
 import numpy as np
@@ -18,34 +18,45 @@ from PIL import Image, ImageDraw
 
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
 KARTE = os.path.join(ROOT, 'maps', 'karte16')
-VORLAGE = os.path.join(ROOT, 'assets', 'vorlagen', 'karte16_vorlage.png')
 C, R, T = 64, 40, 16
-MARKEN = {'tor': (30, 5, 3, 2), 'pfeile': (30, 7, 3, 1), 'start': (30, 35, 4, 1), 'item': (35, 9, 1, 1)}
+ACHSE = 32.0
+CX, CY, RAD = ACHSE, 16.0, 10.4           # Plattform-Kreis (Kacheln)
+PFAD = (31, 32, 26, 33)                   # x0, x1, y0, y1
+ANKUNFT = (29, 34, 33, 36)                # x0, x1, y0, y1
+PFEILE = (30, 33, 35)                     # x0, x1, y
+TOR = (30, 9, 4)                          # x0, Fussreihe, Breite (Objekt kommt in Schritt 3)
+COMPUTER = (25, 10)                       # ungefaehrer Platz links vom Tor
 
 
 def main():
     os.makedirs(KARTE, exist_ok=True)
+    yy, xx = np.mgrid[0:R, 0:C]
+    d = np.hypot(xx + 0.5 - CX, yy + 0.5 - CY)
     k = np.full((R, C), '.')
-    k[2:38, 2:62] = 'b'
-    json.dump({'spalten': C, 'zeilen': R, 'kachel': T, 'raster': [''.join(z) for z in k], 'marken': MARKEN},
-              open(os.path.join(KARTE, 'layout.json'), 'w'), indent=1)
-    # Kontrollbild: Vorlage mit Raster, Klassen und Marken
-    im = Image.open(VORLAGE).convert('RGB')
-    d = ImageDraw.Draw(im, 'RGBA')
+    platt = d <= RAD
+    k[platt] = 'p'
+    k[platt & (d > RAD - 1.15)] = 'r'
+    x0, x1, y0, y1 = PFAD
+    k[(k == 'r') & (xx >= x0) & (xx <= x1) & (yy >= y0 - 1)] = 'p'      # Einmuendung des Pfads ohne Randstein
+    m = (xx >= x0) & (xx <= x1) & (yy >= y0) & (yy <= y1) & ~platt
+    k[m] = 's'
+    x0, x1, y0, y1 = ANKUNFT
+    k[(xx >= x0) & (xx <= x1) & (yy >= y0) & (yy <= y1)] = 'a'
+    k[PFEILE[2], PFEILE[0]:PFEILE[1] + 1] = 'z'
+    h = np.where(k == '.', 0, 2)
+    lay = {'groesse': [C, R], 'klassen': [''.join(z) for z in k], 'hoehe': [''.join(str(c) for c in z) for z in h],
+           'platte': [CX, CY, RAD], 'pfad': PFAD, 'ankunft': ANKUNFT, 'pfeile': PFEILE, 'tor': TOR,
+           'computer': COMPUTER, 'teleporter': [{'x': PFEILE[0], 'y': PFEILE[2], 'b': 4, 'h': 1}]}
+    json.dump(lay, open(os.path.join(KARTE, 'layout.json'), 'w'), indent=0)
+    F = {'.': (10, 14, 30), 'p': (52, 70, 104), 'r': (34, 48, 78), 's': (60, 84, 120), 'a': (60, 84, 120),
+         'z': (60, 200, 230)}
+    im = Image.new('RGB', (C * 8, R * 8))
+    dr = ImageDraw.Draw(im)
     for y in range(R):
         for x in range(C):
-            if k[y, x] == '.':
-                d.rectangle((x * T, y * T, x * T + 15, y * T + 15), fill=(120, 0, 160, 50))
-    for i in range(C + 1):
-        d.line((i * T, 0, i * T, R * T), fill=(255, 255, 255, 40))
-    for i in range(R + 1):
-        d.line((0, i * T, C * T, i * T), fill=(255, 255, 255, 40))
-    farben = {'tor': (255, 60, 60), 'pfeile': (60, 220, 255), 'start': (60, 255, 120), 'item': (255, 210, 60)}
-    for n, (x, y, w, h) in MARKEN.items():
-        d.rectangle((x * T, y * T, (x + w) * T - 1, (y + h) * T - 1), outline=farben[n] + (255,), width=2)
-        d.text((x * T, (y + h) * T + 1), n, fill=farben[n] + (255,))
-    im.resize((C * T * 2, R * T * 2), Image.NEAREST).save(os.path.join(KARTE, 'layout_vergleich.png'))
-    print('Karte 16: %dx%d Kacheln, Boden %d Kacheln' % (C, R, int((k == 'b').sum())))
+            dr.rectangle((x * 8, y * 8, x * 8 + 7, y * 8 + 7), fill=F[k[y, x]], outline=(0, 0, 0))
+    im.save(os.path.join(KARTE, 'layout_vorschau.png'))
+    print('Karte 16 Layout %dx%d, begehbar %d Kacheln' % (C, R, int((k != '.').sum())))
 
 
 if __name__ == '__main__':
