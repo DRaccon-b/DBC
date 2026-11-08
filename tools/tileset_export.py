@@ -51,6 +51,7 @@ KARTEN = {
     'karte14': ('karte14_bauen', 'Spiral_Mountain_Summit', 'v1.0'),
     'karte15': ('karte15_bauen', 'Apocalymons_Realm', 'v1.0'),
     'karte16': ('karte16_bauen', 'The_Network', 'v1.0'),
+    'karte17': ('karte17_bauen', 'Our_War_Game', 'v1.0'),
     'karte18': ('karte18_bauen', 'The_Fog_Bound_City', 'v1.0'),
 }
 
@@ -287,6 +288,9 @@ def objekte_export(karte, mod, out):
     obj_dir = mod.OBJ
     objs = [o for o in json.load(open(os.path.join(obj_dir, 'platzierung.json')))
             if o.get('basis') not in ('schatten',) and os.path.exists(os.path.join(obj_dir, o['datei']))]
+    if not objs:                                         # Karte ohne Objekte (z. B. Karte 17 v1.0): kein Objekt-Tileset
+        print('  keine Objekte - Objekt-Tileset entfaellt')
+        return
     cache = {}
     for o in objs:
         if o['datei'] not in cache:

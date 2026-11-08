@@ -55,7 +55,7 @@ def ringmarke(a, tx, ty, frame):
     yy, xx = np.mgrid[0:T, 0:T]
     d = np.hypot(xx + 0.5 - 8, yy + 0.5 - 8)
     m = np.abs(d - 5.5) <= 0.8
-    p = 0.55 + 0.4 * puls(frame, 0.1)
+    p = 0.3 + 0.65 * puls(frame, 0.1)
     sub = a[ty * T:(ty + 1) * T, tx * T:(tx + 1) * T].astype(np.float32)
     sub[m] = sub[m] * (1 - p) + np.array((225, 235, 245), np.float32) * p
     a[ty * T:(ty + 1) * T, tx * T:(tx + 1) * T] = sub.astype(np.uint8)
