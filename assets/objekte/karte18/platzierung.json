@@ -178,8 +178,8 @@
 "datei": "sauber/gebaeude-wohnblock.png",
 "basis": "gebaeude/wohnblock",
 "x": 80,
-"y": 448,
-"fuss": 191,
+"y": 432,
+"fuss": 207,
 "kachel": [
 17,
 39
@@ -187,7 +187,7 @@
 "ebene": 1,
 "gebaeude": [
 5,
-28,
+27,
 28,
 39
 ],
@@ -380,8 +380,7 @@
 8
 ],
 "ebene": 1,
-"baum": true,
-"an_wand": true
+"baum": true
 },
 {
 "datei": "sauber/karte01-deko-06.png",
@@ -461,11 +460,11 @@
 "datei": "sauber/karte10-baeume-01.png",
 "basis": "karte10/baeume/01",
 "x": 146,
-"y": 941,
+"y": 925,
 "fuss": 66,
 "kachel": [
 11,
-62
+61
 ],
 "ebene": 1,
 "baum": true
@@ -474,11 +473,11 @@
 "datei": "sauber/karte01-deko-06.png",
 "basis": "karte01/deko/06",
 "x": 153,
-"y": 993,
+"y": 977,
 "fuss": 14,
 "kachel": [
 10,
-62
+61
 ],
 "ebene": 1,
 "pflanze": true,
@@ -489,11 +488,11 @@
 "datei": "sauber/karte01-deko-00.png",
 "basis": "karte01/deko/00",
 "x": 175,
-"y": 988,
+"y": 972,
 "fuss": 19,
 "kachel": [
 11,
-62
+61
 ],
 "ebene": 1,
 "pflanze": true,
@@ -504,57 +503,11 @@
 "datei": "sauber/karte01-baeume-00.png",
 "basis": "karte01/baeume/00",
 "x": 178,
-"y": 1029,
+"y": 1013,
 "fuss": 42,
 "kachel": [
 12,
-66
-],
-"ebene": 1,
-"baum": true,
-"an_wand": true
-},
-{
-"datei": "sauber/karte01-deko-06.png",
-"basis": "karte01/deko/06",
-"x": 176,
-"y": 1057,
-"fuss": 14,
-"kachel": [
-11,
-66
-],
-"ebene": 1,
-"pflanze": true,
-"begleiter": true,
-"kein_schatten": true,
-"an_wand": true
-},
-{
-"datei": "sauber/karte01-deko-00.png",
-"basis": "karte01/deko/00",
-"x": 198,
-"y": 1052,
-"fuss": 19,
-"kachel": [
-13,
-66
-],
-"ebene": 1,
-"pflanze": true,
-"begleiter": true,
-"kein_schatten": true,
-"an_wand": true
-},
-{
-"datei": "sauber/karte10-baeume-01.png",
-"basis": "karte10/baeume/01",
-"x": 338,
-"y": 925,
-"fuss": 66,
-"kachel": [
-23,
-61
+65
 ],
 "ebene": 1,
 "baum": true
@@ -562,12 +515,12 @@
 {
 "datei": "sauber/karte01-deko-06.png",
 "basis": "karte01/deko/06",
-"x": 345,
-"y": 977,
+"x": 176,
+"y": 1041,
 "fuss": 14,
 "kachel": [
-22,
-61
+11,
+65
 ],
 "ebene": 1,
 "pflanze": true,
@@ -577,12 +530,55 @@
 {
 "datei": "sauber/karte01-deko-00.png",
 "basis": "karte01/deko/00",
-"x": 367,
-"y": 972,
+"x": 198,
+"y": 1036,
 "fuss": 19,
 "kachel": [
-23,
-61
+13,
+65
+],
+"ebene": 1,
+"pflanze": true,
+"begleiter": true,
+"kein_schatten": true
+},
+{
+"datei": "sauber/karte10-baeume-01.png",
+"basis": "karte10/baeume/01",
+"x": 322,
+"y": 909,
+"fuss": 66,
+"kachel": [
+22,
+60
+],
+"ebene": 1,
+"baum": true
+},
+{
+"datei": "sauber/karte01-deko-06.png",
+"basis": "karte01/deko/06",
+"x": 329,
+"y": 961,
+"fuss": 14,
+"kachel": [
+21,
+60
+],
+"ebene": 1,
+"pflanze": true,
+"begleiter": true,
+"kein_schatten": true
+},
+{
+"datei": "sauber/karte01-deko-00.png",
+"basis": "karte01/deko/00",
+"x": 351,
+"y": 956,
+"fuss": 19,
+"kachel": [
+22,
+60
 ],
 "ebene": 1,
 "pflanze": true,
@@ -593,56 +589,53 @@
 "datei": "sauber/karte01-baeume-00.png",
 "basis": "karte01/baeume/00",
 "x": 386,
-"y": 1013,
+"y": 997,
 "fuss": 42,
 "kachel": [
 25,
-65
+64
 ],
 "ebene": 1,
-"baum": true,
-"an_wand": true
+"baum": true
 },
 {
 "datei": "sauber/karte01-deko-06.png",
 "basis": "karte01/deko/06",
 "x": 384,
-"y": 1041,
+"y": 1025,
 "fuss": 14,
 "kachel": [
 24,
-65
+64
 ],
 "ebene": 1,
 "pflanze": true,
 "begleiter": true,
-"kein_schatten": true,
-"an_wand": true
+"kein_schatten": true
 },
 {
 "datei": "sauber/karte01-deko-00.png",
 "basis": "karte01/deko/00",
 "x": 406,
-"y": 1036,
+"y": 1020,
 "fuss": 19,
 "kachel": [
 26,
-65
+64
 ],
 "ebene": 1,
 "pflanze": true,
 "begleiter": true,
-"kein_schatten": true,
-"an_wand": true
+"kein_schatten": true
 },
 {
 "datei": "sauber/karte01-baeume-00.png",
 "basis": "karte01/baeume/00",
-"x": 98,
+"x": 114,
 "y": 1157,
 "fuss": 42,
 "kachel": [
-7,
+8,
 74
 ],
 "ebene": 1,
@@ -651,11 +644,11 @@
 {
 "datei": "sauber/karte01-deko-06.png",
 "basis": "karte01/deko/06",
-"x": 98,
+"x": 112,
 "y": 1185,
 "fuss": 14,
 "kachel": [
-6,
+7,
 74
 ],
 "ebene": 1,
@@ -666,11 +659,11 @@
 {
 "datei": "sauber/karte01-deko-00.png",
 "basis": "karte01/deko/00",
-"x": 120,
+"x": 134,
 "y": 1180,
 "fuss": 19,
 "kachel": [
-8,
+9,
 74
 ],
 "ebene": 1,
@@ -682,11 +675,11 @@
 "datei": "sauber/karte01-baeume-00.png",
 "basis": "karte01/baeume/00",
 "x": 338,
-"y": 1157,
+"y": 1173,
 "fuss": 42,
 "kachel": [
 22,
-74
+75
 ],
 "ebene": 1,
 "baum": true
@@ -695,11 +688,11 @@
 "datei": "sauber/karte01-deko-06.png",
 "basis": "karte01/deko/06",
 "x": 336,
-"y": 1185,
+"y": 1201,
 "fuss": 14,
 "kachel": [
 21,
-74
+75
 ],
 "ebene": 1,
 "pflanze": true,
@@ -710,11 +703,11 @@
 "datei": "sauber/karte01-deko-00.png",
 "basis": "karte01/deko/00",
 "x": 358,
-"y": 1180,
+"y": 1196,
 "fuss": 19,
 "kachel": [
 23,
-74
+75
 ],
 "ebene": 1,
 "pflanze": true,
@@ -724,12 +717,12 @@
 {
 "datei": "sauber/karte01-baeume-03.png",
 "basis": "karte01/baeume/03",
-"x": 403,
-"y": 1189,
+"x": 387,
+"y": 1141,
 "fuss": 26,
 "kachel": [
-26,
-75
+25,
+72
 ],
 "ebene": 1,
 "baum": true
@@ -737,12 +730,12 @@
 {
 "datei": "sauber/karte01-deko-06.png",
 "basis": "karte01/deko/06",
-"x": 392,
-"y": 1201,
+"x": 376,
+"y": 1153,
 "fuss": 14,
 "kachel": [
-25,
-75
+24,
+72
 ],
 "ebene": 1,
 "pflanze": true,
@@ -752,12 +745,55 @@
 {
 "datei": "sauber/karte01-deko-00.png",
 "basis": "karte01/deko/00",
-"x": 414,
-"y": 1196,
+"x": 398,
+"y": 1148,
 "fuss": 19,
 "kachel": [
-26,
-75
+25,
+72
+],
+"ebene": 1,
+"pflanze": true,
+"begleiter": true,
+"kein_schatten": true
+},
+{
+"datei": "sauber/karte01-baeume-00.png",
+"basis": "karte01/baeume/00",
+"x": 66,
+"y": 1253,
+"fuss": 42,
+"kachel": [
+5,
+80
+],
+"ebene": 1,
+"baum": true
+},
+{
+"datei": "sauber/karte01-deko-06.png",
+"basis": "karte01/deko/06",
+"x": 66,
+"y": 1281,
+"fuss": 14,
+"kachel": [
+4,
+80
+],
+"ebene": 1,
+"pflanze": true,
+"begleiter": true,
+"kein_schatten": true
+},
+{
+"datei": "sauber/karte01-deko-00.png",
+"basis": "karte01/deko/00",
+"x": 88,
+"y": 1276,
+"fuss": 19,
+"kachel": [
+6,
+80
 ],
 "ebene": 1,
 "pflanze": true,
@@ -864,49 +900,6 @@
 "kein_schatten": true
 },
 {
-"datei": "sauber/karte01-baeume-00.png",
-"basis": "karte01/baeume/00",
-"x": 66,
-"y": 1253,
-"fuss": 42,
-"kachel": [
-5,
-80
-],
-"ebene": 1,
-"baum": true
-},
-{
-"datei": "sauber/karte01-deko-06.png",
-"basis": "karte01/deko/06",
-"x": 66,
-"y": 1281,
-"fuss": 14,
-"kachel": [
-4,
-80
-],
-"ebene": 1,
-"pflanze": true,
-"begleiter": true,
-"kein_schatten": true
-},
-{
-"datei": "sauber/karte01-deko-00.png",
-"basis": "karte01/deko/00",
-"x": 88,
-"y": 1276,
-"fuss": 19,
-"kachel": [
-6,
-80
-],
-"ebene": 1,
-"pflanze": true,
-"begleiter": true,
-"kein_schatten": true
-},
-{
 "datei": "sauber/gebaeude-ginkgo.png",
 "basis": "gebaeude/ginkgo",
 "x": 234,
@@ -1001,12 +994,12 @@
 {
 "datei": "sauber/karte01-deko-25.png",
 "basis": "karte01/deko/25",
-"x": 307,
-"y": 981,
+"x": 211,
+"y": 933,
 "fuss": 26,
 "kachel": [
-20,
-62
+14,
+59
 ],
 "ebene": 1,
 "pflanze": true
@@ -1020,19 +1013,6 @@
 "kachel": [
 11,
 72
-],
-"ebene": 1,
-"pflanze": true
-},
-{
-"datei": "sauber/karte01-deko-25.png",
-"basis": "karte01/deko/25",
-"x": 227,
-"y": 1445,
-"fuss": 26,
-"kachel": [
-15,
-91
 ],
 "ebene": 1,
 "pflanze": true
@@ -1256,22 +1236,6 @@
 "an_wand": true
 },
 {
-"datei": "sauber/karte01-deko-50_m.png",
-"basis": "karte01/deko/50",
-"x": 477,
-"y": 1161,
-"fuss": 22,
-"kachel": [
-30,
-73
-],
-"ebene": 1,
-"pflanze": true,
-"begleiter": true,
-"kein_schatten": true,
-"an_wand": true
-},
-{
 "datei": "sauber/gebaeude-ginkgo.png",
 "basis": "gebaeude/ginkgo",
 "x": 579,
@@ -1332,90 +1296,6 @@
 "an_wand": true
 },
 {
-"datei": "sauber/karte01-baeume-00.png",
-"basis": "karte01/baeume/00",
-"x": 1306,
-"y": 597,
-"fuss": 42,
-"kachel": [
-83,
-39
-],
-"ebene": 1,
-"baum": true,
-"an_wand": true
-},
-{
-"datei": "sauber/karte01-baeume-00.png",
-"basis": "karte01/baeume/00",
-"x": 1914,
-"y": 597,
-"fuss": 42,
-"kachel": [
-121,
-39
-],
-"ebene": 1,
-"baum": true,
-"an_wand": true
-},
-{
-"datei": "sauber/karte01-baeume-00.png",
-"basis": "karte01/baeume/00",
-"x": 1306,
-"y": 917,
-"fuss": 42,
-"kachel": [
-83,
-59
-],
-"ebene": 1,
-"baum": true,
-"an_wand": true
-},
-{
-"datei": "sauber/karte01-baeume-00.png",
-"basis": "karte01/baeume/00",
-"x": 1914,
-"y": 917,
-"fuss": 42,
-"kachel": [
-121,
-59
-],
-"ebene": 1,
-"baum": true,
-"an_wand": true
-},
-{
-"datei": "sauber/karte01-baeume-00.png",
-"basis": "karte01/baeume/00",
-"x": 1306,
-"y": 1109,
-"fuss": 42,
-"kachel": [
-83,
-71
-],
-"ebene": 1,
-"baum": true,
-"an_wand": true
-},
-{
-"datei": "sauber/karte01-baeume-00.png",
-"basis": "karte01/baeume/00",
-"x": 1914,
-"y": 1109,
-"fuss": 42,
-"kachel": [
-121,
-71
-],
-"ebene": 1,
-"baum": true,
-"an_wand": true
-},
-{
 "datei": "sauber/gebaeude-ginkgo.png",
 "basis": "gebaeude/ginkgo",
 "x": 1082,
@@ -1433,25 +1313,81 @@
 "datei": "sauber/karte01-baeume-00.png",
 "basis": "karte01/baeume/00",
 "x": 1130,
-"y": 693,
+"y": 597,
 "fuss": 42,
 "kachel": [
 72,
-45
+39
 ],
 "ebene": 1,
 "baum": true,
 "an_wand": true
 },
 {
-"datei": "sauber/gebaeude-ginkgo_gross.png",
-"basis": "gebaeude/ginkgo_gross",
-"x": 1122,
-"y": 1037,
-"fuss": 66,
+"datei": "sauber/karte01-baeume-00.png",
+"basis": "karte01/baeume/00",
+"x": 1306,
+"y": 709,
+"fuss": 42,
+"kachel": [
+83,
+46
+],
+"ebene": 1,
+"baum": true,
+"an_wand": true
+},
+{
+"datei": "sauber/karte01-baeume-00.png",
+"basis": "karte01/baeume/00",
+"x": 1130,
+"y": 1077,
+"fuss": 42,
 "kachel": [
 72,
-68
+69
+],
+"ebene": 1,
+"baum": true,
+"an_wand": true
+},
+{
+"datei": "sauber/karte01-baeume-00.png",
+"basis": "karte01/baeume/00",
+"x": 1914,
+"y": 613,
+"fuss": 42,
+"kachel": [
+121,
+40
+],
+"ebene": 1,
+"baum": true,
+"an_wand": true
+},
+{
+"datei": "sauber/gebaeude-ginkgo.png",
+"basis": "gebaeude/ginkgo",
+"x": 1914,
+"y": 933,
+"fuss": 42,
+"kachel": [
+121,
+60
+],
+"ebene": 1,
+"baum": true,
+"an_wand": true
+},
+{
+"datei": "sauber/karte01-baeume-00.png",
+"basis": "karte01/baeume/00",
+"x": 1914,
+"y": 1125,
+"fuss": 42,
+"kachel": [
+121,
+72
 ],
 "ebene": 1,
 "baum": true,
@@ -1511,6 +1447,33 @@
 "an_wand": true
 },
 {
+"datei": "sauber/gebaeude-feuerschale.png",
+"basis": "gebaeude/feuerschale",
+"x": 277,
+"y": 1348,
+"fuss": 27,
+"kachel": [
+18,
+85
+],
+"ebene": 1,
+"anim": "flammen18",
+"an_wand": true
+},
+{
+"datei": "sauber/k18-strasse-32.png",
+"basis": "k18/strasse/32",
+"x": 385,
+"y": 1349,
+"fuss": 26,
+"kachel": [
+25,
+85
+],
+"ebene": 1,
+"an_wand": true
+},
+{
 "datei": "sauber/k18-strasse-01.png",
 "basis": "k18/strasse/01",
 "x": 470,
@@ -1525,44 +1488,33 @@
 "an_wand": true
 },
 {
-"datei": "sauber/k18-strasse-32.png",
-"basis": "k18/strasse/32",
-"x": 385,
-"y": 1333,
-"fuss": 26,
+"datei": "sauber/gebaeude-koban.png",
+"basis": "gebaeude/koban",
+"x": 418,
+"y": 1323,
+"fuss": 68,
 "kachel": [
-25,
-84
+28,
+86
 ],
 "ebene": 1,
-"an_wand": true
-},
-{
-"datei": "sauber/gebaeude-feuerschale.png",
-"basis": "gebaeude/feuerschale",
-"x": 277,
-"y": 1332,
-"fuss": 27,
-"kachel": [
-18,
-84
+"anim": "rechtecke",
+"licht_rects": [
+[
+6,
+27,
+11,
+31,
+0
 ],
-"ebene": 1,
-"anim": "flammen18",
-"an_wand": true
-},
-{
-"datei": "sauber/k18-strasse-18.png",
-"basis": "k18/strasse/18",
-"x": 324,
-"y": 1330,
-"fuss": 29,
-"kachel": [
-20,
-84
+[
+48,
+27,
+52,
+31,
+2
+]
 ],
-"ebene": 1,
-"anim": "laterne18",
 "an_wand": true
 },
 {
@@ -1631,6 +1583,19 @@
 "an_wand": true
 },
 {
+"datei": "sauber/karte10-banner-06.png",
+"basis": "karte10/banner/06",
+"x": 898,
+"y": 227,
+"fuss": 60,
+"kachel": [
+57,
+17
+],
+"ebene": 1,
+"an_wand": true
+},
+{
 "datei": "sauber/karte10-klein-38.png",
 "basis": "karte10/klein/38",
 "x": 865,
@@ -1672,11 +1637,11 @@
 {
 "datei": "sauber/gebaeude-container_rot.png",
 "basis": "gebaeude/container_rot",
-"x": 1409,
+"x": 1393,
 "y": 1524,
 "fuss": 27,
 "kachel": [
-90,
+89,
 96
 ],
 "ebene": 1,
@@ -1685,11 +1650,11 @@
 {
 "datei": "sauber/gebaeude-container_blau2.png",
 "basis": "gebaeude/container_blau2",
-"x": 1473,
+"x": 1457,
 "y": 1524,
 "fuss": 27,
 "kachel": [
-94,
+93,
 96
 ],
 "ebene": 1,
@@ -1738,11 +1703,11 @@
 "datei": "sauber/k18-frontal-00.png",
 "basis": "k18/frontal/00",
 "x": 1779,
-"y": 1635,
+"y": 1619,
 "fuss": 28,
 "kachel": [
 113,
-103
+102
 ],
 "ebene": 1,
 "anim": "boot",
@@ -1750,43 +1715,41 @@
 "an_wand": true
 },
 {
-"datei": "sauber/gebaeude-koban.png",
-"basis": "gebaeude/koban",
-"x": 418,
-"y": 1307,
-"fuss": 68,
+"datei": "sauber/karte02-abgeleitet-laterne.png",
+"basis": "karte02/abgeleitet/laterne",
+"x": 80,
+"y": 262,
+"fuss": 57,
 "kachel": [
-28,
-85
+5,
+19
 ],
 "ebene": 1,
-"anim": "rechtecke",
-"licht_rects": [
-[
-6,
-27,
-11,
+"anim": "laterne18",
+"an_wand": true
+},
+{
+"datei": "sauber/karte02-abgeleitet-laterne.png",
+"basis": "karte02/abgeleitet/laterne",
+"x": 208,
+"y": 262,
+"fuss": 57,
+"kachel": [
+13,
+19
+],
+"ebene": 1,
+"anim": "laterne18",
+"an_wand": true
+},
+{
+"datei": "sauber/karte02-abgeleitet-laterne.png",
+"basis": "karte02/abgeleitet/laterne",
+"x": 496,
+"y": 262,
+"fuss": 57,
+"kachel": [
 31,
-0
-],
-[
-48,
-27,
-52,
-31,
-2
-]
-],
-"an_wand": true
-},
-{
-"datei": "sauber/karte02-abgeleitet-laterne.png",
-"basis": "karte02/abgeleitet/laterne",
-"x": 224,
-"y": 262,
-"fuss": 57,
-"kachel": [
-14,
 19
 ],
 "ebene": 1,
@@ -1796,11 +1759,11 @@
 {
 "datei": "sauber/karte02-abgeleitet-laterne.png",
 "basis": "karte02/abgeleitet/laterne",
-"x": 480,
+"x": 592,
 "y": 262,
 "fuss": 57,
 "kachel": [
-30,
+37,
 19
 ],
 "ebene": 1,
@@ -1810,11 +1773,11 @@
 {
 "datei": "sauber/karte02-abgeleitet-laterne.png",
 "basis": "karte02/abgeleitet/laterne",
-"x": 736,
+"x": 816,
 "y": 262,
 "fuss": 57,
 "kachel": [
-46,
+51,
 19
 ],
 "ebene": 1,
@@ -1824,11 +1787,11 @@
 {
 "datei": "sauber/karte02-abgeleitet-laterne.png",
 "basis": "karte02/abgeleitet/laterne",
-"x": 928,
+"x": 960,
 "y": 262,
 "fuss": 57,
 "kachel": [
-58,
+60,
 19
 ],
 "ebene": 1,
@@ -1838,11 +1801,11 @@
 {
 "datei": "sauber/karte02-abgeleitet-laterne.png",
 "basis": "karte02/abgeleitet/laterne",
-"x": 1120,
+"x": 1248,
 "y": 262,
 "fuss": 57,
 "kachel": [
-70,
+78,
 19
 ],
 "ebene": 1,
@@ -1852,25 +1815,11 @@
 {
 "datei": "sauber/karte02-abgeleitet-laterne.png",
 "basis": "karte02/abgeleitet/laterne",
-"x": 1312,
-"y": 262,
-"fuss": 57,
-"kachel": [
-82,
-19
-],
-"ebene": 1,
-"anim": "laterne18",
-"an_wand": true
-},
-{
-"datei": "sauber/karte02-abgeleitet-laterne.png",
-"basis": "karte02/abgeleitet/laterne",
-"x": 112,
+"x": 160,
 "y": 374,
 "fuss": 57,
 "kachel": [
-7,
+10,
 26
 ],
 "ebene": 1,
@@ -1880,25 +1829,11 @@
 {
 "datei": "sauber/karte02-abgeleitet-laterne.png",
 "basis": "karte02/abgeleitet/laterne",
-"x": 256,
+"x": 304,
 "y": 374,
 "fuss": 57,
 "kachel": [
-16,
-26
-],
-"ebene": 1,
-"anim": "laterne18",
-"an_wand": true
-},
-{
-"datei": "sauber/karte02-abgeleitet-laterne.png",
-"basis": "karte02/abgeleitet/laterne",
-"x": 352,
-"y": 374,
-"fuss": 57,
-"kachel": [
-22,
+19,
 26
 ],
 "ebene": 1,
@@ -1922,11 +1857,11 @@
 {
 "datei": "sauber/karte02-abgeleitet-laterne.png",
 "basis": "karte02/abgeleitet/laterne",
-"x": 832,
+"x": 880,
 "y": 374,
 "fuss": 57,
 "kachel": [
-52,
+55,
 26
 ],
 "ebene": 1,
@@ -1950,11 +1885,11 @@
 {
 "datei": "sauber/karte02-abgeleitet-laterne.png",
 "basis": "karte02/abgeleitet/laterne",
-"x": 1216,
+"x": 1168,
 "y": 374,
 "fuss": 57,
 "kachel": [
-76,
+73,
 26
 ],
 "ebene": 1,
@@ -1964,11 +1899,11 @@
 {
 "datei": "sauber/karte02-abgeleitet-laterne.png",
 "basis": "karte02/abgeleitet/laterne",
-"x": 96,
+"x": 112,
 "y": 614,
 "fuss": 57,
 "kachel": [
-6,
+7,
 41
 ],
 "ebene": 1,
@@ -1992,11 +1927,11 @@
 {
 "datei": "sauber/karte02-abgeleitet-laterne.png",
 "basis": "karte02/abgeleitet/laterne",
-"x": 672,
+"x": 736,
 "y": 614,
 "fuss": 57,
 "kachel": [
-42,
+46,
 41
 ],
 "ebene": 1,
@@ -2011,6 +1946,20 @@
 "fuss": 57,
 "kachel": [
 54,
+41
+],
+"ebene": 1,
+"anim": "laterne18",
+"an_wand": true
+},
+{
+"datei": "sauber/karte02-abgeleitet-laterne.png",
+"basis": "karte02/abgeleitet/laterne",
+"x": 976,
+"y": 614,
+"fuss": 57,
+"kachel": [
+61,
 41
 ],
 "ebene": 1,
@@ -2048,11 +1997,11 @@
 {
 "datei": "sauber/karte02-abgeleitet-laterne.png",
 "basis": "karte02/abgeleitet/laterne",
-"x": 672,
+"x": 704,
 "y": 822,
 "fuss": 57,
 "kachel": [
-42,
+44,
 54
 ],
 "ebene": 1,
@@ -2062,25 +2011,11 @@
 {
 "datei": "sauber/karte02-abgeleitet-laterne.png",
 "basis": "karte02/abgeleitet/laterne",
-"x": 768,
+"x": 928,
 "y": 822,
 "fuss": 57,
 "kachel": [
-48,
-54
-],
-"ebene": 1,
-"anim": "laterne18",
-"an_wand": true
-},
-{
-"datei": "sauber/karte02-abgeleitet-laterne.png",
-"basis": "karte02/abgeleitet/laterne",
-"x": 960,
-"y": 822,
-"fuss": 57,
-"kachel": [
-60,
+58,
 54
 ],
 "ebene": 1,
@@ -2146,11 +2081,11 @@
 {
 "datei": "sauber/karte02-abgeleitet-laterne.png",
 "basis": "karte02/abgeleitet/laterne",
-"x": 480,
+"x": 496,
 "y": 534,
 "fuss": 57,
 "kachel": [
-30,
+31,
 36
 ],
 "ebene": 1,
@@ -2160,40 +2095,12 @@
 {
 "datei": "sauber/karte02-abgeleitet-laterne.png",
 "basis": "karte02/abgeleitet/laterne",
-"x": 608,
-"y": 438,
+"x": 496,
+"y": 982,
 "fuss": 57,
 "kachel": [
-38,
-30
-],
-"ebene": 1,
-"anim": "laterne18",
-"an_wand": true
-},
-{
-"datei": "sauber/karte02-abgeleitet-laterne.png",
-"basis": "karte02/abgeleitet/laterne",
-"x": 608,
-"y": 918,
-"fuss": 57,
-"kachel": [
-38,
-60
-],
-"ebene": 1,
-"anim": "laterne18",
-"an_wand": true
-},
-{
-"datei": "sauber/karte02-abgeleitet-laterne.png",
-"basis": "karte02/abgeleitet/laterne",
-"x": 608,
-"y": 1062,
-"fuss": 57,
-"kachel": [
-38,
-69
+31,
+64
 ],
 "ebene": 1,
 "anim": "laterne18",
@@ -2203,11 +2110,53 @@
 "datei": "sauber/karte02-abgeleitet-laterne.png",
 "basis": "karte02/abgeleitet/laterne",
 "x": 496,
-"y": 966,
+"y": 1174,
 "fuss": 57,
 "kachel": [
 31,
-63
+76
+],
+"ebene": 1,
+"anim": "laterne18",
+"an_wand": true
+},
+{
+"datei": "sauber/karte02-abgeleitet-laterne.png",
+"basis": "karte02/abgeleitet/laterne",
+"x": 592,
+"y": 454,
+"fuss": 57,
+"kachel": [
+37,
+31
+],
+"ebene": 1,
+"anim": "laterne18",
+"an_wand": true
+},
+{
+"datei": "sauber/karte02-abgeleitet-laterne.png",
+"basis": "karte02/abgeleitet/laterne",
+"x": 592,
+"y": 934,
+"fuss": 57,
+"kachel": [
+37,
+61
+],
+"ebene": 1,
+"anim": "laterne18",
+"an_wand": true
+},
+{
+"datei": "sauber/karte02-abgeleitet-laterne.png",
+"basis": "karte02/abgeleitet/laterne",
+"x": 592,
+"y": 1062,
+"fuss": 57,
+"kachel": [
+37,
+69
 ],
 "ebene": 1,
 "anim": "laterne18",
@@ -2245,11 +2194,25 @@
 "datei": "sauber/karte02-abgeleitet-laterne.png",
 "basis": "karte02/abgeleitet/laterne",
 "x": 480,
-"y": 1382,
+"y": 1398,
 "fuss": 57,
 "kachel": [
 30,
-89
+90
+],
+"ebene": 1,
+"anim": "laterne18",
+"an_wand": true
+},
+{
+"datei": "sauber/karte02-abgeleitet-laterne.png",
+"basis": "karte02/abgeleitet/laterne",
+"x": 160,
+"y": 1238,
+"fuss": 57,
+"kachel": [
+10,
+80
 ],
 "ebene": 1,
 "anim": "laterne18",
@@ -2398,11 +2361,11 @@
 {
 "datei": "sauber/karte02-abgeleitet-laterne.png",
 "basis": "karte02/abgeleitet/laterne",
-"x": 1568,
+"x": 1536,
 "y": 1478,
 "fuss": 57,
 "kachel": [
-98,
+96,
 95
 ],
 "ebene": 1,
@@ -2454,11 +2417,11 @@
 {
 "datei": "sauber/karte02-abgeleitet-laterne.png",
 "basis": "karte02/abgeleitet/laterne",
-"x": 1440,
+"x": 1408,
 "y": 598,
 "fuss": 57,
 "kachel": [
-90,
+88,
 40
 ],
 "ebene": 1,
@@ -2468,11 +2431,11 @@
 {
 "datei": "sauber/karte02-abgeleitet-laterne.png",
 "basis": "karte02/abgeleitet/laterne",
-"x": 1809,
+"x": 1841,
 "y": 598,
 "fuss": 57,
 "kachel": [
-113,
+115,
 40
 ],
 "ebene": 1,
@@ -2482,12 +2445,12 @@
 {
 "datei": "sauber/karte02-abgeleitet-laterne.png",
 "basis": "karte02/abgeleitet/laterne",
-"x": 1440,
-"y": 790,
+"x": 1408,
+"y": 726,
 "fuss": 57,
 "kachel": [
-90,
-52
+88,
+48
 ],
 "ebene": 1,
 "anim": "laterne18",
@@ -2496,12 +2459,12 @@
 {
 "datei": "sauber/karte02-abgeleitet-laterne.png",
 "basis": "karte02/abgeleitet/laterne",
-"x": 1809,
-"y": 790,
+"x": 1841,
+"y": 726,
 "fuss": 57,
 "kachel": [
-113,
-52
+115,
+48
 ],
 "ebene": 1,
 "anim": "laterne18",
@@ -2510,11 +2473,11 @@
 {
 "datei": "sauber/karte02-abgeleitet-laterne.png",
 "basis": "karte02/abgeleitet/laterne",
-"x": 1440,
+"x": 1408,
 "y": 982,
 "fuss": 57,
 "kachel": [
-90,
+88,
 64
 ],
 "ebene": 1,
@@ -2524,11 +2487,11 @@
 {
 "datei": "sauber/karte02-abgeleitet-laterne.png",
 "basis": "karte02/abgeleitet/laterne",
-"x": 1809,
+"x": 1841,
 "y": 982,
 "fuss": 57,
 "kachel": [
-113,
+115,
 64
 ],
 "ebene": 1,
@@ -2538,12 +2501,12 @@
 {
 "datei": "sauber/karte02-abgeleitet-laterne.png",
 "basis": "karte02/abgeleitet/laterne",
-"x": 1440,
-"y": 1174,
+"x": 1408,
+"y": 1110,
 "fuss": 57,
 "kachel": [
-90,
-76
+88,
+72
 ],
 "ebene": 1,
 "anim": "laterne18",
@@ -2552,12 +2515,12 @@
 {
 "datei": "sauber/karte02-abgeleitet-laterne.png",
 "basis": "karte02/abgeleitet/laterne",
-"x": 1809,
-"y": 1174,
+"x": 1841,
+"y": 1110,
 "fuss": 57,
 "kachel": [
-113,
-76
+115,
+72
 ],
 "ebene": 1,
 "anim": "laterne18",
@@ -2566,11 +2529,11 @@
 {
 "datei": "sauber/karte02-abgeleitet-laterne.png",
 "basis": "karte02/abgeleitet/laterne",
-"x": 1280,
+"x": 1264,
 "y": 502,
 "fuss": 57,
 "kachel": [
-80,
+79,
 34
 ],
 "ebene": 1,
@@ -2580,11 +2543,11 @@
 {
 "datei": "sauber/karte02-abgeleitet-laterne.png",
 "basis": "karte02/abgeleitet/laterne",
-"x": 1969,
+"x": 1985,
 "y": 502,
 "fuss": 57,
 "kachel": [
-123,
+124,
 34
 ],
 "ebene": 1,
@@ -2594,12 +2557,12 @@
 {
 "datei": "sauber/karte02-abgeleitet-laterne.png",
 "basis": "karte02/abgeleitet/laterne",
-"x": 1280,
-"y": 694,
+"x": 1264,
+"y": 854,
 "fuss": 57,
 "kachel": [
-80,
-46
+79,
+56
 ],
 "ebene": 1,
 "anim": "laterne18",
@@ -2608,96 +2571,12 @@
 {
 "datei": "sauber/karte02-abgeleitet-laterne.png",
 "basis": "karte02/abgeleitet/laterne",
-"x": 1969,
-"y": 694,
+"x": 1985,
+"y": 854,
 "fuss": 57,
 "kachel": [
-123,
-46
-],
-"ebene": 1,
-"anim": "laterne18",
-"an_wand": true
-},
-{
-"datei": "sauber/karte02-abgeleitet-laterne.png",
-"basis": "karte02/abgeleitet/laterne",
-"x": 1280,
-"y": 822,
-"fuss": 57,
-"kachel": [
-80,
-54
-],
-"ebene": 1,
-"anim": "laterne18",
-"an_wand": true
-},
-{
-"datei": "sauber/karte02-abgeleitet-laterne.png",
-"basis": "karte02/abgeleitet/laterne",
-"x": 1969,
-"y": 822,
-"fuss": 57,
-"kachel": [
-123,
-54
-],
-"ebene": 1,
-"anim": "laterne18",
-"an_wand": true
-},
-{
-"datei": "sauber/karte02-abgeleitet-laterne.png",
-"basis": "karte02/abgeleitet/laterne",
-"x": 1280,
-"y": 1014,
-"fuss": 57,
-"kachel": [
-80,
-66
-],
-"ebene": 1,
-"anim": "laterne18",
-"an_wand": true
-},
-{
-"datei": "sauber/karte02-abgeleitet-laterne.png",
-"basis": "karte02/abgeleitet/laterne",
-"x": 1969,
-"y": 1014,
-"fuss": 57,
-"kachel": [
-123,
-66
-],
-"ebene": 1,
-"anim": "laterne18",
-"an_wand": true
-},
-{
-"datei": "sauber/karte02-abgeleitet-laterne.png",
-"basis": "karte02/abgeleitet/laterne",
-"x": 1280,
-"y": 1174,
-"fuss": 57,
-"kachel": [
-80,
-76
-],
-"ebene": 1,
-"anim": "laterne18",
-"an_wand": true
-},
-{
-"datei": "sauber/karte02-abgeleitet-laterne.png",
-"basis": "karte02/abgeleitet/laterne",
-"x": 1969,
-"y": 1174,
-"fuss": 57,
-"kachel": [
-123,
-76
+124,
+56
 ],
 "ebene": 1,
 "anim": "laterne18",
@@ -2726,76 +2605,6 @@
 "kachel": [
 111,
 30
-],
-"ebene": 1,
-"anim": "laterne18",
-"an_wand": true
-},
-{
-"datei": "sauber/karte02-abgeleitet-laterne.png",
-"basis": "karte02/abgeleitet/laterne",
-"x": 1088,
-"y": 790,
-"fuss": 57,
-"kachel": [
-68,
-52
-],
-"ebene": 1,
-"anim": "laterne18",
-"an_wand": true
-},
-{
-"datei": "sauber/karte02-abgeleitet-laterne.png",
-"basis": "karte02/abgeleitet/laterne",
-"x": 1088,
-"y": 950,
-"fuss": 57,
-"kachel": [
-68,
-62
-],
-"ebene": 1,
-"anim": "laterne18",
-"an_wand": true
-},
-{
-"datei": "sauber/karte02-abgeleitet-laterne.png",
-"basis": "karte02/abgeleitet/laterne",
-"x": 1216,
-"y": 1174,
-"fuss": 57,
-"kachel": [
-76,
-76
-],
-"ebene": 1,
-"anim": "laterne18",
-"an_wand": true
-},
-{
-"datei": "sauber/karte02-abgeleitet-laterne.png",
-"basis": "karte02/abgeleitet/laterne",
-"x": 1056,
-"y": 486,
-"fuss": 57,
-"kachel": [
-66,
-33
-],
-"ebene": 1,
-"anim": "laterne18",
-"an_wand": true
-},
-{
-"datei": "sauber/karte02-abgeleitet-laterne.png",
-"basis": "karte02/abgeleitet/laterne",
-"x": 1088,
-"y": 614,
-"fuss": 57,
-"kachel": [
-68,
-41
 ],
 "ebene": 1,
 "anim": "laterne18",
@@ -2939,50 +2748,11 @@
 {
 "datei": "sauber/k18-strasse-02.png",
 "basis": "k18/strasse/02",
-"x": 785,
+"x": 865,
 "y": 288,
 "fuss": 31,
 "kachel": [
-49,
-19
-],
-"ebene": 1,
-"an_wand": true
-},
-{
-"datei": "sauber/k18-strasse-03.png",
-"basis": "k18/strasse/03",
-"x": 1127,
-"y": 402,
-"fuss": 29,
-"kachel": [
-71,
-26
-],
-"ebene": 1,
-"an_wand": true
-},
-{
-"datei": "sauber/k18-strasse-06.png",
-"basis": "k18/strasse/06",
-"x": 1218,
-"y": 642,
-"fuss": 29,
-"kachel": [
-77,
-41
-],
-"ebene": 1,
-"an_wand": true
-},
-{
-"datei": "sauber/k18-strasse-05.png",
-"basis": "k18/strasse/05",
-"x": 1040,
-"y": 290,
-"fuss": 29,
-"kachel": [
-65,
+54,
 19
 ],
 "ebene": 1,
@@ -3000,6 +2770,32 @@
 ],
 "ebene": 1,
 "anim": "automat",
+"an_wand": true
+},
+{
+"datei": "sauber/k18-strasse-03.png",
+"basis": "k18/strasse/03",
+"x": 1127,
+"y": 402,
+"fuss": 29,
+"kachel": [
+71,
+26
+],
+"ebene": 1,
+"an_wand": true
+},
+{
+"datei": "sauber/k18-strasse-05.png",
+"basis": "k18/strasse/05",
+"x": 1024,
+"y": 290,
+"fuss": 29,
+"kachel": [
+64,
+19
+],
+"ebene": 1,
 "an_wand": true
 },
 {
@@ -3055,11 +2851,11 @@
 "datei": "sauber/k18-strasse-06.png",
 "basis": "k18/strasse/06",
 "x": 1314,
-"y": 738,
+"y": 818,
 "fuss": 29,
 "kachel": [
 83,
-47
+52
 ],
 "ebene": 1,
 "an_wand": true
@@ -3068,11 +2864,11 @@
 "datei": "sauber/k18-strasse-06.png",
 "basis": "k18/strasse/06",
 "x": 1922,
-"y": 738,
+"y": 818,
 "fuss": 29,
 "kachel": [
 121,
-47
+52
 ],
 "ebene": 1,
 "an_wand": true
@@ -3299,11 +3095,11 @@
 "datei": "sauber/karte10-klein-38.png",
 "basis": "karte10/klein/38",
 "x": 257,
-"y": 954,
+"y": 1082,
 "fuss": 21,
 "kachel": [
 17,
-60
+68
 ],
 "ebene": 1,
 "an_wand": true
@@ -3311,25 +3107,12 @@
 {
 "datei": "sauber/karte10-klein-38.png",
 "basis": "karte10/klein/38",
-"x": 369,
-"y": 1066,
+"x": 385,
+"y": 1082,
 "fuss": 21,
 "kachel": [
-24,
-67
-],
-"ebene": 1,
-"an_wand": true
-},
-{
-"datei": "sauber/karte10-klein-38.png",
-"basis": "karte10/klein/38",
-"x": 129,
-"y": 1098,
-"fuss": 21,
-"kachel": [
-9,
-69
+25,
+68
 ],
 "ebene": 1,
 "an_wand": true
@@ -3338,11 +3121,11 @@
 "datei": "sauber/karte10-klein-38.png",
 "basis": "karte10/klein/38",
 "x": 225,
-"y": 1338,
+"y": 1354,
 "fuss": 21,
 "kachel": [
 15,
-84
+85
 ],
 "ebene": 1,
 "an_wand": true
@@ -3351,11 +3134,11 @@
 "datei": "sauber/karte10-klein-38.png",
 "basis": "karte10/klein/38",
 "x": 353,
-"y": 1402,
+"y": 1418,
 "fuss": 21,
 "kachel": [
 23,
-88
+89
 ],
 "ebene": 1,
 "an_wand": true
@@ -3363,11 +3146,11 @@
 {
 "datei": "sauber/karte10-klein-38.png",
 "basis": "karte10/klein/38",
-"x": 1121,
+"x": 1169,
 "y": 826,
 "fuss": 21,
 "kachel": [
-71,
+74,
 52
 ],
 "ebene": 1,
@@ -3376,12 +3159,12 @@
 {
 "datei": "sauber/karte10-klein-38.png",
 "basis": "karte10/klein/38",
-"x": 1841,
-"y": 986,
+"x": 1857,
+"y": 826,
 "fuss": 21,
 "kachel": [
-116,
-62
+117,
+52
 ],
 "ebene": 1,
 "an_wand": true
@@ -3599,38 +3382,12 @@
 {
 "datei": "sauber/karte13-klein-12.png",
 "basis": "karte13/klein/12",
-"x": 964,
+"x": 932,
 "y": 644,
 "fuss": 27,
 "kachel": [
-61,
+59,
 41
-],
-"ebene": 1,
-"an_wand": true
-},
-{
-"datei": "sauber/karte13-klein-12.png",
-"basis": "karte13/klein/12",
-"x": 948,
-"y": 676,
-"fuss": 27,
-"kachel": [
-60,
-43
-],
-"ebene": 1,
-"an_wand": true
-},
-{
-"datei": "sauber/karte10-banner-06.png",
-"basis": "karte10/banner/06",
-"x": 898,
-"y": 227,
-"fuss": 60,
-"kachel": [
-57,
-17
 ],
 "ebene": 1,
 "an_wand": true
@@ -3639,11 +3396,11 @@
 "datei": "sauber/karte10-banner-06.png",
 "basis": "karte10/banner/06",
 "x": 258,
-"y": 867,
+"y": 851,
 "fuss": 60,
 "kachel": [
 17,
-57
+56
 ],
 "ebene": 1,
 "an_wand": true
@@ -3651,24 +3408,11 @@
 {
 "datei": "sauber/karte02-klein-16.png",
 "basis": "karte02/klein/16",
-"x": 592,
-"y": 297,
-"fuss": 22,
-"kachel": [
-37,
-19
-],
-"ebene": 1,
-"an_wand": true
-},
-{
-"datei": "sauber/karte02-klein-16.png",
-"basis": "karte02/klein/16",
-"x": 912,
+"x": 928,
 "y": 409,
 "fuss": 22,
 "kachel": [
-57,
+58,
 26
 ],
 "ebene": 1,
@@ -3677,11 +3421,11 @@
 {
 "datei": "sauber/karte02-klein-16.png",
 "basis": "karte02/klein/16",
-"x": 416,
+"x": 352,
 "y": 873,
 "fuss": 22,
 "kachel": [
-26,
+22,
 55
 ],
 "ebene": 1,
@@ -3735,19 +3479,6 @@
 "kachel": [
 106,
 95
-],
-"ebene": 1,
-"an_wand": true
-},
-{
-"datei": "sauber/karte02-klein-16.png",
-"basis": "karte02/klein/16",
-"x": 1232,
-"y": 409,
-"fuss": 22,
-"kachel": [
-77,
-26
 ],
 "ebene": 1,
 "an_wand": true
@@ -3808,11 +3539,11 @@
 "datei": "sauber/karte10-klein2-02.png",
 "basis": "karte10/klein2/02",
 "x": 1008,
-"y": 690,
+"y": 642,
 "fuss": 29,
 "kachel": [
 63,
-44
+41
 ],
 "ebene": 1,
 "an_wand": true
@@ -4276,11 +4007,11 @@
 {
 "datei": "sauber/k18-autos-02_m.png",
 "basis": "k18/autos/02",
-"x": 790,
+"x": 726,
 "y": 320,
 "fuss": 31,
 "kachel": [
-51,
+47,
 21
 ],
 "ebene": 1,
@@ -4290,11 +4021,11 @@
 {
 "datei": "sauber/k18-autos-01.png",
 "basis": "k18/autos/01",
-"x": 898,
+"x": 930,
 "y": 369,
 "fuss": 30,
 "kachel": [
-57,
+59,
 24
 ],
 "ebene": 1,
@@ -4304,11 +4035,11 @@
 {
 "datei": "sauber/k18-autos-03_m.png",
 "basis": "k18/autos/03",
-"x": 134,
+"x": 102,
 "y": 672,
 "fuss": 31,
 "kachel": [
-10,
+8,
 43
 ],
 "ebene": 1,
@@ -4332,11 +4063,11 @@
 {
 "datei": "sauber/k18-autos-01.png",
 "basis": "k18/autos/01",
-"x": 706,
+"x": 738,
 "y": 785,
 "fuss": 30,
 "kachel": [
-45,
+47,
 50
 ],
 "ebene": 1,
@@ -4388,11 +4119,11 @@
 {
 "datei": "sauber/k18-autos-01.png",
 "basis": "k18/autos/01",
-"x": 1858,
+"x": 1890,
 "y": 1425,
 "fuss": 30,
 "kachel": [
-117,
+119,
 90
 ],
 "ebene": 1,
@@ -4408,20 +4139,6 @@
 "kachel": [
 42,
 93
-],
-"ebene": 1,
-"auto": true,
-"an_wand": true
-},
-{
-"datei": "sauber/k18-autos-04_m.png",
-"basis": "k18/autos/04",
-"x": 884,
-"y": 674,
-"fuss": 32,
-"kachel": [
-57,
-43
 ],
 "ebene": 1,
 "auto": true,
@@ -4510,25 +4227,11 @@
 {
 "datei": "sauber/k18-autos-06.png",
 "basis": "k18/autos/06",
-"x": 822,
+"x": 870,
 "y": 474,
 "fuss": 53,
 "kachel": [
-52,
-32
-],
-"ebene": 1,
-"auto": true,
-"an_wand": true
-},
-{
-"datei": "sauber/k18-autos-07.png",
-"basis": "k18/autos/07",
-"x": 920,
-"y": 473,
-"fuss": 54,
-"kachel": [
-58,
+55,
 32
 ],
 "ebene": 1,
