@@ -21,6 +21,15 @@ wird jede Regel einzeln geprüft.
    - 5b. 2–3 Objekte, die dieser Regel folgen.
    - 5c. Gibt es zu wenig Variation, dürfen neue Objekte erstellt werden – gern auch gleich für andere
      Kartentypen (Gras, Stein, Wüste, Schnee …).
+   - 5d. **Begleiter am Stumpf** (gilt nur für Bäume in der Karte, nicht für den Waldrand):
+     - **Vor dem Stumpf** nur Objekte, die **2 Kacheln hoch** sind (z. B. bemooste Felsen, Blumenbüsche). Sie stehen
+       **eine Kachel tiefer** als der Baum, sodass nur ihre **oberste Kachel** den Stumpf überdeckt.
+     - **Hinter den Blättern** dürfen Felsen eine Reihe höher stehen; die Krone verdeckt sie teilweise (sie werden
+       vor dem Baum gezeichnet).
+     - **Nichts auf Stammhöhe:** In der Stammreihe des Baums sowie direkt darüber und darunter (eine Kachel links und
+       rechts daneben) wird keine freie Deko gesetzt – sonst liegt sie auf dem Stumpf.
+     - Begleiter eines Baums überlappen sich nicht gegenseitig (Fels vor dem Stumpf → keine zusätzliche Eckblume).
+     - Abwechseln statt überall gleich: mal Fels vor dem Stumpf, mal Fels hinter den Blättern, mal beides.
 6. **Wege** gehen nie nur gerade und müssen nicht durchgängig sein: diagonal erlaubt, natürliche Bögen, ein Weg
    darf auch einmal unterbrechen und später weitergehen.
 7. **Schatten** ragen nie über Kanten (Klippen, Wände, Wasser) oder über andere Objekte.
