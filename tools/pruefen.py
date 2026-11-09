@@ -12,6 +12,7 @@ from PIL import Image
 
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
 OBJ = os.path.join(ROOT, 'assets', 'objekte', 'karte01')
+KARTE = os.path.join(ROOT, 'maps', 'karte01')
 
 
 def ist_baum(datei):
@@ -23,7 +24,7 @@ def ist_baum(datei):
 
 def main():
     objs = json.load(open(os.path.join(OBJ, 'platzierung.json')))
-    tm = json.load(open(os.path.join(ROOT, 'maps', 'karte01', 'tilemap.json')))
+    tm = json.load(open(os.path.join(KARTE, 'tilemap.json')))
     W, H = tm['cols'] * 16, tm['rows'] * 16
     besitzer = -np.ones((H, W), np.int32)
     cache, fehler = {}, []
@@ -44,7 +45,7 @@ def main():
                 fehler.append((objs[j]['datei'], (objs[j]['x'], objs[j]['y']), o['datei'], (x0, y0)))
         bereich[a] = i
     # Untergrund
-    b = np.array(Image.open(os.path.join(ROOT, 'maps', 'karte01', 'terrain_basis.png')).convert('RGB')).astype(np.int16)
+    b = np.array(Image.open(os.path.join(KARTE, 'terrain_basis.png')).convert('RGB')).astype(np.int16)
     gras = (b[..., 1] > b[..., 0] + 25) & (b[..., 1] > b[..., 2] + 25)
     sand = (b[..., 0] >= b[..., 1]) & (b[..., 0] > b[..., 2] + 40)
     boden_fehler = []

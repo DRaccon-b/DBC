@@ -14,6 +14,8 @@ ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
 KARTE = os.path.join(ROOT, 'maps', 'karte01')
 OBJ = os.path.join(ROOT, 'assets', 'objekte', 'karte01')
 T = 16
+DSCHUNGEL_SPERRE = (7, 9, 3)   # Sperrbereich um den Dschungelbaum (Kacheln links/rechts, oben, unten)
+TEICH_AB_ZEILE = 50          # Seerosen nur im Teich (Karte 01: unterhalb Zeile 50); Zufallskarten setzen 0
 
 # Welche Kandidaten wofuer (Nummern siehe jeweilige uebersicht.png); Zahl = Gewicht
 AUSWAHL = {
@@ -110,6 +112,8 @@ def main():
             for y in range(t - h - 4, t + 5):
                 gesperrt.add((x, y))
     for x in range(cols):                     # Klippenwand + eine Zeile darunter
+        if x not in tcol or x + 1 not in tcol:    # Spalte ohne Klippe (z. B. Zufallskarten)
+            continue
         t, h = max(tcol[x], tcol[x + 1]), max(hcol[x], hcol[x + 1])
         for y in range(min(tcol[x], tcol[x + 1]) - h, t + 2):
             gesperrt.add((x, y))
@@ -277,8 +281,9 @@ def main():
                 r = rnd.uniform(r0, r1)
                 px_, py_ = ax + r * math.cos(w), ay - 18 + r * 0.6 * math.sin(w)   # flache Ellipse (Draufsicht)
                 setze(rnd.choices(namen, weights=gew)[0], px_, py_, ebene=1, untergrund=unter)
-        for x in range(cx - 7, cx + 8):
-            for y in range(cy - 9, cy + 4):
+        bx_, by0_, by1_ = DSCHUNGEL_SPERRE
+        for x in range(cx - bx_, cx + bx_ + 1):
+            for y in range(cy - by0_, cy + by1_ + 1):
                 belegt.add((x, y))
 
     # Treppen, Bruecken, Steg und Wasserfaelle zeichnet karte_bauen.py selbst (tools/bauwerke.py, klippen.py)
@@ -419,7 +424,7 @@ def main():
                 nahe_strand = any(k(cx + dx, cy + dy) == 's' for dx in range(-4, 5) for dy in range(-4, 5))
                 if nahe_strand and frei_umgebung(cx, cy, 1, 'mw') and r < 0.035:
                     setze(wahl('meer'), px, py, ebene=0)
-            elif kl == 'w' and ch == 'W' and cy > 50 and frei_umgebung(cx, cy, 1, 'w') and r < 0.07:
+            elif kl == 'w' and ch == 'W' and cy > TEICH_AB_ZEILE and frei_umgebung(cx, cy, 1, 'w') and r < 0.07:
                 setze(wahl('teich'), px, py, ebene=0)
             elif kl == 's' and ch == 'p' and any(k(cx + dx, cy + dy) == 'w' for dx in (-1, 0, 1) for dy in (-1, 0, 1)) \
                     and r < 0.12:

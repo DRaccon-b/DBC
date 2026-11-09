@@ -14,6 +14,7 @@ from pruefen import ist_baum
 
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
 OBJ = os.path.join(ROOT, 'assets', 'objekte', 'karte01')
+KARTE = os.path.join(ROOT, 'maps', 'karte01')
 FEST = ('dschungel/', 'gross/', 'zelt_strand/')
 
 
@@ -22,7 +23,7 @@ def fest(o):
 
 
 def pruefen(objs, cache):
-    tm = json.load(open(os.path.join(ROOT, 'maps', 'karte01', 'tilemap.json')))
+    tm = json.load(open(os.path.join(KARTE, 'tilemap.json')))
     W, H = tm['cols'] * 16, tm['rows'] * 16
     besitzer = -np.ones((H, W), np.int32)
     weg = set()
@@ -48,7 +49,7 @@ def pruefen(objs, cache):
             if kandidaten:
                 weg.add(min(kandidaten, key=lambda k: cache[objs[k]['datei']].sum()))
         bereich[a] = i
-    b = np.array(Image.open(os.path.join(ROOT, 'maps', 'karte01', 'terrain_basis.png')).convert('RGB')).astype(np.int16)
+    b = np.array(Image.open(os.path.join(KARTE, 'terrain_basis.png')).convert('RGB')).astype(np.int16)
     gras = (b[..., 1] > b[..., 0] + 25) & (b[..., 1] > b[..., 2] + 25)
     sand = (b[..., 0] >= b[..., 1]) & (b[..., 0] > b[..., 2] + 40)
     for i, o in enumerate(objs):
