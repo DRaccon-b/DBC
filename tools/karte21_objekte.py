@@ -135,13 +135,21 @@ def main():
         art = i % 3
         if art == 0:                                             # ueber dem Stumpf: hoher Fels
             setze(rnd.choice(HOCH_FELS), cx / T, fy // T + 1, {'px': cx + seite * 5, 'py': fy + T})
+            continue                                             # keine zweite Pflanze daneben (keine Ueberlappung)
         elif art == 1:                                           # hinter den Blaettern
             setze(rnd.choice(FELS_GROSS), cx / T, fy // T - 1, {'px': cx + seite * 8, 'py': fy - 7})
         else:                                                    # hinter den Blaettern + hohe Blume ueber dem Stumpf
             setze(rnd.choice(FELS_GROSS), cx / T, fy // T - 1, {'px': cx + seite * 9, 'py': fy - 7})
             setze(rnd.choice(HOCH_BLUME), cx / T, fy // T + 1, {'px': cx - seite * 5, 'py': fy + T, 'anim': 'wehen'})
             continue
-        setze(rnd.choice(HOCH_BLUME), cx / T, fy // T, {'px': cx - seite * 17, 'py': fy + 3, 'anim': 'wehen'})
+        setze(rnd.choice(HOCH_BLUME), cx / T, fy // T + 1, {'px': cx - seite * 13, 'py': fy + T, 'anim': 'wehen'})
+    # Neben den Baeumen (Stammreihe und Reihe darueber) nichts Freies setzen, sonst liegt es auf dem Stumpf
+    for o in objekte:
+        if o['basis'].startswith('k01/baum'):
+            bx, by, wt, ht = o['block']
+            for x in range(bx - 1, bx + wt + 1):
+                for y in (by + ht - 2, by + ht - 1, by + ht):
+                    gesperrt.add((x, y))
     # Felsen und Blumen frei auf der Wiese (nicht an Wegen, Wasser, Platz oder Mauer)
     def frei_gras(tx, ty):
         return all(cls[min(rows - 1, max(0, ty + dy))][min(cols - 1, max(0, tx + dx))] == 'g'
