@@ -29,6 +29,7 @@ BLUMEN = ['k01/deko%02d' % i for i in (0, 1, 2, 3, 4, 27, 30)]
 HOCH_FELS = ['k01/deko09', 'k01/deko11']
 HOCH_BLUME = ['k01/deko04', 'k01/deko27', 'k01/deko30']
 
+TV_A, TV_B, TV_KAPUTT, TV_GROSS = 'tv/00', 'tv/01', 'tv/02', 'tv_gross/00'   # PixelLab k21_tv / k21_tv_gross
 # Baeume auf der Wiese nach der Vorlage: (sprite, Kachel-x der Fussmitte, Fusszeile, Optionen)
 FEST = [
     # oberhalb des Flusses
@@ -40,8 +41,13 @@ FEST = [
     ('k01/baum00', 9, 37, {}), ('k01/baum01', 26.5, 37, {}), ('k01/baum02', 29, 37, {'spiegeln': True}),
     ('k01/baum02', 60.5, 37, {}), ('k01/baum01', 63, 37, {'spiegeln': True}),
     ('k01/baum00', 79.5, 37, {}), ('k01/baum03', 82, 37, {}),
-    # mittlere Ebene vor der Burgmauer
+    # mittlere Ebene vor der Burgmauer (unten weiter)
     ('k01/baum01', 9, 53, {}), ('k01/baum00', 64, 50, {'spiegeln': True}), ('k01/baum02', 83, 53, {}),
+    # Fernseher auf der oberen Ebene: 70 % der Vorlage (7 kleine, 2 grosse Holzfernseher, 1 umgekippter)
+    (TV_A, 15, 8, {}), (TV_B, 39, 6, {}), (TV_A, 11, 15, {'spiegeln': True}), (TV_B, 31, 16, {}),
+    (TV_A, 54, 16, {}), (TV_B, 65, 18, {'spiegeln': True}), (TV_A, 77, 15, {}),
+    (TV_GROSS, 20.5, 17, {}), (TV_GROSS, 67.5, 22, {'spiegeln': True}),
+    (TV_KAPUTT, 24, 20, {}),
 ]
 
 
@@ -127,7 +133,8 @@ def main():
     # Begleiter der Wiesenbaeume (Regel 5, nur Baeume in der Karte, nicht am Waldrand):
     # Fels vor dem Stamm (ueberdeckt den Sockel), Fels hinter den Blaettern (eine Reihe hoeher, die Krone verdeckt
     # ihn teilweise), Blumen an den Sockelecken
-    baeume = [o for o in objekte if o['basis'].startswith('k01/baum')]
+    BEGLEITET = ('k01/baum', 'tv')                              # Regel 5d gilt fuer Wiesenbaeume und Fernseher
+    baeume = [o for o in objekte if o['basis'].startswith(BEGLEITET)]
     for i, b in enumerate(baeume):
         bx, by, wt, ht = b['block']
         cx, fy = bx * T + wt * T // 2, (by + ht) * T - 1
@@ -145,7 +152,7 @@ def main():
         setze(rnd.choice(HOCH_BLUME), cx / T, fy // T + 1, {'px': cx - seite * 13, 'py': fy + T, 'anim': 'wehen'})
     # Neben den Baeumen (Stammreihe und Reihe darueber) nichts Freies setzen, sonst liegt es auf dem Stumpf
     for o in objekte:
-        if o['basis'].startswith('k01/baum'):
+        if o['basis'].startswith(BEGLEITET):
             bx, by, wt, ht = o['block']
             for x in range(bx - 1, bx + wt + 1):
                 for y in (by + ht - 2, by + ht - 1, by + ht):

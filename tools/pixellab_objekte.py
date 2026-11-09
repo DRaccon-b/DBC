@@ -1573,7 +1573,9 @@ def herunterladen(oid, d):
 
 
 def speichern(gruppe, ims, ids):
-    if gruppe.startswith('k20_'):
+    if gruppe.startswith('k21_'):
+        ziel = os.path.join(ROOT, 'assets', 'objekte', 'karte21', gruppe[4:])
+    elif gruppe.startswith('k20_'):
         ziel = os.path.join(ROOT, 'assets', 'objekte', 'karte20', gruppe[4:])
     elif gruppe.startswith('k18_'):
         ziel = os.path.join(ROOT, 'assets', 'objekte', 'karte18', gruppe[4:])
@@ -1673,9 +1675,24 @@ OBJEKTGRUPPEN_K20 = {   # Karte 20 (A02-Startdorf), Stil wie Karte 06 (Primary V
 }
 
 
+OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 01
+    'k21_tv': {'size': 32, 'items': [
+        'small old grey retro CRT television set standing on the grass, boxy light grey plastic case, a slightly curved '
+        'dark screen with a faint blue glow and a white reflection, two small round knobs on the right, short antenna on top, ' + FR14,
+        'small old cream white retro CRT television set standing on the grass, boxy case, dark grey curved screen with a '
+        'light reflection, small speaker grille and knobs on the right side, ' + FR14,
+        'small broken old grey CRT television lying tipped over on its side in the grass, cracked dark screen, bent antenna, ' + FR14,
+    ]},
+    'k21_tv_gross': {'size': 48, 'items': [
+        'big old brown wooden cabinet CRT television standing on short wooden legs, wood grain case, large dark curved '
+        'screen with a faint blue glow, a column of round knobs and a speaker grille on the right, ' + FR14,
+    ]},
+}
+
+
 def erzeugen(gruppe):
-    if gruppe.startswith('k20_'):
-        g = OBJEKTGRUPPEN_K20[gruppe]
+    if gruppe.startswith(('k20_', 'k21_')):
+        g = (OBJEKTGRUPPEN_K21 if gruppe.startswith('k21_') else OBJEKTGRUPPEN_K20)[gruppe]
         req = {'description': STIL, 'size': g['size'], 'view': 'top-down',
                'item_descriptions': [it + '. ' + STIL for it in g['items']],
                'target_palette': {'colors': PALETTE, 'name': 'Karte01 handheld'}}
