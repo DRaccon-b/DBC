@@ -57,14 +57,14 @@ LAGER_UNTEN_FEST = [                                           # Laternen paarwe
 ]
 LAGER_UNTEN = [
     ('lager/zelt', 11.5, 65, {}),
-    ('k01/deko16', 23, 63, {'liegend': True}), ('k01/deko41', 11, 70, {'liegend': True}),
-    ('k01/deko16', 27, 72, {'liegend': True, 'spiegeln': True}), ('k01/deko41', 61, 71, {'liegend': True, 'spiegeln': True}),
+    ('k01/deko16', 23, 63, {'liegend': True}), 
+    ('k01/deko41', 61, 71, {'liegend': True, 'spiegeln': True}),
     ('k01/deko16', 77, 66, {'liegend': True}),
     ('k03/sack', 16, 63, {}), ('saeule/14', 27, 67, {}), ('saeule/14', 81, 68, {'spiegeln': True}),
-    ('saeule/11', 16, 68, {}), ('saeule/11', 59, 67, {'spiegeln': True}), ('saeule/11', 73, 72, {}),
-    ('k03/holz', 23, 69, {}), ('k03/holz', 67, 69, {}), ('k03/holz', 62, 76, {}), ('k03/holz', 8, 76, {}),
-    ('k03/schild', 29, 62, {}), ('k03/schild', 61, 62, {}), ('k03/schild', 20, 67, {}), ('k03/schild', 70, 66, {}),
-    ('k03/fass', 18, 73, {}), ('k03/fass', 59, 70, {}), ('k03/fass', 75, 69, {}), ('k03/kiste', 12, 72, {}),
+    ('saeule/11', 16, 68, {}), ('saeule/11', 59, 67, {'spiegeln': True}),
+    ('k03/holz', 23, 69, {}), ('k03/holz', 67, 69, {}), 
+    ('k03/schild', 29, 62, {}), ('k03/schild', 61, 62, {}), 
+    ('k03/fass', 18, 73, {}), ('k03/fass', 75, 69, {}), ('k03/kiste', 12, 72, {}),
 ]
 ZELT_QUELLE = 'karte04/mittel/02.png'                          # Zelt von Karte 04, lila eingefaerbt (Vorlage)
 
@@ -260,6 +260,26 @@ def main():
     def frei_gras(tx, ty):
         return all(cls[min(rows - 1, max(0, ty + dy))][min(cols - 1, max(0, tx + dx))] == 'g'
                    for dx in (-1, 0, 1) for dy in (-1, 0, 1))
+    lampen = []                                                     # Laternen am Weg entlang (eher wenige, Nutzer)
+    for (lx, ly) in [(o['kachel'][0], o['kachel'][1]) for o in objekte if o['basis'] == 'k01/laterne']:
+        lampen.append((lx, ly))
+    kand = []
+    for ty in range(4, 56):
+        for tx in range(5, cols - 5):
+            if cls[ty][tx] != 'g' or not any(cls[ty][tx + d] == 'w' for d in (-1, 1)):
+                continue
+            if any(cls[ty + dy][tx + dx] in 'xbpqe' for dx in range(-2, 3) for dy in range(-2, 3)):
+                continue
+            kand.append((tx, ty))
+    rnd.shuffle(kand)
+    n_l = 0
+    for (tx, ty) in kand:
+        if n_l >= 9:
+            break
+        if any(abs(tx - lx) + abs(ty - ly) < 14 for (lx, ly) in lampen):
+            continue
+        if setze('k01/laterne', tx, ty, {'anim': 'laterne'}, frei=True):
+            lampen.append((tx, ty)); n_l += 1
     steine = 0                                                      # ein paar kleine Steine auf dem Platz (nicht im Hof)
     for _ in range(3000):
         if steine >= 7:
