@@ -40,7 +40,7 @@ OBJEKTE = (
     + paar(LAMPE, 56, 20, 'lampe')
     + paar(ATM, 120, 20, 'lampe')
     # Jackpot-Inseln: je ein grosser Jackpot-Automat
-    + paar(JACKPOT, 360, 13, 'automat')
+    + paar(JACKPOT, 360, 12, 'automat')
     # Ankunft: zwei Datenkristalle neben den Pfeilen
     + paar(KRISTALL, 48, 25, 'lampe')
 )
