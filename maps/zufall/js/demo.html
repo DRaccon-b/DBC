@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Zufalls-Dungeon Demo</title>
+<style>
+  :root { --bg: #121316; --panel: #1e2025; --text: #eceef2; --dim: #969ca6; --akzent: #4fd0c8; }
+  html, body { margin: 0; height: 100%; background: var(--bg); color: var(--text);
+    font: 15px/1.4 system-ui, sans-serif; }
+  #spiel { position: fixed; inset: 0; image-rendering: pixelated; width: 100%; height: 100%; }
+  #leiste { position: fixed; top: 12px; left: 12px; right: 12px; display: flex; gap: 8px; flex-wrap: wrap;
+    align-items: center; background: rgba(30, 32, 37, .88); padding: 8px 12px; border-radius: 10px; }
+  #leiste input { width: 110px; background: #2a2d33; color: var(--text); border: 1px solid #3a3e46;
+    border-radius: 6px; padding: 4px 8px; font: inherit; }
+  #leiste button { background: var(--akzent); color: #10201f; border: 0; border-radius: 6px; padding: 5px 12px;
+    font: 600 14px system-ui, sans-serif; cursor: pointer; }
+  #leiste .info { color: var(--dim); margin-left: auto; }
+  #laden { position: fixed; inset: 0; display: grid; place-items: center; background: var(--bg);
+    transition: opacity .3s; }
+  #laden.weg { opacity: 0; pointer-events: none; }
+  .wirbel { width: 64px; height: 64px; border-radius: 50%; border: 6px solid #24686a;
+    border-top-color: var(--akzent); animation: dreh 0.9s linear infinite; margin: 0 auto 18px; }
+  @keyframes dreh { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+<canvas id="spiel"></canvas>
+<div id="leiste">
+  <label>Seed <input id="seed" type="number"></label>
+  <button id="neu">Dungeon betreten</button>
+  <button id="zufall">Neuer Seed</button>
+  <span class="info" id="info">Pfeiltasten / WASD · M = ganze Karte</span>
+</div>
+<div id="laden"><div><div class="wirbel"></div><div id="ladetext">Dungeon wird geladen …</div></div></div>
+
+<script type="module">
+import { erzeugeDungeon, ladeBilder, zeichneDungeon } from './zufall_dungeon.js';
+
+const leinwand = document.getElementById('spiel');
+const ctx = leinwand.getContext('2d');
+const laden = document.getElementById('laden');
+const params = new URLSearchParams(location.search);
+let manifest, dungeon, ebenen, spieler, ganzeKarte = params.has('ganz');
+const tasten = new Set();
+
+async function betreten(seed) {
+  laden.classList.remove('weg');
+  document.getElementById('ladetext').textContent = 'Dungeon ' + seed + ' wird geladen …';
+  const t0 = performance.now();
+  manifest ??= await (await fetch('manifest.json')).json();
+  dungeon = erzeugeDungeon(manifest, seed, { breite: 6, hoehe: 5 });
+  const t1 = performance.now();
+  const bilder = await ladeBilder(manifest, dungeon, './');
+  ebenen = zeichneDungeon(manifest, dungeon, bilder);
+  const t2 = performance.now();
+  const T = manifest.kachel;
+  spieler = { x: (dungeon.spawn.x + 0.5) * T, y: (dungeon.spawn.y + 0.5) * T };
+  document.getElementById('seed').value = seed;
+  document.getElementById('info').textContent =
+    `Seed ${seed} · ${dungeon.cols}×${dungeon.rows} Kacheln · Generator ${(t1 - t0).toFixed(1)} ms · ` +
+    `Bilder + Zusammenbau ${(t2 - t1).toFixed(0)} ms · Pfeiltasten / WASD · M = ganze Karte`;
+  history.replaceState(null, '', '?seed=' + seed + (ganzeKarte ? '&ganz' : ''));
+  laden.classList.add('weg');
+  document.body.dataset.fertig = '1';
+}
+
+function bewegen(dt) {
+  const T = manifest.kachel, v = 90 * dt;
+  let dx = 0, dy = 0;
+  if (tasten.has('ArrowLeft') || tasten.has('a')) dx -= v;
+  if (tasten.has('ArrowRight') || tasten.has('d')) dx += v;
+  if (tasten.has('ArrowUp') || tasten.has('w')) dy -= v;
+  if (tasten.has('ArrowDown') || tasten.has('s')) dy += v;
+  // Fusspunkt-Kollision mit kleinem Rand (Figur 10 px breit)
+  const frei = (x, y) => [-5, 5].every((ox) => dungeon.istFrei(Math.floor((x + ox) / T), Math.floor(y / T)));
+  if (dx && frei(spieler.x + dx, spieler.y)) spieler.x += dx;
+  if (dy && frei(spieler.x, spieler.y + dy)) spieler.y += dy;
+}
+
+function figur(c) {                              // einfache Platzhalter-Figur, Fuss auf spieler.y
+  const { x, y } = spieler;
+  c.fillStyle = 'rgba(18,52,48,.45)'; c.beginPath(); c.ellipse(x, y, 6, 2.5, 0, 0, 7); c.fill();
+  c.fillStyle = '#2a3b6e'; c.fillRect(x - 4, y - 9, 8, 8);
+  c.fillStyle = '#f2d2b0'; c.fillRect(x - 3, y - 15, 6, 6);
+  c.fillStyle = '#4fd0c8'; c.fillRect(x - 4, y - 17, 8, 3);
+}
+
+let zuletzt = performance.now();
+function bild(jetzt) {
+  const dt = Math.min(0.05, (jetzt - zuletzt) / 1000); zuletzt = jetzt;
+  const breite = leinwand.clientWidth, hoehe = leinwand.clientHeight;
+  if (leinwand.width !== breite || leinwand.height !== hoehe) { leinwand.width = breite; leinwand.height = hoehe; }
+  ctx.imageSmoothingEnabled = false;
+  ctx.fillStyle = '#121316'; ctx.fillRect(0, 0, breite, hoehe);
+  if (ebenen) {
+    bewegen(dt);
+    const W = ebenen.unten.width, H = ebenen.unten.height;
+    const zoom = ganzeKarte ? Math.min(breite / W, (hoehe - 60) / H) : 3;
+    const rand = (mitte, sicht, gesamt) => sicht >= gesamt ? (sicht - gesamt) / 2
+      : Math.min(0, Math.max(sicht - gesamt, sicht / 2 - mitte));          // Kamera bleibt in der Karte
+    const kx = ganzeKarte ? (breite / zoom - W) / 2 : rand(spieler.x, breite / zoom, W);
+    const ky = ganzeKarte ? (hoehe / zoom - H) / 2 + 30 / zoom : rand(spieler.y, hoehe / zoom, H);
+    ctx.save(); ctx.scale(zoom, zoom); ctx.translate(Math.round(kx), Math.round(ky));
+    ctx.drawImage(ebenen.unten, 0, 0);
+    figur(ctx);
+    ctx.drawImage(ebenen.oben, 0, 0);
+    ctx.restore();
+  }
+  requestAnimationFrame(bild);
+}
+
+addEventListener('keydown', (e) => {
+  tasten.add(e.key.length === 1 ? e.key.toLowerCase() : e.key);
+  if (e.key === 'm' || e.key === 'M') ganzeKarte = !ganzeKarte;
+  if (e.key.startsWith('Arrow')) e.preventDefault();
+});
+addEventListener('keyup', (e) => tasten.delete(e.key.length === 1 ? e.key.toLowerCase() : e.key));
+document.getElementById('neu').onclick = () => betreten(+document.getElementById('seed').value || 1);
+document.getElementById('zufall').onclick = () => betreten(Math.floor(Math.random() * 1e9));
+
+betreten(+(params.get('seed') ?? Math.floor(Math.random() * 1e9)));
+requestAnimationFrame(bild);
+</script>
+</body>
+</html>
