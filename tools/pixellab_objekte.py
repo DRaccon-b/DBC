@@ -1700,6 +1700,10 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'tall slender grey stone column with a square base and a carved capital, cool blue-grey granite like an old '
         'shrine pillar, slightly weathered with a little moss at the base, ' + FR14,
     ]},
+    'k21_zelt': {'size': 64, 'items': [
+        'dark purple canvas camping tent with an open dark entrance flap in the middle, a small golden trim along the '
+        'ridge, tied ropes and wooden pegs at the corners, sturdy and cozy, ' + FR14,
+    ]},
     'k21_tv_gross': {'size': 48, 'items': [
         'big old brown wooden cabinet CRT television standing on short wooden legs, wood grain case, large dark curved '
         'screen with a faint blue glow, a column of round knobs and a speaker grille on the right, ' + FR14,

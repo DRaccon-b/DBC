@@ -56,7 +56,7 @@ LAGER_UNTEN_FEST = [                                           # Laternen paarwe
     ('k01/laterne', 33, 70, {'anim': 'laterne'}), ('k01/laterne', 57, 70, {'anim': 'laterne'}),
 ]
 LAGER_UNTEN = [
-    ('lager/zelt', 11.5, 65, {}),
+    ('zelt/00_lila', 11.5, 65, {'boden': 'sand'}),                                   # Zelt: PixelLab k21_zelt (Nutzer: besser)
     ('k01/deko16', 23, 63, {'liegend': True}), 
     ('k01/deko41', 61, 71, {'liegend': True, 'spiegeln': True}),
     ('k01/deko16', 77, 66, {'liegend': True}),
@@ -119,13 +119,20 @@ def lila(src, ziel):
 
 
 def lila_zelt(src, ziel):
-    """Ganzes Zeltstoff-Sprite (Beige/Braun) ins dunkle Lila der Vorlage einfaerben; Helligkeit bleibt, Konturen bleiben dunkel."""
-    a = np.array(Image.open(src).convert('RGBA')).astype(np.float32)
-    l = a[..., 0] * 0.4 + a[..., 1] * 0.45 + a[..., 2] * 0.15
-    m = a[..., 3] > 0
-    ton = np.array([0.66, 0.44, 0.98], np.float32)
-    a[m, :3] = np.clip(l[m][:, None] * ton[None, :] * 1.05, 0, 255)
-    Image.fromarray(a.astype(np.uint8)).save(ziel)
+    """Zelt von Karte 04 im Lila der Vorlage: jede Stofffarbe auf eine eigene Lila-Stufe (Schatten Richtung Blau,
+    Licht Richtung Rosa), die Naht wird eine goldene Borte, Heringe/Holz bleiben braun, Kontur dunkelviolett."""
+    a = np.array(Image.open(src).convert('RGBA'))
+    karte = {
+        (230, 220, 196): (236, 206, 244), (200, 184, 154): (172, 124, 214), (168, 152, 126): (134, 88, 184),
+        (138, 124, 104): (102, 64, 156), (106, 94, 80): (74, 46, 122), (74, 64, 56): (48, 30, 80),
+        (46, 40, 48): (30, 18, 46), (210, 164, 124): (226, 178, 84), (230, 196, 154): (248, 218, 128),
+        (122, 100, 48): (122, 88, 46), (106, 74, 58): (100, 70, 52),
+    }
+    out = a.copy()
+    for alt, neu in karte.items():
+        m = (a[..., 3] > 0) & (a[..., 0] == alt[0]) & (a[..., 1] == alt[1]) & (a[..., 2] == alt[2])
+        out[m, :3] = neu
+    Image.fromarray(out).save(ziel)
 
 
 def main():
@@ -173,7 +180,7 @@ def main():
                 return False
             if not flach and not wald and any((tx + dx, ty + dy, False) in belegt for dx in (-1, 0, 1) for dy in (-1, 0, 1)):
                 return False
-        b = boden(tx, ty)
+        b = opt.pop('boden', None) or boden(tx, ty)
         key = (name, b, spiegeln)
         if key not in cache:
             sp = Image.open(os.path.join(OBJ, name + '.png')).convert('RGBA')
