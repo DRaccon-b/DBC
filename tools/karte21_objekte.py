@@ -49,6 +49,26 @@ MAUER_DEKO = [                                                 # exakt spiegelsy
     ('k01/laterne', 27, 61, {'anim': 'laterne'}), ('k01/laterne', 63, 61, {'anim': 'laterne'}),
     ('lager/banner', 34, 62, {'anim': 'fahne'}), ('lager/banner', 56, 62, {'anim': 'fahne', 'spiegeln': True}),
 ]
+# Lager unten auf dem Sand (Positionen nach der Vorlage, eher etwas weniger Kleinkram)
+FREMD.update({'k03/schild': 'karte03/klein/19.png'})
+LAGER_UNTEN_FEST = [                                           # Laternen paarweise spiegelsymmetrisch zur Torachse
+    ('k01/laterne', 14, 75, {'anim': 'laterne'}), ('k01/laterne', 76, 75, {'anim': 'laterne'}),
+    ('k01/laterne', 33, 70, {'anim': 'laterne'}), ('k01/laterne', 57, 70, {'anim': 'laterne'}),
+]
+LAGER_UNTEN = [
+    ('lager/zelt', 11.5, 65, {}),
+    ('k01/deko16', 23, 63, {'liegend': True}), ('k01/deko41', 11, 70, {'liegend': True}),
+    ('k01/deko16', 27, 72, {'liegend': True, 'spiegeln': True}), ('k01/deko41', 61, 71, {'liegend': True, 'spiegeln': True}),
+    ('k01/deko16', 77, 66, {'liegend': True}),
+    ('k03/sack', 16, 63, {}), ('saeule/14', 27, 67, {}), ('saeule/14', 81, 68, {'spiegeln': True}),
+    ('saeule/11', 16, 68, {}), ('saeule/11', 59, 67, {'spiegeln': True}), ('saeule/11', 73, 72, {}),
+    ('k03/holz', 23, 69, {}), ('k03/holz', 67, 69, {}), ('k03/holz', 62, 76, {}), ('k03/holz', 8, 76, {}),
+    ('k03/schild', 29, 62, {}), ('k03/schild', 61, 62, {}), ('k03/schild', 20, 67, {}), ('k03/schild', 70, 66, {}),
+    ('k03/fass', 18, 73, {}), ('k03/fass', 59, 70, {}), ('k03/fass', 75, 69, {}), ('k03/kiste', 12, 72, {}),
+]
+ZELT_QUELLE = 'karte04/mittel/02.png'                          # Zelt von Karte 04, lila eingefaerbt (Vorlage)
+
+
 # Schreinhof: alles exakt spiegelsymmetrisch zur Torachse (Spalte x <-> 90 - x); PixelLab k21_schrein
 def _sym(name, tx, fy, opt=None):
     """Pixelgenau mittig auf Kachel tx (Mitte tx + 0.5) -> Paare tx / 90 - tx liegen exakt gespiegelt zur Torachse."""
@@ -83,7 +103,7 @@ FEST = [
     (TV_GROSS, 20.5, 17, {}), (TV_GROSS, 67.5, 22, {'spiegeln': True}),
     (TV_KAPUTT, 24, 20, {}),
 ]
-FEST += LAGER_OBEN + MAUER_DEKO + SCHREIN
+FEST += LAGER_OBEN + MAUER_DEKO + SCHREIN + LAGER_UNTEN_FEST
 
 
 def lila(src, ziel):
@@ -95,6 +115,16 @@ def lila(src, ziel):
     ton = np.array([0.62, 0.36, 0.95], np.float32)
     a[rot, :3] = np.clip(l[:, None] * ton[None, :] * 1.55, 0, 255)
     os.makedirs(os.path.dirname(ziel), exist_ok=True)
+    Image.fromarray(a.astype(np.uint8)).save(ziel)
+
+
+def lila_zelt(src, ziel):
+    """Ganzes Zeltstoff-Sprite (Beige/Braun) ins dunkle Lila der Vorlage einfaerben; Helligkeit bleibt, Konturen bleiben dunkel."""
+    a = np.array(Image.open(src).convert('RGBA')).astype(np.float32)
+    l = a[..., 0] * 0.4 + a[..., 1] * 0.45 + a[..., 2] * 0.15
+    m = a[..., 3] > 0
+    ton = np.array([0.66, 0.44, 0.98], np.float32)
+    a[m, :3] = np.clip(l[m][:, None] * ton[None, :] * 1.05, 0, 255)
     Image.fromarray(a.astype(np.uint8)).save(ziel)
 
 
@@ -111,6 +141,7 @@ def main():
             shutil.copy(q, ziel)
     for name, quelle in LILA.items():
         lila(os.path.join(ROOT, 'assets', 'objekte', quelle), os.path.join(OBJ, name + '.png'))
+    lila_zelt(os.path.join(ROOT, 'assets', 'objekte', ZELT_QUELLE), os.path.join(OBJ, 'lager', 'zelt.png'))
     belegt, objekte, gesperrt = {}, [], set()
     for ty in range(rows):                                         # Fluss: keine Baumfuesse im oder direkt am Wasser
         for tx in range(cols):
@@ -179,6 +210,13 @@ def main():
 
     for (name, fx, fy, opt) in FEST:
         setze(name, fx, fy, opt)
+    for (name, fx, fy, opt) in LAGER_UNTEN:                     # Lager unten: nur wo frei (keine Ueberlappung)
+        setze(name, fx, fy, opt, frei=True)
+    for o in objekte:                                            # vor Lagerobjekten keine freie Deko (sonst Ueberlappung)
+        if o['kachel'][1] >= 60 and not o['basis'].startswith('k01/deko'):
+            bx, by, wt, ht = o['block']
+            for x in range(bx - 1, bx + wt + 1):
+                gesperrt.add((x, by + ht))
     # Begleiter der Wiesenbaeume (Regel 5, nur Baeume in der Karte, nicht am Waldrand):
     # Fels vor dem Stamm (ueberdeckt den Sockel), Fels hinter den Blaettern (eine Reihe hoeher, die Krone verdeckt
     # ihn teilweise), Blumen an den Sockelecken
