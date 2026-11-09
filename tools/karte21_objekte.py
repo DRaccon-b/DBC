@@ -44,7 +44,7 @@ LAGER_OBEN = [
     ('k04/feuerring', 35, 10, {}), ('teppich/00', 38.5, 11, {'liegend': True}), ('k03/holz', 52, 11, {}),   # ein Feuerring weniger (Nutzer)
 ]
 MAUER_DEKO = [                                                 # exakt spiegelsymmetrisch zur Torachse
-    ('k01/baum01', 42, 61, {'px': 44 * 16 - 23, 'py': 61 * 16 + 15}),               # links ein Baum statt Busch (Nutzer)
+    ('k01/baum01', 42, 60, {'px': 44 * 16 - 23, 'py': 60 * 16 + 15, 'nur_blume': True}),  # links ein Baum statt Busch, ohne Fels (Nutzer)
     ('k01/deko25', 47, 60, {'an_wand': True, 'spiegeln': True}),
     ('k01/laterne', 27, 61, {'anim': 'laterne'}), ('k01/laterne', 63, 61, {'anim': 'laterne'}),
     ('lager/banner', 34, 62, {'anim': 'fahne'}), ('lager/banner', 56, 62, {'anim': 'fahne', 'spiegeln': True}),
@@ -189,6 +189,9 @@ def main():
         cx, fy = bx * T + wt * T // 2, (by + ht) * T - 1
         seite = -1 if i % 2 else 1
         art = i % 3
+        if b.get('nur_blume'):                                   # nur eine Blume vor dem Stumpf, kein Fels (Nutzer)
+            setze(rnd.choice(HOCH_BLUME), cx / T, fy // T + 1, {'px': cx - seite * 5, 'py': fy + T, 'anim': 'wehen'})
+            continue
         if b['basis'].startswith('tv'):                          # Fernseher: Begleiter nur an der Ecke (der Bildschirm bleibt frei)
             w2 = wt * T // 2
             if art == 0:

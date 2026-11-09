@@ -708,19 +708,20 @@
 "datei": "varianten/k01-baum01_sand.png",
 "basis": "k01/baum01",
 "x": 657,
-"y": 949,
+"y": 933,
 "fuss": 46,
 "kachel": [
 42,
-61
+60
 ],
 "block": [
 41,
-59,
+58,
 3,
 3
 ],
-"ebene": 1
+"ebene": 1,
+"nur_blume": true
 },
 {
 "datei": "varianten/k01-deko25_sand_m.png",
@@ -1733,59 +1734,23 @@
 "ebene": 0
 },
 {
-"datei": "varianten/k01-deko11_sand.png",
-"basis": "k01/deko11",
-"x": 655,
-"y": 962,
-"fuss": 26,
-"kachel": [
-42,
-60
-],
-"block": [
-42,
-59,
-2,
-2
-],
-"ebene": 0
-},
-{
-"datei": "varianten/k01-deko04_sand.png",
-"basis": "k01/deko04",
+"datei": "varianten/k01-deko27_sand.png",
+"basis": "k01/deko27",
 "x": 669,
-"y": 980,
-"fuss": 31,
+"y": 968,
+"fuss": 27,
 "kachel": [
 42,
-62
+61
 ],
 "block": [
 42,
-61,
+60,
 2,
 2
 ],
 "ebene": 0,
 "anim": "wehen"
-},
-{
-"datei": "varianten/k01-deko08_beton.png",
-"basis": "k01/deko08",
-"x": 484,
-"y": 832,
-"fuss": 19,
-"kachel": [
-31,
-52
-],
-"block": [
-30,
-52,
-2,
-1
-],
-"ebene": 0
 },
 {
 "datei": "varianten/k01-deko08_beton.png",
@@ -1818,6 +1783,24 @@
 "block": [
 58,
 47,
+2,
+1
+],
+"ebene": 0
+},
+{
+"datei": "varianten/k01-deko08_beton.png",
+"basis": "k01/deko08",
+"x": 484,
+"y": 832,
+"fuss": 19,
+"kachel": [
+31,
+52
+],
+"block": [
+30,
+52,
 2,
 1
 ],
