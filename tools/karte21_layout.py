@@ -102,7 +102,7 @@ def main():
     stein = np.isin(v, ['p', 'm', 'M']) & (yy < MAUER_KANTE + 1) & ~wald
     platz = stein & (xx >= 22) & (xx <= 66) & (yy >= 43)
     k[platz] = 'p'
-    k[stein & ~platz] = 's'
+    # Ruinenplatten auf der mittleren Ebene entfernt (Nutzerwunsch) -> bleibt Gras
     k[HOF[1]:HOF[3] + 1, HOF[0]:HOF[2] + 1] = 'q'
     # Burgmauer: Reihen 57-59 ueber die ganze Breite (Front des Oberlands), Treppen und Tor
     k[MAUER_KANTE + 1:MAUER_KANTE + 4, 3:C - 3] = 'm'

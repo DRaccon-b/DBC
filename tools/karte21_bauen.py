@@ -241,6 +241,8 @@ def k01_mauer(a, m, seed, runen=True):
 
 
 def mauer_textur(a, m, seed, hell=0, pfeiler=False):
+    if not m.any():
+        return
     if MAUER_STIL == 'karte01':
         k01_mauer(a, m, seed, runen=pfeiler)
     elif MAUER_STIL == 'fels':
