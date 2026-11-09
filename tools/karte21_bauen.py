@@ -80,7 +80,11 @@ def bruchstein(a, m, seed, hell=0, reihe=10):
         r += 1
 
 
-MAUER_STIL = os.environ.get('K21_MAUER', 'bruch')     # bruch | fels | quader | feldstein | pfeiler | moos
+MAUER_STIL = os.environ.get('K21_MAUER', 'karte01')   # karte01 (gewaehlt) | bruch | fels | quader | feldstein | pfeiler | moos
+import klippen, bauwerke
+if MAUER_STIL == 'karte01':                              # Klippen von Karte 01: Schiefer-Blautoene fuer Mauer, Tor, Kanten
+    BURG = list(klippen.SCHIEFER)
+    k4.FELS['burg'] = BURG
 TOR_MITTE = 45.5 * 16                                   # Achse des Hoehlentors (Rhythmus der Pfeiler)
 
 
@@ -228,8 +232,18 @@ def moos_mauer(a, m, seed, hell=0):
                 break
 
 
+def k01_mauer(a, m, seed, runen=True):
+    """Klippenwand genau wie Karte 01 (klippen.wand): Schiefersaeulen, Schichtfugen, vereinzelte Cyan-Runen."""
+    y0, y1, x0, x1 = _box(m)
+    w = np.array(klippen.wand(x1 - x0, y1 - y0, random.Random(seed), rune_chance=0.12 if runen else 0.0).convert('RGB'))
+    sub = m[y0:y1, x0:x1]
+    a[y0:y1, x0:x1][sub] = w[sub]
+
+
 def mauer_textur(a, m, seed, hell=0, pfeiler=False):
-    if MAUER_STIL == 'fels':
+    if MAUER_STIL == 'karte01':
+        k01_mauer(a, m, seed, runen=pfeiler)
+    elif MAUER_STIL == 'fels':
         fels_mauer(a, m, seed, hell)
     elif MAUER_STIL == 'quader':
         quader_mauer(a, m, seed, hell)
@@ -247,6 +261,25 @@ def mauerkrone(a, y, x0, x1):
     """Abdeckung oben auf der Front je nach Stil."""
     if MAUER_STIL == 'fels':
         return                                                        # Felsen: Lippe kommt aus der Textur
+    if MAUER_STIL == 'karte01':                                       # wie Karte 01: Graskante; unter Stein eine Steinkante
+        a[y:y + 2, x0:x1] = np.array([H(BURG[5]), H(BURG[1])])[:, None, :]
+        img = Image.fromarray(a).convert('RGBA')
+        rnd = random.Random(17)
+        gruen = np.ones(a.shape[1], bool)
+        for d in range(1, 7):                                        # nur wo darueber wirklich Wiese liegt
+            gruen &= (a[y - d, :, 1].astype(int) > a[y - d, :, 0].astype(int) + 12)
+        x = x0
+        while x < x1:
+            if gruen[x]:
+                e = x
+                while e < x1 and gruen[e]:
+                    e += 1
+                klippen.graskante(img, x, e, y, rnd)
+                x = e
+            else:
+                x += 1
+        a[:] = np.array(img.convert('RGB'))
+        return
     if MAUER_STIL == 'quader':
         a[y:y + 4, x0:x1] = np.array([H(BURG[6]), H(BURG[5]), H(BURG[5]), H(BURG[2])])[:, None, :]
         for x in range(x0, x1, 32):
@@ -442,7 +475,12 @@ def bauen(frame=None, speichern=True):
     kontaktschatten(a, mauer, 4, 0.55)
     # Treppen in der Burgmauer (frontal, wie Karte 04) und Hoehlentor
     for (sx0, sx1) in lay['treppen']:
-        k4.treppe(a, sx0 * T, (sx1 + 1) * T, ym0 - 1, 's', MAUER_H - 4, 'burg', sand)
+        if MAUER_STIL == 'karte01':                                   # Treppe wie Karte 01
+            img_ = Image.fromarray(a).convert('RGBA')
+            bauwerke.zeichne_treppe(img_, sx0 * T, (sx1 + 1) * T, ym0, ym1 + 1, seed=sx0)
+            a[:] = np.array(img_.convert('RGB'))
+        else:
+            k4.treppe(a, sx0 * T, (sx1 + 1) * T, ym0 - 1, 's', MAUER_H - 4, 'burg', sand)
     gx0, gx1 = lay['tor']
     hoehlentor(a, gx0 * T, (gx1 + 1) * T, ym0, ym1)
     img = Image.fromarray(a).convert('RGBA')
