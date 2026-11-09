@@ -122,6 +122,19 @@ OBJEKTGRUPPEN = {
         'group of three tall pine trees',
         'large dark green bush cluster',
     ]},
+    # Zufallskarten (maps/zufall): kleines Startportal und kleiner Waldbrunnen, frontal
+    'zufall_portal': {'size': 64, 'items': [
+        'small ancient stone ring portal standing on the forest floor, mossy slate-blue stone arch with faint glowing cyan runes, swirling bright teal and cyan magic vortex inside the ring, a few green vines and grass tufts at the base, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'small round magic portal gate of weathered blue-grey standing stones overgrown with moss and ivy, glowing cyan rune stones, teal swirling vortex in the middle, short stone step at the bottom, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'small runic portal arch made of two mossy stone pillars and a curved capstone, cyan glowing runes, shimmering teal swirl inside, ferns at the foot, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'compact circular stone portal half sunk into grass, slate stones with moss, glowing cyan runes around the rim, teal spiral vortex, small leaves and flowers at the base, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+    ]},
+    'zufall_brunnen': {'size': 48, 'items': [
+        'small old round stone well in a forest clearing, mossy grey-blue fieldstones, small wooden roof with dark green moss, wooden bucket on a rope, grass tufts and ferns growing around the base, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'small rustic forest well made of rough mossy stones, tiny wooden crossbeam with a hanging wooden bucket, ivy creeping up the stones, little flowers at the foot, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'tiny overgrown stone well with a mossy shingle roof on two wooden posts, wooden bucket, ferns and grass around the stones, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'small round fieldstone well without roof, mossy rim, wooden winch with rope and bucket, grass and small blue flowers growing at the base, perfectly straight front elevation view, symmetric, facing the camera head-on, no side wall visible, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+    ]},
 }
 
 

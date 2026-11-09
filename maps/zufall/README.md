@@ -17,6 +17,7 @@ Gleicher Startwert = gleiche Karte.
 | `grundriss_<n>.png` | welches Stück in welcher Lage auf welchem Feld liegt |
 | `karte_<n>.json` | dasselbe als Liste (Startwert, Felder, Stücke) |
 | `stuecke_uebersicht.png` | alle Kartenstücke (rot = feste Objekte) |
+| `assets/objekte/karte01/zufall_portal`, `zufall_brunnen` | kleines Portal und Waldbrunnen (PixelLab-Objekt-Creator, `tools/pixellab_objekte.py`) |
 | `_bau/` | Zwischendateien (nicht im Repo) |
 
 ## Kartenstücke (`tools/zufall_stuecke.py`)
@@ -36,7 +37,7 @@ Zwei Stücke passen zusammen, wenn ihre Kantentypen gleich sind. Der Weg liegt a
 verwendet (die Bossarena nur 0°/180° + gespiegelt, damit die Runensteine symmetrisch zum Baum stehen).
 
 Stückarten: Wege (Bogen, Ecke, Gabel, Kreuzung), Wiesen (mit Teich, Rosabaum, Übergang Waldweg ↔ Wiese),
-Sackgassen (Teich, Schatztruhe, Brunnen, Findling, Runenbaum-Lichtung), Startlager (Zelt, Lagerfeuer,
+Sackgassen (Teich, Wiese, Waldbrunnen, Findling, Runenbaum-Lichtung), Startlager (Portal, Lagerfeuer,
 Wegweiser), Bossarena (Dschungelbaum + Runensteinpaar), Füllwald.
 
 **Neues Stück:** Raster in `STUECKE` eintragen und `python3 tools/zufall_stuecke.py` laufen lassen. Die Prüfung

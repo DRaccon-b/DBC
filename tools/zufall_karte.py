@@ -220,7 +220,7 @@ def bauordner(startwert):
     if os.path.exists(bau):
         shutil.rmtree(bau)
     os.makedirs(obj)
-    for d in ('baeume', 'deko', 'gross', 'dschungel', 'k7gras', 'zelt_strand'):
+    for d in ('baeume', 'deko', 'gross', 'dschungel', 'k7gras', 'zelt_strand', 'zufall_portal', 'zufall_brunnen'):
         os.symlink(os.path.join(OBJ01, d), os.path.join(obj, d))
     shutil.copytree(os.path.join(OBJ01, 'varianten'), os.path.join(obj, 'varianten'))   # eigene Kopie: neue Varianten
     return bau, obj
@@ -240,6 +240,9 @@ def bauen(raster, fest, symmetrie, bau, obj):
         m.OBJ = obj
     objekte_setzen.FEST = fest
     objekte_setzen.TEICH_AB_ZEILE = 0
+    for n in ('zufall_portal/01', 'zufall_brunnen/00'):     # Einbettung: Bodenfuss + Kontaktschatten wie Steine
+        objekte_setzen.FUSS_ART[n] = 'stein'
+    objekte_setzen.SCHATTEN = tuple(objekte_setzen.SCHATTEN) + ('zufall_portal/', 'zufall_brunnen/')
     objekte_setzen.DSCHUNGEL_SPERRE = (5, 7, 2)        # Waldrand ueber der Arena bleibt bewachsen
     karte_bauen.bauen(objekte=False)                     # Boden -> terrain_basis.png, tilemap.json
     objekte_setzen.main()                                # Wald, Deko, feste Objekte -> platzierung.json

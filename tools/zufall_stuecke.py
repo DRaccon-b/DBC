@@ -258,8 +258,7 @@ STUECKE = [
         'FFFFGGGPPGGFFF',
         'FFFFGGPPGGFFFF',
         'FFFFGGPPGGFFFF']},
-    {'name': 'sackgasse_schatz', 'typ': 'normal', 'gewicht': 2,
-     'objekte': [('gross/15', 7, 5)], 'raster': [
+    {'name': 'sackgasse_wiese', 'typ': 'normal', 'gewicht': 2, 'raster': [
         'FFFFFFFFFFFFFF',
         'FFFFFFFFFFFFFF',
         'FFFFFGGGGGFFFF',
@@ -275,7 +274,7 @@ STUECKE = [
         'FFGGGGPPGGGGFF',
         'FFGGGGPPGGGGFF']},
     {'name': 'sackgasse_brunnen', 'typ': 'normal', 'gewicht': 1,
-     'objekte': [('gross/12', 7, 6)], 'raster': [
+     'objekte': [('zufall_brunnen/00', 7, 6)], 'raster': [
         'FFFFFFFFFFFFFF',
         'FFFFFFFFFFFFFF',
         'FFFFFFFFFFFFFF',
@@ -291,7 +290,7 @@ STUECKE = [
         'FFFFGGPPGGFFFF',
         'FFFFGGPPGGFFFF']},
     {'name': 'start_lager', 'typ': 'start', 'gewicht': 1,
-     'objekte': [('gross/03', 4, 5), ('gross/14', 9, 5), ('gross/13', 6, 11)], 'raster': [
+     'objekte': [('zufall_portal/01', 4, 5), ('gross/14', 9, 5), ('gross/13', 6, 11)], 'raster': [
         'FFFFFFFFFFFFFF',
         'FFFFFFFFFFFFFF',
         'FFFFGGGGGGFFFF',
