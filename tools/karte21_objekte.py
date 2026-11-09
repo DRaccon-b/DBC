@@ -18,7 +18,12 @@ T = 16
 FREMD = {}
 for i in range(16):
     FREMD['k01/baum%02d' % i] = 'karte01/baeume/%02d.png' % i
+for i in range(64):
+    FREMD['k01/deko%02d' % i] = 'karte01/deko/%02d.png' % i
 WALD = ['k01/baum%02d' % i for i in (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 12, 13, 14)]
+FELS_KLEIN = ['k01/deko08', 'k01/deko10']                    # kleiner Stein, Kiesel
+FELS_GROSS = ['k01/deko09', 'k01/deko11']                    # bemooste Felsen
+BLUMEN = ['k01/deko%02d' % i for i in (0, 1, 2, 3, 4, 27, 30)]
 
 # Baeume auf der Wiese nach der Vorlage: (sprite, Kachel-x der Fussmitte, Fusszeile, Optionen)
 FEST = [
@@ -115,6 +120,39 @@ def main():
 
     for (name, fx, fy, opt) in FEST:
         setze(name, fx, fy, opt)
+    # Begleiter der Wiesenbaeume (Regel 5, nur Baeume in der Karte, nicht am Waldrand):
+    # Fels vor dem Stamm (ueberdeckt den Sockel), Fels hinter den Blaettern (eine Reihe hoeher, die Krone verdeckt
+    # ihn teilweise), Blumen an den Sockelecken
+    baeume = [o for o in objekte if o['basis'].startswith('k01/baum')]
+    for i, b in enumerate(baeume):
+        bx, by, wt, ht = b['block']
+        cx, fy = bx * T + wt * T // 2, (by + ht) * T - 1
+        seite = -1 if i % 2 else 1
+        art = i % 3
+        if art == 0:                                             # ueber dem Stumpf
+            setze(rnd.choice(FELS_KLEIN), cx / T, fy // T, {'px': cx + seite * 5, 'py': fy + 4})
+        elif art == 1:                                           # hinter den Blaettern
+            setze(rnd.choice(FELS_GROSS), cx / T, fy // T - 1, {'px': cx + seite * 8, 'py': fy - 7})
+        else:                                                    # beides, ohne Blume
+            setze(rnd.choice(FELS_GROSS), cx / T, fy // T - 1, {'px': cx + seite * 9, 'py': fy - 7})
+            setze(rnd.choice(FELS_KLEIN), cx / T, fy // T, {'px': cx - seite * 6, 'py': fy + 4})
+            continue
+        setze(rnd.choice(BLUMEN), cx / T, fy // T, {'px': cx - seite * 16, 'py': fy + 3, 'anim': 'wehen'})
+    # Felsen und Blumen frei auf der Wiese (nicht an Wegen, Wasser, Platz oder Mauer)
+    def frei_gras(tx, ty):
+        return all(cls[min(rows - 1, max(0, ty + dy))][min(cols - 1, max(0, tx + dx))] == 'g'
+                   for dx in (-1, 0, 1) for dy in (-1, 0, 1))
+    for liste, ziel in ((FELS_KLEIN + FELS_GROSS, 16), (BLUMEN, 40)):
+        n = 0
+        for _ in range(5000):
+            if n >= ziel:
+                break
+            tx, ty = rnd.randrange(3, cols - 3), rnd.randrange(3, rows - 3)
+            if not frei_gras(tx, ty):
+                continue
+            n_ = rnd.choice(liste)
+            if setze(n_, tx, ty, {'anim': 'wehen'} if n_ in BLUMEN else {}, frei=True):
+                n += 1
     for ty in range(rows):                                       # Waldrand wie Karte 06
         for tx in range(cols):
             if cls[ty][tx] == 'h' and (tx + ty) % 2 == 0:
