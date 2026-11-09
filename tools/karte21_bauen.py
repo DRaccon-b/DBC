@@ -30,7 +30,6 @@ k4.FELS['burg'] = BURG
 MAUER_H = 48                     # Burgmauer: 3 Kacheln
 RUINE_H = 12                     # Front der Ruinenplatten
 HOF_H = 24                       # Rueckwand des Schreinhofs
-HOF_TREPPE = (44, 46)            # Treppe vom Platz in den Schreinhof (Suedkante, Mitte = Achse des Tors)
 
 
 def grau(a):                     # Kiesel aus Karte 03 -> graues Kopfsteinpflaster (Vorlage)
@@ -352,9 +351,10 @@ def bruecke_ns(img, x0, x1, y0, y1, seed=5):
     img.paste(Image.fromarray(a).convert('RGBA'), (0, 0))
 
 
-def hoehlentor(a, x0, x1, ytop, ybot, seed=7):
-    """Hoehlentor in der Burgmauer: dunkle Oeffnung mit runder Oberkante, gerahmt von groesseren Bogensteinen,
-    innen nach hinten dunkler werdend (Hoehle, kein offener Durchgang)."""
+def hoehlentor(a, x0, x1, ytop, ybot, seed=7, boden=None, hinten=None):
+    """Offenes Tor in der Burgmauer: runder Bogen aus Bogensteinen; durch die Oeffnung sieht man hindurch -
+    vorn laeuft der Sandweg hinein, dahinter liegt das Pflaster des Platzes. Laibung links im Licht, rechts im
+    Schatten, unter dem Bogen ein weicher Schatten (keine dunkle Flaeche)."""
     F = [np.array(H(c), np.float32) for c in BURG]
     cx = (x0 + x1) / 2.0
     hw = (x1 - x0) / 2.0 - 6                                       # halbe Oeffnungsbreite
@@ -369,9 +369,20 @@ def hoehlentor(a, x0, x1, ytop, ybot, seed=7):
     for y in range(ytop - 4, ybot):
         for x in range(x0 - 4, x1 + 4):
             if innen(y, x, hw, oben):
-                t = (y - oben) / max(1, ybot - oben)
-                kern = abs(x - cx) / hw
-                c = np.array([14, 14, 22], np.float32) * (0.8 + 0.5 * kern) + np.array([4, 4, 6]) * (1 - t)
+                if x < cx - hw + 3 and y >= oben + hw:
+                    c = F[4] if x < cx - hw + 2 else F[3]            # Laibung links (Licht)
+                elif x > cx + hw - 3 and y >= oben + hw:
+                    c = F[2] if x > cx + hw - 2 else F[1]            # Laibung rechts (Schatten)
+                else:
+                    c = (boden[y, x] if y >= ybot - 14 else hinten[y, x]).astype(np.float32)
+                    if ybot - 16 <= y < ybot - 14:
+                        c = c * 0.72                                 # Kante Weg -> Platz
+                    tief = y - oben                                  # Schatten unter dem Bogen
+                    rad = np.hypot(x - cx, max(0, (oben + hw) - y))
+                    if y < oben + hw + 6:
+                        c = c * (0.55 + 0.45 * min(1.0, (oben + hw + 6 - y) and (y - oben) / (hw + 6)))
+                    if x < cx - hw + 7:
+                        c = c * 0.85                                 # Schatten der linken Laibung
                 a[y, x] = c
             elif innen(y, x, hw + 6, oben - 6) and y < ybot:
                 # Bogensteine: Keile um die Oeffnung
@@ -390,10 +401,6 @@ def hoehlentor(a, x0, x1, ytop, ybot, seed=7):
                 elif not innen(y, x, hw + 5, oben - 5):
                     c = F[0]
                 a[y, x] = c
-    for x in range(int(cx - hw), int(cx + hw) + 1):                 # Boden im Tor dunkel auslaufend
-        for d, f in ((0, 0.45), (1, 0.6), (2, 0.78)):
-            if ybot + d < a.shape[0]:
-                a[ybot + d, x] = (a[ybot + d, x] * f).astype(np.uint8)
 
 
 def bauen(frame=None, speichern=True):
@@ -417,6 +424,9 @@ def bauen(frame=None, speichern=True):
     # Steinplatz (Kopfstein grau) mit Bordstein; Ruinen und Hof ebenfalls Stein
     kies = flaeche(k6.kacheln(os.path.join(ROOT, 'assets', 'karte03', 'basis', 'kies_%d.png'), 5, grau), cols, rows)
     pm = weich(zell_maske(cls, 'pq', cols, rows), 4, 0.12, 6)
+    yk = (lay['mauer_kante'] + 1) * T                                 # Platz reicht buendig bis an die Mauerkrone
+    for y in range(yk - 6, yk):
+        pm[y] |= pm[yk - 7]
     a[pm] = kies[pm]
     a[kante_rund(pm)] = H('#4a5260')
     kontaktschatten(a, pm, 2, 0.8)
@@ -452,8 +462,6 @@ def bauen(frame=None, speichern=True):
     for d, f in ((0, 0.55), (1, 0.7), (2, 0.85)):                    # Kontaktschatten am Fuss der Rueckwand
         a[hy0 * T + HOF_H + d, hx0 * T + 2:(hx1 + 1) * T - 2] = (a[hy0 * T + HOF_H + d, hx0 * T + 2:(hx1 + 1) * T - 2] * f).astype(np.uint8)
     a[yb - 2, hx0 * T:(hx1 + 1) * T] = H(BURG[2]); a[yb - 1, hx0 * T:(hx1 + 1) * T] = H(BURG[6])   # Suedkante (Stufe hoch)
-    tx0, tx1 = HOF_TREPPE
-    k4.treppe(a, tx0 * T, (tx1 + 1) * T, yb - 23, 'n', 0, 'burg', kies)
     # Fluss: vertieftes Wasser; laeuft links und rechts aus der Karte -> Bild dort 24 px erweitern
     import wasser_vertieft
     xm_roh = zell_maske(cls, 'x', cols, rows)
@@ -484,7 +492,7 @@ def bauen(frame=None, speichern=True):
         else:
             k4.treppe(a, sx0 * T, (sx1 + 1) * T, ym0 - 1, 's', MAUER_H - 4, 'burg', sand)
     gx0, gx1 = lay['tor']
-    hoehlentor(a, gx0 * T, (gx1 + 1) * T, ym0, ym1)
+    hoehlentor(a, gx0 * T, (gx1 + 1) * T, ym0, ym1, boden=sand, hinten=kies)
     img = Image.fromarray(a).convert('RGBA')
     for (bx0, bx1) in lay['bruecken']:
         ys = [y for y in range(rows) if cls[y][bx0] == 'b']
