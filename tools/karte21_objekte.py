@@ -50,19 +50,19 @@ MAUER_DEKO = [                                                 # exakt spiegelsy
     ('lager/banner', 34, 62, {'anim': 'fahne'}), ('lager/banner', 56, 62, {'anim': 'fahne', 'spiegeln': True}),
 ]
 # Lager unten auf dem Sand (Positionen nach der Vorlage, eher etwas weniger Kleinkram)
-FREMD.update({'k03/schild': 'karte03/klein/19.png'})
+FREMD.update({'k03/schild': 'karte03/klein/19.png', 'k04/zirkuszelt': 'karte04/zelte/00.png'})   # rundes Zelt (Nutzer)
 LAGER_UNTEN_FEST = [                                           # Laternen paarweise spiegelsymmetrisch zur Torachse
     ('k01/laterne', 14, 75, {'anim': 'laterne'}), ('k01/laterne', 76, 75, {'anim': 'laterne'}),
     ('k01/laterne', 33, 70, {'anim': 'laterne'}), ('k01/laterne', 57, 70, {'anim': 'laterne'}),
 ]
 LAGER_UNTEN = [
-    ('zelt/00_lila', 11.5, 65, {'boden': 'sand'}),                                   # Zelt: PixelLab k21_zelt (Nutzer: besser)
+    ('k04/zirkuszelt', 12.5, 66, {'boden': 'sand'}),                                   # rundes Zelt von Karte 04, unveraendert (Nutzer)
     ('k01/deko16', 23, 63, {'liegend': True}), 
     ('k01/deko41', 61, 71, {'liegend': True, 'spiegeln': True}),
     ('k01/deko16', 77, 66, {'liegend': True}),
     ('k03/sack', 16, 63, {}), ('saeule/14', 27, 67, {}), ('saeule/14', 81, 68, {'spiegeln': True}),
-    ('saeule/11', 16, 68, {}), ('saeule/11', 59, 67, {'spiegeln': True}),
-    ('k03/holz', 23, 69, {}), ('k03/holz', 67, 69, {}), 
+    ('saeule/11', 19, 69, {}), ('saeule/11', 59, 67, {'spiegeln': True}),
+    ('k03/holz', 26, 71, {}), ('k03/holz', 67, 69, {}), 
     ('k03/schild', 29, 62, {}), ('k03/schild', 61, 62, {}), 
     ('k03/fass', 18, 73, {}), ('k03/fass', 75, 69, {}), ('k03/kiste', 12, 72, {}),
 ]
