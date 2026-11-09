@@ -29,7 +29,7 @@ BLUMEN = ['k01/deko%02d' % i for i in (0, 1, 2, 3, 4, 27, 30)]
 HOCH_FELS = ['k01/deko09', 'k01/deko11']
 HOCH_BLUME = ['k01/deko04', 'k01/deko27', 'k01/deko30']
 
-TV_A, TV_B, TV_KAPUTT, TV_GROSS = 'tv/00', 'tv/01', 'tv/02', 'tv_gross/00'   # PixelLab k21_tv / k21_tv_gross
+TV_A, TV_B, TV_C, TV_D, TV_KAPUTT, TV_GROSS = 'tv/00', 'tv/01', 'tv/03', 'tv/04', 'tv/02', 'tv_gross/00'   # PixelLab k21_tv / k21_tv_gross
 # Baeume auf der Wiese nach der Vorlage: (sprite, Kachel-x der Fussmitte, Fusszeile, Optionen)
 FEST = [
     # oberhalb des Flusses
@@ -44,8 +44,8 @@ FEST = [
     # mittlere Ebene vor der Burgmauer (unten weiter)
     ('k01/baum01', 9, 53, {}), ('k01/baum00', 64, 50, {'spiegeln': True}), ('k01/baum02', 83, 53, {}),
     # Fernseher auf der oberen Ebene: 70 % der Vorlage (7 kleine, 2 grosse Holzfernseher, 1 umgekippter)
-    (TV_A, 15, 8, {}), (TV_B, 39, 6, {}), (TV_A, 11, 15, {'spiegeln': True}), (TV_B, 31, 16, {}),
-    (TV_A, 54, 16, {}), (TV_B, 65, 18, {'spiegeln': True}), (TV_A, 77, 15, {}),
+    (TV_A, 15, 8, {}), (TV_B, 39, 6, {}), (TV_C, 11, 15, {}), (TV_A, 31, 16, {}),
+    (TV_D, 54, 16, {}), (TV_B, 65, 18, {}), (TV_A, 77, 15, {}),
     (TV_GROSS, 20.5, 17, {}), (TV_GROSS, 67.5, 22, {'spiegeln': True}),
     (TV_KAPUTT, 24, 20, {}),
 ]
@@ -140,6 +140,15 @@ def main():
         cx, fy = bx * T + wt * T // 2, (by + ht) * T - 1
         seite = -1 if i % 2 else 1
         art = i % 3
+        if b['basis'].startswith('tv'):                          # Fernseher: Begleiter nur an der Ecke (der Bildschirm bleibt frei)
+            w2 = wt * T // 2
+            if art == 0:
+                setze(rnd.choice(HOCH_FELS), cx / T, fy // T + 1, {'px': cx + seite * (w2 + 6), 'py': fy + T})
+            elif art == 1:
+                setze(rnd.choice(FELS_GROSS), cx / T, fy // T - 1, {'px': cx + seite * (w2 + 2), 'py': fy - 7})
+            else:
+                setze(rnd.choice(HOCH_BLUME), cx / T, fy // T + 1, {'px': cx - seite * (w2 + 6), 'py': fy + T, 'anim': 'wehen'})
+            continue
         if art == 0:                                             # ueber dem Stumpf: hoher Fels
             setze(rnd.choice(HOCH_FELS), cx / T, fy // T + 1, {'px': cx + seite * 5, 'py': fy + T})
             continue                                             # keine zweite Pflanze daneben (keine Ueberlappung)
