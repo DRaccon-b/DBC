@@ -80,6 +80,186 @@ def bruchstein(a, m, seed, hell=0, reihe=10):
         r += 1
 
 
+MAUER_STIL = os.environ.get('K21_MAUER', 'bruch')     # bruch | fels | quader | feldstein | pfeiler | moos
+TOR_MITTE = 45.5 * 16                                   # Achse des Hoehlentors (Rhythmus der Pfeiler)
+
+
+def _box(m):
+    ys, xs = np.nonzero(m)
+    return ys.min(), ys.max() + 1, xs.min(), xs.max() + 1
+
+
+def fels_mauer(a, m, seed, hell=0):
+    """Natuerliche Felswand wie die Klippen der anderen Karten (Karte 04), in den Burgtoenen."""
+    y0, y1, x0, x1 = _box(m)
+    tex = k4.fels_textur('burg', x1 - x0, y1 - y0, seed)
+    sub = m[y0:y1, x0:x1]
+    a[y0:y1, x0:x1][sub] = tex[:y1 - y0, :x1 - x0][sub]
+
+
+def quader_mauer(a, m, seed, hell=0, bh=12, bw=24):
+    """Glatte Quadermauer: grosse behauene Bloecke im Verband, Fase oben/links hell, unten/rechts dunkel,
+    feine Fuge, vereinzelt Abplatzer."""
+    rnd = random.Random(seed)
+    F = [np.array(H(c), np.float32) for c in BURG]
+    y0, y1, x0, x1 = _box(m)
+    rs = np.random.RandomState(seed)
+    for r, y in enumerate(range(y0, y1, bh)):
+        off = (bw // 2) * (r % 2)
+        for bx in range(x0 - off, x1, bw):
+            t = min(5, max(2, rnd.choice((4, 4, 3, 5, 4)) + hell))
+            for yy in range(y, min(y + bh, y1)):
+                for xx in range(max(bx, x0), min(bx + bw, x1)):
+                    if not m[yy, xx]:
+                        continue
+                    dy, dx = yy - y, xx - bx
+                    if dy == bh - 1 or dx == bw - 1:
+                        c = F[1]
+                    elif dy == bh - 2 or dx == bw - 2:
+                        c = F[t - 2]
+                    elif dy <= 1 or dx == 0:
+                        c = F[t + 1]
+                    else:
+                        c = F[t] * (0.97 + 0.06 * rs.rand())
+                    a[yy, xx] = c
+            if rnd.random() < 0.25:                                # Abplatzer
+                cx, cy = bx + rnd.randint(4, bw - 6), y + rnd.randint(3, bh - 4)
+                if x0 <= cx < x1 - 2 and m[cy, cx]:
+                    a[cy, cx] = F[t - 2]; a[cy, cx + 1] = F[t - 1]; a[cy + 1, cx] = F[t + 1]
+
+
+def feldstein_mauer(a, m, seed, hell=0):
+    """Feldsteinmauer: runde, unterschiedlich grosse Steine dicht gepackt (wie die Vorlage), dunkle Fugen,
+    jeder Stein kugelig schattiert (Licht oben links)."""
+    rnd = random.Random(seed)
+    F = [np.array(H(c), np.float32) for c in BURG]
+    y0, y1, x0, x1 = _box(m)
+    sub = np.zeros((y1 - y0, x1 - x0, 3), np.float32)
+    sub[:] = F[1]
+    yy, xx = np.mgrid[0:y1 - y0, 0:x1 - x0]
+    for r, cy in enumerate(range(4, y1 - y0 + 6, 9)):
+        cx = -rnd.randint(0, 6) + (5 if r % 2 else 0)
+        while cx < x1 - x0 + 8:
+            rx, ry = rnd.uniform(5.0, 7.5), rnd.uniform(4.0, 5.2)
+            px, py = cx + rnd.uniform(-1, 1), cy + rnd.uniform(-1, 1)
+            t = min(5, max(2, rnd.choice((3, 4, 4, 5, 3)) + hell))
+            d = ((xx - px) / rx) ** 2 + ((yy - py) / ry) ** 2
+            inn = d <= 1.0
+            licht = (-(xx - px) / rx - (yy - py) / ry) * 0.5           # oben links hell
+            ton = np.clip(t + np.round(licht * 1.6 + (d > 0.7) * -1), 1, 6).astype(int)
+            for k in range(1, 7):
+                sel = inn & (ton == k)
+                sub[sel] = F[k]
+            cx += 2 * rx + rnd.uniform(0.5, 1.5)
+    s_ = m[y0:y1, x0:x1]
+    a[y0:y1, x0:x1][s_] = sub[s_]
+
+
+def pfeiler_mauer(a, m, seed, hell=0, pfeiler=True):
+    """Burgmauer aus kleinen Ziegelsteinen (16x8) mit Wandpfeilern im festen Rhythmus (alle 8 Kacheln,
+    symmetrisch zum Tor): Pfeiler heller, nach rechts Schlagschatten auf die Mauer."""
+    F = [np.array(H(c), np.float32) for c in BURG]
+    y0, y1, x0, x1 = _box(m)
+    rs = np.random.RandomState(seed)
+    for y in range(y0, y1):
+        r = (y - y0) // 8
+        for x in range(x0, x1):
+            if not m[y, x]:
+                continue
+            dy = (y - y0) % 8
+            dx = (x + 8 * (r % 2)) % 16
+            t = 3 + ((x + 8 * (r % 2)) // 16 * 7 + r * 3) % 3 % 2 + hell
+            if dy == 7 or dx == 15:
+                c = F[1]
+            elif dy == 0:
+                c = F[t + 1]
+            else:
+                c = F[t] * (0.96 + 0.08 * rs.rand())
+            a[y, x] = c
+    if not pfeiler or y1 - y0 < 30:
+        return
+    k = 0
+    xs = sorted({int(TOR_MITTE + s * 128 * i) for i in range(1, 8) for s in (-1, 1)})
+    for px in xs:
+        p0, p1 = px - 6, px + 6
+        if p0 < x0 or p1 > x1 or not m[y0 + 10, p0:p1].all():
+            continue
+        for y in range(y0, y1):
+            for x in range(p0, p1):
+                dx = x - p0
+                dy = (y - y0) % 12
+                c = F[5] if dx < 2 else F[2] if dx >= 10 else F[4]
+                if dy == 11:
+                    c = F[2]
+                a[y, x] = c
+            for d, f in ((0, 0.6), (1, 0.72), (2, 0.86)):                # Schatten rechts auf die Mauer
+                a[y, p1 + d] = (a[y, p1 + d] * f).astype(np.uint8)
+        a[y0:y0 + 2, p0 - 1:p1 + 1] = F[6]                              # Kapitell
+        a[y0 + 2, p0 - 1:p1 + 1] = F[2]
+
+
+def moos_mauer(a, m, seed, hell=0):
+    """Alte Ruinenmauer: grosse, unregelmaessige Bloecke, Risse, Moos waechst aus den Fugen und von der Krone."""
+    bruchstein(a, m, seed, hell, reihe=13)
+    rnd = random.Random(seed + 3)
+    MOOS = [np.array(H(c), np.float32) for c in ('#2e4a22', '#3e6228', '#567e34', '#74a044')]
+    y0, y1, x0, x1 = _box(m)
+    for _ in range(int((x1 - x0) * (y1 - y0) / 180)):                   # Moospolster
+        cx, cy = rnd.randint(x0, x1 - 1), rnd.randint(y0, y1 - 1)
+        if rnd.random() < 0.5:
+            cy = y0 + rnd.randint(0, 6)
+        r = rnd.uniform(1.5, 4.0)
+        for yy in range(int(cy - r), int(cy + r) + 1):
+            for xx in range(int(cx - r * 1.4), int(cx + r * 1.4) + 1):
+                if y0 <= yy < y1 and x0 <= xx < x1 and m[yy, xx]:
+                    d = ((xx - cx) / (r * 1.4)) ** 2 + ((yy - cy) / r) ** 2
+                    if d <= 1 and rnd.random() < 1.1 - d * 0.6:
+                        k = 3 if (yy - cy) < -r * 0.3 else 2 if d < 0.5 else 1
+                        a[yy, xx] = MOOS[k] if rnd.random() > 0.15 else MOOS[0]
+    for _ in range(int((x1 - x0) / 60) + 1):                            # Risse
+        x, y = rnd.randint(x0 + 4, x1 - 5), rnd.randint(y0 + 2, y1 - 10)
+        for i in range(rnd.randint(6, 12)):
+            if m[y, x]:
+                a[y, x] = H(BURG[0])
+                if x + 1 < x1:
+                    a[y, x + 1] = (a[y, x + 1] * 0.8).astype(np.uint8)
+            y += 1; x += rnd.choice((-1, 0, 0, 1))
+            if y >= y1 or not (x0 <= x < x1):
+                break
+
+
+def mauer_textur(a, m, seed, hell=0, pfeiler=False):
+    if MAUER_STIL == 'fels':
+        fels_mauer(a, m, seed, hell)
+    elif MAUER_STIL == 'quader':
+        quader_mauer(a, m, seed, hell)
+    elif MAUER_STIL == 'feldstein':
+        feldstein_mauer(a, m, seed, hell)
+    elif MAUER_STIL == 'pfeiler':
+        pfeiler_mauer(a, m, seed, hell, pfeiler)
+    elif MAUER_STIL == 'moos':
+        moos_mauer(a, m, seed, hell)
+    else:
+        bruchstein(a, m, seed, hell)
+
+
+def mauerkrone(a, y, x0, x1):
+    """Abdeckung oben auf der Front je nach Stil."""
+    if MAUER_STIL == 'fels':
+        return                                                        # Felsen: Lippe kommt aus der Textur
+    if MAUER_STIL == 'quader':
+        a[y:y + 4, x0:x1] = np.array([H(BURG[6]), H(BURG[5]), H(BURG[5]), H(BURG[2])])[:, None, :]
+        for x in range(x0, x1, 32):
+            a[y:y + 4, x] = H(BURG[3])
+        return
+    if MAUER_STIL == 'pfeiler':
+        a[y:y + 3, x0:x1] = np.array([H(BURG[6]), H(BURG[4]), H(BURG[1])])[:, None, :]
+        return
+    a[y:y + 3, x0:x1] = np.array([H(BURG[5]), H(BURG[6]), H(BURG[3])])[:, None, :]
+    for x in range(x0, x1, 8):
+        a[y:y + 3, x] = H(BURG[2])
+
+
 def kontaktschatten(a, m, n=3, f=0.62):
     """Schatten unter einer Front (nach Sueden) auf den Boden darunter."""
     unten = m & ~np.roll(m, -1, 0)
@@ -210,7 +390,7 @@ def bauen(frame=None, speichern=True):
     top = sm & np.roll(sm, -RUINE_H, 0)
     a[sm] = np.clip(kies[sm].astype(np.int16) + 14, 0, 255).astype(np.uint8)
     front = sm & ~top
-    bruchstein(a, front, 31, hell=0)
+    mauer_textur(a, front, 31, hell=0)
     a[kante_rund(sm) & top] = H(BURG[1])
     a[top & ~np.roll(top, 1, 0)] = H(BURG[6])                       # Lichtkante oben
     a[top & ~np.roll(top, -1, 0) & sm] = H(BURG[5])                  # Kante zur Front
@@ -226,7 +406,7 @@ def bauen(frame=None, speichern=True):
     a[hm] = (kies[hm] * 0.84).astype(np.uint8)
     rw = np.zeros_like(hm)
     rw[hy0 * T:hy0 * T + HOF_H, hx0 * T:(hx1 + 1) * T] = True
-    bruchstein(a, rw, 41, hell=-1)
+    mauer_textur(a, rw, 41, hell=-1)
     a[hy0 * T:hy0 * T + 2, hx0 * T:(hx1 + 1) * T] = H(BURG[6])       # Mauerkrone (Lichtkante)
     a[hy0 * T + 2, hx0 * T:(hx1 + 1) * T] = H(BURG[2])
     yb = (hy1 + 1) * T
@@ -257,10 +437,8 @@ def bauen(frame=None, speichern=True):
     ym0, ym1 = (mk + 1) * T, (mk + 1) * T + MAUER_H
     mauer = np.zeros((Hp, Wp), bool)
     mauer[ym0:ym1, :] = True
-    bruchstein(a, mauer, 51, hell=0)
-    a[ym0:ym0 + 3] = np.array([H(BURG[5]), H(BURG[6]), H(BURG[3])])[:, None, :]   # Mauerkrone
-    for x in range(0, Wp, 8):                                       # Kronenfugen
-        a[ym0:ym0 + 3, x] = H(BURG[2])
+    mauer_textur(a, mauer, 51, hell=0, pfeiler=True)
+    mauerkrone(a, ym0, 0, Wp)
     kontaktschatten(a, mauer, 4, 0.55)
     # Treppen in der Burgmauer (frontal, wie Karte 04) und Hoehlentor
     for (sx0, sx1) in lay['treppen']:
