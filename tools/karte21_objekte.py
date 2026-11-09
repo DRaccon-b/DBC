@@ -29,6 +29,24 @@ BLUMEN = ['k01/deko%02d' % i for i in (0, 1, 2, 3, 4, 27, 30)]
 HOCH_FELS = ['k01/deko09', 'k01/deko11']
 HOCH_BLUME = ['k01/deko04', 'k01/deko27', 'k01/deko30']
 
+FREMD.update({
+    'k03/feuer': 'karte03/klein/16.png', 'k03/sack': 'karte03/klein/12.png', 'k03/sack2': 'karte03/klein/47.png',
+    'k03/fass': 'karte03/klein/14.png', 'k03/kiste': 'karte03/klein/13.png', 'k03/teppich': 'karte03/klein/34.png',
+    'k03/holz': 'karte03/klein/63.png', 'k04/wegweiser': 'karte04/mittel/13.png', 'k04/feuerring': 'karte04/mittel/04.png',
+    'k01/laterne': 'karte01/laterne.png',
+})
+LILA = {'lager/segel': 'karte03/klein/32.png', 'lager/banner': 'karte03/klein/18.png'}   # rot -> lila umgefaerbt (Vorlage)
+ACHSE_TOR = 45.5                                               # Achse des Tors: Paare an der Mauer spiegeln (Spalte x <-> 90 - x)
+LAGER_OBEN = [
+    ('lager/segel', 50.5, 7, {}), ('k03/sack', 53, 6, {}), ('k03/sack2', 52, 5, {}), ('k03/fass', 54, 4, {}),
+    ('k03/feuer', 47.5, 11, {'anim': 'feuer'}), ('k01/deko16', 49.5, 12, {'liegend': True}), ('k04/wegweiser', 46, 14, {}),
+    ('k04/feuerring', 35, 10, {}), ('k03/teppich', 38, 11, {}), ('k04/feuerring', 41, 11, {}), ('k03/holz', 52, 11, {}),
+]
+MAUER_DEKO = [                                                 # exakt spiegelsymmetrisch zur Torachse
+    ('k01/deko25', 43, 60, {'an_wand': True}), ('k01/deko25', 47, 60, {'an_wand': True, 'spiegeln': True}),
+    ('k01/laterne', 27, 61, {'anim': 'laterne'}), ('k01/laterne', 63, 61, {'anim': 'laterne'}),
+    ('lager/banner', 34, 62, {'anim': 'fahne'}), ('lager/banner', 56, 62, {'anim': 'fahne', 'spiegeln': True}),
+]
 TV_A, TV_B, TV_C, TV_D, TV_KAPUTT, TV_GROSS = 'tv/00', 'tv/01', 'tv/03', 'tv/04', 'tv/02', 'tv_gross/00'   # PixelLab k21_tv / k21_tv_gross
 # Baeume auf der Wiese nach der Vorlage: (sprite, Kachel-x der Fussmitte, Fusszeile, Optionen)
 FEST = [
@@ -49,6 +67,19 @@ FEST = [
     (TV_GROSS, 20.5, 17, {}), (TV_GROSS, 67.5, 22, {'spiegeln': True}),
     (TV_KAPUTT, 24, 20, {}),
 ]
+FEST += LAGER_OBEN + MAUER_DEKO
+
+
+def lila(src, ziel):
+    """Rote Stoffpixel (Segel, Banner) in das Lila der Vorlage umfaerben, Helligkeit bleibt."""
+    a = np.array(Image.open(src).convert('RGBA')).astype(np.float32)
+    r, g, b = a[..., 0], a[..., 1], a[..., 2]
+    rot = (a[..., 3] > 0) & (r > g + 35) & (r > b + 25)
+    l = (r * 0.5 + g * 0.3 + b * 0.2)[rot]
+    ton = np.array([0.62, 0.36, 0.95], np.float32)
+    a[rot, :3] = np.clip(l[:, None] * ton[None, :] * 1.55, 0, 255)
+    os.makedirs(os.path.dirname(ziel), exist_ok=True)
+    Image.fromarray(a.astype(np.uint8)).save(ziel)
 
 
 def main():
@@ -62,6 +93,8 @@ def main():
         if os.path.exists(q):
             os.makedirs(os.path.dirname(ziel), exist_ok=True)
             shutil.copy(q, ziel)
+    for name, quelle in LILA.items():
+        lila(os.path.join(ROOT, 'assets', 'objekte', quelle), os.path.join(OBJ, name + '.png'))
     belegt, objekte, gesperrt = {}, [], set()
     for ty in range(rows):                                         # Fluss: keine Baumfuesse im oder direkt am Wasser
         for tx in range(cols):
@@ -103,7 +136,7 @@ def main():
             ys, xs = np.nonzero(aa)
             ux0, uy0, ux1, uy1 = int(xs.min()), int(ys.min()), int(xs.max()), int(ys.max())
             art = 'baum' if 'baum' in name or 'kirsche' in name else 'klein' if flach else 'stein'
-            ohne_fuss = name in ('k01/laterne', 'k06/tv_treppe') or name.startswith(('k07/gemuese', 'beet/'))
+            ohne_fuss = name in ('k01/laterne', 'k06/tv_treppe', 'k03/teppich') or name.startswith(('k07/gemuese', 'beet/'))
             v = sp if ohne_fuss else bauwerke.bodenfuss(sp, b, art)
             off = 0 if ohne_fuss else 2
             datei = 'varianten/%s_%s%s.png' % (name.replace('/', '-'), b, '_m' if spiegeln else '')
@@ -170,6 +203,18 @@ def main():
     def frei_gras(tx, ty):
         return all(cls[min(rows - 1, max(0, ty + dy))][min(cols - 1, max(0, tx + dx))] == 'g'
                    for dx in (-1, 0, 1) for dy in (-1, 0, 1))
+    pilze = 0                                                       # Pilze am Flussufer (Gras direkt neben dem Ufersand)
+    for _ in range(3000):
+        if pilze >= 10:
+            break
+        tx, ty = rnd.randrange(4, cols - 4), rnd.randrange(24, 40)
+        if any(cls[ty + dy][min(cols - 1, max(0, tx + dx))] == 'b' for dx in range(-3, 4) for dy in range(-3, 4)):
+            continue                                                # nicht an den Brueckenkoepfen
+        if cls[ty][tx] != 'g' or not any(cls[ty + dy][tx] == 'w' and any(cls[ty + dy + e][tx] == 'x' for e in (-2, -1, 1, 2))
+                                         for dy in (-1, 1)):
+            continue
+        if setze(rnd.choice(['k01/deko14', 'k01/deko14', 'k01/deko31']), tx, ty, {}, frei=True):
+            pilze += 1
     for liste, ziel in ((FELS_KLEIN + FELS_GROSS, 16), (BLUMEN, 40)):
         n = 0
         for _ in range(5000):
