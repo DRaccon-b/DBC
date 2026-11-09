@@ -44,7 +44,7 @@ LAGER_OBEN = [
     ('k04/feuerring', 35, 10, {}), ('teppich/00', 38.5, 11, {'liegend': True}), ('k03/holz', 52, 11, {}),   # ein Feuerring weniger (Nutzer)
 ]
 MAUER_DEKO = [                                                 # exakt spiegelsymmetrisch zur Torachse
-    ('k01/baum01', 42, 60, {'px': 44 * 16 - 23, 'py': 60 * 16 + 15, 'nur_blume': True}),  # links ein Baum statt Busch, ohne Fels (Nutzer)
+    ('k01/baum01', 43, 60, {'px': 45 * 16 - 23, 'py': 60 * 16 + 15, 'nur_blume': True}),  # links ein Baum statt Busch, ohne Fels (Nutzer)
     ('k01/deko25', 47, 60, {'an_wand': True, 'spiegeln': True}),
     ('k01/laterne', 27, 61, {'anim': 'laterne'}), ('k01/laterne', 63, 61, {'anim': 'laterne'}),
     ('lager/banner', 34, 62, {'anim': 'fahne'}), ('lager/banner', 56, 62, {'anim': 'fahne', 'spiegeln': True}),
