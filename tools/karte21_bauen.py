@@ -207,7 +207,7 @@ def bauen(frame=None, speichern=True):
     kontaktschatten(a, pm, 2, 0.8)
     # Ruinenplatten (Hoehe 2): Kacheln exakt, Oberseite helleres Pflaster, Front RUINE_H px Bruchstein
     sm = np.kron(np.array([[c == 's' for c in z] for z in cls]), np.ones((T, T), bool))
-    top = sm & ~np.roll(sm, -RUINE_H, 0)
+    top = sm & np.roll(sm, -RUINE_H, 0)
     a[sm] = np.clip(kies[sm].astype(np.int16) + 14, 0, 255).astype(np.uint8)
     front = sm & ~top
     bruchstein(a, front, 31, hell=0)
