@@ -35,12 +35,13 @@ FREMD.update({
     'k03/holz': 'karte03/klein/63.png', 'k04/wegweiser': 'karte04/mittel/13.png', 'k04/feuerring': 'karte04/mittel/04.png',
     'k01/laterne': 'karte01/laterne.png',
 })
-LILA = {'lager/segel': 'karte03/klein/32.png', 'lager/banner': 'karte03/klein/18.png'}   # rot -> lila umgefaerbt (Vorlage)
+LILA = {'lager/segel': 'karte03/mittel/09.png',   # grosses Zelt (Nutzer: groesser)
+         'lager/banner': 'karte03/klein/18.png'}   # rot -> lila umgefaerbt (Vorlage)
 ACHSE_TOR = 45.5                                               # Achse des Tors: Paare an der Mauer spiegeln (Spalte x <-> 90 - x)
 LAGER_OBEN = [
-    ('lager/segel', 50.5, 7, {}), ('k03/sack', 53, 6, {}), ('k03/sack2', 52, 5, {}), ('k03/fass', 54, 4, {}),
+    ('lager/segel', 50.5, 7, {}), ('k03/sack', 54, 7, {}), ('k03/sack2', 55, 6, {}), ('k03/fass', 56, 5, {}),
     ('k03/feuer', 47.5, 11, {'anim': 'feuer'}), ('k01/deko16', 49.5, 12, {'liegend': True}), ('k04/wegweiser', 46, 14, {}),
-    ('k04/feuerring', 35, 10, {}), ('k03/teppich', 38, 11, {}), ('k04/feuerring', 41, 11, {}), ('k03/holz', 52, 11, {}),
+    ('k04/feuerring', 35, 10, {}), ('k03/teppich', 38.5, 11, {}), ('k03/holz', 52, 11, {}),   # ein Feuerring weniger (Nutzer)
 ]
 MAUER_DEKO = [                                                 # exakt spiegelsymmetrisch zur Torachse
     ('k01/deko25', 43, 60, {'an_wand': True}), ('k01/deko25', 47, 60, {'an_wand': True, 'spiegeln': True}),
@@ -74,7 +75,7 @@ def lila(src, ziel):
     """Rote Stoffpixel (Segel, Banner) in das Lila der Vorlage umfaerben, Helligkeit bleibt."""
     a = np.array(Image.open(src).convert('RGBA')).astype(np.float32)
     r, g, b = a[..., 0], a[..., 1], a[..., 2]
-    rot = (a[..., 3] > 0) & (r > g + 35) & (r > b + 25)
+    rot = (a[..., 3] > 0) & (r > g + 70) & (r > b + 60) & (r > 130)        # nur kraeftiges Rot (Stoff), kein Holz
     l = (r * 0.5 + g * 0.3 + b * 0.2)[rot]
     ton = np.array([0.62, 0.36, 0.95], np.float32)
     a[rot, :3] = np.clip(l[:, None] * ton[None, :] * 1.55, 0, 255)
