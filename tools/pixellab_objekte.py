@@ -1687,6 +1687,15 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'large rectangular woven rug lying flat on the grass, warm red and orange colors with a diamond pattern in the '
         'middle, a dark border and small fringes on the short sides, seen from above at a slight angle, flat on the ground',
     ]},
+    'k21_schrein': {'size': 48, 'items': [
+        'large orange egg with a simple yellow zigzag band, resting upright in a small round grey stone pedestal bowl, ' + FR14,
+        'large red egg with small white round spots, resting upright in a small round grey stone pedestal bowl, ' + FR14,
+        'large yellow egg with a black stripe band, resting upright in a small round grey stone pedestal bowl, ' + FR14,
+        'large pink egg with small white heart spots, resting upright in a small round grey stone pedestal bowl, ' + FR14,
+        'slender white marble column with a square base and a carved capital, ancient shrine pillar, ' + FR14,
+        'low ancient stone altar table, a flat grey stone slab resting on two short stone legs, dolmen, ' + FR14,
+        'small grey japanese stone lantern, toro, square roof cap and a small window in the middle, ' + FR14,
+    ]},
     'k21_tv_gross': {'size': 48, 'items': [
         'big old brown wooden cabinet CRT television standing on short wooden legs, wood grain case, large dark curved '
         'screen with a faint blue glow, a column of round knobs and a speaker grille on the right, ' + FR14,

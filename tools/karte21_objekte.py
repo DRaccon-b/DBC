@@ -48,6 +48,20 @@ MAUER_DEKO = [                                                 # exakt spiegelsy
     ('k01/laterne', 27, 61, {'anim': 'laterne'}), ('k01/laterne', 63, 61, {'anim': 'laterne'}),
     ('lager/banner', 34, 62, {'anim': 'fahne'}), ('lager/banner', 56, 62, {'anim': 'fahne', 'spiegeln': True}),
 ]
+# Schreinhof: alles exakt spiegelsymmetrisch zur Torachse (Spalte x <-> 90 - x); PixelLab k21_schrein
+def _sym(name, tx, fy, opt=None):
+    """Pixelgenau mittig auf Kachel tx (Mitte tx + 0.5) -> Paare tx / 90 - tx liegen exakt gespiegelt zur Torachse."""
+    o = dict(opt or {}); o['px'] = int((tx + 0.5) * 16); o['py'] = fy * 16 + 15
+    return (name, tx, fy, o)
+
+
+SCHREIN = [
+    _sym('schrein/04', 36, 51), _sym('schrein/04', 54, 51),                         # Saeulen
+    _sym('schrein/00', 38, 51), _sym('schrein/01', 41, 51),                         # Digi-Eier auf Sockeln
+    _sym('schrein/02', 49, 51), _sym('schrein/03', 52, 51),
+    ('schrein/05', 45, 51, {'px': int(ACHSE_TOR * 16), 'py': 51 * 16 + 15}),         # Steintisch genau auf der Achse
+    _sym('schrein/06', 37, 54), _sym('schrein/06', 53, 54),                         # Steinlaternen
+]
 TV_A, TV_B, TV_C, TV_D, TV_KAPUTT, TV_GROSS = 'tv/00', 'tv/01', 'tv/03', 'tv/04', 'tv/02', 'tv_gross/00'   # PixelLab k21_tv / k21_tv_gross
 # Baeume auf der Wiese nach der Vorlage: (sprite, Kachel-x der Fussmitte, Fusszeile, Optionen)
 FEST = [
@@ -68,7 +82,7 @@ FEST = [
     (TV_GROSS, 20.5, 17, {}), (TV_GROSS, 67.5, 22, {'spiegeln': True}),
     (TV_KAPUTT, 24, 20, {}),
 ]
-FEST += LAGER_OBEN + MAUER_DEKO
+FEST += LAGER_OBEN + MAUER_DEKO + SCHREIN
 
 
 def lila(src, ziel):
@@ -204,6 +218,15 @@ def main():
     def frei_gras(tx, ty):
         return all(cls[min(rows - 1, max(0, ty + dy))][min(cols - 1, max(0, tx + dx))] == 'g'
                    for dx in (-1, 0, 1) for dy in (-1, 0, 1))
+    steine = 0                                                      # ein paar kleine Steine auf dem Platz (nicht im Hof)
+    for _ in range(3000):
+        if steine >= 7:
+            break
+        tx, ty = rnd.randrange(20, 70), rnd.randrange(42, 57)
+        if not all(cls[ty + dy][tx + dx] == 'p' for dx in (-1, 0, 1) for dy in (-1, 0, 1)):
+            continue
+        if setze(rnd.choice(FELS_KLEIN), tx, ty, {}, frei=True):
+            steine += 1
     pilze = 0                                                       # Pilze am Flussufer (Gras direkt neben dem Ufersand)
     for _ in range(3000):
         if pilze >= 10:
