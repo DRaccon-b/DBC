@@ -1683,6 +1683,10 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'light reflection, small speaker grille and knobs on the right side, ' + FR14,
         'small broken old grey CRT television lying tipped over on its side in the grass, cracked dark screen, bent antenna, ' + FR14,
     ]},
+    'k21_teppich': {'size': 48, 'items': [
+        'large rectangular woven rug lying flat on the grass, warm red and orange colors with a diamond pattern in the '
+        'middle, a dark border and small fringes on the short sides, seen from above at a slight angle, flat on the ground',
+    ]},
     'k21_tv_gross': {'size': 48, 'items': [
         'big old brown wooden cabinet CRT television standing on short wooden legs, wood grain case, large dark curved '
         'screen with a faint blue glow, a column of round knobs and a speaker grille on the right, ' + FR14,

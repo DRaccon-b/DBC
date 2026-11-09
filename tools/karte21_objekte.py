@@ -41,7 +41,7 @@ ACHSE_TOR = 45.5                                               # Achse des Tors:
 LAGER_OBEN = [
     ('lager/segel', 50.5, 7, {}), ('k03/sack', 54, 7, {}), ('k03/sack2', 55, 6, {}), ('k03/fass', 56, 5, {}),
     ('k03/feuer', 47.5, 11, {'anim': 'feuer'}), ('k01/deko16', 49.5, 12, {'liegend': True}), ('k04/wegweiser', 46, 14, {}),
-    ('k04/feuerring', 35, 10, {}), ('k03/teppich', 38.5, 11, {}), ('k03/holz', 52, 11, {}),   # ein Feuerring weniger (Nutzer)
+    ('k04/feuerring', 35, 10, {}), ('teppich/00', 38.5, 11, {'liegend': True}), ('k03/holz', 52, 11, {}),   # ein Feuerring weniger (Nutzer)
 ]
 MAUER_DEKO = [                                                 # exakt spiegelsymmetrisch zur Torachse
     ('k01/deko25', 43, 60, {'an_wand': True}), ('k01/deko25', 47, 60, {'an_wand': True, 'spiegeln': True}),
@@ -137,7 +137,7 @@ def main():
             ys, xs = np.nonzero(aa)
             ux0, uy0, ux1, uy1 = int(xs.min()), int(ys.min()), int(xs.max()), int(ys.max())
             art = 'baum' if 'baum' in name or 'kirsche' in name else 'klein' if flach else 'stein'
-            ohne_fuss = name in ('k01/laterne', 'k06/tv_treppe', 'k03/teppich') or name.startswith(('k07/gemuese', 'beet/'))
+            ohne_fuss = name in ('k01/laterne', 'k06/tv_treppe', 'k03/teppich', 'teppich/00') or name.startswith(('k07/gemuese', 'beet/'))
             v = sp if ohne_fuss else bauwerke.bodenfuss(sp, b, art)
             off = 0 if ohne_fuss else 2
             datei = 'varianten/%s_%s%s.png' % (name.replace('/', '-'), b, '_m' if spiegeln else '')
