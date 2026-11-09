@@ -1696,6 +1696,10 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'low ancient stone altar table, a flat grey stone slab resting on two short stone legs, dolmen, ' + FR14,
         'small grey japanese stone lantern, toro, square roof cap and a small window in the middle, ' + FR14,
     ]},
+    'k21_saeule': {'size': 64, 'items': [
+        'tall slender grey stone column with a square base and a carved capital, cool blue-grey granite like an old '
+        'shrine pillar, slightly weathered with a little moss at the base, ' + FR14,
+    ]},
     'k21_tv_gross': {'size': 48, 'items': [
         'big old brown wooden cabinet CRT television standing on short wooden legs, wood grain case, large dark curved '
         'screen with a faint blue glow, a column of round knobs and a speaker grille on the right, ' + FR14,

@@ -56,7 +56,7 @@ def _sym(name, tx, fy, opt=None):
 
 
 SCHREIN = [
-    _sym('schrein/04', 36, 51), _sym('schrein/04', 54, 51),                         # Saeulen
+    _sym('saeule/00', 36, 51), _sym('saeule/00', 54, 51),                           # Saeulen (grau, groesser - Nutzer)
     _sym('schrein/00', 38, 51), _sym('schrein/01', 41, 51),                         # Digi-Eier auf Sockeln
     _sym('schrein/02', 49, 51), _sym('schrein/03', 52, 51),
     ('schrein/05', 45, 51, {'px': int(ACHSE_TOR * 16), 'py': 51 * 16 + 15}),         # Steintisch genau auf der Achse
