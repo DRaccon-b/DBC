@@ -1573,7 +1573,9 @@ def herunterladen(oid, d):
 
 
 def speichern(gruppe, ims, ids):
-    if gruppe.startswith('k21_'):
+    if gruppe.startswith('k22_'):
+        ziel = os.path.join(ROOT, 'assets', 'objekte', 'karte22', gruppe[4:])
+    elif gruppe.startswith('k21_'):
         ziel = os.path.join(ROOT, 'assets', 'objekte', 'karte21', gruppe[4:])
     elif gruppe.startswith('k20_'):
         ziel = os.path.join(ROOT, 'assets', 'objekte', 'karte20', gruppe[4:])
@@ -1711,7 +1713,39 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
 }
 
 
+OBJEKTGRUPPEN_K22 = {   # Karte 22 (Digicasino): Netz-Stil wie Karte 16, aber mit Casino-Farben (Rot, Gold, Violett, Neon)
+    'k22_casino': {'size': 48, 'items': [
+        'digital casino slot machine cabinet, dark violet metal body with gold trim, glowing screen with three reels '
+        'showing cherries and sevens, a red pull lever on the right side, neon cyan light strip on top, ' + FR14,
+        'round roulette table with a green felt top and a red and black roulette wheel in the middle, gold rim, '
+        'short dark wooden legs, seen from the front and slightly above, ' + FR14,
+        'casino card table with green felt top, a few playing cards and small chip stacks on it, gold edge, dark wood '
+        'legs, seen from the front and slightly above, ' + FR14,
+        'small stack of colorful casino chips in red, blue and gold, ' + FR14,
+        'casino velvet rope stanchion post, shiny gold pole on a round base with a red velvet rope hanging to the side, ' + FR14,
+        'glowing neon sign on a short metal stand showing a big pink dice, cyan neon frame, ' + FR14,
+    ]},
+    'k22_gross': {'size': 64, 'items': [
+        'huge golden jackpot slot machine, tall cabinet with a big glowing screen, flashing yellow lights around the '
+        'top sign, red lever, violet and gold body, ' + FR14,
+        'casino prize counter desk, long dark violet counter with gold trim, glass display shelves behind it with '
+        'colorful prizes and plush toys, a small bell on the counter, ' + FR14,
+        'large glowing cyan digital data crystal floating above a small dark metal pedestal with circuit lines, ' + FR14,
+    ]},
+}
+
+
 def erzeugen(gruppe):
+    if gruppe.startswith('k22_'):
+        g = OBJEKTGRUPPEN_K22[gruppe]
+        req = {'description': STIL_K16, 'size': g['size'], 'view': 'top-down',
+               'item_descriptions': [it + '. ' + STIL_K16 for it in g['items']]}
+        d = call('POST', '/v2/create-1-direction-object', req)
+        oid = d['object_id']
+        print(gruppe, 'Objekt', oid)
+        d = warte(oid)
+        speichern(gruppe, *herunterladen(oid, d))
+        return
     if gruppe.startswith(('k20_', 'k21_')):
         g = (OBJEKTGRUPPEN_K21 if gruppe.startswith('k21_') else OBJEKTGRUPPEN_K20)[gruppe]
         req = {'description': STIL, 'size': g['size'], 'view': 'top-down',
