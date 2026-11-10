@@ -236,9 +236,10 @@ def stahlseil(img, stationen, frame):
             a[y, x, :3] = (24, 28, 36); a[y, x + 1, :3] = (110, 120, 138); a[y, x + 2, :3] = (24, 28, 36)
     im = Image.fromarray(a).convert('RGBA')
     gon = Image.open(os.path.join(OBJ, 'gondel_gross', '00.png')).convert('RGBA')
-    t = 0.48 + 0.02 * frame
-    gx, gy = x0 + (x1 - x0) * t, y0 + (y1 - y0) * t
-    im.alpha_composite(gon, (int(gx) - 32 + 1, int(gy) - 2))
+    for t0 in (0.32, 0.72):                                          # zwei Gondeln (Nutzer), fahren mit dem Seil
+        t = t0 + 0.02 * frame
+        gx, gy = x0 + (x1 - x0) * t, y0 + (y1 - y0) * t
+        im.alpha_composite(gon, (int(gx) - 32 + 1, int(gy) - 2))
     img.paste(im.convert(img.mode))
 
 
