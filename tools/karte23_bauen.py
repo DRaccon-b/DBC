@@ -172,6 +172,47 @@ def hecken(img, lay, cls):
             w = min(mauer.width, X1 - x)
             lage.alpha_composite(mauer.crop((0, 0, w, mauer.height)), (x, Y))
             x += w
+    # Enden sauber abschliessen: Schnittkanten bekommen die dunkle Kontur des Sprites, Ecken abgerundet
+    L = np.array(lage)
+    def kante_schliessen(x0_, x1_, y0_, y1_, seite):
+        sub = L[y0_:y1_, x0_:x1_]
+        al_ = sub[..., 3] > 0
+        if not al_.any():
+            return
+        hell = sub[..., :3].astype(int).sum(-1)
+        dunkel = sub[al_][:, :3][np.argmin(hell[al_])]
+        if seite in ('l', 'r'):
+            cols_ = [0, 1] if seite == 'l' else [sub.shape[1] - 1, sub.shape[1] - 2]
+            ys_ = np.nonzero(al_[:, cols_[0]])[0]
+            if not len(ys_):
+                return
+            ya, yb = ys_.min(), ys_.max()
+            for yy_ in (ya, ya + 1, yb - 1, yb):                      # runde Ecken
+                sub[yy_, cols_[0], 3] = 0
+            sub[ya, cols_[1], 3] = 0; sub[yb, cols_[1], 3] = 0
+            for yy_ in range(ya + 2, yb - 1):
+                sub[yy_, cols_[0], :3] = dunkel
+            for yy_ in (ya + 1, yb - 1):
+                sub[yy_, cols_[1], :3] = dunkel
+        else:                                                         # unten
+            xs_ = np.nonzero(al_[-1])[0] if al_[-1].any() else np.nonzero(al_.any(0))[0]
+            xa, xb = xs_.min(), xs_.max()
+            yb = sub.shape[0] - 1
+            for xx_ in (xa, xa + 1, xb - 1, xb):
+                sub[yb, xx_, 3] = 0
+            sub[yb - 1, xa, 3] = 0; sub[yb - 1, xb, 3] = 0
+            sub[yb, xa + 2:xb - 1, :3] = dunkel
+            sub[yb - 1, xa + 1, :3] = dunkel; sub[yb - 1, xb - 1, :3] = dunkel
+            sub[yb - 3:yb - 1, xa + 2:xb - 1, :3] = (sub[yb - 3:yb - 1, xa + 2:xb - 1, :3] * 0.75).astype(np.uint8)
+    for (x0, y0, x1, y1) in lay['maeuerchen']:
+        Y = (y0 + 1) * T - mauer.height - 1
+        kante_schliessen(x0 * T, x0 * T + 4, Y, Y + mauer.height, 'l')
+        kante_schliessen((x1 + 1) * T - 4, (x1 + 1) * T, Y, Y + mauer.height, 'r')
+    for (x0, y0, x1, y1) in lay['hecken']:
+        if y0 != y1:
+            X = x0 * T + (T - senk.width) // 2
+            kante_schliessen(X, X + senk.width, (y1 + 1) * T - 8, (y1 + 1) * T - 2, 'u')
+    lage = Image.fromarray(L)
     al = np.array(lage.getchannel('A')) > 0
     sch = np.zeros_like(al)
     sch[3:, 2:] = al[:-3, :-2]
@@ -207,6 +248,33 @@ def felsboden(a, m, seed=61):
             cx += 2 * rx + rnd.uniform(0.6, 1.8)
     mm = m[y0:y1, x0:x1]
     a[y0:y1, x0:x1][mm] = sub[mm].astype(np.uint8)
+
+
+def schlamm(a, m, erde, seed=63):
+    """Schlammiger Rand: Erdkacheln dunkler und satter (nass), weiche Flecken, glaenzende Nassstellen (Licht oben
+    links) und ein paar kleine Pfuetzen."""
+    Hh, W = m.shape
+    rs = np.random.RandomState(seed)
+    n = rs.rand(Hh // 16 + 2, W // 16 + 2)
+    fl = np.array(Image.fromarray((n * 255).astype(np.uint8)).resize((W, Hh), Image.BICUBIC)).astype(np.float32) / 255
+    basis = erde.astype(np.float32) * np.array([0.66, 0.56, 0.5]) * (0.86 + 0.22 * fl[..., None])
+    a[m] = np.clip(basis[m], 0, 255).astype(np.uint8)
+    ys, xs = np.nonzero(m)
+    for i in rs.choice(len(ys), max(1, len(ys) // 260), replace=False):   # Nassglanz: kleine helle Sicheln
+        y, x = ys[i], xs[i]
+        if y + 3 < Hh and x + 5 < W and m[y:y + 3, x:x + 5].all():
+            a[y, x + 1:x + 4] = H('#b59a7a'); a[y + 1, x:x + 2] = H('#9c8062')
+            a[y + 2, x + 1:x + 5] = (a[y + 2, x + 1:x + 5] * 0.8).astype(np.uint8)
+    for i in rs.choice(len(ys), max(1, len(ys) // 2500), replace=False):  # Pfuetzen
+        y, x = ys[i], xs[i]
+        yy, xx = np.mgrid[-4:5, -7:8]
+        e = (xx / 7.0) ** 2 + (yy / 4.0) ** 2 <= 1
+        if 4 <= y < Hh - 5 and 7 <= x < W - 8 and m[y - 4:y + 5, x - 7:x + 8][e].all():
+            sub = a[y - 4:y + 5, x - 7:x + 8]
+            sub[e] = H('#4c4a48')
+            sub[e & (yy <= -2)] = H('#36302c')
+            sub[e & (yy == -1) & (xx < -1)] = H('#8a8e94')
+            sub[e & (yy == 0) & (xx > -4) & (xx < 0)] = H('#a8b0b8')
 
 
 def nach_oben(hoch, bis=4 * T):
@@ -305,7 +373,7 @@ def bauen(frame=None, speichern=True):
     if zug_o:
         k4.treppe(a, tz0 * T, (tz1 + 1) * T, yt, 's', 20, 'erde', sand)
     rm = weich(zell_maske(cls, 'kc', cols, rows), 4, 0.35, 12) & ~wand & ~cm & ~maske_aus(cls, 'wt', cols, rows)   # Felsrand: steiniger Erdboden bis an die Senke
-    felsboden(a, rm)
+    schlamm(a, rm, erde)
     # ---------------- Mauerchen, Hecken
     # ---------------- Wasser (Bach laeuft unten aus der Karte)
     import wasser_vertieft
