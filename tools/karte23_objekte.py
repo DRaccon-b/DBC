@@ -35,7 +35,12 @@ OBSTWIESE = [(x, y) for y in (8, 16, 24) for x in (5, 8, 11, 14, 23, 26, 29, 32,
 WIESE = [(55.5, 6), (38.5, 12), (38.5, 21), (65, 8), (64, 20), (42, 30), (27, 34), (36, 33), (49, 32), (61, 31),
          (68, 30), (71, 28), (87, 28), (91, 31), (53, 41), (49, 42), (5, 50), (8, 52), (53.5, 68), (4, 74), (9, 76),
          (15, 76), (37, 78), (52, 78), (62, 78), (23, 78)]
-FEST = [(OBST, x + 0.5, y, {'spiegeln': (x + y) % 2 == 0}) for (x, y) in OBSTWIESE] + \
+SORTEN = {'apfel': 'obst/apfel', 'birne': 'obst/00', 'orange': 'obst/01', 'pflaume': 'obst/02', 'kirsche': 'obst/03'}
+def sorte(x, y):                                               # je Reihe eine Sorte (wie gepflanzt), links/rechts verschieden
+    links = x < 20
+    reihe = {8: 0, 16: 1, 24: 2}[y]
+    return SORTEN[(('apfel', 'birne', 'kirsche') if links else ('orange', 'pflaume', 'apfel'))[reihe]]
+FEST = [(sorte(x, y), x + 0.5, y, {'spiegeln': (x + y) % 2 == 0}) for (x, y) in OBSTWIESE] + \
        [('k01/baum0%d' % (i % 3), x, y, {'spiegeln': i % 2 == 0}) for i, (x, y) in enumerate(WIESE)]
 
 

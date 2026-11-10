@@ -1725,6 +1725,12 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'seamless left and right sides so pieces can be placed in a long row, ' + FR14,
         'end piece of a low grey fieldstone farm wall, rounded stones at the left end, ' + FR14,
     ]},
+    'k23_obst': {'size': 32, 'items': [
+        'small round orchard pear tree with a leafy green crown full of yellow pears, short brown trunk, ' + FR14,
+        'small round orchard orange tree with a dark green crown full of bright orange fruits, short brown trunk, ' + FR14,
+        'small round orchard plum tree with a leafy green crown full of dark purple plums, short brown trunk, ' + FR14,
+        'small round orchard cherry tree with a leafy green crown full of small red cherries, short brown trunk, ' + FR14,
+    ]},
     'k21_tv_gross': {'size': 48, 'items': [
         'big old brown wooden cabinet CRT television standing on short wooden legs, wood grain case, large dark curved '
         'screen with a faint blue glow, a column of round knobs and a speaker grille on the right, ' + FR14,
