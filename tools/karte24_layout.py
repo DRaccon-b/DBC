@@ -23,7 +23,7 @@ ARENA = (33, 29, 62, 49)            # Suchbereich der Arena (x0, y0, x1, y1)
 SCHREIN = (62, 6, 80, 20)
 ARENA_TREPPEN = [(45, 49), (52, 56)]          # (x0, x1) an der Suedkante der Arena
 ARENA_LINKS = (39, 43)                        # Aufgang links (Reihen)
-SCHREIN_TREPPE = (66, 70)
+SCHREIN_TREPPE = (68, 71)
 GLEIS = (9, 88, 75)
 TELEPORTER = [(0, 41, 2, 5), (98, 65, 2, 4)]
 
@@ -107,9 +107,10 @@ def main():
     gx0, gx1, gy = GLEIS
     k[gy, gx0:gx1 + 1] = 'g'
     yy, xx = np.mgrid[0:R, 0:C]                       # Schrein: achteckige Flaeche wie die Vorlage (Mitte 71/13)
-    okt = (np.abs(xx - 71) <= 7) & (np.abs(yy - 13) <= 6) & (np.abs(xx - 71) + np.abs(yy - 13) <= 10)
-    ring = (np.abs(xx - 71) <= 9) & (np.abs(yy - 13) <= 8) & (np.abs(xx - 71) + np.abs(yy - 13) <= 13) & ~okt
-    k[ring & (yy < 20)] = 'r'
+    SX, SY = 70, 12                                   # Schrein groesser (Nutzer)
+    okt = (np.abs(xx - SX) <= 9) & (np.abs(yy - SY) <= 7) & (np.abs(xx - SX) + np.abs(yy - SY) <= 12)
+    ring = (np.abs(xx - SX) <= 11) & (np.abs(yy - SY) <= 9) & (np.abs(xx - SX) + np.abs(yy - SY) <= 15) & ~okt
+    k[ring & (yy < 22)] = 'r'
     k[okt] = np.where(k[okt] == 's', 's', 'b')
     h = np.where(k == 'r', 2, 0)
     # Mitte (Nutzer): Felsblock oberhalb der Arena und Arenaring zu EINER Felsmasse schliessen (keine Rinne dazwischen)
@@ -224,6 +225,14 @@ def main():
             for x in range(x0, x1):
                 if h[y, x] == 0 and k[y, x] in 'bs':
                     k[y, x] = 'r'; h[y, x] = 2
+    # Schrein wieder erhoeht mit Treppe (Nutzer)
+    h[okt & (k != 'r')] = 1
+    x0, x1 = SCHREIN_TREPPE
+    yb = max(y for y in range(R) if okt[y, (x0 + x1) // 2])
+    k[yb + 1:yb + 3, x0:x1 + 1] = 't'; h[yb + 1:yb + 3, x0:x1 + 1] = 0
+    for y in range(yb + 3, yb + 6):
+        for x in range(x0, x1 + 1):
+            k[y, x] = 'w'; h[y, x] = 0
     for (tx, ty, b, hh) in TELEPORTER:
         k[ty:ty + hh, tx:tx + b] = 'T'; h[ty:ty + hh, tx:tx + b] = 0
     lay = {'groesse': [C, R], 'klassen': [''.join(z) for z in k], 'hoehe': [''.join(str(c) for c in z) for z in h],

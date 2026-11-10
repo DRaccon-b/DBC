@@ -138,7 +138,7 @@ def bauen(frame=None, speichern=True):
     wand = k4.hoehenkanten(a, h1m, 'rot', 24, 8, LIPPE_ROT, frei_t, 71, berg=False)
     wand |= k4.hoehenkanten(a, hoch2, 'rot', FRONT, 8, LIPPE_ROT, frei_t & ~h1m, 72, berg=False)
     # Treppen der Arena und des Schreins (frontal nach Sueden)
-    for (x0, x1) in lay['arena_treppen']:
+    for (x0, x1) in lay['arena_treppen'] + [tuple(lay['schrein_treppe'])]:
         xc = ((x0 + x1 + 1) * T) // 2
         col = np.nonzero(hp[:, xc] == 1)[0]
         ye = int(col.max())
