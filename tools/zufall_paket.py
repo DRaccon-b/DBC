@@ -93,6 +93,7 @@ def main():
     manifest = {'tileSize': m['kachel'], 'chunkSize': m['feld'], 'padding': m['rand'],
                 'edgeTypes': {'C': 'closed (forest)', 'P': 'forest path', 'O': 'open meadow'},
                 'tileset': {'image': 'objects_tileset.png', 'sprites': sprites}, 'pieces': pieces}
+    tiled(manifest)                                      # Tiled-Tilesets + eine .tmx je Stueck, ergaenzt das Manifest
     json.dump(manifest, open(os.path.join(ZIEL, 'pieces.json'), 'w'), separators=(',', ':'))
     with open(os.path.join(ZIEL, 'pieces.js'), 'w') as fh:
         fh.write('/* Random Dungeon Kit - piece manifest (same content as pieces.json). Loaded with a plain\n'
@@ -124,6 +125,7 @@ def main():
     for f in os.listdir(KIT):
         if f.startswith('demo_') and f.endswith('.png'):
             shutil.copy(os.path.join(KIT, f), os.path.join(ZIEL, 'preview', f))
+    beispiele()                                          # ganze Zufalls-Dungeons als .tmj (ueber das JS in Node)
     if os.path.exists(ZIP):
         os.remove(ZIP)
     with zipfile.ZipFile(ZIP, 'w', zipfile.ZIP_DEFLATED, compresslevel=9) as z:
@@ -133,6 +135,135 @@ def main():
                 z.write(p, os.path.join('random_dungeon_kit', os.path.relpath(p, ZIEL)))
     print('->', os.path.relpath(ZIP, ROOT), '%.1f MB' % (os.path.getsize(ZIP) / 1e6), len(pieces), 'pieces,',
           len(sprites), 'sprites')
+
+
+# ---------------------------------------------------------------- Tiled
+TILED_VERSION, TILED_FORMAT = '1.10.2', '1.10'
+
+
+def xml(s):
+    return str(s).replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;').replace('"', '&quot;')
+
+
+def tiled(manifest):
+    """Schreibt tiled/: ground_tiles.png/.tsx (Bodenkacheln aller Stuecke, doppelte zusammengefasst),
+    objects.tsx (Bildsammlung, je Sprite ein PNG in tiled/sprites/), collision.tsx und pieces/<id>.tmx.
+    Ergaenzt das Manifest um manifest['tiled'] und je Stueck 'groundTiles' (Tile-IDs ab 0)."""
+    T = manifest['tileSize']
+    td = os.path.join(ZIEL, 'tiled')
+    for d in ('pieces', 'sprites'):
+        os.makedirs(os.path.join(td, d))
+    # Bodenkacheln
+    kacheln, index = [], {}
+    for p in manifest['pieces']:
+        im = Image.open(os.path.join(ZIEL, p['ground'])).convert('RGBA')
+        ids = []
+        for ty in range(im.height // T):
+            for tx in range(im.width // T):
+                k = im.crop((tx * T, ty * T, (tx + 1) * T, (ty + 1) * T))
+                b = k.tobytes()
+                if b not in index:
+                    index[b] = len(kacheln)
+                    kacheln.append(k)
+                ids.append(index[b])
+        p['groundTiles'] = ids
+    spalten = 64
+    zeilen = -(-len(kacheln) // spalten)
+    atlas = Image.new('RGBA', (spalten * T, zeilen * T))
+    for i, k in enumerate(kacheln):
+        atlas.paste(k, ((i % spalten) * T, (i // spalten) * T))
+    atlas.save(os.path.join(td, 'ground_tiles.png'), optimize=True)
+    with open(os.path.join(td, 'ground_tiles.tsx'), 'w') as f:
+        f.write('<?xml version="1.0" encoding="UTF-8"?>\n<tileset version="%s" tiledversion="%s" name="ground" '
+                'tilewidth="%d" tileheight="%d" tilecount="%d" columns="%d">\n <image source="ground_tiles.png" '
+                'width="%d" height="%d"/>\n</tileset>\n' % (TILED_FORMAT, TILED_VERSION, T, T, len(kacheln), spalten,
+                                                          atlas.width, atlas.height))
+    # Objekte: Bildsammlung
+    tsatlas = Image.open(os.path.join(ZIEL, 'objects_tileset.png')).convert('RGBA')
+    namen = sorted(manifest['tileset']['sprites'])
+    objtiles = []
+    for i, n in enumerate(namen):
+        s = manifest['tileset']['sprites'][n]
+        tsatlas.crop((s['x'], s['y'], s['x'] + s['w'], s['y'] + s['h'])).save(os.path.join(td, 'sprites', n + '.png'))
+        objtiles.append({'id': i, 'name': n, 'image': 'sprites/%s.png' % n, 'w': s['w'], 'h': s['h'], 'group': s['group']})
+    mw, mh = max(t['w'] for t in objtiles), max(t['h'] for t in objtiles)
+    with open(os.path.join(td, 'objects.tsx'), 'w') as f:
+        f.write('<?xml version="1.0" encoding="UTF-8"?>\n<tileset version="%s" tiledversion="%s" name="objects" '
+                'tilewidth="%d" tileheight="%d" tilecount="%d" columns="0">\n <grid orientation="orthogonal" width="1" height="1"/>\n'
+                % (TILED_FORMAT, TILED_VERSION, mw, mh, len(objtiles)))
+        for t in objtiles:
+            f.write(' <tile id="%d">\n  <properties>\n   <property name="sprite" value="%s"/>\n   <property name="group" value="%s"/>\n'
+                    '  </properties>\n  <image source="%s" width="%d" height="%d"/>\n </tile>\n'
+                    % (t['id'], xml(t['name']), xml(t['group']), t['image'], t['w'], t['h']))
+        f.write('</tileset>\n')
+    # Kollision: 1 Kachel (gesperrt)
+    kim = Image.new('RGBA', (T, T), (220, 60, 60, 150))
+    kim.save(os.path.join(td, 'collision.png'))
+    with open(os.path.join(td, 'collision.tsx'), 'w') as f:
+        f.write('<?xml version="1.0" encoding="UTF-8"?>\n<tileset version="%s" tiledversion="%s" name="collision" '
+                'tilewidth="%d" tileheight="%d" tilecount="1" columns="1">\n <image source="collision.png" width="%d" height="%d"/>\n'
+                ' <tile id="0">\n  <properties>\n   <property name="blocked" type="bool" value="true"/>\n  </properties>\n </tile>\n'
+                '</tileset>\n' % (TILED_FORMAT, TILED_VERSION, T, T, T, T))
+    g_obj = 1 + len(kacheln)
+    g_koll = g_obj + len(objtiles)
+    sprite_id = {t['name']: t['id'] for t in objtiles}
+    manifest['tiled'] = {
+        'ground': {'name': 'ground', 'source': 'tiled/ground_tiles.tsx', 'image': 'tiled/ground_tiles.png',
+                   'columns': spalten, 'tilecount': len(kacheln), 'imagewidth': atlas.width, 'imageheight': atlas.height},
+        'objects': {'name': 'objects', 'source': 'tiled/objects.tsx', 'tilewidth': mw, 'tileheight': mh,
+                    'tiles': [{'id': t['id'], 'sprite': t['name'], 'image': 'tiled/' + t['image'], 'w': t['w'], 'h': t['h']}
+                              for t in objtiles]},
+        'collision': {'name': 'collision', 'source': 'tiled/collision.tsx', 'image': 'tiled/collision.png'}}
+    # eine .tmx je Stueck
+    for p in manifest['pieces']:
+        W, H = p['cells'][0] * manifest['chunkSize'], p['cells'][1] * manifest['chunkSize']
+        boden = ','.join(str(i + 1) for i in p['groundTiles'])
+        koll = ','.join(str(g_koll) if c == '1' else '0' for z in p['collision'] for c in z)
+        oid = 1
+        objs = []
+        for o in p['objectList']:
+            s = manifest['tileset']['sprites'][o['sprite']]
+            gid = g_obj + sprite_id[o['sprite']] + (0x80000000 if o.get('flip') else 0)
+            props = '<property name="layer" type="int" value="%d"/>' % o['layer']
+            if o.get('anim'):
+                props += '<property name="anim" value="%s"/>' % o['anim']
+            objs.append('  <object id="%d" gid="%d" x="%d" y="%d" width="%d" height="%d"><properties>%s</properties></object>'
+                        % (oid, gid, o['x'], o['y'] + s['h'], s['w'], s['h'], props))
+            oid += 1
+        punkte = []
+        for name, (px, py) in p['points'].items():
+            punkte.append('  <object id="%d" name="%s" x="%d" y="%d"><point/></object>' % (oid, name, px * T + T // 2, py * T + T // 2))
+            oid += 1
+        eig = ''.join('  <property name="%s" value="%s"/>\n' % (k, xml(v)) for k, v in (
+            ('chunk', p['chunk']), ('pieceOrientation', p['orientation']), ('pieceType', p['type']),
+            ('edges', json.dumps(p['edges'], separators=(',', ':')))))
+        with open(os.path.join(td, 'pieces', p['id'] + '.tmx'), 'w') as f:
+            f.write('<?xml version="1.0" encoding="UTF-8"?>\n'
+                    '<map version="%s" tiledversion="%s" orientation="orthogonal" renderorder="right-down" width="%d" '
+                    'height="%d" tilewidth="%d" tileheight="%d" infinite="0" nextlayerid="5" nextobjectid="%d">\n'
+                    ' <properties>\n%s </properties>\n'
+                    ' <tileset firstgid="1" source="../ground_tiles.tsx"/>\n'
+                    ' <tileset firstgid="%d" source="../objects.tsx"/>\n'
+                    ' <tileset firstgid="%d" source="../collision.tsx"/>\n'
+                    ' <layer id="1" name="ground" width="%d" height="%d">\n  <data encoding="csv">\n%s\n</data>\n </layer>\n'
+                    ' <objectgroup id="2" name="objects">\n%s\n </objectgroup>\n'
+                    ' <layer id="3" name="collision" width="%d" height="%d" visible="0" opacity="0.6">\n  <data encoding="csv">\n%s\n</data>\n </layer>\n'
+                    ' <objectgroup id="4" name="points">\n%s\n </objectgroup>\n'
+                    '</map>\n' % (TILED_FORMAT, TILED_VERSION, W, H, T, T, oid, eig, g_obj, g_koll,
+                                   W, H, boden, '\n'.join(objs), W, H, koll, '\n'.join(punkte)))
+    print('Tiled:', len(kacheln), 'Bodenkacheln,', len(objtiles), 'Objekt-Sprites,', len(manifest['pieces']), '.tmx')
+
+
+def beispiele():
+    """Zwei ganze Dungeons als .tmj, erzeugt mit RandomDungeon.toTiled() in Node (prueft das JS mit)."""
+    import subprocess
+    ex = os.path.join(ZIEL, 'tiled', 'examples')
+    os.makedirs(ex, exist_ok=True)
+    skript = ("const RD=require(process.argv[1]+'/random_dungeon.js');const m=require(process.argv[1]+'/pieces.json');"
+              "const fs=require('fs');for(const s of [7,42]){const d=RD.generate(m,s,{width:6,height:5});"
+              "fs.writeFileSync(process.argv[1]+'/tiled/examples/dungeon_seed_'+s+'.tmj',"
+              "JSON.stringify(RD.toTiled(m,d,{imageBase:'../../'}),null,1));}")
+    subprocess.run(['node', '-e', skript, ZIEL], check=True)
 
 
 def uebersicht(pfad):

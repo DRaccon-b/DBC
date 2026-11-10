@@ -186,7 +186,12 @@ def gruppe(name):
 def objekt_tileset(namen, breite=32):
     """Alle Objekt-Sprites in ein Tileset-Bild: jedes Sprite im kleinsten 16er-Kachelblock, waagerecht
     zentriert, Fuss buendig unten (Regel 1/1b); nach Gruppen geordnet, jede Gruppe beginnt eine neue Reihe."""
-    bilder = {n: Image.open(os.path.join(SPRITES, n + '.png')).convert('RGBA') for n in namen}
+    bilder = {}
+    for n in namen:                       # halbtransparente Kontaktschatten liegen schon im Boden -> nicht doppelt
+        im = Image.open(os.path.join(SPRITES, n + '.png')).convert('RGBA')
+        a = np.array(im)
+        a[a[..., 3] < 200] = 0
+        bilder[n] = Image.fromarray(a)
     reihen = sorted(namen, key=lambda n: ((GRUPPEN + ['sonstige']).index(gruppe(n)), n))
     plaetze, cx, cy, zh, g_alt = {}, 0, 0, 0, None
     for n in reihen:

@@ -8,6 +8,7 @@ fully available.
 - **145 finished map pieces** (20 hand-made chunks in up to 8 orientations), each as separate images
 - **All objects in one tileset image** (`objects_tileset.png`) with coordinates
 - **One JavaScript file**, no dependencies, no build step, **no web server needed**
+- **Tiled map files**: every piece as `.tmx`, generated dungeons as `.tmj` (`toTiled()`), shared tilesets
 - Same seed → same dungeon
 
 ![all pieces](preview/all_pieces.png)
@@ -27,6 +28,12 @@ random_dungeon_kit/
 │   ├── <id>_objects.png       trees, decoration, portal … (+4 tiles padding for overhanging crowns)
 │   ├── <id>_above.png         upper parts of tall objects – draw ABOVE characters (same size as _objects)
 │   └── <id>_preview.png       the finished piece in one image (ground + objects + above)
+├── tiled/                     Tiled map editor files (Tiled 1.10+)
+│   ├── ground_tiles.png/.tsx  all ground tiles of all pieces, 16 × 16, duplicates merged
+│   ├── objects.tsx            image-collection tileset, one PNG per sprite in sprites/
+│   ├── collision.png/.tsx     one "blocked" tile (property blocked = true)
+│   ├── pieces/<id>.tmx        every piece as a Tiled map
+│   └── examples/              two complete dungeons (seed 7 and 42) as .tmj
 ├── chunks/
 │   ├── chunks.json            the 20 hand-made chunks as tile grids, edges, fixed objects
 │   └── chunks_overview.png
@@ -90,6 +97,7 @@ Node / bundler: `const RandomDungeon = require('./random_dungeon.js')` and `fetc
 | `renderGround(manifest, dungeon, images, createCanvas?)` | ground canvas only (for sprite mode) |
 | `objects(manifest, dungeon)` | every object as its own sprite, sorted by `layer`, then `footY` |
 | `drawObject(ctx, tileset, object, part)` | draws one object; `part` = `'all'`, `'top'` (above its base row) or `'bottom'` |
+| `toTiled(manifest, dungeon, { imageBase })` | the whole dungeon as a Tiled map object (TMJ), tilesets embedded |
 | `createRandom(seed)` | the seeded random generator used internally (mulberry32) |
 
 `createCanvas(w, h)` is optional, e.g. `(w, h) => new OffscreenCanvas(w, h)`.
@@ -114,6 +122,34 @@ Node / bundler: `const RandomDungeon = require('./random_dungeon.js')` and `fetc
    Object `x`/`y` are the top-left corner in map pixels; `sx`/`sy`/`w`/`h` the rectangle in the tileset;
    `blockTiles` the occupied tile block. Only the bottom row of a block is solid (already in `collision`).
 
+## Tiled
+
+Open any file in `tiled/pieces/` or `tiled/examples/` with the [Tiled map editor](https://www.mapeditor.org/)
+(1.10 or newer). Every map has the same layers:
+
+| layer | type | content |
+|---|---|---|
+| `ground` | tile layer | ground incl. baked contact shadows (tileset `ground`) |
+| `objects` | object layer | one tile object per tree / decoration / portal … (tileset `objects`), properties `sprite`, `layer` (0 = flat, 1 = standing), `anim` |
+| `collision` | tile layer, hidden | `blocked` tile where the player cannot walk |
+| `points` | object layer | point objects `spawn` (in front of the portal) and `boss` |
+
+Piece maps also carry map properties `chunk`, `pieceOrientation`, `pieceType` and `edges` (JSON).
+Tile objects use Tiled's usual bottom-left anchor; sort them by `y` to get the correct depth order with
+characters. Tile ids in `ground_tiles.png` are shared by all pieces, so pieces placed next to each other in
+Tiled form one map with one tileset.
+
+**Your own dungeon as a Tiled map:** in the demo press **Download .tmj** and save the file into the kit folder
+(next to `demo.html`), or in code:
+
+```js
+const map = RandomDungeon.toTiled(manifest, dungeon, { imageBase: '' });   // path from the .tmj to the kit
+const json = JSON.stringify(map);                                         // save as dungeon.tmj
+```
+
+The tilesets are embedded in the `.tmj` (image paths relative to the file), so loaders that need embedded
+tilesets (e.g. Phaser) work as well. The `.tmx` piece files reference the shared `.tsx` tilesets.
+
 ## Manifest (`pieces.json` / `pieces.js`)
 
 ```js
@@ -131,8 +167,10 @@ Node / bundler: `const RandomDungeon = require('./random_dungeon.js')` and `fetc
     ground, objects, above, preview,                // image paths
     collision: ['11110000001111', …],               // 14 rows per cell, '1' = blocked
     points: { spawn: [x, y] } | { boss: [x, y] },   // tile inside the piece
-    objectList: [{ sprite, x, y, block: [tx, ty, tw, th], layer, anim?, flip? }]   // px / tiles inside the piece
-  }]
+    objectList: [{ sprite, x, y, block: [tx, ty, tw, th], layer, anim?, flip? }],  // px / tiles inside the piece
+    groundTiles: [ … ]                              // ids in tiled/ground_tiles.png, row by row
+  }],
+  tiled: { ground, objects, collision }             // tileset info used by toTiled()
 }
 ```
 

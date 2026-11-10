@@ -30,6 +30,7 @@
   <label>Seed <input id="seed" type="number"></label>
   <button id="enter">Enter dungeon</button>
   <button id="random">New seed</button>
+  <button id="tiled" title="save this dungeon as a Tiled map into the kit folder">Download .tmj</button>
   <span class="info" id="info"></span>
 </div>
 <div id="loading"><div><div class="spinner"></div><div id="loadingText">Loading dungeon …</div></div></div>
@@ -137,6 +138,12 @@ addEventListener('keydown', (e) => {
 });
 addEventListener('keyup', (e) => keys.delete(e.key.toLowerCase()));
 document.getElementById('enter').onclick = () => enter(+document.getElementById('seed').value || 1);
+document.getElementById('tiled').onclick = () => {
+  // save next to demo.html (kit root) so the image paths in the map resolve
+  const blob = new Blob([JSON.stringify(RandomDungeon.toTiled(manifest, dungeon), null, 1)], { type: 'application/json' });
+  const a = Object.assign(document.createElement('a'), { href: URL.createObjectURL(blob), download: 'dungeon_seed_' + dungeon.seed + '.tmj' });
+  a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+};
 document.getElementById('random').onclick = () => enter(Math.floor(Math.random() * 1e9));
 
 enter(+(params.get('seed') ?? Math.floor(Math.random() * 1e9)));

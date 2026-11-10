@@ -12,6 +12,7 @@
  *   const images  = await RandomDungeon.loadImages(manifest, dungeon, './');
  *   const layers  = RandomDungeon.render(manifest, dungeon, images);      // { below, above } canvases
  *   draw: layers.below → characters → layers.above
+ *   Tiled:   JSON.stringify(RandomDungeon.toTiled(manifest, dungeon))  → save as dungeon.tmj
  *
  * Same seed + same size + same manifest = same dungeon.
  */
@@ -297,5 +298,63 @@
     } else ctx.drawImage(tileset, o.sx, sy, o.w, h, o.x, y, o.w, h);
   }
 
-  return { generate, loadImages, render, renderGround, objects, drawObject, createRandom, version: '1.0.0' };
+  /**
+   * The whole dungeon as a Tiled map (TMJ / JSON format, Tiled 1.10) with embedded tilesets:
+   * layers "ground" (tiles), "objects" (tile objects, bottom-left anchored), "collision" (hidden), "points".
+   * options.imageBase: path from where the .tmj will be saved to the kit folder (default '' = kit root).
+   * Save with JSON.stringify(map) as <name>.tmj; open in Tiled or load with any TMJ loader.
+   */
+  function toTiled(manifest, dungeon, options) {
+    const base = (options && options.imageBase) || '';
+    const t = manifest.tiled, T = manifest.tileSize, N = manifest.chunkSize;
+    const gObj = 1 + t.ground.tilecount, gColl = gObj + t.objects.tiles.length;
+    const spriteId = {};
+    t.objects.tiles.forEach((tile) => { spriteId[tile.sprite] = tile.id; });
+    const ground = new Array(dungeon.cols * dungeon.rows).fill(0);
+    for (const c of dungeon.cells) {
+      const w = c.piece.cells[0] * N;
+      c.piece.groundTiles.forEach((id, i) => {
+        ground[(c.y * N + Math.floor(i / w)) * dungeon.cols + c.x * N + (i % w)] = id + 1;
+      });
+    }
+    let nextId = 1;
+    const prop = (name, value) => ({ name, type: typeof value === 'number' ? 'int' : 'string', value });
+    const objs = objects(manifest, dungeon).map((o) => ({
+      id: nextId++, gid: (gObj + spriteId[o.sprite] + (o.flip ? 0x80000000 : 0)) >>> 0, name: '', type: '',
+      x: o.x, y: o.y + o.h, width: o.w, height: o.h, rotation: 0, visible: true,
+      properties: [prop('sprite', o.sprite), prop('layer', o.layer)].concat(o.anim ? [prop('anim', o.anim)] : []),
+    }));
+    const points = [];
+    for (const [name, p] of [['spawn', dungeon.spawn], ['boss', dungeon.boss]]) {
+      if (p) points.push({ id: nextId++, name, type: '', point: true, x: p.x * T + T / 2, y: p.y * T + T / 2,
+        width: 0, height: 0, rotation: 0, visible: true });
+    }
+    const layer = (id, name, extra) => Object.assign({ id, name, opacity: 1, visible: true, x: 0, y: 0 }, extra);
+    return {
+      type: 'map', version: '1.10', tiledversion: '1.10.2', orientation: 'orthogonal', renderorder: 'right-down',
+      width: dungeon.cols, height: dungeon.rows, tilewidth: T, tileheight: T, infinite: false,
+      compressionlevel: -1, nextlayerid: 5, nextobjectid: nextId,
+      properties: [prop('seed', dungeon.seed), prop('cellsX', dungeon.width), prop('cellsY', dungeon.height)],
+      tilesets: [
+        { firstgid: 1, name: 'ground', tilewidth: T, tileheight: T, tilecount: t.ground.tilecount, columns: t.ground.columns,
+          image: base + t.ground.image, imagewidth: t.ground.imagewidth, imageheight: t.ground.imageheight, margin: 0, spacing: 0 },
+        { firstgid: gObj, name: 'objects', tilewidth: t.objects.tilewidth, tileheight: t.objects.tileheight,
+          tilecount: t.objects.tiles.length, columns: 0, margin: 0, spacing: 0, grid: { orientation: 'orthogonal', width: 1, height: 1 },
+          tiles: t.objects.tiles.map((tile) => ({ id: tile.id, image: base + tile.image, imagewidth: tile.w, imageheight: tile.h,
+            properties: [prop('sprite', tile.sprite)] })) },
+        { firstgid: gColl, name: 'collision', tilewidth: T, tileheight: T, tilecount: 1, columns: 1, margin: 0, spacing: 0,
+          image: base + t.collision.image, imagewidth: T, imageheight: T,
+          tiles: [{ id: 0, properties: [{ name: 'blocked', type: 'bool', value: true }] }] },
+      ],
+      layers: [
+        layer(1, 'ground', { type: 'tilelayer', width: dungeon.cols, height: dungeon.rows, data: ground }),
+        layer(2, 'objects', { type: 'objectgroup', draworder: 'topdown', objects: objs }),
+        layer(3, 'collision', { type: 'tilelayer', width: dungeon.cols, height: dungeon.rows, visible: false, opacity: 0.6,
+          data: Array.from(dungeon.collision, (c) => (c ? gColl : 0)) }),
+        layer(4, 'points', { type: 'objectgroup', draworder: 'topdown', objects: points }),
+      ],
+    };
+  }
+
+  return { generate, loadImages, render, renderGround, objects, drawObject, toTiled, createRandom, version: '1.1.0' };
 });
