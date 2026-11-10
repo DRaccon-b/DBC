@@ -101,6 +101,65 @@ def braun(a):                     # Sandkacheln von Karte 01 -> Erdboden im selb
     return lo + (hi - lo) * np.clip((l - 0.45) / 0.45, 0, 1)
 
 
+def acker(a, m, erde):
+    """Gepfluegter Acker im Kachelstil: Erdkacheln (wie Hof/Wege), quer liegende Furchen alle 8 px - Kamm mit
+    Lichtkante oben, Flanke, dunkle Rinne -, kleine Erdkruemel, Rand leicht erhoeht (heller) mit dunkler Kante."""
+    Hh, W = m.shape
+    yy, xx = np.mgrid[0:Hh, 0:W]
+    ys, xs = np.nonzero(m)
+    y0 = ys.min()
+    r = (yy - y0) % 8
+    basis = erde.astype(np.float32) * 0.78
+    f = np.select([r == 0, r == 1, r <= 4, r == 5, r == 6], [1.22, 1.12, 1.0, 0.86, 0.66], 0.72)
+    neu = np.clip(basis * f[..., None], 0, 255)
+    rs = np.random.RandomState(int(y0) * 7 + int(xs.min()))
+    kr = rs.rand(Hh, W) < 0.035
+    neu[kr & (r <= 3)] = np.clip(neu[kr & (r <= 3)] * 1.18, 0, 255)  # Kruemel auf den Kaemmen
+    a[m] = neu[m].astype(np.uint8)
+    rand = m & ~(np.roll(m, 2, 0) & np.roll(m, -2, 0) & np.roll(m, 2, 1) & np.roll(m, -2, 1))
+    a[rand] = np.clip(erde[rand] * 0.95, 0, 255).astype(np.uint8)      # Feldrand (Erdwall)
+    kante = m & ~(np.roll(m, 1, 0) & np.roll(m, -1, 0) & np.roll(m, 1, 1) & np.roll(m, -1, 1))
+    a[kante] = (erde[kante] * 0.6).astype(np.uint8)
+
+
+def hecken(img, lay, cls):
+    """Hecken aus dem PixelLab-Objekt (k23_hecke): waagerecht nahtlose Stuecke mit runden Enden, senkrecht
+    gestapelte Heckenbloecke; Schatten der Silhouette nach rechts unten."""
+    d = os.path.join(OBJ, 'hecke')
+    seg = Image.open(os.path.join(d, '00.png')).convert('RGBA')
+    rund = Image.open(os.path.join(d, '01.png')).convert('RGBA')
+    block = Image.open(os.path.join(d, '02.png')).convert('RGBA')
+    lage = Image.new('RGBA', img.size, (0, 0, 0, 0))
+    for (x0, y0, x1, y1) in lay['hecken']:
+        if y0 == y1:                                                   # waagerecht
+            X0, X1 = x0 * T, (x1 + 1) * T
+            Y = (y0 + 1) * T - seg.height - 1
+            x = X0
+            while x < X1:
+                w = min(seg.width, X1 - x)
+                lage.alpha_composite(seg.crop((0, 0, w, seg.height)), (x, Y))
+                x += w
+            h2 = rund.width // 2
+            lage.paste(Image.new('RGBA', (h2, rund.height), (0, 0, 0, 0)), (X0, Y))
+            lage.alpha_composite(rund.crop((0, 0, h2, rund.height)), (X0, Y))
+            lage.paste(Image.new('RGBA', (rund.width - h2, rund.height), (0, 0, 0, 0)), (X1 - (rund.width - h2), Y))
+            lage.alpha_composite(rund.crop((h2, 0, rund.width, rund.height)), (X1 - (rund.width - h2), Y))
+        else:                                                          # senkrecht
+            X = x0 * T + (T - block.width) // 2
+            y = y0 * T - 6
+            while y + block.height <= (y1 + 1) * T:
+                lage.alpha_composite(block, (X, y))
+                y += 13
+    al = np.array(lage.getchannel('A')) > 0
+    sch = np.zeros_like(al)
+    sch[3:, 2:] = al[:-3, :-2]
+    sch &= ~al
+    base = np.array(img).astype(np.float32)
+    base[sch, :3] *= 0.68
+    img.paste(Image.fromarray(base.astype(np.uint8)), (0, 0))
+    img.alpha_composite(lage)
+
+
 def nach_oben(hoch, bis=4 * T):
     """Hochflaechen, die (fast) am oberen Kartenrand beginnen, bis zum Rand verlaengern - nur in ihren eigenen Spalten
     (keine Kantenstummel am Kartenrand)."""
@@ -139,7 +198,7 @@ def bauen(frame=None, speichern=True):
     for (x0, y0, x1, y1, _) in lay['felder']:
         bm = np.zeros((Hp, Wp), bool)
         bm[y0 * T + 2:(y1 + 1) * T - 2, x0 * T + 2:(x1 + 1) * T - 2] = True
-        k20.beete(a, bm)
+        acker(a, bm, erde)
     # ---------------- Hoehen: Plateau (Erde), Terrassen (Stein), Senke (Erde, Felsrand)
     wald = maske_aus(cls, 'h', cols, rows)
     nord = np.zeros((Hp, Wp), bool); nord[:4 * T] = True
@@ -206,10 +265,6 @@ def bauen(frame=None, speichern=True):
             a[y, x:x + 3] = H('#cfc2a8'); a[y + 1, x:x + 3] = H('#9c8c74'); a[y + 2, x + 1:x + 3] = H('#5e5040')
     # ---------------- Mauerchen, Hecken
     maeuerchen(a, maske_aus(cls, 'n', cols, rows))
-    hm = np.zeros((Hp, Wp), bool)
-    for (x0, y0, x1, y1) in lay['hecken']:
-        hm[y0 * T + 2:(y1 + 1) * T - 4, x0 * T + 1:(x1 + 1) * T - 1] = True
-    k4.hecke(a, hm, 7)
     # ---------------- Wasser (Bach laeuft unten aus der Karte)
     import wasser_vertieft
     xm = weich(zell_maske(cls, 'x', cols, rows), 4, 0.15, 8, 0.45)
@@ -219,6 +274,7 @@ def bauen(frame=None, speichern=True):
     ag = np.array(wasser_vertieft.vertiefen(Image.fromarray(ag), np.ones_like(mg), frame, maske=mg).convert('RGB'))
     a = ag[:Hp].copy()
     img = Image.fromarray(a).convert('RGBA')
+    hecken(img, lay, cls)
     zx0, zy0, zx1, zy1 = lay['zaun']
     k6.zaun(img, (zx0, zy0, zx1, zy1), (-9, -9))
     a = np.array(img.convert('RGB'))

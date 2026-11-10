@@ -1573,7 +1573,9 @@ def herunterladen(oid, d):
 
 
 def speichern(gruppe, ims, ids):
-    if gruppe.startswith('k22_'):
+    if gruppe.startswith('k23_'):
+        ziel = os.path.join(ROOT, 'assets', 'objekte', 'karte23', gruppe[4:])
+    elif gruppe.startswith('k22_'):
         ziel = os.path.join(ROOT, 'assets', 'objekte', 'karte22', gruppe[4:])
     elif gruppe.startswith('k21_'):
         ziel = os.path.join(ROOT, 'assets', 'objekte', 'karte21', gruppe[4:])
@@ -1706,6 +1708,12 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'dark purple canvas camping tent with an open dark entrance flap in the middle, a small golden trim along the '
         'ridge, tied ropes and wooden pegs at the corners, sturdy and cozy, ' + FR14,
     ]},
+    'k23_hecke': {'size': 32, 'items': [
+        'short section of a neatly trimmed dense green farm hedge, boxy rounded top, leafy texture with small light '
+        'highlights, darker leaves at the bottom, seamless left and right sides so pieces can be placed in a row, ' + FR14,
+        'end piece of a trimmed green farm hedge, rounded on the left side, flat cut on the right side, ' + FR14,
+        'small square trimmed green hedge bush block, rounded corners, ' + FR14,
+    ]},
     'k21_tv_gross': {'size': 48, 'items': [
         'big old brown wooden cabinet CRT television standing on short wooden legs, wood grain case, large dark curved '
         'screen with a faint blue glow, a column of round knobs and a speaker grille on the right, ' + FR14,
@@ -1746,8 +1754,8 @@ def erzeugen(gruppe):
         d = warte(oid)
         speichern(gruppe, *herunterladen(oid, d))
         return
-    if gruppe.startswith(('k20_', 'k21_')):
-        g = (OBJEKTGRUPPEN_K21 if gruppe.startswith('k21_') else OBJEKTGRUPPEN_K20)[gruppe]
+    if gruppe.startswith(('k20_', 'k21_', 'k23_')):
+        g = (OBJEKTGRUPPEN_K21 if gruppe.startswith(('k21_', 'k23_')) else OBJEKTGRUPPEN_K20)[gruppe]
         req = {'description': STIL, 'size': g['size'], 'view': 'top-down',
                'item_descriptions': [it + '. ' + STIL for it in g['items']],
                'target_palette': {'colors': PALETTE, 'name': 'Karte01 handheld'}}
