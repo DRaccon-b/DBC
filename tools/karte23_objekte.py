@@ -24,7 +24,9 @@ for i in range(64):
 FREMD['obst/apfel'] = 'karte23/mauer/48.png'
 FREMD['turm/00_rand'] = 'karte20/turm/00_rand.png'
 FREMD['k20/weizen'] = 'karte20/beet/02.png'
-FREMD['k01/laterne'] = 'karte01/laterne.png'                   # Weizen von Karte 20            # Windmuehle von Karte 20 (Fluegel werden je Bild gezeichnet)
+FREMD['k01/laterne'] = 'karte01/laterne.png'
+for i, n in enumerate(('moehre', 'kohl', 'weizen2', 'spross')):
+    FREMD['k20/' + n] = 'karte20/beet/%02d.png' % i                   # Weizen von Karte 20            # Windmuehle von Karte 20 (Fluegel werden je Bild gezeichnet)
 SCHEUNE, SILO, MUEHLE = 'scheune/00', 'scheune/01', 'turm/00_rand'
 GEBAEUDE = [                                                    # grosse Objekte zuerst (Positionen nach der Vorlage)
     (SCHEUNE, 6, 33, {}), (SILO, 10.5, 33, {}),                 # Hof links
@@ -42,6 +44,36 @@ TERRASSE_DEKO = (                                               # oben rechts na
     [('hecke/05', 75, 12, {}), ('hecke/15', 72.5, 19, {}), ('hecke/13', 85, 18, {}),
      ('hecke/08', 96, 8, {}), ('hecke/09', 96, 19, {}), ('mauer/37', 79, 7, {})]
     + _weizen(86, 97, 13) + _weizen(81, 88, 17) + _weizen(92, 97, 17))
+SORTE_FELD = {'moehren': 'k20/moehre', 'weizen': 'k20/weizen2', 'kohl': 'k20/kohl', 'salat': 'k20/spross'}
+
+
+def feld_pflanzen(felder):
+    """Pflanzen gleichmaessig im Acker (wie die Beete von Karte 20): Spalten alle 2 Kacheln, Reihen auf den Furchen
+    alle 2 Kacheln, mittig im Feld; in der Feldmitte eine Vogelscheuche (dort keine Pflanze)."""
+    out = []
+    for (x0, y0, x1, y1, sorte) in felder:
+        if sorte not in SORTE_FELD:
+            continue
+        bx0, bx1, by0, by1 = x0 * 16 + 2, (x1 + 1) * 16 - 2, y0 * 16 + 2, (y1 + 1) * 16 - 2
+        nx, ny = max(1, (x1 - x0 + 1) // 2), max(1, (y1 - y0 + 1) // 2)
+        mx, my = nx // 2, ny // 2
+        for j in range(ny):
+            fuss = by0 + (j + 1) * (by1 - by0) / (ny + 0.3)
+            for i in range(nx):
+                mitte = bx0 + (i + 0.5) * (bx1 - bx0) / nx
+                if i == mx and j == my:
+                    out.append(('hecke/13', mitte / 16, int(fuss // 16), {'px': int(mitte), 'py': int(fuss) + 2}))
+                    continue
+                o = {'px': int(round(mitte)), 'py': int(round(fuss)), 'an_wand': True}
+                if sorte == 'weizen':
+                    o['anim'] = 'wehen'
+                out.append((SORTE_FELD[sorte], mitte / 16, int(fuss // 16), o))
+    return out
+
+
+MITTE = [('hecke/09', 50.5, 51, {}), ('hecke/15', 50, 54, {}), ('hecke/08', 44.5, 54, {})]   # an der Scheune
+
+
 MITTE_LINKS = [                                                 # Hof links, Weide mit Zaun, Heuwiese (nach der Vorlage)
     # Hof: Reihen 37-40 bleiben frei (gedachter Weg vom Teleporter zum Weg, Nutzer) -> oben und unten verteilt
     ('hecke/10', 14, 34, {}), ('hecke/09', 16.5, 35, {}), ('hecke/08', 12, 35, {}),          # Heu an der Scheune (oben)
@@ -132,7 +164,7 @@ def main():
             ys, xs = np.nonzero(aa)
             ux0, uy0, ux1, uy1 = int(xs.min()), int(ys.min()), int(xs.max()), int(ys.max())
             art = 'baum' if 'baum' in name or 'kirsche' in name else 'klein' if flach else 'stein'
-            ohne_fuss = name in ('k01/laterne', 'k06/tv_treppe', 'k03/teppich', 'teppich/00', 'k20/weizen') or name.startswith(('k07/gemuese', 'beet/'))
+            ohne_fuss = name in ('k01/laterne', 'k06/tv_treppe', 'k03/teppich', 'teppich/00', 'k20/weizen', 'k20/moehre', 'k20/kohl', 'k20/weizen2', 'k20/spross') or name.startswith(('k07/gemuese', 'beet/'))
             v = sp if ohne_fuss else bauwerke.bodenfuss(sp, b, art)
             off = 0 if ohne_fuss else 2
             datei = 'varianten/%s_%s%s.png' % (name.replace('/', '-'), b, '_m' if spiegeln else '')
@@ -164,6 +196,10 @@ def main():
     for x in range(0, 20):                                       # Hof: Weg Teleporter -> Weg frei halten (Reihen 37-40)
         for y in range(37, 41):
             gesperrt.add((x, y))
+    for (name, fx, fy, opt) in feld_pflanzen(lay['felder']):     # Felder: dicht gepflanzt (nicht ueber 'frei')
+        setze(name, fx, fy, opt)
+    for (name, fx, fy, opt) in MITTE:
+        setze(name, fx, fy, opt, frei=True)
     for (name, fx, fy, opt) in MITTE_LINKS:
         setze(name, fx, fy, opt, frei=True)
     for (name, fx, fy, opt) in TERRASSE_DEKO:                  # Weizenreihen dicht (gepflanzt), Rest nur wo frei
