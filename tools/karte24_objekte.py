@@ -69,7 +69,7 @@ OBEN = [                                                        # oberer Canyon 
     (NADEL, 27.5, 8, {}), (NADEL, 16, 13, {}), (NADEL, 45, 11, {}),           # weniger rote Steine (Nutzer)
     (TOTBAUM, 31, 12, {}), (TOTBAUM, 38, 20, {'spiegeln': True}),
     (BROCKEN, 21, 10, {}),
-    (KNOCHEN, 21, 6, {'liegend': True}), (KNOCHEN, 15, 17, {'liegend': True}), (KNOCHEN, 23, 17, {'liegend': True}),
+    (KNOCHEN, 21, 7, {'liegend': True}), (KNOCHEN, 15, 17, {'liegend': True}), (KNOCHEN, 23, 17, {'liegend': True}),
     (KNOCHEN, 43, 18, {'liegend': True}), (SCHAEDEL2, 35.5, 10, {}),
     (GRAS, 9, 9, {}), (GRAS, 34, 7, {}), (GRAS, 43, 8, {}), (GRAS, 19.5, 17, {}), (GRAS, 50, 20, {}),
 ]
