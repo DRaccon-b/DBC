@@ -58,7 +58,8 @@ OBST = 'obst/apfel'
 OBSTWIESE = [(x, y) for y in (8, 16, 24) for x in (4, 8, 12, 24, 28, 32)]   # groessere Baeume -> 4 Kacheln Abstand
 WIESE = [(38.5, 15), (38.5, 21), (65, 8), (64, 20), (42, 30), (27, 34), (36, 33), (49, 32), (61, 31),
          (68, 30), (71, 28), (87, 28), (91, 31), (53, 41), (49, 42), (5, 50), (8, 52), (53.5, 68), (4, 74), (9, 76),
-         (15, 76), (37, 78), (52, 78), (62, 78), (23, 78)]
+         (15, 76), (37, 78), (52, 78), (62, 78), (23, 78),
+         (77.5, 6), (80.5, 4), (71.5, 15), (75.5, 18), (94.5, 4)]        # Terrassen oben rechts (Nutzer: ein paar Baeume)
 SORTEN = {'apfel': 'obst_gross/00', 'birne': 'obst_gross/01', 'orange': 'obst_gross/02', 'pflaume': 'obst_gross/03',
           'kirsche': 'obst_gross/04'}                            # groessere Obstbaeume (Nutzer), PixelLab k23_obst_gross
 def sorte(x, y):                                               # je Reihe eine Sorte (wie gepflanzt), links/rechts verschieden
@@ -216,6 +217,15 @@ def main():
         n_ = rnd.choice(KLEIN)
         if setze(n_, tx, ty, {'anim': 'wehen'} if n_.startswith('k01/deko0') or n_ in BLUMEN else {}, frei=True):
             n_d += 1
+    n_t = 0                                                      # Terrassen oben rechts: ein paar Blumen (Nutzer)
+    for _ in range(3000):
+        if n_t >= 16:
+            break
+        tx, ty = rnd.randrange(70, 98), rnd.randrange(3, 21)
+        if not all(cls[ty + dy][tx + dx] == 'g' for dx in (-1, 0, 1) for dy in (-1, 0, 1)):
+            continue
+        if setze(rnd.choice(['k01/deko%02d' % i for i in (0, 1, 2, 3, 30)] + ['k01/deko05']), tx, ty, {'anim': 'wehen'}, frei=True):
+            n_t += 1
     for ty in range(rows):                                       # Waldrand wie Karte 06
         for tx in range(cols):
             if cls[ty][tx] == 'h' and (tx + ty) % 2 == 0:
