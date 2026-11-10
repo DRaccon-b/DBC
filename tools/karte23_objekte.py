@@ -280,6 +280,17 @@ def main():
             continue
         if setze(rnd.choice(['k01/deko%02d' % i for i in (0, 1, 2, 3, 30)] + ['k01/deko05']), tx, ty, {'anim': 'wehen'}, frei=True):
             n_t += 1
+    setze('maulwurf/03', 93, 69, {}, frei=True)                 # Wegweiser am Ausgang rechts unten
+    for name, ziel in (('maulwurf/01', 4), ('maulwurf/00', 12), ('k01/deko09', 4), ('k01/deko11', 3), ('k01/deko08', 5)):
+        n_ = 0                                                   # unten rechts: Maulwurfshuegel, Baue, Felsen (Vorlage)
+        for _ in range(4000):
+            if n_ >= ziel:
+                break
+            tx, ty = rnd.randrange(56, 97), rnd.randrange(30, 77)
+            if not all(cls[ty + dy][tx + dx] in 'gf' for dx in (-1, 0, 1) for dy in (-1, 0, 1)):
+                continue
+            if setze(name, tx, ty, {'spiegeln': rnd.random() < 0.5}, frei=True):
+                n_ += 1
     for ty in range(rows):                                       # Waldrand wie Karte 06
         for tx in range(cols):
             if cls[ty][tx] == 'h' and (tx + ty) % 2 == 0:

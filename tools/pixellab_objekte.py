@@ -1753,6 +1753,11 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'small grey stone pedestal with a glowing cyan digital control panel screen, ' + FR14,
         'small pile of dark obsidian crystal shards and rubble, ' + FR14,
     ]},
+    'k23_maulwurf': {'size': 32, 'items': [
+        'small brown dirt molehill mound with a dark round hole on the front, loose soil crumbs around it, ' + FR14,
+        'large brown dirt burrow mound with a big dark tunnel entrance on the front, a few pebbles around it, ' + FR14,
+        'small grey field boulder rock with a little moss, ' + FR14,
+    ]},
     'k21_tv_gross': {'size': 48, 'items': [
         'big old brown wooden cabinet CRT television standing on short wooden legs, wood grain case, large dark curved '
         'screen with a faint blue glow, a column of round knobs and a speaker grille on the right, ' + FR14,
