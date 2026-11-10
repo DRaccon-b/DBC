@@ -132,10 +132,13 @@ def hecken(img, lay, cls):
     senk = Image.open(os.path.join(OBJ, 'hecke_senk', '00.png')).convert('RGBA')
     kappe = Image.open(os.path.join(OBJ, 'hecke_senk', '02.png')).convert('RGBA')
 
-    def angleichen(sp):                                                # senkrechte Hecke im Gruen der waagerechten
-        q = np.array(seg).astype(np.float32); z = np.array(sp).astype(np.float32)
-        f = q[q[..., 3] > 0][:, :3].mean(0) / np.maximum(1, z[z[..., 3] > 0][:, :3].mean(0))
-        z[..., :3] = np.clip(z[..., :3] * f, 0, 255)
+    def angleichen(sp):                                                # senkrechte Hecke in die Farbpalette der waagerechten:
+        q = np.array(seg).astype(np.float32); z = np.array(sp).astype(np.float32)   # Helligkeits-Rang -> Farbe
+        qm, zm = q[..., 3] > 0, z[..., 3] > 0
+        ql = q[qm][:, :3] @ np.array([0.3, 0.59, 0.11]); qc = q[qm][:, :3][np.argsort(ql)]
+        zl = z[zm][:, :3] @ np.array([0.3, 0.59, 0.11])
+        rang = np.argsort(np.argsort(zl)) / max(1, len(zl) - 1)
+        z[zm, :3] = qc[np.clip((rang * (len(qc) - 1)).round().astype(int), 0, len(qc) - 1)]
         return Image.fromarray(z.astype(np.uint8))
     senk, kappe = angleichen(senk), angleichen(kappe)
     # Endstueck unten: aus dem runden waagerechten Heckenstueck (Oberseite + Vorderseite) die linken und rechten
