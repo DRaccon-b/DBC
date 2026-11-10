@@ -163,6 +163,28 @@ def main():
     def frei_gras(tx, ty):
         return all(cls[min(rows - 1, max(0, ty + dy))][min(cols - 1, max(0, tx + dx))] == 'g'
                    for dx in (-1, 0, 1) for dy in (-1, 0, 1))
+    # Obstwiese oben links: Deko auf der Wiese (Nutzer) - nichts direkt an den Obstbaeumen (Stammreihe +-1)
+    for o in objekte:
+        if o['basis'].startswith('obst/'):
+            bx, by, wt, ht = o['block']
+            for x in range(bx - 1, bx + wt + 1):
+                for y in (by + ht - 2, by + ht - 1, by + ht):
+                    gesperrt.add((x, y))
+    OBST_DEKO_GROSS = [('hecke/16', 7, 12), ('hecke/08', 13, 20), ('hecke/11', 27, 12), ('mauer/28', 33, 20),
+                       ('obst/61', 3, 19), ('hecke/34', 36, 4), ('obst/41', 24, 20), ('mauer/36', 10, 5)]
+    for (name, x, y) in OBST_DEKO_GROSS:                       # groessere Stuecke zuerst (Kisten, Heu, Karren, Bienenstock)
+        setze(name, x + 0.5, y, {'spiegeln': (x * 7 + y) % 3 == 0}, frei=True)
+    KLEIN = ['k01/deko05', 'k01/deko06', 'k01/deko26'] + BLUMEN + ['obst/15', 'obst/17', 'obst/18']
+    n_d = 0
+    for _ in range(4000):
+        if n_d >= 34:
+            break
+        tx, ty = rnd.randrange(3, 37), rnd.randrange(3, 27)
+        if 16 <= tx <= 22 or not all(cls[ty + dy][tx + dx] == 'g' for dx in (-1, 0, 1) for dy in (-1, 0, 1)):
+            continue
+        n_ = rnd.choice(KLEIN)
+        if setze(n_, tx, ty, {'anim': 'wehen'} if n_.startswith('k01/deko0') or n_ in BLUMEN else {}, frei=True):
+            n_d += 1
     for ty in range(rows):                                       # Waldrand wie Karte 06
         for tx in range(cols):
             if cls[ty][tx] == 'h' and (tx + ty) % 2 == 0:
