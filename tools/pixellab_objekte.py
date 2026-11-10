@@ -1797,6 +1797,13 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'iron mine cart on small rail wheels, dark riveted steel body, heaped full of stacked deep blue sapphire bars shaped like ingots, ' + FR14,
         'iron railway buffer stop bumper at the end of a mine rail track, dark steel with a red and white striped plate, ' + FR14,
     ]},
+    'k24_kran': {'size': 128, 'items': [
+        'large yellow steel lattice mining jib crane, tall vertical lattice tower on a heavy dark steel base with concrete '
+        'blocks, a long horizontal lattice jib arm pointing to the right, a small operator cabin, a steel cable with a big '
+        'iron hook hanging down from the end of the jib, black and yellow warning stripes, ' + FR14,
+        'large yellow steel derrick crane for a mine, A-frame lattice tower on a dark steel base, a diagonal lattice boom '
+        'pointing up to the right, a cable with an iron hook and a small ore bucket hanging from the boom tip, ' + FR14,
+    ]},
     'k24_schrein': {'size': 64, 'items': [
         'dark emperor throne made of jagged black obsidian crystal spikes with deep purple and crimson highlights, a high '
         'pointed back, standing on a small stepped dark stone dais, ' + FR14,

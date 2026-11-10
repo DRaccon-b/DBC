@@ -104,7 +104,10 @@ GL = 75                                                         # Gleisreihe (la
 LOREN = [(GOLD, 79.5, GL, {'px': 79 * T + 8, 'dy': -5, 'auf_gleis': True}),        # drei Loren hintereinander, rechts
          (RUBIN, 81.6, GL, {'px': 81 * T + 10, 'dy': -5, 'auf_gleis': True}),       # wie in der Vorlage
          (SAPHIR, 83.7, GL, {'px': 83 * T + 12, 'dy': -5, 'auf_gleis': True})]
-UNTEN_LINKS = UNTEN_LINKS + LOREN + OBEN + SCHREIN_OBJ + ARENA_OBJ
+KRAN_TURM, KRAN_AUSLEGER = 'kran/00', 'kran/01'
+KRAENE = [(KRAN_AUSLEGER, 67.5, 66, {}),                        # vor der oberen Grube, Kuebel haengt ueber dem Oel
+          (KRAN_TURM, 85.5, 69, {})]                            # grosser Turmdrehkran rechts vor der Felswand
+UNTEN_LINKS = UNTEN_LINKS + LOREN + KRAENE + OBEN + SCHREIN_OBJ + ARENA_OBJ
 
 
 def main():
