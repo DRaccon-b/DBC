@@ -103,10 +103,22 @@ def main():
     rand = (v == 'k') & (np.mgrid[0:R, 0:C][0] >= 48) & (np.mgrid[0:R, 0:C][1] >= 64)
     k[rand] = 'k'
     innen = np.zeros((R, C), bool)
-    for y in range(48, 70):
+    links, rechts = {}, {}
+    for y in range(48, 70):                                       # Randspalten je Reihe (links/rechts der Mitte 76)
         xs = np.nonzero(rand[y])[0]
-        if len(xs) >= 2:
-            innen[y, xs.min() + 1:xs.max()] = True
+        l_ = xs[xs < 76]; r_ = xs[xs > 77]
+        if len(l_): links[y] = l_.max()
+        if len(r_): rechts[y] = r_.min()
+    for y in range(48, 70):                                       # Eingaenge: fehlende Randspalte aus den Nachbarreihen
+        if y not in links and y in rechts:
+            nb = [links[yy] for yy in (y - 3, y - 2, y - 1, y + 1, y + 2, y + 3) if yy in links]
+            if nb: links[y] = min(nb)
+        if y in links and y in rechts:
+            innen[y, links[y] + 1:rechts[y]] = True
+        elif y in links or y in rechts:
+            xs = np.nonzero(rand[y])[0]
+            if len(xs) >= 2:
+                innen[y, xs.min() + 1:xs.max()] = True
     innen &= ~rand
     k[innen] = 'c'
     h[innen | rand] = 0
