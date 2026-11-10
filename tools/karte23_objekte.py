@@ -21,7 +21,15 @@ for i in range(16):
     FREMD['k01/baum%02d' % i] = 'karte01/baeume/%02d.png' % i
 for i in range(64):
     FREMD['k01/deko%02d' % i] = 'karte01/deko/%02d.png' % i
-FREMD['obst/apfel'] = 'karte23/mauer/48.png'                  # Apfelbaum (PixelLab k23_mauer)
+FREMD['obst/apfel'] = 'karte23/mauer/48.png'
+FREMD['turm/00_rand'] = 'karte20/turm/00_rand.png'            # Windmuehle von Karte 20 (Fluegel werden je Bild gezeichnet)
+SCHEUNE, SILO, MUEHLE = 'scheune/00', 'scheune/01', 'turm/00_rand'
+GEBAEUDE = [                                                    # grosse Objekte zuerst (Positionen nach der Vorlage)
+    (SCHEUNE, 6, 33, {}), (SILO, 10.5, 33, {}),                 # Hof links
+    (SCHEUNE, 47, 51, {}),                                      # Mitte bei den Feldern
+    (SCHEUNE, 88, 7, {}), (SILO, 93.5, 7, {}),                  # obere Terrasse rechts
+    (MUEHLE, 41.5, 11, {'anim': 'muehle20'}), (MUEHLE, 58.5, 11, {'anim': 'muehle20'}),   # Plateau, symmetrisch zur Mitte
+]                  # Apfelbaum (PixelLab k23_mauer)
 WALD = ['k01/baum%02d' % i for i in (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 12, 13, 14)]
 FELS_KLEIN = ['k01/deko08', 'k01/deko10']
 FELS_GROSS = ['k01/deko09', 'k01/deko11']
@@ -32,7 +40,7 @@ OBST = 'obst/apfel'
 # Obstwiese oben links (Reihen wie in der Vorlage, einzelne Luecken)
 OBSTWIESE = [(x, y) for y in (8, 16, 24) for x in (5, 8, 11, 14, 23, 26, 29, 32, 35)
              if (x, y) not in ((26, 8), (8, 24), (32, 24))]
-WIESE = [(55.5, 6), (38.5, 12), (38.5, 21), (65, 8), (64, 20), (42, 30), (27, 34), (36, 33), (49, 32), (61, 31),
+WIESE = [(38.5, 15), (38.5, 21), (65, 8), (64, 20), (42, 30), (27, 34), (36, 33), (49, 32), (61, 31),
          (68, 30), (71, 28), (87, 28), (91, 31), (53, 41), (49, 42), (5, 50), (8, 52), (53.5, 68), (4, 74), (9, 76),
          (15, 76), (37, 78), (52, 78), (62, 78), (23, 78)]
 SORTEN = {'apfel': 'obst/apfel', 'birne': 'obst/00', 'orange': 'obst/01', 'pflaume': 'obst/02', 'kirsche': 'obst/03'}
@@ -118,6 +126,8 @@ def main():
                 gesperrt.add((x, y))
         return True
 
+    for (name, fx, fy, opt) in GEBAEUDE:
+        setze(name, fx, fy, opt)
     for (name, fx, fy, opt) in FEST:
         setze(name, fx, fy, opt, frei=True)                      # nur wo frei (Vorlagenpositionen am Raster pruefen)
     # Begleiter der Wiesenbaeume (Regel 5, nur Baeume in der Karte, nicht am Waldrand):

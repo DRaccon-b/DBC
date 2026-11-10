@@ -1731,6 +1731,11 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'small round orchard plum tree with a leafy green crown full of dark purple plums, short brown trunk, ' + FR14,
         'small round orchard cherry tree with a leafy green crown full of small red cherries, short brown trunk, ' + FR14,
     ]},
+    'k23_scheune': {'size': 80, 'items': [
+        'classic red farm barn with a white trim, a big white X-braced double door in the middle, a small hay loft door '
+        'above it, dark grey shingled gambrel roof seen slightly from above so the roof surface is visible, stone base, ' + FR14,
+        'tall red farm grain silo with a white band and a rounded grey metal dome roof, small ladder on the side, ' + FR14,
+    ]},
     'k21_tv_gross': {'size': 48, 'items': [
         'big old brown wooden cabinet CRT television standing on short wooden legs, wood grain case, large dark curved '
         'screen with a faint blue glow, a column of round knobs and a speaker grille on the right, ' + FR14,

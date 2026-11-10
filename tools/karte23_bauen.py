@@ -520,6 +520,15 @@ def bauen(frame=None, speichern=True):
                       key=lambda o: o['y'] + o['fuss'])
         if objs:
             cache = {o['datei']: Image.open(os.path.join(OBJ, o['datei'])).convert('RGBA') for o in objs}
+            neu = []                                                 # Windmuehlen (Karte 20): Fluegel je Bild fest ins Sprite
+            for o in objs:
+                if o.get('anim') == 'muehle20':
+                    o = dict(o); o.pop('anim')
+                    key_ = o['datei'] + '#f%d' % (frame or 0)
+                    cache[key_] = k20.muehle20(cache[o['datei']], frame or 0, dict(o, basis=o['basis']))
+                    o['datei'] = key_
+                neu.append(o)
+            objs = neu
             ebenen = lvl.copy().astype(np.int16)
             ebenen[wand] = 9
             ebenen[xm] = 7
