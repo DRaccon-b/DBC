@@ -58,20 +58,27 @@ def grube(a, m, frame=None):
     rs = np.random.RandomState(31)
     n = rs.rand(Hh // 8 + 2, W // 8 + 2)
     fl = np.array(Image.fromarray((n * 255).astype(np.uint8)).resize((W, Hh), Image.BICUBIC)).astype(np.float32) / 255
-    basis = np.array((18, 12, 22), np.float32) + np.array((14, 8, 22), np.float32) * fl[..., None]
+    basis = np.array((10, 8, 8), np.float32) + np.array((14, 10, 8), np.float32) * fl[..., None]   # fast schwarz
     a[oel] = basis[oel].astype(np.uint8)
-    band = ((xx + 2 * yy + f * 6) % 46 < 3) & oel                      # diagonale Spiegelung, wandert
-    a[band] = (a[band] * 0.4 + np.array((120, 96, 150)) * 0.6).astype(np.uint8)
-    glanz = oel & (d >= len(WAND)) & (d <= len(WAND) + 1)              # Lichtkante unter der Innenwand
-    a[glanz] = (a[glanz] * 0.5 + np.array((90, 70, 110)) * 0.5).astype(np.uint8)
+    # weicher Oelglanz: unregelmaessige, wolkige Flecken (kein Eis: keine geraden Linien, kein Blau)
+    n2 = rs.rand(Hh // 6 + 2, W // 6 + 2)
+    w2 = np.array(Image.fromarray((n2 * 255).astype(np.uint8)).resize((W, Hh), Image.BICUBIC)).astype(np.float32) / 255
+    ph = (f % 4) / 4.0
+    g = np.abs(((w2 + ph) % 1.0) - 0.5)                                 # wandernde Isolinien = schillernde Oelringe
+    ring1 = oel & (g < 0.018)
+    ring2 = oel & (g >= 0.018) & (g < 0.03)
+    a[ring1] = (a[ring1] * 0.3 + np.array((92, 70, 48)) * 0.7).astype(np.uint8)
+    a[ring2] = (a[ring2] * 0.5 + np.array((58, 52, 70)) * 0.5).astype(np.uint8)
+    glanz = oel & (d == len(WAND))                                     # Lichtkante unter der Innenwand
+    a[glanz] = (a[glanz] * 0.6 + np.array((70, 56, 44)) * 0.4).astype(np.uint8)
     ys, xs = np.nonzero(oel)                                           # Blasen (pulsieren)
     if len(ys):
         rb = np.random.RandomState(7)
-        for i in rb.choice(len(ys), max(1, len(ys) // 300), replace=False):
+        for i in rb.choice(len(ys), max(1, len(ys) // 350), replace=False):
             y, x = ys[i], xs[i]
             if (i + f) % 4 == 0 or not oel[max(0, y - 2):y + 3, max(0, x - 2):x + 3].all():
                 continue
-            a[y - 1, x - 1:x + 2] = (150, 130, 170); a[y, x - 1] = (110, 90, 140); a[y, x + 1] = (40, 28, 52)
+            a[y - 1, x] = (120, 100, 80); a[y, x - 1] = (60, 48, 40); a[y, x + 1] = (24, 18, 14); a[y + 1, x] = (24, 18, 14)
     kante = m & ~(np.roll(m, 1, 0) & np.roll(m, -1, 0) & np.roll(m, 1, 1) & np.roll(m, -1, 1))
     a[kante] = (22, 12, 8)
 
