@@ -24,7 +24,8 @@ STREIFEN = (4, 55, 85, 55)
 PODEST = [(4, 5, 33, 10)]
 HALLE_WAND = [(4, 16), (20, 42), (48, 57), (61, 85)]   # Tueren bei x 17-19, 43-47, 58-60
 RUECKWAENDE = [(42, 2, 85, 7)]                 # Labor: hohe Rueckwand mit Lueftungsgittern                      # Thronpodest (heller Boden), Kante darunter
-WAENDE_EXTRA = [(34, 2, 34, 12), (34, 16, 34, 20)]   # duenne Wand Thronsaal | Gang (Durchgang Reihen 13-15)
+WAENDE_EXTRA = [(34, 2, 34, 11), (34, 19, 34, 20)]   # duenne Wand Thronsaal | Gang (Durchgang Reihen 12-18, Nutzer: groesser)
+DURCHGAENGE = [(34, 12, 34, 18)]
 
 
 def main():
@@ -74,6 +75,8 @@ def main():
     for (x0, y0, x1, y1) in RUECKWAENDE:
         sub = k[y0:y1 + 1, x0:x1 + 1]
         sub[sub != '#'] = 'W'
+    for (x0, y0, x1, y1) in DURCHGAENGE:                           # offene Durchgaenge (keine Wandstuecke)
+        k[y0:y1 + 1, x0:x1 + 1] = '.'
     for (x0, y0, x1, y1) in PODEST:
         sub = k[y0:y1 + 1, x0:x1 + 1]
         sub[np.isin(sub, list('.g'))] = 'p'
