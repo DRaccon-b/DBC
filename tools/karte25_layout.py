@@ -73,6 +73,9 @@ def main():
     x0, y0, x1, y1 = SCHIFF
     k[y0:y1 + 1, x0:x1 + 1][np.isin(k[y0:y1 + 1, x0:x1 + 1], list('sfwkpS'))] = 'x'
     # Plateau: Gras + Weg auf Gras; die Felsfront der Vorlage wird Strand (die Front zeichnet bauen darunter)
+    # schmaler Sandstreifen oben (Leuchtturm der Vorlage, Nutzer): wird Berg/Gras
+    st = k[3:12, 50:56]
+    st[np.isin(st, list('sw'))] = 'g'
     gras = (k == 'g')
     gras &= ~((np.arange(R)[:, None] > 30) & (np.arange(C)[None, :] > 8))   # einzelne Palmblaetter auf dem Strand
     plateau = gras.copy()
