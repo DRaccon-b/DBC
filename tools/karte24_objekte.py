@@ -73,7 +73,18 @@ OBEN = [                                                        # oberer Canyon 
     (KNOCHEN, 43, 18, {'liegend': True}), (SCHAEDEL2, 35.5, 10, {}),
     (GRAS, 9, 9, {}), (GRAS, 34, 7, {}), (GRAS, 43, 8, {}), (GRAS, 19.5, 17, {}), (GRAS, 50, 20, {}),
 ]
-UNTEN_LINKS = UNTEN_LINKS + OBEN
+THRON, BANNER, PULT = 'schrein/00', 'schrein/01', 'schrein/02'
+AX = 70 * T                                                     # Achse des Schreins (Mitte der Treppe)
+def _p(name, dx, reihe, opt=None):                              # Paar spiegelsymmetrisch zur Achse
+    o = dict(opt or {})
+    return [(name, (AX - dx) / T, reihe, dict(o, px=AX - dx)), (name, (AX + dx) / T, reihe, dict(o, px=AX + dx, spiegeln=True))]
+SCHREIN_OBJ = (
+    [(THRON, AX / T, 10, {'px': AX})]                           # Thron oben auf der Achse
+    + _p(BANNER, 96, 12, {'anim': 'fahne'}) + _p(BANNER, 96, 16, {'anim': 'fahne'})
+    + _p(LATERNE, 40, 19, {'anim': 'lampe'})                    # Laternen links und rechts der Treppe
+    + [(PULT, 75, 9, {}), (SAECKE, 65, 9, {})]
+)
+UNTEN_LINKS = UNTEN_LINKS + OBEN + SCHREIN_OBJ
 
 
 def main():
@@ -104,9 +115,11 @@ def main():
         tx, ty = int(math.floor(fx)), int(fy)
         bx = int(round(fx + 0.5 - wt / 2.0))
         x = bx * T + (wt * T - bw) // 2 - ux0
+        if 'px' in opt:                                              # pixelgenaue Mitte (Symmetrie zur Schreinachse)
+            x = opt.pop('px') - (ux0 + bw // 2)
         y = (ty + 1) * T - 1 - uy1
         fuss_y = y + uy1
-        if not opt.get('hinter_fels') and (lvl[fuss_y, x + ux0 + bw // 2] != 1 or wand[fuss_y - 2:fuss_y + 1, x + ux0:x + ux1 + 1].any()):
+        if not opt.get('hinter_fels') and (lvl[fuss_y, x + ux0 + bw // 2] not in (1, 2) or wand[fuss_y - 2:fuss_y + 1, x + ux0:x + ux1 + 1].any()):
             print('  uebersprungen (nicht auf dem Canyonboden):', name, fx, fy)
             continue
         o = {'datei': datei, 'basis': name, 'x': x, 'y': y, 'fuss': h, 'kachel': [tx, ty],

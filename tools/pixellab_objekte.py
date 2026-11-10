@@ -1791,6 +1791,13 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'very long toppled dark navy black stone obelisk lying flat on its side on the ground, pointed tip on the right, '
         'broken base on the left, plain smooth stone without runes, seen from slightly above, ' + FR14,
     ]},
+    'k24_schrein': {'size': 64, 'items': [
+        'dark emperor throne made of jagged black obsidian crystal spikes with deep purple and crimson highlights, a high '
+        'pointed back, standing on a small stepped dark stone dais, ' + FR14,
+        'tall dark crimson war banner with a black border hanging from a black iron pole with a pointed tip, plain cloth without symbols, ' + FR14,
+        'dark metal control console desk with two small glowing green screens on top, ' + FR14,
+        'small red cable car gondola cabin hanging from a steel wheel on a cable, ' + FR14,
+    ]},
     'k21_tv_gross': {'size': 48, 'items': [
         'big old brown wooden cabinet CRT television standing on short wooden legs, wood grain case, large dark curved '
         'screen with a faint blue glow, a column of round knobs and a speaker grille on the right, ' + FR14,
