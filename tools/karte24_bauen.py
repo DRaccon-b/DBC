@@ -214,7 +214,7 @@ def bauen(frame=None, speichern=True):
             eisenzaun(img, (x0, y0, x1, y1), offen)
             nach = np.array(img)
             nach[~boden_ok] = vor[~boden_ok]                      # Zaun nie ueber Fels oder Felswand
-            img = Image.fromarray(nach)
+            img = Image.fromarray(nach).copy()
     lvl = hp.astype(np.uint8) + 1
     if speichern and frame is None:
         img.save(os.path.join(KARTE, 'terrain_basis.png'))
@@ -230,7 +230,18 @@ def bauen(frame=None, speichern=True):
             ebenen = lvl.copy().astype(np.int16)
             ebenen[wand] = 9
             ebenen[xm] = 7
+            vor = np.array(img)
             k4.objekte_zeichnen(img, objs, cache, ~xm & ~wand, frame, ebenen=ebenen)
+            nach = np.array(img)                                     # Fels/Felswand liegt ueber Objekten 'hinter_fels'
+            fels = (hp >= 1) | wand
+            for o in objs:
+                if o.get('hinter_fels'):
+                    sp = cache[o['datei']]
+                    y0_, x0_ = max(0, o['y']), max(0, o['x'])
+                    y1_, x1_ = min(Hp, o['y'] + sp.height + 6), min(Wp, o['x'] + sp.width + 6)
+                    m_ = fels[y0_:y1_, x0_:x1_]
+                    nach[y0_:y1_, x0_:x1_][m_] = vor[y0_:y1_, x0_:x1_][m_]
+            img = Image.fromarray(nach).copy()
             k4.animieren(img, objs, cache, frame or 0)
             kb.laternen_licht(img, [o for o in objs if o.get('anim') == 'laterne'], frame)
     if speichern and frame is None:

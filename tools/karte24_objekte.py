@@ -65,11 +65,10 @@ NADEL, TOTBAUM, KNOCHEN, BROCKEN, GRAS, LORE, SCHAEDEL2 = 'oben/00', 'oben/01', 
 OBELISK_LIEGT = 'obelisk_liegend/00'
 OBEN = [                                                        # oberer Canyon nach der Vorlage (sparsam verteilt)
     (OBELISK, 10.5, 18, {}), (OBELISK, 27.5, 18, {}),              # zwei stehende Obelisken
-    (OBELISK_LIEGT, 43.5, 21, {'liegend': True}),                 # umgestuerzter Obelisk unten rechts
-    (NADEL, 10.5, 8, {}), (NADEL, 27.5, 8, {}), (NADEL, 39, 7, {}), (NADEL, 16, 13, {}), (NADEL, 13, 16, {}),
-    (NADEL, 33.5, 14, {}), (NADEL, 45, 11, {}),
+    (OBELISK_LIEGT, 43.5, 22, {'liegend': True, 'hinter_fels': True}),   # eine Kachel tiefer, Fels liegt darueber
+    (NADEL, 27.5, 8, {}), (NADEL, 16, 13, {}), (NADEL, 45, 11, {}),           # weniger rote Steine (Nutzer)
     (TOTBAUM, 31, 12, {}), (TOTBAUM, 38, 20, {'spiegeln': True}),
-    (BROCKEN, 21, 10, {}), (BROCKEN, 15, 18, {}), (BROCKEN, 45, 19, {}),
+    (BROCKEN, 21, 10, {}),
     (KNOCHEN, 21, 6, {'liegend': True}), (KNOCHEN, 15, 17, {'liegend': True}), (KNOCHEN, 23, 17, {'liegend': True}),
     (KNOCHEN, 43, 18, {'liegend': True}), (SCHAEDEL2, 35.5, 10, {}),
     (GRAS, 9, 9, {}), (GRAS, 34, 7, {}), (GRAS, 43, 8, {}), (GRAS, 19.5, 17, {}), (GRAS, 50, 20, {}),
@@ -107,7 +106,7 @@ def main():
         x = bx * T + (wt * T - bw) // 2 - ux0
         y = (ty + 1) * T - 1 - uy1
         fuss_y = y + uy1
-        if lvl[fuss_y, x + ux0 + bw // 2] != 1 or wand[fuss_y - 2:fuss_y + 1, x + ux0:x + ux1 + 1].any():
+        if not opt.get('hinter_fels') and (lvl[fuss_y, x + ux0 + bw // 2] != 1 or wand[fuss_y - 2:fuss_y + 1, x + ux0:x + ux1 + 1].any()):
             print('  uebersprungen (nicht auf dem Canyonboden):', name, fx, fy)
             continue
         o = {'datei': datei, 'basis': name, 'x': x, 'y': y, 'fuss': h, 'kachel': [tx, ty],
