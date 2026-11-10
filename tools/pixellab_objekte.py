@@ -1780,6 +1780,17 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'highlights on the left edge, no runes, no symbols, no writing, standing directly on the ground with only a thin '
         'low square stone foot, ' + FR14,
     ]},
+    'k24_oben': {'size': 48, 'items': [
+        'tall thin pointed red sandstone rock spire, desert hoodoo, ' + FR14,
+        'small dead leafless desert tree with twisted dry grey-brown branches, ' + FR14,
+        'scattered white animal bones and a small rib cage lying flat on the desert ground, ' + FR14,
+        'small round red orange desert boulder with cracks, ' + FR14,
+        'small tuft of dry yellow desert grass, ' + FR14,
+    ]},
+    'k24_obelisk_liegend': {'size': 128, 'items': [
+        'very long toppled dark navy black stone obelisk lying flat on its side on the ground, pointed tip on the right, '
+        'broken base on the left, plain smooth stone without runes, seen from slightly above, ' + FR14,
+    ]},
     'k21_tv_gross': {'size': 48, 'items': [
         'big old brown wooden cabinet CRT television standing on short wooden legs, wood grain case, large dark curved '
         'screen with a faint blue glow, a column of round knobs and a speaker grille on the right, ' + FR14,
