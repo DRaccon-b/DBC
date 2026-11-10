@@ -89,13 +89,14 @@ def stege(a, lay, wasser):
     return oben | front
 
 
-SCHIFF_POS = (1424, 160)                 # Lage wie in der Vorlage (Sprite = Vorlagenausschnitt 1424..1904 x 160..464)
+SCHIFF_POS = (1424, 93)                  # Kaiser-Flaggschiff (eigener Entwurf, Nutzer: Variante A): Deck am Bug auf Hoehe des Anlegers
+SCHIFF_DATEI = os.path.join('schiff_a', '00_sauber.png')
 
 
 def schiff(a, wasser, frame):
     """Schiff (PixelLab Pro-Generator, Ausnahme Nutzer) im tiefen Wasser: Schatten nach rechts unten nur auf dem Wasser,
     Schaum an der Wasserlinie (wandert je Bild), Sprite darueber."""
-    sp = np.array(Image.open(os.path.join(OBJ, 'schiff', '00_sauber.png')).convert('RGBA'))
+    sp = np.array(Image.open(os.path.join(OBJ, SCHIFF_DATEI)).convert('RGBA'))
     al = sp[..., 3] > 0
     x0, y0 = SCHIFF_POS
     h, w = al.shape
@@ -173,8 +174,11 @@ def bauen(frame=None, speichern=True):
     d = np.where(df <= 0.5, np.minimum(dl + welle, wd.STUFE1 - 6), wd.STUFE1 + df)
     meiden = maske(cls, 'pT')
     meiden = np.array(Image.fromarray((meiden * 255).astype(np.uint8)).filter(ImageFilter.MaxFilter(9))) > 0
-    sx0, sy0, sx1, sy1 = lay['schiff']
-    meiden[sy0 * T:(sy1 + 1) * T, sx0 * T:(sx1 + 1) * T] = True
+    s_al = np.array(Image.open(os.path.join(OBJ, SCHIFF_DATEI)))[..., 3] > 0      # keine Felsen unter/am Schiff
+    s_m = np.zeros((Hp, Wp), bool)
+    sh_, sw_ = s_al.shape
+    s_m[SCHIFF_POS[1]:SCHIFF_POS[1] + sh_, SCHIFF_POS[0]:SCHIFF_POS[0] + sw_] = s_al[:Hp - SCHIFF_POS[1], :Wp - SCHIFF_POS[0]]
+    meiden |= np.array(Image.fromarray((s_m * 255).astype(np.uint8)).filter(ImageFilter.MaxFilter(25))) > 0
     wd.FELSEN_PROTOKOLL.clear()
     wd.FELSEN_AUSLASSEN = {(912, 952), (1024, 936), (1080, 902), (904, 1096)}   # 4 Felsspitzen in der Mitte weg (Nutzer)
     alt = wd.N_FRAMES
