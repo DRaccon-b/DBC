@@ -37,18 +37,43 @@ def faerben(lo, hi, a0=0.35, a1=0.5):
     return f
 
 
-def grube(a, m):
-    """Grube: dunkle Tiefe, oben (Nordkante) eine sichtbare Erdwand, Rand mit dunkler Kontur."""
+def grube(a, m, frame=None):
+    """Oelbecken (Nutzer: besser): runde, im Boden eingelassene Grube. Aussen ein Ring aus dunkler, oelverschmierter
+    Erde, oben (Nordseite) die sichtbare Innenwand aus Erdschichten, darin schwarz-violettes Oel mit Spiegelung:
+    helle Glanzbaender (Licht von oben links) und ein paar Blasen; Glanz wandert je Bild ein Stueck (Animation)."""
     Hh, W = m.shape
-    d = np.zeros((Hh, W), np.int32)
+    f = frame or 0
+    yy, xx = np.mgrid[0:Hh, 0:W]
+    from PIL import ImageFilter as _IF
+    aus = np.array(Image.fromarray((m * 255).astype(np.uint8)).filter(_IF.MaxFilter(5))) > 0
+    ring = aus & ~m
+    a[ring] = (a[ring] * 0.55 + np.array((46, 26, 22)) * 0.45).astype(np.uint8)          # oelverschmierter Rand
+    d = np.zeros((Hh, W), np.int32)                                    # Abstand zur Nordkante (Innenwand)
     for y in range(1, Hh):
         d[y] = np.where(m[y], np.where(m[y - 1], d[y - 1] + 1, 0), 0)
-    W_ = [np.array(H(c), np.float32) for c in ('#7c3e24', '#5c2c1a', '#44200f', '#2e160b')]
-    a[m] = (26, 12, 8)
-    for k, c in enumerate(W_):
+    WAND = [np.array(H(c), np.float32) for c in ('#8a4a2c', '#6a3620', '#4e2616', '#341a10', '#24120c')]
+    oel = m & (d >= len(WAND))
+    for k, c in enumerate(WAND):
         a[m & (d == k)] = c.astype(np.uint8)
-    rand = m & ~(np.roll(m, 1, 1) & np.roll(m, -1, 1))
-    a[rand] = (40, 18, 10)
+    rs = np.random.RandomState(31)
+    n = rs.rand(Hh // 8 + 2, W // 8 + 2)
+    fl = np.array(Image.fromarray((n * 255).astype(np.uint8)).resize((W, Hh), Image.BICUBIC)).astype(np.float32) / 255
+    basis = np.array((18, 12, 22), np.float32) + np.array((14, 8, 22), np.float32) * fl[..., None]
+    a[oel] = basis[oel].astype(np.uint8)
+    band = ((xx + 2 * yy + f * 6) % 46 < 3) & oel                      # diagonale Spiegelung, wandert
+    a[band] = (a[band] * 0.4 + np.array((120, 96, 150)) * 0.6).astype(np.uint8)
+    glanz = oel & (d >= len(WAND)) & (d <= len(WAND) + 1)              # Lichtkante unter der Innenwand
+    a[glanz] = (a[glanz] * 0.5 + np.array((90, 70, 110)) * 0.5).astype(np.uint8)
+    ys, xs = np.nonzero(oel)                                           # Blasen (pulsieren)
+    if len(ys):
+        rb = np.random.RandomState(7)
+        for i in rb.choice(len(ys), max(1, len(ys) // 300), replace=False):
+            y, x = ys[i], xs[i]
+            if (i + f) % 4 == 0 or not oel[max(0, y - 2):y + 3, max(0, x - 2):x + 3].all():
+                continue
+            a[y - 1, x - 1:x + 2] = (150, 130, 170); a[y, x - 1] = (110, 90, 140); a[y, x + 1] = (40, 28, 52)
+    kante = m & ~(np.roll(m, 1, 0) & np.roll(m, -1, 0) & np.roll(m, 1, 1) & np.roll(m, -1, 1))
+    a[kante] = (22, 12, 8)
 
 
 def gleis(a, x0, x1, y):
@@ -127,7 +152,9 @@ def bauen(frame=None, speichern=True):
     xm &= (hp == 0) & ~wand                                       # Becken im Boden, nie auf Fels oder Wand (Nutzer)
     from PIL import ImageFilter as _IF
     xm = np.array(Image.fromarray((xm * 255).astype(np.uint8)).filter(_IF.MinFilter(5))) > 0      # Abstand zur Wand
-    grube(a, xm)
+    nah = np.array(Image.fromarray((((hp > 0) | wand) * 255).astype(np.uint8)).filter(_IF.MaxFilter(13))) > 0
+    xm = weich(xm.astype(np.float32), 6, 0.25, 21, 0.5) & ~nah                                       # rund, Abstand zum Fels
+    grube(a, xm, frame)
     gx0, gx1, gy = lay['gleis']
     gleis(a, gx0, gx1, gy)
     for tp in lay['teleporter']:
