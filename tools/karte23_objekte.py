@@ -22,7 +22,8 @@ for i in range(16):
 for i in range(64):
     FREMD['k01/deko%02d' % i] = 'karte01/deko/%02d.png' % i
 FREMD['obst/apfel'] = 'karte23/mauer/48.png'
-FREMD['turm/00_rand'] = 'karte20/turm/00_rand.png'            # Windmuehle von Karte 20 (Fluegel werden je Bild gezeichnet)
+FREMD['turm/00_rand'] = 'karte20/turm/00_rand.png'
+FREMD['k20/weizen'] = 'karte20/beet/02.png'                   # Weizen von Karte 20            # Windmuehle von Karte 20 (Fluegel werden je Bild gezeichnet)
 SCHEUNE, SILO, MUEHLE = 'scheune/00', 'scheune/01', 'turm/00_rand'
 GEBAEUDE = [                                                    # grosse Objekte zuerst (Positionen nach der Vorlage)
     (SCHEUNE, 6, 33, {}), (SILO, 10.5, 33, {}),                 # Hof links
@@ -31,6 +32,15 @@ GEBAEUDE = [                                                    # grosse Objekte
     (MUEHLE, 41.5, 11, {'anim': 'muehle20'}), (MUEHLE, 58.5, 11, {'anim': 'muehle20'}),   # Plateau, symmetrisch zur Mitte
     ('turm/00', 50, 13, {'px': 50 * 16, 'py': 13 * 16 + 15}),   # dunkler Kristallturm mit Geruest (PixelLab k23_turm), Mitte
 ]
+def _weizen(x0, x1, reihe):                                     # Weizenreihe auf der Terrasse (gepflanzt, gleichmaessig)
+    return [('k20/weizen', x + 0.5, reihe, {'px': x * 16 + 8, 'py': reihe * 16 + 14, 'anim': 'wehen', 'an_wand': True})
+            for x in range(x0, x1 + 1)]
+
+
+TERRASSE_DEKO = (                                               # oben rechts nach der Vorlage
+    [('hecke/05', 75, 12, {}), ('hecke/15', 72.5, 19, {}), ('hecke/13', 85, 18, {}),
+     ('hecke/08', 96, 8, {}), ('hecke/09', 96, 19, {}), ('mauer/37', 79, 7, {})]
+    + _weizen(86, 97, 13) + _weizen(81, 88, 17) + _weizen(92, 97, 17))
 PLATEAU_DEKO = [                                                # oben Mitte nach der Vorlage
     ('turm_klein/00', 45, 14, {}), ('turm_klein/02', 55, 14, {'spiegeln': True}),   # Obsidian-Kristalle am Turmfuss
     ('turm_klein/01', 49.5, 17, {}),                            # Steuerpult mit Bildschirm vor dem Turm
@@ -108,7 +118,7 @@ def main():
             ys, xs = np.nonzero(aa)
             ux0, uy0, ux1, uy1 = int(xs.min()), int(ys.min()), int(xs.max()), int(ys.max())
             art = 'baum' if 'baum' in name or 'kirsche' in name else 'klein' if flach else 'stein'
-            ohne_fuss = name in ('k01/laterne', 'k06/tv_treppe', 'k03/teppich', 'teppich/00') or name.startswith(('k07/gemuese', 'beet/'))
+            ohne_fuss = name in ('k01/laterne', 'k06/tv_treppe', 'k03/teppich', 'teppich/00', 'k20/weizen') or name.startswith(('k07/gemuese', 'beet/'))
             v = sp if ohne_fuss else bauwerke.bodenfuss(sp, b, art)
             off = 0 if ohne_fuss else 2
             datei = 'varianten/%s_%s%s.png' % (name.replace('/', '-'), b, '_m' if spiegeln else '')
@@ -137,6 +147,8 @@ def main():
         setze(name, fx, fy, opt)
     for (name, fx, fy, opt) in PLATEAU_DEKO:
         setze(name, fx, fy, opt, frei=True)
+    for (name, fx, fy, opt) in TERRASSE_DEKO:                  # Weizenreihen dicht (gepflanzt), Rest nur wo frei
+        setze(name, fx, fy, opt, frei=not name.startswith('k20/weizen'))
     for (name, fx, fy, opt) in FEST:
         setze(name, fx, fy, opt, frei=True)                      # nur wo frei (Vorlagenpositionen am Raster pruefen)
     # Begleiter der Wiesenbaeume (Regel 5, nur Baeume in der Karte, nicht am Waldrand):
