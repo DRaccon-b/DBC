@@ -141,10 +141,12 @@ def bauen(frame=None, speichern=True):
     sx0, sy0, sx1, sy1 = lay['schiff']
     meiden[sy0 * T:(sy1 + 1) * T, sx0 * T:(sx1 + 1) * T] = True
     wd.FELSEN_PROTOKOLL.clear()
+    wd.FELSEN_AUSLASSEN = {(912, 952), (1024, 936), (1080, 902), (904, 1096)}   # 4 Felsspitzen in der Mitte weg (Nutzer)
     alt = wd.N_FRAMES
     wd.N_FRAMES = N_FRAMES
     img = wd.meer_terrassen(Image.fromarray(a), np.ones((Hp, Wp), bool), frame, meiden, maske=wasser, dist=d)
     wd.N_FRAMES = alt
+    wd.FELSEN_AUSLASSEN = set()
     a = np.array(img.convert('RGB'))
     steg_m = stege(a, lay, wasser)
     for tp in lay['teleporter']:

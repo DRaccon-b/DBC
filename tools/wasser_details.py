@@ -118,6 +118,10 @@ def fels(a, cx, cy, rx, ry, wasser, tiefe, raus, hoehe, frame, seed):
                 a[y2, x] = a[y2, x] * 0.4 + SCHAUM * 0.6
 
 
+FELSEN_AUSLASSEN = set()
+FELSEN_GESETZT = []
+
+
 def felsen_setzen(a, zonen, wasserfarben, tiefen, regeln, frame, seed, meiden=None, anzahl=None):
     """zonen: Liste bool-Masken (flach -> tief). regeln[i]: Liste (art, rx, ry, hoehe) erlaubter Felsen je Zone.
     anzahl[i]: Zielanzahl je Zone. Platziert deterministisch auf einem gestreuten Raster."""
@@ -158,6 +162,9 @@ def felsen_setzen(a, zonen, wasserfarben, tiefen, regeln, frame, seed, meiden=No
             gesetzt.append((i, art, cx, cy, rx_, ry_, hoehe, rs.randrange(10000)))
             n += 1
     for (i, art, cx, cy, rx, ry, hoehe, s) in sorted(gesetzt, key=lambda g: g[3]):
+        if (cx, cy) in FELSEN_AUSLASSEN:                             # einzelne Felsen gezielt weglassen (Karte)
+            continue
+        FELSEN_GESETZT.append((i, art, cx, cy))
         hoehe = hoehe * (2.2 if art == 'raus' else 1)                # spitze Felsnadeln: hoch
         FELSEN_PROTOKOLL.append((int(cx - rx - 3), int(cy - ry * 0.2 - hoehe - 2), int(cx + rx + 4), int(cy + ry + 3),
                                  int(cy - ry * 0.25), art == 'raus'))
