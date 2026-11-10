@@ -182,16 +182,38 @@ EBENE4 = [(89, -1), (92, 12), (90, 19), (94, 17), (101, 16), (101, -1)]
 
 
 def hoehere_felsen(hp):
-    from PIL import ImageDraw as _ID, ImageFilter as _IF
+    """Wie der vorhandene Fels: am Kachelraster mit unregelmaessigen Stufen (Nutzer). Die Linie wird je Kachel mit
+    leichtem Rauschen (ca. 1 Kachel, Wellenlaenge ~3 Kacheln) gerastert, Einzelkacheln werden entfernt; die
+    runden Ecken entstehen danach wie ueberall mit weich()."""
+    from PIL import ImageDraw as _ID
     Hh, W = hp.shape
-    fels = Image.fromarray(((hp >= 2) * 255).astype(np.uint8)).filter(_IF.MinFilter(2 * 3 * T + 1))   # 3 Kacheln Abstand
-    fels = np.array(fels) > 0
+    R, C = Hh // T, W // T
+    ht = hp[::T, ::T]
+    fels = ht >= 2
+    for _ in range(3):                                               # 3 Kacheln Abstand zum unteren Felsrand
+        f = fels.copy()
+        f[1:] &= fels[:-1]; f[:-1] &= fels[1:]; f[:, 1:] &= fels[:, :-1]; f[:, :-1] &= fels[:, 1:]
+        fels = f
+    rng = np.random.RandomState(24)
+    grob = rng.uniform(-1, 1, (R // 3 + 3, C // 3 + 3, 2))
+    yy, xx = np.mgrid[0:R, 0:C]
+    def rausch(k):
+        g = Image.fromarray(((grob[..., k] + 1) * 127).astype(np.uint8)).resize((C + 9, R + 9), Image.BICUBIC)
+        return (np.array(g, np.float32)[:R, :C] / 127.0 - 1) * 1.3
+    nx, ny = rausch(0), rausch(1)
     for stufe, poly in ((3, EBENE3), (4, EBENE4)):
-        m = Image.new('L', (W, Hh), 0)
-        _ID.Draw(m).polygon([(x * T, y * T) for x, y in poly], fill=255)
-        m = weich((np.array(m) > 0).astype(np.float32), 6, 0.0, 9, 0.5) & fels
-        hp = np.where(m & (hp >= stufe - 1), stufe, hp)
-    return hp
+        m = Image.new('L', (C * 8, R * 8), 0)                        # feines Polygon, dann je Kachel abgetastet
+        _ID.Draw(m).polygon([(x * 8, y * 8) for x, y in poly], fill=255)
+        m = np.array(m) > 0
+        sx = np.clip(((xx + 0.5 + nx) * 8).astype(int), 0, C * 8 - 1)
+        sy = np.clip(((yy + 0.5 + ny) * 8).astype(int), 0, R * 8 - 1)
+        k = m[sy, sx]
+        for _ in range(2):                                           # keine einzelnen Zacken/Loecher
+            nb = (np.roll(k, 1, 0).astype(int) + np.roll(k, -1, 0) + np.roll(k, 1, 1) + np.roll(k, -1, 1))
+            k = np.where(k & (nb <= 1), False, np.where(~k & (nb >= 3), True, k))
+        k &= fels & (ht >= stufe - 1)
+        ht = np.where(k, stufe, ht)
+    return np.where(np.kron(ht, np.ones((T, T), int)) > hp, np.kron(ht, np.ones((T, T), int)), hp)
 
 
 SEIL_RAD = (110, 64)                  # Austritt des Seils am Seilrad der Bergstation (Sprite-Pixel)
