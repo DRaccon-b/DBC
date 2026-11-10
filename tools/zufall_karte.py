@@ -150,9 +150,14 @@ def einsetzen(rnd, gw, gh, boss_xy, start, belegt, verb):
         out = [(rnd.random() ** (1.0 / g), l) for g, l in out]
         return [l for _, l in sorted(out, key=lambda t: -t[0])]
 
+    schritte = [0]                                       # Schrittlimit: schlechte Grundrisse aufgeben
+
     def setzen(i):
         if i == len(einheiten):
             return True
+        schritte[0] += 1
+        if schritte[0] > 300000:
+            raise RuntimeError('Schrittlimit')
         e = einheiten[i]
         for l in kandidaten(e):
             ex, ey = e[1]

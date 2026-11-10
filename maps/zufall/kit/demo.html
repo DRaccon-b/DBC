@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Random Dungeon Demo</title>
+<style>
+  :root { --bg: #121316; --panel: #1e2025; --text: #eceef2; --dim: #969ca6; --accent: #4fd0c8; }
+  html, body { margin: 0; height: 100%; background: var(--bg); color: var(--text);
+    font: 15px/1.4 system-ui, sans-serif; overflow: hidden; }
+  #game { position: fixed; inset: 0; width: 100%; height: 100%; image-rendering: pixelated; }
+  #bar { position: fixed; top: 12px; left: 12px; right: 12px; display: flex; gap: 8px; flex-wrap: wrap;
+    align-items: center; background: rgba(30, 32, 37, .9); padding: 8px 12px; border-radius: 10px; }
+  #bar input { width: 120px; background: #2a2d33; color: var(--text); border: 1px solid #3a3e46;
+    border-radius: 6px; padding: 4px 8px; font: inherit; }
+  #bar button { background: var(--accent); color: #10201f; border: 0; border-radius: 6px; padding: 5px 12px;
+    font: 600 14px system-ui, sans-serif; cursor: pointer; }
+  #bar .info { color: var(--dim); margin-left: auto; font-size: 13px; }
+  #loading { position: fixed; inset: 0; display: grid; place-items: center; background: var(--bg);
+    transition: opacity .3s; text-align: center; }
+  #loading.hidden { opacity: 0; pointer-events: none; }
+  .spinner { width: 64px; height: 64px; border-radius: 50%; border: 6px solid #24686a;
+    border-top-color: var(--accent); animation: spin .9s linear infinite; margin: 0 auto 18px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+<canvas id="game"></canvas>
+<div id="bar">
+  <label>Seed <input id="seed" type="number"></label>
+  <button id="enter">Enter dungeon</button>
+  <button id="random">New seed</button>
+  <span class="info" id="info"></span>
+</div>
+<div id="loading"><div><div class="spinner"></div><div id="loadingText">Loading dungeon …</div></div></div>
+
+<!-- plain scripts: works when opened directly from disk (file://), no web server needed -->
+<script src="pieces.js"></script>
+<script src="random_dungeon.js"></script>
+<script>
+const manifest = window.RANDOM_DUNGEON_PIECES;
+const canvas = document.getElementById('game');
+const ctx = canvas.getContext('2d');
+const params = new URLSearchParams(location.search);
+const keys = new Set();
+let dungeon, layers, ground, sprites, images, player;
+let wholeMap = params.has('map');
+let spriteMode = params.has('sprites');          // false: baked layers, true: single sprites from the tileset
+
+async function enter(seed) {
+  document.getElementById('loading').classList.remove('hidden');
+  document.getElementById('loadingText').textContent = 'Loading dungeon ' + seed + ' …';
+  await new Promise((r) => setTimeout(r, 30));      // let the loading screen paint
+  const t0 = performance.now();
+  dungeon = RandomDungeon.generate(manifest, seed, { width: 6, height: 5 });
+  const t1 = performance.now();
+  images = await RandomDungeon.loadImages(manifest, dungeon, '');
+  layers = RandomDungeon.render(manifest, dungeon, images);
+  ground = RandomDungeon.renderGround(manifest, dungeon, images);
+  sprites = RandomDungeon.objects(manifest, dungeon);
+  const t2 = performance.now();
+  const T = manifest.tileSize;
+  player = { x: (dungeon.spawn.x + 0.5) * T, y: (dungeon.spawn.y + 1) * T - 2 };
+  document.getElementById('seed').value = seed;
+  dungeon.timing = `generate ${(t1 - t0).toFixed(1)} ms · images + assembly ${(t2 - t1).toFixed(0)} ms`;
+  history.replaceState(null, '', '?seed=' + seed + (wholeMap ? '&map' : '') + (spriteMode ? '&sprites' : ''));
+  document.getElementById('loading').classList.add('hidden');
+  document.body.dataset.ready = '1';
+}
+
+function move(dt) {
+  const T = manifest.tileSize, v = 90 * dt;
+  let dx = 0, dy = 0;
+  if (keys.has('arrowleft') || keys.has('a')) dx -= v;
+  if (keys.has('arrowright') || keys.has('d')) dx += v;
+  if (keys.has('arrowup') || keys.has('w')) dy -= v;
+  if (keys.has('arrowdown') || keys.has('s')) dy += v;
+  const free = (x, y) => [-5, 5].every((ox) => dungeon.isWalkable(Math.floor((x + ox) / T), Math.floor(y / T)));
+  if (dx && free(player.x + dx, player.y)) player.x += dx;
+  if (dy && free(player.x, player.y + dy)) player.y += dy;
+}
+
+function drawPlayer(c) {                          // placeholder character, foot at player.y
+  const { x, y } = player;
+  c.fillStyle = 'rgba(18,52,48,.45)'; c.beginPath(); c.ellipse(x, y, 6, 2.5, 0, 0, 7); c.fill();
+  c.fillStyle = '#2a3b6e'; c.fillRect(x - 4, y - 9, 8, 8);
+  c.fillStyle = '#f2d2b0'; c.fillRect(x - 3, y - 15, 6, 6);
+  c.fillStyle = '#4fd0c8'; c.fillRect(x - 4, y - 17, 8, 3);
+}
+
+let last = performance.now();
+function frame(now) {
+  const dt = Math.min(0.05, (now - last) / 1000); last = now;
+  const w = canvas.clientWidth, h = canvas.clientHeight;
+  if (canvas.width !== w || canvas.height !== h) { canvas.width = w; canvas.height = h; }
+  ctx.imageSmoothingEnabled = false;
+  ctx.fillStyle = '#121316'; ctx.fillRect(0, 0, w, h);
+  if (layers) {
+    move(dt);
+    const W = ground.width, H = ground.height;
+    const zoom = wholeMap ? Math.min(w / W, (h - 60) / H) : 3;
+    const clamp = (centre, view, total) => view >= total ? (view - total) / 2
+      : Math.min(0, Math.max(view - total, view / 2 - centre));        // camera stays inside the map
+    const cx = wholeMap ? (w / zoom - W) / 2 : clamp(player.x, w / zoom, W);
+    const cy = wholeMap ? (h / zoom - H) / 2 + 30 / zoom : clamp(player.y, h / zoom, H);
+    ctx.save(); ctx.scale(zoom, zoom); ctx.translate(Math.round(cx), Math.round(cy));
+    if (!spriteMode) {
+      // mode 1: two baked layers
+      ctx.drawImage(layers.below, 0, 0);
+      drawPlayer(ctx);
+      ctx.drawImage(layers.above, 0, 0);
+    } else {
+      // mode 2: ground + every object as its own sprite, depth-sorted together with the player
+      ctx.drawImage(ground, 0, 0);
+      const x0 = -cx - 64, x1 = -cx + w / zoom + 64, y0 = -cy - 16, y1 = -cy + h / zoom + 140;
+      let playerDrawn = false;
+      for (const o of sprites) {
+        if (o.x > x1 || o.x + o.w < x0 || o.y > y1 || o.footY < y0) continue;
+        if (!playerDrawn && o.layer > 0 && o.footY > player.y) { drawPlayer(ctx); playerDrawn = true; }
+        RandomDungeon.drawObject(ctx, images.tileset, o, 'all');
+      }
+      if (!playerDrawn) drawPlayer(ctx);
+    }
+    ctx.restore();
+    document.getElementById('info').textContent = `Seed ${dungeon.seed} · ${dungeon.cols}×${dungeon.rows} tiles · ` +
+      `${dungeon.timing} · mode: ${spriteMode ? 'single sprites (O)' : 'baked layers (O)'} · arrows/WASD · M = whole map`;
+  }
+  requestAnimationFrame(frame);
+}
+
+addEventListener('keydown', (e) => {
+  const k = e.key.toLowerCase();
+  keys.add(k);
+  if (k === 'm') wholeMap = !wholeMap;
+  if (k === 'o') spriteMode = !spriteMode;
+  if (k.startsWith('arrow')) e.preventDefault();
+});
+addEventListener('keyup', (e) => keys.delete(e.key.toLowerCase()));
+document.getElementById('enter').onclick = () => enter(+document.getElementById('seed').value || 1);
+document.getElementById('random').onclick = () => enter(Math.floor(Math.random() * 1e9));
+
+enter(+(params.get('seed') ?? Math.floor(Math.random() * 1e9)));
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>

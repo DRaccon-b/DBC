@@ -24,6 +24,7 @@ import zufall_stuecke as zs, zufall_karte as zk
 ROOT = zk.ROOT
 ZIEL = os.path.join(ROOT, 'maps', 'zufall', 'js')
 N, T, PAD = zs.N, 16, 4
+SPRITES = os.path.join(ROOT, 'maps', 'zufall', '_bau', 'sprites')   # gesammelte Sprites (Zwischenablage)
 
 
 def lage_id(l):
@@ -139,18 +140,90 @@ def rendern(l):
     boden_bild.save(os.path.join(ZIEL, 'stuecke', lid + '_boden.png'), optimize=True)
     objekte_bild.save(os.path.join(ZIEL, 'stuecke', lid + '_objekte.png'), optimize=True)
     oben.save(os.path.join(ZIEL, 'stuecke', lid + '_oben.png'), optimize=True)
+    # Komplettbild des Stuecks (Boden + Objekte + oben), genau Stueckgroesse
+    ganz = Image.new('RGBA', voll.size)
+    ganz.alpha_composite(Image.fromarray(bo)); ganz.alpha_composite(objekte_bild); ganz.alpha_composite(oben)
+    ganz.crop((PAD * T, PAD * T, (PAD + w) * T, (PAD + h) * T)).save(
+        os.path.join(ZIEL, 'stuecke', lid + '_komplett.png'), optimize=True)
+    # Sprites fuer das Objekt-Tileset sammeln, Objektliste relativ zur linken oberen Stueckecke (Pixel)
+    liste = []
+    for o in sorted(objs, key=lambda o: (o.get('ebene', 1), o['y'] + o.get('fuss', 0))):
+        name = o['datei'][:-4]
+        ziel = os.path.join(SPRITES, o['datei'])
+        if not os.path.exists(ziel):
+            os.makedirs(os.path.dirname(ziel), exist_ok=True)
+            tmp = ziel + '.%d.tmp' % os.getpid()
+            shutil.copy(os.path.join(obj, o['datei']), tmp)
+            os.replace(tmp, ziel)
+        bx, by, bw, bh = o['block']
+        e = {'s': name, 'x': o['x'] - PAD * T, 'y': o['y'] - PAD * T,
+             'block': [bx - PAD, by - PAD, bw, bh], 'ebene': o.get('ebene', 1)}
+        if o.get('anim'):
+            e['anim'] = o['anim']
+        if o.get('spiegeln'):
+            e['spiegeln'] = True
+        liste.append(e)
     shutil.rmtree(bau)
     print('  ', lid, len(objs), 'Objekte', flush=True)
     return {'id': lid, 'name': l['name'], 'lage': l['lage'], 'typ': l['typ'], 'gewicht': l['gewicht'],
             'felder': list(l['felder']),
             'kanten': {'%d,%d,%s' % k: t for k, t in l['kanten'].items()},
             'boden': 'stuecke/%s_boden.png' % lid, 'objekte': 'stuecke/%s_objekte.png' % lid, 'oben': 'stuecke/%s_oben.png' % lid,
-            'kollision': [''.join(map(str, z)) for z in koll], 'punkte': punkte}
+            'komplett': 'stuecke/%s_komplett.png' % lid,
+            'kollision': [''.join(map(str, z)) for z in koll], 'punkte': punkte, 'objektliste': liste}
+
+
+GRUPPEN = ['baeume', 'gross', 'dschungel', 'zufall_portal', 'zufall_brunnen', 'deko', 'k7gras', 'laterne']
+
+
+def gruppe(name):
+    if name.startswith('varianten/'):
+        name = name[len('varianten/'):].rsplit('_', 1)[0].replace('-', '/', 1)
+    g = name.split('/')[0]
+    return g if g in GRUPPEN else 'sonstige'
+
+
+def objekt_tileset(namen, breite=32):
+    """Alle Objekt-Sprites in ein Tileset-Bild: jedes Sprite im kleinsten 16er-Kachelblock, waagerecht
+    zentriert, Fuss buendig unten (Regel 1/1b); nach Gruppen geordnet, jede Gruppe beginnt eine neue Reihe."""
+    bilder = {n: Image.open(os.path.join(SPRITES, n + '.png')).convert('RGBA') for n in namen}
+    reihen = sorted(namen, key=lambda n: ((GRUPPEN + ['sonstige']).index(gruppe(n)), n))
+    plaetze, cx, cy, zh, g_alt = {}, 0, 0, 0, None
+    for n in reihen:
+        im = bilder[n]
+        wt, ht = -(-im.width // T), -(-im.height // T)
+        if (g_alt is not None and gruppe(n) != g_alt) or cx + wt > breite:
+            cx, cy, zh = 0, cy + zh, 0
+        g_alt = gruppe(n)
+        plaetze[n] = (cx, cy, wt, ht)
+        cx += wt
+        zh = max(zh, ht)
+    atlas = Image.new('RGBA', (breite * T, (cy + zh) * T))
+    info = {}
+    for n, (cx, cy, wt, ht) in plaetze.items():
+        im = bilder[n]
+        x, y = cx * T + (wt * T - im.width) // 2, cy * T + ht * T - im.height
+        atlas.alpha_composite(im, (x, y))
+        info[n] = {'x': x, 'y': y, 'w': im.width, 'h': im.height, 'block': [cx, cy, wt, ht], 'gruppe': gruppe(n)}
+    atlas.save(os.path.join(ZIEL, 'objekte_tileset.png'), optimize=True)
+    # Vorschau 2x auf dunklem Grund mit 16er-Raster
+    v = Image.new('RGBA', atlas.size, (30, 32, 37, 255))
+    from PIL import ImageDraw
+    d = ImageDraw.Draw(v)
+    for x in range(0, atlas.width, T):
+        d.line((x, 0, x, atlas.height), fill=(44, 47, 54, 255))
+    for y in range(0, atlas.height, T):
+        d.line((0, y, atlas.width, y), fill=(44, 47, 54, 255))
+    v.alpha_composite(atlas)
+    v.resize((v.width * 2, v.height * 2), Image.NEAREST).save(os.path.join(ZIEL, 'objekte_tileset_vorschau.png'))
+    print('Objekt-Tileset:', len(info), 'Sprites,', atlas.size)
+    return info
 
 
 def main():
-    if os.path.exists(os.path.join(ZIEL, 'stuecke')):
-        shutil.rmtree(os.path.join(ZIEL, 'stuecke'))
+    for d in (os.path.join(ZIEL, 'stuecke'), SPRITES):
+        if os.path.exists(d):
+            shutil.rmtree(d)
     os.makedirs(os.path.join(ZIEL, 'stuecke'))
     lagen = zs.alle_lagen()
     nur = sys.argv[1:]                                   # optional: nur bestimmte Stuecke (zum Testen)
@@ -164,9 +237,17 @@ def main():
         anzahl[e['name']] = anzahl.get(e['name'], 0) + 1
     for e in eintraege:
         e['lagenDesStuecks'] = anzahl[e['name']]
-    json.dump({'kachel': T, 'feld': N, 'rand': PAD,
-               'kantentypen': {'Z': 'zu (Wald)', 'W': 'Waldweg', 'O': 'offene Wiese'},
-               'lagen': eintraege}, open(os.path.join(ZIEL, 'manifest.json'), 'w'), indent=0)
+    tileset = objekt_tileset(sorted({o['s'] for e in eintraege for o in e['objektliste']}))
+    manifest = {'kachel': T, 'feld': N, 'rand': PAD,
+                'kantentypen': {'Z': 'closed (forest)', 'W': 'forest path', 'O': 'open meadow'},
+                'tileset': {'bild': 'objekte_tileset.png', 'sprites': tileset},
+                'lagen': eintraege}
+    json.dump(manifest, open(os.path.join(ZIEL, 'manifest.json'), 'w'), separators=(',', ':'))
+    # dasselbe als Script: funktioniert auch ohne Webserver (demo.html per Doppelklick)
+    with open(os.path.join(ZIEL, 'manifest.js'), 'w') as fh:
+        fh.write('/* generated by tools/zufall_export.py */\nwindow.ZUFALL_MANIFEST = ')
+        json.dump(manifest, fh, separators=(',', ':'))
+        fh.write(';\n')
     print('fertig:', len(eintraege), 'Lagen -> maps/zufall/js/manifest.json')
 
 

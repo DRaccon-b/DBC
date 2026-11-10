@@ -18,6 +18,9 @@ Gleicher Startwert = gleiche Karte.
 | `karte_<n>.json` | dasselbe als Liste (Startwert, Felder, Stücke) |
 | `stuecke_uebersicht.png` | alle Kartenstücke (rot = feste Objekte) |
 | `assets/objekte/karte01/zufall_portal`, `zufall_brunnen` | kleines Portal und Waldbrunnen (PixelLab-Objekt-Creator, `tools/pixellab_objekte.py`) |
+| `random_dungeon_kit.zip` | fertiges Paket (englisch): alle Kartenstuecke einzeln, Objekt-Tileset, JS ohne Server, Demo, README |
+| `js/` | deutsches JS-Modul + Export der Stuecke (`tools/zufall_export.py`) |
+| `kit/` | Quellen des englischen Pakets (JS, Demo, README); bauen mit `python3 tools/zufall_paket.py` |
 | `_bau/` | Zwischendateien (nicht im Repo) |
 
 ## Kartenstücke (`tools/zufall_stuecke.py`)

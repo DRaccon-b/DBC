@@ -157,8 +157,10 @@ function einsetzen(rnd, gw, gh, g, lagen) {
     }
     return out.sort((a, b) => b[0] - a[0]).map((t) => t[1]);
   };
+  let schritte = 0;                              // Schrittlimit: schlechte Grundrisse aufgeben
   const setzen = (i) => {
     if (i === geordnet.length) return true;
+    if (++schritte > 3000) throw new Error('Schrittlimit');
     const e = geordnet[i];
     for (const l of kandidaten(e)) {
       const neu = Object.entries(l.kanten).map(([schl, t]) => {
