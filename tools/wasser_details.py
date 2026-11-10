@@ -216,7 +216,7 @@ FARBEN = [H('#5fcfd6'), H('#38a8cc'), H('#2a7cbc'), H('#1d58a0')]   # Wasser je 
 MISCH = [0.45, 0.62, 0.78, 0.9]                                  # Anteil Wasserfarbe ueber dem Grund
 
 
-def meer_terrassen(img, region, frame=None, meiden=None, maske=None):
+def meer_terrassen(img, region, frame=None, meiden=None, maske=None, dist=None):
     """maske: feste Meeresflaeche (z. B. aus dem Standbild) - sonst Erkennung ueber die Farbe. Fuer Animationen
     immer die feste Maske uebergeben, sonst wandern Kueste, Stufen und Felsen von Bild zu Bild."""
     a = np.array(img.convert('RGB')).astype(np.float32)
@@ -229,6 +229,7 @@ def meer_terrassen(img, region, frame=None, meiden=None, maske=None):
         m = np.array(Image.fromarray((roh * 255).astype(np.uint8)).filter(ImageFilter.GaussianBlur(2.5))) > 120
         m &= region
     MEER_MASKE[0] = m
+    dist_vorgabe = dist
     if not m.any():
         return img
     # Abstandsfeld zum Land (halbe Aufloesung, dann weich hochskaliert + leichte Welligkeit)
@@ -244,6 +245,8 @@ def meer_terrassen(img, region, frame=None, meiden=None, maske=None):
         dist[neu] = i * 2
         k = k2
     d = np.array(Image.fromarray(dist).resize((W, Hh), Image.BILINEAR))
+    if dist_vorgabe is not None:                                   # eigenes Abstandsfeld (z. B. Flach/Tief nach Vorlage)
+        d = dist_vorgabe.astype(np.float32).copy()
     yy, xx = np.mgrid[0:Hh, 0:W]
     d = d + 3.0 * np.sin(xx / 23.0) + 2.0 * np.sin(xx / 9.0 + yy / 31.0)
     d[~m] = -1
