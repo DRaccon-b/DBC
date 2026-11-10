@@ -95,6 +95,12 @@ def hoehle(a, x0, x1, ytop, ybot):
                 a[y, x] = F[0] if x > cx else F[1]
 
 
+def braun(a):                     # Sandkacheln von Karte 01 -> Erdboden im selben Kachelstil (Hof, Erdflecken, Felsrand)
+    l = a.mean(axis=2, keepdims=True) / 255.0
+    lo, hi = np.array([112, 78, 48], np.float32), np.array([198, 160, 108], np.float32)
+    return lo + (hi - lo) * np.clip((l - 0.45) / 0.45, 0, 1)
+
+
 def nach_oben(hoch, bis=4 * T):
     """Hochflaechen, die (fast) am oberen Kartenrand beginnen, bis zum Rand verlaengern - nur in ihren eigenen Spalten
     (keine Kantenstummel am Kartenrand)."""
@@ -118,8 +124,11 @@ def bauen(frame=None, speichern=True):
     a = gras.copy()
     wm = weich(zell_maske(cls, 'h', cols, rows), 5, 0.4, 3)
     a[wm] = (gras[wm] * np.array([0.62, 0.7, 0.66])).astype(np.uint8)
-    fm = weich(zell_maske(cls, 'f', cols, rows), 4.0, 0.35, 9)
-    k20.feld(a, fm)
+    erde = flaeche(k6.kacheln(os.path.join(basis, 'sand_%d.png'), 5, braun), cols, rows)
+    fm = weich(zell_maske(cls, 'f', cols, rows), 7.0, 0.5, 9)
+    a[fm] = erde[fm]
+    saum_f = weich(zell_maske(cls, 'f', cols, rows), 7.0, 0.5, 9, 0.36) & ~fm
+    a[saum_f] = (a[saum_f] * 0.9).astype(np.uint8)
     roh = zell_maske(cls, 'wtTc', cols, rows)
     m = weich(roh, 7.0, 0.5, 4)
     a[m] = sand[m]
@@ -188,8 +197,7 @@ def bauen(frame=None, speichern=True):
     if zug_o:
         k4.treppe(a, tz0 * T, (tz1 + 1) * T, yt, 's', 20, 'erde', sand)
     rm = weich(zell_maske(cls, 'kc', cols, rows), 4, 0.35, 12) & ~wand & ~cm & ~maske_aus(cls, 'wt', cols, rows)   # Felsrand: steiniger Erdboden bis an die Senke
-    k20.feld(a, rm, seed=61)
-    a[rm] = (a[rm] * 0.82).astype(np.uint8)
+    a[rm] = (erde[rm] * 0.84).astype(np.uint8)
     rs = np.random.RandomState(62)
     ys_, xs_ = np.nonzero(rm)
     for i in rs.choice(len(ys_), len(ys_) // 40, replace=False):     # Steinchen
