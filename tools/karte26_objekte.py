@@ -37,7 +37,7 @@ THRONSAAL = (                                                    # Kommandobruec
     + paar('digifeuer/00', 60, 9, {'anim': 'lampe'})             # Feuerschalen mit digitalen Flammen (Nutzer)
     + paar(KOMMANDO, 172, 9, {'anim': 'lampe'})                  # grosse Kommandopulte mit vier Monitoren
     + [(HOLO, 18, {'px': AX, 'anim': 'lampe'})]                  # ein Holo-Schiff unten auf der Achse (Nutzer)
-    + paar('thron/13', 208, 19)                                  # Nr. 13 statt Radar (Nutzer)
+    + paar('digifeuer/13', 208, 19, {'anim': 'lampe'})          # Tesla-Turm (digifeuer Nr. 13) statt Radar (Nutzer)
 )
 
 

@@ -113,11 +113,11 @@
 "anim": "lampe"
 },
 {
-"datei": "varianten/thron-13.png",
-"basis": "thron/13",
-"x": 78,
-"y": 265,
-"fuss": 55,
+"datei": "varianten/digifeuer-13.png",
+"basis": "digifeuer/13",
+"x": 66,
+"y": 259,
+"fuss": 61,
 "kachel": [
 6,
 19
@@ -125,17 +125,18 @@
 "block": [
 4,
 16,
-3,
+4,
 4
 ],
-"ebene": 1
+"ebene": 1,
+"anim": "lampe"
 },
 {
-"datei": "varianten/thron-13_m.png",
-"basis": "thron/13",
-"x": 494,
-"y": 265,
-"fuss": 55,
+"datei": "varianten/digifeuer-13_m.png",
+"basis": "digifeuer/13",
+"x": 482,
+"y": 259,
+"fuss": 61,
 "kachel": [
 32,
 19
@@ -143,9 +144,10 @@
 "block": [
 30,
 16,
-3,
+4,
 4
 ],
-"ebene": 1
+"ebene": 1,
+"anim": "lampe"
 }
 ]
