@@ -95,12 +95,14 @@ def bauen(frame=None, speichern=True):
         col = np.nonzero(hp[:, ((x0 + x1 + 1) * T) // 2] == 1)[0]
         frei[:, x0 * T:(x1 + 1) * T] |= False
     tmask = zell_maske(cls, 't', cols, rows) > 0.5
-    frei_t = np.kron(np.array([[c == 't' for c in z] for z in cls]), np.ones((T, T), bool))
+    ya_, yb_ = lay['arena_links']
+    frei_t = np.kron(np.array([[c == 't' and not (ya_ <= y <= yb_) for c in z] for y, z in enumerate(cls)]),
+                     np.ones((T, T), bool))                         # nur die Arena-Treppen schneiden den Fels
     frei_t = frei_t | np.roll(frei_t, -T, 0) | np.roll(frei_t, -2 * T, 0)
     ya_, yb_ = lay['arena_links']                                    # Aufgang links: keine Kante quer ueber den Weg
     tx_ = [x for y in range(ya_, yb_ + 1) for x in range(cols) if cls[y][x] == 't']
     if tx_:
-        frei_t[ya_ * T + 3:(yb_ + 1) * T - 3, (min(tx_) - 1) * T:(max(tx_) + 4) * T] = True
+        frei_t[ya_ * T + FRONT + 2:(yb_ + 1) * T - 3, (min(tx_) - 1) * T:(max(tx_) + 4) * T] = True   # Front bleibt
     wand = k4.hoehenkanten(a, h1m, 'rot', 24, 8, LIPPE_ROT, frei_t, 71, berg=False)
     wand |= k4.hoehenkanten(a, hoch2, 'rot', FRONT, 8, LIPPE_ROT, frei_t & ~h1m, 72, berg=False)
     # Treppen der Arena und des Schreins (frontal nach Sueden)
