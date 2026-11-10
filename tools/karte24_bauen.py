@@ -164,8 +164,11 @@ def bauen(frame=None, speichern=True):
     grube(a, xm, frame)
     gx0, gx1, gy = lay['gleis']
     gleis(a, gx0, gx1, gy)
-    for tp in lay['teleporter']:
-        k4.teleporter_zeichnen(a, tp['x'], tp['y'], tp['b'], tp['h'], frame)
+    for tp in lay['teleporter']:                                  # nur Kacheln ohne Felswand darueber (Nutzer)
+        frei_r = [ty for ty in range(tp['y'], tp['y'] + tp['h'])
+                  if not wand[ty * T:(ty + 1) * T, tp['x'] * T:(tp['x'] + tp['b']) * T].any()]
+        if frei_r:
+            k4.teleporter_zeichnen(a, tp['x'], frei_r[0], tp['b'], len(frei_r), frame)
     img = Image.fromarray(a).convert('RGBA')
     lvl = hp.astype(np.uint8) + 1
     if speichern and frame is None:

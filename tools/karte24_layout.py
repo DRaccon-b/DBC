@@ -25,7 +25,7 @@ ARENA_TREPPEN = [(45, 49), (52, 56)]          # (x0, x1) an der Suedkante der Ar
 ARENA_LINKS = (39, 43)                        # Aufgang links (Reihen)
 SCHREIN_TREPPE = (68, 71)
 GLEIS = (9, 88, 75)
-TELEPORTER = [(0, 41, 2, 5), (98, 65, 2, 4)]
+TELEPORTER = [(0, 42, 2, 4), (98, 66, 2, 3)]      # nur auf dem Weg, nicht im Fels (Nutzer)
 
 
 def klassen():
