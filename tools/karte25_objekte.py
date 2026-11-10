@@ -64,8 +64,7 @@ STRAND = [                                                       # Sandstrand na
     (OBELISK, 58, 44, {}), (OBELISK, 87, 28, {}),
     # Palmen locker verteilt (Nutzer: weiter auseinander); zwei direkt unter der Felsfront ragen vor die Klippe
     (P1, 29, 25, {'anim': 'wehen'}), (P4, 49, 26, {'anim': 'wehen'}),
-    (P2, 35, 29, {'anim': 'wehen'}), (P3, 41, 32, {'anim': 'wehen', 'spiegeln': True}), (P1, 34.5, 34, {'anim': 'wehen'}),
-    (P5, 46, 35, {'anim': 'wehen'}), (P2, 39, 38, {'anim': 'wehen', 'spiegeln': True}), (P3, 33, 41, {'anim': 'wehen'}),
+    (P2, 35, 29, {'anim': 'wehen'}), (P3, 33, 41, {'anim': 'wehen'}),        # vier Palmen in der Mitte entfernt (Nutzer)
     (P1, 41.5, 43, {'anim': 'wehen', 'spiegeln': True}), (P2, 51, 39, {'anim': 'wehen'}),
     (P2, 59, 28, {'anim': 'wehen'}), (P3, 65, 27, {'anim': 'wehen'}), (P1, 62, 32, {'anim': 'wehen', 'spiegeln': True}),
     (P4, 70, 25, {'anim': 'wehen'}), (P5, 68, 31, {'anim': 'wehen'}),
