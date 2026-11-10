@@ -183,6 +183,18 @@ def main():
         for x in range(x0, x1 + 1):
             if k[y, x] == 'r':
                 k[y, x] = 'w'; h[y, x] = 0
+    # Nutzer: Arena links unter dem Aufgang schliessen (rot) ...
+    for y in range(44, 49):
+        for x in range(32, 35):
+            k[y, x] = 'r'; h[y, x] = 2
+    # ... und unter dem Arenaring einen Weg vom linken Canyon zu den Treppen (gruen)
+    for y in range(49, 53):
+        for x in range(31, 45):
+            k[y, x] = 'b'; h[y, x] = 0
+    for y in range(51, 53):
+        for x in range(28, 50):
+            if h[y, x] == 0 and k[y, x] in 'bs':
+                k[y, x] = 'w'
     for (tx, ty, b, hh) in TELEPORTER:
         k[ty:ty + hh, tx:tx + b] = 'T'; h[ty:ty + hh, tx:tx + b] = 0
     lay = {'groesse': [C, R], 'klassen': [''.join(z) for z in k], 'hoehe': [''.join(str(c) for c in z) for z in h],
