@@ -43,11 +43,13 @@ TERRASSE_DEKO = (                                               # oben rechts na
      ('hecke/08', 96, 8, {}), ('hecke/09', 96, 19, {}), ('mauer/37', 79, 7, {})]
     + _weizen(86, 97, 13) + _weizen(81, 88, 17) + _weizen(92, 97, 17))
 MITTE_LINKS = [                                                 # Hof links, Weide mit Zaun, Heuwiese (nach der Vorlage)
-    ('hecke/10', 14, 34, {}), ('hecke/09', 16.5, 36, {}), ('hecke/08', 13, 37, {}),          # Heu an der Scheune
-    ('hecke/21', 5, 37, {}), ('hecke/19', 4, 39, {}), ('hecke/18', 8.5, 40, {}),              # Saecke, Fass, Kisten
-    ('hecke/22', 12.5, 40, {}), ('hecke/11', 16, 41, {}), ('hecke/12', 3.5, 44, {}),          # Trog, Karren, Brunnen
-    ('k01/laterne', 6, 43, {'anim': 'laterne'}), ('k01/laterne', 10, 36, {'anim': 'laterne'}),
-    ('k01/laterne', 16, 44, {'anim': 'laterne'}),
+    # Hof: Reihen 37-40 bleiben frei (gedachter Weg vom Teleporter zum Weg, Nutzer) -> oben und unten verteilt
+    ('hecke/10', 14, 34, {}), ('hecke/09', 16.5, 35, {}), ('hecke/08', 12, 35, {}),          # Heu an der Scheune (oben)
+    ('hecke/21', 3, 35, {}), ('hecke/19', 8, 35, {}),                                         # Saecke, Fass (oben)
+    ('k01/laterne', 10, 36, {'anim': 'laterne'}),
+    ('hecke/18', 8.5, 43, {}), ('hecke/22', 12.5, 42, {}), ('hecke/11', 16, 43, {}),          # Kisten, Trog, Karren (unten)
+    ('hecke/12', 3.5, 44, {}),                                                                # Brunnen
+    ('k01/laterne', 6, 44, {'anim': 'laterne'}), ('k01/laterne', 15, 45, {'anim': 'laterne'}),
     ('hecke/08', 14, 50, {}), ('hecke/22', 13, 48, {}),                                       # Weide im Zaun
     ('hecke/09', 6, 57, {}), ('hecke/08', 11, 56, {}), ('hecke/10', 8, 61, {}),               # Heuwiese
     ('hecke/08', 13, 62, {}), ('hecke/09', 5, 66, {}), ('hecke/08', 10, 67, {}),
@@ -159,6 +161,9 @@ def main():
         setze(name, fx, fy, opt)
     for (name, fx, fy, opt) in PLATEAU_DEKO:
         setze(name, fx, fy, opt, frei=True)
+    for x in range(0, 20):                                       # Hof: Weg Teleporter -> Weg frei halten (Reihen 37-40)
+        for y in range(37, 41):
+            gesperrt.add((x, y))
     for (name, fx, fy, opt) in MITTE_LINKS:
         setze(name, fx, fy, opt, frei=True)
     for (name, fx, fy, opt) in TERRASSE_DEKO:                  # Weizenreihen dicht (gepflanzt), Rest nur wo frei

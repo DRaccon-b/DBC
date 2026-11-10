@@ -329,15 +329,15 @@
 "datei": "varianten/hecke-09_sand.png",
 "basis": "hecke/09",
 "x": 257,
-"y": 566,
+"y": 550,
 "fuss": 29,
 "kachel": [
 16,
-36
+35
 ],
 "block": [
 16,
-35,
+34,
 2,
 2
 ],
@@ -347,15 +347,15 @@
 "datei": "varianten/hecke-08_sand.png",
 "basis": "hecke/08",
 "x": 193,
-"y": 584,
+"y": 552,
 "fuss": 27,
 "kachel": [
-13,
-37
+12,
+35
 ],
 "block": [
 12,
-36,
+34,
 2,
 2
 ],
@@ -364,16 +364,16 @@
 {
 "datei": "varianten/hecke-21_sand.png",
 "basis": "hecke/21",
-"x": 63,
-"y": 581,
+"x": 31,
+"y": 549,
 "fuss": 30,
 "kachel": [
-5,
-37
+3,
+35
 ],
 "block": [
-4,
-36,
+2,
+34,
 2,
 2
 ],
@@ -382,34 +382,53 @@
 {
 "datei": "varianten/hecke-19_sand.png",
 "basis": "hecke/19",
-"x": 68,
-"y": 614,
+"x": 132,
+"y": 550,
 "fuss": 29,
 "kachel": [
-4,
-39
+8,
+35
 ],
 "block": [
-4,
-38,
+8,
+34,
 2,
 2
 ],
 "ebene": 1
 },
 {
+"datei": "varianten/k01-laterne_sand.png",
+"basis": "k01/laterne",
+"x": 160,
+"y": 534,
+"fuss": 58,
+"kachel": [
+10,
+36
+],
+"block": [
+10,
+33,
+1,
+4
+],
+"ebene": 1,
+"anim": "laterne"
+},
+{
 "datei": "varianten/hecke-18_sand.png",
 "basis": "hecke/18",
 "x": 128,
-"y": 626,
+"y": 674,
 "fuss": 33,
 "kachel": [
 8,
-40
+43
 ],
 "block": [
 8,
-39,
+42,
 2,
 2
 ],
@@ -419,15 +438,15 @@
 "datei": "varianten/hecke-22_sand.png",
 "basis": "hecke/22",
 "x": 191,
-"y": 641,
+"y": 673,
 "fuss": 18,
 "kachel": [
 12,
-40
+42
 ],
 "block": [
 12,
-40,
+42,
 2,
 1
 ],
@@ -437,15 +456,15 @@
 "datei": "varianten/hecke-11_sand.png",
 "basis": "hecke/11",
 "x": 255,
-"y": 650,
+"y": 682,
 "fuss": 25,
 "kachel": [
 16,
-41
+43
 ],
 "block": [
 16,
-40,
+42,
 2,
 2
 ],
@@ -473,53 +492,34 @@
 "datei": "varianten/k01-laterne_sand.png",
 "basis": "k01/laterne",
 "x": 96,
-"y": 646,
-"fuss": 58,
-"kachel": [
-6,
-43
-],
-"block": [
-6,
-40,
-1,
-4
-],
-"ebene": 1,
-"anim": "laterne"
-},
-{
-"datei": "varianten/k01-laterne_sand.png",
-"basis": "k01/laterne",
-"x": 160,
-"y": 534,
-"fuss": 58,
-"kachel": [
-10,
-36
-],
-"block": [
-10,
-33,
-1,
-4
-],
-"ebene": 1,
-"anim": "laterne"
-},
-{
-"datei": "varianten/k01-laterne_sand.png",
-"basis": "k01/laterne",
-"x": 256,
 "y": 662,
 "fuss": 58,
 "kachel": [
-16,
+6,
 44
 ],
 "block": [
-16,
+6,
 41,
+1,
+4
+],
+"ebene": 1,
+"anim": "laterne"
+},
+{
+"datei": "varianten/k01-laterne_gras.png",
+"basis": "k01/laterne",
+"x": 240,
+"y": 678,
+"fuss": 58,
+"kachel": [
+15,
+45
+],
+"block": [
+15,
+42,
 1,
 4
 ],
