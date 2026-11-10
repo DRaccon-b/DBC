@@ -128,6 +128,7 @@ def hecken(img, lay, cls):
     d = os.path.join(OBJ, 'hecke')
     seg = Image.open(os.path.join(d, '00.png')).convert('RGBA')
     rund = Image.open(os.path.join(d, '01.png')).convert('RGBA')
+    block = Image.open(os.path.join(d, '02.png')).convert('RGBA')
     senk = Image.open(os.path.join(OBJ, 'hecke_senk', '00.png')).convert('RGBA')
     kappe = Image.open(os.path.join(OBJ, 'hecke_senk', '02.png')).convert('RGBA')
 
@@ -136,7 +137,7 @@ def hecken(img, lay, cls):
         f = q[q[..., 3] > 0][:, :3].mean(0) / np.maximum(1, z[z[..., 3] > 0][:, :3].mean(0))
         z[..., :3] = np.clip(z[..., :3] * f, 0, 255)
         return Image.fromarray(z.astype(np.uint8))
-    senk, kappe = angleichen(senk), angleichen(kappe)
+    senk, kappe, block = angleichen(senk), angleichen(kappe), angleichen(block)
     lage = Image.new('RGBA', img.size, (0, 0, 0, 0))
     for (x0, y0, x1, y1) in lay['hecken']:
         if y0 == y1:                                                   # waagerecht
@@ -155,14 +156,16 @@ def hecken(img, lay, cls):
         else:                                                          # senkrecht: neue senkrechte Heckenstuecke
             X = x0 * T + (T - senk.width) // 2
             Y0, Y1 = y0 * T - 8, (y1 + 1) * T - 2
-            y = Y0
-            while y < Y1:
-                hh = min(senk.height, Y1 - y)
+            Y1s = Y1 - block.height + 6                                # unten endet die Hecke mit einem Heckenblock:
+            y = Y0                                                     # Oberseite + sichtbare Vorderseite (Perspektive)
+            while y < Y1s:
+                hh = min(senk.height, Y1s - y)
                 lage.alpha_composite(senk.crop((0, 0, senk.width, hh)), (X, y))
                 y += hh
             kap = kappe.crop((0, 0, kappe.width, 10))                     # runde Kappe oben
             lage.paste(Image.new('RGBA', kap.size, (0, 0, 0, 0)), (X, Y0))
             lage.alpha_composite(kap, (X, Y0))
+            lage.alpha_composite(block, (x0 * T + (T - block.width) // 2, Y1 - block.height))
     mauer = Image.open(os.path.join(OBJ, 'mauer', '00.png')).convert('RGBA')
     for (x0, y0, x1, y1) in lay['maeuerchen']:                          # Feldsteinmauern (PixelLab k23_mauer)
         X0, X1 = x0 * T, (x1 + 1) * T
@@ -208,10 +211,6 @@ def hecken(img, lay, cls):
         Y = (y0 + 1) * T - mauer.height - 1
         kante_schliessen(x0 * T, x0 * T + 4, Y, Y + mauer.height, 'l')
         kante_schliessen((x1 + 1) * T - 4, (x1 + 1) * T, Y, Y + mauer.height, 'r')
-    for (x0, y0, x1, y1) in lay['hecken']:
-        if y0 != y1:
-            X = x0 * T + (T - senk.width) // 2
-            kante_schliessen(X, X + senk.width, (y1 + 1) * T - 8, (y1 + 1) * T - 2, 'u')
     lage = Image.fromarray(L)
     al = np.array(lage.getchannel('A')) > 0
     sch = np.zeros_like(al)
@@ -373,7 +372,7 @@ def bauen(frame=None, speichern=True):
     if zug_o:
         k4.treppe(a, tz0 * T, (tz1 + 1) * T, yt, 's', 20, 'erde', sand)
     rm = weich(zell_maske(cls, 'kc', cols, rows), 4, 0.35, 12) & ~wand & ~cm & ~maske_aus(cls, 'wt', cols, rows)   # Felsrand: steiniger Erdboden bis an die Senke
-    schlamm(a, rm, erde)
+    a[rm] = erde[rm]                                                  # Rand der Senke: dieselben Erdkacheln wie der Hof
     # ---------------- Mauerchen, Hecken
     # ---------------- Wasser (Bach laeuft unten aus der Karte)
     import wasser_vertieft
