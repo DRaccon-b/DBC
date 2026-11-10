@@ -30,6 +30,13 @@ def ohne_runen(sp):
                 a[y, x, :3] = a[nb[0]][:3]; run[y, x] = False; stein[y, x] = True
     return Image.fromarray(a.astype(np.uint8))
 
+def ohne_gleis(sp):
+    """Loren-Sprite ohne das eingebaute Gleisstueck: nur Wagen und Raeder bleiben (Gleis kommt aus der Karte)."""
+    a = np.array(sp)
+    a[38:] = 0                                                   # Schiene und Schwellen unter den Raedern
+    a[26:, :5] = 0; a[26:, 37:] = 0                              # seitliche Schwellenpfosten
+    return Image.fromarray(a)
+
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
 KARTE = os.path.join(ROOT, 'maps', 'karte24')
 OBJ = os.path.join(ROOT, 'assets', 'objekte', 'karte24')
@@ -93,7 +100,12 @@ ARENA_OBJ = (                                                   # reduziert (Nut
     + _pa(LATERNE, 80, 35, {'anim': 'lampe'})                   # Laternen neben den Obelisken
     + _pa(BANNER, 160, 41, {'anim': 'fahne'})                   # Banner an den Seiten
 )
-UNTEN_LINKS = UNTEN_LINKS + OBEN + SCHREIN_OBJ + ARENA_OBJ
+GOLD, RUBIN, SAPHIR = 'loren/00', 'loren/01', 'loren/02'
+GL = 75                                                         # Gleisreihe (layout 'gleis')
+LOREN = [(GOLD, 79.5, GL, {'px': 79 * T + 8, 'dy': -5, 'auf_gleis': True}),        # drei Loren hintereinander, rechts
+         (RUBIN, 81.6, GL, {'px': 81 * T + 10, 'dy': -5, 'auf_gleis': True}),       # wie in der Vorlage
+         (SAPHIR, 83.7, GL, {'px': 83 * T + 12, 'dy': -5, 'auf_gleis': True})]
+UNTEN_LINKS = UNTEN_LINKS + LOREN + OBEN + SCHREIN_OBJ + ARENA_OBJ
 
 
 def main():
@@ -110,6 +122,8 @@ def main():
             sp = saeubern(Image.open(os.path.join(OBJ, name + '.png')).convert('RGBA'))   # PixelLab-Splitter weg
             if name == OBELISK:
                 sp = ohne_runen(sp)
+            if name.startswith('loren/'):
+                sp = ohne_gleis(sp)
             if spiegeln:
                 sp = sp.transpose(Image.FLIP_LEFT_RIGHT)
             datei = 'varianten/%s%s.png' % (name.replace('/', '-'), '_m' if spiegeln else '')
@@ -126,7 +140,7 @@ def main():
         x = bx * T + (wt * T - bw) // 2 - ux0
         if 'px' in opt:                                              # pixelgenaue Mitte (Symmetrie zur Schreinachse)
             x = opt.pop('px') - (ux0 + bw // 2)
-        y = (ty + 1) * T - 1 - uy1
+        y = (ty + 1) * T - 1 - uy1 + opt.pop('dy', 0)
         fuss_y = y + uy1
         if not opt.get('hinter_fels') and (lvl[fuss_y, x + ux0 + bw // 2] not in (1, 2) or wand[fuss_y - 2:fuss_y + 1, x + ux0:x + ux1 + 1].any()):
             print('  uebersprungen (nicht auf dem Canyonboden):', name, fx, fy)

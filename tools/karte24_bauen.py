@@ -120,16 +120,32 @@ def eisenzaun(img, rect, offen):
 
 
 def gleis(a, x0, x1, y):
-    """Lorenbahn waagerecht: Holzschwellen alle 8 px, zwei Stahlschienen mit Lichtkante."""
+    """Lorenbahn waagerecht im Stil der Loren-Sprites (PixelLab k24_loren): Schotterbett, Holzschwellen mit
+    dunkler Kontur und Lichtkante oben links, zwei blaugraue Stahlschienen. Die Enden laufen rund aus."""
     Y = y * T
-    for x in range(x0 * T, (x1 + 1) * T):
-        if x % 8 < 4:
-            a[Y + 3:Y + 13, x] = H('#6a4428') if x % 8 else H('#4a2e1a')
-    for ys in (Y + 4, Y + 10):
-        a[ys - 1, x0 * T:(x1 + 1) * T] = H('#2a2a34')
-        a[ys, x0 * T:(x1 + 1) * T] = H('#a8b0bc')
-        a[ys + 1, x0 * T:(x1 + 1) * T] = H('#5a6070')
-        a[ys + 2, x0 * T:(x1 + 1) * T] = (a[ys + 2, x0 * T:(x1 + 1) * T] * 0.7).astype(np.uint8)
+    X0, X1 = x0 * T + 4, (x1 + 1) * T - 4
+    rng = np.random.RandomState(24)
+    for yy in range(Y + 1, Y + 16):                                  # Schotterbett, etwas dunkler, gesprenkelt
+        for xx in range(X0 - 3, X1 + 3):
+            if (yy in (Y + 1, Y + 15)) and (xx < X0 or xx >= X1):
+                continue
+            f = 0.82 if rng.rand() < 0.75 else (0.68 if rng.rand() < 0.5 else 0.95)
+            a[yy, xx] = (a[yy, xx] * f).astype(np.uint8)
+    KO, HO, HL, HD = (58, 14, 16), (122, 82, 54), (150, 106, 70), (92, 58, 38)
+    for x in range(X0, X1 - 3, 8):                                   # Schwellen 4 px breit, 12 px lang
+        a[Y + 1:Y + 15, x:x + 4] = KO                                # Schwelle ragt oben und unten ueber die Schienen
+        a[Y + 2:Y + 14, x + 1:x + 3] = HO
+        a[Y + 2, x + 1:x + 3] = HL
+        a[Y + 2:Y + 14, x + 1] = HL
+        a[Y + 13, x + 1:x + 3] = HD
+        a[Y + 15, x + 1:x + 4] = (a[Y + 15, x + 1:x + 4] * 0.7).astype(np.uint8)   # Schatten unter der Schwelle
+    for ys in (Y + 4, Y + 10):                                       # Schienen schmal: Kontur, Lauffläche, Unterseite
+        a[ys - 1, X0:X1] = (18, 51, 58)
+        a[ys, X0:X1] = (124, 149, 187)
+        a[ys + 1, X0:X1] = (58, 36, 32)
+        a[ys + 2, X0:X1] = (a[ys + 2, X0:X1] * 0.78).astype(np.uint8)   # Schlagschatten der Schiene
+        for xe in (X0, X1 - 1):                                      # Schienenenden mit Kontur
+            a[ys - 1:ys + 2, xe] = (18, 51, 58)
 
 
 def bauen(frame=None, speichern=True):

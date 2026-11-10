@@ -1791,6 +1791,12 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'very long toppled dark navy black stone obelisk lying flat on its side on the ground, pointed tip on the right, '
         'broken base on the left, plain smooth stone without runes, seen from slightly above, ' + FR14,
     ]},
+    'k24_loren': {'size': 48, 'items': [
+        'iron mine cart on small rail wheels, dark riveted steel body, heaped full of shiny stacked gold ingot bars, ' + FR14,
+        'iron mine cart on small rail wheels, dark riveted steel body, heaped full of stacked deep red ruby bars shaped like ingots, ' + FR14,
+        'iron mine cart on small rail wheels, dark riveted steel body, heaped full of stacked deep blue sapphire bars shaped like ingots, ' + FR14,
+        'iron railway buffer stop bumper at the end of a mine rail track, dark steel with a red and white striped plate, ' + FR14,
+    ]},
     'k24_schrein': {'size': 64, 'items': [
         'dark emperor throne made of jagged black obsidian crystal spikes with deep purple and crimson highlights, a high '
         'pointed back, standing on a small stepped dark stone dais, ' + FR14,
