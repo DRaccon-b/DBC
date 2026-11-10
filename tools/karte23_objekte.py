@@ -71,7 +71,7 @@ def feld_pflanzen(felder):
     return out
 
 
-MITTE = [('hecke/09', 50.5, 51, {}), ('hecke/15', 50, 54, {}), ('hecke/08', 44.5, 54, {})]   # an der Scheune
+MITTE = [('hecke/09', 50.5, 51, {}), ('wagen/00', 50.5, 55, {}), ('hecke/08', 44.5, 54, {})]   # an der Scheune
 
 
 MITTE_LINKS = [                                                 # Hof links, Weide mit Zaun, Heuwiese (nach der Vorlage)
@@ -82,7 +82,7 @@ MITTE_LINKS = [                                                 # Hof links, Wei
     ('hecke/18', 8.5, 43, {}), ('hecke/22', 12.5, 42, {}), ('hecke/11', 16, 43, {}),          # Kisten, Trog, Karren (unten)
     ('hecke/12', 3.5, 44, {}),                                                                # Brunnen
     ('k01/laterne', 6, 44, {'anim': 'laterne'}), ('k01/laterne', 15, 45, {'anim': 'laterne'}),
-    ('hecke/08', 14, 50, {}), ('hecke/22', 13, 48, {}),                                       # Weide im Zaun
+    ('hecke/08', 15, 51, {}), ('hecke/22', 12, 48, {}), ('hecke/09', 11.5, 50, {}),             # Weide im Zaun (groesser)
     ('hecke/09', 6, 57, {}), ('hecke/08', 11, 56, {}), ('hecke/10', 8, 61, {}),               # Heuwiese
     ('hecke/08', 13, 62, {}), ('hecke/09', 5, 66, {}), ('hecke/08', 10, 67, {}),
 ]
@@ -102,7 +102,7 @@ OBST = 'obst/apfel'
 # Obstwiese oben links (Reihen wie in der Vorlage, einzelne Luecken)
 OBSTWIESE = [(x, y) for y in (8, 16, 24) for x in (4, 8, 12, 24, 28, 32)]   # groessere Baeume -> 4 Kacheln Abstand
 WIESE = [(38.5, 15), (38.5, 21), (65, 8), (64, 20), (42, 30), (27, 34), (36, 33), (49, 32), (61, 31),
-         (68, 30), (71, 28), (87, 28), (91, 31), (53, 41), (49, 42), (5, 50), (8, 52), (53.5, 68), (4, 74), (9, 76),
+         (68, 30), (71, 28), (87, 28), (91, 31), (53, 41), (49, 42), (5, 50), (5.5, 55), (53.5, 68), (4, 74), (9, 76),
          (15, 76), (37, 78), (52, 78), (62, 78), (23, 78),
          (77.5, 6), (80.5, 4), (71.5, 15), (75.5, 18), (94.5, 4)]        # Terrassen oben rechts (Nutzer: ein paar Baeume)
 SORTEN = {'apfel': 'obst_gross/00', 'birne': 'obst_gross/01', 'orange': 'obst_gross/02', 'pflaume': 'obst_gross/03',

@@ -1758,6 +1758,10 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'large brown dirt burrow mound with a big dark tunnel entrance on the front, a few pebbles around it, ' + FR14,
         'small grey field boulder rock with a little moss, ' + FR14,
     ]},
+    'k23_wagen': {'size': 48, 'items': [
+        'wooden farm covered wagon with a cream canvas top, two big wooden spoked wheels, a wooden shaft at the front, '
+        'a few hay bundles and sacks visible inside, ' + FR14,
+    ]},
     'k21_tv_gross': {'size': 48, 'items': [
         'big old brown wooden cabinet CRT television standing on short wooden legs, wood grain case, large dark curved '
         'screen with a faint blue glow, a column of round knobs and a speaker grille on the right, ' + FR14,

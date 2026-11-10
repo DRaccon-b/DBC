@@ -1871,20 +1871,20 @@
 "ebene": 1
 },
 {
-"datei": "varianten/hecke-15_sand.png",
-"basis": "hecke/15",
-"x": 800,
-"y": 851,
-"fuss": 32,
+"datei": "varianten/wagen-00_sand.png",
+"basis": "wagen/00",
+"x": 799,
+"y": 850,
+"fuss": 49,
 "kachel": [
 50,
-54
+55
 ],
 "block": [
 50,
 53,
-2,
-2
+3,
+3
 ],
 "ebene": 1
 },
@@ -2108,18 +2108,18 @@
 "anim": "laterne"
 },
 {
-"datei": "varianten/hecke-08_sand.png",
+"datei": "varianten/hecke-08_gras.png",
 "basis": "hecke/08",
 "x": 225,
-"y": 792,
+"y": 808,
 "fuss": 27,
 "kachel": [
-14,
-50
+15,
+51
 ],
 "block": [
 14,
-49,
+50,
 2,
 2
 ],
@@ -2132,7 +2132,7 @@
 "y": 769,
 "fuss": 18,
 "kachel": [
-13,
+12,
 48
 ],
 "block": [
@@ -2140,6 +2140,24 @@
 48,
 2,
 1
+],
+"ebene": 1
+},
+{
+"datei": "varianten/hecke-09_gras.png",
+"basis": "hecke/09",
+"x": 177,
+"y": 790,
+"fuss": 29,
+"kachel": [
+11,
+50
+],
+"block": [
+11,
+49,
+2,
+2
 ],
 "ebene": 1
 },
@@ -3440,16 +3458,16 @@
 {
 "datei": "varianten/k01-baum01_gras_m.png",
 "basis": "k01/baum01",
-"x": 112,
-"y": 805,
+"x": 64,
+"y": 853,
 "fuss": 46,
 "kachel": [
-8,
-52
+5,
+55
 ],
 "block": [
-7,
-50,
+4,
+53,
 3,
 3
 ],
@@ -4079,16 +4097,16 @@
 {
 "datei": "varianten/k01-deko09_gras.png",
 "basis": "k01/deko09",
-"x": 129,
-"y": 816,
+"x": 81,
+"y": 864,
 "fuss": 28,
 "kachel": [
-8,
-51
+5,
+54
 ],
 "block": [
-8,
-50,
+5,
+53,
 2,
 2
 ],
@@ -4097,16 +4115,16 @@
 {
 "datei": "varianten/k01-deko04_gras.png",
 "basis": "k01/deko04",
-"x": 115,
-"y": 836,
+"x": 67,
+"y": 884,
 "fuss": 31,
 "kachel": [
-8,
-53
+5,
+56
 ],
 "block": [
-8,
-52,
+5,
+55,
 2,
 2
 ],
@@ -9744,24 +9762,6 @@
 ],
 "block": [
 0,
-53,
-3,
-3
-],
-"ebene": 1
-},
-{
-"datei": "varianten/k01-baum02_gras.png",
-"basis": "k01/baum02",
-"x": 34,
-"y": 855,
-"fuss": 44,
-"kachel": [
-3,
-55
-],
-"block": [
-2,
 53,
 3,
 3

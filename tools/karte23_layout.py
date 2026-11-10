@@ -28,7 +28,7 @@ FELDER = [(19, 45, 28, 52, 'moehren'), (34, 45, 43, 52, 'weizen'), (20, 58, 28, 
           (34, 58, 41, 65, 'salat'), (19, 67, 27, 72, 'weizen'), (34, 68, 39, 72, 'leer')]
 MAEUERCHEN = [(3, 28, 16, 28), (22, 28, 35, 28), (19, 42, 28, 42), (34, 42, 43, 42)]
 HECKEN = [(19, 54, 28, 54), (34, 54, 43, 54), (19, 66, 28, 66), (34, 66, 41, 66), (43, 58, 43, 65), (18, 67, 18, 73)]
-ZAUN = (11, 47, 17, 51)
+ZAUN = (9, 46, 18, 53)               # Weide groesser (Nutzer)
 PLATEAU_X = (37, 62)               # Plateau Mitte oben (Erd-Felsfront 2 Kacheln, Seiten schmal)
 PLATEAU_TREPPE = (42, 45)
 HOEHLE = (53, 54)
