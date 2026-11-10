@@ -97,8 +97,8 @@ def bauen(frame=None, speichern=True):
     tmask = zell_maske(cls, 't', cols, rows) > 0.5
     frei_t = np.kron(np.array([[c == 't' for c in z] for z in cls]), np.ones((T, T), bool))
     frei_t = frei_t | np.roll(frei_t, -T, 0) | np.roll(frei_t, -2 * T, 0)
-    wand = k4.hoehenkanten(a, h1m, 'rot', 24, 8, LIPPE_ROT, frei_t, 71, berg=False, filtern=True)
-    wand |= k4.hoehenkanten(a, hoch2, 'rot', FRONT, 8, LIPPE_ROT, frei_t & ~h1m, 72, berg=False, filtern=True)
+    wand = k4.hoehenkanten(a, h1m, 'rot', 24, 8, LIPPE_ROT, frei_t, 71, berg=False)
+    wand |= k4.hoehenkanten(a, hoch2, 'rot', FRONT, 8, LIPPE_ROT, frei_t & ~h1m, 72, berg=False)
     # Treppen der Arena und des Schreins (frontal nach Sueden)
     for (x0, x1) in lay['arena_treppen'] + [tuple(lay['schrein_treppe'])]:
         xc = ((x0 + x1 + 1) * T) // 2

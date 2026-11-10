@@ -91,6 +91,19 @@ def main():
                         x = e
                     else:
                         x += 1
+    for _ in range(2):                                 # schmale Felsfinger (<= 2 Kacheln breit) ueberall -> Boden
+        for y in range(R):
+            x = 0
+            while x < C:
+                if k[y, x] == 'r':
+                    e = x
+                    while e < C and k[y, e] == 'r':
+                        e += 1
+                    if e - x <= 2 and x > 0 and e < C:
+                        k[y, x:e] = 'b'
+                    x = e
+                else:
+                    x += 1
     gx0, gx1, gy = GLEIS
     k[gy, gx0:gx1 + 1] = 'g'
     yy, xx = np.mgrid[0:R, 0:C]                       # Schrein: achteckige Flaeche wie die Vorlage (Mitte 71/13)
