@@ -25,7 +25,7 @@ ARENA_TREPPEN = [(45, 49), (52, 56)]          # (x0, x1) an der Suedkante der Ar
 ARENA_LINKS = (39, 43)                        # Aufgang links (Reihen)
 SCHREIN_TREPPE = (68, 71)
 GLEIS = (9, 88, 75)
-TELEPORTER = [(0, 42, 2, 4), (98, 66, 2, 3)]      # nur auf dem Weg, nicht im Fels (Nutzer)
+TELEPORTER = [(0, 42, 2, 4), (98, 66, 2, 4)]      # nur auf dem Weg, nicht im Fels (Nutzer)
 
 
 def klassen():
@@ -242,6 +242,11 @@ def main():
     for y in range(yb + 3, yb + 5):
         for x in range(x0, x1 + 1):
             k[y, x] = 'w'
+    # Platz fuer 2x4 Teleporter (Nutzer): Fels darueber 2 Reihen zurueck, rechts unten 1 Reihe weg
+    for (x0_, x1_, ys_) in ((0, 7, (40, 41)), (93, 100, (64, 65, 69))):
+        for y in ys_:
+            for x in range(x0_, x1_):
+                k[y, x] = 'w'; h[y, x] = 0
     for (tx, ty, b, hh) in TELEPORTER:
         k[ty:ty + hh, tx:tx + b] = 'T'; h[ty:ty + hh, tx:tx + b] = 0
     lay = {'groesse': [C, R], 'klassen': [''.join(z) for z in k], 'hoehe': [''.join(str(c) for c in z) for z in h],
