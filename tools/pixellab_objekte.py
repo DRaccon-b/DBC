@@ -1775,6 +1775,11 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
     'k24_obelisk': {'size': 128, 'items': [
         'very tall narrow dark navy black stone obelisk with faint purple glowing runes, standing on a square stepped dark stone base, ' + FR14,
     ]},
+    'k24_obelisk2': {'size': 128, 'items': [
+        'very tall slender plain dark navy black stone obelisk spire with a pointed tip, smooth polished stone with subtle '
+        'highlights on the left edge, no runes, no symbols, no writing, standing directly on the ground with only a thin '
+        'low square stone foot, ' + FR14,
+    ]},
     'k21_tv_gross': {'size': 48, 'items': [
         'big old brown wooden cabinet CRT television standing on short wooden legs, wood grain case, large dark curved '
         'screen with a faint blue glow, a column of round knobs and a speaker grille on the right, ' + FR14,

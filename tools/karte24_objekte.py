@@ -35,7 +35,7 @@ KARTE = os.path.join(ROOT, 'maps', 'karte24')
 OBJ = os.path.join(ROOT, 'assets', 'objekte', 'karte24')
 T = 16
 ZELT, KAEFIG, FEUER, ERZ, LATERNE, HOCKER = 'lager/00', 'lager/01', 'lager/02', 'lager/03', 'lager/04', 'lager/05'
-KISTEN, SAECKE, DORN, SCHAEDEL, SCHILD, OBELISK = 'lager/08', 'lager/10', 'lager/11', 'lager/14', 'lager/15', 'obelisk/00'
+KISTEN, SAECKE, DORN, SCHAEDEL, SCHILD, OBELISK = 'lager/08', 'lager/10', 'lager/11', 'lager/14', 'lager/15', 'obelisk2/00'
 # Eisenzaun der Pferche: (x0, y0, x1, y1, offene Seiten) - nach der Vorlage, Pferch A links, Pferch B rechts
 ZAEUNE = [(9, 68, 18, 73, 'unten_rechts'), (28, 68, 39, 73, 'unten_links')]   # ganz auf dem Canyonboden   # auf den freien Boden verschoben
 # (sprite, Kachel-x der Fussmitte, Fusszeile, Optionen) - Anordnung nach der Vorlage, auf unseren Canyonboden gelegt
