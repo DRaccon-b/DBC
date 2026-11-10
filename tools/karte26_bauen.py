@@ -120,7 +120,7 @@ def podest(a, pm):
                 a[yy, x] = (a[yy, x] * 0.6).astype(np.uint8)
 
 
-TEPPICHE = [(272, 150, 336, 318)]       # Thronsaal: x 272..336 (4 Kacheln, Mitte 304), vom Podest bis zur Suedwand
+TEPPICHE = [(272, 150, 336, 238)]       # Thronsaal: x 272..336 (4 Kacheln, Mitte 304), vom Podest bis vor den Holo-Tisch
 
 
 def bauen(frame=None, speichern=True):

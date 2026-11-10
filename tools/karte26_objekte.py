@@ -34,11 +34,9 @@ def paar(name, dx, reihe, opt=None):
 
 THRONSAAL = (                                                    # Kommandobruecke des Kaisers (eigene PixelLab-Objekte k26_thron)
     [(THRON2, 9, {'px': AX})]                                    # Kaiserthron auf der Achse, Teppich davor
-    + paar(WACHE, 56, 9) + paar(FEUERSCHALE, 92, 9, {'anim': 'feuer'})
+    + paar('digifeuer/00', 60, 9, {'anim': 'lampe'})             # Feuerschalen mit digitalen Flammen (Nutzer)
     + paar(KOMMANDO, 172, 9, {'anim': 'lampe'})                  # grosse Kommandopulte mit vier Monitoren
-    + paar(WACHE, 52, 15) + paar(WACHE, 52, 19)                  # Ehrenwache am Teppich
-    + paar(HOLO, 128, 16, {'anim': 'lampe'})                     # Holo-Kartentische
-    + paar(WAFFEN, 208, 14)                                      # Waffenstaender an den Seitenwaenden
+    + [(HOLO, 18, {'px': AX, 'anim': 'lampe'})]                  # ein Holo-Schiff unten auf der Achse (Nutzer)
     + paar(RADAR, 208, 19, {'anim': 'lampe'})
 )
 

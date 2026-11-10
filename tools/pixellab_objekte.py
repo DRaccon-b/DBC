@@ -1854,6 +1854,10 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'armored imperial guard statue, dark steel plate armor with gold trim and a glowing red visor, holding a tall halberd, on a small plinth, ' + FR14,
         'tall gold brazier bowl on a black stand with burning crimson flames, ' + FR14,
     ]},
+    'k26_digifeuer': {'size': 64, 'items': [
+        'tall gold brazier bowl on a black stand with burning digital flames made of glowing cyan and magenta pixel squares '
+        'and data bits rising up, ' + FR14,
+    ]},
     'k24_schrein': {'size': 64, 'items': [
         'dark emperor throne made of jagged black obsidian crystal spikes with deep purple and crimson highlights, a high '
         'pointed back, standing on a small stepped dark stone dais, ' + FR14,

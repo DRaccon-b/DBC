@@ -18,11 +18,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/thron-02.png",
-"basis": "thron/02",
-"x": 231,
-"y": 99,
-"fuss": 61,
+"datei": "varianten/digifeuer-00.png",
+"basis": "digifeuer/00",
+"x": 227,
+"y": 98,
+"fuss": 62,
 "kachel": [
 15,
 9
@@ -33,14 +33,15 @@
 3,
 4
 ],
-"ebene": 1
+"ebene": 1,
+"anim": "lampe"
 },
 {
-"datei": "varianten/thron-02_m.png",
-"basis": "thron/02",
-"x": 343,
-"y": 99,
-"fuss": 61,
+"datei": "varianten/digifeuer-00_m.png",
+"basis": "digifeuer/00",
+"x": 347,
+"y": 98,
+"fuss": 62,
 "kachel": [
 22,
 9
@@ -51,45 +52,8 @@
 3,
 4
 ],
-"ebene": 1
-},
-{
-"datei": "varianten/thron-03.png",
-"basis": "thron/03",
-"x": 197,
-"y": 98,
-"fuss": 62,
-"kachel": [
-13,
-9
-],
-"block": [
-12,
-6,
-2,
-4
-],
 "ebene": 1,
-"anim": "feuer"
-},
-{
-"datei": "varianten/thron-03_m.png",
-"basis": "thron/03",
-"x": 381,
-"y": 98,
-"fuss": 62,
-"kachel": [
-24,
-9
-],
-"block": [
-23,
-6,
-2,
-4
-],
-"ebene": 1,
-"anim": "feuer"
+"anim": "lampe"
 },
 {
 "datei": "varianten/thron_gross-01.png",
@@ -130,150 +94,23 @@
 "anim": "lampe"
 },
 {
-"datei": "varianten/thron-02.png",
-"basis": "thron/02",
-"x": 235,
-"y": 195,
-"fuss": 61,
-"kachel": [
-15,
-15
-],
-"block": [
-14,
-12,
-3,
-4
-],
-"ebene": 1
-},
-{
-"datei": "varianten/thron-02_m.png",
-"basis": "thron/02",
-"x": 339,
-"y": 195,
-"fuss": 61,
-"kachel": [
-22,
-15
-],
-"block": [
-21,
-12,
-3,
-4
-],
-"ebene": 1
-},
-{
-"datei": "varianten/thron-02.png",
-"basis": "thron/02",
-"x": 235,
-"y": 259,
-"fuss": 61,
-"kachel": [
-15,
-19
-],
-"block": [
-14,
-16,
-3,
-4
-],
-"ebene": 1
-},
-{
-"datei": "varianten/thron-02_m.png",
-"basis": "thron/02",
-"x": 339,
-"y": 259,
-"fuss": 61,
-"kachel": [
-22,
-19
-],
-"block": [
-21,
-16,
-3,
-4
-],
-"ebene": 1
-},
-{
 "datei": "varianten/thron-00.png",
 "basis": "thron/00",
-"x": 146,
-"y": 217,
+"x": 274,
+"y": 249,
 "fuss": 55,
 "kachel": [
-11,
-16
+19,
+18
 ],
 "block": [
-9,
-13,
+17,
+15,
 4,
 4
 ],
 "ebene": 1,
 "anim": "lampe"
-},
-{
-"datei": "varianten/thron-00_m.png",
-"basis": "thron/00",
-"x": 402,
-"y": 217,
-"fuss": 55,
-"kachel": [
-27,
-16
-],
-"block": [
-25,
-13,
-4,
-4
-],
-"ebene": 1,
-"anim": "lampe"
-},
-{
-"datei": "varianten/thron-05.png",
-"basis": "thron/05",
-"x": 67,
-"y": 181,
-"fuss": 59,
-"kachel": [
-6,
-14
-],
-"block": [
-4,
-11,
-4,
-4
-],
-"ebene": 1
-},
-{
-"datei": "varianten/thron-05_m.png",
-"basis": "thron/05",
-"x": 483,
-"y": 181,
-"fuss": 59,
-"kachel": [
-32,
-14
-],
-"block": [
-30,
-11,
-4,
-4
-],
-"ebene": 1
 },
 {
 "datei": "varianten/thron-15.png",
