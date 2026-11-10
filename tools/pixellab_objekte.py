@@ -1804,6 +1804,15 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'large yellow steel derrick crane for a mine, A-frame lattice tower on a dark steel base, a diagonal lattice boom '
         'pointing up to the right, a cable with an iron hook and a small ore bucket hanging from the boom tip, ' + FR14,
     ]},
+    'k24_mine': {'size': 64, 'items': [
+        'group of three dark rusty steel oil barrels with black oil stains, standing upright, ' + FR14,
+        'pile of red orange iron ore rocks with a few glinting crystals, ' + FR14,
+        'tall dark steel cable car pylon mast with a big grooved pulley wheel on top, lattice legs on a concrete foot, ' + FR14,
+        'small wooden mine supply cart without rails with a few sacks and a lantern, ' + FR14,
+    ]},
+    'k24_gondel': {'size': 32, 'items': [
+        'small red cable car gondola cabin with windows, hanging from a short dark steel hanger arm with a small wheel on top, ' + FR14,
+    ]},
     'k24_schrein': {'size': 64, 'items': [
         'dark emperor throne made of jagged black obsidian crystal spikes with deep purple and crimson highlights, a high '
         'pointed back, standing on a small stepped dark stone dais, ' + FR14,

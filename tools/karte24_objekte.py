@@ -107,7 +107,12 @@ LOREN = [(GOLD, 79.5, GL, {'px': 79 * T + 8, 'dy': -5, 'auf_gleis': True}),     
 KRAN_TURM, KRAN_AUSLEGER = 'kran/00', 'kran/01'
 KRAENE = [(KRAN_AUSLEGER, 67.5, 66, {}),                        # vor der oberen Grube, Kuebel haengt ueber dem Oel
           (KRAN_TURM, 85.5, 69, {})]                            # grosser Turmdrehkran rechts vor der Felswand
-UNTEN_LINKS = UNTEN_LINKS + LOREN + KRAENE + OBEN + SCHREIN_OBJ + ARENA_OBJ
+FAESSER, ERZHAUFEN, MAST, VERSORGUNG, PUMPE = 'mine/00', 'mine/01', 'mine/02', 'mine/03', 'mine/08'
+MINE = [(FAESSER, 75, 69, {}), (ERZHAUFEN, 72.5, 73, {}),       # an der mittleren Grube
+        (PUMPE, 69, 79, {}), (FAESSER, 56.5, 78, {'spiegeln': True}),   # an der unteren Grube
+        (VERSORGUNG, 90, 73, {})]                               # rechts neben den Loren
+SEILBAHN = [(MAST, 80, 14, {'seil': 'oben', 'auf_fels': True}), (MAST, 80, 64, {'seil': 'unten'})]   # Seilbahn Schrein -> Kraene
+UNTEN_LINKS = UNTEN_LINKS + LOREN + KRAENE + MINE + SEILBAHN + OBEN + SCHREIN_OBJ + ARENA_OBJ
 
 
 def main():
@@ -144,7 +149,7 @@ def main():
             x = opt.pop('px') - (ux0 + bw // 2)
         y = (ty + 1) * T - 1 - uy1 + opt.pop('dy', 0)
         fuss_y = y + uy1
-        if not opt.get('hinter_fels') and (lvl[fuss_y, x + ux0 + bw // 2] not in (1, 2) or wand[fuss_y - 2:fuss_y + 1, x + ux0:x + ux1 + 1].any()):
+        if not opt.get('hinter_fels') and not opt.get('auf_fels') and (lvl[fuss_y, x + ux0 + bw // 2] not in (1, 2) or wand[fuss_y - 2:fuss_y + 1, x + ux0:x + ux1 + 1].any()):
             print('  uebersprungen (nicht auf dem Canyonboden):', name, fx, fy)
             continue
         o = {'datei': datei, 'basis': name, 'x': x, 'y': y, 'fuss': h, 'kachel': [tx, ty],

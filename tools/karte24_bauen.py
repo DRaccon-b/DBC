@@ -148,6 +148,34 @@ def gleis(a, x0, x1, y):
             a[ys - 1:ys + 2, xe] = (18, 51, 58)
 
 
+def seilbahn(img, maste, cache, frame):
+    """Seilbahn vom Schrein zu den Kraenen: Seil von Radmitte zu Radmitte (laeuft hinter dem unteren Mast),
+    zwei Gondeln haengen am Seil und fahren gegenlaeufig (4 Bilder). Kein Bodenschatten: die Gondeln haengen
+    hoch ueber Fels und Canyon."""
+    oben = [o for o in maste if o['seil'] == 'oben']
+    unten = [o for o in maste if o['seil'] == 'unten']
+    if not oben or not unten:
+        return
+    o1, o2 = oben[0], unten[0]
+    cx = o1['x'] + 17
+    y0, y1 = o1['y'] + 9, o2['y'] + 9
+    a = np.array(img)
+    sp2 = np.array(cache[o2['datei']])[..., 3] > 0
+    for y in range(y0, y1 + 1):
+        ly, lx = y - o2['y'], cx - o2['x']
+        if 0 <= ly < sp2.shape[0] and 0 <= lx < sp2.shape[1] and sp2[ly, lx]:
+            continue                                                 # hinter dem unteren Mast
+        a[y, cx, :3] = (28, 32, 40)
+        a[y, cx + 1, :3] = (96, 104, 120)
+    gon = Image.open(os.path.join(OBJ, 'gondel', '00.png')).convert('RGBA')
+    im = Image.fromarray(a).convert("RGBA")
+    L = y1 - y0 - gon.height - 24
+    for i, f in enumerate((0.25, 0.62)):                              # gegenlaeufig, je 6 px pro Bild
+        gy = y0 + 12 + int(f * L) + (6 * frame if i == 0 else -6 * frame)
+        im.alpha_composite(gon, (cx - 11 + 1, gy))
+    img.paste(im.convert(img.mode))
+
+
 def bauen(frame=None, speichern=True):
     lay = json.load(open(os.path.join(KARTE, 'layout.json')))
     cls = lay['klassen']
@@ -260,6 +288,7 @@ def bauen(frame=None, speichern=True):
             img = Image.fromarray(nach).copy()
             k4.animieren(img, objs, cache, frame or 0)
             kb.laternen_licht(img, [o for o in objs if o.get('anim') == 'laterne'], frame)
+            seilbahn(img, [o for o in objs if o.get('seil')], cache, frame or 0)
     if speichern and frame is None:
         img.save(os.path.join(KARTE, 'terrain.png'))
     print('Karte 24 %dx%d gebaut' % (cols, rows))
