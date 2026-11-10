@@ -60,9 +60,8 @@ UNTEN_LINKS = [
     (ERZ, 10.5, 66, {'spiegeln': True}),
     # Obelisken auf dem Sandplatz zwischen den Pferchen
     (OBELISK, 21.5, 74, {}), (OBELISK, 42.5, 73, {}),
-    # unten: Zelte und Feuerstellen
-    (ZELT, 27.5, 79, {}), (FEUER, 31, 79, {'anim': 'feuer'}), (ZELT, 13.5, 79, {'spiegeln': True}),
-    (FEUER, 17, 80, {'anim': 'feuer'}),
+    # unten: kaputte Schiene und Bergbau-Ausruestung (Nutzer)
+    ('loren/07', 14.5, 79, {}), ('loren/06', 28.5, 79, {}),     # kaputte Schiene, Minenarbeiter-Ausruestung (statt Zelte/Feuer)
     # Kleinkram (sparsam)
     (SCHAEDEL, 23, 80, {}), (DORN, 5.5, 73, {}), (SCHILD, 21, 46, {}),
 ]
