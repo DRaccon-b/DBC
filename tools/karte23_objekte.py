@@ -281,7 +281,7 @@ def main():
         if setze(rnd.choice(['k01/deko%02d' % i for i in (0, 1, 2, 3, 30)] + ['k01/deko05']), tx, ty, {'anim': 'wehen'}, frei=True):
             n_t += 1
     setze('maulwurf/03', 93, 69, {}, frei=True)                 # Wegweiser am Ausgang rechts unten
-    for name, ziel in (('maulwurf/01', 4), ('maulwurf/00', 12), ('k01/deko09', 4), ('k01/deko11', 3), ('k01/deko08', 5)):
+    for name, ziel in (('maulwurf/01', 2), ('maulwurf/00', 6), ('k01/deko09', 4), ('k01/deko11', 3), ('k01/deko08', 5)):
         n_ = 0                                                   # unten rechts: Maulwurfshuegel, Baue, Felsen (Vorlage)
         for _ in range(4000):
             if n_ >= ziel:
