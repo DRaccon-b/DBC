@@ -289,6 +289,7 @@ def schlamm(a, m, erde, seed=63):
 
 
 SENKE_STIL = os.environ.get('K23_SENKE', 'boeschung')   # gewaehlt: Boeschung (Nutzer)
+TEICH_STIL = os.environ.get('K23_TEICH', 'erde')       # erde | sandstein
 STUFEN = int(os.environ.get('K23_STUFEN', '3'))         # Terrassen der Senke (Nutzer: Variante A = 3)   # erde | hoch | stein | sandstein | holz | boeschung | karte01
 
 
@@ -477,11 +478,24 @@ def bauen(frame=None, speichern=True):
     # ---------------- Mauerchen, Hecken
     # ---------------- Wasser (Bach laeuft unten aus der Karte)
     import wasser_vertieft
-    xm = weich(zell_maske(cls, 'x', cols, rows), 4, 0.15, 8, 0.45)
+    # Teich und Bach groesser (Nutzer): eine Kachel breiter nach Osten und Westen (nicht in die Hecke bei x 43)
+    x_t = np.array([[ch == 'x' for ch in z] for z in cls])
+    g_t = x_t | np.roll(x_t, 1, 1) | np.roll(x_t, -1, 1) | np.roll(x_t, 1, 0)
+    g_t[:66, :44] &= x_t[:66, :44]
+    xm = weich(np.kron(g_t, np.ones((T, T))).astype(np.float32), 4, 0.15, 8, 0.45)
     P = 24
     ag = np.pad(a, ((0, P), (0, 0), (0, 0)), mode='edge')
     mg = np.pad(xm, ((0, P), (0, 0)), mode='edge')
-    ag = np.array(wasser_vertieft.vertiefen(Image.fromarray(ag), np.ones_like(mg), frame, maske=mg).convert('RGB'))
+    alt_mauer = wasser_vertieft.MAUER
+    rand_ = None
+    if TEICH_STIL == 'sandstein':                                     # Ufer und Beckenrand in Sandstein
+        rand_ = ('#6e5236', '#8e6c48', '#ae8a60', '#c8a87a')
+        wasser_vertieft.MAUER = [H(c) for c in ('#5a4632', '#76603f', '#927a52', '#ac9468', '#c6ae82', '#dcc8a0')]
+    try:                                                              # zwei deutliche Tiefenstufen (Nutzer)
+        ag = np.array(wasser_vertieft.vertiefen(Image.fromarray(ag), np.ones_like(mg), frame, maske=mg, rand=rand_,
+                                                stufen=[(14, 0.8, 8), (30, 0.62, 7)]).convert('RGB'))
+    finally:
+        wasser_vertieft.MAUER = alt_mauer
     a = ag[:Hp].copy()
     img = Image.fromarray(a).convert('RGBA')
     hecken(img, lay, cls)
