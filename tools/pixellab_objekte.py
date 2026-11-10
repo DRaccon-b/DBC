@@ -1813,6 +1813,15 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
     'k24_gondel': {'size': 32, 'items': [
         'small red cable car gondola cabin with windows, hanging from a short dark steel hanger arm with a small wheel on top, ' + FR14,
     ]},
+    'k24_bergstation': {'size': 160, 'items': [
+        'cable car mountain top station building, red sandstone and dark steel, flat roof with a steel frame, a big '
+        'horizontal bullwheel for the cable under an open steel canopy on the right side, wide open boarding platform, '
+        'a small ticket window, a red flag on the roof, ' + FR14,
+    ]},
+    'k24_gondel_gross': {'size': 64, 'items': [
+        'large red cable car gondola cabin with big windows, a dark steel hanger arm on top ending in a carriage with two '
+        'small grooved wheels, no cable, ' + FR14,
+    ]},
     'k24_schrein': {'size': 64, 'items': [
         'dark emperor throne made of jagged black obsidian crystal spikes with deep purple and crimson highlights, a high '
         'pointed back, standing on a small stepped dark stone dais, ' + FR14,

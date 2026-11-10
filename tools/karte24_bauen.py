@@ -176,12 +176,57 @@ def seilbahn(img, maste, cache, frame):
     img.paste(im.convert(img.mode))
 
 
+# Weitere Felsebenen rechts (Nutzer, rote Linien): Kachel-Polygone, rechts/oberhalb der Linie liegt die hoehere Ebene
+EBENE3 = [(80, -1), (85, 15), (82, 24), (73, 30), (71, 41), (73, 54), (80, 56), (90, 57), (101, 58), (101, -1)]
+EBENE4 = [(89, -1), (92, 12), (90, 19), (94, 17), (101, 16), (101, -1)]
+
+
+def hoehere_felsen(hp):
+    from PIL import ImageDraw as _ID, ImageFilter as _IF
+    Hh, W = hp.shape
+    fels = Image.fromarray(((hp >= 2) * 255).astype(np.uint8)).filter(_IF.MinFilter(2 * 3 * T + 1))   # 3 Kacheln Abstand
+    fels = np.array(fels) > 0
+    for stufe, poly in ((3, EBENE3), (4, EBENE4)):
+        m = Image.new('L', (W, Hh), 0)
+        _ID.Draw(m).polygon([(x * T, y * T) for x, y in poly], fill=255)
+        m = weich((np.array(m) > 0).astype(np.float32), 6, 0.0, 9, 0.5) & fels
+        hp = np.where(m & (hp >= stufe - 1), stufe, hp)
+    return hp
+
+
+SEIL_RAD = (110, 64)                  # Austritt des Seils am Seilrad der Bergstation (Sprite-Pixel)
+SEIL_ENDE = (1600, 150)               # das Seil laeuft nach Nordosten aus der Karte (Nutzer, blaue Linie)
+
+
+def stahlseil(img, stationen, frame):
+    """Stahlseil von der Bergstation nach Nordosten, daran eine grosse Gondel (Nutzer: lila). Das Seil haengt hoch
+    ueber dem Fels: kein Bodenschatten. Die Gondel faehrt je Bild ein Stueck das Seil hinauf (4 Bilder)."""
+    if not stationen:
+        return
+    o = stationen[0]
+    x0, y0 = o['x'] + SEIL_RAD[0], o['y'] + SEIL_RAD[1]
+    x1, y1 = SEIL_ENDE
+    a = np.array(img)
+    n = int(max(abs(x1 - x0), abs(y1 - y0)))
+    for i in range(n + 1):
+        x = int(round(x0 + (x1 - x0) * i / n)); y = int(round(y0 + (y1 - y0) * i / n))
+        if 0 <= y < a.shape[0] and 0 <= x < a.shape[1] - 2:
+            a[y, x, :3] = (24, 28, 36); a[y, x + 1, :3] = (110, 120, 138); a[y, x + 2, :3] = (24, 28, 36)
+    im = Image.fromarray(a).convert('RGBA')
+    gon = Image.open(os.path.join(OBJ, 'gondel_gross', '00.png')).convert('RGBA')
+    t = 0.48 + 0.02 * frame
+    gx, gy = x0 + (x1 - x0) * t, y0 + (y1 - y0) * t
+    im.alpha_composite(gon, (int(gx) - 32 + 1, int(gy) - 2))
+    img.paste(im.convert(img.mode))
+
+
 def bauen(frame=None, speichern=True):
     lay = json.load(open(os.path.join(KARTE, 'layout.json')))
     cls = lay['klassen']
     cols, rows = lay['groesse']
     Wp, Hp = cols * T, rows * T
     hp = np.kron(np.array([[int(c) for c in z] for z in lay['hoehe']]), np.ones((T, T), int))
+    hp = hoehere_felsen(hp)                                          # zwei weitere Felsebenen rechts (Nutzer)
     basis = os.path.join(ROOT, 'assets', 'basis')
     boden = flaeche(k6.kacheln(os.path.join(basis, 'sand_%d.png'), 5, faerben((150, 82, 50), (214, 140, 96))), cols, rows)
     weg = flaeche(k6.kacheln(os.path.join(basis, 'sand_%d.png'), 5, faerben((160, 118, 76), (214, 172, 120))), cols, rows)
@@ -217,6 +262,10 @@ def bauen(frame=None, speichern=True):
         frei_t[ya_ * T + FRONT + 2:(yb_ + 1) * T - 3, (min(tx_) - 1) * T:(max(tx_) + 4) * T] = True   # Front bleibt
     wand = k4.hoehenkanten(a, h1m, 'rot', 24, 8, LIPPE_ROT, frei_t, 71, berg=False)
     wand |= k4.hoehenkanten(a, hoch2, 'rot', FRONT, 8, LIPPE_ROT, frei_t & ~h1m, 72, berg=False)
+    for st in (3, 4):                                                # hoehere Felsebenen: heller, eigene Front
+        hst = weich((hp >= st).astype(np.float32), 5, 0.0, 7, 0.5)
+        a[hst] = (fels[hst] * (1 + 0.05 * (st - 2))).clip(0, 255).astype(np.uint8)
+        wand |= k4.hoehenkanten(a, hst, 'rot', FRONT, 8, LIPPE_ROT, np.zeros_like(frei_t), 70 + st, berg=False)
     # Treppen der Arena und des Schreins (frontal nach Sueden)
     for (x0, x1) in lay['arena_treppen'] + [tuple(lay['schrein_treppe'])]:
         xc = ((x0 + x1 + 1) * T) // 2
@@ -288,7 +337,8 @@ def bauen(frame=None, speichern=True):
             img = Image.fromarray(nach).copy()
             k4.animieren(img, objs, cache, frame or 0)
             kb.laternen_licht(img, [o for o in objs if o.get('anim') == 'laterne'], frame)
-            seilbahn(img, [o for o in objs if o.get('seil')], cache, frame or 0)
+            seilbahn(img, [o for o in objs if o.get('seil') in ('oben', 'unten')], cache, frame or 0)
+            stahlseil(img, [o for o in objs if o.get('seil') == 'station'], frame or 0)
     if speichern and frame is None:
         img.save(os.path.join(KARTE, 'terrain.png'))
     print('Karte 24 %dx%d gebaut' % (cols, rows))
