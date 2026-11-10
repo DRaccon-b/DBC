@@ -288,7 +288,8 @@ def schlamm(a, m, erde, seed=63):
             sub[e & (yy == 0) & (xx > -4) & (xx < 0)] = H('#a8b0b8')
 
 
-SENKE_STIL = os.environ.get('K23_SENKE', 'boeschung')   # gewaehlt: Boeschung (Nutzer)   # erde | hoch | stein | sandstein | holz | boeschung | karte01
+SENKE_STIL = os.environ.get('K23_SENKE', 'boeschung')   # gewaehlt: Boeschung (Nutzer)
+STUFEN = int(os.environ.get('K23_STUFEN', '3'))         # Terrassen der Senke (Nutzer: 3 oder 4)   # erde | hoch | stein | sandstein | holz | boeschung | karte01
 
 
 def senkenwand(a, m, stil, front):
@@ -426,65 +427,46 @@ def bauen(frame=None, speichern=True):
     wand |= k4.hoehenkanten(a, nach_oben(hoch3), 'stein', FRONT, 8, lippe, frei, 42, berg=False)
     for (sx0, sx1, yl) in trs:
         k4.treppe(a, sx0 * T, (sx1 + 1) * T, (yl + 1) * T - 1, 's', FRONT, 'stein', sand)
-    # Senke unten rechts: alles ausser der Senke ist hoeher; Felsrand-Kacheln gehoeren zum Rand oben
-    rand = maske_aus(cls, 'k', cols, rows)
-    cm = weich(zell_maske(cls, 'c', cols, rows), 6, 0.0, 5, 0.5)       # Form wie die Vorlage, nur Ecken leicht gerundet     # Senke rund (keine Treppenstufen am Rand)
-    hoch = ~cm
-    frei = np.zeros((Hp, Wp), bool)
-    # Zugang von oben (Weg durch den Rand) -> Treppe; Zugang von links -> Rampe ohne Kante
-    zug_o = [x for x in range(70, 86) if any(cls[y][x] in 'wc' for y in range(47, 52)) and cls[52][x] == 'c']
-    ys_c = [y for y in range(48, 70) if cls[y][68] == 'c' or cls[y][67] == 'w']
-    if zug_o:
-        tz0, tz1 = min(zug_o), max(zug_o)
-        yt = max(y for y in range(44, 60) if cls[y][tz0] not in 'c') * T + T - 1
-        frei[yt - 14:yt + 40, tz0 * T:(tz1 + 1) * T] = True
-    ramp = np.zeros((Hp, Wp), bool)
-    for y in range(48, 70):
-        for x in range(62, 72):
-            if cls[y][x] in 'wc' and any(cls[y][xx] == 'c' for xx in range(x, min(cols, x + 6))):
-                ramp[y * T:(y + 1) * T, x * T:(x + 1) * T] = True
-    frei |= ramp
-    LIPPE_ERDE = ['#4a3424', '#6a4c34', '#7e5e40', '#94714c', '#a8835a', '#bc9a70']   # Rand der Senke: Erde statt Gras
-    stil = SENKE_STIL
-    fels_s, front_s = {'erde': ('erde', 20), 'hoch': ('erde', 32), 'stein': ('stein', 24), 'sandstein': ('sandstein', 24),
-                       'holz': ('erde', 20), 'boeschung': ('erde', 16), 'karte01': ('erde', 24)}[stil]
-    sw = k4.hoehenkanten(a, hoch, fels_s, front_s, 6, LIPPE_ERDE, frei, 51, berg=False)
-    senkenwand(a, sw & ~hoch, stil, front_s)
-    wand |= sw
-    if zug_o:
-        k4.treppe(a, tz0 * T, (tz1 + 1) * T, yt, 's', front_s, fels_s, sand)
-    rm = weich(zell_maske(cls, 'kc', cols, rows), 4, 0.35, 12) & ~wand & ~cm & ~maske_aus(cls, 'wt', cols, rows)   # Felsrand: steiniger Erdboden bis an die Senke
-    a[rm] = erde[rm]                                                  # Rand der Senke: dieselben Erdkacheln wie der Hof
-    # Zugang von links: ebenfalls eine Treppe (Nutzer) - an der Westkante der Senke in Hoehe des Weges
+    # Senke unten rechts (Nutzer): groesser, in STUFEN Terrassen nach unten, Boeschungswaende, Boden aus Erdkacheln;
+    # oben fuehrt der Weg ueber Treppen Stufe fuer Stufe hinunter, links als sanfte Rampe
+    def wachsen(m, n):
+        for _ in range(n):
+            m = m | np.roll(m, 1, 0) | np.roll(m, -1, 0) | np.roll(m, 1, 1) | np.roll(m, -1, 1)
+        return m
+
+    def schrumpfen(m, n):
+        return ~wachsen(~m, n)
+    c_t = np.array([[ch == 'c' for ch in z] for z in cls])
+    stufen = [wachsen(c_t, 1)]
+    for _ in range(STUFEN - 1):
+        stufen.append(schrumpfen(stufen[-1], 2))
+    px_m = lambda m: weich(np.kron(m, np.ones((T, T))).astype(np.float32), 6, 0.0, 5, 0.5)
+    L = [px_m(m) for m in stufen]
+    cm = L[0]
+    LIPPE_ERDE = ['#4a3424', '#6a4c34', '#7e5e40', '#94714c', '#a8835a', '#bc9a70']
+    rm = weich(zell_maske(cls, 'kc', cols, rows), 4, 0.35, 12) & ~cm & ~maske_aus(cls, 'wt', cols, rows)
+    a[rm] = erde[rm]                                                  # Rand: Erdkacheln wie der Hof
+    for k, m in enumerate(L):                                         # Boeden: Erdkacheln, je Stufe etwas dunkler
+        a[m] = (erde[m] * (0.97 - 0.06 * k)).astype(np.uint8)
+    # Gaenge: oben (Treppen) und links (Rampe)
+    zug_o = [x for x in range(70, 86) if any(cls[y][x] == 'w' for y in range(46, 50)) and c_t[52, x]]
+    tz0, tz1 = (min(zug_o), max(zug_o)) if zug_o else (76, 78)
     reihen = [y for y in range(50, 66) if cls[y][66] == 'w' and cls[y][62] == 'w']
-    if reihen:
-        ya, yb = reihen[0] * T, (reihen[-1] + 1) * T
-        yc = (ya + yb) // 2
-        xb = int(np.nonzero(cm[yc])[0].min())
-        # statt Treppe (Nutzer: sah schlecht aus): der Weg laeuft als sanfte Rampe in die Senke, seitlich die Boeschung
-        sub = np.zeros_like(cm); sub[ya:yb, xb - 28:xb + 10] = True
-        weg = sub & weich(zell_maske(cls, 'wc', cols, rows), 7.0, 0.5, 4)
-        a[weg] = sand[weg]
-        for x in range(xb - 28, xb + 10):                              # sanfter Uebergang zur dunkleren Senke
-            t = (x - (xb - 28)) / 38.0
-            col = weg[:, x]
-            a[col, x] = (a[col, x] * (1 - 0.08 * t)).astype(np.uint8)
-        # Boeschung seitlich am Weg: kurze schraege Erdkanten oben und unten (wie die Senkenwand), kein Strich
-        E = [np.array(H(c), np.float32) for c in ('#5a4030', '#6e4e38', '#836044', '#987252', '#ad8662', '#c29c76')]
-        for x in range(xb - 28, xb + 10):
-            col = np.nonzero(weg[:, x])[0]
-            if not len(col):
-                continue
-            t = (x - (xb - 28)) / 38.0                                  # nach Osten tiefer -> Kante hoeher
-            hk = int(round(2 + 10 * t))
-            for d in range(hk):                                       # obere Kante: Boeschung faellt zum Weg ab
-                y = col.min() - hk + d
-                if 0 <= y < Hp:
-                    a[y, x] = E[min(5, max(0, 5 - int(d / max(1, hk) * 5)))]
-            for d in range(min(3, hk)):                               # untere Kante: nur schmale Kontur
-                y = col.max() + 1 + d
-                if y < Hp:
-                    a[y, x] = (a[y, x] * (0.7 + 0.1 * d)).astype(np.uint8)
+    ya, yb = (reihen[0] * T, (reihen[-1] + 1) * T) if reihen else (56 * T, 60 * T)
+    gang_o = np.zeros((Hp, Wp), bool); gang_o[44 * T:62 * T, tz0 * T:(tz1 + 1) * T] = True
+    gang_l = np.zeros((Hp, Wp), bool); gang_l[ya + 4:yb - 4, 60 * T:77 * T] = True
+    frei = gang_o | gang_l
+    FR = 12
+    for k, m in enumerate(L):                                         # Waende von aussen nach innen
+        sw = k4.hoehenkanten(a, ~m, 'erde', FR, 6, LIPPE_ERDE, frei, 51 + k, berg=False)
+        senkenwand(a, sw & ~(~m), 'boeschung', FR)
+        wand |= sw
+    # Treppen im oberen Gang an jeder Stufenkante
+    for k, m in enumerate(L):
+        col = np.nonzero(m[:, (tz0 * T + (tz1 + 1) * T) // 2])[0]
+        if len(col):
+            ye = int(col.min()) - 1
+            k4.treppe(a, tz0 * T, (tz1 + 1) * T, ye, 's', FR, 'erde', sand if k == 0 else erde)
     # ---------------- Mauerchen, Hecken
     # ---------------- Wasser (Bach laeuft unten aus der Karte)
     import wasser_vertieft
