@@ -41,20 +41,40 @@ AUFTRAEGE = {
                  'at the back with antennas and many small lit windows, ' + FR14),
     },
 }
+_EIGEN = ('original design, not a copy of any existing ship, seen from the side as a flat 2D profile, bow pointing left, '
+          'lying calm on the water line, no water, no background, ')
+AUFTRAEGE['schiff_a'] = {'ziel': 'assets/objekte/karte25/schiff_a', 'groesse': (480, 304), 'vorlage': None,
+    'stil': 'assets/objekte/karte25/leuchtturm/00.png',
+    'text': ('huge sinister dark emperor flagship, ' + _EIGEN + 'black armoured steel hull with gold trim and a row of glowing '
+             'crimson round portholes, a sharp ram bow, a tall stepped castle-like bridge tower in the middle with a glowing red '
+             'eye window and gold spikes, two smaller towers with pennant flags, heavy anchor chains at the bow, ' + FR14)}
+AUFTRAEGE['schiff_b'] = {'ziel': 'assets/objekte/karte25/schiff_b', 'groesse': (480, 304), 'vorlage': None,
+    'stil': 'assets/objekte/karte25/leuchtturm/00.png',
+    'text': ('large digital world cyber warship, ' + _EIGEN + 'dark gunmetal hull with glowing cyan circuit lines and data '
+             'panels, rows of small cyan lit portholes, a curved sleek bow, a central command tower with a big glowing visor and '
+             'antenna arrays, a satellite dish at the back, small blinking lights, ' + FR14)}
+AUFTRAEGE['schiff_c'] = {'ziel': 'assets/objekte/karte25/schiff_c', 'groesse': (480, 304), 'vorlage': None,
+    'stil': 'assets/objekte/karte25/leuchtturm/00.png',
+    'text': ('huge old ironclad steam battleship, ' + _EIGEN + 'dark riveted iron hull with a dark red waterline stripe, '
+             'round brass portholes, two tall black smokestacks with red bands, a wooden deck with a big round gun turret, '
+             'a small command bridge with lit windows, masts with rigging and a dark flag, anchor chains, ' + FR14)}
 
 
 def main(name):
     a = AUFTRAEGE[name]
     w, h = a['groesse']
-    pf, box = a['vorlage']
-    v = Image.open(os.path.join(ROOT, pf)).convert('RGB').crop(box)
-    d = ImageDraw.Draw(v)
-    for (x0, y0, x1, y1) in a.get('uebermalen', []):
-        d.rectangle((x0 - box[0], y0 - box[1], x1 - box[0], y1 - box[1]), fill=(46, 46, 58))
+    v = None
+    if a.get('vorlage'):
+        pf, box = a['vorlage']
+        v = Image.open(os.path.join(ROOT, pf)).convert('RGB').crop(box)
+        d = ImageDraw.Draw(v)
+        for (x0, y0, x1, y1) in a.get('uebermalen', []):
+            d.rectangle((x0 - box[0], y0 - box[1], x1 - box[0], y1 - box[1]), fill=(46, 46, 58))
     stil = Image.open(os.path.join(ROOT, a['stil'])).convert('RGBA')
     req = {'description': a['text'], 'image_size': {'width': w, 'height': h}, 'no_background': True,
-           'reference_images': [ref(v, 'subject and layout of the ship: shape, proportions, towers, colours')],
            'style_image': ref(stil), 'style_options': {'color_palette': False, 'outline': True, 'detail': True}}
+    if v is not None:
+        req['reference_images'] = [ref(v, 'subject and layout of the ship: shape, proportions, towers, colours')]
     r = call('POST', '/v2/generate-image-v2', req)
     jid = r['background_job_id']
     print(name, 'Auftrag', jid)
@@ -84,7 +104,8 @@ def main(name):
             continue
         im = Image.open(io.BytesIO(base64.b64decode(data))).convert('RGBA')
         im.save(os.path.join(ziel, '%02d.png' % i)); n += 1
-    v.save(os.path.join(ziel, 'referenz.png'))
+    if v is not None:
+        v.save(os.path.join(ziel, 'referenz.png'))
     print(name, '%d Bild(er) ->' % n, a['ziel'])
 
 
