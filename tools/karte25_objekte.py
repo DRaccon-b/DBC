@@ -22,7 +22,14 @@ for i in range(64):
     FREMD['k01/deko%02d' % i] = 'karte01/deko/%02d.png' % i
 for i in range(16):
     FREMD['k01/baum%02d' % i] = 'karte01/baeume/%02d.png' % i
+for i in (0, 1, 2, 7, 9):
+    FREMD['k03/palme%02d' % i] = 'karte03/palmen/%02d.png' % i
+FREMD['k03/fackel'] = 'karte03/klein/15.png'
+FREMD['k03/fass'] = 'karte03/klein/14.png'
 LEUCHTTURM, OBELISK = 'leuchtturm/00', 'k24/obelisk'
+HUETTE, BOOT, BECKEN, BANK = 'strand/00', 'strand/01', 'strand/02', 'strand/03'
+FACKEL, FASS, SEESTERN, MUSCHEL, MUSCHEL2 = 'k03/fackel', 'k03/fass', 'k01/deko20', 'k01/deko21', 'k01/deko21'
+P1, P2, P3, P4, P5 = 'k03/palme00', 'k03/palme01', 'k03/palme02', 'k03/palme07', 'k03/palme09'
 FELS_G, FELS_G2, STEIN, STEIN2 = 'k01/deko09', 'k01/deko11', 'k01/deko08', 'k01/deko10'
 GRAS, GRAS2, BLUME, BLUME2, BLUME3, PINK = 'k01/deko05', 'k01/deko06', 'k01/deko00', 'k01/deko03', 'k01/deko01', 'k01/deko02'
 TANNE, TANNE2 = 'k01/baum07', 'k01/baum08'
@@ -52,6 +59,30 @@ PLATEAU = [
     (BLUME3, 4, 9, {'anim': 'wehen'}), (BLUME2, 31, 19, {'anim': 'wehen'}), (BLUME, 48, 18, {'anim': 'wehen'}),
 ]
 
+STRAND = [                                                       # Sandstrand nach der Vorlage, grosse Objekte zuerst
+    (HUETTE, 26, 37, {}), (HUETTE, 9, 43, {}), (HUETTE, 22, 43, {'spiegeln': True}), (HUETTE, 47, 43, {}),
+    (OBELISK, 58, 44, {}), (OBELISK, 87, 28, {}),
+    # Palmen in lockeren Gruppen (Mitte und rechts oben)
+    (P1, 34, 29, {'anim': 'wehen'}), (P2, 37.5, 30, {'anim': 'wehen'}), (P3, 36, 33, {'anim': 'wehen', 'spiegeln': True}),
+    (P2, 32, 35, {'anim': 'wehen'}), (P5, 46, 36, {'anim': 'wehen'}), (P1, 50, 37, {'anim': 'wehen', 'spiegeln': True}),
+    (P3, 33, 39, {'anim': 'wehen'}), (P2, 47, 39.5, {'anim': 'wehen'}), (P4, 37, 42, {'anim': 'wehen'}),
+    (P1, 40, 41, {'anim': 'wehen'}), (P2, 40.5, 44, {'anim': 'wehen', 'spiegeln': True}), (P5, 29.5, 41, {'anim': 'wehen'}),
+    (P2, 59, 27, {'anim': 'wehen'}), (P3, 63, 28, {'anim': 'wehen'}), (P1, 66, 27, {'anim': 'wehen', 'spiegeln': True}),
+    (P2, 69, 28.5, {'anim': 'wehen'}), (P4, 70, 25, {'anim': 'wehen'}), (P1, 62, 31, {'anim': 'wehen'}),
+    # Boote am Wasser, Felsbecken
+    (BOOT, 20, 45, {}), (BOOT, 26.5, 44, {'spiegeln': True}), (BOOT, 53, 42, {}),
+    (BECKEN, 30, 25, {}), (BECKEN, 20, 26, {}), (BECKEN, 54, 26, {}), (BECKEN, 64, 46, {}), (BECKEN, 6, 47, {}),
+    # Fackeln, Baenke, Faesser am Dorfplatz links
+    (FACKEL, 13, 31, {'anim': 'feuer'}), (FACKEL, 9, 34, {'anim': 'feuer'}), (FACKEL, 19, 34, {'anim': 'feuer'}),
+    (FACKEL, 9, 38, {'anim': 'feuer'}), (FACKEL, 13, 45, {'anim': 'feuer'}), (FACKEL, 16, 45, {'anim': 'feuer'}),
+    (BANK, 12, 41, {}), (BANK, 18, 41, {}), (BANK, 23.5, 33, {}),
+    (FASS, 20, 38, {}), (FASS, 24, 38.5, {}), (FASS, 16, 43, {}), (FASS, 6, 43, {}),
+    # Kleinkram (sparsam): Seesterne, Muscheln, Steine
+    (SEESTERN, 27, 31, {}), (SEESTERN, 43, 34, {}), (SEESTERN, 56, 37, {}), (SEESTERN, 66, 37, {}), (SEESTERN, 15, 38, {}),
+    (MUSCHEL, 30, 43, {}), (MUSCHEL2, 52, 39, {}), (MUSCHEL, 72, 33, {}), (MUSCHEL2, 11, 28, {}), (MUSCHEL, 60, 41, {}),
+    (STEIN, 11, 27, {}), (STEIN, 16, 26, {}), (STEIN, 33, 23.5, {}), (STEIN, 50, 26, {}), (STEIN, 57, 27, {}),
+]
+
 
 def main():
     lay = json.load(open(os.path.join(KARTE, 'layout.json')))
@@ -66,10 +97,10 @@ def main():
     import karte04_bauen as k4                                   # Wege/Sand auf dem Plateau genau wie im Gelaende
     hp = np.kron(np.array([[int(c) for c in z] for z in hoehe]), np.ones((T, T), int))
     weg = k4.weich(k4.zell_maske(cls, 'wst', cols, rows), 7.0, 0.5, 4) & (hp >= 2)
-    for (name, fx, fy, opt) in PLATEAU:
+    for (name, fx, fy, opt, ebene) in [e + ('2',) for e in PLATEAU] + [e + ('1',) for e in STRAND]:
         opt = dict(opt)
         spiegeln = opt.pop('spiegeln', False)
-        flach = name in (STEIN, STEIN2, GRAS, GRAS2, BLUME, BLUME2, BLUME3, PINK)
+        flach = name in (STEIN, STEIN2, GRAS, GRAS2, BLUME, BLUME2, BLUME3, PINK, SEESTERN, MUSCHEL, MUSCHEL2, BECKEN)
         tx, ty = int(math.floor(fx)), int(fy)
         k = cls[ty][tx]
         b = 'sand' if k in 'wsn' else 'gras'
@@ -83,8 +114,8 @@ def main():
             aa = np.array(sp.getchannel('A')) > 0
             ys, xs = np.nonzero(aa)
             ux0, uy0, ux1, uy1 = int(xs.min()), int(ys.min()), int(xs.max()), int(ys.max())
-            art = 'baum' if 'baum' in name else 'klein' if flach else 'stein'
-            ohne_fuss = flach or name == OBELISK
+            art = 'baum' if 'baum' in name or 'palme' in name else 'klein' if flach else 'stein'
+            ohne_fuss = flach or name in (OBELISK, BOOT, FACKEL, BANK, FASS)
             v = sp if ohne_fuss else bauwerke.bodenfuss(sp, b, art)
             off = 0 if ohne_fuss else 2
             datei = 'varianten/%s_%s%s.png' % (name.replace('/', '-'), b, '_m' if spiegeln else '')
@@ -98,9 +129,11 @@ def main():
         x, y = bx * T + (wt * T - bw) // 2 - ux0, (ty + 1) * T - 1 - uy1
         fuss = range(bx, bx + wt)
         unten = [(xx, yy) for xx in fuss for yy in (ty, ty - 1)]
-        if any(hoehe[ty][xx] != '2' for xx in fuss) or wand[max(0, (ty - 1) * T):(ty + 1) * T, bx * T:(bx + wt) * T].any() \
+        if any(hoehe[ty][xx] != ebene or cls[ty][xx] not in 'gwsn' for xx in fuss) or wand[max(0, (ty - 1) * T):(ty + 1) * T, bx * T:(bx + wt) * T].any() \
                 or any(p in belegt for p in unten) \
-                or (flach and any(cls[yy][xx] != 'g' for xx in range(tx - 1, tx + 2) for yy in (ty - 1, ty, ty + 1))):
+                or (flach and ebene == '2' and any(cls[yy][xx] != 'g' for xx in range(tx - 1, tx + 2) for yy in (ty - 1, ty, ty + 1))) \
+                or (ebene == '1' and name != BOOT and any(cls[yy][xx] not in 'sn' for xx in range(bx - 1, bx + wt + 1) for yy in (ty, ty + 1))) \
+                or (name == BOOT and any(cls[ty][xx] not in 'sn' for xx in fuss)):         # Boote liegen am Wasser
             print('  uebersprungen:', name, fx, fy)
             continue
         al = np.array(Image.open(os.path.join(OBJ, datei)))[..., 3] > 0   # nichts auf dem Weg (Nutzer)

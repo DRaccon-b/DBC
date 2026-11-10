@@ -1828,6 +1828,12 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'tall round lighthouse tower with red and white horizontal stripes, a glass lantern room with a glowing yellow light '
         'on top, a dark red domed roof, a small balcony railing, a wooden door at the bottom, on a small stone base, ' + FR14,
     ]},
+    'k25_strand': {'size': 64, 'items': [
+        'small tropical beach hut on short wooden stilts, thick golden straw thatched roof, bamboo walls, a dark open doorway, small wooden steps, ' + FR14,
+        'small wooden rowing boat lying on the sand, brown planks, two oars inside, seen from slightly above, ' + FR14,
+        'small round rock pool tide pool, a ring of grey beach stones filled with clear turquoise water, a small starfish inside, ' + FR14,
+        'short simple wooden beach bench made of driftwood planks, ' + FR14,
+    ]},
     'k24_schrein': {'size': 64, 'items': [
         'dark emperor throne made of jagged black obsidian crystal spikes with deep purple and crimson highlights, a high '
         'pointed back, standing on a small stepped dark stone dais, ' + FR14,
