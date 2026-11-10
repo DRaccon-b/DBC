@@ -484,6 +484,7 @@ def bauen(frame=None, speichern=True):
     g_t[:66, :44] &= x_t[:66, :44]
     teich = g_t.copy(); teich[67:] = False                            # Teich (oberer Teil) weiter nach rechts (Nutzer)
     g_t |= np.roll(teich, 1, 1) | np.roll(teich, 2, 1) | np.roll(teich, 3, 1)
+    g_t |= np.roll(g_t, 1, 1)                                         # alles noch eine Kachel breiter (Nutzer)
     xm = weich(np.kron(g_t, np.ones((T, T))).astype(np.float32), 4, 0.15, 8, 0.45)
     P = 24
     ag = np.pad(a, ((0, P), (0, 0), (0, 0)), mode='edge')
@@ -493,9 +494,9 @@ def bauen(frame=None, speichern=True):
     if TEICH_STIL == 'sandstein':                                     # Ufer und Beckenrand in Sandstein
         rand_ = ('#6e5236', '#8e6c48', '#ae8a60', '#c8a87a')
         wasser_vertieft.MAUER = [H(c) for c in ('#5a4632', '#76603f', '#927a52', '#ac9468', '#c6ae82', '#dcc8a0')]
-    try:                                                              # zwei deutliche Tiefenstufen (Nutzer)
+    try:                                                              # eine Tiefenstufe (Nutzer)
         ag = np.array(wasser_vertieft.vertiefen(Image.fromarray(ag), np.ones_like(mg), frame, maske=mg, rand=rand_,
-                                                stufen=[(14, 0.8, 8), (30, 0.62, 7)]).convert('RGB'))
+                                                stufen=[(16, 0.72, 8)]).convert('RGB'))
     finally:
         wasser_vertieft.MAUER = alt_mauer
     a = ag[:Hp].copy()
