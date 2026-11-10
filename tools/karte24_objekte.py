@@ -84,7 +84,19 @@ SCHREIN_OBJ = (
     + _p(LATERNE, 40, 19, {'anim': 'lampe'})                    # Laternen links und rechts der Treppe
     + [(PULT, 75, 9, {}), (SAECKE, 65, 9, {})]
 )
-UNTEN_LINKS = UNTEN_LINKS + OBEN + SCHREIN_OBJ
+AXA = 49 * T                                                   # Achse der Arena (Mitte der runden Flaeche)
+def _pa(name, dx, reihe, opt=None):
+    o = dict(opt or {})
+    return [(name, (AXA - dx) / T, reihe, dict(o, px=AXA - dx)), (name, (AXA + dx) / T, reihe, dict(o, px=AXA + dx, spiegeln=True))]
+ARENA_OBJ = (
+    _pa(OBELISK, 128, 37)                                       # zwei Obelisken oben, spiegelsymmetrisch
+    + _pa(LATERNE, 80, 35, {'anim': 'lampe'})                   # Laternen oben
+    + _pa(BANNER, 160, 41, {'anim': 'fahne'})                   # Banner an den Seiten
+    + _pa(BANNER, 96, 47, {'anim': 'fahne'})                    # Banner unten
+    + _pa(LATERNE, 144, 45, {'anim': 'lampe'})
+    + [(TOTBAUM, AXA / T, 42, {'px': AXA})]                     # Mitte: toter Baum (Vorlage)
+)
+UNTEN_LINKS = UNTEN_LINKS + OBEN + SCHREIN_OBJ + ARENA_OBJ
 
 
 def main():
