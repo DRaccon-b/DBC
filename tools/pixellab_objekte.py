@@ -1858,6 +1858,16 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'tall gold brazier bowl on a black stand with burning digital flames made of glowing cyan and magenta pixel squares '
         'and data bits rising up, ' + FR14,
     ]},
+    'k26_labor': {'size': 64, 'items': [
+        'glass bio incubation capsule filled with glowing green liquid and a dark curled embryo creature inside, dark steel base and cap with gold rim, small bubbles, ' + FR14,
+        'laboratory workstation desk of dark steel with a glowing teal monitor, test tubes in a rack and a microscope, ' + FR14,
+        'dark steel cryo storage freezer cabinet with frosted glass doors and small blue lights, ' + FR14,
+        'bundle of thick black and red cables with a junction box lying on a metal floor, ' + FR14,
+    ]},
+    'k26_tank': {'size': 96, 'items': [
+        'tall cylindrical stasis tank of glass filled with glowing cyan liquid, a dark sleeping dragon-like creature silhouette '
+        'floating inside, heavy dark steel base and top cap with gold trim, tubes and cables at the base, bubbles, ' + FR14,
+    ]},
     'k24_schrein': {'size': 64, 'items': [
         'dark emperor throne made of jagged black obsidian crystal spikes with deep purple and crimson highlights, a high '
         'pointed back, standing on a small stepped dark stone dais, ' + FR14,
