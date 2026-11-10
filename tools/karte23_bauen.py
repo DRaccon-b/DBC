@@ -289,7 +289,7 @@ def schlamm(a, m, erde, seed=63):
 
 
 SENKE_STIL = os.environ.get('K23_SENKE', 'boeschung')   # gewaehlt: Boeschung (Nutzer)
-STUFEN = int(os.environ.get('K23_STUFEN', '3'))         # Terrassen der Senke (Nutzer: 3 oder 4)   # erde | hoch | stein | sandstein | holz | boeschung | karte01
+STUFEN = int(os.environ.get('K23_STUFEN', '3'))         # Terrassen der Senke (Nutzer: Variante A = 3)   # erde | hoch | stein | sandstein | holz | boeschung | karte01
 
 
 def senkenwand(a, m, stil, front):
@@ -430,21 +430,28 @@ def bauen(frame=None, speichern=True):
     # Senke unten rechts (Nutzer): groesser, in STUFEN Terrassen nach unten, Boeschungswaende, Boden aus Erdkacheln;
     # oben fuehrt der Weg ueber Treppen Stufe fuer Stufe hinunter, links als sanfte Rampe
     def wachsen(m, n):
-        for _ in range(n):
-            m = m | np.roll(m, 1, 0) | np.roll(m, -1, 0) | np.roll(m, 1, 1) | np.roll(m, -1, 1)
+        for i in range(n):                                            # abwechselnd 4er/8er-Nachbarn -> rundlich, nicht spitz
+            m2 = m | np.roll(m, 1, 0) | np.roll(m, -1, 0) | np.roll(m, 1, 1) | np.roll(m, -1, 1)
+            if i % 2 == 0:
+                for dy in (-1, 1):
+                    for dx in (-1, 1):
+                        m2 |= np.roll(np.roll(m, dy, 0), dx, 1)
+            m = m2
         return m
 
     def schrumpfen(m, n):
         return ~wachsen(~m, n)
     c_t = np.array([[ch == 'c' for ch in z] for z in cls])
-    stufen = [wachsen(c_t, 1)]
+    c_t[:53] = False                                                  # Weg-Zipfel oben nicht mitwachsen lassen (Form bleibt rund)
+    stufen = [wachsen(c_t, 3)]                                        # groesser (Nutzer): unten mehr Platz
     for _ in range(STUFEN - 1):
         stufen.append(schrumpfen(stufen[-1], 2))
     px_m = lambda m: weich(np.kron(m, np.ones((T, T))).astype(np.float32), 6, 0.0, 5, 0.5)
     L = [px_m(m) for m in stufen]
     cm = L[0]
     LIPPE_ERDE = ['#4a3424', '#6a4c34', '#7e5e40', '#94714c', '#a8835a', '#bc9a70']
-    rm = weich(zell_maske(cls, 'kc', cols, rows), 4, 0.35, 12) & ~cm & ~maske_aus(cls, 'wt', cols, rows)
+    kc_t = np.array([[ch in 'kc' for ch in z] for z in cls])
+    rm = weich(np.kron(wachsen(kc_t, 2), np.ones((T, T))).astype(np.float32), 4, 0.35, 12) & ~cm & ~maske_aus(cls, 'wt', cols, rows)
     a[rm] = erde[rm]                                                  # Rand: Erdkacheln wie der Hof
     for k, m in enumerate(L):                                         # Boeden: Erdkacheln, je Stufe etwas dunkler
         a[m] = (erde[m] * (0.97 - 0.06 * k)).astype(np.uint8)
