@@ -77,8 +77,27 @@ def main():
         if len(teil) < 3:
             for (y, x) in teil:
                 k[y, x] = 'b'
+    for (x0, y0, x1, y1) in (ARENA, SCHREIN):        # schmale Felsfinger (Obelisken am Rand) in Arena/Schrein -> Boden
+        for _ in range(2):
+            for y in range(y0 + 1, y1):
+                x = x0
+                while x <= x1:
+                    if k[y, x] == 'r':
+                        e = x
+                        while e <= x1 and k[y, e] == 'r':
+                            e += 1
+                        if e - x <= 2 and x > x0 + 1 and e < x1 - 1:
+                            k[y, x:e] = 'b'
+                        x = e
+                    else:
+                        x += 1
     gx0, gx1, gy = GLEIS
     k[gy, gx0:gx1 + 1] = 'g'
+    yy, xx = np.mgrid[0:R, 0:C]                       # Schrein: achteckige Flaeche wie die Vorlage (Mitte 71/13)
+    okt = (np.abs(xx - 71) <= 7) & (np.abs(yy - 13) <= 6) & (np.abs(xx - 71) + np.abs(yy - 13) <= 10)
+    ring = (np.abs(xx - 71) <= 9) & (np.abs(yy - 13) <= 8) & (np.abs(xx - 71) + np.abs(yy - 13) <= 13) & ~okt
+    k[ring & (yy < 20)] = 'r'
+    k[okt] = np.where(k[okt] == 's', 's', 'b')
     h = np.where(k == 'r', 2, 0)
     for (x0, y0, x1, y1) in (ARENA, SCHREIN):        # erhoehte Flaechen: Boden innerhalb des Felsrings
         sub = (k[y0:y1 + 1, x0:x1 + 1] != 'r')
