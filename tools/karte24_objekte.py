@@ -12,6 +12,23 @@ import json, math, os, sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import numpy as np
 from PIL import Image
+from karte04_objekte import saeubern
+
+
+def ohne_runen(sp):
+    """Obelisk ohne leuchtende Schrift (Nutzer): rosa/lila Pixel durch den dunklen Stein daneben ersetzen."""
+    a = np.array(sp).astype(np.int16)
+    r, g, b, al = a[..., 0], a[..., 1], a[..., 2], a[..., 3]
+    run = (al > 0) & (r > g + 40) & (r > 110)
+    stein = (al > 0) & ~run
+    for _ in range(6):
+        ys, xs = np.nonzero(run)
+        for y, x in zip(ys, xs):
+            nb = [(y + dy, x + dx) for dy, dx in ((0, -1), (0, 1), (-1, 0), (1, 0))
+                  if 0 <= y + dy < a.shape[0] and 0 <= x + dx < a.shape[1] and stein[y + dy, x + dx]]
+            if nb:
+                a[y, x, :3] = a[nb[0]][:3]; run[y, x] = False; stein[y, x] = True
+    return Image.fromarray(a.astype(np.uint8))
 
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
 KARTE = os.path.join(ROOT, 'maps', 'karte24')
@@ -26,14 +43,14 @@ UNTEN_LINKS = [
     # Lager oben links: Feuerstelle mit Hockern, Kisten und Saecke
     (FEUER, 9, 49, {'anim': 'feuer'}),
     (HOCKER, 6.5, 48, {}), (HOCKER, 11.5, 48, {}), (HOCKER, 6.5, 51, {}), (HOCKER, 11.5, 51, {}),
-    (KISTEN, 13.5, 54, {}), (SAECKE, 14.5, 47, {}), (ERZ, 14, 58, {}),
+    (KISTEN, 13.5, 54, {}), (SAECKE, 14.5, 47, {}), (ERZ, 5.5, 54, {}),
     # Zelte
     (ZELT, 7.5, 56, {}), (ZELT, 11.5, 61, {'spiegeln': True}), (FEUER, 7.5, 59, {'anim': 'feuer'}),
     # Pferch A (links) und Pferch B (rechts): Kaefige, Laternen
     (KAEFIG, 11.5, 71, {}), (KAEFIG, 15, 71, {}),
     (KAEFIG, 31.5, 71, {}), (KAEFIG, 35, 71, {'spiegeln': True}),
     (LATERNE, 20, 72, {'anim': 'lampe'}), (LATERNE, 38, 71, {'anim': 'lampe'}),
-    (ERZ, 26, 66, {'spiegeln': True}),
+    (ERZ, 10.5, 66, {'spiegeln': True}),
     # Obelisken auf dem Sandplatz zwischen den Pferchen
     (OBELISK, 21.5, 74, {}), (OBELISK, 42.5, 73, {}),
     # unten: Zelte und Feuerstellen
@@ -55,7 +72,9 @@ def main():
         spiegeln = opt.pop('spiegeln', False)
         key = (name, spiegeln)
         if key not in cache:
-            sp = Image.open(os.path.join(OBJ, name + '.png')).convert('RGBA')
+            sp = saeubern(Image.open(os.path.join(OBJ, name + '.png')).convert('RGBA'))   # PixelLab-Splitter weg
+            if name == OBELISK:
+                sp = ohne_runen(sp)
             if spiegeln:
                 sp = sp.transpose(Image.FLIP_LEFT_RIGHT)
             datei = 'varianten/%s%s.png' % (name.replace('/', '-'), '_m' if spiegeln else '')
