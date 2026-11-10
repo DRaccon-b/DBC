@@ -122,6 +122,14 @@ def main():
             for x in range(1, C - 1):
                 if k[y, x] != 'r' and k[y, x - 1] == 'r' and k[y, x + 1] == 'r' and k[y, x] in 'bs':
                     k[y, x] = 'r'
+    for teil in flaechen(k != 'r'):                   # kleine Bodenloecher mitten im Fels -> Fels
+        if len(teil) < 16:
+            for (y, x) in teil:
+                k[y, x] = 'r'
+    for teil in flaechen(k == 'r'):                   # nach dem Schliessen: kleine Felsinseln erneut entfernen
+        if len(teil) < 24:
+            for (y, x) in teil:
+                k[y, x] = 'b'
     h[(k == 'r')] = 2
     for (x0, y0, x1, y1) in (ARENA,):                 # erhoehte Flaeche nur die Arena (Schrein ebenerdig, Nutzer): Boden innerhalb des Felsrings
         sub = (k[y0:y1 + 1, x0:x1 + 1] != 'r')
@@ -140,6 +148,9 @@ def main():
     xs = [x for x in range(ARENA[0], ARENA[0] + 8) if (h[ya:yb_ + 1, x] == 1).any()]
     xl = min(xs)
     k[ya:yb_ + 1, xl - 3:xl] = 't'; h[ya:yb_ + 1, xl - 3:xl] = 0
+    for y in (ya - 2, ya - 1):                        # ueber dem Aufgang eine geschlossene Felskante (keine Taschen)
+        for x in range(xl - 8, xl + 2):
+            k[y, x] = 'r'; h[y, x] = 2
     x0, x1 = SCHREIN_TREPPE                           # Schrein: statt Treppe ein freier Durchgang (Nutzer)
     for y in range(SCHREIN[1] + 8, SCHREIN[3] + 4):
         for x in range(x0, x1 + 1):
