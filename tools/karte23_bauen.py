@@ -288,7 +288,7 @@ def schlamm(a, m, erde, seed=63):
             sub[e & (yy == 0) & (xx > -4) & (xx < 0)] = H('#a8b0b8')
 
 
-SENKE_STIL = os.environ.get('K23_SENKE', 'erde')   # erde | hoch | stein | sandstein | holz | boeschung | karte01
+SENKE_STIL = os.environ.get('K23_SENKE', 'boeschung')   # gewaehlt: Boeschung (Nutzer)   # erde | hoch | stein | sandstein | holz | boeschung | karte01
 
 
 def senkenwand(a, m, stil, front):
@@ -323,6 +323,34 @@ def senkenwand(a, m, stil, front):
         import klippen
         w = np.array(klippen.wand(W, front + 2, random.Random(7), rune_chance=0.0).convert('RGB'))
         a[m] = w[np.clip(d[m], 0, front + 1), xx[m]]
+
+
+def treppe_ost(a, x0, x1, y0, y1, fels, wegtex):
+    """Seitliche Treppe an einer Westkante (von West nach Ost abwaerts): Stufen als senkrechte Baender, je Stufe
+    Tritt hell, Kante dunkel; oben und unten schmale Wangen."""
+    F = [np.array(H(c)) for c in k4.FELS[fels]]
+    n = max(3, (x1 - x0) // 6)
+    sw = (x1 - x0) / n
+    for x in range(x0, x1):
+        i = int((x - x0) / sw)
+        k = (x - x0) - i * sw
+        for y in range(y0, y1):
+            if y - y0 < 3:
+                c = (F[1], F[5], F[4])[y - y0]                       # Wange oben
+            elif y1 - 1 - y < 3:
+                c = (F[0], F[2], F[3])[y1 - 1 - y]                   # Wange unten
+            elif k < 1:
+                c = F[6] if i > 0 else F[5]                            # Lichtkante des Tritts
+            elif k >= sw - 1.5:
+                c = F[1]                                               # Setzstufe (Schatten)
+            else:
+                t = i / n
+                c = F[5] if t < 0.5 else F[4]
+            a[y, x] = c
+    for y in range(y0 + 3, y1 - 3):                                    # Kontaktschatten am Fuss (Ostende)
+        for d, f in ((0, 0.7), (1, 0.85)):
+            if x1 + d < a.shape[1]:
+                a[y, x1 + d] = (a[y, x1 + d] * f).astype(np.uint8)
 
 
 def nach_oben(hoch, bis=4 * T):
@@ -427,6 +455,13 @@ def bauen(frame=None, speichern=True):
         k4.treppe(a, tz0 * T, (tz1 + 1) * T, yt, 's', front_s, fels_s, sand)
     rm = weich(zell_maske(cls, 'kc', cols, rows), 4, 0.35, 12) & ~wand & ~cm & ~maske_aus(cls, 'wt', cols, rows)   # Felsrand: steiniger Erdboden bis an die Senke
     a[rm] = erde[rm]                                                  # Rand der Senke: dieselben Erdkacheln wie der Hof
+    # Zugang von links: ebenfalls eine Treppe (Nutzer) - an der Westkante der Senke in Hoehe des Weges
+    reihen = [y for y in range(50, 66) if cls[y][66] == 'w' and cls[y][62] == 'w']
+    if reihen:
+        ya, yb = reihen[0] * T, (reihen[-1] + 1) * T
+        yc = (ya + yb) // 2
+        xb = int(np.nonzero(cm[yc])[0].min())
+        treppe_ost(a, xb - 18, xb + 6, ya - 2, yb + 2, 'erde', sand)
     # ---------------- Mauerchen, Hecken
     # ---------------- Wasser (Bach laeuft unten aus der Karte)
     import wasser_vertieft
