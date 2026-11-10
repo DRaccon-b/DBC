@@ -23,7 +23,8 @@ for i in range(64):
     FREMD['k01/deko%02d' % i] = 'karte01/deko/%02d.png' % i
 FREMD['obst/apfel'] = 'karte23/mauer/48.png'
 FREMD['turm/00_rand'] = 'karte20/turm/00_rand.png'
-FREMD['k20/weizen'] = 'karte20/beet/02.png'                   # Weizen von Karte 20            # Windmuehle von Karte 20 (Fluegel werden je Bild gezeichnet)
+FREMD['k20/weizen'] = 'karte20/beet/02.png'
+FREMD['k01/laterne'] = 'karte01/laterne.png'                   # Weizen von Karte 20            # Windmuehle von Karte 20 (Fluegel werden je Bild gezeichnet)
 SCHEUNE, SILO, MUEHLE = 'scheune/00', 'scheune/01', 'turm/00_rand'
 GEBAEUDE = [                                                    # grosse Objekte zuerst (Positionen nach der Vorlage)
     (SCHEUNE, 6, 33, {}), (SILO, 10.5, 33, {}),                 # Hof links
@@ -41,6 +42,16 @@ TERRASSE_DEKO = (                                               # oben rechts na
     [('hecke/05', 75, 12, {}), ('hecke/15', 72.5, 19, {}), ('hecke/13', 85, 18, {}),
      ('hecke/08', 96, 8, {}), ('hecke/09', 96, 19, {}), ('mauer/37', 79, 7, {})]
     + _weizen(86, 97, 13) + _weizen(81, 88, 17) + _weizen(92, 97, 17))
+MITTE_LINKS = [                                                 # Hof links, Weide mit Zaun, Heuwiese (nach der Vorlage)
+    ('hecke/10', 14, 34, {}), ('hecke/09', 16.5, 36, {}), ('hecke/08', 13, 37, {}),          # Heu an der Scheune
+    ('hecke/21', 5, 37, {}), ('hecke/19', 4, 39, {}), ('hecke/18', 8.5, 40, {}),              # Saecke, Fass, Kisten
+    ('hecke/22', 12.5, 40, {}), ('hecke/11', 16, 41, {}), ('hecke/12', 3.5, 44, {}),          # Trog, Karren, Brunnen
+    ('k01/laterne', 6, 43, {'anim': 'laterne'}), ('k01/laterne', 10, 36, {'anim': 'laterne'}),
+    ('k01/laterne', 16, 44, {'anim': 'laterne'}),
+    ('hecke/08', 14, 50, {}), ('hecke/22', 13, 48, {}),                                       # Weide im Zaun
+    ('hecke/09', 6, 57, {}), ('hecke/08', 11, 56, {}), ('hecke/10', 8, 61, {}),               # Heuwiese
+    ('hecke/08', 13, 62, {}), ('hecke/09', 5, 66, {}), ('hecke/08', 10, 67, {}),
+]
 PLATEAU_DEKO = [                                                # oben Mitte nach der Vorlage
     ('turm_klein/00', 45, 14, {}), ('turm_klein/02', 55, 14, {'spiegeln': True}),   # Obsidian-Kristalle am Turmfuss
     ('turm_klein/01', 49.5, 17, {}),                            # Steuerpult mit Bildschirm vor dem Turm
@@ -147,6 +158,8 @@ def main():
     for (name, fx, fy, opt) in GEBAEUDE:
         setze(name, fx, fy, opt)
     for (name, fx, fy, opt) in PLATEAU_DEKO:
+        setze(name, fx, fy, opt, frei=True)
+    for (name, fx, fy, opt) in MITTE_LINKS:
         setze(name, fx, fy, opt, frei=True)
     for (name, fx, fy, opt) in TERRASSE_DEKO:                  # Weizenreihen dicht (gepflanzt), Rest nur wo frei
         setze(name, fx, fy, opt, frei=not name.startswith('k20/weizen'))
