@@ -1743,6 +1743,16 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'orchard plum tree with a big round leafy green crown full of dark purple plums, sturdy brown trunk, ' + FR14,
         'orchard cherry tree with a big round leafy green crown full of small red cherries, sturdy brown trunk, ' + FR14,
     ]},
+    'k23_turm': {'size': 192, 'items': [
+        'very tall narrow dark obsidian black crystal tower spire with faint purple glints, wrapped in brown wooden '
+        'construction scaffolding with platforms and ladders around it, a small wooden crane arm at the top right with '
+        'a rope and a hanging bucket, standing on a wide wooden scaffold base, ' + FR14,
+    ]},
+    'k23_turm_klein': {'size': 32, 'items': [
+        'small cluster of dark purple black obsidian crystals growing out of the ground, ' + FR14,
+        'small grey stone pedestal with a glowing cyan digital control panel screen, ' + FR14,
+        'small pile of dark obsidian crystal shards and rubble, ' + FR14,
+    ]},
     'k21_tv_gross': {'size': 48, 'items': [
         'big old brown wooden cabinet CRT television standing on short wooden legs, wood grain case, large dark curved '
         'screen with a faint blue glow, a column of round knobs and a speaker grille on the right, ' + FR14,

@@ -29,6 +29,13 @@ GEBAEUDE = [                                                    # grosse Objekte
     (SCHEUNE, 47, 51, {}),                                      # Mitte bei den Feldern
     (SCHEUNE, 88, 7, {}), (SILO, 93.5, 7, {}),                  # obere Terrasse rechts
     (MUEHLE, 41.5, 11, {'anim': 'muehle20'}), (MUEHLE, 58.5, 11, {'anim': 'muehle20'}),   # Plateau, symmetrisch zur Mitte
+    ('turm/00', 50, 13, {'px': 50 * 16, 'py': 13 * 16 + 15}),   # dunkler Kristallturm mit Geruest (PixelLab k23_turm), Mitte
+]
+PLATEAU_DEKO = [                                                # oben Mitte nach der Vorlage
+    ('turm_klein/00', 45, 14, {}), ('turm_klein/02', 55, 14, {'spiegeln': True}),   # Obsidian-Kristalle am Turmfuss
+    ('turm_klein/01', 49.5, 17, {}),                            # Steuerpult mit Bildschirm vor dem Turm
+    ('turm_klein/29', 38, 6, {}), ('hecke/08', 58, 18, {}), ('hecke/09', 61, 19, {}),   # Heu
+    ('turm_klein/45', 42, 18, {}), ('turm_klein/30', 39, 18, {}), ('mauer/28', 56.5, 16, {}),
 ]                  # Apfelbaum (PixelLab k23_mauer)
 WALD = ['k01/baum%02d' % i for i in (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 12, 13, 14)]
 FELS_KLEIN = ['k01/deko08', 'k01/deko10']
@@ -128,6 +135,8 @@ def main():
 
     for (name, fx, fy, opt) in GEBAEUDE:
         setze(name, fx, fy, opt)
+    for (name, fx, fy, opt) in PLATEAU_DEKO:
+        setze(name, fx, fy, opt, frei=True)
     for (name, fx, fy, opt) in FEST:
         setze(name, fx, fy, opt, frei=True)                      # nur wo frei (Vorlagenpositionen am Raster pruefen)
     # Begleiter der Wiesenbaeume (Regel 5, nur Baeume in der Karte, nicht am Waldrand):
