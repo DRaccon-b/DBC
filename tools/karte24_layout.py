@@ -188,6 +188,12 @@ def main():
     for y in range(37, 49):
         for x in range(30, 36):
             k[y, x] = 'r'; h[y, x] = 2
+    # Felsmasse darunter: Oberkante mit Schwenkern statt gerade (Nutzer)
+    for x in range(31, 59):
+        top = 53 + int(round(0.9 + 0.9 * _m2.sin((x - 31) / 3.4) + 0.4 * _m2.sin(x / 1.6)))
+        for y in range(53, top):
+            if k[y, x] == 'r':
+                k[y, x] = 'b'; h[y, x] = 0
     # Weg unter dem Arenaring zu den Treppen - geschwungen statt gerade
     for y in range(49, 53):
         for x in range(31, 45):
