@@ -137,7 +137,16 @@ def hecken(img, lay, cls):
         f = q[q[..., 3] > 0][:, :3].mean(0) / np.maximum(1, z[z[..., 3] > 0][:, :3].mean(0))
         z[..., :3] = np.clip(z[..., :3] * f, 0, 255)
         return Image.fromarray(z.astype(np.uint8))
-    senk, kappe, block = angleichen(senk), angleichen(kappe), angleichen(block)
+    senk, kappe = angleichen(senk), angleichen(kappe)
+    # Endstueck unten: aus dem runden waagerechten Heckenstueck (Oberseite + Vorderseite) die linken und rechten
+    # Haelften auf die Breite der senkrechten Hecke zusammengesetzt -> gleiche Perspektive wie die waagerechten Hecken
+    hb = senk.width // 2
+    block = Image.new('RGBA', (senk.width, rund.height), (0, 0, 0, 0))
+    block.paste(rund.crop((0, 0, hb, rund.height)), (0, 0))
+    block.paste(rund.crop((rund.width - (senk.width - hb), 0, rund.width, rund.height)), (hb, 0))
+    al_ = np.array(block.getchannel('A')) > 0
+    ob = int(np.nonzero(al_[:, senk.width // 2])[0].min())
+    block = block.crop((0, ob + 3, senk.width, block.height))           # ohne obere Kontur -> nahtlos an die Hecke
     lage = Image.new('RGBA', img.size, (0, 0, 0, 0))
     for (x0, y0, x1, y1) in lay['hecken']:
         if y0 == y1:                                                   # waagerecht
@@ -156,7 +165,7 @@ def hecken(img, lay, cls):
         else:                                                          # senkrecht: neue senkrechte Heckenstuecke
             X = x0 * T + (T - senk.width) // 2
             Y0, Y1 = y0 * T - 8, (y1 + 1) * T - 2
-            Y1s = Y1 - block.height + 6                                # unten endet die Hecke mit einem Heckenblock:
+            Y1s = Y1 - block.height + 1                                # unten endet die Hecke mit dem Endstueck:
             y = Y0                                                     # Oberseite + sichtbare Vorderseite (Perspektive)
             while y < Y1s:
                 hh = min(senk.height, Y1s - y)
