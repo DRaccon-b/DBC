@@ -461,7 +461,30 @@ def bauen(frame=None, speichern=True):
         ya, yb = reihen[0] * T, (reihen[-1] + 1) * T
         yc = (ya + yb) // 2
         xb = int(np.nonzero(cm[yc])[0].min())
-        treppe_ost(a, xb - 18, xb + 6, ya - 2, yb + 2, 'erde', sand)
+        # statt Treppe (Nutzer: sah schlecht aus): der Weg laeuft als sanfte Rampe in die Senke, seitlich die Boeschung
+        sub = np.zeros_like(cm); sub[ya:yb, xb - 28:xb + 10] = True
+        weg = sub & weich(zell_maske(cls, 'wc', cols, rows), 7.0, 0.5, 4)
+        a[weg] = sand[weg]
+        for x in range(xb - 28, xb + 10):                              # sanfter Uebergang zur dunkleren Senke
+            t = (x - (xb - 28)) / 38.0
+            col = weg[:, x]
+            a[col, x] = (a[col, x] * (1 - 0.08 * t)).astype(np.uint8)
+        # Boeschung seitlich am Weg: kurze schraege Erdkanten oben und unten (wie die Senkenwand), kein Strich
+        E = [np.array(H(c), np.float32) for c in ('#5a4030', '#6e4e38', '#836044', '#987252', '#ad8662', '#c29c76')]
+        for x in range(xb - 28, xb + 10):
+            col = np.nonzero(weg[:, x])[0]
+            if not len(col):
+                continue
+            t = (x - (xb - 28)) / 38.0                                  # nach Osten tiefer -> Kante hoeher
+            hk = int(round(2 + 10 * t))
+            for d in range(hk):                                       # obere Kante: Boeschung faellt zum Weg ab
+                y = col.min() - hk + d
+                if 0 <= y < Hp:
+                    a[y, x] = E[min(5, max(0, 5 - int(d / max(1, hk) * 5)))]
+            for d in range(min(3, hk)):                               # untere Kante: nur schmale Kontur
+                y = col.max() + 1 + d
+                if y < Hp:
+                    a[y, x] = (a[y, x] * (0.7 + 0.1 * d)).astype(np.uint8)
     # ---------------- Mauerchen, Hecken
     # ---------------- Wasser (Bach laeuft unten aus der Karte)
     import wasser_vertieft
