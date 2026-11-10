@@ -128,7 +128,15 @@ def hecken(img, lay, cls):
     d = os.path.join(OBJ, 'hecke')
     seg = Image.open(os.path.join(d, '00.png')).convert('RGBA')
     rund = Image.open(os.path.join(d, '01.png')).convert('RGBA')
-    block = Image.open(os.path.join(d, '02.png')).convert('RGBA')
+    senk = Image.open(os.path.join(OBJ, 'hecke_senk', '00.png')).convert('RGBA')
+    kappe = Image.open(os.path.join(OBJ, 'hecke_senk', '02.png')).convert('RGBA')
+
+    def angleichen(sp):                                                # senkrechte Hecke im Gruen der waagerechten
+        q = np.array(seg).astype(np.float32); z = np.array(sp).astype(np.float32)
+        f = q[q[..., 3] > 0][:, :3].mean(0) / np.maximum(1, z[z[..., 3] > 0][:, :3].mean(0))
+        z[..., :3] = np.clip(z[..., :3] * f, 0, 255)
+        return Image.fromarray(z.astype(np.uint8))
+    senk, kappe = angleichen(senk), angleichen(kappe)
     lage = Image.new('RGBA', img.size, (0, 0, 0, 0))
     for (x0, y0, x1, y1) in lay['hecken']:
         if y0 == y1:                                                   # waagerecht
@@ -144,12 +152,26 @@ def hecken(img, lay, cls):
             lage.alpha_composite(rund.crop((0, 0, h2, rund.height)), (X0, Y))
             lage.paste(Image.new('RGBA', (rund.width - h2, rund.height), (0, 0, 0, 0)), (X1 - (rund.width - h2), Y))
             lage.alpha_composite(rund.crop((h2, 0, rund.width, rund.height)), (X1 - (rund.width - h2), Y))
-        else:                                                          # senkrecht
-            X = x0 * T + (T - block.width) // 2
-            y = y0 * T - 6
-            while y + block.height <= (y1 + 1) * T:
-                lage.alpha_composite(block, (X, y))
-                y += 13
+        else:                                                          # senkrecht: neue senkrechte Heckenstuecke
+            X = x0 * T + (T - senk.width) // 2
+            Y0, Y1 = y0 * T - 8, (y1 + 1) * T - 2
+            y = Y0
+            while y < Y1:
+                hh = min(senk.height, Y1 - y)
+                lage.alpha_composite(senk.crop((0, 0, senk.width, hh)), (X, y))
+                y += hh
+            kap = kappe.crop((0, 0, kappe.width, 10))                     # runde Kappe oben
+            lage.paste(Image.new('RGBA', kap.size, (0, 0, 0, 0)), (X, Y0))
+            lage.alpha_composite(kap, (X, Y0))
+    mauer = Image.open(os.path.join(OBJ, 'mauer', '00.png')).convert('RGBA')
+    for (x0, y0, x1, y1) in lay['maeuerchen']:                          # Feldsteinmauern (PixelLab k23_mauer)
+        X0, X1 = x0 * T, (x1 + 1) * T
+        Y = (y0 + 1) * T - mauer.height - 1
+        x = X0
+        while x < X1:
+            w = min(mauer.width, X1 - x)
+            lage.alpha_composite(mauer.crop((0, 0, w, mauer.height)), (x, Y))
+            x += w
     al = np.array(lage.getchannel('A')) > 0
     sch = np.zeros_like(al)
     sch[3:, 2:] = al[:-3, :-2]
@@ -158,6 +180,33 @@ def hecken(img, lay, cls):
     base[sch, :3] *= 0.68
     img.paste(Image.fromarray(base.astype(np.uint8)), (0, 0))
     img.alpha_composite(lage)
+
+
+def felsboden(a, m, seed=61):
+    """Steiniger Erdboden am Senkenrand: dicht gesetzte runde Feldsteine (Licht oben links, Schatten unten rechts)
+    in brauner Erde, dazwischen dunkle Fugen."""
+    rnd = random.Random(seed)
+    Hh, W = m.shape
+    F = [np.array(H(c), np.float32) for c in ('#3e2c1e', '#5a4130', '#76583e', '#8e6e4e', '#a8865f', '#c4a276', '#dcc09a')]
+    ys, xs = np.nonzero(m)
+    y0, y1, x0, x1 = ys.min(), ys.max() + 1, xs.min(), xs.max() + 1
+    sub = np.zeros((y1 - y0, x1 - x0, 3), np.float32); sub[:] = F[1]
+    yy, xx = np.mgrid[0:y1 - y0, 0:x1 - x0]
+    for r, cy in enumerate(range(2, y1 - y0 + 6, 7)):
+        cx = rnd.randint(-4, 2) + (4 if r % 2 else 0)
+        while cx < x1 - x0 + 6:
+            rx, ry = rnd.uniform(3.6, 5.2), rnd.uniform(2.8, 3.8)
+            px, py = cx + rnd.uniform(-1, 1), cy + rnd.uniform(-1, 1)
+            t = rnd.choice((3, 3, 4, 4, 5))
+            d = ((xx - px) / rx) ** 2 + ((yy - py) / ry) ** 2
+            inn = d <= 1.0
+            licht = (-(xx - px) / rx - (yy - py) / ry) * 0.5
+            ton = np.clip(t + np.round(licht * 1.5 - (d > 0.75)), 1, 6).astype(int)
+            for k in range(1, 7):
+                sub[inn & (ton == k)] = F[k]
+            cx += 2 * rx + rnd.uniform(0.6, 1.8)
+    mm = m[y0:y1, x0:x1]
+    a[y0:y1, x0:x1][mm] = sub[mm].astype(np.uint8)
 
 
 def nach_oben(hoch, bis=4 * T):
@@ -235,7 +284,7 @@ def bauen(frame=None, speichern=True):
         k4.treppe(a, sx0 * T, (sx1 + 1) * T, (yl + 1) * T - 1, 's', FRONT, 'stein', sand)
     # Senke unten rechts: alles ausser der Senke ist hoeher; Felsrand-Kacheln gehoeren zum Rand oben
     rand = maske_aus(cls, 'k', cols, rows)
-    cm = weich(zell_maske(cls, 'c', cols, rows), 14, 0.0, 5, 0.5)     # Senke rund (keine Treppenstufen am Rand)
+    cm = weich(zell_maske(cls, 'c', cols, rows), 6, 0.0, 5, 0.5)       # Form wie die Vorlage, nur Ecken leicht gerundet     # Senke rund (keine Treppenstufen am Rand)
     hoch = ~cm
     frei = np.zeros((Hp, Wp), bool)
     # Zugang von oben (Weg durch den Rand) -> Treppe; Zugang von links -> Rampe ohne Kante
@@ -256,15 +305,8 @@ def bauen(frame=None, speichern=True):
     if zug_o:
         k4.treppe(a, tz0 * T, (tz1 + 1) * T, yt, 's', 20, 'erde', sand)
     rm = weich(zell_maske(cls, 'kc', cols, rows), 4, 0.35, 12) & ~wand & ~cm & ~maske_aus(cls, 'wt', cols, rows)   # Felsrand: steiniger Erdboden bis an die Senke
-    a[rm] = (erde[rm] * 0.84).astype(np.uint8)
-    rs = np.random.RandomState(62)
-    ys_, xs_ = np.nonzero(rm)
-    for i in rs.choice(len(ys_), len(ys_) // 40, replace=False):     # Steinchen
-        y, x = ys_[i], xs_[i]
-        if y + 2 < Hp and x + 3 < Wp and rm[y:y + 3, x:x + 3].all():
-            a[y, x:x + 3] = H('#cfc2a8'); a[y + 1, x:x + 3] = H('#9c8c74'); a[y + 2, x + 1:x + 3] = H('#5e5040')
+    felsboden(a, rm)
     # ---------------- Mauerchen, Hecken
-    maeuerchen(a, maske_aus(cls, 'n', cols, rows))
     # ---------------- Wasser (Bach laeuft unten aus der Karte)
     import wasser_vertieft
     xm = weich(zell_maske(cls, 'x', cols, rows), 4, 0.15, 8, 0.45)

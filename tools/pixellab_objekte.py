@@ -1714,6 +1714,17 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'end piece of a trimmed green farm hedge, rounded on the left side, flat cut on the right side, ' + FR14,
         'small square trimmed green hedge bush block, rounded corners, ' + FR14,
     ]},
+    'k23_hecke_senk': {'size': 32, 'items': [
+        'vertical section of a neatly trimmed dense green farm hedge running from top to bottom, narrow and tall, seen '
+        'from above at a slight angle, leafy rounded texture with light highlights on the left, darker on the right, '
+        'seamless top and bottom ends so pieces can be stacked in a column, ' + FR14,
+        'bottom end piece of a vertical trimmed green farm hedge, narrow, rounded at the bottom with a dark leafy front, ' + FR14,
+    ]},
+    'k23_mauer': {'size': 32, 'items': [
+        'low farm field wall section made of stacked grey fieldstones with a flat stone cap on top, about knee high, '
+        'seamless left and right sides so pieces can be placed in a long row, ' + FR14,
+        'end piece of a low grey fieldstone farm wall, rounded stones at the left end, ' + FR14,
+    ]},
     'k21_tv_gross': {'size': 48, 'items': [
         'big old brown wooden cabinet CRT television standing on short wooden legs, wood grain case, large dark curved '
         'screen with a faint blue glow, a column of round knobs and a speaker grille on the right, ' + FR14,
