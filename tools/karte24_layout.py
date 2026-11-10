@@ -203,6 +203,27 @@ def main():
         for y in (int(round(yc)), int(round(yc)) + 1):
             if 0 <= y < R and h[y, x] == 0 and k[y, x] in 'bsw':
                 k[y, x] = 'w'
+    # Abschluss (Nutzer: Flaechen fuellen): Klassen und Hoehen angleichen, Felsinseln und Bodentaschen entfernen
+    h[(k != 'r') & (h == 2)] = 0
+    h[(k == 'r')] = 2
+    for _ in range(2):
+        for teil in flaechen((h == 2)):
+            if len(teil) < 24:
+                for (y, x) in teil:
+                    k[y, x] = 'b'; h[y, x] = 0
+        for teil in flaechen((h == 0)):
+            if len(teil) < 24:
+                for (y, x) in teil:
+                    k[y, x] = 'r'; h[y, x] = 2
+        for y in range(R):                              # 1 Kachel breite Bodenkerben am Fels schliessen
+            for x in range(1, C - 1):
+                if h[y, x] == 0 and k[y, x] in 'bs' and h[y, x - 1] == 2 and h[y, x + 1] in (1, 2):
+                    k[y, x] = 'r'; h[y, x] = 2
+    for (y0, y1, x0, x1) in ((19, 23, 71, 78), (29, 33, 56, 63)):   # Taschen am Schrein und oben rechts an der Arena
+        for y in range(y0, y1):
+            for x in range(x0, x1):
+                if h[y, x] == 0 and k[y, x] in 'bs':
+                    k[y, x] = 'r'; h[y, x] = 2
     for (tx, ty, b, hh) in TELEPORTER:
         k[ty:ty + hh, tx:tx + b] = 'T'; h[ty:ty + hh, tx:tx + b] = 0
     lay = {'groesse': [C, R], 'klassen': [''.join(z) for z in k], 'hoehe': [''.join(str(c) for c in z) for z in h],
