@@ -113,10 +113,37 @@ def main():
     k[okt] = np.where(k[okt] == 's', 's', 'b')
     h = np.where(k == 'r', 2, 0)
     # Mitte (Nutzer): Felsblock oberhalb der Arena und Arenaring zu EINER Felsmasse schliessen (keine Rinne dazwischen)
-    for y in range(21, 34):
-        for x in range(37, 64):
-            if k[y, x] != 'r' and not (ARENA[0] + 3 < x < ARENA[2] - 3 and y >= 31):
+    # nur die Rinne zwischen den beiden Felsmassen schliessen, die Aussenform der Vorlage bleibt (natuerlicher, Nutzer)
+    for x in range(36, 65):
+        oben = [y for y in range(20, 30) if k[y, x] == 'r']
+        unten = [y for y in range(27, 36) if k[y, x] == 'r' and y > (max(oben) if oben else 99)]
+        if oben and unten:
+            for y in range(max(oben), min(unten)):
                 k[y, x] = 'r'
+    # Felsblock oben: unregelmaessige, natuerliche Aussenkante statt gerader Linien (Nutzer)
+    import math as _m, random as _r
+    rr = _r.Random(24)
+    for x in range(37, 63):                                       # Nordkante
+        top = 23 + int(round(1.2 * _m.sin(x / 2.3) + 0.8 * _m.sin(x / 5.1 + 1) + rr.uniform(-0.6, 0.6)))
+        for y in range(20, 29):
+            k[y, x] = 'r' if y >= top else ('b' if k[y, x] == 'r' else k[y, x])
+    for y in range(22, 30):                                       # Westkante
+        left = 39 + int(round(1.3 * _m.sin(y / 1.9) + rr.uniform(-0.7, 0.7)))
+        for x in range(35, 43):
+            if k[y, x] == 'r' and x < left and y < 29:
+                k[y, x] = 'b'
+            elif x >= left and y >= 23 + int(round(1.2 * _m.sin(x / 2.3) + 0.8 * _m.sin(x / 5.1 + 1))):
+                k[y, x] = 'r'
+    for y in range(22, 30):                                       # Ostkante
+        right = 61 + int(round(1.2 * _m.sin(y / 1.7 + 2) + rr.uniform(-0.6, 0.6)))
+        for x in range(57, 66):
+            if x > right and k[y, x] == 'r' and y < 29:
+                k[y, x] = 'b'
+    # unten links an der Arena mehr Platz (Nutzer): Felsband unter dem Ring oeffnen
+    for y in range(49, 53):
+        for x in range(31, 45):
+            if k[y, x] == 'r':
+                k[y, x] = 'b'
     for _ in range(2):                                 # 1 Kachel breite Bodenschlitze zwischen Fels -> Fels
         for y in range(R):
             for x in range(1, C - 1):
