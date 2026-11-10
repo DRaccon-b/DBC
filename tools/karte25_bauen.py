@@ -89,6 +89,41 @@ def stege(a, lay, wasser):
     return oben | front
 
 
+SCHIFF_POS = (1424, 160)                 # Lage wie in der Vorlage (Sprite = Vorlagenausschnitt 1424..1904 x 160..464)
+
+
+def schiff(a, wasser, frame):
+    """Schiff (PixelLab Pro-Generator, Ausnahme Nutzer) im tiefen Wasser: Schatten nach rechts unten nur auf dem Wasser,
+    Schaum an der Wasserlinie (wandert je Bild), Sprite darueber."""
+    sp = np.array(Image.open(os.path.join(OBJ, 'schiff', '00_sauber.png')).convert('RGBA'))
+    al = sp[..., 3] > 0
+    x0, y0 = SCHIFF_POS
+    h, w = al.shape
+    Hh, W = a.shape[:2]
+    sch = np.zeros((Hh, W), bool)                                    # Schatten: Silhouette 8 px rechts, 6 px tiefer
+    ys, xs = np.nonzero(al)
+    Y, X = ys + y0 + 6, xs + x0 + 8
+    ok = (Y < Hh) & (X < W)
+    sch[Y[ok], X[ok]] = True
+    rumpf = np.zeros((Hh, W), bool); rumpf[ys + y0, xs + x0] = True
+    sch &= wasser & ~rumpf
+    a[sch] = (a[sch] * 0.62).astype(np.uint8)
+    f = frame or 0
+    for x in range(w):                                               # Schaum an der Wasserlinie
+        col = np.nonzero(al[:, x])[0]
+        if not len(col):
+            continue
+        yb = y0 + col.max()
+        X_ = x0 + x
+        for d in (1, 2):
+            if yb + d < Hh and wasser[yb + d, X_] and ((X_ + 3 * f) // 3) % 4 != (0 if d == 1 else 2):
+                a[yb + d, X_] = np.clip(a[yb + d, X_] * 0.35 + np.array((230, 245, 250)) * 0.65, 0, 255).astype(np.uint8)
+    im = Image.fromarray(a).convert('RGBA')
+    im.alpha_composite(Image.fromarray(sp), (x0, y0))
+    a[:] = np.array(im.convert('RGB'))
+    return rumpf
+
+
 def bauen(frame=None, speichern=True):
     lay = json.load(open(os.path.join(KARTE, 'layout.json')))
     cls = lay['klassen']
@@ -149,6 +184,7 @@ def bauen(frame=None, speichern=True):
     wd.FELSEN_AUSLASSEN = set()
     a = np.array(img.convert('RGB'))
     steg_m = stege(a, lay, wasser)
+    schiff_m = schiff(a, wasser, frame)
     for tp in lay['teleporter']:
         k4.teleporter_zeichnen(a, tp['x'], tp['y'], tp['b'], tp['h'], frame)
     img = Image.fromarray(a).convert('RGBA')

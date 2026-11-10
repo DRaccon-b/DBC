@@ -147,4 +147,7 @@ Wenn eine Karte fertig scheint: noch einmal komplett auf **Pixelfehler** und **L
   nie über originalgetreue Wappen, Logos oder Symbole.
 - **PixelLab nur Objekt-Creator:** Neue Objekte ausschließlich mit dem Objekt-Creator (`create-1-direction-object`,
   höchstens 256 px) erzeugen – nicht mit dem Pro-Generator (`generate-image-v2`) oder Pixflux für größere Bilder.
+  - **Ausnahme (Nutzer, Karte 25):** Objekte, die zwingend größer als 256 px sind (z. B. das Schiff in Sunset Bay), dürfen
+    mit dem Pro-Generator erzeugt werden (`tools/pixellab_gross.py`): Vorlagenausschnitt als Subjekt-Referenz (geschützte
+    Symbole vorher übermalt), ein vorhandenes Kartenobjekt als Stil-Referenz, danach mitgezeichnete Fremdteile entfernen.
 - **Ablauf:** Jede Änderung committen und pushen, Bilder/GIFs an den Nutzer schicken, auf Deutsch erklären.
