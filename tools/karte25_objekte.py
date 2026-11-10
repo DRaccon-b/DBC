@@ -63,6 +63,9 @@ def main():
         shutil.copy(os.path.join(ROOT, 'assets', 'objekte', quelle), ziel)
     wand = np.unpackbits(np.load(os.path.join(KARTE, 'wand.npy')))[:rows * T * cols * T].reshape(rows * T, cols * T).astype(bool)
     objekte, cache, belegt = [], {}, set()
+    import karte04_bauen as k4                                   # Wege/Sand auf dem Plateau genau wie im Gelaende
+    hp = np.kron(np.array([[int(c) for c in z] for z in hoehe]), np.ones((T, T), int))
+    weg = k4.weich(k4.zell_maske(cls, 'wst', cols, rows), 7.0, 0.5, 4) & (hp >= 2)
     for (name, fx, fy, opt) in PLATEAU:
         opt = dict(opt)
         spiegeln = opt.pop('spiegeln', False)
@@ -99,6 +102,13 @@ def main():
                 or any(p in belegt for p in unten) \
                 or (flach and any(cls[yy][xx] != 'g' for xx in range(tx - 1, tx + 2) for yy in (ty - 1, ty, ty + 1))):
             print('  uebersprungen:', name, fx, fy)
+            continue
+        al = np.array(Image.open(os.path.join(OBJ, datei)))[..., 3] > 0   # nichts auf dem Weg (Nutzer)
+        ys_, xs_ = np.nonzero(al)
+        Y_, X_ = ys_ + y, xs_ + x
+        ok = (Y_ >= 0) & (Y_ < weg.shape[0]) & (X_ >= 0) & (X_ < weg.shape[1])
+        if weg[Y_[ok], X_[ok]].any():
+            print('  auf dem Weg, entfernt:', name, fx, fy)
             continue
         if not flach:
             for p in unten:
