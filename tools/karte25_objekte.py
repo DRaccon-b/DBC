@@ -27,7 +27,7 @@ for i in (0, 1, 2, 7, 9):
 FREMD['k03/fackel'] = 'karte03/klein/15.png'
 FREMD['k03/fass'] = 'karte03/klein/14.png'
 LEUCHTTURM, OBELISK = 'leuchtturm/00', 'k24/obelisk'
-HUETTE, BOOT, BECKEN, BANK = 'strand/00', 'strand/01', 'strand/02', 'strand/03'
+HUETTE, BOOT, BECKEN, BANK = 'huette_gross/00', 'strand/01', 'strand/02', 'strand/03'
 FACKEL, FASS, SEESTERN, MUSCHEL, MUSCHEL2 = 'k03/fackel', 'k03/fass', 'k01/deko20', 'k01/deko21', 'k01/deko21'
 P1, P2, P3, P4, P5 = 'k03/palme00', 'k03/palme01', 'k03/palme02', 'k03/palme07', 'k03/palme09'
 FELS_G, FELS_G2, STEIN, STEIN2 = 'k01/deko09', 'k01/deko11', 'k01/deko08', 'k01/deko10'
@@ -60,27 +60,26 @@ PLATEAU = [
 ]
 
 STRAND = [                                                       # Sandstrand nach der Vorlage, grosse Objekte zuerst
-    (HUETTE, 26, 37, {}), (HUETTE, 9, 43, {}), (HUETTE, 22, 43, {'spiegeln': True}), (HUETTE, 47, 43, {}),
+    (HUETTE, 26, 37, {}), (HUETTE, 11, 43, {}), (HUETTE, 22, 43, {'spiegeln': True}), (HUETTE, 47, 43, {}),
     (OBELISK, 58, 44, {}), (OBELISK, 87, 28, {}),
-    # Palmen in lockeren Gruppen (Mitte und rechts oben)
-    (P1, 34, 29, {'anim': 'wehen'}), (P2, 37.5, 30, {'anim': 'wehen'}), (P3, 36, 33, {'anim': 'wehen', 'spiegeln': True}),
-    (P2, 32, 35, {'anim': 'wehen'}), (P5, 46, 36, {'anim': 'wehen'}), (P1, 50, 37, {'anim': 'wehen', 'spiegeln': True}),
-    (P3, 33, 39, {'anim': 'wehen'}), (P2, 47, 39.5, {'anim': 'wehen'}), (P4, 37, 42, {'anim': 'wehen'}),
-    (P1, 40, 41, {'anim': 'wehen'}), (P2, 40.5, 44, {'anim': 'wehen', 'spiegeln': True}), (P5, 29.5, 41, {'anim': 'wehen'}),
-    (P2, 59, 27, {'anim': 'wehen'}), (P3, 63, 28, {'anim': 'wehen'}), (P1, 66, 27, {'anim': 'wehen', 'spiegeln': True}),
-    (P2, 69, 28.5, {'anim': 'wehen'}), (P4, 70, 25, {'anim': 'wehen'}), (P1, 62, 31, {'anim': 'wehen'}),
-    # Boote am Wasser, Felsbecken
-    (BOOT, 20, 45, {}), (BOOT, 26.5, 44, {'spiegeln': True}), (BOOT, 53, 42, {}),
-    (BECKEN, 30, 25, {}), (BECKEN, 20, 26, {}), (BECKEN, 54, 26, {}), (BECKEN, 64, 46, {}), (BECKEN, 6, 47, {}),
+    # Palmen locker verteilt (Nutzer: weiter auseinander); zwei direkt unter der Felsfront ragen vor die Klippe
+    (P1, 29, 25, {'anim': 'wehen'}), (P4, 49, 26, {'anim': 'wehen'}),
+    (P2, 35, 29, {'anim': 'wehen'}), (P3, 41, 32, {'anim': 'wehen', 'spiegeln': True}), (P1, 34.5, 34, {'anim': 'wehen'}),
+    (P5, 46, 35, {'anim': 'wehen'}), (P2, 39, 38, {'anim': 'wehen', 'spiegeln': True}), (P3, 33, 41, {'anim': 'wehen'}),
+    (P1, 41.5, 43, {'anim': 'wehen', 'spiegeln': True}), (P2, 51, 39, {'anim': 'wehen'}),
+    (P2, 59, 28, {'anim': 'wehen'}), (P3, 65, 27, {'anim': 'wehen'}), (P1, 62, 32, {'anim': 'wehen', 'spiegeln': True}),
+    (P4, 70, 25, {'anim': 'wehen'}), (P5, 68, 31, {'anim': 'wehen'}),
+    # Boote am Wasser
+    (BOOT, 20, 45, {}), (BOOT, 27, 44, {'spiegeln': True}), (BOOT, 54, 42, {}),
     # Fackeln, Baenke, Faesser am Dorfplatz links
     (FACKEL, 13, 31, {'anim': 'feuer'}), (FACKEL, 9, 34, {'anim': 'feuer'}), (FACKEL, 19, 34, {'anim': 'feuer'}),
-    (FACKEL, 9, 38, {'anim': 'feuer'}), (FACKEL, 13, 45, {'anim': 'feuer'}), (FACKEL, 16, 45, {'anim': 'feuer'}),
-    (BANK, 12, 41, {}), (BANK, 18, 41, {}), (BANK, 23.5, 33, {}),
-    (FASS, 20, 38, {}), (FASS, 24, 38.5, {}), (FASS, 16, 43, {}), (FASS, 6, 43, {}),
+    (FACKEL, 9, 38, {'anim': 'feuer'}), (FACKEL, 16, 38, {'anim': 'feuer'}),
+    (BANK, 15.5, 42, {}), (BANK, 19.5, 31, {}),
+    (FASS, 17, 44, {}), (FASS, 30, 38, {}), (FASS, 5, 43, {}),
     # Kleinkram (sparsam): Seesterne, Muscheln, Steine
-    (SEESTERN, 27, 31, {}), (SEESTERN, 43, 34, {}), (SEESTERN, 56, 37, {}), (SEESTERN, 66, 37, {}), (SEESTERN, 15, 38, {}),
-    (MUSCHEL, 30, 43, {}), (MUSCHEL2, 52, 39, {}), (MUSCHEL, 72, 33, {}), (MUSCHEL2, 11, 28, {}), (MUSCHEL, 60, 41, {}),
-    (STEIN, 11, 27, {}), (STEIN, 16, 26, {}), (STEIN, 33, 23.5, {}), (STEIN, 50, 26, {}), (STEIN, 57, 27, {}),
+    (SEESTERN, 27, 31, {}), (SEESTERN, 44, 29, {}), (SEESTERN, 56, 37, {}), (SEESTERN, 66, 37, {}), (SEESTERN, 15, 35, {}),
+    (MUSCHEL, 31, 44, {}), (MUSCHEL2, 48, 38, {}), (MUSCHEL, 72, 33, {}), (MUSCHEL2, 11, 28, {}), (MUSCHEL, 60, 41, {}),
+    (STEIN, 11, 26, {}), (STEIN, 16, 26, {}), (STEIN, 33, 25, {}), (STEIN, 49, 27, {}), (STEIN, 57, 25, {}),
 ]
 
 
@@ -140,7 +139,7 @@ def main():
         ys_, xs_ = np.nonzero(al)
         Y_, X_ = ys_ + y, xs_ + x
         ok = (Y_ >= 0) & (Y_ < weg.shape[0]) & (X_ >= 0) & (X_ < weg.shape[1])
-        if weg[Y_[ok], X_[ok]].any():
+        if ebene == '2' and weg[Y_[ok], X_[ok]].any():              # nur Objekte auf dem Plateau (Palmen vom Strand duerfen vor die Klippe ragen)
             print('  auf dem Weg, entfernt:', name, fx, fy)
             continue
         if not flach:

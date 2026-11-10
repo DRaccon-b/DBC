@@ -1834,6 +1834,10 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'small round rock pool tide pool, a ring of grey beach stones filled with clear turquoise water, a small starfish inside, ' + FR14,
         'short simple wooden beach bench made of driftwood planks, ' + FR14,
     ]},
+    'k25_huette_gross': {'size': 96, 'items': [
+        'tropical beach hut on short wooden stilts, thick golden straw thatched roof with a rounded overhang, bamboo walls, '
+        'a dark open doorway in the middle, small wooden steps in front, ' + FR14,
+    ]},
     'k24_schrein': {'size': 64, 'items': [
         'dark emperor throne made of jagged black obsidian crystal spikes with deep purple and crimson highlights, a high '
         'pointed back, standing on a small stepped dark stone dais, ' + FR14,
