@@ -77,6 +77,7 @@ def main():
         sub[sub != '#'] = 'W'
     for (x0, y0, x1, y1) in DURCHGAENGE:                           # offene Durchgaenge (keine Wandstuecke)
         k[y0:y1 + 1, x0:x1 + 1] = '.'
+        k[y0 - 2:y0, x0:x1 + 1] = 'W'                              # Decke ueber dem Durchgang: Wandfront (Nutzer)
     for (x0, y0, x1, y1) in PODEST:
         sub = k[y0:y1 + 1, x0:x1 + 1]
         sub[np.isin(sub, list('.g'))] = 'p'
