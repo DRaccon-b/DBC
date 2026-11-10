@@ -1573,7 +1573,9 @@ def herunterladen(oid, d):
 
 
 def speichern(gruppe, ims, ids):
-    if gruppe.startswith('k24_'):
+    if gruppe.startswith('k25_'):
+        ziel = os.path.join(ROOT, 'assets', 'objekte', 'karte25', gruppe[4:])
+    elif gruppe.startswith('k24_'):
         ziel = os.path.join(ROOT, 'assets', 'objekte', 'karte24', gruppe[4:])
     elif gruppe.startswith('k23_'):
         ziel = os.path.join(ROOT, 'assets', 'objekte', 'karte23', gruppe[4:])
@@ -1822,6 +1824,10 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'large red cable car gondola cabin with big windows, a dark steel hanger arm on top ending in a carriage with two '
         'small grooved wheels, no cable, ' + FR14,
     ]},
+    'k25_leuchtturm': {'size': 128, 'items': [
+        'tall round lighthouse tower with red and white horizontal stripes, a glass lantern room with a glowing yellow light '
+        'on top, a dark red domed roof, a small balcony railing, a wooden door at the bottom, on a small stone base, ' + FR14,
+    ]},
     'k24_schrein': {'size': 64, 'items': [
         'dark emperor throne made of jagged black obsidian crystal spikes with deep purple and crimson highlights, a high '
         'pointed back, standing on a small stepped dark stone dais, ' + FR14,
@@ -1869,8 +1875,8 @@ def erzeugen(gruppe):
         d = warte(oid)
         speichern(gruppe, *herunterladen(oid, d))
         return
-    if gruppe.startswith(('k20_', 'k21_', 'k23_', 'k24_')):
-        g = (OBJEKTGRUPPEN_K21 if gruppe.startswith(('k21_', 'k23_', 'k24_')) else OBJEKTGRUPPEN_K20)[gruppe]
+    if gruppe.startswith(('k20_', 'k21_', 'k23_', 'k24_', 'k25_')):
+        g = (OBJEKTGRUPPEN_K21 if gruppe.startswith(('k21_', 'k23_', 'k24_', 'k25_')) else OBJEKTGRUPPEN_K20)[gruppe]
         req = {'description': STIL, 'size': g['size'], 'view': 'top-down',
                'item_descriptions': [it + '. ' + STIL for it in g['items']],
                'target_palette': {'colors': PALETTE, 'name': 'Karte01 handheld'}}

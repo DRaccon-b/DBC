@@ -1,0 +1,115 @@
+"""Objekte fuer Karte 25 (Sunset Bay, A02) - Platzierung am 16x16-Raster nach der Vorlage, Logik wie Karte 23/24.
+
+  python3 tools/karte25_bauen.py   (einmal -> wand.npy)
+  python3 tools/karte25_objekte.py && python3 tools/karte25_bauen.py
+
+Schritt 1: Grasplateau oben. Leuchtturm (PixelLab k25_leuchtturm), Obelisk (Karte 24), graue Felsen, Steine,
+Grasbueschel und Blumen (Karte 01), kleine Nadelbaeume (Karte 01) in Gruppen mit Begleitern (Regel 5).
+"""
+import json, math, os, shutil, sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import numpy as np
+from PIL import Image
+import bauwerke
+from karte04_objekte import saeubern
+
+ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
+KARTE = os.path.join(ROOT, 'maps', 'karte25')
+OBJ = os.path.join(ROOT, 'assets', 'objekte', 'karte25')
+T = 16
+FREMD = {'k24/obelisk': 'karte24/obelisk2/00.png'}
+for i in range(64):
+    FREMD['k01/deko%02d' % i] = 'karte01/deko/%02d.png' % i
+for i in range(16):
+    FREMD['k01/baum%02d' % i] = 'karte01/baeume/%02d.png' % i
+LEUCHTTURM, OBELISK = 'leuchtturm/00', 'k24/obelisk'
+FELS_G, FELS_G2, STEIN, STEIN2 = 'k01/deko09', 'k01/deko11', 'k01/deko08', 'k01/deko10'
+GRAS, GRAS2, BLUME, BLUME2, BLUME3, PINK = 'k01/deko05', 'k01/deko06', 'k01/deko00', 'k01/deko03', 'k01/deko01', 'k01/deko02'
+TANNE, TANNE2 = 'k01/baum07', 'k01/baum08'
+
+# (sprite, Kachel-x der Fussmitte, Fusszeile, Optionen) - nach der Vorlage, grosse Objekte zuerst
+PLATEAU = [
+    (LEUCHTTURM, 53, 12, {'anim': 'lampe'}),                     # Leuchtturm rechts neben dem Sandplatz
+    (OBELISK, 7, 15, {}),                                        # dunkler Obelisk links
+    # kleine Nadelbaeume in Gruppen (Vorlage: links und rechts vom Leuchtturm)
+    (TANNE, 42, 5, {}), (TANNE2, 42.5, 9, {}), (TANNE2, 45.5, 7, {'spiegeln': True}),
+    (TANNE, 58, 8, {}), (TANNE2, 60.5, 10, {'spiegeln': True}),
+    # graue Felsen
+    (FELS_G, 5, 7, {}), (FELS_G2, 19, 5, {}), (FELS_G, 17, 12, {'spiegeln': True}), (FELS_G2, 34, 16, {}),
+    (FELS_G, 56, 17, {}), (FELS_G2, 24, 18, {'spiegeln': True}), (FELS_G, 4, 18, {}), (FELS_G2, 49, 4, {}),
+    # Begleiter der Nadelbaeume (Regel 5): Fels / Blumen am Sockel
+    (STEIN, 40.5, 6, {}), (BLUME2, 47.5, 7, {'anim': 'wehen'}), (STEIN2, 56.5, 9, {}), (PINK, 63, 9, {'anim': 'wehen'}),
+    (GRAS, 51, 12, {'anim': 'wehen'}), (GRAS2, 55, 12, {'anim': 'wehen'}),        # Bueschel am Sockel des Leuchtturms
+    (GRAS2, 6, 15, {'anim': 'wehen'}),                                             # und am Obelisken
+    # Kleinkram: Steine, Bueschel, Blumen (unregelmaessig, eher wenig)
+    (STEIN, 9, 5, {}), (STEIN2, 28, 7, {}), (STEIN, 12, 16, {}), (STEIN2, 38, 13, {}), (STEIN, 61, 15, {}),
+    (STEIN2, 2, 11, {}), (STEIN, 30, 14, {}),
+    (GRAS, 7, 4, {'anim': 'wehen'}), (GRAS2, 14, 8, {'anim': 'wehen'}), (GRAS, 23, 6, {'anim': 'wehen'}),
+    (GRAS2, 33, 5, {'anim': 'wehen'}), (GRAS, 10, 12, {'anim': 'wehen'}), (GRAS2, 3, 15, {'anim': 'wehen'}),
+    (GRAS, 27, 17, {'anim': 'wehen'}), (GRAS2, 40, 17, {'anim': 'wehen'}), (GRAS, 50, 15, {'anim': 'wehen'}),
+    (GRAS2, 57, 13, {'anim': 'wehen'}), (GRAS, 62, 18, {'anim': 'wehen'}), (GRAS2, 20, 15, {'anim': 'wehen'}),
+    (BLUME, 12, 6, {'anim': 'wehen'}), (BLUME3, 26, 11, {'anim': 'wehen'}), (BLUME, 36, 10, {'anim': 'wehen'}),
+    (BLUME3, 4, 9, {'anim': 'wehen'}), (BLUME2, 31, 19, {'anim': 'wehen'}), (BLUME, 48, 18, {'anim': 'wehen'}),
+]
+
+
+def main():
+    lay = json.load(open(os.path.join(KARTE, 'layout.json')))
+    cls, hoehe = lay['klassen'], lay['hoehe']
+    cols, rows = lay['groesse']
+    for name, quelle in FREMD.items():
+        ziel = os.path.join(OBJ, name + '.png')
+        os.makedirs(os.path.dirname(ziel), exist_ok=True)
+        shutil.copy(os.path.join(ROOT, 'assets', 'objekte', quelle), ziel)
+    wand = np.unpackbits(np.load(os.path.join(KARTE, 'wand.npy')))[:rows * T * cols * T].reshape(rows * T, cols * T).astype(bool)
+    objekte, cache, belegt = [], {}, set()
+    for (name, fx, fy, opt) in PLATEAU:
+        opt = dict(opt)
+        spiegeln = opt.pop('spiegeln', False)
+        flach = name in (STEIN, STEIN2, GRAS, GRAS2, BLUME, BLUME2, BLUME3, PINK)
+        tx, ty = int(math.floor(fx)), int(fy)
+        k = cls[ty][tx]
+        b = 'sand' if k in 'wsn' else 'gras'
+        key = (name, b, spiegeln)
+        if key not in cache:
+            sp = Image.open(os.path.join(OBJ, name + '.png')).convert('RGBA')
+            if not name.startswith('k01/'):
+                sp = saeubern(sp)
+            if spiegeln:
+                sp = sp.transpose(Image.FLIP_LEFT_RIGHT)
+            aa = np.array(sp.getchannel('A')) > 0
+            ys, xs = np.nonzero(aa)
+            ux0, uy0, ux1, uy1 = int(xs.min()), int(ys.min()), int(xs.max()), int(ys.max())
+            art = 'baum' if 'baum' in name else 'klein' if flach else 'stein'
+            ohne_fuss = flach or name == OBELISK
+            v = sp if ohne_fuss else bauwerke.bodenfuss(sp, b, art)
+            off = 0 if ohne_fuss else 2
+            datei = 'varianten/%s_%s%s.png' % (name.replace('/', '-'), b, '_m' if spiegeln else '')
+            os.makedirs(os.path.join(OBJ, 'varianten'), exist_ok=True)
+            v.save(os.path.join(OBJ, datei))
+            cache[key] = (datei, v.height, ux0 + off, uy0, ux1 + off, uy1)
+        datei, h, ux0, uy0, ux1, uy1 = cache[key]
+        bw, bh = ux1 - ux0 + 1, uy1 - uy0 + 1
+        wt, ht = math.ceil(bw / T), math.ceil(bh / T)
+        bx = int(round(fx + 0.5 - wt / 2.0))
+        x, y = bx * T + (wt * T - bw) // 2 - ux0, (ty + 1) * T - 1 - uy1
+        fuss = range(bx, bx + wt)
+        unten = [(xx, yy) for xx in fuss for yy in (ty, ty - 1)]
+        if any(hoehe[ty][xx] != '2' for xx in fuss) or wand[max(0, (ty - 1) * T):(ty + 1) * T, bx * T:(bx + wt) * T].any() \
+                or any(p in belegt for p in unten) \
+                or (flach and any(cls[yy][xx] != 'g' for xx in range(tx - 1, tx + 2) for yy in (ty - 1, ty, ty + 1))):
+            print('  uebersprungen:', name, fx, fy)
+            continue
+        if not flach:
+            for p in unten:
+                belegt.add(p)
+        o = {'datei': datei, 'basis': name, 'x': x, 'y': y, 'fuss': h, 'kachel': [tx, ty],
+             'block': [bx, ty - ht + 1, wt, ht], 'ebene': 0 if flach else 1}
+        o.update(opt)
+        objekte.append(o)
+    json.dump(objekte, open(os.path.join(OBJ, 'platzierung.json'), 'w'), indent=0)
+    print('Karte 25: %d Objekte' % len(objekte))
+
+
+if __name__ == '__main__':
+    main()
