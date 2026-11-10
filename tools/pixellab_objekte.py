@@ -1813,6 +1813,18 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
     'k24_gondel': {'size': 32, 'items': [
         'small red cable car gondola cabin with windows, hanging from a short dark steel hanger arm with a small wheel on top, ' + FR14,
     ]},
+    'k24_ideen': {'size': 64, 'items': [
+        'small dark obsidian watchtower with a crimson pennant flag on top, black stone bricks, narrow glowing window, ' + FR14,
+        'ruined dark obsidian castle wall segment with broken battlements, ' + FR14,
+        'round steel oil storage tank with a ladder, black oil stains, ' + FR14,
+        'broken ancient red sandstone column with rubble around it, ' + FR14,
+        'large flat topped red sandstone mesa rock formation with layered stripes, ' + FR14,
+        'tall red sandstone rock arch, ' + FR14,
+    ]},
+    'k24_ideen_gross': {'size': 128, 'items': [
+        'giant ancient dragon skeleton lying on the ground, long spine, big ribcage and horned skull, bleached bones, ' + FR14,
+        'tall wooden and steel oil drilling derrick tower with a pump at its base and black oil stains, ' + FR14,
+    ]},
     'k24_schrein': {'size': 64, 'items': [
         'dark emperor throne made of jagged black obsidian crystal spikes with deep purple and crimson highlights, a high '
         'pointed back, standing on a small stepped dark stone dais, ' + FR14,
