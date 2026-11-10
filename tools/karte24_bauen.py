@@ -28,6 +28,7 @@ weich, zell_maske, flaeche = k4.weich, k4.zell_maske, k20.flaeche
 k4.FELS['rot'] = ['#3e1e12', '#5c2c1a', '#7c3e24', '#9a5230', '#b8683e', '#cf8452', '#e2a270']
 LIPPE_ROT = ['#5c2c1a', '#7c3e24', '#9a5230', '#b0623a', '#c47448', '#d68a5a']
 FRONT = 32
+RAND_PX = 14                     # Breite des Felsrands (Vorlage: dunkle Blockkante rund um jede Felsmasse)
 
 
 def faerben(lo, hi, a0=0.35, a1=0.5):
@@ -83,9 +84,18 @@ def bauen(frame=None, speichern=True):
     a[s] = sand[s]
     saum = weich(zell_maske(cls, 's', cols, rows), 6.0, 0.5, 5, 0.36) & ~s
     a[saum] = (a[saum] * 0.92).astype(np.uint8)
-    hoch2 = weich((hp >= 2).astype(np.float32), 5, 0.0, 7, 0.5)       # Felskanten rund statt Kachelstufen
-    h1m = weich((hp >= 1).astype(np.float32), 5, 0.0, 7, 0.5)
+    hoch2 = weich((hp >= 2).astype(np.float32), 3, 0.0, 7, 0.5)       # Felskanten rund statt Kachelstufen
+    h1m = weich((hp >= 1).astype(np.float32), 3, 0.0, 7, 0.5)
     a[hoch2] = fels[hoch2]
+    # Felsrand wie in der Vorlage: an allen Seiten der Felsmassen ein dunklerer Rand aus Felsbloecken (gestufte
+    # Kante von oben), darauf sitzen dann die Fronten nach Sueden
+    from PIL import ImageFilter as _IF
+    aussen = np.array(Image.fromarray(((~hoch2) * 255).astype(np.uint8)).filter(_IF.MaxFilter(RAND_PX * 2 + 1))) > 0
+    rand = hoch2 & aussen
+    rtex = k4.fels_textur('rot', Wp, Hp, 73)
+    a[rand] = (rtex[rand] * 0.9).astype(np.uint8)
+    innen_k = rand & ~(np.array(Image.fromarray(((~hoch2) * 255).astype(np.uint8)).filter(_IF.MaxFilter(RAND_PX * 2 - 1))) > 0)
+    a[innen_k] = (a[innen_k] * 0.75).astype(np.uint8)              # Stufenkante zur Felsflaeche
     hoch1 = (hp == 1)
     a[hoch1] = (boden[hoch1] * 1.04).clip(0, 255).astype(np.uint8)
     a[hoch1 & s] = sand[hoch1 & s]
@@ -97,8 +107,8 @@ def bauen(frame=None, speichern=True):
     tmask = zell_maske(cls, 't', cols, rows) > 0.5
     frei_t = np.kron(np.array([[c == 't' for c in z] for z in cls]), np.ones((T, T), bool))
     frei_t = frei_t | np.roll(frei_t, -T, 0) | np.roll(frei_t, -2 * T, 0)
-    wand = k4.hoehenkanten(a, h1m, 'rot', 24, 8, LIPPE_ROT, frei_t, 71, berg=False, filtern=True)
-    wand |= k4.hoehenkanten(a, hoch2, 'rot', FRONT, 8, LIPPE_ROT, frei_t & ~h1m, 72, berg=False, filtern=True)
+    wand = k4.hoehenkanten(a, h1m, 'rot', 24, 8, LIPPE_ROT, frei_t, 71, berg=False)
+    wand |= k4.hoehenkanten(a, hoch2, 'rot', FRONT, 8, LIPPE_ROT, frei_t & ~h1m, 72, berg=False)
     # Treppen der Arena und des Schreins (frontal nach Sueden)
     for (x0, x1) in lay['arena_treppen'] + [tuple(lay['schrein_treppe'])]:
         xc = ((x0 + x1 + 1) * T) // 2
