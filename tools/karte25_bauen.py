@@ -49,10 +49,12 @@ def abstand(m, schritte=160):
 
 
 def stege(a, lay, wasser):
-    """Holzstege: Planken quer zur Laufrichtung, dunkle Kontur, Pfahlkoepfe; Suedfront mit Pfaehlen ins Wasser;
-    Schatten auf dem Wasser rechts unten."""
+    """Holzstege: Planken quer zur Laufrichtung, Kontur nur am Aussenrand der ganzen Steganlage (Abzweige gehen
+    nahtlos in den Hauptsteg ueber), Suedfront mit Pfaehlen ins Wasser, Schatten auf dem Wasser rechts unten."""
     HELL, MITTE, DUNKEL, KONTUR = H('#a8784a'), H('#8a5e38'), H('#6a4428'), H('#3a2616')
     oben = np.zeros(wasser.shape, bool)
+    for (x0, y0, x1, y1) in lay['stege']:
+        oben[y0 * T:(y1 + 1) * T, x0 * T:(x1 + 1) * T] = True
     for (x0, y0, x1, y1) in lay['stege']:
         X0, X1, Y0, Y1 = x0 * T, (x1 + 1) * T, y0 * T, (y1 + 1) * T
         senk = (y1 - y0) >= (x1 - x0)
@@ -63,25 +65,28 @@ def stege(a, lay, wasser):
                 if (x * 7 + y * 3) % 23 == 0:
                     c = DUNKEL
                 a[y, x] = c
-        a[Y0:Y1, X0] = KONTUR; a[Y0:Y1, X1 - 1] = KONTUR
-        a[Y0, X0:X1] = KONTUR
-        oben[Y0:Y1, X0:X1] = True
-    for (x0, y0, x1, y1) in lay['stege']:                           # Front + Pfaehle + Schatten
-        X0, X1, Y1 = x0 * T, (x1 + 1) * T, (y1 + 1) * T
-        for d in range(9):
-            for x in range(X0, X1):
-                if oben[min(Y1 + d, a.shape[0] - 1), x]:
-                    continue
-                if d < 5:
-                    a[Y1 + d, x] = DUNKEL if d else HELL
-                elif (x - X0) % 16 in (3, 4, 5, 11, 12, 13) and d < 9:
-                    a[Y1 + d, x] = KONTUR
-        sch = np.zeros(wasser.shape, bool)
-        sch[y0 * T + 4:Y1 + 12, X1:X1 + 6] = True
-        sch[Y1 + 9:Y1 + 13, X0 + 4:X1 + 6] = True
-        sch &= wasser & ~oben
-        a[sch] = (a[sch] * 0.68).astype(np.uint8)
-    return oben
+    Hh, W = oben.shape
+    nb = lambda dy, dx: np.roll(np.roll(oben, dy, 0), dx, 1)
+    rand = oben & (~nb(0, 1) | ~nb(0, -1) | ~nb(1, 0))               # links, rechts, oben offen -> Kontur
+    a[rand] = KONTUR
+    unten = oben & ~nb(-1, 0)                                         # unterste Plankenzeile je Spalte
+    ys, xs = np.nonzero(unten)
+    for y, x in zip(ys, xs):                                          # Suedfront 5 px + Pfaehle
+        for d in range(1, 10):
+            yy = y + d
+            if yy >= Hh or oben[yy, x]:
+                break
+            if d < 6:
+                a[yy, x] = HELL if d == 1 else DUNKEL
+            elif (x % 16) in (3, 4, 5, 11, 12, 13):
+                a[yy, x] = KONTUR
+    front = np.zeros_like(oben)
+    for d in range(1, 10):
+        front |= np.roll(unten, d, 0)
+    front &= ~oben
+    sch = (np.roll(np.roll(oben | front, 4, 0), 6, 1)) & ~oben & ~front & wasser
+    a[sch] = (a[sch] * 0.68).astype(np.uint8)
+    return oben | front
 
 
 def bauen(frame=None, speichern=True):
@@ -121,8 +126,10 @@ def bauen(frame=None, speichern=True):
         k4.treppe(a, x0 * T, (x1 + 1) * T, (ye + 1) * T - 1, 's', FRONT, 'sandstein', sand)
     # Meer wie Karte 01: Flach/Tief nach der Vorlage
     flach = maske(cls, 'f')
+    steg_f = maske(cls, 'p')
     tief = maske(cls, 'x')
-    wasser = weich((flach | tief).astype(np.float32), 4, 0.15, 6, 0.5) & ~hoch & ~wand
+    steg_roh = maske(cls, 'p')                                     # Stege stehen ueber dem Wasser
+    wasser = weich((flach | tief | steg_roh).astype(np.float32), 4, 0.15, 6, 0.5) & ~hoch & ~wand
     land = ~wasser
     dl = abstand(land)                                              # Abstand zum Land
     df = abstand(land | (weich(flach.astype(np.float32), 6, 0.0, 9, 0.5) & wasser))   # Abstand zum Flachwasser
