@@ -1825,6 +1825,14 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'giant ancient dragon skeleton lying on the ground, long spine, big ribcage and horned skull, bleached bones, ' + FR14,
         'tall wooden and steel oil drilling derrick tower with a pump at its base and black oil stains, ' + FR14,
     ]},
+    'k24_digi': {'size': 64, 'items': [
+        'large cluster of glowing cyan blue digital data crystals growing out of a red desert rock, pixel grid pattern inside the crystals, ' + FR14,
+        'tall black glitched monolith made of floating pixel cubes, cyan glowing circuit lines, some cubes broken off and hovering, ' + FR14,
+        'digital tree made of glowing cyan wireframe lines with small square pixel leaves, standing on a red rock, ' + FR14,
+        'ring shaped digital portal gate of dark metal with a swirling cyan and green data vortex inside, on a small stone base, ' + FR14,
+        'old cathode ray television half buried in red desert sand, screen glowing with green static, ' + FR14,
+        'broken digital signpost pillar with a floating holographic cyan screen above it, ' + FR14,
+    ]},
     'k24_schrein': {'size': 64, 'items': [
         'dark emperor throne made of jagged black obsidian crystal spikes with deep purple and crimson highlights, a high '
         'pointed back, standing on a small stepped dark stone dais, ' + FR14,
