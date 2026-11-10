@@ -14,6 +14,7 @@ from PIL import Image
 import karte_bauen as kb
 import karte04_bauen as k4
 import karte18_bauen as k18
+import karte22_bauen as k22
 
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
 KARTE = os.path.join(ROOT, 'maps', 'karte26')
@@ -119,6 +120,9 @@ def podest(a, pm):
                 a[yy, x] = (a[yy, x] * 0.6).astype(np.uint8)
 
 
+TEPPICHE = [(272, 150, 336, 318)]       # Thronsaal: x 272..336 (4 Kacheln, Mitte 304), vom Podest bis zur Suedwand
+
+
 def bauen(frame=None, speichern=True):
     lay = json.load(open(os.path.join(KARTE, 'layout.json')))
     cls = lay['klassen']
@@ -136,6 +140,14 @@ def bauen(frame=None, speichern=True):
     bm = ~hm
     huelle_kanten(a, hm, bm)
     podest(a, pm)
+    tm = np.zeros((Hp, Wp), bool)                                    # roter Teppich vom Saal zum Thron (Achse x=304)
+    for (x0, y0, x1, y1) in TEPPICHE:
+        tm[y0:y1, x0:x1] = True
+    k22.teppich(a, tm)
+    stufe = tm & np.roll(pm, 1, 0) & ~pm                             # Stufe des Podests auch auf dem Teppich sichtbar
+    for d in range(1, 8):
+        st = tm & np.roll(pm, d, 0) & ~pm
+        a[st] = (a[st] * (0.62 if d > 1 else 1.25)).clip(0, 255).astype(np.uint8)
     wm = maske(cls, 'W')
     paneelwand(a, wm, frame)
     warnstreifen(a, maske(cls, 'r'))

@@ -1573,7 +1573,9 @@ def herunterladen(oid, d):
 
 
 def speichern(gruppe, ims, ids):
-    if gruppe.startswith('k25_'):
+    if gruppe.startswith('k26_'):
+        ziel = os.path.join(ROOT, 'assets', 'objekte', 'karte26', gruppe[4:])
+    elif gruppe.startswith('k25_'):
         ziel = os.path.join(ROOT, 'assets', 'objekte', 'karte25', gruppe[4:])
     elif gruppe.startswith('k24_'):
         ziel = os.path.join(ROOT, 'assets', 'objekte', 'karte24', gruppe[4:])
@@ -1838,6 +1840,20 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'tropical beach hut on short wooden stilts, thick golden straw thatched roof with a rounded overhang, bamboo walls, '
         'a dark open doorway in the middle, small wooden steps in front, ' + FR14,
     ]},
+    'k26_thron_gross': {'size': 96, 'items': [
+        'grand imperial emperor throne of black obsidian and polished gold, tall pointed backrest with gold spikes and a '
+        'glowing red eye gem at the top, deep crimson velvet cushion, gold armrests shaped like claws, standing on a '
+        'three-step black and gold dais, ' + FR14,
+        'wide imperial command console bank of dark steel with gold trim, four large glowing teal monitors side by side '
+        'showing maps and data, a long keyboard desk with blinking red and green buttons, ' + FR14,
+    ]},
+    'k26_thron': {'size': 64, 'items': [
+        'round holographic tactical map table of dark steel with gold rim, a glowing cyan hologram of a battleship '
+        'floating above it, ' + FR14,
+        'long crimson imperial wall banner with gold trim and a gold eye emblem, hanging from a short gold rod, no pole, ' + FR14,
+        'armored imperial guard statue, dark steel plate armor with gold trim and a glowing red visor, holding a tall halberd, on a small plinth, ' + FR14,
+        'tall gold brazier bowl on a black stand with burning crimson flames, ' + FR14,
+    ]},
     'k24_schrein': {'size': 64, 'items': [
         'dark emperor throne made of jagged black obsidian crystal spikes with deep purple and crimson highlights, a high '
         'pointed back, standing on a small stepped dark stone dais, ' + FR14,
@@ -1885,8 +1901,8 @@ def erzeugen(gruppe):
         d = warte(oid)
         speichern(gruppe, *herunterladen(oid, d))
         return
-    if gruppe.startswith(('k20_', 'k21_', 'k23_', 'k24_', 'k25_')):
-        g = (OBJEKTGRUPPEN_K21 if gruppe.startswith(('k21_', 'k23_', 'k24_', 'k25_')) else OBJEKTGRUPPEN_K20)[gruppe]
+    if gruppe.startswith(('k20_', 'k21_', 'k23_', 'k24_', 'k25_', 'k26_')):
+        g = (OBJEKTGRUPPEN_K21 if gruppe.startswith(('k21_', 'k23_', 'k24_', 'k25_', 'k26_')) else OBJEKTGRUPPEN_K20)[gruppe]
         req = {'description': STIL, 'size': g['size'], 'view': 'top-down',
                'item_descriptions': [it + '. ' + STIL for it in g['items']],
                'target_palette': {'colors': PALETTE, 'name': 'Karte01 handheld'}}

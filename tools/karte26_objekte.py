@@ -20,6 +20,8 @@ FREMD = {'k24/thron': 'karte24/schrein/00.png', 'k24/banner': 'karte24/schrein/0
          'k24/konsole': 'karte24/schrein/02.png', 'k24/kristall': 'karte24/schrein/04.png',
          'k24/laterne': 'karte24/lager/04.png', 'k16/terminal': 'karte16/netz/13.png',
          'k16/saeule': 'karte16/netz/03.png'}
+THRON2, KOMMANDO, HOLO, WACHE, FEUERSCHALE, WAFFEN, RADAR = ('thron_gross/00', 'thron_gross/01', 'thron/00', 'thron/02',
+                                                            'thron/03', 'thron/05', 'thron/15')
 THRON, BANNER, KONSOLE, KRISTALL, LATERNE, TERMINAL = ('k24/thron', 'k24/banner', 'k24/konsole', 'k24/kristall',
                                                       'k24/laterne', 'k16/terminal')
 AX = 19 * T                                                      # Achse des Thronsaals (x 4..33 -> Mitte)
@@ -30,13 +32,14 @@ def paar(name, dx, reihe, opt=None):
     return [(name, reihe, dict(o, px=AX - dx)), (name, reihe, dict(o, px=AX + dx, spiegeln=True))]
 
 
-THRONSAAL = (
-    [(THRON, 7, {'px': AX})]                                     # Thron auf dem Podest, auf der Achse
-    + paar(KRISTALL, 48, 7, {'anim': 'lampe'})                   # Obsidian-Kristallsaeulen neben dem Thron (leuchten)
-    + paar(BANNER, 88, 7, {'anim': 'fahne'})
-    + paar(KONSOLE, 136, 7) + paar(KONSOLE, 196, 7)              # Konsolenreihen wie Vorlage, mit Abstand
-    + paar(TERMINAL, 152, 14) + paar(TERMINAL, 208, 16)          # Terminals locker, keine Reihe
-    + paar(LATERNE, 232, 12, {'anim': 'lampe'}) + paar(LATERNE, 232, 19, {'anim': 'lampe'})
+THRONSAAL = (                                                    # Kommandobruecke des Kaisers (eigene PixelLab-Objekte k26_thron)
+    [(THRON2, 9, {'px': AX})]                                    # Kaiserthron auf der Achse, Teppich davor
+    + paar(WACHE, 56, 9) + paar(FEUERSCHALE, 92, 9, {'anim': 'feuer'})
+    + paar(KOMMANDO, 172, 9, {'anim': 'lampe'})                  # grosse Kommandopulte mit vier Monitoren
+    + paar(WACHE, 52, 15) + paar(WACHE, 52, 19)                  # Ehrenwache am Teppich
+    + paar(HOLO, 128, 16, {'anim': 'lampe'})                     # Holo-Kartentische
+    + paar(WAFFEN, 208, 14)                                      # Waffenstaender an den Seitenwaenden
+    + paar(RADAR, 208, 19, {'anim': 'lampe'})
 )
 
 
