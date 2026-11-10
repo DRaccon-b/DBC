@@ -18,6 +18,7 @@ Aufstellfelds (cyan = Ankunft, gold = weiter; Funktion `pfeil_marke` in `tools/k
 | 1 | Karte 20 – Startdorf | v1.0 (`maps/karte20/v1.0/Startdorf_v1.0.zip`) |
 | 2 | Karte 21 – Digi-Egg Valley | in Arbeit: Gelände und Objekte fertig; offen: Kollision, Animation, v1.0 |
 | 3 | Karte 23 – Harvest Hills | in Arbeit: Gelände und Objekte fertig; offen: Kollision, Animation, v1.0 |
+| 4 | Karte 24 – The Kaiser's Canyon | in Arbeit: Layout |
 | … | weitere Karten folgen | – |
 | ? | Karte 07 – The Holy Peaks | vorhanden, wird vorerst nicht bearbeitet (nur eingeordnet) |
 
