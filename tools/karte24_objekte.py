@@ -20,7 +20,7 @@ T = 16
 ZELT, KAEFIG, FEUER, ERZ, LATERNE, HOCKER = 'lager/00', 'lager/01', 'lager/02', 'lager/03', 'lager/04', 'lager/05'
 KISTEN, SAECKE, DORN, SCHAEDEL, SCHILD, OBELISK = 'lager/08', 'lager/10', 'lager/11', 'lager/14', 'lager/15', 'obelisk/00'
 # Eisenzaun der Pferche: (x0, y0, x1, y1, offene Seiten) - nach der Vorlage, Pferch A links, Pferch B rechts
-ZAEUNE = [(6, 67, 18, 72, 'unten_rechts'), (28, 67, 39, 72, 'unten_links')]   # auf den freien Boden verschoben
+ZAEUNE = [(9, 68, 18, 73, 'unten_rechts'), (28, 68, 39, 73, 'unten_links')]   # ganz auf dem Canyonboden   # auf den freien Boden verschoben
 # (sprite, Kachel-x der Fussmitte, Fusszeile, Optionen) - Anordnung nach der Vorlage, auf unseren Canyonboden gelegt
 UNTEN_LINKS = [
     # Lager oben links: Feuerstelle mit Hockern, Kisten und Saecke
@@ -30,9 +30,9 @@ UNTEN_LINKS = [
     # Zelte
     (ZELT, 7.5, 56, {}), (ZELT, 11.5, 61, {'spiegeln': True}), (FEUER, 7.5, 59, {'anim': 'feuer'}),
     # Pferch A (links) und Pferch B (rechts): Kaefige, Laternen
-    (KAEFIG, 9, 70, {}), (KAEFIG, 12.5, 70, {}),
-    (KAEFIG, 31.5, 70, {}), (KAEFIG, 35, 70, {'spiegeln': True}),
-    (LATERNE, 16, 71, {'anim': 'lampe'}), (LATERNE, 38, 70, {'anim': 'lampe'}),
+    (KAEFIG, 11.5, 71, {}), (KAEFIG, 15, 71, {}),
+    (KAEFIG, 31.5, 71, {}), (KAEFIG, 35, 71, {'spiegeln': True}),
+    (LATERNE, 20, 72, {'anim': 'lampe'}), (LATERNE, 38, 71, {'anim': 'lampe'}),
     (ERZ, 26, 66, {'spiegeln': True}),
     # Obelisken auf dem Sandplatz zwischen den Pferchen
     (OBELISK, 21.5, 74, {}), (OBELISK, 42.5, 73, {}),

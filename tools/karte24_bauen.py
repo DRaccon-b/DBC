@@ -208,8 +208,13 @@ def bauen(frame=None, speichern=True):
     img = Image.fromarray(a).convert('RGBA')
     zf = os.path.join(OBJ, 'zaeune.json')
     if os.path.exists(zf):
+        boden_ok = (hp == 0) & ~wand
         for (x0, y0, x1, y1, offen) in json.load(open(zf)):
+            vor = np.array(img)
             eisenzaun(img, (x0, y0, x1, y1), offen)
+            nach = np.array(img)
+            nach[~boden_ok] = vor[~boden_ok]                      # Zaun nie ueber Fels oder Felswand
+            img = Image.fromarray(nach)
     lvl = hp.astype(np.uint8) + 1
     if speichern and frame is None:
         img.save(os.path.join(KARTE, 'terrain_basis.png'))
