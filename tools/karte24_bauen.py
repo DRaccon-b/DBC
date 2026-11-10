@@ -83,6 +83,42 @@ def grube(a, m, frame=None):
     a[kante] = (22, 12, 8)
 
 
+def eisenzaun(img, rect, offen):
+    """Eisenzaun der Gefangenen-Pferche (Vorlage): dunkle blaugraue Stangen alle 8 px mit Spitze, zwei Querstreben,
+    Schatten nach rechts unten. offen: 'unten_rechts' / 'unten_links' = dort ist die Unterseite zur Haelfte offen."""
+    a = np.array(img).astype(np.int16)
+    x0, y0, x1, y1 = rect
+    K, M, L = (24, 28, 40), (58, 66, 86), (104, 116, 140)
+    def stange(x, yb, hh=14):
+        for y in range(yb - hh, yb + 1):
+            a[y, x - 1] = K + (255,); a[y, x] = M + (255,); a[y, x + 1] = K + (255,)
+            a[y, x - 1 + 0, :3] = K
+        a[yb - hh - 1, x] = L + (255,); a[yb - hh - 2, x] = K + (255,)
+        for d in range(1, 4):
+            a[yb + d, x + d - 1, :3] = (a[yb + d, x + d - 1, :3] * 0.7).astype(np.int16)
+    def strebe(xa, xb, y):
+        a[y, xa:xb, :3] = M; a[y - 1, xa:xb, :3] = L; a[y + 1, xa:xb, :3] = K
+        a[y + 3, xa + 2:xb + 2, :3] = (a[y + 3, xa + 2:xb + 2, :3] * 0.75).astype(np.int16)
+    yt, yb_ = y0 * T + 13, y1 * T + 13
+    X0, X1 = x0 * T + 4, x1 * T + 12
+    strebe(X0, X1, yt - 9); strebe(X0, X1, yt - 3)                   # oben
+    for x in range(X0, X1 + 1, 8):
+        stange(x, yt)
+    mitte = (X0 + X1) // 2
+    ua, ub = (X0, mitte - 24) if offen == 'unten_rechts' else (mitte + 24, X1)
+    strebe(ua, ub, yb_ - 9); strebe(ua, ub, yb_ - 3)                # unten (teilweise offen)
+    for x in range(ua, ub + 1, 8):
+        stange(x, yb_)
+    for xs_ in ((X0,) if offen == 'unten_rechts' else (X1,)) + ((X1,) if offen == 'unten_links' else ()):
+        pass
+    seite = X0 if offen == 'unten_rechts' else X1                    # geschlossene Seite (senkrecht, von oben)
+    for y in range(yt, yb_ + 1):
+        a[y, seite - 1:seite + 2, :3] = (K, M, K)
+    for y in range(yt, yb_ + 1, 8):
+        a[y - 1:y + 1, seite - 1:seite + 2, :3] = L
+    img.paste(Image.fromarray(np.clip(a, 0, 255).astype(np.uint8)), (0, 0))
+
+
 def gleis(a, x0, x1, y):
     """Lorenbahn waagerecht: Holzschwellen alle 8 px, zwei Stahlschienen mit Lichtkante."""
     Y = y * T
@@ -170,6 +206,10 @@ def bauen(frame=None, speichern=True):
         if frei_r:
             k4.teleporter_zeichnen(a, tp['x'], frei_r[0], tp['b'], len(frei_r), frame)
     img = Image.fromarray(a).convert('RGBA')
+    zf = os.path.join(OBJ, 'zaeune.json')
+    if os.path.exists(zf):
+        for (x0, y0, x1, y1, offen) in json.load(open(zf)):
+            eisenzaun(img, (x0, y0, x1, y1), offen)
     lvl = hp.astype(np.uint8) + 1
     if speichern and frame is None:
         img.save(os.path.join(KARTE, 'terrain_basis.png'))

@@ -1573,7 +1573,9 @@ def herunterladen(oid, d):
 
 
 def speichern(gruppe, ims, ids):
-    if gruppe.startswith('k23_'):
+    if gruppe.startswith('k24_'):
+        ziel = os.path.join(ROOT, 'assets', 'objekte', 'karte24', gruppe[4:])
+    elif gruppe.startswith('k23_'):
         ziel = os.path.join(ROOT, 'assets', 'objekte', 'karte23', gruppe[4:])
     elif gruppe.startswith('k22_'):
         ziel = os.path.join(ROOT, 'assets', 'objekte', 'karte22', gruppe[4:])
@@ -1762,6 +1764,17 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'wooden farm covered wagon with a cream canvas top, two big wooden spoked wheels, a wooden shaft at the front, '
         'a few hay bundles and sacks visible inside, ' + FR14,
     ]},
+    'k24_lager': {'size': 48, 'items': [
+        'weathered beige canvas desert camp tent with an open dark entrance flap, ropes and wooden pegs, ' + FR14,
+        'small square iron prisoner cage made of dark blue-grey metal bars with rivets, empty, on the ground, ' + FR14,
+        'campfire ring of red desert stones with small burning flames and logs, ' + FR14,
+        'cluster of glowing red orange ore crystals growing out of a red desert rock, ' + FR14,
+        'iron lantern post with a pale blue glowing glass lamp on top, dark metal pole and base, ' + FR14,
+        'short wooden stump stool, ' + FR14,
+    ]},
+    'k24_obelisk': {'size': 128, 'items': [
+        'very tall narrow dark navy black stone obelisk with faint purple glowing runes, standing on a square stepped dark stone base, ' + FR14,
+    ]},
     'k21_tv_gross': {'size': 48, 'items': [
         'big old brown wooden cabinet CRT television standing on short wooden legs, wood grain case, large dark curved '
         'screen with a faint blue glow, a column of round knobs and a speaker grille on the right, ' + FR14,
@@ -1802,8 +1815,8 @@ def erzeugen(gruppe):
         d = warte(oid)
         speichern(gruppe, *herunterladen(oid, d))
         return
-    if gruppe.startswith(('k20_', 'k21_', 'k23_')):
-        g = (OBJEKTGRUPPEN_K21 if gruppe.startswith(('k21_', 'k23_')) else OBJEKTGRUPPEN_K20)[gruppe]
+    if gruppe.startswith(('k20_', 'k21_', 'k23_', 'k24_')):
+        g = (OBJEKTGRUPPEN_K21 if gruppe.startswith(('k21_', 'k23_', 'k24_')) else OBJEKTGRUPPEN_K20)[gruppe]
         req = {'description': STIL, 'size': g['size'], 'view': 'top-down',
                'item_descriptions': [it + '. ' + STIL for it in g['items']],
                'target_palette': {'colors': PALETTE, 'name': 'Karte01 handheld'}}
