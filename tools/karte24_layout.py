@@ -225,14 +225,23 @@ def main():
             for x in range(x0, x1):
                 if h[y, x] == 0 and k[y, x] in 'bs':
                     k[y, x] = 'r'; h[y, x] = 2
-    # Schrein wieder erhoeht mit Treppe (Nutzer)
-    h[okt & (k != 'r')] = 1
+    # Schrein wieder erhoeht mit Treppe (Nutzer), ordentlich: Plateau mit durchgehender Front nach Sueden,
+    # davor ein Vorplatz auf Bodenhoehe, kein Sand auf dem Plateau, keine Absaetze neben der Treppe
+    k[okt] = 'b'
+    h[okt] = 1
+    yb = max(y for y in range(R) if okt[y, SX])
+    for y in range(yb + 1, yb + 5):                    # Vorplatz unter dem Schrein (Bodenhoehe)
+        for x in range(SX - 7, SX + 8):
+            k[y, x] = 'b'; h[y, x] = 0
+    for y in range(SY + 3, yb + 1):                    # Felsring nur oben und an den Seiten, unten frei fuer die Front
+        for x in range(SX - 12, SX + 13):
+            if ring[y, x] and not okt[y, x] and abs(x - SX) <= 9:
+                k[y, x] = 'b'; h[y, x] = 0
     x0, x1 = SCHREIN_TREPPE
-    yb = max(y for y in range(R) if okt[y, (x0 + x1) // 2])
     k[yb + 1:yb + 3, x0:x1 + 1] = 't'; h[yb + 1:yb + 3, x0:x1 + 1] = 0
-    for y in range(yb + 3, yb + 6):
+    for y in range(yb + 3, yb + 5):
         for x in range(x0, x1 + 1):
-            k[y, x] = 'w'; h[y, x] = 0
+            k[y, x] = 'w'
     for (tx, ty, b, hh) in TELEPORTER:
         k[ty:ty + hh, tx:tx + b] = 'T'; h[ty:ty + hh, tx:tx + b] = 0
     lay = {'groesse': [C, R], 'klassen': [''.join(z) for z in k], 'hoehe': [''.join(str(c) for c in z) for z in h],
