@@ -38,12 +38,12 @@ HOCH_FELS = ['k01/deko09', 'k01/deko11']                       # Regel 5d: vor d
 HOCH_BLUME = ['k01/deko04', 'k01/deko27', 'k01/deko30']
 OBST = 'obst/apfel'
 # Obstwiese oben links (Reihen wie in der Vorlage, einzelne Luecken)
-OBSTWIESE = [(x, y) for y in (8, 16, 24) for x in (5, 8, 11, 14, 23, 26, 29, 32, 35)
-             if (x, y) not in ((26, 8), (8, 24), (32, 24))]
+OBSTWIESE = [(x, y) for y in (8, 16, 24) for x in (4, 8, 12, 24, 28, 32)]   # groessere Baeume -> 4 Kacheln Abstand
 WIESE = [(38.5, 15), (38.5, 21), (65, 8), (64, 20), (42, 30), (27, 34), (36, 33), (49, 32), (61, 31),
          (68, 30), (71, 28), (87, 28), (91, 31), (53, 41), (49, 42), (5, 50), (8, 52), (53.5, 68), (4, 74), (9, 76),
          (15, 76), (37, 78), (52, 78), (62, 78), (23, 78)]
-SORTEN = {'apfel': 'obst/apfel', 'birne': 'obst/00', 'orange': 'obst/01', 'pflaume': 'obst/02', 'kirsche': 'obst/03'}
+SORTEN = {'apfel': 'obst_gross/00', 'birne': 'obst_gross/01', 'orange': 'obst_gross/02', 'pflaume': 'obst_gross/03',
+          'kirsche': 'obst_gross/04'}                            # groessere Obstbaeume (Nutzer), PixelLab k23_obst_gross
 def sorte(x, y):                                               # je Reihe eine Sorte (wie gepflanzt), links/rechts verschieden
     links = x < 20
     reihe = {8: 0, 16: 1, 24: 2}[y]
@@ -175,7 +175,7 @@ def main():
                    for dx in (-1, 0, 1) for dy in (-1, 0, 1))
     # Obstwiese oben links: Deko auf der Wiese (Nutzer) - nichts direkt an den Obstbaeumen (Stammreihe +-1)
     for o in objekte:
-        if o['basis'].startswith('obst/'):
+        if o['basis'].startswith(('obst/', 'obst_gross/')):
             bx, by, wt, ht = o['block']
             for x in range(bx - 1, bx + wt + 1):
                 for y in (by + ht - 2, by + ht - 1, by + ht):
@@ -184,7 +184,7 @@ def main():
                        ('obst/61', 3, 19), ('hecke/34', 36, 4), ('obst/41', 24, 20), ('mauer/36', 10, 5)]
     for (name, x, y) in OBST_DEKO_GROSS:                       # groessere Stuecke zuerst (Kisten, Heu, Karren, Bienenstock)
         setze(name, x + 0.5, y, {'spiegeln': (x * 7 + y) % 3 == 0}, frei=True)
-    KLEIN = ['k01/deko05', 'k01/deko06', 'k01/deko26'] + BLUMEN + ['obst/15', 'obst/17', 'obst/18']
+    KLEIN = ['k01/deko05', 'k01/deko06'] + ['k01/deko%02d' % i for i in (0, 1, 2, 3, 30)]   # ohne Buesche (Nutzer)
     n_d = 0
     for _ in range(4000):
         if n_d >= 34:
