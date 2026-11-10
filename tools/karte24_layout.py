@@ -183,17 +183,19 @@ def main():
         for x in range(x0, x1 + 1):
             if k[y, x] == 'r':
                 k[y, x] = 'w'; h[y, x] = 0
-    # Nutzer: Arena links unter dem Aufgang schliessen (rot) ...
-    for y in range(44, 49):
-        for x in range(32, 35):
+    # Nutzer: Arena links komplett zu (kein seitlicher Zugang mehr): Aufgang und Spalt mit Fels fuellen
+    import math as _m2
+    for y in range(37, 49):
+        for x in range(30, 36):
             k[y, x] = 'r'; h[y, x] = 2
-    # ... und unter dem Arenaring einen Weg vom linken Canyon zu den Treppen (gruen)
+    # Weg unter dem Arenaring zu den Treppen - geschwungen statt gerade
     for y in range(49, 53):
         for x in range(31, 45):
             k[y, x] = 'b'; h[y, x] = 0
-    for y in range(51, 53):
-        for x in range(28, 50):
-            if h[y, x] == 0 and k[y, x] in 'bs':
+    for x in range(27, 50):
+        yc = 50.8 + 0.9 * _m2.sin((x - 27) / 3.1) + 0.4 * _m2.sin(x / 1.7)
+        for y in (int(round(yc)), int(round(yc)) + 1):
+            if 0 <= y < R and h[y, x] == 0 and k[y, x] in 'bsw':
                 k[y, x] = 'w'
     for (tx, ty, b, hh) in TELEPORTER:
         k[ty:ty + hh, tx:tx + b] = 'T'; h[ty:ty + hh, tx:tx + b] = 0

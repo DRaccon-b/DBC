@@ -146,7 +146,7 @@ def bauen(frame=None, speichern=True):
     # Aufgang links: der Weg laeuft als Rampe hinauf
     ya, yb = lay['arena_links']
     rm = np.zeros((Hp, Wp), bool)
-    tl = [(y, x) for y in range(rows) for x in range(cols) if cls[y][x] == 't' and ya <= y <= yb]
+    tl = []                                                          # Aufgang links entfernt (Nutzer)
     if tl:
         xs = [x for _, x in tl]
         x0, x1 = min(xs) * T, (max(xs) + 3) * T
