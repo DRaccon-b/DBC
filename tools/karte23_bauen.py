@@ -482,6 +482,8 @@ def bauen(frame=None, speichern=True):
     x_t = np.array([[ch == 'x' for ch in z] for z in cls])
     g_t = x_t | np.roll(x_t, 1, 1) | np.roll(x_t, -1, 1) | np.roll(x_t, 1, 0)
     g_t[:66, :44] &= x_t[:66, :44]
+    teich = g_t.copy(); teich[67:] = False                            # Teich (oberer Teil) weiter nach rechts (Nutzer)
+    g_t |= np.roll(teich, 1, 1) | np.roll(teich, 2, 1) | np.roll(teich, 3, 1)
     xm = weich(np.kron(g_t, np.ones((T, T))).astype(np.float32), 4, 0.15, 8, 0.45)
     P = 24
     ag = np.pad(a, ((0, P), (0, 0), (0, 0)), mode='edge')
