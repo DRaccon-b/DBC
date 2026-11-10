@@ -290,7 +290,7 @@ def schlamm(a, m, erde, seed=63):
 
 SENKE_STIL = os.environ.get('K23_SENKE', 'boeschung')   # gewaehlt: Boeschung (Nutzer)
 TEICH_STIL = os.environ.get('K23_TEICH', 'erde')       # erde | sandstein
-STUFEN = int(os.environ.get('K23_STUFEN', '3'))         # Terrassen der Senke (Nutzer: Variante A = 3)   # erde | hoch | stein | sandstein | holz | boeschung | karte01
+STUFEN = int(os.environ.get('K23_STUFEN', '2'))         # Terrassen der Senke (Nutzer: Variante A = 3)   # erde | hoch | stein | sandstein | holz | boeschung | karte01
 
 
 def senkenwand(a, m, stil, front):
