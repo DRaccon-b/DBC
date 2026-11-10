@@ -112,7 +112,18 @@ def main():
     k[ring & (yy < 20)] = 'r'
     k[okt] = np.where(k[okt] == 's', 's', 'b')
     h = np.where(k == 'r', 2, 0)
-    for (x0, y0, x1, y1) in (ARENA, SCHREIN):        # erhoehte Flaechen: Boden innerhalb des Felsrings
+    # Mitte (Nutzer): Felsblock oberhalb der Arena und Arenaring zu EINER Felsmasse schliessen (keine Rinne dazwischen)
+    for y in range(21, 34):
+        for x in range(37, 64):
+            if k[y, x] != 'r' and not (ARENA[0] + 3 < x < ARENA[2] - 3 and y >= 31):
+                k[y, x] = 'r'
+    for _ in range(2):                                 # 1 Kachel breite Bodenschlitze zwischen Fels -> Fels
+        for y in range(R):
+            for x in range(1, C - 1):
+                if k[y, x] != 'r' and k[y, x - 1] == 'r' and k[y, x + 1] == 'r' and k[y, x] in 'bs':
+                    k[y, x] = 'r'
+    h[(k == 'r')] = 2
+    for (x0, y0, x1, y1) in (ARENA,):                 # erhoehte Flaeche nur die Arena (Schrein ebenerdig, Nutzer): Boden innerhalb des Felsrings
         sub = (k[y0:y1 + 1, x0:x1 + 1] != 'r')
         teile = flaechen(np.pad(sub, ((y0, R - y1 - 1), (x0, C - x1 - 1))))
         gross = max(teile, key=len)
@@ -129,10 +140,11 @@ def main():
     xs = [x for x in range(ARENA[0], ARENA[0] + 8) if (h[ya:yb_ + 1, x] == 1).any()]
     xl = min(xs)
     k[ya:yb_ + 1, xl - 3:xl] = 't'; h[ya:yb_ + 1, xl - 3:xl] = 0
-    x0, x1 = SCHREIN_TREPPE
-    col = [y for y in range(SCHREIN[1], SCHREIN[3] + 3) if h[y, (x0 + x1) // 2] == 1]
-    yb = max(col)
-    k[yb + 1:yb + 3, x0:x1 + 1] = 't'; h[yb + 1:yb + 3, x0:x1 + 1] = 0
+    x0, x1 = SCHREIN_TREPPE                           # Schrein: statt Treppe ein freier Durchgang (Nutzer)
+    for y in range(SCHREIN[1] + 8, SCHREIN[3] + 4):
+        for x in range(x0, x1 + 1):
+            if k[y, x] == 'r':
+                k[y, x] = 'w'; h[y, x] = 0
     for (tx, ty, b, hh) in TELEPORTER:
         k[ty:ty + hh, tx:tx + b] = 'T'; h[ty:ty + hh, tx:tx + b] = 0
     lay = {'groesse': [C, R], 'klassen': [''.join(z) for z in k], 'hoehe': [''.join(str(c) for c in z) for z in h],
