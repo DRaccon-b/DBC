@@ -288,6 +288,43 @@ def schlamm(a, m, erde, seed=63):
             sub[e & (yy == 0) & (xx > -4) & (xx < 0)] = H('#a8b0b8')
 
 
+SENKE_STIL = os.environ.get('K23_SENKE', 'erde')   # erde | hoch | stein | sandstein | holz | boeschung | karte01
+
+
+def senkenwand(a, m, stil, front):
+    """Wand der Senke nach Stil neu einfaerben (die Form kommt aus hoehenkanten)."""
+    if stil in ('erde', 'hoch', 'stein', 'sandstein') or not m.any():
+        return
+    Hh, W = m.shape
+    # Tiefe je Pixel ab Oberkante der Wand
+    d = np.zeros((Hh, W), np.int32)
+    for y in range(1, Hh):
+        d[y] = np.where(m[y], np.where(m[y - 1], d[y - 1] + 1, 0), 0)
+    yy, xx = np.mgrid[0:Hh, 0:W]
+    if stil == 'holz':                                               # Holzpalisade: senkrechte Bohlen, Pfosten, Querlatte
+        HOLZ = [np.array(H(c)) for c in ('#3a220f', '#5c3818', '#7a4c24', '#9a6432', '#b67c44', '#d29c60')]
+        b = xx % 6
+        c = np.where(b[..., None] == 0, HOLZ[0], np.where(b[..., None] == 1, HOLZ[4], np.where(b[..., None] == 5, HOLZ[1], HOLZ[3])))
+        c = np.where((d[..., None] >= front - 3), HOLZ[1], c)
+        c = np.where(((d[..., None] == 6) | (d[..., None] == 7)) & (b[..., None] >= 0), HOLZ[2], c)
+        c = np.where((xx[..., None] % 24 < 3), np.where((xx[..., None] % 24 == 0), HOLZ[0], HOLZ[5]), c)
+        c = np.where(d[..., None] <= 1, HOLZ[5], c)
+        a[m] = c[m].astype(np.uint8)
+    elif stil == 'boeschung':                                        # Erdboeschung: weiche Schraege von hell nach dunkel
+        E = [np.array(H(c), np.float32) for c in ('#5a4030', '#6e4e38', '#836044', '#987252', '#ad8662', '#c29c76')]
+        t = np.clip(d / max(1, front - 1), 0, 1)
+        idx = np.clip((5 - t * 5).round().astype(int), 0, 5)
+        c = np.array(E)[idx]
+        rs = np.random.RandomState(5)
+        kr = rs.rand(Hh, W) < 0.05
+        c[kr] = c[kr] * 0.85
+        a[m] = c[m].astype(np.uint8)
+    elif stil == 'karte01':                                          # Schieferklippe wie Karte 01 / 21
+        import klippen
+        w = np.array(klippen.wand(W, front + 2, random.Random(7), rune_chance=0.0).convert('RGB'))
+        a[m] = w[np.clip(d[m], 0, front + 1), xx[m]]
+
+
 def nach_oben(hoch, bis=4 * T):
     """Hochflaechen, die (fast) am oberen Kartenrand beginnen, bis zum Rand verlaengern - nur in ihren eigenen Spalten
     (keine Kantenstummel am Kartenrand)."""
@@ -380,9 +417,14 @@ def bauen(frame=None, speichern=True):
                 ramp[y * T:(y + 1) * T, x * T:(x + 1) * T] = True
     frei |= ramp
     LIPPE_ERDE = ['#4a3424', '#6a4c34', '#7e5e40', '#94714c', '#a8835a', '#bc9a70']   # Rand der Senke: Erde statt Gras
-    wand |= k4.hoehenkanten(a, hoch, 'erde', 20, 6, LIPPE_ERDE, frei, 51, berg=False)
+    stil = SENKE_STIL
+    fels_s, front_s = {'erde': ('erde', 20), 'hoch': ('erde', 32), 'stein': ('stein', 24), 'sandstein': ('sandstein', 24),
+                       'holz': ('erde', 20), 'boeschung': ('erde', 16), 'karte01': ('erde', 24)}[stil]
+    sw = k4.hoehenkanten(a, hoch, fels_s, front_s, 6, LIPPE_ERDE, frei, 51, berg=False)
+    senkenwand(a, sw & ~hoch, stil, front_s)
+    wand |= sw
     if zug_o:
-        k4.treppe(a, tz0 * T, (tz1 + 1) * T, yt, 's', 20, 'erde', sand)
+        k4.treppe(a, tz0 * T, (tz1 + 1) * T, yt, 's', front_s, fels_s, sand)
     rm = weich(zell_maske(cls, 'kc', cols, rows), 4, 0.35, 12) & ~wand & ~cm & ~maske_aus(cls, 'wt', cols, rows)   # Felsrand: steiniger Erdboden bis an die Senke
     a[rm] = erde[rm]                                                  # Rand der Senke: dieselben Erdkacheln wie der Hof
     # ---------------- Mauerchen, Hecken
