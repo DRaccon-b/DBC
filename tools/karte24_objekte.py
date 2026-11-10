@@ -112,7 +112,7 @@ MINE = [(FAESSER, 75, 69, {}), (ERZHAUFEN, 72.5, 73, {}),       # an der mittler
         (PUMPE, 69, 79, {}), (FAESSER, 56.5, 78, {'spiegeln': True}),   # an der unteren Grube
         (VERSORGUNG, 90, 73, {})]                               # rechts neben den Loren
 SEILBAHN = [(MAST, 80, 14, {'seil': 'oben', 'auf_fels': True}), (MAST, 80, 64, {'seil': 'unten'})]   # Seilbahn Schrein -> Kraene
-UNTEN_LINKS = UNTEN_LINKS + LOREN + KRAENE + MINE + SEILBAHN + OBEN + SCHREIN_OBJ + ARENA_OBJ
+UNTEN_LINKS = UNTEN_LINKS + LOREN + KRAENE + MINE + OBEN          # Seilbahn entfernt (Nutzer: wird anders geloest) + SCHREIN_OBJ + ARENA_OBJ
 
 
 def main():
