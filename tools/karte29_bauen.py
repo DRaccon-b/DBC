@@ -131,35 +131,47 @@ def bauen(frame=None, speichern=True):
         for dx in (-1, 0, 1):
             am_land |= np.roll(np.roll(lt, dy, 0), dx, 1)
     st_t = np.where(ft & am_land, 0, np.where(ft, 1, np.where(dist <= 2, 2, np.where(dist <= 5, 3, 4))))
-    grund = (strand.astype(np.float32) * np.array([0.78, 0.8, 0.84]))  # Meeresgrund: Sand, kuehl
-    yy_, xx_ = np.mgrid[0:Hp, 0:Wp]                                  # Sandrippeln und Steine am Grund (sichtbar)
-    rippel = ((yy_ + (4 * np.sin(xx_ / 11.0)).astype(int)) % 9) == 0
-    grund[rippel] *= 0.86
-    rs_g = np.random.RandomState(290)
-    for _ in range(Hp * Wp // 900):
-        gy, gx = rs_g.randint(2, Hp - 3), rs_g.randint(2, Wp - 4)
-        grund[gy:gy + 2, gx:gx + 3] *= 0.62
-        grund[gy, gx:gx + 2] = grund[gy, gx:gx + 2] * 1.0 + 30
-    def nahe(m, r):
-        return np.array(Image.fromarray((m * 255).astype(np.uint8)).filter(ImageFilter.GaussianBlur(r))) / 255.0
-    stufe = np.kron(st_t, np.ones((T, T), int))
-    deck = np.array([0.10, 0.26, 0.44, 0.60, 0.74], np.float32)[stufe][..., None]   # Wasserdeckung je Stufe
-    wfarbe = np.array([38, 41, 46], np.float32)                     # schwarzgrau
-    a = (grund * (1 - deck) + wfarbe * deck)
-    wl = np.roll(np.roll(tief_t, 2 * f, axis=1), f, axis=0).astype(np.float32).mean(axis=2)
-    glanz = (wl > np.percentile(wl, 93)) & (stufe >= 1)              # Wellenglanz (wandert)
-    a[glanz] = a[glanz] + 14
-    a = np.clip(a, 0, 255).astype(np.uint8)
-    for s_ in range(1, 5):                                           # sichtbare Abbruchkante an jeder Tiefenstufe (Nutzer):
-        oben_ = stufe < s_                                           # flachere Seite: helle Lippe (1 px) + Kontur,
-        tiefer = stufe >= s_                                         # tiefere Seite: dunkle Abbruchwand (Verlauf 5 px)
-        lippe = oben_ & dehnen(tiefer, 3)
-        kontur = tiefer & dehnen(oben_, 3)
-        a[lippe] = np.clip(a[lippe].astype(np.int16) + 22, 0, 255).astype(np.uint8)
-        a[kontur] = (a[kontur] * 0.55).astype(np.uint8)
-        for d_, fk in ((5, 0.72), (9, 0.82), (13, 0.9)):
-            w_ = tiefer & dehnen(oben_, d_) & ~kontur
-            a[w_] = (a[w_] * fk).astype(np.uint8)
+    # Wasser im Stil von Karte 01 (terrassiertes Meer: Grund sichtbar, Stufenwaende, Felsen, Algen, Schaum),
+    # nur schwarzgrau gefaerbt und mit Stufen genau am 16er-Raster (Nutzer)
+    import wasser_details as wd
+    stufe_px = np.kron(np.where(lt, -1, np.where(ft, 0, np.where(dist <= 2, 1, np.where(dist <= 5, 2, 3)))), np.ones((T, T), int))
+    wasser_m = stufe_px >= 0
+    start = [0, wd.FLACH, wd.STUFE1, wd.STUFE2]
+    spanne = [wd.FLACH - 9, wd.STUFE1 - wd.FLACH - 1, wd.STUFE2 - wd.STUFE1 - 1, 400]   # Schaum genau an der Stufenkante
+    d = np.zeros((Hp, Wp), np.float32)
+    for k_ in range(4):
+        tiefer_ = stufe_px >= k_
+        abst = np.full((Hp, Wp), 999, np.int32)                      # Pixelabstand zur flacheren Stufe (Chebyshev = Raster)
+        cur = ~tiefer_
+        abst[cur] = 0
+        for i_ in range(1, spanne[k_] + 2 if k_ < 3 else 120):
+            cur2 = dehnen(cur, 3)
+            neu = cur2 & ~cur
+            if not neu.any():
+                break
+            abst[neu] = i_
+            cur = cur2
+        sel = stufe_px == k_
+        d[sel] = start[k_] + np.minimum(abst[sel], spanne[k_])
+    a_alt = {n_: getattr(wd, n_) for n_ in ('FARBEN', 'MISCH', 'SCHAUM', 'ALGE', 'WELLIG', 'N_FRAMES', '_kacheln', 'BRAUN')}
+    kach = wd._kacheln
+    wd.FARBEN = [wd.H('#7c868c'), wd.H('#4e565c'), wd.H('#363c42'), wd.H('#24282d')]
+    wd.MISCH = [0.30, 0.46, 0.62, 0.76]
+    wd.SCHAUM = wd.H('#cdd4d8')
+    wd.ALGE = [wd.H(c) for c in ('#1c2a26', '#28392f', '#3a4e3e', '#52664f')]
+    wd.WELLIG = False
+    wd.BRAUN = [wd.H(c) for c in ('#1e2026', '#2e3139', '#41454f', '#565b66', '#6e7480', '#8a909b', '#a8aeb8')]   # Felsen grau
+    wd.N_FRAMES = N_FRAMES
+    def grau_k(name, Hh_, W_):                                       # Grund grau (Sand hellgrau, Tiefe dunkelgrau)
+        t_ = kach(name, Hh_, W_).mean(axis=2, keepdims=True)
+        return t_ * np.array([0.74, 0.77, 0.8], np.float32) if name == 'sand' else t_ * np.array([0.5, 0.52, 0.55], np.float32)
+    wd._kacheln = grau_k
+    wd.FELSEN_PROTOKOLL.clear()
+    a = strand.copy()
+    img_w = wd.meer_terrassen(Image.fromarray(a), np.ones((Hp, Wp), bool), frame, np.zeros((Hp, Wp), bool), maske=wasser_m, dist=d)
+    for n_, v_ in a_alt.items():
+        setattr(wd, n_, v_)
+    a = np.array(img_w.convert('RGB'))
     tief = ~flach & ~land
     # Strand, heller Sand, Pfuetzen bleiben flaches Wasser
     a[land] = strand[land]

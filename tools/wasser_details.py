@@ -219,6 +219,7 @@ def _kacheln(name, Hh, W):
 # Abstand vom Strand (px): Flachwasser | Schaum | Mittel | Stufe 1 | Platz | Stufe 2 | Platz | Tiefsee
 FLACH, SCHAUM_D, STUFE1, STUFE2 = 24, (22, 26), 68, 138
 WAND = 10
+WELLIG = True                                                   # False: Stufen genau nach dem uebergebenen Abstandsfeld (Raster)
 FARBEN = [H('#5fcfd6'), H('#38a8cc'), H('#2a7cbc'), H('#1d58a0')]   # Wasser je Zone (flach -> tief)
 MISCH = [0.45, 0.62, 0.78, 0.9]                                  # Anteil Wasserfarbe ueber dem Grund
 
@@ -255,7 +256,8 @@ def meer_terrassen(img, region, frame=None, meiden=None, maske=None, dist=None):
     if dist_vorgabe is not None:                                   # eigenes Abstandsfeld (z. B. Flach/Tief nach Vorlage)
         d = dist_vorgabe.astype(np.float32).copy()
     yy, xx = np.mgrid[0:Hh, 0:W]
-    d = d + 3.0 * np.sin(xx / 23.0) + 2.0 * np.sin(xx / 9.0 + yy / 31.0)
+    if WELLIG:
+        d = d + 3.0 * np.sin(xx / 23.0) + 2.0 * np.sin(xx / 9.0 + yy / 31.0)
     d[~m] = -1
     sand = _kacheln('sand', Hh, W)
     meer = _kacheln('meer', Hh, W)
