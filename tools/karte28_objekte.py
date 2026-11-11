@@ -86,13 +86,22 @@ def main():
     # Spinnweben (Nutzer, PixelLab k28_netz): flach auf dem Boden, ohne Schatten - Steinplatz ausserhalb des Rings und
     # Arena (vor allem die oberen Ecken, wie die Vorlage); Kokons (4, 6) dazwischen
     NETZE = ['netz/00', 'netz/01', 'netz/02', 'netz/03', 'netz/00', 'netz/02']
-    NETZ_STELLEN = [(67, 12), (72, 12), (77, 12), (63, 13), (79, 13),             # Mauer der Spinnen-Arena: innere Front,
-                    (61, 17), (62, 22), (80, 16), (80, 22), (66, 9), (74, 9),      # Ecken, Krone, aeussere Front
-                    (63, 27), (67, 27), (77, 27),
+    import karte28_bauen as k28
+    cx_, cy_, rx_, ry_ = k28.MAUER_MITTE
+    mauer_netze = []
+    for k in range(10):                                              # Netze an der Mauer (Mittellinie, unregelmaessig)
+        t = k * 2 * math.pi / 10 + (0.18 if k % 2 else -0.1)
+        e = k28.mauer_rand(t)
+        x = cx_ + math.cos(t) * (rx_ - k28.MAUER_DICKE / 2) * e
+        y = cy_ + math.sin(t) * (ry_ - k28.MAUER_DICKE / 2) * e
+        if k28.MAUER_TOR[0] - 12 <= x <= k28.MAUER_TOR[1] + 12 and y > cy_:
+            continue
+        mauer_netze.append((int(x) // T, int(y) // T + (1 if math.sin(t) < -0.3 else 0)))
+    NETZ_STELLEN = mauer_netze + [
                     (87, 12), (88, 20), (87, 27), (59, 27), (59, 16),              # Steinplatz aussen
                     (8, 21), (10, 23), (12, 20), (9, 25), (13, 23), (24, 21), (27, 20), (30, 19), (29, 23), (34, 18),
                     (42, 21), (45, 22), (46, 25), (41, 19), (6, 28), (19, 34), (38, 31)]
-    KOKONS = [(66, 15), (85, 14), (11, 22), (44, 21), (28, 21)]
+    KOKONS = [(68, 15), (85, 14), (11, 22), (44, 21), (28, 21)]
     belegt = set((o['kachel'][0], o['kachel'][1]) for o in objekte if not o['basis'].startswith('wald'))
     for i, (tx, ty) in enumerate(NETZ_STELLEN + KOKONS):
         if (tx, ty) in belegt or cls[ty][tx] in 'hwT' or any(

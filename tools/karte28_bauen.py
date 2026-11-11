@@ -60,7 +60,7 @@ def risse(a, m, seed=28, farbe=(38, 34, 30), n_div=900):
 
 # Spinnen-Arena (Nutzer): wo in der Vorlage der Netzring liegt, steht eine 2 Kacheln dicke Steinmauer um die Arena,
 # 2 Kacheln hohe Front nach Sueden; unten in der Mitte die Torluecke. An der Mauer haengen die Spinnweben.
-MAUER_AUSSEN = (976, 144, 1296, 416, 40)                          # x0, y0, x1, y1, Eckenradius (px, am Raster)
+MAUER_MITTE = (1136, 280, 164, 140)                              # cx, cy, rx, ry (px): organische Ringform (Nutzer)
 MAUER_DICKE = 32
 MAUER_FRONT = 32
 MAUER_TOR = (1104, 1184)                                           # Torluecke unten (px)
@@ -72,12 +72,20 @@ def rr(xx, yy, x0, y0, x1, y1, r):                                  # abgerundet
     return np.hypot(dx, dy) - r
 
 
+def mauer_rand(t):                                                  # unregelmaessiger Radius je Winkel (natuerlich)
+    return 1 + 0.07 * np.sin(3 * t + 1.1) + 0.05 * np.sin(5 * t + 2.3) + 0.03 * np.sin(8 * t + 0.4)
+
+
 def mauer_maske(Hh, W):
     yy, xx = np.mgrid[0:Hh, 0:W]
-    x0, y0, x1, y1, r = MAUER_AUSSEN
+    cx, cy, rx, ry = MAUER_MITTE
     d = MAUER_DICKE
-    ring = (rr(xx, yy, x0, y0, x1, y1, r) < 0) & (rr(xx, yy, x0 + d, y0 + d, x1 - d, y1 - d, max(4, r - d)) >= 0)
-    ring &= ~((xx >= MAUER_TOR[0]) & (xx < MAUER_TOR[1]) & (yy >= y1 - d - 2))
+    dx, dy = xx - cx, yy - cy
+    e = mauer_rand(np.arctan2(dy / ry, dx / rx))
+    aussen = np.hypot(dx / (rx * e), dy / (ry * e)) < 1
+    innen = np.hypot(dx / ((rx - d) * e), dy / ((ry - d) * e)) < 1
+    ring = aussen & ~innen
+    ring &= ~((xx >= MAUER_TOR[0]) & (xx < MAUER_TOR[1]) & (yy > cy))
     return ring
 
 
