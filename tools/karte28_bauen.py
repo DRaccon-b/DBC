@@ -35,7 +35,7 @@ def maske(cls, arten):
 
 def grau(a):                                     # Sandkacheln von Karte 01 -> dunkler, kuehler Steinboden
     l = a.mean(axis=2, keepdims=True) / 255.0
-    lo, hi = np.array([60, 61, 74], np.float32), np.array([112, 114, 132], np.float32)
+    lo, hi = np.array([46, 47, 58], np.float32), np.array([88, 90, 106], np.float32)   # dunkler (dunkler Wald)
     return lo + (hi - lo) * np.clip((l - 0.45) / 0.45, 0, 1)
 
 
@@ -65,13 +65,15 @@ def bauen(frame=None, speichern=True):
     Wp, Hp = cols * T, rows * T
     hp = np.kron(np.array([[int(c) for c in z] for z in lay['hoehe']]), np.ones((T, T), int))
     basis = os.path.join(ROOT, 'assets', 'basis')
-    gras = flaeche(k6.kacheln(os.path.join(basis, 'gras_%d.png'), 5), cols, rows)
-    sand = flaeche(k6.kacheln(os.path.join(basis, 'sand_%d.png'), 5), cols, rows)
-    erde = flaeche(k6.kacheln(os.path.join(basis, 'sand_%d.png'), 5, k23.braun), cols, rows)
+    b12 = os.path.join(ROOT, 'assets', 'karte12', 'basis')          # dunkler Wald (Nutzer): Boeden von Karte 12
+    gras = flaeche(k6.kacheln(os.path.join(b12, 'v_%d.png'), 5), cols, rows)      # Moos statt Wiese
+    waldboden = flaeche(k6.kacheln(os.path.join(b12, 'g_%d.png'), 5), cols, rows)
+    sand = flaeche(k6.kacheln(os.path.join(b12, 'q_%d.png'), 5), cols, rows)      # Trampelpfad statt Sandweg
+    erde = flaeche(k6.kacheln(os.path.join(b12, 'd_%d.png'), 5), cols, rows)      # dunkle Walderde
     stein = flaeche(k6.kacheln(os.path.join(basis, 'sand_%d.png'), 5, grau), cols, rows)
     a = gras.copy()
     wm = weich(zell_maske(cls, 'h', cols, rows), 5, 0.4, 3)          # Waldboden (Baeume sind Objekte)
-    a[wm] = (gras[wm] * np.array([0.62, 0.7, 0.66])).astype(np.uint8)
+    a[wm] = (waldboden[wm] * 0.82).astype(np.uint8)
     # Steinplatz rechts: grauer Boden, Erdflecken mit weichem Rand
     km = weich(zell_maske(cls, 'k', cols, rows), 5.0, 0.4, 11)
     a[km] = stein[km]
@@ -84,7 +86,7 @@ def bauen(frame=None, speichern=True):
     a[fm] = (a[fm] * np.array([0.82, 0.84, 0.86])).astype(np.uint8)
     risse(a, fm)
     eam = weich(zell_maske(cls, 'e', cols, rows), 4.0, 0.5, 13) & arena
-    a[eam] = (erde[eam] * np.array([0.8, 0.74, 0.7])).astype(np.uint8)
+    a[eam] = (erde[eam] * 1.08).clip(0, 255).astype(np.uint8)
     # Feldwege
     roh = zell_maske(cls, 'wT', cols, rows)
     m = weich(roh, 7.0, 0.5, 4) & (hp < 2)
