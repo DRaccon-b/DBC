@@ -51,10 +51,8 @@ LABOR = (                                                        # Brutlabor obe
     + [(SERVER, 9, {'px': 72 * T}), (LABTISCH, 10, {'px': 79 * T})]
 )
 
-LABOR2 = (                                                       # zweites Labor Mitte links (Nischen oben, Kammern unten), sparsam
-    [('kammer/12', 31, {'px': 9 * T}), ('kammer/02', 31, {'px': 19 * T}), ('kammer/06', 31, {'px': 29 * T})]
-    + [('kammer/01', 36, {'px': 14 * T}), ('kammer/01', 36, {'px': 24 * T})]       # Gelaender mit Glastuer zwischen den Nischen
-    + [('kammer/00', 46, {'px': int(x * T), 'anim': 'lampe'}) for x in (6.75, 10.25, 27.75, 31.25)]   # dunkle Kammern in den Ecken (Vorlage)
+LABOR2 = (                                                       # Zellentrakt Mitte links (Nutzer: Zellen mit Gittern, Gitter in karte26_bauen)
+    [('kammer/00', 46, {'px': int(x * T), 'anim': 'lampe'}) for x in (7.25, 10.75, 27.25, 30.75)]   # Kammern in den Eckzellen
 )
 
 

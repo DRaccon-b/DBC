@@ -123,6 +123,44 @@ def podest(a, pm):
 TEPPICHE = [(272, 150, 336, 238)]       # Thronsaal: x 272..336 (4 Kacheln, Mitte 304), vom Podest bis vor den Holo-Tisch
 
 
+# Zellentrakt Mitte links (Nutzer: Zellen mit Gittern). Waagerecht: (x0, x1, Fusslinie y in px, Tuer-Mitte x | None);
+# senkrecht: (x, y0, y1) in px - Gitter von der Seite (Pfostenreihe).
+GITTER_W = [(5 * T, 13 * T, 35 * T, 9 * T), (15 * T, 23 * T, 35 * T, 19 * T), (25 * T, 33 * T, 35 * T, 29 * T),
+            (5 * T, 13 * T, 42 * T, 9 * T), (25 * T, 33 * T, 42 * T, 29 * T)]
+GITTER_S = [(13 * T, 42 * T, 47 * T), (25 * T, 42 * T, 47 * T)]
+
+
+def zellengitter(a, frame):
+    """Eisengitter frontal: Stangen 2 px alle 6 px, 26 px hoch, Ober-/Mittel-/Unterholm, Tuer mit Rahmen und
+    rot blinkendem Schloss; Licht von links (helle Kante), Kontaktschatten am Boden. Seitliche Gitter als
+    Pfostenreihe von oben (schmal)."""
+    D, M, L, HL = H('#1a1c26'), H('#3a3e52'), H('#5a6078'), H('#8a90a8')
+    hoch = 26
+    f = frame or 0
+    for (x0, x1, yb, tuer) in GITTER_W:
+        y0 = yb - hoch
+        a[yb:yb + 3, x0:x1] = (a[yb:yb + 3, x0:x1] * 0.6).astype(np.uint8)          # Kontaktschatten
+        for x in range(x0 + 1, x1 - 1, 6):
+            a[y0:yb, x] = L; a[y0:yb, x + 1] = D
+            a[y0:yb, x - 1] = (a[y0:yb, x - 1] * 0.8).astype(np.uint8) if x > x0 + 1 else a[y0:yb, x - 1]
+        for yy in (y0, y0 + hoch // 2, yb - 3):
+            a[yy:yy + 3, x0:x1] = M; a[yy, x0:x1] = HL; a[yy + 2, x0:x1] = D
+        a[y0:yb, x0:x0 + 2] = M; a[y0:yb, x1 - 2:x1] = D                          # Endpfosten
+        if tuer is not None:
+            t0, t1 = tuer - 14, tuer + 14
+            a[y0 - 2:yb, t0:t0 + 3] = M; a[y0 - 2:yb, t0] = HL
+            a[y0 - 2:yb, t1 - 3:t1] = D
+            a[y0 - 2:y0 + 1, t0:t1] = M; a[y0 - 2, t0:t1] = HL
+            ly = y0 + hoch // 2 - 3                                                  # Schloss mit Statuslicht
+            a[ly:ly + 7, t1 - 9:t1 - 3] = H('#2a2e3e')
+            a[ly + 2:ly + 4, t1 - 7:t1 - 5] = H('#e03040') if f % 2 == 0 else H('#801820')
+    for (x, y0, y1) in GITTER_S:
+        a[y0:y1, x - 1:x + 2] = M; a[y0:y1, x - 1] = HL; a[y0:y1, x + 1] = D
+        for y in range(y0, y1, 6):
+            a[y:y + 2, x - 2:x + 3] = L
+        a[y0:y1, x + 2:x + 4] = (a[y0:y1, x + 2:x + 4] * 0.65).astype(np.uint8)
+
+
 def bauen(frame=None, speichern=True):
     lay = json.load(open(os.path.join(KARTE, 'layout.json')))
     cls = lay['klassen']
@@ -151,6 +189,7 @@ def bauen(frame=None, speichern=True):
     wm = maske(cls, 'W')
     paneelwand(a, wm, frame)
     warnstreifen(a, maske(cls, 'r'))
+    zellengitter(a, frame)
     for tp in lay['teleporter']:
         k18.teleporter(a, tp, frame)
     img = Image.fromarray(a).convert('RGBA')
