@@ -59,6 +59,14 @@ AUFTRAEGE['schiff_c'] = {'ziel': 'assets/objekte/karte25/schiff_c', 'groesse': (
              'round brass portholes, two tall black smokestacks with red bands, a wooden deck with a big round gun turret, '
              'a small command bridge with lit windows, masts with rigging and a dark flag, anchor chains, ' + FR14)}
 
+AUFTRAEGE['wrack'] = {'ziel': 'assets/objekte/karte27/wrack', 'groesse': (320, 240),
+    'vorlage': ('assets/objekte/karte25/schiff_a/00_sauber.png', (0, 0, 476, 282)),
+    'stil': 'assets/objekte/karte25/leuchtturm/00.png',
+    'text': ('crashed wreck of this dark emperor flagship lying on the ground, the hull broken and tilted, bow rammed into '
+             'the earth, cracked black armour plates with gold trim, the castle-like bridge tower broken and leaning, red '
+             'eye window dark and cracked, torn plates and jagged black debris sticking out, scorch marks, '
+             'seen from the side as a flat 2D profile, no background, ' + FR14)}
+
 
 def main(name):
     a = AUFTRAEGE[name]

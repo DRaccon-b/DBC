@@ -66,6 +66,22 @@ def main():
                         k[y, x] = max(set(nb), key=nb.count)
     k[k == '?'] = 'g'
     k[k == 'k'] = 'g'
+    from collections import deque                                    # einzelne Baeume der Vorlage sind kein Wald
+    gesehen = np.zeros((R, C), bool)
+    for y in range(R):
+        for x in range(C):
+            if k[y, x] == 'h' and not gesehen[y, x]:
+                comp, q = [], deque([(y, x)]); gesehen[y, x] = True
+                while q:
+                    cy, cx = q.popleft(); comp.append((cy, cx))
+                    for yy, xx in ((cy - 1, cx), (cy + 1, cx), (cy, cx - 1), (cy, cx + 1)):
+                        if 0 <= yy < R and 0 <= xx < C and k[yy, xx] == 'h' and not gesehen[yy, xx]:
+                            gesehen[yy, xx] = True; q.append((yy, xx))
+                if len(comp) < 12:
+                    for cy, cx in comp:
+                        k[cy, cx] = 'g'
+    seite = k[46:62, 23:29]                                          # Mauerreste an der Seite des Plateaus unten links
+    seite[seite == 'p'] = 'g'
     sub = k[SCHIFF[1]:SCHIFF[3] + 1, SCHIFF[0]:SCHIFF[2] + 1]      # abgestuerztes Schiff (Objekt) steht auf Gras
     sub[np.isin(sub, list('hp'))] = 'g'
     h = np.ones((R, C), int)
