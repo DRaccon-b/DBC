@@ -22,7 +22,7 @@ C, R, T = 130, 110, 16
 REF = {'n': (99, 142, 67), 'g': (168, 178, 177), 's': (52, 61, 73), 'p': (176, 163, 137), 'd': (162, 133, 95),
        'w': (49, 91, 135), 'k': (145, 159, 164)}
 GEBAEUDE = [  # x0, y0, x1, y1 (Kacheln, Fuss = y1), Art
-    [50, 0, 78, 26, 'fernsehturm'], [4, 16, 41, 30, 'buero_lang'], [88, 32, 105, 44, 'buero_glas'],
+    [50, 0, 79, 26, 'fernsehturm'], [4, 16, 41, 30, 'buero_lang'], [88, 32, 105, 44, 'buero_glas'],
     [119, 34, 127, 44, 'buero_klein'], [24, 56, 57, 66, 'laeden'], [64, 56, 93, 66, 'buero_flach'],
     [119, 56, 128, 66, 'buero_klein2'], [3, 70, 22, 78, 'bahnhof']]
 BRUECKE = (110, 0, 117, 21)       # Bruecke ueber das Wasser (Fahrbahn 112-115, Gehwege/Gelaender aussen)

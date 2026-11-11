@@ -14,6 +14,7 @@ from PIL import Image, ImageFilter
 import karte04_bauen as k4
 import karte08_bauen as k8
 import karte18_bauen as k18
+import karte06_bauen as k6
 
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
 KARTE = os.path.join(ROOT, 'maps', 'karte30')
@@ -195,11 +196,27 @@ def bauen(frame=None, speichern=True):
         objs = sorted((o for o in json.load(open(pf)) if os.path.exists(os.path.join(OBJ, o['datei']))),
                       key=lambda o: o.get('sortier', o['y'] + o['fuss']))
         cache = {o['datei']: Image.open(os.path.join(OBJ, o['datei'])).convert('RGBA') for o in objs}
-        k8.schatten_ebene(img, [o for o in objs if not o.get('kein_schatten') and not o.get('hochbahn')], cache, lvl)
-        k4.objekte_zeichnen(img, [o for o in objs if not o.get('hochbahn')], cache, np.zeros((Hp, Wp), bool),
-                            frame if frame is not None else 0)
+        f_ = frame if frame is not None else 0
+        for o in objs:                                                # Riesenrad: Ring und Gondeln drehen sich
+            if o.get('anim') == 'riesenrad':
+                d_ = 'gebaeude/riesenrad_%d.png' % (f_ % 4)
+                cache[o['datei']] = Image.open(os.path.join(OBJ, d_)).convert('RGBA')
+        boden = land & (lvl != 9)
+        boden_sch = boden.copy()
+        for o in objs:                                                # kein Schatten der Baeume im Waldrand
+            pass
+        k4.objekte_zeichnen(img, [o for o in objs if not o.get('hochbahn') and o.get('anim') != 'riesenrad'] , cache,
+                            boden_sch, f_, ebenen=lvl)
+        rr = [o for o in objs if o.get('anim') == 'riesenrad']
+        for o in rr:                                                  # Riesenrad nach Fusshoehe einsortiert ueber allem
+            img.alpha_composite(cache[o['datei']], (o['x'], o['y']))
+        nach = [o for o in objs if not o.get('hochbahn') and o.get('anim') != 'riesenrad' and rr and
+                o['y'] + o['fuss'] > rr[0]['y'] + rr[0]['fuss']]
+        for o in nach:
+            img.alpha_composite(cache[o['datei']], (o['x'], o['y']))
         img = img.copy()
-        k4.animieren(img, [o for o in objs if not o.get('hochbahn')], cache, frame or 0, ruhig=frame is None)
+        k4.animieren(img, [o for o in objs if not o.get('hochbahn')], cache, f_, ruhig=frame is None)
+        k6.animieren_k6(img, [o for o in objs if not o.get('hochbahn')], cache, f_)
         zuege = [o for o in objs if o.get('hochbahn')]
         if zuege:
             zug = cache[zuege[0]['datei']]

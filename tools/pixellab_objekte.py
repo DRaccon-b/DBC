@@ -1582,7 +1582,9 @@ def herunterladen(oid, d):
 
 
 def speichern(gruppe, ims, ids):
-    if gruppe.startswith('k29_'):
+    if gruppe.startswith('k30_'):
+        ziel = os.path.join(ROOT, 'assets', 'objekte', 'karte30', gruppe[4:])
+    elif gruppe.startswith('k29_'):
         ziel = os.path.join(ROOT, 'assets', 'objekte', 'karte29', gruppe[4:])
     elif gruppe.startswith('k28_'):
         ziel = os.path.join(ROOT, 'assets', 'objekte', 'karte28', gruppe[4:])
@@ -1983,6 +1985,20 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'wide craggy dark grey sea rock with several pointed peaks and cracks, barnacles at the bottom, on wet sand, ' + FR14,
         'tall dark jagged rock spire rising out of dark grey water with a small foam ring at its base, ' + FR14,
     ]},
+    'k30_buero1': {'size': 192, 'items': [
+        'small five-storey office building for a sunny city, beige cream facade with rows of small blue windows, flat grey '
+        'roof with parapet visible from slightly above, glass ground floor with an entrance door with an orange frame, ' + FR14,
+    ]},
+    'k30_buero2': {'size': 192, 'items': [
+        'small four-storey office building for a sunny city, light beige facade with rows of blue windows and white frames, '
+        'flat grey roof with a small rooftop box visible from slightly above, glass ground floor with a door, ' + FR14,
+    ]},
+    'k30_klein': {'size': 64, 'items': [
+        'green copper statue of a crowned woman holding a torch up high and a tablet, standing on a tall stone pedestal, ' + FR14,
+        'small ticket kiosk booth with a blue roof and warm yellow lit windows, white walls, ' + FR14,
+        'red public telephone booth with glass windows and a small roof, ' + FR14,
+        'pink cherry blossom tree in full bloom with a short brown trunk, round fluffy crown, ' + FR14,
+    ]},
     'k29_wrack1': {'size': 192, 'items': [
         'large old wooden shipwreck lying on dark grey sand, broken hull tilted to one side, snapped mast with torn grey sail, '
     ]},
@@ -2094,8 +2110,8 @@ def erzeugen(gruppe):
         d = warte(oid)
         speichern(gruppe, *herunterladen(oid, d))
         return
-    if gruppe.startswith(('k20_', 'k21_', 'k23_', 'k24_', 'k25_', 'k26_', 'k27_', 'k28_', 'k29_')):
-        g = (OBJEKTGRUPPEN_K21 if gruppe.startswith(('k21_', 'k23_', 'k24_', 'k25_', 'k26_', 'k27_', 'k28_', 'k29_')) else OBJEKTGRUPPEN_K20)[gruppe]
+    if gruppe.startswith(('k20_', 'k21_', 'k23_', 'k24_', 'k25_', 'k26_', 'k27_', 'k28_', 'k29_', 'k30_')):
+        g = (OBJEKTGRUPPEN_K21 if gruppe.startswith(('k21_', 'k23_', 'k24_', 'k25_', 'k26_', 'k27_', 'k28_', 'k29_', 'k30_')) else OBJEKTGRUPPEN_K20)[gruppe]
         req = {'description': STIL, 'size': g['size'], 'view': 'top-down',
                'item_descriptions': [it + '. ' + STIL for it in g['items']],
                'target_palette': {'colors': PALETTE, 'name': 'Karte01 handheld'}}

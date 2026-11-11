@@ -67,6 +67,32 @@ AUFTRAEGE['wrack'] = {'ziel': 'assets/objekte/karte27/wrack', 'groesse': (320, 2
              'eye window dark and cracked, torn plates and jagged black debris sticking out, scorch marks, '
              'seen from the side as a flat 2D profile, no background, ' + FR14)}
 
+# ---- Karte 30 Odaiba: grosse Gebaeude (> 256 px) nach der Vorlage, frontal mit Dach von leicht oben
+_K30 = ('city building for a sunny bay-side district, daytime, seen from the front with the flat roof visible from slightly '
+        'above, clean pixel art, light from the top left, no ground, no background, ')
+_K30_STIL = 'assets/objekte/karte18/gebaeude/wohnblock.png'
+for _n, _box, _t in (
+        ('fernsehturm', (800, 0, 1280, 432), 'big futuristic TV station headquarters: two tall light grey towers with a grid '
+         'of blue square windows, between them a lattice frame holding a large silver sphere, below a huge dark blue glass '
+         'atrium with an entrance and a wide stone staircase in the middle leading down, '),
+        ('buero_lang', (64, 256, 672, 496), 'long six-storey office building, beige cream facade with rows of small blue '
+         'windows, a grey flat roof with a parapet, a glass ground floor with a central entrance door, '),
+        ('buero_glas', (1408, 512, 1696, 720), 'modern office building with a blue glass curtain wall in horizontal bands, '
+         'grey flat roof with parapet, glass entrance in the middle of the ground floor, '),
+        ('laeden', (384, 896, 928, 1072), 'long two-storey shopping building, light grey and lavender facade with rows of '
+         'warm yellow lit windows, flat grey roof, glass ground floor with two shop entrances with pink awnings, '),
+        ('buero_flach', (1024, 896, 1504, 1072), 'long low modern office building with a blue glass curtain wall in four '
+         'horizontal bands, flat grey roof with parapet, glass entrance on the ground floor, '),
+        ('bahnhof', (48, 1120, 368, 1264), 'small elevated railway station building, light lavender facade, dark blue roof '
+         'band, a sign board with the word ODAIBA and a round clock above the golden lit glass entrance, blue windows left '
+         'and right, '),
+        ('riesenrad', (1552, 688, 1824, 1056), 'big ferris wheel: a white steel ring with thin spokes from the hub, many '
+         'small colourful round gondolas hanging around the ring, two white A-frame legs standing on the ground, '),
+):
+    AUFTRAEGE['k30_' + _n] = {'ziel': 'assets/objekte/karte30/gross_' + _n, 'groesse': (_box[2] - _box[0], _box[3] - _box[1]),
+                             'vorlage': ('assets/vorlagen/karte30_vorlage.png', _box), 'stil': _K30_STIL,
+                             'text': _t + _K30 + FR14}
+
 
 def main(name):
     a = AUFTRAEGE[name]
