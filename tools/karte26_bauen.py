@@ -248,6 +248,41 @@ def boden_details(a, cls, sperre, seed=2626):
                 a[y0 + 2, x0 + 2:x0 + 14] = L; a[y0 + 2:y0 + 14, x0 + 2] = L
 
 
+BODEN_SPRITES = [2, 3, 4, 5, 6, 11, 22, 40, 53, 57]       # PixelLab k26_boden (Nutzer: ueber PixelLab), flach liegend
+
+
+def boden_details_pixellab(a, cls, sperre, seed=2626):
+    """Bodendetails aus PixelLab (k26_boden): Papier, Zahnraeder, Abfluesse, Schrauben, Oelflecken, Gullydeckel,
+    Schraubenschluessel. Flach in den Boden gestempelt (kein Schatten), moderat, nie zwei nebeneinander, nur auf
+    freiem Stahlboden."""
+    import random
+    rs = random.Random(seed)
+    sps = {n: Image.open(os.path.join(OBJ, 'boden', '%02d.png' % n)).convert('RGBA') for n in BODEN_SPRITES}
+    R, C = len(cls), len(cls[0])
+    frei = np.kron(np.array([[c == '.' for c in z] for z in cls]), np.ones((T, T), bool)) & ~sperre
+    belegt = set()
+    im = Image.fromarray(a).convert('RGBA')
+    for ty in range(1, R - 1):
+        for tx in range(1, C - 1):
+            if cls[ty][tx] != '.' or rs.random() > 0.06:
+                continue
+            if any((ty + dy, tx + dx) in belegt for dy in (-2, -1, 0, 1, 2) for dx in (-2, -1, 0, 1, 2)):
+                continue
+            sp = sps[rs.choice(BODEN_SPRITES)]
+            if rs.random() < 0.5:
+                sp = sp.transpose(Image.FLIP_LEFT_RIGHT)
+            x = tx * T + 8 - sp.width // 2
+            y = ty * T + 8 - sp.height // 2
+            al = np.array(sp)[..., 3] > 0
+            ys, xs = np.nonzero(al)
+            Y, X = ys + y, xs + x
+            if Y.min() < 0 or X.min() < 0 or Y.max() >= frei.shape[0] or X.max() >= frei.shape[1] or not frei[Y, X].all():
+                continue
+            belegt.add((ty, tx))
+            im.alpha_composite(sp, (x, y))
+    a[:] = np.array(im.convert('RGB'))
+
+
 def bauen(frame=None, speichern=True):
     lay = json.load(open(os.path.join(KARTE, 'layout.json')))
     cls = lay['klassen']
@@ -279,7 +314,7 @@ def bauen(frame=None, speichern=True):
     sperre = tm.copy()                                                 # keine Details auf Teppich und an Teleportern
     for tp in lay['teleporter']:
         sperre[(tp['y'] - 1) * T:(tp['y'] + tp['h'] + 1) * T, (tp['x'] - 1) * T:(tp['x'] + tp['b'] + 1) * T] = True
-    boden_details(a, cls, sperre)
+    boden_details_pixellab(a, cls, sperre)             # PixelLab-Variante (Nutzer); boden_details() = gezeichnete Variante
     zellengitter(a, frame)
     for tp in lay['teleporter']:
         k18.teleporter(a, tp, frame)

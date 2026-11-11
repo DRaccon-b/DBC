@@ -1940,6 +1940,13 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'yellow industrial robot loader arm on a round black base, bent arm with a gripper claw, ' + FR14,
         'flat red cross shaped floor marking painted on a metal floor, ' + FR14,
     ]},
+    'k26_boden': {'size': 32, 'items': [
+        'thin dark crack in a dark blue-grey steel floor plate, seen from directly above, lying completely flat on the floor, no height, no shadow, classic 2D handheld RPG style',
+        'broken cracked dark blue-grey steel floor plate with a chipped corner, seen from directly above, lying completely flat on the floor, no height, no shadow, classic 2D handheld RPG style',
+        'a few crumpled white paper scraps, seen from directly above, lying completely flat on the floor, no height, no shadow, classic 2D handheld RPG style',
+        'small black metal gear cog, seen from directly above, lying completely flat on the floor, no height, no shadow, classic 2D handheld RPG style',
+        'small square dark metal floor drain grate with slots, seen from directly above, lying completely flat on the floor, no height, no shadow, classic 2D handheld RPG style',
+    ]},
     'k24_schrein': {'size': 64, 'items': [
         'dark emperor throne made of jagged black obsidian crystal spikes with deep purple and crimson highlights, a high '
         'pointed back, standing on a small stepped dark stone dais, ' + FR14,
