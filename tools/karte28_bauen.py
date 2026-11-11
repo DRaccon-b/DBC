@@ -65,15 +65,23 @@ def bauen(frame=None, speichern=True):
     Wp, Hp = cols * T, rows * T
     hp = np.kron(np.array([[int(c) for c in z] for z in lay['hoehe']]), np.ones((T, T), int))
     basis = os.path.join(ROOT, 'assets', 'basis')
-    b12 = os.path.join(ROOT, 'assets', 'karte12', 'basis')          # dunkler Wald (Nutzer): Boeden von Karte 12
-    gras = flaeche(k6.kacheln(os.path.join(b12, 'v_%d.png'), 5), cols, rows)      # Moos statt Wiese
-    waldboden = flaeche(k6.kacheln(os.path.join(b12, 'g_%d.png'), 5), cols, rows)
-    sand = flaeche(k6.kacheln(os.path.join(b12, 'q_%d.png'), 5), cols, rows)      # Trampelpfad statt Sandweg
-    erde = flaeche(k6.kacheln(os.path.join(b12, 'd_%d.png'), 5), cols, rows)      # dunkle Walderde
+    # dunkler Wald (Nutzer): Kacheln von Karte 01 (GBA-Stil wie die anderen Karten), nur dunkler und kuehler gefaerbt
+    def dunkelgruen(a_):
+        return a_ * np.array([0.5, 0.6, 0.58], np.float32)
+    def walddunkel(a_):
+        return a_ * np.array([0.42, 0.52, 0.5], np.float32)
+    def pfad(a_):
+        return k23.braun(a_) * np.array([0.72, 0.68, 0.64], np.float32)
+    def walderde(a_):
+        return k23.braun(a_) * np.array([0.62, 0.56, 0.52], np.float32)
+    gras = flaeche(k6.kacheln(os.path.join(basis, 'gras_%d.png'), 5, dunkelgruen), cols, rows)
+    waldboden = flaeche(k6.kacheln(os.path.join(basis, 'gras_%d.png'), 5, walddunkel), cols, rows)
+    sand = flaeche(k6.kacheln(os.path.join(basis, 'sand_%d.png'), 5, pfad), cols, rows)
+    erde = flaeche(k6.kacheln(os.path.join(basis, 'sand_%d.png'), 5, walderde), cols, rows)
     stein = flaeche(k6.kacheln(os.path.join(basis, 'sand_%d.png'), 5, grau), cols, rows)
     a = gras.copy()
     wm = weich(zell_maske(cls, 'h', cols, rows), 5, 0.4, 3)          # Waldboden (Baeume sind Objekte)
-    a[wm] = (waldboden[wm] * 0.82).astype(np.uint8)
+    a[wm] = waldboden[wm]
     # Steinplatz rechts: grauer Boden, Erdflecken mit weichem Rand
     km = weich(zell_maske(cls, 'k', cols, rows), 5.0, 0.4, 11)
     a[km] = stein[km]
