@@ -43,15 +43,11 @@ THRONSAAL = (                                                    # Kommandobruec
 KAPSEL, TANK, SERVER, FROST, LABTISCH, CHEMIE, REAKTOR, PULT, FAESSER, KABEL, STEUER = (
     'labor/00', 'tank/00', 'labor/09', 'labor/02', 'labor/01', 'labor/08', 'tank/02', 'labor/10', 'labor/12',
     'labor/03', 'labor/05')
-LABOR = (                                                        # Brutlabor oben rechts (eigene PixelLab-Objekte k26_labor/k26_tank)
+LABOR = (                                                        # Brutlabor oben rechts, aufgeraeumt (Nutzer: weniger)
     [(TANK, 13, {'px': 64 * T}), (TANK, 24, {'px': 64 * T})]      # zwei grosse Stasis-Tanks wie in der Vorlage
-    + [(KAPSEL, r, {'px': x * T, 'anim': 'lampe'}) for r in (11, 15, 19) for x in (44, 47)]          # Brutkapseln links
-    + [(KAPSEL, r, {'px': x * T, 'anim': 'lampe'}) for r in (11, 15, 19) for x in (53, 56, 59)]      # und Mitte
-    + [(SERVER, 9, {'px': 71 * T, 'anim': 'lampe'}), (SERVER, 9, {'px': 75 * T, 'anim': 'lampe'}),
-       (FROST, 9, {'px': 50 * T, 'anim': 'lampe'}), (LABTISCH, 10, {'px': 80 * T, 'anim': 'lampe'}),
-       (STEUER, 13, {'px': 87 * T + 8, 'anim': 'lampe'}), (CHEMIE, 16, {'px': 80 * T}),
-       (REAKTOR, 23, {'px': 78 * T, 'anim': 'lampe'}), (PULT, 21, {'px': 71 * T, 'anim': 'lampe'}),
-       (FAESSER, 24, {'px': 84 * T}), (KABEL, 18, {'px': 67 * T + 8}), (KABEL, 23, {'px': 50 * T})]
+    + [('kapsel/%02d' % n, r, {'px': x * T})    # Brutkapseln mit kleinen Digimon (Nutzer), 3 x 2
+       for (n, x, r) in ((0, 46, 12), (1, 50, 12), (2, 54, 12), (5, 46, 18), (12, 50, 18), (13, 54, 18))]
+    + [(SERVER, 9, {'px': 72 * T}), (LABTISCH, 10, {'px': 79 * T})]
 )
 
 
