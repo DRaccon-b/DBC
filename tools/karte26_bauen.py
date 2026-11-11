@@ -175,6 +175,79 @@ def zellengitter_alt(a, frame):
         a[y0:y1, x + 2:x + 4] = (a[y0:y1, x + 2:x + 4] * 0.65).astype(np.uint8)
 
 
+def boden_details(a, cls, sperre, seed=2626):
+    """Flache Bodendetails (Nutzer): Risse, gesprungene Platten, Papierfetzen, kleine schwarze Zahnraeder, Abfluesse.
+    Alles liegt in der Bodenebene (keine Hoehe, kein Schatten nach oben) - man kann darueber laufen. Moderat verteilt,
+    je Kachel hoechstens ein Detail, nie zwei nebeneinander, nur auf Stahlboden ('.')."""
+    import random
+    rs = random.Random(seed)
+    R, C = len(cls), len(cls[0])
+    belegt = set()
+    D, M, L = np.array(H('#14161f')), np.array(H('#2a2f40')), np.array(H('#5a6278'))
+
+    def dunkel(y, x, f):
+        a[y, x] = (a[y, x] * f).astype(np.uint8)
+
+    for ty in range(1, R - 1):
+        for tx in range(1, C - 1):
+            if cls[ty][tx] != '.' or rs.random() > 0.075:
+                continue
+            if any((ty + dy, tx + dx) in belegt for dy in (-1, 0, 1) for dx in (-1, 0, 1)):
+                continue
+            x0, y0 = tx * T, ty * T
+            if sperre[y0:y0 + T, x0:x0 + T].any():
+                continue
+            belegt.add((ty, tx))
+            art = rs.choices(['riss', 'platte', 'papier', 'zahnrad', 'abfluss'], [4, 2, 3, 2, 1])[0]
+            if art == 'riss':                                         # feiner Riss mit heller Kante
+                x, y = x0 + rs.randint(3, 6), y0 + rs.randint(3, 6)
+                for _ in range(rs.randint(7, 12)):
+                    if x0 < x < x0 + 15 and y0 < y < y0 + 15:
+                        dunkel(y, x, 0.45)
+                        if y > y0 + 1:
+                            a[y - 1, x] = np.clip(a[y - 1, x].astype(int) + 14, 0, 255)
+                    x += rs.choice([1, 1, 0]); y += rs.choice([0, 1, 1])
+            elif art == 'platte':                                     # gesprungene Platte: dunkler, Sprung, Ecke fehlt
+                sub = a[y0 + 1:y0 + 15, x0 + 1:x0 + 15]
+                sub[:] = (sub * 0.82).astype(np.uint8)
+                x, y = x0 + 2, y0 + rs.randint(3, 11)
+                while x < x0 + 14:
+                    dunkel(y, x, 0.4)
+                    x += 1; y += rs.choice([-1, 0, 0, 1]); y = min(max(y, y0 + 2), y0 + 13)
+                for k in range(4):                                    # abgeplatzte Ecke unten rechts
+                    a[y0 + 13 - k:y0 + 14, x0 + 10 + k] = D
+            elif art == 'papier':                                     # zwei Papierfetzen
+                for _ in range(rs.randint(1, 2)):
+                    px, py = x0 + rs.randint(2, 9), y0 + rs.randint(2, 9)
+                    w, h = rs.randint(4, 5), rs.randint(3, 4)
+                    a[py + 1:py + h + 1, px + 1:px + w + 1] = (a[py + 1:py + h + 1, px + 1:px + w + 1] * 0.6).astype(np.uint8)
+                    a[py:py + h, px:px + w] = H('#c8c4b4')
+                    a[py + 1, px + 1:px + w - 1] = H('#8a8678')
+                    if h > 3:
+                        a[py + 2, px + 1:px + w - 2] = H('#8a8678')
+            elif art == 'zahnrad':                                    # kleines schwarzes Zahnrad, flach liegend
+                cx, cy = x0 + 8, y0 + 8
+                yy, xx = np.mgrid[-6:7, -6:7]
+                r = np.hypot(xx, yy)
+                ang = np.arctan2(yy, xx)
+                zahn = (np.cos(ang * 8) > 0.3) & (r <= 5.6)
+                koerper = (r <= 4.2) | zahn
+                loch = r <= 1.5
+                for (dy, dx) in zip(*np.nonzero(koerper & ~loch)):
+                    Y, X = cy + dy - 6, cx + dx - 6
+                    a[Y + 1, X + 1] = (a[Y + 1, X + 1] * 0.7).astype(np.uint8)
+                for (dy, dx) in zip(*np.nonzero(koerper & ~loch)):
+                    Y, X = cy + dy - 6, cx + dx - 6
+                    a[Y, X] = M if (dx + dy) < 12 else D
+                a[cy - 3, cx - 2:cx + 1] = L
+            else:                                                     # Abfluss: Gitter mit Rahmen
+                a[y0 + 2:y0 + 14, x0 + 2:x0 + 14] = M
+                a[y0 + 3:y0 + 13, x0 + 3:x0 + 13] = D
+                for k in range(4, 13, 3):
+                    a[y0 + 4:y0 + 12, x0 + k] = H('#3a4054')
+                a[y0 + 2, x0 + 2:x0 + 14] = L; a[y0 + 2:y0 + 14, x0 + 2] = L
+
+
 def bauen(frame=None, speichern=True):
     lay = json.load(open(os.path.join(KARTE, 'layout.json')))
     cls = lay['klassen']
@@ -203,6 +276,10 @@ def bauen(frame=None, speichern=True):
     wm = maske(cls, 'W')
     paneelwand(a, wm, frame)
     warnstreifen(a, maske(cls, 'r'))
+    sperre = tm.copy()                                                 # keine Details auf Teppich und an Teleportern
+    for tp in lay['teleporter']:
+        sperre[(tp['y'] - 1) * T:(tp['y'] + tp['h'] + 1) * T, (tp['x'] - 1) * T:(tp['x'] + tp['b'] + 1) * T] = True
+    boden_details(a, cls, sperre)
     zellengitter(a, frame)
     for tp in lay['teleporter']:
         k18.teleporter(a, tp, frame)
