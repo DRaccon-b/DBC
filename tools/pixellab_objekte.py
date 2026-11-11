@@ -1995,6 +1995,11 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
     'k29_wrack4': {'size': 192, 'items': [
         'large shipwreck stranded on a dark grey shore, bow sticking up, broken hull planks, short broken mast with a shredded '
     ]},
+    'k29_symbol': {'size': 128, 'items': [
+        'large round ancient carved stone floor mosaic seen from directly above, lying flat on the ground: a stylized octopus '
+        'head in the center with eight curling tentacles spiraling outward, inside a circle of strange runes, dark grey stone '
+        'with faint teal green inlays, no background, classic 2D handheld RPG style',
+    ]},
     'k29_felsen': {'size': 64, 'items': [
         'small jagged dark black grey rock spire with sharp facets, on grey sand, ' + FR14,
         'medium pointed dark slate rock with cracks and a bit of moss, on grey sand, ' + FR14,

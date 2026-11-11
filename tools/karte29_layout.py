@@ -22,9 +22,9 @@ VORLAGE = os.path.join(ROOT, 'assets', 'vorlagen', 'karte29_vorlage.png')
 C, R, T = 90, 80, 16
 REF = {'x': (53, 79, 104), 's': (101, 143, 154), 'g': (118, 138, 150), 'l': (152, 158, 170), 'r': (122, 130, 145),
        'm': (55, 62, 78), 'b': (10, 10, 18)}
-FELSEN = [(82, 18, 86, 23)]                       # Felsblock als Hochflaeche (nur noch rechts im Meer)
+FELSEN = []                                      # (Nutzer: keine Felsbloecke als Hochflaeche mehr)
 FELSEN_OBJ = [(44, 6, 52, 11), (60, 5, 65, 9), (4, 23, 7, 32), (22, 26, 30, 33), (43, 28, 46, 33), (7, 42, 14, 47),
-              (30, 47, 35, 52), (20, 58, 27, 63), (36, 66, 39, 70)]   # Nutzer: hier Felsobjekte (PixelLab k29_felsen) statt Bloecke
+              (30, 47, 35, 52), (20, 58, 27, 63), (36, 66, 39, 70), (82, 18, 86, 23)]   # Nutzer: hier Felsobjekte (PixelLab k29_felsen) statt Bloecke
 LANDEPLATZ = (4, 7, 15, 17)                      # gepflasterter Platz oben links (Portal, Laternen)
 PLATZ = (47, 45, 72, 66)                         # Tempelplatz (x0, y0, x1, y1) Kacheln, Front darunter
 PLATZ_TREPPE = (59, 62)                          # Treppe in der Suedfront (Spalten)

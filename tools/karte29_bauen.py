@@ -204,6 +204,16 @@ def bauen(frame=None, speichern=True):
     a[qm] = pf[qm]
     pm = maske(cls, 'p')
     a[pm] = pflaster(cols, rows, 1.08)[pm]
+    sym = np.array(Image.open(os.path.join(ROOT, 'assets', 'objekte', 'karte29', 'symbol', '00.png')).convert('RGBA'),
+                   np.float32)                                       # Bodenmosaik (Krake im Runenkreis), begehbar
+    l_ = sym[..., :3].mean(2, keepdims=True)
+    sym[..., :3] = (sym[..., :3] * 0.6 + l_ * 0.4) * 0.92
+    px0_, py0_, px1_, py1_ = lay['platz']
+    sx_ = (px0_ + px1_ + 1) * T // 2 - sym.shape[1] // 2
+    sy_ = py0_ * T + 224 - sym.shape[0] // 2
+    al_ = sym[..., 3:] / 255 * 0.92
+    ziel_ = a[sy_:sy_ + sym.shape[0], sx_:sx_ + sym.shape[1]].astype(np.float32)
+    a[sy_:sy_ + sym.shape[0], sx_:sx_ + sym.shape[1]] = (ziel_ * (1 - al_) + sym[..., :3] * al_).astype(np.uint8)
     for m_ in (pm,):
         rand_ = m_ & ~(np.roll(m_, 1, 0) & np.roll(m_, -1, 0) & np.roll(m_, 1, 1) & np.roll(m_, -1, 1))
         a[rand_] = H('#3a3f4e')

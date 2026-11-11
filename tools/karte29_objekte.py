@@ -102,10 +102,13 @@ def main():
     setze('gross/02', 864, py0 * T + 94, {})                                 # Statue des Meeresgottes (links oben im Tempel)
     px0, _, px1, py1 = lay['platz']
     achse = (px0 + px1 + 1) * T // 2                                         # Saeulenpaare spiegelsymmetrisch zur Platzachse
-    for fy in (py0 * T + 120, py0 * T + 218, py0 * T + 312):
+    sl = np.array(Image.open(os.path.join(OBJ, 'mittel/00.png')).convert('RGBA'))   # hoehere Saeule: Schaft verlaengert
+    hoch = np.concatenate([sl[:30], sl[18:30], sl[18:30], sl[30:]], 0)
+    Image.fromarray(hoch).save(os.path.join(OBJ, 'mittel/00_hoch.png'))
+    for fy in (py0 * T + 120, py0 * T + 328):                               # (Nutzer: mittleres Paar weg, unteres tiefer)
         for sd in (-1, 1):
-            setze('mittel/00', achse + sd * 168, fy, {})
-    for (cx, fy) in ((940, py0 * T + 70), (1086, py0 * T + 124), (872, py0 * T + 292), (990, py0 * T + 274)):
+            setze('mittel/00_hoch', achse + sd * 168, fy, {})
+    for (cx, fy) in ((940, py0 * T + 70), (1086, py0 * T + 124), (852, py0 * T + 250), (1068, py0 * T + 200)):
         setze('mittel/01', cx, fy, {}, rnd.random() < 0.5)                  # Saeulenstuempfe
     setze('k11/wrack', 300, 728, {'liegend': True, 'versatz': 5}, mit_fuss=False, frei=True)   # Schatten flach ueber die ganze Form              # grosses Schiffswrack am Strand
     # ---- Felsgruppen statt der alten Felsbloecke (Nutzer): je nach Flaeche 1-3 Felsen, unregelmaessig versetzt
