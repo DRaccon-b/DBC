@@ -150,9 +150,16 @@ def bauen(frame=None, speichern=True):
     glanz = (wl > np.percentile(wl, 93)) & (stufe >= 1)              # Wellenglanz (wandert)
     a[glanz] = a[glanz] + 14
     a = np.clip(a, 0, 255).astype(np.uint8)
-    for s_ in range(1, 5):                                           # dunkle Abbruchkante an jeder Tiefenstufe
-        kante = (stufe == s_ - 1) & dehnen(stufe >= s_, 3)
-        a[kante] = (a[kante] * 0.86).astype(np.uint8)
+    for s_ in range(1, 5):                                           # sichtbare Abbruchkante an jeder Tiefenstufe (Nutzer):
+        oben_ = stufe < s_                                           # flachere Seite: helle Lippe (1 px) + Kontur,
+        tiefer = stufe >= s_                                         # tiefere Seite: dunkle Abbruchwand (Verlauf 5 px)
+        lippe = oben_ & dehnen(tiefer, 3)
+        kontur = tiefer & dehnen(oben_, 3)
+        a[lippe] = np.clip(a[lippe].astype(np.int16) + 22, 0, 255).astype(np.uint8)
+        a[kontur] = (a[kontur] * 0.55).astype(np.uint8)
+        for d_, fk in ((5, 0.72), (9, 0.82), (13, 0.9)):
+            w_ = tiefer & dehnen(oben_, d_) & ~kontur
+            a[w_] = (a[w_] * fk).astype(np.uint8)
     tief = ~flach & ~land
     # Strand, heller Sand, Pfuetzen bleiben flaches Wasser
     a[land] = strand[land]
