@@ -889,8 +889,9 @@ def bauen(frame=None, speichern=True):
         k4.teleporter_zeichnen(a, tp['x'], tp['y'], tp['b'], tp['h'], frame)
     img = Image.fromarray(a).convert('RGBA')
     r = RAND
-    roter_zaun(img, [(a_ + r, b_ + r, c_ + r, d_) for (a_, b_, c_, d_) in
-                     [(77, 96, 4, 'h'), (77, 96, 24, 'h'), (96, 4, 24, 'v')]], AZUR_ZAUN[:2] + ((0xd8, 0xa8, 0x3c),))
+    zaun_azur = [(a_ + r, b_ + r, c_ + r, d_) for (a_, b_, c_, d_) in [(77, 96, 4, 'h'), (77, 96, 24, 'h'), (96, 4, 24, 'v')]]
+    zaun_pal = AZUR_ZAUN[:2] + ((0xd8, 0xa8, 0x3c),)
+    roter_zaun(img, zaun_azur, zaun_pal)
     roter_zaun(img, [(a_ + r, b_ + r, c_ + r, d_) for (a_, b_, c_, d_) in
                      [(71, 77, 31, 'h'), (83, 89, 31, 'h'), (96, 63, 80, 'v')]])
     if speichern and frame is None:
@@ -902,6 +903,7 @@ def bauen(frame=None, speichern=True):
         cache = {o['datei']: Image.open(os.path.join(OBJ, o['datei'])).convert('RGBA') for o in objs}
         k4.objekte_zeichnen(img, objs, cache, insel, frame)
         k4.animieren(img, objs, cache, frame or 0)
+        roter_zaun(img, zaun_azur, zaun_pal)                         # Schreinzaun liegt ueber den Objekten (Nutzer)
         import karte06_bauen as k6
         k6.animieren_k6(img, objs, cache, frame or 0)
     if speichern and frame is None:
