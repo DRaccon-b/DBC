@@ -96,7 +96,12 @@ def main():
         y = cy_ + math.sin(t) * (ry_ - k28.MAUER_DICKE / 2) * e
         if k28.MAUER_TOR[0] - 12 <= x <= k28.MAUER_TOR[1] + 12 and y > cy_:
             continue
-        mauer_netze.append((int(x) // T, int(y) // T + (1 if math.sin(t) < -0.3 else 0)))
+        ring_px = k28.mauer_maske(rows * T, cols * T)
+        cand = [(abs(xx * T + 8 - x) + abs(yy * T + 8 - y), xx, yy) for yy in range(int(y) // T - 2, int(y) // T + 3)
+                for xx in range(int(x) // T - 2, int(x) // T + 3) if ring_px[yy * T + 8, xx * T + 8]]
+        if cand:
+            _, xx, yy = min(cand)
+            mauer_netze.append((xx, yy))
     NETZ_STELLEN = mauer_netze + [
                     (87, 12), (88, 20), (87, 27), (59, 27), (59, 16),              # Steinplatz aussen
                     (8, 21), (10, 23), (12, 20), (9, 25), (13, 23), (24, 21), (27, 20), (30, 19), (29, 23), (34, 18),

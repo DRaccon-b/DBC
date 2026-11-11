@@ -30179,17 +30179,17 @@
 "anim": "baum"
 },
 {
-"datei": "varianten/netz-03_m.png",
-"basis": "netz/03",
-"x": 1290,
-"y": 244,
-"fuss": 28,
+"datei": "varianten/netz-02.png",
+"basis": "netz/02",
+"x": 1273,
+"y": 240,
+"fuss": 32,
 "kachel": [
-81,
+80,
 16
 ],
 "block": [
-81,
+80,
 16,
 1,
 1
@@ -30198,18 +30198,18 @@
 "schattenlos": true
 },
 {
-"datei": "varianten/netz-02.png",
+"datei": "varianten/netz-02_m.png",
 "basis": "netz/02",
 "x": 1225,
-"y": 352,
+"y": 336,
 "fuss": 32,
 "kachel": [
 77,
-23
+22
 ],
 "block": [
 77,
-23,
+22,
 1,
 1
 ],
@@ -30274,56 +30274,18 @@
 "schattenlos": true
 },
 {
-"datei": "varianten/netz-03_m.png",
-"basis": "netz/03",
-"x": 1002,
-"y": 212,
-"fuss": 28,
+"datei": "varianten/netz-02_m.png",
+"basis": "netz/02",
+"x": 985,
+"y": 192,
+"fuss": 32,
 "kachel": [
-63,
-14
+62,
+13
 ],
 "block": [
-63,
-14,
-1,
-1
-],
-"ebene": 0,
-"schattenlos": true
-},
-{
-"datei": "varianten/netz-03_m.png",
-"basis": "netz/03",
-"x": 1098,
-"y": 148,
-"fuss": 28,
-"kachel": [
-69,
-10
-],
-"block": [
-69,
-10,
-1,
-1
-],
-"ebene": 0,
-"schattenlos": true
-},
-{
-"datei": "varianten/netz-01_m.png",
-"basis": "netz/01",
-"x": 1162,
-"y": 146,
-"fuss": 30,
-"kachel": [
-73,
-10
-],
-"block": [
-73,
-10,
+62,
+13,
 1,
 1
 ],
@@ -30333,16 +30295,54 @@
 {
 "datei": "varianten/netz-00.png",
 "basis": "netz/00",
-"x": 1256,
-"y": 224,
+"x": 1096,
+"y": 128,
 "fuss": 32,
 "kachel": [
+69,
+9
+],
+"block": [
+69,
+9,
+1,
+1
+],
+"ebene": 0,
+"schattenlos": true
+},
+{
+"datei": "varianten/netz-00.png",
+"basis": "netz/00",
+"x": 1160,
+"y": 128,
+"fuss": 32,
+"kachel": [
+73,
+9
+],
+"block": [
+73,
+9,
+1,
+1
+],
+"ebene": 0,
+"schattenlos": true
+},
+{
+"datei": "varianten/netz-01_m.png",
+"basis": "netz/01",
+"x": 1258,
+"y": 210,
+"fuss": 30,
+"kachel": [
 79,
-15
+14
 ],
 "block": [
 79,
-15,
+14,
 1,
 1
 ],

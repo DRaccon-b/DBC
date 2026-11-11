@@ -73,20 +73,28 @@ def rr(xx, yy, x0, y0, x1, y1, r):                                  # abgerundet
 
 
 def mauer_rand(t):                                                  # unregelmaessiger Radius je Winkel (natuerlich)
-    return 1 + 0.07 * np.sin(3 * t + 1.1) + 0.05 * np.sin(5 * t + 2.3) + 0.03 * np.sin(8 * t + 0.4)
+    return 1 + 0.06 * np.sin(3 * t + 1.1) + 0.035 * np.sin(5 * t + 2.3)
 
 
 def mauer_maske(Hh, W):
-    yy, xx = np.mgrid[0:Hh, 0:W]
+    """Organische Ringform, aber am 16er-Raster (Nutzer): eine Kachel gehoert zur Mauer, wenn ihre Mitte im Ring liegt."""
+    rows, cols = Hh // T, W // T
+    ty, tx = np.mgrid[0:rows, 0:cols]
     cx, cy, rx, ry = MAUER_MITTE
     d = MAUER_DICKE
-    dx, dy = xx - cx, yy - cy
+    dx, dy = tx * T + 8 - cx, ty * T + 8 - cy
     e = mauer_rand(np.arctan2(dy / ry, dx / rx))
     aussen = np.hypot(dx / (rx * e), dy / (ry * e)) < 1
-    innen = np.hypot(dx / ((rx - d) * e), dy / ((ry - d) * e)) < 1
-    ring = aussen & ~innen
-    ring &= ~((xx >= MAUER_TOR[0]) & (xx < MAUER_TOR[1]) & (yy > cy))
-    return ring
+    innen = np.hypot(dx / ((rx - d - 6) * e), dy / ((ry - d - 6) * e)) < 1
+    ring_t = aussen & ~innen
+    for _ in range(2):                                               # Diagonalen: Treppenstufen schliessen (mind. 2 Kacheln)
+        luecke = ~ring_t & ~innen & aussen
+        ring_t |= luecke
+        voll = ring_t.copy()
+        voll[1:-1, 1:-1] |= (ring_t[:-2, 1:-1] & ring_t[1:-1, 2:]) | (ring_t[:-2, 1:-1] & ring_t[1:-1, :-2])
+        ring_t = voll & ~innen
+    ring_t &= ~((tx * T >= MAUER_TOR[0]) & (tx * T < MAUER_TOR[1]) & (ty * T > cy))
+    return np.kron(ring_t, np.ones((T, T), bool))
 
 
 def mauer(a, ring, stein):
