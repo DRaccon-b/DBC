@@ -73,7 +73,7 @@ def main():
     Image.fromarray(np.clip(wp, 0, 255).astype(np.uint8)).save(os.path.join(OBJ, 'fremd', 'strudel.png'))
 
     def pfad(name):
-        if name.startswith(('gebaeude/', 'fremd/', 'klein/')):
+        if name.startswith(('gebaeude/', 'fremd/', 'klein/', 'statue/')):
             return name + '.png'
         ziel = 'fremd/' + name.replace('/', '-') + '.png'
         if not os.path.exists(os.path.join(OBJ, ziel)):
@@ -136,7 +136,7 @@ def main():
     objekte.append({'datei': 'fremd/zug.png', 'basis': 'zug', 'x': zx0 * T + (math.ceil(zug.width / T) * T - zug.width) // 2, 'y': 0, 'fuss': zug.height - 1,
                     'kachel': [zx0, 68], 'ebene': 1, 'hochbahn': True})
     setze('fremd/strudel', 6 * T, 102 * T + 10, {'anim': 'portal', 'schattenlos': True}, pruefen=False)
-    setze('klein/00', 88 * T + 8, 90 * T - 2, {})                                    # Statue im Park
+    setze('statue/00', 89 * T, 91 * T - 1, {}, pruefen=False)                       # Freiheitsstatue (gross, Nutzer)
     # ---------------------------------------------------------------- Baeume nach der Vorlage
     BAUM = ['karte01/baeume/00', 'karte01/baeume/01', 'karte01/baeume/02', 'karte01/baeume/04', 'karte01/baeume/15',
             'karte18/baum2/01']                                                       # mehr Arten (Nutzer: Variation)
