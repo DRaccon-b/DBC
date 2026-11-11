@@ -104,21 +104,27 @@ def bauen(frame=None, speichern=True):
     tief_t = flaeche(k6.kacheln(os.path.join(basis, 'wasser_%d.png'), 5, faerben((30, 48, 72), (62, 88, 116))), cols, rows)
     flach_t = flaeche(k6.kacheln(os.path.join(basis, 'wasser_%d.png'), 5, faerben((76, 116, 130), (124, 164, 174))), cols, rows)
     # Wasser: tiefes Meer und flaches Ufer (Wellen wandern je Bild um 2 px)
-    a = np.roll(tief_t, 2 * f, axis=1).copy()
+    # Wasser (Nutzer): schwarzgrau, in Stufen tiefer - im flachen Wasser sieht man den Grund (Sand) durchschimmern
     land_t = maske(cls, 'glrmpqbT')
     flach_roh = maske(cls, 's')
     land = weich(land_t.astype(np.float32), 3, 0.25, 7, 0.5)
     flach = weich((flach_roh | land_t).astype(np.float32), 5, 0.35, 8, 0.5) & ~land
-    a[flach] = np.roll(flach_t, -f, axis=1)[flach]
-    tief = ~flach & ~land                                            # Tiefenstufen: dunkler, je weiter vom Ufer
-    nah_ = np.array(Image.fromarray(((flach | land) * 255).astype(np.uint8)).filter(ImageFilter.GaussianBlur(14))) / 255.0
-    nah2 = np.array(Image.fromarray(((flach | land) * 255).astype(np.uint8)).filter(ImageFilter.GaussianBlur(34))) / 255.0
-    fern = nah_ < 0.04                                               # weiche, runde Tiefenstufen statt Rechtecke
-    sehr = nah2 < 0.04
-    a[tief & fern] = (a[tief & fern] * 0.86).astype(np.uint8)
-    a[tief & sehr] = (a[tief & sehr] * 0.86).astype(np.uint8)
-    kante = flach & dehnen(tief, 3)                                  # Abbruchkante flach -> tief
-    a[kante] = (a[kante] * 0.78).astype(np.uint8)
+    grund = (strand.astype(np.float32) * np.array([0.78, 0.8, 0.84]))  # Meeresgrund: Sand, kuehl
+    def nahe(m, r):
+        return np.array(Image.fromarray((m * 255).astype(np.uint8)).filter(ImageFilter.GaussianBlur(r))) / 255.0
+    n1, n2 = nahe(land | flach, 10), nahe(land | flach, 30)
+    stufe = np.where(flach & (nahe(land, 6) > 0.12), 0, np.where(flach, 1, np.where(n1 > 0.08, 2, np.where(n2 > 0.06, 3, 4))))
+    deck = np.array([0.16, 0.36, 0.60, 0.80, 0.93], np.float32)[stufe][..., None]   # Wasserdeckung je Stufe
+    wfarbe = np.array([38, 41, 46], np.float32)                     # schwarzgrau
+    a = (grund * (1 - deck) + wfarbe * deck)
+    wl = np.roll(np.roll(tief_t, 2 * f, axis=1), f, axis=0).astype(np.float32).mean(axis=2)
+    glanz = (wl > np.percentile(wl, 93)) & (stufe >= 1)              # Wellenglanz (wandert)
+    a[glanz] = a[glanz] + 14
+    a = np.clip(a, 0, 255).astype(np.uint8)
+    for s_ in range(1, 5):                                           # dunkle Abbruchkante an jeder Tiefenstufe
+        kante = (stufe == s_ - 1) & dehnen(stufe >= s_, 3)
+        a[kante] = (a[kante] * 0.86).astype(np.uint8)
+    tief = ~flach & ~land
     # Strand, heller Sand, Pfuetzen bleiben flaches Wasser
     a[land] = strand[land]
     lm = weich(zell_maske(cls, 'l', cols, rows), 5, 0.45, 9) & land
@@ -131,11 +137,20 @@ def bauen(frame=None, speichern=True):
     a[yy[sel], xx[sel]] = H('#c8d6dc')
     # Plaetze: Pflaster oben links (ebenerdig) und Tempelplatz (erhoeht)
     pf = pflaster(cols, rows)
-    qm = maske(cls, 'q')
+    qm = weich(zell_maske(cls, 'q', cols, rows), 22.0, 0.55, 31, 0.5) & land  # Spawnplatz: rundlich, unregelmaessig (Nutzer)
     a[qm] = pf[qm]
+    rs_ = np.random.RandomState(31)                                  # Rand: Steine verstreut im Sand, Sand weht ueber Fugen
+    naeh = dehnen(qm, 9) & ~qm & land
+    lose = naeh & (rs_.rand(Hp, Wp) < 0.0) 
+    blk = np.kron(rs_.rand(rows * 2 + 1, cols * 2 + 1) < 0.35, np.ones((8, 8), bool))[:Hp, :Wp]
+    lose = naeh & blk & ~dehnen(~dehnen(qm, 9), 3)
+    a[lose] = pf[lose]
+    innen_rand = qm & dehnen(~qm, 7) & (np.kron(rs_.rand(rows * 2 + 1, cols * 2 + 1) < 0.5, np.ones((8, 8), bool))[:Hp, :Wp])
+    a[innen_rand] = strand[innen_rand]
+    qm = qm | lose
     pm = maske(cls, 'p')
     a[pm] = pflaster(cols, rows, 1.08)[pm]
-    for m_ in (qm, pm):
+    for m_ in (pm,):
         rand_ = m_ & ~(np.roll(m_, 1, 0) & np.roll(m_, -1, 0) & np.roll(m_, 1, 1) & np.roll(m_, -1, 1))
         a[rand_] = H('#3a3f4e')
     # Felsbloecke: Oberseite Felskacheln, Fronten (Schiefer) nach Sueden, schmale Seitenkanten
