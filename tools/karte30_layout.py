@@ -101,7 +101,7 @@ def main():
     r_(k, 0, 68, 129, 71, 'g')                                       # unter der Hochbahn (verdeckt)
     # ---- Waldrand rechts
     r_(k, 126, 21, 129, 48, 'f'); r_(k, 126, 55, 129, 90, 'f')
-    r_(k, 129, 49, 129, 54, 'f')
+    r_(k, 126, 49, 129, 54, 'f')
     # ---- Strand, Holzpromenade, Pier
     r_(k, 0, 91, 126, 100, 'd')
     for y in range(85, 101):                                         # Bucht am Pier: Wasser aus der Vorlage behalten
