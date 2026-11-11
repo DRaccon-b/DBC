@@ -23,7 +23,11 @@ FREMD = {'k11/wrack': ('karte11/gross/01.png', 1.0), 'k11/anker': ('karte11/land
          'k11/fels2': ('karte11/meer/09.png', 0.95), 'k11/muschel': ('karte11/meer/07.png', 0.85),
          'k11/auster': ('karte11/meer/14.png', 0.85), 'k11/tang': ('karte11/meer/04.png', 0.9),
          'k11/holz': ('karte11/land/06.png', 0.75), 'k11/graete': ('karte11/land/08.png', 0.8),
-         'k11/felsnadel': ('karte11/gross/03.png', 0.8), 'k25/boot': ('karte25/strand/01.png', 0.62), 'k25/bootwrack': ('karte25/strand/13.png', 0.62)}
+         'k11/felsnadel': ('karte11/gross/03.png', 0.8),
+         'fg/0': ('karte29/felsen_gross/00.png', 0.95), 'fg/1': ('karte29/felsen_gross/01.png', 0.95),
+         'fg/w': ('karte29/felsen_gross/03.png', 0.9), 'fk/1': ('karte29/felsen/01.png', 0.95),
+         'fk/2': ('karte29/felsen/02.png', 0.95), 'fk/6': ('karte29/felsen/06.png', 0.95),
+         'fk/13': ('karte29/felsen/13.png', 0.95), 'fk/14': ('karte29/felsen/14.png', 0.95), 'fk/w': ('karte29/felsen/03.png', 0.9), 'k25/boot': ('karte25/strand/01.png', 0.62), 'k25/bootwrack': ('karte25/strand/13.png', 0.62)}
 
 
 def main():
@@ -38,7 +42,7 @@ def main():
         im = np.array(Image.open(os.path.join(ROOT, 'assets', 'objekte', q)).convert('RGBA')).astype(np.float32)
         l = im[..., :3].mean(2, keepdims=True)
         im[..., :3] = (im[..., :3] * 0.55 + l * 0.45) * f            # entsaettigt + dunkler (dunkles Meer)
-        if name == 'k11/felsnadel':                                  # Wasserring am Fuss grau wie das Meer der Karte
+        if name == 'k11/felsnadel' or name[:3] in ('fg/', 'fk/'):   # Felsen grau wie das Meer der Karte (kein Tuerkis)                                  # Wasserring am Fuss grau wie das Meer der Karte
             im[..., :3] = l * f * np.array([0.96, 1.0, 1.04])
         os.makedirs(os.path.dirname(os.path.join(OBJ, name + '.png')), exist_ok=True)
         Image.fromarray(np.clip(im, 0, 255).astype(np.uint8)).save(os.path.join(OBJ, name + '.png'))
@@ -96,6 +100,26 @@ def main():
     for (cx, fy) in ((940, py0 * T + 70), (1086, py0 * T + 124), (872, py0 * T + 292), (990, py0 * T + 274)):
         setze('mittel/01', cx, fy, {}, rnd.random() < 0.5)                  # Saeulenstuempfe
     setze('k11/wrack', 365, 652, {'liegend': True}, mit_fuss=False, frei=True)   # Schatten flach ueber die ganze Form              # grosses Schiffswrack am Strand
+    # ---- Felsgruppen statt der alten Felsbloecke (Nutzer): je nach Flaeche 1-3 Felsen, unregelmaessig versetzt
+    for i, (x0, y0, x1, y1) in enumerate(lay['felsen_obj']):
+        w, h = x1 - x0 + 1, y1 - y0 + 1
+        nass = cls[(y0 + y1) // 2][(x0 + x1) // 2] in 'xs'
+        cx, cy = (x0 + x1 + 1) * T // 2, (y1 + 1) * T - 6
+        if nass:
+            gruppe = [('fg/w', 0, 0)] + ([('fk/w', -26 if i % 2 else 26, -10)] if w * h >= 16 else [])
+        elif w >= 8:
+            gruppe = [('fg/%d' % (i % 2), -6, -8), ('fk/%d' % (13, 1, 6)[i % 3], -40, 0), ('fk/%d' % (2, 14, 1)[i % 3], 34, -16)]
+        elif h >= 8:
+            gruppe = [('fg/%d' % (i % 2), 0, -56), ('fk/%d' % (13, 6)[i % 2], 4, 0)]
+        else:
+            gruppe = [('fg/%d' % ((i + 1) % 2), -14, -4), ('fk/%d' % (6, 2, 14)[i % 3], 30, 0)]
+        for (n, dx, dy) in sorted(gruppe, key=lambda g: g[2]):
+            o = setze(n, cx + dx, cy + dy, {'schattenlos': n.endswith('/w')}, (i + dx) % 2 == 0,
+                      mit_fuss=not n.endswith('/w'), auf='egal' if nass else 'land', frei=False)
+            if o:                                                    # ganzer Felskoerper gesperrt: kein Kleinkram dahinter
+                fx, fy_ = o['x'], o['y']
+                sp_ = Image.open(os.path.join(OBJ, o['datei'])); b_ = sp_.getbbox()
+                fuesse.append((fx + b_[0] - 4, fy_ + b_[1] - 4, fx + b_[2] + 4, fy_ + b_[3] + 6))
     # ---- Portale / Teleporter (animiert)
     setze('k07_portal', 88, 104, {'anim': 'portal'}, mit_fuss=False, frei=False)        # Spawn: Portal wie Holy Peaks (Nutzer)
     setze('k11/felsnadel', 1360, 112, {}, mit_fuss=False, auf='egal', frei=False)   # Felsnadel im Meer (Nutzer: statt Riss)

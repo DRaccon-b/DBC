@@ -22,8 +22,9 @@ VORLAGE = os.path.join(ROOT, 'assets', 'vorlagen', 'karte29_vorlage.png')
 C, R, T = 90, 80, 16
 REF = {'x': (53, 79, 104), 's': (101, 143, 154), 'g': (118, 138, 150), 'l': (152, 158, 170), 'r': (122, 130, 145),
        'm': (55, 62, 78), 'b': (10, 10, 18)}
-FELSEN = [(44, 6, 52, 11), (60, 5, 65, 9), (4, 23, 7, 32), (22, 26, 30, 33), (43, 28, 46, 33), (7, 42, 14, 47),
-          (30, 47, 35, 52), (20, 58, 27, 63), (36, 66, 39, 70), (82, 18, 86, 23)]   # Felsbloecke (x0, y0, x1, y1)
+FELSEN = [(82, 18, 86, 23)]                       # Felsblock als Hochflaeche (nur noch rechts im Meer)
+FELSEN_OBJ = [(44, 6, 52, 11), (60, 5, 65, 9), (4, 23, 7, 32), (22, 26, 30, 33), (43, 28, 46, 33), (7, 42, 14, 47),
+              (30, 47, 35, 52), (20, 58, 27, 63), (36, 66, 39, 70)]   # Nutzer: hier Felsobjekte (PixelLab k29_felsen) statt Bloecke
 LANDEPLATZ = (4, 7, 15, 17)                      # gepflasterter Platz oben links (Portal, Laternen)
 PLATZ = (47, 45, 72, 66)                         # Tempelplatz (x0, y0, x1, y1) Kacheln, Front darunter
 PLATZ_TREPPE = (59, 62)                          # Treppe in der Suedfront (Spalten)
@@ -94,6 +95,14 @@ def main():
             for x in range(bx // T - 3, bx // T + 4):
                 if k[y, x] == 's':
                     k[y, x] = 'g'
+    for (x0, y0, x1, y1) in FELSEN_OBJ:                             # Untergrund: Strand, oder Flachwasser wenn ringsum Wasser
+        ring = [k[y, x] for y in range(y0 - 1, y1 + 2) for x in range(x0 - 1, x1 + 2)
+                if not (x0 <= x <= x1 and y0 <= y <= y1) and 0 <= y < R and 0 <= x < C]
+        nass = sum(c in 'xs' for c in ring) > len(ring) * 0.6
+        if nass:                                                     # Felsen im Wasser: Wasser wie ringsum (kein Rechteck)
+            k[y0:y1 + 1, x0:x1 + 1] = 'x' if sum(c == 'x' for c in ring) > len(ring) / 2 else 's'
+        else:
+            k[y0:y1 + 1, x0:x1 + 1] = 'g'
     lx0, ly0, lx1, ly1 = LANDEPLATZ
     k[ly0:ly1 + 1, lx0:lx1 + 1] = 'q'
     px0, py0, px1, py1 = PLATZ
@@ -102,7 +111,7 @@ def main():
     for (x0, y0, x1, y1) in BRUECKEN:
         k[y0:y1 + 1, x0:x1 + 1] = 'b'
     lay = {'groesse': [C, R], 'klassen': [''.join(z) for z in k], 'hoehe': [''.join(str(c) for c in z) for z in h],
-           'platz': list(PLATZ), 'platz_treppe': list(PLATZ_TREPPE), 'bruecken': BRUECKEN, 'front_reihen': FRONT_REIHEN,
+           'platz': list(PLATZ), 'felsen_obj': FELSEN_OBJ, 'platz_treppe': list(PLATZ_TREPPE), 'bruecken': BRUECKEN, 'front_reihen': FRONT_REIHEN,
            'treppen_sued': [[PLATZ_TREPPE[0], PLATZ_TREPPE[1], 2, PLATZ[3]]],
            'teleporter': [{'x': tx, 'y': ty, 'b': b, 'h': hh} for (tx, ty, b, hh) in TELEPORTER]}
     json.dump(lay, open(os.path.join(KARTE, 'layout.json'), 'w'), indent=0)
