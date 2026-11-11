@@ -1573,7 +1573,9 @@ def herunterladen(oid, d):
 
 
 def speichern(gruppe, ims, ids):
-    if gruppe.startswith('k27_'):
+    if gruppe.startswith('k28_'):
+        ziel = os.path.join(ROOT, 'assets', 'objekte', 'karte28', gruppe[4:])
+    elif gruppe.startswith('k27_'):
         ziel = os.path.join(ROOT, 'assets', 'objekte', 'karte27', gruppe[4:])
     elif gruppe.startswith('k26_'):
         ziel = os.path.join(ROOT, 'assets', 'objekte', 'karte26', gruppe[4:])
@@ -1955,6 +1957,17 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'small pile of black metal debris shards, bolts and torn plates lying on grass, seen from directly above, lying flat on the ground, classic 2D handheld RPG style',
         'small patch of dark scorched earth with a few black metal splinters, seen from directly above, lying flat on the ground, classic 2D handheld RPG style',
     ]},
+    'k28_treppe': {'size': 64, 'items': [
+        'grey stone staircase leading down into a sunken pit, seen from directly above in top-down view, three tiles wide, '
+        'about six worn stone steps, each lower step a little darker and more shadowed, low stone side walls on the left and '
+        'right, the top step level with the grass, the bottom step meeting dark earth, classic 2D handheld RPG style',
+        'old mossy stone steps descending into a dark earthen hollow, seen from above in top-down view, wide steps with light '
+        'edges on top, deeper steps darker, narrow stone cheek walls at both sides, classic 2D handheld RPG style',
+        'rough grey stone stairs carved down into the ground, top-down view from above, steps going downwards away from the '
+        'viewer, bottom of the stairs in shadow, stone borders on both sides, classic 2D handheld RPG style',
+        'wide stone staircase going down into a pit, top-down view, stone steps with highlighted front edges and dark gaps, '
+        'the lower half in deep shadow, small stone pillars at the top corners, classic 2D handheld RPG style',
+    ]},
     'k27_schrein': {'size': 128, 'items': [
         'tall glowing turquoise crystal spire standing on a square grey stone shrine pedestal with a small stone staircase '
         'in front, the crystal is a long faceted cyan-green gem pointing up, two short stone posts at the pedestal corners, ' + FR14,
@@ -2020,8 +2033,8 @@ def erzeugen(gruppe):
         d = warte(oid)
         speichern(gruppe, *herunterladen(oid, d))
         return
-    if gruppe.startswith(('k20_', 'k21_', 'k23_', 'k24_', 'k25_', 'k26_', 'k27_')):
-        g = (OBJEKTGRUPPEN_K21 if gruppe.startswith(('k21_', 'k23_', 'k24_', 'k25_', 'k26_', 'k27_')) else OBJEKTGRUPPEN_K20)[gruppe]
+    if gruppe.startswith(('k20_', 'k21_', 'k23_', 'k24_', 'k25_', 'k26_', 'k27_', 'k28_')):
+        g = (OBJEKTGRUPPEN_K21 if gruppe.startswith(('k21_', 'k23_', 'k24_', 'k25_', 'k26_', 'k27_', 'k28_')) else OBJEKTGRUPPEN_K20)[gruppe]
         req = {'description': STIL, 'size': g['size'], 'view': 'top-down',
                'item_descriptions': [it + '. ' + STIL for it in g['items']],
                'target_palette': {'colors': PALETTE, 'name': 'Karte01 handheld'}}
