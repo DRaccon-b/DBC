@@ -798,8 +798,8 @@ def bauen(frame=None, speichern=True):
     hoehe = np.array([[int(c) for c in r] for r in lay['hoehe']])
     Wp, Hp = COLS * T, ROWS * T
     a = wolkenmeer(frame)
-    insel_hart = zell_maske([''.join('1' if 1 <= v <= 3 else '0' for v in r) for r in hoehe], '1', COLS, ROWS)
-    insel = weich(insel_hart, 9, 0, 20)
+    insel_hart = zell_maske([''.join('1' if 1 <= v <= 3 else '0' for v in r) for r in hoehe], '1', COLS, ROWS) > 0
+    insel = insel_hart.copy()                                   # Inselkante genau am 16er-Raster (Nutzer)
     gras = flaeche(kacheln(os.path.join(ROOT, 'assets', 'basis', 'gras_%d.png'), 5))
     a[insel] = gras[insel]
     schnee = flaeche(kacheln(os.path.join(ROOT, 'assets', 'karte05', 'basis', 's_%d.png'), 5))
@@ -820,8 +820,8 @@ def bauen(frame=None, speichern=True):
     beete(a, frame)
     # Hoehenkanten: Insel -> Wolken (tiefe Felsfront), Stufen 1->2->3 mit Treppen
     m1 = insel
-    m2 = weich(zell_maske([''.join('1' if 2 <= v <= 3 else '0' for v in r) for r in hoehe], '1', COLS, ROWS), 4, 0.25, 21) 
-    m3 = weich(zell_maske([''.join('1' if v == 3 else '0' for v in r) for r in hoehe], '1', COLS, ROWS), 4, 0.25, 22) 
+    m2 = zell_maske([''.join('1' if 2 <= v <= 3 else '0' for v in r) for r in hoehe], '1', COLS, ROWS) > 0   # am Raster
+    m3 = zell_maske([''.join('1' if v == 3 else '0' for v in r) for r in hoehe], '1', COLS, ROWS) > 0   # am Raster
     frei = np.zeros((Hp, Wp), bool)
     treppen = []
     for (x0, x1, y0, y1) in lay['treppen']:
@@ -846,7 +846,7 @@ def bauen(frame=None, speichern=True):
                 unten.append((x + rs_.randint(10, 22), y))
             if x > 0 and not insel[y, x - 1] and rs_.random() < 0.45:
                 unten.append((x - rs_.randint(10, 22), y))
-    wolken_vorne(a, weich(insel_hart, 9, 0, 20), unten, frame)
+    wolken_vorne(a, insel_hart, unten, frame)
     img = Image.fromarray(a).convert('RGBA')
     alt = bauwerke.S
     bauwerke.S = [H(c) + (255,) for c in k4.FELS['wolkenfels']]
