@@ -116,7 +116,8 @@ def bauen(frame=None, speichern=True):
     km = (((xx - wx) / 175.0) ** 2 + ((yy - wy) / 30.0) ** 2) < 1
     km = weich(km.astype(np.float32), 5, 0.5, 31, 0.5)
     a[km] = (erde[km] * np.array([0.78, 0.72, 0.68])).astype(np.uint8)
-    rand_k = weich(km.astype(np.float32), 6, 0.6, 32, 0.25) & ~km
+    nah_k = (((xx - wx) / 205.0) ** 2 + ((yy - wy) / 52.0) ** 2) < 1   # nur direkt um das Wrack (Fix: keine Flecken auf der Wiese)
+    rand_k = weich(km.astype(np.float32), 6, 0.3, 32, 0.25) & ~km & nah_k
     a[rand_k] = (a[rand_k] * np.array([0.86, 0.8, 0.74])).astype(np.uint8)
     # Plateaus mit grauen Steinmauer-Fronten
     lippe = k20.lippe_aus_gras(gras)
