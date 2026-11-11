@@ -24,6 +24,7 @@ Aufstellfelds (cyan = Ankunft, gold = weiter; Funktion `pfeil_marke` in `tools/k
 | 7 | Karte 27 – Destiny Lake | in Arbeit: Gelände und Objekte fertig; offen: Kollision, Animation, v1.0 |
 | 8 | Karte 28 – Tower Forest | v1.0 (`maps/karte28/v1.0/Tower_Forest_v1.0.zip`) |
 | 9 | Karte 07 – The Holy Peaks | vorhanden (Gelände, Objekte, Animation); als nächste A02-Karte eingeordnet |
+| 10 | Karte 29 – The Sea of Darkness | in Arbeit: Layout |
 | … | weitere Karten folgen | – |
 
 ## A0S – Sondergebiet
