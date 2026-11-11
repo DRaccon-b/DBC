@@ -1908,6 +1908,14 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'and a bottom rail, a barred cell door with a frame and a small electronic lock with a red light in the middle, '
         'the whole front is about five times wider than it is tall, dark steel with subtle purple highlights, ' + FR14,
     ]},
+    'k26_saeule': {'size': 96, 'items': [
+        'very tall narrow dark energy pylon tower, black steel lattice frame around a long glowing purple crystal core, '
+        'spiked top with small red lights, heavy angular black base, ' + FR14,
+    ]},
+    'k26_raum': {'size': 64, 'items': [
+        'thin dark steel signal lamp post with a round glowing red light on top, small round base, ' + FR14,
+        'square crimson wall plaque with a gold border and a gold winged eye emblem in the middle, flat, ' + FR14,
+    ]},
     'k24_schrein': {'size': 64, 'items': [
         'dark emperor throne made of jagged black obsidian crystal spikes with deep purple and crimson highlights, a high '
         'pointed back, standing on a small stepped dark stone dais, ' + FR14,

@@ -55,6 +55,13 @@ LABOR2 = (                                                       # Zellentrakt M
     [('kammer/00', 46, {'px': int(x * T), 'anim': 'lampe'}) for x in (7.0, 10.5, 27.5, 31.0)]   # Kammern in den Eckzellen
 )
 
+AXS = 728                                                        # Achse des Saeulenraums (Mitte Gittersteg = Raummitte)
+SAEULENRAUM = (
+    [('saeule/00', 42, {'px': AXS - 88, 'anim': 'lampe'}), ('saeule/00', 42, {'px': AXS + 88, 'anim': 'lampe', 'spiegeln': True})]
+    + [('raum/00', r, {'px': AXS + d, 'anim': 'lampe'}) for r in (31, 46) for d in (-112, 112)]
+    + [('raum/01', 28, {'px': AXS - 52, 'wand': True}), ('raum/01', 28, {'px': AXS + 52, 'wand': True})]   # Wandschilder
+)
+
 
 def main():
     lay = json.load(open(os.path.join(KARTE, 'layout.json')))
@@ -65,7 +72,7 @@ def main():
         os.makedirs(os.path.dirname(ziel), exist_ok=True)
         shutil.copy(os.path.join(ROOT, 'assets', 'objekte', quelle), ziel)
     objekte, cache = [], {}
-    for (name, fy, opt) in THRONSAAL + LABOR + LABOR2:
+    for (name, fy, opt) in THRONSAAL + LABOR + LABOR2 + SAEULENRAUM:
         opt = dict(opt)
         spiegeln = opt.pop('spiegeln', False)
         key = (name, spiegeln)
@@ -85,7 +92,8 @@ def main():
         x = px - (ux0 + bw // 2)
         y = (fy + 1) * T - 1 - uy1
         tx0, tx1 = (x + ux0) // T, (x + ux1) // T
-        if any(cls[r][c] not in '.pgr' for c in range(tx0, tx1 + 1) for r in (fy, fy - 1)):
+        wandobj = opt.pop('wand', False)
+        if not wandobj and any(cls[r][c] not in '.pgr' for c in range(tx0, tx1 + 1) for r in (fy, fy - 1)):
             print('  uebersprungen (Wand/Huelle):', name, px, fy)
             continue
         wt, ht = math.ceil(bw / T), math.ceil((uy1 - uy0 + 1) / T)
