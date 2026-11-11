@@ -175,8 +175,17 @@ def bauen(frame=None, speichern=True):
     tief = ~flach & ~land
     # Strand, heller Sand, Pfuetzen bleiben flaches Wasser
     a[land] = strand[land]
-    lm = maske(cls, 'l') & land                                       # helle Sandflecken am Raster
-    a[lm] = hell[lm]
+    lm = maske(cls, 'l')                                             # helle Sandflecken am Raster, runde Ecken + Uebergang
+    wz = np.array(Image.fromarray(lm.astype(np.uint8) * 255).filter(ImageFilter.GaussianBlur(4)), np.float32) / 255
+    yy_, xx_ = np.mgrid[0:Hp, 0:Wp]
+    kern_ = (wz > 0.62) & land
+    band_ = (wz > 0.30) & ~kern_ & land
+    dith_ = band_ & ((((xx_ + yy_) % 2 == 0) & (wz > 0.42)) | (((xx_ % 2 == 0) & (yy_ % 2 == 0)) & (wz <= 0.42)))
+    a[kern_] = hell[kern_]
+    a[band_] = (a[band_] * 0.55 + hell[band_] * 0.45).astype(np.uint8)
+    a[dith_] = hell[dith_]
+    rand2_ = (wz > 0.62) & (wz < 0.72) & land                        # feine Kontur innen am hellen Fleck
+    a[rand2_] = (a[rand2_] * 0.94).astype(np.uint8)
     saum = land & dehnen(~land, 3)                                   # nasser Saum + Schaumlinie am Ufer
     a[saum] = (a[saum] * 0.8).astype(np.uint8)
     schaum = ~land & dehnen(land, 3) & ~dehnen(land, 1)
