@@ -122,6 +122,7 @@ def bauen(frame=None, speichern=True):
     lippe = k20.lippe_aus_gras(gras)
     hoch = hp >= 2
     hoch_k = k23.nach_oben(hoch)
+    a_vor_k = a.copy()
     wand = k4.hoehenkanten(a, hoch_k, 'stein', FRONT, 8, lippe, np.zeros((Hp, Wp), bool), 27, berg=False)
     # Wasser: See (Grundebene) und Baeche auf dem Plateau, Ufer und Tiefenstufen
     import wasser_vertieft
@@ -132,7 +133,21 @@ def bauen(frame=None, speichern=True):
     xm = (xm_lo | xm_hi) & ~wand                                     # Wasser bleibt auf seiner Ebene: Bergkante liegt darueber
     steg_t = np.array([[ch == 'b' for ch in z] for z in cls])
     xm |= np.kron(steg_t, np.ones((T, T), bool))                    # Stege stehen ueber dem Wasser
-    a = np.array(wasser_vertieft.vertiefen(Image.fromarray(a), np.ones_like(xm), frame, maske=xm).convert('RGB'))
+    # Seitliche Bergkante liegt als Ebene ueber dem See (Nutzer): das Wasser laeuft unter das Plateau weiter, sein Rand
+    # liegt verdeckt unter dem Plateau; danach werden Plateau und Seitenkontur wieder darueber gesetzt
+    from PIL import ImageFilter as _IFk
+    def _dehnen(m, n):
+        return np.array(Image.fromarray(m.astype(np.uint8) * 255).filter(_IFk.MaxFilter(n))) > 0
+    unter = _dehnen(xm_lo, 25) & hoch_k                              # Wasser laeuft unter das Plateau weiter (verdeckt)
+    unter &= ~_dehnen(xm_hi, 9)                                      # (Seitenkontur gehoert zu wand)
+    oben = a.copy()
+    luecke = xm_lo & ~xm & _dehnen(hoch_k, 13) & (np.roll(xm, 4, axis=1) | np.roll(xm, 3, axis=1))
+    xm_zeichnen = xm | unter | luecke                                # auch unter der Seitenkontur durch
+    seite_k = (oben != a_vor_k).any(axis=2) & ~xm & ~hoch_k & _dehnen(unter, 21) & (luecke | ~xm_lo)  # Seitenkontur
+    a = np.array(wasser_vertieft.vertiefen(Image.fromarray(a), np.ones_like(xm), frame, maske=xm_zeichnen).convert('RGB'))
+    deck = (((unter & hoch_k) | luecke | seite_k | ((a != oben).any(axis=2) & hoch_k)) & ~_dehnen(xm_hi, 15))
+    deck |= (a != oben).any(axis=2) & _dehnen(hoch_k, 9) & ~hoch_k & ~xm_zeichnen & _dehnen(unter, 21)  # kein Uferrand an der Kontur
+    a[deck] = oben[deck]
     # Pfuetzen im Moor oben links: braunes Schlammwasser (Nutzer). Kleine Wasserflaechen, die an Moorkacheln grenzen
     from collections import deque
     from PIL import ImageFilter as _IF
