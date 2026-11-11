@@ -138,11 +138,14 @@ def main():
     setze('fremd/strudel', 6 * T, 102 * T + 10, {'anim': 'portal', 'schattenlos': True}, pruefen=False)
     setze('klein/00', 88 * T + 8, 90 * T - 2, {})                                    # Statue im Park
     # ---------------------------------------------------------------- Baeume nach der Vorlage
-    BAUM = ['karte01/baeume/00', 'karte01/baeume/01', 'karte01/baeume/02']
-    KIRSCH = ['fremd/kirsche0', 'fremd/kirsche1', 'fremd/kirsche2']
+    BAUM = ['karte01/baeume/00', 'karte01/baeume/01', 'karte01/baeume/02', 'karte01/baeume/04', 'karte01/baeume/15',
+            'karte18/baum2/01']                                                       # mehr Arten (Nutzer: Variation)
+    KIRSCH = ['karte01/baeume/10', 'fremd/kirsche0', 'fremd/kirsche1', 'fremd/kirsche2']
+    WALD = ['karte01/baeume/00', 'karte01/baeume/01', 'karte01/baeume/02', 'karte01/baeume/15', 'karte01/baeume/09',
+            'karte01/baeume/06', 'karte18/baum2/01']
     PALME = 'karte25/strand/12'
     gruen = [(3, 3), (6, 5), (9, 11), (29, 9), (33, 10), (37, 8), (44, 2), (81, 3), (45, 32), (49, 36), (45, 39), (49, 44),
-             (75, 33), (80, 35), (76, 42), (80, 45), (7, 37), (36, 37), (7, 60), (17, 60), (26, 89), (43, 89), (75, 89),
+             (82, 33), (80, 38), (84, 42), (80, 45), (7, 37), (36, 37), (7, 60), (17, 60), (26, 89), (43, 89), (75, 89),
              (98, 89), (121, 89)]
     kirsch = [(16, 4), (19, 6), (22, 3), (40, 4), (3, 9), (80, 11), (85, 23), (92, 25), (99, 25), (102, 29), (113, 26),
               (122, 23), (29, 90), (93, 90), (111, 90), (106, 90)]
@@ -167,24 +170,29 @@ def main():
                 setze('karte01/deko/%02d' % (i % 5), bx * T + 8, (by + 1) * T - 1, {'anim': 'blume'}, pruefen=False)
 
     for i, (tx, ty) in enumerate(gruen):
-        if setze(BAUM[i % 3], tx * T + 8, (ty + 1) * T - 2, {'anim': 'baum'}, i % 2 == 0):
+        if auf_rasen(tx, ty) and setze(BAUM[(i * 3) % len(BAUM)], tx * T + 8, (ty + 1) * T - 2, {'anim': 'baum'}, i % 2 == 0):
             begleiter(tx, ty, i)
     for i, (tx, ty) in enumerate(kirsch):
-        if setze(KIRSCH[i % 3], tx * T + 8, (ty + 1) * T - 2, {'anim': 'baum'}, i % 2 == 1):
+        if auf_rasen(tx, ty) and setze(KIRSCH[i % len(KIRSCH)], tx * T + 8, (ty + 1) * T - 2, {'anim': 'baum'}, i % 2 == 1):
             begleiter(tx, ty, i + 1)
     setze('karte18/strasse/14', 27 * T + 8, 10 * T - 1, {})                   # Bank und Laternen am Weg oben (Vorlage)
     for (tx, ty) in ((13, 10), (39, 11)):
         setze('karte18/strasse/18', tx * T + 8, ty * T - 1, {'anim': 'leuchten'})
     for (tx, ty) in ((3, 44), (9, 44), (15, 44), (21, 44), (27, 44), (33, 44), (39, 44)):   # Baumbeete der Allee
-        setze('karte01/baeume/03', tx * T + 8, (ty + 2) * T - 3, {'anim': 'baum'})
+        setze('karte18/baum2/03', tx * T + 8, (ty + 2) * T - 3, {'anim': 'baum'}, tx % 2 == 0)   # Strassenbaum mit Baumscheibe
     for (tx, ty) in ((26, 84), (30, 84), (41, 84), (66, 84), (75, 84), (85, 84), (95, 84), (104, 84), (114, 84),
                      (120, 84), (29, 96), (79, 96), (106, 96), (120, 96)):          # Palmen an der Promenade und am Strand
         setze(PALME, tx * T + 8, (ty + 1) * T - 2, {'anim': 'baum'}, (tx + ty) % 2 == 0)
     for ty in range(21, 92):                                                         # Waldrand rechts: dicht, versetzt,
         for tx in (126, 127, 128, 129):                                              # Kronen ueberlappen (Wald)
             if (tx + ty) % 2 == 0 and kl[min(ty, rows - 1)][tx] == 'f':
-                setze(BAUM[(tx * 7 + ty * 3) % 3], tx * T + 8, (ty + 1) * T - 1,
+                setze(WALD[(tx * 7 + ty * 3) % len(WALD)], tx * T + 8, (ty + 1) * T - 1,
                       {'anim': 'baum', 'kein_schatten': True}, (tx + ty * 5) % 4 < 2, pruefen=False)
+    for ty in range(0, rows):                                                       # Waldrand oben links (Nutzer): oberer
+        for tx in range(0, cols):                                                    # und linker Kartenrand im Gruen
+            if kl[ty][tx] == 'f' and tx < 120 and (tx + ty) % 2 == 0:
+                setze(WALD[(tx * 5 + ty * 11) % len(WALD)], tx * T + 8, (ty + 1) * T - 1,
+                      {'anim': 'baum', 'kein_schatten': True}, (tx * 3 + ty) % 4 < 2, pruefen=False)
     # ---------------------------------------------------------------- Strassenmoebel
     for x in range(4, 125, 9):                                                       # Laternen an der Hauptstrasse
         for fy in (49 * T - 2, 56 * T + 6):

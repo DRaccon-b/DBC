@@ -102,6 +102,11 @@ def main():
     # ---- Waldrand rechts
     r_(k, 126, 21, 129, 48, 'f'); r_(k, 126, 55, 129, 90, 'f')
     r_(k, 126, 49, 129, 54, 'f')
+    # ---- Waldrand oben links (Nutzer): oberer Rand (2 Reihen) und linker Rand (2 Spalten), nur auf Rasen
+    for y in range(0, 16):
+        for x in range(0, 88):
+            if k[y, x] == 'n' and (y < 2 or x < 2):
+                k[y, x] = 'f'
     # ---- Strand, Holzpromenade, Pier
     r_(k, 0, 91, 126, 100, 'd')
     for y in range(85, 101):                                         # Bucht am Pier: Wasser aus der Vorlage behalten
