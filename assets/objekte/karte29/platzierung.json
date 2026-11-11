@@ -16,6 +16,7 @@
 8
 ],
 "ebene": 1,
+"an_wand": true,
 "anim": "lampe"
 },
 {
@@ -34,7 +35,8 @@
 7,
 7
 ],
-"ebene": 1
+"ebene": 1,
+"an_wand": true
 },
 {
 "datei": "varianten/gross-02_0_1.png",
@@ -52,7 +54,8 @@
 4,
 7
 ],
-"ebene": 1
+"ebene": 1,
+"an_wand": true
 },
 {
 "datei": "varianten/mittel-00_0_1.png",
@@ -70,7 +73,8 @@
 3,
 4
 ],
-"ebene": 1
+"ebene": 1,
+"an_wand": true
 },
 {
 "datei": "varianten/mittel-00_0_1.png",
@@ -88,7 +92,8 @@
 3,
 4
 ],
-"ebene": 1
+"ebene": 1,
+"an_wand": true
 },
 {
 "datei": "varianten/mittel-00_0_1.png",
@@ -106,7 +111,8 @@
 3,
 4
 ],
-"ebene": 1
+"ebene": 1,
+"an_wand": true
 },
 {
 "datei": "varianten/mittel-00_0_1.png",
@@ -124,7 +130,8 @@
 3,
 4
 ],
-"ebene": 1
+"ebene": 1,
+"an_wand": true
 },
 {
 "datei": "varianten/mittel-00_0_1.png",
@@ -142,7 +149,8 @@
 3,
 4
 ],
-"ebene": 1
+"ebene": 1,
+"an_wand": true
 },
 {
 "datei": "varianten/mittel-00_0_1.png",
@@ -160,7 +168,8 @@
 3,
 4
 ],
-"ebene": 1
+"ebene": 1,
+"an_wand": true
 },
 {
 "datei": "varianten/mittel-01_0_1.png",
@@ -178,7 +187,8 @@
 3,
 4
 ],
-"ebene": 1
+"ebene": 1,
+"an_wand": true
 },
 {
 "datei": "varianten/mittel-01_0_1.png",
@@ -196,7 +206,8 @@
 3,
 4
 ],
-"ebene": 1
+"ebene": 1,
+"an_wand": true
 },
 {
 "datei": "varianten/mittel-01_1_1.png",
@@ -214,7 +225,8 @@
 3,
 4
 ],
-"ebene": 1
+"ebene": 1,
+"an_wand": true
 },
 {
 "datei": "varianten/k11-wrack_0_1.png",
@@ -252,6 +264,7 @@
 4
 ],
 "ebene": 1,
+"an_wand": true,
 "anim": "portal"
 },
 {
@@ -271,6 +284,7 @@
 8
 ],
 "ebene": 1,
+"an_wand": true,
 "anim": "leuchten"
 },
 {
@@ -290,6 +304,7 @@
 3
 ],
 "ebene": 1,
+"an_wand": true,
 "anim": "portal",
 "schattenlos": true
 },
@@ -310,6 +325,7 @@
 4
 ],
 "ebene": 1,
+"an_wand": true,
 "anim": "leuchten"
 },
 {
@@ -329,6 +345,7 @@
 4
 ],
 "ebene": 1,
+"an_wand": true,
 "anim": "leuchten"
 },
 {
@@ -348,6 +365,7 @@
 4
 ],
 "ebene": 1,
+"an_wand": true,
 "anim": "leuchten"
 },
 {
@@ -367,6 +385,7 @@
 4
 ],
 "ebene": 1,
+"an_wand": true,
 "anim": "leuchten"
 },
 {
@@ -485,24 +504,6 @@
 {
 "datei": "varianten/k11-anker_1_1.png",
 "basis": "k11/anker",
-"x": 472,
-"y": 679,
-"fuss": 55,
-"kachel": [
-30,
-45
-],
-"block": [
-29,
-42,
-3,
-4
-],
-"ebene": 1
-},
-{
-"datei": "varianten/k11-anker_1_1.png",
-"basis": "k11/anker",
 "x": 1112,
 "y": 187,
 "fuss": 55,
@@ -519,43 +520,25 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k11-fels2_1_1.png",
-"basis": "k11/fels2",
-"x": 646,
-"y": 96,
-"fuss": 32,
+"datei": "varianten/k11-fels_0_1.png",
+"basis": "k11/fels",
+"x": 640,
+"y": 83,
+"fuss": 45,
 "kachel": [
 41,
 7
 ],
 "block": [
 40,
-6,
-3,
-2
-],
-"ebene": 1
-},
-{
-"datei": "varianten/k11-fels_1_1.png",
-"basis": "k11/fels",
-"x": 910,
-"y": 197,
-"fuss": 45,
-"kachel": [
-58,
-14
-],
-"block": [
-57,
-12,
+5,
 4,
 3
 ],
 "ebene": 1
 },
 {
-"datei": "varianten/k11-fels_0_1.png",
+"datei": "varianten/k11-fels_1_1.png",
 "basis": "k11/fels",
 "x": 1105,
 "y": 117,
@@ -573,7 +556,7 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k11-fels_0_1.png",
+"datei": "varianten/k11-fels_1_1.png",
 "basis": "k11/fels",
 "x": 225,
 "y": 515,
@@ -591,36 +574,36 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k11-fels_0_1.png",
-"basis": "k11/fels",
-"x": 500,
-"y": 515,
-"fuss": 45,
+"datei": "varianten/k11-fels2_1_1.png",
+"basis": "k11/fels2",
+"x": 263,
+"y": 846,
+"fuss": 32,
 "kachel": [
-33,
-34
+17,
+54
 ],
 "block": [
-31,
-32,
-4,
-3
+16,
+53,
+3,
+2
 ],
 "ebene": 1
 },
 {
 "datei": "varianten/k11-graete_0_0.png",
 "basis": "k11/graete",
-"x": 456,
-"y": 840,
+"x": 457,
+"y": 888,
 "fuss": 38,
 "kachel": [
 30,
-54
+57
 ],
 "block": [
 28,
-52,
+55,
 4,
 3
 ],
@@ -701,186 +684,6 @@
 "block": [
 24,
 14,
-3,
-3
-],
-"ebene": 1,
-"liegend": false,
-"anim": null
-},
-{
-"datei": "varianten/k11-holz_1_0.png",
-"basis": "k11/holz",
-"x": 860,
-"y": 120,
-"fuss": 38,
-"kachel": [
-55,
-9
-],
-"block": [
-53,
-7,
-4,
-3
-],
-"ebene": 1,
-"liegend": true,
-"anim": null
-},
-{
-"datei": "varianten/k11-graete_1_0.png",
-"basis": "k11/graete",
-"x": 327,
-"y": 584,
-"fuss": 38,
-"kachel": [
-22,
-38
-],
-"block": [
-20,
-36,
-4,
-3
-],
-"ebene": 1,
-"liegend": true,
-"anim": null
-},
-{
-"datei": "varianten/k11-holz_0_0.png",
-"basis": "k11/holz",
-"x": 1049,
-"y": 184,
-"fuss": 38,
-"kachel": [
-67,
-13
-],
-"block": [
-65,
-11,
-4,
-3
-],
-"ebene": 1,
-"liegend": true,
-"anim": null
-},
-{
-"datei": "varianten/k11-auster_1_0.png",
-"basis": "k11/auster",
-"x": 482,
-"y": 882,
-"fuss": 44,
-"kachel": [
-31,
-57
-],
-"block": [
-30,
-55,
-3,
-3
-],
-"ebene": 1,
-"liegend": false,
-"anim": null
-},
-{
-"datei": "varianten/k11-holz_0_0.png",
-"basis": "k11/holz",
-"x": 1159,
-"y": 152,
-"fuss": 38,
-"kachel": [
-74,
-11
-],
-"block": [
-72,
-9,
-4,
-3
-],
-"ebene": 1,
-"liegend": true,
-"anim": null
-},
-{
-"datei": "varianten/k11-auster_1_0.png",
-"basis": "k11/auster",
-"x": 224,
-"y": 450,
-"fuss": 44,
-"kachel": [
-15,
-30
-],
-"block": [
-14,
-28,
-3,
-3
-],
-"ebene": 1,
-"liegend": false,
-"anim": null
-},
-{
-"datei": "varianten/k11-muschel_0_0.png",
-"basis": "k11/muschel",
-"x": 150,
-"y": 589,
-"fuss": 33,
-"kachel": [
-10,
-38
-],
-"block": [
-9,
-36,
-3,
-3
-],
-"ebene": 1,
-"liegend": false,
-"anim": null
-},
-{
-"datei": "varianten/k11-holz_0_0.png",
-"basis": "k11/holz",
-"x": 247,
-"y": 744,
-"fuss": 38,
-"kachel": [
-17,
-48
-],
-"block": [
-15,
-46,
-4,
-3
-],
-"ebene": 1,
-"liegend": true,
-"anim": null
-},
-{
-"datei": "varianten/k11-auster_0_0.png",
-"basis": "k11/auster",
-"x": 51,
-"y": 898,
-"fuss": 44,
-"kachel": [
-4,
-58
-],
-"block": [
-3,
-56,
 3,
 3
 ],
