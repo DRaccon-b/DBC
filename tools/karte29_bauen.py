@@ -107,14 +107,43 @@ def bauen(frame=None, speichern=True):
     # Wasser (Nutzer): schwarzgrau, in Stufen tiefer - im flachen Wasser sieht man den Grund (Sand) durchschimmern
     land_t = maske(cls, 'glrmpqbT')
     flach_roh = maske(cls, 's')
-    land = weich(land_t.astype(np.float32), 3, 0.25, 7, 0.5)
-    flach = weich((flach_roh | land_t).astype(np.float32), 5, 0.35, 8, 0.5) & ~land
+    land = land_t.copy()                                             # Uferlinie genau am 16er-Raster (Nutzer)
+    flach = flach_roh & ~land
+    # Tiefenstufen je Kachel: Abstand (Kacheln) zum Ufer/Flachwasser -> 0 flach am Strand, 1 flach, 2..4 tiefer
+    lt = np.array([[c in 'glrmpqbT' for c in z] for z in cls])
+    ft = np.array([[c == 's' for c in z] for z in cls])
+    dist = np.full((rows, cols), 99, int)
+    from collections import deque
+    q_ = deque()
+    for y in range(rows):
+        for x in range(cols):
+            if lt[y, x] or ft[y, x]:
+                dist[y, x] = 0; q_.append((y, x))
+    while q_:
+        y, x = q_.popleft()
+        for dy in (-1, 0, 1):
+            for dx in (-1, 0, 1):
+                yy, xx = y + dy, x + dx
+                if 0 <= yy < rows and 0 <= xx < cols and dist[yy, xx] > dist[y, x] + 1:
+                    dist[yy, xx] = dist[y, x] + 1; q_.append((yy, xx))
+    am_land = np.zeros((rows, cols), bool)
+    for dy in (-1, 0, 1):
+        for dx in (-1, 0, 1):
+            am_land |= np.roll(np.roll(lt, dy, 0), dx, 1)
+    st_t = np.where(ft & am_land, 0, np.where(ft, 1, np.where(dist <= 2, 2, np.where(dist <= 5, 3, 4))))
     grund = (strand.astype(np.float32) * np.array([0.78, 0.8, 0.84]))  # Meeresgrund: Sand, kuehl
+    yy_, xx_ = np.mgrid[0:Hp, 0:Wp]                                  # Sandrippeln und Steine am Grund (sichtbar)
+    rippel = ((yy_ + (4 * np.sin(xx_ / 11.0)).astype(int)) % 9) == 0
+    grund[rippel] *= 0.86
+    rs_g = np.random.RandomState(290)
+    for _ in range(Hp * Wp // 900):
+        gy, gx = rs_g.randint(2, Hp - 3), rs_g.randint(2, Wp - 4)
+        grund[gy:gy + 2, gx:gx + 3] *= 0.62
+        grund[gy, gx:gx + 2] = grund[gy, gx:gx + 2] * 1.0 + 30
     def nahe(m, r):
         return np.array(Image.fromarray((m * 255).astype(np.uint8)).filter(ImageFilter.GaussianBlur(r))) / 255.0
-    n1, n2 = nahe(land | flach, 10), nahe(land | flach, 30)
-    stufe = np.where(flach & (nahe(land, 6) > 0.12), 0, np.where(flach, 1, np.where(n1 > 0.08, 2, np.where(n2 > 0.06, 3, 4))))
-    deck = np.array([0.16, 0.36, 0.60, 0.80, 0.93], np.float32)[stufe][..., None]   # Wasserdeckung je Stufe
+    stufe = np.kron(st_t, np.ones((T, T), int))
+    deck = np.array([0.10, 0.26, 0.44, 0.60, 0.74], np.float32)[stufe][..., None]   # Wasserdeckung je Stufe
     wfarbe = np.array([38, 41, 46], np.float32)                     # schwarzgrau
     a = (grund * (1 - deck) + wfarbe * deck)
     wl = np.roll(np.roll(tief_t, 2 * f, axis=1), f, axis=0).astype(np.float32).mean(axis=2)
@@ -127,7 +156,7 @@ def bauen(frame=None, speichern=True):
     tief = ~flach & ~land
     # Strand, heller Sand, Pfuetzen bleiben flaches Wasser
     a[land] = strand[land]
-    lm = weich(zell_maske(cls, 'l', cols, rows), 5, 0.45, 9) & land
+    lm = maske(cls, 'l') & land                                       # helle Sandflecken am Raster
     a[lm] = hell[lm]
     saum = land & dehnen(~land, 3)                                   # nasser Saum + Schaumlinie am Ufer
     a[saum] = (a[saum] * 0.8).astype(np.uint8)
@@ -137,17 +166,14 @@ def bauen(frame=None, speichern=True):
     a[yy[sel], xx[sel]] = H('#c8d6dc')
     # Plaetze: Pflaster oben links (ebenerdig) und Tempelplatz (erhoeht)
     pf = pflaster(cols, rows)
-    qm = weich(zell_maske(cls, 'q', cols, rows), 22.0, 0.55, 31, 0.5) & land  # Spawnplatz: rundlich, unregelmaessig (Nutzer)
+    qt = np.array([[c == 'q' for c in z] for z in cls])             # Spawnplatz: rundlich in Kachelstufen (Raster)
+    ys_q, xs_q = np.nonzero(qt)
+    cyq, cxq, ryq, rxq = ys_q.mean(), xs_q.mean(), (ys_q.max() - ys_q.min()) / 2 + 0.6, (xs_q.max() - xs_q.min()) / 2 + 0.6
+    tyq, txq = np.mgrid[0:rows, 0:cols]
+    wq = np.arctan2(tyq - cyq, txq - cxq)
+    qt = qt & (((tyq - cyq) / ryq) ** 2 + ((txq - cxq) / rxq) ** 2 < 1.0 + 0.12 * np.sin(3 * wq + 0.7))
+    qm = np.kron(qt, np.ones((T, T), bool)) & land
     a[qm] = pf[qm]
-    rs_ = np.random.RandomState(31)                                  # Rand: Steine verstreut im Sand, Sand weht ueber Fugen
-    naeh = dehnen(qm, 9) & ~qm & land
-    lose = naeh & (rs_.rand(Hp, Wp) < 0.0) 
-    blk = np.kron(rs_.rand(rows * 2 + 1, cols * 2 + 1) < 0.35, np.ones((8, 8), bool))[:Hp, :Wp]
-    lose = naeh & blk & ~dehnen(~dehnen(qm, 9), 3)
-    a[lose] = pf[lose]
-    innen_rand = qm & dehnen(~qm, 7) & (np.kron(rs_.rand(rows * 2 + 1, cols * 2 + 1) < 0.5, np.ones((8, 8), bool))[:Hp, :Wp])
-    a[innen_rand] = strand[innen_rand]
-    qm = qm | lose
     pm = maske(cls, 'p')
     a[pm] = pflaster(cols, rows, 1.08)[pm]
     for m_ in (pm,):
