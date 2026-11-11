@@ -153,6 +153,63 @@ def hochbahn(img, lay, zug_sp=None):
     return img
 
 
+def holzsteg(a, holz, sand_tex, seed=30):
+    """Holzpromenade auf dem Strand (Nutzer: Holz statt Steinoptik): lange waagerechte Planken (4 px hoch, 40-90 px
+    lang, versetzte Stoesse), Lichtkante oben, dunkle Fuge unten, Naegel an den Stoessen, feine Maserung; dunkle
+    Randbohle; Schatten auf dem Sand darunter; Sand weht unregelmaessig ueber die Raender (Uebergang)."""
+    rs = np.random.RandomState(seed)
+    ys, xs = np.nonzero(holz)
+    if not len(ys):
+        return
+    y0, y1, x0, x1 = ys.min(), ys.max(), xs.min(), xs.max()
+    HOLZ = [np.array(H(c), np.float32) for c in ('#a8743e', '#b48048', '#9c6a38', '#bc8a52', '#a27040')]
+    for yy in range(y0, y1 + 1, 4):
+        x = x0 - rs.randint(0, 60)
+        while x <= x1:
+            l = rs.randint(40, 91)
+            c = HOLZ[rs.randint(len(HOLZ))]
+            for dy in range(4):
+                Y = yy + dy
+                if Y > y1:
+                    break
+                for X in range(max(x, x0), min(x + l, x1 + 1)):
+                    if not holz[Y, X]:
+                        continue
+                    f = c * (1.12 if dy == 0 else 1.0 if dy < 3 else 0.62)
+                    if dy in (1, 2) and (X * 7 + Y * 13 + rs.randint(0, 3)) % 23 == 0:
+                        f = c * 0.82                                          # Maserung
+                    a[Y, X] = np.clip(f, 0, 255).astype(np.uint8)
+                if 0 <= x - 1 and x0 <= x <= x1 and holz[Y, x]:
+                    a[Y, x] = H('#5a3c22')                                    # Stoss
+            for nx in (x + 2, x + l - 3):                                     # Naegel
+                if x0 <= nx <= x1 and holz[yy + 1, nx]:
+                    a[yy + 1, nx] = H('#4a3320')
+            x += l
+    rand = kontur(holz)
+    a[rand] = H('#5e3e22')
+    unten = holz & ~np.roll(holz, -1, 0)
+    for d in (1, 2, 3):                                                       # Schatten auf dem Sand
+        m = np.roll(unten, d, 0) & ~holz
+        dunkeln(a, m, 0.72 + d * 0.07)
+    m = np.roll(holz & ~np.roll(holz, -1, 1), 1, 1) & ~holz                   # rechte Seite
+    dunkeln(a, m, 0.8)
+    dist = np.zeros(holz.shape, np.float32)                                   # Sanduebergang ueber die Raender
+    innen = holz.copy()
+    for d in range(1, 6):
+        innen = innen & np.roll(innen, 1, 0) & np.roll(innen, -1, 0) & np.roll(innen, 1, 1) & np.roll(innen, -1, 1)
+        dist[holz & ~innen & (dist == 0)] = d
+    dist[innen] = 6
+    roh = (np.random.RandomState(seed + 1).rand(*holz.shape) * 255).astype(np.uint8)
+    rausch = np.array(Image.fromarray(roh).filter(ImageFilter.GaussianBlur(1.6)), np.float32)
+    rausch = (rausch - rausch.min()) / max(1.0, rausch.max() - rausch.min())     # weiche Flecken statt Einzelpixel
+    yy_, xx_ = np.mgrid[0:holz.shape[0], 0:holz.shape[1]]
+    welle = 0.5 + 0.5 * np.sin(xx_ / 9.0 + np.sin(xx_ / 23.0) * 2)              # Verwehungen ungleichmaessig
+    sandig = holz & (rausch < np.clip((4.5 - dist) / 4.5, 0, 1) * (0.25 + 0.5 * welle) + 0.18)
+    sandig &= dist < 5
+    sandig |= holz & (np.random.RandomState(seed + 2).rand(*holz.shape) < 0.008)                                         # einzelne Koerner auf den Planken
+    a[sandig] = sand_tex[sandig]
+
+
 def schatten_hochbahn(a, lay, boden):
     hb = lay['hochbahn']
     y0 = (hb['y1'] + 1) * T
@@ -208,13 +265,13 @@ def bauen(frame=None, speichern=True):
     k18.rasen_kanten(a, rasen)
     sand = gross(kl == 'd')                                           # Sand: Steinkante nur zur Promenade hin
     nahw = np.array(Image.fromarray((wasser * 255).astype(np.uint8)).filter(ImageFilter.MaxFilter(5))) > 0
-    rand_s = kontur(sand) & ~nahw & ~gross(kl == 'b')
+    rand_s = kontur(sand) & ~nahw & ~gross(kl == 'b') & ~(np.array(Image.fromarray((gross(kl == 'b') * 255).astype(np.uint8)).filter(ImageFilter.MaxFilter(7))) > 0)
     rand_s &= ~(np.roll(gross(kl == 'b'), 1, 0) | np.roll(gross(kl == 'b'), -1, 0))
     a[rand_s] = H('#8a8e98')
     pr = kontur(pm)                                                   # Sandstein-Rahmen: feine Fugenkante
     a[pr] = H('#8c7c62')
-    holz = gross(kl == 'b')                                           # Holzpromenade: dunkle Kante ringsum
-    a[kontur(holz)] = H('#5a4228')
+    holz = gross(kl == 'b')                                           # Holzpromenade: Planken + Sanduebergang
+    holzsteg(a, holz, k18.textur('d', cols, rows))
     becken(a, gross(kl == 'o'), frame, lvl)
     pier = gross(kl == 'v')
     k18.kaimauer(a, wasser, pier, lvl)
