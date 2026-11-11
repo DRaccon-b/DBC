@@ -21727,26 +21727,6 @@
 "anim": "wehen"
 },
 {
-"datei": "varianten/k01-deko05_ohne.png",
-"basis": "k01/deko05",
-"x": 956,
-"y": 230,
-"fuss": 26,
-"kachel": [
-60,
-15
-],
-"block": [
-60,
-15,
-1,
-1
-],
-"ebene": 0,
-"liegend": false,
-"anim": "wehen"
-},
-{
 "datei": "varianten/k01-deko06_m_ohne.png",
 "basis": "k01/deko06",
 "x": 893,
@@ -22208,15 +22188,15 @@
 {
 "datei": "varianten/k20-bank.png",
 "basis": "k20/bank",
-"x": 879,
+"x": 897,
 "y": 211,
 "fuss": 27,
 "kachel": [
-56,
+57,
 14
 ],
 "block": [
-55,
+56,
 13,
 2,
 2
@@ -22226,15 +22206,15 @@
 {
 "datei": "varianten/k20-bank.png",
 "basis": "k20/bank",
-"x": 1039,
+"x": 1021,
 "y": 211,
 "fuss": 27,
 "kachel": [
-66,
+64,
 14
 ],
 "block": [
-65,
+63,
 13,
 2,
 2
@@ -22244,16 +22224,16 @@
 {
 "datei": "varianten/k21-steinlaterne.png",
 "basis": "k21/steinlaterne",
-"x": 852,
-"y": 212,
+"x": 868,
+"y": 192,
 "fuss": 48,
 "kachel": [
+55,
+14
+],
+"block": [
 54,
-16
-],
-"block": [
-53,
-13,
+12,
 2,
 3
 ],
@@ -22263,130 +22243,16 @@
 {
 "datei": "varianten/k21-steinlaterne.png",
 "basis": "k21/steinlaterne",
-"x": 820,
-"y": 274,
+"x": 1060,
+"y": 192,
 "fuss": 48,
 "kachel": [
-52,
-19
-],
-"block": [
-51,
-17,
-2,
-3
-],
-"ebene": 1,
-"anim": "lampe"
-},
-{
-"datei": "varianten/k21-steinlaterne.png",
-"basis": "k21/steinlaterne",
-"x": 1108,
-"y": 274,
-"fuss": 48,
-"kachel": [
-70,
-19
-],
-"block": [
-69,
-17,
-2,
-3
-],
-"ebene": 1,
-"anim": "lampe"
-},
-{
-"datei": "varianten/k21-steinlaterne.png",
-"basis": "k21/steinlaterne",
-"x": 820,
-"y": 342,
-"fuss": 48,
-"kachel": [
-52,
-24
-],
-"block": [
-51,
-21,
-2,
-3
-],
-"ebene": 1,
-"anim": "lampe"
-},
-{
-"datei": "varianten/k21-steinlaterne.png",
-"basis": "k21/steinlaterne",
-"x": 1108,
-"y": 342,
-"fuss": 48,
-"kachel": [
-70,
-24
-],
-"block": [
-69,
-21,
-2,
-3
-],
-"ebene": 1,
-"anim": "lampe"
-},
-{
-"datei": "varianten/k21-steinlaterne.png",
-"basis": "k21/steinlaterne",
-"x": 852,
-"y": 406,
-"fuss": 48,
-"kachel": [
-54,
-28
-],
-"block": [
-53,
-25,
-2,
-3
-],
-"ebene": 1,
-"anim": "lampe"
-},
-{
-"datei": "varianten/k21-steinlaterne.png",
-"basis": "k21/steinlaterne",
-"x": 1076,
-"y": 406,
-"fuss": 48,
-"kachel": [
-68,
-28
-],
-"block": [
 67,
-25,
-2,
-3
-],
-"ebene": 1,
-"anim": "lampe"
-},
-{
-"datei": "varianten/k21-steinlaterne.png",
-"basis": "k21/steinlaterne",
-"x": 996,
-"y": 438,
-"fuss": 48,
-"kachel": [
-63,
-30
+14
 ],
 "block": [
-62,
-27,
+66,
+12,
 2,
 3
 ],
@@ -22434,44 +22300,6 @@
 {
 "datei": "varianten/k01-laterne_ohne.png",
 "basis": "k01/laterne",
-"x": 687,
-"y": 869,
-"fuss": 58,
-"kachel": [
-43,
-57
-],
-"block": [
-42,
-54,
-1,
-4
-],
-"ebene": 1,
-"anim": "laterne"
-},
-{
-"datei": "varianten/k01-laterne_ohne.png",
-"basis": "k01/laterne",
-"x": 738,
-"y": 869,
-"fuss": 58,
-"kachel": [
-46,
-57
-],
-"block": [
-46,
-54,
-1,
-4
-],
-"ebene": 1,
-"anim": "laterne"
-},
-{
-"datei": "varianten/k01-laterne_ohne.png",
-"basis": "k01/laterne",
 "x": 145,
 "y": 1129,
 "fuss": 58,
@@ -22491,63 +22319,6 @@
 {
 "datei": "varianten/k01-laterne_ohne.png",
 "basis": "k01/laterne",
-"x": 145,
-"y": 1193,
-"fuss": 58,
-"kachel": [
-9,
-78
-],
-"block": [
-9,
-74,
-1,
-4
-],
-"ebene": 1,
-"anim": "laterne"
-},
-{
-"datei": "varianten/k01-laterne_ohne.png",
-"basis": "k01/laterne",
-"x": 240,
-"y": 1179,
-"fuss": 58,
-"kachel": [
-15,
-77
-],
-"block": [
-15,
-73,
-1,
-4
-],
-"ebene": 1,
-"anim": "laterne"
-},
-{
-"datei": "varianten/k01-laterne_ohne.png",
-"basis": "k01/laterne",
-"x": 416,
-"y": 1179,
-"fuss": 58,
-"kachel": [
-26,
-77
-],
-"block": [
-26,
-73,
-1,
-4
-],
-"ebene": 1,
-"anim": "laterne"
-},
-{
-"datei": "varianten/k01-laterne_ohne.png",
-"basis": "k01/laterne",
 "x": 496,
 "y": 1113,
 "fuss": 58,
@@ -22558,25 +22329,6 @@
 "block": [
 31,
 69,
-1,
-4
-],
-"ebene": 1,
-"anim": "laterne"
-},
-{
-"datei": "varianten/k01-laterne_ohne.png",
-"basis": "k01/laterne",
-"x": 496,
-"y": 1179,
-"fuss": 58,
-"kachel": [
-31,
-77
-],
-"block": [
-31,
-73,
 1,
 4
 ],
@@ -23100,6 +22852,25 @@
 "ebene": 1
 },
 {
+"datei": "varianten/k01-deko05.png",
+"basis": "k01/deko05",
+"x": 743,
+"y": 916,
+"fuss": 29,
+"kachel": [
+47,
+58
+],
+"block": [
+46,
+57,
+2,
+2
+],
+"ebene": 1,
+"anim": "wehen"
+},
+{
 "datei": "varianten/k01-deko00.png",
 "basis": "k01/deko00",
 "x": 1399,
@@ -23226,6 +22997,25 @@
 "block": [
 31,
 24,
+2,
+2
+],
+"ebene": 1,
+"anim": "wehen"
+},
+{
+"datei": "varianten/k01-deko00.png",
+"basis": "k01/deko00",
+"x": 813,
+"y": 266,
+"fuss": 23,
+"kachel": [
+51,
+17
+],
+"block": [
+50,
+16,
 2,
 2
 ],
@@ -23385,6 +23175,25 @@
 "anim": "wehen"
 },
 {
+"datei": "varianten/k01-deko01.png",
+"basis": "k01/deko01",
+"x": 1116,
+"y": 379,
+"fuss": 22,
+"kachel": [
+70,
+24
+],
+"block": [
+69,
+23,
+2,
+2
+],
+"ebene": 1,
+"anim": "wehen"
+},
+{
 "datei": "varianten/k01-deko00.png",
 "basis": "k01/deko00",
 "x": 393,
@@ -23397,25 +23206,6 @@
 "block": [
 24,
 19,
-2,
-2
-],
-"ebene": 1,
-"anim": "wehen"
-},
-{
-"datei": "varianten/k01-deko30.png",
-"basis": "k01/deko30",
-"x": 746,
-"y": 945,
-"fuss": 32,
-"kachel": [
-47,
-60
-],
-"block": [
-46,
-59,
 2,
 2
 ],
@@ -23815,44 +23605,6 @@
 "block": [
 85,
 35,
-2,
-2
-],
-"ebene": 1,
-"anim": "wehen"
-},
-{
-"datei": "varianten/k01-deko01.png",
-"basis": "k01/deko01",
-"x": 508,
-"y": 267,
-"fuss": 22,
-"kachel": [
-32,
-17
-],
-"block": [
-31,
-16,
-2,
-2
-],
-"ebene": 1,
-"anim": "wehen"
-},
-{
-"datei": "varianten/k01-deko05.png",
-"basis": "k01/deko05",
-"x": 184,
-"y": 1236,
-"fuss": 29,
-"kachel": [
-12,
-78
-],
-"block": [
-11,
-77,
 2,
 2
 ],
@@ -24375,16 +24127,16 @@
 {
 "datei": "varianten/k01-deko37_ohne.png",
 "basis": "k01/deko37",
-"x": 1370,
-"y": 823,
+"x": 746,
+"y": 871,
 "fuss": 22,
 "kachel": [
-86,
-52
+47,
+55
 ],
 "block": [
-85,
-51,
+46,
+54,
 2,
 2
 ],

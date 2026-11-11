@@ -254,13 +254,12 @@ def main():
     AX = 976                                                        # Achse Kristall-Schrein / Steinring
     platz('schrein/00', AX, 14 * T + 7, {'anim': 'kristall'}, frei=False)      # ganz auf dem Platz, nicht ueber Wasser
     fuesse.append((AX - 24, 14 * T + 7, AX + 24, 16 * T + 8))      # Zugang vor der Schreintreppe frei
-    for dx in (-80, 80):                                            # Baenke spiegelsymmetrisch am Schreinplatz
+    for dx in (-62, 62):                                            # Baenke spiegelsymmetrisch am Schreinplatz
         platz('k20/bank', AX + dx, 14 * T + 10, {}, frei=False)
-    for (dx, fy) in ((112, 256), (144, 318), (144, 386), (112, 450), (32, 482)):   # Steinlaternen am Ring (Vorlage)
-        for sd in (-1, 1):
-            platz('k21/steinlaterne', AX + sd * dx, fy, {'anim': 'lampe'}, boden='gpsw', frei=False)
-    for (cx, fy) in ((1206, 894), (1257, 894), (694, 926), (745, 926),             # Laternen an den Stegen
-                     (152, 1186), (152, 1250), (247, 1236), (423, 1236), (503, 1170), (503, 1236)):   # Platz am Wrack
+    for sd in (-1, 1):                                              # ein Paar Steinlaternen am Schrein (Nutzer: weniger Laternen)
+        platz('k21/steinlaterne', AX + sd * 96, 14 * T + 12, {'anim': 'lampe'}, boden='gpsw', frei=False)
+    for (cx, fy) in ((1206, 894), (1257, 894),                     # Laternen am grossen Steg (Nutzer: weniger)
+                     (152, 1186), (503, 1170)):                     # Platz am Wrack: Teleporter und Platzende
         platz('k01/laterne', cx, fy, {'anim': 'laterne'}, boden='gpsw', mit_fuss=False, frei=False)
     platz('k20/bank', 368, 1146, {}, frei=False)                   # Bank auf dem Platz am Wrack
     platz('k01/deko53', 1431, 158, {'anim': None})                  # Wegweiser am Feldweg oben rechts
@@ -316,6 +315,8 @@ def main():
             continue
         if platz('k01/deko37', tx * T + 8, ty * T + 12, {'liegend': True}, boden='s', mit_fuss=False):
             n_ += 1
+    objekte = [o for o in objekte if not (o['basis'] in ('k01/deko05', 'k01/deko06', 'rand/01') and
+                                          AX - 28 <= o['x'] + 8 <= AX + 28 and 14 * T <= o['y'] + o['fuss'] <= 17 * T)]   # Treppenzugang frei
     json.dump(objekte, open(os.path.join(OBJ, 'platzierung.json'), 'w'), indent=0)
     print('Karte 27: %d Objekte' % len(objekte))
 
