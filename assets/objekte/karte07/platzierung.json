@@ -22,15 +22,15 @@
 "datei": "varianten/azul_gross-00_beton.png",
 "basis": "azul_gross/00",
 "x": 1443,
-"y": 188,
+"y": 156,
 "fuss": 119,
 "kachel": [
 93,
-18
+16
 ],
 "block": [
 90,
-11,
+9,
 7,
 8
 ],
@@ -41,15 +41,15 @@
 "datei": "varianten/azul-07_beton.png",
 "basis": "azul/07",
 "x": 1343,
-"y": 229,
+"y": 213,
 "fuss": 62,
 "kachel": [
 85,
-17
+16
 ],
 "block": [
 84,
-14,
+13,
 3,
 4
 ],
@@ -77,15 +77,15 @@
 "datei": "varianten/azul-00_beton.png",
 "basis": "azul/00",
 "x": 1397,
-"y": 233,
+"y": 217,
 "fuss": 58,
 "kachel": [
 88,
-17
+16
 ],
 "block": [
 87,
-14,
+13,
 3,
 4
 ],
@@ -3794,24 +3794,6 @@
 "ebene": 0
 },
 {
-"datei": "varianten/deko_gras-10_gras.png",
-"basis": "deko_gras/10",
-"x": 225,
-"y": 1259,
-"fuss": 24,
-"kachel": [
-15,
-79
-],
-"block": [
-14,
-78,
-2,
-2
-],
-"ebene": 0
-},
-{
 "datei": "varianten/deko_gras-09_gras.png",
 "basis": "deko_gras/09",
 "x": 866,
@@ -3963,18 +3945,18 @@
 "anim": "wehen"
 },
 {
-"datei": "varianten/deko_schnee-01_sand.png",
-"basis": "deko_schnee/01",
-"x": 287,
-"y": 181,
-"fuss": 30,
+"datei": "varianten/k01-deko01_gras.png",
+"basis": "k01/deko01",
+"x": 1539,
+"y": 1389,
+"fuss": 22,
 "kachel": [
-19,
-12
+97,
+87
 ],
 "block": [
-18,
-11,
+96,
+86,
 2,
 2
 ],
@@ -4277,6 +4259,25 @@
 "block": [
 34,
 59,
+2,
+2
+],
+"ebene": 0,
+"anim": "wehen"
+},
+{
+"datei": "varianten/deko_schnee-23_sand.png",
+"basis": "deko_schnee/23",
+"x": 257,
+"y": 677,
+"fuss": 30,
+"kachel": [
+16,
+43
+],
+"block": [
+16,
+42,
 2,
 2
 ],

@@ -56,9 +56,9 @@ FEST = [
     # Gipfel: Wirbelportal, Drachenschrein, Obelisk, Laternen (max. 4 Steinlaternen im Schrein)
     ('mittel/12_sw', 6.5, 7, {'anim': 'portal'}),                   # Portal schwarz-grau-weiss (Nutzer)
     # Reich des azurblauen Drachen (Schreinhof): Drachenstatue um Jadesaeule, Marmorweg, Kugelsockel, Banner
-    ('azul_gross/00', 87, 12, {'anim': 'leuchten'}),
-    ('azul/07', 79, 11, {}), ('azul/07', 79, 19, {'spiegeln': True}),     # oberes Paar ueber dem Marmorweg (Weg frei)
-    ('azul/00', 82, 11, {'anim': 'leuchten'}), ('azul/00', 82, 19, {'anim': 'leuchten'}),
+    ('azul_gross/00', 87, 10, {'anim': 'leuchten'}),
+    ('azul/07', 79, 10, {}), ('azul/07', 79, 19, {'spiegeln': True}),     # oberes Paar ueber dem Marmorweg (Weg frei)
+    ('azul/00', 82, 10, {'anim': 'leuchten'}), ('azul/00', 82, 19, {'anim': 'leuchten'}),
     ('azul/02', 94, 11, {'anim': 'leuchten'}), ('azul/02', 94, 19, {'anim': 'leuchten'}),
     ('azul/01', 79, 6, {'anim': 'wehen'}), ('azul/01', 82, 6, {'anim': 'wehen'}),
     ('azul/01', 92, 6, {'anim': 'wehen'}), ('azul/01', 95, 6, {'anim': 'wehen'}),
