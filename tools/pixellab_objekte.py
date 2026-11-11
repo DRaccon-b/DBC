@@ -1997,6 +1997,10 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'tall green copper statue of a crowned woman in a long robe holding a burning torch high up in her right hand and a '
         'tablet in her left arm, standing on a tall square grey stone pedestal with steps, slim tall monument, ' + FR14,
     ]},
+    'k30_statue_gross': {'size': 256, 'items': [
+        'huge tall green copper statue of a crowned woman in a long flowing robe holding a burning torch high up in her right '
+        'hand and a tablet in her left arm, standing on a tall square grey stone pedestal with steps, monumental, ' + FR14,
+    ]},
     'k30_klein': {'size': 64, 'items': [
         'green copper statue of a crowned woman holding a torch up high and a tablet, standing on a tall stone pedestal, ' + FR14,
         'small ticket kiosk booth with a blue roof and warm yellow lit windows, white walls, ' + FR14,
