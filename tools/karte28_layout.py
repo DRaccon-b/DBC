@@ -9,7 +9,7 @@ Wiesen mit Feldwegen, Lagerfeuer, Ausgaenge oben rechts und unten Mitte.
 
 Klassen:  h Wald  g Gras  w Feldweg  f Schlamm (Arena)  e Erde  k Steinboden  m Steinwand (Arena-Nordrand)
           t Treppe  T Ausgang
-Hoehen:   2 = Arena: SENKE (Nutzer) - ringsum hoeherer Waldboden mit Steinwaenden, Treppen fuehren hinunter
+Hoehen:   2 = Arena: ERHOEHUNG (Nutzer, nur eine Ebene) - Wald dahinter gleich hoch, Suedfront mit Treppen hinauf
 """
 import json, os
 from collections import deque

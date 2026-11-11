@@ -89,7 +89,7 @@ def bauen(frame=None, speichern=True):
     a[em] = erde[em]
     # Schlamm-Arena: dunkle nasse Erde, Risse, hellere Erdflecken
     arena = hp == 2
-    fm = arena & ~maske(cls, 'm')
+    fm = arena                                                       # auch die frueheren Wandreihen im Norden
     k23.schlamm(a, fm, erde)
     a[fm] = (a[fm] * np.array([0.82, 0.84, 0.86])).astype(np.uint8)
     risse(a, fm)
@@ -101,33 +101,44 @@ def bauen(frame=None, speichern=True):
     a[m] = sand[m]
     saum = weich(roh, 7.0, 0.5, 4, 0.36) & ~m & (hp < 2)
     a[saum] = (a[saum] * 0.9).astype(np.uint8)
-    # Arena = SENKE (Nutzer: eine Ebene, nicht zweimal hoch): ringsum liegt der Waldboden hoeher. Nord- und
-    # Stufenkanten sind 3 Kacheln hohe Steinwaende in die Arena hinein, die Suedkante ist nur eine Lippe; die zwei
-    # Treppen fuehren von der Wiese hinunter in die Arena.
+    # Arena = ERHOEHUNG (Nutzer: nur eine Ebene): Arena und der Wald dahinter liegen gleich hoch (keine zweiten Waende
+    # im Norden); im Sueden niedrige Steinfront mit den zwei frontalen Steintreppen hinauf.
     lippe = k20.lippe_aus_gras(gras)
     frei = np.zeros((Hp, Wp), bool)
     treppen = []
     for tp in lay['treppen']:
         x0, x1 = tp['x'] * T, (tp['x'] + tp['b']) * T
-        yb = int(np.nonzero(arena[:, x0 + 8])[0].max())             # unterste Arena-Zeile (Suedkante)
-        frei[yb - 30:yb + 14, x0 - 2:x1 + 2] = True
-        treppen.append((x0, x1, yb))
-    wand = k4.hoehenkanten(a, ~arena, 'stein', FRONT_WALD, 8, lippe, frei, 28, berg=False)
-    for (x0, x1, yb) in treppen:
-        k4.treppe(a, x0, x1, yb - 23, 'n', FRONT_WALD, 'stein', a.copy())   # Stufen steigen nach Sueden zur Wiese an
-        rs = np.random.RandomState(x0)                               # Weg setzt oben genau in Treppenbreite an (Regel 2)
-        y_end = yb + 22
-        while y_end < yb + 60 and not (a[y_end, x0 + 4:x1 - 4] == sand[y_end, x0 + 4:x1 - 4]).all():
-            y_end += 1                                               # bis der Feldweg erreicht ist (keine Luecke)
-        for y in range(yb + 1, y_end + 2):
-            ein = min(4, max(0, (y - yb - 12) // 4))
-            l = x0 + 1 + ein + rs.randint(0, 2) * (y > yb + 10)
-            r = x1 - 1 - ein - rs.randint(0, 2) * (y > yb + 10)
+        ye = int(np.nonzero(arena[:, x0 + 8])[0].max())
+        frei[ye - 14:ye + FRONT_ARENA + 8, x0:x1] = True
+        treppen.append((x0, x1, ye))
+    vor2 = a.copy()
+    wand = k4.hoehenkanten(a, arena | (hp >= 3), 'stein', FRONT_ARENA, 6, lippe, frei, 28, berg=False)
+    from PIL import ImageFilter as _IF
+    def _dehnen(mm, n):
+        return np.array(Image.fromarray(mm.astype(np.uint8) * 255).filter(_IF.MaxFilter(n))) > 0
+    unter_arena = np.zeros_like(arena)                               # Suedfront der Arena (unterhalb) bleibt
+    for d in range(1, FRONT_ARENA + 8):
+        unter_arena[d:] |= arena[:-d]
+    nur_wald = (hp != 2) & ~_dehnen(arena, 13) & ~_dehnen(unter_arena, 5)   # Kante hoher Wald / Wald: unsichtbar
+    a[nur_wald] = vor2[nur_wald]
+    wand &= ~nur_wald
+    for (x0, x1, ye) in treppen:
+        k4.treppe(a, x0, x1, ye, 's', FRONT_ARENA, 'stein', a.copy())
+        yf = ye + FRONT_ARENA + 5                                    # Weg setzt genau in Treppenbreite an (Regel 2)
+        for y in range(yf, yf + 10):                                 # seitlich davon kein Weg (sonst breiter als Treppe)
+            for xs_ in (slice(x0 - 14, x0 + 1), slice(x1 - 1, x1 + 14)):
+                sel = (a[y, xs_] == sand[y, xs_]).all(axis=1)
+                a[y, xs_][sel] = gras[y, xs_][sel]
+        rs = np.random.RandomState(x0)
+        for y in range(yf, yf + 22):
+            ein = max(0, (y - yf - 12) // 3)                         # nach unten weich in den Feldweg uebergehen
+            l = x0 + 1 + ein + rs.randint(0, 2) * (y > yf + 10)
+            r = x1 - 1 - ein - rs.randint(0, 2) * (y > yf + 10)
             a[y, l:r] = sand[y, l:r]
     for tp in lay['ausgaenge']:
         k4.teleporter_zeichnen(a, tp['x'], tp['y'], tp['b'], tp['h'], frame)
     img = Image.fromarray(a).convert('RGBA')
-    lvl = np.where(arena, 1, 2).astype(np.uint8)                  # Arena liegt tiefer
+    lvl = np.where(arena | (hp >= 3), 2, 1).astype(np.uint8)       # Arena und Wald dahinter: obere Ebene
     if speichern and frame is None:
         img.save(os.path.join(KARTE, 'terrain_basis.png'))
         np.save(os.path.join(KARTE, 'pixelhoehe.npy'), lvl)
