@@ -88,8 +88,6 @@ def main():
     h[py0:py1 + 1, px0:px1 + 1] = 2
     for (x0, y0, x1, y1) in BRUECKEN:
         k[y0:y1 + 1, x0:x1 + 1] = 'b'
-    for (tx, ty, b, hh) in TELEPORTER:
-        k[ty:ty + hh, tx:tx + b] = 'T'
     lay = {'groesse': [C, R], 'klassen': [''.join(z) for z in k], 'hoehe': [''.join(str(c) for c in z) for z in h],
            'platz': list(PLATZ), 'platz_treppe': list(PLATZ_TREPPE), 'bruecken': BRUECKEN, 'front_reihen': FRONT_REIHEN,
            'treppen_sued': [[PLATZ_TREPPE[0], PLATZ_TREPPE[1], 2, PLATZ[3]]],
