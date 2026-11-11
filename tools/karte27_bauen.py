@@ -55,32 +55,33 @@ def pflaster(cols, rows):
 
 
 def pflaster_rand(a, pm, gras, sand, sm, seed=272):
-    """Uebergang Gras/Sand -> Pflaster (Nutzer): am Rand der Platten waechst Gras bzw. liegt Sand unregelmaessig
-    1-4 px ueber die Steine, die aeussersten Steine sind etwas abgesenkt (dunkler), Kontaktschatten an der
-    Graskante (Licht von oben links)."""
-    rs = np.random.RandomState(seed)
+    """Uebergang Gras/Sand -> Pflaster (Nutzer): saubere, leicht wellige Kante - Gras bzw. Sand waechst in weichen
+    Boegen 0-4 px ueber die Randsteine (kein Pixelrauschen, keine Einzelpixel), darunter eine dunkle Kontur und ein
+    Kontaktschatten auf den Steinen (Licht von oben links)."""
+    from PIL import ImageFilter as _IF
     Hh, W = pm.shape
-    aussen = ~pm
-    d = np.zeros((Hh, W), np.int32)                                   # Abstand (px) vom Rand ins Pflaster hinein
-    cur = aussen.copy()
+    rs = np.random.RandomState(seed)
+    welle = rs.rand(Hh // 12 + 3, W // 12 + 3)                       # niederfrequent: Ueberwuchs-Tiefe 0..4 px
+    welle = np.array(Image.fromarray((welle * 255).astype(np.uint8)).resize((W + 36, Hh + 36), Image.BICUBIC),
+                     np.float32)[:Hh, :W] / 255.0 * 4.5
+    d = np.full((Hh, W), 99.0, np.float32)                           # Abstand (px) vom Rand ins Pflaster
+    cur = ~pm
     for i in range(1, 6):
         cur = cur | np.roll(cur, 1, 0) | np.roll(cur, -1, 0) | np.roll(cur, 1, 1) | np.roll(cur, -1, 1)
-        d[(d == 0) & pm & cur] = i
-    tiefe = rs.randint(1, 5, (Hh // 4 + 2, W // 4 + 2))               # wie weit Gras/Sand je Stelle hineinwaechst
-    tiefe = np.kron(tiefe, np.ones((4, 4), int))[:Hh, :W]
-    rauschen = rs.rand(Hh, W)
-    ueber = pm & (d > 0) & ((d < tiefe) | ((d == tiefe) & (rauschen < 0.5)))
-    nah_sand = np.zeros_like(pm)
+        d[(d == 99) & pm & cur] = i
+    ueber = pm & (d <= welle)
+    m = Image.fromarray((ueber * 255).astype(np.uint8)).filter(_IF.ModeFilter(5))   # Einzelpixel weg, Boegen glatt
+    ueber = (np.array(m) > 127) & pm
     s_ = sm.copy()
     for _ in range(6):
         s_ = s_ | np.roll(s_, 1, 0) | np.roll(s_, -1, 0) | np.roll(s_, 1, 1) | np.roll(s_, -1, 1)
-    nah_sand = s_
-    a[ueber & ~nah_sand] = gras[ueber & ~nah_sand]
-    a[ueber & nah_sand] = sand[ueber & nah_sand]
-    rest = pm & ~ueber & (d > 0) & (d <= 5)                          # Randsteine leicht abgesenkt
-    a[rest] = (a[rest] * 0.88).astype(np.uint8)
-    kante = pm & ~ueber & (np.roll(ueber | aussen, 1, 0) | np.roll(ueber | aussen, 1, 1))
-    a[kante] = (a[kante] * 0.72).astype(np.uint8)                    # Kontaktschatten unter Gras-/Sandkante
+    a[ueber & ~s_] = gras[ueber & ~s_]
+    a[ueber & s_] = sand[ueber & s_]
+    stein = pm & ~ueber
+    rand = stein & (np.roll(~stein, 1, 0) | np.roll(~stein, -1, 0) | np.roll(~stein, 1, 1) | np.roll(~stein, -1, 1))
+    a[rand] = (a[rand] * 0.62).astype(np.uint8)                      # dunkle Kontur der Steinkante
+    sch = stein & ~rand & (np.roll(~stein, 2, 0) | np.roll(~stein, 2, 1))
+    a[sch] = (a[sch] * 0.84).astype(np.uint8)                        # weicher Kontaktschatten unter der Graskante
 
 
 def bauen(frame=None, speichern=True):
@@ -106,7 +107,7 @@ def bauen(frame=None, speichern=True):
     a[saum] = (a[saum] * 0.9).astype(np.uint8)
     sm = weich(zell_maske(cls, 's', cols, rows), 6.0, 0.4, 5)        # Sandstrand
     a[sm] = sand[sm]
-    pm = weich(zell_maske(cls, 'p', cols, rows), 3.0, 0.35, 27, 0.5)   # Steinweg / Platz: leicht gerundete, unruhige Kante
+    pm = weich(zell_maske(cls, 'p', cols, rows), 3.0, 0.0, 27, 0.5)    # Steinweg / Platz: leicht gerundete Kante
     pf = pflaster(cols, rows)
     a[pm] = pf[pm]
     pflaster_rand(a, pm, gras, sand, sm)
