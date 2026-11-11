@@ -130,6 +130,33 @@ def bauen(frame=None, speichern=True):
     steg_t = np.array([[ch == 'b' for ch in z] for z in cls])
     xm |= np.kron(steg_t, np.ones((T, T), bool))                    # Stege stehen ueber dem Wasser
     a = np.array(wasser_vertieft.vertiefen(Image.fromarray(a), np.ones_like(xm), frame, maske=xm).convert('RGB'))
+    # Pfuetzen im Moor oben links: braunes Schlammwasser (Nutzer). Kleine Wasserflaechen, die an Moorkacheln grenzen
+    from collections import deque
+    from PIL import ImageFilter as _IF
+    f_t = np.array([[ch == 'f' for ch in z] for z in cls])
+    nah_f = np.array(Image.fromarray(f_t.astype(np.uint8) * 255).filter(_IF.MaxFilter(7))) > 0
+    moor_t = np.zeros_like(x_t)
+    gesehen = np.zeros_like(x_t)
+    for y in range(rows):
+        for x in range(cols):
+            if x_t[y, x] and not gesehen[y, x]:
+                komp, q = [], deque([(y, x)]); gesehen[y, x] = True
+                while q:
+                    cy, cx = q.popleft(); komp.append((cy, cx))
+                    for yy, xx in ((cy - 1, cx), (cy + 1, cx), (cy, cx - 1), (cy, cx + 1)):
+                        if 0 <= yy < rows and 0 <= xx < cols and x_t[yy, xx] and not gesehen[yy, xx]:
+                            gesehen[yy, xx] = True; q.append((yy, xx))
+                if len(komp) < 60 and any(nah_f[cy, cx] for cy, cx in komp):
+                    for cy, cx in komp:
+                        moor_t[cy, cx] = True
+    moor_px = (np.kron(moor_t, np.ones((T, T), np.uint8)) * 255).astype(np.uint8)
+    moor_w = xm & (np.array(Image.fromarray(moor_px).filter(_IF.MaxFilter(13))) > 0)
+    if moor_w.any():
+        af = a[moor_w].astype(np.float32)
+        l = af.mean(axis=1, keepdims=True)
+        l = (l - l.mean()) * 1.5 + l.mean()                            # Wellen/Glanz deutlicher, Grundton dunkler als der Schlamm
+        braun_w = np.concatenate([l * 0.62 + 6, l * 0.5 + 2, l * 0.3 + 2], axis=1)
+        a[moor_w] = np.clip(braun_w, 0, 255).astype(np.uint8)
     pmb = maske(cls, 'p') & xm                                       # Steinbruecken ueber dem Wasser (gerade Kanten)
     a[pmb] = pf[pmb]
     img = Image.fromarray(a).convert('RGBA')
