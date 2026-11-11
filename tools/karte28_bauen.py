@@ -99,6 +99,18 @@ def mauer_maske(Hh, W):
     return np.kron(ring_t, np.ones((T, T), bool))
 
 
+def arena_boden_maske(Hh, W):
+    """Boden innerhalb der Ringmauer (Kacheln, deren Mitte innerhalb der Innenkante liegt)."""
+    rows, cols = Hh // T, W // T
+    ty, tx = np.mgrid[0:rows, 0:cols]
+    cx, cy, rx, ry = MAUER_MITTE
+    d = MAUER_DICKE
+    dx, dy = tx * T + 8 - cx, ty * T + 8 - cy
+    e = mauer_rand(np.arctan2(dy / ry, dx / rx))
+    innen = np.hypot(dx / ((rx - d) * e), dy / ((ry - d) * e)) < 1.05
+    return np.kron(innen, np.ones((T, T), bool))
+
+
 def mauer(a, ring, stein):
     """Mauerkrone aus dunklen Steinbloecken (8x8, versetzt, Fugen, Licht oben links), dann Fronten und Seiten."""
     Hh, W = ring.shape
@@ -243,6 +255,7 @@ def bauen(frame=None, speichern=True):
     ring = mauer_maske(Hp, Wp)
     w_m = mauer(a, ring, stein)
     netz_ring(a, frame, ring | w_m, teiler=70)                       # Spinnweben haengen an Mauerkrone und Fronten
+    netz_ring(a, frame, arena_boden_maske(Hp, Wp) & ~ring & ~w_m, teiler=34)   # Arenaboden dicht eingesponnen (Nutzer)
     wand |= w_m | ring
     for tp in lay['ausgaenge']:
         k4.teleporter_zeichnen(a, tp['x'], tp['y'], tp['b'], tp['h'], frame)
