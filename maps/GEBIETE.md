@@ -22,7 +22,7 @@ Aufstellfelds (cyan = Ankunft, gold = weiter; Funktion `pfeil_marke` in `tools/k
 | 5 | Karte 25 – Sunset Bay | in Arbeit: Gelände und Objekte fertig; offen: Kollision, Animation, v1.0 |
 | 6 | Karte 26 – The Kaiser's Fortress | in Arbeit: Gelände und Objekte fertig (Inneres des Kaiser-Flaggschiffs aus Karte 25); offen: Kollision, Animation, v1.0 |
 | 7 | Karte 27 – Destiny Lake | in Arbeit: Gelände und Objekte fertig; offen: Kollision, Animation, v1.0 |
-| 8 | Karte 28 – Tower Forest | in Arbeit: Layout |
+| 8 | Karte 28 – Tower Forest | v1.0 (`maps/karte28/v1.0/Tower_Forest_v1.0.zip`) |
 | … | weitere Karten folgen | – |
 | ? | Karte 07 – The Holy Peaks | vorhanden, wird vorerst nicht bearbeitet (nur eingeordnet) |
 

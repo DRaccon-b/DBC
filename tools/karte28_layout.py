@@ -150,6 +150,8 @@ def main():
     lay = {'groesse': [C, R], 'klassen': [''.join(z) for z in k], 'hoehe': [''.join(str(c) for c in z) for z in h],
            'arena': [int(ax0), int(ay0), int(ax1), int(ay1)],
            'treppen': [{'x': tx, 'y': ty, 'b': b, 'h': hh} for (tx, ty, b, hh) in TREPPEN],
+           'treppen_sued': [[tx, tx + b - 1, 2, ty - 1] for (tx, ty, b, hh) in TREPPEN],
+           'teleporter': [{'x': tx, 'y': ty, 'b': b, 'h': hh} for (tx, ty, b, hh) in AUSGAENGE],
            'ausgaenge': [{'x': tx, 'y': ty, 'b': b, 'h': hh} for (tx, ty, b, hh) in AUSGAENGE]}
     json.dump(lay, open(os.path.join(KARTE, 'layout.json'), 'w'), indent=0)
     F = {'h': (30, 80, 30), 'g': (84, 136, 62), 'f': (70, 60, 48), 'e': (130, 90, 50), 'k': (110, 112, 128),

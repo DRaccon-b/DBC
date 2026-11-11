@@ -22,6 +22,7 @@ KARTE = os.path.join(ROOT, 'maps', 'karte28')
 OBJ = os.path.join(ROOT, 'assets', 'objekte', 'karte28')
 T = 16
 N_FRAMES = 4
+BILDDAUER = 250
 k4.N_FRAMES = N_FRAMES
 H = k4.H
 weich, zell_maske, flaeche = k4.weich, k4.zell_maske, k20.flaeche
@@ -250,7 +251,9 @@ def bauen(frame=None, speichern=True):
     lvl[ring] = 3                                                    # Mauerkrone
     if speichern and frame is None:
         img.save(os.path.join(KARTE, 'terrain_basis.png'))
-        np.save(os.path.join(KARTE, 'pixelhoehe.npy'), lvl)
+        lv_ = lvl.copy(); lv_[wand] = 9
+        np.save(os.path.join(KARTE, 'pixelhoehe.npy'), lv_)
+        np.save(os.path.join(KARTE, 'wasser.npy'), np.packbits(np.zeros_like(wand)))
         np.save(os.path.join(KARTE, 'wand.npy'), np.packbits(wand))
     pfj = os.path.join(OBJ, 'platzierung.json')
     if os.path.exists(pfj):

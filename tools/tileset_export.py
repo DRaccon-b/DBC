@@ -55,6 +55,7 @@ KARTEN = {
     'karte18': ('karte18_bauen', 'The_Fog_Bound_City', 'v1.0'),
     'karte19': ('karte19_bauen', 'Revenge', 'v1.0'),
     'karte20': ('karte20_bauen', 'Startdorf', 'v1.0'),
+    'karte28': ('karte28_bauen', 'Tower_Forest', 'v1.0'),
 }
 
 
