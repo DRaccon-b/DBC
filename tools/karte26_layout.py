@@ -26,7 +26,7 @@ HALLE_WAND = [(4, 16), (20, 42), (48, 57), (61, 85)]   # Tueren bei x 17-19, 43-
 RUECKWAENDE = [(42, 2, 85, 7)]                 # Labor: hohe Rueckwand mit Lueftungsgittern                      # Thronpodest (heller Boden), Kante darunter
 WAENDE_EXTRA = [(34, 2, 34, 11), (34, 19, 34, 20)]   # duenne Wand Thronsaal | Gang (Durchgang Reihen 12-18, Nutzer: groesser)
 DURCHGAENGE = [(34, 12, 34, 18)]
-ZELLENWAENDE = [(12, 42, 12, 46), (25, 42, 25, 46)]
+ZELLENWAENDE = [(13, 42, 13, 46), (24, 42, 24, 46)]   # Eckzellen so breit wie die oberen (Nutzer)
 
 
 def main():

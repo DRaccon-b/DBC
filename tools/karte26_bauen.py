@@ -126,7 +126,7 @@ TEPPICHE = [(272, 150, 336, 238)]       # Thronsaal: x 272..336 (4 Kacheln, Mitt
 # Zellentrakt Mitte links (Nutzer: Zellen mit Gittern). Waagerecht: (x0, x1, Fusslinie y in px, Tuer-Mitte x | None);
 # senkrecht: (x, y0, y1) in px - Gitter von der Seite (Pfostenreihe).
 GITTER_W = [(5 * T, 13 * T, 35 * T, 9 * T), (15 * T, 23 * T, 35 * T, 19 * T), (25 * T, 33 * T, 35 * T, 29 * T),
-            (5 * T, 12 * T, 42 * T, 8 * T + 8), (26 * T, 33 * T, 42 * T, 29 * T + 8)]
+            (5 * T, 13 * T, 42 * T, 9 * T), (25 * T, 33 * T, 42 * T, 29 * T)]
 GITTER_S = []                                    # Seiten der Eckzellen sind jetzt Wand mit Decke (Nutzer)
 
 
