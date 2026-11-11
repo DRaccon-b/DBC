@@ -68,8 +68,8 @@ FEST = [
     (PL, 27, 23, {'anim': 'leuchten', 'spiegeln': True}),
     ('mittel/13', 59, 39, {}), ('mittel/13', 61, 49, {}),
     # Pagodenhof
-    ('pagode/00', 80, 45, {}), (BAMBUS, 73, 39, {'anim': 'wehen'}), (BAMBUS, 87, 39, {'anim': 'wehen'}),
-    (SL, 73, 45, {}), (SL, 87, 45, {}), (PL, 72, 32, {'anim': 'leuchten'}),
+    ('pagode_neu/00', 80, 45, {}), (BAMBUS, 73, 39, {'anim': 'wehen'}), (BAMBUS, 87, 39, {'anim': 'wehen'}),
+    (PL, 72, 32, {'anim': 'leuchten'}),
     (PL, 88, 32, {'anim': 'leuchten', 'spiegeln': True}),
     (KRISTALL, 87, 53, {'anim': 'glitzern'}), (AZALEE, 86, 54, {}),
     (PL, 82, 55, {'anim': 'leuchten', 'spiegeln': True}), (PL, 16, 54, {'anim': 'leuchten'}),

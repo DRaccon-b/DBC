@@ -435,6 +435,15 @@ OBJEKTGRUPPEN_K6 = {
 }
 
 OBJEKTGRUPPEN_K7 = {
+    'k7_pagode': {'size': 192, 'items': [
+        'three tiered japanese pagoda temple with red wooden walls and pillars, dark blue-green tiled roofs with upturned gold '
+        'trimmed eaves and a golden spire on top, stone base with steps in front, seen from the front and slightly above so the '
+        'roof surfaces of every tier and the ridges are visible, like a temple in a classic 2D handheld RPG town, facade facing '
+        'the camera, symmetric, not isometric',
+        'large japanese temple pagoda with three stacked roofs seen from slightly above, roof tiles clearly visible on each tier, '
+        'red lacquered walls, lanterns at the corners, golden finial, wide stone platform with stairs, classic 2D handheld RPG '
+        'style, facade facing the camera, symmetric, not isometric',
+    ]},
     'k7_turm': {'size': 160, 'items': [
         'huge black stone tower lying fallen on its side on the ground, broken in the middle, cracked dark obsidian blocks, a few glowing purple runes, perfectly straight front elevation view, symmetric, facing the camera head-on, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
         'fallen black stone tower segment lying on the ground, round broken end with rubble, dark obsidian, perfectly straight front elevation view, symmetric, facing the camera head-on, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
