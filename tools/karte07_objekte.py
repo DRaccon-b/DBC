@@ -17,9 +17,9 @@ KARTE = os.path.join(ROOT, 'maps', 'karte07')
 OBJ = os.path.join(ROOT, 'assets', 'objekte', 'karte07')
 T = 16
 FREMD = {'k05/tanne%d' % i: 'karte05/baeume/0%d.png' % i for i in range(3)}
-for i in (1, 2, 3, 5, 6, 8, 10, 26, 27, 31):
+for i in (1, 2, 3, 4, 5, 6, 8, 9, 10, 11, 26, 27, 31):
     FREMD['k01/deko%02d' % i] = 'karte01/deko/%02d.png' % i
-for i in (0, 4, 13):
+for i in (0, 4, 13, 36):
     FREMD['k05/klein%02d' % i] = 'karte05/klein/%02d.png' % i
 # Einbettung: Bueschel und Blumen vor dem Sockel von Felsen, Baeumen, Kristallen, Stuempfen
 # neue Deko-Sets (PixelLab k7_deko_*) + bewaehrte aus Karte 01/05
@@ -107,8 +107,7 @@ FEST = [
 ]
 STUMPF_PLAETZE = [(49, 57), (54, 38)]
 RUNEN_PLAETZE = [(40, 37), (57, 31), (89, 51), (27, 58), (65, 54)]
-BAUM_PLAETZE = [(52, 35), (58, 35), (40, 40), (47, 50), (53, 51), (66, 39), (92, 34), (14, 68),
-                (89, 59), (42, 55), (35, 34)]
+BAUM_PLAETZE = [(52, 35), (40, 40), (53, 51), (66, 39), (92, 34), (14, 68), (89, 59)]   # weniger Baeume (Nutzer)
 
 
 def main():
@@ -236,10 +235,8 @@ def main():
         for x in range(bx, bx + wt):
             for y in range(ty - ht + 1, ty + 1):
                 gesperrt.add((x, y))
-        if name in EINBETTEN:
+        if name in EINBETTEN and name not in BAEUME:           # Baeume bekommen Begleiter nach Regel 5d (unten)
             einbetten(bx, wt, ty)
-        if name in BAUM_BAMBUS and rnd2.random() < 0.22:
-            bambus_dazu(bx, wt, ty)
         return True
 
     def einbetten(bx, wt, ty):
@@ -306,13 +303,13 @@ def main():
         x = ox0 + 1.5 + rnd.random() * 1.5
         while x <= ox1 - 1:
             setze(rnd.choice(OBSTBAEUME), x, y, {'anim': 'baum', 'spiegeln': rnd.random() < 0.5}, frei=True)
-            x += 4 + rnd.random() * 1.5
-        y += 5 + rnd.randint(0, 1)
+            x += 6 + rnd.random() * 2                                # weniger Obstbaeume, versetzt
+        y += 6 + rnd.randint(0, 1)
     # verschneite Tannen und Schneefelsen nur auf Schnee (nie auf Wegen), keine Felsen im Steinkreis
     n_s = n_r = 0
     for _ in range(5000):
         tx, ty = rnd.randrange(3, cols - 3), rnd.randrange(3, rows - 3)
-        if cls[ty][tx] != 'n' or n_s >= 42 or rnd.random() > 0.5:
+        if cls[ty][tx] != 'n' or n_s >= 14 or rnd.random() > 0.5:   # weniger Tannen (Nutzer)
             continue
         if RING[0] <= tx - R <= RING[1] and RING[2] <= ty - R <= RING[3]:   # Steinkreis bleibt frei
             continue
@@ -321,6 +318,30 @@ def main():
                 n_r += 1
         elif setze(TANNE, tx, ty, {'anim': 'baum', 'spiegeln': rnd.random() < 0.5}, frei=True, abs_=True):
             n_s += 1
+    # Begleiter nach Regel 5 / 5d fuer alle einzeln stehenden Baeume (nicht Obstgarten, nicht Baeume an Kristallsaeulen):
+    # abwechselnd 2 Kacheln hoher Fels vor dem Stumpf (eine Kachel tiefer), Fels hinter den Blaettern, oder beides mit
+    # hoher Blume vorne; danach Stammreihe +-1 fuer andere Deko sperren
+    kristalle = [o['kachel'] for o in objekte if o['basis'] in (LILA, KRISTALL)]
+    baeume_ = [o for o in objekte if o['basis'] in BAEUME
+               and not any(abs(o['kachel'][0] - kx) <= 3 and abs(o['kachel'][1] - ky) <= 2 for kx, ky in kristalle)]
+    for i, o in enumerate(baeume_):
+        bx, by, wt, ht = o['block']
+        ty = o['kachel'][1]
+        cxm = bx + wt / 2.0 - 0.5
+        k = cls[ty][min(cols - 1, int(cxm + 0.5))]
+        fels = 'k05/klein36' if k == 'n' else rnd2.choice(['k01/deko09', 'k01/deko11'])
+        blume = 'k05/klein04' if k == 'n' else rnd2.choice(['k01/deko04', 'k01/deko27'])
+        sd = -1 if i % 2 else 1
+        art = i % 3
+        if art in (1, 2):                                            # hinter den Blaettern (eine Reihe hoeher, aussen)
+            setze(fels, cxm + sd * (wt / 2.0 + 0.2), ty - 1, {'spiegeln': rnd2.random() < 0.5}, abs_=True, _versuch=True)
+        if art in (0, 2):                                            # vor dem Stumpf: eine Kachel tiefer
+            n_ = fels if art == 0 else blume
+            setze(n_, cxm, ty + 1, {'spiegeln': rnd2.random() < 0.5, 'anim': 'wehen' if n_ == blume else None},
+                  abs_=True, _versuch=True)
+        for x in range(bx - 1, bx + wt + 1):
+            for y in (ty - 1, ty, ty + 1):
+                gesperrt.add((x, y))
     n = 0
     for _ in range(3000):
         if n >= 70:
