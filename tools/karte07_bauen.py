@@ -847,9 +847,9 @@ def bauen(frame=None, speichern=True):
     for (x0, x1, y0, y1) in lay['treppen']:
         frei[y0 * T:(y1 + 1) * T, x0 * T - 6:(x1 + 1) * T + 6] = True
         treppen.append((x0, x1, y0, y1))
-    k4.hoehenkanten(a, m3, 'wolkenfels', 48, 4, LIPPE_SCHNEE, frei, 13, berg=False, filtern=True, min_breite=40)
-    k4.hoehenkanten(a, m2, 'wolkenfels', 48, 4, LIPPE_GRAS, frei, 12, berg=False, filtern=True, min_breite=40)
-    k4.hoehenkanten(a, insel, 'wolkenfels', 64, 4, LIPPE_SCHNEE, np.zeros((Hp, Wp), bool), 11, berg=False, filtern=True, min_breite=40)
+    k4.hoehenkanten(a, m3, 'wolkenfels', 48, 8, LIPPE_SCHNEE, frei, 13, berg=True)
+    k4.hoehenkanten(a, m2, 'wolkenfels', 48, 8, LIPPE_GRAS, frei, 12, berg=True)
+    k4.hoehenkanten(a, insel, 'wolkenfels', 64, 8, LIPPE_SCHNEE, np.zeros((Hp, Wp), bool), 11, berg=True)
     # Wolken vor dem Wandfuss (Sueden) und an den Seiten
     unten = []
     for x in range(0, Wp, 14):
