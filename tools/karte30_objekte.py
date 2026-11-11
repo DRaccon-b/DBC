@@ -30,7 +30,7 @@ def kirsche(q, ziel):
     Image.fromarray(a.astype(np.uint8)).save(ziel)
 
 
-def brueckenturm(w=144, h=336):
+def brueckenturm(w=128, h=336):
     """Pylon der Bruecke (Vorlage): zwei weisse Stahlpfosten an den Gelaendern, drei Querriegel ueber der Fahrbahn,
     Nietreihen, Licht von links. Fuss = Brueckendeck."""
     im = Image.new('RGBA', (w, h), (0, 0, 0, 0))
@@ -95,6 +95,13 @@ def main():
         bb = sp.getbbox()
         bw = bb[2] - bb[0]
         cx, fy = int(cx), int(fy)
+        nb = math.ceil(bw / T)                                       # Regel 1b: kleinster Kachelblock, mittig darin,
+        if nb % 2 == 0:                                               # Fuss buendig auf der unteren Kachelkante
+            cx = int(round(cx / T)) * T
+        else:
+            cx = (cx // T) * T + T // 2
+        cx -= (nb * T - bw) % 2 and 0
+        fy = (fy // T) * T + T - 1
         fuss = (cx - bw // 2 - 2, fy - min(14, bb[3] - bb[1]), cx + bw // 2 + 2, fy + 2)
         if pruefen:
             if not frei(*fuss):
@@ -114,7 +121,8 @@ def main():
         datei = 'gebaeude/%s.png' % art
         sp = Image.open(os.path.join(OBJ, datei))
         objekte.append({'datei': datei, 'basis': 'gebaeude/' + art, 'x': x0 * T, 'y': (y1 + 1) * T - sp.height,
-                        'fuss': sp.height - 1, 'kachel': [(x0 + x1) // 2, y1], 'ebene': 1, 'an_wand': True, 'gebaeude': True})
+                        'fuss': sp.height - 1, 'kachel': [(x0 + x1) // 2, y1], 'ebene': 1, 'an_wand': True, 'gebaeude': True,
+                        'vor_hochbahn': art == 'bahnhof'})
         belegt.append((x0 * T, y0 * T, (x1 + 1) * T, (y1 + 1) * T))
     # Riesenrad (Fuss Reihe 65, Achse Spalte 105), Kiosk darunter, Brueckentuerme, Zug auf der Hochbahn
     setze('gebaeude/riesenrad_0', 105 * T, 66 * T - 2, {'anim': 'riesenrad'}, pruefen=False)
@@ -125,7 +133,7 @@ def main():
     zx0, zx1 = lay['hochbahn']['zug']
     zug = Image.open(os.path.join(ROOT, 'assets', 'objekte', 'karte18', 'gebaeude', 'zug.png'))
     shutil.copy(os.path.join(ROOT, 'assets', 'objekte', 'karte18', 'gebaeude', 'zug.png'), os.path.join(OBJ, 'fremd', 'zug.png'))
-    objekte.append({'datei': 'fremd/zug.png', 'basis': 'zug', 'x': zx0 * T, 'y': 0, 'fuss': zug.height - 1,
+    objekte.append({'datei': 'fremd/zug.png', 'basis': 'zug', 'x': zx0 * T + (math.ceil(zug.width / T) * T - zug.width) // 2, 'y': 0, 'fuss': zug.height - 1,
                     'kachel': [zx0, 68], 'ebene': 1, 'hochbahn': True})
     setze('fremd/strudel', 6 * T, 102 * T + 10, {'anim': 'portal', 'schattenlos': True}, pruefen=False)
     setze('klein/00', 88 * T + 8, 90 * T - 2, {})                                    # Statue im Park
@@ -150,7 +158,7 @@ def main():
     for ty in range(22, 91, 2):                                                      # Waldrand rechts (dicht, versetzt)
         for j, tx in enumerate((126, 128)):
             if kl[ty][tx] == 'f':
-                setze(BAUM[(ty + j) % 3], tx * T + (4 if (ty // 2) % 2 else 12), (ty + 1) * T + j * 8,
+                setze(BAUM[(ty + j) % 3], tx * T + 8, (ty + 1) * T + j * 16,
                       {'anim': 'baum', 'kein_schatten': True}, (ty + j) % 2 == 0, pruefen=False)
     # ---------------------------------------------------------------- Strassenmoebel
     for x in range(4, 125, 9):                                                       # Laternen an der Hauptstrasse

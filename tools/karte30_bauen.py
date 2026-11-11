@@ -113,6 +113,46 @@ def bruecke(a, lay, wasser_m, lvl, frame):
     lvl[:Y1, X0:X0 + 5] = 9; lvl[:Y1, X1 - 5:X1] = 9
 
 
+def hochbahn(img, lay, zug_sp=None):
+    """Hochbahn wie Karte 18 (Oberseite 2 Kacheln mit Fuehrungsschiene, Front 2 Kacheln), aber durchgehend von Rand
+    zu Rand (kein Prellbock, kein Nebel); der Zug steht auf der Fahrbahn."""
+    hb = lay['hochbahn']
+    a = np.array(img)
+    X0, X1, y0 = hb['x0'] * T, (hb['x1'] + 1) * T, hb['y0'] * T
+    xs = np.arange(X0, X1)
+    for d in range(32):
+        if d < 2:
+            c = np.tile(H('#aeb2c0'), (len(xs), 1))
+        elif d < 4:
+            c = np.tile(H('#6a6e7c'), (len(xs), 1))
+        elif 13 <= d <= 18:
+            c = np.tile(H('#8a8e9a') if d in (13, 18) else H('#c0c4ce'), (len(xs), 1))
+        elif d == 30:
+            c = np.tile(H('#9a9eac'), (len(xs), 1))
+        else:
+            c = np.where(((xs // 32) % 2)[:, None] == 1, H('#7c808e'), H('#787c8a'))
+        a[y0 + d, X0:X1, :3] = c[:, :3]
+        a[y0 + d, X0:X1, 3] = 255
+    for d in range(32):
+        c = H('#9a9eaa') if d < 3 else H('#82869a') if d < 26 else H('#5a5e6e')
+        row = np.tile(c, (len(xs), 1))
+        if d >= 3:
+            row[((xs - X0) % 256) < 2] = H('#4e5262')
+        if d == 3:
+            row[:] = H('#4e5262')
+        if 10 <= d <= 12:
+            row[:] = H('#6e7284')
+        a[y0 + 32 + d, X0:X1, :3] = row[:, :3]
+        a[y0 + 32 + d, X0:X1, 3] = 255
+    a[y0 + 63, X0:X1, :3] = H('#2a2c36')[:3]
+    img = Image.fromarray(a)
+    if zug_sp is not None:
+        zx0, zx1 = hb['zug']
+        x_ = zx0 * T + (-(-zug_sp.width // T) * T - zug_sp.width) // 2
+        img.alpha_composite(zug_sp, (x_, y0 + 31 - zug_sp.height))
+    return img
+
+
 def schatten_hochbahn(a, lay, boden):
     hb = lay['hochbahn']
     y0 = (hb['y1'] + 1) * T
@@ -220,7 +260,11 @@ def bauen(frame=None, speichern=True):
         zuege = [o for o in objs if o.get('hochbahn')]
         if zuege:
             zug = cache[zuege[0]['datei']]
-    img = k18.hochbahn(img, lay, frame, zug)
+    img = hochbahn(img, lay, zug)
+    if os.path.exists(pf):                                            # Bahnhof steht VOR der Strecke (Nutzer)
+        for o in objs:
+            if o.get('vor_hochbahn'):
+                img.alpha_composite(cache[o['datei']], (o['x'], o['y']))
     if speichern and frame is None:
         img.save(os.path.join(KARTE, 'terrain.png'))
     print('Karte 30 %dx%d gebaut' % (cols, rows))

@@ -25,8 +25,11 @@ def einpassen(im, w, h):
     bb = im.getbbox()
     im = im.crop(bb)
     out = Image.new('RGBA', (w, h), (0, 0, 0, 0))
-    out.alpha_composite(im.crop((0, max(0, im.height - h), im.width, im.height)) if im.height > h else im,
-                        ((w - min(w, im.width)) // 2, h - min(h, im.height)))
+    cw = min(w, im.width)                                           # Regel 1b: kleinster Kachelblock, darin mittig
+    nb = -(-cw // T)
+    x_ = ((w // T - nb) // 2) * T + (nb * T - cw) // 2
+    out.alpha_composite(im.crop((0, max(0, im.height - h), cw, im.height)) if im.height > h else im.crop((0, 0, cw, im.height)),
+                        (x_, h - min(h, im.height)))
     return out
 
 

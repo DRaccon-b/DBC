@@ -26,7 +26,7 @@ GEBAEUDE = [  # x0, y0, x1, y1 (Kacheln, Fuss = y1), Art
     [119, 34, 127, 44, 'buero_klein'], [24, 56, 57, 66, 'laeden'], [64, 56, 93, 66, 'buero_flach'],
     [119, 56, 128, 66, 'buero_klein2'], [3, 70, 22, 78, 'bahnhof']]
 BRUECKE = (110, 0, 117, 21)       # Bruecke ueber das Wasser (Fahrbahn 112-115, Gehwege/Gelaender aussen)
-HOCHBAHN = {'x0': 3, 'x1': 129, 'y0': 68, 'y1': 71, 'pfeiler': [27, 34, 41, 48, 55, 69, 76, 83, 90, 104, 111, 118, 125],
+HOCHBAHN = {'x0': 0, 'x1': 129, 'y0': 68, 'y1': 71, 'pfeiler': [27, 34, 41, 48, 55, 69, 76, 83, 90, 104, 111, 118, 125],
             'zug': [4, 21]}
 
 
@@ -98,7 +98,7 @@ def main():
     # ---- Bahnhof / Hochbahn
     r_(k, 0, 66, 22, 79, 'g')
     r_(k, 23, 66, 129, 67, 'g')                                      # Gehweg hinter der Hochbahn
-    r_(k, 3, 68, 129, 71, 'g')                                       # unter der Hochbahn (verdeckt)
+    r_(k, 0, 68, 129, 71, 'g')                                       # unter der Hochbahn (verdeckt)
     # ---- Waldrand rechts
     r_(k, 126, 21, 129, 48, 'f'); r_(k, 126, 55, 129, 90, 'f')
     r_(k, 129, 49, 129, 54, 'f')
