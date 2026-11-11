@@ -1955,6 +1955,24 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'small pile of black metal debris shards, bolts and torn plates lying on grass, seen from directly above, lying flat on the ground, classic 2D handheld RPG style',
         'small patch of dark scorched earth with a few black metal splinters, seen from directly above, lying flat on the ground, classic 2D handheld RPG style',
     ]},
+    'k27_schrein': {'size': 128, 'items': [
+        'tall glowing turquoise crystal spire standing on a square grey stone shrine pedestal with a small stone staircase '
+        'in front, the crystal is a long faceted cyan-green gem pointing up, two short stone posts at the pedestal corners, ' + FR14,
+        'tall faceted turquoise crystal obelisk on a stepped grey stone altar base with three stone steps at the front, '
+        'soft cyan glow, ' + FR14,
+    ]},
+    'k27_fels_klein': {'size': 32, 'items': [
+        'grey granite boulder with a small patch of moss at the bottom, ' + FR14,
+        'rounded grey stone with light highlights on top left, ' + FR14,
+        'pair of small grey boulders, ' + FR14,
+        'flat grey rock lying in grass, ' + FR14,
+    ]},
+    'k27_fels': {'size': 64, 'items': [
+        'big round grey granite boulder with a few cracks and a small patch of moss at the bottom, ' + FR14,
+        'medium grey boulder, smooth rounded stone with light highlights on top left, ' + FR14,
+        'wide flat grey rock lying in grass, rounded edges, ' + FR14,
+        'pair of grey boulders, one big and one small, ' + FR14,
+    ]},
     'k24_schrein': {'size': 64, 'items': [
         'dark emperor throne made of jagged black obsidian crystal spikes with deep purple and crimson highlights, a high '
         'pointed back, standing on a small stepped dark stone dais, ' + FR14,
