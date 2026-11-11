@@ -152,7 +152,7 @@ def bauen(frame=None, speichern=True):
     k4.treppe(a, tx0 * T, (tx1 + 1) * T, ye, 's', FRONT, 'schiefer', pf)
     # Bruecken
     for (x0, y0, x1, y1) in lay['bruecken']:
-        senk = (y1 - y0) > (x1 - x0)
+        senk = (y1 - y0) >= (x1 - x0) - 1                           # Steg am Treppenfuss laeuft nach Sueden
         bruecke(a, x0 * T + (2 if senk else 0), y0 * T + (0 if senk else 2), (x1 + 1) * T - (2 if senk else 0),
                 (y1 + 1) * T - (0 if senk else 2), senk)
     img = Image.fromarray(a).convert('RGBA')

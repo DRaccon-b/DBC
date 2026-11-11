@@ -27,7 +27,7 @@ FELSEN = [(44, 6, 52, 11), (60, 5, 65, 9), (4, 23, 7, 32), (22, 26, 30, 33), (43
 LANDEPLATZ = (4, 7, 15, 17)                      # gepflasterter Platz oben links (Portal, Laternen)
 PLATZ = (47, 45, 72, 66)                         # Tempelplatz (x0, y0, x1, y1) Kacheln, Front darunter
 PLATZ_TREPPE = (59, 62)                          # Treppe in der Suedfront (Spalten)
-BRUECKEN = [(64, 17, 67, 44), (34, 55, 46, 57), (59, 67, 60, 71)]   # (x0, y0, x1, y1)
+BRUECKEN = [(64, 17, 67, 44), (34, 55, 46, 57), (59, 69, 62, 71)]   # Steg setzt am Treppenfuss in Treppenbreite an (Regel 2)   # (x0, y0, x1, y1)
 TELEPORTER = [(5, 4, 2, 2), (82, 72, 3, 3), (82, 3, 5, 3)]          # Portal oben links, Strudel unten rechts, Riss oben rechts
 FRONT_REIHEN = 2
 
