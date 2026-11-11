@@ -81,10 +81,19 @@ def main():
         k[y0:y1 + 1, x0:x1 + 1] = 'r'
         h[y0:y1 + 1 - FRONT_REIHEN, x0:x1 + 1] = 2                   # unterste Reihen: Front (Boden der unteren Ebene)
         k[y1 + 1 - FRONT_REIHEN:y1 + 1, x0:x1 + 1] = 'm'
+        if x1 - x0 >= 4 and y1 - y0 >= 5:                            # obere Ecken abrunden (natuerlicher, Raster)
+            for xc in (x0, x1):
+                h[y0, xc] = 1
+                k[y0, xc] = 'g'
     for y in range(PLATZ[3] + 1, PLATZ[3] + 4):                       # Treppe trifft direkt aufs helle Wasser
         for x in range(PLATZ_TREPPE[0] - 1, PLATZ_TREPPE[1] + 2):
             if k[y, x] == 'x':
                 k[y, x] = 's'
+    for (bx, by) in ((180, 446), (660, 222), (885, 286), (150, 944), (545, 420)):   # Boote der Vorlage: Strand, keine Pfuetze
+        for y in range(by // T - 2, by // T + 2):
+            for x in range(bx // T - 3, bx // T + 4):
+                if k[y, x] == 's':
+                    k[y, x] = 'g'
     lx0, ly0, lx1, ly1 = LANDEPLATZ
     k[ly0:ly1 + 1, lx0:lx1 + 1] = 'q'
     px0, py0, px1, py1 = PLATZ

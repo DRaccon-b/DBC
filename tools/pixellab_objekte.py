@@ -1582,7 +1582,9 @@ def herunterladen(oid, d):
 
 
 def speichern(gruppe, ims, ids):
-    if gruppe.startswith('k28_'):
+    if gruppe.startswith('k29_'):
+        ziel = os.path.join(ROOT, 'assets', 'objekte', 'karte29', gruppe[4:])
+    elif gruppe.startswith('k28_'):
         ziel = os.path.join(ROOT, 'assets', 'objekte', 'karte28', gruppe[4:])
     elif gruppe.startswith('k27_'):
         ziel = os.path.join(ROOT, 'assets', 'objekte', 'karte27', gruppe[4:])
@@ -1966,6 +1968,21 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'small pile of black metal debris shards, bolts and torn plates lying on grass, seen from directly above, lying flat on the ground, classic 2D handheld RPG style',
         'small patch of dark scorched earth with a few black metal splinters, seen from directly above, lying flat on the ground, classic 2D handheld RPG style',
     ]},
+    'k29_gross': {'size': 128, 'items': [
+        'tall gloomy lighthouse built of dark grey and black stone blocks, weathered and cracked, with a pale glowing lantern room '
+        'and a pointed dark roof on top, small arched door at the bottom, ' + FR14,
+        'ancient stone temple gate: two thick weathered grey stone pillars carrying a heavy carved stone lintel with a spiral wave '
+        'relief, seaweed hanging down, the opening between the pillars is empty and open, ' + FR14,
+        'dark stone statue of an ancient sea god with an octopus head and tentacle beard, robed body with small wings, sitting on a '
+        'square carved stone pedestal, grey green weathered stone, ' + FR14,
+        'jagged dark purple black dimensional rift floating in the air, a tear in reality with glowing violet edges and shards, ' + FR14,
+    ]},
+    'k29_mittel': {'size': 64, 'items': [
+        'tall weathered grey stone column with a simple capital and base, cracked, some seaweed at the bottom, ' + FR14,
+        'broken short grey stone column stump with rubble at the base, ' + FR14,
+        'floating dark purple crystal portal, a cluster of black and violet crystals around a swirling dark core, ' + FR14,
+        'dark water whirlpool vortex seen from directly above, swirling grey and white foam spiral, lying flat, classic 2D handheld RPG style',
+    ]},
     'k28_netz': {'size': 32, 'items': [
         'round white spider web, thin silver threads, seen from directly above, lying flat on the ground, classic 2D handheld RPG style',
         'small torn spider web in a corner shape, thin grey white threads, seen from directly above, lying flat on the ground, classic 2D handheld RPG style',
@@ -2048,8 +2065,8 @@ def erzeugen(gruppe):
         d = warte(oid)
         speichern(gruppe, *herunterladen(oid, d))
         return
-    if gruppe.startswith(('k20_', 'k21_', 'k23_', 'k24_', 'k25_', 'k26_', 'k27_', 'k28_')):
-        g = (OBJEKTGRUPPEN_K21 if gruppe.startswith(('k21_', 'k23_', 'k24_', 'k25_', 'k26_', 'k27_', 'k28_')) else OBJEKTGRUPPEN_K20)[gruppe]
+    if gruppe.startswith(('k20_', 'k21_', 'k23_', 'k24_', 'k25_', 'k26_', 'k27_', 'k28_', 'k29_')):
+        g = (OBJEKTGRUPPEN_K21 if gruppe.startswith(('k21_', 'k23_', 'k24_', 'k25_', 'k26_', 'k27_', 'k28_', 'k29_')) else OBJEKTGRUPPEN_K20)[gruppe]
         req = {'description': STIL, 'size': g['size'], 'view': 'top-down',
                'item_descriptions': [it + '. ' + STIL for it in g['items']],
                'target_palette': {'colors': PALETTE, 'name': 'Karte01 handheld'}}

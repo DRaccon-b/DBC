@@ -56,6 +56,7 @@ KARTEN = {
     'karte19': ('karte19_bauen', 'Revenge', 'v1.0'),
     'karte20': ('karte20_bauen', 'Startdorf', 'v1.0'),
     'karte28': ('karte28_bauen', 'Tower_Forest', 'v1.0'),
+    'karte29': ('karte29_bauen', 'The_Sea_of_Darkness', 'v1.0'),
 }
 
 
