@@ -58,29 +58,51 @@ def risse(a, m, seed=28, farbe=(38, 34, 30), n_div=900):
                 dy = rs.choice([-1, 0, 1])
 
 
-NETZ_RING = ((960, 127, 1313, 433), (1030, 186, 1240, 384), 70)   # aussen, innen (px), Eckenradius - nach der Vorlage
-NETZ_TOR = (1108, 372, 1196, 445)                                  # Luecke unten in der Mitte fuer das Tor
+# Spinnen-Arena (Nutzer): wo in der Vorlage der Netzring liegt, steht eine 2 Kacheln dicke Steinmauer um die Arena,
+# 2 Kacheln hohe Front nach Sueden; unten in der Mitte die Torluecke. An der Mauer haengen die Spinnweben.
+MAUER_AUSSEN = (976, 144, 1296, 416, 40)                          # x0, y0, x1, y1, Eckenradius (px, am Raster)
+MAUER_DICKE = 32
+MAUER_FRONT = 32
+MAUER_TOR = (1104, 1184)                                           # Torluecke unten (px)
 
 
-def netz_ring(a, frame, stein_px):
+def rr(xx, yy, x0, y0, x1, y1, r):                                  # abgerundetes Rechteck: < 0 innen
+    dx = np.maximum(np.maximum(x0 + r - xx, xx - (x1 - r)), 0)
+    dy = np.maximum(np.maximum(y0 + r - yy, yy - (y1 - r)), 0)
+    return np.hypot(dx, dy) - r
+
+
+def mauer_maske(Hh, W):
+    yy, xx = np.mgrid[0:Hh, 0:W]
+    x0, y0, x1, y1, r = MAUER_AUSSEN
+    d = MAUER_DICKE
+    ring = (rr(xx, yy, x0, y0, x1, y1, r) < 0) & (rr(xx, yy, x0 + d, y0 + d, x1 - d, y1 - d, max(4, r - d)) >= 0)
+    ring &= ~((xx >= MAUER_TOR[0]) & (xx < MAUER_TOR[1]) & (yy >= y1 - d - 2))
+    return ring
+
+
+def mauer(a, ring, stein):
+    """Mauerkrone aus dunklen Steinbloecken (8x8, versetzt, Fugen, Licht oben links), dann Fronten und Seiten."""
+    Hh, W = ring.shape
+    yy, xx = np.mgrid[0:Hh, 0:W]
+    krone = stein.astype(np.float32) * 0.92
+    reihe = yy // 8
+    fuge_h = (yy % 8) == 7
+    fuge_v = ((xx + (reihe % 2) * 4) % 8) == 7
+    licht = ((yy % 8) == 0) | (((xx + (reihe % 2) * 4) % 8) == 0)
+    krone[fuge_h | fuge_v] *= 0.62
+    krone[licht & ~(fuge_h | fuge_v)] = np.clip(krone[licht & ~(fuge_h | fuge_v)] * 1.18, 0, 255)
+    a[ring] = krone[ring].astype(np.uint8)
+    kontur = ring & ~(np.roll(ring, 1, 0) & np.roll(ring, -1, 0) & np.roll(ring, 1, 1) & np.roll(ring, -1, 1))
+    a[kontur] = (36, 37, 46)
+    return k4.hoehenkanten(a, ring, 'stein', MAUER_FRONT, 6, k4.LIPPE['a'], np.zeros((Hh, W), bool), 33, berg=False)
+
+
+def netz_ring(a, frame, maske, teiler=30):
     """Dichter Spinnweben-Teppich als Ring um die Mitte des Steinplatzes (Vorlage): viele feine, gerade Faeden in
     hellem Grauweiss (halbtransparent), dazu Knotenpunkte; zum Rand hin lichter (weich auslaufend)."""
-    (ox0, oy0, ox1, oy1), (ix0, iy0, ix1, iy1), rad = NETZ_RING
     Hh, W = a.shape[:2]
-    yy, xx = np.mgrid[0:Hh, 0:W]
-
-    def rr(x0, y0, x1, y1, r):                                       # abgerundetes Rechteck: Abstand nach innen
-        dx = np.maximum(np.maximum(x0 + r - xx, xx - (x1 - r)), 0)
-        dy = np.maximum(np.maximum(y0 + r - yy, yy - (y1 - r)), 0)
-        return np.hypot(dx, dy) - r
-    rs0 = np.random.RandomState(282)                                 # unregelmaessiger Rand (weiches Rauschen +-12 px)
-    nz = rs0.rand(Hh // 24 + 2, W // 24 + 2)
-    nz = np.array(Image.fromarray((nz * 255).astype(np.uint8)).resize((W, Hh), Image.BICUBIC)).astype(np.float32) / 255 - 0.5
-    aussen = rr(ox0, oy0, ox1, oy1, rad) + nz * 24
-    innen = rr(ix0, iy0, ix1, iy1, rad * 0.7) - nz * 24
-    tx0, ty0, tx1, ty1 = NETZ_TOR
-    ring = (aussen < 0) & (innen > 0) & ~((xx >= tx0) & (xx < tx1) & (yy >= ty0) & (yy < ty1))
-    ring &= stein_px
+    ring = maske
     rs = np.random.RandomState(281)
     over = np.zeros((Hh, W), np.float32)
 
@@ -92,7 +114,7 @@ def netz_ring(a, frame, stein_px):
                 over[Y, X] = max(over[Y, X], st)
     ys, xs = np.nonzero(ring)
     zentren = []
-    for i in rs.permutation(len(ys))[:len(ys) // 30]:                 # kleine Netze mit Mindestabstand
+    for i in rs.permutation(len(ys))[:len(ys) // teiler]:                 # kleine Netze mit Mindestabstand
         y, x = ys[i], xs[i]
         if all((x - cx) ** 2 + (y - cy) ** 2 > 13 ** 2 for cx, cy in zentren):
             zentren.append((x, y))
@@ -200,11 +222,15 @@ def bauen(frame=None, speichern=True):
     innen = arena & _dehnen(~arena, 3) & ~_dehnen(wand, 7)
     a[aussen] = (a[aussen] * np.array([0.5, 0.52, 0.5])).astype(np.uint8)
     a[innen] = np.clip(a[innen] * np.array([1.18, 1.2, 1.12]), 0, 255).astype(np.uint8)
-    netz_ring(a, frame, km)
+    ring = mauer_maske(Hp, Wp)
+    w_m = mauer(a, ring, stein)
+    netz_ring(a, frame, ring | w_m, teiler=70)                       # Spinnweben haengen an Mauerkrone und Fronten
+    wand |= w_m | ring
     for tp in lay['ausgaenge']:
         k4.teleporter_zeichnen(a, tp['x'], tp['y'], tp['b'], tp['h'], frame)
     img = Image.fromarray(a).convert('RGBA')
     lvl = np.where(arena | (hp >= 3), 2, 1).astype(np.uint8)       # Arena und Wald dahinter: obere Ebene
+    lvl[ring] = 3                                                    # Mauerkrone
     if speichern and frame is None:
         img.save(os.path.join(KARTE, 'terrain_basis.png'))
         np.save(os.path.join(KARTE, 'pixelhoehe.npy'), lvl)
