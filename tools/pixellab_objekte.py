@@ -1898,6 +1898,11 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'horned beaked head and folded jagged wings, its body tangled in many black cables and tubes plugged into it, the '
         'creature looks faded and murky behind the turquoise liquid, wide dark machine base with small green lights, ' + FR14,
     ]},
+    'k26_kammer': {'size': 64, 'items': [
+        'dark black containment chamber machine with glowing purple edge lines, a small red warning light on top, a narrow '
+        'glass window showing a glowing silver data core cylinder inside, heavy angular black base with vents, ' + FR14,
+        'low metal laboratory railing segment of dark steel with a small sliding glass door in the middle, ' + FR14,
+    ]},
     'k24_schrein': {'size': 64, 'items': [
         'dark emperor throne made of jagged black obsidian crystal spikes with deep purple and crimson highlights, a high '
         'pointed back, standing on a small stepped dark stone dais, ' + FR14,

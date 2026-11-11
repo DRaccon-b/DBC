@@ -51,6 +51,12 @@ LABOR = (                                                        # Brutlabor obe
     + [(SERVER, 9, {'px': 72 * T}), (LABTISCH, 10, {'px': 79 * T})]
 )
 
+LABOR2 = (                                                       # zweites Labor Mitte links (Nischen oben, Kammern unten), sparsam
+    [('kammer/12', 31, {'px': 9 * T}), ('kammer/02', 31, {'px': 19 * T}), ('kammer/06', 31, {'px': 29 * T})]
+    + [('kammer/01', 36, {'px': 14 * T}), ('kammer/01', 36, {'px': 24 * T})]       # Gelaender mit Glastuer zwischen den Nischen
+    + [('kammer/00', 46, {'px': int(x * T), 'anim': 'lampe'}) for x in (6.75, 10.25, 27.75, 31.25)]   # dunkle Kammern in den Ecken (Vorlage)
+)
+
 
 def main():
     lay = json.load(open(os.path.join(KARTE, 'layout.json')))
@@ -61,7 +67,7 @@ def main():
         os.makedirs(os.path.dirname(ziel), exist_ok=True)
         shutil.copy(os.path.join(ROOT, 'assets', 'objekte', quelle), ziel)
     objekte, cache = [], {}
-    for (name, fy, opt) in THRONSAAL + LABOR:
+    for (name, fy, opt) in THRONSAAL + LABOR + LABOR2:
         opt = dict(opt)
         spiegeln = opt.pop('spiegeln', False)
         key = (name, spiegeln)
