@@ -1876,6 +1876,17 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'glass incubation capsule filled with glowing green liquid, inside floats a small cute original furry digital monster '
         'with long floppy ears and big eyes, dark steel base and cap with gold rim, small bubbles, ' + FR14,
     ]},
+    'k26_kapsel2': {'size': 64, 'items': [
+        'tall narrow upright incubation pod with a dark black and purple spiked steel frame, small red indicator lights on '
+        'the top cap and at the base, glass window filled with bright glowing green liquid, inside floats a small curled up '
+        'green serpent dragon baby digital monster with a little horn, ' + FR14,
+        'tall narrow upright incubation pod with a dark black and purple spiked steel frame, small red indicator lights on '
+        'the top cap and at the base, glass window filled with bright glowing green liquid, inside floats a small coiled '
+        'green seahorse-like baby dragon digital monster with a curled tail, ' + FR14,
+        'tall narrow upright incubation pod with a dark black and purple spiked steel frame, small red indicator lights on '
+        'the top cap and at the base, glass window filled with bright glowing green liquid, inside sleeps a small green '
+        'larva-like baby digital monster with tiny claws, curled in an S shape, ' + FR14,
+    ]},
     'k24_schrein': {'size': 64, 'items': [
         'dark emperor throne made of jagged black obsidian crystal spikes with deep purple and crimson highlights, a high '
         'pointed back, standing on a small stepped dark stone dais, ' + FR14,
