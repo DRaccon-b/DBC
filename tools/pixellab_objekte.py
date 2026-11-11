@@ -1977,6 +1977,18 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'square carved stone pedestal, grey green weathered stone, ' + FR14,
         'jagged dark purple black dimensional rift floating in the air, a tear in reality with glowing violet edges and shards, ' + FR14,
     ]},
+    'k29_felsen_gross': {'size': 128, 'items': [
+        'tall jagged dark black grey rock spire with sharp angular facets and a little dark moss, standing on grey sand, ' + FR14,
+        'cluster of two jagged dark slate rock spires, one tall and one shorter, sharp facets, on grey sand, ' + FR14,
+        'wide craggy dark grey sea rock with several pointed peaks and cracks, barnacles at the bottom, on wet sand, ' + FR14,
+        'tall dark jagged rock spire rising out of dark grey water with a small foam ring at its base, ' + FR14,
+    ]},
+    'k29_felsen': {'size': 64, 'items': [
+        'small jagged dark black grey rock spire with sharp facets, on grey sand, ' + FR14,
+        'medium pointed dark slate rock with cracks and a bit of moss, on grey sand, ' + FR14,
+        'low craggy dark grey rock with two small peaks, on wet sand, ' + FR14,
+        'small dark jagged rock rising out of grey water with a little foam ring, ' + FR14,
+    ]},
     'k29_mittel': {'size': 64, 'items': [
         'tall weathered grey stone column with a simple capital and base, cracked, some seaweed at the bottom, ' + FR14,
         'broken short grey stone column stump with rubble at the base, ' + FR14,
