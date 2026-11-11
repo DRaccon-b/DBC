@@ -18,7 +18,7 @@ ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
 KARTE = os.path.join(ROOT, 'maps', 'karte29')
 OBJ = os.path.join(ROOT, 'assets', 'objekte', 'karte29')
 T = 16
-FREMD = {'k11/wrack': ('karte11/gross/01.png', 1.0), 'k11/anker': ('karte11/land/00.png', 0.9),
+FREMD = {'k11/wrack': ('karte29/wrack3/00.png', 0.95), 'k11/anker': ('karte11/land/00.png', 0.9),
          'k11/laterne': ('karte11/land/11.png', 1.0), 'k11/fels': ('karte11/meer/08.png', 0.95),
          'k11/fels2': ('karte11/meer/09.png', 0.95), 'k11/muschel': ('karte11/meer/07.png', 0.85),
          'k11/auster': ('karte11/meer/14.png', 0.85), 'k11/tang': ('karte11/meer/04.png', 0.9),
@@ -107,7 +107,7 @@ def main():
             setze('mittel/00', achse + sd * 168, fy, {})
     for (cx, fy) in ((940, py0 * T + 70), (1086, py0 * T + 124), (872, py0 * T + 292), (990, py0 * T + 274)):
         setze('mittel/01', cx, fy, {}, rnd.random() < 0.5)                  # Saeulenstuempfe
-    setze('k11/wrack', 365, 652, {'liegend': True}, mit_fuss=False, frei=True)   # Schatten flach ueber die ganze Form              # grosses Schiffswrack am Strand
+    setze('k11/wrack', 300, 728, {'liegend': True, 'versatz': 5}, mit_fuss=False, frei=True)   # Schatten flach ueber die ganze Form              # grosses Schiffswrack am Strand
     # ---- Felsgruppen statt der alten Felsbloecke (Nutzer): je nach Flaeche 1-3 Felsen, unregelmaessig versetzt
     for i, (x0, y0, x1, y1) in enumerate(lay['felsen_obj']):
         w, h = x1 - x0 + 1, y1 - y0 + 1

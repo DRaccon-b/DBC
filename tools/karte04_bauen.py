@@ -496,7 +496,8 @@ def objekte_zeichnen(img, objs, cache, boden, frame, ebenen=None):
             continue
         if o.get('liegend') and len(zeilen):              # liegend: flacher Schatten der ganzen Form
             ys_, xs_ = np.nonzero(a)
-            for d_, w_ in ((2, 0.83), (1, 1.0)):
+            vs_ = o.get('versatz', 2)                     # groessere liegende Objekte: Schatten weiter versetzt
+            for d_, w_ in [(d, 0.83) for d in range(vs_, 1, -1)] + [(1, 1.0)]:
                 Y_, X_ = ys_ + o['y'] + d_, xs_ + o['x'] + d_
                 ok_ = (Y_ >= 0) & (Y_ < kern.shape[0]) & (X_ >= 0) & (X_ < kern.shape[1])
                 wurf[Y_[ok_], X_[ok_]] = np.maximum(wurf[Y_[ok_], X_[ok_]], w_)

@@ -231,22 +231,23 @@
 {
 "datei": "varianten/k11-wrack_0_0.png",
 "basis": "k11/wrack",
-"x": 309,
-"y": 540,
-"fuss": 113,
+"x": 226,
+"y": 587,
+"fuss": 142,
 "kachel": [
-22,
-40
+18,
+45
 ],
 "block": [
-19,
-33,
-7,
-8
+14,
+37,
+10,
+9
 ],
 "ebene": 1,
 "an_wand": true,
-"liegend": true
+"liegend": true,
+"versatz": 5
 },
 {
 "datei": "varianten/fk-2_1_0.png",
@@ -1006,7 +1007,7 @@
 3
 ],
 "ebene": 1,
-"fuss_dy": 4,
+"fuss_dy": 5,
 "an_wand": true
 },
 {
@@ -1066,7 +1067,7 @@
 2
 ],
 "ebene": 1,
-"fuss_dy": 2,
+"fuss_dy": 4,
 "an_wand": true
 },
 {

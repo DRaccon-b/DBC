@@ -1,7 +1,7 @@
 {
  "kachel": 16,
  "breite_kacheln": 40,
- "hoehe_kacheln": 34,
+ "hoehe_kacheln": 36,
  "animationsbereich_hoehe_kacheln": 9,
  "animationsbilder": 4,
  "bilddauer_ms": 250,
@@ -173,36 +173,36 @@
    "slot_kacheln": {
     "x": 0,
     "y": 9,
-    "breite": 8,
-    "hoehe": 8
+    "breite": 10,
+    "hoehe": 10
    },
    "objektblock_im_slot": {
     "x": 0,
-    "y": 0,
-    "breite": 7,
-    "hoehe": 8
+    "y": 1,
+    "breite": 10,
+    "hoehe": 9
    },
    "fundstellen_karte": [
     {
      "block": [
-      19,
-      33,
-      7,
-      8
+      14,
+      37,
+      10,
+      9
      ],
      "fusskachel": [
-      22,
-      40
+      18,
+      45
      ]
     }
    ]
   },
   {
    "name": "fg/1",
-   "datei": "varianten/fg-1_0_1.png",
+   "datei": "varianten/fg-1_0_0.png",
    "animation": null,
    "slot_kacheln": {
-    "x": 8,
+    "x": 10,
     "y": 9,
     "breite": 6,
     "hoehe": 8
@@ -254,10 +254,10 @@
   },
   {
    "name": "fg/1",
-   "datei": "varianten/fg-1_1_1.png",
+   "datei": "varianten/fg-1_1_0.png",
    "animation": null,
    "slot_kacheln": {
-    "x": 14,
+    "x": 16,
     "y": 9,
     "breite": 6,
     "hoehe": 8
@@ -288,7 +288,7 @@
    "datei": "varianten/k11-felsnadel_0_0.png",
    "animation": null,
    "slot_kacheln": {
-    "x": 20,
+    "x": 22,
     "y": 9,
     "breite": 6,
     "hoehe": 8
@@ -316,10 +316,10 @@
   },
   {
    "name": "fg/0",
-   "datei": "varianten/fg-0_1_1.png",
+   "datei": "varianten/fg-0_1_0.png",
    "animation": null,
    "slot_kacheln": {
-    "x": 26,
+    "x": 28,
     "y": 9,
     "breite": 4,
     "hoehe": 8
@@ -362,7 +362,7 @@
    "datei": "varianten/gross-02_0_1.png",
    "animation": null,
    "slot_kacheln": {
-    "x": 30,
+    "x": 32,
     "y": 9,
     "breite": 4,
     "hoehe": 8
@@ -394,7 +394,7 @@
    "animation": null,
    "slot_kacheln": {
     "x": 0,
-    "y": 17,
+    "y": 19,
     "breite": 8,
     "hoehe": 7
    },
@@ -425,7 +425,7 @@
    "animation": null,
    "slot_kacheln": {
     "x": 8,
-    "y": 17,
+    "y": 19,
     "breite": 6,
     "hoehe": 7
    },
@@ -464,11 +464,11 @@
   },
   {
    "name": "fg/0",
-   "datei": "varianten/fg-0_0_1.png",
+   "datei": "varianten/fg-0_0_0.png",
    "animation": null,
    "slot_kacheln": {
     "x": 14,
-    "y": 17,
+    "y": 19,
     "breite": 4,
     "hoehe": 7
    },
@@ -499,7 +499,7 @@
    "animation": null,
    "slot_kacheln": {
     "x": 18,
-    "y": 17,
+    "y": 19,
     "breite": 4,
     "hoehe": 5
    },
@@ -530,7 +530,7 @@
    "animation": null,
    "slot_kacheln": {
     "x": 22,
-    "y": 17,
+    "y": 19,
     "breite": 4,
     "hoehe": 5
    },
@@ -561,7 +561,7 @@
    "animation": null,
    "slot_kacheln": {
     "x": 26,
-    "y": 17,
+    "y": 19,
     "breite": 3,
     "hoehe": 5
    },
@@ -648,11 +648,11 @@
   },
   {
    "name": "fk/13",
-   "datei": "varianten/fk-13_0_1.png",
+   "datei": "varianten/fk-13_0_0.png",
    "animation": null,
    "slot_kacheln": {
     "x": 29,
-    "y": 17,
+    "y": 19,
     "breite": 4,
     "hoehe": 4
    },
@@ -679,11 +679,11 @@
   },
   {
    "name": "fk/13",
-   "datei": "varianten/fk-13_1_1.png",
+   "datei": "varianten/fk-13_1_0.png",
    "animation": null,
    "slot_kacheln": {
     "x": 33,
-    "y": 17,
+    "y": 19,
     "breite": 4,
     "hoehe": 4
    },
@@ -722,11 +722,11 @@
   },
   {
    "name": "fk/14",
-   "datei": "varianten/fk-14_0_1.png",
+   "datei": "varianten/fk-14_0_0.png",
    "animation": null,
    "slot_kacheln": {
     "x": 0,
-    "y": 24,
+    "y": 26,
     "breite": 4,
     "hoehe": 4
    },
@@ -757,7 +757,7 @@
    "animation": null,
    "slot_kacheln": {
     "x": 4,
-    "y": 24,
+    "y": 26,
     "breite": 4,
     "hoehe": 4
    },
@@ -788,7 +788,7 @@
    "animation": null,
    "slot_kacheln": {
     "x": 8,
-    "y": 24,
+    "y": 26,
     "breite": 4,
     "hoehe": 4
    },
@@ -831,7 +831,7 @@
    "animation": null,
    "slot_kacheln": {
     "x": 12,
-    "y": 24,
+    "y": 26,
     "breite": 4,
     "hoehe": 4
    },
@@ -874,7 +874,7 @@
    "animation": null,
    "slot_kacheln": {
     "x": 16,
-    "y": 24,
+    "y": 26,
     "breite": 4,
     "hoehe": 4
    },
@@ -901,11 +901,11 @@
   },
   {
    "name": "fk/1",
-   "datei": "varianten/fk-1_0_1.png",
+   "datei": "varianten/fk-1_0_0.png",
    "animation": null,
    "slot_kacheln": {
     "x": 20,
-    "y": 24,
+    "y": 26,
     "breite": 3,
     "hoehe": 4
    },
@@ -948,7 +948,7 @@
    "animation": null,
    "slot_kacheln": {
     "x": 23,
-    "y": 24,
+    "y": 26,
     "breite": 3,
     "hoehe": 4
    },
@@ -991,7 +991,7 @@
    "animation": null,
    "slot_kacheln": {
     "x": 26,
-    "y": 24,
+    "y": 26,
     "breite": 5,
     "hoehe": 3
    },
@@ -1022,7 +1022,7 @@
    "animation": null,
    "slot_kacheln": {
     "x": 31,
-    "y": 24,
+    "y": 26,
     "breite": 5,
     "hoehe": 3
    },
@@ -1053,7 +1053,7 @@
    "animation": null,
    "slot_kacheln": {
     "x": 0,
-    "y": 28,
+    "y": 30,
     "breite": 5,
     "hoehe": 3
    },
@@ -1096,7 +1096,7 @@
    "animation": null,
    "slot_kacheln": {
     "x": 5,
-    "y": 28,
+    "y": 30,
     "breite": 5,
     "hoehe": 3
    },
@@ -1139,7 +1139,7 @@
    "animation": null,
    "slot_kacheln": {
     "x": 10,
-    "y": 28,
+    "y": 30,
     "breite": 5,
     "hoehe": 3
    },
@@ -1178,11 +1178,11 @@
   },
   {
    "name": "fk/2",
-   "datei": "varianten/fk-2_0_1.png",
+   "datei": "varianten/fk-2_0_0.png",
    "animation": null,
    "slot_kacheln": {
     "x": 15,
-    "y": 28,
+    "y": 30,
     "breite": 4,
     "hoehe": 3
    },
@@ -1221,11 +1221,11 @@
   },
   {
    "name": "fk/6",
-   "datei": "varianten/fk-6_1_1.png",
+   "datei": "varianten/fk-6_1_0.png",
    "animation": null,
    "slot_kacheln": {
     "x": 19,
-    "y": 28,
+    "y": 30,
     "breite": 4,
     "hoehe": 3
    },
@@ -1256,7 +1256,7 @@
    "animation": null,
    "slot_kacheln": {
     "x": 23,
-    "y": 28,
+    "y": 30,
     "breite": 4,
     "hoehe": 3
    },
@@ -1287,7 +1287,7 @@
    "animation": null,
    "slot_kacheln": {
     "x": 27,
-    "y": 28,
+    "y": 30,
     "breite": 4,
     "hoehe": 3
    },
@@ -1318,7 +1318,7 @@
    "animation": null,
    "slot_kacheln": {
     "x": 31,
-    "y": 28,
+    "y": 30,
     "breite": 4,
     "hoehe": 3
    },
@@ -1345,11 +1345,11 @@
   },
   {
    "name": "fk/2",
-   "datei": "varianten/fk-2_1_1.png",
+   "datei": "varianten/fk-2_1_0.png",
    "animation": null,
    "slot_kacheln": {
     "x": 35,
-    "y": 28,
+    "y": 30,
     "breite": 3,
     "hoehe": 3
    },
@@ -1376,11 +1376,11 @@
   },
   {
    "name": "fk/6",
-   "datei": "varianten/fk-6_0_1.png",
+   "datei": "varianten/fk-6_0_0.png",
    "animation": null,
    "slot_kacheln": {
     "x": 0,
-    "y": 31,
+    "y": 33,
     "breite": 3,
     "hoehe": 3
    },
