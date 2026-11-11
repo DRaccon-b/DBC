@@ -41,15 +41,15 @@
 "datei": "varianten/azul-07_beton.png",
 "basis": "azul/07",
 "x": 1343,
-"y": 245,
+"y": 229,
 "fuss": 62,
 "kachel": [
 85,
-18
+17
 ],
 "block": [
 84,
-15,
+14,
 3,
 4
 ],
@@ -77,15 +77,15 @@
 "datei": "varianten/azul-00_beton.png",
 "basis": "azul/00",
 "x": 1397,
-"y": 249,
+"y": 233,
 "fuss": 58,
 "kachel": [
 88,
-18
+17
 ],
 "block": [
 87,
-15,
+14,
 3,
 4
 ],
@@ -134,15 +134,15 @@
 "datei": "varianten/azul-02_beton.png",
 "basis": "azul/02",
 "x": 1589,
-"y": 389,
+"y": 357,
 "fuss": 62,
 "kachel": [
 100,
-27
+25
 ],
 "block": [
 99,
-24,
+22,
 3,
 4
 ],
@@ -3794,6 +3794,24 @@
 "ebene": 0
 },
 {
+"datei": "varianten/deko_gras-10_gras.png",
+"basis": "deko_gras/10",
+"x": 225,
+"y": 1259,
+"fuss": 24,
+"kachel": [
+15,
+79
+],
+"block": [
+14,
+78,
+2,
+2
+],
+"ebene": 0
+},
+{
 "datei": "varianten/deko_gras-09_gras.png",
 "basis": "deko_gras/09",
 "x": 866,
@@ -3945,18 +3963,18 @@
 "anim": "wehen"
 },
 {
-"datei": "varianten/deko_gras-09_gras.png",
-"basis": "deko_gras/09",
-"x": 450,
-"y": 1204,
-"fuss": 31,
+"datei": "varianten/deko_schnee-01_sand.png",
+"basis": "deko_schnee/01",
+"x": 287,
+"y": 181,
+"fuss": 30,
 "kachel": [
-28,
-76
+19,
+12
 ],
 "block": [
-28,
-75,
+18,
+11,
 2,
 2
 ],
@@ -3964,18 +3982,18 @@
 "anim": "wehen"
 },
 {
-"datei": "varianten/deko_schnee-12_sand.png",
-"basis": "deko_schnee/12",
-"x": 193,
-"y": 264,
-"fuss": 27,
+"datei": "varianten/deko_schnee-21_sand.png",
+"basis": "deko_schnee/21",
+"x": 1377,
+"y": 501,
+"fuss": 30,
 "kachel": [
-12,
-17
+86,
+32
 ],
 "block": [
-12,
-16,
+86,
+31,
 2,
 2
 ],
@@ -3983,18 +4001,36 @@
 "anim": "wehen"
 },
 {
-"datei": "varianten/deko_schnee-30_sand.png",
-"basis": "deko_schnee/30",
-"x": 256,
-"y": 439,
-"fuss": 28,
+"datei": "varianten/deko_schnee-47_sand.png",
+"basis": "deko_schnee/47",
+"x": 321,
+"y": 277,
+"fuss": 30,
 "kachel": [
+20,
+18
+],
+"block": [
+20,
 17,
-28
+2,
+2
+],
+"ebene": 0
+},
+{
+"datei": "varianten/deko_schnee-01_sand.png",
+"basis": "deko_schnee/01",
+"x": 383,
+"y": 933,
+"fuss": 30,
+"kachel": [
+24,
+59
 ],
 "block": [
-16,
-27,
+24,
+58,
 2,
 2
 ],
@@ -4078,25 +4114,6 @@
 "anim": "wehen"
 },
 {
-"datei": "varianten/deko_schnee-12_sand.png",
-"basis": "deko_schnee/12",
-"x": 385,
-"y": 936,
-"fuss": 27,
-"kachel": [
-24,
-59
-],
-"block": [
-24,
-58,
-2,
-2
-],
-"ebene": 0,
-"anim": "wehen"
-},
-{
 "datei": "varianten/deko_stein-14_beton.png",
 "basis": "deko_stein/14",
 "x": 351,
@@ -4127,6 +4144,25 @@
 "block": [
 32,
 44,
+2,
+2
+],
+"ebene": 0,
+"anim": "wehen"
+},
+{
+"datei": "varianten/deko_schnee-50_sand.png",
+"basis": "deko_schnee/50",
+"x": 259,
+"y": 461,
+"fuss": 22,
+"kachel": [
+17,
+29
+],
+"block": [
+16,
+28,
 2,
 2
 ],
@@ -4241,44 +4277,6 @@
 "block": [
 34,
 59,
-2,
-2
-],
-"ebene": 0,
-"anim": "wehen"
-},
-{
-"datei": "varianten/deko_schnee-23_sand.png",
-"basis": "deko_schnee/23",
-"x": 257,
-"y": 677,
-"fuss": 30,
-"kachel": [
-16,
-43
-],
-"block": [
-16,
-42,
-2,
-2
-],
-"ebene": 0,
-"anim": "wehen"
-},
-{
-"datei": "varianten/deko_schnee-12_sand.png",
-"basis": "deko_schnee/12",
-"x": 225,
-"y": 280,
-"fuss": 27,
-"kachel": [
-14,
-18
-],
-"block": [
-14,
-17,
 2,
 2
 ],
