@@ -112,14 +112,14 @@ def main():
         if (tx, ty) in belegt or cls[ty][tx] in 'hwT' or any(
                 o['basis'] == OBELISK and abs(o['kachel'][0] - tx) <= 2 and -6 <= ty - o['kachel'][1] <= 1 for o in objekte):
             continue
-        name = ('netz/11' if i % 2 else 'netz/12') if i >= len(NETZ_STELLEN) else NETZE[(tx * 7 + ty * 3) % len(NETZE)]   # Knochen statt Ei/Kokon (Nutzer)
+        name = ('netz/02' if i % 2 else 'netz/00') if i >= len(NETZ_STELLEN) else NETZE[(tx * 7 + ty * 3) % len(NETZE)]   # Spinnweben statt Ei/Kokon/Knochen (Nutzer)
         sp = Image.open(os.path.join(OBJ, name + '.png')).convert('RGBA')
         if (tx + ty) % 2:
             sp = sp.transpose(Image.FLIP_LEFT_RIGHT)
         datei = 'varianten/%s%s.png' % (name.replace('/', '-'), '_m' if (tx + ty) % 2 else '')
         sp.save(os.path.join(OBJ, datei))
         bb = sp.getbbox()
-        kokon = i >= len(NETZ_STELLEN)
+        kokon = False                                                # alles flache Netze
         objekte.append({'datei': datei, 'basis': name, 'x': tx * T + 8 - (bb[0] + bb[2]) // 2, 'y': (ty + 1) * T - 1 - (bb[3] - 1),
                         'fuss': sp.height, 'kachel': [tx, ty], 'block': [tx, ty, 1, 1], 'ebene': 1 if kokon else 0,
                         'schattenlos': not kokon, 'liegend': kokon})
