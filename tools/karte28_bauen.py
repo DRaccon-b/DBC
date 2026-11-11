@@ -89,7 +89,7 @@ def bauen(frame=None, speichern=True):
     a[em] = erde[em]
     # Schlamm-Arena: dunkle nasse Erde, Risse, hellere Erdflecken
     arena = hp == 2
-    fm = arena                                                       # auch die frueheren Wandreihen im Norden
+    fm = weich(zell_maske(cls, 'ft', cols, rows), 5.0, 0.5, 9) & arena   # Schlamm (weicher Rand); der Plateaurand bleibt Gras
     k23.schlamm(a, fm, erde)
     a[fm] = (a[fm] * np.array([0.82, 0.84, 0.86])).astype(np.uint8)
     risse(a, fm)
@@ -135,6 +135,12 @@ def bauen(frame=None, speichern=True):
             l = x0 + 1 + ein + rs.randint(0, 2) * (y > yf + 10)
             r = x1 - 1 - ein - rs.randint(0, 2) * (y > yf + 10)
             a[y, l:r] = sand[y, l:r]
+    # Plateaukante im Norden und an den Seiten (Nutzer: Verlauf oben sichtbar): 2 px dunkle Abbruchkante aussen,
+    # 1 px helle Graslippe innen; die Suedfront (Waende, Treppen) bleibt unberuehrt
+    aussen = _dehnen(arena, 5) & ~arena & ~_dehnen(wand, 7)
+    innen = arena & _dehnen(~arena, 3) & ~_dehnen(wand, 7)
+    a[aussen] = (a[aussen] * np.array([0.5, 0.52, 0.5])).astype(np.uint8)
+    a[innen] = np.clip(a[innen] * np.array([1.18, 1.2, 1.12]), 0, 255).astype(np.uint8)
     for tp in lay['ausgaenge']:
         k4.teleporter_zeichnen(a, tp['x'], tp['y'], tp['b'], tp['h'], frame)
     img = Image.fromarray(a).convert('RGBA')

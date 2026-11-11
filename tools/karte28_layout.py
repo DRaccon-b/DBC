@@ -124,6 +124,25 @@ def main():
                 h[y, x] = 2
                 if k[y, x] in 'gkh':
                     k[y, x] = 'f'
+    # Plateau (Nutzer): Arena + 2 Kacheln Grasrand im Norden und an den Seiten, dahinter endet das Plateau sichtbar
+    # (Kante), der Wald liegt wieder tiefer. Kein hoeherer Wald mehr.
+    h[h == 3] = 1
+    k[(k == 'm')] = 'f'
+    ar = h == 2
+    unten = np.zeros((C,), int)
+    for x in range(C):
+        ys_ = np.nonzero(ar[:, x])[0]
+        unten[x] = ys_.max() if len(ys_) else -1
+    rand = np.zeros_like(ar)
+    for y in range(R):
+        for x in range(C):
+            if ar[y, x]:
+                continue
+            nah = ar[max(0, y - 2):y + 3, max(0, x - 2):x + 3].any()
+            if nah and y <= max(unten[max(0, x - 2):x + 3]):           # nicht suedlich der Arena (dort Front + Treppen)
+                rand[y, x] = True
+    h[rand] = 2
+    k[rand & np.isin(k, list('hfe'))] = 'g'
     for (tx, ty, b, hh) in TREPPEN:
         k[ty:ty + hh, tx:tx + b] = 't'
     for (tx, ty, b, hh) in AUSGAENGE:
