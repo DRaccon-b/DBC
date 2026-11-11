@@ -73,7 +73,8 @@ def rr(xx, yy, x0, y0, x1, y1, r):                                  # abgerundet
 
 
 def mauer_rand(t):                                                  # unregelmaessiger Radius je Winkel (natuerlich)
-    return 1 + 0.06 * np.sin(3 * t + 1.1) + 0.035 * np.sin(5 * t + 2.3)
+    links = np.clip(-np.cos(t), 0, 1) ** 2                          # linke Seite staerker nach aussen gewoelbt (Nutzer)
+    return 1 + 0.06 * np.sin(3 * t + 1.1) * (1 - links) + 0.035 * np.sin(5 * t + 2.3) * (1 - links) + 0.12 * links
 
 
 def mauer_maske(Hh, W):
