@@ -80,8 +80,8 @@ FEST = [
     ('gross/01', 90.5, 80, {}), ('mittel/10', 90.5, 73, {}),
     (SL, 86, 67, {}), (SL, 95, 67, {}), (BAMBUS, 86, 77, {'anim': 'wehen'}), (BAMBUS, 95, 77, {'anim': 'wehen'}),
     (PL, 95, 64, {'anim': 'leuchten', 'spiegeln': True}),
-    (BAMBUS, 45, 66, {'anim': 'wehen'}), (BAMBUS, 22, 70, {'anim': 'wehen'}), (BAMBUS, 6, 72, {'anim': 'wehen'}),
-    (BAMBUS, 9, 72, {'anim': 'wehen'}), (BAMBUS, 12, 72, {'anim': 'wehen'}), (BAMBUS, 70, 73, {'anim': 'wehen'}),
+    (BAMBUS, 45, 66, {'anim': 'wehen'}),
+    (BAMBUS, 9, 72, {'anim': 'wehen'}), (BAMBUS, 70, 73, {'anim': 'wehen'}),
     (PL, 46.5, 76, {'anim': 'leuchten', 'spiegeln': True}), (PL, 69.5, 81, {'anim': 'leuchten'}),
     # umgekippte schwarze Tuerme
     # fuenf schwarze Tuerme wie die Spitzen eines Pentagramms um die Arena (Steinkreis, Mitte 47/15)
@@ -107,7 +107,7 @@ FEST = [
 ]
 STUMPF_PLAETZE = [(49, 57), (54, 38)]
 RUNEN_PLAETZE = [(40, 37), (57, 31), (89, 51), (27, 58), (65, 54)]
-BAUM_PLAETZE = [(52, 35), (40, 40), (53, 51), (66, 39), (92, 34), (14, 68), (89, 59)]   # weniger Baeume (Nutzer)
+BAUM_PLAETZE = [(52, 35), (40, 40), (66, 39), (14, 68)]   # weniger Baeume (Nutzer)
 
 
 def main():
@@ -303,13 +303,13 @@ def main():
         x = ox0 + 1.5 + rnd.random() * 1.5
         while x <= ox1 - 1:
             setze(rnd.choice(OBSTBAEUME), x, y, {'anim': 'baum', 'spiegeln': rnd.random() < 0.5}, frei=True)
-            x += 6 + rnd.random() * 2                                # weniger Obstbaeume, versetzt
-        y += 6 + rnd.randint(0, 1)
+            x += 8 + rnd.random() * 2                                # weniger Obstbaeume, versetzt
+        y += 8 + rnd.randint(0, 1)
     # verschneite Tannen und Schneefelsen nur auf Schnee (nie auf Wegen), keine Felsen im Steinkreis
     n_s = n_r = 0
     for _ in range(5000):
         tx, ty = rnd.randrange(3, cols - 3), rnd.randrange(3, rows - 3)
-        if cls[ty][tx] != 'n' or n_s >= 14 or rnd.random() > 0.5:   # weniger Tannen (Nutzer)
+        if cls[ty][tx] != 'n' or n_s >= 8 or rnd.random() > 0.5:   # weniger Tannen (Nutzer)
             continue
         if RING[0] <= tx - R <= RING[1] and RING[2] <= ty - R <= RING[3]:   # Steinkreis bleibt frei
             continue
@@ -344,7 +344,7 @@ def main():
                 gesperrt.add((x, y))
     n = 0
     for _ in range(3000):
-        if n >= 70:
+        if n >= 28:                                              # weniger Bueschel/Blumen (Nutzer)
             break
         tx, ty = rnd.randrange(3, cols - 3), rnd.randrange(3, rows - 3)
         if cls[ty][tx] != 'g':
@@ -360,7 +360,7 @@ def main():
         k = cls[ty][tx]
         if RING[0] <= tx - R <= RING[1] and RING[2] <= ty - R <= RING[3]:
             continue
-        if k == 'n' and n_sn < 40:
+        if k == 'n' and n_sn < 16:
             z = rnd.random()
             d = rnd.choice(BUESCHEL_SCHNEE if z < 0.5 else BLUMEN_SCHNEE if z < 0.85 else KLEINKRAM_SCHNEE)
             if setze(d, tx, ty, {'anim': 'wehen'} if d not in KLEINKRAM_SCHNEE else {}, frei=True, abs_=True):
