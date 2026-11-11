@@ -62,6 +62,12 @@ SAEULENRAUM = (
     + [('raum/01', 28, {'px': AXS - 52, 'wand': True}), ('raum/01', 28, {'px': AXS + 52, 'wand': True})]   # Wandschilder
 )
 
+PORTALRAUM = (                                                   # Portalraum Mitte rechts nach der Vorlage
+    [('portal/00_lila', 36, {'px': 1040, 'anim': 'portal'}), ('portal/00_lila', 36, {'px': 1327, 'anim': 'portal', 'spiegeln': True})]
+    + [('portalraum/00', 45, {'px': 1047}), ('portalraum/14', 45, {'px': 1280})]                       # Truemmerhaufen
+    + [('portalraum/01', 32, {'px': 926}), ('portalraum/01', 45, {'px': 926})]   # Rohre an den Waenden
+)
+
 
 def main():
     lay = json.load(open(os.path.join(KARTE, 'layout.json')))
@@ -72,7 +78,7 @@ def main():
         os.makedirs(os.path.dirname(ziel), exist_ok=True)
         shutil.copy(os.path.join(ROOT, 'assets', 'objekte', quelle), ziel)
     objekte, cache = [], {}
-    for (name, fy, opt) in THRONSAAL + LABOR + LABOR2 + SAEULENRAUM:
+    for (name, fy, opt) in THRONSAAL + LABOR + LABOR2 + SAEULENRAUM + PORTALRAUM:
         opt = dict(opt)
         spiegeln = opt.pop('spiegeln', False)
         key = (name, spiegeln)
