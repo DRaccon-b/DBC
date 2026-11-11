@@ -20,7 +20,8 @@ Aufstellfelds (cyan = Ankunft, gold = weiter; Funktion `pfeil_marke` in `tools/k
 | 3 | Karte 23 – Harvest Hills | in Arbeit: Gelände und Objekte fertig; offen: Kollision, Animation, v1.0 |
 | 4 | Karte 24 – The Kaiser's Canyon | in Arbeit: Gelände und Objekte fertig; offen: Kollision, Animation, v1.0 |
 | 5 | Karte 25 – Sunset Bay | in Arbeit: Gelände und Objekte fertig; offen: Kollision, Animation, v1.0 |
-| 6 | Karte 26 – The Kaiser's Fortress | in Arbeit: Layout (Inneres des Kaiser-Flaggschiffs aus Karte 25) |
+| 6 | Karte 26 – The Kaiser's Fortress | in Arbeit: Gelände und Objekte fertig (Inneres des Kaiser-Flaggschiffs aus Karte 25); offen: Kollision, Animation, v1.0 |
+| 7 | Karte 27 – Destiny Lake | in Arbeit: Layout |
 | … | weitere Karten folgen | – |
 | ? | Karte 07 – The Holy Peaks | vorhanden, wird vorerst nicht bearbeitet (nur eingeordnet) |
 
