@@ -229,11 +229,11 @@
 "an_wand": true
 },
 {
-"datei": "varianten/k11-wrack_0_1.png",
+"datei": "varianten/k11-wrack_0_0.png",
 "basis": "k11/wrack",
-"x": 307,
+"x": 309,
 "y": 540,
-"fuss": 116,
+"fuss": 113,
 "kachel": [
 22,
 40
@@ -245,22 +245,23 @@
 8
 ],
 "ebene": 1,
-"liegend": false
+"an_wand": true,
+"liegend": true
 },
 {
-"datei": "varianten/mittel-02_0_0.png",
-"basis": "mittel/02",
-"x": 64,
-"y": 44,
-"fuss": 61,
+"datei": "varianten/k07_portal_0_0.png",
+"basis": "k07_portal",
+"x": 63,
+"y": 45,
+"fuss": 60,
 "kachel": [
 5,
 6
 ],
 "block": [
+3,
+3,
 4,
-3,
-3,
 4
 ],
 "ebene": 1,
@@ -389,11 +390,11 @@
 "anim": "leuchten"
 },
 {
-"datei": "varianten/k25-boot_0_1.png",
+"datei": "varianten/k25-boot_0_0.png",
 "basis": "k25/boot",
-"x": 148,
+"x": 150,
 "y": 408,
-"fuss": 42,
+"fuss": 39,
 "kachel": [
 11,
 27
@@ -405,14 +406,15 @@
 3
 ],
 "ebene": 1,
+"an_wand": true,
 "liegend": true
 },
 {
-"datei": "varianten/k25-boot_1_1.png",
+"datei": "varianten/k25-boot_1_0.png",
 "basis": "k25/boot",
-"x": 628,
+"x": 630,
 "y": 184,
-"fuss": 42,
+"fuss": 39,
 "kachel": [
 41,
 13
@@ -424,14 +426,15 @@
 3
 ],
 "ebene": 1,
+"an_wand": true,
 "liegend": true
 },
 {
-"datei": "varianten/k25-boot_0_1.png",
+"datei": "varianten/k25-boot_0_0.png",
 "basis": "k25/boot",
-"x": 853,
+"x": 855,
 "y": 248,
-"fuss": 42,
+"fuss": 39,
 "kachel": [
 55,
 17
@@ -443,14 +446,15 @@
 3
 ],
 "ebene": 1,
+"an_wand": true,
 "liegend": true
 },
 {
-"datei": "varianten/k25-boot_1_1.png",
+"datei": "varianten/k25-boot_1_0.png",
 "basis": "k25/boot",
-"x": 118,
+"x": 120,
 "y": 906,
-"fuss": 42,
+"fuss": 39,
 "kachel": [
 9,
 59
@@ -462,14 +466,15 @@
 3
 ],
 "ebene": 1,
+"an_wand": true,
 "liegend": true
 },
 {
-"datei": "varianten/k25-bootwrack_0_1.png",
+"datei": "varianten/k25-bootwrack_0_0.png",
 "basis": "k25/bootwrack",
-"x": 513,
+"x": 515,
 "y": 367,
-"fuss": 57,
+"fuss": 54,
 "kachel": [
 34,
 26
@@ -481,6 +486,7 @@
 4
 ],
 "ebene": 1,
+"an_wand": true,
 "liegend": true
 },
 {
@@ -499,7 +505,8 @@
 3,
 4
 ],
-"ebene": 1
+"ebene": 1,
+"an_wand": true
 },
 {
 "datei": "varianten/k11-anker_1_1.png",
@@ -517,7 +524,8 @@
 3,
 4
 ],
-"ebene": 1
+"ebene": 1,
+"an_wand": true
 },
 {
 "datei": "varianten/k11-fels_0_1.png",
@@ -535,7 +543,8 @@
 4,
 3
 ],
-"ebene": 1
+"ebene": 1,
+"an_wand": true
 },
 {
 "datei": "varianten/k11-fels_1_1.png",
@@ -553,7 +562,8 @@
 4,
 3
 ],
-"ebene": 1
+"ebene": 1,
+"an_wand": true
 },
 {
 "datei": "varianten/k11-fels_1_1.png",
@@ -571,7 +581,8 @@
 4,
 3
 ],
-"ebene": 1
+"ebene": 1,
+"an_wand": true
 },
 {
 "datei": "varianten/k11-fels2_1_1.png",
@@ -589,7 +600,8 @@
 3,
 2
 ],
-"ebene": 1
+"ebene": 1,
+"an_wand": true
 },
 {
 "datei": "varianten/k11-graete_0_0.png",
@@ -608,6 +620,7 @@
 3
 ],
 "ebene": 1,
+"an_wand": true,
 "liegend": true,
 "anim": null
 },
@@ -628,6 +641,7 @@
 3
 ],
 "ebene": 1,
+"an_wand": true,
 "liegend": true,
 "anim": null
 },
@@ -648,6 +662,7 @@
 3
 ],
 "ebene": 1,
+"an_wand": true,
 "liegend": true,
 "anim": null
 },
@@ -668,6 +683,7 @@
 3
 ],
 "ebene": 1,
+"an_wand": true,
 "liegend": true,
 "anim": null
 },
@@ -688,6 +704,7 @@
 3
 ],
 "ebene": 1,
+"an_wand": true,
 "liegend": false,
 "anim": null
 }

@@ -73,8 +73,7 @@ def main():
         o = {'datei': datei, 'basis': name, 'x': cx - (bb[0] + bw // 2), 'y': fy - (bb[3] - 1), 'fuss': sp.height,
              'kachel': [tx, ty], 'block': [(cx - bw // 2) // T, ty - math.ceil((bb[3] - bb[1]) / T) + 1,
                                            math.ceil(bw / T), math.ceil((bb[3] - bb[1]) / T)], 'ebene': 1}
-        if name.startswith(('gross/', 'mittel/0')) or name == 'k11/laterne':
-            o['an_wand'] = True                                      # Bauwerke auf Pflaster: kein Erdwall ueber den Fuessen
+        o['an_wand'] = True                                          # kein heller Erdwall ueber Fuss/Schatten (Schattenregel)                                      # Bauwerke auf Pflaster: kein Erdwall ueber den Fuessen
         o.update(opt or {})
         objekte.append(o)
         fuesse.append((x0, y0, x1, y1))
@@ -94,9 +93,9 @@ def main():
             setze('mittel/00', achse + sd * 168, fy, {})
     for (cx, fy) in ((940, py0 * T + 70), (1086, py0 * T + 124), (872, py0 * T + 292), (990, py0 * T + 274)):
         setze('mittel/01', cx, fy, {}, rnd.random() < 0.5)                  # Saeulenstuempfe
-    setze('k11/wrack', 365, 652, {'liegend': False}, frei=True)              # grosses Schiffswrack am Strand
+    setze('k11/wrack', 365, 652, {'liegend': True}, mit_fuss=False, frei=True)   # Schatten flach ueber die ganze Form              # grosses Schiffswrack am Strand
     # ---- Portale / Teleporter (animiert)
-    setze('mittel/02', 88, 104, {'anim': 'portal'}, mit_fuss=False, frei=False)          # Spawn: Kristallportal
+    setze('k07_portal', 88, 104, {'anim': 'portal'}, mit_fuss=False, frei=False)        # Spawn: Portal wie Holy Peaks (Nutzer)
     setze('gross/03', 1360, 120, {'anim': 'leuchten'}, mit_fuss=False, auf='egal', frei=False)   # Riss ueber dem Meer
     setze('mittel/03', 1352, 1200, {'anim': 'portal', 'schattenlos': True}, mit_fuss=False, auf='egal', frei=False)
     # ---- Spawnplatz: vier Laternen symmetrisch
@@ -108,7 +107,7 @@ def main():
     # ---- Strand: Boote, Bootswrack, Anker, Felsbrocken
     for (cx, fy, n, sp_) in ((180, 446, 'k25/boot', False), (660, 222, 'k25/boot', True), (885, 286, 'k25/boot', False),
                              (150, 944, 'k25/boot', True), (545, 420, 'k25/bootwrack', False)):
-        setze(n, cx, fy, {'liegend': True}, sp_)
+        setze(n, cx, fy, {'liegend': True}, sp_, mit_fuss=False)
     for (cx, fy) in ((110, 588), (1135, 238)):
         setze('k11/anker', cx, fy, {}, rnd.random() < 0.5)
     for (cx, fy) in ((670, 124), (1135, 158), (255, 556), (287, 874)):
