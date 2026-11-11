@@ -112,9 +112,16 @@ def main():
             for y in range(by, by + ht):
                 gesperrt.add((x, y))
 
-    def setze_px(name, cx, fy, opt, spiegeln=False, mit_fuss=True):
+    wasser_px = np.unpackbits(np.load(os.path.join(KARTE, 'wasser.npy')))[:rows * T * cols * T].reshape(rows * T, cols * T).astype(bool)
+
+    def setze_px(name, cx, fy, opt, spiegeln=False, mit_fuss=True, pruefen=False):
         datei, h, ux0, uy0, ux1, uy1 = variante(name, spiegeln, mit_fuss)
         bw, bh = ux1 - ux0 + 1, uy1 - uy0 + 1
+        if pruefen:                                                 # Fussbereich (unterste Kachel + 3 px) nicht auf Wasser/Wand
+            x0, x1 = max(0, cx - bw // 2 - 3), min(cols * T, cx + bw // 2 + 4)
+            y0, y1 = max(0, fy - T), min(rows * T, fy + 4)
+            if wasser_px[y0:y1, x0:x1].any() or wand[y0:y1, x0:x1].any():
+                return None
         o = {'datei': datei, 'basis': name, 'x': cx - (ux0 + bw // 2), 'y': fy - uy1, 'fuss': h,
              'kachel': [cx // T, fy // T], 'block': [(cx - bw // 2) // T, (fy - bh + 1) // T, math.ceil(bw / T), math.ceil(bh / T)],
              'ebene': 1}
@@ -143,6 +150,13 @@ def main():
         for x in range(bx - 1, bx + wt + 1):                        # Stammreihe +-1 frei von anderer Deko
             for y in range(ty - 2, ty + 2):
                 gesperrt.add((x, y))
+    def begleiter(name, cx, d, seite, fy, opt):                     # erst die gewuenschte, dann die andere Seite
+        sp = rnd.random() < 0.5
+        for sd in (seite, -seite):
+            if setze_px(name, cx + sd * d, fy, dict(opt), sp, pruefen=True):
+                return True
+        return False
+
     # Begleiter (Regel 5d): abwechselnd Fels vor dem Stumpf (eine Kachel tiefer), Fels hinter den Blaettern
     # (eine Reihe hoeher, wird vor dem Baum gezeichnet), oder Fels hinter den Blaettern + hohe Blume vor dem Stumpf
     for i, b in enumerate(baeume):
@@ -162,12 +176,12 @@ def main():
         if art == 3:
             continue
         if art == 0 and unten_frei:
-            setze_px(rnd.choice(FELS_GROSS), cx + seite * 5, fy + T, {'kachel': [tx, ty + 1]}, rnd.random() < 0.5)
+            begleiter(rnd.choice(FELS_GROSS), cx, 5, seite, fy + T, {'kachel': [tx, ty + 1]})
         elif art == 1 or not unten_frei:
-            setze_px(rnd.choice(FELS_GROSS), cx + seite * max(9, b['block'][2] * T // 2 - 2), fy - 7, {'kachel': [tx, ty - 1], 'hinter': True}, rnd.random() < 0.5)
+            begleiter(rnd.choice(FELS_GROSS), cx, max(9, b['block'][2] * T // 2 - 2), seite, fy - 7, {'kachel': [tx, ty - 1], 'hinter': True})
         else:
-            setze_px(rnd.choice(FELS_GROSS), cx + seite * max(9, b['block'][2] * T // 2 - 2), fy - 7, {'kachel': [tx, ty - 1], 'hinter': True}, rnd.random() < 0.5)
-            setze_px(rnd.choice(HOCH_BLUME), cx - seite * 5, fy + T, {'kachel': [tx, ty + 1], 'anim': 'wehen'})
+            begleiter(rnd.choice(FELS_GROSS), cx, max(9, b['block'][2] * T // 2 - 2), seite, fy - 7, {'kachel': [tx, ty - 1], 'hinter': True})
+            begleiter(rnd.choice(HOCH_BLUME), cx, 5, -seite, fy + T, {'kachel': [tx, ty + 1], 'anim': 'wehen'})
     # Uebergaenge (Nutzer, PixelLab k27_rand + Grasbueschel Karte 01): am Rand des Pflasters Bueschel und lose
     # Pflastersteine im Gras, rund um das Wrack Truemmer und angesengte Erde
     for n in (5, 6):
