@@ -1903,6 +1903,11 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'glass window showing a glowing silver data core cylinder inside, heavy angular black base with vents, ' + FR14,
         'low metal laboratory railing segment of dark steel with a small sliding glass door in the middle, ' + FR14,
     ]},
+    'k26_gitter': {'size': 128, 'items': [
+        'very wide and low prison cell front made of dark iron bars, many thin vertical bars between a top rail, a middle rail '
+        'and a bottom rail, a barred cell door with a frame and a small electronic lock with a red light in the middle, '
+        'the whole front is about five times wider than it is tall, dark steel with subtle purple highlights, ' + FR14,
+    ]},
     'k24_schrein': {'size': 64, 'items': [
         'dark emperor throne made of jagged black obsidian crystal spikes with deep purple and crimson highlights, a high '
         'pointed back, standing on a small stepped dark stone dais, ' + FR14,

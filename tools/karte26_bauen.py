@@ -131,6 +131,20 @@ GITTER_S = []                                    # Seiten der Eckzellen sind jet
 
 
 def zellengitter(a, frame):
+    """Gitterfronten aus dem PixelLab-Gitter (k26_gitter/00, auf Zellengroesse zusammengesetzt: gitter/zelle.png),
+    Fuss buendig auf der Linie yb, Kontaktschatten darunter (Nutzer: erstellen lassen statt zeichnen)."""
+    sp = Image.open(os.path.join(OBJ, 'gitter', 'zelle.png')).convert('RGBA')
+    im = Image.fromarray(a).convert('RGBA')
+    for (x0, x1, yb, tuer) in GITTER_W:
+        a_ = np.array(im)
+        a_[yb:yb + 3, x0:x1, :3] = (a_[yb:yb + 3, x0:x1, :3] * 0.6).astype(np.uint8)
+        im = Image.fromarray(a_)
+        g = sp if sp.width == x1 - x0 else sp.resize((x1 - x0, sp.height), Image.NEAREST)
+        im.alpha_composite(g, (x0, yb - g.height + 1))
+    a[:] = np.array(im.convert('RGB'))
+
+
+def zellengitter_alt(a, frame):
     """Eisengitter frontal: Stangen 2 px alle 6 px, 26 px hoch, Ober-/Mittel-/Unterholm, Tuer mit Rahmen und
     rot blinkendem Schloss; Licht von links (helle Kante), Kontaktschatten am Boden. Seitliche Gitter als
     Pfostenreihe von oben (schmal)."""
