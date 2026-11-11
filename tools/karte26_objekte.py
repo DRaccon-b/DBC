@@ -41,7 +41,7 @@ THRONSAAL = (                                                    # Kommandobruec
 )
 
 KAPSEL, TANK, SERVER, FROST, LABTISCH, CHEMIE, REAKTOR, PULT, FAESSER, KABEL, STEUER = (
-    'labor/00', 'tank/00', 'labor/09', 'labor/02', 'labor/01', 'labor/08', 'tank/02', 'labor/10', 'labor/12',
+    'labor/00', 'tank2/00', 'labor/09', 'labor/02', 'labor/01', 'labor/08', 'tank/02', 'labor/10', 'labor/12',
     'labor/03', 'labor/05')
 LABOR = (                                                        # Brutlabor oben rechts, aufgeraeumt (Nutzer: weniger)
     [(TANK, 13, {'px': 64 * T}), (TANK, 24, {'px': 64 * T})]      # zwei grosse Stasis-Tanks wie in der Vorlage

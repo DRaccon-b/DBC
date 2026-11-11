@@ -1887,6 +1887,11 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'the top cap and at the base, glass window filled with bright glowing green liquid, inside sleeps a small green '
         'larva-like baby digital monster with tiny claws, curled in an S shape, ' + FR14,
     ]},
+    'k26_tank2': {'size': 96, 'items': [
+        'tall upright stasis tank with a heavy dark black and purple riveted steel frame and a rounded dark dome cap on top, '
+        'large glass window filled with glowing turquoise cyan liquid and bubbles, inside floats a dark winged dragon-like '
+        'digital monster silhouette with claws, wide heavy dark machine base with small glowing green and cyan lights, ' + FR14,
+    ]},
     'k24_schrein': {'size': 64, 'items': [
         'dark emperor throne made of jagged black obsidian crystal spikes with deep purple and crimson highlights, a high '
         'pointed back, standing on a small stepped dark stone dais, ' + FR14,
