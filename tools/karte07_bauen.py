@@ -20,7 +20,7 @@ ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
 KARTE = os.path.join(ROOT, 'maps', 'karte07')
 OBJ = os.path.join(ROOT, 'assets', 'objekte', 'karte07')
 T = 16
-N_FRAMES = 16
+N_FRAMES = 4                                      # Regel: hoechstens 4 Animationsbilder
 RAND = 6                                       # Wolkenring rundherum (Kacheln)
 IC, IR = 100, 90                               # Inselbereich (Koordinaten wie Vorlage)
 COLS, ROWS = IC + 2 * RAND, IR + 2 * RAND
@@ -174,6 +174,31 @@ def layout():
                        [[22, 26, 22, 26], [60, 64, 26, 30], [22, 26, 55, 60], [77, 81, 55, 60]]],
            'bruecke': [67 + r, 12 + r, 74 + r, 15 + r],
            'teleporter': [{'x': 7 + r, 'y': 86 + r, 'b': 4, 'h': 1}]}
+    # Regel 2: Weg setzt oben und unten genau in Treppenbreite an (Luecken zwischen Wegende und Treppe schliessen)
+    k_ = [list(z) for z in lay['klassen']]
+    for (x0, x1, y0, y1) in lay['treppen']:
+        for richtung, start in ((-1, y0 - 1), (1, y1 + 1)):
+            for d_ in range(0, 7):
+                y = start + richtung * d_
+                if any(k_[y][x] == 'w' for x in range(x0, x1 + 1)) and d_ > 0:
+                    for yy in range(min(start, y), max(start, y) + 1):
+                        for x in range(x0, x1 + 1):
+                            if k_[yy][x] in 'gnf':
+                                k_[yy][x] = 'w'
+                    break
+                if all(k_[y][x] == 'w' for x in range(x0, x1 + 1)):
+                    break
+            for d_ in range(0, 3):                                    # Wegbreite = Treppenbreite direkt am Fuss/Kopf
+                y = start + richtung * d_
+                for x in range(x0, x1 + 1):
+                    if k_[y][x] in 'gnf':
+                        k_[y][x] = 'w'
+    for (x0, x1, y0, y1) in lay['treppen']:                         # im Treppenbereich selbst: Weg in voller Breite
+        for y in range(y0, y1 + 1):
+            for x in range(x0, x1 + 1):
+                if k_[y][x] in 'gnf':
+                    k_[y][x] = 'w'
+    lay['klassen'] = [''.join(z) for z in k_]
     json.dump(lay, open(os.path.join(KARTE, 'layout.json'), 'w'), indent=0)
     print('Layout', COLS, ROWS)
 
@@ -781,9 +806,29 @@ def bauen(frame=None, speichern=True):
     fels = flaeche(kacheln(os.path.join(ROOT, 'assets', 'karte05', 'basis', 'r_%d.png'), 5))
     weg = flaeche(kacheln(os.path.join(ROOT, 'assets', 'karte04', 'basis', 'w_%d.png'), 5))
     pflaster = flaeche(kacheln(os.path.join(ROOT, 'assets', 'karte03', 'basis', 'kies_%d.png'), 5, grau))
+    def weg_biegen(roh):
+        """Regel 6: Wege nie nur gerade - die Wegmaske wird sanft verbogen (Boegen, Versatz); an Treppen, Bruecke,
+        Teleporter und Plaetzen bleibt sie fest, damit die Anschluesse stimmen."""
+        yy, xx = np.mgrid[0:Hp, 0:Wp]
+        dx = 9 * np.sin(2 * np.pi * yy / 176.0 + 1.0) + 5 * np.sin(2 * np.pi * yy / 92.0 + 2.4)
+        dy = 9 * np.sin(2 * np.pi * xx / 168.0 + 0.3) + 5 * np.sin(2 * np.pi * xx / 86.0 + 1.7)
+        fest = np.zeros((Hp, Wp), bool)
+        for (x0, x1, y0, y1) in lay['treppen']:
+            fest[max(0, (y0 - 2) * T):(y1 + 3) * T, max(0, (x0 - 1) * T):(x1 + 2) * T] = True
+        bx0, by0, bx1, by1 = lay['bruecke']
+        fest[(by0 - 1) * T:(by1 + 2) * T, (bx0 - 3) * T:(bx1 + 4) * T] = True
+        for tp in lay['teleporter']:
+            fest[(tp['y'] - 3) * T:(tp['y'] + tp['h'] + 2) * T, (tp['x'] - 2) * T:(tp['x'] + tp['b'] + 2) * T] = True
+        f = np.array(Image.fromarray((~fest * 255).astype(np.uint8)).filter(ImageFilter.GaussianBlur(24))) / 255.0
+        sy = np.clip((yy + dy * f).round().astype(int), 0, Hp - 1)
+        sx = np.clip((xx + dx * f).round().astype(int), 0, Wp - 1)
+        return roh[sy, sx]
     for art, tex, blur, rausch, seed in (('n', schnee, 5, 0.45, 3), ('f', fels, 4, 0.4, 4), ('r', pflaster, 2.5, 0.2, 5),
                                          ('w', weg, 7, 0.5, 6)):
-        m = weich(zell_maske(cls, art, COLS, ROWS), blur, rausch, seed) & insel
+        roh_ = zell_maske(cls, art, COLS, ROWS)
+        if art == 'w':
+            roh_ = weg_biegen(roh_)
+        m = weich(roh_, blur, rausch, seed) & insel
         a[m] = tex[m]
     pm = weich(zell_maske(cls, 'p', COLS, ROWS), 1.2, 0, 7) & insel
     a[pm] = pflaster[pm]

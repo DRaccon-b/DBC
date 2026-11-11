@@ -54,7 +54,7 @@ RING = (30, 62, 4, 26)                                          # Steinkreis obe
 
 FEST = [
     # Gipfel: Wirbelportal, Drachenschrein, Obelisk, Laternen (max. 4 Steinlaternen im Schrein)
-    ('mittel/12', 6.5, 7, {'anim': 'portal'}),
+    ('mittel/12_sw', 6.5, 7, {'anim': 'portal'}),                   # Portal schwarz-grau-weiss (Nutzer)
     # Reich des azurblauen Drachen (Schreinhof): Drachenstatue um Jadesaeule, Marmorweg, Kugelsockel, Banner
     ('azul_gross/00', 87, 12, {'anim': 'leuchten'}),
     ('azul/07', 79, 12, {}), ('azul/07', 79, 19, {'spiegeln': True}),
@@ -62,8 +62,9 @@ FEST = [
     ('azul/02', 94, 11, {'anim': 'leuchten'}), ('azul/02', 94, 21, {'anim': 'leuchten'}),
     ('azul/01', 79, 6, {'anim': 'wehen'}), ('azul/01', 82, 6, {'anim': 'wehen'}),
     ('azul/01', 92, 6, {'anim': 'wehen'}), ('azul/01', 95, 6, {'anim': 'wehen'}),
-    ('azul/04', 86.5, 21, {}), ('azul/09', 91, 22, {'anim': 'glitzern'}),
-    ('azul/03', 79, 23, {'anim': 'glitzern'}), ('azul/05', 82, 23, {}), ('azul/03', 95, 16, {'anim': 'glitzern'}),
+    ('azul/04', 86.5, 21, {}), ('azul/09', 83, 21, {'anim': 'glitzern'}), ('azul/09', 91, 21, {'anim': 'glitzern', 'spiegeln': True}),
+    ('azul/03', 79, 23, {'anim': 'glitzern'}), ('azul/05', 82, 23, {}), ('azul/03', 95, 23, {'anim': 'glitzern', 'spiegeln': True}),
+    ('azul/05', 92, 23, {'spiegeln': True}),                                 # Paare spiegelsymmetrisch zur Schreinachse
     (PL, 66, 22, {'anim': 'leuchten'}),
     (PL, 27, 23, {'anim': 'leuchten', 'spiegeln': True}),
     ('mittel/13', 59, 39, {}), ('mittel/13', 61, 49, {}),
@@ -103,7 +104,7 @@ FEST = [
     (NADEL, -2, 30, {}), (NADEL, -2, 48, {}), (NADEL, -3, 12, {}), (NADEL, -3, 68, {}), (NADEL, -2, 84, {}),
     (NADEL, 102, 22, {}), (NADEL, 102, 56, {}), (NADEL, 103, 8, {}), (NADEL, 103, 72, {}), (NADEL, 102, 88, {}),
     (NADEL, 14, 95, {}), (NADEL, 31, 95, {}), (NADEL, 47, 95, {}), (NADEL, 61, 95, {}),
-    (NADEL, 78, 95, {}), (NADEL, 2, 32, {}), (NADEL, 63, 90, {}), (NADEL, 92, 95, {}),
+    (NADEL, 78, 95, {}), (NADEL, 63, 90, {}), (NADEL, 92, 95, {}),
 ]
 STUMPF_PLAETZE = [(49, 57), (54, 38)]
 RUNEN_PLAETZE = [(40, 37), (57, 31), (89, 51), (27, 58), (65, 54)]
@@ -313,6 +314,8 @@ def main():
             continue
         if RING[0] <= tx - R <= RING[1] and RING[2] <= ty - R <= RING[3]:   # Steinkreis bleibt frei
             continue
+        if 75 <= tx - R <= 98 and 2 <= ty - R <= 27:                 # nicht im Drachenschrein (Zaun, Hof)
+            continue
         if n_r < 6 and rnd.random() < 0.15:
             if setze('mittel/07', tx, ty, {'spiegeln': rnd.random() < 0.5}, frei=True, nur='n', abs_=True):
                 n_r += 1
@@ -334,7 +337,9 @@ def main():
         sd = -1 if i % 2 else 1
         art = i % 3
         if art in (1, 2):                                            # hinter den Blaettern (eine Reihe hoeher, aussen)
-            setze(fels, cxm + sd * (wt / 2.0 + 0.2), ty - 1, {'spiegeln': rnd2.random() < 0.5}, abs_=True, _versuch=True)
+            breit = wt > 4                                           # grosse Kiefer: Fels hinter die Krone, nicht auf Stammhoehe
+            setze(fels, cxm + sd * (2 if breit else wt / 2.0 + 0.2), ty - (3 if breit else 1), {'spiegeln': rnd2.random() < 0.5},
+                  abs_=True, _versuch=True)
         if art in (0, 2):                                            # vor dem Stumpf: eine Kachel tiefer
             n_ = fels if art == 0 else blume
             setze(n_, cxm, ty + 1, {'spiegeln': rnd2.random() < 0.5, 'anim': 'wehen' if n_ == blume else None},
