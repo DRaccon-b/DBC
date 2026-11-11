@@ -1892,6 +1892,12 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'large glass window filled with glowing turquoise cyan liquid and bubbles, inside floats a dark winged dragon-like '
         'digital monster silhouette with claws, wide heavy dark machine base with small glowing green and cyan lights, ' + FR14,
     ]},
+    'k26_tank3': {'size': 96, 'items': [
+        'tall upright stasis tank with a dark black and purple riveted steel frame, glass filled with glowing turquoise liquid '
+        'and bubbles, inside floats a dark grey armored mechanical dragon digital monster with spiky limbs, sharp claws, a '
+        'horned beaked head and folded jagged wings, its body tangled in many black cables and tubes plugged into it, the '
+        'creature looks faded and murky behind the turquoise liquid, wide dark machine base with small green lights, ' + FR14,
+    ]},
     'k24_schrein': {'size': 64, 'items': [
         'dark emperor throne made of jagged black obsidian crystal spikes with deep purple and crimson highlights, a high '
         'pointed back, standing on a small stepped dark stone dais, ' + FR14,
