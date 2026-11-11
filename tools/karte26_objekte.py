@@ -46,7 +46,7 @@ KAPSEL, TANK, SERVER, FROST, LABTISCH, CHEMIE, REAKTOR, PULT, FAESSER, KABEL, ST
 LABOR = (                                                        # Brutlabor oben rechts, aufgeraeumt (Nutzer: weniger)
     [(TANK, 13, {'px': 64 * T}), (TANK, 24, {'px': 64 * T})]      # zwei grosse Stasis-Tanks wie in der Vorlage
     + [('kapsel/%02d' % n, r, {'px': x * T})    # Brutkapseln mit kleinen Digimon (Nutzer), 3 x 2
-       for (n, x, r) in ((0, 46, 12), (1, 50, 12), (2, 54, 12), (5, 46, 18), (12, 50, 18), (13, 54, 18))]
+       for (n, x, r) in ((0, 46, 10), (1, 50, 10), (2, 54, 10), (5, 46, 16), (12, 50, 16), (13, 54, 16))]
     + [(SERVER, 9, {'px': 72 * T}), (LABTISCH, 10, {'px': 79 * T})]
 )
 
