@@ -52,7 +52,7 @@ LABOR = (                                                        # Brutlabor obe
 )
 
 LABOR2 = (                                                       # Zellentrakt Mitte links (Nutzer: Zellen mit Gittern, Gitter in karte26_bauen)
-    [('kammer/00', 46, {'px': int(x * T), 'anim': 'lampe'}) for x in (7.25, 10.75, 27.25, 30.75)]   # Kammern in den Eckzellen
+    [('kammer/00', 46, {'px': int(x * T), 'anim': 'lampe'}) for x in (6.75, 9.75, 28.0, 31.0)]   # Kammern in den Eckzellen
 )
 
 
