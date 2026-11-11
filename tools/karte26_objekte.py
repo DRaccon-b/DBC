@@ -57,7 +57,7 @@ LABOR2 = (                                                       # Zellentrakt M
 
 AXS = 728                                                        # Achse des Saeulenraums (Mitte Gittersteg = Raummitte)
 SAEULENRAUM = (
-    [('saeule/00', 42, {'px': AXS - 88, 'anim': 'lampe'}), ('saeule/00', 42, {'px': AXS + 88, 'anim': 'lampe', 'spiegeln': True})]
+    [('obelisk_bau/00', 42, {'px': AXS - 96}), ('obelisk_bau/00', 42, {'px': AXS + 96, 'spiegeln': True})]   # Obelisken im Bau mit Geruest (Nutzer)
     + [('raum/00', r, {'px': AXS + d, 'anim': 'lampe'}) for r in (31, 46) for d in (-112, 112)]
     + [('raum/01', 28, {'px': AXS - 52, 'wand': True}), ('raum/01', 28, {'px': AXS + 52, 'wand': True})]   # Wandschilder
 )

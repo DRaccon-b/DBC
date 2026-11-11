@@ -1916,6 +1916,11 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'thin dark steel signal lamp post with a round glowing red light on top, small round base, ' + FR14,
         'square crimson wall plaque with a gold border and a gold winged eye emblem in the middle, flat, ' + FR14,
     ]},
+    'k26_obelisk_bau': {'size': 96, 'items': [
+        'very tall narrow black stone obelisk under construction, its pointed top still unfinished and open, surrounded by '
+        'a dark steel construction scaffolding with thin poles, cross braces, two small wooden plank platforms and a ladder, '
+        'plain polished black stone without symbols, standing on a small square black base, ' + FR14,
+    ]},
     'k24_schrein': {'size': 64, 'items': [
         'dark emperor throne made of jagged black obsidian crystal spikes with deep purple and crimson highlights, a high '
         'pointed back, standing on a small stepped dark stone dais, ' + FR14,
