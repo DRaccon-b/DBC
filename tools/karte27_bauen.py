@@ -28,7 +28,7 @@ k4.N_FRAMES = N_FRAMES
 H = k4.H
 weich, zell_maske, flaeche = k4.weich, k4.zell_maske, k20.flaeche
 FRONT = 48                                       # Mauerfronten der Vorlage sind 3 Kacheln hoch
-WRACK_BODEN = (182, 1112)                        # Mitte der aufgewuehlten Erde unter dem Wrack (px)
+WRACK_BODEN = (246, 1112)                        # Mitte der aufgewuehlten Erde unter dem Wrack (px)
 
 
 def maske(cls, arten):

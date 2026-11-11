@@ -21,7 +21,7 @@ for i in range(16):
     FREMD['k01/baum%02d' % i] = 'karte01/baeume/%02d.png' % i
 WALD = ['k01/baum%02d' % i for i in (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 12, 13, 14)]
 WRACK = 'wrack/00_sauber'
-WRACK_POS = (178, 1126)                         # Fussmitte x, Fusslinie y (px) - vor der Mauer des Plateaus unten links
+WRACK_POS = (242, 1126)                         # Fussmitte x, Fusslinie y (px) - vor der Mauer des Plateaus unten links
 
 
 def main():
@@ -92,8 +92,8 @@ def main():
                 gy, gx = [(ty + dy, tx + dx) for dy, dx in ((-1, 0), (1, 0), (0, -1), (0, 1)) if cls[ty + dy][tx + dx] == 'g'][0]
                 flach.append((rnd.choice(['k01/deko05', 'k01/deko06', 'rand/01']), gx, gy))
     wx, wy = WRACK_POS
-    for (dx, dy, n) in ((-150, -6, 'rand/02'), (150, 4, 'rand/47'), (-90, 22, 'rand/03'), (60, 24, 'rand/02'),
-                        (175, -10, 'rand/03'), (-175, 14, 'rand/47')):
+    for (dx, dy, n) in ((-110, 22, 'rand/02'), (150, 4, 'rand/47'), (-128, 8, 'rand/03'), (60, 24, 'rand/02'),
+                        (175, -10, 'rand/03')):
         flach.append((n, (wx + dx) // T, (wy + dy) // T))
     belegt = set()
     for (n, tx, ty) in flach:

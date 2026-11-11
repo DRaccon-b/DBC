@@ -29,7 +29,8 @@ PLATEAUS = [(0, 0, 19, 7), (20, 0, 26, 4), (27, 0, 32, 5), (33, 0, 40, 4), (41, 
             (0, 48, 25, 58)]
 FRONT_REIHEN = 3
 STEGE_WEG = [(24, 29, 30, 32), (15, 42, 18, 46)]
-SCHIFF = (2, 57, 19, 70)                                       # Rechteck des Schiff-Wracks (Objekt)
+SCHIFF = (6, 57, 23, 70)                                       # Rechteck des Schiff-Wracks (Objekt), 4 Kacheln nach rechts
+WALD_NEU = [(0, 59, 3, 66), (0, 67, 3, 71), (0, 72, 7, 80)]     # Nutzer: Baeume unten links vom Wrack
 
 
 def klassen():
@@ -88,6 +89,8 @@ def main():
     seite[seite == 'p'] = 'g'
     sub = k[SCHIFF[1]:SCHIFF[3] + 1, SCHIFF[0]:SCHIFF[2] + 1]      # abgestuerztes Schiff (Objekt) steht auf Gras
     sub[np.isin(sub, list('hp'))] = 'g'
+    for (x0, y0, x1, y1) in WALD_NEU:
+        k[y0:y1 + 1, x0:x1 + 1] = 'h'
     h = np.ones((R, C), int)
     for (x0, y0, x1, y1) in PLATEAUS:
         h[y0:y1 + 1, x0:x1 + 1] = 2
