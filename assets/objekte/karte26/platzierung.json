@@ -817,7 +817,7 @@
 {
 "datei": "varianten/halle-00.png",
 "basis": "halle/00",
-"x": 97,
+"x": 105,
 "y": 787,
 "fuss": 61,
 "kachel": [
@@ -835,16 +835,16 @@
 {
 "datei": "varianten/halle-00.png",
 "basis": "halle/00",
-"x": 129,
-"y": 915,
+"x": 273,
+"y": 931,
 "fuss": 61,
 "kachel": [
-10,
-60
+19,
+61
 ],
 "block": [
-8,
-57,
+17,
+58,
 4,
 4
 ],
@@ -853,29 +853,29 @@
 {
 "datei": "varianten/halle-00.png",
 "basis": "halle/00",
-"x": 400,
-"y": 899,
+"x": 537,
+"y": 883,
 "fuss": 61,
 "kachel": [
-26,
-59
+35,
+58
 ],
 "block": [
-25,
-56,
-4,
-4
-],
-"ebene": 1
-},
-{
-"datei": "varianten/halle-00.png",
-"basis": "halle/00",
-"x": 864,
-"y": 915,
-"fuss": 61,
-"kachel": [
+33,
 55,
+4,
+4
+],
+"ebene": 1
+},
+{
+"datei": "varianten/halle-00.png",
+"basis": "halle/00",
+"x": 874,
+"y": 915,
+"fuss": 61,
+"kachel": [
+56,
 60
 ],
 "block": [
@@ -889,16 +889,16 @@
 {
 "datei": "varianten/halle-00.png",
 "basis": "halle/00",
-"x": 1281,
-"y": 787,
+"x": 1217,
+"y": 771,
 "fuss": 61,
 "kachel": [
-82,
-52
+78,
+51
 ],
 "block": [
-80,
-49,
+76,
+48,
 4,
 4
 ],
@@ -907,16 +907,16 @@
 {
 "datei": "varianten/halle-00.png",
 "basis": "halle/00",
-"x": 1200,
-"y": 915,
+"x": 1097,
+"y": 867,
 "fuss": 61,
 "kachel": [
-76,
-60
+70,
+57
 ],
 "block": [
-75,
-57,
+68,
+54,
 4,
 4
 ],
@@ -925,124 +925,70 @@
 {
 "datei": "varianten/halle-01.png",
 "basis": "halle/01",
-"x": 165,
-"y": 799,
+"x": 181,
+"y": 815,
 "fuss": 49,
 "kachel": [
-11,
-52
-],
-"block": [
-10,
-49,
-2,
-4
-],
-"ebene": 1
-},
-{
-"datei": "varianten/halle-01.png",
-"basis": "halle/01",
-"x": 360,
-"y": 799,
-"fuss": 49,
-"kachel": [
-23,
-52
-],
-"block": [
-22,
-49,
-2,
-4
-],
-"ebene": 1
-},
-{
-"datei": "varianten/halle-01.png",
-"basis": "halle/01",
-"x": 472,
-"y": 799,
-"fuss": 49,
-"kachel": [
-30,
-52
-],
-"block": [
-29,
-49,
-2,
-4
-],
-"ebene": 1
-},
-{
-"datei": "varianten/halle-01.png",
-"basis": "halle/01",
-"x": 809,
-"y": 799,
-"fuss": 49,
-"kachel": [
-51,
-52
-],
-"block": [
-50,
-49,
-2,
-4
-],
-"ebene": 1
-},
-{
-"datei": "varianten/halle-01.png",
-"basis": "halle/01",
-"x": 1153,
-"y": 799,
-"fuss": 49,
-"kachel": [
-73,
-52
-],
-"block": [
-72,
-49,
-2,
-4
-],
-"ebene": 1
-},
-{
-"datei": "varianten/halle-02.png",
-"basis": "halle/02",
-"x": 300,
-"y": 819,
-"fuss": 61,
-"kachel": [
-20,
-54
-],
-"block": [
-18,
-51,
-4,
-4
-],
-"ebene": 1
-},
-{
-"datei": "varianten/halle-02.png",
-"basis": "halle/02",
-"x": 620,
-"y": 803,
-"fuss": 61,
-"kachel": [
-40,
+12,
 53
 ],
 "block": [
-38,
+11,
 50,
+2,
+4
+],
+"ebene": 1
+},
+{
+"datei": "varianten/halle-01.png",
+"basis": "halle/01",
+"x": 457,
+"y": 783,
+"fuss": 49,
+"kachel": [
+29,
+51
+],
+"block": [
+28,
+48,
+2,
+4
+],
+"ebene": 1
+},
+{
+"datei": "varianten/halle-01.png",
+"basis": "halle/01",
+"x": 885,
+"y": 815,
+"fuss": 49,
+"kachel": [
+56,
+53
+],
+"block": [
+55,
+50,
+2,
+4
+],
+"ebene": 1
+},
+{
+"datei": "varianten/halle-02.png",
+"basis": "halle/02",
+"x": 333,
+"y": 819,
+"fuss": 61,
+"kachel": [
+22,
+54
+],
+"block": [
+20,
+51,
 4,
 4
 ],
@@ -1051,16 +997,34 @@
 {
 "datei": "varianten/halle-02.png",
 "basis": "halle/02",
-"x": 940,
-"y": 819,
+"x": 785,
+"y": 771,
 "fuss": 61,
 "kachel": [
-60,
-54
+50,
+51
 ],
 "block": [
-58,
-51,
+49,
+48,
+4,
+4
+],
+"ebene": 1
+},
+{
+"datei": "varianten/halle-02.png",
+"basis": "halle/02",
+"x": 1005,
+"y": 803,
+"fuss": 61,
+"kachel": [
+64,
+53
+],
+"block": [
+62,
+50,
 4,
 4
 ],
@@ -1069,15 +1033,15 @@
 {
 "datei": "varianten/halle-15.png",
 "basis": "halle/15",
-"x": 1074,
+"x": 1264,
 "y": 933,
 "fuss": 59,
 "kachel": [
-68,
+80,
 61
 ],
 "block": [
-67,
+79,
 58,
 4,
 4

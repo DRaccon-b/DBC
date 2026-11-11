@@ -73,12 +73,11 @@ HALLE = (                                                        # grosse Halle 
     [('raum/01', 49, {'px': x, 'wand': True}) for x in (142, 527, 1007, 1200)]               # Wandschilder (eigenes Abzeichen)
     + [('raum/00', 51, {'px': 87, 'anim': 'lampe'}), ('raum/00', 62, {'px': 87, 'anim': 'lampe'}),
        ('raum/00', 51, {'px': 1350, 'anim': 'lampe'}), ('raum/00', 62, {'px': 1350, 'anim': 'lampe'})]
-    + [(KISTEN, 52, {'px': 128}), (KISTEN, 60, {'px': 160}), (KISTEN, 59, {'px': 431}),
-       (KISTEN, 60, {'px': 895}), (KISTEN, 52, {'px': 1312}), (KISTEN, 60, {'px': 1231})]
-    + [(KANISTER, 52, {'px': 180}), (KANISTER, 52, {'px': 375}), (KANISTER, 52, {'px': 487}),
-       (KANISTER, 52, {'px': 824}), (KANISTER, 52, {'px': 1168})]
-    + [(LADEROBOTER, 54, {'px': 327}), (LADEROBOTER, 53, {'px': 647}), (LADEROBOTER, 54, {'px': 967})]
-    + [(FAESSER2, 61, {'px': 1100})]
+    + [(KISTEN, 52, {'px': 136}), (KISTEN, 61, {'px': 304}), (KISTEN, 58, {'px': 568}),
+       (KISTEN, 60, {'px': 905}), (KISTEN, 51, {'px': 1248}), (KISTEN, 57, {'px': 1128})]      # unregelmaessig (Nutzer)
+    + [(KANISTER, 53, {'px': 196}), (KANISTER, 51, {'px': 472}), (KANISTER, 53, {'px': 900})]
+    + [(LADEROBOTER, 54, {'px': 360}), (LADEROBOTER, 51, {'px': 812}), (LADEROBOTER, 53, {'px': 1032})]
+    + [(FAESSER2, 61, {'px': 1290})]
 )
 
 
