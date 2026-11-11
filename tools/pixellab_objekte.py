@@ -1934,6 +1934,12 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'with four big corner clamps lying flat on the floor around a glowing swirling purple vortex in the floor, a front '
         'control panel with three small red lights, a short coolant pipe standing at the back edge, ' + FR14,
     ]},
+    'k26_halle': {'size': 64, 'items': [
+        'stack of four grey steel cargo crates with riveted edges and small warning labels, two by two, ' + FR14,
+        'small grey steel fuel canister barrel with a handle, ' + FR14,
+        'yellow industrial robot loader arm on a round black base, bent arm with a gripper claw, ' + FR14,
+        'flat red cross shaped floor marking painted on a metal floor, ' + FR14,
+    ]},
     'k24_schrein': {'size': 64, 'items': [
         'dark emperor throne made of jagged black obsidian crystal spikes with deep purple and crimson highlights, a high '
         'pointed back, standing on a small stepped dark stone dais, ' + FR14,
