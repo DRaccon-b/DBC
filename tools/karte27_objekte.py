@@ -76,6 +76,35 @@ def main():
         x = cx - (ux0 + bw // 2)
         objekte.append({'datei': datei, 'basis': WRACK, 'x': x, 'y': fy - uy1, 'fuss': h, 'kachel': [cx // T, fy // T],
                         'block': [(x + ux0) // T, (fy - bh) // T, math.ceil(bw / T), math.ceil(bh / T)], 'ebene': 1})
+    # Uebergaenge (Nutzer, PixelLab k27_rand + Grasbueschel Karte 01): am Rand des Pflasters Bueschel und lose
+    # Pflastersteine im Gras, rund um das Wrack Truemmer und angesengte Erde
+    for n in (5, 6):
+        q = os.path.join(ROOT, 'assets', 'objekte', 'karte01', 'deko', '%02d.png' % n)
+        os.makedirs(os.path.join(OBJ, 'k01'), exist_ok=True)
+        shutil.copy(q, os.path.join(OBJ, 'k01', 'deko%02d.png' % n))
+    flach = []
+    for ty in range(1, rows - 1):
+        for tx in range(1, cols - 1):
+            if cls[ty][tx] != 'p':
+                continue
+            nb = [cls[ty + dy][tx + dx] for dy, dx in ((-1, 0), (1, 0), (0, -1), (0, 1))]
+            if 'g' in nb and rnd.random() < 0.12:
+                gy, gx = [(ty + dy, tx + dx) for dy, dx in ((-1, 0), (1, 0), (0, -1), (0, 1)) if cls[ty + dy][tx + dx] == 'g'][0]
+                flach.append((rnd.choice(['k01/deko05', 'k01/deko06', 'rand/01']), gx, gy))
+    wx, wy = WRACK_POS
+    for (dx, dy, n) in ((-150, -6, 'rand/02'), (150, 4, 'rand/47'), (-90, 22, 'rand/03'), (60, 24, 'rand/02'),
+                        (175, -10, 'rand/03'), (-175, 14, 'rand/47')):
+        flach.append((n, (wx + dx) // T, (wy + dy) // T))
+    belegt = set()
+    for (n, tx, ty) in flach:
+        if (tx, ty) in belegt or not (0 <= ty < rows and 0 <= tx < cols):
+            continue
+        belegt.add((tx, ty))
+        datei, h, ux0, uy0, ux1, uy1 = variante(n, rnd.random() < 0.5, mit_fuss=False)
+        bw = ux1 - ux0 + 1
+        objekte.append({'datei': datei, 'basis': n, 'x': tx * T + 8 - (ux0 + bw // 2), 'y': (ty + 1) * T - 1 - uy1,
+                        'fuss': h, 'kachel': [tx, ty], 'block': [tx, ty, 1, 1], 'ebene': 0,
+                        'liegend': n.startswith('rand/'), 'anim': 'wehen' if n.startswith('k01') else None})
     json.dump(objekte, open(os.path.join(OBJ, 'platzierung.json'), 'w'), indent=0)
     print('Karte 27: %d Objekte' % len(objekte))
 

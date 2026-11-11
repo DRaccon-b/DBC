@@ -1573,7 +1573,9 @@ def herunterladen(oid, d):
 
 
 def speichern(gruppe, ims, ids):
-    if gruppe.startswith('k26_'):
+    if gruppe.startswith('k27_'):
+        ziel = os.path.join(ROOT, 'assets', 'objekte', 'karte27', gruppe[4:])
+    elif gruppe.startswith('k26_'):
         ziel = os.path.join(ROOT, 'assets', 'objekte', 'karte26', gruppe[4:])
     elif gruppe.startswith('k25_'):
         ziel = os.path.join(ROOT, 'assets', 'objekte', 'karte25', gruppe[4:])
@@ -1947,6 +1949,12 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'small black metal gear cog, seen from directly above, lying completely flat on the floor, no height, no shadow, classic 2D handheld RPG style',
         'small square dark metal floor drain grate with slots, seen from directly above, lying completely flat on the floor, no height, no shadow, classic 2D handheld RPG style',
     ]},
+    'k27_rand': {'size': 32, 'items': [
+        'small clump of short green grass blades growing over the edge of grey stone paving, seen from directly above, lying flat on the ground, classic 2D handheld RPG style',
+        'a few small grey cobblestones half sunk in green grass, seen from directly above, lying flat on the ground, classic 2D handheld RPG style',
+        'small pile of black metal debris shards, bolts and torn plates lying on grass, seen from directly above, lying flat on the ground, classic 2D handheld RPG style',
+        'small patch of dark scorched earth with a few black metal splinters, seen from directly above, lying flat on the ground, classic 2D handheld RPG style',
+    ]},
     'k24_schrein': {'size': 64, 'items': [
         'dark emperor throne made of jagged black obsidian crystal spikes with deep purple and crimson highlights, a high '
         'pointed back, standing on a small stepped dark stone dais, ' + FR14,
@@ -1994,8 +2002,8 @@ def erzeugen(gruppe):
         d = warte(oid)
         speichern(gruppe, *herunterladen(oid, d))
         return
-    if gruppe.startswith(('k20_', 'k21_', 'k23_', 'k24_', 'k25_', 'k26_')):
-        g = (OBJEKTGRUPPEN_K21 if gruppe.startswith(('k21_', 'k23_', 'k24_', 'k25_', 'k26_')) else OBJEKTGRUPPEN_K20)[gruppe]
+    if gruppe.startswith(('k20_', 'k21_', 'k23_', 'k24_', 'k25_', 'k26_', 'k27_')):
+        g = (OBJEKTGRUPPEN_K21 if gruppe.startswith(('k21_', 'k23_', 'k24_', 'k25_', 'k26_', 'k27_')) else OBJEKTGRUPPEN_K20)[gruppe]
         req = {'description': STIL, 'size': g['size'], 'view': 'top-down',
                'item_descriptions': [it + '. ' + STIL for it in g['items']],
                'target_palette': {'colors': PALETTE, 'name': 'Karte01 handheld'}}

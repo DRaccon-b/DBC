@@ -28,6 +28,7 @@ TELEPORTER = [(97, 6, 3, 3), (11, 72, 3, 2)]
 PLATEAUS = [(0, 0, 19, 7), (20, 0, 26, 4), (27, 0, 32, 5), (33, 0, 40, 4), (41, 0, 67, 2), (68, 0, 88, 13),
             (0, 48, 25, 58)]
 FRONT_REIHEN = 3
+STEGE_WEG = [(24, 29, 30, 32), (15, 42, 18, 46)]
 SCHIFF = (2, 57, 19, 70)                                       # Rechteck des Schiff-Wracks (Objekt)
 
 
@@ -80,6 +81,9 @@ def main():
                 if len(comp) < 12:
                     for cy, cx in comp:
                         k[cy, cx] = 'g'
+    for (x0, y0, x1, y1) in STEGE_WEG:                                # Nutzer: die beiden Stege links entfernen
+        sub = k[y0:y1 + 1, x0:x1 + 1]
+        sub[sub == 'b'] = 'x'
     seite = k[46:62, 23:29]                                          # Mauerreste an der Seite des Plateaus unten links
     seite[seite == 'p'] = 'g'
     sub = k[SCHIFF[1]:SCHIFF[3] + 1, SCHIFF[0]:SCHIFF[2] + 1]      # abgestuerztes Schiff (Objekt) steht auf Gras
