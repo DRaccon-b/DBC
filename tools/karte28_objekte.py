@@ -83,6 +83,31 @@ def main():
             objekte.append({'datei': datei, 'basis': name, 'x': bx * T + (wt * T - bw) // 2 - ux0,
                             'y': (ty + 1) * T - 1 - uy1, 'fuss': h, 'kachel': [tx, ty],
                             'block': [bx, ty - ht + 1, wt, ht], 'ebene': 1, 'anim': 'baum'})
+    # Spinnweben (Nutzer, PixelLab k28_netz): flach auf dem Boden, ohne Schatten - Steinplatz ausserhalb des Rings und
+    # Arena (vor allem die oberen Ecken, wie die Vorlage); Kokons (4, 6) dazwischen
+    NETZE = ['netz/00', 'netz/01', 'netz/02', 'netz/03', 'netz/00', 'netz/02']
+    NETZ_STELLEN = [(62, 12), (66, 11), (65, 16), (83, 12), (87, 11), (87, 16), (88, 20), (87, 27), (62, 24), (59, 27),
+                    (73, 9), (80, 9), (60, 19), (85, 31), (74, 30), (66, 31),
+                    (8, 21), (10, 23), (12, 20), (9, 25), (13, 23), (24, 21), (27, 20), (30, 19), (29, 23), (34, 18),
+                    (42, 21), (45, 22), (46, 25), (41, 19), (6, 28), (19, 34), (38, 31)]
+    KOKONS = [(64, 14), (85, 14), (11, 22), (44, 21), (28, 21)]
+    belegt = set((o['kachel'][0], o['kachel'][1]) for o in objekte if not o['basis'].startswith('wald'))
+    for i, (tx, ty) in enumerate(NETZ_STELLEN + KOKONS):
+        if (tx, ty) in belegt or cls[ty][tx] in 'hwT' or any(
+                o['basis'] == OBELISK and abs(o['kachel'][0] - tx) <= 2 and -6 <= ty - o['kachel'][1] <= 1 for o in objekte):
+            continue
+        name = ('netz/04' if i % 2 else 'netz/06') if i >= len(NETZ_STELLEN) else NETZE[(tx * 7 + ty * 3) % len(NETZE)]
+        sp = Image.open(os.path.join(OBJ, name + '.png')).convert('RGBA')
+        if (tx + ty) % 2:
+            sp = sp.transpose(Image.FLIP_LEFT_RIGHT)
+        datei = 'varianten/%s%s.png' % (name.replace('/', '-'), '_m' if (tx + ty) % 2 else '')
+        sp.save(os.path.join(OBJ, datei))
+        bb = sp.getbbox()
+        kokon = i >= len(NETZ_STELLEN)
+        objekte.append({'datei': datei, 'basis': name, 'x': tx * T + 8 - (bb[0] + bb[2]) // 2, 'y': (ty + 1) * T - 1 - (bb[3] - 1),
+                        'fuss': sp.height, 'kachel': [tx, ty], 'block': [tx, ty, 1, 1], 'ebene': 1 if kokon else 0,
+                        'schattenlos': not kokon})
+        belegt.add((tx, ty))
     json.dump(objekte, open(os.path.join(OBJ, 'platzierung.json'), 'w'), indent=0)
     print('Karte 28: %d Objekte' % len(objekte))
 

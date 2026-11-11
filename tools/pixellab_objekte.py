@@ -1957,6 +1957,12 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'small pile of black metal debris shards, bolts and torn plates lying on grass, seen from directly above, lying flat on the ground, classic 2D handheld RPG style',
         'small patch of dark scorched earth with a few black metal splinters, seen from directly above, lying flat on the ground, classic 2D handheld RPG style',
     ]},
+    'k28_netz': {'size': 32, 'items': [
+        'round white spider web, thin silver threads, seen from directly above, lying flat on the ground, classic 2D handheld RPG style',
+        'small torn spider web in a corner shape, thin grey white threads, seen from directly above, lying flat on the ground, classic 2D handheld RPG style',
+        'dense tangled patch of white cobwebs on the ground, seen from directly above, lying flat, classic 2D handheld RPG style',
+        'small spider web with a tiny dark spider in the middle, seen from directly above, lying flat on the ground, classic 2D handheld RPG style',
+    ]},
     'k28_treppe': {'size': 64, 'items': [
         'grey stone staircase leading down into a sunken pit, seen from directly above in top-down view, three tiles wide, '
         'about six worn stone steps, each lower step a little darker and more shadowed, low stone side walls on the left and '

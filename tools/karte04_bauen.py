@@ -492,6 +492,8 @@ def objekte_zeichnen(img, objs, cache, boden, frame, ebenen=None):
         if not len(zeilen):
             continue
         kern, wurf = felder(o, a)
+        if o.get('schattenlos'):                          # flach auf dem Boden (Spinnweben u. a.): kein Schatten
+            continue
         if o.get('liegend') and len(zeilen):              # liegend: flacher Schatten der ganzen Form
             ys_, xs_ = np.nonzero(a)
             for d_, w_ in ((2, 0.83), (1, 1.0)):
