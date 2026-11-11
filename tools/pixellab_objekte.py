@@ -1983,6 +1983,18 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'wide craggy dark grey sea rock with several pointed peaks and cracks, barnacles at the bottom, on wet sand, ' + FR14,
         'tall dark jagged rock spire rising out of dark grey water with a small foam ring at its base, ' + FR14,
     ]},
+    'k29_wrack1': {'size': 192, 'items': [
+        'large old wooden shipwreck lying on dark grey sand, broken hull tilted to one side, snapped mast with torn grey sail, '
+    ]},
+    'k29_wrack2': {'size': 192, 'items': [
+        'big wrecked wooden sailing ship stranded on a grey beach, hull broken in the middle, one leaning broken mast with a ragged '
+    ]},
+    'k29_wrack3': {'size': 192, 'items': [
+        'huge abandoned ghost ship wreck lying on its side on dark sand, cracked dark wooden hull, broken masts, torn pale sails, '
+    ]},
+    'k29_wrack4': {'size': 192, 'items': [
+        'large shipwreck stranded on a dark grey shore, bow sticking up, broken hull planks, short broken mast with a shredded '
+    ]},
     'k29_felsen': {'size': 64, 'items': [
         'small jagged dark black grey rock spire with sharp facets, on grey sand, ' + FR14,
         'medium pointed dark slate rock with cracks and a bit of moss, on grey sand, ' + FR14,

@@ -503,7 +503,7 @@ def objekte_zeichnen(img, objs, cache, boden, frame, ebenen=None):
             continue
         if len(zeilen) < 4:
             continue
-        zu = zeilen.max()
+        zu = zeilen.max() - o.get('fuss_dy', 0)          # spitz zulaufender Sprite-Fuss: Schatten am breiten Fuss
         fuss_y = o['y'] + zu
         fuss = np.nonzero(a[max(0, zu - 3):zu + 1].any(axis=0))[0]
         if len(fuss):

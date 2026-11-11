@@ -79,6 +79,14 @@ def main():
         o = {'datei': datei, 'basis': name, 'x': cx - (bb[0] + bw // 2), 'y': fy - (bb[3] - 1), 'fuss': sp.height,
              'kachel': [tx, ty], 'block': [(cx - bw // 2) // T, ty - math.ceil((bb[3] - bb[1]) / T) + 1,
                                            math.ceil(bw / T), math.ceil((bb[3] - bb[1]) / T)], 'ebene': 1}
+        if name.startswith(('fg/', 'fk/', 'k11/fels')):              # Felsen laufen unten spitz zu: Fuss = breite Basis
+            a_ = np.array(sp.getchannel('A')) >= 200
+            w_ = a_.sum(1); zl_ = np.nonzero(w_)[0]; zu_ = zl_.max()
+            ref_ = w_[zu_ - int((zu_ - zl_.min()) * 0.4):zu_ + 1].max()
+            k_ = 0
+            while w_[zu_ - k_] < ref_ * 0.5:
+                k_ += 1
+            o['fuss_dy'] = k_
         o['an_wand'] = True                                          # kein heller Erdwall ueber Fuss/Schatten (Schattenregel)                                      # Bauwerke auf Pflaster: kein Erdwall ueber den Fuessen
         o.update(opt or {})
         objekte.append(o)
@@ -115,7 +123,7 @@ def main():
             gruppe = [('fg/%d' % ((i + 1) % 2), -14, -4), ('fk/%d' % (6, 2, 14)[i % 3], 30, 0)]
         for (n, dx, dy) in sorted(gruppe, key=lambda g: g[2]):
             o = setze(n, cx + dx, cy + dy, {'schattenlos': n.endswith('/w')}, (i + dx) % 2 == 0,
-                      mit_fuss=not n.endswith('/w'), auf='egal' if nass else 'land', frei=False)
+                      mit_fuss=False, auf='egal' if nass else 'land', frei=False)
             if o:                                                    # ganzer Felskoerper gesperrt: kein Kleinkram dahinter
                 fx, fy_ = o['x'], o['y']
                 sp_ = Image.open(os.path.join(OBJ, o['datei'])); b_ = sp_.getbbox()
