@@ -23,7 +23,7 @@ FREMD = {'k11/wrack': ('karte11/gross/01.png', 1.0), 'k11/anker': ('karte11/land
          'k11/fels2': ('karte11/meer/09.png', 0.95), 'k11/muschel': ('karte11/meer/07.png', 0.85),
          'k11/auster': ('karte11/meer/14.png', 0.85), 'k11/tang': ('karte11/meer/04.png', 0.9),
          'k11/holz': ('karte11/land/06.png', 0.75), 'k11/graete': ('karte11/land/08.png', 0.8),
-         'k25/boot': ('karte25/strand/01.png', 0.62), 'k25/bootwrack': ('karte25/strand/13.png', 0.62)}
+         'k11/felsnadel': ('karte11/gross/03.png', 0.8), 'k25/boot': ('karte25/strand/01.png', 0.62), 'k25/bootwrack': ('karte25/strand/13.png', 0.62)}
 
 
 def main():
@@ -38,6 +38,8 @@ def main():
         im = np.array(Image.open(os.path.join(ROOT, 'assets', 'objekte', q)).convert('RGBA')).astype(np.float32)
         l = im[..., :3].mean(2, keepdims=True)
         im[..., :3] = (im[..., :3] * 0.55 + l * 0.45) * f            # entsaettigt + dunkler (dunkles Meer)
+        if name == 'k11/felsnadel':                                  # Wasserring am Fuss grau wie das Meer der Karte
+            im[..., :3] = l * f * np.array([0.96, 1.0, 1.04])
         os.makedirs(os.path.dirname(os.path.join(OBJ, name + '.png')), exist_ok=True)
         Image.fromarray(np.clip(im, 0, 255).astype(np.uint8)).save(os.path.join(OBJ, name + '.png'))
     objekte, fuesse = [], []
@@ -96,7 +98,7 @@ def main():
     setze('k11/wrack', 365, 652, {'liegend': True}, mit_fuss=False, frei=True)   # Schatten flach ueber die ganze Form              # grosses Schiffswrack am Strand
     # ---- Portale / Teleporter (animiert)
     setze('k07_portal', 88, 104, {'anim': 'portal'}, mit_fuss=False, frei=False)        # Spawn: Portal wie Holy Peaks (Nutzer)
-    setze('gross/03', 1360, 120, {'anim': 'leuchten'}, mit_fuss=False, auf='egal', frei=False)   # Riss ueber dem Meer
+    setze('k11/felsnadel', 1360, 112, {}, mit_fuss=False, auf='egal', frei=False)   # Felsnadel im Meer (Nutzer: statt Riss)
     setze('mittel/03', 1352, 1200, {'anim': 'portal', 'schattenlos': True}, mit_fuss=False, auf='egal', frei=False)
     # ---- Spawnplatz: vier Laternen symmetrisch
     lx0, ly0, lx1, ly1 = 4, 7, 15, 17
