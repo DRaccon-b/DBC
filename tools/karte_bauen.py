@@ -223,7 +223,7 @@ def laternen_licht(img, laternen, frame):
     W, H = img.size
     a = np.zeros((H, W), dtype=np.float32)
     for i, o in enumerate(laternen):
-        f = 1.0 if frame is None else 0.85 + 0.15 * math.sin(2 * math.pi * frame / N_FRAMES * 2 + i * 1.7)
+        f = 1.0 if frame is None else 0.85 + 0.15 * math.sin(2 * math.pi * frame / N_FRAMES + 0.6 + i * 1.7)   # 1 Takt je Durchlauf (bei 4 Bildern nie ganz still)
         kx, ky = o['x'] + 7, o['y'] + 9                       # Glasmitte (bauwerke.LATERNE_KOPF)
         for (cx, cy, rx, ry, staerke) in ((kx, ky, 18, 16, 62), (kx, o['y'] + 58, 18, 6, 40)):
             y0, y1 = max(0, cy - ry), min(H, cy + ry + 1)

@@ -1213,6 +1213,12 @@ def animieren(img, objs, cache, frame, ruhig=False):
                 if not q.any():
                     q = (a[..., 3] > 0) & (r_ > 200) & (g_ > 180) & (r_ - b_ > 25)
                     q[int(a.shape[0] * 0.5):] = False
+                if not q.any():                                # andersfarbiges Licht (weiss, blau, violett): hellste
+                    hell_ = a[..., :3].max(2) + a[..., :3].min(2) // 2   # gesaettigte bzw. weisse Pixel der oberen Haelfte
+                    oben_ = np.zeros(q.shape, bool); oben_[:int(a.shape[0] * 0.6)] = True
+                    kand_ = (a[..., 3] > 0) & oben_
+                    if kand_.any():
+                        q = kand_ & (hell_ >= np.percentile(hell_[kand_], 96)) & (hell_ > 200)
                 farbe, rad = (255, 220, 120), (14, 10)
             elif anim == 'geisterlicht':
                 q = (a[..., 3] > 0) & (g_ > 150) & (g_ > r_ + 40)

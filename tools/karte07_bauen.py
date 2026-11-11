@@ -21,6 +21,8 @@ KARTE = os.path.join(ROOT, 'maps', 'karte07')
 OBJ = os.path.join(ROOT, 'assets', 'objekte', 'karte07')
 T = 16
 N_FRAMES = 4                                      # Regel: hoechstens 4 Animationsbilder
+import karte_bauen as _kb
+_kb.N_FRAMES = N_FRAMES                       # Windwelle (Pflanzen) ueber die 4 Bilder der Karte
 RAND = 6                                       # Wolkenring rundherum (Kacheln)
 IC, IR = 100, 90                               # Inselbereich (Koordinaten wie Vorlage)
 COLS, ROWS = IC + 2 * RAND, IR + 2 * RAND

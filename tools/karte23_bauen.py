@@ -23,6 +23,8 @@ T = 16
 N_FRAMES = 4
 BILDDAUER = 250
 k4.N_FRAMES = N_FRAMES
+import karte_bauen as _kb
+_kb.N_FRAMES = N_FRAMES                       # Windwelle (Pflanzen) ueber die 4 Bilder der Karte
 H = k4.H
 weich, zell_maske, flaeche = k4.weich, k4.zell_maske, k20.flaeche
 k4.FELS['stein'] = ['#2e2c2a', '#46423e', '#5e5952', '#77716a', '#908a82', '#aaa49a', '#c6c0b4']   # Steinmauern (Vorlage grau)

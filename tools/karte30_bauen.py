@@ -23,6 +23,8 @@ T = 16
 N_FRAMES = 4
 BILDDAUER = 250
 k4.N_FRAMES = N_FRAMES
+import karte_bauen as _kb
+_kb.N_FRAMES = N_FRAMES                       # Windwelle (Pflanzen) ueber die 4 Bilder der Karte
 k18.N_FRAMES = N_FRAMES
 H = k4.H
 gross, kontur, dunkeln, mischen = k18.gross, k18.kontur, k18.dunkeln, k18.mischen
@@ -307,8 +309,12 @@ def bauen(frame=None, speichern=True):
         rr = [o for o in objs if o.get('anim') == 'riesenrad']
         for o in rr:                                                  # Riesenrad nach Fusshoehe einsortiert ueber allem
             img.alpha_composite(cache[o['datei']], (o['x'], o['y']))
+        def _ueber(o, r):                                             # Ueberschneidung mit dem Riesenrad
+            w_, h_ = cache[o['datei']].size
+            W_, H_ = cache[r['datei']].size
+            return not (o['x'] + w_ <= r['x'] or o['x'] >= r['x'] + W_ or o['y'] + h_ <= r['y'] or o['y'] >= r['y'] + H_)
         nach = [o for o in objs if not o.get('hochbahn') and o.get('anim') != 'riesenrad' and rr and
-                o['y'] + o['fuss'] > rr[0]['y'] + rr[0]['fuss']]
+                o['y'] + o['fuss'] > rr[0]['y'] + rr[0]['fuss'] and _ueber(o, rr[0])]
         for o in nach:
             img.alpha_composite(cache[o['datei']], (o['x'], o['y']))
         img = img.copy()

@@ -22,6 +22,8 @@ OBJ = os.path.join(ROOT, 'assets', 'objekte', 'karte26')
 B13 = os.path.join(ROOT, 'assets', 'karte13', 'basis')
 T = 16
 N_FRAMES = 4
+import karte_bauen as _kb
+_kb.N_FRAMES = N_FRAMES                       # Windwelle (Pflanzen) ueber die 4 Bilder der Karte
 H = k4.H
 
 

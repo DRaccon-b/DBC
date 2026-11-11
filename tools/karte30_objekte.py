@@ -185,6 +185,9 @@ def main():
         setze(PALME, tx * T + 8, (ty + 1) * T - 2, {'anim': 'baum'}, (tx + ty) % 2 == 0)
     for ty in range(21, 92):                                                         # Waldrand rechts: dicht, versetzt,
         for tx in (126, 127, 128, 129):                                              # Kronen ueberlappen (Wald)
+            hb_ = lay['hochbahn']
+            if hb_['y0'] <= ty <= hb_['y1'] + 1:                             # unter der Hochbahn verdeckt: kein Baum
+                continue
             if (tx + ty) % 2 == 0 and kl[min(ty, rows - 1)][tx] == 'f':
                 setze(WALD[(tx * 7 + ty * 3) % len(WALD)], tx * T + 8, (ty + 1) * T - 1,
                       {'anim': 'baum', 'kein_schatten': True}, (tx + ty * 5) % 4 < 2, pruefen=False)
