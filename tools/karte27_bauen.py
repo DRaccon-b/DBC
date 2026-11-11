@@ -126,7 +126,10 @@ def bauen(frame=None, speichern=True):
     # Wasser: See (Grundebene) und Baeche auf dem Plateau, Ufer und Tiefenstufen
     import wasser_vertieft
     x_t = np.array([[ch == 'x' for ch in z] for z in cls])
-    xm = weich(np.kron(x_t, np.ones((T, T))).astype(np.float32), 4, 0.15, 8, 0.45) & ~wand
+    h_t = np.array([[c == '2' for c in z] for z in lay['hoehe']])
+    xm_lo = weich(np.kron(x_t & ~h_t, np.ones((T, T))).astype(np.float32), 4, 0.15, 8, 0.45) & ~hoch_k
+    xm_hi = weich(np.kron(x_t & h_t, np.ones((T, T))).astype(np.float32), 4, 0.15, 8, 0.45) & (hp >= 2)
+    xm = (xm_lo | xm_hi) & ~wand                                     # Wasser bleibt auf seiner Ebene: Bergkante liegt darueber
     steg_t = np.array([[ch == 'b' for ch in z] for z in cls])
     xm |= np.kron(steg_t, np.ones((T, T), bool))                    # Stege stehen ueber dem Wasser
     a = np.array(wasser_vertieft.vertiefen(Image.fromarray(a), np.ones_like(xm), frame, maske=xm).convert('RGB'))
