@@ -738,7 +738,7 @@ def drachenbruecke(img, x0, x1, y0, y1, frame=None, spalt=None):
 
     # 4) Eckpfeiler ueber den Kanten der Luecke mit pulsierender Bernsteinkugel
     puls = (0, 1, 2, 1)[fr % 4]
-    for xc in (ga, gb - 1):
+    for xc in (ga - 5, gb + 4):                                       # Pfeiler stehen an Land, direkt an der Kante
         for (yb, h) in ((y0 + 8, 20), (y1 + 1, 22)):
             for y in range(yb - h, yb):
                 for x in range(xc - 4, xc + 5):
@@ -880,8 +880,10 @@ def bauen(frame=None, speichern=True):
             treppe07(img, x0 * T - 6, (x1 + 1) * T + 6, ye + 2, ye + 50, seed=x0 + y0)
     bauwerke.S = alt
     bx0, by0, bx1, by1 = lay['bruecke']
-    drachenbruecke(img, bx0 * T + 8, (bx1 + 1) * T - 8, by0 * T + 4, (by1 + 1) * T - 4, frame,
-                   spalt=((bx0 + 1) * T - 4, bx1 * T + 4))
+    hz = np.array([[int(c) for c in z] for z in lay['hoehe']])
+    luecke = [x for x in range(bx0, bx1 + 1) if hz[(by0 + by1) // 2, x] == 0]     # Wolkenspalt pixelgenau
+    ga_, gb_ = luecke[0] * T, (luecke[-1] + 1) * T
+    drachenbruecke(img, ga_ - T, gb_ + 8, by0 * T + 4, (by1 + 1) * T - 4, frame, spalt=(ga_, gb_))
     a = np.array(img.convert('RGB'))
     for tp in lay['teleporter']:
         k4.teleporter_zeichnen(a, tp['x'], tp['y'], tp['b'], tp['h'], frame)
