@@ -63,7 +63,7 @@ SAEULENRAUM = (
 )
 
 PORTALRAUM = (                                                   # Portalraum Mitte rechts nach der Vorlage
-    [('portal/00_lila', 36, {'px': 1040, 'anim': 'portal'}), ('portal/00_lila', 36, {'px': 1327, 'anim': 'portal', 'spiegeln': True})]
+    [('portal2/00_lila', 36, {'px': 1040, 'anim': 'portal', 'liegend': True}), ('portal2/00_lila', 36, {'px': 1327, 'anim': 'portal', 'liegend': True})]
     + [('portalraum/00', 45, {'px': 1047}), ('portalraum/14', 45, {'px': 1280})]                       # Truemmerhaufen
     + [('portalraum/01', 32, {'px': 926}), ('portalraum/01', 45, {'px': 926})]   # Rohre an den Waenden
 )

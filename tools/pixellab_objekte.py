@@ -1929,6 +1929,11 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'heap of dark broken metal debris, twisted steel plates, cables and rubble on a metal floor, ' + FR14,
         'tall thin vertical dark steel pipe with valves and a pressure gauge, mounted upright, ' + FR14,
     ]},
+    'k26_portal2': {'size': 96, 'items': [
+        'square floor-mounted teleporter portal pad seen from slightly above, a heavy dark black and purple mechanical frame '
+        'with four big corner clamps lying flat on the floor around a glowing swirling purple vortex in the floor, a front '
+        'control panel with three small red lights, a short coolant pipe standing at the back edge, ' + FR14,
+    ]},
     'k24_schrein': {'size': 64, 'items': [
         'dark emperor throne made of jagged black obsidian crystal spikes with deep purple and crimson highlights, a high '
         'pointed back, standing on a small stepped dark stone dais, ' + FR14,
