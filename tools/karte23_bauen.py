@@ -482,6 +482,13 @@ def bauen(frame=None, speichern=True):
         if len(col):
             ye = int(col.min()) - 1
             k4.treppe(a, tz0 * T, (tz1 + 1) * T, ye, 's', FR, 'erde', sand if k == 0 else erde)
+    # Seitliche Treppen im linken Gang an jeder Stufenkante (Weg fuehrt nicht ohne Stufen in die Senke)
+    zeile_ = (ya + yb) // 2
+    for k, m in enumerate(L):
+        xs_ = np.nonzero(m[zeile_, 60 * T:77 * T])[0]
+        if len(xs_):
+            xk = 60 * T + int(xs_.min())
+            treppe_ost(a, xk - 4, xk + 20, ya + 2, yb - 2, 'erde', erde)
     # ---------------- Mauerchen, Hecken
     # ---------------- Wasser (Bach laeuft unten aus der Karte)
     import wasser_vertieft

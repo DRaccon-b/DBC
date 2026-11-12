@@ -50,24 +50,39 @@ KARTEN = {
     'karte13': ('karte13_bauen', 'Spiral_Mountain_Machine_City', 'v1.0'),
     'karte14': ('karte14_bauen', 'Spiral_Mountain_Summit', 'v1.0'),
     'karte15': ('karte15_bauen', 'Apocalymons_Realm', 'v1.0'),
-    'karte16': ('karte16_bauen', 'The_Network', 'v1.0'),
-    'karte17': ('karte17_bauen', 'Our_War_Game', 'v1.0'),
+    'karte16': ('karte16_bauen', 'The_Network', 'v1.1'),
+    'karte17': ('karte17_bauen', 'Our_War_Game', 'v1.1'),
     'karte18': ('karte18_bauen', 'The_Fog_Bound_City', 'v1.0'),
-    'karte19': ('karte19_bauen', 'Revenge', 'v1.0'),
-    'karte20': ('karte20_bauen', 'Startdorf', 'v1.0'),
-    'karte28': ('karte28_bauen', 'Tower_Forest', 'v1.0'),
-    'karte29': ('karte29_bauen', 'The_Sea_of_Darkness', 'v1.0'),
+    'karte19': ('karte19_bauen', 'Revenge', 'v1.1'),
+    'karte20': ('karte20_bauen', 'Startdorf', 'v1.1'),
+    'karte28': ('karte28_bauen', 'Tower_Forest', 'v1.1'),
+    'karte29': ('karte29_bauen', 'The_Sea_of_Darkness', 'v1.1'),
+    'karte21': ('karte21_bauen', 'Digi_Egg_Valley', 'v1.0'),
+    'karte23': ('karte23_bauen', 'Harvest_Hills', 'v1.0'),
+    'karte24': ('karte24_bauen', 'The_Kaisers_Canyon', 'v1.0'),
+    'karte25': ('karte25_bauen', 'Sunset_Bay', 'v1.0'),
+    'karte26': ('karte26_bauen', 'The_Kaisers_Fortress', 'v1.0'),
+    'karte27': ('karte27_bauen', 'Destiny_Lake', 'v1.0'),
+    'karte30': ('karte30_bauen', 'Odaiba', 'v1.0'),
+    'karte31': ('karte31_bauen', 'Highton_View_Terrace', 'v1.0'),
+    'karte32': ('karte32_bauen', 'Dream_Ruins', 'v1.0'),
+    'karte33': ('karte33_bauen', 'The_World_of_Dreams', 'v1.0'),
 }
 
 
 # ---------------------------------------------------------------------------------------------- Boden
 def boden_bild(mod, frame, leer):
-    alt = mod.OBJ
-    mod.OBJ = leer                                    # keine platzierung.json -> nur Boden
+    """Boden ohne Objekte: platzierung.json kurz beiseitelegen (OBJ bleibt, weil manche Karten dort auch
+    Bodenteile laden - Gitter, Bodendetails, Gondeln, Schiff)."""
+    pf = os.path.join(mod.OBJ, 'platzierung.json')
+    weg = pf + '.tileset_pause'
+    if os.path.exists(pf):
+        os.replace(pf, weg)
     try:
         return np.array(mod.bauen(frame=frame, speichern=False).convert('RGBA'))
     finally:
-        mod.OBJ = alt
+        if os.path.exists(weg):
+            os.replace(weg, pf)
 
 
 def schneefall_export(mod, out):

@@ -140,6 +140,13 @@ def bauen(frame=None, speichern=True):
     for ys_, xs_ in _k4._komponenten(stufe_t >= 0):                 # einzelne Wasserkacheln an Land: kein Wasser
         if len(ys_) < 6:
             stufe_t[ys_, xs_] = -1
+    for k_ in (1, 2, 3):                                             # keine Einzelkachel-Inseln/-Loecher je Tiefenstufe
+        for ys_, xs_ in _k4._komponenten(stufe_t >= k_):
+            if len(ys_) < 3:
+                stufe_t[ys_, xs_] = k_ - 1
+        for ys_, xs_ in _k4._komponenten((stufe_t < k_) & (stufe_t >= 0)):
+            if len(ys_) < 3:
+                stufe_t[ys_, xs_] = k_
     # Ufer und Tiefenstufen am 16er-Raster mit 45-Grad-Schraegen (Nutzer, Regel 6b)
     stufe_px = sum(wd.raster45(stufe_t >= k_).astype(int) for k_ in range(4)) - 1
     wasser_m = stufe_px >= 0
@@ -169,14 +176,19 @@ def bauen(frame=None, speichern=True):
     wd._kacheln = grau_k
     wd.FELSEN_PROTOKOLL.clear()
     a = strand.copy()
-    img_w = wd.meer_terrassen(Image.fromarray(a), np.ones((Hp, Wp), bool), frame, np.zeros((Hp, Wp), bool), maske=wasser_m, dist=d)
+    meiden_ = dehnen(maske(cls, 'bT'), 41)                          # keine Felsspitzen an Bruecke und Teleportern
+    img_w = wd.meer_terrassen(Image.fromarray(a), np.ones((Hp, Wp), bool), frame, meiden_, maske=wasser_m, dist=d)
     for n_, v_ in a_alt.items():
         setattr(wd, n_, v_)
     a = np.array(img_w.convert('RGB'))
     tief = ~flach & ~land
     # Strand, heller Sand, Pfuetzen bleiben flaches Wasser
     a[land] = strand[land]
-    lm = maske(cls, 'l')                                             # helle Sandflecken am Raster, runde Ecken + Uebergang
+    lt_ = np.array([[c == 'l' for c in z] for z in cls])            # keine Einzelkachel-Flecken (wirken als runde Punkte)
+    for ys_, xs_ in _k4._komponenten(lt_):
+        if len(ys_) < 2:
+            lt_[ys_, xs_] = False
+    lm = np.kron(lt_, np.ones((T, T), bool))                         # helle Sandflecken am Raster, runde Ecken + Uebergang
     wz = np.array(Image.fromarray(lm.astype(np.uint8) * 255).filter(ImageFilter.GaussianBlur(4)), np.float32) / 255
     yy_, xx_ = np.mgrid[0:Hp, 0:Wp]
     kern_ = (wz > 0.62) & land

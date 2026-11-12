@@ -419,7 +419,18 @@ def bauen(frame=None, speichern=True):
     wm = weich(zell_maske(cls, 'h', cols, rows), 5, 0.4, 3)
     a[wm] = (gras[wm] * np.array([0.62, 0.7, 0.66])).astype(np.uint8)
     # Sandwege und Lager (inkl. Ausgang)
-    roh = zell_maske(cls, 'wet', cols, rows)
+    weg_cls = [list(z) for z in cls]                                 # Weg laeuft in voller Brueckenbreite an die Bruecke
+    for (bx0, bx1) in lay['bruecken']:
+        ys_b = [y for y in range(rows) if cls[y][bx0] == 'b']
+        for y in ys_b:
+            for x in range(bx0, bx1 + 1):
+                weg_cls[y][x] = 'w'
+        for y in (ys_b[0] - 2, ys_b[0] - 1, ys_b[-1] + 1, ys_b[-1] + 2):
+            if 0 <= y < rows:
+                for x in range(bx0, bx1 + 1):
+                    if weg_cls[y][x] in 'g':
+                        weg_cls[y][x] = 'w'
+    roh = zell_maske([''.join(z) for z in weg_cls], 'wet', cols, rows)
     m = weich(roh, 5.0, 0, 4)   # Regel 6b: 45-Grad-Kanten
     a[m] = sand[m]
     saum = weich(roh, 5.0, 0, 4, 0.28) & ~m

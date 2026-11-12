@@ -89,6 +89,11 @@ def pflaster_rand(a, pm, gras, sand, sm, seed=272):
 def bauen(frame=None, speichern=True):
     lay = json.load(open(os.path.join(KARTE, 'layout.json')))
     cls = lay['klassen']
+    _kl = np.array([list(z) for z in cls])                           # einzelne Moorkacheln (runde Flecken) -> Wiese
+    for ys_, xs_ in k4._komponenten(_kl == 'f'):
+        if len(ys_) < 2:
+            _kl[ys_, xs_] = 'g'
+    cls = [''.join(z) for z in _kl]
     cols, rows = lay['groesse']
     Wp, Hp = cols * T, rows * T
     hp = np.kron(np.array([[int(c) for c in z] for z in lay['hoehe']]), np.ones((T, T), int))

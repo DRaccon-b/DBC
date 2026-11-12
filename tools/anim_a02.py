@@ -35,7 +35,7 @@ ANIM = {
     },
     'karte26': {   # Labor und Thronraum: Maschinen laufen, Tesla-Saeulen knistern (Nutzer)
         'digifeuer/13': {'teil': 'blitze', 'lampe_box': [24, 0, 36, 44], 'licht_farbe': [150, 255, 210]},
-        'digifeuer/00': {'teil': 'flammen_boxen', 'flammen_box': [[6, 0, 36, 21]], 'flammen_alle': True,
+        'digifeuer/00': {'teil': 'flammen_boxen', 'flammen_box': [[6, 0, 36, 21]], 'flammen_alle': True, 'flammen_amp': 2.6,
                          'lampe_box': [6, 0, 36, 21], 'licht_farbe': [150, 230, 255]},   # Digi-Flammen zuengeln
         'thron_gross/01': {'anim': 'maschine', 'schirm': [[11, 3, 26, 17], [31, 1, 63, 16], [67, 4, 83, 18]],
                            'leds': True, 'led_box': [[6, 28, 88, 46]]},

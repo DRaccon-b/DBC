@@ -268,17 +268,13 @@ def front_und_faeden(a, land, frame, tiefe=10):
     Hh, W = land.shape
     front = np.zeros_like(land)
     unten = {}
-    for x in range(W):
-        col = np.nonzero(land[:, x])[0]
-        if not len(col):
-            continue
-        y = col.max()
-        if y + 1 < Hh and not land[y + 1, x]:
-            unten[x] = y
+    for x in range(W):                                               # jede Suedkante der Spalte (nicht nur die unterste)
+        for y in np.nonzero(land[:-1, x] & ~land[1:, x])[0]:
+            unten[(x, int(y))] = int(y)
             for dd in range(1, tiefe + 1):
                 if y + dd < Hh and not land[y + dd, x]:
                     front[y + dd, x] = True
-    for x, y in unten.items():
+    for (x, _y), y in unten.items():
         for dd in range(1, tiefe + 1):
             Y = y + dd
             if Y >= Hh or not front[Y, x]:
@@ -291,7 +287,7 @@ def front_und_faeden(a, land, frame, tiefe=10):
             if dd == tiefe:
                 c = np.array((12, 18, 36), np.float32)
             a[Y, x] = np.clip(c, 0, 255).astype(np.uint8)
-        if x % 16 == 0 and x - 1 in unten:                        # Plattenfugen in der Front
+        if x % 16 == 0 and (x - 1, _y) in unten:                  # Plattenfugen in der Front
             for dd in range(2, tiefe):
                 if y + dd < Hh and front[y + dd, x]:
                     a[y + dd, x] = (18, 26, 48)
@@ -299,8 +295,8 @@ def front_und_faeden(a, land, frame, tiefe=10):
     rs = random.Random(1618)
     xs = sorted(unten)
     for i in range(22):
-        x = rs.choice(xs)
-        y = unten[x] + tiefe + 1
+        x, y0_ = rs.choice(xs)
+        y = unten[(x, y0_)] + tiefe + 1
         lang = rs.randint(14, 54)
         ph = rs.random()
         for t in range(lang):

@@ -124,6 +124,8 @@ def objekte_pruefen(karte, wegklassen='w', klein_bis=24):
     print('%s Regeln: %d verschoben, %d entfernt (Wege/Teleporter), %d Objekte' % (karte, verschoben, entfernt, len(neu)))
     import anim_a02                                                 # Zusatz-Animationen (Nutzer: alles animieren)
     anim_a02.anwenden(karte)
+    import korrektur_a02                                             # gezielte Korrekturen aus der Gesamtpruefung
+    korrektur_a02.anwenden(karte)
 
 
 if __name__ == '__main__':

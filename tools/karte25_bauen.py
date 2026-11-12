@@ -181,6 +181,9 @@ def bauen(frame=None, speichern=True):
     tief = maske(cls, 'x')
     steg_roh = maske(cls, 'p')                                     # Stege stehen ueber dem Wasser
     kl_ = np.array([[c for c in z] for z in cls])                    # Kueste am 16er-Raster mit 45 Grad (Nutzer)
+    for ys_, xs_ in k4._komponenten(kl_ == 'x'):                     # einzelne Tiefwasserkacheln im Flachwasser -> flach
+        if len(ys_) < 3:
+            kl_[ys_, xs_] = 'f'
     wasser = wd.raster45(np.isin(kl_, list('fxp'))) & ~hoch & ~wand
     land = ~wasser
     dl = wd.abstand45(land)                                         # Achteck-Abstand: Schaum parallel zur Kueste

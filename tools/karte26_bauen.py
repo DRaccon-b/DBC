@@ -316,6 +316,20 @@ def bauen(frame=None, speichern=True):
     sperre = tm.copy()                                                 # keine Details auf Teppich und an Teleportern
     for tp in lay['teleporter']:
         sperre[(tp['y'] - 1) * T:(tp['y'] + tp['h'] + 1) * T, (tp['x'] - 1) * T:(tp['x'] + tp['b'] + 1) * T] = True
+    pf_ = os.path.join(OBJ, 'platzierung.json')                       # keine Streudeko an Objekten/Portal (2 px+)
+    if os.path.exists(pf_):
+        for o_ in json.load(open(pf_)):
+            try:
+                bb_ = Image.open(os.path.join(OBJ, o_['datei'])).getbbox()
+            except OSError:
+                continue
+            if bb_:
+                rand_ = 16 if o_.get('anim') == 'portal' else 6
+                sperre[max(0, o_['y'] + bb_[1] - rand_):o_['y'] + bb_[3] + rand_,
+                       max(0, o_['x'] + bb_[0] - rand_):o_['x'] + bb_[2] + rand_] = True
+    g_h = Image.open(os.path.join(OBJ, 'gitter', 'zelle.png')).height
+    for (x0_, x1_, yb_, _t) in GITTER_W:                               # nicht auf/an den Zellengittern
+        sperre[max(0, yb_ - g_h - 6):yb_ + 10, max(0, x0_ - 6):x1_ + 6] = True
     boden_details_pixellab(a, cls, sperre)             # PixelLab-Variante (Nutzer); boden_details() = gezeichnete Variante
     zellengitter(a, frame)
     for tp in lay['teleporter']:

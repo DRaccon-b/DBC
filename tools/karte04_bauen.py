@@ -1956,7 +1956,7 @@ def flammen_boxen(sp, frame, o):
         hoch = (0, 1, 1, 0, 1, 0, 0, 1)[(frame + n * 3 + o.get('x', 0)) % 8]
         for y, x in zip(ys, xs):
             k = (y1 - y) / max(1, y1 - y0)
-            dx = int(round(k * 1.2 * math.sin(t * 3 + n * 1.9 + o.get('x', 0) * 0.3)))
+            dx = int(round(k * o.get('flammen_amp', 1.2) * math.sin(t * 2 + n * 1.9 + o.get('x', 0) * 0.3 + y * 0.35)))
             X = x + dx
             if 0 <= X < a.shape[1]:
                 out[y, X] = a[y, x]

@@ -892,7 +892,11 @@ def bauen(frame=None, speichern=True):
                 unten.append((x + rs_.randint(10, 22), y))
             if x > 0 and not insel[y, x - 1] and rs_.random() < 0.45:
                 unten.append((x - rs_.randint(10, 22), y))
-    wolken_vorne(a, insel_hart, unten, frame)
+    wand_ = insel_hart.copy()                                        # Wolken liegen unter der Inselfront, nie auf ihr
+    for w_ in (w1_, w2_, w3_):
+        if isinstance(w_, np.ndarray) and w_.shape == wand_.shape:
+            wand_ |= w_.astype(bool)
+    wolken_vorne(a, wand_, unten, frame)
     img = Image.fromarray(a).convert('RGBA')
     alt = bauwerke.S
     bauwerke.S = [H(c) + (255,) for c in k4.FELS['wolkenfels']]

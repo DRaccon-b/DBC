@@ -145,10 +145,15 @@ def main():
     k[rand & np.isin(k, list('hfe'))] = 'g'
     for (tx, ty, b, hh) in TREPPEN:
         k[ty:ty + hh, tx:tx + b] = 't'
+        for sx in (tx - 1, tx + b):                                   # Front neben der Treppe auf Treppenhoehe (Anschluss)
+            if 0 <= sx < C and h[ty, sx] < 2:
+                h[ty, sx] = 2
+                if k[ty, sx] in 'gh':
+                    k[ty, sx] = 'f'
     for (tx, ty, b, hh) in AUSGAENGE:
         k[ty:ty + hh, tx:tx + b] = 'T'
     import regeln_a02                                                 # Regel 6: Wege nie nur gerade
-    k = regeln_a02.wege_schwingen(k, seed=28)
+    k = regeln_a02.wege_schwingen(k, seed=28, amp=1.9)
     lay = {'groesse': [C, R], 'klassen': [''.join(z) for z in k], 'hoehe': [''.join(str(c) for c in z) for z in h],
            'arena': [int(ax0), int(ay0), int(ax1), int(ay1)],
            'treppen': [{'x': tx, 'y': ty, 'b': b, 'h': hh} for (tx, ty, b, hh) in TREPPEN],
