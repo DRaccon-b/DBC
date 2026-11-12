@@ -35,6 +35,8 @@ wird jede Regel einzeln geprüft.
    - 6b. **Wegkanten in 45° (Nutzer, Karte 31):** Der Verlauf eines Weges darf geschwungen sein, aber seine Ränder
      folgen dem Kachelraster mit **45°-Schrägen** an den Ecken (abgeschrägte Kachelstufen) – keine runden
      Freiform-Kurven. An Treppen läuft der Weg ebenfalls mit 45° auf die exakte Treppenbreite zu.
+     Referenz, die der Nutzer „perfekt“ fand: `karte31_bauen.weg_rund` – Verlauf als Kurve auf Kacheln gerastert, die
+     Kachelmaske (mit angrenzenden Plätzen/Treppen) mit Gauß 5 px weichgezeichnet und bei 50 % geschnitten.
 7. **Schatten** ragen nie über Kanten (Klippen, Wände, Wasser) oder über andere Objekte.
 8. **Bäume überlappen sich nur an den äußeren Kachelspalten:** *(vorerst NICHT anwenden – der Nutzer hat die
    Baum-Änderungen auf Karte 01 und 05 verworfen; Bäume bleiben wie in der jeweiligen Vorlage/v1.0)*

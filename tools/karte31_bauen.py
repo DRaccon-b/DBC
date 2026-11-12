@@ -289,7 +289,7 @@ def weg_rund(kl, lay):
     rows, cols = kl.shape
     anschluss = gross(np.isin(kl, ['g', 'T', 'W', 'p', 'd', 's', 'h', 'f']))
     basis = ((gross(kl == 'w') | gross(np.isin(kl, ['g', 'T', 'W', 'p', 'd']))) * 255).astype(np.uint8)
-    m = raute_oeffnen(raute_schliessen(basis > 0, 6), 6)            # Kachelecken -> exakte 45-Grad-Schraegen (6 px)
+    m = np.array(Image.fromarray(basis).filter(ImageFilter.GaussianBlur(5))) > 127   # Nutzer: "so war es perfekt"
     wk = kl == 'w'                                                    # nur auf Wegkacheln und ihren direkten Nachbarn
     nah = wk | np.roll(wk, 1, 0) | np.roll(wk, -1, 0) | np.roll(wk, 1, 1) | np.roll(wk, -1, 1)
     m &= gross(nah)
