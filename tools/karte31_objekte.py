@@ -169,6 +169,22 @@ def main():
     for mx in [(tr[i][1] + 1 + tr[i + 1][0] - 1) / 2 for i in range(len(tr) - 1)] + [(tr[-1][1] + 1 + 119) / 2]:
         if not setze('karte18/strasse/14', int((mx + 0.5) * T), 29 * T - 1, {}):
             print('Promenadenbank nicht gesetzt:', mx)
+    # Parkrasen: Bueschel und Wildblumen (PixelLab k31_bueschel), unregelmaessig, mit Abstand, nicht an Wegen/Plaetzen
+    import random as _rnd
+    rb = _rnd.Random(3132)
+    BUESCHEL = ['karte31/bueschel/%02d' % i for i in (0, 1, 2, 3, 9, 10, 21, 24, 28, 35, 39, 45, 54, 57, 62, 0, 9, 28)]
+    kand_b = [(tx, ty) for ty in range(3, 25) for tx in range(3, 117)
+              if all(kl[ty + dy][tx + dx] == 'n' for dy in (-1, 0, 1) for dx in (-1, 0, 1))]
+    rb.shuffle(kand_b)
+    gesetzt_b = []
+    for (tx, ty) in kand_b:
+        if len(gesetzt_b) >= 70:
+            break
+        if any(abs(tx - x) + abs(ty - y) < 5 for (x, y) in gesetzt_b):
+            continue
+        if setze(rb.choice(BUESCHEL), tx * T + 8, (ty + 1) * T - 1, {'anim': 'wehen', 'nur_kontakt': True}, rb.random() < 0.5):
+            gesetzt_b.append((tx, ty))
+    print('Parkbueschel:', len(gesetzt_b))
     # ---------------------------------------------------------------- Siedlung
     GINKGO = ['karte18/gebaeude/gold_00', 'karte18/gebaeude/gold_01', 'karte18/gebaeude/gold_02']
     for i, ty in enumerate(range(40, 72, 6)):                                                     # Ginkgo-Allee

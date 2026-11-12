@@ -2011,6 +2011,12 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'single classic Japanese park street lamp: slim dark green cast iron post on a small round foot, on top one glass lantern head with a warm glowing yellow light and a small dark cap, about three times as tall as wide, ' + FR14,
         'single old fashioned park lantern post: thin black iron pole with a decorative base, on top a square glass lamp with warm yellow light and a pointed roof cap, ' + FR14,
     ]},
+    'k31_bueschel': {'size': 32, 'items': [   # Nutzer: Parkrasen etwas leer -> Bueschel/Blumen
+        'small tuft of fresh green grass blades on a lawn, seen slightly from above, classic 2D handheld RPG style',
+        'small clump of white clover with tiny white flowers on a lawn, seen slightly from above, classic 2D handheld RPG style',
+        'small patch of yellow dandelions with leaves on a lawn, seen slightly from above, classic 2D handheld RPG style',
+        'small cluster of tiny pink and purple wildflowers with green leaves, seen slightly from above, classic 2D handheld RPG style',
+    ]},
     'k31_muell': {'size': 32, 'items': [
         'small pile of fallen golden yellow ginkgo leaves lying flat on the ground, seen from above, classic 2D handheld RPG style',
         'small pile of fallen brown and orange autumn leaves lying flat on the ground, seen from above, classic 2D handheld RPG style',
