@@ -154,8 +154,7 @@ def main():
     for yt in (by1 + 1,):
         setze('gebaeude/brueckenturm', (bx0 + bx1 + 1) * T // 2, yt * T - 1, {'kein_schatten': True}, pruefen=False)
     hochbahn_pfeiler().save(os.path.join(OBJ, 'gebaeude', 'hochbahn_pfeiler.png'))
-    for px_ in lay['hochbahn']['pfeiler']:                                           # Stuetzpfeiler auf dem Rasenstreifen
-        setze('gebaeude/hochbahn_pfeiler', px_ * T + 8, 75 * T - 1, {'nur_kontakt': True}, pruefen=False)
+    # (Stuetzpfeiler sind jetzt Teil des kachelbaren Hochbahn-Segments in karte30_bauen.py)
     zx0, zx1 = lay['hochbahn']['zug']
     zug = Image.open(os.path.join(ROOT, 'assets', 'objekte', 'karte18', 'gebaeude', 'zug.png'))
     shutil.copy(os.path.join(ROOT, 'assets', 'objekte', 'karte18', 'gebaeude', 'zug.png'), os.path.join(OBJ, 'fremd', 'zug.png'))

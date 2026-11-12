@@ -115,7 +115,77 @@ def bruecke(a, lay, wasser_m, lvl, frame):
     lvl[:Y1, X0:X0 + 5] = 9; lvl[:Y1, X1 - 5:X1] = 9
 
 
+SEG_B, SEG_P = 7, 3                                                      # Segment 7 Kacheln breit, Pfeiler in Kachel 3
+
+
+def brueckensegment(pfeiler=True):
+    """Kachelbares Hochbahn-Segment im Stil der Vorlage (Nutzer): 112 x 112 px (7 x 7 Kacheln), oben 2 Kacheln Fahrbahn
+    (Bruestung, zwei Gleise mit Schwellen), 1 Kachel helles Steinband, 1 Kachel dunkles Paneelband mit Unterkante, darunter
+    3 Kacheln frei mit einem blaugrauen Stuetzpfeiler (Kapitell, Schaft, Fuss) mittig in Kachel 3. Alle Muster haben
+    eine Periode, die 112 teilt -> nahtlos aneinander setzbar."""
+    W, Hh = SEG_B * T, 7 * T
+    a = np.zeros((Hh, W, 4), np.uint8)
+    def r(y0, y1, c, x0=0, x1=W):
+        a[y0:y1, x0:x1, :3] = H(c)[:3]; a[y0:y1, x0:x1, 3] = 255
+    # Fahrbahn (2 Kacheln): Bruestung hinten, zwei Gleise, Bruestung vorne
+    r(0, 2, '#c9cdd8'); r(2, 4, '#6c7184')
+    for g0 in (5, 18):                                                     # zwei Gleise
+        r(g0 - 1, g0 + 11, '#7a7f93')
+        for x in range(0, W, 8):                                           # Schwellen
+            r(g0 + 1, g0 + 9, '#5c6174', x + 1, x + 6)
+        r(g0, g0 + 2, '#b7bccb'); r(g0 + 2, g0 + 3, '#4b5062')            # Schiene hinten
+        r(g0 + 7, g0 + 9, '#b7bccb'); r(g0 + 9, g0 + 10, '#4b5062')       # Schiene vorne
+    r(16, 17, '#575c6e')
+    r(29, 30, '#9da2b4'); r(30, 32, '#d6dae4')                              # Bruestung vorne (Lichtkante)
+    # helles Steinband (1 Kachel): Bloecke 16 px, Fugen, Licht oben
+    r(32, 48, '#b3bbca'); r(32, 34, '#d3d8e2'); r(45, 48, '#8f97a8')
+    for x in range(0, W, 16):
+        r(34, 45, '#8f97a8', x, x + 1)
+        r(40, 42, '#c6ccd8', x + 5, x + 10)                                  # kleine Fase im Block
+    # dunkles Paneelband (1 Kachel) mit vertieften Feldern, Unterkante
+    r(48, 64, '#4a5068'); r(48, 49, '#2c3040')
+    for x in range(0, W, 16):
+        r(51, 59, '#5a6280', x + 2, x + 15); r(51, 52, '#6c7494', x + 2, x + 15); r(58, 59, '#3a4058', x + 2, x + 15)
+    r(61, 64, '#2a2e3c')
+    if pfeiler:                                                            # Stuetzpfeiler (3 Kacheln), blaugrau wie die Vorlage
+        cx = SEG_P * T + 8
+        k = '#2e3444'
+        r(64, 66, '#6a7690', cx - 9, cx + 9); r(66, 72, '#9aa8bc', cx - 7, cx + 7)    # Kapitell
+        r(66, 67, '#c4d0de', cx - 7, cx + 7); r(71, 72, '#6a7690', cx - 7, cx + 7)
+        r(72, 74, '#d8b866', cx - 4, cx + 4)                                  # schmales goldenes Band (Vorlage)
+        r(74, 104, '#8e9cb2', cx - 4, cx + 4)                                 # Schaft
+        r(74, 104, '#c8d4e2', cx - 3, cx - 1); r(74, 104, '#5e6a82', cx + 2, cx + 4)
+        r(104, 108, '#8e9cb2', cx - 6, cx + 6); r(104, 105, '#c4d0de', cx - 6, cx + 6)   # Fuss
+        r(108, 112, '#5e6a82', cx - 7, cx + 7)
+        for (y0, y1, x0, x1) in ((64, 72, cx - 9, cx + 9), (74, 104, cx - 4, cx + 4), (104, 112, cx - 7, cx + 7)):
+            a[y0:y1, x0, :3] = H(k)[:3]; a[y0:y1, x1 - 1, :3] = H(k)[:3]
+    return Image.fromarray(a)
+
+
 def hochbahn(img, lay, zug_sp=None):
+    """Hochbahn aus kachelbaren Segmenten (Nutzer): Segment 7 Kacheln, Pfeiler alle 7 Kacheln wie in der Vorlage;
+    ueber Querstrassen steht kein Pfeiler (Segment ohne Pfeiler). Zug steht auf der Fahrbahn."""
+    hb = lay['hochbahn']
+    y0 = hb['y0'] * T
+    mit, ohne = brueckensegment(True), brueckensegment(False)
+    kl = lay['klassen']
+    start = hb['pfeiler'][0] - SEG_P
+    while start > hb['x0']:
+        start -= SEG_B
+    x = start
+    while x <= hb['x1']:
+        px_ = x + SEG_P                                                    # Pfeilerkachel dieses Segments
+        auf_strasse = not (0 <= px_ < len(kl[0])) or kl[74][px_] == 's' or kl[76][px_] != 's'
+        img.alpha_composite(ohne if auf_strasse else mit, (x * T, y0))
+        x += SEG_B
+    if zug_sp is not None:
+        zx0, zx1 = hb['zug']
+        x_ = zx0 * T + (-(-zug_sp.width // T) * T - zug_sp.width) // 2
+        img.alpha_composite(zug_sp, (x_, y0 + 31 - zug_sp.height))
+    return img
+
+
+def hochbahn_alt(img, lay, zug_sp=None):
     """Hochbahn wie Karte 18 (Oberseite 2 Kacheln mit Fuehrungsschiene, Front 2 Kacheln), aber durchgehend von Rand
     zu Rand (kein Prellbock, kein Nebel); der Zug steht auf der Fahrbahn."""
     hb = lay['hochbahn']
@@ -357,6 +427,7 @@ def bauen(frame=None, speichern=True):
         zuege = [o for o in objs if o.get('hochbahn')]
         if zuege:
             zug = cache[zuege[0]['datei']]
+    img = img.convert('RGBA')
     img = hochbahn(img, lay, zug)
     if os.path.exists(pf):                                            # Bahnhof steht VOR der Strecke (Nutzer)
         for o in objs:
