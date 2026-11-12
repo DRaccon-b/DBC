@@ -47,7 +47,7 @@ def main():
     k[42:44, 20:24] = 'a'                                  # Ankunftsfelder
     lay = {'groesse': [C, R], 'klassen': [''.join(z) for z in k],
            'hoehe': [''.join('0' if c == '.' else ('2' if c == 'w' else '1') for c in z) for z in k],
-           'runen_px': [[MX * T + sx * 72, MY * T + sy * 72] for sy in (-1, 1) for sx in (-1, 1)],   # 4 Runen diagonal
+           'runen_px': [[MX * T, MY * T - 104], [MX * T - 72, MY * T + 72], [MX * T + 72, MY * T + 72]],   # Nutzer: oben Mitte, unten links/rechts
            'mitte': [MX, MY],
            # Raum-Zeit-Risse in den vier Ecken (Nutzer-Skizze): Risskante als Linie von Kartenrand zu Kartenrand (Kacheln),
            # die Ecke dahinter ist der Riss; darunter eine andere A02-Karte (quelle = Pixel der Quellkarte an der
