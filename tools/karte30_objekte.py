@@ -162,8 +162,7 @@ def main():
     objekte.append({'datei': 'fremd/zug.png', 'basis': 'zug', 'x': zx0 * T + (math.ceil(zug.width / T) * T - zug.width) // 2, 'y': 0, 'fuss': zug.height - 1,
                     'kachel': [zx0, 68], 'ebene': 1, 'hochbahn': True})
     setze('fremd/strudel', 6 * T, 102 * T + 10, {'anim': 'portal', 'schattenlos': True}, pruefen=False)
-    px0_, py0_, px1_, py1_ = lay['pier']                                              # Freiheitsstatue 256 px (Nutzer) mittig
-    setze('statue_gross/00', (px0_ + px1_ + 1) * T // 2, 104 * T - 1, {'anim': 'fackel'}, pruefen=False)   # auf dem Pier
+    setze('statue_gross/00', 89 * T, 91 * T - 1, {'anim': 'fackel'}, pruefen=False)   # Freiheitsstatue 256 px am alten Platz (Nutzer)
     # ---------------------------------------------------------------- Baeume nach der Vorlage
     BAUM = ['karte01/baeume/00', 'karte01/baeume/01', 'karte01/baeume/02', 'karte01/baeume/04', 'karte01/baeume/15',
             'karte18/baum2/01']                                                       # mehr Arten (Nutzer: Variation)
