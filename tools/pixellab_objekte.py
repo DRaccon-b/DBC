@@ -2007,6 +2007,10 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'tall ornate park clock post: a slim dark red-brown cast iron pole on a small stone base, on top a large round white clock face with black hands and roman numerals in a decorative red-brown frame, the clock head clearly larger and wider than the pole, ' + FR14,
         'tall park clock tower post: slender dark brown iron column on a square stone foot, on top a big double sided round clock with a white face and a golden rim and a small pointed cap, the clock is much wider than the column, ' + FR14,
     ]},
+    'k31_laterne': {'size': 48, 'items': [   # Nutzer: Parklaternen neu
+        'single classic Japanese park street lamp: slim dark green cast iron post on a small round foot, on top one glass lantern head with a warm glowing yellow light and a small dark cap, about three times as tall as wide, ' + FR14,
+        'single old fashioned park lantern post: thin black iron pole with a decorative base, on top a square glass lamp with warm yellow light and a pointed roof cap, ' + FR14,
+    ]},
     'k31_muell': {'size': 32, 'items': [
         'small pile of fallen golden yellow ginkgo leaves lying flat on the ground, seen from above, classic 2D handheld RPG style',
         'small pile of fallen brown and orange autumn leaves lying flat on the ground, seen from above, classic 2D handheld RPG style',

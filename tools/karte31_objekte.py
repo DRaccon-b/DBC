@@ -120,7 +120,7 @@ def main():
     KIEFER = 'karte07/mittel/04'                                               # Bonsai-Kiefer
     baeume = [('L', 2, 3), ('K', 6, 3), ('L', 11, 3), ('L', 17, 3), ('C', 24, 3), ('L', 4, 9), ('L', 6, 17), ('L', 18, 21),
               ('K', 25, 9), ('L', 45, 3), ('K', 49, 3), ('L', 54, 3), ('L', 46, 8), ('C', 30, 21), ('C', 35, 20),
-              ('C', 41, 22), ('C', 51, 22), ('L', 67, 3), ('C', 71, 3), ('L', 76, 3), ('K', 81, 3), ('K', 65, 9),
+              ('C', 41, 22), ('C', 51, 22), ('L', 67, 3), ('C', 71, 3), ('L', 76, 3), ('K', 81, 3), ('K', 68, 9),
               ('L', 72, 8), ('L', 76, 21), ('L', 68, 21), ('L', 92, 3), ('K', 96, 3), ('C', 110, 3), ('L', 116, 3),
               ('L', 117, 12), ('L', 116, 22), ('C', 92, 13), ('C', 89, 22), ('C', 108, 22)]
     for i, (art, tx, ty) in enumerate(baeume):
@@ -133,8 +133,17 @@ def main():
                       pruefen=False)
             if i % 3 == 1 and kl[ty + 1][tx + 2] == 'n':
                 setze('karte01/deko/%02d' % (i % 5), (tx + 2) * T + 8, (ty + 2) * T - 1, {'anim': 'blume'})
-    for (tx, ty) in ((16, 10), (39, 10), (108, 7), (107, 15), (100, 15), (61, 10)):   # Laternen
-        setze('karte18/strasse/18', tx * T + 8, ty * T - 1, {'anim': 'leuchten'})
+    MAUER_TREPPEN_ = lay['mauer_treppen']
+    LATERNE, STEINLATERNE = 'karte31/laterne/00', 'karte31/laterne/14'          # Nutzer: Laternen neu (PixelLab)
+    # Paare spiegelsymmetrisch zur Achse des Bauwerks: Uhrplatz (Achse Spalte 60), Pavillon (33/34), Portal (103/104);
+    # einzeln an Baenken und Wegen, abwechselnd ober- und unterhalb des Weges (keine Reihe). Kachel = Fussreihe.
+    for (tx, ty, n) in ((57, 10, LATERNE), (63, 10, LATERNE),                         (100, 14, LATERNE), (107, 14, LATERNE), (17, 11, LATERNE), (47, 15, LATERNE),
+                        (73, 11, LATERNE), (87, 15, LATERNE), (11, 17, LATERNE)):
+        if not setze(n, tx * T + 8, (ty + 1) * T - 1, {'anim': 'lampe'}):
+            print('Laterne nicht gesetzt:', tx, ty)
+    for dx in (-56, 56):                                             # Steinlaternen exakt symmetrisch zum Pavillon (Achse)
+        if not setze(STEINLATERNE, 33 * T + 8 + dx, 9 * T - 1, {'anim': 'lampe'}, raster=False):
+            print('Steinlaterne nicht gesetzt:', dx)
     for (tx, ty) in ((21, 12), (44, 17), (88, 12), (113, 12), (69, 12)):                         # Baenke
         setze('karte18/strasse/14', tx * T + 8, ty * T - 1, {})
     for i, (x0, x1) in enumerate(lay.get('hecken', [])):                                          # Hecken an der Promenade
@@ -142,8 +151,16 @@ def main():
             if x1 - x0 >= 2 else 'karte01/deko/%02d' % (25, 27)[i % 2]                          # (K01-Buesche, schmal: Busch)
         setze(n, (x0 + x1 + 1) * T // 2, 26 * T - 1, {'anim': 'wehen'}, i % 2 == 0, pruefen=False)
     for x in range(6, 118, 8):                                                                   # Promenade: Baenke,
-        setze('karte18/strasse/14' if (x // 8) % 2 else 'karte18/strasse/18', x * T + 8, 27 * T - 1,   # Laternen
-              {} if (x // 8) % 2 else {'anim': 'leuchten'})
+        if (x // 8) % 2 and not any(x0 - 1 <= x <= x1 + 1 for (x0, x1) in MAUER_TREPPEN_):   # nicht vor Treppen
+            setze('karte18/strasse/14', x * T + 8, 27 * T - 1, {})
+    for (x0, x1) in MAUER_TREPPEN_:                                  # Promenade: Laternenpaar an jeder Treppe (Mauerseite)
+        for tx in (x0 - 1, x1 + 1):
+            if not setze(LATERNE, tx * T + 8, 29 * T - 1, {'anim': 'lampe'}):
+                print('Promenadenlaterne nicht gesetzt:', tx)
+    tr = MAUER_TREPPEN_                                              # Baenke mittig zwischen den Laternenpaaren
+    for mx in [(tr[i][1] + 1 + tr[i + 1][0] - 1) / 2 for i in range(len(tr) - 1)] + [(tr[-1][1] + 1 + 119) / 2]:
+        if not setze('karte18/strasse/14', int((mx + 0.5) * T), 29 * T - 1, {}):
+            print('Promenadenbank nicht gesetzt:', mx)
     # ---------------------------------------------------------------- Siedlung
     GINKGO = ['karte18/gebaeude/gold_00', 'karte18/gebaeude/gold_01', 'karte18/gebaeude/gold_02']
     for i, ty in enumerate(range(40, 72, 6)):                                                     # Ginkgo-Allee
