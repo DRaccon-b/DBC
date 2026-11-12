@@ -118,8 +118,6 @@ def main():
     # ------------------------------------------------------------------ Thron, Tor, Tuerme (feste Achsen)
     setze(K9 + 'moebel/07', ACHSE, fuss(8), {'achse': True}, raster=False)          # Thron im Thronturm
     setze(K9 + 'moebel/07', ACHSE, fuss(15), {'achse': True}, raster=False, pruefen=False)   # Nischenthron
-    tor = setze(K9 + 'tor2/02', ACHSE, fuss(57), {'an_wand': True, 'kein_schatten': True, 'keine_verdeckung': True,
-                                                  'fest_pos': True}, raster=False, pruefen=False)
     for dx in (5, 17, 29, 41):                                        # Tuerme alle 12 Kacheln, symmetrisch zum Tor
         for s in (-1, 1):
             x = ACHSE + s * dx * T

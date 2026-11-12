@@ -62,8 +62,8 @@ def main():
         k[y, x0:x1 + 1] = '.'
     # ---------------------------------------------------------------- Aussenmauer + Friedhof
     r_(mauer, 0, 51, 89, 57)
-    r_(mauer, 34, 51, 38, 57, False)           # Tor
-    r_(k, 34, 51, 38, 57, 'c'); r_(k, 34, 51, 34, 57, 'i'); r_(k, 38, 51, 38, 57, 'i')
+    r_(mauer, 35, 51, 37, 57, False)           # Durchgang (Nutzer: ohne Tor, Waende je 1 Kachel laenger)
+    r_(k, 35, 51, 37, 57, 'c')
     r_(k, 2, 58, 87, 77, 'g')
     r_(mauer, 0, 51, 1, 79); r_(mauer, 88, 51, 89, 79); r_(mauer, 0, 78, 89, 79)
     # Pflasterwege nach der Vorlage
@@ -92,7 +92,7 @@ def main():
     h[krone] = 3
     h[(k != '.') & ~krone] = 1
     lay = {'groesse': [C, R], 'klassen': [''.join(z) for z in k], 'hoehe': [''.join(str(c) for c in z) for z in h],
-           'tor': [34, 51, 38, 57], 'teleporter': [{'x': 11, 'y': 74, 'b': 2, 'h': 3, 'farbe': 'violett'}]}
+           'durchgang': [35, 51, 37, 57], 'teleporter': [{'x': 11, 'y': 74, 'b': 2, 'h': 3, 'farbe': 'violett'}]}
     os.makedirs(KARTE, exist_ok=True)
     json.dump(lay, open(os.path.join(KARTE, 'layout.json'), 'w'), indent=0)
     F = {'.': (10, 12, 34), 'i': (125, 135, 150), 'j': (100, 110, 125), 'c': (120, 20, 35), 'v': (80, 45, 140),
