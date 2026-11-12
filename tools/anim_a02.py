@@ -43,9 +43,15 @@ ANIM = {
         'labor/01': {'anim': 'maschine', 'schirm': [[7, 2, 28, 13]], 'leds': True, 'led_box': [[38, 6, 61, 22]]},
         'halle/02': {'anim': 'teil_drehen', 'dreh': [{'bis_y': 35, 'punkt': [13, 35], 'amp': 3}]},
     },
-    'karte07': {   # Steinlaterne leuchtet, Raeucherkessel dampft
+    'karte07': {   # Steinlaterne leuchtet, Raeucherkessel dampft; Befunde der Animationspruefung
         'mittel/00': {'anim': 'lampe'},
-        'azul/04': {'anim': 'rauch'},
+        'azul/04': {'anim': 'rauch', 'rauch_box': [22, 0, 38, 16]},
+        'mittel/12_sw': {'anim': 'portal_box', 'wirbel': [25, 28, 17]},       # grauer Wirbel dreht sich, Ring fest
+        'azul/01': {'anim': 'standarte'},                                     # nur das Tuch weht, Stange fest
+        'frucht/tomate': {'anim': 'laub_wehen'},                              # Pfahl fest
+        'frucht/trauben': {'anim': 'laub_wehen', 'laub_bis': 0.8, 'amp': 1.0},   # Spalier fest
+        'mittel/03': {'glitzer': 'cyan'},                                     # Kristall glitzert, nicht der Busch
+        'azul/00': {'licht': [23, 10], 'licht_box': [6, 0, 40, 22]},          # Schein auf der Kugel
     },
     'karte31': {   # Spielplatz schaukelt/wippt, Papierlaternen an Ramen-Laden und Izakaya glimmen
         'karte10/spielplatz/01': {'anim': 'teil_drehen', 'dreh': [
@@ -58,8 +64,13 @@ ANIM = {
                                                               [84, 77, 91, 87]]},
     },
     'karte32': {   # kaputte Kronleuchter: Kerzen flackern; Friedhofsbrunnen fliessen
-        'karte32/leuchter/00': {'anim': 'kerzen'},
-        'karte09/turm/09': {'anim': 'brunnen_strahl', 'becken': [2, 36, 50, 58], 'strahl_min': 95},
+        'karte32/leuchter/00': {'anim': None},          # Kerzen am Boden sind erloschen (keine Flammen im Sprite)
+        'karte32/leuchter/01': {'anim': None},
+        'karte09/moebel/01': {'anim': 'kerzen', 'flammen_box': [[11, 0, 15, 4], [1, 4, 5, 10], [21, 6, 25, 11]]},
+        'karte09/k8/klein/05': {'anim': None},          # Steinhaufen bewegen sich nicht
+        'karte09/k8/klein/07': {'anim': None},          # liegender Ast bewegt sich nicht
+        'karte09/turm/09': {'anim': 'brunnen_strahl', 'becken': [8, 38, 44, 48], 'strahl_box': [6, 18, 46, 46],
+                            'strahl_min': 95},
     },
 }
 
@@ -78,8 +89,14 @@ def felder(o, cfg, breite):
         for k in ('schirm', 'led_box', 'fluessig', 'wimpel', 'lampions'):
             if k in neu:
                 neu[k] = [_spiegeln(b, breite) for b in neu[k]]
-        if 'becken' in neu:
-            neu['becken'] = _spiegeln(neu['becken'], breite)
+        for k in ('flammen_box',):
+            if k in neu:
+                neu[k] = [_spiegeln(b, breite) for b in neu[k]]
+        for k in ('becken', 'rauch_box', 'licht_box', 'strahl_box', 'glitzer_box', 'licht'):
+            if k in neu:
+                neu[k] = _spiegeln(neu[k], breite)
+        if 'wirbel' in neu:
+            neu['wirbel'] = [breite - 1 - neu['wirbel'][0]] + neu['wirbel'][1:]
         for d in neu.get('dreh', []):
             for k in ('box', 'ohne_box', 'stange'):
                 if k in d:

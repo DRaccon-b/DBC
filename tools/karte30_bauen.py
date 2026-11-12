@@ -425,7 +425,7 @@ def bauen(frame=None, speichern=True):
         f_ = frame if frame is not None else 0
         for o in objs:                                                # Riesenrad: Ring und Gondeln drehen sich
             if o.get('anim') == 'riesenrad':
-                d_ = 'gebaeude/riesenrad_%d.png' % (f_ % 4)
+                d_ = 'gebaeude/riesenrad_%d.png' % ((f_ * 16 // N_FRAMES) % 16)
                 cache[o['datei']] = Image.open(os.path.join(OBJ, d_)).convert('RGBA')
             elif o.get('anim') == 'fackel' and frame is not None:
                 cache[o['datei']] = fackel(cache[o['datei']], f_)

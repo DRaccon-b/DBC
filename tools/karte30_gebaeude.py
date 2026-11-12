@@ -149,9 +149,9 @@ def riesenrad(winkel=0.0, w=272, h=368):
     fuss_y = (h - 4) * S
     for sx in (-1, 1):                                               # hintere Stuetze (dunkler)
         d.line((cx, cy, cx + sx * 70 * S, fuss_y), fill=grau, width=5 * S)
-    for k in range(16):                                              # Speichen
-        a = math.radians(winkel + k * 22.5)
-        d.line((cx, cy, cx + R * math.cos(a), cy + R * math.sin(a)), fill=grau if k % 2 else weiss, width=S)
+    for k in range(24):                                              # Speichen (15 Grad -> Schleife nahtlos)
+        a = math.radians(winkel + k * 15)
+        d.line((cx, cy, cx + R * math.cos(a), cy + R * math.sin(a)), fill=grau if k % 2 else weiss, width=S + 1)
     d.ellipse((cx - R, cy - R, cx + R, cy + R), outline=weiss, width=3 * S)
     d.ellipse((cx - R + 7 * S, cy - R + 7 * S, cx + R - 7 * S, cy + R - 7 * S), outline=grau, width=2 * S)
     for k in range(48):                                              # Querstreben zwischen den Ringen
@@ -168,7 +168,7 @@ def riesenrad(winkel=0.0, w=272, h=368):
     for k in range(24):                                              # Gondeln
         a = math.radians(winkel + k * 15)
         gx, gy = cx + (R + 2 * S) * math.cos(a), cy + (R + 2 * S) * math.sin(a)
-        f = H(GONDEL[k % len(GONDEL)])
+        f = H(GONDEL[(k * 2) % len(GONDEL)])                         # 4 Farben im Wechsel: Muster wiederholt sich nach 60 Grad
         d.line((gx, gy, gx, gy + 4 * S), fill=dunkel, width=S)
         d.rounded_rectangle((gx - 6 * S, gy + 3 * S, gx + 6 * S, gy + 15 * S), radius=4 * S, fill=f, outline=dunkel, width=S)
         d.rectangle((gx - 4 * S, gy + 6 * S, gx + 4 * S, gy + 9 * S), fill=H('#cfe8f6'))   # Fenster
@@ -202,8 +202,8 @@ def main():
             im = dach_ergaenzen(Image.fromarray(a_.astype(np.uint8)))
         im.save(os.path.join(OUT, art + '.png'))
         teile.append((art, im))
-    for i in range(4):                                               # Riesenrad: 4 Bilder (Gondelabstand 15 Grad)
-        rr = riesenrad(i * 15 / 4.0)
+    for i in range(16):                                              # Riesenrad: 16 Bilder, 60 Grad = ein Farbmuster -> nahtlos
+        rr = riesenrad(i * 60 / 16.0)
         rr.save(os.path.join(OUT, 'riesenrad_%d.png' % i))
     teile.append(('riesenrad', riesenrad(0)))
     W = 1900

@@ -553,6 +553,8 @@ def objekte_zeichnen(img, objs, cache, boden, frame, ebenen=None):
             sp = standarte(sp, frame, o['x'] * 0.37)
         elif frame is not None and o.get('anim') == 'reaktor':
             sp = reaktor_ruetteln(sp, frame, o['x'])
+        elif frame is not None and o.get('anim') in ('kerzen', 'feuer_kamin', 'feuer', 'feuer_lila') and o.get('flammen_box'):
+            sp = flammen_boxen(sp, frame, o)
         elif frame is not None and o.get('anim') in ('kerzen', 'feuer_kamin', 'feuer', 'feuer_lila'):
             sp = flammen_bewegen(sp, frame, o['x'] + o['y'], lila=o.get('anim') == 'feuer_lila')
         elif frame is not None and o.get('anim') == 'portal':
@@ -560,7 +562,7 @@ def objekte_zeichnen(img, objs, cache, boden, frame, ebenen=None):
         elif frame is not None and o.get('anim') == 'brunnen':
             sp = brunnen_fliessen(sp, frame)
         elif frame is not None and o.get('anim') == 'rauch':
-            sp = rauch_steigen(sp, frame)
+            sp = rauch_steigen(sp, frame, o.get('rauch_box'))
         elif frame is not None and o.get('anim') in ('ampel', 'signal'):
             sp = ampel_schalten(sp, frame, o.get('anim'))
         elif frame is not None and o.get('anim') == 'windrad':
@@ -572,7 +574,8 @@ def objekte_zeichnen(img, objs, cache, boden, frame, ebenen=None):
         img.alpha_composite(sp, (o['x'], o['y']))
         if frame is not None and o.get('anim') == 'blume':
             bluete_puls(img, o, sp, frame)
-        if not o['basis'].startswith(('rand/', 'klein/0', 'klein/1', 'klein/2', 'klein/5')) and not o.get('an_wand'):
+        if not o['basis'].startswith(('rand/', 'klein/0', 'klein/1', 'klein/2', 'klein/5')) and not o.get('an_wand') \
+                and not o.get('schwebend'):
             bodenwall(img, grund, o, cache[o['datei']])     # Wandobjekte (Fenster, Banner ...) stehen nicht am Boden
 
 
@@ -860,7 +863,7 @@ def kamin_rauch(gd, o, sp, frame):
         gd.ellipse((cx - rr, cy - rr, cx + rr, cy + rr), fill=(236, 236, 242, int(200 * (1 - ph))))
 
 
-def rauch_steigen(sp, frame):
+def rauch_steigen(sp, frame, box=None):
     """Lok-Rauch (Karte 10): die hellen Rauchwolken steigen aus dem Schornstein, treiben leicht nach rechts
     und werden duenner; die Lok selbst bleibt ruhig."""
     a = np.array(sp)
@@ -870,6 +873,8 @@ def rauch_steigen(sp, frame):
     oben = np.zeros(a.shape[:2], bool)
     oben[:zeilen.min() + int((zeilen.max() - zeilen.min()) * 0.3)] = True
     rauch = (a[..., 3] > 0) & (mn > 150) & (mx - mn < 40) & oben
+    if box is not None:                                      # nur aus der Oeffnung (nicht Lichtpunkte daneben)
+        rauch &= _box_maske(a.shape, box)
     if not rauch.any():
         return sp
     k = frame % 8
@@ -1198,8 +1203,18 @@ def animieren(img, objs, cache, frame, ruhig=False):
         elif anim == 'glitzern':
             a = np.array(sp)
             m = (a[..., 2] > 200) & (a[..., 0] > 150) & (a[..., 3] > 0)
+            if o.get('glitzer') == 'cyan':                     # Cyan-Kristall (nicht die Blueten daneben)
+                ai_ = a.astype(int)
+                m = (ai_[..., 3] > 0) & (ai_[..., 2] > 170) & (ai_[..., 1] > 140) & (ai_[..., 0] < 150)
+                if o.get('glitzer_box'):
+                    m &= _box_maske(a.shape, o['glitzer_box'])
             ys, xs = np.nonzero(m)
             if len(xs):
+                if o.get('glitzer') == 'cyan':                 # Kristallflaechen schimmern selbst
+                    for y_, x_ in zip(ys, xs):
+                        if (x_ + y_ * 2 + frame) % 6 == 0:
+                            rr, gg, bb, _ = px[o['x'] + x_, o['y'] + y_]
+                            px[o['x'] + x_, o['y'] + y_] = (min(255, rr + 70), min(255, gg + 60), min(255, bb + 40), 255)
                 k = (frame * 3 + i * 5) % (len(xs) * 3)
                 if k < len(xs):
                     x_, y_ = o['x'] + xs[k], o['y'] + ys[k]
@@ -1275,6 +1290,17 @@ def animieren(img, objs, cache, frame, ruhig=False):
             else:
                 q = (a[..., 3] > 0) & (b_ > 150) & (r_ > 120) & (g_ < r_ - 30)
                 farbe, rad = (190, 120, 255), (9, 4)
+            if o.get('flammen_box'):                           # nur echte Flammen (nicht Wachs/Messing), Schein je Flamme
+                q = np.any([_box_maske(a.shape, b_) for b_ in o['flammen_box']], axis=0) & (a[..., 3] > 0) & (r_ > 200) & (r_ - b_ > 60)
+                for b_ in o['flammen_box']:
+                    qq = q & _box_maske(a.shape, b_)
+                    if qq.any():
+                        yq, xq = np.nonzero(qq)
+                        f2 = 0.55 + 0.45 * ((frame * 7 + i * 3 + b_[0]) % 5) / 4.0
+                        cx2, cy2 = o['x'] + xq.mean(), o['y'] + yq.mean()
+                        for k_, al in ((1.0, 22), (0.55, 40)):
+                            gd.ellipse((cx2 - 9 * k_, cy2 - 6 * k_, cx2 + 9 * k_, cy2 + 6 * k_), fill=farbe + (int(al * (0.55 + 0.45 * f2)),))
+                q = q & False
             ys_q, xs_q = np.nonzero(q)
             if len(xs_q):
                 f_ = 0.5 + 0.5 * math.sin(2 * math.pi * frame / N_FRAMES * (3 if anim == 'kerzen' else 1) + i * 1.7)
@@ -1293,6 +1319,15 @@ def animieren(img, objs, cache, frame, ruhig=False):
             kamin_rauch(gd, o, sp, frame)
         elif anim == 'leuchten':
             cx, cy = o['x'] + sp.width // 2, o['y'] + sp.height // 2
+            if o.get('licht'):                                 # Schein auf der echten Lichtquelle (Kugel), nicht dem Sockel
+                cx, cy = o['x'] + o['licht'][0], o['y'] + o['licht'][1]
+                a_ = np.array(sp).astype(int)
+                q_ = (a_[..., 3] > 0) & (a_[..., 0] > 200) & (a_[..., 1] > 120) & (a_[..., 2] < 140)
+                q_ &= _box_maske(a_.shape, o.get('licht_box', [0, 0, sp.width, sp.height]))
+                for y_, x_ in zip(*np.nonzero(q_)):
+                    rr, gg, bb, _ = px[o['x'] + x_, o['y'] + y_]
+                    k_ = 0.9 + 0.25 * puls
+                    px[o['x'] + x_, o['y'] + y_] = (min(255, int(rr * k_)), min(255, int(gg * k_)), min(255, int(bb * k_)), 255)
             for r, al in ((14, 30), (7, 50)):
                 gd.ellipse((cx - r, cy - r, cx + r, cy + r), fill=(255, 200, 110, int(al * (0.6 + 0.4 * puls))))
     img.alpha_composite(glut)
@@ -1780,6 +1815,8 @@ def brunnen_strahl(sp, frame, o):
     ai = a.astype(np.int16)
     mx, mn = ai[..., :3].max(-1), ai[..., :3].min(-1)
     strahl = (a[..., 3] > 0) & (mn > o.get('strahl_min', 120)) & (mx - mn < 70)
+    if o.get('strahl_box'):
+        strahl &= _box_maske(a.shape, o['strahl_box'])
     becken = (a[..., 3] > 0) & _box_maske(a.shape, o['becken']) & (ai[..., 1] > ai[..., 0] + 6) & ~strahl
     out = ai.copy()
     yy, xx = np.mgrid[0:a.shape[0], 0:a.shape[1]]
@@ -1812,3 +1849,90 @@ def lampions(sp, frame, o):
 TEILANIM.update({'bildschirm': bildschirm, 'leds': leds, 'blasen': blasen, 'maschine': maschine,
                  'teil_drehen': teil_drehen, 'wimpel': wimpel, 'blitze': blitze, 'brunnen_strahl': brunnen_strahl,
                  'lampions': lampions})
+
+
+def portal_box(sp, frame, o):
+    """Portal ohne Farberkennung (z. B. schwarz-grau-weiss): der Wirbel in der Kreisscheibe o['wirbel'] = [cx, cy, r]
+    dreht sich einmal pro Schleife, der Rahmen ausserhalb bleibt fest."""
+    a = np.array(sp.convert('RGBA'))
+    cx, cy, r = o['wirbel']
+    yy, xx = np.mgrid[0:a.shape[0], 0:a.shape[1]]
+    m = (yy - cy) ** 2 + (xx - cx) ** 2 <= r * r
+    win = math.radians(-360.0 * frame / N_FRAMES)
+    ca, sa = math.cos(win), math.sin(win)
+    ys, xs = np.nonzero(m)
+    dy_, dx_ = ys - cy, xs - cx
+    sy = np.round(cy + dy_ * ca - dx_ * sa).astype(int)
+    sx = np.round(cx + dy_ * sa + dx_ * ca).astype(int)
+    ok = (sy >= 0) & (sy < a.shape[0]) & (sx >= 0) & (sx < a.shape[1])
+    ok[ok] &= m[sy[ok], sx[ok]]
+    out = a.copy()
+    out[ys[ok], xs[ok]] = a[sy[ok], sx[ok]]
+    return Image.fromarray(out, 'RGBA')
+
+
+def laub_wehen(sp, frame, o):
+    """Pflanze an Holzpfahl/Spalier: nur Laub, Blueten und Fruechte wiegen sich (oben am staerksten), das Holz
+    (Pfahl, Latten) bleibt voellig ruhig."""
+    a = np.array(sp.convert('RGBA'))
+    ai = a.astype(np.int16)
+    r, g, b = ai[..., 0], ai[..., 1], ai[..., 2]
+    holz = (r > g + 10) & (g > b + 10) & (r < 215) & (g > 45)
+    holz |= ai[..., :3].max(-1) < 40 & False
+    if o.get('holz_box'):
+        for b_ in o['holz_box']:
+            holz |= _box_maske(a.shape, b_) & (ai[..., :3].max(-1) < 90)
+    zeilen = np.nonzero(a[..., 3].any(1))[0]
+    y0, y1 = zeilen.min(), zeilen.max()
+    grenze = y0 + (y1 - y0) * o.get('laub_bis', 0.7)
+    s_ = math.sin(2 * math.pi * frame / N_FRAMES + o.get('x', 0) * 0.05)
+    beweg = (a[..., 3] > 0) & ~holz
+    out = a.copy()
+    for y in range(a.shape[0]):
+        if y >= grenze:
+            continue
+        d = int(round(o.get('amp', 1.4) * s_ * (grenze - y) / max(1, grenze - y0)))
+        if not d:
+            continue
+        xs = np.nonzero(beweg[y])[0]
+        out[y, xs] = 0
+        out[y, xs] = np.where(holz[y, xs, None], a[y, xs], 0)
+        for x in xs:
+            X = x + d
+            if 0 <= X < a.shape[1] and not holz[y, X]:
+                out[y, X] = a[y, x]
+    return Image.fromarray(out, 'RGBA')
+
+
+TEILANIM.update({'portal_box': portal_box, 'laub_wehen': laub_wehen})
+
+
+def flammen_boxen(sp, frame, o):
+    """Kerzenflammen in festen Boxen (o['flammen_box']): jede Flamme zuengelt fuer sich (Spitze seitlich, streckt sich
+    um 1 px); Wachs, Messing und Halter bleiben unveraendert."""
+    a = np.array(sp.convert('RGBA'))
+    ai = a.astype(int)
+    out = a.copy()
+    t = 2 * math.pi * frame / N_FRAMES
+    for n, b_ in enumerate(o['flammen_box']):
+        m = _box_maske(a.shape, b_) & (ai[..., 3] > 0) & (ai[..., 0] > 200) & (ai[..., 0] - ai[..., 2] > 60)
+        if not m.any():
+            continue
+        ys, xs = np.nonzero(m)
+        y0, y1 = ys.min(), ys.max()
+        out[m] = 0
+        hoch = (0, 1, 1, 0, 1, 0, 0, 1)[(frame + n * 3 + o.get('x', 0)) % 8]
+        for y, x in zip(ys, xs):
+            k = (y1 - y) / max(1, y1 - y0)
+            dx = int(round(k * 1.2 * math.sin(t * 3 + n * 1.9 + o.get('x', 0) * 0.3)))
+            X = x + dx
+            if 0 <= X < a.shape[1]:
+                out[y, X] = a[y, x]
+                if hoch and y == y0 and y - 1 >= 0:
+                    out[y - 1, X] = a[y, x]
+        unten = m & (out[..., 3] == 0)                       # Flammenfuss bleibt am Docht
+        out[unten & (np.arange(a.shape[0])[:, None] >= y1)] = a[unten & (np.arange(a.shape[0])[:, None] >= y1)]
+    return Image.fromarray(out, 'RGBA')
+
+
+TEILANIM.update({'flammen_boxen': flammen_boxen})
