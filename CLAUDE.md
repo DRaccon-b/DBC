@@ -150,4 +150,9 @@ Wenn eine Karte fertig scheint: noch einmal komplett auf **Pixelfehler** und **L
   - **Ausnahme (Nutzer, Karte 25):** Objekte, die zwingend größer als 256 px sind (z. B. das Schiff in Sunset Bay), dürfen
     mit dem Pro-Generator erzeugt werden (`tools/pixellab_gross.py`): Vorlagenausschnitt als Subjekt-Referenz (geschützte
     Symbole vorher übermalt), ein vorhandenes Kartenobjekt als Stil-Referenz, danach mitgezeichnete Fremdteile entfernen.
+- **Gebäude vollständig:** Generierte Gebäude müssen ganz im Bild sein – Dach mit allen Ecken, beide Seitenwände,
+  Sockel; nichts abgeschnitten (mit Rand generieren). Passt ein gutes Gebäude nicht auf seine Fläche, wird die Karte
+  an das Gebäude angepasst (Fläche, Straßen verschieben) – nicht das Gebäude beschnitten oder geflickt.
+- **Deko-Flächen mit Abstand:** Sandflecken, Erdflecken u. Ä. um Objekte (z. B. Sand um Palmen auf Rasen) berühren nie
+  Straßen- oder Gehwegkacheln; sie bleiben mit einigen Pixeln Abstand auf ihrer Fläche.
 - **Ablauf:** Jede Änderung committen und pushen, Bilder/GIFs an den Nutzer schicken, auf Deutsch erklären.
