@@ -162,4 +162,27 @@ Wenn eine Karte fertig scheint: noch einmal komplett auf **Pixelfehler** und **L
   an das Gebäude angepasst (Fläche, Straßen verschieben) – nicht das Gebäude beschnitten oder geflickt.
 - **Deko-Flächen mit Abstand:** Sandflecken, Erdflecken u. Ä. um Objekte (z. B. Sand um Palmen auf Rasen) berühren nie
   Straßen- oder Gehwegkacheln; sie bleiben mit einigen Pixeln Abstand auf ihrer Fläche.
+- **Nichts auf Wegen:** Objekte stehen nie mit dem Fuß auf Weg- oder Pflasterkacheln (Prüfung beim Setzen). Ausnahmen:
+  Brunnen u. Ä. mitten auf Plätzen, flaches Laub.
+- **Generierte Sprites umfärben:** Liefert PixelLab Farben, die nicht zur Karte passen, werden Stein/Dach/Holz auf die
+  Palette der Karte bzw. eines vorhandenen Vorbild-Objekts umgefärbt (Helligkeit -> Vorbildfarbe, Karte 32: Turm,
+  Säulen). Leuchtende Teile, Fenster und Stoff behalten ihre Farbe.
+- **Mauern massiv:** Jede Mauer hat oben eine Abdeckung (Deckplatten mit Licht-/Schattenkante) und davor eine Wand mit
+  Schattenfuge unter der Abdeckung, Fußkante und Bodenschatten. Die Abdeckung ist überall gleich breit – auch an Stufen.
+- **Durchgänge passend:** Mauerdurchgang, Weg/Steg und Teppich sind gleich breit und liegen auf derselben Achse.
+- **Mitte exakt bestimmen:** Bei runden oder symmetrischen Plätzen/Arenen die Achse aus der Fläche berechnen (notfalls
+  auf der Kachelkante); Ring, Mitte, Runen u. Ä. sitzen exakt darauf (gespiegelt am Klassenraster prüfen).
+- **Keine Wiederholung:** Gleiche Deko-Motive nie nebeneinander; Streudeko ohne Wiederholung ziehen, solange der Vorrat
+  reicht.
+- **Kleinkram dezent:** Lieber verstreutes Laub, Blütenblätter, Zweige und wenige Büschel als volle Flächen. Kleine
+  Pflanzen werfen nur einen Kontaktschatten.
+- **Ruinen-Logik:** In zerfallenen Orten werden Säulen, Leuchter u. Ä. reduziert und liegen kaputt am Boden (umgestürzt,
+  abgebrochen) statt intakt in Reihen.
+- **Teleporter- und Spawnfelder frei:** Im Umkreis (inkl. flankierender Objekte) keine Streudeko.
+- **Schwebende Objekte:** Kein Bodenschatten, 1 px Auf-und-ab mit eigenem Takt, Abstand zu Plattformen und Rissen;
+  surreale Wirkung über Motive, Schimmer und Nachbild.
+- **Blicke in andere Karten:** Risse/Fenster in andere Karten zeigen Ausschnitte im selben Maßstab aus der echten Karte
+  und sind aus deren Animation animiert; die Risskante liegt am 45°-Raster (wie Regel 6b).
+- **Unklares erst fragen:** Bei mehrdeutigen Wünschen kurz nachfragen (z. B. welche Variante gemeint ist), sonst ohne
+  Zögern umsetzen.
 - **Ablauf:** Jede Änderung committen und pushen, Bilder/GIFs an den Nutzer schicken, auf Deutsch erklären.
