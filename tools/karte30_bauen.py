@@ -212,6 +212,38 @@ def holzsteg(a, holz, sand_tex, seed=30):
     a[sandig] = sand_tex[sandig]
 
 
+def fackel(sp, frame):
+    """Fackel der Statue: nur die Flamme bewegt sich (Regel Feuer) - sie zuengelt (Spitze waechst/schrumpft um 1-2 px,
+    neigt sich), Kern und Rand wechseln die Farbe; Arm und Fackelschaft bleiben ruhig."""
+    a = np.array(sp).astype(np.int16)
+    h = a.shape[0]
+    r_, g_, b_ = a[..., 0], a[..., 1], a[..., 2]
+    oben = np.zeros(a.shape[:2], bool); oben[:int(h * 0.12)] = True
+    fl = oben & (a[..., 3] > 0) & (r_ > 190) & (g_ > 70) & (b_ < 140) & (r_ > b_ + 80)
+    if not fl.any():
+        return sp
+    ys, xs = np.nonzero(fl)
+    cx, top = int(round(xs.mean())), ys.min()
+    out = a.copy()
+    GELB, ORANGE, ROT, HELL = (255, 236, 120), (250, 160, 50), (214, 80, 34), (255, 250, 210)
+    for y, x in zip(ys, xs):                                       # Farben flackern
+        t = (x * 3 + y * 5 + frame * 7) % 5
+        rel = (y - top) / max(1, ys.max() - top)
+        c = HELL if (t == 0 and rel > 0.4) else GELB if rel > 0.55 else ORANGE if (t + frame) % 2 else ROT
+        out[y, x, :3] = c
+    lang = (1, 2, 0, 1)[frame % 4]                                 # Zunge oben: waechst und neigt sich
+    neig = (0, 1, 0, -1)[frame % 4]
+    for d in range(1, lang + 1):
+        y, x = top - d, cx + (neig if d == lang else 0)
+        if y >= 0:
+            out[y, x] = (*(ORANGE if d < lang else ROT), 255)
+    if frame % 2:                                                  # seitliche Flammenzunge
+        y, x = top + 1, cx + (2 if frame % 4 == 1 else -2)
+        if 0 <= y < h and 0 <= x < a.shape[1] and out[y, x, 3] == 0:
+            out[y, x] = (*ORANGE, 255)
+    return Image.fromarray(np.clip(out, 0, 255).astype(np.uint8))
+
+
 def schatten_hochbahn(a, lay, boden):
     hb = lay['hochbahn']
     y0 = (hb['y1'] + 1) * T
@@ -300,6 +332,8 @@ def bauen(frame=None, speichern=True):
             if o.get('anim') == 'riesenrad':
                 d_ = 'gebaeude/riesenrad_%d.png' % (f_ % 4)
                 cache[o['datei']] = Image.open(os.path.join(OBJ, d_)).convert('RGBA')
+            elif o.get('anim') == 'fackel' and frame is not None:
+                cache[o['datei']] = fackel(cache[o['datei']], f_)
         boden = land & (lvl != 9)
         boden_sch = boden.copy()
         for o in objs:                                                # kein Schatten der Baeume im Waldrand

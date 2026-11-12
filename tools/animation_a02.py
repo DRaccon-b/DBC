@@ -15,7 +15,7 @@ from PIL import Image
 import animation_bauen as ab
 
 DETAILS = {   # Kachel-Ausschnitte (x0, y0, x1, y1) fuer Detail-GIFs
-    'karte30': {'riesenrad': (94, 40, 120, 68), 'strand': (40, 82, 80, 110)},
+    'karte30': {'riesenrad': (94, 40, 120, 68), 'strand': (40, 82, 80, 110), 'statue': (52, 86, 66, 105)},
 }
 
 
