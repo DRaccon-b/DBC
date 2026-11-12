@@ -19,7 +19,7 @@ ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
 QUELLE = os.path.join(ROOT, 'assets', 'objekte', 'karte31')
 OUT = os.path.join(QUELLE, 'gebaeude')
 T = 16
-LADEN = ['ladendach1/00', 'ladendach1/01', 'ladendach1/02', 'ladendach1/03', 'ladendach2/00', 'ladendach2/01',
+LADEN = ['ladendach1/00', 'ladendach1/01', 'ladendach1/02', 'books/00', 'ladendach2/00', 'ladendach2/01',
          'ladendach2/02', 'ladendach2/03']                         # Nutzer: mit Dach (vorher flach)
 
 
@@ -75,12 +75,42 @@ def turm(q, hoehe, nummer=None):
     xr = min([c for c in spalten if c > w_ // 2] or [w_ - 1])
     zeilen = np.nonzero(dunkel[:, xl] & dunkel[:, xr])[0]          # Zeilen, in denen beide Aussenkonturen laufen
     a = a[zeilen.min():zeilen.max() + 1, xl:xr + 1].copy()
-    # ruhigster Dachabschnitt (geringste Zeilenaenderung) im oberen Drittel bis zur Haelfte
-    diffs = [np.abs(a[y].astype(int) - a[y + 1].astype(int)).sum() for y in range(a.shape[0] - 1)]
-    y0 = int(np.argmin(diffs[a.shape[0] // 5:a.shape[0] // 2])) + a.shape[0] // 5
-    zeile = a[y0:y0 + 1]
-    fehlt = max(0, hoehe - a.shape[0])
-    a = np.concatenate([a[:y0], np.repeat(zeile, fehlt, 0), a[y0:]], 0)
+    # Dach neu aufbauen: glatte Dachzeile als Flaeche, Dachaufbauten (Lueftungskaesten) gleichmaessig verteilt
+    st = np.array([a[y, 4:-4, :3].astype(int).std(0).sum() for y in range(a.shape[0])])
+    ref = np.median(a[a.shape[0] // 3:a.shape[0] // 2, a.shape[1] // 2, :3], 0)   # Dachfarbe
+    farbe = np.abs(a[:, a.shape[1] // 2, :3].astype(int) - ref).sum(1) < 12
+    glatt = (st <= st[a.shape[0] // 3:a.shape[0] // 2].min() + 2) & farbe
+    gy = np.nonzero(glatt)[0]
+    fassade = gy.max() + 1                                         # nach der letzten glatten Dachzeile: Fassade
+    oben = gy.min()                                                # Dachrand oben
+    zeile = a[gy[len(gy) // 2]:gy[len(gy) // 2] + 1]
+    baender, y = [], oben
+    while y < fassade:                                             # Aufbauten = Zeilenbereiche zwischen glatten Zeilen
+        if not glatt[y]:
+            y0_ = y
+            while y < fassade and not glatt[y]:
+                y += 1
+            baender.append(a[y0_ - 2:y + 2])
+        y += 1
+    unten = a[fassade:]
+    L = max(0, hoehe - oben - unten.shape[0])
+    k = max(1, round(L / 100))
+    teile = [baender[i % len(baender)] for i in range(k)]
+    luecke = L - sum(t.shape[0] for t in teile)
+    stuecke = [a[:oben]]
+    for i, t in enumerate(teile):
+        g_ = luecke * (i + 1) // (k + 1) - luecke * i // (k + 1)
+        stuecke += [np.repeat(zeile, g_, 0), t]
+    rest = L - sum(x.shape[0] for x in stuecke[1:])
+    stuecke += [np.repeat(zeile, rest, 0), unten]
+    a = np.concatenate(stuecke, 0)
+    gleich = (a[:, 4:-4] == zeile[0, 4:-4]).all((1, 2))             # Dachbahnen wie in der Vorlage (feine Fugen)
+    for y in np.nonzero(gleich)[0]:
+        if y % 6 == 0:
+            innen = a[y, 4:-4, :3].astype(int)
+            maske = np.abs(innen - ref).sum(1) < 12
+            innen[maske] -= 10
+            a[y, 4:-4, :3] = innen.clip(0, 255)
     out = Image.fromarray(a)
     if nummer is not None:
         out = nummer_ersetzen(out, nummer)

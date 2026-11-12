@@ -1999,6 +1999,10 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'narrow two-storey Japanese shop building, 64 pixels wide, top-down RPG view from the front and slightly above: a clearly visible roof on top (grey flat roof with a parapet and an air unit) taking about one third of the height, below it the upper floor with windows and the ground floor shop: closed shop with a grey metal roller shutter, ' + FR14,
         'narrow two-storey Japanese shop building, 64 pixels wide, top-down RPG view from the front and slightly above: a clearly visible roof on top (blue grey flat roof with a parapet and a water tank) taking about one third of the height, below it the upper floor with windows and the ground floor shop: drugstore with a white and green front and a sign reading DRUG, ' + FR14,
     ]},
+    'k31_books': {'size': 128, 'items': [   # Nutzer: Books-Laden wirkt platt -> deutlich sichtbares Satteldach
+        'narrow two-storey Japanese book shop building, 64 pixels wide, top-down RPG view from the front and slightly above: a large clearly visible sloped roof surface on top seen from above (dark brown clay tile roof with rows of tiles and a ridge line along the top) taking almost half of the height, below it the upper floor with two windows and the ground floor book shop with shelves of books behind glass and a blue sign reading BOOKS, ' + FR14,
+        'narrow two-storey Japanese book shop building, 64 pixels wide, top-down RPG view from the front and slightly above: a large clearly visible sloped roof surface on top seen from above (dark slate blue tile roof with rows of tiles and a ridge line along the top) taking almost half of the height, below it the upper floor with two windows and the ground floor book shop with shelves of books behind glass and a wooden sign reading BOOKS, ' + FR14,
+    ]},
     'k31_muell': {'size': 32, 'items': [
         'small pile of fallen golden yellow ginkgo leaves lying flat on the ground, seen from above, classic 2D handheld RPG style',
         'small pile of fallen brown and orange autumn leaves lying flat on the ground, seen from above, classic 2D handheld RPG style',

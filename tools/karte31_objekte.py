@@ -95,7 +95,8 @@ def main():
     # ---------------------------------------------------------------- Gebaeude
     for (x0, y0, x1, y1, art) in lay['gebaeude']:
         if art == 'laeden':
-            x = x0 * T                                                # Ladenzeile: Fronten luecklos nebeneinander
+            breiten = [Image.open(os.path.join(OBJ, 'gebaeude', 'laden_%d.png' % i)).width for i in range(8)]
+            x = min(x0 * T, (x1 + 1) * T - 6 - sum(breiten))          # Ladenzeile luecklos, rechts Abstand zum Baumrand
             for i in range(8):
                 sp = Image.open(os.path.join(OBJ, 'gebaeude', 'laden_%d.png' % i))
                 setze('gebaeude/laden_%d' % i, x + sp.width // 2, (y1 + 1) * T - 1, {'gebaeude': True}, pruefen=False,
