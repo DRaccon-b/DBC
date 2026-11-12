@@ -1582,7 +1582,9 @@ def herunterladen(oid, d):
 
 
 def speichern(gruppe, ims, ids):
-    if gruppe.startswith('k31_'):
+    if gruppe.startswith('k32_'):
+        ziel = os.path.join(ROOT, 'assets', 'objekte', 'karte32', gruppe[4:])
+    elif gruppe.startswith('k31_'):
         ziel = os.path.join(ROOT, 'assets', 'objekte', 'karte31', gruppe[4:])
     elif gruppe.startswith('k30_'):
         ziel = os.path.join(ROOT, 'assets', 'objekte', 'karte30', gruppe[4:])
@@ -2023,6 +2025,12 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'two or three fallen dry orange and brown autumn leaves lying flat on the ground, seen from above, classic 2D handheld RPG style',
         'a single small fallen twig with two leaves lying flat on the ground, seen from above, classic 2D handheld RPG style',
     ]},
+    'k32_traum': {'size': 32, 'items': [   # Karte 32 Dream Ruins: schwebende Traumobjekte in der Sternenleere
+        'golden pocket watch with a white clock face floating in space, small, glowing softly, classic 2D handheld RPG style, transparent background',
+        'small old crt television with a glowing pink screen and antenna floating in space, classic 2D handheld RPG style, transparent background',
+        'single floating playing card glowing orange and red, slightly tilted, classic 2D handheld RPG style, transparent background',
+        'small oval hand mirror with a golden frame floating in space, classic 2D handheld RPG style, transparent background',
+    ]},
     'k31_muell': {'size': 32, 'items': [
         'small pile of fallen golden yellow ginkgo leaves lying flat on the ground, seen from above, classic 2D handheld RPG style',
         'small pile of fallen brown and orange autumn leaves lying flat on the ground, seen from above, classic 2D handheld RPG style',
@@ -2182,8 +2190,8 @@ def erzeugen(gruppe):
         d = warte(oid)
         speichern(gruppe, *herunterladen(oid, d))
         return
-    if gruppe.startswith(('k20_', 'k21_', 'k23_', 'k24_', 'k25_', 'k26_', 'k27_', 'k28_', 'k29_', 'k30_', 'k31_')):
-        g = (OBJEKTGRUPPEN_K21 if gruppe.startswith(('k21_', 'k23_', 'k24_', 'k25_', 'k26_', 'k27_', 'k28_', 'k29_', 'k30_', 'k31_')) else OBJEKTGRUPPEN_K20)[gruppe]
+    if gruppe.startswith(('k20_', 'k21_', 'k23_', 'k24_', 'k25_', 'k26_', 'k27_', 'k28_', 'k29_', 'k30_', 'k31_', 'k32_')):
+        g = (OBJEKTGRUPPEN_K21 if gruppe.startswith(('k21_', 'k23_', 'k24_', 'k25_', 'k26_', 'k27_', 'k28_', 'k29_', 'k30_', 'k31_', 'k32_')) else OBJEKTGRUPPEN_K20)[gruppe]
         req = {'description': STIL, 'size': g['size'], 'view': 'top-down',
                'item_descriptions': [it + '. ' + STIL for it in g['items']],
                'target_palette': {'colors': PALETTE, 'name': 'Karte01 handheld'}}

@@ -25,6 +25,9 @@ Aufstellfelds (cyan = Ankunft, gold = weiter; Funktion `pfeil_marke` in `tools/k
 | 8 | Karte 28 – Tower Forest | v1.0 (`maps/karte28/v1.0/Tower_Forest_v1.0.zip`) |
 | 9 | Karte 07 – The Holy Peaks | vorhanden (Gelände, Objekte, Animation); als nächste A02-Karte eingeordnet |
 | 10 | Karte 29 – The Sea of Darkness | v1.0 (`maps/karte29/v1.0/The_Sea_of_Darkness_v1.0.zip`) |
+| 11 | Karte 30 – Odaiba | in Arbeit: Gelände, Gebäude und Objekte (Vorschau); offen: Kollision, Regelprüfung, Tileset, v1.0 |
+| 12 | Karte 31 – Highton View Terrace | in Arbeit: Gelände, Gebäude und Objekte (Vorschau), Animation; offen: Kollision, Regelprüfung, Tileset, v1.0 |
+| 13 | Karte 32 – Dream Ruins | in Arbeit: Gelände und Objekte (erste Vorschau) |
 | … | weitere Karten folgen | – |
 
 ## A0S – Sondergebiet
