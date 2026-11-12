@@ -127,6 +127,18 @@ for _v in ('e', 'f', 'g'):                                                      
              'empty magenta margin on the left, right, top and bottom; both side walls and all four roof corners are '
              'complete and visible, the roof edge wraps around the corners, nothing touches the image border.')
 
+for _v in 'hijklm':                                                             # neu, unbearbeitet (Nutzer): Karte passt sich an
+    AUFTRAEGE['k30_buero_flach_' + _v] = dict(AUFTRAEGE['k30_buero_flach_a'], ziel='assets/objekte/karte30/gross_buero_flach_' + _v,
+        groesse=(608, 288), vorlage=('assets/vorlagen/karte30_vorlage.png', (960, 816, 1568, 1104)),
+        text=('long low modern office building, clean crisp pixel art, centered in the image with a wide empty magenta '
+              'margin on all four sides (about 50 pixels left and right, 40 pixels top and bottom), nothing touches the image '
+              'border. Flat grey roof with a parapet visible from slightly above, the roof edge wraps cleanly around all four '
+              'corners. Both side walls are clearly visible as solid light concrete corner pillars from the roof down to the '
+              'ground with a dark outline. Facade of dark blue glass curtain wall in three even horizontal bands between light '
+              'grey concrete floor slabs that end flush at the corner pillars, regular thin mullions, a glass entrance with a '
+              'small canopy in the middle of the ground floor, complete base line at the bottom, daytime, sharp outlines, '
+              + _K30 + FR14))
+
 
 def main(name):
     a = AUFTRAEGE[name]
