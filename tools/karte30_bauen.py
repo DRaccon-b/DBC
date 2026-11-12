@@ -381,6 +381,10 @@ def bauen(frame=None, speichern=True):
     if os.path.exists(pf_):
         sand_t = k18.textur('d', cols, rows)
         rs_ = np.random.RandomState(31)
+        rasen_innen = gross(np.isin(kl, ['n', 'f']))                  # Sand nie an Strasse/Gehweg: Rasen 3 px nach innen
+        for _ in range(3):
+            rasen_innen = rasen_innen & np.roll(rasen_innen, 1, 0) & np.roll(rasen_innen, -1, 0) & \
+                np.roll(rasen_innen, 1, 1) & np.roll(rasen_innen, -1, 1)
         for o in json.load(open(pf_)):
             if not o.get('sandfleck'):
                 continue
@@ -391,9 +395,9 @@ def bauen(frame=None, speichern=True):
             fy_ = o['y'] + o['fuss']
             for yy in range(int(fy_ - 10), int(fy_ + 7)):
                 for xx in range(int(cx_ - 18), int(cx_ + 19)):
-                    if not (0 <= yy < Hp and 0 <= xx < Wp) or kl[yy // T, xx // T] not in 'nf':
+                    if not (0 <= yy < Hp and 0 <= xx < Wp) or not rasen_innen[yy, xx]:
                         continue
-                    d_ = ((xx - cx_) / 16.0) ** 2 + ((yy - fy_ + 2) / 7.5) ** 2
+                    d_ = ((xx - cx_) / 12.0) ** 2 + ((yy - fy_ + 2) / 6.0) ** 2
                     if d_ < 0.72 or (d_ < 1.0 and rs_.rand() < (1.0 - d_) / 0.28 * 0.8):
                         a[yy, xx] = sand_t[yy, xx]
                     elif d_ < 1.12 and rs_.rand() < 0.25:
