@@ -121,7 +121,7 @@ def main():
         for s in (-1, 1):
             x = ACHSE + s * dx * T
             if T <= x <= Wp - T:
-                o = setze(K9 + 'turm/01', x, fuss(57), {'an_wand': True, 'kein_schatten': True,
+                o = setze('karte32/turm_k/00', x, fuss(57), {'an_wand': True, 'kein_schatten': True,
                                                         'keine_verdeckung': True}, raster=False, pruefen=False)
     # ------------------------------------------------------------------ Thronturm und grosser Saal
     paar(K9 + 'moebel/01', 7 * T, fuss(6), {'anim': 'kerzen'})                       # Kandelaber neben dem Thron
@@ -170,7 +170,7 @@ def main():
         if o:
             setze(K9 + rnd.choice(['k8/mittel/14', 'k8/klein/48']), (x + 1) * T + 8, fuss(y + 1),
                   {'begleiter': True, 'anim': 'wehen'}, pruefen=False)
-    for (x, y) in ((5, 60), (18, 60), (4, 74), (21, 74)):            # Mauerreste
+    for (x, y) in ((3, 60), (13, 60), (4, 74), (21, 74)):    # Mauerreste (nicht vor den Turmfuessen)            # Mauerreste
         setze(K9 + 'turm/15', x * T + 8, fuss(y), {})
     for (x, y) in ((5, 66), (20, 66)):
         setze(K9 + 'wand/45', x * T + 8, fuss(y), {})

@@ -2043,6 +2043,10 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'surreal dream portal standing on a stone floor: a tall twisted golden arch frame that melts and drips like a clock, with tiny floating stars and broken stones around it, inside a swirling violet and pink vortex with stars, ' + FR14,
         'surreal floating dream portal: an oval doorway of floating cracked stone pieces and golden clock gears hovering in a ring above a small stone base, inside a deep swirling violet vortex with tiny stars, ' + FR14,
     ]},
+    'k32_turm': {'size': 112, 'items': [   # Nutzer: Tuerme an der Aussenmauer neu und groesser
+        'tall slender gothic castle wall tower: round dark grey stone tower about 2 tiles wide and 6 tiles tall, narrow arched windows glowing faint violet, a tall pointed dark slate spire roof with a small purple pennant on top, stone base, ' + FR14,
+        'tall slender gothic stone watchtower for a castle wall: dark grey brick round tower, decorative ring of stones below a very tall pointed slate cone roof, two narrow purple glowing slit windows, ' + FR14,
+    ]},
     'k31_muell': {'size': 32, 'items': [
         'small pile of fallen golden yellow ginkgo leaves lying flat on the ground, seen from above, classic 2D handheld RPG style',
         'small pile of fallen brown and orange autumn leaves lying flat on the ground, seen from above, classic 2D handheld RPG style',
