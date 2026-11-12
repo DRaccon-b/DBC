@@ -53,11 +53,11 @@ GEBAEUDE = [
 BAEUME = [
     (LAUB[0], 51, 6), (LAUB[1], 6, 11), (LAUB[2], 14, 10), (LAUB[0], 17, 10), (GROSS, 20, 11), (LAUB[1], 26, 12),
     (LAUB[2], 28, 21), (LAUB[0], 29, 25), (LAUB[1], 17, 25), (LAUB[2], 17, 32), (GROSS, 7, 28), (LAUB[0], 3, 28),
-    (LAUB[1], 3, 31), (LAUB[2], 3, 46), (LAUB[0], 27, 47), (GROSS, 36, 48), (LAUB[1], 58, 48), (LAUB[2], 61, 47),
+    (LAUB[1], 3, 31), (LAUB[2], 3, 46), (LAUB[0], 27, 45), (GROSS, 36, 48), (LAUB[1], 58, 47), (LAUB[2], 60, 44),
 ]
-ZYPRESSEN = [(2, 10), (8, 13), (2, 17), (26, 27), (20, 28), (4, 35), (23, 47), (25, 46), (19, 52), (24, 49)]
+ZYPRESSEN = [(2, 10), (8, 13), (2, 17), (26, 27), (20, 28), (4, 35), (23, 47), (25, 46), (19, 50), (24, 49)]
 BAENKE = [(18.5, 21), (23.5, 31), (22.5, 36), (23.5, 40), (12.5, 40), (6.5, 38), (33.5, 32), (33.5, 38), (37.5, 40),
-          (38.5, 30), (51.5, 25)]
+          (38.5, 30), (50.5, 25)]
 LATERNEN = [(42, 22), (51, 22), (19, 35), (21, 46), (32, 29), (8, 41)]   # Paar 42/51 symmetrisch zum Rathaus
 
 
@@ -77,13 +77,14 @@ def main():
             os.makedirs(os.path.dirname(ziel), exist_ok=True)
             shutil.copy(q, ziel)
     belegt, objekte, gesperrt = {}, [], set()
+    rects = []                                                   # (x0, y0, x1, y1, wald) sichtbare Pixelflaeche je Objekt
     for ty in range(rows):                                       # Teich und Steg: keine Fuesse im Wasser
         for tx in range(cols):
             if cls[ty][tx] in 'xb':
                 gesperrt.add((tx, ty))
-    for tp in lay['teleporter']:                                 # Teleporter frei (inkl. Umkreis)
-        for y in range(tp['y'] - 2, tp['y'] + tp['h'] + 2):
-            for x in range(tp['x'] - 2, tp['x'] + tp['b'] + 2):
+    for tp in lay['teleporter']:                                 # Teleporter frei (inkl. Umkreis, 2-Kachel-Sprites)
+        for y in range(tp['y'] - 3, tp['y'] + tp['h'] + 3):
+            for x in range(tp['x'] - 3, tp['x'] + tp['b'] + 3):
                 gesperrt.add((x, y))
     cache = {}
 
@@ -91,15 +92,18 @@ def main():
         kk = k(tx, ty)
         return 'sand' if kk in 'wsem' else 'beton' if kk == 'p' else 'gras'
 
+    def schnitt(a, b, rand=0):
+        return not (a[2] + rand < b[0] or b[2] + rand < a[0] or a[3] + rand < b[1] or b[3] + rand < a[1])
+
     def setze(name, fx, fy, opt, frei=False, wald=False):
+        """frei: nur wenn Kachel frei und keine Pixelueberlappung (2 px Abstand) mit vorhandenen Objekten.
+        wald: Waldrand - darf Kronen anderer Waldbaeume ueberlappen, aber nie den Fuss (untere 20 px) anderer Objekte."""
         opt = dict(opt)
         spiegeln = opt.pop('spiegeln', False)
         flach = name.startswith('k01/deko')
         tx, ty = int(math.floor(fx)), int(fy)
         if frei:
             if (tx, ty) in gesperrt or (tx, ty, flach) in belegt:
-                return False
-            if not flach and not wald and any((tx + dx, ty + dy, False) in belegt for dx in (-1, 0, 1) for dy in (-1, 0, 1)):
                 return False
         b = opt.pop('boden', None) or boden(tx, ty)
         key = (name, b, spiegeln)
@@ -128,8 +132,18 @@ def main():
         if px_ is not None:                                      # pixelgenaue Lage (Begleiter am Stumpf)
             o['x'] = px_ - (ux0 + bw // 2)
             o['y'] = py_ - uy1
+        r = (o['x'] + ux0, o['y'] + uy0, o['x'] + ux1, o['y'] + uy1)
+        if wald:
+            if any(schnitt(r, ((tp['x'] * T), (tp['y'] * T), (tp['x'] + tp['b']) * T - 1, (tp['y'] + tp['h']) * T - 1), 2)
+                   for tp in lay['teleporter']):
+                return False                                     # Waldbaeume nie ueber Teleportern
+            if any(not w and schnitt(r, (a0, max(a1, a3 - 20), a2, a3), 1) for (a0, a1, a2, a3, w) in rects):
+                return False
+        elif frei and any(schnitt(r, rr[:4], 2) for rr in rects):
+            return False
         o.update(opt)
         objekte.append(o)
+        rects.append(r + (wald,))
         belegt[(tx, ty, flach)] = True
         if not flach:
             for x in range(bx, bx + wt):                         # Sockel/Block gesperrt
@@ -137,17 +151,21 @@ def main():
                     gesperrt.add((x, y))
         return True
 
-    def naechste(fx, fy, klassen='g', r=2):
-        """Naechste Fusskachel auf passendem Boden (Vorlagenlage auf das Layout einrasten)."""
+    def versuche(name, fx, fy, opt, klassen='g', r=2, breite=1):
+        """Vorlagenlage einrasten: naechste Fusskachel(n) auf passendem Boden, frei und ohne Pixelueberlappung."""
         for d in range(r + 1):
             for dy in range(-d, d + 1):
                 for dx in range(-d, d + 1):
                     if max(abs(dx), abs(dy)) != d:
                         continue
-                    tx, ty = int(math.floor(fx)) + dx, fy + dy
-                    if k(tx, ty) in klassen and k(tx, ty + 1) in klassen + 'hp' and (tx, ty) not in gesperrt:
-                        return fx + dx, ty
-        return None
+                    x, y = fx + dx, fy + dy
+                    bx = int(math.floor(x + 0.5 - breite / 2.0 + 0.5))
+                    if not all(k(bx + i, y) in klassen and k(bx + i, y + 1) in klassen + 'hp' for i in range(breite)):
+                        continue
+                    if setze(name, x, y, opt, frei=True):
+                        return True
+        print('nicht gesetzt:', name, fx, fy)
+        return False
 
     # ---------------------------------------------------------------- grosse Objekte
     for (name, fx, fy, opt) in GEBAEUDE:
@@ -160,46 +178,60 @@ def main():
     # ---------------------------------------------------------------- Wiesenbaeume mit Begleitern (Regel 5d)
     gesetzt_b = []
     for i, (name, fx, fy) in enumerate(BAEUME):
-        p = naechste(fx, fy)
-        if p and setze(name, p[0], p[1], {'spiegeln': i % 2 == 1}, frei=True):
+        if versuche(name, fx, fy, {'spiegeln': i % 2 == 1}, 'g', 2, 3):
             gesetzt_b.append(objekte[-1])
-        else:
-            print('Baum nicht gesetzt:', name, fx, fy)
     for i, b in enumerate(gesetzt_b):
         bx, by, wt, ht = b['block']
         cx, fy = bx * T + wt * T // 2, (by + ht) * T - 1
         seite = -1 if i % 2 else 1
         art = i % 3
-        vorne_frei = k(bx + wt // 2, by + ht) == 'g' and (bx + wt // 2, by + ht) not in gesperrt
+        mx = bx + wt // 2
+        vorne_frei = all(k(mx + d, by + ht) == 'g' and (mx + d, by + ht) not in gesperrt for d in (-1, 0, 1))
+        hinten_frei = all(k(x, by + ht - 2) == 'g' for x in range(bx, bx + wt))
         if art == 0 and vorne_frei:                              # Fels vor dem Stumpf (2 Kacheln hoch, eine Reihe tiefer)
             setze(rnd.choice(HOCH_FELS), cx / T, fy // T + 1, {'px': cx + seite * 5, 'py': fy + T})
-        elif art == 1 or not vorne_frei:                         # Fels hinter den Blaettern
-            if k(bx, by + ht - 2) == 'g':
-                setze(rnd.choice(FELS_GROSS), cx / T, fy // T - 1, {'px': cx + seite * 8, 'py': fy - 7})
-        else:                                                    # hohe Blume vor dem Stumpf
+        elif (art == 1 or not vorne_frei) and hinten_frei:       # Fels hinter den Blaettern: eine Reihe hoeher, ragt
+            setze(rnd.choice(FELS_GROSS), cx / T, fy // T - 1, {'px': cx + seite * 17, 'py': fy - T})   # seitlich heraus
+        elif vorne_frei:                                         # hohe Blume vor dem Stumpf
             setze(rnd.choice(HOCH_BLUME), cx / T, fy // T + 1, {'px': cx - seite * 5, 'py': fy + T, 'anim': 'wehen'})
-    for o in gesetzt_b:                                          # Stammreihe +-1: keine freie Deko
+    for o in gesetzt_b:                                          # Stammreihe +-1 und Begleiterreihe: keine freie Deko
         bx, by, wt, ht = o['block']
         for x in range(bx - 1, bx + wt + 1):
-            for y in (by + ht - 2, by + ht - 1, by + ht):
+            for y in (by + ht - 2, by + ht - 1, by + ht, by + ht + 1):
                 gesperrt.add((x, y))
-    for i, (fx, fy) in enumerate(ZYPRESSEN):                     # schlanke Zypressen (Vorlage), ohne Begleitpflicht
-        p = naechste(fx, fy)
-        if p:
-            setze(ZYPRESSE[i % 2], p[0], p[1], {'spiegeln': i % 3 == 0}, frei=True)
-    # ---------------------------------------------------------------- Parkmoebel
-    for (fx, fy) in BAENKE:                                      # Baenke am Wegrand (Rasen/Platz, nicht auf dem Weg)
-        p = naechste(fx, fy, 'gp', 2)
-        if p:
-            setze('moebel/bank', p[0], p[1], {}, frei=True)
+    for i, (fx, fy) in enumerate(ZYPRESSEN):                     # schlanke Zypressen (Vorlage)
+        if versuche(ZYPRESSE[i % 2], fx, fy, {'spiegeln': i % 3 == 0}, 'g', 2, 2):
+            bx, by, wt, ht = objekte[-1]['block']
+            for x in range(bx - 1, bx + wt + 1):
+                for y in (by + ht - 1, by + ht, by + ht + 1):
+                    gesperrt.add((x, y))
+    # ---------------------------------------------------------------- Parkmoebel (nie auf dem Weg, beide Fusskacheln)
+    for (fx, fy) in BAENKE:
+        versuche('moebel/bank', fx, fy, {}, 'gp', 2, 2)
     for (fx, fy) in LATERNEN:
-        if not setze('moebel/laterne', fx, fy, {'anim': 'lampe'}, frei=True):
-            p = naechste(fx, fy, 'gp', 2)
-            if not (p and setze('moebel/laterne', p[0], p[1], {'anim': 'lampe'}, frei=True)):
-                print('Laterne nicht gesetzt:', fx, fy)
+        versuche('moebel/laterne', fx, fy, {'anim': 'lampe'}, 'gp', 2, 1)
+    # ---------------------------------------------------------------- Waldrand / Hecken auf allen 'h'-Kacheln
+    for ty in range(rows):
+        for tx in range(cols):
+            if cls[ty][tx] == 'h' and (tx + ty) % 2 == 0:
+                setze(rnd.choice(WALD), tx, ty, {'spiegeln': rnd.random() < 0.5}, frei=True, wald=True)
+    deck = np.zeros((rows * T, cols * T), bool)                  # Luecken im Waldrand schliessen (kein nackter Waldboden)
+    for (x0, y0, x1, y1, w) in rects:
+        deck[max(0, y0):max(0, y1 + 1), max(0, x0):max(0, x1 + 1)] = True
+    luecken = 0
+    for ty in range(rows):
+        for tx in range(cols):
+            if cls[ty][tx] == 'h' and deck[ty * T:(ty + 1) * T, tx * T:(tx + 1) * T].mean() < 0.6:
+                if setze(rnd.choice(['k01/baum12', 'k01/baum13', 'k01/baum14']), tx, ty,
+                         {'spiegeln': rnd.random() < 0.5}, wald=True):
+                    x0, y0, x1, y1, _ = rects[-1]
+                    deck[max(0, y0):y1 + 1, max(0, x0):x1 + 1] = True
+                    luecken += 1
+    print('Waldrand-Luecken gefuellt:', luecken)
     # ---------------------------------------------------------------- Teich: Uferfelsen und Seerosen
     ufer = [(tx, ty) for ty in range(rows) for tx in range(cols) if cls[ty][tx] == 'm'
             and any(k(tx + dx, ty + dy) == 'x' for dx in (-1, 0, 1) for dy in (-1, 0, 1))
+            and not any(k(tx + dx, ty + dy) == 'p' for dx in (-2, -1, 0, 1, 2) for dy in (-1, 0, 1))
             and not any(k(tx + dx, ty + dy) == 'b' for dx in range(-3, 4) for dy in range(-2, 3))]
     rnd.shuffle(ufer)
     fels = []
@@ -227,9 +259,10 @@ def main():
         rosen.append((tx, ty))
     # ---------------------------------------------------------------- Streudeko auf dem Rasen (wenig, unregelmaessig)
     def frei_gras(tx, ty):
-        return all(k(tx + dx, ty + dy) == 'g' for dx in (-1, 0, 1) for dy in (-1, 0, 1))
+        return all(k(tx + dx, ty + dy) == 'g' for dx in (-1, 0, 1) for dy in (-1, 0, 1, 2))
+    gesetzt = []                                                 # Abstand ueber alle Listen (kein Klumpen)
     for liste, ziel, opt in ((FELS_KLEIN + FELS_GROSS, 8, {}), (PILZE, 7, {}), (BLUMEN, 26, {'anim': 'wehen'})):
-        n, gesetzt = 0, []
+        n = 0
         for _ in range(6000):
             if n >= ziel:
                 break
@@ -239,11 +272,6 @@ def main():
             if setze(rnd.choice(liste), tx, ty, opt, frei=True):
                 n += 1
                 gesetzt.append((tx, ty))
-    # ---------------------------------------------------------------- Waldrand / Hecken auf allen 'h'-Kacheln
-    for ty in range(rows):
-        for tx in range(cols):
-            if cls[ty][tx] == 'h' and (tx + ty) % 2 == 0:
-                setze(rnd.choice(WALD), tx, ty, {'spiegeln': rnd.random() < 0.5}, frei=True, wald=True)
     json.dump(objekte, open(os.path.join(OBJ, 'platzierung.json'), 'w'), indent=0)
     print(len(objekte), 'Objekte am Raster')
 

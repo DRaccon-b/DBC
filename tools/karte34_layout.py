@@ -71,6 +71,28 @@ def kleine_weg(k, art, mind, ersatz=None):
     return k
 
 
+def zipfel_weg(k, arten='pwms'):
+    """Kacheln, die nur ueber eine einzige gleichartige Nachbarkachel (4er-Nachbarschaft) an ihre Flaeche haengen,
+    oder in einer Achse eingeklemmt sind (1 Kachel breiter Finger), bekommen die haeufigste Nachbarklasse
+    (Pruefliste: keine Ein-Kachel-Zipfel, die das 45-Grad-Raster zu Tropfen rundet)."""
+    for _ in range(3):
+        neu = k.copy()
+        for y in range(1, R - 1):
+            for x in range(1, C - 1):
+                a = k[y, x]
+                if a not in arten:
+                    continue
+                n4 = [k[y - 1, x], k[y + 1, x], k[y, x - 1], k[y, x + 1]]
+                gleich = sum(c == a for c in n4)
+                finger = (k[y, x - 1] != a and k[y, x + 1] != a) or (k[y - 1, x] != a and k[y + 1, x] != a)
+                if gleich <= 1 or finger:
+                    andere = [c for c in n4 if c != a and c != 'b']
+                    if andere:
+                        neu[y, x] = max(set(andere), key=andere.count)
+        k = neu
+    return k
+
+
 def main():
     import sys
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -83,9 +105,15 @@ def main():
     sp[np.isin(sp, ['w', 'g'])] = 's'
     x0, y0, x1, y1 = STEG
     k[y0:y1 + 1, x0:x1 + 1] = 'b'
+    k[y0:y1 + 1, x0 - 3:x0] = 'w'                                     # Weg in voller Stegbreite (3 Spalten davor)
     # Ufer: Ring aus Erde um das Wasser (Vorlage), Steg bleibt
     for art, mind in (('x', 3), ('m', 2), ('p', 4), ('w', 3), ('h', 3), ('g', 2), ('s', 3)):
         k = kleine_weg(k, art, mind)
+    k = zipfel_weg(k)                                                   # keine 1 Kachel breiten Zipfel/Finger
+    k = kleine_weg(k, 'w', 8)                                           # Sand-Inselchen zwischen Plaetzen weg
+    x0, y0, x1, y1 = STEG
+    k[y0:y1 + 1, x0:x1 + 1] = 'b'
+    k[y0:y1 + 1, x0 - 3:x0] = 'w'
     for (x, y, b, h) in AUSGAENGE:
         k[y:y + h, x:x + b] = 'e'
     # Rand: aussen ringsum Wald (Vorlage), ausser an den Ausgaengen

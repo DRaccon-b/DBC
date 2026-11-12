@@ -83,8 +83,8 @@ ANIM = {
     },
     'karte34': {   # Shinjuku Central Park: Schaukeln schwingen um die Kettenaufhaengung
         'spiel/schaukel': {'anim': 'teil_drehen', 'dreh': [
-            {'box': [12, 6, 29, 39], 'punkt': [19, 5], 'amp': 7},
-            {'box': [32, 6, 49, 39], 'punkt': [41, 5], 'amp': 7, 'phase': 1.9}]},
+            {'box': [12, 6, 29, 39], 'punkt': [19, 5], 'amp': 4},
+            {'box': [32, 6, 49, 39], 'punkt': [41, 5], 'amp': 4, 'phase': 1.9}]},
     },
     'karte32': {   # kaputte Kronleuchter: Kerzen flackern; Friedhofsbrunnen fliessen
         'karte32/leuchter/00': {'anim': None},          # Kerzen am Boden sind erloschen (keine Flammen im Sprite)

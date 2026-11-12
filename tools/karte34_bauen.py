@@ -46,7 +46,7 @@ def bauen(frame=None, speichern=True):
     wm = weich(zell_maske(cls, 'h', cols, rows), 5.0, 0, 3)
     a[wm] = (gras[wm] * np.array([0.62, 0.7, 0.66])).astype(np.uint8)
     # Sandwege inkl. Ausgaenge und Weg unter dem Steg; Spielplatz heller
-    roh = zell_maske(cls, 'web', cols, rows)
+    roh = zell_maske(cls, 'webs', cols, rows)      # Spielplatz mit im Wegsand (keine Graskeile an der Naht)
     m = weich(roh, 5.0, 0, 4)
     a[m] = sand[m]
     saum = weich(roh, 5.0, 0, 4, 0.28) & ~m
