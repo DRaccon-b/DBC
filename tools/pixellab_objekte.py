@@ -1582,7 +1582,9 @@ def herunterladen(oid, d):
 
 
 def speichern(gruppe, ims, ids):
-    if gruppe.startswith('k30_'):
+    if gruppe.startswith('k31_'):
+        ziel = os.path.join(ROOT, 'assets', 'objekte', 'karte31', gruppe[4:])
+    elif gruppe.startswith('k30_'):
         ziel = os.path.join(ROOT, 'assets', 'objekte', 'karte30', gruppe[4:])
     elif gruppe.startswith('k29_'):
         ziel = os.path.join(ROOT, 'assets', 'objekte', 'karte29', gruppe[4:])
@@ -1985,6 +1987,26 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'wide craggy dark grey sea rock with several pointed peaks and cracks, barnacles at the bottom, on wet sand, ' + FR14,
         'tall dark jagged rock spire rising out of dark grey water with a small foam ring at its base, ' + FR14,
     ]},
+    'k31_laden1': {'size': 128, 'items': [
+        'narrow Japanese two-storey shop front, 64 pixels wide: upper floor with small windows and an air unit, ground '
+        'floor convenience store with a glass front and a sign reading MART, flat roof edge visible from slightly above, ' + FR14,
+        'narrow Japanese two-storey shop front, 64 pixels wide: upper floor with a red sign board with white symbols, ground '
+        'floor ramen restaurant with a dark wooden front, red curtain and a sign reading RAMEN, flat roof edge, ' + FR14,
+        'narrow Japanese two-storey shop front, 64 pixels wide: upper floor windows, ground floor cafe with a striped green '
+        'and white awning, glass door and a sign reading CAFE, flat roof edge visible from slightly above, ' + FR14,
+        'narrow Japanese two-storey shop front, 64 pixels wide: upper floor with a green sign board, ground floor book shop '
+        'with shelves behind glass and a blue sign reading BOOKS, flat roof edge visible from slightly above, ' + FR14,
+    ]},
+    'k31_laden2': {'size': 128, 'items': [
+        'narrow Japanese two-storey shop front, 64 pixels wide: upper floor windows, ground floor izakaya pub with a dark '
+        'wooden front, red lanterns and a sign reading IZAKAYA, flat roof edge visible from slightly above, ' + FR14,
+        'narrow Japanese two-storey shop front, 64 pixels wide: upper floor windows with plants, ground floor flower shop '
+        'with buckets of colorful flowers and a pink sign reading FLOWER, flat roof edge visible from slightly above, ' + FR14,
+        'narrow Japanese two-storey building front, 64 pixels wide: upper floor windows, ground floor closed grey metal '
+        'roller shutter, flat roof edge visible from slightly above, ' + FR14,
+        'narrow Japanese two-storey shop front, 64 pixels wide: upper floor with a green sign board, ground floor drugstore '
+        'with a white and green front, glass door and a small sign, flat roof edge visible from slightly above, ' + FR14,
+    ]},
     'k30_buero1': {'size': 192, 'items': [
         'small five-storey office building for a sunny city, beige cream facade with rows of small blue windows, flat grey '
         'roof with parapet visible from slightly above, glass ground floor with an entrance door with an orange frame, ' + FR14,
@@ -2118,8 +2140,8 @@ def erzeugen(gruppe):
         d = warte(oid)
         speichern(gruppe, *herunterladen(oid, d))
         return
-    if gruppe.startswith(('k20_', 'k21_', 'k23_', 'k24_', 'k25_', 'k26_', 'k27_', 'k28_', 'k29_', 'k30_')):
-        g = (OBJEKTGRUPPEN_K21 if gruppe.startswith(('k21_', 'k23_', 'k24_', 'k25_', 'k26_', 'k27_', 'k28_', 'k29_', 'k30_')) else OBJEKTGRUPPEN_K20)[gruppe]
+    if gruppe.startswith(('k20_', 'k21_', 'k23_', 'k24_', 'k25_', 'k26_', 'k27_', 'k28_', 'k29_', 'k30_', 'k31_')):
+        g = (OBJEKTGRUPPEN_K21 if gruppe.startswith(('k21_', 'k23_', 'k24_', 'k25_', 'k26_', 'k27_', 'k28_', 'k29_', 'k30_', 'k31_')) else OBJEKTGRUPPEN_K20)[gruppe]
         req = {'description': STIL, 'size': g['size'], 'view': 'top-down',
                'item_descriptions': [it + '. ' + STIL for it in g['items']],
                'target_palette': {'colors': PALETTE, 'name': 'Karte01 handheld'}}

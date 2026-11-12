@@ -69,6 +69,22 @@ def main():
                         neu[y, x] = Counter(nb).most_common(1)[0][0]
         k = neu
     k[k == '?'] = 'g'
+    from collections import deque                                    # kleine Asphalt-Inseln (Baumstaemme/Schatten der
+    gesehen = np.zeros((R, C), bool)                                 # Vorlage) -> Umgebung
+    for y in range(R):
+        for x in range(C):
+            if k[y, x] == 's' and not gesehen[y, x]:
+                comp, q = [], deque([(y, x)]); gesehen[y, x] = True
+                while q:
+                    cy, cx = q.popleft(); comp.append((cy, cx))
+                    for yy, xx in ((cy - 1, cx), (cy + 1, cx), (cy, cx - 1), (cy, cx + 1)):
+                        if 0 <= yy < R and 0 <= xx < C and k[yy, xx] == 's' and not gesehen[yy, xx]:
+                            gesehen[yy, xx] = True; q.append((yy, xx))
+                if len(comp) < 12:
+                    for cy, cx in comp:
+                        nb = [k[yy, xx] for yy, xx in ((cy - 1, cx), (cy + 1, cx), (cy, cx - 1), (cy, cx + 1))
+                              if 0 <= yy < R and 0 <= xx < C and k[yy, xx] != 's']
+                        k[cy, cx] = Counter(nb).most_common(1)[0][0] if nb else 'g'
     for y in list(range(2, 25)) + [100, 101]:                        # Baumstaemme als 'Hecke' erkannt -> Rasen
         for x in range(C):
             if k[y, x] == 'h':

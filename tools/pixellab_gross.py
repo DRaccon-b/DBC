@@ -151,6 +151,35 @@ for _v in 'nopqrs':                                                             
               'at the bottom. The building is about 460 pixels wide, centered, with a wide empty magenta margin on all four '
               'sides, nothing touches the image border, daytime, sharp outlines, ' + _K30 + FR14))
 
+# ---- Karte 31 Highton View Terrace (Nutzer: Haelften generieren und spiegeln, wo moeglich)
+_K31 = ('Japanese residential district building, daytime, seen from the front with the flat roof visible from slightly '
+        'above, clean crisp pixel art, light from the top left, sharp dark outlines, ')
+_K31_STIL = 'assets/objekte/karte30/gross_buero_flach_s/00.png'
+_HALB = (' This is only the LEFT HALF of a long symmetric building: the left end wall, roof corner and base are complete, '
+         'the building continues straight beyond the RIGHT image border (the right side is cut exactly through the middle '
+         'of the facade, no wall there). Wide empty magenta margin on the left, top and bottom.')
+_VOLL = ' The whole building is fully visible, centered, with a wide empty magenta margin on all four sides, nothing touches the image border.'
+for _n, _box, _gr, _t in (
+        ('block_grau_halb', (48, 560, 336, 816), (288, 256), 'long five-storey grey concrete apartment block (danchi): '
+         'light grey facade with rows of balconies, some with laundry and boxes, dark blue windows, a stairwell tower '
+         'rising above the flat grey roof with rooftop water tanks and air units, entrance doors at the bottom, ' + _HALB),
+        ('block_beige_halb', (1072, 560, 1424, 816), (352, 256), 'long five-storey beige apartment block (danchi): warm '
+         'beige facade with rows of balconies with railings, some laundry, dark blue windows, a stairwell tower rising above '
+         'the flat grey roof with rooftop air units, entrance doors at the bottom, ' + _HALB),
+        ('turm', (688, 576, 816, 1184), (160, 640), 'tall narrow grey concrete apartment tower seen from above and the '
+         'front: a very long flat grey rooftop stretching far up with two small rooftop units, at the bottom the front '
+         'facade with a few small windows, a building number sign and a door, ' + _VOLL),
+        ('bahnhof', (0, 1184, 464, 1360), (480, 208), 'small suburban train station building with a dark green roof band, '
+         'light facade with a sign board reading HIGHTON and a round clock, blue windows and a glass entrance in the middle, '
+         'light grey platform edge, ' + _VOLL),
+        ('bruecke', (720, 1200, 1200, 1344), (512, 176), 'pedestrian overpass footbridge: a long straight walkway with teal '
+         'green railings and a small sign in the middle, supported by grey pillars, with a staircase going down at the '
+         'left end and at the right end, ' + _VOLL),
+):
+    AUFTRAEGE['k31_' + _n] = {'ziel': 'assets/objekte/karte31/gross_' + _n, 'groesse': _gr, 'magenta': True,
+                             'vorlage': ('assets/vorlagen/karte31_vorlage.png', _box), 'stil': _K31_STIL,
+                             'text': _t + _K31 + FR14}
+
 
 def main(name):
     a = AUFTRAEGE[name]
