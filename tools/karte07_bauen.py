@@ -201,6 +201,8 @@ def layout():
             for x in range(x0, x1 + 1):
                 if k_[y][x] in 'gnf':
                     k_[y][x] = 'w'
+    import regeln_a02                                               # Regel 6/6b: am Kachelraster biegen (statt Pixel)
+    k_ = regeln_a02.wege_schwingen(np.array([list(z) for z in k_]), frei='gn', seed=7, amp=1.6, platz_r=3)
     lay['klassen'] = [''.join(z) for z in k_]
     json.dump(lay, open(os.path.join(KARTE, 'layout.json'), 'w'), indent=0)
     print('Layout', COLS, ROWS)
@@ -829,8 +831,7 @@ def bauen(frame=None, speichern=True):
     for art, tex, blur, rausch, seed in (('n', schnee, 5, 0.45, 3), ('f', fels, 4, 0.4, 4), ('r', pflaster, 2.5, 0.2, 5),
                                          ('w', weg, 5, 0, 6)):   # Regel 6b: Weg 45-Grad-Kanten
         roh_ = zell_maske(cls, art, COLS, ROWS)
-        if art == 'w':
-            roh_ = weg_biegen(roh_)
+        # (frueher: Pixel-Verbiegung weg_biegen - jetzt am Kachelraster im Layout, Regel 6b)
         m = weich(roh_, blur, rausch, seed) & insel
         a[m] = tex[m]
     pm = weich(zell_maske(cls, 'p', COLS, ROWS), 1.2, 0, 7) & insel

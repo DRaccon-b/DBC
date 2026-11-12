@@ -23,7 +23,7 @@ def platz(w, r=2, anteil=0.8):
     return w & (m > anteil)
 
 
-def wege_schwingen(k, weg='w', frei='g', amp=1.25, wellen=(21.0, 17.0), seed=0, fest=None, abstand=2):
+def wege_schwingen(k, weg='w', frei='g', amp=1.25, wellen=(21.0, 17.0), seed=0, fest=None, abstand=2, platz_r=2):
     """Regel 6 (Wege nie nur gerade): die Wegflaeche wird mit einem weichen Verschiebungsfeld verbogen - waagerechte
     Bahnen schwingen auf und ab, senkrechte nach links und rechts (Amplitude amp Kacheln, Wellenlaenge ~20 Kacheln,
     Steigung < 0.5 -> Wege bleiben zusammenhaengend und gleich breit). Gerechnet wird 4-fach fein mit weicher Maske,
@@ -33,7 +33,7 @@ def wege_schwingen(k, weg='w', frei='g', amp=1.25, wellen=(21.0, 17.0), seed=0, 
     k = np.array(k)
     R, C = k.shape
     w = np.isin(k, list(weg))
-    anker = ~np.isin(k, list(weg + frei)) | platz(w)                 # breite Flaechen sind Plaetze, keine Wege
+    anker = ~np.isin(k, list(weg + frei)) | platz(w, platz_r)                 # breite Flaechen sind Plaetze, keine Wege
     if fest is not None:
         anker |= fest
     cur = anker.copy()
@@ -55,7 +55,10 @@ def wege_schwingen(k, weg='w', frei='g', amp=1.25, wellen=(21.0, 17.0), seed=0, 
     neu_f = w[sy.astype(int), sx.astype(int)].astype(np.float32)
     neu = neu_f.reshape(R, F, C, F).mean((1, 3)) > 0.5
     out = k.copy()
-    out[w & ~neu & (gew > 0)] = frei[0]
+    for y, x in zip(*np.nonzero(w & ~neu & (gew > 0))):                # frei gewordene Kachel: Boden der Nachbarn
+        nb = [k[yy, xx] for yy in range(max(0, y - 1), min(R, y + 2)) for xx in range(max(0, x - 1), min(C, x + 2))
+              if k[yy, xx] in frei]
+        out[y, x] = max(set(nb), key=nb.count) if nb else frei[0]
     out[neu & np.isin(k, list(frei))] = weg[0]
     return out
 
