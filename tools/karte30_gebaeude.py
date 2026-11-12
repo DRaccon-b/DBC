@@ -26,11 +26,29 @@ def einpassen(im, w, h):
     im = im.crop(bb)
     out = Image.new('RGBA', (w, h), (0, 0, 0, 0))
     cw = min(w, im.width)                                           # Regel 1b: kleinster Kachelblock, darin mittig
+    if im.width > w:                                                # zu breit: mittig auf die Flaeche zuschneiden und
+        l_ = (im.width - w) // 2                                    # die Enden als echte Hauskanten nachzeichnen
+        im = enden(im.crop((l_, 0, l_ + w, im.height)))
     nb = -(-cw // T)
     x_ = ((w // T - nb) // 2) * T + (nb * T - cw) // 2
-    out.alpha_composite(im.crop((0, max(0, im.height - h), cw, im.height)) if im.height > h else im.crop((0, 0, cw, im.height)),
-                        (x_, h - min(h, im.height)))
+    if im.height > h:                                               # hoeher als die Flaeche: ragt nach oben hinaus
+        out = Image.new('RGBA', (w, im.height), (0, 0, 0, 0))       # (Nutzer: Haeuser ganz zeigen, nichts abschneiden)
+        h = im.height
+    out.alpha_composite(im.crop((0, 0, cw, im.height)), (x_, h - im.height))
     return out
+
+
+def enden(im):
+    """Seitlich abgeschnittene Fassade zu echten Gebaeudeenden machen: 1 px Kontur, links 2 px Lichtkante,
+    rechts 2 px Schattenkante (Licht von oben links) - nur dort, wo das Gebaeude Pixel hat."""
+    a = np.array(im).astype(np.float32)
+    w = a.shape[1]
+    al = a[..., 3] > 0
+    for x, f in ((1, 1.25), (2, 1.12), (w - 3, 0.82), (w - 2, 0.68)):
+        a[al[:, x], x, :3] = np.clip(a[al[:, x], x, :3] * f, 0, 255)
+    for x in (0, w - 1):
+        a[al[:, x], x, :3] = UMRISS[:3]
+    return Image.fromarray(a.astype(np.uint8))
 
 
 def loecher_fuellen(im):
@@ -151,7 +169,7 @@ def main():
         if art in ('buero_klein', 'buero_klein2'):
             q = os.path.join(QUELLE, 'buero1' if art == 'buero_klein' else 'buero2', '00.png')
         else:
-            neu_ = {'laeden': 'gross_laeden_b', 'buero_flach': 'gross_buero_flach_b'}   # Nutzer: Qualitaet, neu erzeugt
+            neu_ = {'laeden': 'gross_laeden_c', 'buero_flach': 'gross_buero_flach_c'}   # Nutzer: Qualitaet, neu erzeugt
             q = os.path.join(QUELLE, neu_.get(art, 'gross_' + art), '00.png')
         im = loecher_fuellen(einpassen(Image.open(q).convert('RGBA'), w, h))
         if art == 'buero_flach' and False:                         # (alte Fassung ohne Dach - nicht mehr noetig)

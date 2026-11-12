@@ -110,6 +110,16 @@ for _v in ('a', 'b'):
                  'grey concrete slabs, regular thin mullions, subtle sky reflections, a glass entrance with a small canopy on '
                  'the ground floor, daytime, sharp outlines, ' + _K30 + FR14)}
 
+for _v in ('c', 'd'):                                                           # ganz im Bild (Nutzer): Leinwand mit Rand
+    AUFTRAEGE['k30_laeden_' + _v] = dict(AUFTRAEGE['k30_laeden_a'], ziel='assets/objekte/karte30/gross_laeden_' + _v,
+        groesse=(576, 240), vorlage=('assets/vorlagen/karte30_vorlage.png', (368, 848, 944, 1088)),
+        text=AUFTRAEGE['k30_laeden_a']['text'] + ' The whole building is fully visible with empty margin around it, '
+             'nothing cut off at the top or bottom, the ground floor base line is complete.')
+    AUFTRAEGE['k30_buero_flach_' + _v] = dict(AUFTRAEGE['k30_buero_flach_a'], ziel='assets/objekte/karte30/gross_buero_flach_' + _v,
+        groesse=(512, 240), vorlage=('assets/vorlagen/karte30_vorlage.png', (1008, 848, 1520, 1088)),
+        text=AUFTRAEGE['k30_buero_flach_a']['text'] + ' The whole building is fully visible with empty margin around it, '
+             'nothing cut off at the top or bottom, the ground floor base line is complete.')
+
 
 def main(name):
     a = AUFTRAEGE[name]

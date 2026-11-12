@@ -213,7 +213,7 @@ def main():
         setze('karte18/strasse/18', tx * T + 8, ty * T - 2, {'anim': 'leuchten'})    # Laternen am Platz (symmetrisch)
     # Autos (stehen auf ihrer Fahrspur), Bus
     for (n, tx, ty, sp) in (('karte18/autos/04', 21, 52, False), ('karte18/autos/00', 37, 52, False),
-                            ('karte18/autos/05', 8, 54, True), ('karte18/autos/02', 84, 54, True),
+                            ('karte18/autos/05', 8, 54, True), ('karte18/autos/02', 120, 54, True),
                             ('karte18/autos/12', 75, 52, False), ('karte18/autos/01', 46, 78, True),
                             ('karte18/autos/12', 82, 76, False), ('karte18/autos/00', 117, 78, True)):
         setze(n, tx * T + 8, (ty + 1) * T - 3, {}, sp)
