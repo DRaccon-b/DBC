@@ -289,7 +289,6 @@ def bauen(frame=None, speichern=True):
     k18.mittelstreifen(a, gross(kl == 'h'), k18.textur('n', cols, rows)) if False else None
     hecke(a, gross(kl == 'h'))
     leitstreifen(a, gross(kl == 'y'))
-    streugut(a, kl)
     mauerfront(a, gross(kl == 'W'), lvl, gross(kl == 'T'))
     treppe(a, gross(kl == 'T'), lvl)
     tx0, ty0, tx1, ty1 = lay['terrasse']                              # Terrassenseite: schmale Kontur + gruener Zaun

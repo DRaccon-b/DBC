@@ -1987,6 +1987,12 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'wide craggy dark grey sea rock with several pointed peaks and cracks, barnacles at the bottom, on wet sand, ' + FR14,
         'tall dark jagged rock spire rising out of dark grey water with a small foam ring at its base, ' + FR14,
     ]},
+    'k31_muell': {'size': 32, 'items': [
+        'small pile of fallen golden yellow ginkgo leaves lying flat on the ground, seen from above, classic 2D handheld RPG style',
+        'small pile of fallen brown and orange autumn leaves lying flat on the ground, seen from above, classic 2D handheld RPG style',
+        'crumpled white paper and an old newspaper page lying flat on the ground, seen from above, classic 2D handheld RPG style',
+        'crushed red soda can and a cigarette butt lying flat on the ground, seen from above, classic 2D handheld RPG style',
+    ]},
     'k31_laden1': {'size': 128, 'items': [
         'narrow Japanese two-storey shop front, 64 pixels wide: upper floor with small windows and an air unit, ground '
         'floor convenience store with a glass front and a sign reading MART, flat roof edge visible from slightly above, ' + FR14,

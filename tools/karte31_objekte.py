@@ -42,6 +42,8 @@ def main():
     def pfad(name):
         if name.startswith(('gebaeude/', 'fremd/')):
             return name + '.png'
+        if name.startswith('karte31/'):
+            return name[len('karte31/'):] + '.png'
         ziel = 'fremd/' + name.replace('/', '-') + '.png'
         if not os.path.exists(os.path.join(OBJ, ziel)):
             shutil.copy(os.path.join(ROOT, 'assets', 'objekte', name + '.png'), os.path.join(OBJ, ziel))
@@ -186,6 +188,33 @@ def main():
                             ('karte18/autos/01', 82, 95, False), ('karte18/autos/04', 99, 97, True),
                             ('karte18/autos/12', 114, 97, True)):
         setze(n, tx * T + 8, (ty + 1) * T - 3, {}, sp)
+    # Kleinkram an den Strassen (Nutzer: mit PixelLab statt gezeichnet): Laub, Zeitung, Dose, Flasche, Tueten
+    import random
+    rnd = random.Random(3131)
+    MUELL = ['karte31/muell_klein/01', 'karte31/muell_klein/02', 'karte31/muell_klein/03', 'karte31/muell_klein/18',
+             'karte31/muell_klein/39', 'karte31/muell_klein/40', 'karte31/muell_klein/49']   # PixelLab, halbiert (Massstab)
+    kand = []
+    for ty in range(rows):
+        for tx in range(cols):
+            if kl[ty][tx] not in 'gs':
+                continue
+            if any(0 <= ty + dy < rows and 0 <= tx + dx < cols and kl[ty + dy][tx + dx] == 's'
+                   for dy in (-2, -1, 0, 1, 2) for dx in (-2, -1, 0, 1, 2)):
+                if kl[ty][tx] == 's' and not any(kl[ty + dy][tx] != 's' for dy in (-1, 1) if 0 <= ty + dy < rows):
+                    continue                                                                    # nicht mitten auf der Fahrbahn
+                kand.append((tx, ty))
+    rnd.shuffle(kand)
+    gesetzt = []
+    for (tx, ty) in kand:
+        if len(gesetzt) >= 60:
+            break
+        if any(abs(tx - x) + abs(ty - y) < 5 for (x, y) in gesetzt):
+            continue
+        ginkgo = 50 <= tx <= 69 and 36 <= ty <= 75
+        n = 'karte31/muell_klein/00' if ginkgo and rnd.random() < 0.7 else rnd.choice(MUELL)
+        if setze(n, tx * T + rnd.randint(3, 13), ty * T + rnd.randint(8, 15), {'liegend': True}, rnd.random() < 0.5,
+                 raster=False):
+            gesetzt.append((tx, ty))
     json.dump(objekte, open(os.path.join(OBJ, 'platzierung.json'), 'w'), indent=0)
     print('Karte 31: %d Objekte' % len(objekte))
 
