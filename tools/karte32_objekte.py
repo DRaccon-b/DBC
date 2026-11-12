@@ -121,8 +121,8 @@ def main():
         for s in (-1, 1):
             x = ACHSE + s * dx * T
             if T <= x <= Wp - T:
-                o = setze('karte32/turm_k/00', x, fuss(59), {'keine_verdeckung': True}, raster=False,
-                          pruefen=False)                          # Nutzer: 2 Kacheln tiefer, Fuss auf dem Friedhof
+                o = setze('karte32/turm_k/00', x, fuss(58), {'keine_verdeckung': True}, raster=False,
+                          pruefen=False)                          # Nutzer: Fuss in der ersten Friedhofsreihe
     # ------------------------------------------------------------------ Thronturm und grosser Saal
     paar(K9 + 'moebel/01', 7 * T, fuss(6), {'anim': 'kerzen'})                       # Kandelaber neben dem Thron
     # Saeulen (Nutzer: reduziert wie die Kronleuchter, kaputt): umgestuerzt bzw. abgebrochener Stumpf
