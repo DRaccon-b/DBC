@@ -23,6 +23,37 @@ T, C, R = 16, 90, 80
 WAND = 3                                       # Wandflaeche 3 Kacheln hoch (wie Karte 09)
 
 
+WEGE = [  # (Stuetzpunkte in Kacheln, halbe Breite) -> Catmull-Rom-Kurven auf dem Friedhof
+    ([(36.5, 57.6), (36.2, 60), (37.4, 62.4), (36.0, 64.6)], 1.5),                              # vom Durchgang
+    ([(4.5, 64.6), (12, 63.5), (20, 65.1), (28, 64.0), (36, 64.6), (44, 63.6), (52, 64.8), (60, 63.8),
+      (68, 65.0), (76, 64.0), (83.5, 64.6)], 1.5),                                               # Hauptweg
+    ([(53.5, 57.6), (52.6, 61), (54.0, 66), (52.8, 71), (53.5, 77.6)], 1.5),                     # Mitte senkrecht
+    ([(71.5, 57.6), (70.6, 61), (72.0, 66.5), (70.8, 70.5), (71.5, 73)], 1.5),                   # rechts senkrecht
+    ([(24.5, 72.6), (32, 73.4), (40, 72.3), (48, 73.2), (56, 72.4), (64, 73.4), (72, 72.6), (83.5, 73.0)], 1.25),
+    ([(43.8, 69.5), (45.2, 69.5)], 2.7), ([(44.5, 70.5), (45.0, 72.6)], 1.3),                  # Brunnenplatz links
+    ([(77.8, 69.5), (79.2, 69.5)], 2.7), ([(78.5, 70.5), (78.0, 72.6)], 1.3),                  # Brunnenplatz rechts
+]
+
+
+def _kurve(pts, n=24):
+    p = [pts[0]] + list(pts) + [pts[-1]]
+    out = []
+    for i in range(1, len(p) - 2):
+        p0, p1, p2, p3 = (np.array(q, float) for q in p[i - 1:i + 3])
+        for t in np.linspace(0, 1, n, endpoint=False):
+            out.append(0.5 * ((2 * p1) + (-p0 + p2) * t + (2 * p0 - 5 * p1 + 4 * p2 - p3) * t * t
+                              + (-p0 + 3 * p1 - 3 * p2 + p3) * t ** 3))
+    out.append(np.array(pts[-1], float))
+    return np.array(out)
+
+
+def _weg(k, pts, r, erlaubt):
+    c = _kurve(pts)
+    yy, xx = np.mgrid[0:R, 0:C]
+    d = np.min([(xx + 0.5 - px) ** 2 + (yy + 0.5 - py) ** 2 for px, py in c], axis=0)
+    k[(d <= r * r) & erlaubt & (k == 'g')] = 'p'
+
+
 def r_(m, x0, y0, x1, y1, v=True):
     m[y0:y1 + 1, x0:x1 + 1] = v
 
@@ -66,10 +97,10 @@ def main():
     r_(k, 35, 51, 37, 57, 'c')
     r_(k, 2, 58, 87, 77, 'g')
     r_(mauer, 0, 51, 1, 79); r_(mauer, 88, 51, 89, 79); r_(mauer, 0, 78, 89, 79)
-    # Pflasterwege nach der Vorlage
-    for (x0, y0, x1, y1) in ((4, 63, 83, 65), (24, 72, 83, 73), (35, 58, 37, 65), (52, 58, 54, 77),
-                             (70, 58, 72, 75), (41, 67, 47, 71), (75, 67, 81, 71)):
-        r_(k, x0, y0, x1, y1, 'p')
+    # Pflasterwege nach der Vorlage, aber geschwungen (Regel 6: nie nur gerade; Kanten 45 Grad beim Bauen, 6b)
+    friedhof = np.zeros((R, C), bool); friedhof[58:78, 2:88] = True
+    for pts, rad in WEGE:
+        _weg(k, pts, rad, friedhof)
     # ---------------------------------------------------------------- Mauerkoerper -> Krone + Wandflaeche
     h = np.zeros((R, C), int)
     h[k != '.'] = 1

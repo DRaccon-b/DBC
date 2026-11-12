@@ -63,6 +63,8 @@ def main():
             y0_, x0_ = max(0, fy - 3), max(0, cx - bw // 3)
             if (lvl[y0_:fy + 1, x0_:cx + bw // 3 + 1] != 1).any():   # Fuss nur auf Boden (keine Mauer, Leere, Wand)
                 return None
+            if any(kl[fy // T][xx // T] == 'p' for xx in (cx - bw // 3, cx, cx + bw // 3)):   # nicht auf Wegen
+                return None
         o = {'datei': datei, 'basis': name, 'x': cx - (bb[0] + bw // 2), 'y': fy - (bb[3] - 1), 'fuss': bb[3] - 1,
              'kachel': [cx // T, fy // T], 'ebene': 1}
         o.update(opt or {})
@@ -163,13 +165,15 @@ def main():
             setze(K9 + 'wand/19', x * T + 16, fuss(61), {}, raster=False)
     for (x0, x1) in ((26, 34), (56, 68)):                            # eingezaeunte Grabfelder
         for x in range(x0, x1 + 1, 2):
+            if any(kl[y][xx] == 'p' for y in range(66, 70) for xx in (x, x + 1)):
+                continue                                              # Grabfeld nicht auf dem Weg
             setze(K9 + 'wand/19', x * T + 16, fuss(66), {}, raster=False, pruefen=False)
             setze(K9 + rnd.choice(GRAEBER), x * T + 8, fuss(68), {}, pruefen=False)
             setze(K9 + 'wand/19', x * T + 16, fuss(69), {}, raster=False, pruefen=False)
     for (x, y) in ((34, 61), (38, 61), (51, 61), (55, 61), (69, 61), (73, 61), (25, 68), (35, 68), (55, 68), (69, 68)):
         setze(K9 + 'wand/31', x * T + 8, fuss(y))                    # kleine Wasserspeier-Statuen an den Wegen
-    setze(K9 + 'turm/09', 44.5 * T, fuss(70), {}, raster=False)      # Brunnen auf den Plaetzen (Platzmitte)
-    setze(K9 + 'turm/09', 78.5 * T, fuss(70), {}, raster=False)
+    setze(K9 + 'turm/09', 44.5 * T, fuss(70), {}, raster=False, pruefen=False)   # Brunnen mitten auf den Plaetzen
+    setze(K9 + 'turm/09', 78.5 * T, fuss(70), {}, raster=False, pruefen=False)
     for (n, x) in (('turm/04', 29), ('turm/08', 47), ('turm/04', 62), ('turm/08', 81)):
         setze(K9 + n, x * T + 8, fuss(77), {})                        # Gruefte unten
     for (x, y) in ((25, 61), (23, 69), (40, 77), (56, 77), (69, 76), (75, 77)):
