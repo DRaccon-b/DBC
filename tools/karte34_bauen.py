@@ -43,10 +43,9 @@ def bauen(frame=None, speichern=True):
                    cols, rows) if False else (sand.astype(np.float32) * np.array([0.66, 0.54, 0.42])).astype(np.uint8)
     a = gras.copy()
     # Waldboden (unter Waldrand und Hecken)
-    wm = weich(zell_maske(cls, 'h', cols, rows), 5.0, 0, 3)
-    a[wm] = (gras[wm] * np.array([0.62, 0.7, 0.66])).astype(np.uint8)
+    # (kein abgedunkelter Waldboden: die Kronen decken den Rand dicht, freie Stellen waeren dunkle Balken - Pruefung K34)
     # Sandwege inkl. Ausgaenge und Weg unter dem Steg; Spielplatz heller
-    roh = zell_maske(cls, 'webs', cols, rows)      # Spielplatz mit im Wegsand (keine Graskeile an der Naht)
+    roh = zell_maske(cls, 'websp', cols, rows)      # Spielplatz mit im Wegsand (keine Graskeile an der Naht)
     m = weich(roh, 5.0, 0, 4)
     a[m] = sand[m]
     saum = weich(roh, 5.0, 0, 4, 0.28) & ~m

@@ -47,7 +47,7 @@ GEBAEUDE = [
     ('buero/00', 10, 36, {'gebaeude': True}),                 # glaesernes Buerohaus links
     ('pavillon/00', 14.5, 17, {'gebaeude': True}),            # kleiner Steinpavillon oben links
     ('spiel/brunnen', 29, 31, {'anim': 'brunnen'}),           # Brunnen auf dem mittleren Platz
-    ('spiel/schaukel', 45.5, 46, {}), ('spiel/rutsche', 50.5, 47, {}), ('spiel/kuppel', 47, 49, {}),
+    ('spiel/schaukel', 45.5, 46, {}), ('spiel/rutsche', 50.5, 47, {}), ('spiel/kuppel', 47, 48, {}),
 ]
 # Wiesenbaeume nach der Vorlage (Fussmitte, Fusszeile); werden bei Bedarf auf die naechste freie Graskachel geschoben
 BAEUME = [
@@ -133,6 +133,14 @@ def main():
             o['x'] = px_ - (ux0 + bw // 2)
             o['y'] = py_ - uy1
         r = (o['x'] + ux0, o['y'] + uy0, o['x'] + ux1, o['y'] + uy1)
+        if wald and not all(k(x, ty) in 'hg' for x in range(bx, bx + wt)):
+            return False                                         # Waldrand/Hecke nie mit dem Fuss auf Pflaster oder Weg
+        if opt.pop('begleiter', False):                          # Begleiter: Fuss auf Rasen, nicht in Gebaeuden/Moebeln
+            if not all(k(x // T, r[3] // T) == 'g' for x in range(r[0], r[2] + 1, 4)):
+                return False
+            if any(schnitt(r, (a0, a1, a2, a3), 2) for (a0, a1, a2, a3, w), oo in zip(rects, objekte)
+                   if not w and 'baum' not in oo['basis']):
+                return False
         if wald:
             if any(schnitt(r, ((tp['x'] * T), (tp['y'] * T), (tp['x'] + tp['b']) * T - 1, (tp['y'] + tp['h']) * T - 1), 2)
                    for tp in lay['teleporter']):
@@ -189,11 +197,11 @@ def main():
         vorne_frei = all(k(mx + d, by + ht) == 'g' and (mx + d, by + ht) not in gesperrt for d in (-1, 0, 1))
         hinten_frei = all(k(x, by + ht - 2) == 'g' for x in range(bx, bx + wt))
         if art == 0 and vorne_frei:                              # Fels vor dem Stumpf (2 Kacheln hoch, eine Reihe tiefer)
-            setze(rnd.choice(HOCH_FELS), cx / T, fy // T + 1, {'px': cx + seite * 5, 'py': fy + T})
+            setze(rnd.choice(HOCH_FELS), cx / T, fy // T + 1, {'px': cx + seite * 5, 'py': fy + T, 'begleiter': True})
         elif (art == 1 or not vorne_frei) and hinten_frei:       # Fels hinter den Blaettern: eine Reihe hoeher, ragt
-            setze(rnd.choice(FELS_GROSS), cx / T, fy // T - 1, {'px': cx + seite * 17, 'py': fy - T})   # seitlich heraus
+            setze(rnd.choice(FELS_GROSS), cx / T, fy // T - 1, {'px': cx + seite * 17, 'py': fy - T, 'begleiter': True})   # seitlich heraus
         elif vorne_frei:                                         # hohe Blume vor dem Stumpf
-            setze(rnd.choice(HOCH_BLUME), cx / T, fy // T + 1, {'px': cx - seite * 5, 'py': fy + T, 'anim': 'wehen'})
+            setze(rnd.choice(HOCH_BLUME), cx / T, fy // T + 1, {'px': cx - seite * 5, 'py': fy + T, 'anim': 'wehen', 'begleiter': True})
     for o in gesetzt_b:                                          # Stammreihe +-1 und Begleiterreihe: keine freie Deko
         bx, by, wt, ht = o['block']
         for x in range(bx - 1, bx + wt + 1):
@@ -207,7 +215,8 @@ def main():
                     gesperrt.add((x, y))
     # ---------------------------------------------------------------- Parkmoebel (nie auf dem Weg, beide Fusskacheln)
     for (fx, fy) in BAENKE:
-        versuche('moebel/bank', fx, fy, {}, 'gp', 2, 2)
+        if not versuche('moebel/bank', fx, fy, {}, 'g', 2, 2):          # beide Fuesse auf demselben Boden
+            versuche('moebel/bank', fx, fy, {}, 'p', 2, 2)
     for (fx, fy) in LATERNEN:
         versuche('moebel/laterne', fx, fy, {'anim': 'lampe'}, 'gp', 2, 1)
     # ---------------------------------------------------------------- Waldrand / Hecken auf allen 'h'-Kacheln
