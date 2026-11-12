@@ -33,6 +33,8 @@ def main():
             continue
         if any(abs(tx - x) + abs(ty - y) < 6 for (x, y) in gesetzt):
             continue
+        if any(math.hypot(tx + 0.5 - r['cx'], ty + 0.5 - r['cy']) < 7.5 for r in lay.get('risse', [])):
+            continue
         name = rnd.choice(TRAUM)
         ziel = 'fremd/' + name.replace('/', '-') + '.png'
         if not os.path.exists(os.path.join(OBJ, ziel)):

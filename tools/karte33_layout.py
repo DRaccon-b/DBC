@@ -48,7 +48,12 @@ def main():
     lay = {'groesse': [C, R], 'klassen': [''.join(z) for z in k],
            'hoehe': [''.join('0' if c == '.' else ('2' if c == 'w' else '1') for c in z) for z in k],
            'runen_px': [[MX * T + sx * 72, MY * T + sy * 72] for sy in (-1, 1) for sx in (-1, 1)],   # 4 Runen diagonal
-           'mitte': [MX, MY]}
+           'mitte': [MX, MY],
+           # Raum-Zeit-Risse in den vier Ecken (Nutzer): darunter erscheinen andere A02-Karten (Ausschnitt in Pixeln)
+           'risse': [{'cx': 6.0, 'cy': 6.0, 'karte': 'karte20', 'quelle': [48, 104]},      # Startkarte mit Fernseher
+                     {'cx': 38.0, 'cy': 6.0, 'karte': 'karte07', 'quelle': [560, 40]},     # The Holy Peaks
+                     {'cx': 6.0, 'cy': 38.0, 'karte': 'karte25', 'quelle': [560, 560]},    # Sunset Bay (Strand)
+                     {'cx': 38.0, 'cy': 38.0, 'karte': 'karte27', 'quelle': [560, 260]}]}  # Destiny Lake
     os.makedirs(KARTE, exist_ok=True)
     json.dump(lay, open(os.path.join(KARTE, 'layout.json'), 'w'), indent=0)
     F = {'w': (90, 86, 120), '.': (12, 14, 38), 'i': (178, 170, 205), 'r': (205, 200, 225), 'm': (140, 140, 180), 'p': (190, 185, 215),
