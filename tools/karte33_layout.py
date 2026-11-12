@@ -7,7 +7,7 @@ Sternenleere (wie Karte 32): heller Randring, darin ein am Raster gestufter Raut
 lila Runen (oben, unten links, unten rechts) und ein Mittelquadrat; nach Sueden ein 4 Kacheln breiter Steg bis zu den
 Ankunftsfeldern am Kartenrand.
 
-Klassen:  . Leere  i Plattenboden  r Randring  m Rautenring/Mittelquadrat  p Steg  a Ankunftsfelder
+Klassen:  . Leere  i Plattenboden  r Randring  m Rautenring/Medaillon  w Ringmauer  p Steg  a Ankunftsfelder
 """
 import json, os
 import numpy as np
@@ -17,6 +17,7 @@ ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
 KARTE = os.path.join(ROOT, 'maps', 'karte33')
 VORLAGE = os.path.join(ROOT, 'assets', 'vorlagen', 'karte33_vorlage.png')
 T, C, R = 16, 44, 44
+MX, MY = 22, 20                                # Plattformmitte (Kachelkante): Achse aller Symmetrien
 # Plattform-Zeilen aus der Vorlage: (Reihe, x0, x1)
 SCHEIBE = [(6, 18, 25), (7, 16, 27), (8, 14, 29), (9, 13, 30), (10, 12, 31), (11, 11, 32), (12, 10, 33), (13, 10, 33),
            (14, 9, 34), (15, 9, 34), (16, 8, 35), (17, 8, 35), (18, 8, 35), (19, 8, 35), (20, 8, 35), (21, 8, 35),
@@ -35,17 +36,23 @@ def main():
     rand = (k == 'i') & ~(np.roll(k == 'i', 1, 0) & np.roll(k == 'i', -1, 0) & np.roll(k == 'i', 1, 1)
                           & np.roll(k == 'i', -1, 1))
     k[rand] = 'r'
-    for y, x0, x1 in RING:
-        k[y, x0:x1 + 1] = 'm'
-    k[19:22, 21:24] = 'm'                                  # Mittelquadrat
+    # Ring, Ringmauer und Medaillon exakt symmetrisch zur Plattformmitte (Nutzer): Achteck um (22, 20) Kachelkanten
+    yy, xx = np.mgrid[0:R, 0:C]
+    dx, dy = xx + 0.5 - MX, yy + 0.5 - MY
+    d = np.maximum(np.maximum(abs(dx), abs(dy)), (abs(dx) + abs(dy)) * 0.72)
+    k[(d >= 5.5) & (d < 7.5)] = 'm'                        # Rautenring
+    k[(d >= 7.5) & (d < 8.5)] = 'w'                        # Ringmauer (Nutzer: Mauer umrundet den Ring)
+    k[d < 2.1] = 'm'                                       # Medaillon in der Mitte
+    k[27, 20:24] = 'i'                                     # Tor in der Ringmauer: Stegbreite, auf der Achse
     k[33:44, 20:24] = 'p'                                  # Steg
     k[42:44, 20:24] = 'a'                                  # Ankunftsfelder
     lay = {'groesse': [C, R], 'klassen': [''.join(z) for z in k],
-           'hoehe': [''.join('0' if c == '.' else '1' for c in z) for z in k],
-           'runen': [[22, 12], [16, 24], [28, 24]], 'mitte': [22, 20]}
+           'hoehe': [''.join('0' if c == '.' else ('2' if c == 'w' else '1') for c in z) for z in k],
+           'runen_px': [[MX * T + sx * 72, MY * T + sy * 72] for sy in (-1, 1) for sx in (-1, 1)],   # 4 Runen diagonal
+           'mitte': [MX, MY]}
     os.makedirs(KARTE, exist_ok=True)
     json.dump(lay, open(os.path.join(KARTE, 'layout.json'), 'w'), indent=0)
-    F = {'.': (12, 14, 38), 'i': (178, 170, 205), 'r': (205, 200, 225), 'm': (140, 140, 180), 'p': (190, 185, 215),
+    F = {'w': (90, 86, 120), '.': (12, 14, 38), 'i': (178, 170, 205), 'r': (205, 200, 225), 'm': (140, 140, 180), 'p': (190, 185, 215),
          'a': (110, 200, 230)}
     out = np.zeros((R, C, 3), np.uint8)
     for kk, c in F.items():

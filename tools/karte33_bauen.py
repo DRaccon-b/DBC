@@ -46,10 +46,9 @@ def ring_kante(a, m):
     a[unten | rechts] = np.clip(a[unten | rechts].astype(int) + 26, 0, 255).astype(np.uint8)
 
 
-def rune(a, tx, ty, frame):
-    """Lila Rune: ovales Glyphenfeld mit innerem Kreis und Strahlen, glimmt im Takt (4 Bilder)."""
-    f = 0.6 + 0.4 * math.sin(2 * math.pi * ((frame or 0) / N_FRAMES) + tx)
-    cx, cy = tx * T + 8, ty * T + 8
+def rune(a, cx, cy, frame):
+    """Lila Rune: ovales Glyphenfeld mit innerem Kreis, glimmt im Takt (4 Bilder). cx, cy in Pixeln."""
+    f = 0.6 + 0.4 * math.sin(2 * math.pi * ((frame or 0) / N_FRAMES))
     Hp, Wp = a.shape[:2]
     for y in range(cy - 12, cy + 13):
         for x in range(cx - 14, cx + 15):
@@ -64,6 +63,35 @@ def rune(a, tx, ty, frame):
             elif d <= 2.6:                                           # weicher Schein auf den Platten
                 t_ = (1 - (d - 1) / 1.6) * 0.35 * f
                 a[y, x] = np.clip(a[y, x] * (1 - t_) + np.array([170, 110, 255]) * t_, 0, 255).astype(np.uint8)
+
+
+def ringmauer(a, wm):
+    """Niedrige Ringmauer: Krone aus hellem Stein (Lichtkante oben/links), an Suedkanten eine 9 px hohe Front im
+    unteren Teil der Mauerkachel, 3 px Schatten auf den Boden davor; Seitenkanten nur als Kontur."""
+    Hp, Wp = wm.shape
+    yy, xx = np.mgrid[0:Hp, 0:Wp]
+    krone = wm.copy()
+    z = ((xx // 8 + (yy // 6) % 2) % 2 == 0)
+    a[krone] = np.where(z[krone][:, None], H('#8a84b4'), H('#827cac'))
+    a[krone & ((yy % 6 == 5) | ((xx + 4 * ((yy // 6) % 2)) % 8 == 7))] = H('#6a6494')
+    a[krone & ~np.roll(wm, 1, 0)] = H('#c8c2e8')
+    a[krone & ~np.roll(wm, 1, 1)] = H('#aaa4d0')
+    a[krone & ~np.roll(wm, -1, 1)] = H('#4e4878')
+    sued = wm & ~np.roll(wm, -T // 2, 0)                              # untere halbe Kachel der Suedreihe
+    front = np.zeros_like(wm)
+    for y, x in zip(*np.nonzero(wm & ~np.roll(wm, -1, 0))):
+        for d in range(9):
+            if y - d >= 0 and wm[y - d, x]:
+                front[y - d, x] = True
+    a[front] = np.where(((xx // 8 + yy // 4) % 2 == 0)[front][:, None], H('#5c5688'), H('#56507e'))
+    a[front & (yy % 4 == 3)] = H('#48426e')
+    obk = front & ~np.roll(front, 1, 0)
+    a[obk] = H('#3c3660')                                             # Schattenfuge unter der Krone
+    for k_, fa in ((1, 0.6), (2, 0.72), (3, 0.86)):                   # Schatten auf den Boden vor der Mauer
+        m_ = np.roll(front & ~np.roll(front, -1, 0), k_, 0) & ~wm
+        a[m_] = (a[m_] * fa).astype(np.uint8)
+    rand = ~wm & (np.roll(wm, 1, 1) | np.roll(wm, -1, 1))
+    a[rand & ~np.roll(wm, -1, 0)] = (a[rand & ~np.roll(wm, -1, 0)] * 0.85).astype(np.uint8)
 
 
 def bauen(frame=None, speichern=True):
@@ -83,8 +111,10 @@ def bauen(frame=None, speichern=True):
     stegkante = gross(kl == 'p') | am                                 # Steg: dunkle Seitenkanten
     sk = stegkante & (~np.roll(stegkante, 1, 1) | ~np.roll(stegkante, -1, 1))
     a[sk] = (a[sk] * 0.62).astype(np.uint8)
-    for (tx, ty) in lay.get('runen', []):
-        rune(a, tx, ty, frame)
+    for (cx, cy) in lay.get('runen_px', []):
+        rune(a, cx, cy, frame)
+    wm = gross(kl == 'w')
+    ringmauer(a, wm)
     fund = k32.fundament(a, land, leer, tiefe=12, seed=3333)
     for i, x in enumerate(range(20, 24)):                             # Ankunftsfelder (wie Karte 16)
         for y in (42, 43):
@@ -92,6 +122,7 @@ def bauen(frame=None, speichern=True):
     lvl = np.ones((Hp, Wp), np.uint8)
     lvl[leer] = 0
     lvl[fund] = 9
+    lvl[gross(kl == 'w')] = 2
     if speichern and frame is None:
         np.save(os.path.join(KARTE, 'pixelhoehe.npy'), lvl)
     img = Image.fromarray(a).convert('RGBA')
