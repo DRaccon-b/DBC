@@ -210,9 +210,9 @@ def bauen(frame=None, speichern=True):
     a[eam] = (erde[eam] * 1.08).clip(0, 255).astype(np.uint8)
     # Feldwege
     roh = zell_maske(cls, 'wT', cols, rows)
-    m = weich(roh, 7.0, 0.5, 4) & (hp < 2)
+    m = weich(roh, 5.0, 0, 4)   # Regel 6b: 45-Grad-Kanten & (hp < 2)
     a[m] = sand[m]
-    saum = weich(roh, 7.0, 0.5, 4, 0.36) & ~m & (hp < 2)
+    saum = weich(roh, 5.0, 0, 4, 0.28) & ~m & (hp < 2)
     a[saum] = (a[saum] * 0.9).astype(np.uint8)
     # Arena = ERHOEHUNG (Nutzer: nur eine Ebene): Arena und der Wald dahinter liegen gleich hoch (keine zweiten Waende
     # im Norden); im Sueden niedrige Steinfront mit den zwei frontalen Steintreppen hinauf.

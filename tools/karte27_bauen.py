@@ -102,9 +102,9 @@ def bauen(frame=None, speichern=True):
     a[fm] = erde[fm]
     k23.schlamm(a, fm, erde)
     roh = zell_maske(cls, 'wT', cols, rows)                          # Feldweg
-    m = weich(roh, 7.0, 0.5, 4)
+    m = weich(roh, 5.0, 0, 4)   # Regel 6b: 45-Grad-Kanten
     a[m] = sand[m]
-    saum = weich(roh, 7.0, 0.5, 4, 0.36) & ~m
+    saum = weich(roh, 5.0, 0, 4, 0.28) & ~m
     a[saum] = (a[saum] * 0.9).astype(np.uint8)
     sm = weich(zell_maske(cls, 's', cols, rows), 6.0, 0.4, 5)        # Sandstrand
     a[sm] = sand[sm]

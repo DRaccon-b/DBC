@@ -230,9 +230,9 @@ def bauen(frame=None, speichern=True):
     fm = weich(zell_maske(cls, 'f', cols, rows), 3.0, 0.3, 9)
     feld(a, fm)
     roh = zell_maske(cls, 'wet', cols, rows)
-    m = weich(roh, 7.0, 0.5, 4)
+    m = weich(roh, 5.0, 0, 4)   # Regel 6b: 45-Grad-Kanten
     a[m] = sand[m]
-    saum = weich(roh, 7.0, 0.5, 4, 0.36) & ~m
+    saum = weich(roh, 5.0, 0, 4, 0.28) & ~m
     a[saum] = (a[saum] * 0.9).astype(np.uint8)
     # Kopfsteinplatz mit Bordstein, Rasen in der Mitte
     kies = flaeche(k6.kacheln(os.path.join(ROOT, 'assets', 'karte03', 'basis', 'kies_%d.png'), 5, k6.beige), cols, rows)

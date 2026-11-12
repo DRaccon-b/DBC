@@ -25,12 +25,13 @@ def main(karte, bilder=None):
     n = getattr(k, 'N_FRAMES', 4)
     zusatz = ''
     if bilder:                                                    # Sonderfassung mit anderer Bildanzahl (Nutzer: 16)
-        import karte_bauen as _kb, karte04_bauen as _k4
         n = int(bilder)
-        for mod in (k, _kb, _k4):
-            mod.N_FRAMES = n
+        for mod in list(sys.modules.values()):                    # alle geladenen Karten-Module (Wind, Wasser ...)
+            if getattr(mod, 'N_FRAMES', None) is not None and 'tools' in (getattr(mod, '__file__', '') or ''):
+                mod.N_FRAMES = n
         zusatz = '_%d' % n
-    dauer = getattr(k, 'BILDDAUER', 250)
+        dauer_16 = 110                                            # wie die fruehen 16-Bilder-Karten
+    dauer = 110 if bilder else getattr(k, 'BILDDAUER', 250)
     out = os.path.join(k.KARTE, 'animation')
     os.makedirs(out, exist_ok=True)
     t0 = time.time()
@@ -42,7 +43,12 @@ def main(karte, bilder=None):
                    duration=dauer, loop=0, lossless=True, method=4)
     alt = (ab.OUT, ab.DAUER)
     ab.OUT, ab.DAUER = out, dauer
-    ab.discord_gif([fr.resize((fr.width * 2, fr.height * 2), Image.NEAREST) for fr in frames])
+    if bilder:                                                    # 16 Bilder: Originalgroesse, alle Bilder behalten
+        q = [fr.quantize(colors=255, method=Image.Quantize.MAXCOVERAGE) for fr in frames]
+        q[0].save(os.path.join(out, 'karte01_discord.gif'), save_all=True, append_images=q[1:], duration=dauer,
+                  loop=0, disposal=1, optimize=True)
+    else:
+        ab.discord_gif([fr.resize((fr.width * 2, fr.height * 2), Image.NEAREST) for fr in frames])
     os.replace(os.path.join(out, 'karte01_discord.gif'), os.path.join(out, '%s_discord%s.gif' % (karte, zusatz)))
     ab.OUT, ab.DAUER = alt
     for name, (x0, y0, x1, y1) in DETAILS.get(karte, {}).items():

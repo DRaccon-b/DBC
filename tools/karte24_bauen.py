@@ -265,7 +265,7 @@ def bauen(frame=None, speichern=True):
     fels = flaeche(k6.kacheln(os.path.join(ROOT, 'assets', 'karte03', 'basis', 'kies_%d.png'), 5,
                               faerben((120, 58, 32), (214, 132, 84), 0.25, 0.6)), cols, rows)
     a = boden.copy()
-    m = weich(zell_maske(cls, 'wtT', cols, rows), 7.0, 0.5, 4)
+    m = weich(zell_maske(cls, 'wtT', cols, rows), 5.0, 0, 4)        # Regel 6b: 45-Grad-Kanten
     a[m] = weg[m]
     s = weich(zell_maske(cls, 's', cols, rows), 6.0, 0.5, 5)
     a[s] = sand[s]

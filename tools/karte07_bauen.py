@@ -826,7 +826,7 @@ def bauen(frame=None, speichern=True):
         sx = np.clip((xx + dx * f).round().astype(int), 0, Wp - 1)
         return roh[sy, sx]
     for art, tex, blur, rausch, seed in (('n', schnee, 5, 0.45, 3), ('f', fels, 4, 0.4, 4), ('r', pflaster, 2.5, 0.2, 5),
-                                         ('w', weg, 7, 0.5, 6)):
+                                         ('w', weg, 5, 0, 6)):   # Regel 6b: Weg 45-Grad-Kanten
         roh_ = zell_maske(cls, art, COLS, ROWS)
         if art == 'w':
             roh_ = weg_biegen(roh_)

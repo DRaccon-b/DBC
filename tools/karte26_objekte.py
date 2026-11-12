@@ -125,3 +125,5 @@ def main():
 
 if __name__ == '__main__':
     main()
+    import regeln_a02                                                 # Regeln: nichts auf Wegen, Teleporter frei
+    regeln_a02.objekte_pruefen('karte26', '')

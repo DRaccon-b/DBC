@@ -133,6 +133,8 @@ def main():
     # Reste aus der Vorlage (Objektflecken) -> Gras
     k[k == '?'] = 'g'
     h = np.where(np.isin(k, ['o']) | ((k == 'w') & pl), 2, 1)
+    import regeln_a02                                                 # Regel 6: Wege nie nur gerade
+    k = regeln_a02.wege_schwingen(k, seed=20)
     lay = {'groesse': [C, R], 'klassen': [''.join(z) for z in k], 'hoehe': [''.join(str(c) for c in z) for z in h],
            'platz': PLATZ, 'platz_rasen': PLATZ_RASEN, 'acker_zaun': ACKER_ZAUN, 'beete': BEETE,
            'feld_zaun': FELD_ZAUN, 'plateau': PLATEAU, 'treppe': TREPPE, 'bruecken': BRUECKEN,

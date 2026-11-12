@@ -249,6 +249,8 @@ def main():
                 k[y, x] = 'w'; h[y, x] = 0
     for (tx, ty, b, hh) in TELEPORTER:
         k[ty:ty + hh, tx:tx + b] = 'T'; h[ty:ty + hh, tx:tx + b] = 0
+    import regeln_a02                                                 # Regel 6: Wege nie nur gerade
+    k = regeln_a02.wege_schwingen(k, seed=24)
     lay = {'groesse': [C, R], 'klassen': [''.join(z) for z in k], 'hoehe': [''.join(str(c) for c in z) for z in h],
            'arena_treppen': ARENA_TREPPEN, 'arena_links': ARENA_LINKS, 'schrein_treppe': SCHREIN_TREPPE,
            'gleis': GLEIS, 'teleporter': [{'x': tx, 'y': ty, 'b': b, 'h': hh} for (tx, ty, b, hh) in TELEPORTER]}

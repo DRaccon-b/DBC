@@ -143,9 +143,9 @@ def bauen(frame=None, speichern=True):
     # Plateau: Gras, darauf Wege und Sandplatz aus Sandkacheln
     hoch = weich((hp >= 2).astype(np.float32), 5, 0.0, 7, 0.5)
     a[hoch] = gras[hoch]
-    wm = weich(zell_maske(cls, 'wst', cols, rows), 7.0, 0.5, 4) & hoch
+    wm = weich(zell_maske(cls, 'wst', cols, rows), 5.0, 0, 4) & hoch
     a[wm] = sand[wm]
-    saum = weich(zell_maske(cls, 'wst', cols, rows), 7.0, 0.5, 4, 0.36) & ~wm & hoch
+    saum = weich(zell_maske(cls, 'wst', cols, rows), 5.0, 0, 4, 0.28) & ~wm & hoch
     a[saum] = (a[saum] * 0.9).astype(np.uint8)
     # Felsfront des Plateaus (Sandstein wie die Vorlage) mit zwei Treppen
     lippe = k20.lippe_aus_gras(gras)

@@ -419,9 +419,9 @@ def bauen(frame=None, speichern=True):
     a[wm] = (gras[wm] * np.array([0.62, 0.7, 0.66])).astype(np.uint8)
     # Sandwege und Lager (inkl. Ausgang)
     roh = zell_maske(cls, 'wet', cols, rows)
-    m = weich(roh, 7.0, 0.5, 4)
+    m = weich(roh, 5.0, 0, 4)   # Regel 6b: 45-Grad-Kanten
     a[m] = sand[m]
-    saum = weich(roh, 7.0, 0.5, 4, 0.36) & ~m
+    saum = weich(roh, 5.0, 0, 4, 0.28) & ~m
     a[saum] = (a[saum] * 0.9).astype(np.uint8)
     # Steinplatz (Kopfstein grau) mit Bordstein; Ruinen und Hof ebenfalls Stein
     kies = flaeche(k6.kacheln(os.path.join(ROOT, 'assets', 'karte03', 'basis', 'kies_%d.png'), 5, grau), cols, rows)

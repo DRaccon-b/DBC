@@ -147,6 +147,8 @@ def main():
         k[ty:ty + hh, tx:tx + b] = 't'
     for (tx, ty, b, hh) in AUSGAENGE:
         k[ty:ty + hh, tx:tx + b] = 'T'
+    import regeln_a02                                                 # Regel 6: Wege nie nur gerade
+    k = regeln_a02.wege_schwingen(k, seed=28)
     lay = {'groesse': [C, R], 'klassen': [''.join(z) for z in k], 'hoehe': [''.join(str(c) for c in z) for z in h],
            'arena': [int(ax0), int(ay0), int(ax1), int(ay1)],
            'treppen': [{'x': tx, 'y': ty, 'b': b, 'h': hh} for (tx, ty, b, hh) in TREPPEN],

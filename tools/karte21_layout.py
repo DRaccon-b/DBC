@@ -119,6 +119,8 @@ def main():
     inseln_weg(k, 's', 'g', 6)
     h = np.where(yy <= MAUER_KANTE, 1, 0)
     h[k == 's'] = 2
+    import regeln_a02                                                 # Regel 6: Wege nie nur gerade
+    k = regeln_a02.wege_schwingen(k, seed=21)
     lay = {'groesse': [C, R], 'klassen': [''.join(z) for z in k], 'hoehe': [''.join(str(c) for c in z) for z in h],
            'mauer_kante': MAUER_KANTE, 'treppen': TREPPEN, 'tor': TOR, 'hof': HOF, 'bruecken': BRUECKEN,
            'fluss': FLUSS, 'treppen_sued': [[x0_, x1_, 1, MAUER_KANTE] for (x0_, x1_) in TREPPEN],
