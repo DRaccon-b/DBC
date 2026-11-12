@@ -833,6 +833,21 @@ def bauen(frame=None, speichern=True):
         roh_ = zell_maske(cls, art, COLS, ROWS)
         # (frueher: Pixel-Verbiegung weg_biegen - jetzt am Kachelraster im Layout, Regel 6b)
         m = weich(roh_, blur, rausch, seed) & insel
+        if art == 'w':                                              # Nutzer: Uebergang Weg -> Schnee/Rasen (6 px Saum)
+            ringe, cur = [], m.copy()
+            for _ in range(6):
+                nb = cur | np.roll(cur, 1, 0) | np.roll(cur, -1, 0) | np.roll(cur, 1, 1) | np.roll(cur, -1, 1)
+                ringe.append(nb & ~cur & insel); cur = nb
+            rr = random.Random(77)
+            for i, ring in enumerate(ringe):                         # innen viel Erde, aussen wenig + Krumen
+                anteil = (0.55, 0.45, 0.32, 0.2, 0.1, 0.05)[i]
+                a[ring] = (a[ring] * (1 - anteil) + tex[ring] * anteil).astype(np.uint8)
+                if i >= 2:                                          # leichter Schatten/Feuchte im Boden
+                    a[ring] = (a[ring] * 0.96).astype(np.uint8)
+                ys, xs = np.nonzero(ring)
+                for _ in range(len(ys) // (10 + 8 * i)):            # Erdkrumen, nach aussen seltener
+                    j = rr.randrange(len(ys))
+                    a[ys[j], xs[j]] = tex[ys[j], xs[j]]
         a[m] = tex[m]
     pm = weich(zell_maske(cls, 'p', COLS, ROWS), 1.2, 0, 7) & insel
     a[pm] = pflaster[pm]
