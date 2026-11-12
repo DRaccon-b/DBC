@@ -98,11 +98,10 @@ def main():
     r_(k, 0, MAUER[0], 119, MAUER[1], 'W')
     for (x0, x1) in MAUER_TREPPEN:
         r_(k, x0, MAUER[0], x1, MAUER[1], 'T')
-    r_(k, TERRASSE[0] + 1, TERRASSE_FRONT[0], TERRASSE[2], TERRASSE_FRONT[1], 'W')
+    r_(k, TERRASSE[0], TERRASSE_FRONT[0], TERRASSE[2], TERRASSE_FRONT[1], 'W')
     r_(k, TERRASSE_TREPPE[0], TERRASSE_FRONT[0], TERRASSE_TREPPE[1], TERRASSE_FRONT[1], 'T')
     # ---- Siedlung: Heckenrand links/unten, Strassen
-    r_(k, 0, 33, 1, 92, 'h')
-    r_(k, 0, 102, 119, 103, 'h')
+    r_(k, 0, 33, 1, 92, 'n')
     r_(k, 57, 36, 63, 92, 's')                                       # Querstrasse (unter der Fussgaengerbruecke)
     r_(k, 66, 81, 119, 84, 's')                                      # Strasse rechts
     r_(k, 2, 94, 119, 98, 's')                                       # Strasse unten
@@ -111,6 +110,16 @@ def main():
     r_(k, 2, 84, 7, 85, 'g')
     r_(k, 8, 84, 27, 84, 'y'); r_(k, 18, 84, 18, 91, 'y')            # Leitstreifen (Vorlage: gelbe Linie zum Bahnhof)
     r_(k, 2, 92, 27, 92, 'y')
+    # ---- Baumrand am Kartenrand (Nutzer: Baeume statt Hecken): oben 2 Reihen, links/rechts 2 Spalten, unten 3 Reihen
+    r_(k, 0, 0, 119, 1, 'f')
+    for y in range(R):
+        for x in (0, 1, 118, 119):
+            if 26 <= y <= 35 or k[y, x] in 'sWT':                     # Promenade, Mauer, Strassen bleiben frei
+                continue
+            if k[y, x] in 'nhfeg' and not (72 <= y <= 92 and x <= 1):   # (links unten: Bahnhofsvorplatz frei)
+                k[y, x] = 'f'
+    r_(k, 0, 101, 119, 103, 'f')
+    k[k == 'h'] = 'h'
     # ---- Hoehen
     h = np.ones((R, C), int)
     h[:MAUER[0], :] = 2

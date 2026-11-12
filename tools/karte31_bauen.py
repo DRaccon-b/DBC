@@ -74,53 +74,92 @@ def leitstreifen(a, m):
 
 
 def mauerfront(a, m, lvl, treppen_m):
-    """Stuetzmauer (Vorlage): oben 3 px Heckenkrone, 3 px Abdeckstein (Licht), darunter Steinbloecke 16x8 im Verband
-    mit Fugen und kleinen Entwaesserungsloechern, unten 2 px dunkler Fuss. Nicht begehbar."""
+    """Stuetzmauer wie die Vorlage: helle Betonplatten (32 px breit) mit feinen Sprenkeln, Abdeckkante oben (Licht),
+    dunkle Plattenfugen, kleine Wandleuchten im Raster, Gras-/Moosbueschel am Fuss, 2 px Schatten auf dem Boden davor.
+    Nicht begehbar."""
     ys, xs = np.nonzero(m)
     if not len(ys):
         return
-    for y, x in zip(ys, xs):
-        d = y - (y // T) * 0                                          # Abstand zur Oberkante der Mauer (spaltenweise)
-    oben = m & ~np.roll(m, 1, 0)
-    top = np.full(a.shape[1], -1)
+    rs = np.random.RandomState(311)
+    top = {}; bot = {}
     for x in np.unique(xs):
         col = np.nonzero(m[:, x])[0]
-        top[x] = col.min()
+        top[x], bot[x] = col.min(), col.max()
     for y, x in zip(ys, xs):
-        d = y - top[x]
-        hoehe = (np.nonzero(m[:, x])[0].max() - top[x]) + 1
-        if d < 3:
-            c = H('#3e6a32') if (x + d) % 3 else H('#58884a')         # Heckenkrone
-        elif d < 6:
-            c = H('#d2d6de') if d == 3 else H('#b4b9c4')            # Abdeckstein
+        d, hoehe = y - top[x], bot[x] - top[x] + 1
+        if d < 2:
+            c = H('#e6e9ee')
+        elif d < 4:
+            c = H('#9da3ad')
         elif d >= hoehe - 2:
-            c = H('#4a4f5c')                                          # Fuss
+            c = H('#5d636e')
         else:
-            dd = d - 6
-            reihe = dd // 8
-            versatz = 8 if reihe % 2 else 0
-            if dd % 8 == 7 or (x + versatz) % 16 == 0:
-                c = H('#6a7080')                                      # Fuge
-            else:
-                c = H('#9aa1b0') if dd % 8 < 2 else H('#8a91a1')
-            if (x + versatz) % 32 == 16 and dd % 8 == 4 and reihe == 1:
-                c = H('#3a3e48')                                      # Entwaesserungsloch
+            c = H('#c4c8cf') if (x // 32 + (d - 4) // 22) % 2 == 0 else H('#bcc1c9')
+            if x % 32 == 0 or (d - 4) % 22 == 21:
+                c = H('#7e8490')
+            elif x % 32 == 1:
+                c = H('#d8dbe1')
+            elif rs.rand() < 0.07:
+                c = H('#a6abb4')
         a[y, x] = c
         lvl[y, x] = 9
+    for x in np.unique(xs):                                           # Wandleuchten + Bueschel am Fuss
+        if x % 64 == 40 and m[top[x] + 12, x]:
+            a[top[x] + 10:top[x] + 15, x - 1:x + 2] = H('#3a3e48')
+            a[top[x] + 11:top[x] + 14, x] = H('#f0e0a0')
+        if rs.rand() < 0.35:
+            hh = rs.randint(2, 6)
+            for d in range(hh):
+                if m[bot[x] - 2 - d, x]:
+                    a[bot[x] - 2 - d, x] = H('#5e8a3c') if d < hh - 1 else H('#8ab45a')
+    unten = m & ~np.roll(m, -1, 0)
+    for d in (1, 2):
+        sch = np.roll(unten, d, 0) & ~m & ~treppen_m
+        dunkeln(a, sch, 0.72 + 0.1 * d)
+
+
+def maschendraht(a, lvl, y, x0, x1, ausnahmen=()):
+    """Gruener Maschendrahtzaun oben auf der Mauerkante (Vorlage): Handlauf, Pfosten alle 16 px, Rautengeflecht."""
+    for x in range(x0, x1):
+        if any(e0 <= x < e1 for (e0, e1) in ausnahmen):
+            continue
+        for d in range(10):
+            Y = y - 10 + d
+            if d == 0:
+                c = H('#2e6a36')
+            elif d == 1:
+                c = H('#5aa05a')
+            elif x % 16 in (0, 1):
+                c = H('#2e6a36') if x % 16 == 0 else H('#4a8a4a')
+            elif (x + d) % 4 == 0 or (x - d) % 4 == 0:
+                c = H('#3e7e44')
+            else:
+                continue
+            a[Y, x] = c
+            lvl[Y, x] = 9
+
+
+def zaun_senkrecht(a, lvl, x, y0, y1):
+    """Seitlicher Zaun der Terrasse (gruen wie die Vorlage): Pfosten alle 16 px, zwei Laengsstaebe."""
+    for y in range(y0, y1):
+        a[y, x - 1] = H('#2e6a36'); a[y, x] = H('#5aa05a'); a[y, x + 1] = H('#2e6a36')
+        if y % 16 in (0, 1, 2):
+            a[y, x - 2:x + 3] = H('#2e6a36')
+        lvl[y, x - 2:x + 3] = 9
 
 
 def treppe(a, m, lvl):
-    """Treppe in der Mauer: Stufen alle 4 px (Kante hell, Setzstufe dunkler), Wangen links/rechts mit Kontur."""
+    """Treppe wie die Vorlage: dunkle Stufen alle 4 px (Kante hell, Setzstufe dunkel), Handlaeufe links/rechts."""
     ys, xs = np.nonzero(m)
     for y, x in zip(ys, xs):
         d = y % 4
-        c = H('#d4d8e0') if d == 0 else H('#b8bdc8') if d < 3 else H('#8e94a2')
-        a[y, x] = c
+        a[y, x] = H('#9298a6') if d == 0 else H('#6c7282') if d < 3 else H('#4a4f5c')
     links = m & ~np.roll(m, 1, 1)
     rechts = m & ~np.roll(m, -1, 1)
-    for msk, c1, c2 in ((links, '#6a7080', '#c4c9d4'), (rechts, '#4a4f5c', '#7a8090')):
-        a[msk] = H(c1)
-        a[np.roll(msk, 1 if msk is links else -1, 1) & m] = H(c2)
+    for msk, sx in ((links, 1), (rechts, -1)):
+        a[msk] = H('#2a2e38')
+        a[np.roll(msk, sx, 1) & m] = H('#c8ccd6')
+        a[np.roll(msk, 2 * sx, 1) & m] = H('#3a3e48')
     lvl[m] = 1
 
 
@@ -189,7 +228,7 @@ def bauen(frame=None, speichern=True):
     kl = np.array([list(r) for r in lay['klassen']])
     hk = np.array([[int(c) for c in r] for r in lay['hoehe']])
     a = k18.textur('g', cols, rows)
-    for art, tex in (('s', 's'), ('n', 'n'), ('h', 'n'), ('d', 'd')):
+    for art, tex in (('s', 's'), ('n', 'n'), ('h', 'n'), ('f', 'n'), ('d', 'd')):
         m = gross(kl == art)
         a[m] = k18.textur(tex, cols, rows)[m]
     m = gross(kl == 'e'); a[m] = erde(cols, rows, (0.93, 0.9, 0.86))[m]
@@ -199,7 +238,7 @@ def bauen(frame=None, speichern=True):
     asphalt = gross(kl == 's')
     k18.bordsteine(a, asphalt, ~asphalt)
     markierungen(a, asphalt, lay)
-    k18.rasen_kanten(a, gross(np.isin(kl, ['n'])))
+    k18.rasen_kanten(a, gross(np.isin(kl, ['n', 'f'])))
     for art in ('w', 'e', 'd'):                                       # Erd-/Sandflaechen: feine dunkle Kante zum Rest
         m = gross(kl == art)
         dunkeln(a, kontur(m) & ~gross(np.isin(kl, ['w', 'e', 'd'])), 0.85)
@@ -208,10 +247,15 @@ def bauen(frame=None, speichern=True):
     leitstreifen(a, gross(kl == 'y'))
     mauerfront(a, gross(kl == 'W'), lvl, gross(kl == 'T'))
     treppe(a, gross(kl == 'T'), lvl)
-    tx0, ty0, tx1, ty1 = lay['terrasse']                              # Terrassenseite: schmale Kontur + Zaun
+    tx0, ty0, tx1, ty1 = lay['terrasse']                              # Terrassenseite: schmale Kontur + gruener Zaun
     a[ty0 * T:(ty1 + 1) * T, tx0 * T:tx0 * T + 2] = H('#4a5040')
-    zaun(a, tx0 * T + 3, ty0 * T, (ty1 + 1) * T)
-    lvl[ty0 * T:(ty1 + 1) * T, tx0 * T:tx0 * T + 5] = 9
+    zaun_senkrecht(a, lvl, tx0 * T + 4, (ty0 + 2) * T, (ty1 + 1) * T)
+    my0 = lay['mauer'][0]                                             # Maschendraht oben auf den Mauern (Treppen frei)
+    maschendraht(a, lvl, my0 * T, 0, 120 * T, [(x0 * T, (x1 + 1) * T) for (x0, x1) in lay['mauer_treppen']])
+    fy0 = lay['terrasse_front'][0]
+    tt0, tt1 = lay['terrasse_treppe']
+    maschendraht(a, lvl, fy0 * T, (tx0 + 1) * T, 120 * T, [(tt0 * T, (tt1 + 1) * T)])
+    f_ = gross(kl == 'f'); lvl[f_] = 9
     lvl[gross(kl == 'h')] = 9
     if speichern and frame is None:
         np.save(os.path.join(KARTE, 'pixelhoehe.npy'), lvl)

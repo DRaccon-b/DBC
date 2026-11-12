@@ -147,8 +147,17 @@ def main():
         n = LAUB[(tx + ty) % 4] if art == 'L' else KIRSCH[(tx + ty) % 3] if art == 'C' else GINKGO[(tx + ty) % 3]
         if setze(n, tx * T + 8, (ty + 1) * T - 1, {'anim': 'baum'}, tx % 2 == 0) and kl[ty + 1][tx] == 'n':
             setze('karte01/deko/%02d' % (25, 27)[tx % 2], tx * T + 8, (ty + 2) * T - 1, {'anim': 'wehen'}, pruefen=False)
-    for x in range(5, 118, 14):                                                                  # Strassenbaeume unten
-        setze(LAUB[(x // 14) % 4], x * T + 8, 102 * T - 1, {'anim': 'baum', 'kein_schatten': True}, (x // 14) % 2 == 0)
+    WALD = ['karte01/baeume/00', 'karte01/baeume/01', 'karte01/baeume/02', 'karte01/baeume/15', 'karte01/baeume/09',
+            'karte01/baeume/06']
+    hb = lay['hochbahn']
+    for ty in range(rows):                                                                       # Baumrand am Kartenrand
+        for tx in range(cols):                                                                   # (Nutzer): dicht, versetzt
+            if kl[ty][tx] != 'f' or (tx + ty) % 2:
+                continue
+            if tx <= hb['x1'] and hb['y0'] <= ty <= hb['y1'] + 1:
+                continue
+            setze(WALD[(tx * 7 + ty * 3) % len(WALD)], tx * T + 8, (ty + 1) * T - 1,
+                  {'anim': 'baum', 'kein_schatten': True}, (tx * 3 + ty) % 4 < 2, pruefen=False)
     # Spielplaetze
     for (n, tx, ty) in (('karte10/spielplatz/01', 21, 56), ('karte10/spielplatz/00', 18, 60), ('karte18/gebaeude/kletterkuppel', 9, 59),
                         ('karte10/spielplatz/01', 83, 57), ('karte10/spielplatz/01', 89, 57), ('karte10/spielplatz/00', 80, 61),
