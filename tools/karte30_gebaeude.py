@@ -51,6 +51,27 @@ def enden(im):
     return Image.fromarray(a.astype(np.uint8))
 
 
+def eckpfeiler(im, y0=46, b=6):
+    """Glasbuero (Nutzer: links/rechts wirkte abgeschnitten): an beiden Seiten ein Eckpfeiler aus Beton von der
+    Dachkante bis zum Sockel - aussen dunkle Kontur, links Lichtkante, rechts Schattenseite (Licht oben links)."""
+    a = np.array(im)
+    al = a[..., 3] > 0
+    xs = np.nonzero(al.any(0))[0]
+    xl, xr = xs.min(), xs.max()
+    for y in range(y0, a.shape[0] - 3):
+        if not al[y].any():
+            continue
+        for i in range(b):                                          # links: Kontur, Licht, Beton
+            c = UMRISS if i == 0 else H('#e2e6ec') if i < 3 else H('#b4bac4') if i < b - 1 else H('#8a909c')
+            a[y, xl + i] = c
+        for i in range(b):                                          # rechts: Beton, Schatten, Kontur
+            c = UMRISS if i == 0 else H('#5e6470') if i < 3 else H('#7e8592') if i < b - 1 else H('#9aa1ad')
+            a[y, xr - i] = c
+    for x in list(range(xl, xl + b)) + list(range(xr - b + 1, xr + 1)):   # Pfeilerkopf unter der Attika
+        a[y0, x] = H('#f0f2f6') if xl <= x < xl + b else H('#a8aeb8')
+    return Image.fromarray(a)
+
+
 def loecher_fuellen(im):
     """Vom Generator freigestellte helle Glasflaechen (durchsichtige Loecher mitten im Gebaeude) wieder fuellen:
     Loch = durchsichtig und nicht ueber Durchsichtiges mit dem Bildrand verbunden. Farbe aus den Nachbarn, leicht blau."""
@@ -177,6 +198,8 @@ def main():
             a_ = np.array(roh)                                          # 30 Kacheln mit Gehweg zu beiden Querstrassen (Nutzer)
             roh = Image.fromarray(np.concatenate([a_[:, :320], a_[:, 352:]], 1))
         im = loecher_fuellen(einpassen(roh, w, h))
+        if art == 'buero_flach':
+            im = eckpfeiler(im)
         if art == 'buero_flach' and False:                         # (alte Fassung ohne Dach - nicht mehr noetig)
             a_ = np.array(im).astype(int)                             # weisse Scheiben -> helle Himmelsspiegelung
             weiss_ = (a_[..., :3].min(2) > 228) & (a_[..., 3] > 0)
