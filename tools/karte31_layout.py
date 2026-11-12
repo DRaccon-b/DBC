@@ -144,6 +144,7 @@ def main():
     r_(k, 0, 26, 119, 29, 'g')                                       # Promenade auf der Mauer
     hecken = [(x0, x1) for (x0, x1) in _laeufe(k[25], 'h')]           # Heckenbeete -> Rasen, Hecken als Objekte
     k[25][k[25] == 'h'] = 'n'
+    k[7, 102:106] = 'g'                                               # Portalplatz: Luecke vom alten Tor schliessen
     # ---- Parkwege natuerlich (Regel 6: nie nur gerade, Boegen/Diagonalen): Vorlagen-Rechteckwege -> Kurven
     park = np.zeros((R, C), bool); park[2:26, 2:118] = True
     park[TERRASSE[1]:TERRASSE[3] + 1, TERRASSE[0]:TERRASSE[2] + 1] &= False
@@ -190,7 +191,7 @@ def main():
                            [[TERRASSE_TREPPE[0], TERRASSE_TREPPE[1], 3, TERRASSE_FRONT[0] - 1]],
            'hecken': hecken,
            'parkwege': [[[list(map(float, q)) for q in _kurve(pts).tolist()], r] for pts, r in WEGE + WEGE_TERRASSE],
-           'teleporter': [{'x': 103, 'y': 2, 'b': 3, 'h': 3, 'farbe': 'violett'}]}
+           'teleporter': [{'x': 102, 'y': 11, 'b': 4, 'h': 3, 'farbe': 'violett'}]}
     json.dump(lay, open(os.path.join(KARTE, 'layout.json'), 'w'), indent=0)
     F = {'n': (99, 142, 67), 'w': (187, 163, 118), 'e': (173, 155, 113), 'g': (147, 158, 155), 's': (52, 61, 73),
          'p': (176, 163, 137), 'd': (212, 188, 128), 'y': (230, 200, 60), 'h': (60, 100, 40), 'W': (110, 116, 130),

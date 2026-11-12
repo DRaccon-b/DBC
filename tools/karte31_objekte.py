@@ -112,8 +112,7 @@ def main():
     setze('karte07/gross/02', 33 * T + 8, 7 * T - 1, {})                                         # Pavillon
     setze('karte31/uhr/00', 60 * T + 8, 14 * T - 1, {}, raster=False)                                       # Uhr (Nutzer: oben groesser)
     setze('karte30/klein/01', 75 * T, 17 * T - 1, {})                                            # Kiosk
-    setze('karte29/gross/03', 104 * T, 5 * T - 1, {'anim': 'portal', 'schattenlos': True}, pruefen=False)   # Riss
-    setze('karte29/mittel/02', 104 * T, 9 * T - 1, {'anim': 'portal'})                           # Portal-Tor
+    setze('karte29/gross/03', 104 * T, 14 * T - 1, {'anim': 'portal', 'schattenlos': True}, pruefen=False)  # Riss (Nutzer: tiefer, Tor weg)
     LAUB = ['karte01/baeume/00', 'karte18/baum2/01', 'karte01/baeume/01', 'karte01/baeume/04', 'karte01/baeume/02',
             'karte01/baeume/15', 'karte01/baeume/13']                                 # mehr Arten (Nutzer: Variation)
     KIRSCH = ['karte01/baeume/10', 'fremd/kirsche0', 'fremd/kirsche1']
