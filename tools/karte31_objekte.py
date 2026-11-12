@@ -137,8 +137,8 @@ def main():
     LATERNE, STEINLATERNE = 'karte31/laterne/00', 'karte31/laterne/14'          # Nutzer: Laternen neu (PixelLab)
     # Paare spiegelsymmetrisch zur Achse des Bauwerks: Uhrplatz (Achse Spalte 60), Pavillon (33/34), Portal (103/104);
     # einzeln an Baenken und Wegen, abwechselnd ober- und unterhalb des Weges (keine Reihe). Kachel = Fussreihe.
-    for (tx, ty, n) in ((57, 10, LATERNE), (63, 10, LATERNE),                         (100, 14, LATERNE), (107, 14, LATERNE), (17, 11, LATERNE), (47, 15, LATERNE),
-                        (73, 11, LATERNE), (87, 15, LATERNE), (11, 17, LATERNE)):
+    for (tx, ty, n) in ((57, 10, LATERNE), (63, 10, LATERNE),                         (100, 14, LATERNE), (107, 14, LATERNE), (17, 11, LATERNE), (47, 17, LATERNE),
+                        (76, 11, LATERNE), (87, 15, LATERNE), (11, 17, LATERNE)):
         if not setze(n, tx * T + 8, (ty + 1) * T - 1, {'anim': 'lampe'}):
             print('Laterne nicht gesetzt:', tx, ty)
     for dx in (-56, 56):                                             # Steinlaternen exakt symmetrisch zum Pavillon (Achse)

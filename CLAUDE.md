@@ -32,6 +32,9 @@ wird jede Regel einzeln geprüft.
      - Abwechseln statt überall gleich: mal Fels vor dem Stumpf, mal Fels hinter den Blättern, mal beides.
 6. **Wege** gehen nie nur gerade und müssen nicht durchgängig sein: diagonal erlaubt, natürliche Bögen, ein Weg
    darf auch einmal unterbrechen und später weitergehen.
+   - 6b. **Wegkanten in 45° (Nutzer, Karte 31):** Der Verlauf eines Weges darf geschwungen sein, aber seine Ränder
+     folgen dem Kachelraster mit **45°-Schrägen** an den Ecken (abgeschrägte Kachelstufen) – keine runden
+     Freiform-Kurven. An Treppen läuft der Weg ebenfalls mit 45° auf die exakte Treppenbreite zu.
 7. **Schatten** ragen nie über Kanten (Klippen, Wände, Wasser) oder über andere Objekte.
 8. **Bäume überlappen sich nur an den äußeren Kachelspalten:** *(vorerst NICHT anwenden – der Nutzer hat die
    Baum-Änderungen auf Karte 01 und 05 verworfen; Bäume bleiben wie in der jeweiligen Vorlage/v1.0)*

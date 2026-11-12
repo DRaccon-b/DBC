@@ -265,24 +265,34 @@ def hochbahn(img, lay, zug_sp=None):
     return img
 
 
+def _raute(m, r, wachsen):
+    """r-mal mit dem 4er-Kreuz erweitern bzw. schrumpfen = Rauten-Strukturelement (L1-Radius r) -> 45-Grad-Kanten."""
+    m = m.copy()
+    for _ in range(r):
+        n = [np.roll(m, 1, 0), np.roll(m, -1, 0), np.roll(m, 1, 1), np.roll(m, -1, 1)]
+        m = (m | n[0] | n[1] | n[2] | n[3]) if wachsen else (m & n[0] & n[1] & n[2] & n[3])
+    return m
+
+
+def raute_schliessen(m, r):
+    return _raute(_raute(m, r, True), r, False)
+
+
+def raute_oeffnen(m, r):
+    return _raute(_raute(m, r, False), r, True)
+
+
 def weg_rund(kl, lay):
-    """Erdweg-Pixelmaske direkt aus den Wegkurven des Layouts (runde Kanten, Regel 6): je Kurvenpunkt ein Kreis mit
-    der halben Wegbreite. Platz-, Treppen- und Mauerkacheln werden ausgespart (der Weg laeuft bis an ihre Kante)."""
-    from PIL import ImageDraw
+    """Erdweg-Pixelmaske mit 45-Grad-Kanten (Regel 6b): Kachelmaske der Wege weichzeichnen und bei 0.5 schneiden ->
+    die Kachelstufen werden zu 45-Grad-Schraegen. Platz-, Treppen- und Mauerkacheln zaehlen beim Weichzeichnen mit
+    (kein Rasenspalt am Anschluss), werden danach aber ausgespart."""
     rows, cols = kl.shape
-    bild = Image.new('L', (cols * T, rows * T), 0)
-    d = ImageDraw.Draw(bild)
-    for pts, r in lay.get('parkwege', []):
-        rp = r * T
-        dichte = []
-        for (x0, y0), (x1, y1) in zip(pts[:-1], pts[1:]):
-            n = max(1, int(np.hypot(x1 - x0, y1 - y0) * 4))
-            dichte += [(x0 + (x1 - x0) * t, y0 + (y1 - y0) * t) for t in np.linspace(0, 1, n, endpoint=False)]
-        dichte.append(tuple(pts[-1]))
-        for (x, y) in dichte:
-            d.ellipse((x * T - rp, y * T - rp, x * T + rp, y * T + rp), fill=255)
-    m = np.array(bild) > 0
     anschluss = gross(np.isin(kl, ['g', 'T', 'W', 'p', 'd', 's', 'h', 'f']))
+    basis = ((gross(kl == 'w') | gross(np.isin(kl, ['g', 'T', 'W', 'p', 'd']))) * 255).astype(np.uint8)
+    m = raute_oeffnen(raute_schliessen(basis > 0, 6), 6)            # Kachelecken -> exakte 45-Grad-Schraegen (6 px)
+    wk = kl == 'w'                                                    # nur auf Wegkacheln und ihren direkten Nachbarn
+    nah = wk | np.roll(wk, 1, 0) | np.roll(wk, -1, 0) | np.roll(wk, 1, 1) | np.roll(wk, -1, 1)
+    m &= gross(nah)
     park = np.zeros_like(m); park[:26 * T] = True
     m = (m & park & ~anschluss) | (gross(kl == 'w') & ~park)
     # Regel 2: direkt ober- und unterhalb einer Treppe ist der Weg genau so breit wie die Treppe (eine Kachelreihe)
@@ -304,8 +314,7 @@ def weg_rund(kl, lay):
                     m[py, max(0, l_ - 3 * T):max(0, l_)] = False
                     m[py, r_:r_ + 3 * T] = False
                     m[py, x0 * T:(x1 + 1) * T] = True
-    weich = np.array(Image.fromarray(((m | anschluss) * 255).astype(np.uint8)).filter(ImageFilter.GaussianBlur(1.5))) > 127
-    m = (weich & ~anschluss & park) | (m & ~park)
+    m &= ~anschluss
     return m
 
 
