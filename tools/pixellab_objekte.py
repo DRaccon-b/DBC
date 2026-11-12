@@ -9,7 +9,7 @@ Die Kandidaten werden ueber api.pixellab.ai heruntergeladen (backblaze ist in de
 Cloud-Umgebung gesperrt) und unter assets/objekte/karte01/<gruppe>/NN.png abgelegt,
 zugeschnitten auf den sichtbaren Inhalt; dazu uebersicht.png mit Nummern.
 """
-import base64, io, json, os, sys, time, urllib.error, urllib.request, zipfile
+import base64, io, json, os, re, sys, time, urllib.error, urllib.request, zipfile
 from PIL import Image, ImageDraw
 
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
@@ -1581,8 +1581,16 @@ def herunterladen(oid, d):
     return ims, sel['created_object_ids']
 
 
+def _neue_karte(gruppe):
+    """Gruppen ab Karte 34 ('k34_rathaus' ...): Nummer der Karte, sonst None."""
+    m = re.match(r'^k(\d+)_', gruppe)
+    return int(m.group(1)) if m and int(m.group(1)) >= 34 else None
+
+
 def speichern(gruppe, ims, ids):
-    if gruppe.startswith('k26_'):
+    if _neue_karte(gruppe):
+        ziel = os.path.join(ROOT, 'assets', 'objekte', 'karte%02d' % _neue_karte(gruppe), gruppe.split('_', 1)[1])
+    elif gruppe.startswith('k26_'):
         ziel = os.path.join(ROOT, 'assets', 'objekte', 'karte26', gruppe[4:])
     elif gruppe.startswith('k33_'):
         ziel = os.path.join(ROOT, 'assets', 'objekte', 'karte33', gruppe[4:])
@@ -2057,6 +2065,23 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'surreal lone wooden door standing in nothing, half open with a starry night sky inside, dreamlike, classic 2D handheld RPG style, transparent background',
         'surreal porcelain teacup tilted in the air pouring out a swirling purple galaxy instead of tea, dreamlike, classic 2D handheld RPG style, transparent background',
     ]},
+    # ---- A03 Karte 34 Shinjuku Central Park
+    'k34_rathaus': {'size': 176, 'freie_farben': True, 'items': [
+        'grand modern city hall skyscraper complex in light grey granite: two tall identical towers side by side, each tower '
+        'with a stepped top and small antenna, joined by a lower wide central block with a big glass entrance hall at the '
+        'bottom center, many narrow vertical window strips, the whole building fully in frame with empty margin around it, '
+        'flat roofs visible from slightly above, ' + FR14,
+    ]},
+    'k34_buero': {'size': 176, 'freie_farben': True, 'items': [
+        'wide modern two-storey glass office building, about twice as wide as tall: light grey flat roof with a parapet and '
+        'small roof units visible from slightly above, upper floor with a row of tall blue glass windows, ground floor glass '
+        'front with a thin pink sign band and glass entrance doors in the middle, grey concrete frame, fully in frame, ' + FR14,
+    ]},
+    'k34_pavillon': {'size': 64, 'freie_farben': True, 'items': [
+        'small square light cream stone park memorial hall: flat stone roof with a cornice visible from slightly above, four '
+        'short square columns in front, dark entrance between them, two steps at the bottom, a little green ivy on one side, '
+        'fully in frame, ' + FR14,
+    ]},
     'k26_schild': {'size': 32, 'items': [   # Nutzer: Wandschilder in der Halle (Wand nur 2 Kacheln hoch)
         'small square golden wall plaque with a dark red border and a winged eye emblem in the middle, hanging flat on a wall, ' + FR14,
     ]},
@@ -2213,6 +2238,18 @@ def erzeugen(gruppe):
         g = OBJEKTGRUPPEN_K22[gruppe]
         req = {'description': STIL_K16, 'size': g['size'], 'view': 'top-down',
                'item_descriptions': [it + '. ' + STIL_K16 for it in g['items']]}
+        d = call('POST', '/v2/create-1-direction-object', req)
+        oid = d['object_id']
+        print(gruppe, 'Objekt', oid)
+        d = warte(oid)
+        speichern(gruppe, *herunterladen(oid, d))
+        return
+    if _neue_karte(gruppe):                                          # neue Karten (A03 ...): Gruppen in OBJEKTGRUPPEN_K21
+        g = OBJEKTGRUPPEN_K21[gruppe]
+        req = {'description': STIL, 'size': g['size'], 'view': 'top-down',
+               'item_descriptions': [it + '. ' + STIL for it in g['items']]}
+        if not g.get('freie_farben'):
+            req['target_palette'] = {'colors': PALETTE, 'name': 'Karte01 handheld'}
         d = call('POST', '/v2/create-1-direction-object', req)
         oid = d['object_id']
         print(gruppe, 'Objekt', oid)
