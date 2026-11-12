@@ -82,11 +82,10 @@ def main():
     r_(k, 35, 19, 37, 57, 'c')                 # roter Teppich: Thron -> Mittelmauer -> Halle -> Tor
     r_(mauer, 35, 27, 37, 32, False)           # Durchgang in der Mittelmauer
     # Zerbrochene rechte Kante des grossen Saals (Vorlage): Boden reisst stufig in die Leere ab, keine Mauer
-    for y, x1 in ((15, 56), (16, 56), (17, 56), (18, 56), (19, 56), (20, 56), (21, 55), (22, 54), (23, 55),
+    for y, x1 in ((15, 57), (16, 57), (17, 56), (18, 56), (19, 56), (20, 56), (21, 55), (22, 54), (23, 55),
                   (24, 54), (25, 55), (26, 56)):
         k[y, x1 + 1:58] = '.'
     r_(mauer, 57, 15, 58, 26, False)
-    mauer[13:15, 56:58] = False
     # Loch in die Leere in der Bannerhalle links (Vorlage)
     loch = [(43, 17, 17), (44, 14, 19), (45, 14, 19), (46, 15, 19), (47, 17, 18)]
     for y, x0, x1 in loch:

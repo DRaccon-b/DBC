@@ -101,22 +101,19 @@ def main():
     # ------------------------------------------------------------------ Wandflaechen
     for x in (31.5, 41.5):                                            # Thronturm: Banner seitlich vom Portal (zwischen Pfeilern)
         wand(K9 + 'banner/03', x * T, 2)
-    FENSTER = [K9 + 'wand/02', K9 + 'wand/00', K9 + 'wand/01']
-    for i, x in enumerate((14.5, 18.5, 22.5, 26.5)):                   # linker Fluegel
-        wand(FENSTER[i % 3], x * T, 12)
-    for x in (16.5, 20.5, 24.5):
-        wand(K9 + 'banner/02', x * T, 12)
-    for i, x in enumerate((46.5, 50.5, 54.5)):                         # rechter Fluegel
-        wand(FENSTER[(i + 1) % 3], x * T, 12)
-    for x in (48.5, 52.5):
-        wand(K9 + 'banner/02', x * T, 12)
-    for dx in (4, 10, 16):                                            # Mittelmauer: Banner paarweise zur Achse
-        for s in (-1, 1):
-            wand(K9 + 'banner/03', ACHSE + s * dx * T, 30)
-    for i, x in enumerate((66.5, 70.5, 74.5, 78.5, 82.5)):             # Festsaal: Buntglasfenster (Achse 74.5)
-        wand(FENSTER[i % 3], x * T, 33)
-    for x in (13, 25, 48, 60, 72, 84):                                 # Aussenmauer: schmale Fenster zwischen Tuermen
-        wand(K9 + 'wand/03', (x + 0.5) * T, 54)
+    # Wandobjekte je mittig in einem Feld zwischen zwei Pfeilern (Pfeilerraster symmetrisch zur Achse, karte32_bauen.
+    # mauern): Felder bei Achse + 5k Kacheln. Seitenfluegel spiegelgleich zur Teppichachse: Fenster - Banner - Fenster.
+    ROT, LILA, GRUEN = K9 + 'wand/02', K9 + 'wand/00', K9 + 'wand/01'
+    for (x, n) in ((16.5, ROT), (21.5, K9 + 'banner/02'), (26.5, LILA), (46.5, LILA), (51.5, K9 + 'banner/02'),
+                   (56.5, ROT)):
+        wand(n, x * T, 12)
+    for k_ in (1, 2, 3, 4):                                           # Mittelmauer: 8 Banner, je ein Feld
+        for s_ in (-1, 1):
+            wand(K9 + 'banner/03', ACHSE + s_ * k_ * 5 * T, 30)
+    for (x, n) in ((64.5, ROT), (69.5, LILA), (74.5, GRUEN), (79.5, LILA), (84.5, ROT)):   # Festsaal (Achse 74.5)
+        wand(n, x * T, 33)
+    for x in (3.5, 11.5, 15.5, 23.5, 27.5, 45.5, 49.5, 57.5, 61.5, 69.5, 73.5, 81.5, 85.5):
+        wand(K9 + 'wand/03', x * T, 54)                               # Aussenmauer: alle 4 Kacheln, Tuerme alle 12
     # ------------------------------------------------------------------ Thron, Tor, Tuerme (feste Achsen)
     setze('karte32/portal/00_frei', ACHSE, fuss(6), {'achse': True, 'anim': 'portal'}, raster=False)   # Nutzer: surreales Portal statt Thron
     setze(K9 + 'moebel/07', ACHSE, fuss(15), {'achse': True}, raster=False, pruefen=False)   # Nischenthron
@@ -139,7 +136,7 @@ def main():
     setze('karte32/saeule_k/01', 26 * T + 8, fuss(37), {})                            # kaputte Saeulen
     setze('karte32/saeule_k/00', 46 * T + 8, fuss(47), {'liegend': True, 'versatz': 2}, spiegeln=True)
     setze('karte32/leuchter/01', 42 * T + 8, fuss(45), {'liegend': True, 'versatz': 2, 'anim': 'kerzen'}, spiegeln=True)
-    paar(K9 + 'moebel/01', 5 * T, fuss(34), {'anim': 'kerzen'})
+    paar(K9 + 'moebel/01', 3 * T, fuss(34), {'anim': 'kerzen'})                       # zwischen Banner und Teppich
     for (x, y) in ((20, 44), (13, 46), (16, 49)):                     # Truemmer am Loch
         setze(K9 + 'wand/45', x * T + 8, fuss(y))
     # ------------------------------------------------------------------ Festsaal (Achse 74.5)

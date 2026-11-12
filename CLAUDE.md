@@ -136,6 +136,8 @@ Wenn eine Karte fertig scheint: noch einmal komplett auf **Pixelfehler** und **L
   exakt auf der Mitte des Teppichs bzw. Rahmens. Das geht vor Regel 1b; Paare werden an derselben Achse gespiegelt.
 - **Fester Rhythmus:** Wiederkehrende Bauteile (Türme, Banner, Wandpfeiler) stehen in gleichen Abständen, symmetrisch zum
   Tor; Banner mittig zwischen den Türmen, Pfeiler im selben Raster.
+  Wandpfeiler liegen symmetrisch zur Achse der jeweiligen Wand bzw. des Raums; jedes Fenster/Banner hängt mittig in einem
+  Feld zwischen zwei Pfeilern (nie auf einem Pfeiler), gleichartige Wandobjekte auf exakt derselben Höhe (Karte 32).
 - **Wandobjekte hängen frei:** Fenster, Banner, Bilder und Fackeln in Originalgröße auf der Wandfläche – mit Abstand zur
   Mauerkrone, Unterkante über der Leiste, ohne Bodenwall und ohne Bodenschatten.
 - **Räume mit Funktion:** Innenräume bekommen eine erkennbare Aufgabe (Bibliothek, Thron, Speisesaal, Ritualsaal) statt

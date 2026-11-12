@@ -29,6 +29,28 @@ kb.N_FRAMES = N_FRAMES
 H = k4.H
 
 
+import inspect as _insp
+_src = _insp.getsource(k9.mauern_zeichnen).replace('def mauern_zeichnen(a, wm):', 'def _mauern32(a, wm, PER_, OFF_):')
+_src = _src.replace('PER, OFF = 80, 78', 'PER, OFF = PER_, OFF_')
+_ns = dict(k9.__dict__)
+exec(_src, _ns)
+ACHSE = 36.5 * T                 # roter Teppich: Achse der Schlossmauern
+FESTSAAL = 74.5 * T
+
+
+def mauern(a, wm):
+    """Mauern wie Karte 09, aber das Pfeilerraster liegt je Wand symmetrisch zu ihrer Achse (Regel 'Fester Rhythmus'):
+    Pfeiler bei Achse +-40 px + 80k, die Felder dazwischen sind bei Achse + 80k zentriert (dort haengen Fenster und
+    Banner). Festsaal: Achse 74.5; Aussenmauer: keine Pfeiler (die Tuerme geben den Rhythmus)."""
+    Hp, Wp = wm.shape
+    off = np.full((Hp, Wp), int(ACHSE) - 44)
+    per = np.full((Hp, Wp), 80)
+    off[33 * T:36 * T, 59 * T:] = int(FESTSAAL) - 44
+    off[52 * T:58 * T, :] = -1000                                      # Aussenmauer ohne Pfeiler
+    per[52 * T:58 * T, :] = 10 ** 6
+    return _ns['_mauern32'](a, wm, per, off)
+
+
 def gross(m):
     return np.kron(np.asarray(m, np.uint8), np.ones((T, T), np.uint8)).astype(bool)
 
@@ -155,7 +177,7 @@ def bauen(frame=None, speichern=True):
         k9.teppich_rand(a, m)
     k9.fransen(a, cm | vm | om, boden)
     mauer = gross(hk == 3)
-    flaeche = k9.mauern_zeichnen(a, mauer)
+    flaeche = mauern(a, mauer)
     fund = fundament(a, land, leer)
     lvl = np.ones((Hp, Wp), np.uint8)
     lvl[leer] = 0
