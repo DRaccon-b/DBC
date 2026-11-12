@@ -120,6 +120,13 @@ for _v in ('c', 'd'):                                                           
         text=AUFTRAEGE['k30_buero_flach_a']['text'] + ' The whole building is fully visible with empty margin around it, '
              'nothing cut off at the top or bottom, the ground floor base line is complete.')
 
+for _v in ('e', 'f', 'g'):                                                      # Glasbuero mit sichtbaren Seiten (Nutzer)
+    AUFTRAEGE['k30_buero_flach_' + _v] = dict(AUFTRAEGE['k30_buero_flach_a'], ziel='assets/objekte/karte30/gross_buero_flach_' + _v,
+        groesse=(576, 256), vorlage=('assets/vorlagen/karte30_vorlage.png', (976, 832, 1552, 1088)),
+        text=AUFTRAEGE['k30_buero_flach_a']['text'] + ' The building is about 480 pixels wide and centered, with a wide '
+             'empty magenta margin on the left, right, top and bottom; both side walls and all four roof corners are '
+             'complete and visible, the roof edge wraps around the corners, nothing touches the image border.')
+
 
 def main(name):
     a = AUFTRAEGE[name]
