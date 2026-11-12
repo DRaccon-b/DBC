@@ -33,7 +33,7 @@ GEBAEUDE = [                                                    # grosse Objekte
     (SCHEUNE, 47, 51, {}),                                      # Mitte bei den Feldern
     (SCHEUNE, 88, 7, {}), (SILO, 93.5, 7, {}),                  # obere Terrasse rechts
     (MUEHLE, 41.5, 11, {'anim': 'muehle20'}), (MUEHLE, 58.5, 11, {'anim': 'muehle20'}),   # Plateau, symmetrisch zur Mitte
-    ('turm/00', 50, 13, {'px': 50 * 16, 'py': 13 * 16 + 15}),   # dunkler Kristallturm mit Geruest (PixelLab k23_turm), Mitte
+    ('turm/00', 50.5, 13, {'px': 808, 'py': 13 * 16 + 15}),     # Kristallturm exakt auf der Achse der Muehlen (808 px)
 ]
 def _weizen(x0, x1, reihe):                                     # Weizenreihe auf der Terrasse (gepflanzt, gleichmaessig)
     return [('k20/weizen', x + 0.5, reihe, {'px': x * 16 + 8, 'py': reihe * 16 + 14, 'anim': 'wehen', 'an_wand': True})
@@ -71,7 +71,7 @@ def feld_pflanzen(felder):
     return out
 
 
-MITTE = [('hecke/09', 50.5, 51, {}), ('wagen/00', 50.5, 55, {}), ('hecke/08', 44.5, 54, {})]   # an der Scheune
+MITTE = [('hecke/09', 50.5, 51, {}), ('wagen/00', 49.5, 53, {}), ('hecke/08', 44.5, 53, {})]   # an der Scheune, nicht auf dem Weg
 
 
 MITTE_LINKS = [                                                 # Hof links, Weide mit Zaun, Heuwiese (nach der Vorlage)
@@ -134,6 +134,10 @@ def main():
                 for dy in (-1, 0, 1):
                     for dx in (-1, 0, 1):
                         gesperrt.add((tx + dx, ty + dy))
+    for ty in range(rows):                                         # Regel: nichts auf Wegen
+        for tx in range(cols):
+            if cls[ty][tx] == 'w':
+                gesperrt.add((tx, ty))
     for tp in lay['teleporter']:
         for y in range(tp['y'] - 1, tp['y'] + tp['h'] + 1):
             for x in range(tp['x'] - 1, tp['x'] + tp['b'] + 1):

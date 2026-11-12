@@ -60,6 +60,58 @@ def rand_verbunden(m):
         zu = n
 
 
+REGELN_WEGE = True     # Regel 6: Wege nie nur gerade -> gerade Bahnen der Vorlage sanft in Boegen verbiegen
+
+
+WEGE = [  # (Stuetzpunkte in Kacheln, halbe Breite) - Verbindungen wie in der Vorlage, Verlauf geschwungen (Regel 6)
+    ([(16.5, 3.5), (17.8, 9), (16.2, 16), (17.6, 24), (16.6, 31), (18.2, 38.5)], 1.15),       # links am Obstgarten
+    ([(18.2, 38.5), (24, 39.6), (29.5, 38.4), (31, 36.5)], 1.4),                               # hinueber zur Querachse
+    ([(29, 36.2), (36, 35.2), (44, 36.6), (52, 35.6), (58, 36.3)], 1.5),                       # obere Querachse
+    ([(41.5, 23.2), (42.6, 27), (41.2, 31), (42.0, 35.5)], 1.95),                              # Plateau-Treppe
+    ([(53, 28.6), (53.6, 32), (52.6, 35.5)], 1.0),                                             # Hoehle
+    ([(76.5, 24.5), (72, 25.8), (66, 25.2), (63.6, 28), (64.4, 32), (63.4, 37)], 1.3),         # zu den Terrassen
+    ([(63.4, 37), (60, 38.8), (56, 39.6)], 1.5),
+    ([(56.4, 39.5), (56.9, 46), (55.5, 52), (56.6, 58), (55.6, 64), (56.4, 70)], 1.4),         # Mittelachse
+    ([(56.4, 44), (62, 43.3), (68, 44.7), (74, 43.8), (77.2, 45.5), (77.4, 48), (77, 50.6)], 1.4),   # zur Senke oben
+    ([(15.5, 55), (22, 56.2), (30, 55.2), (38, 56.3), (46, 55.4), (54, 56.4), (60, 57.6), (66, 58.3),
+      (69.6, 58.2)], 1.5),                                                                     # untere Querachse
+    ([(29.5, 40), (28.6, 47), (29.6, 53), (28.6, 60), (29.4, 66), (29.0, 74)], 1.1),           # zwischen den Feldern
+    ([(56.4, 69.5), (62, 70.6), (68, 72.4), (76, 71.5), (84, 72.6), (92, 71.8), (97.6, 72)], 1.5),   # zum Teleporter
+]
+
+
+def _kurve(pts, n=24):
+    p = [pts[0]] + list(pts) + [pts[-1]]
+    out = []
+    for i in range(1, len(p) - 2):
+        p0, p1, p2, p3 = (np.array(q, float) for q in p[i - 1:i + 3])
+        for t in np.linspace(0, 1, n, endpoint=False):
+            out.append(0.5 * ((2 * p1) + (-p0 + p2) * t + (2 * p0 - 5 * p1 + 4 * p2 - p3) * t * t
+                              + (-p0 + 3 * p1 - 3 * p2 + p3) * t ** 3))
+    out.append(np.array(pts[-1], float))
+    return np.array(out)
+
+
+def wege_schwingen(k):
+    """Regel 6 (Wege nie nur gerade): die geraden Wegbahnen der Vorlage werden durch geschwungene Kurven mit denselben
+    Verbindungen ersetzt (Catmull-Rom, wie Karte 31). Fest bleiben die Wegstuecke an Treppen (2 Reihen davor/dahinter),
+    die Terrassen oben rechts, Senke, Hoehle und Teleporter (Regel 2). Neue Wegkacheln nur auf Gras."""
+    yy, xx = np.mgrid[0:R, 0:C]
+    fest = np.zeros((R, C), bool)
+    fest[:27, 69:] = True                                              # Terrassen oben rechts
+    t = k == 't'
+    for d in (1, 2):
+        fest |= np.roll(t, d, 0) | np.roll(t, -d, 0)
+    fest[:21, 38:47] = True                                            # Plateau oben
+    out = k.copy()
+    out[(k == 'w') & ~fest] = 'g'
+    for pts, r in WEGE:
+        c = _kurve(pts)
+        d = np.min([(xx + 0.5 - px) ** 2 + (yy + 0.5 - py) ** 2 for px, py in c], axis=0)
+        out[(d <= r * r) & (out == 'g')] = 'w'
+    return out
+
+
 def main():
     os.makedirs(KARTE, exist_ok=True)
     v = vorlage_klassen()
@@ -132,6 +184,8 @@ def main():
     for (tx, ty, b, hh) in TELEPORTER:
         k[ty:ty + hh, tx:tx + b] = 'T'
     k[k == '?'] = 'g'
+    if REGELN_WEGE:
+        k = wege_schwingen(k)
     lay = {'groesse': [C, R], 'klassen': [''.join(z) for z in k], 'hoehe': [''.join(str(c) for c in z) for z in h],
            'felder': FELDER, 'maeuerchen': MAEUERCHEN, 'hecken': HECKEN, 'zaun': ZAUN,
            'plateau': {'x': PLATEAU_X, 'unten': plateau_unten, 'treppe': PLATEAU_TREPPE, 'hoehle': HOEHLE},

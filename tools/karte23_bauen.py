@@ -386,9 +386,13 @@ def bauen(frame=None, speichern=True):
     saum_f = weich(zell_maske(cls, 'f', cols, rows), 7.0, 0.5, 9, 0.36) & ~fm
     a[saum_f] = (a[saum_f] * 0.9).astype(np.uint8)
     roh = zell_maske(cls, 'wtTc', cols, rows)
-    m = weich(roh, 7.0, 0.5, 4)
+    # Regel 6b: Wegkanten in 45 Grad (Kachelmaske Gauss 5 px, Schwelle 50 %) statt ausgefranstem Rand
+    from PIL import ImageFilter as _IF
+    kach = (np.kron(np.array([[c in 'wtTc' for c in r] for r in cls], np.uint8), np.ones((T, T), np.uint8)) * 255)
+    m = np.array(Image.fromarray(kach).filter(_IF.GaussianBlur(5))) > 127
     a[m] = sand[m]
-    saum = weich(roh, 7.0, 0.5, 4, 0.36) & ~m
+    m_g = np.array(Image.fromarray(kach).filter(_IF.GaussianBlur(5))) > 70
+    saum = m_g & ~m
     a[saum] = (a[saum] * 0.9).astype(np.uint8)
     cm = maske_aus(cls, 'c', cols, rows)
     a[cm] = (a[cm] * 0.92).astype(np.uint8)                          # Senke etwas dunkler
