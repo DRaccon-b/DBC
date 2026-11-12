@@ -66,30 +66,47 @@ def rune(a, cx, cy, frame):
 
 
 def ringmauer(a, wm):
-    """Ringmauer, ueberall genau 1 Kachel breit (Nutzer): die Krone fuellt die ganze Mauerkachel (Steinlagen,
-    Lichtkante oben/links, Schattenkante rechts); unter jeder Suedkante eine 7 px hohe Front auf der Kachel davor
-    (Boden bzw. Leere), darunter 3 px Schatten auf dem Boden. -> Maske der Front."""
+    """Massive Ringmauer, ueberall 1 Kachel breit (Nutzer): oben eine Abdeckung (Decke) aus glatten, hellen
+    Deckplatten mit Fugen, Lichtkante oben/links und dunkler Kante rechts; unter jeder Suedkante die Mauerwand aus
+    Ziegellagen (13 px), direkt unter der Abdeckung eine Schattenfuge (die Platte steht ueber), unten die Fusskante und
+    3 px Schatten auf dem Boden davor. Seitlich nur Kontur. -> Maske der Wand."""
     Hp, Wp = wm.shape
     yy, xx = np.mgrid[0:Hp, 0:Wp]
-    z = ((xx // 8 + (yy // 6) % 2) % 2 == 0)
-    a[wm] = np.where(z[wm][:, None], H('#8a84b4'), H('#827cac'))
-    a[wm & ((yy % 6 == 5) | ((xx + 4 * ((yy // 6) % 2)) % 8 == 7))] = H('#6a6494')
-    a[wm & ~np.roll(wm, 1, 0)] = H('#c8c2e8')
-    a[wm & ~np.roll(wm, 1, 1)] = H('#aaa4d0')
-    a[wm & ~np.roll(wm, -1, 1)] = H('#4e4878')
-    a[wm & ~np.roll(wm, -1, 0)] = H('#6a6494')
-    front = np.zeros_like(wm)
-    for y, x in zip(*np.nonzero(wm & ~np.roll(wm, -1, 0))):
-        for d in range(1, 8):
+    WH = 13
+    # Abdeckung: Platten 16x8 versetzt, sehr ruhig
+    platte = ((yy // 8) % 2 == 0)
+    a[wm] = np.where(platte[wm][:, None], H('#bcb6dc'), H('#b4aed6'))
+    fuge = wm & ((yy % 8 == 7) | (((xx + 8 * ((yy // 8) % 2)) % 16) == 15))
+    a[fuge] = H('#9a94c2')
+    a[wm & ~np.roll(wm, 1, 0)] = H('#e4e0f6')                         # Lichtkante oben
+    a[wm & ~np.roll(wm, 1, 1)] = H('#d4d0ee')                         # Lichtkante links
+    a[wm & ~np.roll(wm, -1, 1)] = H('#5a5486')                        # Schattenkante rechts
+    a[wm & ~np.roll(wm, 1, 1) & ~np.roll(wm, 1, 0)] = H('#eeeaf9')
+    unterkante = wm & ~np.roll(wm, -1, 0)
+    a[unterkante] = H('#7a74a6')                                      # Plattenkante vorn
+    # Mauerwand unter den Suedkanten
+    wand = np.zeros_like(wm)
+    dist = np.zeros((Hp, Wp), np.int16)
+    for y, x in zip(*np.nonzero(unterkante)):
+        for d in range(1, WH + 1):
             if y + d < Hp and not wm[y + d, x]:
-                front[y + d, x] = True
-    a[front] = np.where(((xx // 8 + yy // 4) % 2 == 0)[front][:, None], H('#5c5688'), H('#56507e'))
-    a[front & (yy % 4 == 3)] = H('#48426e')
-    a[front & ~np.roll(front, -1, 0)] = H('#36305a')                  # Fusskante
-    for k_, fa in ((1, 0.6), (2, 0.74), (3, 0.88)):                   # Schatten auf den Boden vor der Front
-        m_ = np.roll(front & ~np.roll(front, -1, 0), k_, 0) & ~wm & ~front
+                wand[y + d, x] = True
+                dist[y + d, x] = d
+    reihe = (dist - 1) // 4
+    ziegel = (xx + np.where(reihe % 2 == 1, 6, 0)) % 12
+    basis = np.where(((xx // 12 + reihe) % 3 == 0)[..., None], H('#625c8e'), H('#6a6496'))
+    a[wand] = basis[wand]
+    a[wand & (((dist - 1) % 4 == 3) | (ziegel == 11))] = H('#4a4474')          # Fugen
+    a[wand & ((dist - 1) % 4 == 0) & (ziegel != 11)] = H('#7a74a8')            # Lichtkante je Lage
+    a[wand & (dist <= 2)] = H('#3a345e')                                       # Schattenfuge unter der Abdeckung
+    a[wand & (dist == WH)] = H('#2e2a4c')                                      # Fusskante
+    links = wand & ~np.roll(wand, 1, 1)
+    rechts = wand & ~np.roll(wand, -1, 1)
+    a[links] = H('#8680b0'); a[rechts] = H('#2e2a4c')
+    for k_, fa in ((1, 0.58), (2, 0.72), (3, 0.86)):                  # Schatten auf den Boden vor der Wand
+        m_ = np.roll(wand & ~np.roll(wand, -1, 0), k_, 0) & ~wm & ~wand
         a[m_] = (a[m_] * fa).astype(np.uint8)
-    return front
+    return wand
 
 
 def bauen(frame=None, speichern=True):
