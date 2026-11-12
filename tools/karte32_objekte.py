@@ -128,10 +128,9 @@ def main():
                                                         'keine_verdeckung': True}, raster=False, pruefen=False)
     # ------------------------------------------------------------------ Thronturm und grosser Saal
     paar(K9 + 'moebel/01', 6 * T, fuss(6), {'anim': 'kerzen'})                       # Kandelaber neben dem Thron
-    paar(K9 + 'moebel/00', 8 * T, fuss(19))                                         # Saeulen (2 Paare x 2 Reihen)
-    paar(K9 + 'moebel/00', 16 * T, fuss(19))
-    paar(K9 + 'moebel/00', 8 * T, fuss(24))
-    paar(K9 + 'moebel/00', 16 * T, fuss(24))
+    # Saeulen (Nutzer: reduziert wie die Kronleuchter, kaputt): umgestuerzt bzw. abgebrochener Stumpf
+    setze('karte32/saeule_k/00', 20 * T + 8, fuss(19), {'liegend': True, 'versatz': 2})
+    setze('karte32/saeule_k/01', 52 * T + 8, fuss(24), {}, spiegeln=True)
     setze('karte32/leuchter/00', 24 * T + 8, fuss(22), {'liegend': True, 'versatz': 2})   # Nutzer: weniger Kronleuchter, kaputt am Boden
     paar(K9 + 'moebel/01', 7 * T, fuss(16), {'anim': 'kerzen'})                      # Kandelaber am Teppich
     for (x, y) in ((13, 16), (13, 25), (55, 16)):
@@ -139,8 +138,8 @@ def main():
     for (x, y) in ((53, 21), (54, 25), (51, 17)):                     # Truemmer an der abgebrochenen Kante
         setze(K9 + 'wand/45', x * T + 8, fuss(y))
     # ------------------------------------------------------------------ Bannerhalle
-    for y in (36, 42, 48):
-        paar(K9 + 'moebel/00', 10 * T, fuss(y))                                     # Saeulenreihen (mit Luft)
+    setze('karte32/saeule_k/01', 26 * T + 8, fuss(37), {})                            # kaputte Saeulen
+    setze('karte32/saeule_k/00', 46 * T + 8, fuss(47), {'liegend': True, 'versatz': 2}, spiegeln=True)
     setze('karte32/leuchter/01', 42 * T + 8, fuss(45), {'liegend': True, 'versatz': 2, 'anim': 'kerzen'}, spiegeln=True)
     paar(K9 + 'moebel/01', 5 * T, fuss(34), {'anim': 'kerzen'})
     for (x, y) in ((13, 35), (13, 40), (13, 49), (57, 35), (57, 40), (57, 49)):
