@@ -49,9 +49,10 @@ ANIM = {
     },
     'karte31': {   # Spielplatz schaukelt/wippt, Papierlaternen an Ramen-Laden und Izakaya glimmen
         'karte10/spielplatz/01': {'anim': 'teil_drehen', 'dreh': [
-            {'box': [11, 6, 28, 39], 'punkt': [19, 5], 'amp': 7},
-            {'box': [32, 6, 49, 39], 'punkt': [40, 5], 'amp': 7, 'phase': 1.9}]},
-        'karte10/spielplatz/02': {'anim': 'schaukeln', 'fest': 0.45, 'amp': 7},
+            {'box': [12, 6, 29, 39], 'punkt': [19, 5], 'amp': 7},
+            {'box': [32, 6, 49, 39], 'punkt': [41, 5], 'amp': 7, 'phase': 1.9}]},
+        'karte10/spielplatz/02': {'anim': 'teil_drehen', 'dreh': [   # Brett kippt um den Bolzen, Bock bleibt fest
+            {'box': [0, 0, 62, 30], 'ohne_boxen': [[27, 15, 42, 30], [21, 21, 42, 30]], 'punkt': [31, 15], 'amp': 6}]},
         'gebaeude/laden_1': {'anim': 'lampions', 'lampions': [[0, 77, 10, 92]]},
         'gebaeude/laden_4': {'anim': 'lampions', 'lampions': [[4, 77, 11, 87], [24, 77, 31, 87], [64, 77, 72, 87],
                                                               [84, 77, 91, 87]]},

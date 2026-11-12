@@ -1660,6 +1660,8 @@ def teil_drehen(sp, frame, o):
         m = _box_maske(a.shape, d['box']) if 'box' in d else (np.arange(a.shape[0])[:, None] < d['bis_y']) & np.ones(a.shape[:2], bool)
         if 'ohne_box' in d:
             m &= ~_box_maske(a.shape, d['ohne_box'])
+        for b_ in d.get('ohne_boxen', []):
+            m &= ~_box_maske(a.shape, b_)
         m &= a[..., 3] > 0
         teil = np.zeros_like(a)
         teil[m] = a[m]
@@ -1792,7 +1794,7 @@ def brunnen_strahl(sp, frame, o):
 
 
 def lampions(sp, frame, o):
-    """Rote Papierlaternen an Laeden: glimmen (Helligkeit pulsiert wie Kerzenlicht) und schaukeln 1 px; nur die
+    """Rote Papierlaternen an Laeden: glimmen (Helligkeit pulsiert wie Kerzenlicht); nur die
     Laternenpixel in den Boxen o['lampions'] veraendern sich."""
     a = np.array(sp.convert('RGBA'))
     out = a.copy()
@@ -1800,9 +1802,9 @@ def lampions(sp, frame, o):
         x0, y0, x1, y1 = box
         sub = a[y0:y1, x0:x1].astype(np.int16)
         m = sub[..., 3] > 0
-        f = 1.0 + 0.16 * (((frame * 5 + n * 3) % 7) / 6.0) - 0.04
-        warm = m & (sub[..., 0] > sub[..., 2] + 30)
-        sub[warm, :3] = np.clip(sub[warm, :3] * f + np.array([10, 4, 0]) * f, 0, 255)
+        f = 0.92 + 0.36 * (((frame * 5 + n * 3) % 7) / 6.0)
+        warm = m & (sub[..., 0] > sub[..., 2] + 30) & (sub[..., 0] > 110)
+        sub[warm, :3] = np.clip(sub[warm, :3] * f + np.array([18, 8, 0]) * (f - 0.9), 0, 255)
         out[y0:y1, x0:x1] = sub.astype(np.uint8)
     return Image.fromarray(out, 'RGBA')
 
