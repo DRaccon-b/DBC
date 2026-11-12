@@ -99,7 +99,7 @@ def main():
         return (row + 1) * T - 1
 
     # ------------------------------------------------------------------ Wandflaechen
-    for x in (34.5, 38.5):                                            # Thronturm: zwei Banner hinter dem Thron
+    for x in (31.5, 41.5):                                            # Thronturm: Banner seitlich vom Portal (zwischen Pfeilern)
         wand(K9 + 'banner/03', x * T, 2)
     FENSTER = [K9 + 'wand/02', K9 + 'wand/00', K9 + 'wand/01']
     for i, x in enumerate((14.5, 18.5, 22.5, 26.5)):                   # linker Fluegel
@@ -118,7 +118,7 @@ def main():
     for x in (13, 25, 48, 60, 72, 84):                                 # Aussenmauer: schmale Fenster zwischen Tuermen
         wand(K9 + 'wand/03', (x + 0.5) * T, 54)
     # ------------------------------------------------------------------ Thron, Tor, Tuerme (feste Achsen)
-    setze('karte32/portal/00_frei', ACHSE, fuss(8), {'achse': True, 'anim': 'portal'}, raster=False)   # Nutzer: surreales Portal statt Thron
+    setze('karte32/portal/00_frei', ACHSE, fuss(6), {'achse': True, 'anim': 'portal'}, raster=False)   # Nutzer: surreales Portal statt Thron
     setze(K9 + 'moebel/07', ACHSE, fuss(15), {'achse': True}, raster=False, pruefen=False)   # Nischenthron
     for dx in (5, 17, 29, 41):                                        # Tuerme alle 12 Kacheln, symmetrisch zum Tor
         for s in (-1, 1):
@@ -127,7 +127,7 @@ def main():
                 o = setze(K9 + 'turm/01', x, fuss(57), {'an_wand': True, 'kein_schatten': True,
                                                         'keine_verdeckung': True}, raster=False, pruefen=False)
     # ------------------------------------------------------------------ Thronturm und grosser Saal
-    paar(K9 + 'moebel/01', 6 * T, fuss(6), {'anim': 'kerzen'})                       # Kandelaber neben dem Thron
+    paar(K9 + 'moebel/01', 7 * T, fuss(6), {'anim': 'kerzen'})                       # Kandelaber neben dem Thron
     # Saeulen (Nutzer: reduziert wie die Kronleuchter, kaputt): umgestuerzt bzw. abgebrochener Stumpf
     setze('karte32/saeule_k/00', 20 * T + 8, fuss(19), {'liegend': True, 'versatz': 2})
     setze('karte32/saeule_k/01', 52 * T + 8, fuss(24), {}, spiegeln=True)
