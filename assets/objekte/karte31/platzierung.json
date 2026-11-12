@@ -115,7 +115,16 @@
 ],
 "ebene": 1,
 "an_wand": true,
-"gebaeude": true
+"gebaeude": true,
+"anim": "lampions",
+"lampions": [
+[
+0,
+77,
+10,
+92
+]
+]
 },
 {
 "datei": "gebaeude/laden_2.png",
@@ -157,7 +166,34 @@
 ],
 "ebene": 1,
 "an_wand": true,
-"gebaeude": true
+"gebaeude": true,
+"anim": "lampions",
+"lampions": [
+[
+4,
+77,
+11,
+87
+],
+[
+24,
+77,
+31,
+87
+],
+[
+64,
+77,
+72,
+87
+],
+[
+84,
+77,
+91,
+87
+]
+]
 },
 {
 "datei": "gebaeude/laden_5.png",
@@ -9402,7 +9438,37 @@
 56
 ],
 "ebene": 1,
-"an_wand": true
+"an_wand": true,
+"anim": "teil_drehen",
+"dreh": [
+{
+"box": [
+11,
+6,
+28,
+39
+],
+"punkt": [
+19,
+5
+],
+"amp": 7
+},
+{
+"box": [
+32,
+6,
+49,
+39
+],
+"punkt": [
+40,
+5
+],
+"amp": 7,
+"phase": 1.9
+}
+]
 },
 {
 "datei": "fremd/karte10-spielplatz-00.png",
@@ -9441,7 +9507,37 @@
 57
 ],
 "ebene": 1,
-"an_wand": true
+"an_wand": true,
+"anim": "teil_drehen",
+"dreh": [
+{
+"box": [
+11,
+6,
+28,
+39
+],
+"punkt": [
+19,
+5
+],
+"amp": 7
+},
+{
+"box": [
+32,
+6,
+49,
+39
+],
+"punkt": [
+40,
+5
+],
+"amp": 7,
+"phase": 1.9
+}
+]
 },
 {
 "datei": "fremd/karte10-spielplatz-01.png",
@@ -9454,7 +9550,37 @@
 57
 ],
 "ebene": 1,
-"an_wand": true
+"an_wand": true,
+"anim": "teil_drehen",
+"dreh": [
+{
+"box": [
+11,
+6,
+28,
+39
+],
+"punkt": [
+19,
+5
+],
+"amp": 7
+},
+{
+"box": [
+32,
+6,
+49,
+39
+],
+"punkt": [
+40,
+5
+],
+"amp": 7,
+"phase": 1.9
+}
+]
 },
 {
 "datei": "fremd/karte10-spielplatz-00.png",
@@ -9480,7 +9606,10 @@
 61
 ],
 "ebene": 1,
-"an_wand": true
+"an_wand": true,
+"anim": "schaukeln",
+"fest": 0.45,
+"amp": 7
 },
 {
 "datei": "fremd/karte18-gebaeude-kletterkuppel.png",

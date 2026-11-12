@@ -122,6 +122,8 @@ def objekte_pruefen(karte, wegklassen='w', klein_bis=24):
         neu.append(o)
     json.dump(neu, open(pf, 'w'), indent=0)
     print('%s Regeln: %d verschoben, %d entfernt (Wege/Teleporter), %d Objekte' % (karte, verschoben, entfernt, len(neu)))
+    import anim_a02                                                 # Zusatz-Animationen (Nutzer: alles animieren)
+    anim_a02.anwenden(karte)
 
 
 if __name__ == '__main__':

@@ -612,7 +612,35 @@
 4
 ],
 "ebene": 1,
-"an_wand": true
+"an_wand": true,
+"anim": "teil_drehen",
+"dreh": [
+{
+"box": [
+0,
+0,
+56,
+27
+],
+"ohne_box": [
+17,
+18,
+32,
+27
+],
+"punkt": [
+24,
+16
+],
+"amp": 4,
+"stange": [
+0,
+27,
+5,
+50
+]
+}
+]
 },
 {
 "datei": "varianten/mine-00_m.png",
@@ -671,7 +699,17 @@
 "ebene": 1,
 "an_wand": true,
 "auf_fels": true,
-"seil": "station"
+"seil": "station",
+"anim": "wimpel",
+"wimpel": [
+[
+85,
+0,
+99,
+11
+]
+],
+"wimpel_frei": true
 },
 {
 "datei": "varianten/obelisk2-00.png",
@@ -1196,7 +1234,31 @@
 3
 ],
 "ebene": 1,
-"an_wand": true
+"an_wand": true,
+"anim": "maschine",
+"schirm": [
+[
+8,
+4,
+19,
+15
+],
+[
+29,
+4,
+40,
+15
+]
+],
+"leds": true,
+"led_box": [
+[
+2,
+17,
+46,
+28
+]
+]
 },
 {
 "datei": "varianten/lager-10.png",

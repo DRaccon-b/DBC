@@ -691,7 +691,8 @@
 ],
 "ebene": 1,
 "liegend": true,
-"versatz": 2
+"versatz": 2,
+"anim": "kerzen"
 },
 {
 "datei": "fremd/karte09-moebel-01.png",
@@ -846,7 +847,8 @@
 ],
 "ebene": 1,
 "liegend": true,
-"versatz": 2
+"versatz": 2,
+"anim": "kerzen"
 },
 {
 "datei": "fremd/karte09-moebel-01.png",
@@ -1580,7 +1582,15 @@
 44,
 70
 ],
-"ebene": 1
+"ebene": 1,
+"anim": "brunnen_strahl",
+"becken": [
+2,
+36,
+50,
+58
+],
+"strahl_min": 95
 },
 {
 "datei": "fremd/karte09-turm-09.png",
@@ -1592,7 +1602,15 @@
 78,
 70
 ],
-"ebene": 1
+"ebene": 1,
+"anim": "brunnen_strahl",
+"becken": [
+2,
+36,
+50,
+58
+],
+"strahl_min": 95
 },
 {
 "datei": "fremd/karte09-turm-04.png",

@@ -129,7 +129,8 @@
 4
 ],
 "ebene": 1,
-"anim": "lampe"
+"anim": "lampe",
+"teil": "blitze"
 },
 {
 "datei": "varianten/digifeuer-13_m.png",
@@ -148,7 +149,8 @@
 4
 ],
 "ebene": 1,
-"anim": "lampe"
+"anim": "lampe",
+"teil": "blitze"
 },
 {
 "datei": "varianten/tank3-00.png",
@@ -166,7 +168,26 @@
 5,
 6
 ],
-"ebene": 1
+"ebene": 1,
+"anim": "maschine",
+"fluessig": [
+[
+16,
+16,
+58,
+66,
+"cyan"
+]
+],
+"leds": true,
+"led_box": [
+[
+18,
+72,
+58,
+86
+]
+]
 },
 {
 "datei": "varianten/tank3-00.png",
@@ -184,7 +205,26 @@
 5,
 6
 ],
-"ebene": 1
+"ebene": 1,
+"anim": "maschine",
+"fluessig": [
+[
+16,
+16,
+58,
+66,
+"cyan"
+]
+],
+"leds": true,
+"led_box": [
+[
+18,
+72,
+58,
+86
+]
+]
 },
 {
 "datei": "varianten/kapsel2-14.png",
@@ -220,7 +260,26 @@
 3,
 4
 ],
-"ebene": 1
+"ebene": 1,
+"anim": "maschine",
+"fluessig": [
+[
+12,
+16,
+30,
+50,
+"gruen"
+]
+],
+"leds": true,
+"led_box": [
+[
+8,
+2,
+32,
+14
+]
+]
 },
 {
 "datei": "varianten/kapsel2-11.png",
@@ -238,7 +297,32 @@
 4,
 4
 ],
-"ebene": 1
+"ebene": 1,
+"anim": "maschine",
+"fluessig": [
+[
+4,
+4,
+58,
+50,
+"rot"
+]
+],
+"leds": true,
+"led_box": [
+[
+22,
+46,
+42,
+60
+],
+[
+48,
+34,
+62,
+48
+]
+]
 },
 {
 "datei": "varianten/kapsel2-04.png",
@@ -256,7 +340,8 @@
 4,
 4
 ],
-"ebene": 1
+"ebene": 1,
+"teil": "leds"
 },
 {
 "datei": "varianten/kapsel2-11.png",
@@ -274,7 +359,32 @@
 4,
 4
 ],
-"ebene": 1
+"ebene": 1,
+"anim": "maschine",
+"fluessig": [
+[
+4,
+4,
+58,
+50,
+"rot"
+]
+],
+"leds": true,
+"led_box": [
+[
+22,
+46,
+42,
+60
+],
+[
+48,
+34,
+62,
+48
+]
+]
 },
 {
 "datei": "varianten/kapsel2-14.png",
@@ -310,7 +420,10 @@
 4,
 4
 ],
-"ebene": 1
+"ebene": 1,
+"anim": "maschine",
+"leds": true,
+"led_max": 4
 },
 {
 "datei": "varianten/labor-01.png",
@@ -328,7 +441,25 @@
 4,
 4
 ],
-"ebene": 1
+"ebene": 1,
+"anim": "maschine",
+"schirm": [
+[
+7,
+2,
+28,
+13
+]
+],
+"leds": true,
+"led_box": [
+[
+38,
+6,
+61,
+22
+]
+]
 },
 {
 "datei": "varianten/kammer-00.png",
@@ -1010,7 +1141,18 @@
 4,
 4
 ],
-"ebene": 1
+"ebene": 1,
+"anim": "teil_drehen",
+"dreh": [
+{
+"bis_y": 35,
+"punkt": [
+13,
+35
+],
+"amp": 3
+}
+]
 },
 {
 "datei": "varianten/halle-02.png",
@@ -1028,7 +1170,18 @@
 4,
 4
 ],
-"ebene": 1
+"ebene": 1,
+"anim": "teil_drehen",
+"dreh": [
+{
+"bis_y": 35,
+"punkt": [
+13,
+35
+],
+"amp": 3
+}
+]
 },
 {
 "datei": "varianten/halle-02.png",
@@ -1046,7 +1199,18 @@
 4,
 4
 ],
-"ebene": 1
+"ebene": 1,
+"anim": "teil_drehen",
+"dreh": [
+{
+"bis_y": 35,
+"punkt": [
+13,
+35
+],
+"amp": 3
+}
+]
 },
 {
 "datei": "varianten/halle-15.png",
