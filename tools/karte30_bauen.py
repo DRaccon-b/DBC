@@ -55,14 +55,14 @@ def markierungen(a, asphalt, lay):
     sperre = np.array(Image.fromarray((zebra * 255).astype(np.uint8)).filter(ImageFilter.MaxFilter(9))) > 0
     frei = asphalt & ~sperre
     for xs in ((59, 62), (95, 98)):                                   # Kreuzungen frei
-        frei[50 * T:55 * T, xs[0] * T - 6:(xs[1] + 1) * T + 6] = False
+        frei[49 * T:54 * T, xs[0] * T - 6:(xs[1] + 1) * T + 6] = False
         frei[75 * T:79 * T, xs[0] * T - 6:(xs[1] + 1) * T + 6] = False
-    frei[50 * T:55 * T, 112 * T - 6:116 * T + 6] = False
-    striche(a, frei, 0, 126 * T, int(52.5 * T) - 1, GELB)            # Hauptstrasse: gelbe Mittellinie gestrichelt
+    frei[49 * T:54 * T, 112 * T - 6:116 * T + 6] = False
+    striche(a, frei, 0, 126 * T, int(51.5 * T) - 1, GELB)            # Hauptstrasse: gelbe Mittellinie gestrichelt
     striche(a, frei, 23 * T, 126 * T, int(77 * T) - 1, GELB)         # Uferstrasse
     for xc in (61, 97):                                                # Querstrassen
         striche(a, frei, 55 * T, 75 * T, xc * T - 1, GELB, senkrecht=True)
-    striche(a, frei, 0, 50 * T, 114 * T - 1, GELB, senkrecht=True)   # Brueckenstrasse
+    striche(a, frei, 0, 49 * T, 114 * T - 1, GELB, senkrecht=True)   # Brueckenstrasse
     for (x0, x1, y0, y1, art) in lay['zebra']:
         for y in range(y0 * T, (y1 + 1) * T):
             for x in range(x0 * T, (x1 + 1) * T):

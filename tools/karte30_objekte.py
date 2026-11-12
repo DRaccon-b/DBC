@@ -199,12 +199,15 @@ def main():
                       {'anim': 'baum', 'kein_schatten': True}, (tx * 3 + ty) % 4 < 2, pruefen=False)
     # ---------------------------------------------------------------- Strassenmoebel
     for x in range(4, 125, 9):                                                       # Laternen an der Hauptstrasse
-        for fy in (49 * T - 2, 56 * T + 6):
-            if kl[fy // T][x] == 'g':
-                setze('karte18/strasse/18', x * T + 8, fy, {'anim': 'leuchten'})
+        for fy in (48 * T - 1, 55 * T + 14):
+            px_ = x * T + 8
+            unter_bau = any(o.get('gebaeude') and o['x'] <= px_ < o['x'] + Image.open(os.path.join(OBJ, o['datei'])).width
+                            and o['y'] <= fy <= o['y'] + o['fuss'] for o in objekte)              # nicht vor/auf einem Gebaeude, das hier aufragt
+            if kl[fy // T][x] == 'g' and not unter_bau:
+                setze('karte18/strasse/18', px_, fy, {'anim': 'leuchten'})
     for x in range(26, 125, 10):                                                     # Laternen an der Uferstrasse
         setze('karte18/strasse/18', x * T + 8, 81 * T - 2, {'anim': 'leuchten'})
-    setze('karte18/strasse/41', 26 * T + 8, 49 * T - 2, {})                          # Bushaltestelle
+    setze('karte18/strasse/41', 26 * T + 8, 48 * T - 1, {})                          # Bushaltestelle
     for (tx, ty) in ((29, 57), (50, 57)):
         setze('klein/02', tx * T + 8, ty * T - 2, {})                                # Telefonzellen
     for (tx, ty) in ((50, 37), (78, 37), (11, 88), (28, 86), (44, 86), (77, 86), (108, 86), (63, 86)):
@@ -212,9 +215,9 @@ def main():
     for (tx, ty) in ((53, 27), (76, 27), (53, 47), (76, 47)):
         setze('karte18/strasse/18', tx * T + 8, ty * T - 2, {'anim': 'leuchten'})    # Laternen am Platz (symmetrisch)
     # Autos (stehen auf ihrer Fahrspur), Bus
-    for (n, tx, ty, sp) in (('karte18/autos/04', 21, 52, False), ('karte18/autos/00', 37, 52, False),
-                            ('karte18/autos/05', 8, 54, True), ('karte18/autos/02', 120, 54, True),
-                            ('karte18/autos/12', 75, 52, False), ('karte18/autos/01', 46, 78, True),
+    for (n, tx, ty, sp) in (('karte18/autos/04', 21, 51, False), ('karte18/autos/00', 37, 51, False),
+                            ('karte18/autos/05', 8, 53, True), ('karte18/autos/02', 120, 53, True),
+                            ('karte18/autos/12', 75, 51, False), ('karte18/autos/01', 46, 78, True),
                             ('karte18/autos/12', 82, 76, False), ('karte18/autos/00', 117, 78, True)):
         setze(n, tx * T + 8, (ty + 1) * T - 3, {}, sp)
     for o in objekte:

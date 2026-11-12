@@ -23,7 +23,7 @@ REF = {'n': (99, 142, 67), 'g': (168, 178, 177), 's': (52, 61, 73), 'p': (176, 1
        'w': (49, 91, 135), 'k': (145, 159, 164)}
 GEBAEUDE = [  # x0, y0, x1, y1 (Kacheln, Fuss = y1), Art
     [50, 0, 79, 26, 'fernsehturm'], [4, 16, 41, 30, 'buero_lang'], [88, 32, 105, 44, 'buero_glas'],
-    [119, 34, 127, 44, 'buero_klein'], [24, 56, 57, 66, 'laeden'], [64, 56, 92, 66, 'buero_flach'],
+    [119, 34, 127, 44, 'buero_klein'], [24, 56, 57, 66, 'laeden'], [64, 57, 93, 67, 'buero_flach'],
     [119, 56, 128, 66, 'buero_klein2'], [3, 70, 22, 78, 'bahnhof']]
 BRUECKE = (110, 0, 117, 21)       # Bruecke ueber das Wasser (Fahrbahn 112-115, Gehwege/Gelaender aussen)
 HOCHBAHN = {'x0': 0, 'x1': 129, 'y0': 68, 'y1': 71, 'pfeiler': [27, 34, 41, 48, 55, 69, 76, 83, 90, 104, 111, 118, 125],
@@ -85,8 +85,9 @@ def main():
     r_(k, 10, 35, 33, 39, 'o')
     r_(k, 16, 36, 27, 38, 'n')
     # ---- Strassen
-    r_(k, 0, 50, 125, 54, 's')                                       # Hauptstrasse
-    r_(k, 59, 55, 62, 67, 's'); r_(k, 95, 55, 98, 67, 's')          # Querstrassen bis unter die Hochbahn
+    r_(k, 0, 50, 125, 54, 'g')
+    r_(k, 0, 49, 125, 53, 's')                                       # Hauptstrasse (eine Reihe hoeher: Platz fuer das Glasbuero)
+    r_(k, 59, 54, 62, 67, 's'); r_(k, 95, 54, 98, 67, 's')          # Querstrassen bis unter die Hochbahn
     r_(k, 23, 72, 129, 72, 's')                                      # Fahrbahn unter der Hochbahn (Schattenseite)
     r_(k, 23, 73, 129, 74, 'n')                                      # Rasen-Mittelstreifen mit Pfeilern
     r_(k, 59, 73, 62, 74, 's'); r_(k, 95, 73, 98, 74, 's')          # Durchfahrten
@@ -125,7 +126,7 @@ def main():
     lay = {'groesse': [C, R], 'klassen': [''.join(z) for z in k], 'hoehe': [''.join(str(c) for c in z) for z in h],
            'gebaeude': GEBAEUDE, 'bruecke': list(BRUECKE), 'hochbahn': HOCHBAHN, 'platz': [55, 28, 74, 47],
            'achse': 65, 'pier': [50, 85, 67, 107],
-           'zebra': [[59, 62, 49, 50, 'h'], [95, 98, 49, 50, 'h'], [59, 62, 73, 74, 'h'], [95, 98, 73, 74, 'h'],
+           'zebra': [[59, 62, 54, 55, 'h'], [95, 98, 54, 55, 'h'], [59, 62, 73, 74, 'h'], [95, 98, 73, 74, 'h'],
                      [56, 58, 75, 78, 'v'], [63, 65, 75, 78, 'v'], [92, 94, 75, 78, 'v'], [99, 101, 75, 78, 'v']],
            'teleporter': [{'x': 5, 'y': 101, 'b': 2, 'h': 2, 'farbe': 'violett'}],
            'treppen_sued': []}

@@ -139,6 +139,18 @@ for _v in 'hijklm':                                                             
               'small canopy in the middle of the ground floor, complete base line at the bottom, daytime, sharp outlines, '
               + _K30 + FR14))
 
+for _v in 'nopqrs':                                                             # tieferes Dach (Nutzer: oben wirkte gekappt)
+    AUFTRAEGE['k30_buero_flach_' + _v] = dict(AUFTRAEGE['k30_buero_flach_a'], ziel='assets/objekte/karte30/gross_buero_flach_' + _v,
+        groesse=(560, 288), vorlage=None,
+        text=('long low modern four-storey office building, clean crisp pixel art, top-down RPG view from the front and '
+              'slightly above, so that a DEEP flat grey rooftop is clearly visible above the facade (the roof surface is about '
+              'one third of the building height, with a parapet edge all around, rooftop air conditioning units, a small '
+              'stairwell box and pipes). Below the roof: a facade of dark blue glass curtain wall in three even horizontal '
+              'bands between light grey concrete floor slabs, light concrete corner pillars on both sides from the roof down '
+              'to the ground, a glass entrance with a small canopy in the middle of the ground floor, a dark grey base plinth '
+              'at the bottom. The building is about 460 pixels wide, centered, with a wide empty magenta margin on all four '
+              'sides, nothing touches the image border, daytime, sharp outlines, ' + _K30 + FR14))
+
 
 def main(name):
     a = AUFTRAEGE[name]

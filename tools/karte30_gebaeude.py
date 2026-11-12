@@ -190,7 +190,7 @@ def main():
         if art in ('buero_klein', 'buero_klein2'):
             q = os.path.join(QUELLE, 'buero1' if art == 'buero_klein' else 'buero2', '00.png')
         else:
-            neu_ = {'laeden': 'gross_laeden_c', 'buero_flach': 'gross_buero_flach_k'}   # Nutzer: Qualitaet, neu erzeugt
+            neu_ = {'laeden': 'gross_laeden_c', 'buero_flach': 'gross_buero_flach_s'}   # Nutzer: Qualitaet, neu erzeugt
             q = os.path.join(QUELLE, neu_.get(art, 'gross_' + art), '00.png')
         roh = Image.open(q).convert('RGBA')
         im = loecher_fuellen(einpassen(roh, w, h))
