@@ -1582,7 +1582,9 @@ def herunterladen(oid, d):
 
 
 def speichern(gruppe, ims, ids):
-    if gruppe.startswith('k32_'):
+    if gruppe.startswith('k33_'):
+        ziel = os.path.join(ROOT, 'assets', 'objekte', 'karte33', gruppe[4:])
+    elif gruppe.startswith('k32_'):
         ziel = os.path.join(ROOT, 'assets', 'objekte', 'karte32', gruppe[4:])
     elif gruppe.startswith('k31_'):
         ziel = os.path.join(ROOT, 'assets', 'objekte', 'karte31', gruppe[4:])
@@ -2047,6 +2049,12 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'tall slender gothic castle wall tower: round dark grey stone tower about 2 tiles wide and 6 tiles tall, narrow arched windows glowing faint violet, a tall pointed dark slate spire roof with a small purple pennant on top, stone base, ' + FR14,
         'tall slender gothic stone watchtower for a castle wall: dark grey brick round tower, decorative ring of stones below a very tall pointed slate cone roof, two narrow purple glowing slit windows, ' + FR14,
     ]},
+    'k33_surreal': {'size': 48, 'items': [   # Nutzer: schwebende Objekte surrealer
+        'surreal melting golden pocket watch draped and dripping like soft cheese, floating in space, dreamlike, classic 2D handheld RPG style, transparent background',
+        'surreal floating eyeball with small white feathered wings and a violet iris, dreamlike, classic 2D handheld RPG style, transparent background',
+        'surreal lone wooden door standing in nothing, half open with a starry night sky inside, dreamlike, classic 2D handheld RPG style, transparent background',
+        'surreal porcelain teacup tilted in the air pouring out a swirling purple galaxy instead of tea, dreamlike, classic 2D handheld RPG style, transparent background',
+    ]},
     'k31_muell': {'size': 32, 'items': [
         'small pile of fallen golden yellow ginkgo leaves lying flat on the ground, seen from above, classic 2D handheld RPG style',
         'small pile of fallen brown and orange autumn leaves lying flat on the ground, seen from above, classic 2D handheld RPG style',
@@ -2206,8 +2214,8 @@ def erzeugen(gruppe):
         d = warte(oid)
         speichern(gruppe, *herunterladen(oid, d))
         return
-    if gruppe.startswith(('k20_', 'k21_', 'k23_', 'k24_', 'k25_', 'k26_', 'k27_', 'k28_', 'k29_', 'k30_', 'k31_', 'k32_')):
-        g = (OBJEKTGRUPPEN_K21 if gruppe.startswith(('k21_', 'k23_', 'k24_', 'k25_', 'k26_', 'k27_', 'k28_', 'k29_', 'k30_', 'k31_', 'k32_')) else OBJEKTGRUPPEN_K20)[gruppe]
+    if gruppe.startswith(('k20_', 'k21_', 'k23_', 'k24_', 'k25_', 'k26_', 'k27_', 'k28_', 'k29_', 'k30_', 'k31_', 'k32_', 'k33_')):
+        g = (OBJEKTGRUPPEN_K21 if gruppe.startswith(('k21_', 'k23_', 'k24_', 'k25_', 'k26_', 'k27_', 'k28_', 'k29_', 'k30_', 'k31_', 'k32_', 'k33_')) else OBJEKTGRUPPEN_K20)[gruppe]
         req = {'description': STIL, 'size': g['size'], 'view': 'top-down',
                'item_descriptions': [it + '. ' + STIL for it in g['items']],
                'target_palette': {'colors': PALETTE, 'name': 'Karte01 handheld'}}

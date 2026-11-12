@@ -197,6 +197,32 @@ def risse(a, lay, frame, land):
     return gesamt
 
 
+def traumschein(img, objs, cache, frame):
+    """Surreale Schwebeobjekte: weicher, pulsierender lila/cyan Schimmer hinter jedem Objekt und ein schwaches,
+    verschobenes Nachbild (Geisterbild) darunter - vor dem eigentlichen Objekt gezeichnet."""
+    from PIL import ImageDraw, ImageFilter
+    f = frame or 0
+    glow = Image.new('RGBA', img.size, (0, 0, 0, 0))
+    gd = ImageDraw.Draw(glow)
+    for i, o in enumerate(objs):
+        if not o.get('schwebend'):
+            continue
+        sp = cache[o['datei']]
+        bb = sp.getbbox()
+        cx, cy = o['x'] + (bb[0] + bb[2]) / 2, o['y'] + (bb[1] + bb[3]) / 2
+        r = max(bb[2] - bb[0], bb[3] - bb[1]) * 0.75
+        p = 0.6 + 0.4 * math.sin(2 * math.pi * (f + o.get('phase', 0)) / N_FRAMES)
+        farbe = (190, 120, 255) if i % 2 else (120, 210, 255)
+        for k_, al in ((1.05, 52), (0.7, 72)):
+            gd.ellipse((cx - r * k_, cy - r * k_, cx + r * k_, cy + r * k_), fill=farbe + (int(al * p),))
+        geist = sp.copy()
+        a_ = np.array(geist).astype(np.float32)
+        a_[..., :3] = a_[..., :3] * 0.4 + np.array(farbe, np.float32) * 0.6
+        a_[..., 3] *= 0.28
+        img.alpha_composite(Image.fromarray(a_.astype(np.uint8)), (int(o['x']) + 2, int(o['y']) + 3 + (f + o.get('phase', 0)) % 2))
+    img.alpha_composite(glow.filter(ImageFilter.GaussianBlur(4)))
+
+
 def bauen(frame=None, speichern=True):
     lay = json.load(open(os.path.join(KARTE, 'layout.json')))
     cols, rows = lay['groesse']
@@ -243,6 +269,7 @@ def bauen(frame=None, speichern=True):
                     o['y'] += (0, -1, -1, 0)[(frame + o.get('phase', 0)) % 4]
         cache = {o['datei']: Image.open(os.path.join(OBJ, o['datei'])).convert('RGBA') for o in objs}
         k8.schatten_ebene(img, [o for o in objs if not o.get('schwebend') and not o.get('kein_schatten')], cache, lvl)
+        traumschein(img, objs, cache, frame)
         k4.objekte_zeichnen(img, objs, cache, np.zeros((Hp, Wp), bool), frame)
         k4.animieren(img, objs, cache, frame or 0, ruhig=frame is None)
     if speichern and frame is None:
