@@ -8,7 +8,8 @@ die Bilder zusammen (Generator ~15–60 ms, Bilder + Zusammenbau ~80 ms).
 |---|---|
 | `zufall_dungeon.js` | ES-Modul, engine-unabhängig: Seed → Grundriss → Stücke → Ebenen + Kollision |
 | `manifest.json` | alle 145 Lagen: Kanten, Kollision, Spawn-/Bosspunkt, Gewichte, Bildpfade |
-| `stuecke/<lage>_boden.png` | Boden mit Schatten (224×224 px, Bossarena 448×448) |
+| `stuecke/<lage>_boden.png` | reiner Boden (224×224 px, Bossarena 448×448) |
+| `stuecke/<lage>_schatten.png` | Kontakt- und Schlagschatten (je 4 Kacheln Rand, reichen über die Naht) |
 | `stuecke/<lage>_objekte.png` | Bäume, Deko, Portal … (je 4 Kacheln Rand für überstehende Kronen) |
 | `stuecke/<lage>_oben.png` | obere Teile hoher Objekte – wird **über** dem Spieler gezeichnet |
 | `demo.html` | Testseite: Ladebildschirm, Spielfigur, Kollision, Kamera |
@@ -37,7 +38,7 @@ const { unten, oben } = zeichneDungeon(manifest, dungeon, bilder);   // zwei Can
 // --- Spiel ---
 // zeichnen: unten → Figuren (nach y sortiert) → oben
 // dungeon.istFrei(kx, ky)      begehbar? (Kachelkoordinaten)
-// dungeon.kollision            Uint8Array cols*rows, 1 = gesperrt (Wald, Wasser, Sockel von Objekten)
+// dungeon.kollision            Uint8Array cols*rows: 1 begehbar, 2 gesperrt, 3 begehbar + verdeckt (wie kollision.py)
 // dungeon.spawn / dungeon.boss  {x, y} in Kacheln (vor dem Portal / in der Arena)
 // dungeon.felder               welches Stück in welcher Lage wo liegt
 ```
@@ -57,9 +58,10 @@ Nach Änderungen an `tools/zufall_stuecke.py` oder an den Objekten:
 python3 tools/zufall_export.py
 ```
 
-Rendert alle Lagen mit der Karte-01-Technik (4 Prozesse, ~25 s). Jede Lage wird mit 4 Kacheln Rand gebaut
+Rendert alle Lagen nach dem aktuellen Kachel-Standard (A02, Stil Karte 20, 45-Grad-Kanten; `tools/zufall_a02.py`,
+4 Prozesse, ~15 s). Zeichenreihenfolge: alle Böden → alle Schatten → Objekte von Nord nach Süd → oben. Jede Lage wird mit 4 Kacheln Rand gebaut
 (Randkacheln fortgesetzt = genau das, was ein passender Nachbar dort hat); Objekte zählen nur, wenn ihr Fuß im
-Stück steht. Laternen gibt es nur an Startlager, Arena und Gabelungen.
+Stück steht.
 
 ## Noch offen
 

@@ -205,7 +205,7 @@
     return {
       seed, width, height, cols, rows, tileSize: manifest.tileSize, collision, spawn, boss,
       cells: cells.map((c) => ({ x: c.x, y: c.y, id: c.piece.id, chunk: c.piece.chunk, piece: c.piece })),
-      isWalkable: (x, y) => x >= 0 && y >= 0 && x < cols && y < rows && collision[y * cols + x] === 0,
+      isWalkable: (x, y) => x >= 0 && y >= 0 && x < cols && y < rows && collision[y * cols + x] !== 2,
     };
   }
 
@@ -224,8 +224,9 @@
     const pieces = new Map();
     const used = [...new Map(dungeon.cells.map((c) => [c.id, c.piece])).values()];
     await Promise.all(used.map(async (p) => {
-      const [ground, objects, above] = await Promise.all([p.ground, p.objects, p.above].map((f) => loadImage(base + f)));
-      pieces.set(p.id, { ground, objects, above });
+      const [ground, shadows, objects, above] = await Promise.all(
+        [p.ground, p.shadows, p.objects, p.above].map((f) => loadImage(base + f)));
+      pieces.set(p.id, { ground, shadows, objects, above });
     }));
     const tileset = await loadImage(base + manifest.tileset.image);
     return { pieces, tileset };
@@ -233,13 +234,15 @@
 
   const defaultCanvas = (w, h) => Object.assign(document.createElement('canvas'), { width: w, height: h });
 
-  /** Ground only (with baked contact shadows) – use with objects() when you draw objects yourself. */
+  /** Ground + shadows of all objects – use with objects() when you draw objects yourself. */
   function renderGround(manifest, dungeon, images, createCanvas) {
-    const T = manifest.tileSize, N = manifest.chunkSize;
+    const T = manifest.tileSize, N = manifest.chunkSize, P = manifest.padding;
     const canvas = (createCanvas || defaultCanvas)(dungeon.cols * T, dungeon.rows * T);
     const ctx = canvas.getContext('2d');
     ctx.imageSmoothingEnabled = false;
     for (const c of dungeon.cells) ctx.drawImage(images.pieces.get(c.id).ground, c.x * N * T, c.y * N * T);
+    // shadows reach across piece borders (padding), so they are drawn after all grounds
+    for (const c of dungeon.cells) ctx.drawImage(images.pieces.get(c.id).shadows, (c.x * N - P) * T, (c.y * N - P) * T);
     return canvas;
   }
 
@@ -333,7 +336,7 @@
     return {
       type: 'map', version: '1.10', tiledversion: '1.10.2', orientation: 'orthogonal', renderorder: 'right-down',
       width: dungeon.cols, height: dungeon.rows, tilewidth: T, tileheight: T, infinite: false,
-      compressionlevel: -1, nextlayerid: 5, nextobjectid: nextId,
+      compressionlevel: -1, nextlayerid: 6 + dungeon.cells.length, nextobjectid: nextId,
       properties: [prop('seed', dungeon.seed), prop('cellsX', dungeon.width), prop('cellsY', dungeon.height)],
       tilesets: [
         { firstgid: 1, name: 'ground', tilewidth: T, tileheight: T, tilecount: t.ground.tilecount, columns: t.ground.columns,
@@ -342,15 +345,20 @@
           tilecount: t.objects.tiles.length, columns: 0, margin: 0, spacing: 0, grid: { orientation: 'orthogonal', width: 1, height: 1 },
           tiles: t.objects.tiles.map((tile) => ({ id: tile.id, image: base + tile.image, imagewidth: tile.w, imageheight: tile.h,
             properties: [prop('sprite', tile.sprite)] })) },
-        { firstgid: gColl, name: 'collision', tilewidth: T, tileheight: T, tilecount: 1, columns: 1, margin: 0, spacing: 0,
-          image: base + t.collision.image, imagewidth: T, imageheight: T,
-          tiles: [{ id: 0, properties: [{ name: 'blocked', type: 'bool', value: true }] }] },
+        { firstgid: gColl, name: 'collision', tilewidth: T, tileheight: T, tilecount: 2, columns: 2, margin: 0, spacing: 0,
+          image: base + t.collision.image, imagewidth: 2 * T, imageheight: T,
+          tiles: [{ id: 0, properties: [{ name: 'blocked', type: 'bool', value: true }] },
+                  { id: 1, properties: [{ name: 'covered', type: 'bool', value: true }] }] },
       ],
       layers: [
         layer(1, 'ground', { type: 'tilelayer', width: dungeon.cols, height: dungeon.rows, data: ground }),
+        // shadows reach across piece borders: one image layer per piece, shifted by the padding
+        layer(5, 'shadows', { type: 'group', layers: dungeon.cells.map((c, i) => layer(6 + i, c.id, {
+          type: 'imagelayer', image: base + c.piece.shadows, repeatx: false, repeaty: false,
+          offsetx: (c.x * N - manifest.padding) * T, offsety: (c.y * N - manifest.padding) * T })) }),
         layer(2, 'objects', { type: 'objectgroup', draworder: 'topdown', objects: objs }),
         layer(3, 'collision', { type: 'tilelayer', width: dungeon.cols, height: dungeon.rows, visible: false, opacity: 0.6,
-          data: Array.from(dungeon.collision, (c) => (c ? gColl : 0)) }),
+          data: Array.from(dungeon.collision, (c) => (c === 2 ? gColl : c === 3 ? gColl + 1 : 0)) }),
         layer(4, 'points', { type: 'objectgroup', draworder: 'topdown', objects: points }),
       ],
     };

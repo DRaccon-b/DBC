@@ -221,9 +221,9 @@ def main():
     x, y = panel(d, (1440, oben, W - 80, oben + 1000), 5, 'Build')
     kb = karte.resize((int(karte.width * 0.62), int(karte.height * 0.62)), Image.LANCZOS)
     im.paste(kb, (x + 10, y + 20))
-    text_block(d, (x, y + 20 + kb.height + 30), 'Rendered with the Map 01 pipeline: soft terrain transitions, '
-               'sunken ponds, forest floor, trees and decoration, lanterns along paths, companion plants at lone '
-               'trees, grid snapping and a final overlap / ground check.', f('r', 22), DIM, 800)
+    text_block(d, (x, y + 20 + kb.height + 30), 'Rendered with the current tile standard (area A02, map 20 style): ground edges on the 16 px grid with '
+               '45° corners, forest floor, sunken ponds, trees and decoration snapped to the grid, companion plants at '
+               'lone trees, free spawn area, contact and cast shadows only on the ground.', f('r', 22), DIM, 800)
 
     # ------------------------------------------------------------ Fusszeile
     fy = oben + 1040

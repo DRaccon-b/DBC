@@ -10,11 +10,9 @@ Ablauf (wie bei Kachel-Dungeons a la Path of Exile):
   2. Stuecke einsetzen: Fuer jedes Feld wird zufaellig ein Stueck (in einer seiner 8 Lagen) gewaehlt,
      dessen Kanten genau zum Grundriss passen (zu = Wald, offen = Waldweg oder Wiese) und zu den schon
      gesetzten Nachbarn passen (gleicher Kantentyp). Klappt es nicht, wird zurueckgegangen (Backtracking).
-  3. Bauen mit der Karte-01-Technik: karte_bauen.py (Boden, Uebergaenge, Teiche, Waldboden),
-     objekte_setzen.py (Wald, Waldrand, Wiese, Laternen, feste Objekte der Stuecke), karte01_raster.py
-     (Regel 1/1b), karte01_v11_begleiter.py (Regel 5, Regel 7), karte01_v11_aufraeumen.py
-     (keine Ueberlappungen, richtiger Untergrund). Die Karte-01-Dateien bleiben unberuehrt: alle Skripte
-     schreiben in maps/zufall/_bau/<startwert>/.
+  3. Bauen nach dem aktuellen Kachel-Standard (A02, Stil Karte 20): tools/zufall_a02.py - Gras/Sand-Grundkacheln
+     von Karte 01, Wege mit 45-Grad-Kanten (Regel 6b), Waldboden, vertiefte Teiche, Objekte am Raster mit
+     Bodenfuss, Begleiter nach Regel 5d, Spawnfeld frei, Schatten nur auf dem Boden (karte04_bauen).
 
 Ausgabe: maps/zufall/karte_<startwert>.png und maps/zufall/grundriss_<startwert>.png (Felder mit Stueckname).
 """
@@ -193,73 +191,21 @@ def zusammensetzen(gw, gh, wahl):
     return [''.join(z) for z in raster], fest, symmetrie
 
 
-def symmetrisch(obj, symmetrie):
-    """Regel 'Symmetrische Plaetze': Paare stehen exakt spiegelgleich zur Achse (geht vor Regel 1b)."""
-    pf = os.path.join(obj, 'platzierung.json')
-    objs = json.load(open(pf))
-
-    def finde(f):
-        name, ax, ay = f
-        k = [o for o in objs if o.get('basis') == name and 'kachel' in o]
-        return min(k, key=lambda o: abs(o['kachel'][0] - ax) + abs(o['kachel'][1] - ay)) if k else None
-
-    def mitte(o):
-        return (o['block'][0] + o['block'][2] / 2.0) * 16
-    for achse, a, b in symmetrie:
-        oa, o1, o2 = finde(achse), finde(a), finde(b)
-        if not (oa and o1 and o2):
-            print('  Symmetrie: Objekt fehlt', achse, a, b)
-            continue
-        m = mitte(oa)
-        links, rechts = sorted((o1, o2), key=mitte)
-        d = round((m - mitte(links) + mitte(rechts) - m) / 2.0)
-        links['x'] += int(round(m - d - mitte(links)))
-        rechts['x'] += int(round(m + d - mitte(rechts)))
-        print('  Symmetrie: %s / %s im Abstand %d px zu %s' % (a[0], b[0], d, achse[0]))
-    json.dump(objs, open(pf, 'w'), indent=0)
-
-
 def bauordner(startwert):
-    bau = os.path.join(ZIEL, '_bau', str(startwert))
-    obj = os.path.join(bau, 'obj')
-    if os.path.exists(bau):
-        shutil.rmtree(bau)
+    """Arbeitsordner fuer die Objekt-Varianten (Bodenfuss) dieser Karte (nicht im Repo)."""
+    obj = os.path.join(ZIEL, '_bau', str(startwert), 'obj')
+    if os.path.exists(os.path.dirname(obj)):
+        shutil.rmtree(os.path.dirname(obj))
     os.makedirs(obj)
-    for d in ('baeume', 'deko', 'gross', 'dschungel', 'k7gras', 'zelt_strand', 'zufall_portal', 'zufall_brunnen'):
-        os.symlink(os.path.join(OBJ01, d), os.path.join(obj, d))
-    shutil.copytree(os.path.join(OBJ01, 'varianten'), os.path.join(obj, 'varianten'))   # eigene Kopie: neue Varianten
-    return bau, obj
+    return obj
 
 
-def bauen(raster, fest, symmetrie, bau, obj):
-    rows, cols = len(raster), len(raster[0])
-    json.dump({'tile_size': 16, 'cols': cols, 'rows': rows,
-               'legend': {'G': 'gras', 'F': 'wald', 'P': 'weg_hell', 'W': 'fluss_teich'}, 'grid': raster},
-              open(os.path.join(bau, 'terrain_grid.json'), 'w'), indent=0)
-    json.dump({'segmente': [], 'treppen': [], 'wasserfaelle': [], 'bruecken': [], 'stege': []},
-              open(os.path.join(bau, 'hoehenplan.json'), 'w'))
-    import karte_bauen, objekte_setzen, karte01_raster, karte01_v11_begleiter, karte01_v11_aufraeumen
-    for m in (karte_bauen, objekte_setzen, karte01_raster, karte01_v11_begleiter, karte01_v11_aufraeumen):
-        if hasattr(m, 'KARTE'):
-            m.KARTE = bau
-        m.OBJ = obj
-    objekte_setzen.FEST = fest
-    objekte_setzen.TEICH_AB_ZEILE = 0
-    for n in ('zufall_portal/01', 'zufall_brunnen/00'):     # Einbettung: Bodenfuss + Kontaktschatten wie Steine
-        objekte_setzen.FUSS_ART[n] = 'stein'
-    objekte_setzen.SCHATTEN = tuple(objekte_setzen.SCHATTEN) + ('zufall_portal/', 'zufall_brunnen/')
-    objekte_setzen.DSCHUNGEL_SPERRE = (5, 7, 2)        # Waldrand ueber der Arena bleibt bewachsen
-    karte_bauen.bauen(objekte=False)                     # Boden -> terrain_basis.png, tilemap.json
-    objekte_setzen.main()                                # Wald, Deko, feste Objekte -> platzierung.json
-    karte01_raster.main()                                # Regel 1/1b: minimaler Kachelblock, mittig
-    symmetrisch(obj, symmetrie)                          # Paare spiegelgleich zur Achse
-    karte01_v11_begleiter.main()                         # Regel 5 + Regel 7
-    karte_bauen.bauen()
-    karte01_v11_aufraeumen.main()                        # Ueberlappungen / Untergrund
-    img = karte_bauen.bauen()
-    rest = karte01_v11_aufraeumen.pruefen(json.load(open(os.path.join(obj, 'platzierung.json'))), {})
-    print('Endkontrolle: %d Objekte mit Ueberlappung oder falschem Untergrund (Regel-5-Begleiter erlaubt)' % len(rest))
-    return img
+def bauen(raster, fest, symmetrie, obj, seed):
+    """Gelaende und Objekte nach dem aktuellen Kachel-Standard (A02, Stil Karte 20): tools/zufall_a02.py."""
+    import zufall_a02
+    r = zufall_a02.bauen(raster, fest, symmetrie, obj, seed)
+    print('%d Objekte (Wald, Deko, feste Objekte, Begleiter nach Regel 5d)' % len(r['objekte']))
+    return r['bild']
 
 
 def grundriss_bild(gw, gh, wahl, boss_xy, start, verb, pfad):
@@ -292,8 +238,8 @@ def main():
     grundriss_bild(gw, gh, wahl, boss_xy, start, verb, pfad).save(os.path.join(ZIEL, 'grundriss_%d.png' % startwert))
     for (fx, fy), l in sorted(wahl.items(), key=lambda t: (t[0][1], t[0][0])):
         print('  Feld %d,%d: %s (%s)' % (fx, fy, l['name'], l['lage']))
-    bau, obj = bauordner(startwert)
-    img = bauen(raster, fest, symmetrie, bau, obj)
+    obj = bauordner(startwert)
+    img = bauen(raster, fest, symmetrie, obj, startwert)
     img.convert('RGB').save(os.path.join(ZIEL, 'karte_%d.png' % startwert))
     json.dump({'startwert': startwert, 'felder': [gw, gh],
                'stuecke': {'%d,%d' % k: {'name': l['name'], 'lage': l['lage']} for k, l in wahl.items()}},

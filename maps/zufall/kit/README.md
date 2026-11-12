@@ -24,7 +24,8 @@ random_dungeon_kit/
 ├── objects_tileset.json       sprite rectangles in the tileset (also inside the manifest)
 ├── demo.html                  playable demo – just double-click it
 ├── pieces/
-│   ├── <id>_ground.png        ground incl. contact shadows, exact piece size (224 × 224, arena 448 × 448)
+│   ├── <id>_ground.png        plain ground, exact piece size (224 × 224, arena 448 × 448)
+│   ├── <id>_shadows.png       contact + cast shadows (+4 tiles padding: shadows cross piece borders)
 │   ├── <id>_objects.png       trees, decoration, portal … (+4 tiles padding for overhanging crowns)
 │   ├── <id>_above.png         upper parts of tall objects – draw ABOVE characters (same size as _objects)
 │   └── <id>_preview.png       the finished piece in one image (ground + objects + above)
@@ -61,8 +62,8 @@ the whole map, **O** switches between the two drawing modes, `?seed=42` in the a
    (`F` forest, `G` meadow, `P` sand path.) For every cell a random piece is chosen whose edges match the
    layout (closed where there is no connection) and the neighbours (same type on both sides). If nothing fits,
    the solver steps back (backtracking). Pieces used often are picked less often.
-3. **Assemble** – the pre-rendered images are put together; collision, spawn and boss position come from
-   the manifest. Generation takes ~15–70 ms, loading the images and assembling ~100 ms.
+3. **Assemble** – the pre-rendered images are put together (all grounds → all shadows → objects north to
+   south → above); collision, spawn and boss position come from the manifest. Generation takes ~15–70 ms, loading the images and assembling ~100 ms.
 
 Because the path always crosses an edge in the middle (tiles 6–7) and the edge rows are standardised, rotated
 and mirrored pieces connect seamlessly.
@@ -94,7 +95,7 @@ Node / bundler: `const RandomDungeon = require('./random_dungeon.js')` and `fetc
 | `generate(manifest, seed, { width, height })` | dungeon data (below) – synchronous, no DOM |
 | `loadImages(manifest, dungeon, baseUrl)` | `Promise<{ pieces: Map<id,{ground,objects,above}>, tileset }>` – only the pieces this dungeon uses |
 | `render(manifest, dungeon, images, createCanvas?)` | `{ below, above }` – two canvases of map size |
-| `renderGround(manifest, dungeon, images, createCanvas?)` | ground canvas only (for sprite mode) |
+| `renderGround(manifest, dungeon, images, createCanvas?)` | ground + shadows canvas (for sprite mode) |
 | `objects(manifest, dungeon)` | every object as its own sprite, sorted by `layer`, then `footY` |
 | `drawObject(ctx, tileset, object, part)` | draws one object; `part` = `'all'`, `'top'` (above its base row) or `'bottom'` |
 | `toTiled(manifest, dungeon, { imageBase })` | the whole dungeon as a Tiled map object (TMJ), tilesets embedded |
@@ -107,8 +108,8 @@ Node / bundler: `const RandomDungeon = require('./random_dungeon.js')` and `fetc
 | field | meaning |
 |---|---|
 | `cols`, `rows`, `tileSize` | map size in tiles (6 × 5 cells = 84 × 70 tiles = 1344 × 1120 px) |
-| `collision` | `Uint8Array(cols * rows)`, `1` = blocked (forest, water, base row of objects) |
-| `isWalkable(x, y)` | tile test, `false` outside the map |
+| `collision` | `Uint8Array(cols * rows)`: `1` walkable, `2` blocked (forest, water, object bases), `3` walkable but covered (behind tree crowns) |
+| `isWalkable(x, y)` | tile test (`collision !== 2`), `false` outside the map |
 | `spawn`, `boss` | `{x, y}` in tiles: in front of the portal / in the arena |
 | `cells` | `[{x, y, id, chunk, piece}]` – which piece lies on which cell |
 
@@ -129,9 +130,10 @@ Open any file in `tiled/pieces/` or `tiled/examples/` with the [Tiled map editor
 
 | layer | type | content |
 |---|---|---|
-| `ground` | tile layer | ground incl. baked contact shadows (tileset `ground`) |
+| `ground` | tile layer | plain ground (tileset `ground`) |
+| `shadows` | image layer (group in `.tmj`) | shadows of the objects, shifted by the padding so they cross piece borders |
 | `objects` | object layer | one tile object per tree / decoration / portal … (tileset `objects`), properties `sprite`, `layer` (0 = flat, 1 = standing), `anim` |
-| `collision` | tile layer, hidden | `blocked` tile where the player cannot walk |
+| `collision` | tile layer, hidden | tile `blocked` (code 2) and tile `covered` (code 3, walkable behind crowns) |
 | `points` | object layer | point objects `spawn` (in front of the portal) and `boss` |
 
 Piece maps also carry map properties `chunk`, `pieceOrientation`, `pieceType` and `edges` (JSON).
@@ -150,6 +152,10 @@ const json = JSON.stringify(map);                                         // sav
 The tilesets are embedded in the `.tmj` (image paths relative to the file), so loaders that need embedded
 tilesets (e.g. Phaser) work as well. The `.tmx` piece files reference the shared `.tsx` tilesets.
 
+Difference to the baked images: the small ground mounds drawn over the feet of objects (`_objects.png`) depend on
+the ground at each spot and are not part of the object sprites, so a Tiled map looks about 1–2 % different
+(only at object feet). Everything else – ground, shadows, objects, collision – is identical.
+
 ## Manifest (`pieces.json` / `pieces.js`)
 
 ```js
@@ -164,8 +170,8 @@ tilesets (e.g. Phaser) work as well. The `.tmx` piece files reference the shared
     weight: 3, orientationsOfChunk: 4,
     cells: [1, 1],                                  // size in cells (boss arena: [2, 2])
     edges: { '0,0,N': 'P', '0,0,E': 'P', '0,0,S': 'C', '0,0,W': 'C' },   // cellX,cellY,side
-    ground, objects, above, preview,                // image paths
-    collision: ['11110000001111', …],               // 14 rows per cell, '1' = blocked
+    ground, shadows, objects, above, preview,       // image paths
+    collision: ['22221111112222', …],               // 14 rows per cell: 1 walkable, 2 blocked, 3 covered
     points: { spawn: [x, y] } | { boss: [x, y] },   // tile inside the piece
     objectList: [{ sprite, x, y, block: [tx, ty, tw, th], layer, anim?, flip? }],  // px / tiles inside the piece
     groundTiles: [ … ]                              // ids in tiled/ground_tiles.png, row by row
@@ -174,8 +180,8 @@ tilesets (e.g. Phaser) work as well. The `.tmx` piece files reference the shared
 }
 ```
 
-Image placement: `ground` at `(cellX * 14) * 16`, `objects`/`above` at `(cellX * 14 - padding) * 16`
-(same for y). Draw all grounds first, then objects north to south.
+Image placement: `ground` at `(cellX * 14) * 16`, `shadows`/`objects`/`above` at `(cellX * 14 - padding) * 16`
+(same for y). Draw all grounds, then all shadows, then objects north to south, then (after characters) above.
 
 ## Chunks
 
@@ -198,4 +204,6 @@ Image placement: `ground` at `(cellX * 14) * 16`, `objects`/`above` at `(cellX *
   device and in Node.
 - Not animated yet: portal vortex, campfire, water and grass are static in the images. The objects that should
   move are marked with `anim` in `objectList`.
-- Art style: polished handheld monster-RPG look, light from the upper left, frontal view.
+- Art style: polished handheld monster-RPG look, light from the upper left, frontal view. Ground edges follow the
+  16 px grid with 45° corners (same tile standard as the hand-made maps of area A02, e.g. map 20).
+- Collision codes are the same as in the map packages of the other maps (`tools/kollision.py`).

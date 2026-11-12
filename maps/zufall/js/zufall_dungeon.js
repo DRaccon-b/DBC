@@ -11,7 +11,7 @@
  *   const { unten, oben } = zeichneDungeon(manifest, dungeon, bilder);           // zwei Canvas-Ebenen
  *
  * Zeichnen im Spiel: `unten` → Spieler/Gegner → `oben` (Baumkronen, Portalbogen …).
- * dungeon.kollision: Uint8Array (1 = gesperrt), dungeon.spawn / dungeon.boss: Kachelkoordinaten.
+ * dungeon.kollision: Uint8Array (1 begehbar, 2 gesperrt, 3 begehbar + verdeckt - wie tools/kollision.py), dungeon.spawn / dungeon.boss: Kachelkoordinaten.
  * Gleicher Seed + gleiche Groesse + gleiches Manifest = gleicher Dungeon.
  */
 
@@ -206,7 +206,7 @@ export function erzeugeDungeon(manifest, seed, { breite = 6, hoehe = 5 } = {}) {
   return {
     seed, breite, hoehe, cols, rows, kachel: manifest.kachel, kollision, spawn, boss,
     felder: felder.map((f) => ({ x: f.x, y: f.y, id: f.lage.id, name: f.lage.name, lage: f.lage })),
-    istFrei: (x, y) => x >= 0 && y >= 0 && x < cols && y < rows && kollision[y * cols + x] === 0,
+    istFrei: (x, y) => x >= 0 && y >= 0 && x < cols && y < rows && kollision[y * cols + x] !== 2,
   };
 }
 
@@ -220,8 +220,8 @@ export async function ladeBilder(manifest, dungeon, basisUrl = './') {
   });
   const bilder = new Map();
   await Promise.all([...new Set(dungeon.felder.map((f) => f.lage))].map(async (l) => {
-    const [boden, objekte, oben] = await Promise.all([lade(l.boden), lade(l.objekte), lade(l.oben)]);
-    bilder.set(l.id, { boden, objekte, oben });
+    const [boden, schatten, objekte, oben] = await Promise.all([lade(l.boden), lade(l.schatten), lade(l.objekte), lade(l.oben)]);
+    bilder.set(l.id, { boden, schatten, objekte, oben });
   }));
   return bilder;
 }
@@ -237,6 +237,8 @@ export function zeichneDungeon(manifest, dungeon, bilder, erzeugeCanvas) {
   // 1. Boden aller Stuecke, 2. Objekte von Nord nach Sued (ueberstehende Kronen suedlicher Stuecke liegen
   //    vor dem noerdlichen Stueck), 3. obere Ebene genauso
   for (const f of dungeon.felder) cu.drawImage(bilder.get(f.id).boden, f.x * N * T, f.y * N * T);
+  // Schatten aller Stuecke (reichen ueber die Naht - sonst enden Schlagschatten am Stueckrand)
+  for (const f of dungeon.felder) cu.drawImage(bilder.get(f.id).schatten, (f.x * N - R) * T, (f.y * N - R) * T);
   const reihe = [...dungeon.felder].sort((a, b) => (a.y + a.lage.felder[1]) - (b.y + b.lage.felder[1]) || a.x - b.x);
   for (const f of reihe) {
     const b = bilder.get(f.id);

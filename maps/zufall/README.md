@@ -54,10 +54,11 @@ in einer Lage am Waldrand steht (Stamm verdeckt), und 1 Kachel schmale Grasinsel
    oder Süd betreten.
 2. **Stücke einsetzen:** Je Feld ein zufälliges Stück in passender Lage (Kanten passen zum Grundriss und zu den
    Nachbarn), sonst Backtracking. Häufig benutzte Stücke werden seltener gewählt.
-3. **Bauen mit der Karte-01-Technik:** `karte_bauen.py` (Boden, Übergänge, vertiefte Teiche, Waldboden),
-   `objekte_setzen.py` (Wald, Waldrand, Wiese, Laternen, feste Objekte), `karte01_raster.py` (Regel 1/1b),
-   Symmetrie der Objektpaare, `karte01_v11_begleiter.py` (Regel 5 und 7), `karte01_v11_aufraeumen.py`
-   (keine Überlappungen, richtiger Untergrund). Karte 01 selbst wird dabei nicht verändert.
+3. **Bauen nach dem aktuellen Kachel-Standard (A02, Stil Karte 20):** `tools/zufall_a02.py` – Gras/Sand-Grundkacheln
+   von Karte 01, alle Bodenkanten am 16er-Raster mit 45°-Schrägen (Regel 6b), Waldboden, vertiefte Teiche, Objekte im
+   kleinsten Kachelblock mit Bodenfuß (Regel 1/1b), Wald auf jeder zweiten Waldkachel, Begleiter einzelner Bäume nach
+   Regel 5d, Streudeko ohne Wiederholung und nie auf Wegen, Spawnfeld am Portal frei, Kontakt- und Schlagschatten nur
+   auf dem Boden (`karte04_bauen.objekte_zeichnen`). Kollision im Format von `tools/kollision.py` (1/2/3).
 
 ## Noch nicht enthalten (nächste Schritte)
 

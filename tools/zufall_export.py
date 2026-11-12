@@ -7,10 +7,12 @@ Uebergaenge an den Raendern genauso aussehen wie in einer echten Karte, wird das
 von PAD Kacheln gebaut (Randkacheln nach aussen fortgesetzt - wegen der genormten Kanten ist das genau
 das, was ein passender Nachbar dort haette). Objekte zaehlen nur, wenn ihr Fuss im Stueck steht.
 
+Gelaende und Objekte nach dem aktuellen Kachel-Standard (A02, tools/zufall_a02.py: 45-Grad-Kanten, Karte-20-Stil).
 Ausgabe je Lage:
-  stuecke/<id>_boden.png    Boden mit Schatten, genau Stueckgroesse            (1. alle Stuecke)
-  stuecke/<id>_objekte.png  deckende Objektpixel, um PAD Kacheln groesser     (2. von Nord nach Sued)
-  stuecke/<id>_oben.png     obere Teile hoher Objekte (Baumkronen), wie objekte (3. ueber dem Spieler)
+  stuecke/<id>_boden.png    reiner Boden, genau Stueckgroesse                  (1. alle Stuecke)
+  stuecke/<id>_schatten.png Kontakt- und Schlagschatten, um PAD Kacheln groesser (2. alle Stuecke)
+  stuecke/<id>_objekte.png  deckende Objektpixel + Bodenwall, wie schatten      (3. von Nord nach Sued)
+  stuecke/<id>_oben.png     obere Teile hoher Objekte (Baumkronen), wie schatten (4. ueber dem Spieler)
   Objekt- und Oben-Bilder sind groesser als das Stueck, damit ueberstehende Kronen erhalten bleiben.
   manifest.json            Kanten, Kollision (1 = gesperrt), Spawn-/Bosspunkt, Gewichte
 """
@@ -38,52 +40,25 @@ def gepolstert(raster):
 
 
 def rendern(l):
-    import karte_bauen, objekte_setzen, karte01_raster, karte01_v11_begleiter, karte01_v11_aufraeumen
+    import zufall_a02
     lid = lage_id(l)
     raster = gepolstert(l['raster'])
-    rows, cols = len(raster), len(raster[0])
     h, w = len(l['raster']), len(l['raster'][0])
     fest = [(n, x + PAD, y + PAD) for n, x, y in l.get('objekte', [])]
     symmetrie = [tuple(fest[i] for i in s) for s in l.get('symmetrie', [])]
-    bau, obj = zk.bauordner('export_' + lid)
-    json.dump({'tile_size': T, 'cols': cols, 'rows': rows, 'grid': raster},
-              open(os.path.join(bau, 'terrain_grid.json'), 'w'))
-    json.dump({'segmente': [], 'treppen': [], 'wasserfaelle': [], 'bruecken': [], 'stege': []},
-              open(os.path.join(bau, 'hoehenplan.json'), 'w'))
-    for m in (karte_bauen, objekte_setzen, karte01_raster, karte01_v11_begleiter, karte01_v11_aufraeumen):
-        if hasattr(m, 'KARTE'):
-            m.KARTE = bau
-        m.OBJ = obj
-    objekte_setzen.FEST = fest
-    objekte_setzen.TEICH_AB_ZEILE = 0
-    for n in ('zufall_portal/01', 'zufall_brunnen/00'):
-        objekte_setzen.FUSS_ART[n] = 'stein'
-    objekte_setzen.SCHATTEN = tuple(objekte_setzen.SCHATTEN) + ('zufall_portal/', 'zufall_brunnen/')
-    objekte_setzen.DSCHUNGEL_SPERRE = (5, 7, 2)
-    stumm = open(os.devnull, 'w')
-    alt, sys.stdout = sys.stdout, stumm
-    try:
-        karte_bauen.bauen(objekte=False)
-        objekte_setzen.main()
-        karte01_raster.main()
-        zk.symmetrisch(obj, symmetrie)
-        karte01_v11_begleiter.main()
-        # nur Objekte, deren Fuss im Stueck steht (die anderen gehoeren zum Nachbarn)
-        pf = os.path.join(obj, 'platzierung.json')
-        objs = [o for o in json.load(open(pf))
-                if PAD <= o['kachel'][0] < PAD + w and PAD <= o['kachel'][1] < PAD + h]
-        # Laternen nur an Startlager, Arena und Gabelungen - sonst haette jedes Stueck seine eigene
-        if l['typ'] not in ('start', 'boss') and 'gabel' not in l['name'] and 'kreuz' not in l['name']:
-            objs = [o for o in objs if o.get('basis') != 'laterne']
-        json.dump(objs, open(pf, 'w'))
-        karte_bauen.bauen()
-        karte01_v11_aufraeumen.main()
-        voll = karte_bauen.bauen().convert('RGBA')
-        boden = karte_bauen.bauen(objekte=False, speichern=False).convert('RGBA')
-    finally:
-        sys.stdout = alt
-    objs = json.load(open(os.path.join(obj, 'platzierung.json')))
-    tm = json.load(open(os.path.join(bau, 'tilemap.json')))
+    obj = os.path.join(ROOT, 'maps', 'zufall', '_bau', 'export_' + lid)
+    if os.path.exists(obj):
+        shutil.rmtree(obj)
+    os.makedirs(obj)
+    # Aktueller Kachel-Standard (A02, Stil Karte 20): Boden mit 45-Grad-Kanten, Objekte am Raster (tools/zufall_a02.py).
+    # Der Rand (PAD Kacheln, Randkacheln fortgesetzt) bekommt ebenfalls Wald und Deko - so verhalten sich Platzierung
+    # und Schatten am Rand wie mit einem echten Nachbarn; behalten werden nur Objekte mit dem Fuss im Stueck.
+    boden_rgb, wasser = zufall_a02.boden_bauen(raster)
+    objs = zufall_a02.objekte_setzen(raster, fest, symmetrie, obj, seed=7)
+    objs = [o for o in objs if PAD <= o['kachel'][0] < PAD + w and PAD <= o['kachel'][1] < PAD + h]
+    boden_rgb = zufall_a02.waldboden(boden_rgb, objs, obj)              # Wurzeln des Dschungelbaums gehoeren zum Boden
+    voll, cache = zufall_a02.zeichnen(boden_rgb, wasser, objs, obj)
+    boden = Image.fromarray(boden_rgb).convert('RGBA')
 
     # --- Sprite-Maske: deckende Objektpixel (Kontaktschatten/Lichtschein zaehlen zum Boden)
     maske = np.zeros(voll.size[::-1], bool)
@@ -103,33 +78,37 @@ def rendern(l):
             sockel_y = (o['block'][1] + o['block'][3] - 1) * T - o['y']
             if sockel_y > 0:
                 oben.alpha_composite(sp.crop((0, 0, sp.width, min(sockel_y, sp.height))), (x0, y0))
+    # --- Schatten als eigene Ebene (reicht wie die Kronen ueber den Rand - sonst enden Schlagschatten an der Naht):
+    # dieselben Objekte noch einmal auf weissem Grund zeichnen; Schattenfarbe (60, 40, 24) mit Deckkraft a ergibt
+    # R = 255 - a * (255 - 60)  ->  a aus dem Rotkanal
+    import karte04_bauen as k4
+    weiss = Image.new('RGBA', voll.size, (255, 255, 255, 255))
+    ebenen = np.ones(wasser.shape, np.int16)
+    ebenen[wasser] = 7
+    k4.objekte_zeichnen(weiss, sorted(objs, key=lambda o: (o.get('ebene', 1), o['y'] + o['fuss'])), cache, ~wasser,
+                        None, ebenen=ebenen)
+    rw = np.array(weiss.convert('RGB')).astype(np.float32)
+    alpha = np.clip((255 - rw[..., 0]) / (255 - 60), 0, 1)
+    alpha[maske] = 0                                             # unter den Sprites egal (Sprites decken)
+    sch = np.zeros(rw.shape[:2] + (4,), np.uint8)
+    sch[..., 0], sch[..., 1], sch[..., 2] = 60, 40, 24
+    sch[..., 3] = np.round(alpha * 255).astype(np.uint8)
+    schatten_bild = Image.fromarray(sch)
     v, b = np.array(voll), np.array(boden)
-    # boden: nur das Stueck, ohne Objekte (unter Sprites der reine Boden)
-    bo = v.copy()
-    bo[maske] = b[maske]
-    boden_bild = Image.fromarray(bo).crop((PAD * T, PAD * T, (PAD + w) * T, (PAD + h) * T))
-    # objekte: deckende Sprite-Pixel, auch ueber den Rand hinaus
+    # boden: nur das Stueck, reiner Boden ohne Schatten und Objekte
+    boden_bild = boden.crop((PAD * T, PAD * T, (PAD + w) * T, (PAD + h) * T))
+    # objekte: deckende Sprite-Pixel + Bodenwall an den Fuessen (was nach Boden+Schatten noch anders ist)
+    ref = Image.fromarray(b); ref.alpha_composite(schatten_bild)
+    anders = np.abs(v[..., :3].astype(int) - np.array(ref)[..., :3]).sum(-1) > 6
     ob = v.copy()
-    ob[~maske] = 0
+    ob[~(maske | anders)] = 0
     objekte_bild = Image.fromarray(ob)
 
-    # --- Kollision im Stueck: Wald, Wasser, Sockelreihe stehender Objekte
-    koll = [[0] * w for _ in range(h)]
-    for y in range(h):
-        for x in range(w):
-            if l['raster'][y][x] in 'FW' or tm['klassen'][y + PAD][x + PAD] == 'w':
-                koll[y][x] = 1
-    for o in objs:
-        if o.get('ebene', 1) != 1 or o.get('anim') == 'wehen':
-            continue
-        bx, by, bw, bh = o['block']
-        for x in range(bx, bx + bw):
-            yy, xx = by + bh - 1 - PAD, x - PAD
-            if 0 <= yy < h and 0 <= xx < w:
-                koll[yy][xx] = 1
+    # --- Kollision im Stueck wie tools/kollision.py: 1 begehbar, 2 gesperrt, 3 begehbar + verdeckt
+    koll = zufall_a02.kollision(raster, objs, cache, wasser, PAD, PAD, w, h)
 
     def frei_nahe(x, y):
-        best = min(((abs(xx - x) + abs(yy - y), xx, yy) for yy in range(h) for xx in range(w) if not koll[yy][xx]))
+        best = min(((abs(xx - x) + abs(yy - y), xx, yy) for yy in range(h) for xx in range(w) if koll[yy][xx] == '1'))
         return [best[1], best[2]]
     punkte = {}
     for n, x, y in l.get('objekte', []):
@@ -138,11 +117,11 @@ def rendern(l):
         if n.startswith('dschungel/'):
             punkte['boss'] = frei_nahe(x, y + 4)
     boden_bild.save(os.path.join(ZIEL, 'stuecke', lid + '_boden.png'), optimize=True)
+    schatten_bild.save(os.path.join(ZIEL, 'stuecke', lid + '_schatten.png'), optimize=True)
     objekte_bild.save(os.path.join(ZIEL, 'stuecke', lid + '_objekte.png'), optimize=True)
     oben.save(os.path.join(ZIEL, 'stuecke', lid + '_oben.png'), optimize=True)
-    # Komplettbild des Stuecks (Boden + Objekte + oben), genau Stueckgroesse
-    ganz = Image.new('RGBA', voll.size)
-    ganz.alpha_composite(Image.fromarray(bo)); ganz.alpha_composite(objekte_bild); ganz.alpha_composite(oben)
+    # Komplettbild des Stuecks (Boden + Schatten + Objekte + oben), genau Stueckgroesse
+    ganz = voll.copy(); ganz.alpha_composite(oben)
     ganz.crop((PAD * T, PAD * T, (PAD + w) * T, (PAD + h) * T)).save(
         os.path.join(ZIEL, 'stuecke', lid + '_komplett.png'), optimize=True)
     # Sprites fuer das Objekt-Tileset sammeln, Objektliste relativ zur linken oberen Stueckecke (Pixel)
@@ -163,23 +142,36 @@ def rendern(l):
         if o.get('spiegeln'):
             e['spiegeln'] = True
         liste.append(e)
-    shutil.rmtree(bau)
+    shutil.rmtree(obj)
     print('  ', lid, len(objs), 'Objekte', flush=True)
     return {'id': lid, 'name': l['name'], 'lage': l['lage'], 'typ': l['typ'], 'gewicht': l['gewicht'],
             'felder': list(l['felder']),
             'kanten': {'%d,%d,%s' % k: t for k, t in l['kanten'].items()},
-            'boden': 'stuecke/%s_boden.png' % lid, 'objekte': 'stuecke/%s_objekte.png' % lid, 'oben': 'stuecke/%s_oben.png' % lid,
+            'boden': 'stuecke/%s_boden.png' % lid, 'schatten': 'stuecke/%s_schatten.png' % lid, 'objekte': 'stuecke/%s_objekte.png' % lid, 'oben': 'stuecke/%s_oben.png' % lid,
             'komplett': 'stuecke/%s_komplett.png' % lid,
-            'kollision': [''.join(map(str, z)) for z in koll], 'punkte': punkte, 'objektliste': liste}
+            'kollision': koll, 'punkte': punkte, 'objektliste': liste}
 
 
 GRUPPEN = ['baeume', 'gross', 'dschungel', 'zufall_portal', 'zufall_brunnen', 'deko', 'k7gras', 'laterne']
 
 
-def gruppe(name):
+def basis_name(name):
+    """'varianten/k01-baum00_gras_m' -> 'k01/baum00' (Bodenfuss-Variante, gespiegelt) bzw. Name unveraendert."""
     if name.startswith('varianten/'):
-        name = name[len('varianten/'):].rsplit('_', 1)[0].replace('-', '/', 1)
-    g = name.split('/')[0]
+        rest = name[len('varianten/'):]
+        if rest.endswith('_m'):
+            rest = rest[:-2]
+        return rest.rsplit('_', 1)[0].replace('-', '/', 1)
+    return name
+
+
+def gruppe(name):
+    b = basis_name(name)
+    if b.startswith('k01/baum'):
+        return 'baeume'
+    if b.startswith('k01/deko'):
+        return 'deko'
+    g = b.split('/')[0]
     return g if g in GRUPPEN else 'sonstige'
 
 

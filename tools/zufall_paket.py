@@ -40,10 +40,17 @@ def lage_en(lage):                       # '0' -> 'r0', 's90' -> 'm90'
 
 
 def sprite_en(name):
+    """'varianten/k01-baum00_gras_m' -> 'trees_00_grass_m', 'varianten/zufall_portal-01_gras' -> 'portal_01_grass'."""
+    gespiegelt = ''
     if name.startswith('varianten/'):
-        rest, boden = name[len('varianten/'):].rsplit('_', 1)
+        rest = name[len('varianten/'):]
+        if rest.endswith('_m'):
+            rest, gespiegelt = rest[:-2], '_m'
+        rest, boden = rest.rsplit('_', 1)
         g, nr = rest.split('-', 1)
-        return '%s_%s_%s' % (GRUPPE.get(g, g), nr, BODEN.get(boden, boden))
+        if g == 'k01':
+            g, nr = ('baeume', nr[4:]) if nr.startswith('baum') else ('deko', nr[4:])
+        return '%s_%s_%s%s' % (GRUPPE.get(g, g), nr, BODEN.get(boden, boden), gespiegelt)
     if '/' in name:
         g, nr = name.split('/', 1)
         return '%s_%s' % (GRUPPE.get(g, g), nr)
@@ -73,7 +80,8 @@ def main():
     for l in m['lagen']:
         pid = '%s_%s' % (STUECK[l['name']], lage_en(l['lage']))
         dateien = {}
-        for alt, neu in (('boden', 'ground'), ('objekte', 'objects'), ('oben', 'above'), ('komplett', 'preview')):
+        for alt, neu in (('boden', 'ground'), ('schatten', 'shadows'), ('objekte', 'objects'), ('oben', 'above'),
+                         ('komplett', 'preview')):
             ziel = 'pieces/%s_%s.png' % (pid, neu)
             shutil.copy(os.path.join(QUELLE, l[alt]), os.path.join(ZIEL, ziel))
             dateien[neu] = ziel
@@ -196,14 +204,16 @@ def tiled(manifest):
                     '  </properties>\n  <image source="%s" width="%d" height="%d"/>\n </tile>\n'
                     % (t['id'], xml(t['name']), xml(t['group']), t['image'], t['w'], t['h']))
         f.write('</tileset>\n')
-    # Kollision: 1 Kachel (gesperrt)
-    kim = Image.new('RGBA', (T, T), (220, 60, 60, 150))
+    # Kollision (Format wie tools/kollision.py): Kachel 0 = gesperrt (2), Kachel 1 = begehbar + verdeckt (3)
+    kim = Image.new('RGBA', (2 * T, T), (220, 60, 60, 150))
+    kim.paste(Image.new('RGBA', (T, T), (60, 200, 255, 120)), (T, 0))
     kim.save(os.path.join(td, 'collision.png'))
     with open(os.path.join(td, 'collision.tsx'), 'w') as f:
         f.write('<?xml version="1.0" encoding="UTF-8"?>\n<tileset version="%s" tiledversion="%s" name="collision" '
-                'tilewidth="%d" tileheight="%d" tilecount="1" columns="1">\n <image source="collision.png" width="%d" height="%d"/>\n'
+                'tilewidth="%d" tileheight="%d" tilecount="2" columns="2">\n <image source="collision.png" width="%d" height="%d"/>\n'
                 ' <tile id="0">\n  <properties>\n   <property name="blocked" type="bool" value="true"/>\n  </properties>\n </tile>\n'
-                '</tileset>\n' % (TILED_FORMAT, TILED_VERSION, T, T, T, T))
+                ' <tile id="1">\n  <properties>\n   <property name="covered" type="bool" value="true"/>\n  </properties>\n </tile>\n'
+                '</tileset>\n' % (TILED_FORMAT, TILED_VERSION, T, T, 2 * T, T))
     g_obj = 1 + len(kacheln)
     g_koll = g_obj + len(objtiles)
     sprite_id = {t['name']: t['id'] for t in objtiles}
@@ -215,10 +225,11 @@ def tiled(manifest):
                               for t in objtiles]},
         'collision': {'name': 'collision', 'source': 'tiled/collision.tsx', 'image': 'tiled/collision.png'}}
     # eine .tmx je Stueck
+    P = manifest['padding']
     for p in manifest['pieces']:
         W, H = p['cells'][0] * manifest['chunkSize'], p['cells'][1] * manifest['chunkSize']
         boden = ','.join(str(i + 1) for i in p['groundTiles'])
-        koll = ','.join(str(g_koll) if c == '1' else '0' for z in p['collision'] for c in z)
+        koll = ','.join(str(g_koll) if c == '2' else str(g_koll + 1) if c == '3' else '0' for z in p['collision'] for c in z)
         oid = 1
         objs = []
         for o in p['objectList']:
@@ -240,17 +251,19 @@ def tiled(manifest):
         with open(os.path.join(td, 'pieces', p['id'] + '.tmx'), 'w') as f:
             f.write('<?xml version="1.0" encoding="UTF-8"?>\n'
                     '<map version="%s" tiledversion="%s" orientation="orthogonal" renderorder="right-down" width="%d" '
-                    'height="%d" tilewidth="%d" tileheight="%d" infinite="0" nextlayerid="5" nextobjectid="%d">\n'
+                    'height="%d" tilewidth="%d" tileheight="%d" infinite="0" nextlayerid="6" nextobjectid="%d">\n'
                     ' <properties>\n%s </properties>\n'
                     ' <tileset firstgid="1" source="../ground_tiles.tsx"/>\n'
                     ' <tileset firstgid="%d" source="../objects.tsx"/>\n'
                     ' <tileset firstgid="%d" source="../collision.tsx"/>\n'
                     ' <layer id="1" name="ground" width="%d" height="%d">\n  <data encoding="csv">\n%s\n</data>\n </layer>\n'
+                    ' <imagelayer id="5" name="shadows" offsetx="%d" offsety="%d">\n  <image source="../../%s" width="%d" height="%d"/>\n </imagelayer>\n'
                     ' <objectgroup id="2" name="objects">\n%s\n </objectgroup>\n'
                     ' <layer id="3" name="collision" width="%d" height="%d" visible="0" opacity="0.6">\n  <data encoding="csv">\n%s\n</data>\n </layer>\n'
                     ' <objectgroup id="4" name="points">\n%s\n </objectgroup>\n'
                     '</map>\n' % (TILED_FORMAT, TILED_VERSION, W, H, T, T, oid, eig, g_obj, g_koll,
-                                   W, H, boden, '\n'.join(objs), W, H, koll, '\n'.join(punkte)))
+                                   W, H, boden, -P * T, -P * T, p['shadows'], (W + 2 * P) * T, (H + 2 * P) * T,
+                                   '\n'.join(objs), W, H, koll, '\n'.join(punkte)))
     print('Tiled:', len(kacheln), 'Bodenkacheln,', len(objtiles), 'Objekt-Sprites,', len(manifest['pieces']), '.tmx')
 
 
