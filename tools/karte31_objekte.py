@@ -136,6 +136,10 @@ def main():
         setze('karte18/strasse/18', tx * T + 8, ty * T - 1, {'anim': 'leuchten'})
     for (tx, ty) in ((21, 12), (44, 17), (88, 12), (113, 12), (69, 12)):                         # Baenke
         setze('karte18/strasse/14', tx * T + 8, ty * T - 1, {})
+    for i, (x0, x1) in enumerate(lay.get('hecken', [])):                                          # Hecken an der Promenade
+        n = ['karte01/baeume/14', 'karte01/baeume/12', 'karte01/baeume/14', 'karte01/baeume/13'][i % 4] \
+            if x1 - x0 >= 2 else 'karte01/deko/%02d' % (25, 27)[i % 2]                          # (K01-Buesche, schmal: Busch)
+        setze(n, (x0 + x1 + 1) * T // 2, 26 * T - 1, {'anim': 'wehen'}, i % 2 == 0, pruefen=False)
     for x in range(6, 118, 8):                                                                   # Promenade: Baenke,
         setze('karte18/strasse/14' if (x // 8) % 2 else 'karte18/strasse/18', x * T + 8, 27 * T - 1,   # Laternen
               {} if (x // 8) % 2 else {'anim': 'leuchten'})

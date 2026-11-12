@@ -92,11 +92,11 @@
 {
 "datei": "gebaeude/laden_0.png",
 "basis": "gebaeude/laden_0",
-"x": 1168,
-"y": 1370,
-"fuss": 117,
+"x": 1136,
+"y": 1373,
+"fuss": 114,
 "kachel": [
-75,
+73,
 92
 ],
 "ebene": 1,
@@ -106,11 +106,11 @@
 {
 "datei": "gebaeude/laden_1.png",
 "basis": "gebaeude/laden_1",
-"x": 1248,
-"y": 1376,
-"fuss": 111,
+"x": 1229,
+"y": 1374,
+"fuss": 113,
 "kachel": [
-80,
+79,
 92
 ],
 "ebene": 1,
@@ -120,9 +120,9 @@
 {
 "datei": "gebaeude/laden_2.png",
 "basis": "gebaeude/laden_2",
-"x": 1326,
-"y": 1371,
-"fuss": 116,
+"x": 1319,
+"y": 1376,
+"fuss": 111,
 "kachel": [
 85,
 92
@@ -148,7 +148,7 @@
 {
 "datei": "gebaeude/laden_4.png",
 "basis": "gebaeude/laden_4",
-"x": 1491,
+"x": 1500,
 "y": 1373,
 "fuss": 114,
 "kachel": [
@@ -162,9 +162,9 @@
 {
 "datei": "gebaeude/laden_5.png",
 "basis": "gebaeude/laden_5",
-"x": 1592,
-"y": 1373,
-"fuss": 114,
+"x": 1596,
+"y": 1371,
+"fuss": 116,
 "kachel": [
 102,
 92
@@ -176,11 +176,11 @@
 {
 "datei": "gebaeude/laden_6.png",
 "basis": "gebaeude/laden_6",
-"x": 1700,
-"y": 1375,
-"fuss": 112,
+"x": 1694,
+"y": 1376,
+"fuss": 111,
 "kachel": [
-109,
+108,
 92
 ],
 "ebene": 1,
@@ -190,11 +190,11 @@
 {
 "datei": "gebaeude/laden_7.png",
 "basis": "gebaeude/laden_7",
-"x": 1798,
-"y": 1376,
-"fuss": 111,
+"x": 1784,
+"y": 1373,
+"fuss": 114,
 "kachel": [
-115,
+114,
 92
 ],
 "ebene": 1,
@@ -1384,99 +1384,242 @@
 "an_wand": true
 },
 {
-"datei": "fremd/karte18-strasse-18.png",
-"basis": "karte18/strasse/18",
-"x": 100,
-"y": 402,
-"fuss": 29,
+"datei": "fremd/karte01-baeume-14_m.png",
+"basis": "karte01/baeume/14",
+"x": 83,
+"y": 385,
+"fuss": 30,
 "kachel": [
 6,
-26
+25
 ],
 "ebene": 1,
 "an_wand": true,
-"anim": "leuchten"
+"anim": "wehen"
 },
 {
-"datei": "fremd/karte18-strasse-14.png",
-"basis": "karte18/strasse/14",
-"x": 209,
-"y": 409,
-"fuss": 22,
+"datei": "fremd/karte01-deko-27.png",
+"basis": "karte01/deko/27",
+"x": 178,
+"y": 392,
+"fuss": 23,
 "kachel": [
-14,
-26
+12,
+25
 ],
 "ebene": 1,
-"an_wand": true
+"an_wand": true,
+"anim": "wehen"
 },
 {
-"datei": "fremd/karte18-strasse-18.png",
-"basis": "karte18/strasse/18",
-"x": 356,
-"y": 402,
-"fuss": 29,
+"datei": "fremd/karte01-deko-25_m.png",
+"basis": "karte01/deko/25",
+"x": 227,
+"y": 389,
+"fuss": 26,
+"kachel": [
+15,
+25
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "wehen"
+},
+{
+"datei": "fremd/karte01-baeume-13.png",
+"basis": "karte01/baeume/13",
+"x": 341,
+"y": 382,
+"fuss": 33,
 "kachel": [
 22,
-26
+25
 ],
 "ebene": 1,
 "an_wand": true,
-"anim": "leuchten"
+"anim": "wehen"
 },
 {
-"datei": "fremd/karte18-strasse-14.png",
-"basis": "karte18/strasse/14",
-"x": 465,
-"y": 409,
-"fuss": 22,
+"datei": "fremd/karte01-baeume-14_m.png",
+"basis": "karte01/baeume/14",
+"x": 467,
+"y": 385,
+"fuss": 30,
 "kachel": [
 30,
-26
-],
-"ebene": 1,
-"an_wand": true
-},
-{
-"datei": "fremd/karte18-strasse-18.png",
-"basis": "karte18/strasse/18",
-"x": 612,
-"y": 402,
-"fuss": 29,
-"kachel": [
-38,
-26
+25
 ],
 "ebene": 1,
 "an_wand": true,
-"anim": "leuchten"
+"anim": "wehen"
 },
 {
-"datei": "fremd/karte18-strasse-14.png",
-"basis": "karte18/strasse/14",
-"x": 721,
-"y": 409,
-"fuss": 22,
+"datei": "fremd/karte01-deko-27.png",
+"basis": "karte01/deko/27",
+"x": 562,
+"y": 392,
+"fuss": 23,
+"kachel": [
+36,
+25
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "wehen"
+},
+{
+"datei": "fremd/karte01-deko-25_m.png",
+"basis": "karte01/deko/25",
+"x": 611,
+"y": 389,
+"fuss": 26,
+"kachel": [
+39,
+25
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "wehen"
+},
+{
+"datei": "fremd/karte01-baeume-13.png",
+"basis": "karte01/baeume/13",
+"x": 725,
+"y": 382,
+"fuss": 33,
 "kachel": [
 46,
-26
-],
-"ebene": 1,
-"an_wand": true
-},
-{
-"datei": "fremd/karte18-strasse-18.png",
-"basis": "karte18/strasse/18",
-"x": 868,
-"y": 402,
-"fuss": 29,
-"kachel": [
-54,
-26
+25
 ],
 "ebene": 1,
 "an_wand": true,
-"anim": "leuchten"
+"anim": "wehen"
+},
+{
+"datei": "fremd/karte01-baeume-14_m.png",
+"basis": "karte01/baeume/14",
+"x": 835,
+"y": 385,
+"fuss": 30,
+"kachel": [
+53,
+25
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "wehen"
+},
+{
+"datei": "fremd/karte01-baeume-12.png",
+"basis": "karte01/baeume/12",
+"x": 1219,
+"y": 380,
+"fuss": 35,
+"kachel": [
+77,
+25
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "wehen"
+},
+{
+"datei": "fremd/karte01-baeume-14_m.png",
+"basis": "karte01/baeume/14",
+"x": 1363,
+"y": 385,
+"fuss": 30,
+"kachel": [
+86,
+25
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "wehen"
+},
+{
+"datei": "fremd/karte01-deko-27.png",
+"basis": "karte01/deko/27",
+"x": 1458,
+"y": 392,
+"fuss": 23,
+"kachel": [
+92,
+25
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "wehen"
+},
+{
+"datei": "fremd/karte01-deko-25_m.png",
+"basis": "karte01/deko/25",
+"x": 1507,
+"y": 389,
+"fuss": 26,
+"kachel": [
+95,
+25
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "wehen"
+},
+{
+"datei": "fremd/karte01-deko-27.png",
+"basis": "karte01/deko/27",
+"x": 1586,
+"y": 392,
+"fuss": 23,
+"kachel": [
+100,
+25
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "wehen"
+},
+{
+"datei": "fremd/karte01-deko-25_m.png",
+"basis": "karte01/deko/25",
+"x": 1635,
+"y": 389,
+"fuss": 26,
+"kachel": [
+103,
+25
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "wehen"
+},
+{
+"datei": "fremd/karte01-baeume-13.png",
+"basis": "karte01/baeume/13",
+"x": 1749,
+"y": 382,
+"fuss": 33,
+"kachel": [
+110,
+25
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "wehen"
+},
+{
+"datei": "fremd/karte01-baeume-14_m.png",
+"basis": "karte01/baeume/14",
+"x": 1875,
+"y": 385,
+"fuss": 30,
+"kachel": [
+118,
+25
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "wehen"
 },
 {
 "datei": "fremd/karte18-strasse-14.png",
@@ -1504,73 +1647,6 @@
 "ebene": 1,
 "an_wand": true,
 "anim": "leuchten"
-},
-{
-"datei": "fremd/karte18-strasse-14.png",
-"basis": "karte18/strasse/14",
-"x": 1233,
-"y": 409,
-"fuss": 22,
-"kachel": [
-78,
-26
-],
-"ebene": 1,
-"an_wand": true
-},
-{
-"datei": "fremd/karte18-strasse-18.png",
-"basis": "karte18/strasse/18",
-"x": 1380,
-"y": 402,
-"fuss": 29,
-"kachel": [
-86,
-26
-],
-"ebene": 1,
-"an_wand": true,
-"anim": "leuchten"
-},
-{
-"datei": "fremd/karte18-strasse-14.png",
-"basis": "karte18/strasse/14",
-"x": 1489,
-"y": 409,
-"fuss": 22,
-"kachel": [
-94,
-26
-],
-"ebene": 1,
-"an_wand": true
-},
-{
-"datei": "fremd/karte18-strasse-18.png",
-"basis": "karte18/strasse/18",
-"x": 1636,
-"y": 402,
-"fuss": 29,
-"kachel": [
-102,
-26
-],
-"ebene": 1,
-"an_wand": true,
-"anim": "leuchten"
-},
-{
-"datei": "fremd/karte18-strasse-14.png",
-"basis": "karte18/strasse/14",
-"x": 1745,
-"y": 409,
-"fuss": 22,
-"kachel": [
-110,
-26
-],
-"ebene": 1,
-"an_wand": true
 },
 {
 "datei": "fremd/karte18-gebaeude-gold_02.png",

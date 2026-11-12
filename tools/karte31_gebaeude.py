@@ -19,7 +19,8 @@ ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
 QUELLE = os.path.join(ROOT, 'assets', 'objekte', 'karte31')
 OUT = os.path.join(QUELLE, 'gebaeude')
 T = 16
-LADEN = ['laden1/00', 'laden1/01', 'laden1/02', 'laden1/03', 'laden2/00', 'laden2/01', 'laden2/02', 'laden2/03']
+LADEN = ['ladendach1/00', 'ladendach1/01', 'ladendach1/02', 'ladendach1/03', 'ladendach2/00', 'ladendach2/01',
+         'ladendach2/02', 'ladendach2/03']                         # Nutzer: mit Dach (vorher flach)
 
 
 def magenta_rein(im, durchsichtig=False):
@@ -119,6 +120,15 @@ def main():
     teile = []
     grau = haelfte_spiegeln(os.path.join(QUELLE, 'gross_block_grau_halb', '00.png'))
     beige = haelfte_spiegeln(os.path.join(QUELLE, 'gross_block_beige_halb', '00.png'))
+    ba = np.array(beige)                                              # Spiegelnaht-Fehler auf dem Dach (halbes Rohr -> Spitze):
+    c, dach = ba.shape[1] // 2, int(ba.shape[0] * 0.34)              # Dachmitte mit Dachflaeche von daneben ueberdecken
+    for y in range(dach):
+        if ba[y, c - 14:c + 14, 3].min() > 0 and ba[y, c - 44:c - 16, 3].min() > 0:
+            ba[y, c - 14:c] = ba[y, c - 42:c - 28]
+            ba[y, c:c + 14] = ba[y, c - 42:c - 28][::-1]
+        elif ba[y, c - 44:c - 16, 3].max() == 0:                     # Spitze ueber der Dachkante: weg
+            ba[y, c - 16:c + 16] = 0
+    beige = Image.fromarray(ba)
     for n, im in (('block1', grau), ('block3', grau), ('block2', beige)):
         im.save(os.path.join(OUT, n + '.png')); teile.append((n, im))
     hoehen = {a: (y1 - y0 + 1) * T for (x0, y0, x1, y1, a) in lay['gebaeude']}

@@ -1987,6 +1987,18 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'wide craggy dark grey sea rock with several pointed peaks and cracks, barnacles at the bottom, on wet sand, ' + FR14,
         'tall dark jagged rock spire rising out of dark grey water with a small foam ring at its base, ' + FR14,
     ]},
+    'k31_ladendach1': {'size': 128, 'items': [
+        'narrow two-storey Japanese shop building, 64 pixels wide, top-down RPG view from the front and slightly above: a clearly visible roof on top (dark grey tiled gable roof with a ridge) taking about one third of the height, below it the upper floor with windows and the ground floor shop: convenience store with a glass front and a sign reading MART, ' + FR14,
+        'narrow two-storey Japanese shop building, 64 pixels wide, top-down RPG view from the front and slightly above: a clearly visible roof on top (dark teal tiled gable roof with a ridge) taking about one third of the height, below it the upper floor with windows and the ground floor shop: ramen restaurant with a dark wooden front, red curtain and a sign reading RAMEN, ' + FR14,
+        'narrow two-storey Japanese shop building, 64 pixels wide, top-down RPG view from the front and slightly above: a clearly visible roof on top (red brown tiled gable roof with a ridge) taking about one third of the height, below it the upper floor with windows and the ground floor shop: cafe with a striped green and white awning and a sign reading CAFE, ' + FR14,
+        'narrow two-storey Japanese shop building, 64 pixels wide, top-down RPG view from the front and slightly above: a clearly visible roof on top (dark brown tiled gable roof with a ridge) taking about one third of the height, below it the upper floor with windows and the ground floor shop: book shop with shelves behind glass and a blue sign reading BOOKS, ' + FR14,
+    ]},
+    'k31_ladendach2': {'size': 128, 'items': [
+        'narrow two-storey Japanese shop building, 64 pixels wide, top-down RPG view from the front and slightly above: a clearly visible roof on top (black tiled gable roof with a ridge) taking about one third of the height, below it the upper floor with windows and the ground floor shop: izakaya pub with a wooden front, red paper lanterns and a sign reading IZAKAYA, ' + FR14,
+        'narrow two-storey Japanese shop building, 64 pixels wide, top-down RPG view from the front and slightly above: a clearly visible roof on top (green tiled gable roof with a ridge) taking about one third of the height, below it the upper floor with windows and the ground floor shop: flower shop with buckets of colorful flowers and a pink sign reading FLOWER, ' + FR14,
+        'narrow two-storey Japanese shop building, 64 pixels wide, top-down RPG view from the front and slightly above: a clearly visible roof on top (grey flat roof with a parapet and an air unit) taking about one third of the height, below it the upper floor with windows and the ground floor shop: closed shop with a grey metal roller shutter, ' + FR14,
+        'narrow two-storey Japanese shop building, 64 pixels wide, top-down RPG view from the front and slightly above: a clearly visible roof on top (blue grey flat roof with a parapet and a water tank) taking about one third of the height, below it the upper floor with windows and the ground floor shop: drugstore with a white and green front and a sign reading DRUG, ' + FR14,
+    ]},
     'k31_muell': {'size': 32, 'items': [
         'small pile of fallen golden yellow ginkgo leaves lying flat on the ground, seen from above, classic 2D handheld RPG style',
         'small pile of fallen brown and orange autumn leaves lying flat on the ground, seen from above, classic 2D handheld RPG style',

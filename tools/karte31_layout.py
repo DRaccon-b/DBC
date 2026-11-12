@@ -25,7 +25,7 @@ REF = {'n': (99, 142, 67), 'w': (187, 163, 118), 'e': (173, 155, 113), 'g': (147
        'p': (176, 163, 137), 'd': (212, 188, 128), 'h': (132, 152, 68), 'k': (145, 159, 164)}
 GEBAEUDE = [  # x0, y0, x1, y1 (Kacheln, Fuss = y1), Art
     [4, 37, 36, 49, 'block1'], [44, 37, 49, 72, 'turm12'], [67, 37, 110, 49, 'block2'], [113, 37, 118, 79, 'turm5'],
-    [77, 67, 109, 79, 'block3'], [8, 75, 27, 83, 'bahnhof'], [73, 86, 117, 92, 'laeden']]
+    [77, 67, 109, 79, 'block3'], [8, 75, 27, 83, 'bahnhof'], [71, 86, 117, 92, 'laeden']]
 MAUER = (30, 32)                          # Stuetzmauer Park -> Siedlung (Front-Reihen)
 MAUER_TREPPEN = [(10, 15), (56, 64), (98, 103)]
 TERRASSE = (86, 0, 119, 18)               # Portal-Terrasse (Ebene 3), Front Reihen 19-20
@@ -36,6 +36,19 @@ HOCHBAHN = {'x0': 0, 'x1': 27, 'y0': 72, 'y1': 75, 'zug': [1, 18], 'pfeiler': [3
 
 def r_(k, x0, y0, x1, y1, art):
     k[y0:y1 + 1, x0:x1 + 1] = art
+
+
+def _laeufe(zeile, c):
+    out, x = [], 0
+    while x < len(zeile):
+        if zeile[x] == c:
+            x0 = x
+            while x < len(zeile) and zeile[x] == c:
+                x += 1
+            out.append((x0, x - 1))
+        else:
+            x += 1
+    return out
 
 
 def klassen():
@@ -94,6 +107,8 @@ def main():
     r_(k, 0, 0, 85, 1, 'h')
     r_(k, 86, 0, 119, 1, 'n')
     r_(k, 0, 26, 119, 29, 'g')                                       # Promenade auf der Mauer
+    hecken = [(x0, x1) for (x0, x1) in _laeufe(k[25], 'h')]           # Heckenbeete -> Rasen, Hecken als Objekte
+    k[25][k[25] == 'h'] = 'n'
     # ---- Stuetzmauer und Treppen
     r_(k, 0, MAUER[0], 119, MAUER[1], 'W')
     for (x0, x1) in MAUER_TREPPEN:
@@ -130,6 +145,7 @@ def main():
            'zebra': [[57, 63, 88, 89, 'v'], [54, 55, 94, 98, 'h'], [64, 65, 94, 98, 'h']],
            'treppen_sued': [[x0, x1, 2, MAUER[0] - 1] for (x0, x1) in MAUER_TREPPEN] +
                            [[TERRASSE_TREPPE[0], TERRASSE_TREPPE[1], 3, TERRASSE_FRONT[0] - 1]],
+           'hecken': hecken,
            'teleporter': [{'x': 103, 'y': 2, 'b': 3, 'h': 3, 'farbe': 'violett'}]}
     json.dump(lay, open(os.path.join(KARTE, 'layout.json'), 'w'), indent=0)
     F = {'n': (99, 142, 67), 'w': (187, 163, 118), 'e': (173, 155, 113), 'g': (147, 158, 155), 's': (52, 61, 73),
