@@ -27,7 +27,8 @@ Aufstellfelds (cyan = Ankunft, gold = weiter; Funktion `pfeil_marke` in `tools/k
 | 10 | Karte 29 – The Sea of Darkness | v1.0 (`maps/karte29/v1.0/The_Sea_of_Darkness_v1.0.zip`) |
 | 11 | Karte 30 – Odaiba | in Arbeit: Gelände, Gebäude und Objekte (Vorschau); offen: Kollision, Regelprüfung, Tileset, v1.0 |
 | 12 | Karte 31 – Highton View Terrace | in Arbeit: Gelände, Gebäude und Objekte (Vorschau), Animation; offen: Kollision, Regelprüfung, Tileset, v1.0 |
-| 13 | Karte 32 – Dream Ruins | in Arbeit: Gelände und Objekte (erste Vorschau) |
+| 13 | Karte 32 – Dream Ruins | in Arbeit: Gelände und Objekte (Vorschau); offen: Animation, Kollision, Regelprüfung, Tileset, v1.0 |
+| 14 | Karte 33 – The World of Dreams | in Arbeit: Gelände und Objekte (erste Vorschau) |
 | … | weitere Karten folgen | – |
 
 ## A0S – Sondergebiet
