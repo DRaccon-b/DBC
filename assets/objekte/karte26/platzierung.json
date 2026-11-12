@@ -1,0 +1,1373 @@
+[
+{
+"datei": "varianten/thron_gross-00.png",
+"basis": "thron_gross/00",
+"x": 274,
+"y": 69,
+"fuss": 91,
+"kachel": [
+19,
+9
+],
+"block": [
+17,
+4,
+4,
+6
+],
+"ebene": 1
+},
+{
+"datei": "varianten/digifeuer-00.png",
+"basis": "digifeuer/00",
+"x": 227,
+"y": 98,
+"fuss": 62,
+"kachel": [
+15,
+9
+],
+"block": [
+14,
+6,
+3,
+4
+],
+"ebene": 1,
+"anim": "lampe",
+"teil": "flammen_boxen",
+"flammen_box": [
+[
+6,
+0,
+36,
+21
+]
+],
+"flammen_alle": true,
+"lampe_box": [
+6,
+0,
+36,
+21
+],
+"licht_farbe": [
+150,
+230,
+255
+],
+"flammen_amp": 2.6
+},
+{
+"datei": "varianten/digifeuer-00_m.png",
+"basis": "digifeuer/00",
+"x": 347,
+"y": 98,
+"fuss": 62,
+"kachel": [
+22,
+9
+],
+"block": [
+21,
+6,
+3,
+4
+],
+"ebene": 1,
+"anim": "lampe",
+"teil": "flammen_boxen",
+"flammen_box": [
+[
+-2,
+0,
+28,
+21
+]
+],
+"flammen_alle": true,
+"lampe_box": [
+-2,
+0,
+28,
+21
+],
+"licht_farbe": [
+150,
+230,
+255
+],
+"flammen_amp": 2.6
+},
+{
+"datei": "varianten/thron_gross-01.png",
+"basis": "thron_gross/01",
+"x": 87,
+"y": 94,
+"fuss": 66,
+"kachel": [
+8,
+9
+],
+"block": [
+5,
+5,
+6,
+5
+],
+"ebene": 1,
+"anim": "maschine",
+"schirm": [
+[
+11,
+3,
+26,
+17
+],
+[
+31,
+1,
+63,
+16
+],
+[
+67,
+4,
+83,
+18
+]
+],
+"leds": true,
+"led_box": [
+[
+6,
+28,
+88,
+46
+]
+]
+},
+{
+"datei": "varianten/thron_gross-01_m.png",
+"basis": "thron_gross/01",
+"x": 431,
+"y": 94,
+"fuss": 66,
+"kachel": [
+29,
+9
+],
+"block": [
+26,
+5,
+6,
+5
+],
+"ebene": 1,
+"anim": "maschine",
+"schirm": [
+[
+64,
+3,
+79,
+17
+],
+[
+27,
+1,
+59,
+16
+],
+[
+7,
+4,
+23,
+18
+]
+],
+"leds": true,
+"led_box": [
+[
+2,
+28,
+84,
+46
+]
+]
+},
+{
+"datei": "varianten/thron-00.png",
+"basis": "thron/00",
+"x": 274,
+"y": 249,
+"fuss": 55,
+"kachel": [
+19,
+18
+],
+"block": [
+17,
+15,
+4,
+4
+],
+"ebene": 1,
+"anim": "bildschirm",
+"schirm": [
+[
+9,
+10,
+57,
+36
+]
+]
+},
+{
+"datei": "varianten/digifeuer-13.png",
+"basis": "digifeuer/13",
+"x": 66,
+"y": 259,
+"fuss": 61,
+"kachel": [
+6,
+19
+],
+"block": [
+4,
+16,
+4,
+4
+],
+"ebene": 1,
+"anim": "lampe",
+"teil": "blitze",
+"lampe_box": [
+24,
+0,
+36,
+44
+],
+"licht_farbe": [
+150,
+255,
+210
+]
+},
+{
+"datei": "varianten/digifeuer-13_m.png",
+"basis": "digifeuer/13",
+"x": 482,
+"y": 259,
+"fuss": 61,
+"kachel": [
+32,
+19
+],
+"block": [
+30,
+16,
+4,
+4
+],
+"ebene": 1,
+"anim": "lampe",
+"teil": "blitze",
+"lampe_box": [
+24,
+0,
+36,
+44
+],
+"licht_farbe": [
+150,
+255,
+210
+]
+},
+{
+"datei": "varianten/tank3-00.png",
+"basis": "tank3/00",
+"x": 986,
+"y": 138,
+"fuss": 86,
+"kachel": [
+64,
+13
+],
+"block": [
+61,
+8,
+5,
+6
+],
+"ebene": 1,
+"anim": "maschine",
+"fluessig": [
+[
+16,
+16,
+58,
+66,
+"cyan"
+]
+],
+"leds": true,
+"led_box": [
+[
+18,
+72,
+58,
+86
+]
+]
+},
+{
+"datei": "varianten/tank3-00.png",
+"basis": "tank3/00",
+"x": 986,
+"y": 314,
+"fuss": 86,
+"kachel": [
+64,
+24
+],
+"block": [
+61,
+19,
+5,
+6
+],
+"ebene": 1,
+"anim": "maschine",
+"fluessig": [
+[
+16,
+16,
+58,
+66,
+"cyan"
+]
+],
+"leds": true,
+"led_box": [
+[
+18,
+72,
+58,
+86
+]
+]
+},
+{
+"datei": "varianten/kapsel2-14.png",
+"basis": "kapsel2/14",
+"x": 713,
+"y": 115,
+"fuss": 61,
+"kachel": [
+46,
+10
+],
+"block": [
+44,
+7,
+3,
+4
+],
+"ebene": 1
+},
+{
+"datei": "varianten/kapsel2-02.png",
+"basis": "kapsel2/02",
+"x": 780,
+"y": 114,
+"fuss": 62,
+"kachel": [
+50,
+10
+],
+"block": [
+48,
+7,
+3,
+4
+],
+"ebene": 1,
+"anim": "maschine",
+"fluessig": [
+[
+12,
+16,
+30,
+50,
+"gruen"
+]
+],
+"leds": true,
+"led_box": [
+[
+8,
+2,
+32,
+14
+]
+]
+},
+{
+"datei": "varianten/kapsel2-11.png",
+"basis": "kapsel2/11",
+"x": 833,
+"y": 114,
+"fuss": 62,
+"kachel": [
+54,
+10
+],
+"block": [
+52,
+7,
+4,
+4
+],
+"ebene": 1,
+"anim": "maschine",
+"fluessig": [
+[
+4,
+4,
+58,
+50,
+"rot"
+]
+],
+"leds": true,
+"led_box": [
+[
+22,
+46,
+42,
+60
+],
+[
+48,
+34,
+62,
+48
+]
+]
+},
+{
+"datei": "varianten/kapsel2-04.png",
+"basis": "kapsel2/04",
+"x": 706,
+"y": 201,
+"fuss": 55,
+"kachel": [
+46,
+15
+],
+"block": [
+44,
+12,
+4,
+4
+],
+"ebene": 1,
+"teil": "leds",
+"led_box": [
+[
+8,
+36,
+52,
+55
+]
+]
+},
+{
+"datei": "varianten/kapsel2-11.png",
+"basis": "kapsel2/11",
+"x": 769,
+"y": 194,
+"fuss": 62,
+"kachel": [
+50,
+15
+],
+"block": [
+48,
+12,
+4,
+4
+],
+"ebene": 1,
+"anim": "maschine",
+"fluessig": [
+[
+4,
+4,
+58,
+50,
+"rot"
+]
+],
+"leds": true,
+"led_box": [
+[
+22,
+46,
+42,
+60
+],
+[
+48,
+34,
+62,
+48
+]
+]
+},
+{
+"datei": "varianten/kapsel2-14.png",
+"basis": "kapsel2/14",
+"x": 841,
+"y": 195,
+"fuss": 61,
+"kachel": [
+54,
+15
+],
+"block": [
+52,
+12,
+3,
+4
+],
+"ebene": 1
+},
+{
+"datei": "varianten/labor-09.png",
+"basis": "labor/09",
+"x": 1127,
+"y": 102,
+"fuss": 58,
+"kachel": [
+72,
+9
+],
+"block": [
+70,
+6,
+4,
+4
+],
+"ebene": 1,
+"anim": "maschine",
+"leds": true,
+"led_max": 4
+},
+{
+"datei": "varianten/labor-01.png",
+"basis": "labor/01",
+"x": 1234,
+"y": 127,
+"fuss": 49,
+"kachel": [
+79,
+10
+],
+"block": [
+77,
+7,
+4,
+4
+],
+"ebene": 1,
+"anim": "maschine",
+"schirm": [
+[
+7,
+2,
+28,
+13
+]
+],
+"leds": true,
+"led_box": [
+[
+38,
+6,
+61,
+22
+]
+]
+},
+{
+"datei": "varianten/kammer-00.png",
+"basis": "kammer/00",
+"x": 88,
+"y": 690,
+"fuss": 62,
+"kachel": [
+7,
+46
+],
+"block": [
+5,
+43,
+3,
+4
+],
+"ebene": 1,
+"anim": "lampe"
+},
+{
+"datei": "varianten/kammer-00.png",
+"basis": "kammer/00",
+"x": 144,
+"y": 690,
+"fuss": 62,
+"kachel": [
+10,
+46
+],
+"block": [
+9,
+43,
+3,
+4
+],
+"ebene": 1,
+"anim": "lampe"
+},
+{
+"datei": "varianten/kammer-00.png",
+"basis": "kammer/00",
+"x": 416,
+"y": 690,
+"fuss": 62,
+"kachel": [
+27,
+46
+],
+"block": [
+26,
+43,
+3,
+4
+],
+"ebene": 1,
+"anim": "lampe"
+},
+{
+"datei": "varianten/kammer-00.png",
+"basis": "kammer/00",
+"x": 472,
+"y": 690,
+"fuss": 62,
+"kachel": [
+31,
+46
+],
+"block": [
+29,
+43,
+3,
+4
+],
+"ebene": 1,
+"anim": "lampe"
+},
+{
+"datei": "varianten/obelisk_bau-00.png",
+"basis": "obelisk_bau/00",
+"x": 596,
+"y": 601,
+"fuss": 87,
+"kachel": [
+39,
+42
+],
+"block": [
+37,
+37,
+5,
+6
+],
+"ebene": 1
+},
+{
+"datei": "varianten/obelisk_bau-00_m.png",
+"basis": "obelisk_bau/00",
+"x": 788,
+"y": 601,
+"fuss": 87,
+"kachel": [
+51,
+42
+],
+"block": [
+49,
+37,
+5,
+6
+],
+"ebene": 1
+},
+{
+"datei": "varianten/raum-00.png",
+"basis": "raum/00",
+"x": 607,
+"y": 452,
+"fuss": 60,
+"kachel": [
+38,
+31
+],
+"block": [
+37,
+28,
+2,
+4
+],
+"ebene": 1,
+"anim": "lampe"
+},
+{
+"datei": "varianten/raum-00.png",
+"basis": "raum/00",
+"x": 831,
+"y": 452,
+"fuss": 60,
+"kachel": [
+52,
+31
+],
+"block": [
+51,
+28,
+2,
+4
+],
+"ebene": 1,
+"anim": "lampe"
+},
+{
+"datei": "varianten/raum-00.png",
+"basis": "raum/00",
+"x": 607,
+"y": 692,
+"fuss": 60,
+"kachel": [
+38,
+46
+],
+"block": [
+37,
+43,
+2,
+4
+],
+"ebene": 1,
+"anim": "lampe"
+},
+{
+"datei": "varianten/raum-00.png",
+"basis": "raum/00",
+"x": 831,
+"y": 692,
+"fuss": 60,
+"kachel": [
+52,
+46
+],
+"block": [
+51,
+43,
+2,
+4
+],
+"ebene": 1,
+"anim": "lampe"
+},
+{
+"datei": "varianten/raum-01_gefuellt.png",
+"basis": "raum/01_gefuellt",
+"x": 666,
+"y": 436,
+"fuss": 41,
+"kachel": [
+43,
+28
+],
+"block": [
+41,
+26,
+3,
+3
+],
+"ebene": 1,
+"an_wand": true,
+"kein_schatten": true,
+"keine_verdeckung": true
+},
+{
+"datei": "varianten/raum-01_gefuellt.png",
+"basis": "raum/01_gefuellt",
+"x": 746,
+"y": 436,
+"fuss": 41,
+"kachel": [
+48,
+28
+],
+"block": [
+46,
+26,
+3,
+3
+],
+"ebene": 1,
+"an_wand": true,
+"kein_schatten": true,
+"keine_verdeckung": true
+},
+{
+"datei": "varianten/portal2-00_lila.png",
+"basis": "portal2/00_lila",
+"x": 999,
+"y": 513,
+"fuss": 79,
+"kachel": [
+65,
+36
+],
+"block": [
+62,
+32,
+6,
+5
+],
+"ebene": 1,
+"anim": "portal",
+"liegend": true
+},
+{
+"datei": "varianten/portal2-00_lila.png",
+"basis": "portal2/00_lila",
+"x": 1286,
+"y": 513,
+"fuss": 79,
+"kachel": [
+82,
+36
+],
+"block": [
+80,
+32,
+6,
+5
+],
+"ebene": 1,
+"anim": "portal",
+"liegend": true
+},
+{
+"datei": "varianten/portalraum-00.png",
+"basis": "portalraum/00",
+"x": 1016,
+"y": 682,
+"fuss": 54,
+"kachel": [
+65,
+45
+],
+"block": [
+63,
+42,
+4,
+4
+],
+"ebene": 1
+},
+{
+"datei": "varianten/portalraum-14.png",
+"basis": "portalraum/14",
+"x": 1250,
+"y": 688,
+"fuss": 48,
+"kachel": [
+80,
+45
+],
+"block": [
+78,
+43,
+4,
+3
+],
+"ebene": 1
+},
+{
+"datei": "varianten/portalraum-01.png",
+"basis": "portalraum/01",
+"x": 914,
+"y": 466,
+"fuss": 62,
+"kachel": [
+57,
+32
+],
+"block": [
+57,
+29,
+2,
+4
+],
+"ebene": 1
+},
+{
+"datei": "varianten/portalraum-01.png",
+"basis": "portalraum/01",
+"x": 914,
+"y": 674,
+"fuss": 62,
+"kachel": [
+57,
+45
+],
+"block": [
+57,
+42,
+2,
+4
+],
+"ebene": 1
+},
+{
+"datei": "varianten/schild-00.png",
+"basis": "schild/00",
+"x": 228,
+"y": 774,
+"fuss": 20,
+"kachel": [
+14,
+49
+],
+"block": [
+14,
+48,
+2,
+2
+],
+"ebene": 1,
+"an_wand": true,
+"kein_schatten": true,
+"keine_verdeckung": true
+},
+{
+"datei": "varianten/schild-00.png",
+"basis": "schild/00",
+"x": 548,
+"y": 774,
+"fuss": 20,
+"kachel": [
+34,
+49
+],
+"block": [
+34,
+48,
+2,
+2
+],
+"ebene": 1,
+"an_wand": true,
+"kein_schatten": true,
+"keine_verdeckung": true
+},
+{
+"datei": "varianten/schild-00.png",
+"basis": "schild/00",
+"x": 868,
+"y": 774,
+"fuss": 20,
+"kachel": [
+54,
+49
+],
+"block": [
+54,
+48,
+2,
+2
+],
+"ebene": 1,
+"an_wand": true,
+"kein_schatten": true,
+"keine_verdeckung": true
+},
+{
+"datei": "varianten/schild-00.png",
+"basis": "schild/00",
+"x": 1188,
+"y": 774,
+"fuss": 20,
+"kachel": [
+74,
+49
+],
+"block": [
+74,
+48,
+2,
+2
+],
+"ebene": 1,
+"an_wand": true,
+"kein_schatten": true,
+"keine_verdeckung": true
+},
+{
+"datei": "varianten/raum-00.png",
+"basis": "raum/00",
+"x": 78,
+"y": 772,
+"fuss": 60,
+"kachel": [
+5,
+51
+],
+"block": [
+4,
+48,
+2,
+4
+],
+"ebene": 1,
+"anim": "lampe"
+},
+{
+"datei": "varianten/raum-00.png",
+"basis": "raum/00",
+"x": 78,
+"y": 948,
+"fuss": 60,
+"kachel": [
+5,
+62
+],
+"block": [
+4,
+59,
+2,
+4
+],
+"ebene": 1,
+"anim": "lampe"
+},
+{
+"datei": "varianten/raum-00.png",
+"basis": "raum/00",
+"x": 1341,
+"y": 772,
+"fuss": 60,
+"kachel": [
+84,
+51
+],
+"block": [
+83,
+48,
+2,
+4
+],
+"ebene": 1,
+"anim": "lampe"
+},
+{
+"datei": "varianten/raum-00.png",
+"basis": "raum/00",
+"x": 1341,
+"y": 948,
+"fuss": 60,
+"kachel": [
+84,
+62
+],
+"block": [
+83,
+59,
+2,
+4
+],
+"ebene": 1,
+"anim": "lampe"
+},
+{
+"datei": "varianten/halle-00.png",
+"basis": "halle/00",
+"x": 105,
+"y": 787,
+"fuss": 61,
+"kachel": [
+8,
+52
+],
+"block": [
+6,
+49,
+4,
+4
+],
+"ebene": 1
+},
+{
+"datei": "varianten/halle-00.png",
+"basis": "halle/00",
+"x": 273,
+"y": 931,
+"fuss": 61,
+"kachel": [
+19,
+61
+],
+"block": [
+17,
+58,
+4,
+4
+],
+"ebene": 1
+},
+{
+"datei": "varianten/halle-00.png",
+"basis": "halle/00",
+"x": 537,
+"y": 883,
+"fuss": 61,
+"kachel": [
+35,
+58
+],
+"block": [
+33,
+55,
+4,
+4
+],
+"ebene": 1
+},
+{
+"datei": "varianten/halle-00.png",
+"basis": "halle/00",
+"x": 874,
+"y": 915,
+"fuss": 61,
+"kachel": [
+56,
+60
+],
+"block": [
+54,
+57,
+4,
+4
+],
+"ebene": 1
+},
+{
+"datei": "varianten/halle-00.png",
+"basis": "halle/00",
+"x": 1217,
+"y": 771,
+"fuss": 61,
+"kachel": [
+78,
+51
+],
+"block": [
+76,
+48,
+4,
+4
+],
+"ebene": 1
+},
+{
+"datei": "varianten/halle-00.png",
+"basis": "halle/00",
+"x": 1097,
+"y": 867,
+"fuss": 61,
+"kachel": [
+70,
+57
+],
+"block": [
+68,
+54,
+4,
+4
+],
+"ebene": 1
+},
+{
+"datei": "varianten/halle-01.png",
+"basis": "halle/01",
+"x": 181,
+"y": 815,
+"fuss": 49,
+"kachel": [
+12,
+53
+],
+"block": [
+11,
+50,
+2,
+4
+],
+"ebene": 1
+},
+{
+"datei": "varianten/halle-01.png",
+"basis": "halle/01",
+"x": 457,
+"y": 783,
+"fuss": 49,
+"kachel": [
+29,
+51
+],
+"block": [
+28,
+48,
+2,
+4
+],
+"ebene": 1
+},
+{
+"datei": "varianten/halle-01.png",
+"basis": "halle/01",
+"x": 885,
+"y": 815,
+"fuss": 49,
+"kachel": [
+56,
+53
+],
+"block": [
+55,
+50,
+2,
+4
+],
+"ebene": 1
+},
+{
+"datei": "varianten/halle-02.png",
+"basis": "halle/02",
+"x": 333,
+"y": 819,
+"fuss": 61,
+"kachel": [
+22,
+54
+],
+"block": [
+20,
+51,
+4,
+4
+],
+"ebene": 1,
+"anim": "teil_drehen",
+"dreh": [
+{
+"bis_y": 35,
+"punkt": [
+13,
+35
+],
+"amp": 3
+}
+]
+},
+{
+"datei": "varianten/halle-02.png",
+"basis": "halle/02",
+"x": 785,
+"y": 771,
+"fuss": 61,
+"kachel": [
+50,
+51
+],
+"block": [
+49,
+48,
+4,
+4
+],
+"ebene": 1,
+"anim": "teil_drehen",
+"dreh": [
+{
+"bis_y": 35,
+"punkt": [
+13,
+35
+],
+"amp": 3
+}
+]
+},
+{
+"datei": "varianten/halle-02.png",
+"basis": "halle/02",
+"x": 1005,
+"y": 803,
+"fuss": 61,
+"kachel": [
+64,
+53
+],
+"block": [
+62,
+50,
+4,
+4
+],
+"ebene": 1,
+"anim": "teil_drehen",
+"dreh": [
+{
+"bis_y": 35,
+"punkt": [
+13,
+35
+],
+"amp": 3
+}
+]
+},
+{
+"datei": "varianten/halle-15.png",
+"basis": "halle/15",
+"x": 1264,
+"y": 933,
+"fuss": 59,
+"kachel": [
+80,
+61
+],
+"block": [
+79,
+58,
+4,
+4
+],
+"ebene": 1
+}
+]

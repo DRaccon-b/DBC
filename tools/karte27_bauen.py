@@ -1,0 +1,253 @@
+"""Karte 27 - Destiny Lake (A02), Gelaende im Stil von Karte 23 / 25 (Bausteine Karte 01/04/06).
+
+Gras und Sand aus Karte 01, Waldboden dunkler (die Baeume des Waldrands sind Objekte), Moor aus Erdkacheln (Karte 23)
+mit Schlamm, Feldweg, Steinweg-Pflaster, See mit Ufer und Tiefenstufen (wasser_vertieft), Plateaus mit grauen
+Steinmauer-Fronten (3 Kacheln, Karte 23 'stein'), Wasserfaelle wo die Baeche des Plateaus ueber die Front fallen,
+Holzstege (Karte 25), Teleporter.
+
+  python3 tools/karte27_layout.py && python3 tools/karte27_bauen.py
+"""
+import json, os, sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import numpy as np
+from PIL import Image
+import karte_bauen as kb
+import karte04_bauen as k4
+import karte06_bauen as k6
+import karte20_bauen as k20
+import karte23_bauen as k23
+import karte25_bauen as k25
+import klippen
+
+ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
+KARTE = os.path.join(ROOT, 'maps', 'karte27')
+OBJ = os.path.join(ROOT, 'assets', 'objekte', 'karte27')
+T = 16
+N_FRAMES = 4
+k4.N_FRAMES = N_FRAMES
+import karte_bauen as _kb
+_kb.N_FRAMES = N_FRAMES                       # Windwelle (Pflanzen) ueber die 4 Bilder der Karte
+H = k4.H
+weich, zell_maske, flaeche = k4.weich, k4.zell_maske, k20.flaeche
+k4.RASTER45 = True                       # Nutzer: ALLE Bodenkanten am 16er-Raster mit 45 Grad (Regel 6b)
+FRONT = 48                                       # Mauerfronten der Vorlage sind 3 Kacheln hoch
+WRACK_BODEN = (246, 1112)                        # Mitte der aufgewuehlten Erde unter dem Wrack (px)
+
+
+def maske(cls, arten):
+    return np.kron(np.array([[c in arten for c in z] for z in cls]), np.ones((T, T), bool))
+
+
+def pflaster(cols, rows):
+    """Steinweg: graue Pflastersteine (je Kachel 2x2 Steine, versetzt), Fugen dunkel, Lichtkante oben links."""
+    t = np.zeros((rows * T, cols * T, 3), np.uint8)
+    rng = np.random.RandomState(27)
+    for y in range(0, rows * T, 8):
+        off = 4 if (y // 8) % 2 else 0
+        for x in range(-8, cols * T, 8):
+            c = np.array((128, 134, 138)) + rng.randint(-10, 10)
+            x0, x1 = max(0, x + off), min(cols * T, x + off + 8)
+            if x1 <= x0:
+                continue
+            t[y:y + 8, x0:x1] = c
+            t[y, x0:x1] = np.clip(c + 22, 0, 255)
+            t[y:y + 8, x0] = np.clip(c + 12, 0, 255)
+            t[y + 7, x0:x1] = (70, 74, 80)
+            t[y:y + 8, x1 - 1] = (78, 82, 88)
+    return t
+
+
+def pflaster_rand(a, pm, gras, sand, sm, seed=272):
+    """Uebergang Gras/Sand -> Pflaster (Nutzer): am Rand der Platten waechst Gras bzw. liegt Sand unregelmaessig
+    1-4 px ueber die Steine, die aeussersten Steine sind etwas abgesenkt (dunkler), Kontaktschatten an der
+    Graskante (Licht von oben links)."""
+    rs = np.random.RandomState(seed)
+    Hh, W = pm.shape
+    aussen = ~pm
+    d = np.zeros((Hh, W), np.int32)                                   # Abstand (px) vom Rand ins Pflaster hinein
+    cur = aussen.copy()
+    for i in range(1, 6):
+        cur = cur | np.roll(cur, 1, 0) | np.roll(cur, -1, 0) | np.roll(cur, 1, 1) | np.roll(cur, -1, 1)
+        d[(d == 0) & pm & cur] = i
+    tiefe = rs.randint(1, 5, (Hh // 4 + 2, W // 4 + 2))               # wie weit Gras/Sand je Stelle hineinwaechst
+    tiefe = np.kron(tiefe, np.ones((4, 4), int))[:Hh, :W]
+    rauschen = rs.rand(Hh, W)
+    ueber = pm & (d > 0) & ((d < tiefe) | ((d == tiefe) & (rauschen < 0.5)))
+    nah_sand = np.zeros_like(pm)
+    s_ = sm.copy()
+    for _ in range(6):
+        s_ = s_ | np.roll(s_, 1, 0) | np.roll(s_, -1, 0) | np.roll(s_, 1, 1) | np.roll(s_, -1, 1)
+    nah_sand = s_
+    a[ueber & ~nah_sand] = gras[ueber & ~nah_sand]
+    a[ueber & nah_sand] = sand[ueber & nah_sand]
+    rest = pm & ~ueber & (d > 0) & (d <= 5)                          # Randsteine leicht abgesenkt
+    a[rest] = (a[rest] * 0.88).astype(np.uint8)
+    kante = pm & ~ueber & (np.roll(ueber | aussen, 1, 0) | np.roll(ueber | aussen, 1, 1))
+    a[kante] = (a[kante] * 0.72).astype(np.uint8)                    # Kontaktschatten unter Gras-/Sandkante
+
+
+def bauen(frame=None, speichern=True):
+    lay = json.load(open(os.path.join(KARTE, 'layout.json')))
+    cls = lay['klassen']
+    _kl = np.array([list(z) for z in cls])                           # einzelne Moorkacheln (runde Flecken) -> Wiese
+    for ys_, xs_ in k4._komponenten(_kl == 'f'):
+        if len(ys_) < 2:
+            _kl[ys_, xs_] = 'g'
+    cls = [''.join(z) for z in _kl]
+    cols, rows = lay['groesse']
+    Wp, Hp = cols * T, rows * T
+    hp = np.kron(np.array([[int(c) for c in z] for z in lay['hoehe']]), np.ones((T, T), int))
+    basis = os.path.join(ROOT, 'assets', 'basis')
+    gras = flaeche(k6.kacheln(os.path.join(basis, 'gras_%d.png'), 5), cols, rows)
+    sand = flaeche(k6.kacheln(os.path.join(basis, 'sand_%d.png'), 5), cols, rows)
+    erde = flaeche(k6.kacheln(os.path.join(basis, 'sand_%d.png'), 5, k23.braun), cols, rows)
+    a = gras.copy()
+    wm = weich(zell_maske(cls, 'h', cols, rows), 5, 0.4, 3)          # Waldboden (Baeume sind Objekte)
+    a[wm] = (gras[wm] * np.array([0.62, 0.7, 0.66])).astype(np.uint8)
+    fm = weich(zell_maske(cls, 'f', cols, rows), 6.0, 0.5, 9)        # Moor: Erde, nass und dunkel
+    a[fm] = erde[fm]
+    k23.schlamm(a, fm, erde)
+    roh = zell_maske(cls, 'wT', cols, rows)                          # Feldweg
+    m = weich(roh, 5.0, 0, 4)   # Regel 6b: 45-Grad-Kanten
+    a[m] = sand[m]
+    saum = weich(roh, 5.0, 0, 4, 0.28) & ~m
+    a[saum] = (a[saum] * 0.9).astype(np.uint8)
+    sm = weich(zell_maske(cls, 's', cols, rows), 6.0, 0.4, 5)        # Sandstrand
+    a[sm] = sand[sm]
+    pm = weich(zell_maske(cls, 'p', cols, rows), 3.0, 0.35, 27, 0.5)   # Steinweg / Platz: ausgefranste Kante (Nutzer: wie am Anfang)
+    pf = pflaster(cols, rows)
+    a[pm] = pf[pm]
+    pflaster_rand(a, pm, gras, sand, sm)
+    wx, wy = WRACK_BODEN                                             # Wrack: aufgewuehlte, angesengte Erde unter dem Rumpf
+    yy, xx = np.mgrid[0:Hp, 0:Wp]
+    km = (((xx - wx) / 175.0) ** 2 + ((yy - wy) / 30.0) ** 2) < 1
+    km = weich(km.astype(np.float32), 5, 0.5, 31, 0.5)
+    a[km] = (erde[km] * np.array([0.78, 0.72, 0.68])).astype(np.uint8)
+    nah_k = (((xx - wx) / 205.0) ** 2 + ((yy - wy) / 52.0) ** 2) < 1   # nur direkt um das Wrack (Fix: keine Flecken auf der Wiese)
+    rand_k = weich(km.astype(np.float32), 6, 0.3, 32, 0.25) & ~km & nah_k
+    a[rand_k] = (a[rand_k] * np.array([0.86, 0.8, 0.74])).astype(np.uint8)
+    # Plateaus mit grauen Steinmauer-Fronten
+    lippe = k20.lippe_aus_gras(gras)
+    hoch = hp >= 2
+    hoch_k = k23.nach_oben(hoch)
+    a_vor_k = a.copy()
+    wand = k4.hoehenkanten(a, hoch_k, 'stein', FRONT, 8, lippe, np.zeros((Hp, Wp), bool), 27, berg=False)
+    # Wasser: See (Grundebene) und Baeche auf dem Plateau, Ufer und Tiefenstufen
+    import wasser_vertieft
+    x_t = np.array([[ch == 'x' for ch in z] for z in cls])
+    h_t = np.array([[c == '2' for c in z] for z in lay['hoehe']])
+    xm_lo = weich(np.kron(x_t & ~h_t, np.ones((T, T))).astype(np.float32), 4, 0.15, 8, 0.45) & ~hoch_k
+    xm_hi = weich(np.kron(x_t & h_t, np.ones((T, T))).astype(np.float32), 4, 0.15, 8, 0.45) & (hp >= 2)
+    xm = (xm_lo | xm_hi) & ~wand                                     # Wasser bleibt auf seiner Ebene: Bergkante liegt darueber
+    steg_t = np.array([[ch == 'b' for ch in z] for z in cls])
+    xm |= np.kron(steg_t, np.ones((T, T), bool))                    # Stege stehen ueber dem Wasser
+    # Seitliche Bergkante liegt als Ebene ueber dem See (Nutzer): das Wasser laeuft unter das Plateau weiter, sein Rand
+    # liegt verdeckt unter dem Plateau; danach werden Plateau und Seitenkontur wieder darueber gesetzt
+    from PIL import ImageFilter as _IFk
+    def _dehnen(m, n):
+        return np.array(Image.fromarray(m.astype(np.uint8) * 255).filter(_IFk.MaxFilter(n))) > 0
+    unter = _dehnen(xm_lo, 25) & hoch_k                              # Wasser laeuft unter das Plateau weiter (verdeckt)
+    unter &= ~_dehnen(xm_hi, 9)                                      # (Seitenkontur gehoert zu wand)
+    oben = a.copy()
+    luecke = xm_lo & ~xm & _dehnen(hoch_k, 13) & (np.roll(xm, 4, axis=1) | np.roll(xm, 3, axis=1))
+    xm_zeichnen = xm | unter | luecke                                # auch unter der Seitenkontur durch
+    seite_k = (oben != a_vor_k).any(axis=2) & ~xm & ~hoch_k & _dehnen(unter, 21) & (luecke | ~xm_lo)  # Seitenkontur
+    a = np.array(wasser_vertieft.vertiefen(Image.fromarray(a), np.ones_like(xm), frame, maske=xm_zeichnen).convert('RGB'))
+    deck = (((unter & hoch_k) | luecke | seite_k | ((a != oben).any(axis=2) & hoch_k)) & ~_dehnen(xm_hi, 15))
+    deck |= (a != oben).any(axis=2) & _dehnen(hoch_k, 9) & ~hoch_k & ~xm_zeichnen & _dehnen(unter, 21)  # kein Uferrand an der Kontur
+    a[deck] = oben[deck]
+    # Pfuetzen im Moor oben links: braunes Schlammwasser (Nutzer). Kleine Wasserflaechen, die an Moorkacheln grenzen
+    from collections import deque
+    from PIL import ImageFilter as _IF
+    f_t = np.array([[ch == 'f' for ch in z] for z in cls])
+    nah_f = np.array(Image.fromarray(f_t.astype(np.uint8) * 255).filter(_IF.MaxFilter(7))) > 0
+    moor_t = np.zeros_like(x_t)
+    gesehen = np.zeros_like(x_t)
+    for y in range(rows):
+        for x in range(cols):
+            if x_t[y, x] and not gesehen[y, x]:
+                komp, q = [], deque([(y, x)]); gesehen[y, x] = True
+                while q:
+                    cy, cx = q.popleft(); komp.append((cy, cx))
+                    for yy, xx in ((cy - 1, cx), (cy + 1, cx), (cy, cx - 1), (cy, cx + 1)):
+                        if 0 <= yy < rows and 0 <= xx < cols and x_t[yy, xx] and not gesehen[yy, xx]:
+                            gesehen[yy, xx] = True; q.append((yy, xx))
+                if len(komp) < 60 and any(nah_f[cy, cx] for cy, cx in komp):
+                    for cy, cx in komp:
+                        moor_t[cy, cx] = True
+    moor_px = (np.kron(moor_t, np.ones((T, T), np.uint8)) * 255).astype(np.uint8)
+    moor_w = xm & (np.array(Image.fromarray(moor_px).filter(_IF.MaxFilter(13))) > 0)
+    if moor_w.any():
+        af = a[moor_w].astype(np.float32)
+        l = af.mean(axis=1, keepdims=True)
+        l = (l - l.mean()) * 1.5 + l.mean()                            # Wellen/Glanz deutlicher, Grundton dunkler als der Schlamm
+        braun_w = np.concatenate([l * 0.62 + 6, l * 0.5 + 2, l * 0.3 + 2], axis=1)
+        a[moor_w] = np.clip(braun_w, 0, 255).astype(np.uint8)
+    pmb = maske(cls, 'p') & xm                                       # Steinbruecken ueber dem Wasser (gerade Kanten)
+    a[pmb] = pf[pmb]
+    img = Image.fromarray(a).convert('RGBA')
+    # Wasserfaelle: Baeche des Plateaus, die an der Front enden
+    for (x0, y0, x1, y1) in lay['plateaus']:
+        reihe = y1
+        if reihe + 1 >= rows:
+            continue
+        xs = [x for x in range(x0, x1 + 1) if cls[reihe][x] == 'x']
+        laeufe, cur = [], []
+        for x in xs:
+            if cur and x != cur[-1] + 1:
+                laeufe.append(cur); cur = []
+            cur.append(x)
+        if cur:
+            laeufe.append(cur)
+        for l in laeufe:
+            klippen.zeichne_wasserfall(img, l[0] * T, (l[-1] + 1) * T, (reihe + 1) * T, (reihe + 1) * T + FRONT + 6,
+                                       seed=l[0], frame=frame or 0)
+    a = np.array(img.convert('RGB'))
+    # Holzstege (wie Karte 25): Rechtecke der zusammenhaengenden 'b'-Kacheln
+    stege = []
+    gesehen = set()
+    for y in range(rows):
+        for x in range(cols):
+            if cls[y][x] == 'b' and (y, x) not in gesehen:
+                x1 = x
+                while x1 + 1 < cols and cls[y][x1 + 1] == 'b':
+                    x1 += 1
+                y1 = y
+                while y1 + 1 < rows and all(cls[y1 + 1][xx] == 'b' for xx in range(x, x1 + 1)):
+                    y1 += 1
+                for yy in range(y, y1 + 1):
+                    for xx in range(x, x1 + 1):
+                        gesehen.add((yy, xx))
+                stege.append((x, y, x1, y1))
+    steg_m = k25.stege(a, {'stege': stege}, xm) if stege else np.zeros((Hp, Wp), bool)
+    for tp in lay['teleporter']:
+        k4.teleporter_zeichnen(a, tp['x'], tp['y'], tp['b'], tp['h'], frame)
+    img = Image.fromarray(a).convert('RGBA')
+    lvl = hp.astype(np.uint8) + 1
+    wasser = xm & ~steg_m & ~maske(cls, 'p')
+    if speichern and frame is None:
+        img.save(os.path.join(KARTE, 'terrain_basis.png'))
+        np.save(os.path.join(KARTE, 'wasser.npy'), np.packbits(wasser))
+        np.save(os.path.join(KARTE, 'pixelhoehe.npy'), lvl)
+        np.save(os.path.join(KARTE, 'wand.npy'), np.packbits(wand))
+    pfj = os.path.join(OBJ, 'platzierung.json')
+    if os.path.exists(pfj):
+        objs = sorted((o for o in json.load(open(pfj)) if os.path.exists(os.path.join(OBJ, o['datei']))),
+                      key=lambda o: o['y'] + o['fuss'])
+        if objs:
+            cache = {o['datei']: Image.open(os.path.join(OBJ, o['datei'])).convert('RGBA') for o in objs}
+            ebenen = lvl.copy().astype(np.int16)
+            ebenen[wand] = 9
+            ebenen[wasser] = 7
+            k4.objekte_zeichnen(img, objs, cache, ~wasser & ~wand, frame, ebenen=ebenen)
+            k4.animieren(img, objs, cache, frame or 0)
+            k6.animieren_k6(img, objs, cache, frame or 0)
+            kb.laternen_licht(img, [o for o in objs if o.get('anim') == 'laterne'], frame)
+    if speichern and frame is None:
+        img.save(os.path.join(KARTE, 'terrain.png'))
+    print('Karte 27 %dx%d gebaut' % (cols, rows))
+    return img
+
+
+if __name__ == '__main__':
+    bauen()

@@ -36,7 +36,10 @@ def main(karte):
     cols, rows = lay['groesse']
     lvl = np.load(os.path.join(K, 'pixelhoehe.npy'))
     Hh, W = lvl.shape
-    wasser = np.unpackbits(np.load(os.path.join(K, 'wasser.npy')))[:Hh * W].reshape(Hh, W).astype(bool)
+    if os.path.exists(os.path.join(K, 'wasser.npy')):
+        wasser = np.unpackbits(np.load(os.path.join(K, 'wasser.npy')))[:Hh * W].reshape(Hh, W).astype(bool)
+    else:                                                     # Karte ohne Wasser (z. B. Festung, Ruinen)
+        wasser = np.zeros((Hh, W), bool)
     grund = np.full((rows, cols), '', object)                 # Grund je Kachel (leer = begehbar)
     ebene = np.zeros((rows, cols), int)
     kach = lambda m, x, y: m[y * T:(y + 1) * T, x * T:(x + 1) * T]
@@ -50,14 +53,36 @@ def main(karte):
             elif os.path.exists(os.path.join(K, 'leere.npy')) and (l_ == 0).mean() >= 0.5:
                 grund[y, x] = 'leere'                         # Karte 15: Leere um die schwebende Insel
             ebene[y, x] = int(np.bincount(l_.ravel()).argmax())
+    if lay.get('risse'):                                     # Karte 33: Raum-Zeit-Risse sind nicht begehbar
+        from PIL import ImageDraw as _D
+        rm = Image.new('L', (cols, rows), 0)
+        for r_ in lay['risse']:
+            ex, ey = r_['ecke']
+            ecke = [(0 if ex == 0 else cols, 0 if ey == 0 else rows)]
+            _D.Draw(rm).polygon([(x - 0.5, y - 0.5) for (x, y) in [tuple(p_) for p_ in r_['kante']] + ecke], fill=255)
+        grund[np.array(rm) > 0] = 'leere'
     # Durchgaenge: Treppen (Front 32 px = 2 Kacheln unter der Kante), Bruecken, Arena-Treppe
     durch = np.zeros((rows, cols), bool)
     for (x0, x1, e, yb) in lay.get('treppen_sued', []):
         durch[yb:yb + 3, x0:x1 + 1] = True
+    for t_ in lay.get('treppen', []):                        # Treppen anderer Karten: (x0, x1, y0, y1) bzw. (x0, x1, ye)
+        if isinstance(t_, dict):
+            continue
+        if len(t_) == 4:
+            durch[max(0, t_[2] - 1):t_[3] + 2, t_[0]:t_[1] + 1] = True
+        elif len(t_) == 3:
+            durch[max(0, t_[2] - 1):t_[2] + 4, t_[0]:t_[1] + 1] = True
     if lay.get('arena_treppe'):
         x0, x1, yb = lay['arena_treppe']
         durch[yb:yb + 3, x0:x1 + 1] = True
     for b in lay.get('bruecken', []):                        # Holzstege (Karte 12): ganze Flaeche begehbar
+        if isinstance(b, dict):
+            continue
+        if len(b) == 2:                                      # (x0, x1): Reihen mit Brueckenkacheln 'b' (Karte 21)
+            for y in range(rows):
+                if lay['klassen'][y][b[0]] == 'b':
+                    durch[y, b[0]:b[1] + 1] = True
+            continue
         durch[b[1]:b[3] + 1, b[0]:b[2] + 1] = True
     bru = lay.get('bruecke')                                 # Steinbruecke (Karte 11): Deck mittig, Bruestungen zu
     if bru:

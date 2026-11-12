@@ -24,7 +24,7 @@ KARTE = os.path.join(ROOT, 'maps', 'karte19')
 C, R = 76, 38
 RAEUME = [(6, 6), (42, 6)]
 RW, RH = 28, 24
-PLATTEN = [(6, 12), (22, 12), (14, 18)]
+PLATTEN = [(6, 12), (21, 12), (14, 18)]   # Paar spiegelsymmetrisch zur Raumachse (Pruefung)
 KANAL = os.environ.get('K19_KANAL', '0') == '1'   # Variante: Wasser laeuft links und rechts als Kanal nach unten
 
 

@@ -21,8 +21,24 @@ wird jede Regel einzeln geprüft.
    - 5b. 2–3 Objekte, die dieser Regel folgen.
    - 5c. Gibt es zu wenig Variation, dürfen neue Objekte erstellt werden – gern auch gleich für andere
      Kartentypen (Gras, Stein, Wüste, Schnee …).
+   - 5d. **Begleiter am Stumpf** (gilt nur für Bäume in der Karte, nicht für den Waldrand):
+     - **Vor dem Stumpf** nur Objekte, die **2 Kacheln hoch** sind (z. B. bemooste Felsen, Blumenbüsche). Sie stehen
+       **eine Kachel tiefer** als der Baum, sodass nur ihre **oberste Kachel** den Stumpf überdeckt.
+     - **Hinter den Blättern** dürfen Felsen eine Reihe höher stehen; die Krone verdeckt sie teilweise (sie werden
+       vor dem Baum gezeichnet).
+     - **Nichts auf Stammhöhe:** In der Stammreihe des Baums sowie direkt darüber und darunter (eine Kachel links und
+       rechts daneben) wird keine freie Deko gesetzt – sonst liegt sie auf dem Stumpf.
+     - Begleiter eines Baums überlappen sich nicht gegenseitig (Fels vor dem Stumpf → keine zusätzliche Eckblume).
+     - Abwechseln statt überall gleich: mal Fels vor dem Stumpf, mal Fels hinter den Blättern, mal beides.
 6. **Wege** gehen nie nur gerade und müssen nicht durchgängig sein: diagonal erlaubt, natürliche Bögen, ein Weg
    darf auch einmal unterbrechen und später weitergehen.
+   - 6b. **Alle Bodenkanten in 45° (Nutzer, Karte 31; für alle Bodenarten erweitert):** Gilt nicht nur für Wege, sondern für
+     jede Bodenkante (Gras, Sand, Erde, Platz, Wasser, Schlamm, Schnee …) – immer am 16er-Raster mit 45°-Schrägen
+     (`karte04_bauen.RASTER45 = True`). Wege im Einzelnen: Der Verlauf eines Weges darf geschwungen sein, aber seine Ränder
+     folgen dem Kachelraster mit **45°-Schrägen** an den Ecken (abgeschrägte Kachelstufen) – keine runden
+     Freiform-Kurven. An Treppen läuft der Weg ebenfalls mit 45° auf die exakte Treppenbreite zu.
+     Referenz, die der Nutzer „perfekt“ fand: `karte31_bauen.weg_rund` – Verlauf als Kurve auf Kacheln gerastert, die
+     Kachelmaske (mit angrenzenden Plätzen/Treppen) mit Gauß 5 px weichgezeichnet und bei 50 % geschnitten.
 7. **Schatten** ragen nie über Kanten (Klippen, Wände, Wasser) oder über andere Objekte.
 8. **Bäume überlappen sich nur an den äußeren Kachelspalten:** *(vorerst NICHT anwenden – der Nutzer hat die
    Baum-Änderungen auf Karte 01 und 05 verworfen; Bäume bleiben wie in der jeweiligen Vorlage/v1.0)*
@@ -122,6 +138,8 @@ Wenn eine Karte fertig scheint: noch einmal komplett auf **Pixelfehler** und **L
   exakt auf der Mitte des Teppichs bzw. Rahmens. Das geht vor Regel 1b; Paare werden an derselben Achse gespiegelt.
 - **Fester Rhythmus:** Wiederkehrende Bauteile (Türme, Banner, Wandpfeiler) stehen in gleichen Abständen, symmetrisch zum
   Tor; Banner mittig zwischen den Türmen, Pfeiler im selben Raster.
+  Wandpfeiler liegen symmetrisch zur Achse der jeweiligen Wand bzw. des Raums; jedes Fenster/Banner hängt mittig in einem
+  Feld zwischen zwei Pfeilern (nie auf einem Pfeiler), gleichartige Wandobjekte auf exakt derselben Höhe (Karte 32).
 - **Wandobjekte hängen frei:** Fenster, Banner, Bilder und Fackeln in Originalgröße auf der Wandfläche – mit Abstand zur
   Mauerkrone, Unterkante über der Leiste, ohne Bodenwall und ohne Bodenschatten.
 - **Räume mit Funktion:** Innenräume bekommen eine erkennbare Aufgabe (Bibliothek, Thron, Speisesaal, Ritualsaal) statt
@@ -138,4 +156,35 @@ Wenn eine Karte fertig scheint: noch einmal komplett auf **Pixelfehler** und **L
   nie über originalgetreue Wappen, Logos oder Symbole.
 - **PixelLab nur Objekt-Creator:** Neue Objekte ausschließlich mit dem Objekt-Creator (`create-1-direction-object`,
   höchstens 256 px) erzeugen – nicht mit dem Pro-Generator (`generate-image-v2`) oder Pixflux für größere Bilder.
+  - **Ausnahme (Nutzer, Karte 25):** Objekte, die zwingend größer als 256 px sind (z. B. das Schiff in Sunset Bay), dürfen
+    mit dem Pro-Generator erzeugt werden (`tools/pixellab_gross.py`): Vorlagenausschnitt als Subjekt-Referenz (geschützte
+    Symbole vorher übermalt), ein vorhandenes Kartenobjekt als Stil-Referenz, danach mitgezeichnete Fremdteile entfernen.
+- **Gebäude vollständig:** Generierte Gebäude müssen ganz im Bild sein – Dach mit allen Ecken, beide Seitenwände,
+  Sockel; nichts abgeschnitten (mit Rand generieren). Passt ein gutes Gebäude nicht auf seine Fläche, wird die Karte
+  an das Gebäude angepasst (Fläche, Straßen verschieben) – nicht das Gebäude beschnitten oder geflickt.
+- **Deko-Flächen mit Abstand:** Sandflecken, Erdflecken u. Ä. um Objekte (z. B. Sand um Palmen auf Rasen) berühren nie
+  Straßen- oder Gehwegkacheln; sie bleiben mit einigen Pixeln Abstand auf ihrer Fläche.
+- **Nichts auf Wegen:** Objekte stehen nie mit dem Fuß auf Weg- oder Pflasterkacheln (Prüfung beim Setzen). Ausnahmen:
+  Brunnen u. Ä. mitten auf Plätzen, flaches Laub.
+- **Generierte Sprites umfärben:** Liefert PixelLab Farben, die nicht zur Karte passen, werden Stein/Dach/Holz auf die
+  Palette der Karte bzw. eines vorhandenen Vorbild-Objekts umgefärbt (Helligkeit -> Vorbildfarbe, Karte 32: Turm,
+  Säulen). Leuchtende Teile, Fenster und Stoff behalten ihre Farbe.
+- **Mauern massiv:** Jede Mauer hat oben eine Abdeckung (Deckplatten mit Licht-/Schattenkante) und davor eine Wand mit
+  Schattenfuge unter der Abdeckung, Fußkante und Bodenschatten. Die Abdeckung ist überall gleich breit – auch an Stufen.
+- **Durchgänge passend:** Mauerdurchgang, Weg/Steg und Teppich sind gleich breit und liegen auf derselben Achse.
+- **Mitte exakt bestimmen:** Bei runden oder symmetrischen Plätzen/Arenen die Achse aus der Fläche berechnen (notfalls
+  auf der Kachelkante); Ring, Mitte, Runen u. Ä. sitzen exakt darauf (gespiegelt am Klassenraster prüfen).
+- **Keine Wiederholung:** Gleiche Deko-Motive nie nebeneinander; Streudeko ohne Wiederholung ziehen, solange der Vorrat
+  reicht.
+- **Kleinkram dezent:** Lieber verstreutes Laub, Blütenblätter, Zweige und wenige Büschel als volle Flächen. Kleine
+  Pflanzen werfen nur einen Kontaktschatten.
+- **Ruinen-Logik:** In zerfallenen Orten werden Säulen, Leuchter u. Ä. reduziert und liegen kaputt am Boden (umgestürzt,
+  abgebrochen) statt intakt in Reihen.
+- **Teleporter- und Spawnfelder frei:** Im Umkreis (inkl. flankierender Objekte) keine Streudeko.
+- **Schwebende Objekte:** Kein Bodenschatten, 1 px Auf-und-ab mit eigenem Takt, Abstand zu Plattformen und Rissen;
+  surreale Wirkung über Motive, Schimmer und Nachbild.
+- **Blicke in andere Karten:** Risse/Fenster in andere Karten zeigen Ausschnitte im selben Maßstab aus der echten Karte
+  und sind aus deren Animation animiert; die Risskante liegt am 45°-Raster (wie Regel 6b).
+- **Unklares erst fragen:** Bei mehrdeutigen Wünschen kurz nachfragen (z. B. welche Variante gemeint ist), sonst ohne
+  Zögern umsetzen.
 - **Ablauf:** Jede Änderung committen und pushen, Bilder/GIFs an den Nutzer schicken, auf Deutsch erklären.

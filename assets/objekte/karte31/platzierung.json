@@ -1,0 +1,10981 @@
+[
+{
+"datei": "gebaeude/block1.png",
+"basis": "gebaeude/block1",
+"x": 71,
+"y": 556,
+"fuss": 243,
+"kachel": [
+20,
+49
+],
+"ebene": 1,
+"an_wand": true,
+"gebaeude": true,
+"vor_hochbahn": false
+},
+{
+"datei": "gebaeude/turm12.png",
+"basis": "gebaeude/turm12",
+"x": 712,
+"y": 592,
+"fuss": 575,
+"kachel": [
+46,
+72
+],
+"ebene": 1,
+"an_wand": true,
+"gebaeude": true,
+"vor_hochbahn": false
+},
+{
+"datei": "gebaeude/block2.png",
+"basis": "gebaeude/block2",
+"x": 1073,
+"y": 544,
+"fuss": 255,
+"kachel": [
+89,
+49
+],
+"ebene": 1,
+"an_wand": true,
+"gebaeude": true,
+"vor_hochbahn": false
+},
+{
+"datei": "gebaeude/turm5.png",
+"basis": "gebaeude/turm5",
+"x": 1816,
+"y": 592,
+"fuss": 687,
+"kachel": [
+115,
+79
+],
+"ebene": 1,
+"an_wand": true,
+"gebaeude": true,
+"vor_hochbahn": false
+},
+{
+"datei": "gebaeude/block3.png",
+"basis": "gebaeude/block3",
+"x": 1239,
+"y": 1036,
+"fuss": 243,
+"kachel": [
+93,
+79
+],
+"ebene": 1,
+"an_wand": true,
+"gebaeude": true,
+"vor_hochbahn": false
+},
+{
+"datei": "gebaeude/bahnhof.png",
+"basis": "gebaeude/bahnhof",
+"x": 132,
+"y": 1199,
+"fuss": 144,
+"kachel": [
+18,
+83
+],
+"ebene": 1,
+"an_wand": true,
+"gebaeude": true,
+"vor_hochbahn": true
+},
+{
+"datei": "gebaeude/laden_0.png",
+"basis": "gebaeude/laden_0",
+"x": 1128,
+"y": 1373,
+"fuss": 114,
+"kachel": [
+73,
+92
+],
+"ebene": 1,
+"an_wand": true,
+"gebaeude": true
+},
+{
+"datei": "gebaeude/laden_1.png",
+"basis": "gebaeude/laden_1",
+"x": 1221,
+"y": 1374,
+"fuss": 113,
+"kachel": [
+79,
+92
+],
+"ebene": 1,
+"an_wand": true,
+"gebaeude": true,
+"anim": "lampions",
+"lampions": [
+[
+0,
+77,
+10,
+92
+]
+]
+},
+{
+"datei": "gebaeude/laden_2.png",
+"basis": "gebaeude/laden_2",
+"x": 1311,
+"y": 1376,
+"fuss": 111,
+"kachel": [
+84,
+92
+],
+"ebene": 1,
+"an_wand": true,
+"gebaeude": true
+},
+{
+"datei": "gebaeude/laden_3.png",
+"basis": "gebaeude/laden_3",
+"x": 1403,
+"y": 1374,
+"fuss": 113,
+"kachel": [
+90,
+92
+],
+"ebene": 1,
+"an_wand": true,
+"gebaeude": true
+},
+{
+"datei": "gebaeude/laden_4.png",
+"basis": "gebaeude/laden_4",
+"x": 1507,
+"y": 1373,
+"fuss": 114,
+"kachel": [
+97,
+92
+],
+"ebene": 1,
+"an_wand": true,
+"gebaeude": true,
+"anim": "lampions",
+"lampions": [
+[
+4,
+77,
+11,
+87
+],
+[
+24,
+77,
+31,
+87
+],
+[
+64,
+77,
+72,
+87
+],
+[
+84,
+77,
+91,
+87
+]
+]
+},
+{
+"datei": "gebaeude/laden_5.png",
+"basis": "gebaeude/laden_5",
+"x": 1603,
+"y": 1371,
+"fuss": 116,
+"kachel": [
+103,
+92
+],
+"ebene": 1,
+"an_wand": true,
+"gebaeude": true
+},
+{
+"datei": "gebaeude/laden_6.png",
+"basis": "gebaeude/laden_6",
+"x": 1701,
+"y": 1376,
+"fuss": 111,
+"kachel": [
+109,
+92
+],
+"ebene": 1,
+"an_wand": true,
+"gebaeude": true
+},
+{
+"datei": "gebaeude/laden_7.png",
+"basis": "gebaeude/laden_7",
+"x": 1791,
+"y": 1373,
+"fuss": 114,
+"kachel": [
+114,
+92
+],
+"ebene": 1,
+"an_wand": true,
+"gebaeude": true
+},
+{
+"datei": "gebaeude/bruecke.png",
+"basis": "gebaeude/bruecke",
+"x": 723,
+"y": 1174,
+"fuss": 121,
+"kachel": [
+60,
+80
+],
+"ebene": 1,
+"an_wand": true,
+"gebaeude": true
+},
+{
+"datei": "fremd/karte18-gebaeude-zug.png",
+"basis": "zug",
+"x": 16,
+"y": 0,
+"fuss": 60,
+"kachel": [
+1,
+72
+],
+"ebene": 1,
+"hochbahn": true
+},
+{
+"datei": "fremd/karte07-gross-02.png",
+"basis": "karte07/gross/02",
+"x": 483,
+"y": -3,
+"fuss": 114,
+"kachel": [
+33,
+6
+],
+"ebene": 1,
+"an_wand": true
+},
+{
+"datei": "uhr/00.png",
+"basis": "karte31/uhr/00",
+"x": 956,
+"y": 162,
+"fuss": 61,
+"kachel": [
+60,
+13
+],
+"ebene": 1,
+"an_wand": true
+},
+{
+"datei": "fremd/karte30-klein-01.png",
+"basis": "karte30/klein/01",
+"x": 1186,
+"y": 211,
+"fuss": 60,
+"kachel": [
+75,
+16
+],
+"ebene": 1,
+"an_wand": true
+},
+{
+"datei": "fremd/karte29-gross-03.png",
+"basis": "karte29/gross/03",
+"x": 1638,
+"y": 111,
+"fuss": 112,
+"kachel": [
+104,
+13
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "portal",
+"schattenlos": true
+},
+{
+"datei": "fremd/karte07-mittel-04.png",
+"basis": "karte07/mittel/04",
+"x": 65,
+"y": 10,
+"fuss": 53,
+"kachel": [
+6,
+3
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum"
+},
+{
+"datei": "fremd/karte01-deko-27.png",
+"basis": "karte01/deko/27",
+"x": 82,
+"y": 56,
+"fuss": 23,
+"kachel": [
+6,
+4
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "wehen"
+},
+{
+"datei": "fremd/karte01-baeume-01_m.png",
+"basis": "karte01/baeume/01",
+"x": 162,
+"y": 21,
+"fuss": 42,
+"kachel": [
+11,
+3
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum"
+},
+{
+"datei": "fremd/karte01-deko-26.png",
+"basis": "karte01/deko/26",
+"x": 178,
+"y": 53,
+"fuss": 26,
+"kachel": [
+12,
+4
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "wehen"
+},
+{
+"datei": "fremd/karte01-baeume-04.png",
+"basis": "karte01/baeume/04",
+"x": 260,
+"y": 21,
+"fuss": 42,
+"kachel": [
+17,
+3
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum"
+},
+{
+"datei": "fremd/karte01-deko-25.png",
+"basis": "karte01/deko/25",
+"x": 275,
+"y": 53,
+"fuss": 26,
+"kachel": [
+18,
+4
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "wehen"
+},
+{
+"datei": "fremd/kirsche0_m.png",
+"basis": "fremd/kirsche0",
+"x": 370,
+"y": 21,
+"fuss": 42,
+"kachel": [
+24,
+3
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum"
+},
+{
+"datei": "fremd/karte01-deko-27.png",
+"basis": "karte01/deko/27",
+"x": 370,
+"y": 56,
+"fuss": 23,
+"kachel": [
+24,
+4
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "wehen"
+},
+{
+"datei": "fremd/karte01-baeume-15.png",
+"basis": "karte01/baeume/15",
+"x": 55,
+"y": 120,
+"fuss": 39,
+"kachel": [
+4,
+9
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum"
+},
+{
+"datei": "fremd/karte01-deko-26.png",
+"basis": "karte01/deko/26",
+"x": 50,
+"y": 149,
+"fuss": 26,
+"kachel": [
+4,
+10
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "wehen"
+},
+{
+"datei": "fremd/karte01-baeume-13_m.png",
+"basis": "karte01/baeume/13",
+"x": 85,
+"y": 254,
+"fuss": 33,
+"kachel": [
+6,
+17
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum"
+},
+{
+"datei": "fremd/karte01-deko-25.png",
+"basis": "karte01/deko/25",
+"x": 83,
+"y": 277,
+"fuss": 26,
+"kachel": [
+6,
+18
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "wehen"
+},
+{
+"datei": "fremd/karte01-baeume-00.png",
+"basis": "karte01/baeume/00",
+"x": 274,
+"y": 309,
+"fuss": 42,
+"kachel": [
+18,
+21
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum"
+},
+{
+"datei": "fremd/karte01-deko-27.png",
+"basis": "karte01/deko/27",
+"x": 274,
+"y": 344,
+"fuss": 23,
+"kachel": [
+18,
+22
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "wehen"
+},
+{
+"datei": "fremd/karte07-mittel-04_m.png",
+"basis": "karte07/mittel/04",
+"x": 385,
+"y": 106,
+"fuss": 53,
+"kachel": [
+26,
+9
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum"
+},
+{
+"datei": "fremd/karte01-deko-26.png",
+"basis": "karte01/deko/26",
+"x": 402,
+"y": 149,
+"fuss": 26,
+"kachel": [
+26,
+10
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "wehen"
+},
+{
+"datei": "fremd/karte01-baeume-01.png",
+"basis": "karte01/baeume/01",
+"x": 706,
+"y": 21,
+"fuss": 42,
+"kachel": [
+45,
+3
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum"
+},
+{
+"datei": "fremd/karte01-deko-25.png",
+"basis": "karte01/deko/25",
+"x": 723,
+"y": 53,
+"fuss": 26,
+"kachel": [
+46,
+4
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "wehen"
+},
+{
+"datei": "fremd/karte07-mittel-04_m.png",
+"basis": "karte07/mittel/04",
+"x": 769,
+"y": 10,
+"fuss": 53,
+"kachel": [
+50,
+3
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum"
+},
+{
+"datei": "fremd/karte01-deko-27.png",
+"basis": "karte01/deko/27",
+"x": 786,
+"y": 56,
+"fuss": 23,
+"kachel": [
+50,
+4
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "wehen"
+},
+{
+"datei": "fremd/karte01-baeume-02.png",
+"basis": "karte01/baeume/02",
+"x": 852,
+"y": 23,
+"fuss": 40,
+"kachel": [
+54,
+3
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum"
+},
+{
+"datei": "fremd/karte01-deko-26.png",
+"basis": "karte01/deko/26",
+"x": 850,
+"y": 53,
+"fuss": 26,
+"kachel": [
+54,
+4
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "wehen"
+},
+{
+"datei": "fremd/karte01-baeume-15_m.png",
+"basis": "karte01/baeume/15",
+"x": 727,
+"y": 104,
+"fuss": 39,
+"kachel": [
+46,
+8
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum"
+},
+{
+"datei": "fremd/karte01-deko-25.png",
+"basis": "karte01/deko/25",
+"x": 723,
+"y": 133,
+"fuss": 26,
+"kachel": [
+46,
+9
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "wehen"
+},
+{
+"datei": "fremd/kirsche0.png",
+"basis": "fremd/kirsche0",
+"x": 466,
+"y": 309,
+"fuss": 42,
+"kachel": [
+30,
+21
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum"
+},
+{
+"datei": "fremd/karte01-deko-27.png",
+"basis": "karte01/deko/27",
+"x": 466,
+"y": 344,
+"fuss": 23,
+"kachel": [
+30,
+22
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "wehen"
+},
+{
+"datei": "fremd/kirsche1_m.png",
+"basis": "fremd/kirsche1",
+"x": 546,
+"y": 293,
+"fuss": 42,
+"kachel": [
+35,
+20
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum"
+},
+{
+"datei": "fremd/karte01-deko-26.png",
+"basis": "karte01/deko/26",
+"x": 562,
+"y": 325,
+"fuss": 26,
+"kachel": [
+36,
+21
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "wehen"
+},
+{
+"datei": "fremd/karte01-baeume-10.png",
+"basis": "karte01/baeume/10",
+"x": 644,
+"y": 325,
+"fuss": 42,
+"kachel": [
+41,
+22
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum"
+},
+{
+"datei": "fremd/karte01-deko-25.png",
+"basis": "karte01/deko/25",
+"x": 659,
+"y": 357,
+"fuss": 26,
+"kachel": [
+42,
+23
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "wehen"
+},
+{
+"datei": "fremd/kirsche0_m.png",
+"basis": "fremd/kirsche0",
+"x": 802,
+"y": 325,
+"fuss": 42,
+"kachel": [
+51,
+22
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum"
+},
+{
+"datei": "fremd/karte01-deko-27.png",
+"basis": "karte01/deko/27",
+"x": 818,
+"y": 360,
+"fuss": 23,
+"kachel": [
+52,
+23
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "wehen"
+},
+{
+"datei": "fremd/karte01-deko-01.png",
+"basis": "karte01/deko/01",
+"x": 853,
+"y": 365,
+"fuss": 18,
+"kachel": [
+54,
+23
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "blume"
+},
+{
+"datei": "fremd/karte01-baeume-04.png",
+"basis": "karte01/baeume/04",
+"x": 1060,
+"y": 21,
+"fuss": 42,
+"kachel": [
+67,
+3
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum"
+},
+{
+"datei": "fremd/karte01-deko-26.png",
+"basis": "karte01/deko/26",
+"x": 1074,
+"y": 53,
+"fuss": 26,
+"kachel": [
+68,
+4
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "wehen"
+},
+{
+"datei": "fremd/karte01-baeume-10_m.png",
+"basis": "karte01/baeume/10",
+"x": 1124,
+"y": 21,
+"fuss": 42,
+"kachel": [
+71,
+3
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum"
+},
+{
+"datei": "fremd/karte01-deko-25.png",
+"basis": "karte01/deko/25",
+"x": 1139,
+"y": 53,
+"fuss": 26,
+"kachel": [
+72,
+4
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "wehen"
+},
+{
+"datei": "fremd/karte01-baeume-15.png",
+"basis": "karte01/baeume/15",
+"x": 1207,
+"y": 24,
+"fuss": 39,
+"kachel": [
+76,
+3
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum"
+},
+{
+"datei": "fremd/karte01-deko-27.png",
+"basis": "karte01/deko/27",
+"x": 1202,
+"y": 56,
+"fuss": 23,
+"kachel": [
+76,
+4
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "wehen"
+},
+{
+"datei": "fremd/karte07-mittel-04_m.png",
+"basis": "karte07/mittel/04",
+"x": 1281,
+"y": 10,
+"fuss": 53,
+"kachel": [
+82,
+3
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum"
+},
+{
+"datei": "fremd/karte01-deko-26.png",
+"basis": "karte01/deko/26",
+"x": 1298,
+"y": 53,
+"fuss": 26,
+"kachel": [
+82,
+4
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "wehen"
+},
+{
+"datei": "fremd/karte07-mittel-04.png",
+"basis": "karte07/mittel/04",
+"x": 1057,
+"y": 106,
+"fuss": 53,
+"kachel": [
+68,
+9
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum"
+},
+{
+"datei": "fremd/karte01-deko-25.png",
+"basis": "karte01/deko/25",
+"x": 1075,
+"y": 149,
+"fuss": 26,
+"kachel": [
+68,
+10
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "wehen"
+},
+{
+"datei": "fremd/karte18-baum2-01_m.png",
+"basis": "karte18/baum2/01",
+"x": 1126,
+"y": 84,
+"fuss": 59,
+"kachel": [
+72,
+8
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum"
+},
+{
+"datei": "fremd/karte01-deko-27.png",
+"basis": "karte01/deko/27",
+"x": 1138,
+"y": 136,
+"fuss": 23,
+"kachel": [
+72,
+9
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "wehen"
+},
+{
+"datei": "fremd/karte01-baeume-01.png",
+"basis": "karte01/baeume/01",
+"x": 1202,
+"y": 309,
+"fuss": 42,
+"kachel": [
+76,
+21
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum"
+},
+{
+"datei": "fremd/karte01-deko-26.png",
+"basis": "karte01/deko/26",
+"x": 1202,
+"y": 341,
+"fuss": 26,
+"kachel": [
+76,
+22
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "wehen"
+},
+{
+"datei": "fremd/karte01-baeume-04_m.png",
+"basis": "karte01/baeume/04",
+"x": 1076,
+"y": 309,
+"fuss": 42,
+"kachel": [
+68,
+21
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum"
+},
+{
+"datei": "fremd/karte01-deko-25.png",
+"basis": "karte01/deko/25",
+"x": 1075,
+"y": 341,
+"fuss": 26,
+"kachel": [
+68,
+22
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "wehen"
+},
+{
+"datei": "fremd/karte01-baeume-02.png",
+"basis": "karte01/baeume/02",
+"x": 1460,
+"y": 23,
+"fuss": 40,
+"kachel": [
+92,
+3
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum"
+},
+{
+"datei": "fremd/karte01-deko-27.png",
+"basis": "karte01/deko/27",
+"x": 1458,
+"y": 56,
+"fuss": 23,
+"kachel": [
+92,
+4
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "wehen"
+},
+{
+"datei": "fremd/karte07-mittel-04_m.png",
+"basis": "karte07/mittel/04",
+"x": 1505,
+"y": 10,
+"fuss": 53,
+"kachel": [
+96,
+3
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum"
+},
+{
+"datei": "fremd/karte01-deko-26.png",
+"basis": "karte01/deko/26",
+"x": 1522,
+"y": 53,
+"fuss": 26,
+"kachel": [
+96,
+4
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "wehen"
+},
+{
+"datei": "fremd/karte01-baeume-10.png",
+"basis": "karte01/baeume/10",
+"x": 1748,
+"y": 21,
+"fuss": 42,
+"kachel": [
+110,
+3
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum"
+},
+{
+"datei": "fremd/karte01-deko-25.png",
+"basis": "karte01/deko/25",
+"x": 1747,
+"y": 53,
+"fuss": 26,
+"kachel": [
+110,
+4
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "wehen"
+},
+{
+"datei": "fremd/karte01-baeume-00_m.png",
+"basis": "karte01/baeume/00",
+"x": 1842,
+"y": 21,
+"fuss": 42,
+"kachel": [
+116,
+3
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum"
+},
+{
+"datei": "fremd/karte01-deko-27.png",
+"basis": "karte01/deko/27",
+"x": 1842,
+"y": 56,
+"fuss": 23,
+"kachel": [
+116,
+4
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "wehen"
+},
+{
+"datei": "fremd/karte01-baeume-01_m.png",
+"basis": "karte01/baeume/01",
+"x": 1842,
+"y": 325,
+"fuss": 42,
+"kachel": [
+116,
+22
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum"
+},
+{
+"datei": "fremd/karte01-deko-25.png",
+"basis": "karte01/deko/25",
+"x": 1843,
+"y": 357,
+"fuss": 26,
+"kachel": [
+116,
+23
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "wehen"
+},
+{
+"datei": "fremd/kirsche0.png",
+"basis": "fremd/kirsche0",
+"x": 1458,
+"y": 181,
+"fuss": 42,
+"kachel": [
+92,
+13
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum"
+},
+{
+"datei": "fremd/karte01-deko-27.png",
+"basis": "karte01/deko/27",
+"x": 1458,
+"y": 216,
+"fuss": 23,
+"kachel": [
+92,
+14
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "wehen"
+},
+{
+"datei": "fremd/kirsche1_m.png",
+"basis": "fremd/kirsche1",
+"x": 1410,
+"y": 325,
+"fuss": 42,
+"kachel": [
+89,
+22
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum"
+},
+{
+"datei": "fremd/karte01-deko-26.png",
+"basis": "karte01/deko/26",
+"x": 1426,
+"y": 357,
+"fuss": 26,
+"kachel": [
+90,
+23
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "wehen"
+},
+{
+"datei": "fremd/karte01-baeume-10.png",
+"basis": "karte01/baeume/10",
+"x": 1716,
+"y": 325,
+"fuss": 42,
+"kachel": [
+108,
+22
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum"
+},
+{
+"datei": "fremd/karte01-deko-25.png",
+"basis": "karte01/deko/25",
+"x": 1715,
+"y": 357,
+"fuss": 26,
+"kachel": [
+108,
+23
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "wehen"
+},
+{
+"datei": "laterne/00.png",
+"basis": "karte31/laterne/00",
+"x": 914,
+"y": 131,
+"fuss": 44,
+"kachel": [
+57,
+10
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "lampe"
+},
+{
+"datei": "laterne/00.png",
+"basis": "karte31/laterne/00",
+"x": 1010,
+"y": 131,
+"fuss": 44,
+"kachel": [
+63,
+10
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "lampe"
+},
+{
+"datei": "laterne/00.png",
+"basis": "karte31/laterne/00",
+"x": 1602,
+"y": 195,
+"fuss": 44,
+"kachel": [
+100,
+14
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "lampe"
+},
+{
+"datei": "laterne/00.png",
+"basis": "karte31/laterne/00",
+"x": 1714,
+"y": 195,
+"fuss": 44,
+"kachel": [
+107,
+14
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "lampe"
+},
+{
+"datei": "laterne/00.png",
+"basis": "karte31/laterne/00",
+"x": 274,
+"y": 147,
+"fuss": 44,
+"kachel": [
+17,
+11
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "lampe"
+},
+{
+"datei": "laterne/00.png",
+"basis": "karte31/laterne/00",
+"x": 754,
+"y": 211,
+"fuss": 44,
+"kachel": [
+47,
+15
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "lampe"
+},
+{
+"datei": "laterne/00.png",
+"basis": "karte31/laterne/00",
+"x": 1170,
+"y": 147,
+"fuss": 44,
+"kachel": [
+73,
+11
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "lampe"
+},
+{
+"datei": "laterne/00.png",
+"basis": "karte31/laterne/00",
+"x": 1394,
+"y": 211,
+"fuss": 44,
+"kachel": [
+87,
+15
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "lampe"
+},
+{
+"datei": "laterne/00.png",
+"basis": "karte31/laterne/00",
+"x": 178,
+"y": 243,
+"fuss": 44,
+"kachel": [
+11,
+17
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "lampe"
+},
+{
+"datei": "laterne/14.png",
+"basis": "karte31/laterne/14",
+"x": 470,
+"y": 101,
+"fuss": 42,
+"kachel": [
+30,
+8
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "lampe"
+},
+{
+"datei": "laterne/14.png",
+"basis": "karte31/laterne/14",
+"x": 582,
+"y": 101,
+"fuss": 42,
+"kachel": [
+37,
+8
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "lampe"
+},
+{
+"datei": "fremd/karte18-strasse-14.png",
+"basis": "karte18/strasse/14",
+"x": 337,
+"y": 169,
+"fuss": 22,
+"kachel": [
+22,
+11
+],
+"ebene": 1,
+"an_wand": true
+},
+{
+"datei": "fremd/karte18-strasse-14.png",
+"basis": "karte18/strasse/14",
+"x": 689,
+"y": 249,
+"fuss": 22,
+"kachel": [
+44,
+16
+],
+"ebene": 1,
+"an_wand": true
+},
+{
+"datei": "fremd/karte18-strasse-14.png",
+"basis": "karte18/strasse/14",
+"x": 1393,
+"y": 169,
+"fuss": 22,
+"kachel": [
+88,
+11
+],
+"ebene": 1,
+"an_wand": true
+},
+{
+"datei": "fremd/karte18-strasse-14.png",
+"basis": "karte18/strasse/14",
+"x": 1809,
+"y": 169,
+"fuss": 22,
+"kachel": [
+114,
+11
+],
+"ebene": 1,
+"an_wand": true
+},
+{
+"datei": "fremd/karte01-baeume-14_m.png",
+"basis": "karte01/baeume/14",
+"x": 83,
+"y": 385,
+"fuss": 30,
+"kachel": [
+6,
+25
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "wehen"
+},
+{
+"datei": "fremd/karte01-baeume-12.png",
+"basis": "karte01/baeume/12",
+"x": 339,
+"y": 380,
+"fuss": 35,
+"kachel": [
+22,
+25
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "wehen"
+},
+{
+"datei": "fremd/karte01-baeume-14_m.png",
+"basis": "karte01/baeume/14",
+"x": 467,
+"y": 385,
+"fuss": 30,
+"kachel": [
+30,
+25
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "wehen"
+},
+{
+"datei": "fremd/karte01-deko-27.png",
+"basis": "karte01/deko/27",
+"x": 562,
+"y": 392,
+"fuss": 23,
+"kachel": [
+36,
+25
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "wehen"
+},
+{
+"datei": "fremd/karte01-deko-25_m.png",
+"basis": "karte01/deko/25",
+"x": 611,
+"y": 389,
+"fuss": 26,
+"kachel": [
+39,
+25
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "wehen"
+},
+{
+"datei": "fremd/karte01-baeume-12.png",
+"basis": "karte01/baeume/12",
+"x": 723,
+"y": 380,
+"fuss": 35,
+"kachel": [
+46,
+25
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "wehen"
+},
+{
+"datei": "fremd/karte01-baeume-14_m.png",
+"basis": "karte01/baeume/14",
+"x": 835,
+"y": 385,
+"fuss": 30,
+"kachel": [
+53,
+25
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "wehen"
+},
+{
+"datei": "fremd/karte01-baeume-13.png",
+"basis": "karte01/baeume/13",
+"x": 1221,
+"y": 382,
+"fuss": 33,
+"kachel": [
+77,
+25
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "wehen"
+},
+{
+"datei": "fremd/karte01-deko-25_m.png",
+"basis": "karte01/deko/25",
+"x": 1395,
+"y": 389,
+"fuss": 26,
+"kachel": [
+88,
+25
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "wehen"
+},
+{
+"datei": "fremd/karte01-deko-27.png",
+"basis": "karte01/deko/27",
+"x": 1458,
+"y": 392,
+"fuss": 23,
+"kachel": [
+92,
+25
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "wehen"
+},
+{
+"datei": "fremd/karte01-deko-25_m.png",
+"basis": "karte01/deko/25",
+"x": 1507,
+"y": 389,
+"fuss": 26,
+"kachel": [
+95,
+25
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "wehen"
+},
+{
+"datei": "fremd/karte01-deko-27.png",
+"basis": "karte01/deko/27",
+"x": 1650,
+"y": 392,
+"fuss": 23,
+"kachel": [
+104,
+25
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "wehen"
+},
+{
+"datei": "fremd/karte01-baeume-14_m.png",
+"basis": "karte01/baeume/14",
+"x": 1747,
+"y": 385,
+"fuss": 30,
+"kachel": [
+110,
+25
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "wehen"
+},
+{
+"datei": "fremd/karte01-baeume-12.png",
+"basis": "karte01/baeume/12",
+"x": 1875,
+"y": 380,
+"fuss": 35,
+"kachel": [
+118,
+25
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "wehen"
+},
+{
+"datei": "laterne/00.png",
+"basis": "karte31/laterne/00",
+"x": 146,
+"y": 419,
+"fuss": 44,
+"kachel": [
+9,
+28
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "lampe"
+},
+{
+"datei": "laterne/00.png",
+"basis": "karte31/laterne/00",
+"x": 258,
+"y": 419,
+"fuss": 44,
+"kachel": [
+16,
+28
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "lampe"
+},
+{
+"datei": "laterne/00.png",
+"basis": "karte31/laterne/00",
+"x": 882,
+"y": 419,
+"fuss": 44,
+"kachel": [
+55,
+28
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "lampe"
+},
+{
+"datei": "laterne/00.png",
+"basis": "karte31/laterne/00",
+"x": 1042,
+"y": 419,
+"fuss": 44,
+"kachel": [
+65,
+28
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "lampe"
+},
+{
+"datei": "laterne/00.png",
+"basis": "karte31/laterne/00",
+"x": 1554,
+"y": 419,
+"fuss": 44,
+"kachel": [
+97,
+28
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "lampe"
+},
+{
+"datei": "laterne/00.png",
+"basis": "karte31/laterne/00",
+"x": 1666,
+"y": 419,
+"fuss": 44,
+"kachel": [
+104,
+28
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "lampe"
+},
+{
+"datei": "fremd/karte18-strasse-14.png",
+"basis": "karte18/strasse/14",
+"x": 561,
+"y": 441,
+"fuss": 22,
+"kachel": [
+36,
+28
+],
+"ebene": 1,
+"an_wand": true
+},
+{
+"datei": "fremd/karte18-strasse-14.png",
+"basis": "karte18/strasse/14",
+"x": 1297,
+"y": 441,
+"fuss": 22,
+"kachel": [
+82,
+28
+],
+"ebene": 1,
+"an_wand": true
+},
+{
+"datei": "fremd/karte18-strasse-14.png",
+"basis": "karte18/strasse/14",
+"x": 1777,
+"y": 441,
+"fuss": 22,
+"kachel": [
+112,
+28
+],
+"ebene": 1,
+"an_wand": true
+},
+{
+"datei": "bueschel/09_m.png",
+"basis": "karte31/bueschel/09",
+"x": 1011,
+"y": 86,
+"fuss": 25,
+"kachel": [
+64,
+6
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "wehen",
+"nur_kontakt": true
+},
+{
+"datei": "bueschel/21.png",
+"basis": "karte31/bueschel/21",
+"x": 1683,
+"y": 341,
+"fuss": 26,
+"kachel": [
+106,
+22
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "wehen",
+"nur_kontakt": true
+},
+{
+"datei": "bueschel/00_m.png",
+"basis": "karte31/bueschel/00",
+"x": 1396,
+"y": 90,
+"fuss": 21,
+"kachel": [
+88,
+6
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "wehen",
+"nur_kontakt": true
+},
+{
+"datei": "bueschel/45.png",
+"basis": "karte31/bueschel/45",
+"x": 690,
+"y": 68,
+"fuss": 27,
+"kachel": [
+44,
+5
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "wehen",
+"nur_kontakt": true
+},
+{
+"datei": "bueschel/10.png",
+"basis": "karte31/bueschel/10",
+"x": 1142,
+"y": 346,
+"fuss": 21,
+"kachel": [
+72,
+22
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "wehen",
+"nur_kontakt": true
+},
+{
+"datei": "bueschel/21_m.png",
+"basis": "karte31/bueschel/21",
+"x": 531,
+"y": 245,
+"fuss": 26,
+"kachel": [
+34,
+16
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "wehen",
+"nur_kontakt": true
+},
+{
+"datei": "bueschel/57_m.png",
+"basis": "karte31/bueschel/57",
+"x": 1846,
+"y": 124,
+"fuss": 19,
+"kachel": [
+116,
+8
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "wehen",
+"nur_kontakt": true
+},
+{
+"datei": "bueschel/09.png",
+"basis": "karte31/bueschel/09",
+"x": 1651,
+"y": 38,
+"fuss": 25,
+"kachel": [
+104,
+3
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "wehen",
+"nur_kontakt": true
+},
+{
+"datei": "bueschel/10.png",
+"basis": "karte31/bueschel/10",
+"x": 758,
+"y": 346,
+"fuss": 21,
+"kachel": [
+48,
+22
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "wehen",
+"nur_kontakt": true
+},
+{
+"datei": "bueschel/10.png",
+"basis": "karte31/bueschel/10",
+"x": 214,
+"y": 42,
+"fuss": 21,
+"kachel": [
+14,
+3
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "wehen",
+"nur_kontakt": true
+},
+{
+"datei": "bueschel/00.png",
+"basis": "karte31/bueschel/00",
+"x": 1300,
+"y": 138,
+"fuss": 21,
+"kachel": [
+82,
+9
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "wehen",
+"nur_kontakt": true
+},
+{
+"datei": "bueschel/54.png",
+"basis": "karte31/bueschel/54",
+"x": 116,
+"y": 88,
+"fuss": 23,
+"kachel": [
+8,
+6
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "wehen",
+"nur_kontakt": true
+},
+{
+"datei": "bueschel/54_m.png",
+"basis": "karte31/bueschel/54",
+"x": 852,
+"y": 264,
+"fuss": 23,
+"kachel": [
+54,
+17
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "wehen",
+"nur_kontakt": true
+},
+{
+"datei": "bueschel/00.png",
+"basis": "karte31/bueschel/00",
+"x": 1460,
+"y": 346,
+"fuss": 21,
+"kachel": [
+92,
+22
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "wehen",
+"nur_kontakt": true
+},
+{
+"datei": "bueschel/57.png",
+"basis": "karte31/bueschel/57",
+"x": 310,
+"y": 284,
+"fuss": 19,
+"kachel": [
+20,
+18
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "wehen",
+"nur_kontakt": true
+},
+{
+"datei": "bueschel/03.png",
+"basis": "karte31/bueschel/03",
+"x": 435,
+"y": 328,
+"fuss": 23,
+"kachel": [
+28,
+21
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "wehen",
+"nur_kontakt": true
+},
+{
+"datei": "bueschel/02.png",
+"basis": "karte31/bueschel/02",
+"x": 595,
+"y": 357,
+"fuss": 26,
+"kachel": [
+38,
+23
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "wehen",
+"nur_kontakt": true
+},
+{
+"datei": "bueschel/10.png",
+"basis": "karte31/bueschel/10",
+"x": 1846,
+"y": 266,
+"fuss": 21,
+"kachel": [
+116,
+17
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "wehen",
+"nur_kontakt": true
+},
+{
+"datei": "laub_klein/03_m.png",
+"basis": "karte31/laub_klein/03",
+"x": 239,
+"y": 81,
+"fuss": 9,
+"kachel": [
+15,
+5
+],
+"ebene": 1,
+"an_wand": true,
+"liegend": true
+},
+{
+"datei": "laub_klein/41.png",
+"basis": "karte31/laub_klein/41",
+"x": 418,
+"y": 76,
+"fuss": 10,
+"kachel": [
+26,
+5
+],
+"ebene": 1,
+"an_wand": true,
+"liegend": true
+},
+{
+"datei": "laub_klein/55.png",
+"basis": "karte31/laub_klein/55",
+"x": 357,
+"y": 83,
+"fuss": 7,
+"kachel": [
+22,
+5
+],
+"ebene": 1,
+"an_wand": true,
+"liegend": true
+},
+{
+"datei": "laub_klein/03_m.png",
+"basis": "karte31/laub_klein/03",
+"x": 87,
+"y": 165,
+"fuss": 9,
+"kachel": [
+5,
+10
+],
+"ebene": 1,
+"an_wand": true,
+"liegend": true
+},
+{
+"datei": "laub_klein/62.png",
+"basis": "karte31/laub_klein/62",
+"x": 135,
+"y": 277,
+"fuss": 9,
+"kachel": [
+8,
+17
+],
+"ebene": 1,
+"an_wand": true,
+"liegend": true
+},
+{
+"datei": "laub_klein/42.png",
+"basis": "karte31/laub_klein/42",
+"x": 373,
+"y": 165,
+"fuss": 10,
+"kachel": [
+23,
+10
+],
+"ebene": 1,
+"an_wand": true,
+"liegend": true
+},
+{
+"datei": "laub_klein/03.png",
+"basis": "karte31/laub_klein/03",
+"x": 899,
+"y": 83,
+"fuss": 9,
+"kachel": [
+56,
+5
+],
+"ebene": 1,
+"an_wand": true,
+"liegend": true
+},
+{
+"datei": "laub_klein/62.png",
+"basis": "karte31/laub_klein/62",
+"x": 884,
+"y": 84,
+"fuss": 9,
+"kachel": [
+55,
+5
+],
+"ebene": 1,
+"an_wand": true,
+"liegend": true
+},
+{
+"datei": "laub_klein/19.png",
+"basis": "karte31/laub_klein/19",
+"x": 755,
+"y": 148,
+"fuss": 9,
+"kachel": [
+47,
+9
+],
+"ebene": 1,
+"an_wand": true,
+"liegend": true
+},
+{
+"datei": "laub_klein/42_m.png",
+"basis": "karte31/laub_klein/42",
+"x": 777,
+"y": 157,
+"fuss": 10,
+"kachel": [
+48,
+10
+],
+"ebene": 1,
+"an_wand": true,
+"liegend": true
+},
+{
+"datei": "laub_klein/41_m.png",
+"basis": "karte31/laub_klein/41",
+"x": 1175,
+"y": 69,
+"fuss": 10,
+"kachel": [
+73,
+4
+],
+"ebene": 1,
+"an_wand": true,
+"liegend": true
+},
+{
+"datei": "laub_klein/03_m.png",
+"basis": "karte31/laub_klein/03",
+"x": 1056,
+"y": 333,
+"fuss": 9,
+"kachel": [
+66,
+21
+],
+"ebene": 1,
+"an_wand": true,
+"liegend": true
+},
+{
+"datei": "laub_klein/33_m.png",
+"basis": "karte31/laub_klein/33",
+"x": 1574,
+"y": 54,
+"fuss": 9,
+"kachel": [
+98,
+3
+],
+"ebene": 1,
+"an_wand": true,
+"liegend": true
+},
+{
+"datei": "laub_klein/19.png",
+"basis": "karte31/laub_klein/19",
+"x": 1842,
+"y": 221,
+"fuss": 9,
+"kachel": [
+115,
+14
+],
+"ebene": 1,
+"an_wand": true,
+"liegend": true
+},
+{
+"datei": "laub_klein/42_m.png",
+"basis": "karte31/laub_klein/42",
+"x": 881,
+"y": 254,
+"fuss": 10,
+"kachel": [
+55,
+16
+],
+"ebene": 1,
+"an_wand": true,
+"liegend": true
+},
+{
+"datei": "laub_klein/00_m.png",
+"basis": "karte31/laub_klein/00",
+"x": 710,
+"y": 191,
+"fuss": 9,
+"kachel": [
+44,
+12
+],
+"ebene": 1,
+"an_wand": true,
+"liegend": true
+},
+{
+"datei": "laub_klein/02_m.png",
+"basis": "karte31/laub_klein/02",
+"x": 1789,
+"y": 176,
+"fuss": 11,
+"kachel": [
+112,
+11
+],
+"ebene": 1,
+"an_wand": true,
+"liegend": true
+},
+{
+"datei": "laub_klein/00.png",
+"basis": "karte31/laub_klein/00",
+"x": 647,
+"y": 277,
+"fuss": 9,
+"kachel": [
+40,
+17
+],
+"ebene": 1,
+"an_wand": true,
+"liegend": true
+},
+{
+"datei": "laub_klein/58_m.png",
+"basis": "karte31/laub_klein/58",
+"x": 1859,
+"y": 221,
+"fuss": 10,
+"kachel": [
+116,
+14
+],
+"ebene": 1,
+"an_wand": true,
+"liegend": true
+},
+{
+"datei": "laub_klein/42.png",
+"basis": "karte31/laub_klein/42",
+"x": 119,
+"y": 180,
+"fuss": 10,
+"kachel": [
+7,
+11
+],
+"ebene": 1,
+"an_wand": true,
+"liegend": true
+},
+{
+"datei": "laub_klein/00.png",
+"basis": "karte31/laub_klein/00",
+"x": 1327,
+"y": 192,
+"fuss": 9,
+"kachel": [
+83,
+12
+],
+"ebene": 1,
+"an_wand": true,
+"liegend": true
+},
+{
+"datei": "laub_klein/03.png",
+"basis": "karte31/laub_klein/03",
+"x": 1214,
+"y": 132,
+"fuss": 9,
+"kachel": [
+76,
+8
+],
+"ebene": 1,
+"an_wand": true,
+"liegend": true
+},
+{
+"datei": "laub_klein/33.png",
+"basis": "karte31/laub_klein/33",
+"x": 596,
+"y": 275,
+"fuss": 9,
+"kachel": [
+37,
+17
+],
+"ebene": 1,
+"an_wand": true,
+"liegend": true
+},
+{
+"datei": "laub_klein/42.png",
+"basis": "karte31/laub_klein/42",
+"x": 1300,
+"y": 126,
+"fuss": 10,
+"kachel": [
+81,
+8
+],
+"ebene": 1,
+"an_wand": true,
+"liegend": true
+},
+{
+"datei": "laub_klein/19_m.png",
+"basis": "karte31/laub_klein/19",
+"x": 1329,
+"y": 211,
+"fuss": 9,
+"kachel": [
+83,
+13
+],
+"ebene": 1,
+"an_wand": true,
+"liegend": true
+},
+{
+"datei": "fremd/karte18-gebaeude-gold_02.png",
+"basis": "karte18/gebaeude/gold_02",
+"x": 836,
+"y": 615,
+"fuss": 40,
+"kachel": [
+53,
+40
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum"
+},
+{
+"datei": "fremd/karte18-gebaeude-gold_00.png",
+"basis": "karte18/gebaeude/gold_00",
+"x": 834,
+"y": 709,
+"fuss": 42,
+"kachel": [
+53,
+46
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum"
+},
+{
+"datei": "fremd/karte18-gebaeude-gold_01.png",
+"basis": "karte18/gebaeude/gold_01",
+"x": 834,
+"y": 805,
+"fuss": 42,
+"kachel": [
+53,
+52
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum"
+},
+{
+"datei": "fremd/karte18-gebaeude-gold_00.png",
+"basis": "karte18/gebaeude/gold_00",
+"x": 1058,
+"y": 805,
+"fuss": 42,
+"kachel": [
+67,
+52
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum"
+},
+{
+"datei": "fremd/karte18-gebaeude-gold_02.png",
+"basis": "karte18/gebaeude/gold_02",
+"x": 836,
+"y": 903,
+"fuss": 40,
+"kachel": [
+53,
+58
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum"
+},
+{
+"datei": "fremd/karte18-gebaeude-gold_01.png",
+"basis": "karte18/gebaeude/gold_01",
+"x": 1058,
+"y": 901,
+"fuss": 42,
+"kachel": [
+67,
+58
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum"
+},
+{
+"datei": "fremd/karte18-gebaeude-gold_00.png",
+"basis": "karte18/gebaeude/gold_00",
+"x": 834,
+"y": 997,
+"fuss": 42,
+"kachel": [
+53,
+64
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum"
+},
+{
+"datei": "fremd/karte18-gebaeude-gold_01.png",
+"basis": "karte18/gebaeude/gold_01",
+"x": 834,
+"y": 1093,
+"fuss": 42,
+"kachel": [
+53,
+70
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum"
+},
+{
+"datei": "fremd/karte18-gebaeude-gold_00.png",
+"basis": "karte18/gebaeude/gold_00",
+"x": 1058,
+"y": 1093,
+"fuss": 42,
+"kachel": [
+67,
+70
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum"
+},
+{
+"datei": "fremd/karte01-baeume-01.png",
+"basis": "karte01/baeume/01",
+"x": 578,
+"y": 949,
+"fuss": 42,
+"kachel": [
+37,
+61
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum"
+},
+{
+"datei": "fremd/karte01-deko-27.png",
+"basis": "karte01/deko/27",
+"x": 594,
+"y": 984,
+"fuss": 23,
+"kachel": [
+38,
+62
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "wehen"
+},
+{
+"datei": "fremd/karte01-baeume-04.png",
+"basis": "karte01/baeume/04",
+"x": 36,
+"y": 1061,
+"fuss": 42,
+"kachel": [
+3,
+68
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum"
+},
+{
+"datei": "fremd/karte01-deko-27.png",
+"basis": "karte01/deko/27",
+"x": 50,
+"y": 1096,
+"fuss": 23,
+"kachel": [
+4,
+69
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "wehen"
+},
+{
+"datei": "fremd/kirsche1_m.png",
+"basis": "fremd/kirsche1",
+"x": 178,
+"y": 1061,
+"fuss": 42,
+"kachel": [
+12,
+68
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum"
+},
+{
+"datei": "fremd/karte01-deko-25.png",
+"basis": "karte01/deko/25",
+"x": 179,
+"y": 1093,
+"fuss": 26,
+"kachel": [
+12,
+69
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "wehen"
+},
+{
+"datei": "fremd/karte18-baum2-01.png",
+"basis": "karte18/baum2/01",
+"x": 1158,
+"y": 852,
+"fuss": 59,
+"kachel": [
+74,
+56
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum"
+},
+{
+"datei": "fremd/karte01-deko-27.png",
+"basis": "karte01/deko/27",
+"x": 1170,
+"y": 904,
+"fuss": 23,
+"kachel": [
+74,
+57
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "wehen"
+},
+{
+"datei": "fremd/karte01-baeume-04.png",
+"basis": "karte01/baeume/04",
+"x": 1636,
+"y": 869,
+"fuss": 42,
+"kachel": [
+103,
+56
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum"
+},
+{
+"datei": "fremd/karte01-deko-27.png",
+"basis": "karte01/deko/27",
+"x": 1650,
+"y": 904,
+"fuss": 23,
+"kachel": [
+104,
+57
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "wehen"
+},
+{
+"datei": "fremd/kirsche1.png",
+"basis": "fremd/kirsche1",
+"x": 1698,
+"y": 981,
+"fuss": 42,
+"kachel": [
+107,
+63
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum"
+},
+{
+"datei": "fremd/karte01-deko-27.png",
+"basis": "karte01/deko/27",
+"x": 1714,
+"y": 1016,
+"fuss": 23,
+"kachel": [
+108,
+64
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "wehen"
+},
+{
+"datei": "fremd/karte18-gebaeude-gold_01_m.png",
+"basis": "karte18/gebaeude/gold_01",
+"x": 786,
+"y": 1349,
+"fuss": 42,
+"kachel": [
+50,
+86
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum"
+},
+{
+"datei": "fremd/karte01-deko-25.png",
+"basis": "karte01/deko/25",
+"x": 787,
+"y": 1381,
+"fuss": 26,
+"kachel": [
+50,
+87
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "wehen"
+},
+{
+"datei": "fremd/karte18-gebaeude-gold_02_m.png",
+"basis": "karte18/gebaeude/gold_02",
+"x": 756,
+"y": 1399,
+"fuss": 40,
+"kachel": [
+48,
+89
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum"
+},
+{
+"datei": "fremd/karte01-deko-25.png",
+"basis": "karte01/deko/25",
+"x": 755,
+"y": 1429,
+"fuss": 26,
+"kachel": [
+48,
+90
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "wehen"
+},
+{
+"datei": "fremd/karte01-baeume-00_m.png",
+"basis": "karte01/baeume/00",
+"x": -14,
+"y": -27,
+"fuss": 42,
+"kachel": [
+0,
+0
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-15.png",
+"basis": "karte01/baeume/15",
+"x": 23,
+"y": -24,
+"fuss": 39,
+"kachel": [
+2,
+0
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-04_m.png",
+"basis": "karte01/baeume/04",
+"x": 52,
+"y": -27,
+"fuss": 42,
+"kachel": [
+4,
+0
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-13.png",
+"basis": "karte01/baeume/13",
+"x": 85,
+"y": -18,
+"fuss": 33,
+"kachel": [
+6,
+0
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-01_m.png",
+"basis": "karte01/baeume/01",
+"x": 114,
+"y": -27,
+"fuss": 42,
+"kachel": [
+8,
+0
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-09.png",
+"basis": "karte01/baeume/09",
+"x": 149,
+"y": -28,
+"fuss": 43,
+"kachel": [
+10,
+0
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte18-baum2-01_m.png",
+"basis": "karte18/baum2/01",
+"x": 166,
+"y": -44,
+"fuss": 59,
+"kachel": [
+12,
+0
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-08.png",
+"basis": "karte01/baeume/08",
+"x": 213,
+"y": -18,
+"fuss": 33,
+"kachel": [
+14,
+0
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-02_m.png",
+"basis": "karte01/baeume/02",
+"x": 244,
+"y": -25,
+"fuss": 40,
+"kachel": [
+16,
+0
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-06.png",
+"basis": "karte01/baeume/06",
+"x": 279,
+"y": -28,
+"fuss": 43,
+"kachel": [
+18,
+0
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-07_m.png",
+"basis": "karte01/baeume/07",
+"x": 307,
+"y": -25,
+"fuss": 40,
+"kachel": [
+20,
+0
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-00.png",
+"basis": "karte01/baeume/00",
+"x": 338,
+"y": -27,
+"fuss": 42,
+"kachel": [
+22,
+0
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-15_m.png",
+"basis": "karte01/baeume/15",
+"x": 375,
+"y": -24,
+"fuss": 39,
+"kachel": [
+24,
+0
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-04.png",
+"basis": "karte01/baeume/04",
+"x": 404,
+"y": -27,
+"fuss": 42,
+"kachel": [
+26,
+0
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-13_m.png",
+"basis": "karte01/baeume/13",
+"x": 437,
+"y": -18,
+"fuss": 33,
+"kachel": [
+28,
+0
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-01.png",
+"basis": "karte01/baeume/01",
+"x": 466,
+"y": -27,
+"fuss": 42,
+"kachel": [
+30,
+0
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-09_m.png",
+"basis": "karte01/baeume/09",
+"x": 501,
+"y": -28,
+"fuss": 43,
+"kachel": [
+32,
+0
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte18-baum2-01.png",
+"basis": "karte18/baum2/01",
+"x": 518,
+"y": -44,
+"fuss": 59,
+"kachel": [
+34,
+0
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-08_m.png",
+"basis": "karte01/baeume/08",
+"x": 565,
+"y": -18,
+"fuss": 33,
+"kachel": [
+36,
+0
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-02.png",
+"basis": "karte01/baeume/02",
+"x": 596,
+"y": -25,
+"fuss": 40,
+"kachel": [
+38,
+0
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-06_m.png",
+"basis": "karte01/baeume/06",
+"x": 631,
+"y": -28,
+"fuss": 43,
+"kachel": [
+40,
+0
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-07.png",
+"basis": "karte01/baeume/07",
+"x": 659,
+"y": -25,
+"fuss": 40,
+"kachel": [
+42,
+0
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-00_m.png",
+"basis": "karte01/baeume/00",
+"x": 690,
+"y": -27,
+"fuss": 42,
+"kachel": [
+44,
+0
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-15.png",
+"basis": "karte01/baeume/15",
+"x": 727,
+"y": -24,
+"fuss": 39,
+"kachel": [
+46,
+0
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-04_m.png",
+"basis": "karte01/baeume/04",
+"x": 756,
+"y": -27,
+"fuss": 42,
+"kachel": [
+48,
+0
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-13.png",
+"basis": "karte01/baeume/13",
+"x": 789,
+"y": -18,
+"fuss": 33,
+"kachel": [
+50,
+0
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-01_m.png",
+"basis": "karte01/baeume/01",
+"x": 818,
+"y": -27,
+"fuss": 42,
+"kachel": [
+52,
+0
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-09.png",
+"basis": "karte01/baeume/09",
+"x": 853,
+"y": -28,
+"fuss": 43,
+"kachel": [
+54,
+0
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte18-baum2-01_m.png",
+"basis": "karte18/baum2/01",
+"x": 870,
+"y": -44,
+"fuss": 59,
+"kachel": [
+56,
+0
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-08.png",
+"basis": "karte01/baeume/08",
+"x": 917,
+"y": -18,
+"fuss": 33,
+"kachel": [
+58,
+0
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-02_m.png",
+"basis": "karte01/baeume/02",
+"x": 948,
+"y": -25,
+"fuss": 40,
+"kachel": [
+60,
+0
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-06.png",
+"basis": "karte01/baeume/06",
+"x": 983,
+"y": -28,
+"fuss": 43,
+"kachel": [
+62,
+0
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-07_m.png",
+"basis": "karte01/baeume/07",
+"x": 1011,
+"y": -25,
+"fuss": 40,
+"kachel": [
+64,
+0
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-00.png",
+"basis": "karte01/baeume/00",
+"x": 1042,
+"y": -27,
+"fuss": 42,
+"kachel": [
+66,
+0
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-15_m.png",
+"basis": "karte01/baeume/15",
+"x": 1079,
+"y": -24,
+"fuss": 39,
+"kachel": [
+68,
+0
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-04.png",
+"basis": "karte01/baeume/04",
+"x": 1108,
+"y": -27,
+"fuss": 42,
+"kachel": [
+70,
+0
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-13_m.png",
+"basis": "karte01/baeume/13",
+"x": 1141,
+"y": -18,
+"fuss": 33,
+"kachel": [
+72,
+0
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-01.png",
+"basis": "karte01/baeume/01",
+"x": 1170,
+"y": -27,
+"fuss": 42,
+"kachel": [
+74,
+0
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-09_m.png",
+"basis": "karte01/baeume/09",
+"x": 1205,
+"y": -28,
+"fuss": 43,
+"kachel": [
+76,
+0
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte18-baum2-01.png",
+"basis": "karte18/baum2/01",
+"x": 1222,
+"y": -44,
+"fuss": 59,
+"kachel": [
+78,
+0
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-08_m.png",
+"basis": "karte01/baeume/08",
+"x": 1269,
+"y": -18,
+"fuss": 33,
+"kachel": [
+80,
+0
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-02.png",
+"basis": "karte01/baeume/02",
+"x": 1300,
+"y": -25,
+"fuss": 40,
+"kachel": [
+82,
+0
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-06_m.png",
+"basis": "karte01/baeume/06",
+"x": 1335,
+"y": -28,
+"fuss": 43,
+"kachel": [
+84,
+0
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-07.png",
+"basis": "karte01/baeume/07",
+"x": 1363,
+"y": -25,
+"fuss": 40,
+"kachel": [
+86,
+0
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-00_m.png",
+"basis": "karte01/baeume/00",
+"x": 1394,
+"y": -27,
+"fuss": 42,
+"kachel": [
+88,
+0
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-15.png",
+"basis": "karte01/baeume/15",
+"x": 1431,
+"y": -24,
+"fuss": 39,
+"kachel": [
+90,
+0
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-04_m.png",
+"basis": "karte01/baeume/04",
+"x": 1460,
+"y": -27,
+"fuss": 42,
+"kachel": [
+92,
+0
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-13.png",
+"basis": "karte01/baeume/13",
+"x": 1493,
+"y": -18,
+"fuss": 33,
+"kachel": [
+94,
+0
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-01_m.png",
+"basis": "karte01/baeume/01",
+"x": 1522,
+"y": -27,
+"fuss": 42,
+"kachel": [
+96,
+0
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-09.png",
+"basis": "karte01/baeume/09",
+"x": 1557,
+"y": -28,
+"fuss": 43,
+"kachel": [
+98,
+0
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte18-baum2-01_m.png",
+"basis": "karte18/baum2/01",
+"x": 1574,
+"y": -44,
+"fuss": 59,
+"kachel": [
+100,
+0
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-08.png",
+"basis": "karte01/baeume/08",
+"x": 1621,
+"y": -18,
+"fuss": 33,
+"kachel": [
+102,
+0
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-02_m.png",
+"basis": "karte01/baeume/02",
+"x": 1652,
+"y": -25,
+"fuss": 40,
+"kachel": [
+104,
+0
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-06.png",
+"basis": "karte01/baeume/06",
+"x": 1687,
+"y": -28,
+"fuss": 43,
+"kachel": [
+106,
+0
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-07_m.png",
+"basis": "karte01/baeume/07",
+"x": 1715,
+"y": -25,
+"fuss": 40,
+"kachel": [
+108,
+0
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-00.png",
+"basis": "karte01/baeume/00",
+"x": 1746,
+"y": -27,
+"fuss": 42,
+"kachel": [
+110,
+0
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-15_m.png",
+"basis": "karte01/baeume/15",
+"x": 1783,
+"y": -24,
+"fuss": 39,
+"kachel": [
+112,
+0
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-04.png",
+"basis": "karte01/baeume/04",
+"x": 1812,
+"y": -27,
+"fuss": 42,
+"kachel": [
+114,
+0
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-13_m.png",
+"basis": "karte01/baeume/13",
+"x": 1845,
+"y": -18,
+"fuss": 33,
+"kachel": [
+116,
+0
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-01.png",
+"basis": "karte01/baeume/01",
+"x": 1874,
+"y": -27,
+"fuss": 42,
+"kachel": [
+118,
+0
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-08_m.png",
+"basis": "karte01/baeume/08",
+"x": 21,
+"y": -2,
+"fuss": 33,
+"kachel": [
+2,
+1
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-02.png",
+"basis": "karte01/baeume/02",
+"x": 36,
+"y": -9,
+"fuss": 40,
+"kachel": [
+3,
+1
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-06_m.png",
+"basis": "karte01/baeume/06",
+"x": 71,
+"y": -12,
+"fuss": 43,
+"kachel": [
+5,
+1
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-07.png",
+"basis": "karte01/baeume/07",
+"x": 115,
+"y": -9,
+"fuss": 40,
+"kachel": [
+8,
+1
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-00_m.png",
+"basis": "karte01/baeume/00",
+"x": 130,
+"y": -11,
+"fuss": 42,
+"kachel": [
+9,
+1
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-15.png",
+"basis": "karte01/baeume/15",
+"x": 167,
+"y": -8,
+"fuss": 39,
+"kachel": [
+11,
+1
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-04_m.png",
+"basis": "karte01/baeume/04",
+"x": 196,
+"y": -11,
+"fuss": 42,
+"kachel": [
+13,
+1
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-13.png",
+"basis": "karte01/baeume/13",
+"x": 229,
+"y": -2,
+"fuss": 33,
+"kachel": [
+15,
+1
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-01_m.png",
+"basis": "karte01/baeume/01",
+"x": 258,
+"y": -11,
+"fuss": 42,
+"kachel": [
+17,
+1
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-09.png",
+"basis": "karte01/baeume/09",
+"x": 293,
+"y": -12,
+"fuss": 43,
+"kachel": [
+19,
+1
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte18-baum2-01_m.png",
+"basis": "karte18/baum2/01",
+"x": 326,
+"y": -28,
+"fuss": 59,
+"kachel": [
+22,
+1
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-08.png",
+"basis": "karte01/baeume/08",
+"x": 373,
+"y": -2,
+"fuss": 33,
+"kachel": [
+24,
+1
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-02_m.png",
+"basis": "karte01/baeume/02",
+"x": 388,
+"y": -9,
+"fuss": 40,
+"kachel": [
+25,
+1
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-06.png",
+"basis": "karte01/baeume/06",
+"x": 423,
+"y": -12,
+"fuss": 43,
+"kachel": [
+27,
+1
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-07_m.png",
+"basis": "karte01/baeume/07",
+"x": 467,
+"y": -9,
+"fuss": 40,
+"kachel": [
+30,
+1
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-00.png",
+"basis": "karte01/baeume/00",
+"x": 482,
+"y": -11,
+"fuss": 42,
+"kachel": [
+31,
+1
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-15_m.png",
+"basis": "karte01/baeume/15",
+"x": 519,
+"y": -8,
+"fuss": 39,
+"kachel": [
+33,
+1
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-04.png",
+"basis": "karte01/baeume/04",
+"x": 548,
+"y": -11,
+"fuss": 42,
+"kachel": [
+35,
+1
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-13_m.png",
+"basis": "karte01/baeume/13",
+"x": 581,
+"y": -2,
+"fuss": 33,
+"kachel": [
+37,
+1
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-01.png",
+"basis": "karte01/baeume/01",
+"x": 610,
+"y": -11,
+"fuss": 42,
+"kachel": [
+39,
+1
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-09_m.png",
+"basis": "karte01/baeume/09",
+"x": 645,
+"y": -12,
+"fuss": 43,
+"kachel": [
+41,
+1
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte18-baum2-01.png",
+"basis": "karte18/baum2/01",
+"x": 678,
+"y": -28,
+"fuss": 59,
+"kachel": [
+44,
+1
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-08_m.png",
+"basis": "karte01/baeume/08",
+"x": 725,
+"y": -2,
+"fuss": 33,
+"kachel": [
+46,
+1
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-02.png",
+"basis": "karte01/baeume/02",
+"x": 740,
+"y": -9,
+"fuss": 40,
+"kachel": [
+47,
+1
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-06_m.png",
+"basis": "karte01/baeume/06",
+"x": 775,
+"y": -12,
+"fuss": 43,
+"kachel": [
+49,
+1
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-07.png",
+"basis": "karte01/baeume/07",
+"x": 819,
+"y": -9,
+"fuss": 40,
+"kachel": [
+52,
+1
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-00_m.png",
+"basis": "karte01/baeume/00",
+"x": 834,
+"y": -11,
+"fuss": 42,
+"kachel": [
+53,
+1
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-15.png",
+"basis": "karte01/baeume/15",
+"x": 871,
+"y": -8,
+"fuss": 39,
+"kachel": [
+55,
+1
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-04_m.png",
+"basis": "karte01/baeume/04",
+"x": 900,
+"y": -11,
+"fuss": 42,
+"kachel": [
+57,
+1
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-13.png",
+"basis": "karte01/baeume/13",
+"x": 933,
+"y": -2,
+"fuss": 33,
+"kachel": [
+59,
+1
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-01_m.png",
+"basis": "karte01/baeume/01",
+"x": 962,
+"y": -11,
+"fuss": 42,
+"kachel": [
+61,
+1
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-09.png",
+"basis": "karte01/baeume/09",
+"x": 997,
+"y": -12,
+"fuss": 43,
+"kachel": [
+63,
+1
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte18-baum2-01_m.png",
+"basis": "karte18/baum2/01",
+"x": 1030,
+"y": -28,
+"fuss": 59,
+"kachel": [
+66,
+1
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-08.png",
+"basis": "karte01/baeume/08",
+"x": 1077,
+"y": -2,
+"fuss": 33,
+"kachel": [
+68,
+1
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-02_m.png",
+"basis": "karte01/baeume/02",
+"x": 1092,
+"y": -9,
+"fuss": 40,
+"kachel": [
+69,
+1
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-06.png",
+"basis": "karte01/baeume/06",
+"x": 1127,
+"y": -12,
+"fuss": 43,
+"kachel": [
+71,
+1
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-07_m.png",
+"basis": "karte01/baeume/07",
+"x": 1171,
+"y": -9,
+"fuss": 40,
+"kachel": [
+74,
+1
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-00.png",
+"basis": "karte01/baeume/00",
+"x": 1186,
+"y": -11,
+"fuss": 42,
+"kachel": [
+75,
+1
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-15_m.png",
+"basis": "karte01/baeume/15",
+"x": 1223,
+"y": -8,
+"fuss": 39,
+"kachel": [
+77,
+1
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-04.png",
+"basis": "karte01/baeume/04",
+"x": 1252,
+"y": -11,
+"fuss": 42,
+"kachel": [
+79,
+1
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-13_m.png",
+"basis": "karte01/baeume/13",
+"x": 1285,
+"y": -2,
+"fuss": 33,
+"kachel": [
+81,
+1
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-01.png",
+"basis": "karte01/baeume/01",
+"x": 1314,
+"y": -11,
+"fuss": 42,
+"kachel": [
+83,
+1
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-09_m.png",
+"basis": "karte01/baeume/09",
+"x": 1349,
+"y": -12,
+"fuss": 43,
+"kachel": [
+85,
+1
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte18-baum2-01.png",
+"basis": "karte18/baum2/01",
+"x": 1382,
+"y": -28,
+"fuss": 59,
+"kachel": [
+88,
+1
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-08_m.png",
+"basis": "karte01/baeume/08",
+"x": 1429,
+"y": -2,
+"fuss": 33,
+"kachel": [
+90,
+1
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-02.png",
+"basis": "karte01/baeume/02",
+"x": 1444,
+"y": -9,
+"fuss": 40,
+"kachel": [
+91,
+1
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-06_m.png",
+"basis": "karte01/baeume/06",
+"x": 1479,
+"y": -12,
+"fuss": 43,
+"kachel": [
+93,
+1
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-07.png",
+"basis": "karte01/baeume/07",
+"x": 1523,
+"y": -9,
+"fuss": 40,
+"kachel": [
+96,
+1
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-00_m.png",
+"basis": "karte01/baeume/00",
+"x": 1538,
+"y": -11,
+"fuss": 42,
+"kachel": [
+97,
+1
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-15.png",
+"basis": "karte01/baeume/15",
+"x": 1575,
+"y": -8,
+"fuss": 39,
+"kachel": [
+99,
+1
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-04_m.png",
+"basis": "karte01/baeume/04",
+"x": 1604,
+"y": -11,
+"fuss": 42,
+"kachel": [
+101,
+1
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-13.png",
+"basis": "karte01/baeume/13",
+"x": 1637,
+"y": -2,
+"fuss": 33,
+"kachel": [
+103,
+1
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-01_m.png",
+"basis": "karte01/baeume/01",
+"x": 1666,
+"y": -11,
+"fuss": 42,
+"kachel": [
+105,
+1
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-09.png",
+"basis": "karte01/baeume/09",
+"x": 1701,
+"y": -12,
+"fuss": 43,
+"kachel": [
+107,
+1
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte18-baum2-01_m.png",
+"basis": "karte18/baum2/01",
+"x": 1734,
+"y": -28,
+"fuss": 59,
+"kachel": [
+110,
+1
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-08.png",
+"basis": "karte01/baeume/08",
+"x": 1781,
+"y": -2,
+"fuss": 33,
+"kachel": [
+112,
+1
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-02_m.png",
+"basis": "karte01/baeume/02",
+"x": 1796,
+"y": -9,
+"fuss": 40,
+"kachel": [
+113,
+1
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-06.png",
+"basis": "karte01/baeume/06",
+"x": 1831,
+"y": -12,
+"fuss": 43,
+"kachel": [
+115,
+1
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-07_m.png",
+"basis": "karte01/baeume/07",
+"x": 1875,
+"y": -9,
+"fuss": 40,
+"kachel": [
+118,
+1
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-00.png",
+"basis": "karte01/baeume/00",
+"x": 1890,
+"y": -11,
+"fuss": 42,
+"kachel": [
+119,
+1
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-04.png",
+"basis": "karte01/baeume/04",
+"x": -12,
+"y": 5,
+"fuss": 42,
+"kachel": [
+0,
+2
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte18-baum2-01_m.png",
+"basis": "karte18/baum2/01",
+"x": 1862,
+"y": -12,
+"fuss": 59,
+"kachel": [
+118,
+2
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-06.png",
+"basis": "karte01/baeume/06",
+"x": 7,
+"y": 20,
+"fuss": 43,
+"kachel": [
+1,
+3
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-04_m.png",
+"basis": "karte01/baeume/04",
+"x": 1892,
+"y": 21,
+"fuss": 42,
+"kachel": [
+119,
+3
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-01_m.png",
+"basis": "karte01/baeume/01",
+"x": -14,
+"y": 37,
+"fuss": 42,
+"kachel": [
+0,
+4
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-02.png",
+"basis": "karte01/baeume/02",
+"x": 1876,
+"y": 39,
+"fuss": 40,
+"kachel": [
+118,
+4
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-00_m.png",
+"basis": "karte01/baeume/00",
+"x": 2,
+"y": 53,
+"fuss": 42,
+"kachel": [
+1,
+5
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-01.png",
+"basis": "karte01/baeume/01",
+"x": 1890,
+"y": 53,
+"fuss": 42,
+"kachel": [
+119,
+5
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte18-baum2-01.png",
+"basis": "karte18/baum2/01",
+"x": -26,
+"y": 52,
+"fuss": 59,
+"kachel": [
+0,
+6
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-07_m.png",
+"basis": "karte01/baeume/07",
+"x": 1875,
+"y": 71,
+"fuss": 40,
+"kachel": [
+118,
+6
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-04.png",
+"basis": "karte01/baeume/04",
+"x": 4,
+"y": 85,
+"fuss": 42,
+"kachel": [
+1,
+7
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte18-baum2-01_m.png",
+"basis": "karte18/baum2/01",
+"x": 1894,
+"y": 68,
+"fuss": 59,
+"kachel": [
+120,
+7
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-02_m.png",
+"basis": "karte01/baeume/02",
+"x": -12,
+"y": 103,
+"fuss": 40,
+"kachel": [
+0,
+8
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-15.png",
+"basis": "karte01/baeume/15",
+"x": 1879,
+"y": 104,
+"fuss": 39,
+"kachel": [
+118,
+8
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-01_m.png",
+"basis": "karte01/baeume/01",
+"x": 2,
+"y": 117,
+"fuss": 42,
+"kachel": [
+1,
+9
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-02.png",
+"basis": "karte01/baeume/02",
+"x": 1892,
+"y": 119,
+"fuss": 40,
+"kachel": [
+119,
+9
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-07.png",
+"basis": "karte01/baeume/07",
+"x": -13,
+"y": 135,
+"fuss": 40,
+"kachel": [
+0,
+10
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-13_m.png",
+"basis": "karte01/baeume/13",
+"x": 1877,
+"y": 142,
+"fuss": 33,
+"kachel": [
+118,
+10
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte18-baum2-01.png",
+"basis": "karte18/baum2/01",
+"x": 6,
+"y": 132,
+"fuss": 59,
+"kachel": [
+2,
+11
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-07_m.png",
+"basis": "karte01/baeume/07",
+"x": 1907,
+"y": 151,
+"fuss": 40,
+"kachel": [
+120,
+11
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-15_m.png",
+"basis": "karte01/baeume/15",
+"x": -9,
+"y": 168,
+"fuss": 39,
+"kachel": [
+0,
+12
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-09.png",
+"basis": "karte01/baeume/09",
+"x": 1877,
+"y": 164,
+"fuss": 43,
+"kachel": [
+118,
+12
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-02_m.png",
+"basis": "karte01/baeume/02",
+"x": 4,
+"y": 183,
+"fuss": 40,
+"kachel": [
+1,
+13
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-15.png",
+"basis": "karte01/baeume/15",
+"x": 1895,
+"y": 184,
+"fuss": 39,
+"kachel": [
+119,
+13
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-13.png",
+"basis": "karte01/baeume/13",
+"x": -11,
+"y": 206,
+"fuss": 33,
+"kachel": [
+0,
+14
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-08_m.png",
+"basis": "karte01/baeume/08",
+"x": 1877,
+"y": 206,
+"fuss": 33,
+"kachel": [
+118,
+14
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-07.png",
+"basis": "karte01/baeume/07",
+"x": 19,
+"y": 215,
+"fuss": 40,
+"kachel": [
+2,
+15
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-13_m.png",
+"basis": "karte01/baeume/13",
+"x": 1893,
+"y": 222,
+"fuss": 33,
+"kachel": [
+119,
+15
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-09_m.png",
+"basis": "karte01/baeume/09",
+"x": -11,
+"y": 228,
+"fuss": 43,
+"kachel": [
+0,
+16
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-06.png",
+"basis": "karte01/baeume/06",
+"x": 1879,
+"y": 228,
+"fuss": 43,
+"kachel": [
+118,
+16
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-15_m.png",
+"basis": "karte01/baeume/15",
+"x": 7,
+"y": 248,
+"fuss": 39,
+"kachel": [
+1,
+17
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-09.png",
+"basis": "karte01/baeume/09",
+"x": 1893,
+"y": 244,
+"fuss": 43,
+"kachel": [
+119,
+17
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-08.png",
+"basis": "karte01/baeume/08",
+"x": -11,
+"y": 270,
+"fuss": 33,
+"kachel": [
+0,
+18
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-00_m.png",
+"basis": "karte01/baeume/00",
+"x": 1874,
+"y": 261,
+"fuss": 42,
+"kachel": [
+118,
+18
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-13.png",
+"basis": "karte01/baeume/13",
+"x": 5,
+"y": 286,
+"fuss": 33,
+"kachel": [
+1,
+19
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-06_m.png",
+"basis": "karte01/baeume/06",
+"x": -9,
+"y": 292,
+"fuss": 43,
+"kachel": [
+0,
+20
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-09_m.png",
+"basis": "karte01/baeume/09",
+"x": 5,
+"y": 308,
+"fuss": 43,
+"kachel": [
+1,
+21
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-06.png",
+"basis": "karte01/baeume/06",
+"x": 1895,
+"y": 308,
+"fuss": 43,
+"kachel": [
+119,
+21
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-00.png",
+"basis": "karte01/baeume/00",
+"x": -14,
+"y": 325,
+"fuss": 42,
+"kachel": [
+0,
+22
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-01_m.png",
+"basis": "karte01/baeume/01",
+"x": 1874,
+"y": 325,
+"fuss": 42,
+"kachel": [
+118,
+22
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-08.png",
+"basis": "karte01/baeume/08",
+"x": 21,
+"y": 350,
+"fuss": 33,
+"kachel": [
+2,
+23
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-00_m.png",
+"basis": "karte01/baeume/00",
+"x": 1890,
+"y": 341,
+"fuss": 42,
+"kachel": [
+119,
+23
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-04_m.png",
+"basis": "karte01/baeume/04",
+"x": -12,
+"y": 357,
+"fuss": 42,
+"kachel": [
+0,
+24
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte18-baum2-01.png",
+"basis": "karte18/baum2/01",
+"x": 1862,
+"y": 340,
+"fuss": 59,
+"kachel": [
+118,
+24
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-06_m.png",
+"basis": "karte01/baeume/06",
+"x": 7,
+"y": 372,
+"fuss": 43,
+"kachel": [
+1,
+25
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-04.png",
+"basis": "karte01/baeume/04",
+"x": 1892,
+"y": 373,
+"fuss": 42,
+"kachel": [
+119,
+25
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-13_m.png",
+"basis": "karte01/baeume/13",
+"x": -11,
+"y": 558,
+"fuss": 33,
+"kachel": [
+0,
+36
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-08.png",
+"basis": "karte01/baeume/08",
+"x": 1877,
+"y": 558,
+"fuss": 33,
+"kachel": [
+118,
+36
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-07_m.png",
+"basis": "karte01/baeume/07",
+"x": 19,
+"y": 567,
+"fuss": 40,
+"kachel": [
+2,
+37
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-13.png",
+"basis": "karte01/baeume/13",
+"x": 1893,
+"y": 574,
+"fuss": 33,
+"kachel": [
+119,
+37
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-09.png",
+"basis": "karte01/baeume/09",
+"x": -11,
+"y": 580,
+"fuss": 43,
+"kachel": [
+0,
+38
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-06_m.png",
+"basis": "karte01/baeume/06",
+"x": 1879,
+"y": 580,
+"fuss": 43,
+"kachel": [
+118,
+38
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-15.png",
+"basis": "karte01/baeume/15",
+"x": 7,
+"y": 600,
+"fuss": 39,
+"kachel": [
+1,
+39
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-09_m.png",
+"basis": "karte01/baeume/09",
+"x": 1893,
+"y": 596,
+"fuss": 43,
+"kachel": [
+119,
+39
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-08_m.png",
+"basis": "karte01/baeume/08",
+"x": -11,
+"y": 622,
+"fuss": 33,
+"kachel": [
+0,
+40
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-00.png",
+"basis": "karte01/baeume/00",
+"x": 1874,
+"y": 613,
+"fuss": 42,
+"kachel": [
+118,
+40
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-13_m.png",
+"basis": "karte01/baeume/13",
+"x": 5,
+"y": 638,
+"fuss": 33,
+"kachel": [
+1,
+41
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-08.png",
+"basis": "karte01/baeume/08",
+"x": 1909,
+"y": 638,
+"fuss": 33,
+"kachel": [
+120,
+41
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-06.png",
+"basis": "karte01/baeume/06",
+"x": -9,
+"y": 644,
+"fuss": 43,
+"kachel": [
+0,
+42
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-04_m.png",
+"basis": "karte01/baeume/04",
+"x": 1876,
+"y": 645,
+"fuss": 42,
+"kachel": [
+118,
+42
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-09.png",
+"basis": "karte01/baeume/09",
+"x": 5,
+"y": 660,
+"fuss": 43,
+"kachel": [
+1,
+43
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-06_m.png",
+"basis": "karte01/baeume/06",
+"x": 1895,
+"y": 660,
+"fuss": 43,
+"kachel": [
+119,
+43
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-00_m.png",
+"basis": "karte01/baeume/00",
+"x": -14,
+"y": 677,
+"fuss": 42,
+"kachel": [
+0,
+44
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-01.png",
+"basis": "karte01/baeume/01",
+"x": 1874,
+"y": 677,
+"fuss": 42,
+"kachel": [
+118,
+44
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-08_m.png",
+"basis": "karte01/baeume/08",
+"x": 21,
+"y": 702,
+"fuss": 33,
+"kachel": [
+2,
+45
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-00.png",
+"basis": "karte01/baeume/00",
+"x": 1890,
+"y": 693,
+"fuss": 42,
+"kachel": [
+119,
+45
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-04.png",
+"basis": "karte01/baeume/04",
+"x": -12,
+"y": 709,
+"fuss": 42,
+"kachel": [
+0,
+46
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte18-baum2-01_m.png",
+"basis": "karte18/baum2/01",
+"x": 1862,
+"y": 692,
+"fuss": 59,
+"kachel": [
+118,
+46
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-06.png",
+"basis": "karte01/baeume/06",
+"x": 7,
+"y": 724,
+"fuss": 43,
+"kachel": [
+1,
+47
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-04_m.png",
+"basis": "karte01/baeume/04",
+"x": 1892,
+"y": 725,
+"fuss": 42,
+"kachel": [
+119,
+47
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-01_m.png",
+"basis": "karte01/baeume/01",
+"x": -14,
+"y": 741,
+"fuss": 42,
+"kachel": [
+0,
+48
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-02.png",
+"basis": "karte01/baeume/02",
+"x": 1876,
+"y": 743,
+"fuss": 40,
+"kachel": [
+118,
+48
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-00_m.png",
+"basis": "karte01/baeume/00",
+"x": 2,
+"y": 757,
+"fuss": 42,
+"kachel": [
+1,
+49
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-01.png",
+"basis": "karte01/baeume/01",
+"x": 1890,
+"y": 757,
+"fuss": 42,
+"kachel": [
+119,
+49
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte18-baum2-01.png",
+"basis": "karte18/baum2/01",
+"x": -26,
+"y": 756,
+"fuss": 59,
+"kachel": [
+0,
+50
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-07_m.png",
+"basis": "karte01/baeume/07",
+"x": 1875,
+"y": 775,
+"fuss": 40,
+"kachel": [
+118,
+50
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-04.png",
+"basis": "karte01/baeume/04",
+"x": 4,
+"y": 789,
+"fuss": 42,
+"kachel": [
+1,
+51
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte18-baum2-01_m.png",
+"basis": "karte18/baum2/01",
+"x": 1894,
+"y": 772,
+"fuss": 59,
+"kachel": [
+120,
+51
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-02_m.png",
+"basis": "karte01/baeume/02",
+"x": -12,
+"y": 807,
+"fuss": 40,
+"kachel": [
+0,
+52
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-15.png",
+"basis": "karte01/baeume/15",
+"x": 1879,
+"y": 808,
+"fuss": 39,
+"kachel": [
+118,
+52
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-01_m.png",
+"basis": "karte01/baeume/01",
+"x": 2,
+"y": 821,
+"fuss": 42,
+"kachel": [
+1,
+53
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-02.png",
+"basis": "karte01/baeume/02",
+"x": 1892,
+"y": 823,
+"fuss": 40,
+"kachel": [
+119,
+53
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-07.png",
+"basis": "karte01/baeume/07",
+"x": -13,
+"y": 839,
+"fuss": 40,
+"kachel": [
+0,
+54
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-13_m.png",
+"basis": "karte01/baeume/13",
+"x": 1877,
+"y": 846,
+"fuss": 33,
+"kachel": [
+118,
+54
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte18-baum2-01.png",
+"basis": "karte18/baum2/01",
+"x": 6,
+"y": 836,
+"fuss": 59,
+"kachel": [
+2,
+55
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-07_m.png",
+"basis": "karte01/baeume/07",
+"x": 1907,
+"y": 855,
+"fuss": 40,
+"kachel": [
+120,
+55
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-15_m.png",
+"basis": "karte01/baeume/15",
+"x": -9,
+"y": 872,
+"fuss": 39,
+"kachel": [
+0,
+56
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-09.png",
+"basis": "karte01/baeume/09",
+"x": 1877,
+"y": 868,
+"fuss": 43,
+"kachel": [
+118,
+56
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-02_m.png",
+"basis": "karte01/baeume/02",
+"x": 4,
+"y": 887,
+"fuss": 40,
+"kachel": [
+1,
+57
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-15.png",
+"basis": "karte01/baeume/15",
+"x": 1895,
+"y": 888,
+"fuss": 39,
+"kachel": [
+119,
+57
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-13.png",
+"basis": "karte01/baeume/13",
+"x": -11,
+"y": 910,
+"fuss": 33,
+"kachel": [
+0,
+58
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-08_m.png",
+"basis": "karte01/baeume/08",
+"x": 1877,
+"y": 910,
+"fuss": 33,
+"kachel": [
+118,
+58
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-07.png",
+"basis": "karte01/baeume/07",
+"x": 19,
+"y": 919,
+"fuss": 40,
+"kachel": [
+2,
+59
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-13_m.png",
+"basis": "karte01/baeume/13",
+"x": 1893,
+"y": 926,
+"fuss": 33,
+"kachel": [
+119,
+59
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-09_m.png",
+"basis": "karte01/baeume/09",
+"x": -11,
+"y": 932,
+"fuss": 43,
+"kachel": [
+0,
+60
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-06.png",
+"basis": "karte01/baeume/06",
+"x": 1879,
+"y": 932,
+"fuss": 43,
+"kachel": [
+118,
+60
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-15_m.png",
+"basis": "karte01/baeume/15",
+"x": 7,
+"y": 952,
+"fuss": 39,
+"kachel": [
+1,
+61
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-09.png",
+"basis": "karte01/baeume/09",
+"x": 1893,
+"y": 948,
+"fuss": 43,
+"kachel": [
+119,
+61
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-08.png",
+"basis": "karte01/baeume/08",
+"x": -11,
+"y": 974,
+"fuss": 33,
+"kachel": [
+0,
+62
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-00_m.png",
+"basis": "karte01/baeume/00",
+"x": 1874,
+"y": 965,
+"fuss": 42,
+"kachel": [
+118,
+62
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-13.png",
+"basis": "karte01/baeume/13",
+"x": 5,
+"y": 990,
+"fuss": 33,
+"kachel": [
+1,
+63
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-08_m.png",
+"basis": "karte01/baeume/08",
+"x": 1909,
+"y": 990,
+"fuss": 33,
+"kachel": [
+120,
+63
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-06_m.png",
+"basis": "karte01/baeume/06",
+"x": -9,
+"y": 996,
+"fuss": 43,
+"kachel": [
+0,
+64
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-04.png",
+"basis": "karte01/baeume/04",
+"x": 1876,
+"y": 997,
+"fuss": 42,
+"kachel": [
+118,
+64
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-09_m.png",
+"basis": "karte01/baeume/09",
+"x": 5,
+"y": 1012,
+"fuss": 43,
+"kachel": [
+1,
+65
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-06.png",
+"basis": "karte01/baeume/06",
+"x": 1895,
+"y": 1012,
+"fuss": 43,
+"kachel": [
+119,
+65
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-00.png",
+"basis": "karte01/baeume/00",
+"x": -14,
+"y": 1029,
+"fuss": 42,
+"kachel": [
+0,
+66
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-01_m.png",
+"basis": "karte01/baeume/01",
+"x": 1874,
+"y": 1029,
+"fuss": 42,
+"kachel": [
+118,
+66
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-08.png",
+"basis": "karte01/baeume/08",
+"x": 21,
+"y": 1054,
+"fuss": 33,
+"kachel": [
+2,
+67
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-00_m.png",
+"basis": "karte01/baeume/00",
+"x": 1890,
+"y": 1045,
+"fuss": 42,
+"kachel": [
+119,
+67
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-04_m.png",
+"basis": "karte01/baeume/04",
+"x": -12,
+"y": 1061,
+"fuss": 42,
+"kachel": [
+0,
+68
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte18-baum2-01.png",
+"basis": "karte18/baum2/01",
+"x": 1862,
+"y": 1044,
+"fuss": 59,
+"kachel": [
+118,
+68
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-06_m.png",
+"basis": "karte01/baeume/06",
+"x": 7,
+"y": 1076,
+"fuss": 43,
+"kachel": [
+1,
+69
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-04.png",
+"basis": "karte01/baeume/04",
+"x": 1892,
+"y": 1077,
+"fuss": 42,
+"kachel": [
+119,
+69
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-01.png",
+"basis": "karte01/baeume/01",
+"x": -14,
+"y": 1093,
+"fuss": 42,
+"kachel": [
+0,
+70
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-02_m.png",
+"basis": "karte01/baeume/02",
+"x": 1876,
+"y": 1095,
+"fuss": 40,
+"kachel": [
+118,
+70
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-00.png",
+"basis": "karte01/baeume/00",
+"x": 2,
+"y": 1109,
+"fuss": 42,
+"kachel": [
+1,
+71
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-01_m.png",
+"basis": "karte01/baeume/01",
+"x": 1890,
+"y": 1109,
+"fuss": 42,
+"kachel": [
+119,
+71
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-07.png",
+"basis": "karte01/baeume/07",
+"x": 1875,
+"y": 1127,
+"fuss": 40,
+"kachel": [
+118,
+72
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte18-baum2-01.png",
+"basis": "karte18/baum2/01",
+"x": 1894,
+"y": 1124,
+"fuss": 59,
+"kachel": [
+120,
+73
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-15_m.png",
+"basis": "karte01/baeume/15",
+"x": 1879,
+"y": 1160,
+"fuss": 39,
+"kachel": [
+118,
+74
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-02_m.png",
+"basis": "karte01/baeume/02",
+"x": 1892,
+"y": 1175,
+"fuss": 40,
+"kachel": [
+119,
+75
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-13.png",
+"basis": "karte01/baeume/13",
+"x": 1877,
+"y": 1198,
+"fuss": 33,
+"kachel": [
+118,
+76
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-07.png",
+"basis": "karte01/baeume/07",
+"x": 1907,
+"y": 1207,
+"fuss": 40,
+"kachel": [
+120,
+77
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-09_m.png",
+"basis": "karte01/baeume/09",
+"x": 1877,
+"y": 1220,
+"fuss": 43,
+"kachel": [
+118,
+78
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-15_m.png",
+"basis": "karte01/baeume/15",
+"x": 1895,
+"y": 1240,
+"fuss": 39,
+"kachel": [
+119,
+79
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-08.png",
+"basis": "karte01/baeume/08",
+"x": 1877,
+"y": 1262,
+"fuss": 33,
+"kachel": [
+118,
+80
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-08.png",
+"basis": "karte01/baeume/08",
+"x": 1909,
+"y": 1342,
+"fuss": 33,
+"kachel": [
+120,
+85
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-04_m.png",
+"basis": "karte01/baeume/04",
+"x": 1876,
+"y": 1349,
+"fuss": 42,
+"kachel": [
+118,
+86
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-06_m.png",
+"basis": "karte01/baeume/06",
+"x": 1895,
+"y": 1364,
+"fuss": 43,
+"kachel": [
+119,
+87
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-01.png",
+"basis": "karte01/baeume/01",
+"x": 1874,
+"y": 1381,
+"fuss": 42,
+"kachel": [
+118,
+88
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-00.png",
+"basis": "karte01/baeume/00",
+"x": 1890,
+"y": 1397,
+"fuss": 42,
+"kachel": [
+119,
+89
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte18-baum2-01_m.png",
+"basis": "karte18/baum2/01",
+"x": 1862,
+"y": 1396,
+"fuss": 59,
+"kachel": [
+118,
+90
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-04_m.png",
+"basis": "karte01/baeume/04",
+"x": 1892,
+"y": 1429,
+"fuss": 42,
+"kachel": [
+119,
+91
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-02.png",
+"basis": "karte01/baeume/02",
+"x": 1876,
+"y": 1447,
+"fuss": 40,
+"kachel": [
+118,
+92
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-00_m.png",
+"basis": "karte01/baeume/00",
+"x": 2,
+"y": 1461,
+"fuss": 42,
+"kachel": [
+1,
+93
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-01.png",
+"basis": "karte01/baeume/01",
+"x": 1890,
+"y": 1461,
+"fuss": 42,
+"kachel": [
+119,
+93
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte18-baum2-01.png",
+"basis": "karte18/baum2/01",
+"x": -26,
+"y": 1460,
+"fuss": 59,
+"kachel": [
+0,
+94
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-04.png",
+"basis": "karte01/baeume/04",
+"x": 4,
+"y": 1493,
+"fuss": 42,
+"kachel": [
+1,
+95
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-02_m.png",
+"basis": "karte01/baeume/02",
+"x": -12,
+"y": 1511,
+"fuss": 40,
+"kachel": [
+0,
+96
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-01_m.png",
+"basis": "karte01/baeume/01",
+"x": 2,
+"y": 1525,
+"fuss": 42,
+"kachel": [
+1,
+97
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-07.png",
+"basis": "karte01/baeume/07",
+"x": -13,
+"y": 1543,
+"fuss": 40,
+"kachel": [
+0,
+98
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte18-baum2-01.png",
+"basis": "karte18/baum2/01",
+"x": 6,
+"y": 1540,
+"fuss": 59,
+"kachel": [
+2,
+99
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-07_m.png",
+"basis": "karte01/baeume/07",
+"x": 1907,
+"y": 1559,
+"fuss": 40,
+"kachel": [
+120,
+99
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-15_m.png",
+"basis": "karte01/baeume/15",
+"x": -9,
+"y": 1576,
+"fuss": 39,
+"kachel": [
+0,
+100
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-09.png",
+"basis": "karte01/baeume/09",
+"x": 1877,
+"y": 1572,
+"fuss": 43,
+"kachel": [
+118,
+100
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-02_m.png",
+"basis": "karte01/baeume/02",
+"x": 4,
+"y": 1591,
+"fuss": 40,
+"kachel": [
+1,
+101
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-06.png",
+"basis": "karte01/baeume/06",
+"x": 39,
+"y": 1588,
+"fuss": 43,
+"kachel": [
+3,
+101
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-07_m.png",
+"basis": "karte01/baeume/07",
+"x": 83,
+"y": 1591,
+"fuss": 40,
+"kachel": [
+6,
+101
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-00.png",
+"basis": "karte01/baeume/00",
+"x": 98,
+"y": 1589,
+"fuss": 42,
+"kachel": [
+7,
+101
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-15_m.png",
+"basis": "karte01/baeume/15",
+"x": 135,
+"y": 1592,
+"fuss": 39,
+"kachel": [
+9,
+101
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-04.png",
+"basis": "karte01/baeume/04",
+"x": 164,
+"y": 1589,
+"fuss": 42,
+"kachel": [
+11,
+101
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-13_m.png",
+"basis": "karte01/baeume/13",
+"x": 197,
+"y": 1598,
+"fuss": 33,
+"kachel": [
+13,
+101
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-01.png",
+"basis": "karte01/baeume/01",
+"x": 226,
+"y": 1589,
+"fuss": 42,
+"kachel": [
+15,
+101
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-09_m.png",
+"basis": "karte01/baeume/09",
+"x": 261,
+"y": 1588,
+"fuss": 43,
+"kachel": [
+17,
+101
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte18-baum2-01.png",
+"basis": "karte18/baum2/01",
+"x": 294,
+"y": 1572,
+"fuss": 59,
+"kachel": [
+20,
+101
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-08_m.png",
+"basis": "karte01/baeume/08",
+"x": 341,
+"y": 1598,
+"fuss": 33,
+"kachel": [
+22,
+101
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-02.png",
+"basis": "karte01/baeume/02",
+"x": 356,
+"y": 1591,
+"fuss": 40,
+"kachel": [
+23,
+101
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-06_m.png",
+"basis": "karte01/baeume/06",
+"x": 391,
+"y": 1588,
+"fuss": 43,
+"kachel": [
+25,
+101
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-07.png",
+"basis": "karte01/baeume/07",
+"x": 435,
+"y": 1591,
+"fuss": 40,
+"kachel": [
+28,
+101
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-00_m.png",
+"basis": "karte01/baeume/00",
+"x": 450,
+"y": 1589,
+"fuss": 42,
+"kachel": [
+29,
+101
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-15.png",
+"basis": "karte01/baeume/15",
+"x": 487,
+"y": 1592,
+"fuss": 39,
+"kachel": [
+31,
+101
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-04_m.png",
+"basis": "karte01/baeume/04",
+"x": 516,
+"y": 1589,
+"fuss": 42,
+"kachel": [
+33,
+101
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-13.png",
+"basis": "karte01/baeume/13",
+"x": 549,
+"y": 1598,
+"fuss": 33,
+"kachel": [
+35,
+101
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-01_m.png",
+"basis": "karte01/baeume/01",
+"x": 578,
+"y": 1589,
+"fuss": 42,
+"kachel": [
+37,
+101
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-09.png",
+"basis": "karte01/baeume/09",
+"x": 613,
+"y": 1588,
+"fuss": 43,
+"kachel": [
+39,
+101
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte18-baum2-01_m.png",
+"basis": "karte18/baum2/01",
+"x": 646,
+"y": 1572,
+"fuss": 59,
+"kachel": [
+42,
+101
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-08.png",
+"basis": "karte01/baeume/08",
+"x": 693,
+"y": 1598,
+"fuss": 33,
+"kachel": [
+44,
+101
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-02_m.png",
+"basis": "karte01/baeume/02",
+"x": 708,
+"y": 1591,
+"fuss": 40,
+"kachel": [
+45,
+101
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-06.png",
+"basis": "karte01/baeume/06",
+"x": 743,
+"y": 1588,
+"fuss": 43,
+"kachel": [
+47,
+101
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-07_m.png",
+"basis": "karte01/baeume/07",
+"x": 787,
+"y": 1591,
+"fuss": 40,
+"kachel": [
+50,
+101
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-00.png",
+"basis": "karte01/baeume/00",
+"x": 802,
+"y": 1589,
+"fuss": 42,
+"kachel": [
+51,
+101
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-15_m.png",
+"basis": "karte01/baeume/15",
+"x": 839,
+"y": 1592,
+"fuss": 39,
+"kachel": [
+53,
+101
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-04.png",
+"basis": "karte01/baeume/04",
+"x": 868,
+"y": 1589,
+"fuss": 42,
+"kachel": [
+55,
+101
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-13_m.png",
+"basis": "karte01/baeume/13",
+"x": 901,
+"y": 1598,
+"fuss": 33,
+"kachel": [
+57,
+101
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-01.png",
+"basis": "karte01/baeume/01",
+"x": 930,
+"y": 1589,
+"fuss": 42,
+"kachel": [
+59,
+101
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-09_m.png",
+"basis": "karte01/baeume/09",
+"x": 965,
+"y": 1588,
+"fuss": 43,
+"kachel": [
+61,
+101
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte18-baum2-01.png",
+"basis": "karte18/baum2/01",
+"x": 998,
+"y": 1572,
+"fuss": 59,
+"kachel": [
+64,
+101
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-08_m.png",
+"basis": "karte01/baeume/08",
+"x": 1045,
+"y": 1598,
+"fuss": 33,
+"kachel": [
+66,
+101
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-02.png",
+"basis": "karte01/baeume/02",
+"x": 1060,
+"y": 1591,
+"fuss": 40,
+"kachel": [
+67,
+101
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-06_m.png",
+"basis": "karte01/baeume/06",
+"x": 1095,
+"y": 1588,
+"fuss": 43,
+"kachel": [
+69,
+101
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-07.png",
+"basis": "karte01/baeume/07",
+"x": 1139,
+"y": 1591,
+"fuss": 40,
+"kachel": [
+72,
+101
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-00_m.png",
+"basis": "karte01/baeume/00",
+"x": 1154,
+"y": 1589,
+"fuss": 42,
+"kachel": [
+73,
+101
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-15.png",
+"basis": "karte01/baeume/15",
+"x": 1191,
+"y": 1592,
+"fuss": 39,
+"kachel": [
+75,
+101
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-04_m.png",
+"basis": "karte01/baeume/04",
+"x": 1220,
+"y": 1589,
+"fuss": 42,
+"kachel": [
+77,
+101
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-13.png",
+"basis": "karte01/baeume/13",
+"x": 1253,
+"y": 1598,
+"fuss": 33,
+"kachel": [
+79,
+101
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-01_m.png",
+"basis": "karte01/baeume/01",
+"x": 1282,
+"y": 1589,
+"fuss": 42,
+"kachel": [
+81,
+101
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-09.png",
+"basis": "karte01/baeume/09",
+"x": 1317,
+"y": 1588,
+"fuss": 43,
+"kachel": [
+83,
+101
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte18-baum2-01_m.png",
+"basis": "karte18/baum2/01",
+"x": 1350,
+"y": 1572,
+"fuss": 59,
+"kachel": [
+86,
+101
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-08.png",
+"basis": "karte01/baeume/08",
+"x": 1397,
+"y": 1598,
+"fuss": 33,
+"kachel": [
+88,
+101
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-02_m.png",
+"basis": "karte01/baeume/02",
+"x": 1412,
+"y": 1591,
+"fuss": 40,
+"kachel": [
+89,
+101
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-06.png",
+"basis": "karte01/baeume/06",
+"x": 1447,
+"y": 1588,
+"fuss": 43,
+"kachel": [
+91,
+101
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-07_m.png",
+"basis": "karte01/baeume/07",
+"x": 1491,
+"y": 1591,
+"fuss": 40,
+"kachel": [
+94,
+101
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-00.png",
+"basis": "karte01/baeume/00",
+"x": 1506,
+"y": 1589,
+"fuss": 42,
+"kachel": [
+95,
+101
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-15_m.png",
+"basis": "karte01/baeume/15",
+"x": 1543,
+"y": 1592,
+"fuss": 39,
+"kachel": [
+97,
+101
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-04.png",
+"basis": "karte01/baeume/04",
+"x": 1572,
+"y": 1589,
+"fuss": 42,
+"kachel": [
+99,
+101
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-13_m.png",
+"basis": "karte01/baeume/13",
+"x": 1605,
+"y": 1598,
+"fuss": 33,
+"kachel": [
+101,
+101
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-01.png",
+"basis": "karte01/baeume/01",
+"x": 1634,
+"y": 1589,
+"fuss": 42,
+"kachel": [
+103,
+101
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-09_m.png",
+"basis": "karte01/baeume/09",
+"x": 1669,
+"y": 1588,
+"fuss": 43,
+"kachel": [
+105,
+101
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte18-baum2-01.png",
+"basis": "karte18/baum2/01",
+"x": 1702,
+"y": 1572,
+"fuss": 59,
+"kachel": [
+108,
+101
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-08_m.png",
+"basis": "karte01/baeume/08",
+"x": 1749,
+"y": 1598,
+"fuss": 33,
+"kachel": [
+110,
+101
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-02.png",
+"basis": "karte01/baeume/02",
+"x": 1764,
+"y": 1591,
+"fuss": 40,
+"kachel": [
+111,
+101
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-06_m.png",
+"basis": "karte01/baeume/06",
+"x": 1799,
+"y": 1588,
+"fuss": 43,
+"kachel": [
+113,
+101
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-07.png",
+"basis": "karte01/baeume/07",
+"x": 1843,
+"y": 1591,
+"fuss": 40,
+"kachel": [
+116,
+101
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-00_m.png",
+"basis": "karte01/baeume/00",
+"x": 1858,
+"y": 1589,
+"fuss": 42,
+"kachel": [
+117,
+101
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-15.png",
+"basis": "karte01/baeume/15",
+"x": 1895,
+"y": 1592,
+"fuss": 39,
+"kachel": [
+119,
+101
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-13.png",
+"basis": "karte01/baeume/13",
+"x": -11,
+"y": 1614,
+"fuss": 33,
+"kachel": [
+0,
+102
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-01_m.png",
+"basis": "karte01/baeume/01",
+"x": 18,
+"y": 1605,
+"fuss": 42,
+"kachel": [
+2,
+102
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-09.png",
+"basis": "karte01/baeume/09",
+"x": 53,
+"y": 1604,
+"fuss": 43,
+"kachel": [
+4,
+102
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte18-baum2-01_m.png",
+"basis": "karte18/baum2/01",
+"x": 70,
+"y": 1588,
+"fuss": 59,
+"kachel": [
+6,
+102
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-08.png",
+"basis": "karte01/baeume/08",
+"x": 117,
+"y": 1614,
+"fuss": 33,
+"kachel": [
+8,
+102
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-02_m.png",
+"basis": "karte01/baeume/02",
+"x": 148,
+"y": 1607,
+"fuss": 40,
+"kachel": [
+10,
+102
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-06.png",
+"basis": "karte01/baeume/06",
+"x": 183,
+"y": 1604,
+"fuss": 43,
+"kachel": [
+12,
+102
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-07_m.png",
+"basis": "karte01/baeume/07",
+"x": 211,
+"y": 1607,
+"fuss": 40,
+"kachel": [
+14,
+102
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-00.png",
+"basis": "karte01/baeume/00",
+"x": 242,
+"y": 1605,
+"fuss": 42,
+"kachel": [
+16,
+102
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-15_m.png",
+"basis": "karte01/baeume/15",
+"x": 279,
+"y": 1608,
+"fuss": 39,
+"kachel": [
+18,
+102
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-04.png",
+"basis": "karte01/baeume/04",
+"x": 308,
+"y": 1605,
+"fuss": 42,
+"kachel": [
+20,
+102
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-13_m.png",
+"basis": "karte01/baeume/13",
+"x": 341,
+"y": 1614,
+"fuss": 33,
+"kachel": [
+22,
+102
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-01.png",
+"basis": "karte01/baeume/01",
+"x": 370,
+"y": 1605,
+"fuss": 42,
+"kachel": [
+24,
+102
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-09_m.png",
+"basis": "karte01/baeume/09",
+"x": 405,
+"y": 1604,
+"fuss": 43,
+"kachel": [
+26,
+102
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte18-baum2-01.png",
+"basis": "karte18/baum2/01",
+"x": 422,
+"y": 1588,
+"fuss": 59,
+"kachel": [
+28,
+102
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-08_m.png",
+"basis": "karte01/baeume/08",
+"x": 469,
+"y": 1614,
+"fuss": 33,
+"kachel": [
+30,
+102
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-02.png",
+"basis": "karte01/baeume/02",
+"x": 500,
+"y": 1607,
+"fuss": 40,
+"kachel": [
+32,
+102
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-06_m.png",
+"basis": "karte01/baeume/06",
+"x": 535,
+"y": 1604,
+"fuss": 43,
+"kachel": [
+34,
+102
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-07.png",
+"basis": "karte01/baeume/07",
+"x": 563,
+"y": 1607,
+"fuss": 40,
+"kachel": [
+36,
+102
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-00_m.png",
+"basis": "karte01/baeume/00",
+"x": 594,
+"y": 1605,
+"fuss": 42,
+"kachel": [
+38,
+102
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-15.png",
+"basis": "karte01/baeume/15",
+"x": 631,
+"y": 1608,
+"fuss": 39,
+"kachel": [
+40,
+102
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-04_m.png",
+"basis": "karte01/baeume/04",
+"x": 660,
+"y": 1605,
+"fuss": 42,
+"kachel": [
+42,
+102
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-13.png",
+"basis": "karte01/baeume/13",
+"x": 693,
+"y": 1614,
+"fuss": 33,
+"kachel": [
+44,
+102
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-01_m.png",
+"basis": "karte01/baeume/01",
+"x": 722,
+"y": 1605,
+"fuss": 42,
+"kachel": [
+46,
+102
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-09.png",
+"basis": "karte01/baeume/09",
+"x": 757,
+"y": 1604,
+"fuss": 43,
+"kachel": [
+48,
+102
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte18-baum2-01_m.png",
+"basis": "karte18/baum2/01",
+"x": 774,
+"y": 1588,
+"fuss": 59,
+"kachel": [
+50,
+102
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-08.png",
+"basis": "karte01/baeume/08",
+"x": 821,
+"y": 1614,
+"fuss": 33,
+"kachel": [
+52,
+102
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-02_m.png",
+"basis": "karte01/baeume/02",
+"x": 852,
+"y": 1607,
+"fuss": 40,
+"kachel": [
+54,
+102
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-06.png",
+"basis": "karte01/baeume/06",
+"x": 887,
+"y": 1604,
+"fuss": 43,
+"kachel": [
+56,
+102
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-07_m.png",
+"basis": "karte01/baeume/07",
+"x": 915,
+"y": 1607,
+"fuss": 40,
+"kachel": [
+58,
+102
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-00.png",
+"basis": "karte01/baeume/00",
+"x": 946,
+"y": 1605,
+"fuss": 42,
+"kachel": [
+60,
+102
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-15_m.png",
+"basis": "karte01/baeume/15",
+"x": 983,
+"y": 1608,
+"fuss": 39,
+"kachel": [
+62,
+102
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-04.png",
+"basis": "karte01/baeume/04",
+"x": 1012,
+"y": 1605,
+"fuss": 42,
+"kachel": [
+64,
+102
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-13_m.png",
+"basis": "karte01/baeume/13",
+"x": 1045,
+"y": 1614,
+"fuss": 33,
+"kachel": [
+66,
+102
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-01.png",
+"basis": "karte01/baeume/01",
+"x": 1074,
+"y": 1605,
+"fuss": 42,
+"kachel": [
+68,
+102
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-09_m.png",
+"basis": "karte01/baeume/09",
+"x": 1109,
+"y": 1604,
+"fuss": 43,
+"kachel": [
+70,
+102
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte18-baum2-01.png",
+"basis": "karte18/baum2/01",
+"x": 1126,
+"y": 1588,
+"fuss": 59,
+"kachel": [
+72,
+102
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-08_m.png",
+"basis": "karte01/baeume/08",
+"x": 1173,
+"y": 1614,
+"fuss": 33,
+"kachel": [
+74,
+102
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-02.png",
+"basis": "karte01/baeume/02",
+"x": 1204,
+"y": 1607,
+"fuss": 40,
+"kachel": [
+76,
+102
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-06_m.png",
+"basis": "karte01/baeume/06",
+"x": 1239,
+"y": 1604,
+"fuss": 43,
+"kachel": [
+78,
+102
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-07.png",
+"basis": "karte01/baeume/07",
+"x": 1267,
+"y": 1607,
+"fuss": 40,
+"kachel": [
+80,
+102
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-00_m.png",
+"basis": "karte01/baeume/00",
+"x": 1298,
+"y": 1605,
+"fuss": 42,
+"kachel": [
+82,
+102
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-15.png",
+"basis": "karte01/baeume/15",
+"x": 1335,
+"y": 1608,
+"fuss": 39,
+"kachel": [
+84,
+102
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-04_m.png",
+"basis": "karte01/baeume/04",
+"x": 1364,
+"y": 1605,
+"fuss": 42,
+"kachel": [
+86,
+102
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-13.png",
+"basis": "karte01/baeume/13",
+"x": 1397,
+"y": 1614,
+"fuss": 33,
+"kachel": [
+88,
+102
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-01_m.png",
+"basis": "karte01/baeume/01",
+"x": 1426,
+"y": 1605,
+"fuss": 42,
+"kachel": [
+90,
+102
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-09.png",
+"basis": "karte01/baeume/09",
+"x": 1461,
+"y": 1604,
+"fuss": 43,
+"kachel": [
+92,
+102
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte18-baum2-01_m.png",
+"basis": "karte18/baum2/01",
+"x": 1478,
+"y": 1588,
+"fuss": 59,
+"kachel": [
+94,
+102
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-08.png",
+"basis": "karte01/baeume/08",
+"x": 1525,
+"y": 1614,
+"fuss": 33,
+"kachel": [
+96,
+102
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-02_m.png",
+"basis": "karte01/baeume/02",
+"x": 1556,
+"y": 1607,
+"fuss": 40,
+"kachel": [
+98,
+102
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-06.png",
+"basis": "karte01/baeume/06",
+"x": 1591,
+"y": 1604,
+"fuss": 43,
+"kachel": [
+100,
+102
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-07_m.png",
+"basis": "karte01/baeume/07",
+"x": 1619,
+"y": 1607,
+"fuss": 40,
+"kachel": [
+102,
+102
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-00.png",
+"basis": "karte01/baeume/00",
+"x": 1650,
+"y": 1605,
+"fuss": 42,
+"kachel": [
+104,
+102
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-15_m.png",
+"basis": "karte01/baeume/15",
+"x": 1687,
+"y": 1608,
+"fuss": 39,
+"kachel": [
+106,
+102
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-04.png",
+"basis": "karte01/baeume/04",
+"x": 1716,
+"y": 1605,
+"fuss": 42,
+"kachel": [
+108,
+102
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-13_m.png",
+"basis": "karte01/baeume/13",
+"x": 1749,
+"y": 1614,
+"fuss": 33,
+"kachel": [
+110,
+102
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-01.png",
+"basis": "karte01/baeume/01",
+"x": 1778,
+"y": 1605,
+"fuss": 42,
+"kachel": [
+112,
+102
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-09_m.png",
+"basis": "karte01/baeume/09",
+"x": 1813,
+"y": 1604,
+"fuss": 43,
+"kachel": [
+114,
+102
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte18-baum2-01.png",
+"basis": "karte18/baum2/01",
+"x": 1830,
+"y": 1588,
+"fuss": 59,
+"kachel": [
+116,
+102
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-08_m.png",
+"basis": "karte01/baeume/08",
+"x": 1877,
+"y": 1614,
+"fuss": 33,
+"kachel": [
+118,
+102
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-07.png",
+"basis": "karte01/baeume/07",
+"x": 19,
+"y": 1623,
+"fuss": 40,
+"kachel": [
+2,
+103
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-00_m.png",
+"basis": "karte01/baeume/00",
+"x": 34,
+"y": 1621,
+"fuss": 42,
+"kachel": [
+3,
+103
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-15.png",
+"basis": "karte01/baeume/15",
+"x": 71,
+"y": 1624,
+"fuss": 39,
+"kachel": [
+5,
+103
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-04_m.png",
+"basis": "karte01/baeume/04",
+"x": 100,
+"y": 1621,
+"fuss": 42,
+"kachel": [
+7,
+103
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-13.png",
+"basis": "karte01/baeume/13",
+"x": 133,
+"y": 1630,
+"fuss": 33,
+"kachel": [
+9,
+103
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-01_m.png",
+"basis": "karte01/baeume/01",
+"x": 162,
+"y": 1621,
+"fuss": 42,
+"kachel": [
+11,
+103
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-09.png",
+"basis": "karte01/baeume/09",
+"x": 197,
+"y": 1620,
+"fuss": 43,
+"kachel": [
+13,
+103
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte18-baum2-01_m.png",
+"basis": "karte18/baum2/01",
+"x": 230,
+"y": 1604,
+"fuss": 59,
+"kachel": [
+16,
+103
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-08.png",
+"basis": "karte01/baeume/08",
+"x": 277,
+"y": 1630,
+"fuss": 33,
+"kachel": [
+18,
+103
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-02_m.png",
+"basis": "karte01/baeume/02",
+"x": 292,
+"y": 1623,
+"fuss": 40,
+"kachel": [
+19,
+103
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-06.png",
+"basis": "karte01/baeume/06",
+"x": 327,
+"y": 1620,
+"fuss": 43,
+"kachel": [
+21,
+103
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-07_m.png",
+"basis": "karte01/baeume/07",
+"x": 371,
+"y": 1623,
+"fuss": 40,
+"kachel": [
+24,
+103
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-00.png",
+"basis": "karte01/baeume/00",
+"x": 386,
+"y": 1621,
+"fuss": 42,
+"kachel": [
+25,
+103
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-15_m.png",
+"basis": "karte01/baeume/15",
+"x": 423,
+"y": 1624,
+"fuss": 39,
+"kachel": [
+27,
+103
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-04.png",
+"basis": "karte01/baeume/04",
+"x": 452,
+"y": 1621,
+"fuss": 42,
+"kachel": [
+29,
+103
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-13_m.png",
+"basis": "karte01/baeume/13",
+"x": 485,
+"y": 1630,
+"fuss": 33,
+"kachel": [
+31,
+103
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-01.png",
+"basis": "karte01/baeume/01",
+"x": 514,
+"y": 1621,
+"fuss": 42,
+"kachel": [
+33,
+103
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-09_m.png",
+"basis": "karte01/baeume/09",
+"x": 549,
+"y": 1620,
+"fuss": 43,
+"kachel": [
+35,
+103
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte18-baum2-01.png",
+"basis": "karte18/baum2/01",
+"x": 582,
+"y": 1604,
+"fuss": 59,
+"kachel": [
+38,
+103
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-08_m.png",
+"basis": "karte01/baeume/08",
+"x": 629,
+"y": 1630,
+"fuss": 33,
+"kachel": [
+40,
+103
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-02.png",
+"basis": "karte01/baeume/02",
+"x": 644,
+"y": 1623,
+"fuss": 40,
+"kachel": [
+41,
+103
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-06_m.png",
+"basis": "karte01/baeume/06",
+"x": 679,
+"y": 1620,
+"fuss": 43,
+"kachel": [
+43,
+103
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-07.png",
+"basis": "karte01/baeume/07",
+"x": 723,
+"y": 1623,
+"fuss": 40,
+"kachel": [
+46,
+103
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-00_m.png",
+"basis": "karte01/baeume/00",
+"x": 738,
+"y": 1621,
+"fuss": 42,
+"kachel": [
+47,
+103
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-15.png",
+"basis": "karte01/baeume/15",
+"x": 775,
+"y": 1624,
+"fuss": 39,
+"kachel": [
+49,
+103
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-04_m.png",
+"basis": "karte01/baeume/04",
+"x": 804,
+"y": 1621,
+"fuss": 42,
+"kachel": [
+51,
+103
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-13.png",
+"basis": "karte01/baeume/13",
+"x": 837,
+"y": 1630,
+"fuss": 33,
+"kachel": [
+53,
+103
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-01_m.png",
+"basis": "karte01/baeume/01",
+"x": 866,
+"y": 1621,
+"fuss": 42,
+"kachel": [
+55,
+103
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-09.png",
+"basis": "karte01/baeume/09",
+"x": 901,
+"y": 1620,
+"fuss": 43,
+"kachel": [
+57,
+103
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte18-baum2-01_m.png",
+"basis": "karte18/baum2/01",
+"x": 934,
+"y": 1604,
+"fuss": 59,
+"kachel": [
+60,
+103
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-08.png",
+"basis": "karte01/baeume/08",
+"x": 981,
+"y": 1630,
+"fuss": 33,
+"kachel": [
+62,
+103
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-02_m.png",
+"basis": "karte01/baeume/02",
+"x": 996,
+"y": 1623,
+"fuss": 40,
+"kachel": [
+63,
+103
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-06.png",
+"basis": "karte01/baeume/06",
+"x": 1031,
+"y": 1620,
+"fuss": 43,
+"kachel": [
+65,
+103
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-07_m.png",
+"basis": "karte01/baeume/07",
+"x": 1075,
+"y": 1623,
+"fuss": 40,
+"kachel": [
+68,
+103
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-00.png",
+"basis": "karte01/baeume/00",
+"x": 1090,
+"y": 1621,
+"fuss": 42,
+"kachel": [
+69,
+103
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-15_m.png",
+"basis": "karte01/baeume/15",
+"x": 1127,
+"y": 1624,
+"fuss": 39,
+"kachel": [
+71,
+103
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-04.png",
+"basis": "karte01/baeume/04",
+"x": 1156,
+"y": 1621,
+"fuss": 42,
+"kachel": [
+73,
+103
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-13_m.png",
+"basis": "karte01/baeume/13",
+"x": 1189,
+"y": 1630,
+"fuss": 33,
+"kachel": [
+75,
+103
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-01.png",
+"basis": "karte01/baeume/01",
+"x": 1218,
+"y": 1621,
+"fuss": 42,
+"kachel": [
+77,
+103
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-09_m.png",
+"basis": "karte01/baeume/09",
+"x": 1253,
+"y": 1620,
+"fuss": 43,
+"kachel": [
+79,
+103
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte18-baum2-01.png",
+"basis": "karte18/baum2/01",
+"x": 1286,
+"y": 1604,
+"fuss": 59,
+"kachel": [
+82,
+103
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-08_m.png",
+"basis": "karte01/baeume/08",
+"x": 1333,
+"y": 1630,
+"fuss": 33,
+"kachel": [
+84,
+103
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-02.png",
+"basis": "karte01/baeume/02",
+"x": 1348,
+"y": 1623,
+"fuss": 40,
+"kachel": [
+85,
+103
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-06_m.png",
+"basis": "karte01/baeume/06",
+"x": 1383,
+"y": 1620,
+"fuss": 43,
+"kachel": [
+87,
+103
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-07.png",
+"basis": "karte01/baeume/07",
+"x": 1427,
+"y": 1623,
+"fuss": 40,
+"kachel": [
+90,
+103
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-00_m.png",
+"basis": "karte01/baeume/00",
+"x": 1442,
+"y": 1621,
+"fuss": 42,
+"kachel": [
+91,
+103
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-15.png",
+"basis": "karte01/baeume/15",
+"x": 1479,
+"y": 1624,
+"fuss": 39,
+"kachel": [
+93,
+103
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-04_m.png",
+"basis": "karte01/baeume/04",
+"x": 1508,
+"y": 1621,
+"fuss": 42,
+"kachel": [
+95,
+103
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-13.png",
+"basis": "karte01/baeume/13",
+"x": 1541,
+"y": 1630,
+"fuss": 33,
+"kachel": [
+97,
+103
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-01_m.png",
+"basis": "karte01/baeume/01",
+"x": 1570,
+"y": 1621,
+"fuss": 42,
+"kachel": [
+99,
+103
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-09.png",
+"basis": "karte01/baeume/09",
+"x": 1605,
+"y": 1620,
+"fuss": 43,
+"kachel": [
+101,
+103
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte18-baum2-01_m.png",
+"basis": "karte18/baum2/01",
+"x": 1638,
+"y": 1604,
+"fuss": 59,
+"kachel": [
+104,
+103
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-08.png",
+"basis": "karte01/baeume/08",
+"x": 1685,
+"y": 1630,
+"fuss": 33,
+"kachel": [
+106,
+103
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-02_m.png",
+"basis": "karte01/baeume/02",
+"x": 1700,
+"y": 1623,
+"fuss": 40,
+"kachel": [
+107,
+103
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-06.png",
+"basis": "karte01/baeume/06",
+"x": 1735,
+"y": 1620,
+"fuss": 43,
+"kachel": [
+109,
+103
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-07_m.png",
+"basis": "karte01/baeume/07",
+"x": 1779,
+"y": 1623,
+"fuss": 40,
+"kachel": [
+112,
+103
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-00.png",
+"basis": "karte01/baeume/00",
+"x": 1794,
+"y": 1621,
+"fuss": 42,
+"kachel": [
+113,
+103
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-15_m.png",
+"basis": "karte01/baeume/15",
+"x": 1831,
+"y": 1624,
+"fuss": 39,
+"kachel": [
+115,
+103
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-04.png",
+"basis": "karte01/baeume/04",
+"x": 1860,
+"y": 1621,
+"fuss": 42,
+"kachel": [
+117,
+103
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte01-baeume-13_m.png",
+"basis": "karte01/baeume/13",
+"x": 1893,
+"y": 1630,
+"fuss": 33,
+"kachel": [
+119,
+103
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"kein_schatten": true
+},
+{
+"datei": "fremd/karte10-spielplatz-01.png",
+"basis": "karte10/spielplatz/01",
+"x": 321,
+"y": 862,
+"fuss": 49,
+"kachel": [
+22,
+56
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "teil_drehen",
+"dreh": [
+{
+"box": [
+12,
+6,
+29,
+39
+],
+"punkt": [
+19,
+5
+],
+"amp": 7
+},
+{
+"box": [
+32,
+6,
+49,
+39
+],
+"punkt": [
+41,
+5
+],
+"amp": 7,
+"phase": 1.9
+}
+]
+},
+{
+"datei": "fremd/karte10-spielplatz-00.png",
+"basis": "karte10/spielplatz/00",
+"x": 275,
+"y": 915,
+"fuss": 60,
+"kachel": [
+18,
+60
+],
+"ebene": 1,
+"an_wand": true
+},
+{
+"datei": "fremd/karte18-gebaeude-kletterkuppel.png",
+"basis": "karte18/gebaeude/kletterkuppel",
+"x": 130,
+"y": 934,
+"fuss": 25,
+"kachel": [
+9,
+59
+],
+"ebene": 1,
+"an_wand": true
+},
+{
+"datei": "fremd/karte10-spielplatz-01.png",
+"basis": "karte10/spielplatz/01",
+"x": 1313,
+"y": 878,
+"fuss": 49,
+"kachel": [
+84,
+57
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "teil_drehen",
+"dreh": [
+{
+"box": [
+12,
+6,
+29,
+39
+],
+"punkt": [
+19,
+5
+],
+"amp": 7
+},
+{
+"box": [
+32,
+6,
+49,
+39
+],
+"punkt": [
+41,
+5
+],
+"amp": 7,
+"phase": 1.9
+}
+]
+},
+{
+"datei": "fremd/karte10-spielplatz-01.png",
+"basis": "karte10/spielplatz/01",
+"x": 1409,
+"y": 878,
+"fuss": 49,
+"kachel": [
+90,
+57
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "teil_drehen",
+"dreh": [
+{
+"box": [
+12,
+6,
+29,
+39
+],
+"punkt": [
+19,
+5
+],
+"amp": 7
+},
+{
+"box": [
+32,
+6,
+49,
+39
+],
+"punkt": [
+41,
+5
+],
+"amp": 7,
+"phase": 1.9
+}
+]
+},
+{
+"datei": "fremd/karte10-spielplatz-00.png",
+"basis": "karte10/spielplatz/00",
+"x": 1267,
+"y": 931,
+"fuss": 60,
+"kachel": [
+80,
+61
+],
+"ebene": 1,
+"an_wand": true
+},
+{
+"datei": "fremd/karte10-spielplatz-02.png",
+"basis": "karte10/spielplatz/02",
+"x": 1345,
+"y": 962,
+"fuss": 29,
+"kachel": [
+86,
+61
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "teil_drehen",
+"fest": 0.45,
+"amp": 7,
+"dreh": [
+{
+"box": [
+0,
+0,
+62,
+30
+],
+"ohne_boxen": [
+[
+27,
+15,
+42,
+30
+],
+[
+21,
+21,
+42,
+30
+]
+],
+"punkt": [
+31,
+15
+],
+"amp": 6
+}
+]
+},
+{
+"datei": "fremd/karte18-gebaeude-kletterkuppel.png",
+"basis": "karte18/gebaeude/kletterkuppel",
+"x": 1458,
+"y": 966,
+"fuss": 25,
+"kachel": [
+92,
+61
+],
+"ebene": 1,
+"an_wand": true
+},
+{
+"datei": "fremd/karte18-strasse-41.png",
+"basis": "karte18/strasse/41",
+"x": 113,
+"y": 820,
+"fuss": 27,
+"kachel": [
+8,
+52
+],
+"ebene": 1,
+"an_wand": true
+},
+{
+"datei": "fremd/karte18-strasse-41.png",
+"basis": "karte18/strasse/41",
+"x": 465,
+"y": 820,
+"fuss": 27,
+"kachel": [
+30,
+52
+],
+"ebene": 1,
+"an_wand": true
+},
+{
+"datei": "fremd/karte30-klein-08.png",
+"basis": "karte30/klein/08",
+"x": 295,
+"y": 788,
+"fuss": 43,
+"kachel": [
+20,
+51
+],
+"ebene": 1,
+"an_wand": true
+},
+{
+"datei": "fremd/karte30-klein-08.png",
+"basis": "karte30/klein/08",
+"x": 1511,
+"y": 788,
+"fuss": 43,
+"kachel": [
+96,
+51
+],
+"ebene": 1,
+"an_wand": true
+},
+{
+"datei": "fremd/karte18-strasse-14.png",
+"basis": "karte18/strasse/14",
+"x": 305,
+"y": 985,
+"fuss": 22,
+"kachel": [
+20,
+62
+],
+"ebene": 1,
+"an_wand": true
+},
+{
+"datei": "fremd/karte18-strasse-14.png",
+"basis": "karte18/strasse/14",
+"x": 1521,
+"y": 953,
+"fuss": 22,
+"kachel": [
+96,
+60
+],
+"ebene": 1,
+"an_wand": true
+},
+{
+"datei": "fremd/karte30-klein-09.png",
+"basis": "karte30/klein/09",
+"x": 214,
+"y": 1378,
+"fuss": 61,
+"kachel": [
+14,
+89
+],
+"ebene": 1,
+"an_wand": true
+},
+{
+"datei": "fremd/karte18-strasse-02.png",
+"basis": "karte18/strasse/02",
+"x": 401,
+"y": 1392,
+"fuss": 31,
+"kachel": [
+25,
+88
+],
+"ebene": 1,
+"an_wand": true
+},
+{
+"datei": "fremd/karte18-strasse-41.png",
+"basis": "karte18/strasse/41",
+"x": 433,
+"y": 1460,
+"fuss": 27,
+"kachel": [
+28,
+92
+],
+"ebene": 1,
+"an_wand": true
+},
+{
+"datei": "fremd/karte18-strasse-00.png",
+"basis": "karte18/strasse/00",
+"x": 1078,
+"y": 1376,
+"fuss": 31,
+"kachel": [
+68,
+87
+],
+"ebene": 1,
+"an_wand": true
+},
+{
+"datei": "fremd/karte18-strasse-01.png",
+"basis": "karte18/strasse/01",
+"x": 1430,
+"y": 1264,
+"fuss": 31,
+"kachel": [
+90,
+80
+],
+"ebene": 1,
+"an_wand": true
+},
+{
+"datei": "fremd/karte18-strasse-18.png",
+"basis": "karte18/strasse/18",
+"x": 100,
+"y": 1474,
+"fuss": 29,
+"kachel": [
+6,
+93
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "leuchten"
+},
+{
+"datei": "fremd/karte18-strasse-18.png",
+"basis": "karte18/strasse/18",
+"x": 100,
+"y": 1570,
+"fuss": 29,
+"kachel": [
+6,
+99
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "leuchten"
+},
+{
+"datei": "fremd/karte18-strasse-18.png",
+"basis": "karte18/strasse/18",
+"x": 260,
+"y": 1474,
+"fuss": 29,
+"kachel": [
+16,
+93
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "leuchten"
+},
+{
+"datei": "fremd/karte18-strasse-18.png",
+"basis": "karte18/strasse/18",
+"x": 260,
+"y": 1570,
+"fuss": 29,
+"kachel": [
+16,
+99
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "leuchten"
+},
+{
+"datei": "fremd/karte18-strasse-18.png",
+"basis": "karte18/strasse/18",
+"x": 420,
+"y": 1474,
+"fuss": 29,
+"kachel": [
+26,
+93
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "leuchten"
+},
+{
+"datei": "fremd/karte18-strasse-18.png",
+"basis": "karte18/strasse/18",
+"x": 420,
+"y": 1570,
+"fuss": 29,
+"kachel": [
+26,
+99
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "leuchten"
+},
+{
+"datei": "fremd/karte18-strasse-18.png",
+"basis": "karte18/strasse/18",
+"x": 580,
+"y": 1474,
+"fuss": 29,
+"kachel": [
+36,
+93
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "leuchten"
+},
+{
+"datei": "fremd/karte18-strasse-18.png",
+"basis": "karte18/strasse/18",
+"x": 580,
+"y": 1570,
+"fuss": 29,
+"kachel": [
+36,
+99
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "leuchten"
+},
+{
+"datei": "fremd/karte18-strasse-18.png",
+"basis": "karte18/strasse/18",
+"x": 740,
+"y": 1474,
+"fuss": 29,
+"kachel": [
+46,
+93
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "leuchten"
+},
+{
+"datei": "fremd/karte18-strasse-18.png",
+"basis": "karte18/strasse/18",
+"x": 740,
+"y": 1570,
+"fuss": 29,
+"kachel": [
+46,
+99
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "leuchten"
+},
+{
+"datei": "fremd/karte18-strasse-18.png",
+"basis": "karte18/strasse/18",
+"x": 900,
+"y": 1474,
+"fuss": 29,
+"kachel": [
+56,
+93
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "leuchten"
+},
+{
+"datei": "fremd/karte18-strasse-18.png",
+"basis": "karte18/strasse/18",
+"x": 900,
+"y": 1570,
+"fuss": 29,
+"kachel": [
+56,
+99
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "leuchten"
+},
+{
+"datei": "fremd/karte18-strasse-18.png",
+"basis": "karte18/strasse/18",
+"x": 1060,
+"y": 1474,
+"fuss": 29,
+"kachel": [
+66,
+93
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "leuchten"
+},
+{
+"datei": "fremd/karte18-strasse-18.png",
+"basis": "karte18/strasse/18",
+"x": 1060,
+"y": 1570,
+"fuss": 29,
+"kachel": [
+66,
+99
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "leuchten"
+},
+{
+"datei": "fremd/karte18-strasse-18.png",
+"basis": "karte18/strasse/18",
+"x": 1220,
+"y": 1570,
+"fuss": 29,
+"kachel": [
+76,
+99
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "leuchten"
+},
+{
+"datei": "fremd/karte18-strasse-18.png",
+"basis": "karte18/strasse/18",
+"x": 1540,
+"y": 1570,
+"fuss": 29,
+"kachel": [
+96,
+99
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "leuchten"
+},
+{
+"datei": "fremd/karte18-strasse-18.png",
+"basis": "karte18/strasse/18",
+"x": 1700,
+"y": 1570,
+"fuss": 29,
+"kachel": [
+106,
+99
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "leuchten"
+},
+{
+"datei": "fremd/karte18-strasse-18.png",
+"basis": "karte18/strasse/18",
+"x": 1860,
+"y": 1570,
+"fuss": 29,
+"kachel": [
+116,
+99
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "leuchten"
+},
+{
+"datei": "fremd/karte18-autos-04.png",
+"basis": "karte18/autos/04",
+"x": 196,
+"y": 1503,
+"fuss": 32,
+"kachel": [
+14,
+95
+],
+"ebene": 1,
+"an_wand": true
+},
+{
+"datei": "fremd/karte18-autos-03_m.png",
+"basis": "karte18/autos/03",
+"x": 582,
+"y": 1536,
+"fuss": 31,
+"kachel": [
+38,
+97
+],
+"ebene": 1,
+"an_wand": true
+},
+{
+"datei": "fremd/karte18-autos-06.png",
+"basis": "karte18/autos/06",
+"x": 950,
+"y": 1082,
+"fuss": 53,
+"kachel": [
+60,
+70
+],
+"ebene": 1,
+"an_wand": true
+},
+{
+"datei": "fremd/karte18-autos-03_m.png",
+"basis": "karte18/autos/03",
+"x": 1382,
+"y": 1312,
+"fuss": 31,
+"kachel": [
+88,
+83
+],
+"ebene": 1,
+"an_wand": true
+},
+{
+"datei": "fremd/karte18-autos-00.png",
+"basis": "karte18/autos/00",
+"x": 1731,
+"y": 1297,
+"fuss": 30,
+"kachel": [
+110,
+82
+],
+"ebene": 1,
+"an_wand": true
+},
+{
+"datei": "fremd/karte18-autos-01.png",
+"basis": "karte18/autos/01",
+"x": 1283,
+"y": 1505,
+"fuss": 30,
+"kachel": [
+82,
+95
+],
+"ebene": 1,
+"an_wand": true
+},
+{
+"datei": "fremd/karte18-autos-04_m.png",
+"basis": "karte18/autos/04",
+"x": 1572,
+"y": 1535,
+"fuss": 32,
+"kachel": [
+100,
+97
+],
+"ebene": 1,
+"an_wand": true
+},
+{
+"datei": "fremd/karte18-autos-12_m.png",
+"basis": "karte18/autos/12",
+"x": 1793,
+"y": 1528,
+"fuss": 39,
+"kachel": [
+114,
+97
+],
+"ebene": 1,
+"an_wand": true
+},
+{
+"datei": "muell_klein/18_m.png",
+"basis": "karte31/muell_klein/18",
+"x": 598,
+"y": 1504,
+"fuss": 12,
+"kachel": [
+37,
+94
+],
+"ebene": 1,
+"an_wand": true,
+"liegend": true
+},
+{
+"datei": "muell_klein/40.png",
+"basis": "karte31/muell_klein/40",
+"x": 1660,
+"y": 1341,
+"fuss": 12,
+"kachel": [
+104,
+84
+],
+"ebene": 1,
+"an_wand": true,
+"liegend": true
+},
+{
+"datei": "muell_klein/40_m.png",
+"basis": "karte31/muell_klein/40",
+"x": 1107,
+"y": 1347,
+"fuss": 12,
+"kachel": [
+69,
+84
+],
+"ebene": 1,
+"an_wand": true,
+"liegend": true
+},
+{
+"datei": "muell_klein/18_m.png",
+"basis": "karte31/muell_klein/18",
+"x": 900,
+"y": 1245,
+"fuss": 12,
+"kachel": [
+56,
+78
+],
+"ebene": 1,
+"an_wand": true,
+"liegend": true
+},
+{
+"datei": "muell_klein/00_m.png",
+"basis": "karte31/muell_klein/00",
+"x": 1044,
+"y": 706,
+"fuss": 12,
+"kachel": [
+65,
+44
+],
+"ebene": 1,
+"an_wand": true,
+"liegend": true
+},
+{
+"datei": "muell_klein/00_m.png",
+"basis": "karte31/muell_klein/00",
+"x": 896,
+"y": 847,
+"fuss": 12,
+"kachel": [
+56,
+53
+],
+"ebene": 1,
+"an_wand": true,
+"liegend": true
+},
+{
+"datei": "muell_klein/18_m.png",
+"basis": "karte31/muell_klein/18",
+"x": 1351,
+"y": 1294,
+"fuss": 12,
+"kachel": [
+84,
+81
+],
+"ebene": 1,
+"an_wand": true,
+"liegend": true
+},
+{
+"datei": "muell_klein/02.png",
+"basis": "karte31/muell_klein/02",
+"x": 1718,
+"y": 1376,
+"fuss": 12,
+"kachel": [
+107,
+86
+],
+"ebene": 1,
+"an_wand": true,
+"liegend": true
+},
+{
+"datei": "muell_klein/03_m.png",
+"basis": "karte31/muell_klein/03",
+"x": 1043,
+"y": 1586,
+"fuss": 9,
+"kachel": [
+65,
+99
+],
+"ebene": 1,
+"an_wand": true,
+"liegend": true
+},
+{
+"datei": "muell_klein/39_m.png",
+"basis": "karte31/muell_klein/39",
+"x": 901,
+"y": 594,
+"fuss": 13,
+"kachel": [
+56,
+37
+],
+"ebene": 1,
+"an_wand": true,
+"liegend": true
+},
+{
+"datei": "muell_klein/00_m.png",
+"basis": "karte31/muell_klein/00",
+"x": 877,
+"y": 910,
+"fuss": 12,
+"kachel": [
+55,
+57
+],
+"ebene": 1,
+"an_wand": true,
+"liegend": true
+},
+{
+"datei": "muell_klein/40_m.png",
+"basis": "karte31/muell_klein/40",
+"x": 1040,
+"y": 1106,
+"fuss": 12,
+"kachel": [
+65,
+69
+],
+"ebene": 1,
+"an_wand": true,
+"liegend": true
+},
+{
+"datei": "muell_klein/02.png",
+"basis": "karte31/muell_klein/02",
+"x": 927,
+"y": 1504,
+"fuss": 12,
+"kachel": [
+58,
+94
+],
+"ebene": 1,
+"an_wand": true,
+"liegend": true
+},
+{
+"datei": "muell_klein/01_m.png",
+"basis": "karte31/muell_klein/01",
+"x": 1187,
+"y": 1346,
+"fuss": 11,
+"kachel": [
+74,
+84
+],
+"ebene": 1,
+"an_wand": true,
+"liegend": true
+},
+{
+"datei": "muell_klein/01_m.png",
+"basis": "karte31/muell_klein/01",
+"x": 1428,
+"y": 1587,
+"fuss": 11,
+"kachel": [
+89,
+99
+],
+"ebene": 1,
+"an_wand": true,
+"liegend": true
+},
+{
+"datei": "muell_klein/39_m.png",
+"basis": "karte31/muell_klein/39",
+"x": 1096,
+"y": 1472,
+"fuss": 13,
+"kachel": [
+68,
+92
+],
+"ebene": 1,
+"an_wand": true,
+"liegend": true
+},
+{
+"datei": "muell_klein/01.png",
+"basis": "karte31/muell_klein/01",
+"x": 784,
+"y": 1502,
+"fuss": 11,
+"kachel": [
+49,
+94
+],
+"ebene": 1,
+"an_wand": true,
+"liegend": true
+},
+{
+"datei": "muell_klein/18_m.png",
+"basis": "karte31/muell_klein/18",
+"x": 1856,
+"y": 1344,
+"fuss": 12,
+"kachel": [
+116,
+84
+],
+"ebene": 1,
+"an_wand": true,
+"liegend": true
+},
+{
+"datei": "muell_klein/40.png",
+"basis": "karte31/muell_klein/40",
+"x": 159,
+"y": 1491,
+"fuss": 12,
+"kachel": [
+10,
+93
+],
+"ebene": 1,
+"an_wand": true,
+"liegend": true
+},
+{
+"datei": "muell_klein/18_m.png",
+"basis": "karte31/muell_klein/18",
+"x": 1325,
+"y": 1567,
+"fuss": 12,
+"kachel": [
+83,
+98
+],
+"ebene": 1,
+"an_wand": true,
+"liegend": true
+},
+{
+"datei": "muell_klein/00.png",
+"basis": "karte31/muell_klein/00",
+"x": 1024,
+"y": 962,
+"fuss": 12,
+"kachel": [
+64,
+60
+],
+"ebene": 1,
+"an_wand": true,
+"liegend": true
+},
+{
+"datei": "muell_klein/00_m.png",
+"basis": "karte31/muell_klein/00",
+"x": 1037,
+"y": 813,
+"fuss": 12,
+"kachel": [
+65,
+51
+],
+"ebene": 1,
+"an_wand": true,
+"liegend": true
+},
+{
+"datei": "muell_klein/02.png",
+"basis": "karte31/muell_klein/02",
+"x": 237,
+"y": 1490,
+"fuss": 12,
+"kachel": [
+15,
+93
+],
+"ebene": 1,
+"an_wand": true,
+"liegend": true
+},
+{
+"datei": "muell_klein/03.png",
+"basis": "karte31/muell_klein/03",
+"x": 1135,
+"y": 1504,
+"fuss": 9,
+"kachel": [
+71,
+94
+],
+"ebene": 1,
+"an_wand": true,
+"liegend": true
+},
+{
+"datei": "muell_klein/40.png",
+"basis": "karte31/muell_klein/40",
+"x": 1663,
+"y": 1500,
+"fuss": 12,
+"kachel": [
+104,
+94
+],
+"ebene": 1,
+"an_wand": true,
+"liegend": true
+},
+{
+"datei": "muell_klein/03.png",
+"basis": "karte31/muell_klein/03",
+"x": 1447,
+"y": 1493,
+"fuss": 9,
+"kachel": [
+90,
+93
+],
+"ebene": 1,
+"an_wand": true,
+"liegend": true
+},
+{
+"datei": "muell_klein/49.png",
+"basis": "karte31/muell_klein/49",
+"x": 1842,
+"y": 1284,
+"fuss": 11,
+"kachel": [
+115,
+80
+],
+"ebene": 1,
+"an_wand": true,
+"liegend": true
+},
+{
+"datei": "muell_klein/02.png",
+"basis": "karte31/muell_klein/02",
+"x": 895,
+"y": 989,
+"fuss": 12,
+"kachel": [
+56,
+62
+],
+"ebene": 1,
+"an_wand": true,
+"liegend": true
+},
+{
+"datei": "muell_klein/39.png",
+"basis": "karte31/muell_klein/39",
+"x": 895,
+"y": 1086,
+"fuss": 13,
+"kachel": [
+56,
+68
+],
+"ebene": 1,
+"an_wand": true,
+"liegend": true
+},
+{
+"datei": "muell_klein/40.png",
+"basis": "karte31/muell_klein/40",
+"x": 92,
+"y": 1564,
+"fuss": 12,
+"kachel": [
+6,
+98
+],
+"ebene": 1,
+"an_wand": true,
+"liegend": true
+},
+{
+"datei": "muell_klein/49_m.png",
+"basis": "karte31/muell_klein/49",
+"x": 901,
+"y": 1440,
+"fuss": 11,
+"kachel": [
+56,
+90
+],
+"ebene": 1,
+"an_wand": true,
+"liegend": true
+},
+{
+"datei": "muell_klein/39.png",
+"basis": "karte31/muell_klein/39",
+"x": 501,
+"y": 1486,
+"fuss": 13,
+"kachel": [
+31,
+93
+],
+"ebene": 1,
+"an_wand": true,
+"liegend": true
+},
+{
+"datei": "muell_klein/03_m.png",
+"basis": "karte31/muell_klein/03",
+"x": 404,
+"y": 1568,
+"fuss": 9,
+"kachel": [
+25,
+98
+],
+"ebene": 1,
+"an_wand": true,
+"liegend": true
+},
+{
+"datei": "muell_klein/02_m.png",
+"basis": "karte31/muell_klein/02",
+"x": 1489,
+"y": 1361,
+"fuss": 12,
+"kachel": [
+93,
+85
+],
+"ebene": 1,
+"an_wand": true,
+"liegend": true
+},
+{
+"datei": "muell_klein/40_m.png",
+"basis": "karte31/muell_klein/40",
+"x": 1398,
+"y": 1363,
+"fuss": 12,
+"kachel": [
+87,
+85
+],
+"ebene": 1,
+"an_wand": true,
+"liegend": true
+},
+{
+"datei": "muell_klein/18_m.png",
+"basis": "karte31/muell_klein/18",
+"x": 901,
+"y": 1358,
+"fuss": 12,
+"kachel": [
+56,
+85
+],
+"ebene": 1,
+"an_wand": true,
+"liegend": true
+},
+{
+"datei": "muell_klein/18.png",
+"basis": "karte31/muell_klein/18",
+"x": 1733,
+"y": 1567,
+"fuss": 12,
+"kachel": [
+108,
+98
+],
+"ebene": 1,
+"an_wand": true,
+"liegend": true
+},
+{
+"datei": "muell_klein/18.png",
+"basis": "karte31/muell_klein/18",
+"x": 260,
+"y": 1569,
+"fuss": 12,
+"kachel": [
+16,
+98
+],
+"ebene": 1,
+"an_wand": true,
+"liegend": true
+},
+{
+"datei": "muell_klein/01.png",
+"basis": "karte31/muell_klein/01",
+"x": 1239,
+"y": 1297,
+"fuss": 11,
+"kachel": [
+77,
+81
+],
+"ebene": 1,
+"an_wand": true,
+"liegend": true
+},
+{
+"datei": "muell_klein/39.png",
+"basis": "karte31/muell_klein/39",
+"x": 1027,
+"y": 1041,
+"fuss": 13,
+"kachel": [
+64,
+65
+],
+"ebene": 1,
+"an_wand": true,
+"liegend": true
+},
+{
+"datei": "muell_klein/02.png",
+"basis": "karte31/muell_klein/02",
+"x": 1036,
+"y": 1230,
+"fuss": 12,
+"kachel": [
+65,
+77
+],
+"ebene": 1,
+"an_wand": true,
+"liegend": true
+},
+{
+"datei": "muell_klein/00.png",
+"basis": "karte31/muell_klein/00",
+"x": 1027,
+"y": 1170,
+"fuss": 12,
+"kachel": [
+64,
+73
+],
+"ebene": 1,
+"an_wand": true,
+"liegend": true
+},
+{
+"datei": "muell_klein/03.png",
+"basis": "karte31/muell_klein/03",
+"x": 1823,
+"y": 1574,
+"fuss": 9,
+"kachel": [
+114,
+98
+],
+"ebene": 1,
+"an_wand": true,
+"liegend": true
+},
+{
+"datei": "muell_klein/02_m.png",
+"basis": "karte31/muell_klein/02",
+"x": 1843,
+"y": 1506,
+"fuss": 12,
+"kachel": [
+115,
+94
+],
+"ebene": 1,
+"an_wand": true,
+"liegend": true
+},
+{
+"datei": "muell_klein/49_m.png",
+"basis": "karte31/muell_klein/49",
+"x": 1582,
+"y": 1363,
+"fuss": 11,
+"kachel": [
+99,
+85
+],
+"ebene": 1,
+"an_wand": true,
+"liegend": true
+},
+{
+"datei": "muell_klein/40_m.png",
+"basis": "karte31/muell_klein/40",
+"x": 739,
+"y": 1565,
+"fuss": 12,
+"kachel": [
+46,
+98
+],
+"ebene": 1,
+"an_wand": true,
+"liegend": true
+},
+{
+"datei": "muell_klein/40_m.png",
+"basis": "karte31/muell_klein/40",
+"x": 594,
+"y": 1586,
+"fuss": 12,
+"kachel": [
+37,
+99
+],
+"ebene": 1,
+"an_wand": true,
+"liegend": true
+},
+{
+"datei": "muell_klein/01.png",
+"basis": "karte31/muell_klein/01",
+"x": 1506,
+"y": 1501,
+"fuss": 11,
+"kachel": [
+94,
+94
+],
+"ebene": 1,
+"an_wand": true,
+"liegend": true
+},
+{
+"datei": "muell_klein/49.png",
+"basis": "karte31/muell_klein/49",
+"x": 1234,
+"y": 1492,
+"fuss": 11,
+"kachel": [
+77,
+93
+],
+"ebene": 1,
+"an_wand": true,
+"liegend": true
+},
+{
+"datei": "muell_klein/49.png",
+"basis": "karte31/muell_klein/49",
+"x": 1037,
+"y": 1439,
+"fuss": 11,
+"kachel": [
+65,
+90
+],
+"ebene": 1,
+"an_wand": true,
+"liegend": true
+},
+{
+"datei": "muell_klein/02.png",
+"basis": "karte31/muell_klein/02",
+"x": 1317,
+"y": 1505,
+"fuss": 12,
+"kachel": [
+82,
+94
+],
+"ebene": 1,
+"an_wand": true,
+"liegend": true
+},
+{
+"datei": "muell_klein/18_m.png",
+"basis": "karte31/muell_klein/18",
+"x": 733,
+"y": 1470,
+"fuss": 12,
+"kachel": [
+46,
+92
+],
+"ebene": 1,
+"an_wand": true,
+"liegend": true
+},
+{
+"datei": "muell_klein/02_m.png",
+"basis": "karte31/muell_klein/02",
+"x": 1046,
+"y": 547,
+"fuss": 12,
+"kachel": [
+65,
+34
+],
+"ebene": 1,
+"an_wand": true,
+"liegend": true
+},
+{
+"datei": "muell_klein/39.png",
+"basis": "karte31/muell_klein/39",
+"x": 321,
+"y": 1503,
+"fuss": 13,
+"kachel": [
+20,
+94
+],
+"ebene": 1,
+"an_wand": true,
+"liegend": true
+},
+{
+"datei": "muell_klein/01_m.png",
+"basis": "karte31/muell_klein/01",
+"x": 934,
+"y": 1583,
+"fuss": 11,
+"kachel": [
+58,
+99
+],
+"ebene": 1,
+"an_wand": true,
+"liegend": true
+},
+{
+"datei": "muell_klein/49.png",
+"basis": "karte31/muell_klein/49",
+"x": 1329,
+"y": 1376,
+"fuss": 11,
+"kachel": [
+83,
+86
+],
+"ebene": 1,
+"an_wand": true,
+"liegend": true
+},
+{
+"datei": "muell_klein/39.png",
+"basis": "karte31/muell_klein/39",
+"x": 1270,
+"y": 1341,
+"fuss": 13,
+"kachel": [
+79,
+84
+],
+"ebene": 1,
+"an_wand": true,
+"liegend": true
+},
+{
+"datei": "muell_klein/02_m.png",
+"basis": "karte31/muell_klein/02",
+"x": 657,
+"y": 1565,
+"fuss": 12,
+"kachel": [
+41,
+98
+],
+"ebene": 1,
+"an_wand": true,
+"liegend": true
+},
+{
+"datei": "muell_klein/02.png",
+"basis": "karte31/muell_klein/02",
+"x": 1557,
+"y": 1295,
+"fuss": 12,
+"kachel": [
+97,
+81
+],
+"ebene": 1,
+"an_wand": true,
+"liegend": true
+},
+{
+"datei": "muell_klein/49.png",
+"basis": "karte31/muell_klein/49",
+"x": 1575,
+"y": 1571,
+"fuss": 11,
+"kachel": [
+98,
+98
+],
+"ebene": 1,
+"an_wand": true,
+"liegend": true
+}
+]

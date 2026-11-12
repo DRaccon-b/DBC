@@ -1,0 +1,135 @@
+"""Objekte fuer Karte 26 (The Kaiser's Fortress, A02) - Raum fuer Raum, Platzierung wie Karte 24/25.
+
+  python3 tools/karte26_bauen.py   (einmal -> wand.npy)
+  python3 tools/karte26_objekte.py && python3 tools/karte26_bauen.py
+
+Schritt 1: Thronsaal. Obsidian-Thron, Kriegsbanner, Konsolen, Obsidian-Saeulen (Karte 24), Terminals (Karte 16),
+Laternen (Karte 24). Paare exakt spiegelsymmetrisch zur Achse des Throns (Mitte des Saals).
+"""
+import json, math, os, shutil, sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import numpy as np
+from PIL import Image
+from karte04_objekte import saeubern
+
+ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
+KARTE = os.path.join(ROOT, 'maps', 'karte26')
+OBJ = os.path.join(ROOT, 'assets', 'objekte', 'karte26')
+T = 16
+FREMD = {'k24/thron': 'karte24/schrein/00.png', 'k24/banner': 'karte24/schrein/01.png',
+         'k24/konsole': 'karte24/schrein/02.png', 'k24/kristall': 'karte24/schrein/04.png',
+         'k24/laterne': 'karte24/lager/04.png', 'k16/terminal': 'karte16/netz/13.png',
+         'k16/saeule': 'karte16/netz/03.png'}
+THRON2, KOMMANDO, HOLO, WACHE, FEUERSCHALE, WAFFEN, RADAR = ('thron_gross/00', 'thron_gross/01', 'thron/00', 'thron/02',
+                                                            'thron/03', 'thron/05', 'thron/15')
+THRON, BANNER, KONSOLE, KRISTALL, LATERNE, TERMINAL = ('k24/thron', 'k24/banner', 'k24/konsole', 'k24/kristall',
+                                                      'k24/laterne', 'k16/terminal')
+AX = 19 * T                                                      # Achse des Thronsaals (x 4..33 -> Mitte)
+
+
+def paar(name, dx, reihe, opt=None):
+    o = dict(opt or {})
+    return [(name, reihe, dict(o, px=AX - dx)), (name, reihe, dict(o, px=AX + dx, spiegeln=True))]
+
+
+THRONSAAL = (                                                    # Kommandobruecke des Kaisers (eigene PixelLab-Objekte k26_thron)
+    [(THRON2, 9, {'px': AX})]                                    # Kaiserthron auf der Achse, Teppich davor
+    + paar('digifeuer/00', 60, 9, {'anim': 'lampe'})             # Feuerschalen mit digitalen Flammen (Nutzer)
+    + paar(KOMMANDO, 172, 9, {'anim': 'lampe'})                  # grosse Kommandopulte mit vier Monitoren
+    + [(HOLO, 18, {'px': AX, 'anim': 'lampe'})]                  # ein Holo-Schiff unten auf der Achse (Nutzer)
+    + paar('digifeuer/13', 208, 19, {'anim': 'lampe'})          # Tesla-Turm (digifeuer Nr. 13) statt Radar (Nutzer)
+)
+
+KAPSEL, TANK, SERVER, FROST, LABTISCH, CHEMIE, REAKTOR, PULT, FAESSER, KABEL, STEUER = (
+    'labor/00', 'tank3/00', 'labor/09', 'labor/02', 'labor/01', 'labor/08', 'tank/02', 'labor/10', 'labor/12',
+    'labor/03', 'labor/05')
+LABOR = (                                                        # Brutlabor oben rechts, aufgeraeumt (Nutzer: weniger)
+    [(TANK, 13, {'px': 64 * T}), (TANK, 24, {'px': 64 * T})]      # zwei grosse Stasis-Tanks wie in der Vorlage
+    + [(n, r, {'px': x * T})                                     # Nutzer: kapsel2 Nr. 2 (Brutkapseln oben), 4, 11, 14 (unten)
+       for (n, x, r) in (('kapsel2/14', 46, 10), ('kapsel2/02', 50, 10), ('kapsel2/11', 54, 10),
+                         ('kapsel2/04', 46, 15), ('kapsel2/11', 50, 15), ('kapsel2/14', 54, 15))]
+    + [(SERVER, 9, {'px': 72 * T}), (LABTISCH, 10, {'px': 79 * T})]
+)
+
+LABOR2 = (                                                       # Zellentrakt Mitte links (Nutzer: Zellen mit Gittern, Gitter in karte26_bauen)
+    [('kammer/00', 46, {'px': int(x * T), 'anim': 'lampe'}) for x in (7.0, 10.5, 27.5, 31.0)]   # Kammern in den Eckzellen
+)
+
+AXS = 728                                                        # Achse des Saeulenraums (Mitte Gittersteg = Raummitte)
+SAEULENRAUM = (
+    [('obelisk_bau/00', 42, {'px': AXS - 96}), ('obelisk_bau/00', 42, {'px': AXS + 96, 'spiegeln': True})]   # Obelisken im Bau mit Geruest (Nutzer)
+    + [('raum/00', r, {'px': AXS + d, 'anim': 'lampe'}) for r in (31, 46) for d in (-112, 112)]
+    + [('raum/01_gefuellt', 28, {'px': AXS + d, 'wand': True, 'oben': 27 * T + 4}) for d in (-40, 40)]    # Wandschilder
+    # (Nutzer): frei auf der Wand, symmetrisch zur Raumachse wie die Lampen, ganz auf der Wandflaeche, Inneres gefuellt
+)
+
+PORTALRAUM = (                                                   # Portalraum Mitte rechts nach der Vorlage
+    [('portal2/00_lila', 36, {'px': 1040, 'anim': 'portal', 'liegend': True}), ('portal2/00_lila', 36, {'px': 1327, 'anim': 'portal', 'liegend': True})]
+    + [('portalraum/00', 45, {'px': 1047}), ('portalraum/14', 45, {'px': 1280})]                       # Truemmerhaufen
+    + [('portalraum/01', 32, {'px': 926}), ('portalraum/01', 45, {'px': 926})]   # Rohre an den Waenden
+)
+
+HALLE_ACHSE = 718                                                # Mitte zwischen den Lampen (87 / 1350)
+KISTEN, KANISTER, LADEROBOTER, FAESSER2 = 'halle/00', 'halle/01', 'halle/02', 'halle/15'
+HALLE = (                                                        # grosse Halle (Frachtdeck) nach der Vorlage, sparsam
+    [('schild/00', 49, {'px': HALLE_ACHSE + d, 'wand': True, 'oben': 48 * T + 6}) for d in (-480, -160, 160, 480)]   # kleine
+    # Wandschilder (PixelLab k26_schild, 20 px: die Hallenwand ist nur 2 Kacheln hoch), fester Rhythmus symmetrisch zur Halle
+    + [('raum/00', 51, {'px': 87, 'anim': 'lampe'}), ('raum/00', 62, {'px': 87, 'anim': 'lampe'}),
+       ('raum/00', 51, {'px': 1350, 'anim': 'lampe'}), ('raum/00', 62, {'px': 1350, 'anim': 'lampe'})]
+    + [(KISTEN, 52, {'px': 136}), (KISTEN, 61, {'px': 304}), (KISTEN, 58, {'px': 568}),
+       (KISTEN, 60, {'px': 905}), (KISTEN, 51, {'px': 1248}), (KISTEN, 57, {'px': 1128})]      # unregelmaessig (Nutzer)
+    + [(KANISTER, 53, {'px': 196}), (KANISTER, 51, {'px': 472}), (KANISTER, 53, {'px': 900})]
+    + [(LADEROBOTER, 54, {'px': 360}), (LADEROBOTER, 51, {'px': 812}), (LADEROBOTER, 53, {'px': 1032})]
+    + [(FAESSER2, 61, {'px': 1290})]
+)
+
+
+def main():
+    lay = json.load(open(os.path.join(KARTE, 'layout.json')))
+    cls = lay['klassen']
+    cols, rows = lay['groesse']
+    for name, quelle in FREMD.items():
+        ziel = os.path.join(OBJ, name + '.png')
+        os.makedirs(os.path.dirname(ziel), exist_ok=True)
+        shutil.copy(os.path.join(ROOT, 'assets', 'objekte', quelle), ziel)
+    objekte, cache = [], {}
+    for (name, fy, opt) in THRONSAAL + LABOR + LABOR2 + SAEULENRAUM + PORTALRAUM + HALLE:
+        opt = dict(opt)
+        spiegeln = opt.pop('spiegeln', False)
+        key = (name, spiegeln)
+        if key not in cache:
+            sp = saeubern(Image.open(os.path.join(OBJ, name + '.png')).convert('RGBA'))
+            if spiegeln:
+                sp = sp.transpose(Image.FLIP_LEFT_RIGHT)
+            datei = 'varianten/%s%s.png' % (name.replace('/', '-'), '_m' if spiegeln else '')
+            os.makedirs(os.path.join(OBJ, 'varianten'), exist_ok=True)
+            sp.save(os.path.join(OBJ, datei))
+            a = np.array(sp.getchannel('A')) > 0
+            ys, xs = np.nonzero(a)
+            cache[key] = (datei, sp.height, int(xs.min()), int(ys.min()), int(xs.max()), int(ys.max()))
+        datei, h, ux0, uy0, ux1, uy1 = cache[key]
+        bw = ux1 - ux0 + 1
+        px = opt.pop('px')
+        x = px - (ux0 + bw // 2)
+        oben = opt.pop('oben', None)
+        y = (fy + 1) * T - 1 - uy1 if oben is None else oben - uy0       # Wandobjekt: Oberkante mit Abstand zur Krone
+        tx0, tx1 = (x + ux0) // T, (x + ux1) // T
+        wandobj = opt.pop('wand', False)
+        if not wandobj and any(cls[r][c] not in '.pgr' for c in range(tx0, tx1 + 1) for r in (fy, fy - 1)):
+            print('  uebersprungen (Wand/Huelle):', name, px, fy)
+            continue
+        wt, ht = math.ceil(bw / T), math.ceil((uy1 - uy0 + 1) / T)
+        o = {'datei': datei, 'basis': name, 'x': x, 'y': y, 'fuss': h, 'kachel': [px // T, fy],
+             'block': [tx0, fy - ht + 1, wt, ht], 'ebene': 1}
+        if wandobj:                                                  # haengt frei an der Wand: kein Bodenschatten
+            o.update({'an_wand': True, 'kein_schatten': True, 'keine_verdeckung': True})
+        o.update(opt)
+        objekte.append(o)
+    json.dump(objekte, open(os.path.join(OBJ, 'platzierung.json'), 'w'), indent=0)
+    print('Karte 26: %d Objekte' % len(objekte))
+
+
+if __name__ == '__main__':
+    main()
+    import regeln_a02                                                 # Regeln: nichts auf Wegen, Teleporter frei
+    regeln_a02.objekte_pruefen('karte26', '')

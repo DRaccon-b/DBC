@@ -60,7 +60,12 @@ def zell_maske(cls, arten, cols, rows):
     return m
 
 
+RASTER45 = False        # A02 (Nutzer): alle Bodenkanten am 16er-Raster mit 45-Grad-Schraegen (Regel 6b) statt ausgefranst
+
+
 def weich(m, blur, rausch, seed, schwelle=0.5):
+    if RASTER45:                                       # Kachelmaske, Gauss 5 px, ohne Rauschen -> 45-Grad-Ecken
+        blur, rausch = 5.0, 0
     a = np.array(Image.fromarray((m * 255).astype(np.uint8)).filter(ImageFilter.GaussianBlur(blur))) / 255.0
     if rausch:
         h, w = a.shape
@@ -492,16 +497,19 @@ def objekte_zeichnen(img, objs, cache, boden, frame, ebenen=None):
         if not len(zeilen):
             continue
         kern, wurf = felder(o, a)
+        if o.get('schattenlos'):                          # flach auf dem Boden (Spinnweben u. a.): kein Schatten
+            continue
         if o.get('liegend') and len(zeilen):              # liegend: flacher Schatten der ganzen Form
             ys_, xs_ = np.nonzero(a)
-            for d_, w_ in ((2, 0.83), (1, 1.0)):
+            vs_ = o.get('versatz', 2)                     # groessere liegende Objekte: Schatten weiter versetzt
+            for d_, w_ in [(d, 0.83) for d in range(vs_, 1, -1)] + [(1, 1.0)]:
                 Y_, X_ = ys_ + o['y'] + d_, xs_ + o['x'] + d_
                 ok_ = (Y_ >= 0) & (Y_ < kern.shape[0]) & (X_ >= 0) & (X_ < kern.shape[1])
                 wurf[Y_[ok_], X_[ok_]] = np.maximum(wurf[Y_[ok_], X_[ok_]], w_)
             continue
         if len(zeilen) < 4:
             continue
-        zu = zeilen.max()
+        zu = zeilen.max() - o.get('fuss_dy', 0)          # spitz zulaufender Sprite-Fuss: Schatten am breiten Fuss
         fuss_y = o['y'] + zu
         fuss = np.nonzero(a[max(0, zu - 3):zu + 1].any(axis=0))[0]
         if len(fuss):
@@ -511,6 +519,8 @@ def objekte_zeichnen(img, objs, cache, boden, frame, ebenen=None):
                     ein = (yy - fuss_y + 1) if yy > fuss_y else 0
                     kern[yy, max(0, fx0 - 1 + ein):max(0, min(kern.shape[1], fx1 + 3 - ein))] = 1
         hoehe_ = max(1, zu - zeilen.min())
+        if o.get('nur_kontakt'):                          # steht im Schatten (z. B. unter einer Hochbahn): nur Kontaktschatten
+            continue
         for zi in zeilen:
             k = zu - zi
             ty = int(fuss_y + k * 0.24)
@@ -539,8 +549,12 @@ def objekte_zeichnen(img, objs, cache, boden, frame, ebenen=None):
             sp = baum_wind(sp, frame, o['x'] + o['y'] * 0.3)
         elif frame is not None and o.get('anim') == 'fahne':
             sp = fahne_wehen(sp, frame, o['x'] * 0.37)
+        elif frame is not None and o.get('anim') == 'standarte':
+            sp = standarte(sp, frame, o['x'] * 0.37)
         elif frame is not None and o.get('anim') == 'reaktor':
             sp = reaktor_ruetteln(sp, frame, o['x'])
+        elif frame is not None and o.get('anim') in ('kerzen', 'feuer_kamin', 'feuer', 'feuer_lila') and o.get('flammen_box'):
+            sp = flammen_boxen(sp, frame, o)
         elif frame is not None and o.get('anim') in ('kerzen', 'feuer_kamin', 'feuer', 'feuer_lila'):
             sp = flammen_bewegen(sp, frame, o['x'] + o['y'], lila=o.get('anim') == 'feuer_lila')
         elif frame is not None and o.get('anim') == 'portal':
@@ -548,17 +562,20 @@ def objekte_zeichnen(img, objs, cache, boden, frame, ebenen=None):
         elif frame is not None and o.get('anim') == 'brunnen':
             sp = brunnen_fliessen(sp, frame)
         elif frame is not None and o.get('anim') == 'rauch':
-            sp = rauch_steigen(sp, frame)
+            sp = rauch_steigen(sp, frame, o.get('rauch_box'))
         elif frame is not None and o.get('anim') in ('ampel', 'signal'):
             sp = ampel_schalten(sp, frame, o.get('anim'))
         elif frame is not None and o.get('anim') == 'windrad':
             sp = windrad_drehen(sp, frame)
         elif frame is not None and o.get('anim') in TEILANIM:
             sp = TEILANIM[o['anim']](sp, frame, o)
+        if frame is not None and o.get('teil') in TEILANIM:          # Zusatzteil zu einer Licht-Animation
+            sp = TEILANIM[o['teil']](sp, frame, o)
         img.alpha_composite(sp, (o['x'], o['y']))
         if frame is not None and o.get('anim') == 'blume':
             bluete_puls(img, o, sp, frame)
-        if not o['basis'].startswith(('rand/', 'klein/0', 'klein/1', 'klein/2', 'klein/5')) and not o.get('an_wand'):
+        if not o['basis'].startswith(('rand/', 'klein/0', 'klein/1', 'klein/2', 'klein/5')) and not o.get('an_wand') \
+                and not o.get('schwebend'):
             bodenwall(img, grund, o, cache[o['datei']])     # Wandobjekte (Fenster, Banner ...) stehen nicht am Boden
 
 
@@ -846,7 +863,7 @@ def kamin_rauch(gd, o, sp, frame):
         gd.ellipse((cx - rr, cy - rr, cx + rr, cy + rr), fill=(236, 236, 242, int(200 * (1 - ph))))
 
 
-def rauch_steigen(sp, frame):
+def rauch_steigen(sp, frame, box=None):
     """Lok-Rauch (Karte 10): die hellen Rauchwolken steigen aus dem Schornstein, treiben leicht nach rechts
     und werden duenner; die Lok selbst bleibt ruhig."""
     a = np.array(sp)
@@ -856,6 +873,8 @@ def rauch_steigen(sp, frame):
     oben = np.zeros(a.shape[:2], bool)
     oben[:zeilen.min() + int((zeilen.max() - zeilen.min()) * 0.3)] = True
     rauch = (a[..., 3] > 0) & (mn > 150) & (mx - mn < 40) & oben
+    if box is not None:                                      # nur aus der Oeffnung (nicht Lichtpunkte daneben)
+        rauch &= _box_maske(a.shape, box)
     if not rauch.any():
         return sp
     k = frame % 8
@@ -931,7 +950,9 @@ def flammen_bewegen(sp, frame, phase, lila=False):
         X, Y = x + dx, y + dy
         if 0 <= X < a.shape[1] and 0 <= Y < a.shape[0]:
             out[Y, X] = a[y, x]
-    # Loecher am Flammenfuss schliessen (Original dort, wo nichts hingerueckt ist und unten Flamme war)
+    # Loecher schliessen: wo nichts hingerueckt ist, bleibt die Flamme (nie Durchblick auf den Boden)
+    loch = m & (out[..., 3] == 0)
+    out[loch] = a[loch]
     return Image.fromarray(out, 'RGBA')
 
 
@@ -1021,6 +1042,41 @@ def fahne_wehen(sp, frame, phase=0.0):
             if 0 <= xn < a.shape[1]:
                 out[y, xn] = a[y, x]
     return Image.fromarray(np.clip(out, 0, 255).astype(np.uint8), 'RGBA')
+
+
+def standarte(sp, frame, phase=0.0):
+    """Haengendes Banner an Querstange (Standarte, Lagerbanner): nur das Tuch unter der Querstange schwingt -
+    Spitze, Querstange, Stange darunter und Fuss bleiben vollkommen ruhig (Regel "Wehen nur am beweglichen Teil").
+    Das Tuch wird zeilenweise als Ganzes (mit Motiv und Rand) verschoben: oben fest an der Stange, nach unten
+    zunehmend bis 1-2 px, so reisst weder Rand noch Wappen auseinander."""
+    a = np.array(sp.convert('RGBA'))
+    al = a[..., 3] > 0
+    breite = al.sum(1)
+    zeilen = np.nonzero(breite)[0]
+    if len(zeilen) < 8:
+        return sp
+    stange_b = int(np.percentile(breite[zeilen], 15))
+    q = int(np.argmax(breite[:len(breite) * 2 // 3]))             # Querstange = breiteste Zeile oben
+    while q + 1 < len(breite) and breite[q + 1] >= breite[q] - 2 and breite[q + 1] > stange_b + 4:
+        q += 1
+    t0 = q + 1
+    t1 = t0
+    while t1 + 1 < len(breite) and breite[t1 + 1] > stange_b + 1:
+        t1 += 1
+    if t1 - t0 < 4:
+        return sp
+    out = a.copy()
+    ph = 2 * math.pi * frame / N_FRAMES + phase
+    for y in range(t0, t1 + 1):
+        t = (y - t0) / (t1 - t0)
+        d = int(round(1.7 * t ** 1.6 * math.sin(ph - t * 1.2)))
+        if d:
+            out[y] = 0
+            if d > 0:
+                out[y, d:] = a[y, :-d]
+            else:
+                out[y, :d] = a[y, -d:]
+    return Image.fromarray(out, 'RGBA')
 
 
 def bodenwall(img, grund, o, sp):
@@ -1149,8 +1205,18 @@ def animieren(img, objs, cache, frame, ruhig=False):
         elif anim == 'glitzern':
             a = np.array(sp)
             m = (a[..., 2] > 200) & (a[..., 0] > 150) & (a[..., 3] > 0)
+            if o.get('glitzer') == 'cyan':                     # Cyan-Kristall (nicht die Blueten daneben)
+                ai_ = a.astype(int)
+                m = (ai_[..., 3] > 0) & (ai_[..., 2] > 170) & (ai_[..., 1] > 140) & (ai_[..., 0] < 150)
+                if o.get('glitzer_box'):
+                    m &= _box_maske(a.shape, o['glitzer_box'])
             ys, xs = np.nonzero(m)
             if len(xs):
+                if o.get('glitzer') == 'cyan':                 # Kristallflaechen schimmern selbst
+                    for y_, x_ in zip(ys, xs):
+                        if (x_ + y_ * 2 + frame) % 6 == 0:
+                            rr, gg, bb, _ = px[o['x'] + x_, o['y'] + y_]
+                            px[o['x'] + x_, o['y'] + y_] = (min(255, rr + 70), min(255, gg + 60), min(255, bb + 40), 255)
                 k = (frame * 3 + i * 5) % (len(xs) * 3)
                 if k < len(xs):
                     x_, y_ = o['x'] + xs[k], o['y'] + ys[k]
@@ -1205,11 +1271,21 @@ def animieren(img, objs, cache, frame, ruhig=False):
             if anim == 'kessel':                               # gruen brodelnder Kesselinhalt
                 q = (a[..., 3] > 0) & (g_ > r_ + 25) & (g_ > b_)
                 farbe, rad = (120, 255, 140), (12, 6)
+            elif anim == 'lampe' and o.get('lampe_box'):     # Lichtquelle in fester Box (nicht Gold/Sandstein daneben)
+                mxl = a[..., :3].max(2)
+                q = (a[..., 3] > 0) & _box_maske(a.shape, o['lampe_box']) & (mxl > 170)
+                farbe, rad = tuple(o.get('licht_farbe', (255, 220, 120))), (14, 10)
             elif anim == 'lampe':                              # Strassenlaterne: gelbe/cremige Glaskugel leuchtet (Karte 10)
                 q = (a[..., 3] > 0) & (r_ > 200) & (g_ > 160) & (b_ < 150)
                 if not q.any():
                     q = (a[..., 3] > 0) & (r_ > 200) & (g_ > 180) & (r_ - b_ > 25)
                     q[int(a.shape[0] * 0.5):] = False
+                if not q.any():                                # andersfarbiges Licht (weiss, blau, violett): hellste
+                    hell_ = a[..., :3].max(2) + a[..., :3].min(2) // 2   # gesaettigte bzw. weisse Pixel der oberen Haelfte
+                    oben_ = np.zeros(q.shape, bool); oben_[:int(a.shape[0] * 0.6)] = True
+                    kand_ = (a[..., 3] > 0) & oben_
+                    if kand_.any():
+                        q = kand_ & (hell_ >= np.percentile(hell_[kand_], 96)) & (hell_ > 200)
                 farbe, rad = (255, 220, 120), (14, 10)
             elif anim == 'geisterlicht':
                 q = (a[..., 3] > 0) & (g_ > 150) & (g_ > r_ + 40)
@@ -1220,6 +1296,17 @@ def animieren(img, objs, cache, frame, ruhig=False):
             else:
                 q = (a[..., 3] > 0) & (b_ > 150) & (r_ > 120) & (g_ < r_ - 30)
                 farbe, rad = (190, 120, 255), (9, 4)
+            if o.get('flammen_box'):                           # nur echte Flammen (nicht Wachs/Messing), Schein je Flamme
+                q = np.any([_box_maske(a.shape, b_) for b_ in o['flammen_box']], axis=0) & (a[..., 3] > 0) & (r_ > 200) & (r_ - b_ > 60)
+                for b_ in o['flammen_box']:
+                    qq = q & _box_maske(a.shape, b_)
+                    if qq.any():
+                        yq, xq = np.nonzero(qq)
+                        f2 = 0.55 + 0.45 * ((frame * 7 + i * 3 + b_[0]) % 5) / 4.0
+                        cx2, cy2 = o['x'] + xq.mean(), o['y'] + yq.mean()
+                        for k_, al in ((1.0, 22), (0.55, 40)):
+                            gd.ellipse((cx2 - 9 * k_, cy2 - 6 * k_, cx2 + 9 * k_, cy2 + 6 * k_), fill=farbe + (int(al * (0.55 + 0.45 * f2)),))
+                q = q & False
             ys_q, xs_q = np.nonzero(q)
             if len(xs_q):
                 f_ = 0.5 + 0.5 * math.sin(2 * math.pi * frame / N_FRAMES * (3 if anim == 'kerzen' else 1) + i * 1.7)
@@ -1236,8 +1323,40 @@ def animieren(img, objs, cache, frame, ruhig=False):
                     px[X, Y] = (min(255, int(rr * k_)), min(255, int(gg * k_)), min(255, int(bb * k_)), 255)
         elif anim == 'kamin':
             kamin_rauch(gd, o, sp, frame)
+        elif anim == 'kristall':                               # Kristall: Lichtband wandert ueber die Flaechen, weicher Schein
+            a = np.array(sp).astype(int)
+            mx_, mn_ = a[..., :3].max(-1), a[..., :3].min(-1)
+            q = (a[..., 3] > 0) & (mx_ - mn_ > 50) & (mx_ > 120)
+            if o.get('kristall_box'):
+                q &= _box_maske(a.shape, o['kristall_box'])
+            else:
+                q[int(a.shape[0] * 0.75):] = False
+            ys_q, xs_q = np.nonzero(q)
+            if len(xs_q):
+                h_ = ys_q.max() - ys_q.min() + 1
+                band = ys_q.min() + (frame * (h_ + 8) // N_FRAMES) - 4
+                for y_, x_ in zip(ys_q, xs_q):
+                    d_ = abs((y_ + (x_ - xs_q.min()) // 2) - band)
+                    if d_ <= 2:
+                        rr, gg, bb, _ = px[o['x'] + x_, o['y'] + y_]
+                        add = (60, 40, 20)[d_]
+                        px[o['x'] + x_, o['y'] + y_] = (min(255, rr + add), min(255, gg + add), min(255, bb + add), 255)
+                farbe_ = tuple(int(v) for v in np.median(a[ys_q, xs_q, :3], 0))
+                cx, cy = o['x'] + xs_q.mean(), o['y'] + ys_q.mean()
+                for k_, al in ((1.0, 20), (0.55, 34)):
+                    r_ = max(10, (xs_q.max() - xs_q.min()) * 0.9) * k_
+                    gd.ellipse((cx - r_, cy - r_ * 0.8, cx + r_, cy + r_ * 0.8), fill=farbe_ + (int(al * (0.6 + 0.4 * puls)),))
         elif anim == 'leuchten':
             cx, cy = o['x'] + sp.width // 2, o['y'] + sp.height // 2
+            if o.get('licht'):                                 # Schein auf der echten Lichtquelle (Kugel), nicht dem Sockel
+                cx, cy = o['x'] + o['licht'][0], o['y'] + o['licht'][1]
+                a_ = np.array(sp).astype(int)
+                q_ = (a_[..., 3] > 0) & (a_[..., 0] > 200) & (a_[..., 1] > 120) & (a_[..., 2] < 140)
+                q_ &= _box_maske(a_.shape, o.get('licht_box', [0, 0, sp.width, sp.height]))
+                for y_, x_ in zip(*np.nonzero(q_)):
+                    rr, gg, bb, _ = px[o['x'] + x_, o['y'] + y_]
+                    k_ = 0.9 + 0.25 * puls
+                    px[o['x'] + x_, o['y'] + y_] = (min(255, int(rr * k_)), min(255, int(gg * k_)), min(255, int(bb * k_)), 255)
             for r, al in ((14, 30), (7, 50)):
                 gd.ellipse((cx - r, cy - r, cx + r, cy + r), fill=(255, 200, 110, int(al * (0.6 + 0.4 * puls))))
     img.alpha_composite(glut)
@@ -1473,3 +1592,379 @@ def bauen(frame=None, speichern=True):
 
 if __name__ == '__main__':
     bauen()
+
+
+# ---------------------------------------------------------------------------------------------------------------
+# Zusatz-Animationen (A02, Nutzer: "Animiere alles"): jede veraendert nur genau das bewegliche/leuchtende Teil.
+# Parameter stehen am Objekt (platzierung.json), gesetzt von tools/anim_a02.py. Boxen [x0, y0, x1, y1] in
+# Sprite-Pixeln des ungespiegelten Sprites; anim_a02 spiegelt sie fuer *_m-Varianten.
+
+def _zufall(*w):
+    return np.random.RandomState(abs(hash(tuple(int(v) for v in w))) % (2 ** 31))
+
+
+def _box_maske(shape, box):
+    m = np.zeros(shape[:2], bool)
+    x0, y0, x1, y1 = [int(v) for v in box]
+    m[max(0, y0):y1, max(0, x0):x1] = True
+    return m
+
+
+def bildschirm(sp, frame, o):
+    """Fernseher/Monitore: nur die Bildflaeche flimmert - Helligkeit pulsiert leicht, eine helle Zeile laeuft
+    nach unten, Schrift-/Bildpixel flackern. 'kaputt' bzw. dunkle (ausgeschaltete) Schirme zeigen Rauschen."""
+    a = np.array(sp.convert('RGBA'))
+    ai = a.astype(np.int16)
+    out = ai.copy()
+    for n, box in enumerate(o.get('schirm', [])):
+        bm = _box_maske(a.shape, box) & (a[..., 3] > 0)
+        if not bm.any():
+            continue
+        ys, xs = np.nonzero(bm)
+        y0, y1 = ys.min(), ys.max()
+        hell = ai[..., :3].max(-1)
+        dunkel_schirm = np.median(hell[bm]) < 90
+        rs = _zufall(frame, n, o.get('x', 0), o.get('y', 0))
+        if o.get('kaputt') or dunkel_schirm:
+            rausch = bm & (rs.rand(*bm.shape) < (0.35 if o.get('kaputt') else 0.18))
+            g = rs.randint(70, 200, size=bm.shape)
+            if not o.get('kaputt'):
+                g = (g * 0.55).astype(int)
+            for c in range(3):
+                out[..., c] = np.where(rausch, (out[..., c] + g * (1.0 if o.get('kaputt') else 0.8)) // 2, out[..., c])
+            zeile = y0 + (frame * 3 + n * 5) % max(1, (y1 - y0 + 1))
+            zm = bm & (np.arange(a.shape[0])[:, None] == zeile)
+            out[zm, :3] = np.minimum(255, out[zm, :3] + 45)
+            continue
+        f = 1.0 + 0.07 * math.sin(2 * math.pi * frame / N_FRAMES * 2 + n) + rs.uniform(-0.03, 0.03)
+        out[bm, :3] = np.clip(out[bm, :3] * f, 0, 255)
+        zeile = y0 + (frame * 2 + n * 3) % max(1, (y1 - y0 + 1))
+        for dz, add in ((0, 38), (-1, 16)):
+            zm = bm & (np.arange(a.shape[0])[:, None] == zeile + dz)
+            out[zm, :3] = np.minimum(255, out[zm, :3] + add)
+        glanz = bm & (hell > np.percentile(hell[bm], 80)) & (rs.rand(*bm.shape) < 0.25)
+        out[glanz, :3] = np.clip(out[glanz, :3] * 0.75, 0, 255)
+    return Image.fromarray(out.astype(np.uint8), 'RGBA')
+
+
+def leds(sp, frame, o):
+    """Kleine Leuchtpunkte (LEDs, Anzeigen) blinken unabhaengig voneinander; sonst bleibt alles gleich."""
+    a = np.array(sp.convert('RGBA'))
+    ai = a.astype(np.int16)
+    mx, mn = ai[..., :3].max(-1), ai[..., :3].min(-1)
+    kand = (a[..., 3] > 0) & (mx > 178) & ((mx - mn > 70) | (mn > 215))     # kein braunes Kupferkabel
+    if o.get('led_box'):
+        kand &= np.any([_box_maske(a.shape, b) for b in o['led_box']], axis=0)
+    out = ai.copy()
+    for i, (ys, xs) in enumerate(_komponenten(kand)):
+        if len(ys) > o.get('led_max', 8):
+            continue
+        h = (int(xs[0]) * 7 + int(ys[0]) * 13) % 11
+        an = ((frame + h) // (1 + h % 3)) % 4 != 0
+        if not an:
+            out[ys, xs, :3] = (out[ys, xs, :3] * 0.45).astype(np.int16)
+    return Image.fromarray(out.astype(np.uint8), 'RGBA')
+
+
+def _fluessig_maske(a, art, box):
+    ai = a.astype(np.int16)
+    r, g, b = ai[..., 0], ai[..., 1], ai[..., 2]
+    m = {'cyan': (b > r + 50) & (g > r + 30),
+         'gruen': (g > r + 20) & (g > b + 20),
+         'rot': (r > g + 30) & (r > b + 10) & (r > 60)}[art]
+    return m & (a[..., 3] > 0) & _box_maske(a.shape, box)
+
+
+def blasen(sp, frame, o):
+    """Fluessigkeit in Tanks/Kapseln: kleine Blasen steigen auf (nur auf Fluessigkeitspixeln), die Flaeche
+    schimmert leicht. Glas, Gehaeuse und das Wesen im Tank bleiben unveraendert."""
+    a = np.array(sp.convert('RGBA'))
+    out = a.astype(np.int16)
+    for n, (x0, y0, x1, y1, art) in enumerate(o.get('fluessig', [])):
+        m = _fluessig_maske(a, art, (x0, y0, x1, y1))
+        if not m.any():
+            continue
+        spalten = np.nonzero(m.any(0))[0]
+        rs = np.random.RandomState(int(x0 * 31 + y0 * 7 + n))
+        H = y1 - y0
+        for k in range(max(3, len(spalten) // 5)):
+            x = int(rs.choice(spalten))
+            tempo = rs.choice((1, 2))
+            y = y1 - 1 - ((frame * tempo * 16 // N_FRAMES * (H // 16 + 1) + rs.randint(0, H)) % H)
+            for dy, st in ((0, 0.6), (1, 0.3)):
+                Y = y + dy
+                if y0 <= Y < y1 and m[Y, x]:
+                    out[Y, x, :3] = out[Y, x, :3] + (255 - out[Y, x, :3]) * st
+        schimmer = m & (((np.arange(a.shape[1])[None, :] + np.arange(a.shape[0])[:, None] * 2 + frame * 3) % 11) == 0)
+        out[schimmer, :3] = np.minimum(255, out[schimmer, :3] + 22)
+    return Image.fromarray(np.clip(out, 0, 255).astype(np.uint8), 'RGBA')
+
+
+def maschine(sp, frame, o):
+    """Laufende Maschine (Regel Maschinen-Animation): Bildschirme flimmern, LEDs blinken, Fluessigkeit blubbert,
+    auf Wunsch ruettelt das Gehaeuse 1 px - die Fuesse bleiben fest."""
+    if o.get('schirm'):
+        sp = bildschirm(sp, frame, o)
+    if o.get('fluessig'):
+        sp = blasen(sp, frame, o)
+    if o.get('leds'):
+        sp = leds(sp, frame, o)
+    if o.get('ruetteln'):
+        sp = reaktor_ruetteln(sp, frame, o.get('x', 0))
+    return sp
+
+
+def teil_drehen(sp, frame, o):
+    """Ein Teil kippt um seinen festen Drehpunkt (Pumpenbalken, Roboterarm, Schaukelsitze) - nichts verbiegt sich.
+    o['dreh'] = Liste von {box | bis_y, punkt [x, y], amp (Grad), phase, ohne_box, stange}."""
+    a = np.array(sp.convert('RGBA'))
+    rest = a.copy()
+    teile = []
+    for n, d in enumerate(o['dreh']):
+        m = _box_maske(a.shape, d['box']) if 'box' in d else (np.arange(a.shape[0])[:, None] < d['bis_y']) & np.ones(a.shape[:2], bool)
+        if 'ohne_box' in d:
+            m &= ~_box_maske(a.shape, d['ohne_box'])
+        for b_ in d.get('ohne_boxen', []):
+            m &= ~_box_maske(a.shape, b_)
+        m &= a[..., 3] > 0
+        teil = np.zeros_like(a)
+        teil[m] = a[m]
+        rest[m] = 0
+        w = d.get('amp', 4) * math.sin(2 * math.pi * frame / N_FRAMES + d.get('phase', 0) + o.get('x', 0) * 0.05)
+        teile.append((teil, w, d))
+    out = Image.fromarray(rest)
+    for teil, w, d in teile:
+        out.alpha_composite(Image.fromarray(teil).rotate(w, resample=Image.NEAREST, center=tuple(d['punkt'])))
+        for st_box in ([d['stange']] if 'stange' in d else []) + d.get('stangen', []):   # Gestaenge folgt senkrecht
+            sx0, sy0, sx1, sy1 = st_box
+            dy = int(round(math.sin(math.radians(w)) * (d['punkt'][0] - (sx0 + sx1) / 2)))
+            if dy:
+                st = np.array(out)
+                stueck = np.array(sp.convert('RGBA'))[sy0:sy1, sx0:sx1].copy()
+                st[sy0:sy1, sx0:sx1] = 0
+                ys0 = max(0, sy0 + dy)
+                st[ys0:min(st.shape[0], sy1 + dy), sx0:sx1] = stueck[ys0 - sy0 - dy:ys0 - sy0 - dy + min(st.shape[0], sy1 + dy) - ys0]
+                out = Image.fromarray(st)
+    return out
+
+
+def wimpel(sp, frame, o):
+    """Kleine Fahnen an Stangen (Zelte, Bergstation): nur das Tuch rechts der Stange weht - Spalten verschieben
+    sich senkrecht, zur Spitze hin staerker; Stange und Zelt bleiben ruhig. o['wimpel'] = [[x0, y0, x1, y1], ...]
+    mit x0 = erste Spalte rechts neben der Stange."""
+    a = np.array(sp.convert('RGBA'))
+    ai = a.astype(np.int16)
+    out = a.copy()
+    dunkel = ai[..., :3].max(-1) < 90
+    links = o.get('wimpel_links')                           # gespiegelt: Stange rechts, Tuch weht nach links
+    for n, box in enumerate(o['wimpel']):
+        x0, y0, x1, y1 = box[:4]
+        frei = (len(box) > 4 and box[4]) or o.get('wimpel_frei')   # Tuch vor freiem Himmel
+        sub_d = dunkel[y0:y1, x0:x1] | ((a[y0:y1, x0:x1, 3] > 0) if frei else False)
+        sub_a = a[y0:y1, x0:x1, 3] > 0
+        h, w = sub_d.shape
+        aussen = np.zeros((h, w), bool)                     # von Rand (ohne Stangenseite) ohne Kontur erreichbar
+        from collections import deque
+        q = deque()
+        for y in range(h):
+            for x in range(w):
+                if (y in (0, h - 1) or x == (0 if links else w - 1)) and not sub_d[y, x]:
+                    aussen[y, x] = True; q.append((y, x))
+        while q:
+            y, x = q.popleft()
+            for dy, dx in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+                Y, X = y + dy, x + dx
+                if 0 <= Y < h and 0 <= X < w and not aussen[Y, X] and not sub_d[Y, X]:
+                    aussen[Y, X] = True; q.append((Y, X))
+        tuch = sub_a & ~aussen
+        if not tuch.any():
+            continue
+        hinter = a[y0:y1, x0:x1][aussen & sub_a]
+        fuell = np.median(hinter, axis=0).astype(np.uint8) if len(hinter) > 4 else np.zeros(4, np.uint8)
+        sub = a[y0:y1, x0:x1]
+        neu = sub.copy()
+        neu[tuch] = 0 if frei else (fuell if len(hinter) > 4 and (aussen & sub_a).sum() > aussen.sum() * 0.5 else 0)
+        ph = 2 * math.pi * frame / N_FRAMES + n * 1.3 + o.get('x', 0) * 0.07
+        for x in range(w):
+            t = (w - 1 - x if links else x) / max(1, w - 1)
+            d = int(round(1.25 * t * math.sin(ph - t * 2.6)))
+            for y in np.nonzero(tuch[:, x])[0]:
+                Y = y + d
+                if 0 <= Y < h:
+                    neu[Y, x] = sub[y, x]
+        out[y0:y1, x0:x1] = neu
+    return Image.fromarray(out, 'RGBA')
+
+
+def blitze(sp, frame, o):
+    """Tesla-Saeulen: die Blitzboegen knistern - jeder Bogen springt pro Bild um 1 px, flackert hell/dunkel
+    und setzt manchmal aus; kleine Funken springen. Saeule und Sockel bleiben ruhig."""
+    a = np.array(sp.convert('RGBA'))
+    ai = a.astype(np.int16)
+    mx, mn = ai[..., :3].max(-1), ai[..., :3].min(-1)
+    w = a.shape[1]
+    blitz = (a[..., 3] > 0) & (ai[..., 1] > 150) & (ai[..., 1] >= ai[..., 0]) & ((mx - mn > 50) | (mn > 200))
+    mitte = np.zeros_like(blitz)
+    mitte[:, int(w * o.get('saeule', (0.36, 0.64))[0]):int(w * o.get('saeule', (0.36, 0.64))[1])] = True
+    boegen = blitz & ~mitte
+    out = a.copy()
+    out[boegen, 3] = 0
+    # Untergrund unter den Boegen (Saeulenkoerper) wiederherstellen: Nachbarfarbe
+    rs = _zufall(frame, o.get('x', 0), o.get('y', 0))
+    teile = [t for t in _komponenten(boegen) if len(t[0]) >= 2]
+    aus = rs.randint(len(teile)) if len(teile) > 2 and rs.rand() < 0.5 else -1
+    for i, (ys, xs) in enumerate(teile):
+        if i == aus:
+            continue                                         # ein Bogen setzt kurz aus
+        dx, dy = rs.randint(-1, 2), rs.randint(-1, 2)
+        f = rs.uniform(0.85, 1.25)
+        for y, x in zip(ys, xs):
+            Y, X = y + dy, x + dx
+            if 0 <= Y < a.shape[0] and 0 <= X < w:
+                c = np.clip(a[y, x, :3].astype(float) * f, 0, 255).astype(np.uint8)
+                out[Y, X, :3] = c
+                out[Y, X, 3] = max(int(out[Y, X, 3]), int(a[y, x, 3]))
+    for _ in range(3):                                       # Funken
+        if len(teile):
+            ys, xs = teile[rs.randint(len(teile))]
+            j = rs.randint(len(ys))
+            Y, X = ys[j] + rs.randint(-2, 3), xs[j] + rs.randint(-2, 3)
+            if 0 <= Y < a.shape[0] and 0 <= X < w:
+                out[Y, X] = (230, 255, 220, 255)
+    kern = blitz & mitte
+    f = 0.85 + 0.3 * rs.rand()
+    out[kern, :3] = np.clip(out[kern, :3].astype(float) * f, 0, 255).astype(np.uint8)
+    return Image.fromarray(out, 'RGBA')
+
+
+def brunnen_strahl(sp, frame, o):
+    """Steinbrunnen (Friedhof): die hellen Wasserstrahlen fliessen (Helligkeitsmuster wandert nach unten),
+    im Becken wandern Lichtpunkte; Stein bleibt ruhig."""
+    a = np.array(sp.convert('RGBA'))
+    ai = a.astype(np.int16)
+    mx, mn = ai[..., :3].max(-1), ai[..., :3].min(-1)
+    strahl = (a[..., 3] > 0) & (mn > o.get('strahl_min', 120)) & (mx - mn < 70)
+    if o.get('strahl_box'):
+        strahl &= _box_maske(a.shape, o['strahl_box'])
+    becken = (a[..., 3] > 0) & _box_maske(a.shape, o['becken']) & (ai[..., 1] > ai[..., 0] + 6) & ~strahl
+    out = ai.copy()
+    yy, xx = np.mgrid[0:a.shape[0], 0:a.shape[1]]
+    welle = ((yy - frame) % 4 == 0)
+    out[strahl & welle, :3] = np.minimum(255, out[strahl & welle, :3] + 40)
+    out[strahl & ((yy - frame) % 4 == 2), :3] = (out[strahl & ((yy - frame) % 4 == 2), :3] * 0.85).astype(np.int16)
+    funkel = becken & (((xx * 3 + yy * 5 + frame * 7) % 23) == 0)
+    out[funkel, :3] = np.minimum(255, out[funkel, :3] + 55)
+    ring = becken & (((xx + yy * 3 - frame * 2) % 9) == 0)
+    out[ring, :3] = np.minimum(255, out[ring, :3] + 18)
+    return Image.fromarray(np.clip(out, 0, 255).astype(np.uint8), 'RGBA')
+
+
+def lampions(sp, frame, o):
+    """Rote Papierlaternen an Laeden: glimmen (Helligkeit pulsiert wie Kerzenlicht); nur die
+    Laternenpixel in den Boxen o['lampions'] veraendern sich."""
+    a = np.array(sp.convert('RGBA'))
+    out = a.copy()
+    for n, box in enumerate(o['lampions']):
+        x0, y0, x1, y1 = box
+        sub = a[y0:y1, x0:x1].astype(np.int16)
+        m = sub[..., 3] > 0
+        f = 0.92 + 0.36 * (((frame * 5 + n * 3) % 7) / 6.0)
+        warm = m & (sub[..., 0] > sub[..., 2] + 30) & (sub[..., 0] > 110)
+        sub[warm, :3] = np.clip(sub[warm, :3] * f + np.array([18, 8, 0]) * (f - 0.9), 0, 255)
+        out[y0:y1, x0:x1] = sub.astype(np.uint8)
+    return Image.fromarray(out, 'RGBA')
+
+
+TEILANIM.update({'bildschirm': bildschirm, 'leds': leds, 'blasen': blasen, 'maschine': maschine,
+                 'teil_drehen': teil_drehen, 'wimpel': wimpel, 'blitze': blitze, 'brunnen_strahl': brunnen_strahl,
+                 'lampions': lampions})
+
+
+def portal_box(sp, frame, o):
+    """Portal ohne Farberkennung (z. B. schwarz-grau-weiss): der Wirbel in der Kreisscheibe o['wirbel'] = [cx, cy, r]
+    dreht sich einmal pro Schleife, der Rahmen ausserhalb bleibt fest."""
+    a = np.array(sp.convert('RGBA'))
+    cx, cy, r = o['wirbel']
+    yy, xx = np.mgrid[0:a.shape[0], 0:a.shape[1]]
+    m = (yy - cy) ** 2 + (xx - cx) ** 2 <= r * r
+    win = math.radians(-360.0 * frame / N_FRAMES)
+    ca, sa = math.cos(win), math.sin(win)
+    ys, xs = np.nonzero(m)
+    dy_, dx_ = ys - cy, xs - cx
+    sy = np.round(cy + dy_ * ca - dx_ * sa).astype(int)
+    sx = np.round(cx + dy_ * sa + dx_ * ca).astype(int)
+    ok = (sy >= 0) & (sy < a.shape[0]) & (sx >= 0) & (sx < a.shape[1])
+    ok[ok] &= m[sy[ok], sx[ok]]
+    out = a.copy()
+    out[ys[ok], xs[ok]] = a[sy[ok], sx[ok]]
+    return Image.fromarray(out, 'RGBA')
+
+
+def laub_wehen(sp, frame, o):
+    """Pflanze an Holzpfahl/Spalier: nur Laub, Blueten und Fruechte wiegen sich (oben am staerksten), das Holz
+    (Pfahl, Latten) bleibt voellig ruhig."""
+    a = np.array(sp.convert('RGBA'))
+    ai = a.astype(np.int16)
+    r, g, b = ai[..., 0], ai[..., 1], ai[..., 2]
+    holz = (r > g + 10) & (g > b + 10) & (r < 215) & (g > 45)
+    holz |= ai[..., :3].max(-1) < 40 & False
+    if o.get('holz_box'):
+        for b_ in o['holz_box']:
+            holz |= _box_maske(a.shape, b_) & (ai[..., :3].max(-1) < 90)
+    zeilen = np.nonzero(a[..., 3].any(1))[0]
+    y0, y1 = zeilen.min(), zeilen.max()
+    grenze = y0 + (y1 - y0) * o.get('laub_bis', 0.7)
+    s_ = math.sin(2 * math.pi * frame / N_FRAMES + o.get('x', 0) * 0.05)
+    beweg = (a[..., 3] > 0) & ~holz
+    out = a.copy()
+    for y in range(a.shape[0]):
+        if y >= grenze:
+            continue
+        d = int(round(o.get('amp', 1.4) * s_ * (grenze - y) / max(1, grenze - y0)))
+        if not d:
+            continue
+        xs = np.nonzero(beweg[y])[0]
+        out[y, xs] = 0
+        out[y, xs] = np.where(holz[y, xs, None], a[y, xs], 0)
+        for x in xs:
+            X = x + d
+            if 0 <= X < a.shape[1] and not holz[y, X]:
+                out[y, X] = a[y, x]
+    return Image.fromarray(out, 'RGBA')
+
+
+TEILANIM.update({'portal_box': portal_box, 'laub_wehen': laub_wehen})
+
+
+def flammen_boxen(sp, frame, o):
+    """Kerzenflammen in festen Boxen (o['flammen_box']): jede Flamme zuengelt fuer sich (Spitze seitlich, streckt sich
+    um 1 px); Wachs, Messing und Halter bleiben unveraendert."""
+    a = np.array(sp.convert('RGBA'))
+    ai = a.astype(int)
+    out = a.copy()
+    t = 2 * math.pi * frame / N_FRAMES
+    for n, b_ in enumerate(o['flammen_box']):
+        if o.get('flammen_alle'):                            # bunte Digi-Flammen (cyan/pink): alles Bunte in der Box
+            m = _box_maske(a.shape, b_) & (ai[..., 3] > 0) & (ai[..., :3].max(-1) - ai[..., :3].min(-1) > 40)
+        else:
+            m = _box_maske(a.shape, b_) & (ai[..., 3] > 0) & (ai[..., 0] > 200) & (ai[..., 0] - ai[..., 2] > 60)
+        if not m.any():
+            continue
+        ys, xs = np.nonzero(m)
+        y0, y1 = ys.min(), ys.max()
+        out[m] = 0
+        hoch = (0, 1, 1, 0, 1, 0, 0, 1)[(frame + n * 3 + o.get('x', 0)) % 8]
+        for y, x in zip(ys, xs):
+            k = (y1 - y) / max(1, y1 - y0)
+            dx = int(round(k * o.get('flammen_amp', 1.2) * math.sin(t * 2 + n * 1.9 + o.get('x', 0) * 0.3 + y * 0.35)))
+            X = x + dx
+            if 0 <= X < a.shape[1]:
+                out[y, X] = a[y, x]
+                if hoch and y == y0 and y - 1 >= 0:
+                    out[y - 1, X] = a[y, x]
+        unten = m & (out[..., 3] == 0)                       # Flammenfuss bleibt am Docht
+        out[unten & (np.arange(a.shape[0])[:, None] >= y1)] = a[unten & (np.arange(a.shape[0])[:, None] >= y1)]
+    return Image.fromarray(out, 'RGBA')
+
+
+TEILANIM.update({'flammen_boxen': flammen_boxen})

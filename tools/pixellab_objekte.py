@@ -448,6 +448,15 @@ OBJEKTGRUPPEN_K6 = {
 }
 
 OBJEKTGRUPPEN_K7 = {
+    'k7_pagode': {'size': 192, 'items': [
+        'three tiered japanese pagoda temple with red wooden walls and pillars, dark blue-green tiled roofs with upturned gold '
+        'trimmed eaves and a golden spire on top, stone base with steps in front, seen from the front and slightly above so the '
+        'roof surfaces of every tier and the ridges are visible, like a temple in a classic 2D handheld RPG town, facade facing '
+        'the camera, symmetric, not isometric',
+        'large japanese temple pagoda with three stacked roofs seen from slightly above, roof tiles clearly visible on each tier, '
+        'red lacquered walls, lanterns at the corners, golden finial, wide stone platform with stairs, classic 2D handheld RPG '
+        'style, facade facing the camera, symmetric, not isometric',
+    ]},
     'k7_turm': {'size': 160, 'items': [
         'huge black stone tower lying fallen on its side on the ground, broken in the middle, cracked dark obsidian blocks, a few glowing purple runes, perfectly straight front elevation view, symmetric, facing the camera head-on, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
         'fallen black stone tower segment lying on the ground, round broken end with rubble, dark obsidian, perfectly straight front elevation view, symmetric, facing the camera head-on, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
@@ -1586,7 +1595,35 @@ def herunterladen(oid, d):
 
 
 def speichern(gruppe, ims, ids):
-    if gruppe.startswith('k20_'):
+    if gruppe.startswith('k26_'):
+        ziel = os.path.join(ROOT, 'assets', 'objekte', 'karte26', gruppe[4:])
+    elif gruppe.startswith('k33_'):
+        ziel = os.path.join(ROOT, 'assets', 'objekte', 'karte33', gruppe[4:])
+    elif gruppe.startswith('k32_'):
+        ziel = os.path.join(ROOT, 'assets', 'objekte', 'karte32', gruppe[4:])
+    elif gruppe.startswith('k31_'):
+        ziel = os.path.join(ROOT, 'assets', 'objekte', 'karte31', gruppe[4:])
+    elif gruppe.startswith('k30_'):
+        ziel = os.path.join(ROOT, 'assets', 'objekte', 'karte30', gruppe[4:])
+    elif gruppe.startswith('k29_'):
+        ziel = os.path.join(ROOT, 'assets', 'objekte', 'karte29', gruppe[4:])
+    elif gruppe.startswith('k28_'):
+        ziel = os.path.join(ROOT, 'assets', 'objekte', 'karte28', gruppe[4:])
+    elif gruppe.startswith('k27_'):
+        ziel = os.path.join(ROOT, 'assets', 'objekte', 'karte27', gruppe[4:])
+    elif gruppe.startswith('k26_'):
+        ziel = os.path.join(ROOT, 'assets', 'objekte', 'karte26', gruppe[4:])
+    elif gruppe.startswith('k25_'):
+        ziel = os.path.join(ROOT, 'assets', 'objekte', 'karte25', gruppe[4:])
+    elif gruppe.startswith('k24_'):
+        ziel = os.path.join(ROOT, 'assets', 'objekte', 'karte24', gruppe[4:])
+    elif gruppe.startswith('k23_'):
+        ziel = os.path.join(ROOT, 'assets', 'objekte', 'karte23', gruppe[4:])
+    elif gruppe.startswith('k22_'):
+        ziel = os.path.join(ROOT, 'assets', 'objekte', 'karte22', gruppe[4:])
+    elif gruppe.startswith('k21_'):
+        ziel = os.path.join(ROOT, 'assets', 'objekte', 'karte21', gruppe[4:])
+    elif gruppe.startswith('k20_'):
         ziel = os.path.join(ROOT, 'assets', 'objekte', 'karte20', gruppe[4:])
     elif gruppe.startswith('k18_'):
         ziel = os.path.join(ROOT, 'assets', 'objekte', 'karte18', gruppe[4:])
@@ -1686,9 +1723,517 @@ OBJEKTGRUPPEN_K20 = {   # Karte 20 (A02-Startdorf), Stil wie Karte 06 (Primary V
 }
 
 
+OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 01
+    'k21_tv': {'size': 32, 'items': [
+        'small old grey retro CRT television set standing on the grass, boxy light grey plastic case, a slightly curved '
+        'dark screen with a faint blue glow and a white reflection, two small round knobs on the right, short antenna on top, ' + FR14,
+        'small old cream white retro CRT television set standing on the grass, boxy case, dark grey curved screen with a '
+        'light reflection, small speaker grille and knobs on the right side, ' + FR14,
+        'small broken old grey CRT television lying tipped over on its side in the grass, cracked dark screen, bent antenna, ' + FR14,
+    ]},
+    'k21_teppich': {'size': 48, 'items': [
+        'large rectangular woven rug lying flat on the grass, warm red and orange colors with a diamond pattern in the '
+        'middle, a dark border and small fringes on the short sides, seen from above at a slight angle, flat on the ground',
+    ]},
+    'k21_schrein': {'size': 48, 'items': [
+        'large orange egg with a simple yellow zigzag band, resting upright in a small round grey stone pedestal bowl, ' + FR14,
+        'large red egg with small white round spots, resting upright in a small round grey stone pedestal bowl, ' + FR14,
+        'large yellow egg with a black stripe band, resting upright in a small round grey stone pedestal bowl, ' + FR14,
+        'large pink egg with small white heart spots, resting upright in a small round grey stone pedestal bowl, ' + FR14,
+        'slender white marble column with a square base and a carved capital, ancient shrine pillar, ' + FR14,
+        'low ancient stone altar table, a flat grey stone slab resting on two short stone legs, dolmen, ' + FR14,
+        'small grey japanese stone lantern, toro, square roof cap and a small window in the middle, ' + FR14,
+    ]},
+    'k21_saeule': {'size': 64, 'items': [
+        'tall slender grey stone column with a square base and a carved capital, cool blue-grey granite like an old '
+        'shrine pillar, slightly weathered with a little moss at the base, ' + FR14,
+    ]},
+    'k21_zelt': {'size': 64, 'items': [
+        'dark purple canvas camping tent with an open dark entrance flap in the middle, a small golden trim along the '
+        'ridge, tied ropes and wooden pegs at the corners, sturdy and cozy, ' + FR14,
+    ]},
+    'k23_hecke': {'size': 32, 'items': [
+        'short section of a neatly trimmed dense green farm hedge, boxy rounded top, leafy texture with small light '
+        'highlights, darker leaves at the bottom, seamless left and right sides so pieces can be placed in a row, ' + FR14,
+        'end piece of a trimmed green farm hedge, rounded on the left side, flat cut on the right side, ' + FR14,
+        'small square trimmed green hedge bush block, rounded corners, ' + FR14,
+    ]},
+    'k23_hecke_senk': {'size': 32, 'items': [
+        'vertical section of a neatly trimmed dense green farm hedge running from top to bottom, narrow and tall, seen '
+        'from above at a slight angle, leafy rounded texture with light highlights on the left, darker on the right, '
+        'seamless top and bottom ends so pieces can be stacked in a column, ' + FR14,
+        'bottom end piece of a vertical trimmed green farm hedge, narrow, rounded at the bottom with a dark leafy front, ' + FR14,
+    ]},
+    'k23_mauer': {'size': 32, 'items': [
+        'low farm field wall section made of stacked grey fieldstones with a flat stone cap on top, about knee high, '
+        'seamless left and right sides so pieces can be placed in a long row, ' + FR14,
+        'end piece of a low grey fieldstone farm wall, rounded stones at the left end, ' + FR14,
+    ]},
+    'k23_obst': {'size': 32, 'items': [
+        'small round orchard pear tree with a leafy green crown full of yellow pears, short brown trunk, ' + FR14,
+        'small round orchard orange tree with a dark green crown full of bright orange fruits, short brown trunk, ' + FR14,
+        'small round orchard plum tree with a leafy green crown full of dark purple plums, short brown trunk, ' + FR14,
+        'small round orchard cherry tree with a leafy green crown full of small red cherries, short brown trunk, ' + FR14,
+    ]},
+    'k23_scheune': {'size': 80, 'items': [
+        'classic red farm barn with a white trim, a big white X-braced double door in the middle, a small hay loft door '
+        'above it, dark grey shingled gambrel roof seen slightly from above so the roof surface is visible, stone base, ' + FR14,
+        'tall red farm grain silo with a white band and a rounded grey metal dome roof, small ladder on the side, ' + FR14,
+    ]},
+    'k23_obst_gross': {'size': 48, 'items': [
+        'orchard apple tree with a big round leafy green crown full of red apples, sturdy brown trunk, ' + FR14,
+        'orchard pear tree with a big round leafy green crown full of yellow pears, sturdy brown trunk, ' + FR14,
+        'orchard orange tree with a big round dark green crown full of bright orange fruits, sturdy brown trunk, ' + FR14,
+        'orchard plum tree with a big round leafy green crown full of dark purple plums, sturdy brown trunk, ' + FR14,
+        'orchard cherry tree with a big round leafy green crown full of small red cherries, sturdy brown trunk, ' + FR14,
+    ]},
+    'k23_turm': {'size': 192, 'items': [
+        'very tall narrow dark obsidian black crystal tower spire with faint purple glints, wrapped in brown wooden '
+        'construction scaffolding with platforms and ladders around it, a small wooden crane arm at the top right with '
+        'a rope and a hanging bucket, standing on a wide wooden scaffold base, ' + FR14,
+    ]},
+    'k23_turm_klein': {'size': 32, 'items': [
+        'small cluster of dark purple black obsidian crystals growing out of the ground, ' + FR14,
+        'small grey stone pedestal with a glowing cyan digital control panel screen, ' + FR14,
+        'small pile of dark obsidian crystal shards and rubble, ' + FR14,
+    ]},
+    'k23_maulwurf': {'size': 32, 'items': [
+        'small brown dirt molehill mound with a dark round hole on the front, loose soil crumbs around it, ' + FR14,
+        'large brown dirt burrow mound with a big dark tunnel entrance on the front, a few pebbles around it, ' + FR14,
+        'small grey field boulder rock with a little moss, ' + FR14,
+    ]},
+    'k23_wagen': {'size': 48, 'items': [
+        'wooden farm covered wagon with a cream canvas top, two big wooden spoked wheels, a wooden shaft at the front, '
+        'a few hay bundles and sacks visible inside, ' + FR14,
+    ]},
+    'k24_lager': {'size': 48, 'items': [
+        'weathered beige canvas desert camp tent with an open dark entrance flap, ropes and wooden pegs, ' + FR14,
+        'small square iron prisoner cage made of dark blue-grey metal bars with rivets, empty, on the ground, ' + FR14,
+        'campfire ring of red desert stones with small burning flames and logs, ' + FR14,
+        'cluster of glowing red orange ore crystals growing out of a red desert rock, ' + FR14,
+        'iron lantern post with a pale blue glowing glass lamp on top, dark metal pole and base, ' + FR14,
+        'short wooden stump stool, ' + FR14,
+    ]},
+    'k24_obelisk': {'size': 128, 'items': [
+        'very tall narrow dark navy black stone obelisk with faint purple glowing runes, standing on a square stepped dark stone base, ' + FR14,
+    ]},
+    'k24_obelisk2': {'size': 128, 'items': [
+        'very tall slender plain dark navy black stone obelisk spire with a pointed tip, smooth polished stone with subtle '
+        'highlights on the left edge, no runes, no symbols, no writing, standing directly on the ground with only a thin '
+        'low square stone foot, ' + FR14,
+    ]},
+    'k24_oben': {'size': 48, 'items': [
+        'tall thin pointed red sandstone rock spire, desert hoodoo, ' + FR14,
+        'small dead leafless desert tree with twisted dry grey-brown branches, ' + FR14,
+        'scattered white animal bones and a small rib cage lying flat on the desert ground, ' + FR14,
+        'small round red orange desert boulder with cracks, ' + FR14,
+        'small tuft of dry yellow desert grass, ' + FR14,
+    ]},
+    'k24_obelisk_liegend': {'size': 128, 'items': [
+        'very long toppled dark navy black stone obelisk lying flat on its side on the ground, pointed tip on the right, '
+        'broken base on the left, plain smooth stone without runes, seen from slightly above, ' + FR14,
+    ]},
+    'k24_loren': {'size': 48, 'items': [
+        'iron mine cart on small rail wheels, dark riveted steel body, heaped full of shiny stacked gold ingot bars, ' + FR14,
+        'iron mine cart on small rail wheels, dark riveted steel body, heaped full of stacked deep red ruby bars shaped like ingots, ' + FR14,
+        'iron mine cart on small rail wheels, dark riveted steel body, heaped full of stacked deep blue sapphire bars shaped like ingots, ' + FR14,
+        'iron railway buffer stop bumper at the end of a mine rail track, dark steel with a red and white striped plate, ' + FR14,
+    ]},
+    'k24_kran': {'size': 128, 'items': [
+        'large yellow steel lattice mining jib crane, tall vertical lattice tower on a heavy dark steel base with concrete '
+        'blocks, a long horizontal lattice jib arm pointing to the right, a small operator cabin, a steel cable with a big '
+        'iron hook hanging down from the end of the jib, black and yellow warning stripes, ' + FR14,
+        'large yellow steel derrick crane for a mine, A-frame lattice tower on a dark steel base, a diagonal lattice boom '
+        'pointing up to the right, a cable with an iron hook and a small ore bucket hanging from the boom tip, ' + FR14,
+    ]},
+    'k24_mine': {'size': 64, 'items': [
+        'group of three dark rusty steel oil barrels with black oil stains, standing upright, ' + FR14,
+        'pile of red orange iron ore rocks with a few glinting crystals, ' + FR14,
+        'tall dark steel cable car pylon mast with a big grooved pulley wheel on top, lattice legs on a concrete foot, ' + FR14,
+        'small wooden mine supply cart without rails with a few sacks and a lantern, ' + FR14,
+    ]},
+    'k24_gondel': {'size': 32, 'items': [
+        'small red cable car gondola cabin with windows, hanging from a short dark steel hanger arm with a small wheel on top, ' + FR14,
+    ]},
+    'k24_bergstation': {'size': 160, 'items': [
+        'cable car mountain top station building, red sandstone and dark steel, flat roof with a steel frame, a big '
+        'horizontal bullwheel for the cable under an open steel canopy on the right side, wide open boarding platform, '
+        'a small ticket window, a red flag on the roof, ' + FR14,
+    ]},
+    'k24_gondel_gross': {'size': 64, 'items': [
+        'large red cable car gondola cabin with big windows, a dark steel hanger arm on top ending in a carriage with two '
+        'small grooved wheels, no cable, ' + FR14,
+    ]},
+    'k25_leuchtturm': {'size': 128, 'items': [
+        'tall round lighthouse tower with red and white horizontal stripes, a glass lantern room with a glowing yellow light '
+        'on top, a dark red domed roof, a small balcony railing, a wooden door at the bottom, on a small stone base, ' + FR14,
+    ]},
+    'k25_strand': {'size': 64, 'items': [
+        'small tropical beach hut on short wooden stilts, thick golden straw thatched roof, bamboo walls, a dark open doorway, small wooden steps, ' + FR14,
+        'small wooden rowing boat lying on the sand, brown planks, two oars inside, seen from slightly above, ' + FR14,
+        'small round rock pool tide pool, a ring of grey beach stones filled with clear turquoise water, a small starfish inside, ' + FR14,
+        'short simple wooden beach bench made of driftwood planks, ' + FR14,
+    ]},
+    'k25_huette_gross': {'size': 96, 'items': [
+        'tropical beach hut on short wooden stilts, thick golden straw thatched roof with a rounded overhang, bamboo walls, '
+        'a dark open doorway in the middle, small wooden steps in front, ' + FR14,
+    ]},
+    'k26_thron_gross': {'size': 96, 'items': [
+        'grand imperial emperor throne of black obsidian and polished gold, tall pointed backrest with gold spikes and a '
+        'glowing red eye gem at the top, deep crimson velvet cushion, gold armrests shaped like claws, standing on a '
+        'three-step black and gold dais, ' + FR14,
+        'wide imperial command console bank of dark steel with gold trim, four large glowing teal monitors side by side '
+        'showing maps and data, a long keyboard desk with blinking red and green buttons, ' + FR14,
+    ]},
+    'k26_thron': {'size': 64, 'items': [
+        'round holographic tactical map table of dark steel with gold rim, a glowing cyan hologram of a battleship '
+        'floating above it, ' + FR14,
+        'long crimson imperial wall banner with gold trim and a gold eye emblem, hanging from a short gold rod, no pole, ' + FR14,
+        'armored imperial guard statue, dark steel plate armor with gold trim and a glowing red visor, holding a tall halberd, on a small plinth, ' + FR14,
+        'tall gold brazier bowl on a black stand with burning crimson flames, ' + FR14,
+    ]},
+    'k26_digifeuer': {'size': 64, 'items': [
+        'tall gold brazier bowl on a black stand with burning digital flames made of glowing cyan and magenta pixel squares '
+        'and data bits rising up, ' + FR14,
+    ]},
+    'k26_labor': {'size': 64, 'items': [
+        'glass bio incubation capsule filled with glowing green liquid and a dark curled embryo creature inside, dark steel base and cap with gold rim, small bubbles, ' + FR14,
+        'laboratory workstation desk of dark steel with a glowing teal monitor, test tubes in a rack and a microscope, ' + FR14,
+        'dark steel cryo storage freezer cabinet with frosted glass doors and small blue lights, ' + FR14,
+        'bundle of thick black and red cables with a junction box lying on a metal floor, ' + FR14,
+    ]},
+    'k26_tank': {'size': 96, 'items': [
+        'tall cylindrical stasis tank of glass filled with glowing cyan liquid, a dark sleeping dragon-like creature silhouette '
+        'floating inside, heavy dark steel base and top cap with gold trim, tubes and cables at the base, bubbles, ' + FR14,
+    ]},
+    'k26_kapsel': {'size': 64, 'items': [
+        'glass incubation capsule filled with glowing green liquid, inside floats a small cute original baby digital monster: '
+        'round slime body with big shiny eyes and two little horns, dark steel base and cap with gold rim, small bubbles, ' + FR14,
+        'glass incubation capsule filled with glowing green liquid, inside sleeps a small cute original baby dragon digital '
+        'monster curled up with tiny wings and a long tail, dark steel base and cap with gold rim, small bubbles, ' + FR14,
+        'glass incubation capsule filled with glowing green liquid, inside floats a small cute original furry digital monster '
+        'with long floppy ears and big eyes, dark steel base and cap with gold rim, small bubbles, ' + FR14,
+    ]},
+    'k26_kapsel2': {'size': 64, 'items': [
+        'tall narrow upright incubation pod with a dark black and purple spiked steel frame, small red indicator lights on '
+        'the top cap and at the base, glass window filled with bright glowing green liquid, inside floats a small curled up '
+        'green serpent dragon baby digital monster with a little horn, ' + FR14,
+        'tall narrow upright incubation pod with a dark black and purple spiked steel frame, small red indicator lights on '
+        'the top cap and at the base, glass window filled with bright glowing green liquid, inside floats a small coiled '
+        'green seahorse-like baby dragon digital monster with a curled tail, ' + FR14,
+        'tall narrow upright incubation pod with a dark black and purple spiked steel frame, small red indicator lights on '
+        'the top cap and at the base, glass window filled with bright glowing green liquid, inside sleeps a small green '
+        'larva-like baby digital monster with tiny claws, curled in an S shape, ' + FR14,
+    ]},
+    'k26_tank2': {'size': 96, 'items': [
+        'tall upright stasis tank with a heavy dark black and purple riveted steel frame and a rounded dark dome cap on top, '
+        'large glass window filled with glowing turquoise cyan liquid and bubbles, inside floats a dark winged dragon-like '
+        'digital monster silhouette with claws, wide heavy dark machine base with small glowing green and cyan lights, ' + FR14,
+    ]},
+    'k26_tank3': {'size': 96, 'items': [
+        'tall upright stasis tank with a dark black and purple riveted steel frame, glass filled with glowing turquoise liquid '
+        'and bubbles, inside floats a dark grey armored mechanical dragon digital monster with spiky limbs, sharp claws, a '
+        'horned beaked head and folded jagged wings, its body tangled in many black cables and tubes plugged into it, the '
+        'creature looks faded and murky behind the turquoise liquid, wide dark machine base with small green lights, ' + FR14,
+    ]},
+    'k26_kammer': {'size': 64, 'items': [
+        'dark black containment chamber machine with glowing purple edge lines, a small red warning light on top, a narrow '
+        'glass window showing a glowing silver data core cylinder inside, heavy angular black base with vents, ' + FR14,
+        'low metal laboratory railing segment of dark steel with a small sliding glass door in the middle, ' + FR14,
+    ]},
+    'k26_gitter': {'size': 128, 'items': [
+        'very wide and low prison cell front made of dark iron bars, many thin vertical bars between a top rail, a middle rail '
+        'and a bottom rail, a barred cell door with a frame and a small electronic lock with a red light in the middle, '
+        'the whole front is about five times wider than it is tall, dark steel with subtle purple highlights, ' + FR14,
+    ]},
+    'k26_saeule': {'size': 96, 'items': [
+        'very tall narrow dark energy pylon tower, black steel lattice frame around a long glowing purple crystal core, '
+        'spiked top with small red lights, heavy angular black base, ' + FR14,
+    ]},
+    'k26_raum': {'size': 64, 'items': [
+        'thin dark steel signal lamp post with a round glowing red light on top, small round base, ' + FR14,
+        'square crimson wall plaque with a gold border and a gold winged eye emblem in the middle, flat, ' + FR14,
+    ]},
+    'k26_obelisk_bau': {'size': 96, 'items': [
+        'very tall narrow black stone obelisk under construction, its pointed top still unfinished and open, surrounded by '
+        'a dark steel construction scaffolding with thin poles, cross braces, two small wooden plank platforms and a ladder, '
+        'plain polished black stone without symbols, standing on a small square black base, ' + FR14,
+    ]},
+    'k26_portal': {'size': 96, 'items': [
+        'large dark mechanical teleporter portal machine, heavy angular black steel frame with spikes, red warning lights and '
+        'vents, a round opening in the middle with a swirling glowing purple vortex, a coolant tank on the back, ' + FR14,
+    ]},
+    'k26_portalraum': {'size': 64, 'items': [
+        'heap of dark broken metal debris, twisted steel plates, cables and rubble on a metal floor, ' + FR14,
+        'tall thin vertical dark steel pipe with valves and a pressure gauge, mounted upright, ' + FR14,
+    ]},
+    'k26_portal2': {'size': 96, 'items': [
+        'square floor-mounted teleporter portal pad seen from slightly above, a heavy dark black and purple mechanical frame '
+        'with four big corner clamps lying flat on the floor around a glowing swirling purple vortex in the floor, a front '
+        'control panel with three small red lights, a short coolant pipe standing at the back edge, ' + FR14,
+    ]},
+    'k26_halle': {'size': 64, 'items': [
+        'stack of four grey steel cargo crates with riveted edges and small warning labels, two by two, ' + FR14,
+        'small grey steel fuel canister barrel with a handle, ' + FR14,
+        'yellow industrial robot loader arm on a round black base, bent arm with a gripper claw, ' + FR14,
+        'flat red cross shaped floor marking painted on a metal floor, ' + FR14,
+    ]},
+    'k26_boden': {'size': 32, 'items': [
+        'thin dark crack in a dark blue-grey steel floor plate, seen from directly above, lying completely flat on the floor, no height, no shadow, classic 2D handheld RPG style',
+        'broken cracked dark blue-grey steel floor plate with a chipped corner, seen from directly above, lying completely flat on the floor, no height, no shadow, classic 2D handheld RPG style',
+        'a few crumpled white paper scraps, seen from directly above, lying completely flat on the floor, no height, no shadow, classic 2D handheld RPG style',
+        'small black metal gear cog, seen from directly above, lying completely flat on the floor, no height, no shadow, classic 2D handheld RPG style',
+        'small square dark metal floor drain grate with slots, seen from directly above, lying completely flat on the floor, no height, no shadow, classic 2D handheld RPG style',
+    ]},
+    'k27_rand': {'size': 32, 'items': [
+        'small clump of short green grass blades growing over the edge of grey stone paving, seen from directly above, lying flat on the ground, classic 2D handheld RPG style',
+        'a few small grey cobblestones half sunk in green grass, seen from directly above, lying flat on the ground, classic 2D handheld RPG style',
+        'small pile of black metal debris shards, bolts and torn plates lying on grass, seen from directly above, lying flat on the ground, classic 2D handheld RPG style',
+        'small patch of dark scorched earth with a few black metal splinters, seen from directly above, lying flat on the ground, classic 2D handheld RPG style',
+    ]},
+    'k29_gross': {'size': 128, 'items': [
+        'tall gloomy lighthouse built of dark grey and black stone blocks, weathered and cracked, with a pale glowing lantern room '
+        'and a pointed dark roof on top, small arched door at the bottom, ' + FR14,
+        'ancient stone temple gate: two thick weathered grey stone pillars carrying a heavy carved stone lintel with a spiral wave '
+        'relief, seaweed hanging down, the opening between the pillars is empty and open, ' + FR14,
+        'dark stone statue of an ancient sea god with an octopus head and tentacle beard, robed body with small wings, sitting on a '
+        'square carved stone pedestal, grey green weathered stone, ' + FR14,
+        'jagged dark purple black dimensional rift floating in the air, a tear in reality with glowing violet edges and shards, ' + FR14,
+    ]},
+    'k29_felsen_gross': {'size': 128, 'items': [
+        'tall jagged dark black grey rock spire with sharp angular facets and a little dark moss, standing on grey sand, ' + FR14,
+        'cluster of two jagged dark slate rock spires, one tall and one shorter, sharp facets, on grey sand, ' + FR14,
+        'wide craggy dark grey sea rock with several pointed peaks and cracks, barnacles at the bottom, on wet sand, ' + FR14,
+        'tall dark jagged rock spire rising out of dark grey water with a small foam ring at its base, ' + FR14,
+    ]},
+    'k31_ladendach1': {'size': 128, 'items': [
+        'narrow two-storey Japanese shop building, 64 pixels wide, top-down RPG view from the front and slightly above: a clearly visible roof on top (dark grey tiled gable roof with a ridge) taking about one third of the height, below it the upper floor with windows and the ground floor shop: convenience store with a glass front and a sign reading MART, ' + FR14,
+        'narrow two-storey Japanese shop building, 64 pixels wide, top-down RPG view from the front and slightly above: a clearly visible roof on top (dark teal tiled gable roof with a ridge) taking about one third of the height, below it the upper floor with windows and the ground floor shop: ramen restaurant with a dark wooden front, red curtain and a sign reading RAMEN, ' + FR14,
+        'narrow two-storey Japanese shop building, 64 pixels wide, top-down RPG view from the front and slightly above: a clearly visible roof on top (red brown tiled gable roof with a ridge) taking about one third of the height, below it the upper floor with windows and the ground floor shop: cafe with a striped green and white awning and a sign reading CAFE, ' + FR14,
+        'narrow two-storey Japanese shop building, 64 pixels wide, top-down RPG view from the front and slightly above: a clearly visible roof on top (dark brown tiled gable roof with a ridge) taking about one third of the height, below it the upper floor with windows and the ground floor shop: book shop with shelves behind glass and a blue sign reading BOOKS, ' + FR14,
+    ]},
+    'k31_ladendach2': {'size': 128, 'items': [
+        'narrow two-storey Japanese shop building, 64 pixels wide, top-down RPG view from the front and slightly above: a clearly visible roof on top (black tiled gable roof with a ridge) taking about one third of the height, below it the upper floor with windows and the ground floor shop: izakaya pub with a wooden front, red paper lanterns and a sign reading IZAKAYA, ' + FR14,
+        'narrow two-storey Japanese shop building, 64 pixels wide, top-down RPG view from the front and slightly above: a clearly visible roof on top (green tiled gable roof with a ridge) taking about one third of the height, below it the upper floor with windows and the ground floor shop: flower shop with buckets of colorful flowers and a pink sign reading FLOWER, ' + FR14,
+        'narrow two-storey Japanese shop building, 64 pixels wide, top-down RPG view from the front and slightly above: a clearly visible roof on top (grey flat roof with a parapet and an air unit) taking about one third of the height, below it the upper floor with windows and the ground floor shop: closed shop with a grey metal roller shutter, ' + FR14,
+        'narrow two-storey Japanese shop building, 64 pixels wide, top-down RPG view from the front and slightly above: a clearly visible roof on top (blue grey flat roof with a parapet and a water tank) taking about one third of the height, below it the upper floor with windows and the ground floor shop: drugstore with a white and green front and a sign reading DRUG, ' + FR14,
+    ]},
+    'k31_books': {'size': 128, 'items': [   # Nutzer: Books-Laden wirkt platt -> deutlich sichtbares Satteldach
+        'narrow two-storey Japanese book shop building, 64 pixels wide, top-down RPG view from the front and slightly above: a large clearly visible sloped roof surface on top seen from above (dark brown clay tile roof with rows of tiles and a ridge line along the top) taking almost half of the height, below it the upper floor with two windows and the ground floor book shop with shelves of books behind glass and a blue sign reading BOOKS, ' + FR14,
+        'narrow two-storey Japanese book shop building, 64 pixels wide, top-down RPG view from the front and slightly above: a large clearly visible sloped roof surface on top seen from above (dark slate blue tile roof with rows of tiles and a ridge line along the top) taking almost half of the height, below it the upper floor with two windows and the ground floor book shop with shelves of books behind glass and a wooden sign reading BOOKS, ' + FR14,
+    ]},
+    'k31_uhr': {'size': 64, 'items': [   # Nutzer: Uhrturm oben groesser
+        'tall ornate park clock post: a slim dark red-brown cast iron pole on a small stone base, on top a large round white clock face with black hands and roman numerals in a decorative red-brown frame, the clock head clearly larger and wider than the pole, ' + FR14,
+        'tall park clock tower post: slender dark brown iron column on a square stone foot, on top a big double sided round clock with a white face and a golden rim and a small pointed cap, the clock is much wider than the column, ' + FR14,
+    ]},
+    'k31_laterne': {'size': 48, 'items': [   # Nutzer: Parklaternen neu
+        'single classic Japanese park street lamp: slim dark green cast iron post on a small round foot, on top one glass lantern head with a warm glowing yellow light and a small dark cap, about three times as tall as wide, ' + FR14,
+        'single old fashioned park lantern post: thin black iron pole with a decorative base, on top a square glass lamp with warm yellow light and a pointed roof cap, ' + FR14,
+    ]},
+    'k31_bueschel': {'size': 32, 'items': [   # Nutzer: Parkrasen etwas leer -> Bueschel/Blumen
+        'small tuft of fresh green grass blades on a lawn, seen slightly from above, classic 2D handheld RPG style',
+        'small clump of white clover with tiny white flowers on a lawn, seen slightly from above, classic 2D handheld RPG style',
+        'small patch of yellow dandelions with leaves on a lawn, seen slightly from above, classic 2D handheld RPG style',
+        'small cluster of tiny pink and purple wildflowers with green leaves, seen slightly from above, classic 2D handheld RPG style',
+    ]},
+    'k31_laub': {'size': 32, 'items': [   # Nutzer: "eher Blaetter auf dem Boden usw., nicht alles voll"
+        'a few scattered fallen green and brown leaves lying flat on the ground, seen from above, small and sparse, classic 2D handheld RPG style',
+        'a few scattered fallen pink cherry blossom petals lying flat on the ground, seen from above, small and sparse, classic 2D handheld RPG style',
+        'two or three fallen dry orange and brown autumn leaves lying flat on the ground, seen from above, classic 2D handheld RPG style',
+        'a single small fallen twig with two leaves lying flat on the ground, seen from above, classic 2D handheld RPG style',
+    ]},
+    'k32_traum': {'size': 32, 'items': [   # Karte 32 Dream Ruins: schwebende Traumobjekte in der Sternenleere
+        'golden pocket watch with a white clock face floating in space, small, glowing softly, classic 2D handheld RPG style, transparent background',
+        'small old crt television with a glowing pink screen and antenna floating in space, classic 2D handheld RPG style, transparent background',
+        'single floating playing card glowing orange and red, slightly tilted, classic 2D handheld RPG style, transparent background',
+        'small oval hand mirror with a golden frame floating in space, classic 2D handheld RPG style, transparent background',
+    ]},
+    'k32_leuchter': {'size': 64, 'items': [   # Nutzer: weniger Kronleuchter, kaputt auf dem Boden
+        'broken fallen black iron chandelier lying flat on a stone floor, bent ring, snapped chain, toppled candles and wax, a few scattered pieces, seen from above, classic 2D handheld RPG style, transparent background',
+        'crashed gothic wrought iron chandelier on the floor, ring cracked in two, candles knocked over with one still burning, small debris around, seen from above, classic 2D handheld RPG style, transparent background',
+    ]},
+    'k32_saeule': {'size': 64, 'items': [   # Nutzer: Saeulen reduzieren, kaputt wie die Kronleuchter
+        'fallen dark grey gothic stone column lying flat on a stone floor, broken into two pieces with a decorated capital, small rubble around, seen from above, classic 2D handheld RPG style, transparent background',
+        'broken dark grey gothic stone column stump standing on its square base, snapped off at half height with jagged top, fallen capital and rubble lying beside it, perfectly straight front elevation view, classic 2D handheld RPG style, transparent background',
+    ]},
+    'k32_portal': {'size': 80, 'items': [   # Nutzer: Thron oben weg, surreales Portal
+        'surreal dream portal standing on a stone floor: a tall twisted golden arch frame that melts and drips like a clock, with tiny floating stars and broken stones around it, inside a swirling violet and pink vortex with stars, ' + FR14,
+        'surreal floating dream portal: an oval doorway of floating cracked stone pieces and golden clock gears hovering in a ring above a small stone base, inside a deep swirling violet vortex with tiny stars, ' + FR14,
+    ]},
+    'k32_turm': {'size': 112, 'items': [   # Nutzer: Tuerme an der Aussenmauer neu und groesser
+        'tall slender gothic castle wall tower: round dark grey stone tower about 2 tiles wide and 6 tiles tall, narrow arched windows glowing faint violet, a tall pointed dark slate spire roof with a small purple pennant on top, stone base, ' + FR14,
+        'tall slender gothic stone watchtower for a castle wall: dark grey brick round tower, decorative ring of stones below a very tall pointed slate cone roof, two narrow purple glowing slit windows, ' + FR14,
+    ]},
+    'k33_surreal': {'size': 48, 'items': [   # Nutzer: schwebende Objekte surrealer
+        'surreal melting golden pocket watch draped and dripping like soft cheese, floating in space, dreamlike, classic 2D handheld RPG style, transparent background',
+        'surreal floating eyeball with small white feathered wings and a violet iris, dreamlike, classic 2D handheld RPG style, transparent background',
+        'surreal lone wooden door standing in nothing, half open with a starry night sky inside, dreamlike, classic 2D handheld RPG style, transparent background',
+        'surreal porcelain teacup tilted in the air pouring out a swirling purple galaxy instead of tea, dreamlike, classic 2D handheld RPG style, transparent background',
+    ]},
+    'k26_schild': {'size': 32, 'items': [   # Nutzer: Wandschilder in der Halle (Wand nur 2 Kacheln hoch)
+        'small square golden wall plaque with a dark red border and a winged eye emblem in the middle, hanging flat on a wall, ' + FR14,
+    ]},
+    'k31_muell': {'size': 32, 'items': [
+        'small pile of fallen golden yellow ginkgo leaves lying flat on the ground, seen from above, classic 2D handheld RPG style',
+        'small pile of fallen brown and orange autumn leaves lying flat on the ground, seen from above, classic 2D handheld RPG style',
+        'crumpled white paper and an old newspaper page lying flat on the ground, seen from above, classic 2D handheld RPG style',
+        'crushed red soda can and a cigarette butt lying flat on the ground, seen from above, classic 2D handheld RPG style',
+    ]},
+    'k31_laden1': {'size': 128, 'items': [
+        'narrow Japanese two-storey shop front, 64 pixels wide: upper floor with small windows and an air unit, ground '
+        'floor convenience store with a glass front and a sign reading MART, flat roof edge visible from slightly above, ' + FR14,
+        'narrow Japanese two-storey shop front, 64 pixels wide: upper floor with a red sign board with white symbols, ground '
+        'floor ramen restaurant with a dark wooden front, red curtain and a sign reading RAMEN, flat roof edge, ' + FR14,
+        'narrow Japanese two-storey shop front, 64 pixels wide: upper floor windows, ground floor cafe with a striped green '
+        'and white awning, glass door and a sign reading CAFE, flat roof edge visible from slightly above, ' + FR14,
+        'narrow Japanese two-storey shop front, 64 pixels wide: upper floor with a green sign board, ground floor book shop '
+        'with shelves behind glass and a blue sign reading BOOKS, flat roof edge visible from slightly above, ' + FR14,
+    ]},
+    'k31_laden2': {'size': 128, 'items': [
+        'narrow Japanese two-storey shop front, 64 pixels wide: upper floor windows, ground floor izakaya pub with a dark '
+        'wooden front, red lanterns and a sign reading IZAKAYA, flat roof edge visible from slightly above, ' + FR14,
+        'narrow Japanese two-storey shop front, 64 pixels wide: upper floor windows with plants, ground floor flower shop '
+        'with buckets of colorful flowers and a pink sign reading FLOWER, flat roof edge visible from slightly above, ' + FR14,
+        'narrow Japanese two-storey building front, 64 pixels wide: upper floor windows, ground floor closed grey metal '
+        'roller shutter, flat roof edge visible from slightly above, ' + FR14,
+        'narrow Japanese two-storey shop front, 64 pixels wide: upper floor with a green sign board, ground floor drugstore '
+        'with a white and green front, glass door and a small sign, flat roof edge visible from slightly above, ' + FR14,
+    ]},
+    'k30_buero1': {'size': 192, 'items': [
+        'small five-storey office building for a sunny city, beige cream facade with rows of small blue windows, flat grey '
+        'roof with parapet visible from slightly above, glass ground floor with an entrance door with an orange frame, ' + FR14,
+    ]},
+    'k30_buero2': {'size': 192, 'items': [
+        'small four-storey office building for a sunny city, light beige facade with rows of blue windows and white frames, '
+        'flat grey roof with a small rooftop box visible from slightly above, glass ground floor with a door, ' + FR14,
+    ]},
+    'k30_statue': {'size': 128, 'items': [
+        'tall green copper statue of a crowned woman in a long robe holding a burning torch high up in her right hand and a '
+        'tablet in her left arm, standing on a tall square grey stone pedestal with steps, slim tall monument, ' + FR14,
+    ]},
+    'k30_statue_gross': {'size': 256, 'items': [
+        'huge tall green copper statue of a crowned woman in a long flowing robe holding a burning torch high up in her right '
+        'hand and a tablet in her left arm, standing on a tall square grey stone pedestal with steps, monumental, ' + FR14,
+    ]},
+    'k30_klein': {'size': 64, 'items': [
+        'green copper statue of a crowned woman holding a torch up high and a tablet, standing on a tall stone pedestal, ' + FR14,
+        'small ticket kiosk booth with a blue roof and warm yellow lit windows, white walls, ' + FR14,
+        'red public telephone booth with glass windows and a small roof, ' + FR14,
+        'pink cherry blossom tree in full bloom with a short brown trunk, round fluffy crown, ' + FR14,
+    ]},
+    'k29_wrack1': {'size': 192, 'items': [
+        'large old wooden shipwreck lying on dark grey sand, broken hull tilted to one side, snapped mast with torn grey sail, '
+    ]},
+    'k29_wrack2': {'size': 192, 'items': [
+        'big wrecked wooden sailing ship stranded on a grey beach, hull broken in the middle, one leaning broken mast with a ragged '
+    ]},
+    'k29_wrack3': {'size': 192, 'items': [
+        'huge abandoned ghost ship wreck lying on its side on dark sand, cracked dark wooden hull, broken masts, torn pale sails, '
+    ]},
+    'k29_wrack4': {'size': 192, 'items': [
+        'large shipwreck stranded on a dark grey shore, bow sticking up, broken hull planks, short broken mast with a shredded '
+    ]},
+    'k29_symbol': {'size': 128, 'items': [
+        'large round ancient carved stone floor mosaic seen from directly above, lying flat on the ground: a stylized octopus '
+        'head in the center with eight curling tentacles spiraling outward, inside a circle of strange runes, dark grey stone '
+        'with faint teal green inlays, no background, classic 2D handheld RPG style',
+    ]},
+    'k29_felsen': {'size': 64, 'items': [
+        'small jagged dark black grey rock spire with sharp facets, on grey sand, ' + FR14,
+        'medium pointed dark slate rock with cracks and a bit of moss, on grey sand, ' + FR14,
+        'low craggy dark grey rock with two small peaks, on wet sand, ' + FR14,
+        'small dark jagged rock rising out of grey water with a little foam ring, ' + FR14,
+    ]},
+    'k29_mittel': {'size': 64, 'items': [
+        'tall weathered grey stone column with a simple capital and base, cracked, some seaweed at the bottom, ' + FR14,
+        'broken short grey stone column stump with rubble at the base, ' + FR14,
+        'floating dark purple crystal portal, a cluster of black and violet crystals around a swirling dark core, ' + FR14,
+        'dark water whirlpool vortex seen from directly above, swirling grey and white foam spiral, lying flat, classic 2D handheld RPG style',
+    ]},
+    'k28_netz': {'size': 32, 'items': [
+        'round white spider web, thin silver threads, seen from directly above, lying flat on the ground, classic 2D handheld RPG style',
+        'small torn spider web in a corner shape, thin grey white threads, seen from directly above, lying flat on the ground, classic 2D handheld RPG style',
+        'dense tangled patch of white cobwebs on the ground, seen from directly above, lying flat, classic 2D handheld RPG style',
+        'small spider web with a tiny dark spider in the middle, seen from directly above, lying flat on the ground, classic 2D handheld RPG style',
+    ]},
+    'k28_treppe': {'size': 64, 'items': [
+        'grey stone staircase leading down into a sunken pit, seen from directly above in top-down view, three tiles wide, '
+        'about six worn stone steps, each lower step a little darker and more shadowed, low stone side walls on the left and '
+        'right, the top step level with the grass, the bottom step meeting dark earth, classic 2D handheld RPG style',
+        'old mossy stone steps descending into a dark earthen hollow, seen from above in top-down view, wide steps with light '
+        'edges on top, deeper steps darker, narrow stone cheek walls at both sides, classic 2D handheld RPG style',
+        'rough grey stone stairs carved down into the ground, top-down view from above, steps going downwards away from the '
+        'viewer, bottom of the stairs in shadow, stone borders on both sides, classic 2D handheld RPG style',
+        'wide stone staircase going down into a pit, top-down view, stone steps with highlighted front edges and dark gaps, '
+        'the lower half in deep shadow, small stone pillars at the top corners, classic 2D handheld RPG style',
+    ]},
+    'k27_schrein': {'size': 128, 'items': [
+        'tall glowing turquoise crystal spire standing on a square grey stone shrine pedestal with a small stone staircase '
+        'in front, the crystal is a long faceted cyan-green gem pointing up, two short stone posts at the pedestal corners, ' + FR14,
+        'tall faceted turquoise crystal obelisk on a stepped grey stone altar base with three stone steps at the front, '
+        'soft cyan glow, ' + FR14,
+    ]},
+    'k27_fels_klein': {'size': 32, 'items': [
+        'grey granite boulder with a small patch of moss at the bottom, ' + FR14,
+        'rounded grey stone with light highlights on top left, ' + FR14,
+        'pair of small grey boulders, ' + FR14,
+        'flat grey rock lying in grass, ' + FR14,
+    ]},
+    'k27_fels': {'size': 64, 'items': [
+        'big round grey granite boulder with a few cracks and a small patch of moss at the bottom, ' + FR14,
+        'medium grey boulder, smooth rounded stone with light highlights on top left, ' + FR14,
+        'wide flat grey rock lying in grass, rounded edges, ' + FR14,
+        'pair of grey boulders, one big and one small, ' + FR14,
+    ]},
+    'k24_schrein': {'size': 64, 'items': [
+        'dark emperor throne made of jagged black obsidian crystal spikes with deep purple and crimson highlights, a high '
+        'pointed back, standing on a small stepped dark stone dais, ' + FR14,
+        'tall dark crimson war banner with a black border hanging from a black iron pole with a pointed tip, plain cloth without symbols, ' + FR14,
+        'dark metal control console desk with two small glowing green screens on top, ' + FR14,
+        'small red cable car gondola cabin hanging from a steel wheel on a cable, ' + FR14,
+    ]},
+    'k21_tv_gross': {'size': 48, 'items': [
+        'big old brown wooden cabinet CRT television standing on short wooden legs, wood grain case, large dark curved '
+        'screen with a faint blue glow, a column of round knobs and a speaker grille on the right, ' + FR14,
+    ]},
+}
+
+
+OBJEKTGRUPPEN_K22 = {   # Karte 22 (Digicasino): Netz-Stil wie Karte 16, aber mit Casino-Farben (Rot, Gold, Violett, Neon)
+    'k22_casino': {'size': 48, 'items': [
+        'digital casino slot machine cabinet, dark violet metal body with gold trim, glowing screen with three reels '
+        'showing cherries and sevens, a red pull lever on the right side, neon cyan light strip on top, ' + FR14,
+        'round roulette table with a green felt top and a red and black roulette wheel in the middle, gold rim, '
+        'short dark wooden legs, seen from the front and slightly above, ' + FR14,
+        'casino card table with green felt top, a few playing cards and small chip stacks on it, gold edge, dark wood '
+        'legs, seen from the front and slightly above, ' + FR14,
+        'small stack of colorful casino chips in red, blue and gold, ' + FR14,
+        'casino velvet rope stanchion post, shiny gold pole on a round base with a red velvet rope hanging to the side, ' + FR14,
+        'glowing neon sign on a short metal stand showing a big pink dice, cyan neon frame, ' + FR14,
+    ]},
+    'k22_gross': {'size': 64, 'items': [
+        'huge golden jackpot slot machine, tall cabinet with a big glowing screen, flashing yellow lights around the '
+        'top sign, red lever, violet and gold body, ' + FR14,
+        'casino prize counter desk, long dark violet counter with gold trim, glass display shelves behind it with '
+        'colorful prizes and plush toys, a small bell on the counter, ' + FR14,
+        'large glowing cyan digital data crystal floating above a small dark metal pedestal with circuit lines, ' + FR14,
+    ]},
+}
+
+
 def erzeugen(gruppe):
-    if gruppe.startswith('k20_'):
-        g = OBJEKTGRUPPEN_K20[gruppe]
+    if gruppe.startswith('k22_'):
+        g = OBJEKTGRUPPEN_K22[gruppe]
+        req = {'description': STIL_K16, 'size': g['size'], 'view': 'top-down',
+               'item_descriptions': [it + '. ' + STIL_K16 for it in g['items']]}
+        d = call('POST', '/v2/create-1-direction-object', req)
+        oid = d['object_id']
+        print(gruppe, 'Objekt', oid)
+        d = warte(oid)
+        speichern(gruppe, *herunterladen(oid, d))
+        return
+    if gruppe.startswith(('k20_', 'k21_', 'k23_', 'k24_', 'k25_', 'k26_', 'k27_', 'k28_', 'k29_', 'k30_', 'k31_', 'k32_', 'k33_')):
+        g = (OBJEKTGRUPPEN_K21 if gruppe.startswith(('k21_', 'k23_', 'k24_', 'k25_', 'k26_', 'k27_', 'k28_', 'k29_', 'k30_', 'k31_', 'k32_', 'k33_')) else OBJEKTGRUPPEN_K20)[gruppe]
         req = {'description': STIL, 'size': g['size'], 'view': 'top-down',
                'item_descriptions': [it + '. ' + STIL for it in g['items']],
                'target_palette': {'colors': PALETTE, 'name': 'Karte01 handheld'}}

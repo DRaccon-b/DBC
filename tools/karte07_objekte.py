@@ -17,9 +17,9 @@ KARTE = os.path.join(ROOT, 'maps', 'karte07')
 OBJ = os.path.join(ROOT, 'assets', 'objekte', 'karte07')
 T = 16
 FREMD = {'k05/tanne%d' % i: 'karte05/baeume/0%d.png' % i for i in range(3)}
-for i in (1, 2, 3, 5, 6, 8, 10, 26, 27, 31):
+for i in (1, 2, 3, 4, 5, 6, 8, 9, 10, 11, 26, 27, 31):
     FREMD['k01/deko%02d' % i] = 'karte01/deko/%02d.png' % i
-for i in (0, 4, 13):
+for i in (0, 4, 13, 36):
     FREMD['k05/klein%02d' % i] = 'karte05/klein/%02d.png' % i
 # Einbettung: Bueschel und Blumen vor dem Sockel von Felsen, Baeumen, Kristallen, Stuempfen
 # neue Deko-Sets (PixelLab k7_deko_*) + bewaehrte aus Karte 01/05
@@ -54,22 +54,23 @@ RING = (30, 62, 4, 26)                                          # Steinkreis obe
 
 FEST = [
     # Gipfel: Wirbelportal, Drachenschrein, Obelisk, Laternen (max. 4 Steinlaternen im Schrein)
-    ('mittel/12', 6.5, 7, {'anim': 'portal'}),
+    ('mittel/12_sw', 6.5, 7, {'anim': 'portal'}),                   # Portal schwarz-grau-weiss (Nutzer)
     # Reich des azurblauen Drachen (Schreinhof): Drachenstatue um Jadesaeule, Marmorweg, Kugelsockel, Banner
-    ('azul_gross/00', 87, 12, {'anim': 'leuchten'}),
-    ('azul/07', 79, 12, {}), ('azul/07', 79, 19, {'spiegeln': True}),
-    ('azul/00', 82, 12, {'anim': 'leuchten'}), ('azul/00', 82, 19, {'anim': 'leuchten'}),
-    ('azul/02', 94, 11, {'anim': 'leuchten'}), ('azul/02', 94, 21, {'anim': 'leuchten'}),
+    ('azul_gross/00', 87, 10, {'anim': 'leuchten'}),
+    ('azul/07', 79, 10, {}), ('azul/07', 79, 19, {'spiegeln': True}),     # oberes Paar ueber dem Marmorweg (Weg frei)
+    ('azul/00', 82, 10, {'anim': 'leuchten'}), ('azul/00', 82, 19, {'anim': 'leuchten'}),
+    ('azul/02', 94, 11, {'anim': 'leuchten'}), ('azul/02', 94, 19, {'anim': 'leuchten'}),
     ('azul/01', 79, 6, {'anim': 'wehen'}), ('azul/01', 82, 6, {'anim': 'wehen'}),
     ('azul/01', 92, 6, {'anim': 'wehen'}), ('azul/01', 95, 6, {'anim': 'wehen'}),
-    ('azul/04', 86.5, 21, {}), ('azul/09', 91, 22, {'anim': 'glitzern'}),
-    ('azul/03', 79, 23, {'anim': 'glitzern'}), ('azul/05', 82, 23, {}), ('azul/03', 95, 16, {'anim': 'glitzern'}),
+    ('azul/04', 86.5, 21, {}), ('azul/09', 83, 21, {'anim': 'glitzern'}), ('azul/09', 91, 21, {'anim': 'glitzern', 'spiegeln': True}),
+    ('azul/03', 79, 23, {'anim': 'glitzern'}), ('azul/05', 82, 23, {}), ('azul/03', 95, 23, {'anim': 'glitzern', 'spiegeln': True}),
+    ('azul/05', 92, 23, {'spiegeln': True}),                                 # Paare spiegelsymmetrisch zur Schreinachse
     (PL, 66, 22, {'anim': 'leuchten'}),
     (PL, 27, 23, {'anim': 'leuchten', 'spiegeln': True}),
     ('mittel/13', 59, 39, {}), ('mittel/13', 61, 49, {}),
     # Pagodenhof
-    ('pagode/00', 80, 45, {}), (BAMBUS, 73, 39, {'anim': 'wehen'}), (BAMBUS, 87, 39, {'anim': 'wehen'}),
-    (SL, 73, 45, {}), (SL, 87, 45, {}), (PL, 72, 32, {'anim': 'leuchten'}),
+    ('pagode_neu/00', 80, 45, {}), (BAMBUS, 73, 39, {'anim': 'wehen'}), (BAMBUS, 87, 39, {'anim': 'wehen'}),
+    (PL, 72, 32, {'anim': 'leuchten'}),
     (PL, 88, 32, {'anim': 'leuchten', 'spiegeln': True}),
     (KRISTALL, 87, 53, {'anim': 'glitzern'}), (AZALEE, 86, 54, {}),
     (PL, 82, 55, {'anim': 'leuchten', 'spiegeln': True}), (PL, 16, 54, {'anim': 'leuchten'}),
@@ -80,8 +81,8 @@ FEST = [
     ('gross/01', 90.5, 80, {}), ('mittel/10', 90.5, 73, {}),
     (SL, 86, 67, {}), (SL, 95, 67, {}), (BAMBUS, 86, 77, {'anim': 'wehen'}), (BAMBUS, 95, 77, {'anim': 'wehen'}),
     (PL, 95, 64, {'anim': 'leuchten', 'spiegeln': True}),
-    (BAMBUS, 45, 66, {'anim': 'wehen'}), (BAMBUS, 22, 70, {'anim': 'wehen'}), (BAMBUS, 6, 72, {'anim': 'wehen'}),
-    (BAMBUS, 9, 72, {'anim': 'wehen'}), (BAMBUS, 12, 72, {'anim': 'wehen'}), (BAMBUS, 70, 73, {'anim': 'wehen'}),
+    (BAMBUS, 45, 66, {'anim': 'wehen'}),
+    (BAMBUS, 9, 72, {'anim': 'wehen'}), (BAMBUS, 70, 73, {'anim': 'wehen'}),
     (PL, 46.5, 76, {'anim': 'leuchten', 'spiegeln': True}), (PL, 69.5, 81, {'anim': 'leuchten'}),
     # umgekippte schwarze Tuerme
     # fuenf schwarze Tuerme wie die Spitzen eines Pentagramms um die Arena (Steinkreis, Mitte 47/15)
@@ -103,12 +104,11 @@ FEST = [
     (NADEL, -2, 30, {}), (NADEL, -2, 48, {}), (NADEL, -3, 12, {}), (NADEL, -3, 68, {}), (NADEL, -2, 84, {}),
     (NADEL, 102, 22, {}), (NADEL, 102, 56, {}), (NADEL, 103, 8, {}), (NADEL, 103, 72, {}), (NADEL, 102, 88, {}),
     (NADEL, 14, 95, {}), (NADEL, 31, 95, {}), (NADEL, 47, 95, {}), (NADEL, 61, 95, {}),
-    (NADEL, 78, 95, {}), (NADEL, 2, 32, {}), (NADEL, 63, 90, {}), (NADEL, 92, 95, {}),
+    (NADEL, 78, 95, {}), (NADEL, 63, 90, {}), (NADEL, 92, 95, {}),
 ]
 STUMPF_PLAETZE = [(49, 57), (54, 38)]
 RUNEN_PLAETZE = [(40, 37), (57, 31), (89, 51), (27, 58), (65, 54)]
-BAUM_PLAETZE = [(52, 35), (58, 35), (40, 40), (47, 50), (53, 51), (66, 39), (92, 34), (14, 68),
-                (89, 59), (42, 55), (35, 34)]
+BAUM_PLAETZE = [(52, 35), (40, 40), (66, 39), (14, 68)]   # weniger Baeume (Nutzer)
 
 
 def main():
@@ -236,10 +236,8 @@ def main():
         for x in range(bx, bx + wt):
             for y in range(ty - ht + 1, ty + 1):
                 gesperrt.add((x, y))
-        if name in EINBETTEN:
+        if name in EINBETTEN and name not in BAEUME:           # Baeume bekommen Begleiter nach Regel 5d (unten)
             einbetten(bx, wt, ty)
-        if name in BAUM_BAMBUS and rnd2.random() < 0.22:
-            bambus_dazu(bx, wt, ty)
         return True
 
     def einbetten(bx, wt, ty):
@@ -306,24 +304,52 @@ def main():
         x = ox0 + 1.5 + rnd.random() * 1.5
         while x <= ox1 - 1:
             setze(rnd.choice(OBSTBAEUME), x, y, {'anim': 'baum', 'spiegeln': rnd.random() < 0.5}, frei=True)
-            x += 4 + rnd.random() * 1.5
-        y += 5 + rnd.randint(0, 1)
+            x += 8 + rnd.random() * 2                                # weniger Obstbaeume, versetzt
+        y += 8 + rnd.randint(0, 1)
     # verschneite Tannen und Schneefelsen nur auf Schnee (nie auf Wegen), keine Felsen im Steinkreis
     n_s = n_r = 0
     for _ in range(5000):
         tx, ty = rnd.randrange(3, cols - 3), rnd.randrange(3, rows - 3)
-        if cls[ty][tx] != 'n' or n_s >= 42 or rnd.random() > 0.5:
+        if cls[ty][tx] != 'n' or n_s >= 8 or rnd.random() > 0.5:   # weniger Tannen (Nutzer)
             continue
         if RING[0] <= tx - R <= RING[1] and RING[2] <= ty - R <= RING[3]:   # Steinkreis bleibt frei
+            continue
+        if 75 <= tx - R <= 98 and 2 <= ty - R <= 27:                 # nicht im Drachenschrein (Zaun, Hof)
             continue
         if n_r < 6 and rnd.random() < 0.15:
             if setze('mittel/07', tx, ty, {'spiegeln': rnd.random() < 0.5}, frei=True, nur='n', abs_=True):
                 n_r += 1
         elif setze(TANNE, tx, ty, {'anim': 'baum', 'spiegeln': rnd.random() < 0.5}, frei=True, abs_=True):
             n_s += 1
+    # Begleiter nach Regel 5 / 5d fuer alle einzeln stehenden Baeume (nicht Obstgarten, nicht Baeume an Kristallsaeulen):
+    # abwechselnd 2 Kacheln hoher Fels vor dem Stumpf (eine Kachel tiefer), Fels hinter den Blaettern, oder beides mit
+    # hoher Blume vorne; danach Stammreihe +-1 fuer andere Deko sperren
+    kristalle = [o['kachel'] for o in objekte if o['basis'] in (LILA, KRISTALL)]
+    baeume_ = [o for o in objekte if o['basis'] in BAEUME
+               and not any(abs(o['kachel'][0] - kx) <= 3 and abs(o['kachel'][1] - ky) <= 2 for kx, ky in kristalle)]
+    for i, o in enumerate(baeume_):
+        bx, by, wt, ht = o['block']
+        ty = o['kachel'][1]
+        cxm = bx + wt / 2.0 - 0.5
+        k = cls[ty][min(cols - 1, int(cxm + 0.5))]
+        fels = 'k05/klein36' if k == 'n' else rnd2.choice(['k01/deko09', 'k01/deko11'])
+        blume = 'k05/klein04' if k == 'n' else rnd2.choice(['k01/deko04', 'k01/deko27'])
+        sd = -1 if i % 2 else 1
+        art = i % 3
+        if art in (1, 2):                                            # hinter den Blaettern (eine Reihe hoeher, aussen)
+            breit = wt > 4                                           # grosse Kiefer: Fels hinter die Krone, nicht auf Stammhoehe
+            setze(fels, cxm + sd * (2 if breit else wt / 2.0 + 0.2), ty - (3 if breit else 1), {'spiegeln': rnd2.random() < 0.5},
+                  abs_=True, _versuch=True)
+        if art in (0, 2):                                            # vor dem Stumpf: eine Kachel tiefer
+            n_ = fels if art == 0 else blume
+            setze(n_, cxm, ty + 1, {'spiegeln': rnd2.random() < 0.5, 'anim': 'wehen' if n_ == blume else None},
+                  abs_=True, _versuch=True)
+        for x in range(bx - 1, bx + wt + 1):
+            for y in (ty - 1, ty, ty + 1):
+                gesperrt.add((x, y))
     n = 0
     for _ in range(3000):
-        if n >= 70:
+        if n >= 28:                                              # weniger Bueschel/Blumen (Nutzer)
             break
         tx, ty = rnd.randrange(3, cols - 3), rnd.randrange(3, rows - 3)
         if cls[ty][tx] != 'g':
@@ -339,7 +365,7 @@ def main():
         k = cls[ty][tx]
         if RING[0] <= tx - R <= RING[1] and RING[2] <= ty - R <= RING[3]:
             continue
-        if k == 'n' and n_sn < 40:
+        if k == 'n' and n_sn < 16:
             z = rnd.random()
             d = rnd.choice(BUESCHEL_SCHNEE if z < 0.5 else BLUMEN_SCHNEE if z < 0.85 else KLEINKRAM_SCHNEE)
             if setze(d, tx, ty, {'anim': 'wehen'} if d not in KLEINKRAM_SCHNEE else {}, frei=True, abs_=True):
@@ -353,3 +379,5 @@ def main():
 
 if __name__ == '__main__':
     main()
+    import regeln_a02                                                 # Regeln: nichts auf Wegen, Teleporter frei
+    regeln_a02.objekte_pruefen('karte07', 'w')

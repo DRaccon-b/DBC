@@ -1,0 +1,327 @@
+"""Objekte fuer Karte 27 (Destiny Lake, A02).
+
+  python3 tools/karte27_bauen.py   (einmal -> wand.npy)
+  python3 tools/karte27_objekte.py && python3 tools/karte27_bauen.py
+
+Schritt 1: Baum-Umrandung (Waldrand wie Karte 06/23: Baeume von Karte 01 dicht auf den Waldkacheln, jede zweite
+Kachel im Schachbrett) und das Wrack des Kaiser-Flaggschiffs (Karte 25) unten links.
+"""
+import json, math, os, random, shutil, sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import numpy as np
+from PIL import Image
+import bauwerke
+
+ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
+KARTE = os.path.join(ROOT, 'maps', 'karte27')
+OBJ = os.path.join(ROOT, 'assets', 'objekte', 'karte27')
+T = 16
+FREMD = {}
+for i in range(16):
+    FREMD['k01/baum%02d' % i] = 'karte01/baeume/%02d.png' % i
+WALD = ['k01/baum%02d' % i for i in (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 12, 13, 14)]
+WRACK = 'wrack/00_sauber'
+WRACK_POS = (242, 1126)                         # Fussmitte x, Fusslinie y (px) - vor der Mauer des Plateaus unten links
+
+# Einzelne Baeume nach der Vorlage: Stammfuss (px) und Art, aus der Vorlage gelesen (Stammfarbe, Kronenfarbe)
+VORLAGE_BAEUME = [
+    (462, 189, 'eiche'), (1102, 221, 'eiche'), (478, 237, 'eiche'), (1470, 253, 'eiche'),
+    (1518, 349, 'eiche'), (798, 365, 'eiche'), (142, 381, 'eiche'), (1390, 429, 'eiche'),
+    (1054, 477, 'eiche'), (62, 493, 'eiche'), (446, 573, 'eiche'), (494, 621, 'eiche'),
+    (270, 669, 'eiche'), (1406, 669, 'eiche'), (990, 733, 'eiche'), (1390, 765, 'eiche'),
+    (1006, 813, 'eiche'), (926, 861, 'eiche'), (990, 893, 'eiche'), (1022, 893, 'kirsche'),
+    (910, 909, 'eiche'), (510, 925, 'eiche'), (542, 925, 'eiche'), (942, 925, 'eiche'),
+    (1102, 925, 'kirsche'), (574, 941, 'eiche'), (1454, 941, 'kirsche'), (1070, 957, 'kirsche'),
+    (526, 973, 'eiche'), (1438, 989, 'eiche'), (974, 1005, 'eiche'), (878, 1053, 'kirsche'),
+    (1246, 1053, 'kirsche'), (1326, 1053, 'kirsche'), (830, 1069, 'kirsche'), (1038, 1085, 'kirsche'),
+    (734, 1101, 'kirsche'), (990, 1101, 'eiche'), (1134, 1101, 'eiche'), (1294, 1101, 'kirsche'),
+    (702, 1117, 'eiche'), (831, 1117, 'eiche'), (862, 1117, 'eiche'), (894, 1117, 'eiche'),
+    (1102, 1133, 'kirsche'), (1150, 1133, 'eiche'), (814, 1149, 'eiche')]
+EICHEN = ['k01/baum00', 'k01/baum01', 'k01/baum02', 'k01/baum04', 'k01/baum15']
+KIRSCHE = 'k01/baum10'
+FELS_GROSS = ['k01/deko09', 'k01/deko11']                       # bemooste Felsen (2 Kacheln hoch, Regel 5d)
+HOCH_BLUME = ['k01/deko04', 'k01/deko27', 'k01/deko30']
+
+
+def main():
+    rnd = random.Random(27)
+    lay = json.load(open(os.path.join(KARTE, 'layout.json')))
+    cls = lay['klassen']
+    cols, rows = lay['groesse']
+    for name, quelle in FREMD.items():
+        ziel = os.path.join(OBJ, name + '.png')
+        os.makedirs(os.path.dirname(ziel), exist_ok=True)
+        shutil.copy(os.path.join(ROOT, 'assets', 'objekte', quelle), ziel)
+    wand = np.unpackbits(np.load(os.path.join(KARTE, 'wand.npy')))[:rows * T * cols * T].reshape(rows * T, cols * T).astype(bool)
+    objekte, cache = [], {}
+
+    def variante(name, spiegeln, mit_fuss=True):
+        key = (name, spiegeln, mit_fuss)
+        if key not in cache:
+            sp = Image.open(os.path.join(OBJ, name + '.png')).convert('RGBA')
+            if spiegeln:
+                sp = sp.transpose(Image.FLIP_LEFT_RIGHT)
+            aa = np.array(sp.getchannel('A')) > 0
+            ys, xs = np.nonzero(aa)
+            ux0, uy0, ux1, uy1 = int(xs.min()), int(ys.min()), int(xs.max()), int(ys.max())
+            art = 'baum' if 'baum' in name else 'stein' if name in ('k01/deko09', 'k01/deko11') else 'klein'
+            v = bauwerke.bodenfuss(sp, 'gras', art) if mit_fuss else sp
+            off = 2 if mit_fuss else 0
+            datei = 'varianten/%s%s%s.png' % (name.replace('/', '-'), '_m' if spiegeln else '', '' if mit_fuss else '_ohne')
+            os.makedirs(os.path.join(OBJ, 'varianten'), exist_ok=True)
+            v.save(os.path.join(OBJ, datei))
+            cache[key] = (datei, v.height, ux0 + off, uy0, ux1 + off, uy1)
+        return cache[key]
+
+    # Waldrand: Baeume dicht im Schachbrett auf den Waldkacheln (Fuss auf Wald, nicht auf einer Mauerfront)
+    for ty in range(rows):
+        for tx in range(cols):
+            if cls[ty][tx] != 'h' or (tx + ty) % 2:
+                continue
+            if wand[ty * T:(ty + 1) * T, tx * T:(tx + 1) * T].any():
+                continue
+            name = rnd.choice(WALD)
+            datei, h, ux0, uy0, ux1, uy1 = variante(name, rnd.random() < 0.5)
+            bw = ux1 - ux0 + 1
+            wt, ht = math.ceil(bw / T), math.ceil((uy1 - uy0 + 1) / T)
+            bx = int(round(tx + 0.5 - wt / 2.0))
+            objekte.append({'datei': datei, 'basis': name, 'x': bx * T + (wt * T - bw) // 2 - ux0,
+                            'y': (ty + 1) * T - 1 - uy1, 'fuss': h, 'kachel': [tx, ty],
+                            'block': [bx, ty - ht + 1, wt, ht], 'ebene': 1, 'anim': 'baum'})
+    # Wrack des Kaiser-Flaggschiffs (PixelLab Pro-Generator, Ausnahme > 256 px, Vorbild: Schiff aus Karte 25)
+    if os.path.exists(os.path.join(OBJ, WRACK + '.png')):
+        datei, h, ux0, uy0, ux1, uy1 = variante(WRACK, False, mit_fuss=False)
+        cx, fy = WRACK_POS
+        bw, bh = ux1 - ux0 + 1, uy1 - uy0 + 1
+        x = cx - (ux0 + bw // 2)
+        objekte.append({'datei': datei, 'basis': WRACK, 'x': x, 'y': fy - uy1, 'fuss': h, 'kachel': [cx // T, fy // T],
+                        'block': [(x + ux0) // T, (fy - bh) // T, math.ceil(bw / T), math.ceil(bh / T)], 'ebene': 1})
+    # Einzelne Baeume (Eichen, Kirschbaeume) nach der Vorlage, mit Begleitern nach Regel 5d
+    for n in (9, 11, 4, 27, 30):
+        q = os.path.join(ROOT, 'assets', 'objekte', 'karte01', 'deko', '%02d.png' % n)
+        os.makedirs(os.path.join(OBJ, 'k01'), exist_ok=True)
+        shutil.copy(q, os.path.join(OBJ, 'k01', 'deko%02d.png' % n))
+    gesperrt = set()
+    for ty in range(rows):
+        for tx in range(cols):
+            if cls[ty][tx] in 'xpbwTqh' or wand[ty * T:(ty + 1) * T, tx * T:(tx + 1) * T].any():
+                gesperrt.add((tx, ty))
+    for o in objekte:                                               # Wrack und Waldrand
+        bx, by, wt, ht = o['block']
+        for x in range(bx, bx + wt):
+            for y in range(by, by + ht):
+                gesperrt.add((x, y))
+
+    wasser_px = np.unpackbits(np.load(os.path.join(KARTE, 'wasser.npy')))[:rows * T * cols * T].reshape(rows * T, cols * T).astype(bool)
+
+    def setze_px(name, cx, fy, opt, spiegeln=False, mit_fuss=True, pruefen=False):
+        datei, h, ux0, uy0, ux1, uy1 = variante(name, spiegeln, mit_fuss)
+        bw, bh = ux1 - ux0 + 1, uy1 - uy0 + 1
+        if pruefen:                                                 # Fussbereich (unterste Kachel + 3 px) nicht auf Wasser/Wand
+            x0, x1 = max(0, cx - bw // 2 - 3), min(cols * T, cx + bw // 2 + 4)
+            y0, y1 = max(0, fy - T), min(rows * T, fy + 4)
+            if wasser_px[y0:y1, x0:x1].any() or wand[y0:y1, x0:x1].any():
+                return None
+        o = {'datei': datei, 'basis': name, 'x': cx - (ux0 + bw // 2), 'y': fy - uy1, 'fuss': h,
+             'kachel': [cx // T, fy // T], 'block': [(cx - bw // 2) // T, (fy - bh + 1) // T, math.ceil(bw / T), math.ceil(bh / T)],
+             'ebene': 1}
+        o.update(opt)
+        objekte.append(o)
+        return o
+
+    baeume = []
+    for (cx, cy, art) in VORLAGE_BAEUME:
+        tx, ty = cx // T, cy // T
+        for dx, dy in ((0, 0), (-1, 0), (1, 0), (0, -1), (0, 1), (-1, -1), (1, -1)):
+            ok = all((tx + dx + ex, ty + dy + ey) not in gesperrt for ex in (-1, 0, 1) for ey in (-1, 0))
+            if ok:
+                tx, ty = tx + dx, ty + dy
+                break
+        else:
+            continue
+        if any((abs(b['kachel'][0] - tx) < 3 and abs(b['kachel'][1] - ty) < 2) or
+               (abs(b['kachel'][0] - tx) < 2 and abs(b['kachel'][1] - ty) < 4) for b in baeume):
+            continue                                                # Sockel zweier Baeume ueberlappen nie (Regel 4)
+        name = KIRSCHE if art == 'kirsche' else rnd.choice(EICHEN)
+        b = setze_px(name, tx * T + 8, (ty + 1) * T - 1, {'anim': 'baum'}, rnd.random() < 0.5)
+        b['kachel'] = [tx, ty]
+        baeume.append(b)
+        bx, by, wt, ht = b['block']
+        for x in range(bx - 1, bx + wt + 1):                        # Stammreihe +-1 frei von anderer Deko
+            for y in range(ty - 2, ty + 2):
+                gesperrt.add((x, y))
+    def begleiter(name, cx, d, seite, fy, opt):                     # erst die gewuenschte, dann die andere Seite
+        sp = rnd.random() < 0.5
+        for sd in (seite, -seite):
+            if setze_px(name, cx + sd * d, fy, dict(opt), sp, pruefen=True):
+                return True
+        return False
+
+    # Begleiter (Regel 5d): abwechselnd Fels vor dem Stumpf (eine Kachel tiefer), Fels hinter den Blaettern
+    # (eine Reihe hoeher, wird vor dem Baum gezeichnet), oder Fels hinter den Blaettern + hohe Blume vor dem Stumpf
+    for i, b in enumerate(baeume):
+        tx, ty = b['kachel']
+        cx, fy = tx * T + 8, (ty + 1) * T - 1
+        seite = -1 if i % 2 else 1
+        art = i % 3
+        unten_frei = cls[min(rows - 1, ty + 1)][tx] in 'gfs' and not wand[min(rows * T - 1, fy + T), cx]
+        andere = [c['kachel'] for c in baeume if c is not b]
+        nah = [ax for ax, ay in andere if abs(ax - tx) <= 5 and abs(ay - ty) <= 3]
+        if nah:                                                     # Begleiter auf die vom Nachbarbaum abgewandte Seite
+            n0 = min(nah, key=lambda ax: abs(ax - tx))
+            seite = 1 if tx >= n0 else -1
+        oben_frei = not any(abs(ax - tx) <= 2 and 0 < ty - ay <= 3 for ax, ay in andere)   # kein Stamm hinter den Blaettern
+        if not oben_frei:
+            art = 0 if unten_frei else 3
+        if art == 3:
+            continue
+        if art == 0 and unten_frei:
+            begleiter(rnd.choice(FELS_GROSS), cx, 5, seite, fy + T, {'kachel': [tx, ty + 1]})
+        elif art == 1 or not unten_frei:
+            begleiter(rnd.choice(FELS_GROSS), cx, max(9, b['block'][2] * T // 2 - 2), seite, fy - 7, {'kachel': [tx, ty - 1], 'hinter': True})
+        else:
+            begleiter(rnd.choice(FELS_GROSS), cx, max(9, b['block'][2] * T // 2 - 2), seite, fy - 7, {'kachel': [tx, ty - 1], 'hinter': True})
+            begleiter(rnd.choice(HOCH_BLUME), cx, 5, -seite, fy + T, {'kachel': [tx, ty + 1], 'anim': 'wehen'})
+    # Uebergaenge (Nutzer, PixelLab k27_rand + Grasbueschel Karte 01): am Rand des Pflasters Bueschel und lose
+    # Pflastersteine im Gras, rund um das Wrack Truemmer und angesengte Erde
+    for n in (5, 6):
+        q = os.path.join(ROOT, 'assets', 'objekte', 'karte01', 'deko', '%02d.png' % n)
+        os.makedirs(os.path.join(OBJ, 'k01'), exist_ok=True)
+        shutil.copy(q, os.path.join(OBJ, 'k01', 'deko%02d.png' % n))
+    flach = []
+    for ty in range(1, rows - 1):
+        for tx in range(1, cols - 1):
+            if cls[ty][tx] != 'p':
+                continue
+            nb = [cls[ty + dy][tx + dx] for dy, dx in ((-1, 0), (1, 0), (0, -1), (0, 1))]
+            if 'g' in nb and rnd.random() < 0.12:
+                gy, gx = [(ty + dy, tx + dx) for dy, dx in ((-1, 0), (1, 0), (0, -1), (0, 1)) if cls[ty + dy][tx + dx] == 'g'][0]
+                flach.append((rnd.choice(['k01/deko05', 'k01/deko06', 'rand/01']), gx, gy))
+    wx, wy = WRACK_POS
+    for (dx, dy, n) in ((-110, 22, 'rand/02'), (150, 4, 'rand/47'), (-128, 8, 'rand/03'), (60, 24, 'rand/02'),
+                        (175, -10, 'rand/03')):
+        flach.append((n, (wx + dx) // T, (wy + dy) // T))
+    belegt = set()
+    for (n, tx, ty) in flach:
+        if (tx, ty) in belegt or not (0 <= ty < rows and 0 <= tx < cols):
+            continue
+        belegt.add((tx, ty))
+        datei, h, ux0, uy0, ux1, uy1 = variante(n, rnd.random() < 0.5, mit_fuss=False)
+        bw = ux1 - ux0 + 1
+        objekte.append({'datei': datei, 'basis': n, 'x': tx * T + 8 - (ux0 + bw // 2), 'y': (ty + 1) * T - 1 - uy1,
+                        'fuss': h, 'kachel': [tx, ty], 'block': [tx, ty, 1, 1], 'ebene': 0,
+                        'liegend': n.startswith('rand/'), 'anim': 'wehen' if n.startswith('k01') else None})
+    # ---- Restliche Objekte nach der Vorlage (Nutzer: "mach das was noch fehlt") ----
+    for q, z in (('karte01/laterne.png', 'k01/laterne.png'), ('karte20/k10/bank.png', 'k20/bank.png')):
+        os.makedirs(os.path.dirname(os.path.join(OBJ, z)), exist_ok=True)
+        shutil.copy(os.path.join(ROOT, 'assets', 'objekte', q), os.path.join(OBJ, z))
+    for n in (7, 8, 10, 14, 16, 17, 18, 19, 31, 37, 41, 53, 0, 1, 2, 3, 30, 5, 6):
+        shutil.copy(os.path.join(ROOT, 'assets', 'objekte', 'karte01', 'deko', '%02d.png' % n),
+                    os.path.join(OBJ, 'k01', 'deko%02d.png' % n))
+    sl = np.array(Image.open(os.path.join(ROOT, 'assets', 'objekte', 'karte21', 'schrein', '06.png')).convert('RGBA'))
+    fen = np.zeros(sl.shape[:2], bool); fen[16:21, 7:13] = True    # Steinlaterne: Fenster leuchtet (Kerze an)
+    dunkel = fen & (sl[..., :3].sum(2) < 200)
+    sl[dunkel, :3] = (246, 196, 92)
+    sl[16:21, 9:11][dunkel[16:21, 9:11], :3] = (255, 236, 160)
+    os.makedirs(os.path.join(OBJ, 'k21'), exist_ok=True)
+    Image.fromarray(sl).save(os.path.join(OBJ, 'k21', 'steinlaterne.png'))
+    fuesse = []                                                     # Fussrechtecke aller Objekte (2 px Abstand)
+    for o in objekte:
+        bx, by, wt, ht = o['block']
+        fuesse.append((bx * T, (by + ht - 1) * T, (bx + wt) * T, (by + ht) * T))
+
+    def platz(name, cx, fy, opt=None, boden='gpsfw', spiegeln=False, mit_fuss=True, frei=True):
+        datei, h, ux0, uy0, ux1, uy1 = variante(name, spiegeln, mit_fuss)
+        bw = ux1 - ux0 + 1
+        fx0, fx1, fy0 = cx - bw // 2 - 2, cx + bw // 2 + 2, fy - (uy1 - uy0 if name.startswith('schrein') else min(2 * T, uy1 - uy0)) - 2
+        tx, ty = int(cx) // T, int(fy) // T
+        if not (0 <= tx < cols and 0 <= ty < rows) or cls[ty][tx] not in boden:
+            return None
+        y0, y1, x0, x1 = max(0, fy - 12), min(rows * T, fy + 3), max(0, cx - bw // 2), min(cols * T, cx + bw // 2 + 1)
+        if ('x' not in boden and wasser_px[y0:y1, x0:x1].any()) or wand[y0:y1, x0:x1].any():
+            return None
+        if 'x' in boden and not wasser_px[y0:y1, x0:x1].all():
+            return None
+        if frei:
+            if (tx, ty) in gesperrt and cls[ty][tx] not in boden.replace('g', '').replace('f', '').replace('s', ''):
+                return None
+            if any(not (fx1 < a0 or fx0 > a1 or fy < b0 or fy0 > b1) for (a0, b0, a1, b1) in fuesse):
+                return None
+        o = setze_px(name, int(cx), int(fy), dict(opt or {}), spiegeln, mit_fuss)
+        fuesse.append((fx0, fy0, fx1, fy + 2))
+        return o
+
+    AX = 976                                                        # Achse Kristall-Schrein / Steinring
+    platz('schrein/00', AX, 14 * T + 7, {'anim': 'kristall'}, frei=False)      # ganz auf dem Platz, nicht ueber Wasser
+    fuesse.append((AX - 24, 14 * T + 7, AX + 24, 16 * T + 8))      # Zugang vor der Schreintreppe frei
+    for dx in (-62, 62):                                            # Baenke spiegelsymmetrisch am Schreinplatz
+        platz('k20/bank', AX + dx, 14 * T + 10, {}, frei=False)
+    for sd in (-1, 1):                                              # ein Paar Steinlaternen am Schrein (Nutzer: weniger Laternen)
+        platz('k21/steinlaterne', AX + sd * 96, 14 * T + 12, {'anim': 'lampe'}, boden='gpsw', frei=False)
+    for (cx, fy) in ((1206, 894), (1257, 894),                     # Laternen am grossen Steg (Nutzer: weniger)
+                     (152, 1186), (503, 1170)):                     # Platz am Wrack: Teleporter und Platzende
+        platz('k01/laterne', cx, fy, {'anim': 'laterne'}, boden='gpsw', mit_fuss=False, frei=False)
+    platz('k20/bank', 368, 1146, {}, frei=False)                   # Bank auf dem Platz am Wrack
+    platz('k01/deko53', 1431, 158, {'anim': None})                  # Wegweiser am Feldweg oben rechts
+    platz('k01/deko53', 440, 1142, {}, frei=False)                  # Hinweisschild am Wrack-Platz
+    for (n, cx, fy) in (('fels_klein/00', 1105, 872), ('fels_klein/52', 1295, 900), ('fels_klein/01', 1056, 985),
+                        ('fels_klein/00', 1424, 1096), ('fels_klein/03', 840, 1152), ('fels_klein/51', 1368, 496),
+                        ('fels_klein/01', 1432, 95), ('fels_klein/03', 1170, 1180)):
+        platz(n, cx, fy, {}, spiegeln=rnd.random() < 0.5)            # graue Findlinge (Vorlage)
+    for (n, cx, fy) in (('k01/deko08', 200, 212), ('k01/deko10', 265, 240), ('k01/deko08', 440, 240),
+                        ('k01/deko10', 553, 256), ('k01/deko08', 585, 80)):
+        platz(n, cx, fy, {})                                         # kleine Steine
+    for (cx, fy) in ((80, 222), (60, 758), (1055, 1128)):           # liegende Staemme
+        platz(rnd.choice(['k01/deko16', 'k01/deko41']), cx, fy, {'liegend': True}, spiegeln=rnd.random() < 0.5)
+    for (cx, fy) in ((1398, 553), (1512, 563), (1495, 790)):        # kleine Nadelbaeume
+        platz('k01/baum08', cx, fy, {'anim': 'baum'})
+    n_ = 0                                                          # Moor: Pilze und Bueschel auf dem Schlamm
+    for _ in range(3000):
+        if n_ >= 16:
+            break
+        tx, ty = rnd.randrange(1, 32), rnd.randrange(9, 48)
+        if cls[ty][tx] != 'f':
+            continue
+        nm = rnd.choice(['k01/deko14', 'k01/deko31', 'k01/deko06', 'k01/deko07'])
+        if platz(nm, tx * T + rnd.randrange(4, 12), ty * T + 13, {'anim': 'wehen'} if nm in ('k01/deko06', 'k01/deko07') else {}, boden='f'):
+            n_ += 1
+    n_ = 0                                                          # Wiesen: Bueschel und Blumen (unregelmaessig, eher wenig)
+    for _ in range(8000):
+        if n_ >= 40:
+            break
+        tx, ty = rnd.randrange(1, cols - 1), rnd.randrange(1, rows - 1)
+        if not all(cls[ty + dy][tx + dx] == 'g' for dx in (-1, 0, 1) for dy in (-1, 0, 1)):
+            continue
+        nm = rnd.choice(['k01/deko05', 'k01/deko06', 'k01/deko05', 'k01/deko00', 'k01/deko01', 'k01/deko02', 'k01/deko03', 'k01/deko30'])
+        if platz(nm, tx * T + rnd.randrange(3, 13), ty * T + 13, {'anim': 'wehen'}, boden='g'):
+            n_ += 1
+    n_ = 0                                                          # Seerosen im flachen Wasser am Ufer (nicht im Moor)
+    for _ in range(8000):
+        if n_ >= 22:
+            break
+        tx, ty = rnd.randrange(30, cols - 1), rnd.randrange(5, rows - 1)
+        if cls[ty][tx] != 'x' or not any(cls[ty + dy][tx + dx] in 'gs' for dx in (-2, 0, 2) for dy in (-2, 0, 2)):
+            continue
+        if wand[max(0, ty * T - 56):ty * T + 40, max(0, tx * T - 40):tx * T + 56].any():
+            continue                                                # nicht am Fuss von Waenden/Wasserfaellen (Stroemung)
+        if platz(rnd.choice(['k01/deko17', 'k01/deko18', 'k01/deko19']), tx * T + 8, ty * T + 12, {'liegend': True}, boden='x', mit_fuss=False):
+            n_ += 1
+    n_ = 0                                                          # Kiesel auf Sand
+    for _ in range(4000):
+        if n_ >= 6:
+            break
+        tx, ty = rnd.randrange(1, cols - 1), rnd.randrange(1, rows - 1)
+        if not all(cls[ty + dy][tx + dx] == 's' for dx in (-1, 0, 1) for dy in (0,)):
+            continue
+        if platz('k01/deko37', tx * T + 8, ty * T + 12, {'liegend': True}, boden='s', mit_fuss=False):
+            n_ += 1
+    objekte = [o for o in objekte if not (o['basis'] in ('k01/deko05', 'k01/deko06', 'rand/01') and
+                                          AX - 28 <= o['x'] + 8 <= AX + 28 and 14 * T <= o['y'] + o['fuss'] <= 17 * T)]   # Treppenzugang frei
+    json.dump(objekte, open(os.path.join(OBJ, 'platzierung.json'), 'w'), indent=0)
+    print('Karte 27: %d Objekte' % len(objekte))
+
+
+if __name__ == '__main__':
+    main()
+    import regeln_a02                                                 # Regeln: nichts auf Wegen, Teleporter frei
+    regeln_a02.objekte_pruefen('karte27', 'w')

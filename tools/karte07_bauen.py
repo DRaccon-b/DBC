@@ -20,12 +20,15 @@ ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
 KARTE = os.path.join(ROOT, 'maps', 'karte07')
 OBJ = os.path.join(ROOT, 'assets', 'objekte', 'karte07')
 T = 16
-N_FRAMES = 16
+N_FRAMES = 4                                      # Regel: hoechstens 4 Animationsbilder
+import karte_bauen as _kb
+_kb.N_FRAMES = N_FRAMES                       # Windwelle (Pflanzen) ueber die 4 Bilder der Karte
 RAND = 6                                       # Wolkenring rundherum (Kacheln)
 IC, IR = 100, 90                               # Inselbereich (Koordinaten wie Vorlage)
 COLS, ROWS = IC + 2 * RAND, IR + 2 * RAND
 H = k4.H
 weich, zell_maske = k4.weich, k4.zell_maske
+k4.RASTER45 = True                       # Nutzer: ALLE Bodenkanten am 16er-Raster mit 45 Grad (Regel 6b)
 k4.FELS['heilig'] = ['#3c4048', '#545a64', '#6e7480', '#8a909a', '#a6abb4', '#c2c6cc', '#dcdfe3']
 LIPPE_GRAS = ['#2e6a3a', '#3e8444', '#56a04e', '#6eb85a', '#8ccc6a', '#a8dc82']
 LIPPE_SCHNEE = ['#90a6bc', '#b0c4d6', '#cad9e6', '#dfe9f2', '#f0f6fb', '#ffffff']
@@ -174,6 +177,33 @@ def layout():
                        [[22, 26, 22, 26], [60, 64, 26, 30], [22, 26, 55, 60], [77, 81, 55, 60]]],
            'bruecke': [67 + r, 12 + r, 74 + r, 15 + r],
            'teleporter': [{'x': 7 + r, 'y': 86 + r, 'b': 4, 'h': 1}]}
+    # Regel 2: Weg setzt oben und unten genau in Treppenbreite an (Luecken zwischen Wegende und Treppe schliessen)
+    k_ = [list(z) for z in lay['klassen']]
+    for (x0, x1, y0, y1) in lay['treppen']:
+        for richtung, start in ((-1, y0 - 1), (1, y1 + 1)):
+            for d_ in range(0, 7):
+                y = start + richtung * d_
+                if any(k_[y][x] == 'w' for x in range(x0, x1 + 1)) and d_ > 0:
+                    for yy in range(min(start, y), max(start, y) + 1):
+                        for x in range(x0, x1 + 1):
+                            if k_[yy][x] in 'gnf':
+                                k_[yy][x] = 'w'
+                    break
+                if all(k_[y][x] == 'w' for x in range(x0, x1 + 1)):
+                    break
+            for d_ in range(0, 3):                                    # Wegbreite = Treppenbreite direkt am Fuss/Kopf
+                y = start + richtung * d_
+                for x in range(x0, x1 + 1):
+                    if k_[y][x] in 'gnf':
+                        k_[y][x] = 'w'
+    for (x0, x1, y0, y1) in lay['treppen']:                         # im Treppenbereich selbst: Weg in voller Breite
+        for y in range(y0, y1 + 1):
+            for x in range(x0, x1 + 1):
+                if k_[y][x] in 'gnf':
+                    k_[y][x] = 'w'
+    import regeln_a02                                               # Regel 6/6b: am Kachelraster biegen (statt Pixel)
+    k_ = regeln_a02.wege_schwingen(np.array([list(z) for z in k_]), frei='gn', seed=7, amp=1.6, platz_r=3)
+    lay['klassen'] = [''.join(z) for z in k_]
     json.dump(lay, open(os.path.join(KARTE, 'layout.json'), 'w'), indent=0)
     print('Layout', COLS, ROWS)
 
@@ -633,130 +663,105 @@ def emblem(a, cx, cy, r):
 
 
 def drachenbruecke(img, x0, x1, y0, y1, frame=None, spalt=None):
-    """Imposante Drachenbruecke (Stil des azurblauen Drachen): weisses Marmordeck mit azurblauem Laeufer und
-    Goldborte, Bruestungen aus Marmorpfosten mit Goldkappen und azurblauen Feldern, vier hohe Eckpfeiler mit
-    leuchtenden Bernsteinkugeln, darunter eine azurblau gekachelte Bogenfront mit Goldkante und Marmorpfeilern."""
+    """Drachenbruecke (Nutzer: ueberarbeitet, sauber eingefuegt): Marmordeck ueber der Wolkenluecke, von oben gesehen.
+    Hinten und vorne je eine niedrige Bruestung (Marmorpfosten mit Goldkappe, Handlauf), an den vier Ecken ueber
+    den Kanten der Luecke hohe Pfeiler mit Bernsteinkugel; vorne ueber der Luecke eine azurblaue Stirnseite mit
+    flachem Bogen und Goldkante, Schatten nur auf die Wolken darunter. An Land laeuft das Deck flach als
+    Marmorpodest aus (ohne Bruestung)."""
     px = img.load()
     W, Hh = img.size
     M = [(0x8a, 0x98, 0xb0), (0xb8, 0xc4, 0xd6), (0xd8, 0xe0, 0xec), (0xee, 0xf2, 0xf8), (0xff, 0xff, 0xff)]
     A = [(0x10, 0x22, 0x44), (0x1c, 0x4a, 0x8c), (0x2a, 0x6a, 0xb8), (0x46, 0x8e, 0xd8), (0x8c, 0xc4, 0xf2)]
     G = [(0x6a, 0x48, 0x14), (0xa8, 0x7a, 0x26), (0xd8, 0xa8, 0x3c), (0xf2, 0xd2, 0x7a), (0xff, 0xf2, 0xc0)]
-    K = (0x0c, 0x14, 0x24)
+    K = (0x2c, 0x34, 0x48)
     fr = frame or 0
+    ga, gb = spalt if spalt else (x0, x1)
 
     def p(x, y, c):
         if 0 <= x < W and 0 <= y < Hh:
-            px[x, y] = c + (255,)
+            px[x, y] = tuple(c) + (255,)
 
     def d(x, y, f):
         if 0 <= x < W and 0 <= y < Hh:
             r, g, b, a = px[x, y]
             px[x, y] = (int(r * f), int(g * f), int(b * f), a)
-    breite = x1 - x0
-    # Bogenfront unter dem Deck (Sueden) + Schatten auf die Wolken
-    tiefe = 30
-    ga, gb = spalt if spalt else (x0, x1)                    # Bogenfront nur ueber der Wolkenluecke
+    # 1) Stirnseite vorne ueber der Luecke (flacher Bogen) + Schatten auf die Wolken
+    tiefe = 16
     for x in range(ga, gb):
-        t = (x - ga) / max(1, gb - ga)
-        bogen = int(tiefe - 22 * max(0.0, 1 - ((t - 0.5) / 0.42) ** 2) ** 0.5) if 0.08 < t < 0.92 else tiefe
-        for y in range(y1, y1 + bogen):
-            dy = y - y1
-            if dy < 3:
-                c = G[3] if dy == 0 else G[2] if dy == 1 else G[0]
-            elif x < ga + 8 or x >= gb - 8:
-                c = M[2] if (dy // 6 + (x - ga) // 8) % 2 else M[1]         # Marmorpfeiler
-                if (y - y1) % 6 == 0 or x in (ga + 7, gb - 8):
-                    c = M[0]
-            else:
-                c = A[2] if ((x // 4 + dy // 4) % 2) else A[1]               # azurblaue Kacheln
-                if dy % 4 == 0:
-                    c = A[3] if x < (x0 + x1) // 2 else A[2]
-            if dy == bogen - 1:
-                c = G[1] if ga + 8 <= x < gb - 8 else K                      # goldene Bogenkante
-            if dy == bogen - 2 and ga + 8 <= x < gb - 8:
+        t = (x - ga) / max(1, gb - ga - 1)
+        bogen = int(round(tiefe - 6 * max(0.0, 1 - ((t - 0.5) / 0.45) ** 2) ** 0.5))
+        for dy in range(bogen):
+            y = y1 + dy
+            if dy == 0:
                 c = G[3]
+            elif dy == 1:
+                c = G[1]
+            elif dy == bogen - 1:
+                c = K
+            elif dy == bogen - 2:
+                c = G[2]
+            else:
+                c = A[2] if ((x - ga) // 4 + dy // 3) % 2 else A[1]
             p(x, y, c)
-        for k, f in ((0, 0.72), (1, 0.8), (2, 0.88), (3, 0.94)):
-            d(x + 3, y1 + bogen + k, f)
-    # Anlauf links: Marmorplatten vom Weg zum Deck, Goldkante oben/unten
-    for y in range(y0, y1):
-        for x in range(x0 - 40, x0):
-            c = M[3] if ((x - x0) // 12 + (y - y0) // 8) % 2 else M[2]
-            if (y - y0) % 8 == 7 or (x - x0) % 12 == 11:
-                c = M[1]
-            if y in (y0, y1 - 1):
-                c = G[2] if y == y0 else G[0]
-            p(x, y, c)
-        for k, f in ((0, 0.8), (1, 0.9)):
-            d(x0 - 24 + 2, y1 + k, f)
-    for x in range(x0 - 40, x0):
-        for k, f in ((0, 0.78), (1, 0.88)):
-            d(x + 2, y1 + k, f)
-    # Deck: Marmorplatten, azurblauer Laeufer mit Goldborte in der Mitte
-    mitte0, mitte1 = y0 + (y1 - y0) // 2 - 9, y0 + (y1 - y0) // 2 + 9
+        for k, f in ((0, 0.7), (1, 0.8), (2, 0.9)):
+            d(x + 2, y1 + bogen + k, f)
+    # 2) Deck (ganze Laenge): Marmorplatten 16x8 versetzt, azurblauer Laeufer mit Goldborte
+    mitte = (y0 + y1) // 2
     for y in range(y0, y1):
         for x in range(x0, x1):
-            reihe = (y - y0) // 8
-            c = M[3] if ((x - x0 + (6 if reihe % 2 else 0)) // 12) % 2 else M[2]
-            if (y - y0) % 8 == 7 or (x - x0 + (6 if reihe % 2 else 0)) % 12 == 11:
+            r = (y - y0) // 8
+            c = M[3] if ((x - x0 + (r % 2) * 8) // 16) % 2 else M[2]
+            if (y - y0) % 8 == 7 or (x - x0 + (r % 2) * 8) % 16 == 15:
                 c = M[1]
-            if mitte0 <= y < mitte1:
-                c = A[2] if (x // 6 + y // 6) % 2 else A[1]
-                if y in (mitte0, mitte1 - 1):
+            if abs(y - mitte) <= 6:
+                c = A[2] if ((x // 6) + (y // 3)) % 2 else A[1]
+                if abs(y - mitte) == 6:
                     c = G[2]
-                elif y in (mitte0 + 1, mitte1 - 2):
-                    c = G[3] if y == mitte0 + 1 else G[0]
-                elif (x - x0) % 16 in (7, 8) and (y - mitte0) in (8, 9):
-                    c = G[3]                                                  # Goldpunkte (Wolkenmotiv)
+                elif abs(y - mitte) == 5:
+                    c = G[0]
             p(x, y, c)
-    # Bruestungen oben und unten: Handlauf, Pfosten mit Goldkappe, azurblaue Felder
-    for (yb, oben) in ((y0, True), (y1 - 1, False)):
-        for x in range(x0, x1):
-            for k, c in enumerate((K, M[4], M[3], M[1], K)):
-                p(x, yb - 10 + k, c)                                            # Handlauf
-            for y in range(yb - 5, yb + 1):
-                p(x, y, A[2] if (x - x0) % 12 not in (0, 11) else A[0])        # Felder
-                if y == yb - 5:
-                    p(x, y, A[3])
-            if (x - x0) % 12 in (5, 6) and not oben:
-                p(x, yb - 3, G[3])
-        for xp in range(x0, x1 + 1, 12):
-            for y in range(yb - 13, yb + 2):
-                for dx in range(-2, 3):
-                    c = K if abs(dx) == 2 else M[4] if dx == -1 else M[3] if dx == 0 else M[1]
-                    p(xp + dx, y, c)
-            for dx in range(-2, 3):
-                p(xp + dx, yb - 14, G[2] if abs(dx) < 2 else G[0]); p(xp + dx, yb - 15, G[3] if dx < 1 else G[1])
-            for dx in range(3, 6):
-                d(xp + dx, yb + 1, 0.75)
-    # vier Eckpfeiler mit Bernsteinkugel (pulsierend)
-    puls = 0.5 + 0.5 * math.sin(2 * math.pi * fr / N_FRAMES)
-    for xc in (x0 - 2, x1 + 1):
-        for (yb, h) in ((y0 + 2, 30), (y1 + 4, 30)):
-            for y in range(yb - h, yb + 1):
-                for dx in range(-5, 6):
-                    c = K if abs(dx) == 5 else M[4] if dx <= -3 else M[3] if dx <= 0 else M[2] if dx < 3 else M[1]
-                    if (y - (yb - h)) % 10 == 0:
-                        c = G[2] if abs(dx) < 5 else G[0]
-                    p(xc + dx, y, c)
-            for dx in range(-6, 7):
-                p(xc + dx, yb - h - 1, G[1]); p(xc + dx, yb - h - 2, G[3] if dx < 2 else G[2])
-            cy = yb - h - 8
-            for yy in range(cy - 6, cy + 7):
-                for xx in range(xc - 6, xc + 7):
-                    r2 = (xx - xc) ** 2 + (yy - cy) ** 2
-                    if r2 <= 36:
-                        if r2 >= 26:
-                            c = (0x8a, 0x3c, 0x08)
-                        elif (xx - xc) + (yy - cy) < -4:
-                            c = (0xff, 0xf0, 0xb0)
-                        elif (xx - xc) + (yy - cy) < 1:
-                            c = (0xff, int(0xb8 + 0x30 * puls), 0x40)
-                        else:
-                            c = (0xe8, 0x80, 0x18)
-                        p(xx, yy, c)
-            for k in range(6):                                                  # Schatten des Pfeilers
-                d(xc + 6 + k // 2, yb + 1 + k // 3, 0.78)
+    for x in range(x0, x1):                                            # Kontaktkanten des Podests an Land
+        p(x, y1 - 1, M[0])
+        if not (ga <= x < gb):
+            d(x + 1, y1, 0.8); d(x + 1, y1 + 1, 0.9)
+    for y in range(y0, y1):
+        p(x0, y, M[1]); p(x1 - 1, y, M[0])
+
+    # 3) Bruestungen hinten (oben) und vorne (unten) nur ueber der Luecke: Pfosten alle 12 px, Handlauf
+    def bruestung(yb, h):
+        for x in range(ga, gb):
+            p(x, yb - h, G[3]); p(x, yb - h + 1, G[1])                    # Handlauf
+            p(x, yb, M[0])
+            if (x - ga) % 12 < 3:
+                for y in range(yb - h + 2, yb + 1):
+                    p(x, y, M[3] if (x - ga) % 12 == 0 else M[2] if (x - ga) % 12 == 1 else M[1])
+            else:
+                for y in range(yb - h + 2, yb):
+                    p(x, y, A[3] if y == yb - h + 2 else A[2])
+    bruestung(y0 + 6, 8)
+    bruestung(y1 - 1, 8)
+
+    # 4) Eckpfeiler ueber den Kanten der Luecke mit pulsierender Bernsteinkugel
+    puls = (0, 1, 2, 1)[fr % 4]
+    for xc in (ga - 5, gb + 4):                                       # Pfeiler stehen an Land, direkt an der Kante
+        for (yb, h) in ((y0 + 8, 20), (y1 + 1, 22)):
+            for y in range(yb - h, yb):
+                for x in range(xc - 4, xc + 5):
+                    c = M[3] if x < xc - 1 else M[2] if x < xc + 2 else M[1]
+                    if x in (xc - 4, xc + 4):
+                        c = M[0]
+                    p(x, y, c)
+            for x in range(xc - 5, xc + 6):
+                p(x, yb - h, G[2]); p(x, yb - h + 1, G[1])
+            cy = yb - h - 4
+            for yy in range(cy - 3, cy + 4):
+                for xx in range(xc - 3, xc + 4):
+                    if (xx - xc) ** 2 + (yy - cy) ** 2 <= 10:
+                        hell = (xx - xc) + (yy - cy) < -1
+                        p(xx, yy, G[4] if hell and puls else G[3] if hell else G[2])
+            for k in range(3):
+                d(xc + 5 + k, yb - 1, 0.8)
+
 
 
 def steinbruecke(img, x0, x1, y0, y1):
@@ -798,17 +803,51 @@ def bauen(frame=None, speichern=True):
     hoehe = np.array([[int(c) for c in r] for r in lay['hoehe']])
     Wp, Hp = COLS * T, ROWS * T
     a = wolkenmeer(frame)
-    insel_hart = zell_maske([''.join('1' if 1 <= v <= 3 else '0' for v in r) for r in hoehe], '1', COLS, ROWS)
-    insel = weich(insel_hart, 9, 0, 20)
+    insel_hart = zell_maske([''.join('1' if 1 <= v <= 3 else '0' for v in r) for r in hoehe], '1', COLS, ROWS) > 0
+    insel = insel_hart.copy()                                   # Inselkante genau am 16er-Raster (Nutzer)
     gras = flaeche(kacheln(os.path.join(ROOT, 'assets', 'basis', 'gras_%d.png'), 5))
     a[insel] = gras[insel]
     schnee = flaeche(kacheln(os.path.join(ROOT, 'assets', 'karte05', 'basis', 's_%d.png'), 5))
     fels = flaeche(kacheln(os.path.join(ROOT, 'assets', 'karte05', 'basis', 'r_%d.png'), 5))
     weg = flaeche(kacheln(os.path.join(ROOT, 'assets', 'karte04', 'basis', 'w_%d.png'), 5))
     pflaster = flaeche(kacheln(os.path.join(ROOT, 'assets', 'karte03', 'basis', 'kies_%d.png'), 5, grau))
+    def weg_biegen(roh):
+        """Regel 6: Wege nie nur gerade - die Wegmaske wird sanft verbogen (Boegen, Versatz); an Treppen, Bruecke,
+        Teleporter und Plaetzen bleibt sie fest, damit die Anschluesse stimmen."""
+        yy, xx = np.mgrid[0:Hp, 0:Wp]
+        dx = 9 * np.sin(2 * np.pi * yy / 176.0 + 1.0) + 5 * np.sin(2 * np.pi * yy / 92.0 + 2.4)
+        dy = 9 * np.sin(2 * np.pi * xx / 168.0 + 0.3) + 5 * np.sin(2 * np.pi * xx / 86.0 + 1.7)
+        fest = np.zeros((Hp, Wp), bool)
+        for (x0, x1, y0, y1) in lay['treppen']:
+            fest[max(0, (y0 - 2) * T):(y1 + 3) * T, max(0, (x0 - 1) * T):(x1 + 2) * T] = True
+        bx0, by0, bx1, by1 = lay['bruecke']
+        fest[(by0 - 1) * T:(by1 + 2) * T, (bx0 - 3) * T:(bx1 + 4) * T] = True
+        for tp in lay['teleporter']:
+            fest[(tp['y'] - 3) * T:(tp['y'] + tp['h'] + 2) * T, (tp['x'] - 2) * T:(tp['x'] + tp['b'] + 2) * T] = True
+        f = np.array(Image.fromarray((~fest * 255).astype(np.uint8)).filter(ImageFilter.GaussianBlur(24))) / 255.0
+        sy = np.clip((yy + dy * f).round().astype(int), 0, Hp - 1)
+        sx = np.clip((xx + dx * f).round().astype(int), 0, Wp - 1)
+        return roh[sy, sx]
     for art, tex, blur, rausch, seed in (('n', schnee, 5, 0.45, 3), ('f', fels, 4, 0.4, 4), ('r', pflaster, 2.5, 0.2, 5),
-                                         ('w', weg, 7, 0.5, 6)):
-        m = weich(zell_maske(cls, art, COLS, ROWS), blur, rausch, seed) & insel
+                                         ('w', weg, 5, 0, 6)):   # Regel 6b: Weg 45-Grad-Kanten
+        roh_ = zell_maske(cls, art, COLS, ROWS)
+        # (frueher: Pixel-Verbiegung weg_biegen - jetzt am Kachelraster im Layout, Regel 6b)
+        m = weich(roh_, blur, rausch, seed) & insel
+        if art == 'w':                                              # Nutzer: Uebergang Weg -> Schnee/Rasen (6 px Saum)
+            ringe, cur = [], m.copy()
+            for _ in range(6):
+                nb = cur | np.roll(cur, 1, 0) | np.roll(cur, -1, 0) | np.roll(cur, 1, 1) | np.roll(cur, -1, 1)
+                ringe.append(nb & ~cur & insel); cur = nb
+            rr = random.Random(77)
+            for i, ring in enumerate(ringe):                         # innen viel Erde, aussen wenig + Krumen
+                anteil = (0.55, 0.45, 0.32, 0.2, 0.1, 0.05)[i]
+                a[ring] = (a[ring] * (1 - anteil) + tex[ring] * anteil).astype(np.uint8)
+                if i >= 2:                                          # leichter Schatten/Feuchte im Boden
+                    a[ring] = (a[ring] * 0.96).astype(np.uint8)
+                ys, xs = np.nonzero(ring)
+                for _ in range(len(ys) // (10 + 8 * i)):            # Erdkrumen, nach aussen seltener
+                    j = rr.randrange(len(ys))
+                    a[ys[j], xs[j]] = tex[ys[j], xs[j]]
         a[m] = tex[m]
     pm = weich(zell_maske(cls, 'p', COLS, ROWS), 1.2, 0, 7) & insel
     a[pm] = pflaster[pm]
@@ -820,16 +859,23 @@ def bauen(frame=None, speichern=True):
     beete(a, frame)
     # Hoehenkanten: Insel -> Wolken (tiefe Felsfront), Stufen 1->2->3 mit Treppen
     m1 = insel
-    m2 = weich(zell_maske([''.join('1' if 2 <= v <= 3 else '0' for v in r) for r in hoehe], '1', COLS, ROWS), 4, 0.25, 21) 
-    m3 = weich(zell_maske([''.join('1' if v == 3 else '0' for v in r) for r in hoehe], '1', COLS, ROWS), 4, 0.25, 22) 
+    m2 = zell_maske([''.join('1' if 2 <= v <= 3 else '0' for v in r) for r in hoehe], '1', COLS, ROWS) > 0   # am Raster
+    m3 = zell_maske([''.join('1' if v == 3 else '0' for v in r) for r in hoehe], '1', COLS, ROWS) > 0   # am Raster
     frei = np.zeros((Hp, Wp), bool)
     treppen = []
     for (x0, x1, y0, y1) in lay['treppen']:
         frei[y0 * T:(y1 + 1) * T, x0 * T - 6:(x1 + 1) * T + 6] = True
         treppen.append((x0, x1, y0, y1))
-    k4.hoehenkanten(a, m3, 'wolkenfels', 48, 8, LIPPE_SCHNEE, frei, 13, berg=True)
-    k4.hoehenkanten(a, m2, 'wolkenfels', 48, 8, LIPPE_GRAS, frei, 12, berg=True)
-    k4.hoehenkanten(a, insel, 'wolkenfels', 64, 8, LIPPE_SCHNEE, np.zeros((Hp, Wp), bool), 11, berg=True)
+    w3_ = k4.hoehenkanten(a, m3, 'wolkenfels', 48, 1, LIPPE_SCHNEE, frei, 13, berg=True)
+    w2_ = k4.hoehenkanten(a, m2, 'wolkenfels', 48, 1, LIPPE_GRAS, frei, 12, berg=True)
+    w1_ = k4.hoehenkanten(a, insel, 'wolkenfels', 64, 1, LIPPE_SCHNEE, np.zeros((Hp, Wp), bool), 11, berg=True)
+    if speichern and frame is None:                                  # Hoehen je Pixel fuer die Kollision
+        lvl_ = np.where(m3, 3, np.where(m2, 2, np.where(insel, 1, 0))).astype(np.uint8)
+        for w_ in (w1_, w2_, w3_):
+            if isinstance(w_, np.ndarray) and w_.shape == lvl_.shape:
+                lvl_[w_.astype(bool)] = 9
+        np.save(os.path.join(KARTE, 'pixelhoehe.npy'), lvl_)
+        np.save(os.path.join(KARTE, 'leere.npy'), np.zeros(1, np.uint8))   # Wolkenmeer = Abgrund
     # Wolken vor dem Wandfuss (Sueden) und an den Seiten
     unten = []
     for x in range(0, Wp, 14):
@@ -846,7 +892,11 @@ def bauen(frame=None, speichern=True):
                 unten.append((x + rs_.randint(10, 22), y))
             if x > 0 and not insel[y, x - 1] and rs_.random() < 0.45:
                 unten.append((x - rs_.randint(10, 22), y))
-    wolken_vorne(a, weich(insel_hart, 9, 0, 20), unten, frame)
+    wand_ = insel_hart.copy()                                        # Wolken liegen unter der Inselfront, nie auf ihr
+    for w_ in (w1_, w2_, w3_):
+        if isinstance(w_, np.ndarray) and w_.shape == wand_.shape:
+            wand_ |= w_.astype(bool)
+    wolken_vorne(a, wand_, unten, frame)
     img = Image.fromarray(a).convert('RGBA')
     alt = bauwerke.S
     bauwerke.S = [H(c) + (255,) for c in k4.FELS['wolkenfels']]
@@ -860,15 +910,18 @@ def bauen(frame=None, speichern=True):
             treppe07(img, x0 * T - 6, (x1 + 1) * T + 6, ye + 2, ye + 50, seed=x0 + y0)
     bauwerke.S = alt
     bx0, by0, bx1, by1 = lay['bruecke']
-    drachenbruecke(img, bx0 * T + 8, (bx1 + 1) * T - 8, by0 * T + 4, (by1 + 1) * T - 4, frame,
-                   spalt=((bx0 + 1) * T - 4, bx1 * T + 4))
+    hz = np.array([[int(c) for c in z] for z in lay['hoehe']])
+    luecke = [x for x in range(bx0, bx1 + 1) if hz[(by0 + by1) // 2, x] == 0]     # Wolkenspalt pixelgenau
+    ga_, gb_ = luecke[0] * T, (luecke[-1] + 1) * T
+    drachenbruecke(img, ga_ - T, gb_ + 8, by0 * T + 4, (by1 + 1) * T - 4, frame, spalt=(ga_, gb_))
     a = np.array(img.convert('RGB'))
     for tp in lay['teleporter']:
         k4.teleporter_zeichnen(a, tp['x'], tp['y'], tp['b'], tp['h'], frame)
     img = Image.fromarray(a).convert('RGBA')
     r = RAND
-    roter_zaun(img, [(a_ + r, b_ + r, c_ + r, d_) for (a_, b_, c_, d_) in
-                     [(77, 96, 4, 'h'), (77, 96, 24, 'h'), (96, 4, 24, 'v')]], AZUR_ZAUN[:2] + ((0xd8, 0xa8, 0x3c),))
+    zaun_azur = [(a_ + r, b_ + r, c_ + r, d_) for (a_, b_, c_, d_) in [(77, 96, 4, 'h'), (77, 96, 24, 'h'), (96, 4, 24, 'v')]]
+    zaun_pal = AZUR_ZAUN[:2] + ((0xd8, 0xa8, 0x3c),)
+    roter_zaun(img, zaun_azur, zaun_pal)
     roter_zaun(img, [(a_ + r, b_ + r, c_ + r, d_) for (a_, b_, c_, d_) in
                      [(71, 77, 31, 'h'), (83, 89, 31, 'h'), (96, 63, 80, 'v')]])
     if speichern and frame is None:
@@ -880,6 +933,7 @@ def bauen(frame=None, speichern=True):
         cache = {o['datei']: Image.open(os.path.join(OBJ, o['datei'])).convert('RGBA') for o in objs}
         k4.objekte_zeichnen(img, objs, cache, insel, frame)
         k4.animieren(img, objs, cache, frame or 0)
+        roter_zaun(img, zaun_azur, zaun_pal)                         # Schreinzaun liegt ueber den Objekten (Nutzer)
         import karte06_bauen as k6
         k6.animieren_k6(img, objs, cache, frame or 0)
     if speichern and frame is None:

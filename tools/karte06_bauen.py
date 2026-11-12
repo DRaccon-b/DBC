@@ -332,6 +332,10 @@ def animieren_k6(img, objs, cache, frame):
         if anim == 'portal':
             a = np.array(sp).astype(np.int16)
             m = (a[..., 2] > 170) & (a[..., 1] > 140) & (a[..., 0] < 170) & (a[..., 3] > 0)
+            if o.get('schirm_box'):                            # nur der Bildschirm wirbelt (nicht Treppe/Sockel/Knoepfe)
+                x0_, y0_, x1_, y1_ = o['schirm_box']
+                b_ = np.zeros_like(m); b_[y0_:y1_, x0_:x1_] = True
+                m &= b_
             ys, xs = np.nonzero(m)
             if not len(xs):
                 continue

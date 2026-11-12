@@ -143,8 +143,10 @@ def zeichne_bruecke(img, x0, x1, y0, y1, frame=0, seed=5, wasser=True):
     # Wasserringe an den Pfosten des unteren Balkens (schimmern je Frame)
     for p in (pfosten if wasser else []):
         for k, xx in enumerate(range(p - 2, p + 7)):
-            if (k + frame) % 3:
-                _setz(px, W, H, xx, y1 + 7, WS['w4'] if k % 4 else WS['w5'])
+            if (k + frame) % 3 and 0 <= xx < W and 0 <= y1 + 7 < H:
+                c_ = px[xx, y1 + 7]
+                if c_[2] > c_[0] + 15:                      # nur auf Wasser (Endpfosten stehen am Ufer)
+                    _setz(px, W, H, xx, y1 + 7, WS['w4'] if k % 4 else WS['w5'])
 
 
 # ---------------------------------------------------------------- Steg (Laufrichtung senkrecht)
