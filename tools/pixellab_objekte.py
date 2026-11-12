@@ -2031,6 +2031,10 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'single floating playing card glowing orange and red, slightly tilted, classic 2D handheld RPG style, transparent background',
         'small oval hand mirror with a golden frame floating in space, classic 2D handheld RPG style, transparent background',
     ]},
+    'k32_leuchter': {'size': 64, 'items': [   # Nutzer: weniger Kronleuchter, kaputt auf dem Boden
+        'broken fallen black iron chandelier lying flat on a stone floor, bent ring, snapped chain, toppled candles and wax, a few scattered pieces, seen from above, classic 2D handheld RPG style, transparent background',
+        'crashed gothic wrought iron chandelier on the floor, ring cracked in two, candles knocked over with one still burning, small debris around, seen from above, classic 2D handheld RPG style, transparent background',
+    ]},
     'k31_muell': {'size': 32, 'items': [
         'small pile of fallen golden yellow ginkgo leaves lying flat on the ground, seen from above, classic 2D handheld RPG style',
         'small pile of fallen brown and orange autumn leaves lying flat on the ground, seen from above, classic 2D handheld RPG style',
