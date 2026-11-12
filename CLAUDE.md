@@ -203,6 +203,10 @@ Vor jeder Abgabe Punkt für Punkt prüfen (vergrößert, Standbild und mehrere A
 - **Objekte:** nichts auf Pflaster/Weg/Mauerkrone/Klippenkante; keine Überlappung (Schild↔Feuerstelle, Wagen↔Scheune,
   Laterne↔Silo, Netz↔Netz, Stein auf Obelisk); Waldbäume/Felsnadeln nie über Teleportern; Waldrand nie vor Fassaden;
   keine Laternen in Riesenrad/Gebäuden; Autos in Fahrtrichtung; Kronen nicht am Kartenrand abgeschnitten.
+- **Platzierung pixelgenau (Karte 34):** Freie Objekte gegen die echten Bildrechtecke aller gesetzten Objekte prüfen
+  (2 px Abstand, auch über verschiedene Deko-Listen hinweg), nicht nur die Fußkachel; Bänke/Möbel mit allen Fußkacheln
+  neben dem Weg; Waldrand **nach** Bäumen/Möbeln setzen, nie über deren Fuß oder Teleporter, Lücken im Waldrand mit
+  Büschen schließen (kein nackter Waldboden); Streudeko erst danach, nie unter Waldkronen.
 - **Begleiter am Stumpf (5d):** keine 1-Kachel-Blumen auf dem Stumpf, kein Blumenklumpen; Begleiter überlappen sich nicht.
 - **Paare/Achsen:** Paare vor Toren/Bauwerken exakt gespiegelt (Mitte und Fuß), gleiche Objekte auf gleicher Höhe;
   Druckplatten, Obelisken usw. symmetrisch zur berechneten Achse.
