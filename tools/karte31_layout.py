@@ -24,14 +24,14 @@ C, R, T = 120, 104, 16
 REF = {'n': (99, 142, 67), 'w': (187, 163, 118), 'e': (173, 155, 113), 'g': (147, 158, 155), 's': (52, 61, 73),
        'p': (176, 163, 137), 'd': (212, 188, 128), 'h': (132, 152, 68), 'k': (145, 159, 164)}
 GEBAEUDE = [  # x0, y0, x1, y1 (Kacheln, Fuss = y1), Art
-    [4, 37, 35, 49, 'block1'], [44, 37, 49, 72, 'turm12'], [68, 37, 109, 49, 'block2'], [113, 37, 118, 79, 'turm5'],
-    [74, 67, 105, 79, 'block3'], [8, 77, 27, 83, 'bahnhof'], [73, 86, 117, 92, 'laeden']]
+    [4, 37, 36, 49, 'block1'], [44, 37, 49, 72, 'turm12'], [67, 37, 110, 49, 'block2'], [113, 37, 118, 79, 'turm5'],
+    [77, 67, 109, 79, 'block3'], [8, 75, 27, 83, 'bahnhof'], [73, 86, 117, 92, 'laeden']]
 MAUER = (30, 32)                          # Stuetzmauer Park -> Siedlung (Front-Reihen)
 MAUER_TREPPEN = [(10, 15), (56, 64), (98, 103)]
 TERRASSE = (86, 0, 119, 18)               # Portal-Terrasse (Ebene 3), Front Reihen 19-20
 TERRASSE_FRONT = (19, 20)
 TERRASSE_TREPPE = (95, 98)
-HOCHBAHN = {'x0': 0, 'x1': 27, 'y0': 74, 'y1': 77, 'zug': [1, 18], 'pfeiler': [3]}
+HOCHBAHN = {'x0': 0, 'x1': 27, 'y0': 72, 'y1': 75, 'zug': [1, 18], 'pfeiler': [3]}
 
 
 def r_(k, x0, y0, x1, y1, art):

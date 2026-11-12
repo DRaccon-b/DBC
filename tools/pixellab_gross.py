@@ -180,6 +180,15 @@ for _n, _box, _gr, _t in (
                              'vorlage': ('assets/vorlagen/karte31_vorlage.png', _box), 'stil': _K31_STIL,
                              'text': _t + _K31 + FR14}
 
+for _v in ('b', 'c'):                                                           # Breite passend zur Vorlage
+    AUFTRAEGE['k31_bahnhof_' + _v] = dict(AUFTRAEGE['k31_bahnhof'], ziel='assets/objekte/karte31/gross_bahnhof_' + _v,
+        groesse=(384, 192), vorlage=('assets/vorlagen/karte31_vorlage.png', (112, 1200, 464, 1360)),
+        text=AUFTRAEGE['k31_bahnhof']['text'].replace(_VOLL, '') + ' The building is exactly about 320 pixels wide and '
+             '96 pixels tall, centered, with a wide empty magenta margin on all four sides, nothing touches the image border.')
+    AUFTRAEGE['k31_bruecke_' + _v] = dict(AUFTRAEGE['k31_bruecke'], ziel='assets/objekte/karte31/gross_bruecke_' + _v,
+        groesse=(512, 176), text=AUFTRAEGE['k31_bruecke']['text'].replace(_VOLL, '') + ' The whole bridge including both '
+             'staircases is about 440 pixels wide, centered, with a wide empty magenta margin on all four sides.')
+
 
 def main(name):
     a = AUFTRAEGE[name]
