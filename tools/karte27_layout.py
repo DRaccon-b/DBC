@@ -101,7 +101,7 @@ def main():
     for (tx, ty, b, hh) in TELEPORTER:
         k[ty:ty + hh, tx:tx + b] = 'T'
     import regeln_a02                                                 # Regel 6: Wege nie nur gerade
-    k = regeln_a02.wege_schwingen(k, seed=27)
+    # Destiny Lake: Wege waren schon natuerlich geschwungen -> nicht zusaetzlich biegen (nur 45-Grad-Kanten)
     lay = {'groesse': [C, R], 'klassen': [''.join(z) for z in k], 'hoehe': [''.join(str(c) for c in z) for z in h],
            'schiff': SCHIFF, 'plateaus': PLATEAUS, 'front_reihen': FRONT_REIHEN,
            'teleporter': [{'x': tx, 'y': ty, 'b': b, 'h': hh} for (tx, ty, b, hh) in TELEPORTER]}
