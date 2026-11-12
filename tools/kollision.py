@@ -36,7 +36,10 @@ def main(karte):
     cols, rows = lay['groesse']
     lvl = np.load(os.path.join(K, 'pixelhoehe.npy'))
     Hh, W = lvl.shape
-    wasser = np.unpackbits(np.load(os.path.join(K, 'wasser.npy')))[:Hh * W].reshape(Hh, W).astype(bool)
+    if os.path.exists(os.path.join(K, 'wasser.npy')):
+        wasser = np.unpackbits(np.load(os.path.join(K, 'wasser.npy')))[:Hh * W].reshape(Hh, W).astype(bool)
+    else:                                                     # Karte ohne Wasser (z. B. Festung, Ruinen)
+        wasser = np.zeros((Hh, W), bool)
     grund = np.full((rows, cols), '', object)                 # Grund je Kachel (leer = begehbar)
     ebene = np.zeros((rows, cols), int)
     kach = lambda m, x, y: m[y * T:(y + 1) * T, x * T:(x + 1) * T]
@@ -54,6 +57,13 @@ def main(karte):
     durch = np.zeros((rows, cols), bool)
     for (x0, x1, e, yb) in lay.get('treppen_sued', []):
         durch[yb:yb + 3, x0:x1 + 1] = True
+    for t_ in lay.get('treppen', []):                        # Treppen anderer Karten: (x0, x1, y0, y1) bzw. (x0, x1, ye)
+        if isinstance(t_, dict):
+            continue
+        if len(t_) == 4:
+            durch[max(0, t_[2] - 1):t_[3] + 2, t_[0]:t_[1] + 1] = True
+        elif len(t_) == 3:
+            durch[max(0, t_[2] - 1):t_[2] + 4, t_[0]:t_[1] + 1] = True
     if lay.get('arena_treppe'):
         x0, x1, yb = lay['arena_treppe']
         durch[yb:yb + 3, x0:x1 + 1] = True

@@ -866,9 +866,16 @@ def bauen(frame=None, speichern=True):
     for (x0, x1, y0, y1) in lay['treppen']:
         frei[y0 * T:(y1 + 1) * T, x0 * T - 6:(x1 + 1) * T + 6] = True
         treppen.append((x0, x1, y0, y1))
-    k4.hoehenkanten(a, m3, 'wolkenfels', 48, 1, LIPPE_SCHNEE, frei, 13, berg=True)
-    k4.hoehenkanten(a, m2, 'wolkenfels', 48, 1, LIPPE_GRAS, frei, 12, berg=True)
-    k4.hoehenkanten(a, insel, 'wolkenfels', 64, 1, LIPPE_SCHNEE, np.zeros((Hp, Wp), bool), 11, berg=True)
+    w3_ = k4.hoehenkanten(a, m3, 'wolkenfels', 48, 1, LIPPE_SCHNEE, frei, 13, berg=True)
+    w2_ = k4.hoehenkanten(a, m2, 'wolkenfels', 48, 1, LIPPE_GRAS, frei, 12, berg=True)
+    w1_ = k4.hoehenkanten(a, insel, 'wolkenfels', 64, 1, LIPPE_SCHNEE, np.zeros((Hp, Wp), bool), 11, berg=True)
+    if speichern and frame is None:                                  # Hoehen je Pixel fuer die Kollision
+        lvl_ = np.where(m3, 3, np.where(m2, 2, np.where(insel, 1, 0))).astype(np.uint8)
+        for w_ in (w1_, w2_, w3_):
+            if isinstance(w_, np.ndarray) and w_.shape == lvl_.shape:
+                lvl_[w_.astype(bool)] = 9
+        np.save(os.path.join(KARTE, 'pixelhoehe.npy'), lvl_)
+        np.save(os.path.join(KARTE, 'leere.npy'), np.zeros(1, np.uint8))   # Wolkenmeer = Abgrund
     # Wolken vor dem Wandfuss (Sueden) und an den Seiten
     unten = []
     for x in range(0, Wp, 14):
