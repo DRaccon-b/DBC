@@ -145,6 +145,8 @@ def main():
     hecken = [(x0, x1) for (x0, x1) in _laeufe(k[25], 'h')]           # Heckenbeete -> Rasen, Hecken als Objekte
     k[25][k[25] == 'h'] = 'n'
     k[7, 102:106] = 'g'                                               # Portalplatz: Luecke vom alten Tor schliessen
+    blk = k[14:19, 75:81]                                            # Vorlagenreste neben dem Kiosk -> Rasen
+    blk[np.isin(blk, ['d', 'p', 'g'])] = 'n'
     # ---- Parkwege natuerlich (Regel 6: nie nur gerade, Boegen/Diagonalen): Vorlagen-Rechteckwege -> Kurven
     park = np.zeros((R, C), bool); park[2:26, 2:118] = True
     park[TERRASSE[1]:TERRASSE[3] + 1, TERRASSE[0]:TERRASSE[2] + 1] &= False
