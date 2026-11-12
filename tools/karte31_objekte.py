@@ -110,7 +110,7 @@ def main():
                     'kachel': [1, 72], 'ebene': 1, 'hochbahn': True})
     # ---------------------------------------------------------------- Park oben
     setze('karte07/gross/02', 33 * T + 8, 7 * T - 1, {})                                         # Pavillon
-    setze('karte30/klein/09', 60 * T + 8, 13 * T - 1, {})                                        # Uhr
+    setze('karte31/uhr/00', 60 * T + 8, 13 * T - 1, {})                                          # Uhr (Nutzer: oben groesser)
     setze('karte30/klein/01', 75 * T, 17 * T - 1, {})                                            # Kiosk
     setze('karte29/gross/03', 104 * T, 5 * T - 1, {'anim': 'portal', 'schattenlos': True}, pruefen=False)   # Riss
     setze('karte29/mittel/02', 104 * T, 9 * T - 1, {'anim': 'portal'})                           # Portal-Tor
@@ -133,7 +133,7 @@ def main():
                       pruefen=False)
             if i % 3 == 1 and kl[ty + 1][tx + 2] == 'n':
                 setze('karte01/deko/%02d' % (i % 5), (tx + 2) * T + 8, (ty + 2) * T - 1, {'anim': 'blume'})
-    for (tx, ty) in ((16, 10), (39, 10), (59, 21), (60, 21), (108, 7), (107, 15), (100, 15), (61, 10)):   # Laternen
+    for (tx, ty) in ((16, 10), (39, 10), (108, 7), (107, 15), (100, 15), (61, 10)):   # Laternen
         setze('karte18/strasse/18', tx * T + 8, ty * T - 1, {'anim': 'leuchten'})
     for (tx, ty) in ((21, 12), (44, 17), (88, 12), (113, 12), (69, 12)):                         # Baenke
         setze('karte18/strasse/14', tx * T + 8, ty * T - 1, {})

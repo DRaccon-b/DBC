@@ -2003,6 +2003,10 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'narrow two-storey Japanese book shop building, 64 pixels wide, top-down RPG view from the front and slightly above: a large clearly visible sloped roof surface on top seen from above (dark brown clay tile roof with rows of tiles and a ridge line along the top) taking almost half of the height, below it the upper floor with two windows and the ground floor book shop with shelves of books behind glass and a blue sign reading BOOKS, ' + FR14,
         'narrow two-storey Japanese book shop building, 64 pixels wide, top-down RPG view from the front and slightly above: a large clearly visible sloped roof surface on top seen from above (dark slate blue tile roof with rows of tiles and a ridge line along the top) taking almost half of the height, below it the upper floor with two windows and the ground floor book shop with shelves of books behind glass and a wooden sign reading BOOKS, ' + FR14,
     ]},
+    'k31_uhr': {'size': 64, 'items': [   # Nutzer: Uhrturm oben groesser
+        'tall ornate park clock post: a slim dark red-brown cast iron pole on a small stone base, on top a large round white clock face with black hands and roman numerals in a decorative red-brown frame, the clock head clearly larger and wider than the pole, ' + FR14,
+        'tall park clock tower post: slender dark brown iron column on a square stone foot, on top a big double sided round clock with a white face and a golden rim and a small pointed cap, the clock is much wider than the column, ' + FR14,
+    ]},
     'k31_muell': {'size': 32, 'items': [
         'small pile of fallen golden yellow ginkgo leaves lying flat on the ground, seen from above, classic 2D handheld RPG style',
         'small pile of fallen brown and orange autumn leaves lying flat on the ground, seen from above, classic 2D handheld RPG style',
