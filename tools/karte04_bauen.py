@@ -514,6 +514,8 @@ def objekte_zeichnen(img, objs, cache, boden, frame, ebenen=None):
                     ein = (yy - fuss_y + 1) if yy > fuss_y else 0
                     kern[yy, max(0, fx0 - 1 + ein):max(0, min(kern.shape[1], fx1 + 3 - ein))] = 1
         hoehe_ = max(1, zu - zeilen.min())
+        if o.get('nur_kontakt'):                          # steht im Schatten (z. B. unter einer Hochbahn): nur Kontaktschatten
+            continue
         for zi in zeilen:
             k = zu - zi
             ty = int(fuss_y + k * 0.24)

@@ -54,6 +54,29 @@ def brueckenturm(w=128, h=336):
     return im
 
 
+def hochbahn_pfeiler(h=48):
+    """Stuetzpfeiler der Hochbahn (Vorlage): Kapitell unter der Bahnfront, schlanker runder Betonschaft (8 px), Fuss
+    mit Sockelplatte; Licht von links (linke Kante hell, rechts Schatten). Oben verdeckt die Bahnfront den Kopf."""
+    w = 16
+    im = Image.new('RGBA', (w, h), (0, 0, 0, 0))
+    d = ImageDraw.Draw(im)
+    k, hell, mittel, dunkel, tief = H('#3a4252'), H('#e4e8ee'), H('#b8bec8'), H('#8a919c'), H('#666d78')
+    d.rectangle((1, 0, w - 2, 7), fill=mittel, outline=k)                  # Kapitell (Auflager)
+    d.rectangle((2, 1, w - 3, 2), fill=hell)
+    d.rectangle((2, 6, w - 3, 6), fill=dunkel)
+    d.rectangle((3, 8, w - 4, 10), fill=dunkel, outline=k)
+    x0, x1 = 4, w - 5                                                      # Schaft
+    d.rectangle((x0, 11, x1, h - 8), fill=mittel, outline=k)
+    d.line((x0 + 1, 11, x0 + 1, h - 9), fill=hell)
+    d.line((x0 + 2, 11, x0 + 2, h - 9), fill=hell)
+    d.line((x1 - 1, 11, x1 - 1, h - 9), fill=dunkel)
+    d.line((x1 - 2, 11, x1 - 2, h - 9), fill=tief if False else dunkel)
+    d.rectangle((2, h - 8, w - 3, h - 4), fill=mittel, outline=k)         # Fuss
+    d.line((3, h - 7, w - 4, h - 7), fill=hell)
+    d.rectangle((1, h - 4, w - 2, h - 1), fill=dunkel, outline=k)         # Sockelplatte
+    return im
+
+
 def main():
     rnd = random.Random(30)
     lay = json.load(open(os.path.join(KARTE, 'layout.json')))
@@ -130,6 +153,9 @@ def main():
     bx0, _, bx1, by1 = lay['bruecke']
     for yt in (by1 + 1,):
         setze('gebaeude/brueckenturm', (bx0 + bx1 + 1) * T // 2, yt * T - 1, {'kein_schatten': True}, pruefen=False)
+    hochbahn_pfeiler().save(os.path.join(OBJ, 'gebaeude', 'hochbahn_pfeiler.png'))
+    for px_ in lay['hochbahn']['pfeiler']:                                           # Stuetzpfeiler auf dem Rasenstreifen
+        setze('gebaeude/hochbahn_pfeiler', px_ * T + 8, 75 * T - 1, {'nur_kontakt': True}, pruefen=False)
     zx0, zx1 = lay['hochbahn']['zug']
     zug = Image.open(os.path.join(ROOT, 'assets', 'objekte', 'karte18', 'gebaeude', 'zug.png'))
     shutil.copy(os.path.join(ROOT, 'assets', 'objekte', 'karte18', 'gebaeude', 'zug.png'), os.path.join(OBJ, 'fremd', 'zug.png'))
