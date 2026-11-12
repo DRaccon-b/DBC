@@ -377,6 +377,27 @@ def bauen(frame=None, speichern=True):
     holz = gross(kl == 'b')                                           # Holzpromenade: Planken + Sanduebergang
     holzsteg(a, holz, k18.textur('d', cols, rows))
     becken(a, gross(kl == 'o'), frame, lvl)
+    pf_ = os.path.join(OBJ, 'platzierung.json')                      # Sandfleck um Palmen auf dem Rasen (Nutzer)
+    if os.path.exists(pf_):
+        sand_t = k18.textur('d', cols, rows)
+        rs_ = np.random.RandomState(31)
+        for o in json.load(open(pf_)):
+            if not o.get('sandfleck'):
+                continue
+            sp_ = Image.open(os.path.join(OBJ, o['datei']))
+            al_ = np.array(sp_.getchannel('A')) > 0
+            xs_ = np.nonzero(al_[o['fuss']])[0]
+            cx_ = o['x'] + (xs_.mean() if len(xs_) else sp_.width / 2)
+            fy_ = o['y'] + o['fuss']
+            for yy in range(int(fy_ - 10), int(fy_ + 7)):
+                for xx in range(int(cx_ - 18), int(cx_ + 19)):
+                    if not (0 <= yy < Hp and 0 <= xx < Wp) or kl[yy // T, xx // T] not in 'nf':
+                        continue
+                    d_ = ((xx - cx_) / 16.0) ** 2 + ((yy - fy_ + 2) / 7.5) ** 2
+                    if d_ < 0.72 or (d_ < 1.0 and rs_.rand() < (1.0 - d_) / 0.28 * 0.8):
+                        a[yy, xx] = sand_t[yy, xx]
+                    elif d_ < 1.12 and rs_.rand() < 0.25:
+                        a[yy, xx] = (a[yy, xx] * 0.6 + sand_t[yy, xx] * 0.4).astype(np.uint8)
     pier = gross(kl == 'v')
     k18.kaimauer(a, wasser, pier, lvl)
     rand_p = kontur(pier) & (np.roll(wasser, 1, 1) | np.roll(wasser, -1, 1) | np.roll(wasser, -1, 0))

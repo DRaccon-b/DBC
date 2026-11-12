@@ -124,7 +124,8 @@ def main():
         else:
             cx = (cx // T) * T + T // 2
         cx -= (nb * T - bw) % 2 and 0
-        fy = (fy // T) * T + T - 1
+        if not (opt or {}).get('fy_frei'):
+            fy = (fy // T) * T + T - 1
         fuss = (cx - bw // 2 - 2, fy - min(14, bb[3] - bb[1]), cx + bw // 2 + 2, fy + 2)
         if pruefen:
             if not frei(*fuss):
@@ -204,10 +205,14 @@ def main():
     setze('karte18/strasse/14', 27 * T + 8, 10 * T - 1, {})                   # Bank und Laternen am Weg oben (Vorlage)
     for (tx, ty) in ((13, 10), (39, 11)):
         setze('karte18/strasse/18', tx * T + 8, ty * T - 1, {'anim': 'leuchten'})
-    for (tx, ty) in ((3, 44), (9, 44), (15, 44), (21, 44), (27, 44), (33, 44), (39, 44)):   # Baumbeete der Allee
-        setze('karte18/baum2/03', tx * T + 8, (ty + 2) * T - 3, {'anim': 'baum'}, tx % 2 == 0)   # Strassenbaum mit Baumscheibe
-    for (tx, ty) in ((26, 84), (30, 84), (41, 84), (66, 84), (75, 84), (85, 84), (95, 84), (104, 84), (114, 84),
-                     (120, 84), (29, 96), (79, 96), (106, 96), (120, 96)):          # Palmen an der Promenade und am Strand
+    for x0 in range(2, 40, 6):                                                       # Allee: Strassenbaum mit Gully genau
+        if kl[44][x0] == 'n' and kl[45][x0 + 3] == 'n':                               # mittig im Rasenbeet (4 x 2 Kacheln),
+            setze('karte18/baum2/03', (x0 + 2) * T, 46 * T - 7,                        # Gitter ganz auf dem Rasen (Nutzer)
+                  {'anim': 'baum', 'fy_frei': True}, x0 % 4 == 0, pruefen=False)
+    for x in range(cols - 1):                                                        # Palmen mittig auf den Rasenzungen der
+        if kl[82][x] == 'n' and kl[82][x + 1] == 'n' and (x == 0 or kl[82][x - 1] != 'n'):   # Promenade, Sandfleck darum
+            setze(PALME, (x + 1) * T, 85 * T - 1, {'anim': 'baum', 'sandfleck': True}, x % 4 < 2, pruefen=False)
+    for (tx, ty) in ((29, 96), (79, 96), (106, 96), (120, 96)):                      # Palmen am Strand
         setze(PALME, tx * T + 8, (ty + 1) * T - 2, {'anim': 'baum'}, (tx + ty) % 2 == 0)
     for ty in range(21, 92):                                                         # Waldrand rechts: dicht, versetzt,
         for tx in (126, 127, 128, 129):                                              # Kronen ueberlappen (Wald)

@@ -1414,7 +1414,7 @@
 "datei": "fremd/karte18-baum2-03.png",
 "basis": "karte18/baum2/03",
 "x": 50,
-"y": 675,
+"y": 669,
 "fuss": 60,
 "kachel": [
 4,
@@ -1422,13 +1422,14 @@
 ],
 "ebene": 1,
 "an_wand": true,
-"anim": "baum"
+"anim": "baum",
+"fy_frei": true
 },
 {
-"datei": "fremd/karte18-baum2-03.png",
+"datei": "fremd/karte18-baum2-03_m.png",
 "basis": "karte18/baum2/03",
 "x": 146,
-"y": 675,
+"y": 669,
 "fuss": 60,
 "kachel": [
 10,
@@ -1436,13 +1437,14 @@
 ],
 "ebene": 1,
 "an_wand": true,
-"anim": "baum"
+"anim": "baum",
+"fy_frei": true
 },
 {
 "datei": "fremd/karte18-baum2-03.png",
 "basis": "karte18/baum2/03",
 "x": 242,
-"y": 675,
+"y": 669,
 "fuss": 60,
 "kachel": [
 16,
@@ -1450,13 +1452,14 @@
 ],
 "ebene": 1,
 "an_wand": true,
-"anim": "baum"
+"anim": "baum",
+"fy_frei": true
 },
 {
-"datei": "fremd/karte18-baum2-03.png",
+"datei": "fremd/karte18-baum2-03_m.png",
 "basis": "karte18/baum2/03",
 "x": 338,
-"y": 675,
+"y": 669,
 "fuss": 60,
 "kachel": [
 22,
@@ -1464,13 +1467,14 @@
 ],
 "ebene": 1,
 "an_wand": true,
-"anim": "baum"
+"anim": "baum",
+"fy_frei": true
 },
 {
 "datei": "fremd/karte18-baum2-03.png",
 "basis": "karte18/baum2/03",
 "x": 434,
-"y": 675,
+"y": 669,
 "fuss": 60,
 "kachel": [
 28,
@@ -1478,13 +1482,14 @@
 ],
 "ebene": 1,
 "an_wand": true,
-"anim": "baum"
+"anim": "baum",
+"fy_frei": true
 },
 {
-"datei": "fremd/karte18-baum2-03.png",
+"datei": "fremd/karte18-baum2-03_m.png",
 "basis": "karte18/baum2/03",
 "x": 530,
-"y": 675,
+"y": 669,
 "fuss": 60,
 "kachel": [
 34,
@@ -1492,13 +1497,14 @@
 ],
 "ebene": 1,
 "an_wand": true,
-"anim": "baum"
+"anim": "baum",
+"fy_frei": true
 },
 {
 "datei": "fremd/karte18-baum2-03.png",
 "basis": "karte18/baum2/03",
 "x": 626,
-"y": 675,
+"y": 669,
 "fuss": 60,
 "kachel": [
 40,
@@ -1506,147 +1512,143 @@
 ],
 "ebene": 1,
 "an_wand": true,
-"anim": "baum"
-},
-{
-"datei": "fremd/karte25-strand-12_m.png",
-"basis": "karte25/strand/12",
-"x": 392,
-"y": 1300,
-"fuss": 59,
-"kachel": [
-26,
-84
-],
-"ebene": 1,
-"an_wand": true,
-"anim": "baum"
-},
-{
-"datei": "fremd/karte25-strand-12_m.png",
-"basis": "karte25/strand/12",
-"x": 456,
-"y": 1300,
-"fuss": 59,
-"kachel": [
-30,
-84
-],
-"ebene": 1,
-"an_wand": true,
-"anim": "baum"
+"anim": "baum",
+"fy_frei": true
 },
 {
 "datei": "fremd/karte25-strand-12.png",
 "basis": "karte25/strand/12",
-"x": 648,
+"x": 408,
 "y": 1300,
 "fuss": 59,
 "kachel": [
-42,
+27,
 84
 ],
 "ebene": 1,
 "an_wand": true,
-"anim": "baum"
-},
-{
-"datei": "fremd/karte25-strand-12_m.png",
-"basis": "karte25/strand/12",
-"x": 1032,
-"y": 1300,
-"fuss": 59,
-"kachel": [
-66,
-84
-],
-"ebene": 1,
-"an_wand": true,
-"anim": "baum"
+"anim": "baum",
+"sandfleck": true
 },
 {
 "datei": "fremd/karte25-strand-12.png",
 "basis": "karte25/strand/12",
-"x": 1192,
+"x": 472,
 "y": 1300,
 "fuss": 59,
 "kachel": [
-76,
+31,
 84
 ],
 "ebene": 1,
 "an_wand": true,
-"anim": "baum"
+"anim": "baum",
+"sandfleck": true
 },
 {
 "datei": "fremd/karte25-strand-12.png",
 "basis": "karte25/strand/12",
-"x": 1352,
+"x": 664,
 "y": 1300,
 "fuss": 59,
 "kachel": [
-86,
+43,
 84
 ],
 "ebene": 1,
 "an_wand": true,
-"anim": "baum"
+"anim": "baum",
+"sandfleck": true
 },
 {
 "datei": "fremd/karte25-strand-12.png",
 "basis": "karte25/strand/12",
-"x": 1512,
+"x": 1048,
 "y": 1300,
 "fuss": 59,
 "kachel": [
-96,
+67,
 84
 ],
 "ebene": 1,
 "an_wand": true,
-"anim": "baum"
+"anim": "baum",
+"sandfleck": true
 },
 {
 "datei": "fremd/karte25-strand-12_m.png",
 "basis": "karte25/strand/12",
-"x": 1640,
+"x": 1208,
 "y": 1300,
 "fuss": 59,
 "kachel": [
-104,
+77,
 84
 ],
 "ebene": 1,
 "an_wand": true,
-"anim": "baum"
+"anim": "baum",
+"sandfleck": true
+},
+{
+"datei": "fremd/karte25-strand-12.png",
+"basis": "karte25/strand/12",
+"x": 1560,
+"y": 1300,
+"fuss": 59,
+"kachel": [
+99,
+84
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"sandfleck": true
 },
 {
 "datei": "fremd/karte25-strand-12_m.png",
 "basis": "karte25/strand/12",
-"x": 1800,
+"x": 1720,
 "y": 1300,
 "fuss": 59,
 "kachel": [
-114,
+109,
 84
 ],
 "ebene": 1,
 "an_wand": true,
-"anim": "baum"
+"anim": "baum",
+"sandfleck": true
 },
 {
-"datei": "fremd/karte25-strand-12_m.png",
+"datei": "fremd/karte25-strand-12.png",
 "basis": "karte25/strand/12",
-"x": 1896,
+"x": 1816,
 "y": 1300,
 "fuss": 59,
 "kachel": [
-120,
+115,
 84
 ],
 "ebene": 1,
 "an_wand": true,
-"anim": "baum"
+"anim": "baum",
+"sandfleck": true
+},
+{
+"datei": "fremd/karte25-strand-12.png",
+"basis": "karte25/strand/12",
+"x": 1944,
+"y": 1300,
+"fuss": 59,
+"kachel": [
+123,
+84
+],
+"ebene": 1,
+"an_wand": true,
+"anim": "baum",
+"sandfleck": true
 },
 {
 "datei": "fremd/karte25-strand-12.png",
@@ -5153,11 +5155,11 @@
 {
 "datei": "fremd/karte18-strasse-14.png",
 "basis": "karte18/strasse/14",
-"x": 1713,
+"x": 1009,
 "y": 1353,
 "fuss": 22,
 "kachel": [
-108,
+64,
 85
 ],
 "ebene": 1,
