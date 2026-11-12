@@ -21,6 +21,9 @@ SP = 6                             # Spalten -> 6 x 3 Raster (17 Karten + Titelf
 LUECKE = 4
 DAUER = 110                        # ms je Bild (Takt der 16-Bilder-Animationen)
 FETT = '/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf'
+# von Hand gewaehlte Ausschnitte (x, y am 16er-Raster), wo die Automatik nur Leere/Wald/Boden findet
+AUSSCHNITT = {'16': (368, 96), '17': (432, 32), '19': (704, 96), '26': (64, 16), '27': (1040, 96), '28': (1104, 112),
+              '31': (1152, 1360), '32': (400, 0), '33': (16, 48)}
 
 
 def animation(k):
@@ -62,7 +65,8 @@ def mosaik():
     zellen = []
     for i, (k, name) in enumerate(KARTEN):
         fr = animation(k)
-        x0, y0 = ausschnitt(fr)
+        x0, y0 = AUSSCHNITT.get(k) or ausschnitt(fr)
+        x0, y0 = min(x0, fr[0].width - ZW), min(y0, fr[0].height - ZH)
         zx, zy = LUECKE + (i % SP) * (ZW + LUECKE), LUECKE + (i // SP) * (ZH + LUECKE)
         for f in range(16):
             bilder[f].paste(fr[f].crop((x0, y0, x0 + ZW, y0 + ZH)), (zx, zy))
@@ -117,7 +121,7 @@ def main():
         u = 2 * math.pi * t / n1
         cx = W / 2 + (W / 2 - 150) * math.sin(u)
         cy = H / 2 + (H / 2 - 110) * math.sin(2 * u + 0.6)
-        r = 118 + 10 * math.sin(4 * u)
+        r = 138 + 12 * math.sin(4 * u)
         al = Image.fromarray(loch_rund(W, H, cx, cy, r))
         fr1.append(Image.composite(schwarz, bilder[t % 16], al))
     speichern(fr1, os.path.join(out, 'sneak_peek_loch_1.gif'))
