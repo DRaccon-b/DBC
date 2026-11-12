@@ -151,9 +151,10 @@ def main():
         if art in ('buero_klein', 'buero_klein2'):
             q = os.path.join(QUELLE, 'buero1' if art == 'buero_klein' else 'buero2', '00.png')
         else:
-            q = os.path.join(QUELLE, 'gross_' + art, '00.png')
+            neu_ = {'laeden': 'gross_laeden_b', 'buero_flach': 'gross_buero_flach_b'}   # Nutzer: Qualitaet, neu erzeugt
+            q = os.path.join(QUELLE, neu_.get(art, 'gross_' + art), '00.png')
         im = loecher_fuellen(einpassen(Image.open(q).convert('RGBA'), w, h))
-        if art == 'buero_flach':
+        if art == 'buero_flach' and False:                         # (alte Fassung ohne Dach - nicht mehr noetig)
             a_ = np.array(im).astype(int)                             # weisse Scheiben -> helle Himmelsspiegelung
             weiss_ = (a_[..., :3].min(2) > 228) & (a_[..., 3] > 0)
             a_[weiss_, :3] = (184, 216, 238)

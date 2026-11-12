@@ -93,6 +93,23 @@ for _n, _box, _t in (
                              'vorlage': ('assets/vorlagen/karte30_vorlage.png', _box), 'stil': _K30_STIL,
                              'text': _t + _K30 + FR14}
 
+_K30_STIL2 = 'assets/objekte/karte30/gross_buero_glas/00.png'                 # gut gelungenes Glasbuero als Stil
+for _v in ('a', 'b'):
+    AUFTRAEGE['k30_laeden_' + _v] = {
+        'ziel': 'assets/objekte/karte30/gross_laeden_' + _v, 'groesse': (544, 176), 'magenta': True, 'stil': _K30_STIL2,
+        'vorlage': ('assets/vorlagen/karte30_vorlage.png', (384, 896, 928, 1072)),
+        'text': ('long two-storey shopping arcade building, clean crisp pixel art: a flat light grey roof with a parapet edge '
+                 'visible from slightly above and a few small rooftop units, a light lavender grey facade with two even rows '
+                 'of small windows (some warm yellow lit, most blue glass with white frames), a glass ground floor with dark '
+                 'blue window bands and two shop entrances with pink awnings, daytime, sharp outlines, ' + _K30 + FR14)}
+    AUFTRAEGE['k30_buero_flach_' + _v] = {
+        'ziel': 'assets/objekte/karte30/gross_buero_flach_' + _v, 'groesse': (480, 176), 'magenta': True, 'stil': _K30_STIL2,
+        'vorlage': ('assets/vorlagen/karte30_vorlage.png', (1024, 896, 1504, 1072)),
+        'text': ('long low modern office building, clean crisp pixel art: a flat grey roof with a parapet edge visible from '
+                 'slightly above, a facade of dark blue glass curtain wall in three even horizontal bands separated by light '
+                 'grey concrete slabs, regular thin mullions, subtle sky reflections, a glass entrance with a small canopy on '
+                 'the ground floor, daytime, sharp outlines, ' + _K30 + FR14)}
+
 
 def main(name):
     a = AUFTRAEGE[name]
@@ -105,7 +122,9 @@ def main(name):
         for (x0, y0, x1, y1) in a.get('uebermalen', []):
             d.rectangle((x0 - box[0], y0 - box[1], x1 - box[0], y1 - box[1]), fill=(46, 46, 58))
     stil = Image.open(os.path.join(ROOT, a['stil'])).convert('RGBA')
-    req = {'description': a['text'], 'image_size': {'width': w, 'height': h}, 'no_background': True,
+    magenta = a.get('magenta', False)                                # Hintergrund selbst freistellen (helle Scheiben bleiben)
+    req = {'description': a['text'] + (' The building stands on a plain flat solid magenta (#ff00ff) background.' if magenta else ''),
+           'image_size': {'width': w, 'height': h}, 'no_background': not magenta,
            'style_image': ref(stil), 'style_options': {'color_palette': False, 'outline': True, 'detail': True}}
     if v is not None:
         req['reference_images'] = [ref(v, 'subject and layout of the ship: shape, proportions, towers, colours')]
@@ -137,6 +156,31 @@ def main(name):
         if not data:
             continue
         im = Image.open(io.BytesIO(base64.b64decode(data))).convert('RGBA')
+        if magenta:
+            import numpy as np
+            from collections import deque
+            ar = np.array(im).astype(int)
+            mg = (ar[..., 0] > 170) & (ar[..., 2] > 170) & (ar[..., 1] < 110)          # magentafarbene Pixel
+            hh, ww = mg.shape                                                           # nur vom Rand her erreichbares
+            weg = np.zeros_like(mg); q = deque()                                        # Magenta ist Hintergrund
+            for yy in range(hh):
+                for xx in (0, ww - 1):
+                    if mg[yy, xx] and not weg[yy, xx]:
+                        weg[yy, xx] = True; q.append((yy, xx))
+            for xx in range(ww):
+                for yy in (0, hh - 1):
+                    if mg[yy, xx] and not weg[yy, xx]:
+                        weg[yy, xx] = True; q.append((yy, xx))
+            while q:
+                yy, xx = q.popleft()
+                for y2, x2 in ((yy - 1, xx), (yy + 1, xx), (yy, xx - 1), (yy, xx + 1)):
+                    if 0 <= y2 < hh and 0 <= x2 < ww and mg[y2, x2] and not weg[y2, x2]:
+                        weg[y2, x2] = True; q.append((y2, x2))
+            rand = ~weg & (np.roll(weg, 1, 0) | np.roll(weg, -1, 0) | np.roll(weg, 1, 1) | np.roll(weg, -1, 1))
+            ar[weg, 3] = 0
+            saum = rand & (ar[..., 0] > 140) & (ar[..., 2] > 140) & (ar[..., 1] < ar[..., 0] - 40)   # Magenta-Saum weg
+            ar[saum, 3] = 0
+            im = Image.fromarray(ar.astype(np.uint8))
         im.save(os.path.join(ziel, '%02d.png' % i)); n += 1
     if v is not None:
         v.save(os.path.join(ziel, 'referenz.png'))
