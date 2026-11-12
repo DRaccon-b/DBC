@@ -950,7 +950,9 @@ def flammen_bewegen(sp, frame, phase, lila=False):
         X, Y = x + dx, y + dy
         if 0 <= X < a.shape[1] and 0 <= Y < a.shape[0]:
             out[Y, X] = a[y, x]
-    # Loecher am Flammenfuss schliessen (Original dort, wo nichts hingerueckt ist und unten Flamme war)
+    # Loecher schliessen: wo nichts hingerueckt ist, bleibt die Flamme (nie Durchblick auf den Boden)
+    loch = m & (out[..., 3] == 0)
+    out[loch] = a[loch]
     return Image.fromarray(out, 'RGBA')
 
 
@@ -1269,6 +1271,10 @@ def animieren(img, objs, cache, frame, ruhig=False):
             if anim == 'kessel':                               # gruen brodelnder Kesselinhalt
                 q = (a[..., 3] > 0) & (g_ > r_ + 25) & (g_ > b_)
                 farbe, rad = (120, 255, 140), (12, 6)
+            elif anim == 'lampe' and o.get('lampe_box'):     # Lichtquelle in fester Box (nicht Gold/Sandstein daneben)
+                mxl = a[..., :3].max(2)
+                q = (a[..., 3] > 0) & _box_maske(a.shape, o['lampe_box']) & (mxl > 170)
+                farbe, rad = tuple(o.get('licht_farbe', (255, 220, 120))), (14, 10)
             elif anim == 'lampe':                              # Strassenlaterne: gelbe/cremige Glaskugel leuchtet (Karte 10)
                 q = (a[..., 3] > 0) & (r_ > 200) & (g_ > 160) & (b_ < 150)
                 if not q.any():
@@ -1317,6 +1323,29 @@ def animieren(img, objs, cache, frame, ruhig=False):
                     px[X, Y] = (min(255, int(rr * k_)), min(255, int(gg * k_)), min(255, int(bb * k_)), 255)
         elif anim == 'kamin':
             kamin_rauch(gd, o, sp, frame)
+        elif anim == 'kristall':                               # Kristall: Lichtband wandert ueber die Flaechen, weicher Schein
+            a = np.array(sp).astype(int)
+            mx_, mn_ = a[..., :3].max(-1), a[..., :3].min(-1)
+            q = (a[..., 3] > 0) & (mx_ - mn_ > 50) & (mx_ > 120)
+            if o.get('kristall_box'):
+                q &= _box_maske(a.shape, o['kristall_box'])
+            else:
+                q[int(a.shape[0] * 0.75):] = False
+            ys_q, xs_q = np.nonzero(q)
+            if len(xs_q):
+                h_ = ys_q.max() - ys_q.min() + 1
+                band = ys_q.min() + (frame * (h_ + 8) // N_FRAMES) - 4
+                for y_, x_ in zip(ys_q, xs_q):
+                    d_ = abs((y_ + (x_ - xs_q.min()) // 2) - band)
+                    if d_ <= 2:
+                        rr, gg, bb, _ = px[o['x'] + x_, o['y'] + y_]
+                        add = (60, 40, 20)[d_]
+                        px[o['x'] + x_, o['y'] + y_] = (min(255, rr + add), min(255, gg + add), min(255, bb + add), 255)
+                farbe_ = tuple(int(v) for v in np.median(a[ys_q, xs_q, :3], 0))
+                cx, cy = o['x'] + xs_q.mean(), o['y'] + ys_q.mean()
+                for k_, al in ((1.0, 20), (0.55, 34)):
+                    r_ = max(10, (xs_q.max() - xs_q.min()) * 0.9) * k_
+                    gd.ellipse((cx - r_, cy - r_ * 0.8, cx + r_, cy + r_ * 0.8), fill=farbe_ + (int(al * (0.6 + 0.4 * puls)),))
         elif anim == 'leuchten':
             cx, cy = o['x'] + sp.width // 2, o['y'] + sp.height // 2
             if o.get('licht'):                                 # Schein auf der echten Lichtquelle (Kugel), nicht dem Sockel
@@ -1623,7 +1652,7 @@ def leds(sp, frame, o):
     a = np.array(sp.convert('RGBA'))
     ai = a.astype(np.int16)
     mx, mn = ai[..., :3].max(-1), ai[..., :3].min(-1)
-    kand = (a[..., 3] > 0) & (mx > 150) & ((mx - mn > 70) | (mn > 215))
+    kand = (a[..., 3] > 0) & (mx > 178) & ((mx - mn > 70) | (mn > 215))     # kein braunes Kupferkabel
     if o.get('led_box'):
         kand &= np.any([_box_maske(a.shape, b) for b in o['led_box']], axis=0)
     out = ai.copy()
@@ -1706,8 +1735,8 @@ def teil_drehen(sp, frame, o):
     out = Image.fromarray(rest)
     for teil, w, d in teile:
         out.alpha_composite(Image.fromarray(teil).rotate(w, resample=Image.NEAREST, center=tuple(d['punkt'])))
-        if 'stange' in d:                                   # Pumpgestaenge folgt dem Pferdekopf senkrecht
-            sx0, sy0, sx1, sy1 = d['stange']
+        for st_box in ([d['stange']] if 'stange' in d else []) + d.get('stangen', []):   # Gestaenge folgt senkrecht
+            sx0, sy0, sx1, sy1 = st_box
             dy = int(round(math.sin(math.radians(w)) * (d['punkt'][0] - (sx0 + sx1) / 2)))
             if dy:
                 st = np.array(out)
@@ -1915,7 +1944,10 @@ def flammen_boxen(sp, frame, o):
     out = a.copy()
     t = 2 * math.pi * frame / N_FRAMES
     for n, b_ in enumerate(o['flammen_box']):
-        m = _box_maske(a.shape, b_) & (ai[..., 3] > 0) & (ai[..., 0] > 200) & (ai[..., 0] - ai[..., 2] > 60)
+        if o.get('flammen_alle'):                            # bunte Digi-Flammen (cyan/pink): alles Bunte in der Box
+            m = _box_maske(a.shape, b_) & (ai[..., 3] > 0) & (ai[..., :3].max(-1) - ai[..., :3].min(-1) > 40)
+        else:
+            m = _box_maske(a.shape, b_) & (ai[..., 3] > 0) & (ai[..., 0] > 200) & (ai[..., 0] - ai[..., 2] > 60)
         if not m.any():
             continue
         ys, xs = np.nonzero(m)

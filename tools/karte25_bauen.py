@@ -7,7 +7,7 @@ mit zweiter Stufe; Holzstege (Planken mit Pfaehlen), Teleporter (Karte 04).
 
   python3 tools/karte25_layout.py && python3 tools/karte25_bauen.py
 """
-import json, os, sys
+import json, math, os, sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import numpy as np
 from PIL import Image, ImageFilter
@@ -100,6 +100,18 @@ def schiff(a, wasser, frame):
     """Schiff (PixelLab Pro-Generator, Ausnahme Nutzer) im tiefen Wasser: Schatten nach rechts unten nur auf dem Wasser,
     Schaum an der Wasserlinie (wandert je Bild), Sprite darueber."""
     sp = np.array(Image.open(os.path.join(OBJ, SCHIFF_DATEI)).convert('RGBA'))
+    if frame is not None:                                            # Wimpel wehen, Auge und Bullaugen gluehen
+        sp = np.array(k4.wimpel(Image.fromarray(sp), frame, {'wimpel': [[149, 86, 192, 112, 1], [377, 76, 418, 102, 1]],
+                                                               'x': SCHIFF_POS[0]}))
+        si = sp.astype(np.int16)
+        rot = (si[..., 3] > 0) & (si[..., 0] > 150) & (si[..., 1] < 90) & (si[..., 2] < 90)
+        auge = rot & k4._box_maske(sp.shape, [272, 62, 306, 94])
+        luken = rot & k4._box_maske(sp.shape, [140, 200, 430, 240])
+        f1 = 0.85 + 0.3 * (0.5 + 0.5 * math.sin(2 * math.pi * frame / N_FRAMES))
+        f2 = 0.9 + 0.2 * (0.5 + 0.5 * math.sin(2 * math.pi * frame / N_FRAMES + 2.0))
+        si[auge, :3] = np.clip(si[auge, :3] * f1, 0, 255)
+        si[luken, :3] = np.clip(si[luken, :3] * f2, 0, 255)
+        sp = si.astype(np.uint8)
     al = sp[..., 3] > 0
     x0, y0 = SCHIFF_POS
     h, w = al.shape

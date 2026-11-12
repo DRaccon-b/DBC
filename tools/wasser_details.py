@@ -305,12 +305,12 @@ def meer_terrassen(img, region, frame=None, meiden=None, maske=None, dist=None):
     nach_felsen = a.copy()
     # Schaumkante am Uebergang Flach -> tiefer (wellig, wandert) und Wellen am Strand
     welle = 1.8 * np.sin(xx / 11.0 + 2 * math.pi * fr / N_FRAMES) + 1.2 * np.sin(xx / 5.0 - 2 * math.pi * fr / N_FRAMES)
-    schaum = m & (np.abs(d - (SCHAUM_D[0] + SCHAUM_D[1]) / 2 - welle) < 1.6) & (((xx + fr) // 3) % 5 != 0)
+    schaum = m & (np.abs(d - (SCHAUM_D[0] + SCHAUM_D[1]) / 2 - welle) < 1.6) & (((xx + fr * 16 // N_FRAMES) // 4) % 4 != 0)
     a[schaum] = SCHAUM
     schaum2 = m & (np.abs(d - (SCHAUM_D[0] + SCHAUM_D[1]) / 2 - welle) < 2.6) & ~schaum
     a[schaum2] = a[schaum2] * 0.5 + SCHAUM * 0.5
     brandung = 2.5 + 2.0 * math.sin(2 * math.pi * fr / N_FRAMES)
-    ufer = m & (np.abs(d - brandung) < 1.0) & (((xx + 2 * fr) // 4) % 4 != 0)
+    ufer = m & (np.abs(d - brandung) < 1.0) & (((xx + fr * 32 // N_FRAMES) // 4) % 4 != 0)
     a[ufer] = a[ufer] * 0.3 + SCHAUM * 0.7
     nass = ~m & region & (np.array(Image.fromarray((m * 255).astype(np.uint8)).filter(ImageFilter.MaxFilter(5))) > 0)
     a[nass] = a[nass] * 0.82                                       # nasser Sand an der Wasserlinie
@@ -318,9 +318,9 @@ def meer_terrassen(img, region, frame=None, meiden=None, maske=None, dist=None):
     tiefw = m & (d > FLACH + 2)
     ys, xs = np.nonzero(tiefw)
     for y, x in zip(ys, xs):
-        kx, ky = (x - fr) // 16, y // 16
+        kx, ky = x // 16, y // 16                                  # Strich wandert in seiner Kachel -> Schleife nahtlos
         h = (kx * 73856093 ^ ky * 19349663) & 0xffff
-        px_, py_ = (x - fr) % 16, y % 16
+        px_, py_ = (x - fr * 16 // N_FRAMES) % 16, y % 16
         sy, sx = h % 13 + 1, (h >> 8) % 11 + 1
         if py_ == sy and sx <= px_ < sx + 4:
             a[y, x] = np.clip(a[y, x] * 0.4 + H('#cfeeff') * 0.6, 0, 255)

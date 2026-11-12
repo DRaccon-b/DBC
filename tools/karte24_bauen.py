@@ -7,7 +7,7 @@ Teleporter.
 
   python3 tools/karte24_layout.py && python3 tools/karte24_bauen.py
 """
-import json, os, random, sys
+import json, math, os, random, sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import numpy as np
 from PIL import Image
@@ -175,7 +175,7 @@ def seilbahn(img, maste, cache, frame):
     L = y1 - y0 - gon.height - 24
     for i, f in enumerate((0.25, 0.62)):                              # stehen still und wippen (Nutzer)
         gy = y0 + 12 + int(f * L)
-        winkel = (0.0, 3.0, 0.0, -3.0)[(frame + 2 * i) % 4]
+        winkel = round(3.0 * math.sin(2 * math.pi * frame / N_FRAMES + i * math.pi), 1)   # ein ruhiger Schwung pro Schleife
         g = gon.rotate(winkel, resample=Image.NEAREST, center=(gon.width // 2, 0)) if winkel else gon
         im.alpha_composite(g, (cx - 11 + 1, gy))
     img.paste(im.convert(img.mode))
@@ -246,7 +246,7 @@ def stahlseil(img, stationen, frame):
     HAKEN = (int(round(hx.mean())), hy)
     for i, t in enumerate((0.32, 0.72)):                             # zwei Gondeln (Nutzer): stehen still und wippen
         gx, gy = x0 + (x1 - x0) * t, y0 + (y1 - y0) * t
-        winkel = (0.0, 2.5, 0.0, -2.5)[(frame + 2 * i) % 4]           # Schaukeln als Ganzes um den Haken am Seil
+        winkel = round(2.5 * math.sin(2 * math.pi * frame / N_FRAMES + i * math.pi), 1)           # Schaukeln als Ganzes um den Haken am Seil
         g = gon.rotate(winkel, resample=Image.NEAREST, center=(HAKEN[0], HAKEN[1])) if winkel else gon
         im.alpha_composite(g, (int(gx) - HAKEN[0], int(gy) - HAKEN[1]))
     img.paste(im.convert(img.mode))

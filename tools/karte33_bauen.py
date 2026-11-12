@@ -117,10 +117,10 @@ def quellbild(karte, frame):
     fertigen Animation der Karte (Wasser, Fernseher-Wirbel, Wind bewegen sich auch im Riss)."""
     schluessel = (karte, None if frame is None else frame % N_FRAMES)
     if schluessel not in _QUELLEN:
-        anim = os.path.join(ROOT, 'maps', karte, 'animation', '%s_animiert.webp' % karte)
+        anim = os.path.join(ROOT, 'maps', karte, 'animation', '%s_animiert%s.webp' % (karte, '_16' if N_FRAMES == 16 else ''))
         if frame is not None and os.path.exists(anim):
-            im = Image.open(anim)
-            im.seek(frame % getattr(im, 'n_frames', 1))
+            im = Image.open(anim)                                     # Quelle mit gleicher Bildzahl (4 bzw. 16)
+            im.seek(frame * getattr(im, 'n_frames', 1) // N_FRAMES % getattr(im, 'n_frames', 1))
             _QUELLEN[schluessel] = np.array(im.convert('RGB'))
         else:
             _QUELLEN[schluessel] = np.array(Image.open(os.path.join(ROOT, 'maps', karte, 'terrain.png')).convert('RGB'))
@@ -219,7 +219,7 @@ def traumschein(img, objs, cache, frame):
         a_ = np.array(geist).astype(np.float32)
         a_[..., :3] = a_[..., :3] * 0.4 + np.array(farbe, np.float32) * 0.6
         a_[..., 3] *= 0.28
-        img.alpha_composite(Image.fromarray(a_.astype(np.uint8)), (int(o['x']) + 2, int(o['y']) + 3 + (f + o.get('phase', 0)) % 2))
+        img.alpha_composite(Image.fromarray(a_.astype(np.uint8)), (int(o['x']), int(o['y']) - 3))   # Nachbild darueber, im Gleichtakt (kein Schatten)
     img.alpha_composite(glow.filter(ImageFilter.GaussianBlur(4)))
 
 
@@ -266,7 +266,7 @@ def bauen(frame=None, speichern=True):
         if frame is not None:
             for o in objs:
                 if o.get('schwebend'):
-                    o['y'] += (0, -1, -1, 0)[(frame + o.get('phase', 0)) % 4]
+                    o['y'] += (0, -1, -1, 0)[(frame * 4 // N_FRAMES + o.get('phase', 0)) % 4]   # ruhiges Schweben, eine Welle pro Schleife
         cache = {o['datei']: Image.open(os.path.join(OBJ, o['datei'])).convert('RGBA') for o in objs}
         k8.schatten_ebene(img, [o for o in objs if not o.get('schwebend') and not o.get('kein_schatten')], cache, lvl)
         traumschein(img, objs, cache, frame)

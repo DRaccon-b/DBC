@@ -34,7 +34,28 @@
 4
 ],
 "ebene": 1,
-"anim": "lampe"
+"anim": "lampe",
+"teil": "flammen_boxen",
+"flammen_box": [
+[
+6,
+0,
+36,
+21
+]
+],
+"flammen_alle": true,
+"lampe_box": [
+6,
+0,
+36,
+21
+],
+"licht_farbe": [
+150,
+230,
+255
+]
 },
 {
 "datei": "varianten/digifeuer-00_m.png",
@@ -53,7 +74,28 @@
 4
 ],
 "ebene": 1,
-"anim": "lampe"
+"anim": "lampe",
+"teil": "flammen_boxen",
+"flammen_box": [
+[
+-2,
+0,
+28,
+21
+]
+],
+"flammen_alle": true,
+"lampe_box": [
+-2,
+0,
+28,
+21
+],
+"licht_farbe": [
+150,
+230,
+255
+]
 },
 {
 "datei": "varianten/thron_gross-01.png",
@@ -72,7 +114,36 @@
 5
 ],
 "ebene": 1,
-"anim": "lampe"
+"anim": "maschine",
+"schirm": [
+[
+11,
+3,
+26,
+17
+],
+[
+31,
+1,
+63,
+16
+],
+[
+67,
+4,
+83,
+18
+]
+],
+"leds": true,
+"led_box": [
+[
+6,
+28,
+88,
+46
+]
+]
 },
 {
 "datei": "varianten/thron_gross-01_m.png",
@@ -91,7 +162,36 @@
 5
 ],
 "ebene": 1,
-"anim": "lampe"
+"anim": "maschine",
+"schirm": [
+[
+64,
+3,
+79,
+17
+],
+[
+27,
+1,
+59,
+16
+],
+[
+7,
+4,
+23,
+18
+]
+],
+"leds": true,
+"led_box": [
+[
+2,
+28,
+84,
+46
+]
+]
 },
 {
 "datei": "varianten/thron-00.png",
@@ -110,7 +210,15 @@
 4
 ],
 "ebene": 1,
-"anim": "lampe"
+"anim": "bildschirm",
+"schirm": [
+[
+9,
+10,
+57,
+36
+]
+]
 },
 {
 "datei": "varianten/digifeuer-13.png",
@@ -130,7 +238,18 @@
 ],
 "ebene": 1,
 "anim": "lampe",
-"teil": "blitze"
+"teil": "blitze",
+"lampe_box": [
+24,
+0,
+36,
+44
+],
+"licht_farbe": [
+150,
+255,
+210
+]
 },
 {
 "datei": "varianten/digifeuer-13_m.png",
@@ -150,7 +269,18 @@
 ],
 "ebene": 1,
 "anim": "lampe",
-"teil": "blitze"
+"teil": "blitze",
+"lampe_box": [
+24,
+0,
+36,
+44
+],
+"licht_farbe": [
+150,
+255,
+210
+]
 },
 {
 "datei": "varianten/tank3-00.png",
@@ -341,7 +471,15 @@
 4
 ],
 "ebene": 1,
-"teil": "leds"
+"teil": "leds",
+"led_box": [
+[
+8,
+36,
+52,
+55
+]
+]
 },
 {
 "datei": "varianten/kapsel2-11.png",
