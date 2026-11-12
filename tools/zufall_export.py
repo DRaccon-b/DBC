@@ -1,13 +1,15 @@
 """Export der Kartenstuecke fuer den JS-Generator (maps/zufall/js/).
 
-  python3 tools/zufall_export.py            (alle Lagen, 4 Prozesse parallel, dauert einige Minuten)
+  python3 tools/zufall_export.py --typ wald        (alle Lagen im Wald-Stil, 4 Prozesse parallel)
+  python3 tools/zufall_export.py --typ netz        (dieselben Stuecke im Stil von Karte 16 - The Network)
 
 Jede Lage jedes Stuecks wird einmal mit der Karte-01-Technik fertig gerendert. Damit Baeume und
 Uebergaenge an den Raendern genauso aussehen wie in einer echten Karte, wird das Stueck mit einem Rand
 von PAD Kacheln gebaut (Randkacheln nach aussen fortgesetzt - wegen der genormten Kanten ist das genau
 das, was ein passender Nachbar dort haette). Objekte zaehlen nur, wenn ihr Fuss im Stueck steht.
 
-Gelaende und Objekte nach dem aktuellen Kachel-Standard (A02, tools/zufall_a02.py: 45-Grad-Kanten, Karte-20-Stil).
+Gelaende und Objekte je Kartentyp: wald = tools/zufall_a02.py (A02, Karte 20, 45-Grad-Kanten), netz = tools/zufall_netz.py
+(Karte 16, The Network).
 Ausgabe je Lage:
   stuecke/<id>_boden.png    reiner Boden, genau Stueckgroesse                  (1. alle Stuecke)
   stuecke/<id>_schatten.png Kontakt- und Schlagschatten, um PAD Kacheln groesser (2. alle Stuecke)
@@ -16,7 +18,7 @@ Ausgabe je Lage:
   Objekt- und Oben-Bilder sind groesser als das Stueck, damit ueberstehende Kronen erhalten bleiben.
   manifest.json            Kanten, Kollision (1 = gesperrt), Spawn-/Bosspunkt, Gewichte
 """
-import json, os, shutil, sys
+import json, os, shutil, sys, zlib
 from multiprocessing import Pool
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import numpy as np
@@ -39,25 +41,35 @@ def gepolstert(raster):
             for y in range(h + 2 * PAD)]
 
 
-def rendern(l):
-    import zufall_a02
+MODUL = {'wald': 'zufall_a02', 'netz': 'zufall_netz'}
+VARIANTEN = {'wald': 4}                                      # Lagen-Varianten je Stueck (verschiedene Deko)        # Kartentypen: Wald (A02, Karte 20) und Netz (Karte 16)
+
+
+def rendern(arg):
+    l, typ = arg
+    mod = __import__(MODUL[typ])
     lid = lage_id(l)
     raster = gepolstert(l['raster'])
     h, w = len(l['raster']), len(l['raster'][0])
     fest = [(n, x + PAD, y + PAD) for n, x, y in l.get('objekte', [])]
     symmetrie = [tuple(fest[i] for i in s) for s in l.get('symmetrie', [])]
-    obj = os.path.join(ROOT, 'maps', 'zufall', '_bau', 'export_' + lid)
+    obj = os.path.join(ROOT, 'maps', 'zufall', '_bau', 'export_%s_%s' % (typ, lid))
     if os.path.exists(obj):
         shutil.rmtree(obj)
     os.makedirs(obj)
-    # Aktueller Kachel-Standard (A02, Stil Karte 20): Boden mit 45-Grad-Kanten, Objekte am Raster (tools/zufall_a02.py).
-    # Der Rand (PAD Kacheln, Randkacheln fortgesetzt) bekommt ebenfalls Wald und Deko - so verhalten sich Platzierung
-    # und Schatten am Rand wie mit einem echten Nachbarn; behalten werden nur Objekte mit dem Fuss im Stueck.
-    boden_rgb, wasser = zufall_a02.boden_bauen(raster)
-    objs = zufall_a02.objekte_setzen(raster, fest, symmetrie, obj, seed=7)
+    # Gelaende und Objekte des Typs. Der Rand (PAD Kacheln, Randkacheln fortgesetzt) bekommt ebenfalls Objekte - so
+    # verhalten sich Platzierung und Kanten am Rand wie mit einem echten Nachbarn; behalten werden nur Objekte mit dem
+    # Fuss im Stueck. Netz: Nebel/Raster periodisch je Feld (ursprung), Straenge/Fragmente nur im Stueck (bereich).
+    bereich = np.zeros((len(raster) * T, len(raster[0]) * T), bool)
+    bereich[PAD * T:(PAD + h) * T, PAD * T:(PAD + w) * T] = True
+    seed = zlib.crc32(lid.encode())                                     # je Stueck eigene Deko / Leere
+    boden_rgb, wasser = mod.boden_bauen(raster, None, fest=fest, ursprung=(PAD * T, PAD * T), bereich=bereich, seed=seed)
+    objs = mod.objekte_setzen(raster, fest, symmetrie, obj, seed=seed, innen=(PAD, PAD, PAD + w, PAD + h))
     objs = [o for o in objs if PAD <= o['kachel'][0] < PAD + w and PAD <= o['kachel'][1] < PAD + h]
-    boden_rgb = zufall_a02.waldboden(boden_rgb, objs, obj)              # Wurzeln des Dschungelbaums gehoeren zum Boden
-    voll, cache = zufall_a02.zeichnen(boden_rgb, wasser, objs, obj)
+    if typ == 'wald' and l['typ'] not in ('start', 'boss') and 'gabel' not in l['name'] and 'kreuz' not in l['name']:
+        objs = [o for o in objs if o.get('basis') != 'laterne']
+    boden_rgb = mod.waldboden(boden_rgb, objs, obj)                     # Wurzeln des Dschungelbaums gehoeren zum Boden
+    voll, cache = mod.zeichnen(boden_rgb, wasser, objs, obj)
     boden = Image.fromarray(boden_rgb).convert('RGBA')
 
     # --- Sprite-Maske: deckende Objektpixel (Kontaktschatten/Lichtschein zaehlen zum Boden)
@@ -79,19 +91,18 @@ def rendern(l):
             if sockel_y > 0:
                 oben.alpha_composite(sp.crop((0, 0, sp.width, min(sockel_y, sp.height))), (x0, y0))
     # --- Schatten als eigene Ebene (reicht wie die Kronen ueber den Rand - sonst enden Schlagschatten an der Naht):
-    # dieselben Objekte noch einmal auf weissem Grund zeichnen; Schattenfarbe (60, 40, 24) mit Deckkraft a ergibt
-    # R = 255 - a * (255 - 60)  ->  a aus dem Rotkanal
-    import karte04_bauen as k4
-    weiss = Image.new('RGBA', voll.size, (255, 255, 255, 255))
-    ebenen = np.ones(wasser.shape, np.int16)
-    ebenen[wasser] = 7
-    k4.objekte_zeichnen(weiss, sorted(objs, key=lambda o: (o.get('ebene', 1), o['y'] + o['fuss'])), cache, ~wasser,
-                        None, ebenen=ebenen)
-    rw = np.array(weiss.convert('RGB')).astype(np.float32)
-    alpha = np.clip((255 - rw[..., 0]) / (255 - 60), 0, 1)
+    # dieselben Objekte auf rein weissem und rein schwarzem Boden zeichnen. Schatten = Farbe S mit Deckkraft a:
+    # weiss -> 255 (1 - a) + S a, schwarz -> S a  =>  a = 1 - (weiss - schwarz) / 255, S = schwarz / a
+    def auf(wert):
+        grund = np.full(boden_rgb.shape, wert, np.uint8)
+        return np.array(mod.zeichnen(grund, wasser, objs, obj)[0].convert('RGB')).astype(np.float32)
+    rw, rb = auf(255), auf(0)
+    alpha = np.clip(1 - (rw - rb).mean(-1) / 255.0, 0, 1)
     alpha[maske] = 0                                             # unter den Sprites egal (Sprites decken)
+    alpha[alpha < 0.02] = 0
+    farbe = np.clip(rb / np.maximum(alpha, 1e-3)[..., None], 0, 255)
     sch = np.zeros(rw.shape[:2] + (4,), np.uint8)
-    sch[..., 0], sch[..., 1], sch[..., 2] = 60, 40, 24
+    sch[..., :3] = farbe.astype(np.uint8)
     sch[..., 3] = np.round(alpha * 255).astype(np.uint8)
     schatten_bild = Image.fromarray(sch)
     v, b = np.array(voll), np.array(boden)
@@ -105,7 +116,7 @@ def rendern(l):
     objekte_bild = Image.fromarray(ob)
 
     # --- Kollision im Stueck wie tools/kollision.py: 1 begehbar, 2 gesperrt, 3 begehbar + verdeckt
-    koll = zufall_a02.kollision(raster, objs, cache, wasser, PAD, PAD, w, h)
+    koll = mod.kollision(raster, objs, cache, wasser, PAD, PAD, w, h)
 
     def frei_nahe(x, y):
         best = min(((abs(xx - x) + abs(yy - y), xx, yy) for yy in range(h) for xx in range(w) if koll[yy][xx] == '1'))
@@ -113,22 +124,22 @@ def rendern(l):
     punkte = {}
     for n, x, y in l.get('objekte', []):
         if n.startswith('zufall_portal/'):
-            punkte['spawn'] = frei_nahe(x, y + 2)
+            punkte['spawn'] = frei_nahe(x, y + 1)                  # direkt vor der Ankunft (Netz: auf den Pfeilfeldern)
         if n.startswith('dschungel/'):
             punkte['boss'] = frei_nahe(x, y + 4)
-    boden_bild.save(os.path.join(ZIEL, 'stuecke', lid + '_boden.png'), optimize=True)
-    schatten_bild.save(os.path.join(ZIEL, 'stuecke', lid + '_schatten.png'), optimize=True)
-    objekte_bild.save(os.path.join(ZIEL, 'stuecke', lid + '_objekte.png'), optimize=True)
-    oben.save(os.path.join(ZIEL, 'stuecke', lid + '_oben.png'), optimize=True)
+    boden_bild.save(os.path.join(ZIEL, 'stuecke', typ, lid + '_boden.png'), optimize=True)
+    schatten_bild.save(os.path.join(ZIEL, 'stuecke', typ, lid + '_schatten.png'), optimize=True)
+    objekte_bild.save(os.path.join(ZIEL, 'stuecke', typ, lid + '_objekte.png'), optimize=True)
+    oben.save(os.path.join(ZIEL, 'stuecke', typ, lid + '_oben.png'), optimize=True)
     # Komplettbild des Stuecks (Boden + Schatten + Objekte + oben), genau Stueckgroesse
     ganz = voll.copy(); ganz.alpha_composite(oben)
     ganz.crop((PAD * T, PAD * T, (PAD + w) * T, (PAD + h) * T)).save(
-        os.path.join(ZIEL, 'stuecke', lid + '_komplett.png'), optimize=True)
+        os.path.join(ZIEL, 'stuecke', typ, lid + '_komplett.png'), optimize=True)
     # Sprites fuer das Objekt-Tileset sammeln, Objektliste relativ zur linken oberen Stueckecke (Pixel)
     liste = []
     for o in sorted(objs, key=lambda o: (o.get('ebene', 1), o['y'] + o.get('fuss', 0))):
         name = o['datei'][:-4]
-        ziel = os.path.join(SPRITES, o['datei'])
+        ziel = os.path.join(SPRITES, typ, o['datei'])
         if not os.path.exists(ziel):
             os.makedirs(os.path.dirname(ziel), exist_ok=True)
             tmp = ziel + '.%d.tmp' % os.getpid()
@@ -147,21 +158,24 @@ def rendern(l):
     return {'id': lid, 'name': l['name'], 'lage': l['lage'], 'typ': l['typ'], 'gewicht': l['gewicht'],
             'felder': list(l['felder']),
             'kanten': {'%d,%d,%s' % k: t for k, t in l['kanten'].items()},
-            'boden': 'stuecke/%s_boden.png' % lid, 'schatten': 'stuecke/%s_schatten.png' % lid, 'objekte': 'stuecke/%s_objekte.png' % lid, 'oben': 'stuecke/%s_oben.png' % lid,
-            'komplett': 'stuecke/%s_komplett.png' % lid,
+            'boden': 'stuecke/%s/%s_boden.png' % (typ, lid), 'schatten': 'stuecke/%s/%s_schatten.png' % (typ, lid), 'objekte': 'stuecke/%s/%s_objekte.png' % (typ, lid), 'oben': 'stuecke/%s/%s_oben.png' % (typ, lid),
+            'komplett': 'stuecke/%s/%s_komplett.png' % (typ, lid),
             'kollision': koll, 'punkte': punkte, 'objektliste': liste}
 
 
-GRUPPEN = ['baeume', 'gross', 'dschungel', 'zufall_portal', 'zufall_brunnen', 'deko', 'k7gras', 'laterne']
+GRUPPEN = ['baeume', 'gross', 'dschungel', 'zufall_portal', 'zufall_brunnen', 'deko', 'k7gras', 'laterne',
+           'tor', 'computer', 'netz', 'klein', 'k17']
 
 
 def basis_name(name):
-    """'varianten/k01-baum00_gras_m' -> 'k01/baum00' (Bodenfuss-Variante, gespiegelt) bzw. Name unveraendert."""
+    """'varianten/k01-baum00_gras_m' -> 'k01/baum00' (Bodenfuss-Variante, gespiegelt), 'netz/tor-10' -> 'tor/10'."""
     if name.startswith('varianten/'):
         rest = name[len('varianten/'):]
         if rest.endswith('_m'):
             rest = rest[:-2]
         return rest.rsplit('_', 1)[0].replace('-', '/', 1)
+    if name.startswith('netz/'):
+        return name[len('netz/'):].replace('-', '/')
     return name
 
 
@@ -175,12 +189,12 @@ def gruppe(name):
     return g if g in GRUPPEN else 'sonstige'
 
 
-def objekt_tileset(namen, breite=32):
+def objekt_tileset(namen, typ, breite=32):
     """Alle Objekt-Sprites in ein Tileset-Bild: jedes Sprite im kleinsten 16er-Kachelblock, waagerecht
     zentriert, Fuss buendig unten (Regel 1/1b); nach Gruppen geordnet, jede Gruppe beginnt eine neue Reihe."""
     bilder = {}
     for n in namen:                       # halbtransparente Kontaktschatten liegen schon im Boden -> nicht doppelt
-        im = Image.open(os.path.join(SPRITES, n + '.png')).convert('RGBA')
+        im = Image.open(os.path.join(SPRITES, typ, n + '.png')).convert('RGBA')
         a = np.array(im)
         a[a[..., 3] < 200] = 0
         bilder[n] = Image.fromarray(a)
@@ -202,7 +216,7 @@ def objekt_tileset(namen, breite=32):
         x, y = cx * T + (wt * T - im.width) // 2, cy * T + ht * T - im.height
         atlas.alpha_composite(im, (x, y))
         info[n] = {'x': x, 'y': y, 'w': im.width, 'h': im.height, 'block': [cx, cy, wt, ht], 'gruppe': gruppe(n)}
-    atlas.save(os.path.join(ZIEL, 'objekte_tileset.png'), optimize=True)
+    atlas.save(os.path.join(ZIEL, 'objekte_tileset_%s.png' % typ), optimize=True)
     # Vorschau 2x auf dunklem Grund mit 16er-Raster
     v = Image.new('RGBA', atlas.size, (30, 32, 37, 255))
     from PIL import ImageDraw
@@ -212,40 +226,55 @@ def objekt_tileset(namen, breite=32):
     for y in range(0, atlas.height, T):
         d.line((0, y, atlas.width, y), fill=(44, 47, 54, 255))
     v.alpha_composite(atlas)
-    v.resize((v.width * 2, v.height * 2), Image.NEAREST).save(os.path.join(ZIEL, 'objekte_tileset_vorschau.png'))
+    v.resize((v.width * 2, v.height * 2), Image.NEAREST).save(os.path.join(ZIEL, 'objekte_tileset_%s_vorschau.png' % typ))
     print('Objekt-Tileset:', len(info), 'Sprites,', atlas.size)
     return info
 
 
+KANTEN = {'wald': {'Z': 'closed (forest)', 'W': 'forest path', 'O': 'open meadow'},
+          'netz': {'Z': 'closed (void)', 'W': 'narrow platform bridge', 'O': 'wide platform'}}
+NAME = {'wald': 'Forest (map 01 / area A02 style)', 'netz': 'The Network (map 16 style)'}
+
+
 def main():
-    for d in (os.path.join(ZIEL, 'stuecke'), SPRITES):
+    args = sys.argv[1:]
+    typ = 'wald'
+    if '--typ' in args:
+        i = args.index('--typ'); typ = args[i + 1]; del args[i:i + 2]
+    assert typ in MODUL, 'Typ: ' + ', '.join(MODUL)
+    for d in (os.path.join(ZIEL, 'stuecke', typ), os.path.join(SPRITES, typ)):
         if os.path.exists(d):
             shutil.rmtree(d)
-    os.makedirs(os.path.join(ZIEL, 'stuecke'))
+    os.makedirs(os.path.join(ZIEL, 'stuecke', typ))
     lagen = zs.alle_lagen()
-    nur = sys.argv[1:]                                   # optional: nur bestimmte Stuecke (zum Testen)
-    if nur:
-        lagen = [l for l in lagen if l['name'] in nur]
-    print(len(lagen), 'Lagen werden gerendert')
+    # Fuellstueck (nur eine Lage): mehrere Varianten mit eigener Deko, sonst sehen alle Wald-/Leere-Felder gleich aus
+    extra = []
+    for l in lagen:
+        for v in range(1, VARIANTEN.get(l['name'], 1)):
+            extra.append(dict(l, lage='%sv%d' % (l['lage'], v)))
+    lagen += extra
+    if args:                                             # optional: nur bestimmte Stuecke (zum Testen)
+        lagen = [l for l in lagen if l['name'] in args]
+    print(len(lagen), 'Lagen werden gerendert (Typ %s)' % typ)
     with Pool(4) as p:
-        eintraege = p.map(rendern, lagen, chunksize=1)
+        eintraege = p.map(rendern, [(l, typ) for l in lagen], chunksize=1)
     anzahl = {}
     for e in eintraege:
         anzahl[e['name']] = anzahl.get(e['name'], 0) + 1
     for e in eintraege:
         e['lagenDesStuecks'] = anzahl[e['name']]
-    tileset = objekt_tileset(sorted({o['s'] for e in eintraege for o in e['objektliste']}))
-    manifest = {'kachel': T, 'feld': N, 'rand': PAD,
-                'kantentypen': {'Z': 'closed (forest)', 'W': 'forest path', 'O': 'open meadow'},
-                'tileset': {'bild': 'objekte_tileset.png', 'sprites': tileset},
+    tileset = objekt_tileset(sorted({o['s'] for e in eintraege for o in e['objektliste']}), typ)
+    manifest = {'typ': typ, 'name': NAME[typ], 'kachel': T, 'feld': N, 'rand': PAD, 'kantentypen': KANTEN[typ],
+                'tileset': {'bild': 'objekte_tileset_%s.png' % typ, 'sprites': tileset},
                 'lagen': eintraege}
-    json.dump(manifest, open(os.path.join(ZIEL, 'manifest.json'), 'w'), separators=(',', ':'))
-    # dasselbe als Script: funktioniert auch ohne Webserver (demo.html per Doppelklick)
-    with open(os.path.join(ZIEL, 'manifest.js'), 'w') as fh:
-        fh.write('/* generated by tools/zufall_export.py */\nwindow.ZUFALL_MANIFEST = ')
+    json.dump(manifest, open(os.path.join(ZIEL, 'manifest_%s.json' % typ), 'w'), separators=(',', ':'))
+    # dasselbe als Script: funktioniert auch ohne Webserver
+    with open(os.path.join(ZIEL, 'manifest_%s.js' % typ), 'w') as fh:
+        fh.write('/* generated by tools/zufall_export.py */\nwindow.ZUFALL_MANIFESTE = window.ZUFALL_MANIFESTE || {};\n'
+                 'window.ZUFALL_MANIFESTE[%s] = ' % json.dumps(typ))
         json.dump(manifest, fh, separators=(',', ':'))
         fh.write(';\n')
-    print('fertig:', len(eintraege), 'Lagen -> maps/zufall/js/manifest.json')
+    print('fertig:', len(eintraege), 'Lagen -> maps/zufall/js/manifest_%s.json' % typ)
 
 
 if __name__ == '__main__':

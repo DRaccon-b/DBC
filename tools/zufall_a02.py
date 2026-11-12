@@ -53,7 +53,7 @@ def flaeche(ks, cols, rows):
     return t
 
 
-def boden_bauen(raster, frame=None):
+def boden_bauen(raster, frame=None, **_):
     """Boden nach Karte 20: Gras, Waldboden, Sandwege (45 Grad + Saum), vertiefte Teiche. -> (RGB-Array, Wassermaske)"""
     import karte04_bauen as k4
     import karte06_bauen as k6
@@ -77,7 +77,7 @@ def boden_bauen(raster, frame=None):
     return a, xm
 
 
-def objekte_setzen(raster, fest, symmetrie, obj_dir, seed=1):
+def objekte_setzen(raster, fest, symmetrie, obj_dir, seed=1, innen=None):
     """Objekte am Raster im A02-Stil. Varianten mit Bodenfuss landen in obj_dir/varianten/. -> Liste wie platzierung.json"""
     import bauwerke
     rows, cols = len(raster), len(raster[0])
@@ -179,6 +179,9 @@ def objekte_setzen(raster, fest, symmetrie, obj_dir, seed=1):
                 setze(rnd.choice(WALD), tx, ty, {'spiegeln': rnd.random() < 0.5}, frei=True, wald=True)
     # 4. Streudeko auf der Wiese: nicht am Weg (1 Kachel), nicht am Wasser, ohne Wiederholung, dezent
     wiese = [(tx, ty) for ty in range(rows) for tx in range(cols) if raster[ty][tx] == 'G']
+    if innen:                                                    # Export: 2 Kacheln Abstand zum Stueckrand (Nachbar unbekannt)
+        x0, y0, x1, y1 = innen
+        wiese = [(tx, ty) for (tx, ty) in wiese if x0 + 2 <= tx <= x1 - 3 and y0 + 2 <= ty <= y1 - 3]
     ziel = len(wiese) // 22 if wiese else 0
     vorrat, n = [], 0
     for _ in range(ziel * 40):

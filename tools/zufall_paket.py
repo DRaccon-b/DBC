@@ -1,10 +1,11 @@
 """Baut das englische Paket "random_dungeon_kit" (ZIP) aus dem Export in maps/zufall/js/.
 
-  python3 tools/zufall_export.py && python3 tools/zufall_paket.py
+  python3 tools/zufall_export.py --typ wald && python3 tools/zufall_export.py --typ netz && python3 tools/zufall_paket.py
 
 Ausgabe: maps/zufall/random_dungeon_kit.zip  (Ordner maps/zufall/_bau/random_dungeon_kit/ als Zwischenstand)
-Inhalt: alle fertigen Kartenstuecke einzeln (Boden / Objekte / oben / komplett), alle Objekte in einem
-Tileset-Bild, das JS-Script (laeuft ohne Webserver und ohne Repository), Demo und englische README.
+Inhalt je Kartentyp (forest = Wald, network = The Network): alle fertigen Kartenstuecke einzeln (Boden / Schatten /
+Objekte / oben / komplett), alle Objekte in einem Tileset-Bild, Tiled-Dateien; dazu das JS-Script (laeuft ohne
+Webserver und ohne Repository), Demo mit Reitern fuer den Kartentyp und englische README.
 Im Paket sind Manifest, Datei-, Stueck- und Sprite-Namen englisch.
 """
 import json, os, shutil, sys, zipfile
@@ -30,7 +31,12 @@ TYP = {'normal': 'normal', 'start': 'start', 'boss': 'boss', 'wald': 'forest'}
 KANTE = {'Z': 'C', 'W': 'P', 'O': 'O'}                      # closed / forest path / open meadow
 SEITE = {'N': 'N', 'O': 'E', 'S': 'S', 'W': 'W'}
 GRUPPE = {'baeume': 'trees', 'gross': 'large', 'dschungel': 'jungle', 'zufall_portal': 'portal',
-          'zufall_brunnen': 'well', 'deko': 'decor', 'k7gras': 'grass', 'laterne': 'lantern', 'sonstige': 'other'}
+          'zufall_brunnen': 'well', 'deko': 'decor', 'k7gras': 'grass', 'laterne': 'lantern', 'sonstige': 'other',
+          'tor': 'gate', 'computer': 'computer', 'netz': 'net', 'klein': 'small', 'k17': 'virus'}
+TYPEN = {'wald': 'forest', 'netz': 'network'}                # Kartentypen (Reiter in der Demo)
+LABEL = {'forest': 'Forest', 'network': 'The Network'}
+KANTEN_TEXT = {'forest': {'C': 'closed (forest)', 'P': 'forest path', 'O': 'open meadow'},
+               'network': {'C': 'closed (void)', 'P': 'narrow platform bridge', 'O': 'wide platform'}}
 BODEN = {'gras': 'grass', 'sand': 'sand'}
 GELAENDE = {'F': 'F', 'G': 'G', 'P': 'P', 'W': 'W'}
 
@@ -42,6 +48,9 @@ def lage_en(lage):                       # '0' -> 'r0', 's90' -> 'm90'
 def sprite_en(name):
     """'varianten/k01-baum00_gras_m' -> 'trees_00_grass_m', 'varianten/zufall_portal-01_gras' -> 'portal_01_grass'."""
     gespiegelt = ''
+    if name.startswith('netz/'):                               # 'netz/tor-10' -> 'gate_10', 'netz/k17-gross-01' -> 'virus_01'
+        teile = name[len('netz/'):].split('-')
+        return '%s_%s' % (GRUPPE.get(teile[0], teile[0]), teile[-1])
     if name.startswith('varianten/'):
         rest = name[len('varianten/'):]
         if rest.endswith('_m'):
@@ -65,24 +74,21 @@ def kanten_en(k):
     return out
 
 
-def main():
-    if os.path.exists(ZIEL):
-        shutil.rmtree(ZIEL)
-    for d in ('pieces', 'chunks', 'preview'):
-        os.makedirs(os.path.join(ZIEL, d))
-    m = json.load(open(os.path.join(QUELLE, 'manifest.json')))
+def typ_bauen(typ, en):
+    """Ein Kartentyp: Stuecke kopieren (pieces/<typ>/), Objekt-Tileset, Manifest, Tiled-Dateien."""
+    m = json.load(open(os.path.join(QUELLE, 'manifest_%s.json' % typ)))
+    os.makedirs(os.path.join(ZIEL, 'pieces', en))
     sprites = {sprite_en(n): dict(v, group=GRUPPE.get(v.pop('gruppe'), 'other')) for n, v in m['tileset']['sprites'].items()}
-    for v in sprites.values():
-        v['block'] = v['block']
-    shutil.copy(os.path.join(QUELLE, 'objekte_tileset.png'), os.path.join(ZIEL, 'objects_tileset.png'))
-    shutil.copy(os.path.join(QUELLE, 'objekte_tileset_vorschau.png'), os.path.join(ZIEL, 'preview', 'objects_tileset_2x.png'))
+    shutil.copy(os.path.join(QUELLE, 'objekte_tileset_%s.png' % typ), os.path.join(ZIEL, 'objects_tileset_%s.png' % en))
+    shutil.copy(os.path.join(QUELLE, 'objekte_tileset_%s_vorschau.png' % typ),
+                os.path.join(ZIEL, 'preview', 'objects_tileset_%s_2x.png' % en))
     pieces = []
     for l in m['lagen']:
         pid = '%s_%s' % (STUECK[l['name']], lage_en(l['lage']))
         dateien = {}
         for alt, neu in (('boden', 'ground'), ('schatten', 'shadows'), ('objekte', 'objects'), ('oben', 'above'),
                          ('komplett', 'preview')):
-            ziel = 'pieces/%s_%s.png' % (pid, neu)
+            ziel = 'pieces/%s/%s_%s.png' % (en, pid, neu)
             shutil.copy(os.path.join(QUELLE, l[alt]), os.path.join(ZIEL, ziel))
             dateien[neu] = ziel
         objs = []
@@ -93,26 +99,35 @@ def main():
             if o.get('spiegeln'):
                 e['flip'] = True
             objs.append(e)
-        punkte = l['punkte']
         pieces.append({'id': pid, 'chunk': STUECK[l['name']], 'orientation': lage_en(l['lage']),
                        'type': TYP[l['typ']], 'weight': l['gewicht'], 'orientationsOfChunk': l['lagenDesStuecks'],
                        'cells': l['felder'], 'edges': kanten_en(l['kanten']), **dateien,
-                       'collision': l['kollision'], 'points': punkte, 'objectList': objs})
-    manifest = {'tileSize': m['kachel'], 'chunkSize': m['feld'], 'padding': m['rand'],
-                'edgeTypes': {'C': 'closed (forest)', 'P': 'forest path', 'O': 'open meadow'},
-                'tileset': {'image': 'objects_tileset.png', 'sprites': sprites}, 'pieces': pieces}
-    tiled(manifest)                                      # Tiled-Tilesets + eine .tmx je Stueck, ergaenzt das Manifest
-    json.dump(manifest, open(os.path.join(ZIEL, 'pieces.json'), 'w'), separators=(',', ':'))
-    with open(os.path.join(ZIEL, 'pieces.js'), 'w') as fh:
-        fh.write('/* Random Dungeon Kit - piece manifest (same content as pieces.json). Loaded with a plain\n'
-                 '   <script> tag so the kit also works from the file system without a web server. */\n'
-                 'window.RANDOM_DUNGEON_PIECES = ')
-        json.dump(manifest, fh, separators=(',', ':'))
-        fh.write(';\n')
-    json.dump({'image': 'objects_tileset.png', 'tileSize': m['kachel'], 'sprites': sprites},
-              open(os.path.join(ZIEL, 'objects_tileset.json'), 'w'), indent=1)
+                       'collision': l['kollision'], 'points': l['punkte'], 'objectList': objs})
+    manifest = {'mapType': en, 'label': LABEL[en], 'tileSize': m['kachel'], 'chunkSize': m['feld'], 'padding': m['rand'],
+                'edgeTypes': KANTEN_TEXT[en],
+                'tileset': {'image': 'objects_tileset_%s.png' % en, 'sprites': sprites}, 'pieces': pieces}
+    tiled(manifest, en)                                  # Tiled-Tilesets + eine .tmx je Stueck, ergaenzt das Manifest
+    json.dump({'image': 'objects_tileset_%s.png' % en, 'tileSize': m['kachel'], 'sprites': sprites},
+              open(os.path.join(ZIEL, 'objects_tileset_%s.json' % en), 'w'), indent=1)
+    alle_lagen(manifest, os.path.join(ZIEL, 'preview', 'all_pieces_%s.png' % en))
+    return manifest
 
-    # Stueck-Definitionen (Raster)
+
+def main():
+    if os.path.exists(ZIEL):
+        shutil.rmtree(ZIEL)
+    for d in ('chunks', 'preview'):
+        os.makedirs(os.path.join(ZIEL, d))
+    typen = {en: typ_bauen(typ, en) for typ, en in TYPEN.items()}
+    json.dump(typen, open(os.path.join(ZIEL, 'pieces.json'), 'w'), separators=(',', ':'))
+    with open(os.path.join(ZIEL, 'pieces.js'), 'w') as fh:
+        fh.write('/* Random Dungeon Kit - piece manifests of all map types (same content as pieces.json). Loaded with a\n'
+                 '   plain <script> tag so the kit also works from the file system without a web server. */\n'
+                 'window.RANDOM_DUNGEON_TYPES = ')
+        json.dump(typen, fh, separators=(',', ':'))
+        fh.write(';\nwindow.RANDOM_DUNGEON_PIECES = window.RANDOM_DUNGEON_TYPES.forest;   // older single-type name\n')
+
+    # Stueck-Definitionen (Raster) - fuer alle Typen gleich, nur anders gelesen
     defs = []
     for st in zs.STUECKE:
         defs.append({'chunk': STUECK[st['name']], 'type': TYP[st['typ']], 'weight': st['gewicht'],
@@ -121,11 +136,12 @@ def main():
                      'edges': kanten_en({'%d,%d,%s' % k: t for k, t in zs.kanten(st['raster']).items()}),
                      'fixedObjects': [{'sprite': sprite_en(n), 'tileX': x, 'tileY': y} for n, x, y in st.get('objekte', [])],
                      'grid': st['raster']})
-    json.dump({'chunkSize': zs.N, 'legend': {'F': 'forest', 'G': 'meadow', 'P': 'sand path', 'W': 'pond'},
+    json.dump({'chunkSize': zs.N,
+               'legend': {'forest': {'F': 'forest', 'G': 'meadow', 'P': 'sand path', 'W': 'pond'},
+                          'network': {'F': 'void', 'G': 'platform', 'P': 'guide lane', 'W': 'hole into the void'}},
                'edgePatterns': {KANTE[t]: p for t, p in zs.KANTE.items()}, 'chunks': defs},
               open(os.path.join(ZIEL, 'chunks', 'chunks.json'), 'w'), indent=1)
     uebersicht(os.path.join(ZIEL, 'chunks', 'chunks_overview.png'))
-    alle_lagen(manifest, os.path.join(ZIEL, 'preview', 'all_pieces.png'))
     for f, n in (('system_explained.png', 'system_explained.png'),):
         shutil.copy(os.path.join(ROOT, 'maps', 'zufall', f), os.path.join(ZIEL, 'preview', n))
     for f in ('random_dungeon.js', 'demo.html', 'README.md'):
@@ -133,7 +149,7 @@ def main():
     for f in os.listdir(KIT):
         if f.startswith('demo_') and f.endswith('.png'):
             shutil.copy(os.path.join(KIT, f), os.path.join(ZIEL, 'preview', f))
-    beispiele()                                          # ganze Zufalls-Dungeons als .tmj (ueber das JS in Node)
+    beispiele(list(typen))                               # ganze Zufalls-Dungeons als .tmj (ueber das JS in Node)
     if os.path.exists(ZIP):
         os.remove(ZIP)
     with zipfile.ZipFile(ZIP, 'w', zipfile.ZIP_DEFLATED, compresslevel=9) as z:
@@ -141,8 +157,8 @@ def main():
             for f in sorted(dateien):
                 p = os.path.join(wurzel, f)
                 z.write(p, os.path.join('random_dungeon_kit', os.path.relpath(p, ZIEL)))
-    print('->', os.path.relpath(ZIP, ROOT), '%.1f MB' % (os.path.getsize(ZIP) / 1e6), len(pieces), 'pieces,',
-          len(sprites), 'sprites')
+    print('->', os.path.relpath(ZIP, ROOT), '%.1f MB' % (os.path.getsize(ZIP) / 1e6),
+          ', '.join('%s: %d pieces, %d sprites' % (en, len(m['pieces']), len(m['tileset']['sprites'])) for en, m in typen.items()))
 
 
 # ---------------------------------------------------------------- Tiled
@@ -153,12 +169,12 @@ def xml(s):
     return str(s).replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;').replace('"', '&quot;')
 
 
-def tiled(manifest):
+def tiled(manifest, en):
     """Schreibt tiled/: ground_tiles.png/.tsx (Bodenkacheln aller Stuecke, doppelte zusammengefasst),
     objects.tsx (Bildsammlung, je Sprite ein PNG in tiled/sprites/), collision.tsx und pieces/<id>.tmx.
     Ergaenzt das Manifest um manifest['tiled'] und je Stueck 'groundTiles' (Tile-IDs ab 0)."""
     T = manifest['tileSize']
-    td = os.path.join(ZIEL, 'tiled')
+    td = os.path.join(ZIEL, 'tiled', en)
     for d in ('pieces', 'sprites'):
         os.makedirs(os.path.join(td, d))
     # Bodenkacheln
@@ -187,7 +203,7 @@ def tiled(manifest):
                 'width="%d" height="%d"/>\n</tileset>\n' % (TILED_FORMAT, TILED_VERSION, T, T, len(kacheln), spalten,
                                                           atlas.width, atlas.height))
     # Objekte: Bildsammlung
-    tsatlas = Image.open(os.path.join(ZIEL, 'objects_tileset.png')).convert('RGBA')
+    tsatlas = Image.open(os.path.join(ZIEL, manifest['tileset']['image'])).convert('RGBA')
     namen = sorted(manifest['tileset']['sprites'])
     objtiles = []
     for i, n in enumerate(namen):
@@ -218,12 +234,12 @@ def tiled(manifest):
     g_koll = g_obj + len(objtiles)
     sprite_id = {t['name']: t['id'] for t in objtiles}
     manifest['tiled'] = {
-        'ground': {'name': 'ground', 'source': 'tiled/ground_tiles.tsx', 'image': 'tiled/ground_tiles.png',
+        'ground': {'name': 'ground', 'source': 'tiled/%s/ground_tiles.tsx' % en, 'image': 'tiled/%s/ground_tiles.png' % en,
                    'columns': spalten, 'tilecount': len(kacheln), 'imagewidth': atlas.width, 'imageheight': atlas.height},
-        'objects': {'name': 'objects', 'source': 'tiled/objects.tsx', 'tilewidth': mw, 'tileheight': mh,
-                    'tiles': [{'id': t['id'], 'sprite': t['name'], 'image': 'tiled/' + t['image'], 'w': t['w'], 'h': t['h']}
+        'objects': {'name': 'objects', 'source': 'tiled/%s/objects.tsx' % en, 'tilewidth': mw, 'tileheight': mh,
+                    'tiles': [{'id': t['id'], 'sprite': t['name'], 'image': 'tiled/%s/' % en + t['image'], 'w': t['w'], 'h': t['h']}
                               for t in objtiles]},
-        'collision': {'name': 'collision', 'source': 'tiled/collision.tsx', 'image': 'tiled/collision.png'}}
+        'collision': {'name': 'collision', 'source': 'tiled/%s/collision.tsx' % en, 'image': 'tiled/%s/collision.png' % en}}
     # eine .tmx je Stueck
     P = manifest['padding']
     for p in manifest['pieces']:
@@ -246,7 +262,7 @@ def tiled(manifest):
             punkte.append('  <object id="%d" name="%s" x="%d" y="%d"><point/></object>' % (oid, name, px * T + T // 2, py * T + T // 2))
             oid += 1
         eig = ''.join('  <property name="%s" value="%s"/>\n' % (k, xml(v)) for k, v in (
-            ('chunk', p['chunk']), ('pieceOrientation', p['orientation']), ('pieceType', p['type']),
+            ('mapType', en), ('chunk', p['chunk']), ('pieceOrientation', p['orientation']), ('pieceType', p['type']),
             ('edges', json.dumps(p['edges'], separators=(',', ':')))))
         with open(os.path.join(td, 'pieces', p['id'] + '.tmx'), 'w') as f:
             f.write('<?xml version="1.0" encoding="UTF-8"?>\n'
@@ -257,26 +273,26 @@ def tiled(manifest):
                     ' <tileset firstgid="%d" source="../objects.tsx"/>\n'
                     ' <tileset firstgid="%d" source="../collision.tsx"/>\n'
                     ' <layer id="1" name="ground" width="%d" height="%d">\n  <data encoding="csv">\n%s\n</data>\n </layer>\n'
-                    ' <imagelayer id="5" name="shadows" offsetx="%d" offsety="%d">\n  <image source="../../%s" width="%d" height="%d"/>\n </imagelayer>\n'
+                    ' <imagelayer id="5" name="shadows" offsetx="%d" offsety="%d">\n  <image source="../../../%s" width="%d" height="%d"/>\n </imagelayer>\n'
                     ' <objectgroup id="2" name="objects">\n%s\n </objectgroup>\n'
                     ' <layer id="3" name="collision" width="%d" height="%d" visible="0" opacity="0.6">\n  <data encoding="csv">\n%s\n</data>\n </layer>\n'
                     ' <objectgroup id="4" name="points">\n%s\n </objectgroup>\n'
                     '</map>\n' % (TILED_FORMAT, TILED_VERSION, W, H, T, T, oid, eig, g_obj, g_koll,
                                    W, H, boden, -P * T, -P * T, p['shadows'], (W + 2 * P) * T, (H + 2 * P) * T,
                                    '\n'.join(objs), W, H, koll, '\n'.join(punkte)))
-    print('Tiled:', len(kacheln), 'Bodenkacheln,', len(objtiles), 'Objekt-Sprites,', len(manifest['pieces']), '.tmx')
+    print('Tiled %s:' % en, len(kacheln), 'Bodenkacheln,', len(objtiles), 'Objekt-Sprites,', len(manifest['pieces']), '.tmx')
 
 
-def beispiele():
-    """Zwei ganze Dungeons als .tmj, erzeugt mit RandomDungeon.toTiled() in Node (prueft das JS mit)."""
+def beispiele(typen):
+    """Je Typ zwei ganze Dungeons als .tmj, erzeugt mit RandomDungeon.toTiled() in Node (prueft das JS mit)."""
     import subprocess
-    ex = os.path.join(ZIEL, 'tiled', 'examples')
-    os.makedirs(ex, exist_ok=True)
-    skript = ("const RD=require(process.argv[1]+'/random_dungeon.js');const m=require(process.argv[1]+'/pieces.json');"
-              "const fs=require('fs');for(const s of [7,42]){const d=RD.generate(m,s,{width:6,height:5});"
-              "fs.writeFileSync(process.argv[1]+'/tiled/examples/dungeon_seed_'+s+'.tmj',"
-              "JSON.stringify(RD.toTiled(m,d,{imageBase:'../../'}),null,1));}")
-    subprocess.run(['node', '-e', skript, ZIEL], check=True)
+    for en in typen:
+        os.makedirs(os.path.join(ZIEL, 'tiled', en, 'examples'), exist_ok=True)
+        skript = ("const RD=require(process.argv[1]+'/random_dungeon.js');const m=require(process.argv[1]+'/pieces.json')[process.argv[2]];"
+                  "const fs=require('fs');for(const s of [7,42]){const d=RD.generate(m,s,{width:6,height:5});"
+                  "fs.writeFileSync(process.argv[1]+'/tiled/'+process.argv[2]+'/examples/dungeon_seed_'+s+'.tmj',"
+                  "JSON.stringify(RD.toTiled(m,d,{imageBase:'../../../'}),null,1));}")
+        subprocess.run(['node', '-e', skript, ZIEL, en], check=True)
 
 
 def uebersicht(pfad):
@@ -308,7 +324,7 @@ def alle_lagen(m, pfad):
     W = sp * (zelle + gap) + gap
     out = Image.new('RGB', (W, 50 + zeilen * (zelle + 24) + 10 + 256 + 40), (18, 19, 22))
     d = ImageDraw.Draw(out)
-    d.text((gap, 14), 'Random Dungeon Kit – all %d pieces (half size)' % len(m['pieces']),
+    d.text((gap, 14), 'Random Dungeon Kit – %s – all %d pieces (half size)' % (m['label'], len(m['pieces'])),
            font=ImageFont.truetype(FONT + 'Inter-Bold.otf', 20), fill=(236, 238, 242))
     for i, p in enumerate(klein):
         x, y = gap + (i % sp) * (zelle + gap), 50 + (i // sp) * (zelle + 24)

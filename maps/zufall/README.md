@@ -7,13 +7,19 @@ Path of Exile: Die Stücke sind von Hand gebaut, nur ihre Anordnung ist zufälli
 python3 tools/zufall_stuecke.py           # Stücke prüfen + stuecke_uebersicht.png
 python3 tools/zufall_karte.py 7           # Karte mit Startwert 7 (5×4 Felder)
 python3 tools/zufall_karte.py 7 6 5       # Startwert 7, 6×5 Felder
+python3 tools/zufall_karte.py 7 6 5 netz  # dasselbe im Stil von Karte 16 (The Network)
 ```
+
+**Kartentypen:** `wald` (Stil Karte 01 / Gebiet A02, `tools/zufall_a02.py`) und `netz` (Stil Karte 16 – The Network,
+`tools/zufall_netz.py`). Beide nutzen dieselben Kartenstücke, sie werden nur anders gelesen: Wald → Leere des Netzes,
+Wiese → Plattform, Weg → Leitbahn, Teich → Loch in die Leere; Startlager → Teleporter mit cyan Pfeilfeldern, Computer,
+Holo-Anzeige; Bossarena → Viren-Kokon (Karte 17) mit Energiesäulen-Paar. In der Demo wählt ein **Reiter** den Typ.
 
 Gleicher Startwert = gleiche Karte.
 
 | Datei | Inhalt |
 |---|---|
-| `karte_<n>.png` | fertige Karte (Felder × 14 Kacheln à 16 px, z. B. 84×70 Kacheln) |
+| `karte_<n>.png` / `karte_netz_<n>.png` | fertige Karte Wald / Netz (Felder × 14 Kacheln à 16 px, z. B. 84×70 Kacheln) |
 | `grundriss_<n>.png` | welches Stück in welcher Lage auf welchem Feld liegt |
 | `karte_<n>.json` | dasselbe als Liste (Startwert, Felder, Stücke) |
 | `stuecke_uebersicht.png` | alle Kartenstücke (rot = feste Objekte) |

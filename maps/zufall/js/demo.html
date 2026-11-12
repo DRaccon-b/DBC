@@ -22,11 +22,19 @@
   .wirbel { width: 64px; height: 64px; border-radius: 50%; border: 6px solid #24686a;
     border-top-color: var(--akzent); animation: dreh 0.9s linear infinite; margin: 0 auto 18px; }
   @keyframes dreh { to { transform: rotate(360deg); } }
+  /* Reiter: Kartentyp waehlen */
+  #reiter { display: flex; gap: 2px; background: #15171b; border-radius: 8px; padding: 3px; }
+  #reiter button { background: transparent; color: var(--dim); font-weight: 600; }
+  #reiter button.aktiv { background: var(--akzent); color: #10201f; }
 </style>
 </head>
 <body>
 <canvas id="spiel"></canvas>
 <div id="leiste">
+  <div id="reiter" role="tablist">
+    <button role="tab" data-typ="wald">Wald</button>
+    <button role="tab" data-typ="netz">The Network</button>
+  </div>
   <label>Seed <input id="seed" type="number"></label>
   <button id="neu">Dungeon betreten</button>
   <button id="zufall">Neuer Seed</button>
@@ -42,13 +50,19 @@ const ctx = leinwand.getContext('2d');
 const laden = document.getElementById('laden');
 const params = new URLSearchParams(location.search);
 let manifest, dungeon, ebenen, spieler, ganzeKarte = params.has('ganz');
+let typ = params.get('typ') === 'netz' ? 'netz' : 'wald';             // Kartentyp (Reiter)
+const manifeste = {};
+function reiterZeigen() {
+  for (const b of document.querySelectorAll('#reiter button')) b.classList.toggle('aktiv', b.dataset.typ === typ);
+}
 const tasten = new Set();
 
 async function betreten(seed) {
   laden.classList.remove('weg');
   document.getElementById('ladetext').textContent = 'Dungeon ' + seed + ' wird geladen …';
   const t0 = performance.now();
-  manifest ??= await (await fetch('manifest.json')).json();
+  manifeste[typ] ??= await (await fetch('manifest_' + typ + '.json')).json();
+  manifest = manifeste[typ];
   dungeon = erzeugeDungeon(manifest, seed, { breite: 6, hoehe: 5 });
   const t1 = performance.now();
   const bilder = await ladeBilder(manifest, dungeon, './');
@@ -60,7 +74,7 @@ async function betreten(seed) {
   document.getElementById('info').textContent =
     `Seed ${seed} · ${dungeon.cols}×${dungeon.rows} Kacheln · Generator ${(t1 - t0).toFixed(1)} ms · ` +
     `Bilder + Zusammenbau ${(t2 - t1).toFixed(0)} ms · Pfeiltasten / WASD · M = ganze Karte`;
-  history.replaceState(null, '', '?seed=' + seed + (ganzeKarte ? '&ganz' : ''));
+  history.replaceState(null, '', '?typ=' + typ + '&seed=' + seed + (ganzeKarte ? '&ganz' : ''));
   laden.classList.add('weg');
   document.body.dataset.fertig = '1';
 }
@@ -116,6 +130,10 @@ addEventListener('keydown', (e) => {
   if (e.key.startsWith('Arrow')) e.preventDefault();
 });
 addEventListener('keyup', (e) => tasten.delete(e.key.length === 1 ? e.key.toLowerCase() : e.key));
+for (const b of document.querySelectorAll('#reiter button')) {
+  b.onclick = () => { typ = b.dataset.typ; reiterZeigen(); betreten(+document.getElementById('seed').value || 1); };
+}
+reiterZeigen();
 document.getElementById('neu').onclick = () => betreten(+document.getElementById('seed').value || 1);
 document.getElementById('zufall').onclick = () => betreten(Math.floor(Math.random() * 1e9));
 

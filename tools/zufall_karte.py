@@ -2,6 +2,7 @@
 
   python3 tools/zufall_karte.py 7            (Startwert 7, 5x4 Felder)
   python3 tools/zufall_karte.py 7 6 5        (Startwert 7, 6x5 Felder)
+  python3 tools/zufall_karte.py 7 6 5 netz   (dasselbe im Stil von Karte 16 - The Network)
 
 Ablauf (wie bei Kachel-Dungeons a la Path of Exile):
   1. Grundriss auf einem groben Feldraster: Bossarena (2x2 Felder) und Startlager moeglichst weit
@@ -200,11 +201,14 @@ def bauordner(startwert):
     return obj
 
 
-def bauen(raster, fest, symmetrie, obj, seed):
-    """Gelaende und Objekte nach dem aktuellen Kachel-Standard (A02, Stil Karte 20): tools/zufall_a02.py."""
-    import zufall_a02
-    r = zufall_a02.bauen(raster, fest, symmetrie, obj, seed)
-    print('%d Objekte (Wald, Deko, feste Objekte, Begleiter nach Regel 5d)' % len(r['objekte']))
+TYPEN = {'wald': 'zufall_a02', 'netz': 'zufall_netz'}       # Kartentyp -> Bau-Modul
+
+
+def bauen(raster, fest, symmetrie, obj, seed, typ='wald'):
+    """Gelaende und Objekte je Kartentyp: wald = tools/zufall_a02.py (A02, Stil Karte 20),
+    netz = tools/zufall_netz.py (Stil Karte 16, The Network)."""
+    r = __import__(TYPEN[typ]).bauen(raster, fest, symmetrie, obj, seed)
+    print('%d Objekte' % len(r['objekte']))
     return r['bild']
 
 
@@ -225,6 +229,9 @@ def main():
     startwert = int(sys.argv[1]) if len(sys.argv) > 1 else 1
     gw = int(sys.argv[2]) if len(sys.argv) > 2 else 5
     gh = int(sys.argv[3]) if len(sys.argv) > 3 else 4
+    typ = sys.argv[4] if len(sys.argv) > 4 else 'wald'
+    assert typ in TYPEN, 'Kartentyp: ' + ', '.join(TYPEN)
+    name = 'karte_%d' % startwert if typ == 'wald' else 'karte_%s_%d' % (typ, startwert)
     rnd = random.Random(startwert)
     for _ in range(50):
         boss_xy, start, belegt, verb, pfad = grundriss(rnd, gw, gh)
@@ -238,13 +245,13 @@ def main():
     grundriss_bild(gw, gh, wahl, boss_xy, start, verb, pfad).save(os.path.join(ZIEL, 'grundriss_%d.png' % startwert))
     for (fx, fy), l in sorted(wahl.items(), key=lambda t: (t[0][1], t[0][0])):
         print('  Feld %d,%d: %s (%s)' % (fx, fy, l['name'], l['lage']))
-    obj = bauordner(startwert)
-    img = bauen(raster, fest, symmetrie, obj, startwert)
-    img.convert('RGB').save(os.path.join(ZIEL, 'karte_%d.png' % startwert))
-    json.dump({'startwert': startwert, 'felder': [gw, gh],
+    obj = bauordner('%s_%d' % (typ, startwert))
+    img = bauen(raster, fest, symmetrie, obj, startwert, typ)
+    img.convert('RGB').save(os.path.join(ZIEL, name + '.png'))
+    json.dump({'startwert': startwert, 'typ': typ, 'felder': [gw, gh],
                'stuecke': {'%d,%d' % k: {'name': l['name'], 'lage': l['lage']} for k, l in wahl.items()}},
-              open(os.path.join(ZIEL, 'karte_%d.json' % startwert), 'w'), indent=1)
-    print('fertig: maps/zufall/karte_%d.png (%dx%d Kacheln)' % (startwert, gw * N, gh * N))
+              open(os.path.join(ZIEL, name + '.json'), 'w'), indent=1)
+    print('fertig: maps/zufall/%s.png (%dx%d Kacheln)' % (name, gw * N, gh * N))
 
 
 if __name__ == '__main__':

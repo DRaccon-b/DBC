@@ -1,35 +1,41 @@
 # Random Dungeon Kit
 
-Random forest dungeons for a top-down pixel-art RPG (16 × 16 px tiles), assembled from **hand-made,
+Random dungeons for a top-down pixel-art RPG (16 × 16 px tiles), assembled from **hand-made,
 pre-rendered map pieces** – the same idea as the maps in *Path of Exile*: the pieces are designed by hand,
 only their arrangement is random. A dungeon is generated while a short loading screen is shown and is then
 fully available.
 
-- **145 finished map pieces** (20 hand-made chunks in up to 8 orientations), each as separate images
-- **All objects in one tileset image** (`objects_tileset.png`) with coordinates
+- **Two map types** – choose one with the tabs in the demo or with the manifest you pass in:
+  - **Forest** – meadows, sand paths and dense forest (map 01 / area A02 style)
+  - **The Network** – floating platforms in the void of the net (map 16 style)
+- **148 finished map pieces per type** (20 hand-made chunks in up to 8 orientations, plus filler variants),
+  each as separate images
+- **All objects of a type in one tileset image** (`objects_tileset_<type>.png`) with coordinates
 - **One JavaScript file**, no dependencies, no build step, **no web server needed**
 - **Tiled map files**: every piece as `.tmx`, generated dungeons as `.tmj` (`toTiled()`), shared tilesets
 - Same seed → same dungeon
 
-![all pieces](preview/all_pieces.png)
+| Forest | The Network |
+|---|---|
+| ![forest](preview/demo_whole_map.png) | ![network](preview/demo_whole_map_network.png) |
 
 ## Contents
 
 ```
 random_dungeon_kit/
 ├── random_dungeon.js          the generator (browser <script>, Node require, or bundler import)
-├── pieces.js                  piece manifest as a script (works from file://)
-├── pieces.json                the same manifest as JSON (for fetch / engines / tools)
-├── objects_tileset.png        every object sprite once, aligned to the 16 px grid, grouped
-├── objects_tileset.json       sprite rectangles in the tileset (also inside the manifest)
-├── demo.html                  playable demo – just double-click it
-├── pieces/
+├── pieces.js                  manifests of all map types as a script (works from file://)
+├── pieces.json                the same as JSON: { forest: manifest, network: manifest }
+├── objects_tileset_<type>.png every object sprite of a type once, aligned to the 16 px grid, grouped
+├── objects_tileset_<type>.json sprite rectangles in the tileset (also inside the manifest)
+├── demo.html                  playable demo with a tab per map type – just double-click it
+├── pieces/<type>/             <type> = forest | network
 │   ├── <id>_ground.png        plain ground, exact piece size (224 × 224, arena 448 × 448)
 │   ├── <id>_shadows.png       contact + cast shadows (+4 tiles padding: shadows cross piece borders)
 │   ├── <id>_objects.png       trees, decoration, portal … (+4 tiles padding for overhanging crowns)
 │   ├── <id>_above.png         upper parts of tall objects – draw ABOVE characters (same size as _objects)
 │   └── <id>_preview.png       the finished piece in one image (ground + objects + above)
-├── tiled/                     Tiled map editor files (Tiled 1.10+)
+├── tiled/<type>/              Tiled map editor files (Tiled 1.10+), one folder per map type
 │   ├── ground_tiles.png/.tsx  all ground tiles of all pieces, 16 × 16, duplicates merged
 │   ├── objects.tsx            image-collection tileset, one PNG per sprite in sprites/
 │   ├── collision.png/.tsx     one "blocked" tile (property blocked = true)
@@ -38,13 +44,15 @@ random_dungeon_kit/
 ├── chunks/
 │   ├── chunks.json            the 20 hand-made chunks as tile grids, edges, fixed objects
 │   └── chunks_overview.png
-└── preview/                   all_pieces.png, objects_tileset_2x.png, system_explained.png, demo screenshots
+└── preview/                   all_pieces_<type>.png, objects_tileset_<type>_2x.png, system_explained.png, screenshots
 ```
 
 ## Try it
 
-Open `demo.html` in a browser (double-click). Arrow keys / WASD move the placeholder character, **M** toggles
-the whole map, **O** switches between the two drawing modes, `?seed=42` in the address loads a specific dungeon.
+Open `demo.html` in a browser (double-click). The **tabs** at the top choose the map type (*Forest* or
+*The Network*); the same seed gives the same layout in both types. Arrow keys / WASD move the placeholder
+character, **M** toggles the whole map, **O** switches between the two drawing modes, `?type=network&seed=42` in
+the address loads a specific dungeon.
 
 ## How it works
 
@@ -68,13 +76,30 @@ the whole map, **O** switches between the two drawing modes, `?seed=42` in the a
 Because the path always crosses an edge in the middle (tiles 6–7) and the edge rows are standardised, rotated
 and mirrored pieces connect seamlessly.
 
+### Map types
+
+All types use the **same 20 chunks and the same generator** – only the pre-rendered images differ. The tile grid of a
+chunk is read per type:
+
+| grid | Forest | The Network |
+|---|---|---|
+| `F` | dense forest | void of the net (grid, fog, data strands, floating fragments) |
+| `G` | meadow | platform (floor plates, stepped edges, cyan glowing rim, metal front with light threads) |
+| `P` | sand path (45° edges) | guide lane on the platform |
+| `W` | sunken pond | hole into the void |
+| start camp | rune portal, campfire, signpost | teleporter pad with cyan arrival arrows, computer, holo display |
+| boss arena | jungle tree + rune stone pair | virus cocoon + energy pylon pair |
+
+Edge types per type: Forest `C` forest / `P` forest path / `O` open meadow – The Network `C` void / `P` narrow
+platform bridge / `O` wide platform.
+
 ## Using it in your game
 
 ```html
 <script src="pieces.js"></script>
 <script src="random_dungeon.js"></script>
 <script>
-  const manifest = window.RANDOM_DUNGEON_PIECES;
+  const manifest = window.RANDOM_DUNGEON_TYPES.network;            // or .forest
   async function enterDungeon(seed) {
     // --- loading screen ---
     const dungeon = RandomDungeon.generate(manifest, seed, { width: 6, height: 5 });
@@ -85,7 +110,8 @@ and mirrored pieces connect seamlessly.
 </script>
 ```
 
-Node / bundler: `const RandomDungeon = require('./random_dungeon.js')` and `fetch('pieces.json')` (or `require`).
+Node / bundler: `const RandomDungeon = require('./random_dungeon.js')` and `fetch('pieces.json')` (or `require`);
+use `pieces.network` / `pieces.forest` as the manifest.
 `generate()` needs no DOM – you can create dungeons on a server, e.g. to share the seed between players.
 
 ### API
@@ -125,7 +151,7 @@ Node / bundler: `const RandomDungeon = require('./random_dungeon.js')` and `fetc
 
 ## Tiled
 
-Open any file in `tiled/pieces/` or `tiled/examples/` with the [Tiled map editor](https://www.mapeditor.org/)
+Open any file in `tiled/<type>/pieces/` or `tiled/<type>/examples/` with the [Tiled map editor](https://www.mapeditor.org/)
 (1.10 or newer). Every map has the same layers:
 
 | layer | type | content |
@@ -158,11 +184,14 @@ the ground at each spot and are not part of the object sprites, so a Tiled map l
 
 ## Manifest (`pieces.json` / `pieces.js`)
 
+`pieces.json` = `{ forest: manifest, network: manifest }` (`pieces.js`: `window.RANDOM_DUNGEON_TYPES`). One manifest:
+
 ```js
 {
-  tileSize: 16, chunkSize: 14, padding: 4,          // padding: extra tiles around _objects/_above images
+  mapType: 'network', label: 'The Network',
+  tileSize: 16, chunkSize: 14, padding: 4,          // padding: extra tiles around _shadows/_objects/_above images
   edgeTypes: { C, P, O },
-  tileset: { image: 'objects_tileset.png', sprites: { '<name>': { x, y, w, h, block: [tx, ty, tw, th], group } } },
+  tileset: { image: 'objects_tileset_network.png', sprites: { '<name>': { x, y, w, h, block: [tx, ty, tw, th], group } } },
   pieces: [{
     id: 'path_corner_m90',                          // <chunk>_<orientation>
     chunk: 'path_corner', orientation: 'm90',       // r = rotated clockwise, m = mirrored first, then rotated
@@ -174,7 +203,7 @@ the ground at each spot and are not part of the object sprites, so a Tiled map l
     collision: ['22221111112222', …],               // 14 rows per cell: 1 walkable, 2 blocked, 3 covered
     points: { spawn: [x, y] } | { boss: [x, y] },   // tile inside the piece
     objectList: [{ sprite, x, y, block: [tx, ty, tw, th], layer, anim?, flip? }],  // px / tiles inside the piece
-    groundTiles: [ … ]                              // ids in tiled/ground_tiles.png, row by row
+    groundTiles: [ … ]                              // ids in tiled/<type>/ground_tiles.png, row by row
   }],
   tiled: { ground, objects, collision }             // tileset info used by toTiled()
 }
@@ -196,7 +225,7 @@ Image placement: `ground` at `(cellX * 14) * 16`, `shadows`/`objects`/`above` at
 | `deadend_pond`, `deadend_well`, `deadend_meadow`, `deadend_boulder`, `glade_rune_tree` | dead end | |
 | `start_camp` | dead end | rune portal (spawn), campfire, signpost |
 | `boss_jungle_tree` | 2 × 2 cells | giant jungle tree with a symmetric pair of rune stones; rotates 180° only |
-| `forest` | closed | filler |
+| `forest` | closed | filler (4 variants with different decoration) |
 
 ## Notes
 
@@ -204,6 +233,8 @@ Image placement: `ground` at `(cellX * 14) * 16`, `shadows`/`objects`/`above` at
   device and in Node.
 - Not animated yet: portal vortex, campfire, water and grass are static in the images. The objects that should
   move are marked with `anim` in `objectList`.
-- Art style: polished handheld monster-RPG look, light from the upper left, frontal view. Ground edges follow the
-  16 px grid with 45° corners (same tile standard as the hand-made maps of area A02, e.g. map 20).
+- Art style: polished handheld monster-RPG look, light from the upper left, frontal view. Forest: ground edges follow
+  the 16 px grid with 45° corners (same tile standard as the hand-made maps of area A02, e.g. map 20). The Network:
+  platform edges stepped on the 16 px grid like map 16; fog and grid of the void repeat per cell so they continue
+  seamlessly across piece borders.
 - Collision codes are the same as in the map packages of the other maps (`tools/kollision.py`).

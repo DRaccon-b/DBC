@@ -7,12 +7,12 @@ die Bilder zusammen (Generator ~15–60 ms, Bilder + Zusammenbau ~80 ms).
 | Datei | Inhalt |
 |---|---|
 | `zufall_dungeon.js` | ES-Modul, engine-unabhängig: Seed → Grundriss → Stücke → Ebenen + Kollision |
-| `manifest.json` | alle 145 Lagen: Kanten, Kollision, Spawn-/Bosspunkt, Gewichte, Bildpfade |
-| `stuecke/<lage>_boden.png` | reiner Boden (224×224 px, Bossarena 448×448) |
-| `stuecke/<lage>_schatten.png` | Kontakt- und Schlagschatten (je 4 Kacheln Rand, reichen über die Naht) |
-| `stuecke/<lage>_objekte.png` | Bäume, Deko, Portal … (je 4 Kacheln Rand für überstehende Kronen) |
-| `stuecke/<lage>_oben.png` | obere Teile hoher Objekte – wird **über** dem Spieler gezeichnet |
-| `demo.html` | Testseite: Ladebildschirm, Spielfigur, Kollision, Kamera |
+| `manifest_<typ>.json` / `.js` | je Kartentyp (`wald`, `netz`) alle 148 Lagen: Kanten, Kollision, Spawn-/Bosspunkt, Gewichte, Bildpfade |
+| `stuecke/<typ>/<lage>_boden.png` | reiner Boden (224×224 px, Bossarena 448×448) |
+| `stuecke/<typ>/<lage>_schatten.png` | Kontakt- und Schlagschatten (je 4 Kacheln Rand, reichen über die Naht) |
+| `stuecke/<typ>/<lage>_objekte.png` | Bäume, Deko, Portal … (je 4 Kacheln Rand für überstehende Kronen) |
+| `stuecke/<typ>/<lage>_oben.png` | obere Teile hoher Objekte – wird **über** dem Spieler gezeichnet |
+| `demo.html` | Testseite mit **Reitern für den Kartentyp** (Wald / The Network): Ladebildschirm, Spielfigur, Kollision, Kamera |
 
 ## Demo starten
 
@@ -30,7 +30,7 @@ Dann `http://localhost:8000/demo.html` öffnen. Pfeiltasten/WASD laufen, **M** z
 ```js
 import { erzeugeDungeon, ladeBilder, zeichneDungeon } from './zufall_dungeon.js';
 
-const manifest = await (await fetch('manifest.json')).json();      // einmal beim Spielstart
+const manifest = await (await fetch('manifest_netz.json')).json(); // Kartentyp: manifest_wald.json oder manifest_netz.json
 // --- Ladebildschirm ---
 const dungeon = erzeugeDungeon(manifest, seed, { breite: 6, hoehe: 5 });
 const bilder  = await ladeBilder(manifest, dungeon, './');           // lädt nur benutzte Stücke
@@ -55,11 +55,12 @@ const { unten, oben } = zeichneDungeon(manifest, dungeon, bilder);   // zwei Can
 Nach Änderungen an `tools/zufall_stuecke.py` oder an den Objekten:
 
 ```bash
-python3 tools/zufall_export.py
+python3 tools/zufall_export.py --typ wald
+python3 tools/zufall_export.py --typ netz
 ```
 
-Rendert alle Lagen nach dem aktuellen Kachel-Standard (A02, Stil Karte 20, 45-Grad-Kanten; `tools/zufall_a02.py`,
-4 Prozesse, ~15 s). Zeichenreihenfolge: alle Böden → alle Schatten → Objekte von Nord nach Süd → oben. Jede Lage wird mit 4 Kacheln Rand gebaut
+Rendert alle Lagen eines Typs (Wald: aktueller Kachel-Standard A02, Stil Karte 20, 45-Grad-Kanten, `tools/zufall_a02.py`;
+Netz: Stil Karte 16, `tools/zufall_netz.py`; je 4 Prozesse, ~15 s). Zeichenreihenfolge: alle Böden → alle Schatten → Objekte von Nord nach Süd → oben. Jede Lage wird mit 4 Kacheln Rand gebaut
 (Randkacheln fortgesetzt = genau das, was ein passender Nachbar dort hat); Objekte zählen nur, wenn ihr Fuß im
 Stück steht.
 
