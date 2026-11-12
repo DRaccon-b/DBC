@@ -25,6 +25,7 @@ N_FRAMES = 4                     # Regel: hoechstens 4 Animationsbilder
 BILDDAUER = 250
 k4.N_FRAMES = N_FRAMES
 kb.N_FRAMES = N_FRAMES
+k6.N_FRAMES = N_FRAMES                    # Brunnen (animieren_k6) im selben Takt, Schleife ohne Sprung
 H = k4.H
 weich, zell_maske, flaeche = k4.weich, k4.zell_maske, k20.flaeche
 k4.RASTER45 = True                       # Regel 6b: alle Bodenkanten am 16er-Raster mit 45 Grad

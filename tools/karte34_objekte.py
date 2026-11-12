@@ -28,9 +28,9 @@ FREMD.update({
     'spiel/brunnen': 'karte10/spielplatz/08.png', 'spiel/kuppel': 'karte18/gebaeude/kletterkuppel.png',
     'moebel/bank': 'karte18/strasse/14.png', 'moebel/laterne': 'karte31/laterne/00.png',
 })
-WALD = ['k01/baum%02d' % i for i in (0, 1, 2, 4, 5, 9, 12, 13, 14, 15)]
+WALD = ['k01/baum%02d' % i for i in (0, 1, 2, 4, 9, 12, 13, 14, 15)]
 LAUB = ['k01/baum00', 'k01/baum01', 'k01/baum02', 'k01/baum15']
-GROSS = 'k01/baum05'                                         # knorriger Grossbaum (Vorlage: drei alte Baeume)
+GROSS = 'k01/baum00'                                         # grosser Laubbaum (Runenbaum baum05 passt nicht in den Stadtpark)
 ZYPRESSE = ['k01/baum07', 'k01/baum08']
 FELS_KLEIN = ['k01/deko08', 'k01/deko10']
 FELS_GROSS = ['k01/deko09', 'k01/deko11']
@@ -58,7 +58,7 @@ BAEUME = [
 ZYPRESSEN = [(2, 10), (8, 13), (2, 17), (26, 27), (20, 28), (4, 35), (23, 47), (25, 46), (19, 50), (24, 49)]
 BAENKE = [(18.5, 21), (23.5, 31), (22.5, 36), (23.5, 40), (12.5, 40), (6.5, 38), (33.5, 32), (33.5, 38), (37.5, 40),
           (38.5, 30), (50.5, 25)]
-LATERNEN = [(42, 22), (51, 22), (19, 35), (21, 46), (32, 29), (8, 41)]   # Paar 42/51 symmetrisch zum Rathaus
+LATERNEN = [(42, 22), (51, 22), (19, 35), (21, 46), (32, 29)]   # Paar 42/51 symmetrisch zum Rathaus
 
 
 def main():
@@ -105,6 +105,7 @@ def main():
         if frei:
             if (tx, ty) in gesperrt or (tx, ty, flach) in belegt:
                 return False
+        nur_land = opt.pop('nur_land', False)
         b = opt.pop('boden', None) or boden(tx, ty)
         key = (name, b, spiegeln)
         if key not in cache:
@@ -133,6 +134,10 @@ def main():
             o['x'] = px_ - (ux0 + bw // 2)
             o['y'] = py_ - uy1
         r = (o['x'] + ux0, o['y'] + uy0, o['x'] + ux1, o['y'] + uy1)
+        if frei and not wald and any((x, ty) in gesperrt for x in range(bx, bx + wt)):
+            return False                                         # ganze Fussbreite frei (nicht nur die linke Kachel)
+        if nur_land and not all(k(x // T, r[3] // T) in 'mg' for x in range(r[0], r[2] + 1, 3)):
+            return False                                         # Uferfels ganz auf Land
         if wald and not all(k(x, ty) in 'hg' for x in range(bx, bx + wt)):
             return False                                         # Waldrand/Hecke nie mit dem Fuss auf Pflaster oder Weg
         if opt.pop('begleiter', False):                          # Begleiter: Fuss auf Rasen, nicht in Gebaeuden/Moebeln
@@ -142,7 +147,7 @@ def main():
                    if not w and 'baum' not in oo['basis']):
                 return False
         if wald:
-            if any(schnitt(r, ((tp['x'] * T), (tp['y'] * T), (tp['x'] + tp['b']) * T - 1, (tp['y'] + tp['h']) * T - 1), 2)
+            if any(schnitt(r, ((tp['x'] * T) - 24, (tp['y'] * T) - 16, (tp['x'] + tp['b']) * T - 1, (tp['y'] + tp['h']) * T - 1), 2)
                    for tp in lay['teleporter']):
                 return False                                     # Waldbaeume nie ueber Teleportern
             if any(not w and schnitt(r, (a0, max(a1, a3 - 20), a2, a3), 1) for (a0, a1, a2, a3, w) in rects):
@@ -249,7 +254,7 @@ def main():
             break
         if any(abs(tx - x) + abs(ty - y) < 7 for (x, y) in fels):
             continue
-        if setze(rnd.choice(FELS_KLEIN + FELS_GROSS), tx, ty, {}, frei=True):
+        if setze(FELS_KLEIN[len(fels) % 2] if len(fels) % 2 else FELS_GROSS[len(fels) // 2 % 2], tx, ty, {'nur_land': True}, frei=True):
             fels.append((tx, ty))
     rosen = []
     wasser = [(tx, ty) for ty in range(rows) for tx in range(cols) if cls[ty][tx] == 'x'
@@ -276,11 +281,18 @@ def main():
             if n >= ziel:
                 break
             tx, ty = rnd.randrange(3, cols - 3), rnd.randrange(3, rows - 3)
-            if not frei_gras(tx, ty) or any(abs(tx - x) + abs(ty - y) < 4 for (x, y) in gesetzt):
+            if not frei_gras(tx, ty) or any(abs(tx - x) + abs(ty - y) < 5 or (y == ty and abs(tx - x) < 9)
+                                            for (x, y, _) in gesetzt):
                 continue
-            if setze(rnd.choice(liste), tx, ty, opt, frei=True):
+            nah = {m for (x, y, m) in gesetzt if abs(tx - x) + abs(ty - y) < 10}
+            nah |= {oo['basis'] for oo in objekte if abs(oo['kachel'][0] - tx) + abs(oo['kachel'][1] - ty) < 6}
+            wahl = [m for m in liste if m not in nah]
+            if not wahl:
+                continue
+            m_ = rnd.choice(wahl)
+            if setze(m_, tx, ty, opt, frei=True):
                 n += 1
-                gesetzt.append((tx, ty))
+                gesetzt.append((tx, ty, m_))
     json.dump(objekte, open(os.path.join(OBJ, 'platzierung.json'), 'w'), indent=0)
     print(len(objekte), 'Objekte am Raster')
 

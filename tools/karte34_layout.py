@@ -71,7 +71,7 @@ def kleine_weg(k, art, mind, ersatz=None):
     return k
 
 
-def zipfel_weg(k, arten='pwms'):
+def zipfel_weg(k, arten='pws'):
     """Kacheln, die nur ueber eine einzige gleichartige Nachbarkachel (4er-Nachbarschaft) an ihre Flaeche haengen,
     oder in einer Achse eingeklemmt sind (1 Kachel breiter Finger), bekommen die haeufigste Nachbarklasse
     (Pruefliste: keine Ein-Kachel-Zipfel, die das 45-Grad-Raster zu Tropfen rundet)."""
@@ -111,6 +111,12 @@ def main():
         k = kleine_weg(k, art, mind)
     k = zipfel_weg(k)                                                   # keine 1 Kachel breiten Zipfel/Finger
     k = kleine_weg(k, 'w', 8)                                           # Sand-Inselchen zwischen Plaetzen weg
+    w_ = k == 'x'                                                       # Erdufer-Ring um den Teich (Vorlage), nicht auf Platz/Weg
+    nb = np.zeros_like(w_)
+    for dy in (-1, 0, 1):
+        for dx in (-1, 0, 1):
+            nb[max(0, dy):R + min(0, dy), max(0, dx):C + min(0, dx)] |= w_[max(0, -dy):R + min(0, -dy), max(0, -dx):C + min(0, -dx)]
+    k[nb & (k == 'g')] = 'm'
     x0, y0, x1, y1 = STEG
     k[y0:y1 + 1, x0:x1 + 1] = 'b'
     k[y0:y1 + 1, x0 - 3:x0] = 'w'

@@ -96,26 +96,26 @@
 "dreh": [
 {
 "box": [
-12,
+13,
 6,
 30,
-39
+40
 ],
 "punkt": [
-19,
+21,
 5
 ],
 "amp": 3
 },
 {
 "box": [
-32,
+33,
 6,
 50,
-39
+40
 ],
 "punkt": [
-41,
+42,
 5
 ],
 "amp": 3,
@@ -232,9 +232,9 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum05_gras.png",
-"basis": "k01/baum05",
-"x": 305,
+"datei": "varianten/k01-baum00_gras.png",
+"basis": "k01/baum00",
+"x": 304,
 "y": 165,
 "fuss": 46,
 "kachel": [
@@ -324,25 +324,25 @@
 {
 "datei": "varianten/k01-baum02_gras_m.png",
 "basis": "k01/baum02",
-"x": 258,
-"y": 487,
+"x": 274,
+"y": 471,
 "fuss": 44,
 "kachel": [
-17,
-32
+18,
+31
 ],
 "block": [
-16,
-30,
+17,
+29,
 3,
 3
 ],
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum05_gras.png",
-"basis": "k01/baum05",
-"x": 113,
+"datei": "varianten/k01-baum00_gras.png",
+"basis": "k01/baum00",
+"x": 112,
 "y": 421,
 "fuss": 46,
 "kachel": [
@@ -430,9 +430,9 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum05_gras_m.png",
-"basis": "k01/baum05",
-"x": 545,
+"datei": "varianten/k01-baum00_gras_m.png",
+"basis": "k01/baum00",
+"x": 544,
 "y": 757,
 "fuss": 46,
 "kachel": [
@@ -607,6 +607,24 @@
 "block": [
 29,
 23,
+2,
+2
+],
+"ebene": 0
+},
+{
+"datei": "varianten/k01-deko11_gras.png",
+"basis": "k01/deko11",
+"x": 275,
+"y": 505,
+"fuss": 26,
+"kachel": [
+18,
+32
+],
+"block": [
+18,
+31,
 2,
 2
 ],
@@ -794,18 +812,18 @@
 "ebene": 1
 },
 {
-"datei": "varianten/moebel-bank_beton.png",
+"datei": "varianten/moebel-bank_gras.png",
 "basis": "moebel/bank",
 "x": 367,
-"y": 489,
+"y": 473,
 "fuss": 26,
 "kachel": [
 23,
-31
+30
 ],
 "block": [
 23,
-30,
+29,
 2,
 2
 ],
@@ -940,16 +958,16 @@
 {
 "datei": "varianten/moebel-bank_gras.png",
 "basis": "moebel/bank",
-"x": 591,
-"y": 457,
+"x": 575,
+"y": 473,
 "fuss": 26,
 "kachel": [
-37,
-29
+36,
+30
 ],
 "block": [
-37,
-28,
+36,
+29,
 2,
 2
 ],
@@ -1069,30 +1087,11 @@
 "anim": "lampe"
 },
 {
-"datei": "varianten/moebel-laterne_beton.png",
-"basis": "moebel/laterne",
-"x": 129,
-"y": 627,
-"fuss": 45,
-"kachel": [
-8,
-41
-],
-"block": [
-8,
-39,
-1,
-3
-],
-"ebene": 1,
-"anim": "lampe"
-},
-{
-"datei": "varianten/k01-baum09_gras.png",
-"basis": "k01/baum09",
-"x": -13,
-"y": -28,
-"fuss": 47,
+"datei": "varianten/k01-baum12_gras.png",
+"basis": "k01/baum12",
+"x": -15,
+"y": -20,
+"fuss": 39,
 "kachel": [
 0,
 0
@@ -1142,11 +1141,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum09_gras_m.png",
-"basis": "k01/baum09",
-"x": 83,
-"y": -28,
-"fuss": 47,
+"datei": "varianten/k01-baum12_gras_m.png",
+"basis": "k01/baum12",
+"x": 81,
+"y": -20,
+"fuss": 39,
 "kachel": [
 6,
 0
@@ -1160,20 +1159,20 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum14_gras.png",
-"basis": "k01/baum14",
-"x": 113,
-"y": -15,
-"fuss": 34,
+"datei": "varianten/k01-baum15_gras.png",
+"basis": "k01/baum15",
+"x": 117,
+"y": -24,
+"fuss": 43,
 "kachel": [
 8,
 0
 ],
 "block": [
 7,
--1,
+-2,
 3,
-2
+3
 ],
 "ebene": 1
 },
@@ -1214,11 +1213,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum05_gras_m.png",
-"basis": "k01/baum05",
-"x": 209,
-"y": -27,
-"fuss": 46,
+"datei": "varianten/k01-baum09_gras_m.png",
+"basis": "k01/baum09",
+"x": 211,
+"y": -28,
+"fuss": 47,
 "kachel": [
 14,
 0
@@ -1232,11 +1231,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum09_gras_m.png",
-"basis": "k01/baum09",
-"x": 243,
-"y": -28,
-"fuss": 47,
+"datei": "varianten/k01-baum12_gras_m.png",
+"basis": "k01/baum12",
+"x": 241,
+"y": -20,
+"fuss": 39,
 "kachel": [
 16,
 0
@@ -1250,29 +1249,29 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum13_gras.png",
-"basis": "k01/baum13",
-"x": 275,
-"y": -18,
-"fuss": 37,
+"datei": "varianten/k01-baum14_gras.png",
+"basis": "k01/baum14",
+"x": 273,
+"y": -15,
+"fuss": 34,
 "kachel": [
 18,
 0
 ],
 "block": [
 17,
--2,
+-1,
 3,
-3
+2
 ],
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum15_gras_m.png",
-"basis": "k01/baum15",
-"x": 309,
-"y": -24,
-"fuss": 43,
+"datei": "varianten/k01-baum02_gras.png",
+"basis": "k01/baum02",
+"x": 306,
+"y": -25,
+"fuss": 44,
 "kachel": [
 20,
 0
@@ -1286,11 +1285,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum12_gras.png",
-"basis": "k01/baum12",
-"x": 337,
-"y": -20,
-"fuss": 39,
+"datei": "varianten/k01-baum13_gras.png",
+"basis": "k01/baum13",
+"x": 339,
+"y": -18,
+"fuss": 37,
 "kachel": [
 22,
 0
@@ -1358,11 +1357,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum05_gras_m.png",
-"basis": "k01/baum05",
-"x": 465,
-"y": -27,
-"fuss": 46,
+"datei": "varianten/k01-baum09_gras_m.png",
+"basis": "k01/baum09",
+"x": 467,
+"y": -28,
+"fuss": 47,
 "kachel": [
 30,
 0
@@ -1376,11 +1375,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum15_gras_m.png",
-"basis": "k01/baum15",
-"x": 501,
-"y": -24,
-"fuss": 43,
+"datei": "varianten/k01-baum09_gras.png",
+"basis": "k01/baum09",
+"x": 499,
+"y": -28,
+"fuss": 47,
 "kachel": [
 32,
 0
@@ -1412,11 +1411,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum12_gras.png",
-"basis": "k01/baum12",
-"x": 561,
-"y": -20,
-"fuss": 39,
+"datei": "varianten/k01-baum13_gras.png",
+"basis": "k01/baum13",
+"x": 563,
+"y": -18,
+"fuss": 37,
 "kachel": [
 36,
 0
@@ -1430,11 +1429,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum09_gras_m.png",
-"basis": "k01/baum09",
-"x": 595,
-"y": -28,
-"fuss": 47,
+"datei": "varianten/k01-baum12_gras_m.png",
+"basis": "k01/baum12",
+"x": 593,
+"y": -20,
+"fuss": 39,
 "kachel": [
 38,
 0
@@ -1466,56 +1465,56 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum13_gras_m.png",
-"basis": "k01/baum13",
-"x": 659,
-"y": -18,
-"fuss": 37,
+"datei": "varianten/k01-baum14_gras_m.png",
+"basis": "k01/baum14",
+"x": 657,
+"y": -15,
+"fuss": 34,
 "kachel": [
 42,
 0
 ],
 "block": [
 41,
--2,
+-1,
 3,
-3
+2
 ],
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum13_gras_m.png",
-"basis": "k01/baum13",
-"x": 691,
-"y": -18,
-"fuss": 37,
+"datei": "varianten/k01-baum14_gras_m.png",
+"basis": "k01/baum14",
+"x": 689,
+"y": -15,
+"fuss": 34,
 "kachel": [
 44,
 0
 ],
 "block": [
 43,
--2,
+-1,
 3,
-3
+2
 ],
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum13_gras_m.png",
-"basis": "k01/baum13",
-"x": 723,
-"y": -18,
-"fuss": 37,
+"datei": "varianten/k01-baum14_gras_m.png",
+"basis": "k01/baum14",
+"x": 721,
+"y": -15,
+"fuss": 34,
 "kachel": [
 46,
 0
 ],
 "block": [
 45,
--2,
+-1,
 3,
-3
+2
 ],
 "ebene": 1
 },
@@ -1538,11 +1537,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum05_gras_m.png",
-"basis": "k01/baum05",
-"x": 785,
-"y": -27,
-"fuss": 46,
+"datei": "varianten/k01-baum09_gras_m.png",
+"basis": "k01/baum09",
+"x": 787,
+"y": -28,
+"fuss": 47,
 "kachel": [
 50,
 0
@@ -1556,11 +1555,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum12_gras.png",
-"basis": "k01/baum12",
-"x": 977,
-"y": -20,
-"fuss": 39,
+"datei": "varianten/k01-baum09_gras.png",
+"basis": "k01/baum09",
+"x": 979,
+"y": -28,
+"fuss": 47,
 "kachel": [
 62,
 0
@@ -1574,11 +1573,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum05_gras.png",
-"basis": "k01/baum05",
+"datei": "varianten/k01-baum12_gras.png",
+"basis": "k01/baum12",
 "x": 1,
-"y": -11,
-"fuss": 46,
+"y": -4,
+"fuss": 39,
 "kachel": [
 1,
 1
@@ -1592,29 +1591,29 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum09_gras.png",
-"basis": "k01/baum09",
-"x": 35,
-"y": -12,
-"fuss": 47,
+"datei": "varianten/k01-baum14_gras_m.png",
+"basis": "k01/baum14",
+"x": 33,
+"y": 1,
+"fuss": 34,
 "kachel": [
 3,
 1
 ],
 "block": [
 2,
--1,
+0,
 3,
-3
+2
 ],
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum15_gras.png",
-"basis": "k01/baum15",
-"x": 69,
-"y": -8,
-"fuss": 43,
+"datei": "varianten/k01-baum00_gras_m.png",
+"basis": "k01/baum00",
+"x": 64,
+"y": -11,
+"fuss": 46,
 "kachel": [
 5,
 1
@@ -1628,11 +1627,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum13_gras_m.png",
-"basis": "k01/baum13",
-"x": 99,
-"y": -2,
-"fuss": 37,
+"datei": "varianten/k01-baum12_gras_m.png",
+"basis": "k01/baum12",
+"x": 97,
+"y": -4,
+"fuss": 39,
 "kachel": [
 7,
 1
@@ -1646,11 +1645,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum00_gras_m.png",
-"basis": "k01/baum00",
-"x": 128,
-"y": -11,
-"fuss": 46,
+"datei": "varianten/k01-baum02_gras.png",
+"basis": "k01/baum02",
+"x": 130,
+"y": -9,
+"fuss": 44,
 "kachel": [
 9,
 1
@@ -1664,11 +1663,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum09_gras_m.png",
-"basis": "k01/baum09",
-"x": 163,
-"y": -12,
-"fuss": 47,
+"datei": "varianten/k01-baum12_gras_m.png",
+"basis": "k01/baum12",
+"x": 161,
+"y": -4,
+"fuss": 39,
 "kachel": [
 11,
 1
@@ -1682,11 +1681,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum02_gras.png",
-"basis": "k01/baum02",
-"x": 194,
-"y": -9,
-"fuss": 44,
+"datei": "varianten/k01-baum09_gras_m.png",
+"basis": "k01/baum09",
+"x": 195,
+"y": -12,
+"fuss": 47,
 "kachel": [
 13,
 1
@@ -1700,7 +1699,7 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum09_gras_m.png",
+"datei": "varianten/k01-baum09_gras.png",
 "basis": "k01/baum09",
 "x": 227,
 "y": -12,
@@ -1718,9 +1717,9 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum05_gras_m.png",
-"basis": "k01/baum05",
-"x": 257,
+"datei": "varianten/k01-baum00_gras_m.png",
+"basis": "k01/baum00",
+"x": 256,
 "y": -11,
 "fuss": 46,
 "kachel": [
@@ -1736,11 +1735,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum15_gras.png",
-"basis": "k01/baum15",
-"x": 293,
-"y": -8,
-"fuss": 43,
+"datei": "varianten/k01-baum01_gras.png",
+"basis": "k01/baum01",
+"x": 288,
+"y": -11,
+"fuss": 46,
 "kachel": [
 19,
 1
@@ -1754,29 +1753,29 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum14_gras.png",
-"basis": "k01/baum14",
-"x": 321,
-"y": 1,
-"fuss": 34,
+"datei": "varianten/k01-baum01_gras.png",
+"basis": "k01/baum01",
+"x": 320,
+"y": -11,
+"fuss": 46,
 "kachel": [
 21,
 1
 ],
 "block": [
 20,
-0,
+-1,
 3,
-2
+3
 ],
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum00_gras_m.png",
-"basis": "k01/baum00",
-"x": 352,
-"y": -11,
-"fuss": 46,
+"datei": "varianten/k01-baum15_gras_m.png",
+"basis": "k01/baum15",
+"x": 357,
+"y": -8,
+"fuss": 43,
 "kachel": [
 23,
 1
@@ -1790,11 +1789,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum01_gras.png",
-"basis": "k01/baum01",
-"x": 384,
-"y": -11,
-"fuss": 46,
+"datei": "varianten/k01-baum02_gras_m.png",
+"basis": "k01/baum02",
+"x": 386,
+"y": -9,
+"fuss": 44,
 "kachel": [
 25,
 1
@@ -1808,11 +1807,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum01_gras.png",
-"basis": "k01/baum01",
-"x": 416,
-"y": -11,
-"fuss": 46,
+"datei": "varianten/k01-baum02_gras_m.png",
+"basis": "k01/baum02",
+"x": 418,
+"y": -9,
+"fuss": 44,
 "kachel": [
 27,
 1
@@ -1826,29 +1825,29 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum14_gras_m.png",
-"basis": "k01/baum14",
-"x": 449,
-"y": 1,
-"fuss": 34,
+"datei": "varianten/k01-baum02_gras.png",
+"basis": "k01/baum02",
+"x": 450,
+"y": -9,
+"fuss": 44,
 "kachel": [
 29,
 1
 ],
 "block": [
 28,
-0,
+-1,
 3,
-2
+3
 ],
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum02_gras_m.png",
-"basis": "k01/baum02",
-"x": 482,
-"y": -9,
-"fuss": 44,
+"datei": "varianten/k01-baum12_gras.png",
+"basis": "k01/baum12",
+"x": 481,
+"y": -4,
+"fuss": 39,
 "kachel": [
 31,
 1
@@ -1862,11 +1861,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum02_gras_m.png",
-"basis": "k01/baum02",
-"x": 514,
-"y": -9,
-"fuss": 44,
+"datei": "varianten/k01-baum13_gras.png",
+"basis": "k01/baum13",
+"x": 515,
+"y": -2,
+"fuss": 37,
 "kachel": [
 33,
 1
@@ -1880,7 +1879,7 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum02_gras.png",
+"datei": "varianten/k01-baum02_gras_m.png",
 "basis": "k01/baum02",
 "x": 546,
 "y": -9,
@@ -1898,11 +1897,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum09_gras.png",
-"basis": "k01/baum09",
-"x": 579,
-"y": -12,
-"fuss": 47,
+"datei": "varianten/k01-baum12_gras.png",
+"basis": "k01/baum12",
+"x": 577,
+"y": -4,
+"fuss": 39,
 "kachel": [
 37,
 1
@@ -1916,11 +1915,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum12_gras.png",
-"basis": "k01/baum12",
-"x": 609,
-"y": -4,
-"fuss": 39,
+"datei": "varianten/k01-baum02_gras_m.png",
+"basis": "k01/baum02",
+"x": 610,
+"y": -9,
+"fuss": 44,
 "kachel": [
 39,
 1
@@ -1934,29 +1933,29 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum02_gras_m.png",
-"basis": "k01/baum02",
-"x": 642,
-"y": -9,
-"fuss": 44,
+"datei": "varianten/k01-baum14_gras.png",
+"basis": "k01/baum14",
+"x": 641,
+"y": 1,
+"fuss": 34,
 "kachel": [
 41,
 1
 ],
 "block": [
 40,
--1,
+0,
 3,
-3
+2
 ],
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum09_gras.png",
-"basis": "k01/baum09",
-"x": 675,
-"y": -12,
-"fuss": 47,
+"datei": "varianten/k01-baum15_gras.png",
+"basis": "k01/baum15",
+"x": 677,
+"y": -8,
+"fuss": 43,
 "kachel": [
 43,
 1
@@ -1970,11 +1969,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum02_gras_m.png",
-"basis": "k01/baum02",
-"x": 706,
-"y": -9,
-"fuss": 44,
+"datei": "varianten/k01-baum15_gras.png",
+"basis": "k01/baum15",
+"x": 709,
+"y": -8,
+"fuss": 43,
 "kachel": [
 45,
 1
@@ -1988,11 +1987,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum13_gras.png",
-"basis": "k01/baum13",
-"x": 739,
-"y": -2,
-"fuss": 37,
+"datei": "varianten/k01-baum00_gras_m.png",
+"basis": "k01/baum00",
+"x": 736,
+"y": -11,
+"fuss": 46,
 "kachel": [
 47,
 1
@@ -2024,11 +2023,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum15_gras.png",
-"basis": "k01/baum15",
-"x": 805,
-"y": -8,
-"fuss": 43,
+"datei": "varianten/k01-baum13_gras_m.png",
+"basis": "k01/baum13",
+"x": 803,
+"y": -2,
+"fuss": 37,
 "kachel": [
 51,
 1
@@ -2042,47 +2041,47 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum01_gras_m.png",
-"basis": "k01/baum01",
-"x": 992,
-"y": -11,
-"fuss": 46,
+"datei": "varianten/k01-baum14_gras_m.png",
+"basis": "k01/baum14",
+"x": 993,
+"y": 1,
+"fuss": 34,
 "kachel": [
 63,
 1
 ],
 "block": [
 62,
--1,
+0,
 3,
-3
+2
 ],
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum14_gras_m.png",
-"basis": "k01/baum14",
-"x": -15,
-"y": 17,
-"fuss": 34,
+"datei": "varianten/k01-baum13_gras.png",
+"basis": "k01/baum13",
+"x": -13,
+"y": 14,
+"fuss": 37,
 "kachel": [
 0,
 2
 ],
 "block": [
 -1,
-1,
+0,
 3,
-2
+3
 ],
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum02_gras.png",
-"basis": "k01/baum02",
-"x": 978,
-"y": 7,
-"fuss": 44,
+"datei": "varianten/k01-baum09_gras_m.png",
+"basis": "k01/baum09",
+"x": 979,
+"y": 4,
+"fuss": 47,
 "kachel": [
 62,
 2
@@ -2096,11 +2095,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum13_gras_m.png",
-"basis": "k01/baum13",
+"datei": "varianten/k01-baum09_gras.png",
+"basis": "k01/baum09",
 "x": 3,
-"y": 30,
-"fuss": 37,
+"y": 20,
+"fuss": 47,
 "kachel": [
 1,
 3
@@ -2114,11 +2113,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum12_gras.png",
-"basis": "k01/baum12",
-"x": 33,
-"y": 28,
-"fuss": 39,
+"datei": "varianten/k01-baum01_gras.png",
+"basis": "k01/baum01",
+"x": 32,
+"y": 21,
+"fuss": 46,
 "kachel": [
 3,
 3
@@ -2132,11 +2131,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum05_gras_m.png",
-"basis": "k01/baum05",
-"x": 65,
-"y": 21,
-"fuss": 46,
+"datei": "varianten/k01-baum02_gras.png",
+"basis": "k01/baum02",
+"x": 66,
+"y": 23,
+"fuss": 44,
 "kachel": [
 5,
 3
@@ -2150,11 +2149,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum05_gras.png",
-"basis": "k01/baum05",
-"x": 97,
-"y": 21,
-"fuss": 46,
+"datei": "varianten/k01-baum09_gras.png",
+"basis": "k01/baum09",
+"x": 99,
+"y": 20,
+"fuss": 47,
 "kachel": [
 7,
 3
@@ -2168,11 +2167,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum15_gras.png",
-"basis": "k01/baum15",
-"x": 133,
-"y": 24,
-"fuss": 43,
+"datei": "varianten/k01-baum09_gras_m.png",
+"basis": "k01/baum09",
+"x": 131,
+"y": 20,
+"fuss": 47,
 "kachel": [
 9,
 3
@@ -2186,9 +2185,9 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum04_gras_m.png",
-"basis": "k01/baum04",
-"x": 162,
+"datei": "varianten/k01-baum01_gras.png",
+"basis": "k01/baum01",
+"x": 160,
 "y": 21,
 "fuss": 46,
 "kachel": [
@@ -2204,7 +2203,7 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum14_gras.png",
+"datei": "varianten/k01-baum14_gras_m.png",
 "basis": "k01/baum14",
 "x": 193,
 "y": 33,
@@ -2222,11 +2221,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum01_gras_m.png",
-"basis": "k01/baum01",
-"x": 256,
-"y": 21,
-"fuss": 46,
+"datei": "varianten/k01-baum15_gras_m.png",
+"basis": "k01/baum15",
+"x": 261,
+"y": 24,
+"fuss": 43,
 "kachel": [
 17,
 3
@@ -2240,11 +2239,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum01_gras.png",
-"basis": "k01/baum01",
-"x": 288,
-"y": 21,
-"fuss": 46,
+"datei": "varianten/k01-baum15_gras.png",
+"basis": "k01/baum15",
+"x": 293,
+"y": 24,
+"fuss": 43,
 "kachel": [
 19,
 3
@@ -2258,11 +2257,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum13_gras_m.png",
-"basis": "k01/baum13",
-"x": 323,
-"y": 30,
-"fuss": 37,
+"datei": "varianten/k01-baum12_gras.png",
+"basis": "k01/baum12",
+"x": 321,
+"y": 28,
+"fuss": 39,
 "kachel": [
 21,
 3
@@ -2276,47 +2275,47 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum14_gras_m.png",
-"basis": "k01/baum14",
+"datei": "varianten/k01-baum12_gras_m.png",
+"basis": "k01/baum12",
 "x": 353,
-"y": 33,
-"fuss": 34,
+"y": 28,
+"fuss": 39,
 "kachel": [
 23,
 3
 ],
 "block": [
 22,
-2,
+1,
 3,
-2
-],
-"ebene": 1
-},
-{
-"datei": "varianten/k01-baum14_gras.png",
-"basis": "k01/baum14",
-"x": 385,
-"y": 33,
-"fuss": 34,
-"kachel": [
-25,
 3
-],
-"block": [
-24,
-2,
-3,
-2
 ],
 "ebene": 1
 },
 {
 "datei": "varianten/k01-baum09_gras.png",
 "basis": "k01/baum09",
-"x": 419,
+"x": 387,
 "y": 20,
 "fuss": 47,
+"kachel": [
+25,
+3
+],
+"block": [
+24,
+1,
+3,
+3
+],
+"ebene": 1
+},
+{
+"datei": "varianten/k01-baum12_gras.png",
+"basis": "k01/baum12",
+"x": 417,
+"y": 28,
+"fuss": 39,
 "kachel": [
 27,
 3
@@ -2330,11 +2329,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum09_gras_m.png",
-"basis": "k01/baum09",
-"x": 451,
-"y": 20,
-"fuss": 47,
+"datei": "varianten/k01-baum00_gras_m.png",
+"basis": "k01/baum00",
+"x": 448,
+"y": 21,
+"fuss": 46,
 "kachel": [
 29,
 3
@@ -2348,11 +2347,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum05_gras.png",
-"basis": "k01/baum05",
-"x": 513,
-"y": 21,
-"fuss": 46,
+"datei": "varianten/k01-baum02_gras_m.png",
+"basis": "k01/baum02",
+"x": 514,
+"y": 23,
+"fuss": 44,
 "kachel": [
 33,
 3
@@ -2366,26 +2365,26 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum09_gras.png",
-"basis": "k01/baum09",
-"x": 547,
-"y": 20,
-"fuss": 47,
+"datei": "varianten/k01-baum14_gras_m.png",
+"basis": "k01/baum14",
+"x": 545,
+"y": 33,
+"fuss": 34,
 "kachel": [
 35,
 3
 ],
 "block": [
 34,
-1,
+2,
 3,
-3
+2
 ],
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum00_gras_m.png",
-"basis": "k01/baum00",
+"datei": "varianten/k01-baum01_gras.png",
+"basis": "k01/baum01",
 "x": 576,
 "y": 21,
 "fuss": 46,
@@ -2402,11 +2401,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum02_gras_m.png",
-"basis": "k01/baum02",
-"x": 610,
-"y": 23,
-"fuss": 44,
+"datei": "varianten/k01-baum13_gras.png",
+"basis": "k01/baum13",
+"x": 611,
+"y": 30,
+"fuss": 37,
 "kachel": [
 39,
 3
@@ -2420,11 +2419,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum13_gras_m.png",
-"basis": "k01/baum13",
+"datei": "varianten/k01-baum09_gras.png",
+"basis": "k01/baum09",
 "x": 643,
-"y": 30,
-"fuss": 37,
+"y": 20,
+"fuss": 47,
 "kachel": [
 41,
 3
@@ -2438,11 +2437,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum01_gras.png",
-"basis": "k01/baum01",
-"x": 672,
-"y": 21,
-"fuss": 46,
+"datei": "varianten/k01-baum13_gras.png",
+"basis": "k01/baum13",
+"x": 675,
+"y": 30,
+"fuss": 37,
 "kachel": [
 43,
 3
@@ -2456,11 +2455,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum15_gras.png",
-"basis": "k01/baum15",
-"x": 709,
-"y": 24,
-"fuss": 43,
+"datei": "varianten/k01-baum00_gras_m.png",
+"basis": "k01/baum00",
+"x": 704,
+"y": 21,
+"fuss": 46,
 "kachel": [
 45,
 3
@@ -2474,47 +2473,47 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum15_gras_m.png",
-"basis": "k01/baum15",
-"x": 997,
-"y": 24,
-"fuss": 43,
+"datei": "varianten/k01-baum14_gras_m.png",
+"basis": "k01/baum14",
+"x": 993,
+"y": 33,
+"fuss": 34,
 "kachel": [
 63,
 3
 ],
 "block": [
 62,
-1,
+2,
 3,
-3
+2
 ],
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum01_gras.png",
-"basis": "k01/baum01",
-"x": -16,
-"y": 37,
-"fuss": 46,
+"datei": "varianten/k01-baum14_gras.png",
+"basis": "k01/baum14",
+"x": -15,
+"y": 49,
+"fuss": 34,
 "kachel": [
 0,
 4
 ],
 "block": [
 -1,
-2,
 3,
-3
+3,
+2
 ],
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum15_gras_m.png",
-"basis": "k01/baum15",
-"x": 53,
-"y": 40,
-"fuss": 43,
+"datei": "varianten/k01-baum09_gras.png",
+"basis": "k01/baum09",
+"x": 51,
+"y": 36,
+"fuss": 47,
 "kachel": [
 4,
 4
@@ -2528,11 +2527,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum12_gras.png",
-"basis": "k01/baum12",
-"x": 81,
-"y": 44,
-"fuss": 39,
+"datei": "varianten/k01-baum00_gras_m.png",
+"basis": "k01/baum00",
+"x": 80,
+"y": 37,
+"fuss": 46,
 "kachel": [
 6,
 4
@@ -2546,11 +2545,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum00_gras_m.png",
-"basis": "k01/baum00",
-"x": 112,
-"y": 37,
-"fuss": 46,
+"datei": "varianten/k01-baum15_gras.png",
+"basis": "k01/baum15",
+"x": 117,
+"y": 40,
+"fuss": 43,
 "kachel": [
 8,
 4
@@ -2582,11 +2581,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum13_gras.png",
-"basis": "k01/baum13",
-"x": 179,
-"y": 46,
-"fuss": 37,
+"datei": "varianten/k01-baum04_gras_m.png",
+"basis": "k01/baum04",
+"x": 178,
+"y": 37,
+"fuss": 46,
 "kachel": [
 12,
 4
@@ -2600,9 +2599,9 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum05_gras.png",
-"basis": "k01/baum05",
-"x": 209,
+"datei": "varianten/k01-baum01_gras.png",
+"basis": "k01/baum01",
+"x": 208,
 "y": 37,
 "fuss": 46,
 "kachel": [
@@ -2618,11 +2617,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum00_gras_m.png",
-"basis": "k01/baum00",
-"x": 240,
-"y": 37,
-"fuss": 46,
+"datei": "varianten/k01-baum13_gras_m.png",
+"basis": "k01/baum13",
+"x": 243,
+"y": 46,
+"fuss": 37,
 "kachel": [
 16,
 4
@@ -2636,29 +2635,29 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum14_gras.png",
-"basis": "k01/baum14",
-"x": 273,
-"y": 49,
-"fuss": 34,
+"datei": "varianten/k01-baum04_gras.png",
+"basis": "k01/baum04",
+"x": 274,
+"y": 37,
+"fuss": 46,
 "kachel": [
 18,
 4
 ],
 "block": [
 17,
+2,
 3,
-3,
-2
+3
 ],
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum12_gras_m.png",
-"basis": "k01/baum12",
-"x": 305,
-"y": 44,
-"fuss": 39,
+"datei": "varianten/k01-baum01_gras.png",
+"basis": "k01/baum01",
+"x": 304,
+"y": 37,
+"fuss": 46,
 "kachel": [
 20,
 4
@@ -2690,8 +2689,8 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum01_gras.png",
-"basis": "k01/baum01",
+"datei": "varianten/k01-baum00_gras_m.png",
+"basis": "k01/baum00",
 "x": 368,
 "y": 37,
 "fuss": 46,
@@ -2726,11 +2725,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum04_gras.png",
-"basis": "k01/baum04",
-"x": 434,
-"y": 37,
-"fuss": 46,
+"datei": "varianten/k01-baum15_gras_m.png",
+"basis": "k01/baum15",
+"x": 437,
+"y": 40,
+"fuss": 43,
 "kachel": [
 28,
 4
@@ -2744,29 +2743,29 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum01_gras.png",
-"basis": "k01/baum01",
-"x": 464,
-"y": 37,
-"fuss": 46,
+"datei": "varianten/k01-baum14_gras.png",
+"basis": "k01/baum14",
+"x": 465,
+"y": 49,
+"fuss": 34,
 "kachel": [
 30,
 4
 ],
 "block": [
 29,
-2,
 3,
-3
+3,
+2
 ],
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum04_gras_m.png",
-"basis": "k01/baum04",
-"x": 498,
-"y": 37,
-"fuss": 46,
+"datei": "varianten/k01-baum15_gras.png",
+"basis": "k01/baum15",
+"x": 501,
+"y": 40,
+"fuss": 43,
 "kachel": [
 32,
 4
@@ -2780,29 +2779,29 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum00_gras_m.png",
-"basis": "k01/baum00",
-"x": 528,
-"y": 37,
-"fuss": 46,
+"datei": "varianten/k01-baum14_gras_m.png",
+"basis": "k01/baum14",
+"x": 529,
+"y": 49,
+"fuss": 34,
 "kachel": [
 34,
 4
 ],
 "block": [
 33,
-2,
 3,
-3
+3,
+2
 ],
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum09_gras_m.png",
-"basis": "k01/baum09",
-"x": 563,
-"y": 36,
-"fuss": 47,
+"datei": "varianten/k01-baum15_gras.png",
+"basis": "k01/baum15",
+"x": 565,
+"y": 40,
+"fuss": 43,
 "kachel": [
 36,
 4
@@ -2816,29 +2815,29 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum14_gras_m.png",
-"basis": "k01/baum14",
+"datei": "varianten/k01-baum12_gras_m.png",
+"basis": "k01/baum12",
 "x": 593,
-"y": 49,
-"fuss": 34,
+"y": 44,
+"fuss": 39,
 "kachel": [
 38,
 4
 ],
 "block": [
 37,
+2,
 3,
-3,
-2
+3
 ],
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum13_gras.png",
-"basis": "k01/baum13",
-"x": 627,
-"y": 46,
-"fuss": 37,
+"datei": "varianten/k01-baum04_gras_m.png",
+"basis": "k01/baum04",
+"x": 626,
+"y": 37,
+"fuss": 46,
 "kachel": [
 40,
 4
@@ -2852,29 +2851,29 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum14_gras.png",
-"basis": "k01/baum14",
-"x": 657,
-"y": 49,
-"fuss": 34,
+"datei": "varianten/k01-baum02_gras_m.png",
+"basis": "k01/baum02",
+"x": 658,
+"y": 39,
+"fuss": 44,
 "kachel": [
 42,
 4
 ],
 "block": [
 41,
+2,
 3,
-3,
-2
+3
 ],
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum15_gras_m.png",
-"basis": "k01/baum15",
-"x": 693,
-"y": 40,
-"fuss": 43,
+"datei": "varianten/k01-baum12_gras_m.png",
+"basis": "k01/baum12",
+"x": 689,
+"y": 44,
+"fuss": 39,
 "kachel": [
 44,
 4
@@ -2888,11 +2887,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum15_gras.png",
-"basis": "k01/baum15",
-"x": 725,
-"y": 40,
-"fuss": 43,
+"datei": "varianten/k01-baum13_gras_m.png",
+"basis": "k01/baum13",
+"x": 723,
+"y": 46,
+"fuss": 37,
 "kachel": [
 46,
 4
@@ -2906,29 +2905,29 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum14_gras.png",
-"basis": "k01/baum14",
-"x": 977,
-"y": 49,
-"fuss": 34,
+"datei": "varianten/k01-baum04_gras.png",
+"basis": "k01/baum04",
+"x": 978,
+"y": 37,
+"fuss": 46,
 "kachel": [
 62,
 4
 ],
 "block": [
 61,
+2,
 3,
-3,
-2
+3
 ],
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum09_gras_m.png",
-"basis": "k01/baum09",
-"x": 3,
-"y": 52,
-"fuss": 47,
+"datei": "varianten/k01-baum02_gras.png",
+"basis": "k01/baum02",
+"x": 2,
+"y": 55,
+"fuss": 44,
 "kachel": [
 1,
 5
@@ -2942,11 +2941,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum04_gras_m.png",
-"basis": "k01/baum04",
-"x": 34,
-"y": 53,
-"fuss": 46,
+"datei": "varianten/k01-baum09_gras.png",
+"basis": "k01/baum09",
+"x": 35,
+"y": 52,
+"fuss": 47,
 "kachel": [
 3,
 5
@@ -2960,11 +2959,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum02_gras_m.png",
-"basis": "k01/baum02",
-"x": 66,
-"y": 55,
-"fuss": 44,
+"datei": "varianten/k01-baum01_gras.png",
+"basis": "k01/baum01",
+"x": 64,
+"y": 53,
+"fuss": 46,
 "kachel": [
 5,
 5
@@ -2978,11 +2977,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum09_gras_m.png",
-"basis": "k01/baum09",
-"x": 99,
-"y": 52,
-"fuss": 47,
+"datei": "varianten/k01-baum02_gras.png",
+"basis": "k01/baum02",
+"x": 98,
+"y": 55,
+"fuss": 44,
 "kachel": [
 7,
 5
@@ -2996,11 +2995,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum12_gras_m.png",
-"basis": "k01/baum12",
-"x": 129,
-"y": 60,
-"fuss": 39,
+"datei": "varianten/k01-baum09_gras.png",
+"basis": "k01/baum09",
+"x": 131,
+"y": 52,
+"fuss": 47,
 "kachel": [
 9,
 5
@@ -3014,11 +3013,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum04_gras.png",
-"basis": "k01/baum04",
-"x": 162,
-"y": 53,
-"fuss": 46,
+"datei": "varianten/k01-baum15_gras.png",
+"basis": "k01/baum15",
+"x": 165,
+"y": 56,
+"fuss": 43,
 "kachel": [
 11,
 5
@@ -3050,11 +3049,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum05_gras.png",
-"basis": "k01/baum05",
-"x": 225,
-"y": 53,
-"fuss": 46,
+"datei": "varianten/k01-baum13_gras_m.png",
+"basis": "k01/baum13",
+"x": 227,
+"y": 62,
+"fuss": 37,
 "kachel": [
 15,
 5
@@ -3068,29 +3067,29 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum01_gras.png",
-"basis": "k01/baum01",
-"x": 256,
-"y": 53,
-"fuss": 46,
+"datei": "varianten/k01-baum14_gras.png",
+"basis": "k01/baum14",
+"x": 257,
+"y": 65,
+"fuss": 34,
 "kachel": [
 17,
 5
 ],
 "block": [
 16,
+4,
 3,
-3,
-3
+2
 ],
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum02_gras.png",
-"basis": "k01/baum02",
-"x": 290,
-"y": 55,
-"fuss": 44,
+"datei": "varianten/k01-baum09_gras.png",
+"basis": "k01/baum09",
+"x": 291,
+"y": 52,
+"fuss": 47,
 "kachel": [
 19,
 5
@@ -3104,9 +3103,9 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum05_gras.png",
-"basis": "k01/baum05",
-"x": 321,
+"datei": "varianten/k01-baum01_gras_m.png",
+"basis": "k01/baum01",
+"x": 320,
 "y": 53,
 "fuss": 46,
 "kachel": [
@@ -3122,29 +3121,29 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum14_gras.png",
-"basis": "k01/baum14",
-"x": 353,
-"y": 65,
-"fuss": 34,
+"datei": "varianten/k01-baum04_gras.png",
+"basis": "k01/baum04",
+"x": 354,
+"y": 53,
+"fuss": 46,
 "kachel": [
 23,
 5
 ],
 "block": [
 22,
-4,
 3,
-2
+3,
+3
 ],
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum02_gras.png",
-"basis": "k01/baum02",
-"x": 386,
-"y": 55,
-"fuss": 44,
+"datei": "varianten/k01-baum01_gras.png",
+"basis": "k01/baum01",
+"x": 384,
+"y": 53,
+"fuss": 46,
 "kachel": [
 25,
 5
@@ -3158,11 +3157,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum12_gras_m.png",
-"basis": "k01/baum12",
-"x": 417,
-"y": 60,
-"fuss": 39,
+"datei": "varianten/k01-baum02_gras.png",
+"basis": "k01/baum02",
+"x": 418,
+"y": 55,
+"fuss": 44,
 "kachel": [
 27,
 5
@@ -3176,11 +3175,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum13_gras.png",
-"basis": "k01/baum13",
-"x": 451,
-"y": 62,
-"fuss": 37,
+"datei": "varianten/k01-baum01_gras_m.png",
+"basis": "k01/baum01",
+"x": 448,
+"y": 53,
+"fuss": 46,
 "kachel": [
 29,
 5
@@ -3194,11 +3193,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum05_gras.png",
-"basis": "k01/baum05",
-"x": 481,
-"y": 53,
-"fuss": 46,
+"datei": "varianten/k01-baum09_gras_m.png",
+"basis": "k01/baum09",
+"x": 483,
+"y": 52,
+"fuss": 47,
 "kachel": [
 31,
 5
@@ -3212,8 +3211,8 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum01_gras_m.png",
-"basis": "k01/baum01",
+"datei": "varianten/k01-baum00_gras.png",
+"basis": "k01/baum00",
 "x": 512,
 "y": 53,
 "fuss": 46,
@@ -3230,11 +3229,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum04_gras.png",
-"basis": "k01/baum04",
-"x": 546,
-"y": 53,
-"fuss": 46,
+"datei": "varianten/k01-baum09_gras_m.png",
+"basis": "k01/baum09",
+"x": 547,
+"y": 52,
+"fuss": 47,
 "kachel": [
 35,
 5
@@ -3248,11 +3247,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum01_gras.png",
-"basis": "k01/baum01",
-"x": 576,
-"y": 53,
-"fuss": 46,
+"datei": "varianten/k01-baum09_gras_m.png",
+"basis": "k01/baum09",
+"x": 579,
+"y": 52,
+"fuss": 47,
 "kachel": [
 37,
 5
@@ -3266,29 +3265,29 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum02_gras.png",
-"basis": "k01/baum02",
-"x": 610,
-"y": 55,
-"fuss": 44,
+"datei": "varianten/k01-baum14_gras_m.png",
+"basis": "k01/baum14",
+"x": 609,
+"y": 65,
+"fuss": 34,
 "kachel": [
 39,
 5
 ],
 "block": [
 38,
+4,
 3,
-3,
-3
+2
 ],
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum15_gras.png",
-"basis": "k01/baum15",
-"x": 645,
-"y": 56,
-"fuss": 43,
+"datei": "varianten/k01-baum02_gras.png",
+"basis": "k01/baum02",
+"x": 642,
+"y": 55,
+"fuss": 44,
 "kachel": [
 41,
 5
@@ -3302,11 +3301,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum01_gras_m.png",
-"basis": "k01/baum01",
-"x": 672,
-"y": 53,
-"fuss": 46,
+"datei": "varianten/k01-baum02_gras.png",
+"basis": "k01/baum02",
+"x": 674,
+"y": 55,
+"fuss": 44,
 "kachel": [
 43,
 5
@@ -3320,11 +3319,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum05_gras_m.png",
-"basis": "k01/baum05",
-"x": 705,
-"y": 53,
-"fuss": 46,
+"datei": "varianten/k01-baum02_gras_m.png",
+"basis": "k01/baum02",
+"x": 706,
+"y": 55,
+"fuss": 44,
 "kachel": [
 45,
 5
@@ -3338,11 +3337,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum00_gras.png",
-"basis": "k01/baum00",
-"x": 736,
-"y": 53,
-"fuss": 46,
+"datei": "varianten/k01-baum09_gras_m.png",
+"basis": "k01/baum09",
+"x": 739,
+"y": 52,
+"fuss": 47,
 "kachel": [
 47,
 5
@@ -3356,9 +3355,9 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum05_gras_m.png",
-"basis": "k01/baum05",
-"x": 993,
+"datei": "varianten/k01-baum04_gras.png",
+"basis": "k01/baum04",
+"x": 994,
 "y": 53,
 "fuss": 46,
 "kachel": [
@@ -3374,11 +3373,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum05_gras_m.png",
-"basis": "k01/baum05",
+"datei": "varianten/k01-baum12_gras_m.png",
+"basis": "k01/baum12",
 "x": -15,
-"y": 69,
-"fuss": 46,
+"y": 76,
+"fuss": 39,
 "kachel": [
 0,
 6
@@ -3392,7 +3391,7 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum13_gras_m.png",
+"datei": "varianten/k01-baum13_gras.png",
 "basis": "k01/baum13",
 "x": 51,
 "y": 78,
@@ -3410,11 +3409,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum02_gras.png",
-"basis": "k01/baum02",
-"x": 82,
-"y": 71,
-"fuss": 44,
+"datei": "varianten/k01-baum09_gras.png",
+"basis": "k01/baum09",
+"x": 83,
+"y": 68,
+"fuss": 47,
 "kachel": [
 6,
 6
@@ -3428,7 +3427,7 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum15_gras_m.png",
+"datei": "varianten/k01-baum15_gras.png",
 "basis": "k01/baum15",
 "x": 117,
 "y": 72,
@@ -3446,11 +3445,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum15_gras_m.png",
-"basis": "k01/baum15",
-"x": 149,
-"y": 72,
-"fuss": 43,
+"datei": "varianten/k01-baum01_gras_m.png",
+"basis": "k01/baum01",
+"x": 144,
+"y": 69,
+"fuss": 46,
 "kachel": [
 10,
 6
@@ -3464,11 +3463,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum05_gras_m.png",
-"basis": "k01/baum05",
-"x": 177,
-"y": 69,
-"fuss": 46,
+"datei": "varianten/k01-baum09_gras_m.png",
+"basis": "k01/baum09",
+"x": 179,
+"y": 68,
+"fuss": 47,
 "kachel": [
 12,
 6
@@ -3482,11 +3481,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum04_gras.png",
-"basis": "k01/baum04",
-"x": 210,
-"y": 69,
-"fuss": 46,
+"datei": "varianten/k01-baum15_gras_m.png",
+"basis": "k01/baum15",
+"x": 213,
+"y": 72,
+"fuss": 43,
 "kachel": [
 14,
 6
@@ -3500,11 +3499,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum09_gras_m.png",
-"basis": "k01/baum09",
-"x": 243,
-"y": 68,
-"fuss": 47,
+"datei": "varianten/k01-baum00_gras.png",
+"basis": "k01/baum00",
+"x": 240,
+"y": 69,
+"fuss": 46,
 "kachel": [
 16,
 6
@@ -3518,11 +3517,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum12_gras.png",
-"basis": "k01/baum12",
-"x": 273,
-"y": 76,
-"fuss": 39,
+"datei": "varianten/k01-baum00_gras_m.png",
+"basis": "k01/baum00",
+"x": 272,
+"y": 69,
+"fuss": 46,
 "kachel": [
 18,
 6
@@ -3536,11 +3535,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum05_gras.png",
-"basis": "k01/baum05",
-"x": 305,
-"y": 69,
-"fuss": 46,
+"datei": "varianten/k01-baum13_gras.png",
+"basis": "k01/baum13",
+"x": 307,
+"y": 78,
+"fuss": 37,
 "kachel": [
 20,
 6
@@ -3554,25 +3553,25 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum14_gras.png",
-"basis": "k01/baum14",
-"x": 337,
-"y": 81,
-"fuss": 34,
+"datei": "varianten/k01-baum00_gras.png",
+"basis": "k01/baum00",
+"x": 336,
+"y": 69,
+"fuss": 46,
 "kachel": [
 22,
 6
 ],
 "block": [
 21,
-5,
+4,
 3,
-2
+3
 ],
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum01_gras_m.png",
+"datei": "varianten/k01-baum01_gras.png",
 "basis": "k01/baum01",
 "x": 368,
 "y": 69,
@@ -3590,11 +3589,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum05_gras_m.png",
-"basis": "k01/baum05",
-"x": 401,
-"y": 69,
-"fuss": 46,
+"datei": "varianten/k01-baum13_gras.png",
+"basis": "k01/baum13",
+"x": 403,
+"y": 78,
+"fuss": 37,
 "kachel": [
 26,
 6
@@ -3608,7 +3607,7 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum14_gras_m.png",
+"datei": "varianten/k01-baum14_gras.png",
 "basis": "k01/baum14",
 "x": 433,
 "y": 81,
@@ -3626,11 +3625,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum00_gras.png",
-"basis": "k01/baum00",
-"x": 464,
-"y": 69,
-"fuss": 46,
+"datei": "varianten/k01-baum13_gras.png",
+"basis": "k01/baum13",
+"x": 467,
+"y": 78,
+"fuss": 37,
 "kachel": [
 30,
 6
@@ -3644,8 +3643,8 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum00_gras_m.png",
-"basis": "k01/baum00",
+"datei": "varianten/k01-baum01_gras_m.png",
+"basis": "k01/baum01",
 "x": 496,
 "y": 69,
 "fuss": 46,
@@ -3662,29 +3661,29 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum12_gras.png",
-"basis": "k01/baum12",
+"datei": "varianten/k01-baum14_gras.png",
+"basis": "k01/baum14",
 "x": 529,
-"y": 76,
-"fuss": 39,
+"y": 81,
+"fuss": 34,
 "kachel": [
 34,
 6
 ],
 "block": [
 33,
-4,
+5,
 3,
-3
+2
 ],
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum00_gras.png",
-"basis": "k01/baum00",
-"x": 560,
-"y": 69,
-"fuss": 46,
+"datei": "varianten/k01-baum12_gras.png",
+"basis": "k01/baum12",
+"x": 561,
+"y": 76,
+"fuss": 39,
 "kachel": [
 36,
 6
@@ -3698,9 +3697,9 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum01_gras.png",
-"basis": "k01/baum01",
-"x": 592,
+"datei": "varianten/k01-baum04_gras.png",
+"basis": "k01/baum04",
+"x": 594,
 "y": 69,
 "fuss": 46,
 "kachel": [
@@ -3716,11 +3715,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum12_gras.png",
-"basis": "k01/baum12",
-"x": 625,
-"y": 76,
-"fuss": 39,
+"datei": "varianten/k01-baum01_gras_m.png",
+"basis": "k01/baum01",
+"x": 624,
+"y": 69,
+"fuss": 46,
 "kachel": [
 40,
 6
@@ -3734,11 +3733,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum15_gras_m.png",
-"basis": "k01/baum15",
-"x": 661,
-"y": 72,
-"fuss": 43,
+"datei": "varianten/k01-baum09_gras_m.png",
+"basis": "k01/baum09",
+"x": 659,
+"y": 68,
+"fuss": 47,
 "kachel": [
 42,
 6
@@ -3752,11 +3751,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum12_gras.png",
-"basis": "k01/baum12",
-"x": 689,
-"y": 76,
-"fuss": 39,
+"datei": "varianten/k01-baum15_gras_m.png",
+"basis": "k01/baum15",
+"x": 693,
+"y": 72,
+"fuss": 43,
 "kachel": [
 44,
 6
@@ -3770,11 +3769,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum01_gras_m.png",
-"basis": "k01/baum01",
-"x": 720,
-"y": 69,
-"fuss": 46,
+"datei": "varianten/k01-baum15_gras.png",
+"basis": "k01/baum15",
+"x": 725,
+"y": 72,
+"fuss": 43,
 "kachel": [
 46,
 6
@@ -3806,11 +3805,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum09_gras.png",
-"basis": "k01/baum09",
-"x": 979,
-"y": 68,
-"fuss": 47,
+"datei": "varianten/k01-baum02_gras_m.png",
+"basis": "k01/baum02",
+"x": 978,
+"y": 71,
+"fuss": 44,
 "kachel": [
 62,
 6
@@ -3824,11 +3823,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum04_gras.png",
-"basis": "k01/baum04",
-"x": 2,
-"y": 85,
-"fuss": 46,
+"datei": "varianten/k01-baum15_gras.png",
+"basis": "k01/baum15",
+"x": 5,
+"y": 88,
+"fuss": 43,
 "kachel": [
 1,
 7
@@ -3842,11 +3841,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum01_gras_m.png",
-"basis": "k01/baum01",
-"x": 32,
-"y": 85,
-"fuss": 46,
+"datei": "varianten/k01-baum13_gras.png",
+"basis": "k01/baum13",
+"x": 35,
+"y": 94,
+"fuss": 37,
 "kachel": [
 3,
 7
@@ -3860,11 +3859,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum05_gras_m.png",
-"basis": "k01/baum05",
-"x": 65,
-"y": 85,
-"fuss": 46,
+"datei": "varianten/k01-baum15_gras_m.png",
+"basis": "k01/baum15",
+"x": 69,
+"y": 88,
+"fuss": 43,
 "kachel": [
 5,
 7
@@ -3878,53 +3877,17 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum14_gras_m.png",
-"basis": "k01/baum14",
-"x": 97,
-"y": 97,
-"fuss": 34,
+"datei": "varianten/k01-baum04_gras.png",
+"basis": "k01/baum04",
+"x": 98,
+"y": 85,
+"fuss": 46,
 "kachel": [
 7,
 7
 ],
 "block": [
 6,
-6,
-3,
-2
-],
-"ebene": 1
-},
-{
-"datei": "varianten/k01-baum14_gras.png",
-"basis": "k01/baum14",
-"x": 129,
-"y": 97,
-"fuss": 34,
-"kachel": [
-9,
-7
-],
-"block": [
-8,
-6,
-3,
-2
-],
-"ebene": 1
-},
-{
-"datei": "varianten/k01-baum12_gras.png",
-"basis": "k01/baum12",
-"x": 161,
-"y": 92,
-"fuss": 39,
-"kachel": [
-11,
-7
-],
-"block": [
-10,
 5,
 3,
 3
@@ -3932,11 +3895,47 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum02_gras_m.png",
-"basis": "k01/baum02",
-"x": 194,
-"y": 87,
-"fuss": 44,
+"datei": "varianten/k01-baum04_gras.png",
+"basis": "k01/baum04",
+"x": 130,
+"y": 85,
+"fuss": 46,
+"kachel": [
+9,
+7
+],
+"block": [
+8,
+5,
+3,
+3
+],
+"ebene": 1
+},
+{
+"datei": "varianten/k01-baum14_gras.png",
+"basis": "k01/baum14",
+"x": 161,
+"y": 97,
+"fuss": 34,
+"kachel": [
+11,
+7
+],
+"block": [
+10,
+6,
+3,
+2
+],
+"ebene": 1
+},
+{
+"datei": "varianten/k01-baum01_gras_m.png",
+"basis": "k01/baum01",
+"x": 192,
+"y": 85,
+"fuss": 46,
 "kachel": [
 13,
 7
@@ -3950,29 +3949,29 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum14_gras.png",
-"basis": "k01/baum14",
-"x": 257,
-"y": 97,
-"fuss": 34,
+"datei": "varianten/k01-baum01_gras_m.png",
+"basis": "k01/baum01",
+"x": 256,
+"y": 85,
+"fuss": 46,
 "kachel": [
 17,
 7
 ],
 "block": [
 16,
-6,
+5,
 3,
-2
+3
 ],
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum12_gras.png",
-"basis": "k01/baum12",
-"x": 289,
-"y": 92,
-"fuss": 39,
+"datei": "varianten/k01-baum13_gras_m.png",
+"basis": "k01/baum13",
+"x": 291,
+"y": 94,
+"fuss": 37,
 "kachel": [
 19,
 7
@@ -3986,25 +3985,25 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum14_gras_m.png",
-"basis": "k01/baum14",
-"x": 321,
-"y": 97,
-"fuss": 34,
+"datei": "varianten/k01-baum13_gras_m.png",
+"basis": "k01/baum13",
+"x": 323,
+"y": 94,
+"fuss": 37,
 "kachel": [
 21,
 7
 ],
 "block": [
 20,
-6,
+5,
 3,
-2
+3
 ],
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum04_gras.png",
+"datei": "varianten/k01-baum04_gras_m.png",
 "basis": "k01/baum04",
 "x": 354,
 "y": 85,
@@ -4022,11 +4021,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum04_gras.png",
-"basis": "k01/baum04",
-"x": 386,
-"y": 85,
-"fuss": 46,
+"datei": "varianten/k01-baum12_gras_m.png",
+"basis": "k01/baum12",
+"x": 385,
+"y": 92,
+"fuss": 39,
 "kachel": [
 25,
 7
@@ -4040,11 +4039,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum13_gras.png",
-"basis": "k01/baum13",
-"x": 419,
-"y": 94,
-"fuss": 37,
+"datei": "varianten/k01-baum12_gras.png",
+"basis": "k01/baum12",
+"x": 417,
+"y": 92,
+"fuss": 39,
 "kachel": [
 27,
 7
@@ -4058,11 +4057,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum01_gras_m.png",
-"basis": "k01/baum01",
-"x": 448,
-"y": 85,
-"fuss": 46,
+"datei": "varianten/k01-baum09_gras_m.png",
+"basis": "k01/baum09",
+"x": 451,
+"y": 84,
+"fuss": 47,
 "kachel": [
 29,
 7
@@ -4076,29 +4075,29 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum01_gras_m.png",
-"basis": "k01/baum01",
-"x": 480,
-"y": 85,
-"fuss": 46,
+"datei": "varianten/k01-baum14_gras.png",
+"basis": "k01/baum14",
+"x": 481,
+"y": 97,
+"fuss": 34,
 "kachel": [
 31,
 7
 ],
 "block": [
 30,
-5,
+6,
 3,
-3
+2
 ],
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum12_gras_m.png",
-"basis": "k01/baum12",
-"x": 513,
-"y": 92,
-"fuss": 39,
+"datei": "varianten/k01-baum15_gras_m.png",
+"basis": "k01/baum15",
+"x": 517,
+"y": 88,
+"fuss": 43,
 "kachel": [
 33,
 7
@@ -4112,11 +4111,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum12_gras_m.png",
-"basis": "k01/baum12",
-"x": 545,
-"y": 92,
-"fuss": 39,
+"datei": "varianten/k01-baum00_gras_m.png",
+"basis": "k01/baum00",
+"x": 544,
+"y": 85,
+"fuss": 46,
 "kachel": [
 35,
 7
@@ -4130,11 +4129,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum15_gras_m.png",
-"basis": "k01/baum15",
-"x": 581,
-"y": 88,
-"fuss": 43,
+"datei": "varianten/k01-baum12_gras.png",
+"basis": "k01/baum12",
+"x": 577,
+"y": 92,
+"fuss": 39,
 "kachel": [
 37,
 7
@@ -4148,11 +4147,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum00_gras_m.png",
-"basis": "k01/baum00",
-"x": 608,
-"y": 85,
-"fuss": 46,
+"datei": "varianten/k01-baum09_gras_m.png",
+"basis": "k01/baum09",
+"x": 611,
+"y": 84,
+"fuss": 47,
 "kachel": [
 39,
 7
@@ -4166,11 +4165,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum09_gras.png",
-"basis": "k01/baum09",
+"datei": "varianten/k01-baum13_gras.png",
+"basis": "k01/baum13",
 "x": 643,
-"y": 84,
-"fuss": 47,
+"y": 94,
+"fuss": 37,
 "kachel": [
 41,
 7
@@ -4184,11 +4183,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum05_gras_m.png",
-"basis": "k01/baum05",
-"x": 673,
-"y": 85,
-"fuss": 46,
+"datei": "varianten/k01-baum13_gras.png",
+"basis": "k01/baum13",
+"x": 675,
+"y": 94,
+"fuss": 37,
 "kachel": [
 43,
 7
@@ -4202,11 +4201,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum13_gras.png",
-"basis": "k01/baum13",
-"x": 707,
-"y": 94,
-"fuss": 37,
+"datei": "varianten/k01-baum15_gras_m.png",
+"basis": "k01/baum15",
+"x": 709,
+"y": 88,
+"fuss": 43,
 "kachel": [
 45,
 7
@@ -4220,7 +4219,7 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum14_gras_m.png",
+"datei": "varianten/k01-baum14_gras.png",
 "basis": "k01/baum14",
 "x": 737,
 "y": 97,
@@ -4238,11 +4237,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum00_gras_m.png",
-"basis": "k01/baum00",
-"x": 992,
-"y": 85,
-"fuss": 46,
+"datei": "varianten/k01-baum13_gras_m.png",
+"basis": "k01/baum13",
+"x": 995,
+"y": 94,
+"fuss": 37,
 "kachel": [
 63,
 7
@@ -4256,11 +4255,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum09_gras.png",
-"basis": "k01/baum09",
-"x": -13,
-"y": 100,
-"fuss": 47,
+"datei": "varianten/k01-baum04_gras_m.png",
+"basis": "k01/baum04",
+"x": -14,
+"y": 101,
+"fuss": 46,
 "kachel": [
 0,
 8
@@ -4274,11 +4273,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum05_gras_m.png",
-"basis": "k01/baum05",
+"datei": "varianten/k01-baum12_gras_m.png",
+"basis": "k01/baum12",
 "x": 49,
-"y": 101,
-"fuss": 46,
+"y": 108,
+"fuss": 39,
 "kachel": [
 4,
 8
@@ -4292,11 +4291,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum12_gras.png",
-"basis": "k01/baum12",
-"x": 81,
-"y": 108,
-"fuss": 39,
+"datei": "varianten/k01-baum02_gras.png",
+"basis": "k01/baum02",
+"x": 82,
+"y": 103,
+"fuss": 44,
 "kachel": [
 6,
 8
@@ -4310,11 +4309,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum12_gras.png",
-"basis": "k01/baum12",
-"x": 113,
-"y": 108,
-"fuss": 39,
+"datei": "varianten/k01-baum09_gras_m.png",
+"basis": "k01/baum09",
+"x": 115,
+"y": 100,
+"fuss": 47,
 "kachel": [
 8,
 8
@@ -4328,17 +4327,35 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum14_gras_m.png",
-"basis": "k01/baum14",
-"x": 145,
-"y": 113,
-"fuss": 34,
+"datei": "varianten/k01-baum15_gras_m.png",
+"basis": "k01/baum15",
+"x": 149,
+"y": 104,
+"fuss": 43,
 "kachel": [
 10,
 8
 ],
 "block": [
 9,
+6,
+3,
+3
+],
+"ebene": 1
+},
+{
+"datei": "varianten/k01-baum14_gras.png",
+"basis": "k01/baum14",
+"x": 177,
+"y": 113,
+"fuss": 34,
+"kachel": [
+12,
+8
+],
+"block": [
+11,
 7,
 3,
 2
@@ -4346,47 +4363,29 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum13_gras.png",
-"basis": "k01/baum13",
-"x": 179,
-"y": 110,
-"fuss": 37,
-"kachel": [
-12,
-8
-],
-"block": [
-11,
-6,
-3,
-3
-],
-"ebene": 1
-},
-{
-"datei": "varianten/k01-baum12_gras_m.png",
-"basis": "k01/baum12",
+"datei": "varianten/k01-baum14_gras.png",
+"basis": "k01/baum14",
 "x": 305,
-"y": 108,
-"fuss": 39,
+"y": 113,
+"fuss": 34,
 "kachel": [
 20,
 8
 ],
 "block": [
 19,
-6,
+7,
 3,
-3
+2
 ],
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum04_gras_m.png",
-"basis": "k01/baum04",
-"x": 338,
-"y": 101,
-"fuss": 46,
+"datei": "varianten/k01-baum09_gras_m.png",
+"basis": "k01/baum09",
+"x": 339,
+"y": 100,
+"fuss": 47,
 "kachel": [
 22,
 8
@@ -4400,11 +4399,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum09_gras_m.png",
-"basis": "k01/baum09",
-"x": 371,
-"y": 100,
-"fuss": 47,
+"datei": "varianten/k01-baum12_gras_m.png",
+"basis": "k01/baum12",
+"x": 369,
+"y": 108,
+"fuss": 39,
 "kachel": [
 24,
 8
@@ -4418,11 +4417,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum02_gras.png",
-"basis": "k01/baum02",
-"x": 402,
-"y": 103,
-"fuss": 44,
+"datei": "varianten/k01-baum09_gras.png",
+"basis": "k01/baum09",
+"x": 403,
+"y": 100,
+"fuss": 47,
 "kachel": [
 26,
 8
@@ -4436,11 +4435,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum05_gras_m.png",
-"basis": "k01/baum05",
-"x": 433,
-"y": 101,
-"fuss": 46,
+"datei": "varianten/k01-baum13_gras.png",
+"basis": "k01/baum13",
+"x": 435,
+"y": 110,
+"fuss": 37,
 "kachel": [
 28,
 8
@@ -4454,11 +4453,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum15_gras.png",
-"basis": "k01/baum15",
-"x": 501,
-"y": 104,
-"fuss": 43,
+"datei": "varianten/k01-baum02_gras_m.png",
+"basis": "k01/baum02",
+"x": 498,
+"y": 103,
+"fuss": 44,
 "kachel": [
 32,
 8
@@ -4472,35 +4471,17 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum14_gras_m.png",
-"basis": "k01/baum14",
-"x": 529,
-"y": 113,
-"fuss": 34,
+"datei": "varianten/k01-baum04_gras_m.png",
+"basis": "k01/baum04",
+"x": 530,
+"y": 101,
+"fuss": 46,
 "kachel": [
 34,
 8
 ],
 "block": [
 33,
-7,
-3,
-2
-],
-"ebene": 1
-},
-{
-"datei": "varianten/k01-baum13_gras.png",
-"basis": "k01/baum13",
-"x": 563,
-"y": 110,
-"fuss": 37,
-"kachel": [
-36,
-8
-],
-"block": [
-35,
 6,
 3,
 3
@@ -4508,11 +4489,29 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum13_gras.png",
-"basis": "k01/baum13",
+"datei": "varianten/k01-baum14_gras.png",
+"basis": "k01/baum14",
+"x": 561,
+"y": 113,
+"fuss": 34,
+"kachel": [
+36,
+8
+],
+"block": [
+35,
+7,
+3,
+2
+],
+"ebene": 1
+},
+{
+"datei": "varianten/k01-baum09_gras.png",
+"basis": "k01/baum09",
 "x": 595,
-"y": 110,
-"fuss": 37,
+"y": 100,
+"fuss": 47,
 "kachel": [
 38,
 8
@@ -4526,11 +4525,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum05_gras_m.png",
-"basis": "k01/baum05",
-"x": 625,
-"y": 101,
-"fuss": 46,
+"datei": "varianten/k01-baum09_gras.png",
+"basis": "k01/baum09",
+"x": 627,
+"y": 100,
+"fuss": 47,
 "kachel": [
 40,
 8
@@ -4544,11 +4543,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum09_gras_m.png",
-"basis": "k01/baum09",
-"x": 659,
-"y": 100,
-"fuss": 47,
+"datei": "varianten/k01-baum12_gras_m.png",
+"basis": "k01/baum12",
+"x": 657,
+"y": 108,
+"fuss": 39,
 "kachel": [
 42,
 8
@@ -4562,9 +4561,9 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum05_gras.png",
-"basis": "k01/baum05",
-"x": 689,
+"datei": "varianten/k01-baum01_gras.png",
+"basis": "k01/baum01",
+"x": 688,
 "y": 101,
 "fuss": 46,
 "kachel": [
@@ -4580,11 +4579,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum12_gras.png",
-"basis": "k01/baum12",
-"x": 721,
-"y": 108,
-"fuss": 39,
+"datei": "varianten/k01-baum02_gras.png",
+"basis": "k01/baum02",
+"x": 722,
+"y": 103,
+"fuss": 44,
 "kachel": [
 46,
 8
@@ -4598,11 +4597,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum15_gras_m.png",
-"basis": "k01/baum15",
-"x": 981,
-"y": 104,
-"fuss": 43,
+"datei": "varianten/k01-baum02_gras.png",
+"basis": "k01/baum02",
+"x": 978,
+"y": 103,
+"fuss": 44,
 "kachel": [
 62,
 8
@@ -4634,7 +4633,7 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum09_gras_m.png",
+"datei": "varianten/k01-baum09_gras.png",
 "basis": "k01/baum09",
 "x": 323,
 "y": 116,
@@ -4670,11 +4669,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum02_gras.png",
-"basis": "k01/baum02",
-"x": 546,
-"y": 119,
-"fuss": 44,
+"datei": "varianten/k01-baum09_gras_m.png",
+"basis": "k01/baum09",
+"x": 547,
+"y": 116,
+"fuss": 47,
 "kachel": [
 35,
 9
@@ -4688,11 +4687,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum02_gras.png",
-"basis": "k01/baum02",
+"datei": "varianten/k01-baum04_gras_m.png",
+"basis": "k01/baum04",
 "x": 578,
-"y": 119,
-"fuss": 44,
+"y": 117,
+"fuss": 46,
 "kachel": [
 37,
 9
@@ -4706,11 +4705,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum15_gras.png",
-"basis": "k01/baum15",
-"x": 613,
-"y": 120,
-"fuss": 43,
+"datei": "varianten/k01-baum13_gras_m.png",
+"basis": "k01/baum13",
+"x": 611,
+"y": 126,
+"fuss": 37,
 "kachel": [
 39,
 9
@@ -4724,11 +4723,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum00_gras_m.png",
-"basis": "k01/baum00",
-"x": 992,
-"y": 117,
-"fuss": 46,
+"datei": "varianten/k01-baum09_gras_m.png",
+"basis": "k01/baum09",
+"x": 995,
+"y": 116,
+"fuss": 47,
 "kachel": [
 63,
 9
@@ -4742,9 +4741,9 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum04_gras.png",
-"basis": "k01/baum04",
-"x": -14,
+"datei": "varianten/k01-baum01_gras_m.png",
+"basis": "k01/baum01",
+"x": -16,
 "y": 133,
 "fuss": 46,
 "kachel": [
@@ -4760,11 +4759,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum04_gras_m.png",
-"basis": "k01/baum04",
-"x": 338,
-"y": 133,
-"fuss": 46,
+"datei": "varianten/k01-baum12_gras_m.png",
+"basis": "k01/baum12",
+"x": 337,
+"y": 140,
+"fuss": 39,
 "kachel": [
 22,
 10
@@ -4778,9 +4777,9 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum05_gras.png",
-"basis": "k01/baum05",
-"x": 561,
+"datei": "varianten/k01-baum01_gras.png",
+"basis": "k01/baum01",
+"x": 560,
 "y": 133,
 "fuss": 46,
 "kachel": [
@@ -4796,11 +4795,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum01_gras.png",
-"basis": "k01/baum01",
-"x": 592,
-"y": 133,
-"fuss": 46,
+"datei": "varianten/k01-baum12_gras.png",
+"basis": "k01/baum12",
+"x": 593,
+"y": 140,
+"fuss": 39,
 "kachel": [
 38,
 10
@@ -4814,9 +4813,9 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum05_gras_m.png",
-"basis": "k01/baum05",
-"x": 625,
+"datei": "varianten/k01-baum00_gras_m.png",
+"basis": "k01/baum00",
+"x": 624,
 "y": 133,
 "fuss": 46,
 "kachel": [
@@ -4832,11 +4831,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum04_gras_m.png",
-"basis": "k01/baum04",
-"x": 978,
-"y": 133,
-"fuss": 46,
+"datei": "varianten/k01-baum15_gras_m.png",
+"basis": "k01/baum15",
+"x": 981,
+"y": 136,
+"fuss": 43,
 "kachel": [
 62,
 10
@@ -4868,29 +4867,29 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum09_gras_m.png",
-"basis": "k01/baum09",
-"x": -13,
-"y": 164,
-"fuss": 47,
+"datei": "varianten/k01-baum14_gras_m.png",
+"basis": "k01/baum14",
+"x": -15,
+"y": 177,
+"fuss": 34,
 "kachel": [
 0,
 12
 ],
 "block": [
 -1,
-10,
+11,
 3,
-3
+2
 ],
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum09_gras.png",
-"basis": "k01/baum09",
-"x": 979,
-"y": 164,
-"fuss": 47,
+"datei": "varianten/k01-baum04_gras.png",
+"basis": "k01/baum04",
+"x": 978,
+"y": 165,
+"fuss": 46,
 "kachel": [
 62,
 12
@@ -4904,11 +4903,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum00_gras_m.png",
-"basis": "k01/baum00",
-"x": 0,
-"y": 181,
-"fuss": 46,
+"datei": "varianten/k01-baum02_gras_m.png",
+"basis": "k01/baum02",
+"x": 2,
+"y": 183,
+"fuss": 44,
 "kachel": [
 1,
 13
@@ -4922,11 +4921,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum15_gras.png",
-"basis": "k01/baum15",
-"x": 37,
-"y": 184,
-"fuss": 43,
+"datei": "varianten/k01-baum02_gras_m.png",
+"basis": "k01/baum02",
+"x": 34,
+"y": 183,
+"fuss": 44,
 "kachel": [
 3,
 13
@@ -4940,20 +4939,20 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum14_gras_m.png",
-"basis": "k01/baum14",
-"x": 993,
-"y": 193,
-"fuss": 34,
+"datei": "varianten/k01-baum00_gras.png",
+"basis": "k01/baum00",
+"x": 992,
+"y": 181,
+"fuss": 46,
 "kachel": [
 63,
 13
 ],
 "block": [
 62,
-12,
+11,
 3,
-2
+3
 ],
 "ebene": 1
 },
@@ -4976,8 +4975,8 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum01_gras_m.png",
-"basis": "k01/baum01",
+"datei": "varianten/k01-baum00_gras.png",
+"basis": "k01/baum00",
 "x": 48,
 "y": 197,
 "fuss": 46,
@@ -4994,11 +4993,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum13_gras_m.png",
-"basis": "k01/baum13",
-"x": 83,
-"y": 206,
-"fuss": 37,
+"datei": "varianten/k01-baum00_gras.png",
+"basis": "k01/baum00",
+"x": 80,
+"y": 197,
+"fuss": 46,
 "kachel": [
 6,
 14
@@ -5012,11 +5011,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum00_gras_m.png",
-"basis": "k01/baum00",
-"x": 976,
-"y": 197,
-"fuss": 46,
+"datei": "varianten/k01-baum12_gras_m.png",
+"basis": "k01/baum12",
+"x": 977,
+"y": 204,
+"fuss": 39,
 "kachel": [
 62,
 14
@@ -5030,9 +5029,9 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum04_gras.png",
-"basis": "k01/baum04",
-"x": 2,
+"datei": "varianten/k01-baum01_gras.png",
+"basis": "k01/baum01",
+"x": 0,
 "y": 213,
 "fuss": 46,
 "kachel": [
@@ -5048,11 +5047,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum02_gras_m.png",
-"basis": "k01/baum02",
-"x": 34,
-"y": 215,
-"fuss": 44,
+"datei": "varianten/k01-baum15_gras_m.png",
+"basis": "k01/baum15",
+"x": 37,
+"y": 216,
+"fuss": 43,
 "kachel": [
 3,
 15
@@ -5060,6 +5059,294 @@
 "block": [
 2,
 13,
+3,
+3
+],
+"ebene": 1
+},
+{
+"datei": "varianten/k01-baum15_gras.png",
+"basis": "k01/baum15",
+"x": 69,
+"y": 216,
+"fuss": 43,
+"kachel": [
+5,
+15
+],
+"block": [
+4,
+13,
+3,
+3
+],
+"ebene": 1
+},
+{
+"datei": "varianten/k01-baum04_gras_m.png",
+"basis": "k01/baum04",
+"x": 994,
+"y": 213,
+"fuss": 46,
+"kachel": [
+63,
+15
+],
+"block": [
+62,
+13,
+3,
+3
+],
+"ebene": 1
+},
+{
+"datei": "varianten/k01-baum15_gras_m.png",
+"basis": "k01/baum15",
+"x": -11,
+"y": 232,
+"fuss": 43,
+"kachel": [
+0,
+16
+],
+"block": [
+-1,
+14,
+3,
+3
+],
+"ebene": 1
+},
+{
+"datei": "varianten/k01-baum04_gras_m.png",
+"basis": "k01/baum04",
+"x": 50,
+"y": 229,
+"fuss": 46,
+"kachel": [
+4,
+16
+],
+"block": [
+3,
+14,
+3,
+3
+],
+"ebene": 1
+},
+{
+"datei": "varianten/k01-baum13_gras.png",
+"basis": "k01/baum13",
+"x": 83,
+"y": 238,
+"fuss": 37,
+"kachel": [
+6,
+16
+],
+"block": [
+5,
+14,
+3,
+3
+],
+"ebene": 1
+},
+{
+"datei": "varianten/k01-baum09_gras_m.png",
+"basis": "k01/baum09",
+"x": 979,
+"y": 228,
+"fuss": 47,
+"kachel": [
+62,
+16
+],
+"block": [
+61,
+14,
+3,
+3
+],
+"ebene": 1
+},
+{
+"datei": "varianten/k01-baum14_gras.png",
+"basis": "k01/baum14",
+"x": 1,
+"y": 257,
+"fuss": 34,
+"kachel": [
+1,
+17
+],
+"block": [
+0,
+16,
+3,
+2
+],
+"ebene": 1
+},
+{
+"datei": "varianten/k01-baum13_gras_m.png",
+"basis": "k01/baum13",
+"x": 35,
+"y": 254,
+"fuss": 37,
+"kachel": [
+3,
+17
+],
+"block": [
+2,
+15,
+3,
+3
+],
+"ebene": 1
+},
+{
+"datei": "varianten/k01-baum09_gras.png",
+"basis": "k01/baum09",
+"x": 67,
+"y": 244,
+"fuss": 47,
+"kachel": [
+5,
+17
+],
+"block": [
+4,
+15,
+3,
+3
+],
+"ebene": 1
+},
+{
+"datei": "varianten/k01-baum14_gras.png",
+"basis": "k01/baum14",
+"x": 993,
+"y": 257,
+"fuss": 34,
+"kachel": [
+63,
+17
+],
+"block": [
+62,
+16,
+3,
+2
+],
+"ebene": 1
+},
+{
+"datei": "varianten/k01-baum02_gras.png",
+"basis": "k01/baum02",
+"x": -14,
+"y": 263,
+"fuss": 44,
+"kachel": [
+0,
+18
+],
+"block": [
+-1,
+16,
+3,
+3
+],
+"ebene": 1
+},
+{
+"datei": "varianten/k01-baum15_gras.png",
+"basis": "k01/baum15",
+"x": 53,
+"y": 264,
+"fuss": 43,
+"kachel": [
+4,
+18
+],
+"block": [
+3,
+16,
+3,
+3
+],
+"ebene": 1
+},
+{
+"datei": "varianten/k01-baum13_gras_m.png",
+"basis": "k01/baum13",
+"x": 83,
+"y": 270,
+"fuss": 37,
+"kachel": [
+6,
+18
+],
+"block": [
+5,
+16,
+3,
+3
+],
+"ebene": 1
+},
+{
+"datei": "varianten/k01-baum02_gras_m.png",
+"basis": "k01/baum02",
+"x": 978,
+"y": 263,
+"fuss": 44,
+"kachel": [
+62,
+18
+],
+"block": [
+61,
+16,
+3,
+3
+],
+"ebene": 1
+},
+{
+"datei": "varianten/k01-baum02_gras.png",
+"basis": "k01/baum02",
+"x": 2,
+"y": 279,
+"fuss": 44,
+"kachel": [
+1,
+19
+],
+"block": [
+0,
+17,
+3,
+3
+],
+"ebene": 1
+},
+{
+"datei": "varianten/k01-baum00_gras_m.png",
+"basis": "k01/baum00",
+"x": 32,
+"y": 277,
+"fuss": 46,
+"kachel": [
+3,
+19
+],
+"block": [
+2,
+17,
 3,
 3
 ],
@@ -5069,231 +5356,33 @@
 "datei": "varianten/k01-baum02_gras_m.png",
 "basis": "k01/baum02",
 "x": 66,
-"y": 215,
+"y": 279,
 "fuss": 44,
 "kachel": [
 5,
-15
+19
 ],
 "block": [
 4,
-13,
-3,
-3
-],
-"ebene": 1
-},
-{
-"datei": "varianten/k01-baum00_gras_m.png",
-"basis": "k01/baum00",
-"x": 992,
-"y": 213,
-"fuss": 46,
-"kachel": [
-63,
-15
-],
-"block": [
-62,
-13,
-3,
-3
-],
-"ebene": 1
-},
-{
-"datei": "varianten/k01-baum00_gras.png",
-"basis": "k01/baum00",
-"x": -16,
-"y": 229,
-"fuss": 46,
-"kachel": [
-0,
-16
-],
-"block": [
--1,
-14,
-3,
-3
-],
-"ebene": 1
-},
-{
-"datei": "varianten/k01-baum09_gras_m.png",
-"basis": "k01/baum09",
-"x": 51,
-"y": 228,
-"fuss": 47,
-"kachel": [
-4,
-16
-],
-"block": [
-3,
-14,
-3,
-3
-],
-"ebene": 1
-},
-{
-"datei": "varianten/k01-baum00_gras.png",
-"basis": "k01/baum00",
-"x": 80,
-"y": 229,
-"fuss": 46,
-"kachel": [
-6,
-16
-],
-"block": [
-5,
-14,
-3,
-3
-],
-"ebene": 1
-},
-{
-"datei": "varianten/k01-baum00_gras.png",
-"basis": "k01/baum00",
-"x": 976,
-"y": 229,
-"fuss": 46,
-"kachel": [
-62,
-16
-],
-"block": [
-61,
-14,
-3,
-3
-],
-"ebene": 1
-},
-{
-"datei": "varianten/k01-baum09_gras_m.png",
-"basis": "k01/baum09",
-"x": 3,
-"y": 244,
-"fuss": 47,
-"kachel": [
-1,
-17
-],
-"block": [
-0,
-15,
-3,
-3
-],
-"ebene": 1
-},
-{
-"datei": "varianten/k01-baum01_gras.png",
-"basis": "k01/baum01",
-"x": 32,
-"y": 245,
-"fuss": 46,
-"kachel": [
-3,
-17
-],
-"block": [
-2,
-15,
-3,
-3
-],
-"ebene": 1
-},
-{
-"datei": "varianten/k01-baum14_gras_m.png",
-"basis": "k01/baum14",
-"x": 65,
-"y": 257,
-"fuss": 34,
-"kachel": [
-5,
-17
-],
-"block": [
-4,
-16,
-3,
-2
-],
-"ebene": 1
-},
-{
-"datei": "varianten/k01-baum14_gras.png",
-"basis": "k01/baum14",
-"x": 993,
-"y": 257,
-"fuss": 34,
-"kachel": [
-63,
-17
-],
-"block": [
-62,
-16,
-3,
-2
-],
-"ebene": 1
-},
-{
-"datei": "varianten/k01-baum04_gras_m.png",
-"basis": "k01/baum04",
-"x": -14,
-"y": 261,
-"fuss": 46,
-"kachel": [
-0,
-18
-],
-"block": [
--1,
-16,
-3,
-3
-],
-"ebene": 1
-},
-{
-"datei": "varianten/k01-baum14_gras_m.png",
-"basis": "k01/baum14",
-"x": 49,
-"y": 273,
-"fuss": 34,
-"kachel": [
-4,
-18
-],
-"block": [
-3,
 17,
 3,
-2
+3
 ],
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum04_gras_m.png",
-"basis": "k01/baum04",
-"x": 82,
-"y": 261,
-"fuss": 46,
+"datei": "varianten/k01-baum15_gras.png",
+"basis": "k01/baum15",
+"x": 997,
+"y": 280,
+"fuss": 43,
 "kachel": [
-6,
-18
+63,
+19
 ],
 "block": [
-5,
-16,
+62,
+17,
 3,
 3
 ],
@@ -5302,99 +5391,9 @@
 {
 "datei": "varianten/k01-baum12_gras.png",
 "basis": "k01/baum12",
-"x": 977,
-"y": 268,
+"x": -15,
+"y": 300,
 "fuss": 39,
-"kachel": [
-62,
-18
-],
-"block": [
-61,
-16,
-3,
-3
-],
-"ebene": 1
-},
-{
-"datei": "varianten/k01-baum05_gras_m.png",
-"basis": "k01/baum05",
-"x": 1,
-"y": 277,
-"fuss": 46,
-"kachel": [
-1,
-19
-],
-"block": [
-0,
-17,
-3,
-3
-],
-"ebene": 1
-},
-{
-"datei": "varianten/k01-baum13_gras.png",
-"basis": "k01/baum13",
-"x": 35,
-"y": 286,
-"fuss": 37,
-"kachel": [
-3,
-19
-],
-"block": [
-2,
-17,
-3,
-3
-],
-"ebene": 1
-},
-{
-"datei": "varianten/k01-baum12_gras_m.png",
-"basis": "k01/baum12",
-"x": 65,
-"y": 284,
-"fuss": 39,
-"kachel": [
-5,
-19
-],
-"block": [
-4,
-17,
-3,
-3
-],
-"ebene": 1
-},
-{
-"datei": "varianten/k01-baum05_gras.png",
-"basis": "k01/baum05",
-"x": 993,
-"y": 277,
-"fuss": 46,
-"kachel": [
-63,
-19
-],
-"block": [
-62,
-17,
-3,
-3
-],
-"ebene": 1
-},
-{
-"datei": "varianten/k01-baum13_gras.png",
-"basis": "k01/baum13",
-"x": -13,
-"y": 302,
-"fuss": 37,
 "kachel": [
 0,
 20
@@ -5408,11 +5407,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum02_gras.png",
-"basis": "k01/baum02",
-"x": 50,
-"y": 295,
-"fuss": 44,
+"datei": "varianten/k01-baum15_gras.png",
+"basis": "k01/baum15",
+"x": 53,
+"y": 296,
+"fuss": 43,
 "kachel": [
 4,
 20
@@ -5426,35 +5425,17 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum14_gras.png",
-"basis": "k01/baum14",
+"datei": "varianten/k01-baum12_gras_m.png",
+"basis": "k01/baum12",
 "x": 81,
-"y": 305,
-"fuss": 34,
+"y": 300,
+"fuss": 39,
 "kachel": [
 6,
 20
 ],
 "block": [
 5,
-19,
-3,
-2
-],
-"ebene": 1
-},
-{
-"datei": "varianten/k01-baum12_gras_m.png",
-"basis": "k01/baum12",
-"x": 977,
-"y": 300,
-"fuss": 39,
-"kachel": [
-62,
-20
-],
-"block": [
-61,
 18,
 3,
 3
@@ -5462,7 +5443,25 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum15_gras.png",
+"datei": "varianten/k01-baum14_gras.png",
+"basis": "k01/baum14",
+"x": 977,
+"y": 305,
+"fuss": 34,
+"kachel": [
+62,
+20
+],
+"block": [
+61,
+19,
+3,
+2
+],
+"ebene": 1
+},
+{
+"datei": "varianten/k01-baum15_gras_m.png",
 "basis": "k01/baum15",
 "x": 5,
 "y": 312,
@@ -5480,11 +5479,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum02_gras_m.png",
-"basis": "k01/baum02",
+"datei": "varianten/k01-baum04_gras_m.png",
+"basis": "k01/baum04",
 "x": 34,
-"y": 311,
-"fuss": 44,
+"y": 309,
+"fuss": 46,
 "kachel": [
 3,
 21
@@ -5498,11 +5497,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum15_gras.png",
-"basis": "k01/baum15",
-"x": 69,
-"y": 312,
-"fuss": 43,
+"datei": "varianten/k01-baum13_gras_m.png",
+"basis": "k01/baum13",
+"x": 67,
+"y": 318,
+"fuss": 37,
 "kachel": [
 5,
 21
@@ -5516,29 +5515,29 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum00_gras.png",
-"basis": "k01/baum00",
-"x": 992,
-"y": 309,
-"fuss": 46,
+"datei": "varianten/k01-baum14_gras.png",
+"basis": "k01/baum14",
+"x": 993,
+"y": 321,
+"fuss": 34,
 "kachel": [
 63,
 21
 ],
 "block": [
 62,
-19,
+20,
 3,
-3
+2
 ],
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum09_gras.png",
-"basis": "k01/baum09",
-"x": -13,
-"y": 324,
-"fuss": 47,
+"datei": "varianten/k01-baum02_gras_m.png",
+"basis": "k01/baum02",
+"x": -14,
+"y": 327,
+"fuss": 44,
 "kachel": [
 0,
 22
@@ -5552,29 +5551,29 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum14_gras.png",
-"basis": "k01/baum14",
-"x": 49,
-"y": 337,
-"fuss": 34,
+"datei": "varianten/k01-baum04_gras_m.png",
+"basis": "k01/baum04",
+"x": 50,
+"y": 325,
+"fuss": 46,
 "kachel": [
 4,
 22
 ],
 "block": [
 3,
-21,
+20,
 3,
-2
+3
 ],
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum09_gras.png",
-"basis": "k01/baum09",
-"x": 83,
-"y": 324,
-"fuss": 47,
+"datei": "varianten/k01-baum04_gras.png",
+"basis": "k01/baum04",
+"x": 82,
+"y": 325,
+"fuss": 46,
 "kachel": [
 6,
 22
@@ -5588,47 +5587,47 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum14_gras.png",
-"basis": "k01/baum14",
-"x": 977,
-"y": 337,
-"fuss": 34,
+"datei": "varianten/k01-baum02_gras.png",
+"basis": "k01/baum02",
+"x": 978,
+"y": 327,
+"fuss": 44,
 "kachel": [
 62,
 22
 ],
 "block": [
 61,
-21,
-3,
-2
-],
-"ebene": 1
-},
-{
-"datei": "varianten/k01-baum09_gras_m.png",
-"basis": "k01/baum09",
-"x": 3,
-"y": 340,
-"fuss": 47,
-"kachel": [
-1,
-23
-],
-"block": [
-0,
-21,
+20,
 3,
 3
 ],
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum13_gras.png",
-"basis": "k01/baum13",
-"x": 35,
-"y": 350,
-"fuss": 37,
+"datei": "varianten/k01-baum14_gras.png",
+"basis": "k01/baum14",
+"x": 1,
+"y": 353,
+"fuss": 34,
+"kachel": [
+1,
+23
+],
+"block": [
+0,
+22,
+3,
+2
+],
+"ebene": 1
+},
+{
+"datei": "varianten/k01-baum12_gras.png",
+"basis": "k01/baum12",
+"x": 33,
+"y": 348,
+"fuss": 39,
 "kachel": [
 3,
 23
@@ -5642,29 +5641,29 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum14_gras_m.png",
-"basis": "k01/baum14",
-"x": 65,
-"y": 353,
-"fuss": 34,
+"datei": "varianten/k01-baum01_gras_m.png",
+"basis": "k01/baum01",
+"x": 64,
+"y": 341,
+"fuss": 46,
 "kachel": [
 5,
 23
 ],
 "block": [
 4,
-22,
+21,
 3,
-2
+3
 ],
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum04_gras_m.png",
-"basis": "k01/baum04",
-"x": 994,
-"y": 341,
-"fuss": 46,
+"datei": "varianten/k01-baum09_gras.png",
+"basis": "k01/baum09",
+"x": 995,
+"y": 340,
+"fuss": 47,
 "kachel": [
 63,
 23
@@ -5678,7 +5677,7 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum12_gras_m.png",
+"datei": "varianten/k01-baum12_gras.png",
 "basis": "k01/baum12",
 "x": -15,
 "y": 364,
@@ -5714,29 +5713,29 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum02_gras_m.png",
-"basis": "k01/baum02",
-"x": 82,
-"y": 359,
-"fuss": 44,
+"datei": "varianten/k01-baum14_gras_m.png",
+"basis": "k01/baum14",
+"x": 81,
+"y": 369,
+"fuss": 34,
 "kachel": [
 6,
 24
 ],
 "block": [
 5,
-22,
+23,
 3,
-3
+2
 ],
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum04_gras_m.png",
-"basis": "k01/baum04",
-"x": 978,
-"y": 357,
-"fuss": 46,
+"datei": "varianten/k01-baum13_gras.png",
+"basis": "k01/baum13",
+"x": 979,
+"y": 366,
+"fuss": 37,
 "kachel": [
 62,
 24
@@ -5768,11 +5767,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum02_gras.png",
-"basis": "k01/baum02",
-"x": 34,
-"y": 375,
-"fuss": 44,
+"datei": "varianten/k01-baum09_gras_m.png",
+"basis": "k01/baum09",
+"x": 35,
+"y": 372,
+"fuss": 47,
 "kachel": [
 3,
 25
@@ -5786,11 +5785,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum13_gras.png",
-"basis": "k01/baum13",
-"x": 995,
-"y": 382,
-"fuss": 37,
+"datei": "varianten/k01-baum04_gras.png",
+"basis": "k01/baum04",
+"x": 994,
+"y": 373,
+"fuss": 46,
 "kachel": [
 63,
 25
@@ -5804,11 +5803,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum09_gras.png",
-"basis": "k01/baum09",
-"x": -13,
-"y": 388,
-"fuss": 47,
+"datei": "varianten/k01-baum01_gras.png",
+"basis": "k01/baum01",
+"x": -16,
+"y": 389,
+"fuss": 46,
 "kachel": [
 0,
 26
@@ -5822,11 +5821,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum01_gras_m.png",
-"basis": "k01/baum01",
-"x": 80,
-"y": 389,
-"fuss": 46,
+"datei": "varianten/k01-baum12_gras_m.png",
+"basis": "k01/baum12",
+"x": 81,
+"y": 396,
+"fuss": 39,
 "kachel": [
 6,
 26
@@ -5840,7 +5839,7 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum01_gras_m.png",
+"datei": "varianten/k01-baum01_gras.png",
 "basis": "k01/baum01",
 "x": 976,
 "y": 389,
@@ -5858,11 +5857,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum05_gras_m.png",
-"basis": "k01/baum05",
-"x": 993,
-"y": 405,
-"fuss": 46,
+"datei": "varianten/k01-baum09_gras_m.png",
+"basis": "k01/baum09",
+"x": 995,
+"y": 404,
+"fuss": 47,
 "kachel": [
 63,
 27
@@ -5876,11 +5875,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum04_gras.png",
-"basis": "k01/baum04",
-"x": -14,
-"y": 421,
-"fuss": 46,
+"datei": "varianten/k01-baum12_gras_m.png",
+"basis": "k01/baum12",
+"x": -15,
+"y": 428,
+"fuss": 39,
 "kachel": [
 0,
 28
@@ -5894,11 +5893,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum09_gras_m.png",
-"basis": "k01/baum09",
-"x": 275,
-"y": 420,
-"fuss": 47,
+"datei": "varianten/k01-baum15_gras_m.png",
+"basis": "k01/baum15",
+"x": 277,
+"y": 424,
+"fuss": 43,
 "kachel": [
 18,
 28
@@ -5912,29 +5911,29 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum09_gras.png",
-"basis": "k01/baum09",
-"x": 979,
-"y": 420,
-"fuss": 47,
+"datei": "varianten/k01-baum14_gras.png",
+"basis": "k01/baum14",
+"x": 977,
+"y": 433,
+"fuss": 34,
 "kachel": [
 62,
 28
 ],
 "block": [
 61,
-26,
+27,
 3,
-3
+2
 ],
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum02_gras_m.png",
-"basis": "k01/baum02",
-"x": 994,
-"y": 439,
-"fuss": 44,
+"datei": "varianten/k01-baum15_gras.png",
+"basis": "k01/baum15",
+"x": 997,
+"y": 440,
+"fuss": 43,
 "kachel": [
 63,
 29
@@ -5948,11 +5947,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum01_gras.png",
-"basis": "k01/baum01",
-"x": -16,
-"y": 453,
-"fuss": 46,
+"datei": "varianten/k01-baum15_gras.png",
+"basis": "k01/baum15",
+"x": -11,
+"y": 456,
+"fuss": 43,
 "kachel": [
 0,
 30
@@ -5966,9 +5965,9 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum04_gras_m.png",
-"basis": "k01/baum04",
-"x": 978,
+"datei": "varianten/k01-baum01_gras_m.png",
+"basis": "k01/baum01",
+"x": 976,
 "y": 453,
 "fuss": 46,
 "kachel": [
@@ -5984,65 +5983,65 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum09_gras_m.png",
-"basis": "k01/baum09",
-"x": 995,
-"y": 468,
-"fuss": 47,
+"datei": "varianten/k01-baum14_gras.png",
+"basis": "k01/baum14",
+"x": 993,
+"y": 481,
+"fuss": 34,
 "kachel": [
 63,
 31
 ],
 "block": [
 62,
-29,
+30,
 3,
-3
+2
 ],
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum14_gras_m.png",
-"basis": "k01/baum14",
-"x": -15,
-"y": 497,
-"fuss": 34,
+"datei": "varianten/k01-baum15_gras_m.png",
+"basis": "k01/baum15",
+"x": -11,
+"y": 488,
+"fuss": 43,
 "kachel": [
 0,
 32
 ],
 "block": [
 -1,
-31,
+30,
 3,
-2
+3
 ],
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum14_gras_m.png",
-"basis": "k01/baum14",
-"x": 977,
-"y": 497,
-"fuss": 34,
+"datei": "varianten/k01-baum01_gras.png",
+"basis": "k01/baum01",
+"x": 976,
+"y": 485,
+"fuss": 46,
 "kachel": [
 62,
 32
 ],
 "block": [
 61,
-31,
+30,
 3,
-2
+3
 ],
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum09_gras_m.png",
-"basis": "k01/baum09",
-"x": 995,
-"y": 500,
-"fuss": 47,
+"datei": "varianten/k01-baum02_gras.png",
+"basis": "k01/baum02",
+"x": 994,
+"y": 503,
+"fuss": 44,
 "kachel": [
 63,
 33
@@ -6056,29 +6055,29 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum14_gras.png",
-"basis": "k01/baum14",
-"x": -15,
-"y": 529,
-"fuss": 34,
+"datei": "varianten/k01-baum13_gras_m.png",
+"basis": "k01/baum13",
+"x": -13,
+"y": 526,
+"fuss": 37,
 "kachel": [
 0,
 34
 ],
 "block": [
 -1,
-33,
+32,
 3,
-2
+3
 ],
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum02_gras.png",
-"basis": "k01/baum02",
-"x": 2,
-"y": 535,
-"fuss": 44,
+"datei": "varianten/k01-baum15_gras.png",
+"basis": "k01/baum15",
+"x": 5,
+"y": 536,
+"fuss": 43,
 "kachel": [
 1,
 35
@@ -6092,11 +6091,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum00_gras_m.png",
-"basis": "k01/baum00",
-"x": -16,
-"y": 549,
-"fuss": 46,
+"datei": "varianten/k01-baum12_gras_m.png",
+"basis": "k01/baum12",
+"x": -15,
+"y": 556,
+"fuss": 39,
 "kachel": [
 0,
 36
@@ -6110,29 +6109,29 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum14_gras_m.png",
-"basis": "k01/baum14",
+"datei": "varianten/k01-baum12_gras_m.png",
+"basis": "k01/baum12",
 "x": 1,
-"y": 577,
-"fuss": 34,
+"y": 572,
+"fuss": 39,
 "kachel": [
 1,
 37
 ],
 "block": [
 0,
-36,
+35,
 3,
-2
+3
 ],
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum01_gras.png",
-"basis": "k01/baum01",
-"x": -16,
-"y": 581,
-"fuss": 46,
+"datei": "varianten/k01-baum02_gras.png",
+"basis": "k01/baum02",
+"x": -14,
+"y": 583,
+"fuss": 44,
 "kachel": [
 0,
 38
@@ -6146,11 +6145,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum13_gras.png",
-"basis": "k01/baum13",
-"x": 3,
-"y": 606,
-"fuss": 37,
+"datei": "varianten/k01-baum01_gras_m.png",
+"basis": "k01/baum01",
+"x": 0,
+"y": 597,
+"fuss": 46,
 "kachel": [
 1,
 39
@@ -6164,11 +6163,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum02_gras.png",
-"basis": "k01/baum02",
-"x": 34,
-"y": 599,
-"fuss": 44,
+"datei": "varianten/k01-baum01_gras_m.png",
+"basis": "k01/baum01",
+"x": 32,
+"y": 597,
+"fuss": 46,
 "kachel": [
 3,
 39
@@ -6182,11 +6181,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum12_gras_m.png",
-"basis": "k01/baum12",
-"x": -15,
-"y": 620,
-"fuss": 39,
+"datei": "varianten/k01-baum09_gras.png",
+"basis": "k01/baum09",
+"x": -13,
+"y": 612,
+"fuss": 47,
 "kachel": [
 0,
 40
@@ -6200,47 +6199,47 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum14_gras.png",
-"basis": "k01/baum14",
-"x": 1,
-"y": 641,
-"fuss": 34,
+"datei": "varianten/k01-baum04_gras_m.png",
+"basis": "k01/baum04",
+"x": 2,
+"y": 629,
+"fuss": 46,
 "kachel": [
 1,
 41
 ],
 "block": [
 0,
-40,
+39,
 3,
-2
+3
 ],
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum14_gras_m.png",
-"basis": "k01/baum14",
+"datei": "varianten/k01-baum12_gras_m.png",
+"basis": "k01/baum12",
 "x": 33,
-"y": 641,
-"fuss": 34,
+"y": 636,
+"fuss": 39,
 "kachel": [
 3,
 41
 ],
 "block": [
 2,
-40,
+39,
 3,
-2
+3
 ],
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum09_gras_m.png",
-"basis": "k01/baum09",
+"datei": "varianten/k01-baum13_gras_m.png",
+"basis": "k01/baum13",
 "x": -13,
-"y": 644,
-"fuss": 47,
+"y": 654,
+"fuss": 37,
 "kachel": [
 0,
 42
@@ -6254,29 +6253,29 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum01_gras_m.png",
-"basis": "k01/baum01",
-"x": 0,
-"y": 661,
-"fuss": 46,
+"datei": "varianten/k01-baum14_gras.png",
+"basis": "k01/baum14",
+"x": 1,
+"y": 673,
+"fuss": 34,
 "kachel": [
 1,
 43
 ],
 "block": [
 0,
-41,
+42,
 3,
-3
+2
 ],
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum05_gras.png",
-"basis": "k01/baum05",
-"x": -15,
-"y": 677,
-"fuss": 46,
+"datei": "varianten/k01-baum13_gras_m.png",
+"basis": "k01/baum13",
+"x": -13,
+"y": 686,
+"fuss": 37,
 "kachel": [
 0,
 44
@@ -6290,20 +6289,20 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum02_gras.png",
-"basis": "k01/baum02",
-"x": 978,
-"y": 679,
-"fuss": 44,
+"datei": "varianten/k01-baum14_gras_m.png",
+"basis": "k01/baum14",
+"x": 977,
+"y": 689,
+"fuss": 34,
 "kachel": [
 62,
 44
 ],
 "block": [
 61,
-42,
+43,
 3,
-3
+2
 ],
 "ebene": 1
 },
@@ -6326,8 +6325,8 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum00_gras_m.png",
-"basis": "k01/baum00",
+"datei": "varianten/k01-baum01_gras_m.png",
+"basis": "k01/baum01",
 "x": -16,
 "y": 709,
 "fuss": 46,
@@ -6344,11 +6343,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum09_gras.png",
-"basis": "k01/baum09",
-"x": 563,
-"y": 708,
-"fuss": 47,
+"datei": "varianten/k01-baum00_gras.png",
+"basis": "k01/baum00",
+"x": 560,
+"y": 709,
+"fuss": 46,
 "kachel": [
 36,
 46
@@ -6362,25 +6361,25 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum15_gras.png",
-"basis": "k01/baum15",
-"x": 981,
-"y": 712,
-"fuss": 43,
+"datei": "varianten/k01-baum14_gras.png",
+"basis": "k01/baum14",
+"x": 977,
+"y": 721,
+"fuss": 34,
 "kachel": [
 62,
 46
 ],
 "block": [
 61,
-44,
+45,
 3,
-3
+2
 ],
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum13_gras.png",
+"datei": "varianten/k01-baum13_gras_m.png",
 "basis": "k01/baum13",
 "x": 579,
 "y": 734,
@@ -6398,11 +6397,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum02_gras_m.png",
-"basis": "k01/baum02",
-"x": 994,
-"y": 727,
-"fuss": 44,
+"datei": "varianten/k01-baum15_gras_m.png",
+"basis": "k01/baum15",
+"x": 997,
+"y": 728,
+"fuss": 43,
 "kachel": [
 63,
 47
@@ -6416,11 +6415,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum12_gras_m.png",
-"basis": "k01/baum12",
-"x": -15,
-"y": 748,
-"fuss": 39,
+"datei": "varianten/k01-baum15_gras_m.png",
+"basis": "k01/baum15",
+"x": -11,
+"y": 744,
+"fuss": 43,
 "kachel": [
 0,
 48
@@ -6434,29 +6433,29 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum14_gras_m.png",
-"basis": "k01/baum14",
-"x": 977,
-"y": 753,
-"fuss": 34,
+"datei": "varianten/k01-baum01_gras_m.png",
+"basis": "k01/baum01",
+"x": 976,
+"y": 741,
+"fuss": 46,
 "kachel": [
 62,
 48
 ],
 "block": [
 61,
-47,
+46,
 3,
-2
+3
 ],
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum05_gras_m.png",
-"basis": "k01/baum05",
-"x": 1,
-"y": 757,
-"fuss": 46,
+"datei": "varianten/k01-baum02_gras.png",
+"basis": "k01/baum02",
+"x": 2,
+"y": 759,
+"fuss": 44,
 "kachel": [
 1,
 49
@@ -6488,29 +6487,29 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum09_gras_m.png",
-"basis": "k01/baum09",
-"x": 451,
-"y": 756,
-"fuss": 47,
+"datei": "varianten/k01-baum14_gras.png",
+"basis": "k01/baum14",
+"x": 449,
+"y": 769,
+"fuss": 34,
 "kachel": [
 29,
 49
 ],
 "block": [
 28,
-47,
+48,
 3,
-3
+2
 ],
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum13_gras.png",
-"basis": "k01/baum13",
+"datei": "varianten/k01-baum09_gras_m.png",
+"basis": "k01/baum09",
 "x": 483,
-"y": 766,
-"fuss": 37,
+"y": 756,
+"fuss": 47,
 "kachel": [
 31,
 49
@@ -6524,11 +6523,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum15_gras_m.png",
-"basis": "k01/baum15",
-"x": 997,
-"y": 760,
-"fuss": 43,
+"datei": "varianten/k01-baum02_gras.png",
+"basis": "k01/baum02",
+"x": 994,
+"y": 759,
+"fuss": 44,
 "kachel": [
 63,
 49
@@ -6542,9 +6541,9 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum05_gras_m.png",
-"basis": "k01/baum05",
-"x": -15,
+"datei": "varianten/k01-baum00_gras.png",
+"basis": "k01/baum00",
+"x": -16,
 "y": 773,
 "fuss": 46,
 "kachel": [
@@ -6560,11 +6559,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum15_gras.png",
-"basis": "k01/baum15",
-"x": 405,
-"y": 776,
-"fuss": 43,
+"datei": "varianten/k01-baum01_gras_m.png",
+"basis": "k01/baum01",
+"x": 400,
+"y": 773,
+"fuss": 46,
 "kachel": [
 26,
 50
@@ -6578,29 +6577,29 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum09_gras_m.png",
-"basis": "k01/baum09",
-"x": 435,
-"y": 772,
-"fuss": 47,
+"datei": "varianten/k01-baum14_gras_m.png",
+"basis": "k01/baum14",
+"x": 433,
+"y": 785,
+"fuss": 34,
 "kachel": [
 28,
 50
 ],
 "block": [
 27,
-48,
+49,
 3,
-3
+2
 ],
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum01_gras_m.png",
-"basis": "k01/baum01",
-"x": 464,
-"y": 773,
-"fuss": 46,
+"datei": "varianten/k01-baum09_gras_m.png",
+"basis": "k01/baum09",
+"x": 467,
+"y": 772,
+"fuss": 47,
 "kachel": [
 30,
 50
@@ -6614,11 +6613,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum02_gras.png",
-"basis": "k01/baum02",
+"datei": "varianten/k01-baum04_gras_m.png",
+"basis": "k01/baum04",
 "x": 498,
-"y": 775,
-"fuss": 44,
+"y": 773,
+"fuss": 46,
 "kachel": [
 32,
 50
@@ -6632,11 +6631,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum00_gras.png",
-"basis": "k01/baum00",
-"x": 976,
-"y": 773,
-"fuss": 46,
+"datei": "varianten/k01-baum02_gras.png",
+"basis": "k01/baum02",
+"x": 978,
+"y": 775,
+"fuss": 44,
 "kachel": [
 62,
 50
@@ -6650,11 +6649,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum13_gras.png",
-"basis": "k01/baum13",
-"x": 3,
-"y": 798,
-"fuss": 37,
+"datei": "varianten/k01-baum01_gras_m.png",
+"basis": "k01/baum01",
+"x": 0,
+"y": 789,
+"fuss": 46,
 "kachel": [
 1,
 51
@@ -6668,11 +6667,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum02_gras.png",
-"basis": "k01/baum02",
-"x": 386,
-"y": 791,
-"fuss": 44,
+"datei": "varianten/k01-baum15_gras_m.png",
+"basis": "k01/baum15",
+"x": 389,
+"y": 792,
+"fuss": 43,
 "kachel": [
 25,
 51
@@ -6686,35 +6685,17 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum00_gras.png",
-"basis": "k01/baum00",
-"x": 416,
-"y": 789,
-"fuss": 46,
+"datei": "varianten/k01-baum14_gras_m.png",
+"basis": "k01/baum14",
+"x": 417,
+"y": 801,
+"fuss": 34,
 "kachel": [
 27,
 51
 ],
 "block": [
 26,
-49,
-3,
-3
-],
-"ebene": 1
-},
-{
-"datei": "varianten/k01-baum14_gras.png",
-"basis": "k01/baum14",
-"x": 449,
-"y": 801,
-"fuss": 34,
-"kachel": [
-29,
-51
-],
-"block": [
-28,
 50,
 3,
 2
@@ -6722,11 +6703,29 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum01_gras_m.png",
-"basis": "k01/baum01",
-"x": 480,
+"datei": "varianten/k01-baum04_gras.png",
+"basis": "k01/baum04",
+"x": 450,
 "y": 789,
 "fuss": 46,
+"kachel": [
+29,
+51
+],
+"block": [
+28,
+49,
+3,
+3
+],
+"ebene": 1
+},
+{
+"datei": "varianten/k01-baum09_gras_m.png",
+"basis": "k01/baum09",
+"x": 483,
+"y": 788,
+"fuss": 47,
 "kachel": [
 31,
 51
@@ -6740,11 +6739,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum05_gras_m.png",
-"basis": "k01/baum05",
-"x": 993,
-"y": 789,
-"fuss": 46,
+"datei": "varianten/k01-baum15_gras_m.png",
+"basis": "k01/baum15",
+"x": 997,
+"y": 792,
+"fuss": 43,
 "kachel": [
 63,
 51
@@ -6758,9 +6757,9 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum04_gras_m.png",
-"basis": "k01/baum04",
-"x": -14,
+"datei": "varianten/k01-baum01_gras_m.png",
+"basis": "k01/baum01",
+"x": -16,
 "y": 805,
 "fuss": 46,
 "kachel": [
@@ -6776,11 +6775,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum15_gras_m.png",
-"basis": "k01/baum15",
-"x": 405,
-"y": 808,
-"fuss": 43,
+"datei": "varianten/k01-baum09_gras.png",
+"basis": "k01/baum09",
+"x": 403,
+"y": 804,
+"fuss": 47,
 "kachel": [
 26,
 52
@@ -6794,11 +6793,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum15_gras_m.png",
-"basis": "k01/baum15",
-"x": 437,
-"y": 808,
-"fuss": 43,
+"datei": "varianten/k01-baum04_gras.png",
+"basis": "k01/baum04",
+"x": 434,
+"y": 805,
+"fuss": 46,
 "kachel": [
 28,
 52
@@ -6812,35 +6811,17 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum14_gras.png",
-"basis": "k01/baum14",
-"x": 465,
-"y": 817,
-"fuss": 34,
+"datei": "varianten/k01-baum09_gras_m.png",
+"basis": "k01/baum09",
+"x": 467,
+"y": 804,
+"fuss": 47,
 "kachel": [
 30,
 52
 ],
 "block": [
 29,
-51,
-3,
-2
-],
-"ebene": 1
-},
-{
-"datei": "varianten/k01-baum02_gras.png",
-"basis": "k01/baum02",
-"x": 498,
-"y": 807,
-"fuss": 44,
-"kachel": [
-32,
-52
-],
-"block": [
-31,
 50,
 3,
 3
@@ -6848,11 +6829,29 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum09_gras.png",
-"basis": "k01/baum09",
-"x": 979,
-"y": 804,
-"fuss": 47,
+"datei": "varianten/k01-baum14_gras_m.png",
+"basis": "k01/baum14",
+"x": 497,
+"y": 817,
+"fuss": 34,
+"kachel": [
+32,
+52
+],
+"block": [
+31,
+51,
+3,
+2
+],
+"ebene": 1
+},
+{
+"datei": "varianten/k01-baum00_gras.png",
+"basis": "k01/baum00",
+"x": 976,
+"y": 805,
+"fuss": 46,
 "kachel": [
 62,
 52
@@ -6866,11 +6865,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum13_gras_m.png",
-"basis": "k01/baum13",
+"datei": "varianten/k01-baum09_gras.png",
+"basis": "k01/baum09",
 "x": 3,
-"y": 830,
-"fuss": 37,
+"y": 820,
+"fuss": 47,
 "kachel": [
 1,
 53
@@ -6884,9 +6883,9 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum04_gras.png",
-"basis": "k01/baum04",
-"x": 994,
+"datei": "varianten/k01-baum00_gras.png",
+"basis": "k01/baum00",
+"x": 992,
 "y": 821,
 "fuss": 46,
 "kachel": [
@@ -6902,11 +6901,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum05_gras_m.png",
-"basis": "k01/baum05",
-"x": -15,
-"y": 837,
-"fuss": 46,
+"datei": "varianten/k01-baum02_gras_m.png",
+"basis": "k01/baum02",
+"x": -14,
+"y": 839,
+"fuss": 44,
 "kachel": [
 0,
 54
@@ -6920,11 +6919,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum02_gras_m.png",
-"basis": "k01/baum02",
-"x": 18,
-"y": 839,
-"fuss": 44,
+"datei": "varianten/k01-baum15_gras.png",
+"basis": "k01/baum15",
+"x": 21,
+"y": 840,
+"fuss": 43,
 "kachel": [
 2,
 54
@@ -6938,9 +6937,9 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum05_gras.png",
-"basis": "k01/baum05",
-"x": 209,
+"datei": "varianten/k01-baum04_gras.png",
+"basis": "k01/baum04",
+"x": 210,
 "y": 837,
 "fuss": 46,
 "kachel": [
@@ -6956,11 +6955,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum15_gras_m.png",
-"basis": "k01/baum15",
-"x": 245,
-"y": 840,
-"fuss": 43,
+"datei": "varianten/k01-baum09_gras_m.png",
+"basis": "k01/baum09",
+"x": 243,
+"y": 836,
+"fuss": 47,
 "kachel": [
 16,
 54
@@ -6974,11 +6973,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum02_gras_m.png",
-"basis": "k01/baum02",
-"x": 274,
-"y": 839,
-"fuss": 44,
+"datei": "varianten/k01-baum09_gras_m.png",
+"basis": "k01/baum09",
+"x": 275,
+"y": 836,
+"fuss": 47,
 "kachel": [
 18,
 54
@@ -6992,11 +6991,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum09_gras_m.png",
-"basis": "k01/baum09",
-"x": 307,
-"y": 836,
-"fuss": 47,
+"datei": "varianten/k01-baum04_gras_m.png",
+"basis": "k01/baum04",
+"x": 306,
+"y": 837,
+"fuss": 46,
 "kachel": [
 20,
 54
@@ -7010,11 +7009,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum00_gras.png",
-"basis": "k01/baum00",
-"x": 336,
-"y": 837,
-"fuss": 46,
+"datei": "varianten/k01-baum12_gras_m.png",
+"basis": "k01/baum12",
+"x": 337,
+"y": 844,
+"fuss": 39,
 "kachel": [
 22,
 54
@@ -7028,11 +7027,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum05_gras.png",
-"basis": "k01/baum05",
-"x": 369,
-"y": 837,
-"fuss": 46,
+"datei": "varianten/k01-baum09_gras.png",
+"basis": "k01/baum09",
+"x": 371,
+"y": 836,
+"fuss": 47,
 "kachel": [
 24,
 54
@@ -7046,11 +7045,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum15_gras_m.png",
-"basis": "k01/baum15",
-"x": 405,
-"y": 840,
-"fuss": 43,
+"datei": "varianten/k01-baum00_gras.png",
+"basis": "k01/baum00",
+"x": 400,
+"y": 837,
+"fuss": 46,
 "kachel": [
 26,
 54
@@ -7064,11 +7063,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum02_gras_m.png",
-"basis": "k01/baum02",
-"x": 434,
-"y": 839,
-"fuss": 44,
+"datei": "varianten/k01-baum12_gras_m.png",
+"basis": "k01/baum12",
+"x": 433,
+"y": 844,
+"fuss": 39,
 "kachel": [
 28,
 54
@@ -7082,29 +7081,29 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum14_gras.png",
-"basis": "k01/baum14",
-"x": 465,
-"y": 849,
-"fuss": 34,
+"datei": "varianten/k01-baum04_gras.png",
+"basis": "k01/baum04",
+"x": 466,
+"y": 837,
+"fuss": 46,
 "kachel": [
 30,
 54
 ],
 "block": [
 29,
-53,
+52,
 3,
-2
+3
 ],
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum00_gras_m.png",
-"basis": "k01/baum00",
-"x": 496,
-"y": 837,
-"fuss": 46,
+"datei": "varianten/k01-baum12_gras_m.png",
+"basis": "k01/baum12",
+"x": 497,
+"y": 844,
+"fuss": 39,
 "kachel": [
 32,
 54
@@ -7118,11 +7117,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum01_gras_m.png",
-"basis": "k01/baum01",
-"x": 528,
-"y": 837,
-"fuss": 46,
+"datei": "varianten/k01-baum02_gras_m.png",
+"basis": "k01/baum02",
+"x": 530,
+"y": 839,
+"fuss": 44,
 "kachel": [
 34,
 54
@@ -7136,11 +7135,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum15_gras.png",
-"basis": "k01/baum15",
-"x": 565,
-"y": 840,
-"fuss": 43,
+"datei": "varianten/k01-baum01_gras.png",
+"basis": "k01/baum01",
+"x": 560,
+"y": 837,
+"fuss": 46,
 "kachel": [
 36,
 54
@@ -7154,9 +7153,9 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum04_gras.png",
-"basis": "k01/baum04",
-"x": 594,
+"datei": "varianten/k01-baum01_gras.png",
+"basis": "k01/baum01",
+"x": 592,
 "y": 837,
 "fuss": 46,
 "kachel": [
@@ -7172,11 +7171,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum05_gras_m.png",
-"basis": "k01/baum05",
-"x": 625,
-"y": 837,
-"fuss": 46,
+"datei": "varianten/k01-baum13_gras_m.png",
+"basis": "k01/baum13",
+"x": 627,
+"y": 846,
+"fuss": 37,
 "kachel": [
 40,
 54
@@ -7190,9 +7189,9 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum05_gras_m.png",
-"basis": "k01/baum05",
-"x": 657,
+"datei": "varianten/k01-baum01_gras_m.png",
+"basis": "k01/baum01",
+"x": 656,
 "y": 837,
 "fuss": 46,
 "kachel": [
@@ -7208,11 +7207,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum04_gras_m.png",
-"basis": "k01/baum04",
-"x": 690,
-"y": 837,
-"fuss": 46,
+"datei": "varianten/k01-baum09_gras_m.png",
+"basis": "k01/baum09",
+"x": 691,
+"y": 836,
+"fuss": 47,
 "kachel": [
 44,
 54
@@ -7226,11 +7225,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum09_gras_m.png",
-"basis": "k01/baum09",
-"x": 723,
-"y": 836,
-"fuss": 47,
+"datei": "varianten/k01-baum15_gras_m.png",
+"basis": "k01/baum15",
+"x": 725,
+"y": 840,
+"fuss": 43,
 "kachel": [
 46,
 54
@@ -7244,9 +7243,9 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum05_gras.png",
-"basis": "k01/baum05",
-"x": 753,
+"datei": "varianten/k01-baum01_gras.png",
+"basis": "k01/baum01",
+"x": 752,
 "y": 837,
 "fuss": 46,
 "kachel": [
@@ -7262,9 +7261,9 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum00_gras.png",
-"basis": "k01/baum00",
-"x": 784,
+"datei": "varianten/k01-baum04_gras.png",
+"basis": "k01/baum04",
+"x": 786,
 "y": 837,
 "fuss": 46,
 "kachel": [
@@ -7280,11 +7279,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum09_gras_m.png",
-"basis": "k01/baum09",
-"x": 819,
-"y": 836,
-"fuss": 47,
+"datei": "varianten/k01-baum04_gras_m.png",
+"basis": "k01/baum04",
+"x": 818,
+"y": 837,
+"fuss": 46,
 "kachel": [
 52,
 54
@@ -7298,11 +7297,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum04_gras.png",
-"basis": "k01/baum04",
-"x": 850,
-"y": 837,
-"fuss": 46,
+"datei": "varianten/k01-baum15_gras_m.png",
+"basis": "k01/baum15",
+"x": 853,
+"y": 840,
+"fuss": 43,
 "kachel": [
 54,
 54
@@ -7316,11 +7315,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum09_gras_m.png",
-"basis": "k01/baum09",
-"x": 883,
-"y": 836,
-"fuss": 47,
+"datei": "varianten/k01-baum00_gras_m.png",
+"basis": "k01/baum00",
+"x": 880,
+"y": 837,
+"fuss": 46,
 "kachel": [
 56,
 54
@@ -7334,11 +7333,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum02_gras_m.png",
-"basis": "k01/baum02",
-"x": 914,
-"y": 839,
-"fuss": 44,
+"datei": "varianten/k01-baum09_gras.png",
+"basis": "k01/baum09",
+"x": 915,
+"y": 836,
+"fuss": 47,
 "kachel": [
 58,
 54
@@ -7352,11 +7351,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum01_gras.png",
-"basis": "k01/baum01",
-"x": 944,
-"y": 837,
-"fuss": 46,
+"datei": "varianten/k01-baum15_gras_m.png",
+"basis": "k01/baum15",
+"x": 949,
+"y": 840,
+"fuss": 43,
 "kachel": [
 60,
 54
@@ -7370,8 +7369,8 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum01_gras.png",
-"basis": "k01/baum01",
+"datei": "varianten/k01-baum00_gras.png",
+"basis": "k01/baum00",
 "x": 976,
 "y": 837,
 "fuss": 46,
@@ -7388,11 +7387,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum12_gras_m.png",
-"basis": "k01/baum12",
-"x": 1,
-"y": 860,
-"fuss": 39,
+"datei": "varianten/k01-baum01_gras_m.png",
+"basis": "k01/baum01",
+"x": 0,
+"y": 853,
+"fuss": 46,
 "kachel": [
 1,
 55
@@ -7406,11 +7405,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum09_gras_m.png",
-"basis": "k01/baum09",
-"x": 195,
-"y": 852,
-"fuss": 47,
+"datei": "varianten/k01-baum02_gras.png",
+"basis": "k01/baum02",
+"x": 194,
+"y": 855,
+"fuss": 44,
 "kachel": [
 13,
 55
@@ -7424,11 +7423,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum12_gras_m.png",
-"basis": "k01/baum12",
-"x": 225,
-"y": 860,
-"fuss": 39,
+"datei": "varianten/k01-baum02_gras_m.png",
+"basis": "k01/baum02",
+"x": 226,
+"y": 855,
+"fuss": 44,
 "kachel": [
 15,
 55
@@ -7442,11 +7441,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum04_gras_m.png",
-"basis": "k01/baum04",
-"x": 258,
-"y": 853,
-"fuss": 46,
+"datei": "varianten/k01-baum09_gras.png",
+"basis": "k01/baum09",
+"x": 259,
+"y": 852,
+"fuss": 47,
 "kachel": [
 17,
 55
@@ -7460,35 +7459,17 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum14_gras_m.png",
-"basis": "k01/baum14",
-"x": 289,
-"y": 865,
-"fuss": 34,
+"datei": "varianten/k01-baum04_gras.png",
+"basis": "k01/baum04",
+"x": 290,
+"y": 853,
+"fuss": 46,
 "kachel": [
 19,
 55
 ],
 "block": [
 18,
-54,
-3,
-2
-],
-"ebene": 1
-},
-{
-"datei": "varianten/k01-baum00_gras_m.png",
-"basis": "k01/baum00",
-"x": 320,
-"y": 853,
-"fuss": 46,
-"kachel": [
-21,
-55
-],
-"block": [
-20,
 53,
 3,
 3
@@ -7496,11 +7477,29 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum05_gras.png",
-"basis": "k01/baum05",
-"x": 353,
-"y": 853,
-"fuss": 46,
+"datei": "varianten/k01-baum14_gras.png",
+"basis": "k01/baum14",
+"x": 321,
+"y": 865,
+"fuss": 34,
+"kachel": [
+21,
+55
+],
+"block": [
+20,
+54,
+3,
+2
+],
+"ebene": 1
+},
+{
+"datei": "varianten/k01-baum02_gras.png",
+"basis": "k01/baum02",
+"x": 354,
+"y": 855,
+"fuss": 44,
 "kachel": [
 23,
 55
@@ -7514,20 +7513,20 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum14_gras_m.png",
-"basis": "k01/baum14",
-"x": 385,
-"y": 865,
-"fuss": 34,
+"datei": "varianten/k01-baum00_gras_m.png",
+"basis": "k01/baum00",
+"x": 384,
+"y": 853,
+"fuss": 46,
 "kachel": [
 25,
 55
 ],
 "block": [
 24,
-54,
+53,
 3,
-2
+3
 ],
 "ebene": 1
 },
@@ -7550,8 +7549,8 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum01_gras_m.png",
-"basis": "k01/baum01",
+"datei": "varianten/k01-baum00_gras.png",
+"basis": "k01/baum00",
 "x": 448,
 "y": 853,
 "fuss": 46,
@@ -7568,11 +7567,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum09_gras_m.png",
-"basis": "k01/baum09",
-"x": 483,
-"y": 852,
-"fuss": 47,
+"datei": "varianten/k01-baum00_gras_m.png",
+"basis": "k01/baum00",
+"x": 480,
+"y": 853,
+"fuss": 46,
 "kachel": [
 31,
 55
@@ -7604,8 +7603,8 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum01_gras.png",
-"basis": "k01/baum01",
+"datei": "varianten/k01-baum00_gras.png",
+"basis": "k01/baum00",
 "x": 544,
 "y": 853,
 "fuss": 46,
@@ -7622,11 +7621,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum02_gras.png",
-"basis": "k01/baum02",
-"x": 578,
-"y": 855,
-"fuss": 44,
+"datei": "varianten/k01-baum09_gras_m.png",
+"basis": "k01/baum09",
+"x": 579,
+"y": 852,
+"fuss": 47,
 "kachel": [
 37,
 55
@@ -7640,11 +7639,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum02_gras_m.png",
-"basis": "k01/baum02",
-"x": 610,
-"y": 855,
-"fuss": 44,
+"datei": "varianten/k01-baum01_gras_m.png",
+"basis": "k01/baum01",
+"x": 608,
+"y": 853,
+"fuss": 46,
 "kachel": [
 39,
 55
@@ -7658,11 +7657,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum05_gras.png",
-"basis": "k01/baum05",
-"x": 641,
-"y": 853,
-"fuss": 46,
+"datei": "varianten/k01-baum13_gras_m.png",
+"basis": "k01/baum13",
+"x": 643,
+"y": 862,
+"fuss": 37,
 "kachel": [
 41,
 55
@@ -7676,7 +7675,7 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum04_gras.png",
+"datei": "varianten/k01-baum04_gras_m.png",
 "basis": "k01/baum04",
 "x": 674,
 "y": 853,
@@ -7694,11 +7693,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum15_gras.png",
-"basis": "k01/baum15",
-"x": 709,
-"y": 856,
-"fuss": 43,
+"datei": "varianten/k01-baum09_gras.png",
+"basis": "k01/baum09",
+"x": 707,
+"y": 852,
+"fuss": 47,
 "kachel": [
 45,
 55
@@ -7712,11 +7711,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum13_gras.png",
-"basis": "k01/baum13",
-"x": 739,
-"y": 862,
-"fuss": 37,
+"datei": "varianten/k01-baum15_gras.png",
+"basis": "k01/baum15",
+"x": 741,
+"y": 856,
+"fuss": 43,
 "kachel": [
 47,
 55
@@ -7730,11 +7729,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum02_gras.png",
-"basis": "k01/baum02",
-"x": 770,
-"y": 855,
-"fuss": 44,
+"datei": "varianten/k01-baum13_gras_m.png",
+"basis": "k01/baum13",
+"x": 771,
+"y": 862,
+"fuss": 37,
 "kachel": [
 49,
 55
@@ -7748,11 +7747,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum00_gras_m.png",
-"basis": "k01/baum00",
-"x": 800,
-"y": 853,
-"fuss": 46,
+"datei": "varianten/k01-baum13_gras.png",
+"basis": "k01/baum13",
+"x": 803,
+"y": 862,
+"fuss": 37,
 "kachel": [
 51,
 55
@@ -7766,9 +7765,9 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum00_gras.png",
-"basis": "k01/baum00",
-"x": 832,
+"datei": "varianten/k01-baum04_gras_m.png",
+"basis": "k01/baum04",
+"x": 834,
 "y": 853,
 "fuss": 46,
 "kachel": [
@@ -7784,11 +7783,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum15_gras_m.png",
-"basis": "k01/baum15",
-"x": 869,
-"y": 856,
-"fuss": 43,
+"datei": "varianten/k01-baum02_gras_m.png",
+"basis": "k01/baum02",
+"x": 866,
+"y": 855,
+"fuss": 44,
 "kachel": [
 55,
 55
@@ -7802,11 +7801,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum00_gras_m.png",
-"basis": "k01/baum00",
-"x": 896,
-"y": 853,
-"fuss": 46,
+"datei": "varianten/k01-baum09_gras.png",
+"basis": "k01/baum09",
+"x": 899,
+"y": 852,
+"fuss": 47,
 "kachel": [
 57,
 55
@@ -7820,11 +7819,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum05_gras.png",
-"basis": "k01/baum05",
-"x": 929,
-"y": 853,
-"fuss": 46,
+"datei": "varianten/k01-baum13_gras_m.png",
+"basis": "k01/baum13",
+"x": 931,
+"y": 862,
+"fuss": 37,
 "kachel": [
 59,
 55
@@ -7838,11 +7837,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum00_gras.png",
-"basis": "k01/baum00",
-"x": 960,
-"y": 853,
-"fuss": 46,
+"datei": "varianten/k01-baum12_gras.png",
+"basis": "k01/baum12",
+"x": 961,
+"y": 860,
+"fuss": 39,
 "kachel": [
 61,
 55
@@ -7856,11 +7855,11 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum05_gras_m.png",
-"basis": "k01/baum05",
-"x": 993,
-"y": 853,
-"fuss": 46,
+"datei": "varianten/k01-baum13_gras.png",
+"basis": "k01/baum13",
+"x": 995,
+"y": 862,
+"fuss": 37,
 "kachel": [
 63,
 55
@@ -7874,20 +7873,20 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum12_gras_m.png",
-"basis": "k01/baum12",
-"x": 817,
-"y": -20,
-"fuss": 39,
+"datei": "varianten/k01-baum14_gras_m.png",
+"basis": "k01/baum14",
+"x": 945,
+"y": -15,
+"fuss": 34,
 "kachel": [
-52,
+60,
 0
 ],
 "block": [
-51,
--2,
+59,
+-1,
 3,
-3
+2
 ],
 "ebene": 1
 },
@@ -7895,107 +7894,53 @@
 "datei": "varianten/k01-baum13_gras_m.png",
 "basis": "k01/baum13",
 "x": 947,
-"y": -18,
+"y": -2,
 "fuss": 37,
 "kachel": [
 60,
-0
+1
 ],
 "block": [
 59,
--2,
+-1,
 3,
 3
 ],
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum14_gras.png",
-"basis": "k01/baum14",
-"x": 817,
-"y": 1,
-"fuss": 34,
-"kachel": [
-52,
-1
-],
-"block": [
-51,
-0,
-3,
-2
-],
-"ebene": 1
-},
-{
-"datei": "varianten/k01-baum14_gras.png",
-"basis": "k01/baum14",
-"x": 945,
-"y": 1,
-"fuss": 34,
-"kachel": [
-60,
-1
-],
-"block": [
-59,
-0,
-3,
-2
-],
-"ebene": 1
-},
-{
-"datei": "varianten/k01-baum14_gras_m.png",
-"basis": "k01/baum14",
+"datei": "varianten/k01-baum12_gras.png",
+"basis": "k01/baum12",
 "x": 977,
-"y": 529,
-"fuss": 34,
+"y": 524,
+"fuss": 39,
 "kachel": [
 62,
 34
 ],
 "block": [
 61,
-33,
+32,
+3,
+3
+],
+"ebene": 1
+},
+{
+"datei": "varianten/k01-baum14_gras_m.png",
+"basis": "k01/baum14",
+"x": 65,
+"y": 641,
+"fuss": 34,
+"kachel": [
+5,
+41
+],
+"block": [
+4,
+40,
 3,
 2
-],
-"ebene": 1
-},
-{
-"datei": "varianten/k01-baum13_gras.png",
-"basis": "k01/baum13",
-"x": 979,
-"y": 542,
-"fuss": 37,
-"kachel": [
-62,
-35
-],
-"block": [
-61,
-33,
-3,
-3
-],
-"ebene": 1
-},
-{
-"datei": "varianten/k01-baum12_gras_m.png",
-"basis": "k01/baum12",
-"x": 961,
-"y": 716,
-"fuss": 39,
-"kachel": [
-61,
-46
-],
-"block": [
-60,
-44,
-3,
-3
 ],
 "ebene": 1
 },
@@ -8020,23 +7965,23 @@
 {
 "datei": "varianten/k01-baum14_gras.png",
 "basis": "k01/baum14",
-"x": 49,
-"y": 849,
+"x": 353,
+"y": 817,
 "fuss": 34,
 "kachel": [
-4,
-54
+23,
+52
 ],
 "block": [
-3,
-53,
+22,
+51,
 3,
 2
 ],
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum12_gras_m.png",
+"datei": "varianten/k01-baum12_gras.png",
 "basis": "k01/baum12",
 "x": 161,
 "y": 844,
@@ -8054,17 +7999,17 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum14_gras.png",
+"datei": "varianten/k01-baum14_gras_m.png",
 "basis": "k01/baum14",
-"x": 33,
+"x": 161,
 "y": 865,
 "fuss": 34,
 "kachel": [
-3,
+11,
 55
 ],
 "block": [
-2,
+10,
 54,
 3,
 2
@@ -8072,71 +8017,71 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-baum13_gras.png",
-"basis": "k01/baum13",
-"x": 163,
-"y": 862,
-"fuss": 37,
+"datei": "varianten/k01-deko09_sand.png",
+"basis": "k01/deko09",
+"x": 688,
+"y": 615,
+"fuss": 28,
 "kachel": [
-11,
-55
+43,
+39
 ],
 "block": [
-10,
-53,
-3,
-3
-],
-"ebene": 1
-},
-{
-"datei": "varianten/k01-deko10_sand.png",
-"basis": "k01/deko10",
-"x": 803,
-"y": 557,
-"fuss": 22,
-"kachel": [
-50,
-35
-],
-"block": [
-50,
-34,
+43,
+38,
 2,
 2
 ],
 "ebene": 0
 },
 {
-"datei": "varianten/k01-deko08_sand.png",
-"basis": "k01/deko08",
-"x": 660,
-"y": 608,
-"fuss": 19,
+"datei": "varianten/k01-deko10_sand.png",
+"basis": "k01/deko10",
+"x": 819,
+"y": 573,
+"fuss": 22,
 "kachel": [
-41,
-38
+51,
+36
 ],
 "block": [
-41,
-38,
+51,
+35,
 2,
-1
+2
+],
+"ebene": 0
+},
+{
+"datei": "varianten/k01-deko11_sand.png",
+"basis": "k01/deko11",
+"x": 832,
+"y": 425,
+"fuss": 26,
+"kachel": [
+52,
+27
+],
+"block": [
+52,
+26,
+2,
+2
 ],
 "ebene": 0
 },
 {
 "datei": "varianten/k01-deko10_sand.png",
 "basis": "k01/deko10",
-"x": 803,
+"x": 643,
 "y": 413,
 "fuss": 22,
 "kachel": [
-50,
+40,
 26
 ],
 "block": [
-50,
+40,
 25,
 2,
 2
@@ -8144,39 +8089,9 @@
 "ebene": 0
 },
 {
-"datei": "k01/deko19.png",
+"datei": "k01/deko18.png",
 "basis": "seerose",
-"x": 736,
-"y": 548,
-"fuss": 12,
-"kachel": [
-46,
-34
-],
-"ebene": 0,
-"liegend": true,
-"schattenlos": true,
-"wasser": true
-},
-{
-"datei": "k01/deko19.png",
-"basis": "seerose",
-"x": 721,
-"y": 596,
-"fuss": 12,
-"kachel": [
-45,
-37
-],
-"ebene": 0,
-"liegend": true,
-"schattenlos": true,
-"wasser": true
-},
-{
-"datei": "k01/deko17.png",
-"basis": "seerose",
-"x": 783,
+"x": 782,
 "y": 449,
 "fuss": 12,
 "kachel": [
@@ -8191,27 +8106,12 @@
 {
 "datei": "k01/deko18.png",
 "basis": "seerose",
-"x": 769,
-"y": 515,
-"fuss": 12,
-"kachel": [
-48,
-32
-],
-"ebene": 0,
-"liegend": true,
-"schattenlos": true,
-"wasser": true
-},
-{
-"datei": "k01/deko18.png",
-"basis": "seerose",
-"x": 723,
-"y": 432,
+"x": 718,
+"y": 498,
 "fuss": 12,
 "kachel": [
 45,
-27
+31
 ],
 "ebene": 0,
 "liegend": true,
@@ -8221,11 +8121,26 @@
 {
 "datei": "k01/deko17.png",
 "basis": "seerose",
-"x": 672,
-"y": 450,
+"x": 755,
+"y": 592,
 "fuss": 12,
 "kachel": [
-42,
+47,
+37
+],
+"ebene": 0,
+"liegend": true,
+"schattenlos": true,
+"wasser": true
+},
+{
+"datei": "k01/deko18.png",
+"basis": "seerose",
+"x": 704,
+"y": 451,
+"fuss": 12,
+"kachel": [
+44,
 28
 ],
 "ebene": 0,
@@ -8236,12 +8151,12 @@
 {
 "datei": "k01/deko19.png",
 "basis": "seerose",
-"x": 815,
-"y": 480,
+"x": 753,
+"y": 529,
 "fuss": 12,
 "kachel": [
-51,
-30
+47,
+33
 ],
 "ebene": 0,
 "liegend": true,
@@ -8249,40 +8164,34 @@
 "wasser": true
 },
 {
-"datei": "varianten/k01-deko10_gras.png",
-"basis": "k01/deko10",
-"x": 883,
-"y": 717,
-"fuss": 22,
+"datei": "k01/deko17.png",
+"basis": "seerose",
+"x": 734,
+"y": 419,
+"fuss": 12,
 "kachel": [
-55,
-45
+46,
+26
 ],
-"block": [
-55,
-44,
-2,
-2
-],
-"ebene": 0
+"ebene": 0,
+"liegend": true,
+"schattenlos": true,
+"wasser": true
 },
 {
-"datei": "varianten/k01-deko11_gras.png",
-"basis": "k01/deko11",
-"x": 384,
-"y": 329,
-"fuss": 26,
+"datei": "k01/deko19.png",
+"basis": "seerose",
+"x": 719,
+"y": 564,
+"fuss": 12,
 "kachel": [
-24,
-21
+45,
+35
 ],
-"block": [
-24,
-20,
-2,
-2
-],
-"ebene": 0
+"ebene": 0,
+"liegend": true,
+"schattenlos": true,
+"wasser": true
 },
 {
 "datei": "varianten/k01-deko08_gras.png",
@@ -8321,11 +8230,11 @@
 "ebene": 0
 },
 {
-"datei": "varianten/k01-deko09_gras.png",
-"basis": "k01/deko09",
-"x": 496,
-"y": 311,
-"fuss": 28,
+"datei": "varianten/k01-deko10_gras.png",
+"basis": "k01/deko10",
+"x": 499,
+"y": 317,
+"fuss": 22,
 "kachel": [
 31,
 20
@@ -8375,18 +8284,54 @@
 "ebene": 0
 },
 {
-"datei": "varianten/k01-deko10_gras.png",
-"basis": "k01/deko10",
-"x": 275,
-"y": 573,
-"fuss": 22,
+"datei": "varianten/k01-deko08_gras.png",
+"basis": "k01/deko08",
+"x": 260,
+"y": 208,
+"fuss": 19,
+"kachel": [
+16,
+13
+],
+"block": [
+16,
+13,
+2,
+1
+],
+"ebene": 0
+},
+{
+"datei": "varianten/k01-deko08_gras.png",
+"basis": "k01/deko08",
+"x": 276,
+"y": 576,
+"fuss": 19,
 "kachel": [
 17,
 36
 ],
 "block": [
 17,
-35,
+36,
+2,
+1
+],
+"ebene": 0
+},
+{
+"datei": "varianten/k01-deko09_gras.png",
+"basis": "k01/deko09",
+"x": 880,
+"y": 711,
+"fuss": 28,
+"kachel": [
+55,
+45
+],
+"block": [
+55,
+44,
 2,
 2
 ],
@@ -8429,24 +8374,6 @@
 "ebene": 0
 },
 {
-"datei": "varianten/k01-deko31_gras.png",
-"basis": "k01/deko31",
-"x": 549,
-"y": 330,
-"fuss": 25,
-"kachel": [
-34,
-21
-],
-"block": [
-34,
-20,
-2,
-2
-],
-"ebene": 0
-},
-{
 "datei": "varianten/k01-deko14_gras.png",
 "basis": "k01/deko14",
 "x": 899,
@@ -8459,24 +8386,6 @@
 "block": [
 56,
 49,
-2,
-2
-],
-"ebene": 0
-},
-{
-"datei": "varianten/k01-deko31_gras.png",
-"basis": "k01/deko31",
-"x": 469,
-"y": 282,
-"fuss": 25,
-"kachel": [
-29,
-18
-],
-"block": [
-29,
-17,
 2,
 2
 ],
@@ -8501,86 +8410,29 @@
 "ebene": 0
 },
 {
-"datei": "varianten/k01-deko14_gras.png",
-"basis": "k01/deko14",
-"x": 819,
-"y": 636,
-"fuss": 23,
+"datei": "varianten/k01-deko31_gras.png",
+"basis": "k01/deko31",
+"x": 805,
+"y": 810,
+"fuss": 25,
 "kachel": [
-51,
-40
+50,
+51
 ],
 "block": [
-51,
-39,
+50,
+50,
 2,
 2
 ],
 "ebene": 0
 },
 {
-"datei": "varianten/k01-deko04_gras.png",
-"basis": "k01/deko04",
-"x": 768,
-"y": 804,
-"fuss": 31,
-"kachel": [
-48,
-51
-],
-"block": [
-48,
-50,
-2,
-2
-],
-"ebene": 0,
-"anim": "wehen"
-},
-{
-"datei": "varianten/k01-deko00_gras.png",
-"basis": "k01/deko00",
-"x": 177,
-"y": 156,
-"fuss": 23,
-"kachel": [
-11,
-10
-],
-"block": [
-11,
-9,
-2,
-2
-],
-"ebene": 0,
-"anim": "wehen"
-},
-{
-"datei": "varianten/k01-deko00_gras.png",
-"basis": "k01/deko00",
-"x": 673,
-"y": 636,
-"fuss": 23,
-"kachel": [
-42,
-40
-],
-"block": [
-42,
-39,
-2,
-2
-],
-"ebene": 0,
-"anim": "wehen"
-},
-{
-"datei": "varianten/k01-deko30_gras.png",
-"basis": "k01/deko30",
-"x": 128,
-"y": 227,
-"fuss": 32,
+"datei": "varianten/k01-deko31_gras.png",
+"basis": "k01/deko31",
+"x": 133,
+"y": 234,
+"fuss": 25,
 "kachel": [
 8,
 15
@@ -8591,34 +8443,14 @@
 2,
 2
 ],
-"ebene": 0,
-"anim": "wehen"
+"ebene": 0
 },
 {
-"datei": "varianten/k01-deko02_gras.png",
-"basis": "k01/deko02",
-"x": 947,
-"y": 812,
-"fuss": 23,
-"kachel": [
-59,
-51
-],
-"block": [
-59,
-50,
-2,
-2
-],
-"ebene": 0,
-"anim": "wehen"
-},
-{
-"datei": "varianten/k01-deko02_gras.png",
-"basis": "k01/deko02",
-"x": 291,
-"y": 748,
-"fuss": 23,
+"datei": "varianten/k01-deko31_gras.png",
+"basis": "k01/deko31",
+"x": 293,
+"y": 746,
+"fuss": 25,
 "kachel": [
 18,
 47
@@ -8629,27 +8461,7 @@
 2,
 2
 ],
-"ebene": 0,
-"anim": "wehen"
-},
-{
-"datei": "varianten/k01-deko27_gras.png",
-"basis": "k01/deko27",
-"x": 256,
-"y": 200,
-"fuss": 27,
-"kachel": [
-16,
-13
-],
-"block": [
-16,
-12,
-2,
-2
-],
-"ebene": 0,
-"anim": "wehen"
+"ebene": 0
 },
 {
 "datei": "varianten/k01-deko01_gras.png",
@@ -8664,25 +8476,6 @@
 "block": [
 3,
 48,
-2,
-2
-],
-"ebene": 0,
-"anim": "wehen"
-},
-{
-"datei": "varianten/k01-deko02_gras.png",
-"basis": "k01/deko02",
-"x": 819,
-"y": 44,
-"fuss": 23,
-"kachel": [
-51,
-3
-],
-"block": [
-51,
-2,
 2,
 2
 ],
@@ -8709,94 +8502,37 @@
 "anim": "wehen"
 },
 {
-"datei": "varianten/k01-deko01_gras.png",
-"basis": "k01/deko01",
-"x": 835,
-"y": 813,
-"fuss": 22,
+"datei": "varianten/k01-deko27_gras.png",
+"basis": "k01/deko27",
+"x": 384,
+"y": 328,
+"fuss": 27,
 "kachel": [
-52,
-51
+24,
+21
 ],
 "block": [
-52,
+24,
+20,
+2,
+2
+],
+"ebene": 0,
+"anim": "wehen"
+},
+{
+"datei": "varianten/k01-deko00_gras.png",
+"basis": "k01/deko00",
+"x": 801,
+"y": 44,
+"fuss": 23,
+"kachel": [
+50,
+3
+],
+"block": [
 50,
 2,
-2
-],
-"ebene": 0,
-"anim": "wehen"
-},
-{
-"datei": "varianten/k01-deko03_gras.png",
-"basis": "k01/deko03",
-"x": 515,
-"y": 363,
-"fuss": 24,
-"kachel": [
-32,
-23
-],
-"block": [
-32,
-22,
-2,
-2
-],
-"ebene": 0,
-"anim": "wehen"
-},
-{
-"datei": "varianten/k01-deko30_gras.png",
-"basis": "k01/deko30",
-"x": 272,
-"y": 803,
-"fuss": 32,
-"kachel": [
-17,
-51
-],
-"block": [
-17,
-50,
-2,
-2
-],
-"ebene": 0,
-"anim": "wehen"
-},
-{
-"datei": "varianten/k01-deko01_gras.png",
-"basis": "k01/deko01",
-"x": 195,
-"y": 205,
-"fuss": 22,
-"kachel": [
-12,
-13
-],
-"block": [
-12,
-12,
-2,
-2
-],
-"ebene": 0,
-"anim": "wehen"
-},
-{
-"datei": "varianten/k01-deko04_gras.png",
-"basis": "k01/deko04",
-"x": 528,
-"y": 276,
-"fuss": 31,
-"kachel": [
-33,
-18
-],
-"block": [
-33,
-17,
 2,
 2
 ],
