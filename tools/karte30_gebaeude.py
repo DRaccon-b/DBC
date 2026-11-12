@@ -171,7 +171,12 @@ def main():
         else:
             neu_ = {'laeden': 'gross_laeden_c', 'buero_flach': 'gross_buero_flach_f'}   # Nutzer: Qualitaet, neu erzeugt
             q = os.path.join(QUELLE, neu_.get(art, 'gross_' + art), '00.png')
-        im = loecher_fuellen(einpassen(Image.open(q).convert('RGBA'), w, h))
+        roh = Image.open(q).convert('RGBA')
+        if art == 'buero_flach':                                        # 2 Fensterachsen (32 px, Raster 16) aus der Mitte
+            roh = roh.crop(roh.getbbox())                               # nehmen: Ecken und Dach bleiben ganz, Haus passt auf
+            a_ = np.array(roh)                                          # 30 Kacheln mit Gehweg zu beiden Querstrassen (Nutzer)
+            roh = Image.fromarray(np.concatenate([a_[:, :320], a_[:, 352:]], 1))
+        im = loecher_fuellen(einpassen(roh, w, h))
         if art == 'buero_flach' and False:                         # (alte Fassung ohne Dach - nicht mehr noetig)
             a_ = np.array(im).astype(int)                             # weisse Scheiben -> helle Himmelsspiegelung
             weiss_ = (a_[..., :3].min(2) > 228) & (a_[..., 3] > 0)
