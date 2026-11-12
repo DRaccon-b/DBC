@@ -219,6 +219,35 @@ def _kacheln(name, Hh, W):
 # Abstand vom Strand (px): Flachwasser | Schaum | Mittel | Stufe 1 | Platz | Stufe 2 | Platz | Tiefsee
 FLACH, SCHAUM_D, STUFE1, STUFE2 = 24, (22, 26), 68, 138
 WAND = 10
+RASTER45 = False                                                # True: Kueste/Stufen/Schaum am 16er-Raster mit 45 Grad (Regel 6b)
+
+
+def raster45(kachel_maske, T=16):
+    """Kachelmaske -> Pixelmaske mit 45-Grad-Schraegen an den Ecken (Gauss 5 px, Schwelle 50 %, wie Regel 6b)."""
+    px = np.kron(np.asarray(kachel_maske, bool), np.ones((T, T), bool))
+    b = np.array(Image.fromarray((px * 255).astype(np.uint8)).filter(ImageFilter.GaussianBlur(5)))
+    return b >= 128
+
+
+def abstand45(quelle, schritte=200):
+    """Achteck-Abstand (px) jedes Pixels zur Maske quelle: abwechselnd Quadrat- und Kreuz-Dehnung - Parallelen zu
+    waagerechten, senkrechten UND 45-Grad-Kanten bleiben gerade (keine runden Kurven)."""
+    k = np.asarray(quelle, bool).copy()
+    d = np.full(k.shape, 999.0, np.float32)
+    d[k] = 0
+    for i in range(1, schritte):
+        if i % 2:
+            k2 = np.array(Image.fromarray((k * 255).astype(np.uint8)).filter(ImageFilter.MaxFilter(3))) > 0
+        else:
+            k2 = k | np.roll(k, 1, 0) | np.roll(k, -1, 0) | np.roll(k, 1, 1) | np.roll(k, -1, 1)
+        neu = k2 & ~k
+        if not neu.any():
+            break
+        d[neu] = i
+        k = k2
+    return d
+
+
 WELLIG = True                                                   # False: Stufen genau nach dem uebergebenen Abstandsfeld (Raster)
 FARBEN = [H('#5fcfd6'), H('#38a8cc'), H('#2a7cbc'), H('#1d58a0')]   # Wasser je Zone (flach -> tief)
 MISCH = [0.45, 0.62, 0.78, 0.9]                                  # Anteil Wasserfarbe ueber dem Grund
@@ -241,6 +270,8 @@ def meer_terrassen(img, region, frame=None, meiden=None, maske=None, dist=None):
     if not m.any():
         return img
     # Abstandsfeld zum Land (halbe Aufloesung, dann weich hochskaliert + leichte Welligkeit)
+    if RASTER45 and dist_vorgabe is None:
+        d45 = abstand45(~m)
     klein = Image.fromarray(((~m) * 255).astype(np.uint8)).resize((W // 2, Hh // 2), Image.NEAREST)
     dist = np.full((Hh // 2, W // 2), 999.0, np.float32)
     k = np.array(klein) > 0
@@ -255,10 +286,19 @@ def meer_terrassen(img, region, frame=None, meiden=None, maske=None, dist=None):
     d = np.array(Image.fromarray(dist).resize((W, Hh), Image.BILINEAR))
     if dist_vorgabe is not None:                                   # eigenes Abstandsfeld (z. B. Flach/Tief nach Vorlage)
         d = dist_vorgabe.astype(np.float32).copy()
+    elif RASTER45:
+        d = d45
     yy, xx = np.mgrid[0:Hh, 0:W]
-    if WELLIG:
+    if WELLIG and not RASTER45:
         d = d + 3.0 * np.sin(xx / 23.0) + 2.0 * np.sin(xx / 9.0 + yy / 31.0)
     d[~m] = -1
+    if RASTER45:                                                   # keine duennen Stufen-Grate in engen Kanaelen
+        for st_ in (STUFE1, STUFE2):
+            tiefer = m & (d >= st_)
+            k_ = Image.fromarray((tiefer * 255).astype(np.uint8))
+            offen = np.array(k_.filter(ImageFilter.MinFilter(9)).filter(ImageFilter.MaxFilter(9))) > 0
+            grat = tiefer & ~offen
+            d[grat] = st_ - 1
     sand = _kacheln('sand', Hh, W)
     meer = _kacheln('meer', Hh, W)
     z0 = m & (d < FLACH)
@@ -304,13 +344,22 @@ def meer_terrassen(img, region, frame=None, meiden=None, maske=None, dist=None):
     felsen_setzen(a, zonen, FARBEN, tiefen, regeln, fr, 21, meiden, anzahl=[14, 12, 16, 6])
     nach_felsen = a.copy()
     # Schaumkante am Uebergang Flach -> tiefer (wellig, wandert) und Wellen am Strand
-    welle = 1.8 * np.sin(xx / 11.0 + 2 * math.pi * fr / N_FRAMES) + 1.2 * np.sin(xx / 5.0 - 2 * math.pi * fr / N_FRAMES)
-    schaum = m & (np.abs(d - (SCHAUM_D[0] + SCHAUM_D[1]) / 2 - welle) < 1.6) & (((xx + fr * 16 // N_FRAMES) // 4) % 4 != 0)
+    if RASTER45:                                                   # Schaum parallel zur 45-Grad-Kueste: ganze Linie
+        welle = float(round(1.5 * math.sin(2 * math.pi * fr / N_FRAMES)))   # rollt gleichmaessig vor und zurueck
+        luecke = (((2 * xx + 3 * yy + fr * 40 // N_FRAMES) // 8) % 5 != 0)   # Luecken wandern entlang der Linie
+    else:
+        welle = 1.8 * np.sin(xx / 11.0 + 2 * math.pi * fr / N_FRAMES) + 1.2 * np.sin(xx / 5.0 - 2 * math.pi * fr / N_FRAMES)
+        luecke = (((xx + fr * 16 // N_FRAMES) // 4) % 4 != 0)
+    schaum = m & (np.abs(d - (SCHAUM_D[0] + SCHAUM_D[1]) / 2 - welle) < 1.6) & luecke
     a[schaum] = SCHAUM
     schaum2 = m & (np.abs(d - (SCHAUM_D[0] + SCHAUM_D[1]) / 2 - welle) < 2.6) & ~schaum
     a[schaum2] = a[schaum2] * 0.5 + SCHAUM * 0.5
     brandung = 2.5 + 2.0 * math.sin(2 * math.pi * fr / N_FRAMES)
-    ufer = m & (np.abs(d - brandung) < 1.0) & (((xx + fr * 32 // N_FRAMES) // 4) % 4 != 0)
+    if RASTER45:
+        brandung = float(round(brandung))
+        ufer = m & (np.abs(d - brandung) < 1.0) & (((2 * xx + 3 * yy - fr * 40 // N_FRAMES) // 6) % 6 != 0)
+    else:
+        ufer = m & (np.abs(d - brandung) < 1.0) & (((xx + fr * 32 // N_FRAMES) // 4) % 4 != 0)
     a[ufer] = a[ufer] * 0.3 + SCHAUM * 0.7
     nass = ~m & region & (np.array(Image.fromarray((m * 255).astype(np.uint8)).filter(ImageFilter.MaxFilter(5))) > 0)
     a[nass] = a[nass] * 0.82                                       # nasser Sand an der Wasserlinie

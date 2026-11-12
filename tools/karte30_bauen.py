@@ -327,6 +327,8 @@ def meer(a, kl, wasser, frame, lay):
     import wasser_details as wd
     alt = (wd.N_FRAMES, wd.FLACH, wd.SCHAUM_D, wd.STUFE1, wd.STUFE2)
     wd.N_FRAMES = N_FRAMES
+    raster_alt = wd.RASTER45
+    wd.RASTER45 = True                                               # Schaum/Stufen parallel zur 45-Grad-Kueste
     wd.FLACH, wd.SCHAUM_D, wd.STUFE1, wd.STUFE2 = 22, (18, 22), 56, 110
     meiden = gross(np.isin(kl, ['v', 'b']))
     bx0, by0, bx1, by1 = lay['bruecke']
@@ -340,6 +342,7 @@ def meer(a, kl, wasser, frame, lay):
     vorher = a.copy()
     img = wd.meer_terrassen(Image.fromarray(a), see, frame, meiden, maske=see)
     wd.N_FRAMES, wd.FLACH, wd.SCHAUM_D, wd.STUFE1, wd.STUFE2 = alt
+    wd.RASTER45 = raster_alt
     out = np.array(img.convert('RGB'))
     deck = np.zeros_like(wasser); deck[:(by1 + 1) * T, bx0 * T:(bx1 + 1) * T] = True
     out[deck] = vorher[deck]
@@ -351,13 +354,27 @@ def bauen(frame=None, speichern=True):
     cols, rows = lay['groesse']
     Wp, Hp = cols * T, rows * T
     kl = np.array([list(r) for r in lay['klassen']])
+    for ys_, xs_ in k4._komponenten(kl == 'w'):                     # winzige Wassertaschen am Pier: Boden der Nachbarn
+        if len(ys_) < 20:
+            nb = [kl[y_ + dy_, x_ + dx_] for y_, x_ in zip(ys_, xs_) for dy_, dx_ in ((1, 0), (-1, 0), (0, 1), (0, -1))
+                  if 0 <= y_ + dy_ < rows and 0 <= x_ + dx_ < cols and kl[y_ + dy_, x_ + dx_] != 'w']
+            kl[ys_, xs_] = max(set(nb), key=nb.count)
     a = k18.textur('g', cols, rows)
     for art, tex in (('s', 's'), ('n', 'n'), ('f', 'n'), ('d', 'd'), ('b', 'b'), ('v', 'v'), ('w', 'w'), ('o', 'w')):
         m = gross(kl == art)
         a[m] = k18.textur(tex, cols, rows)[m]
     pm = gross(kl == 'p')
     a[pm] = sandstein(cols, rows)[pm]
-    wasser = gross(kl == 'w')
+    import wasser_details as wd_
+    # Kueste am Sandstrand am 16er-Raster mit 45-Grad-Schraegen (Nutzer, Regel 6b); an Kaimauern/Gehwegen bleibt die
+    # gerade Kachelkante
+    w_px = gross(kl == 'w')
+    r45 = wd_.raster45(kl == 'w') & gross(np.isin(kl, ['w', 'd']))
+    hart = gross(~np.isin(kl, ['w', 'd']))
+    nahe_hart = np.array(Image.fromarray((hart * 255).astype(np.uint8)).filter(ImageFilter.MaxFilter(33))) > 0
+    wasser = (r45 & ~nahe_hart) | (w_px & nahe_hart)
+    weg_ = w_px & ~wasser                                            # abgeschraegte Ecke wird Sand
+    a[weg_] = k18.textur('d', cols, rows)[weg_]
     a = meer(a, kl, wasser, frame, lay)
     land = ~wasser
     asphalt = gross(kl == 's')

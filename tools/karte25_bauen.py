@@ -180,13 +180,12 @@ def bauen(frame=None, speichern=True):
     steg_f = maske(cls, 'p')
     tief = maske(cls, 'x')
     steg_roh = maske(cls, 'p')                                     # Stege stehen ueber dem Wasser
-    wasser = weich((flach | tief | steg_roh).astype(np.float32), 4, 0.15, 6, 0.5) & ~hoch & ~wand
+    kl_ = np.array([[c for c in z] for z in cls])                    # Kueste am 16er-Raster mit 45 Grad (Nutzer)
+    wasser = wd.raster45(np.isin(kl_, list('fxp'))) & ~hoch & ~wand
     land = ~wasser
-    dl = abstand(land)                                              # Abstand zum Land
-    df = abstand(land | (weich(flach.astype(np.float32), 6, 0.0, 9, 0.5) & wasser))   # Abstand zum Flachwasser
-    yy, xx = np.mgrid[0:Hp, 0:Wp]
-    welle = 3.0 * np.sin(xx / 23.0) + 2.0 * np.sin(xx / 9.0 + yy / 31.0)
-    d = np.where(df <= 0.5, np.minimum(dl + welle, wd.STUFE1 - 6), wd.STUFE1 + df)
+    dl = wd.abstand45(land)                                         # Achteck-Abstand: Schaum parallel zur Kueste
+    df = wd.abstand45(land | (wd.raster45(kl_ == 'f') & wasser))   # Abstand zum Flachwasser
+    d = np.where(df <= 0.5, np.minimum(dl, wd.STUFE1 - 6), wd.STUFE1 + df)
     meiden = maske(cls, 'pT')
     meiden = np.array(Image.fromarray((meiden * 255).astype(np.uint8)).filter(ImageFilter.MaxFilter(9))) > 0
     s_al = np.array(Image.open(os.path.join(OBJ, SCHIFF_DATEI)))[..., 3] > 0      # keine Felsen unter/am Schiff
@@ -196,10 +195,10 @@ def bauen(frame=None, speichern=True):
     meiden |= np.array(Image.fromarray((s_m * 255).astype(np.uint8)).filter(ImageFilter.MaxFilter(25))) > 0
     wd.FELSEN_PROTOKOLL.clear()
     wd.FELSEN_AUSLASSEN = {(912, 952), (1024, 936), (1080, 902), (904, 1096)}   # 4 Felsspitzen in der Mitte weg (Nutzer)
-    alt = wd.N_FRAMES
-    wd.N_FRAMES = N_FRAMES
+    alt = (wd.N_FRAMES, wd.RASTER45)
+    wd.N_FRAMES, wd.RASTER45 = N_FRAMES, True
     img = wd.meer_terrassen(Image.fromarray(a), np.ones((Hp, Wp), bool), frame, meiden, maske=wasser, dist=d)
-    wd.N_FRAMES = alt
+    wd.N_FRAMES, wd.RASTER45 = alt
     wd.FELSEN_AUSLASSEN = set()
     a = np.array(img.convert('RGB'))
     steg_m = stege(a, lay, wasser)

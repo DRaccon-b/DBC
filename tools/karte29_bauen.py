@@ -135,23 +135,21 @@ def bauen(frame=None, speichern=True):
     # Wasser im Stil von Karte 01 (terrassiertes Meer: Grund sichtbar, Stufenwaende, Felsen, Algen, Schaum),
     # nur schwarzgrau gefaerbt und mit Stufen genau am 16er-Raster (Nutzer)
     import wasser_details as wd
-    stufe_px = np.kron(np.where(lt, -1, np.where(ft, 0, np.where(dist <= 2, 1, np.where(dist <= 5, 2, 3)))), np.ones((T, T), int))
+    stufe_t = np.where(lt, -1, np.where(ft, 0, np.where(dist <= 2, 1, np.where(dist <= 5, 2, 3))))
+    import karte04_bauen as _k4
+    for ys_, xs_ in _k4._komponenten(stufe_t >= 0):                 # einzelne Wasserkacheln an Land: kein Wasser
+        if len(ys_) < 6:
+            stufe_t[ys_, xs_] = -1
+    # Ufer und Tiefenstufen am 16er-Raster mit 45-Grad-Schraegen (Nutzer, Regel 6b)
+    stufe_px = sum(wd.raster45(stufe_t >= k_).astype(int) for k_ in range(4)) - 1
     wasser_m = stufe_px >= 0
+    land = ~wasser_m                                                 # Land exakt bis zur 45-Grad-Kueste
     start = [0, wd.FLACH, wd.STUFE1, wd.STUFE2]
     spanne = [wd.FLACH - 9, wd.STUFE1 - wd.FLACH - 1, wd.STUFE2 - wd.STUFE1 - 1, 400]   # Schaum genau an der Stufenkante
     d = np.zeros((Hp, Wp), np.float32)
     for k_ in range(4):
         tiefer_ = stufe_px >= k_
-        abst = np.full((Hp, Wp), 999, np.int32)                      # Pixelabstand zur flacheren Stufe (Chebyshev = Raster)
-        cur = ~tiefer_
-        abst[cur] = 0
-        for i_ in range(1, spanne[k_] + 2 if k_ < 3 else 120):
-            cur2 = dehnen(cur, 3)
-            neu = cur2 & ~cur
-            if not neu.any():
-                break
-            abst[neu] = i_
-            cur = cur2
+        abst = wd.abstand45(~tiefer_, spanne[k_] + 2 if k_ < 3 else 120)   # Achteck-Abstand: parallel zur 45-Grad-Kante
         sel = stufe_px == k_
         d[sel] = start[k_] + np.minimum(abst[sel], spanne[k_])
     a_alt = {n_: getattr(wd, n_) for n_ in ('FARBEN', 'MISCH', 'SCHAUM', 'ALGE', 'WELLIG', 'N_FRAMES', '_kacheln', 'BRAUN')}
@@ -161,6 +159,8 @@ def bauen(frame=None, speichern=True):
     wd.SCHAUM = wd.H('#cdd4d8')
     wd.ALGE = [wd.H(c) for c in ('#1c2a26', '#28392f', '#3a4e3e', '#52664f')]
     wd.WELLIG = False
+    a_alt['RASTER45'] = wd.RASTER45
+    wd.RASTER45 = True
     wd.BRAUN = [wd.H(c) for c in ('#1e2026', '#2e3139', '#41454f', '#565b66', '#6e7480', '#8a909b', '#a8aeb8')]   # Felsen grau
     wd.N_FRAMES = N_FRAMES
     def grau_k(name, Hh_, W_):                                       # Grund grau (Sand hellgrau, Tiefe dunkelgrau)
@@ -189,10 +189,7 @@ def bauen(frame=None, speichern=True):
     a[rand2_] = (a[rand2_] * 0.94).astype(np.uint8)
     saum = land & dehnen(~land, 3)                                   # nasser Saum + Schaumlinie am Ufer
     a[saum] = (a[saum] * 0.8).astype(np.uint8)
-    schaum = ~land & dehnen(land, 3) & ~dehnen(land, 1)
-    yy, xx = np.nonzero(schaum)
-    sel = ((xx // 3 + yy + f) % 5) < 3
-    a[yy[sel], xx[sel]] = H('#c8d6dc')
+    # (Schaumlinie am Ufer zeichnet meer_terrassen: parallel zur 45-Grad-Kueste, nahtlos animiert)
     # Plaetze: Pflaster oben links (ebenerdig) und Tempelplatz (erhoeht)
     pf = pflaster(cols, rows)
     qt = np.array([[c == 'q' for c in z] for z in cls])             # Spawnplatz: rundlich in Kachelstufen (Raster)
