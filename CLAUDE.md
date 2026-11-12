@@ -32,7 +32,9 @@ wird jede Regel einzeln geprüft.
      - Abwechseln statt überall gleich: mal Fels vor dem Stumpf, mal Fels hinter den Blättern, mal beides.
 6. **Wege** gehen nie nur gerade und müssen nicht durchgängig sein: diagonal erlaubt, natürliche Bögen, ein Weg
    darf auch einmal unterbrechen und später weitergehen.
-   - 6b. **Wegkanten in 45° (Nutzer, Karte 31):** Der Verlauf eines Weges darf geschwungen sein, aber seine Ränder
+   - 6b. **Alle Bodenkanten in 45° (Nutzer, Karte 31; für alle Bodenarten erweitert):** Gilt nicht nur für Wege, sondern für
+     jede Bodenkante (Gras, Sand, Erde, Platz, Wasser, Schlamm, Schnee …) – immer am 16er-Raster mit 45°-Schrägen
+     (`karte04_bauen.RASTER45 = True`). Wege im Einzelnen: Der Verlauf eines Weges darf geschwungen sein, aber seine Ränder
      folgen dem Kachelraster mit **45°-Schrägen** an den Ecken (abgeschrägte Kachelstufen) – keine runden
      Freiform-Kurven. An Treppen läuft der Weg ebenfalls mit 45° auf die exakte Treppenbreite zu.
      Referenz, die der Nutzer „perfekt“ fand: `karte31_bauen.weg_rund` – Verlauf als Kurve auf Kacheln gerastert, die

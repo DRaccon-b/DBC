@@ -60,7 +60,12 @@ def zell_maske(cls, arten, cols, rows):
     return m
 
 
+RASTER45 = False        # A02 (Nutzer): alle Bodenkanten am 16er-Raster mit 45-Grad-Schraegen (Regel 6b) statt ausgefranst
+
+
 def weich(m, blur, rausch, seed, schwelle=0.5):
+    if RASTER45:                                       # Kachelmaske, Gauss 5 px, ohne Rauschen -> 45-Grad-Ecken
+        blur, rausch = 5.0, 0
     a = np.array(Image.fromarray((m * 255).astype(np.uint8)).filter(ImageFilter.GaussianBlur(blur))) / 255.0
     if rausch:
         h, w = a.shape

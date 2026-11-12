@@ -27,6 +27,7 @@ import karte_bauen as _kb
 _kb.N_FRAMES = N_FRAMES                       # Windwelle (Pflanzen) ueber die 4 Bilder der Karte
 H = k4.H
 weich, zell_maske, flaeche = k4.weich, k4.zell_maske, k20.flaeche
+k4.RASTER45 = True                       # Nutzer: ALLE Bodenkanten am 16er-Raster mit 45 Grad (Regel 6b)
 k4.FELS['rot'] = ['#3e1e12', '#5c2c1a', '#7c3e24', '#9a5230', '#b8683e', '#cf8452', '#e2a270']
 LIPPE_ROT = ['#5c2c1a', '#7c3e24', '#9a5230', '#b0623a', '#c47448', '#d68a5a']
 FRONT = 32

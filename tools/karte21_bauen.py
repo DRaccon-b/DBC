@@ -27,6 +27,7 @@ import karte_bauen as _kb
 _kb.N_FRAMES = N_FRAMES                       # Windwelle (Pflanzen) ueber die 4 Bilder der Karte
 H = k4.H
 weich, zell_maske, flaeche = k4.weich, k4.zell_maske, k20.flaeche
+k4.RASTER45 = True                       # Nutzer: ALLE Bodenkanten am 16er-Raster mit 45 Grad (Regel 6b)
 BURG = ['#1c222c', '#2a323e', '#3c4554', '#505a6a', '#667182', '#808b9a', '#a0a9b6']   # Bruchstein dunkel -> hell
 k4.FELS['burg'] = BURG
 MAUER_H = 48                     # Burgmauer: 3 Kacheln

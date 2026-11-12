@@ -28,6 +28,7 @@ IC, IR = 100, 90                               # Inselbereich (Koordinaten wie V
 COLS, ROWS = IC + 2 * RAND, IR + 2 * RAND
 H = k4.H
 weich, zell_maske = k4.weich, k4.zell_maske
+k4.RASTER45 = True                       # Nutzer: ALLE Bodenkanten am 16er-Raster mit 45 Grad (Regel 6b)
 k4.FELS['heilig'] = ['#3c4048', '#545a64', '#6e7480', '#8a909a', '#a6abb4', '#c2c6cc', '#dcdfe3']
 LIPPE_GRAS = ['#2e6a3a', '#3e8444', '#56a04e', '#6eb85a', '#8ccc6a', '#a8dc82']
 LIPPE_SCHNEE = ['#90a6bc', '#b0c4d6', '#cad9e6', '#dfe9f2', '#f0f6fb', '#ffffff']

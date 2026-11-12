@@ -25,6 +25,7 @@ BILDDAUER = 250
 k4.N_FRAMES = N_FRAMES
 H = k4.H
 weich, zell_maske, flaeche = k4.weich, k4.zell_maske, k20.flaeche
+k4.RASTER45 = True                       # Nutzer: ALLE Bodenkanten am 16er-Raster mit 45 Grad (Regel 6b)
 FRONT = 32                                       # Felsfronten 2 Kacheln
 LIPPE_FELS = ['#2c3240', '#3c4454', '#4e5868', '#62707e', '#788694', '#8e9cab']
 
