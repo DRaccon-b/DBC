@@ -35,15 +35,14 @@ def main():
         k[y, x0:x1 + 1] = 'i'
     rand = (k == 'i') & ~(np.roll(k == 'i', 1, 0) & np.roll(k == 'i', -1, 0) & np.roll(k == 'i', 1, 1)
                           & np.roll(k == 'i', -1, 1))
-    k[rand] = 'r'
     # Ring, Ringmauer und Medaillon exakt symmetrisch zur Plattformmitte (Nutzer): Achteck um (22, 20) Kachelkanten
     yy, xx = np.mgrid[0:R, 0:C]
     dx, dy = xx + 0.5 - MX, yy + 0.5 - MY
     d = np.maximum(np.maximum(abs(dx), abs(dy)), (abs(dx) + abs(dy)) * 0.72)
     k[(d >= 5.5) & (d < 7.5)] = 'm'                        # Rautenring
-    k[(d >= 7.5) & (d < 8.5)] = 'w'                        # Ringmauer (Nutzer: Mauer umrundet den Ring)
     k[d < 2.1] = 'm'                                       # Medaillon in der Mitte
-    k[27, 20:24] = 'i'                                     # Tor in der Ringmauer: Stegbreite, auf der Achse
+    k[rand] = 'w'                                          # Ringmauer um die ganze Arena, 1 Kachel dick (Nutzer)
+    k[33, 20:24] = 'i'                                     # Tor im Sueden: Stegbreite, auf der Achse
     k[33:44, 20:24] = 'p'                                  # Steg
     k[42:44, 20:24] = 'a'                                  # Ankunftsfelder
     lay = {'groesse': [C, R], 'klassen': [''.join(z) for z in k],
