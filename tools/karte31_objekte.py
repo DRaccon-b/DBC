@@ -178,13 +178,34 @@ def main():
     rb.shuffle(kand_b)
     gesetzt_b = []
     for (tx, ty) in kand_b:
-        if len(gesetzt_b) >= 70:
+        if len(gesetzt_b) >= 18:
             break
-        if any(abs(tx - x) + abs(ty - y) < 5 for (x, y) in gesetzt_b):
+        if any(abs(tx - x) + abs(ty - y) < 10 for (x, y) in gesetzt_b):
             continue
         if setze(rb.choice(BUESCHEL), tx * T + 8, (ty + 1) * T - 1, {'anim': 'wehen', 'nur_kontakt': True}, rb.random() < 0.5):
             gesetzt_b.append((tx, ty))
     print('Parkbueschel:', len(gesetzt_b))
+    # Laub am Boden (Nutzer: "eher Blaetter auf dem Boden, nicht alles voll"): unter Baeumen 0-2 Teile, unter
+    # Kirschbaeumen Bluetenblaetter, dazu wenige einzelne Blaetter auf Rasen und Wegen. Flach liegend, halbe Groesse.
+    BLATT = ['karte31/laub_klein/%02d' % i for i in (0, 2, 33, 58, 62, 19, 3, 42, 7)]
+    BLUETE = ['karte31/laub_klein/%02d' % i for i in (1, 41, 55)]
+    n_laub = 0
+    for i, (art, tx, ty) in enumerate(baeume):
+        for _ in range(rb.choice((0, 1, 1, 2))):
+            dx, dy = rb.choice((-2, -1, 1, 2)), rb.choice((0, 1, 2))
+            x, y = tx + dx, ty + dy
+            if 0 <= y < 23 and 0 <= x < cols and kl[y][x] in 'nw':
+                n = rb.choice(BLUETE if art == 'C' else BLATT)
+                if setze(n, x * T + rb.randint(2, 14), y * T + rb.randint(6, 15), {'liegend': True}, rb.random() < 0.5,
+                         raster=False):
+                    n_laub += 1
+    frei_l = [(tx, ty) for ty in range(3, 23) for tx in range(3, 117) if kl[ty][tx] in 'nw']
+    rb.shuffle(frei_l)
+    for (tx, ty) in frei_l[:14]:
+        if setze(rb.choice(BLATT), tx * T + rb.randint(2, 14), ty * T + rb.randint(6, 15), {'liegend': True},
+                 rb.random() < 0.5, raster=False):
+            n_laub += 1
+    print('Laub im Park:', n_laub)
     # ---------------------------------------------------------------- Siedlung
     GINKGO = ['karte18/gebaeude/gold_00', 'karte18/gebaeude/gold_01', 'karte18/gebaeude/gold_02']
     for i, ty in enumerate(range(40, 72, 6)):                                                     # Ginkgo-Allee

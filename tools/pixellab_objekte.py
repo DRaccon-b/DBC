@@ -2017,6 +2017,12 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'small patch of yellow dandelions with leaves on a lawn, seen slightly from above, classic 2D handheld RPG style',
         'small cluster of tiny pink and purple wildflowers with green leaves, seen slightly from above, classic 2D handheld RPG style',
     ]},
+    'k31_laub': {'size': 32, 'items': [   # Nutzer: "eher Blaetter auf dem Boden usw., nicht alles voll"
+        'a few scattered fallen green and brown leaves lying flat on the ground, seen from above, small and sparse, classic 2D handheld RPG style',
+        'a few scattered fallen pink cherry blossom petals lying flat on the ground, seen from above, small and sparse, classic 2D handheld RPG style',
+        'two or three fallen dry orange and brown autumn leaves lying flat on the ground, seen from above, classic 2D handheld RPG style',
+        'a single small fallen twig with two leaves lying flat on the ground, seen from above, classic 2D handheld RPG style',
+    ]},
     'k31_muell': {'size': 32, 'items': [
         'small pile of fallen golden yellow ginkgo leaves lying flat on the ground, seen from above, classic 2D handheld RPG style',
         'small pile of fallen brown and orange autumn leaves lying flat on the ground, seen from above, classic 2D handheld RPG style',
