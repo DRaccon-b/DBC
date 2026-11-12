@@ -392,6 +392,7 @@ def bauen(frame=None, speichern=True):
     kach = (np.kron(np.array([[c in 'wtTc' for c in r] for r in cls], np.uint8), np.ones((T, T), np.uint8)) * 255)
     m = np.array(Image.fromarray(kach).filter(_IF.GaussianBlur(5))) > 127
     a[m] = sand[m]
+    weg_maske = m.copy()                                              # (m wird spaeter fuer Stufen wiederverwendet)
     m_g = np.array(Image.fromarray(kach).filter(_IF.GaussianBlur(5))) > 70
     saum = m_g & ~m
     a[saum] = (a[saum] * 0.9).astype(np.uint8)
@@ -484,11 +485,29 @@ def bauen(frame=None, speichern=True):
             k4.treppe(a, tz0 * T, (tz1 + 1) * T, ye, 's', FR, 'erde', sand if k == 0 else erde)
     # Seitliche Treppen im linken Gang an jeder Stufenkante (Weg fuehrt nicht ohne Stufen in die Senke)
     zeile_ = (ya + yb) // 2
-    for k, m in enumerate(L):
-        xs_ = np.nonzero(m[zeile_, 60 * T:77 * T])[0]
+    kanten_ = []
+    for k, m_s in enumerate(L):
+        xs_ = np.nonzero(m_s[zeile_, 60 * T:77 * T])[0]
         if len(xs_):
-            xk = 60 * T + int(xs_.min())
-            treppe_ost(a, xk - 4, xk + 20, ya + 2, yb - 2, 'erde', erde)
+            kanten_.append(60 * T + int(xs_.min()))
+    if kanten_:
+        x_r = kanten_[0] - 3 * T                                     # Wegbreite vor der Senke messen (zusammenhaengend)
+        py0 = py1 = zeile_
+        while py0 > 0 and weg_maske[py0 - 1, x_r]:
+            py0 -= 1
+        while py1 < Hp and weg_maske[py1, x_r]:
+            py1 += 1
+        band0 = np.zeros((Hp, Wp), bool)                              # Weg auch auf dem Rand bis zur ersten Stufe voll breit
+        band0[py0:py1, x_r:kanten_[0]] = True
+        a[band0] = sand[band0]
+        x_e = kanten_[-1] + 3 * T                                     # Weg laeuft ueber die Boeden bis unten weiter
+        band = np.zeros((Hp, Wp), bool)
+        band[py0:py1, kanten_[0] - 8:x_e] = True
+        yy_, xx_ = np.mgrid[0:Hp, 0:Wp]
+        band &= ~(((x_e - xx_) + (yy_ - py0) < 8) | ((x_e - xx_) + (py1 - 1 - yy_) < 8))   # 45-Grad-Ende
+        a[band] = sand[band]
+        for xk in kanten_:                                            # Treppe in voller Wegbreite an jeder Stufe
+            treppe_ost(a, xk - 6, xk + 22, py0, py1, 'erde', sand)
     # ---------------- Mauerchen, Hecken
     # ---------------- Wasser (Bach laeuft unten aus der Karte)
     import wasser_vertieft

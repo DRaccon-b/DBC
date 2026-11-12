@@ -145,11 +145,16 @@ def main():
     k[rand & np.isin(k, list('hfe'))] = 'g'
     for (tx, ty, b, hh) in TREPPEN:
         k[ty:ty + hh, tx:tx + b] = 't'
-        for sx in (tx - 1, tx + b):                                   # Front neben der Treppe auf Treppenhoehe (Anschluss)
+        h[ty, tx:tx + b] = 2                                         # ganze Treppenbreite auf Plateauhoehe (keine Kerbe)
+        for sx in (tx - 2, tx - 1, tx + b, tx + b + 1):               # Front links/rechts 2 Kacheln gerade weiter
             if 0 <= sx < C and h[ty, sx] < 2:
                 h[ty, sx] = 2
                 if k[ty, sx] in 'gh':
                     k[ty, sx] = 'f'
+            if 0 <= sx < C and h[ty - 1, sx] < 2:                     # darueber kein Loch in der Plateaukante
+                h[ty - 1, sx] = 2
+                if k[ty - 1, sx] in 'gh':
+                    k[ty - 1, sx] = 'f'
     for (tx, ty, b, hh) in AUSGAENGE:
         k[ty:ty + hh, tx:tx + b] = 'T'
     import regeln_a02                                                 # Regel 6: Wege nie nur gerade
