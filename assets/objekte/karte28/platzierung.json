@@ -31692,12 +31692,12 @@
 {
 "datei": "varianten/k03-feuer_0_1.png",
 "basis": "k03/feuer",
-"x": 791,
-"y": 1089,
+"x": 775,
+"y": 1121,
 "fuss": 33,
 "kachel": [
-50,
-69
+49,
+71
 ],
 "block": [
 48,
@@ -32423,41 +32423,23 @@
 "ebene": 1
 },
 {
-"datei": "varianten/k01-deko05_0_0.png",
-"basis": "k01/deko05",
-"x": 703,
-"y": 1108,
-"fuss": 26,
+"datei": "varianten/k01-deko06_0_0.png",
+"basis": "k01/deko06",
+"x": 1342,
+"y": 959,
+"fuss": 15,
 "kachel": [
-44,
-70
+84,
+60
 ],
 "block": [
-43,
-69,
+83,
+60,
 2,
-2
+1
 ],
 "ebene": 1,
 "anim": "wehen"
-},
-{
-"datei": "varianten/k01-deko14_0_0.png",
-"basis": "k01/deko14",
-"x": 809,
-"y": 970,
-"fuss": 20,
-"kachel": [
-51,
-61
-],
-"block": [
-50,
-60,
-2,
-2
-],
-"ebene": 1
 },
 {
 "datei": "varianten/k01-deko06_0_0.png",
@@ -32477,6 +32459,24 @@
 ],
 "ebene": 1,
 "anim": "wehen"
+},
+{
+"datei": "varianten/k01-deko14_0_0.png",
+"basis": "k01/deko14",
+"x": 794,
+"y": 954,
+"fuss": 20,
+"kachel": [
+50,
+60
+],
+"block": [
+49,
+59,
+2,
+2
+],
+"ebene": 1
 },
 {
 "datei": "varianten/k01-deko31_0_0.png",
@@ -32963,6 +32963,25 @@
 "ebene": 1
 },
 {
+"datei": "varianten/k01-deko05_1_0.png",
+"basis": "k01/deko05",
+"x": 1434,
+"y": 356,
+"fuss": 26,
+"kachel": [
+90,
+23
+],
+"block": [
+89,
+22,
+2,
+2
+],
+"ebene": 1,
+"anim": "wehen"
+},
+{
 "datei": "varianten/k01-deko06_1_0.png",
 "basis": "k01/deko06",
 "x": 508,
@@ -33224,23 +33243,76 @@
 "anim": "wehen"
 },
 {
-"datei": "varianten/k01-deko05_0_0.png",
-"basis": "k01/deko05",
-"x": 1081,
-"y": 996,
-"fuss": 26,
+"datei": "varianten/deko-fels2_0_1.png",
+"basis": "deko/fels2",
+"x": 824,
+"y": 1209,
+"fuss": 25,
 "kachel": [
-68,
+52,
+76
+],
+"block": [
+51,
+75,
+2,
+2
+],
+"ebene": 1
+},
+{
+"datei": "varianten/deko-fels3_0_1.png",
+"basis": "deko/fels3",
+"x": 696,
+"y": 761,
+"fuss": 25,
+"kachel": [
+44,
+48
+],
+"block": [
+43,
+47,
+2,
+2
+],
+"ebene": 1
+},
+{
+"datei": "varianten/deko-fels0_1_1.png",
+"basis": "deko/fels0",
+"x": 808,
+"y": 692,
+"fuss": 30,
+"kachel": [
+51,
+44
+],
+"block": [
+50,
+43,
+2,
+2
+],
+"ebene": 1
+},
+{
+"datei": "varianten/deko-fels3_1_1.png",
+"basis": "deko/fels3",
+"x": 1096,
+"y": 1001,
+"fuss": 25,
+"kachel": [
+69,
 63
 ],
 "block": [
-67,
+68,
 62,
 2,
 2
 ],
-"ebene": 1,
-"anim": "wehen"
+"ebene": 1
 },
 {
 "datei": "varianten/deko-fels3_0_1.png",
@@ -33273,78 +33345,6 @@
 "block": [
 46,
 50,
-2,
-2
-],
-"ebene": 1
-},
-{
-"datei": "varianten/deko-fels1_1_1.png",
-"basis": "deko/fels1",
-"x": 1033,
-"y": 776,
-"fuss": 26,
-"kachel": [
-65,
-49
-],
-"block": [
-64,
-48,
-2,
-2
-],
-"ebene": 1
-},
-{
-"datei": "varianten/deko-fels2_1_1.png",
-"basis": "deko/fels2",
-"x": 808,
-"y": 1033,
-"fuss": 25,
-"kachel": [
-51,
-65
-],
-"block": [
-50,
-64,
-2,
-2
-],
-"ebene": 1
-},
-{
-"datei": "varianten/deko-fels1_0_1.png",
-"basis": "deko/fels1",
-"x": 841,
-"y": 968,
-"fuss": 26,
-"kachel": [
-53,
-61
-],
-"block": [
-52,
-60,
-2,
-2
-],
-"ebene": 1
-},
-{
-"datei": "varianten/deko-fels3_0_1.png",
-"basis": "deko/fels3",
-"x": 392,
-"y": 777,
-"fuss": 25,
-"kachel": [
-25,
-49
-],
-"block": [
-24,
-48,
 2,
 2
 ],

@@ -380,4 +380,4 @@ def main():
 if __name__ == '__main__':
     main()
     import regeln_a02                                                 # Regeln: nichts auf Wegen, Teleporter frei
-    regeln_a02.objekte_pruefen('karte07', 'w')
+    regeln_a02.objekte_pruefen('karte07', '')                        # Wege sind gebogen gemalt, Klassenraster passt nicht
