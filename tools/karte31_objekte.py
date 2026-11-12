@@ -111,7 +111,8 @@ def main():
     setze('karte30/klein/01', 75 * T, 17 * T - 1, {})                                            # Kiosk
     setze('karte29/gross/03', 104 * T, 5 * T - 1, {'anim': 'portal', 'schattenlos': True}, pruefen=False)   # Riss
     setze('karte29/mittel/02', 104 * T, 9 * T - 1, {'anim': 'portal'})                           # Portal-Tor
-    LAUB = ['karte01/baeume/00', 'karte01/baeume/01', 'karte01/baeume/02', 'karte01/baeume/15']
+    LAUB = ['karte01/baeume/00', 'karte18/baum2/01', 'karte01/baeume/01', 'karte01/baeume/04', 'karte01/baeume/02',
+            'karte01/baeume/15', 'karte01/baeume/13']                                 # mehr Arten (Nutzer: Variation)
     KIRSCH = ['karte01/baeume/10', 'fremd/kirsche0', 'fremd/kirsche1']
     KIEFER = 'karte07/mittel/04'                                               # Bonsai-Kiefer
     baeume = [('L', 2, 3), ('K', 6, 3), ('L', 11, 3), ('L', 17, 3), ('C', 24, 3), ('L', 4, 9), ('L', 6, 17), ('L', 18, 21),
@@ -148,7 +149,8 @@ def main():
         if setze(n, tx * T + 8, (ty + 1) * T - 1, {'anim': 'baum'}, tx % 2 == 0) and kl[ty + 1][tx] == 'n':
             setze('karte01/deko/%02d' % (25, 27)[tx % 2], tx * T + 8, (ty + 2) * T - 1, {'anim': 'wehen'}, pruefen=False)
     WALD = ['karte01/baeume/00', 'karte01/baeume/01', 'karte01/baeume/02', 'karte01/baeume/15', 'karte01/baeume/09',
-            'karte01/baeume/06']
+            'karte01/baeume/06', 'karte01/baeume/04', 'karte18/baum2/01', 'karte01/baeume/07', 'karte01/baeume/13',
+            'karte01/baeume/08']
     hb = lay['hochbahn']
     for ty in range(rows):                                                                       # Baumrand am Kartenrand
         for tx in range(cols):                                                                   # (Nutzer): dicht, versetzt

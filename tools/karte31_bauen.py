@@ -63,6 +63,50 @@ def hecke(a, m, seed=31):
     a[rand] = H('#4a6c2e')
 
 
+def streugut(a, kl, seed=3131):
+    """Kleinkram an den Strassen (Nutzer): vereinzelt Laub (unter der Ginkgo-Allee goldgelb, sonst braun/gruen),
+    Papierschnipsel, Dosen, Kippen - auf Gehwegen nahe der Fahrbahn und am Fahrbahnrand, unregelmaessig, ohne Reihen.
+    Fest je Position (kein Flimmern)."""
+    rs = np.random.RandomState(seed)
+    R_, C_ = kl.shape
+    strasse = kl == 's'
+    nah = np.zeros_like(strasse)
+    for dy in (-2, -1, 0, 1, 2):
+        for dx in (-2, -1, 0, 1, 2):
+            nah |= np.roll(np.roll(strasse, dy, 0), dx, 1)
+    kandidaten = [(y, x) for y in range(R_) for x in range(C_) if nah[y, x] and kl[y, x] in 'gs']
+    rs.shuffle(kandidaten)
+    gesetzt = []
+    for (ty, tx) in kandidaten[:len(kandidaten) // 6]:
+        if any(abs(ty - y) + abs(tx - x) < 3 for (y, x) in gesetzt):
+            continue
+        gesetzt.append((ty, tx))
+        x0, y0 = tx * T + rs.randint(2, 13), ty * T + rs.randint(2, 13)
+        art = rs.rand()
+        ginkgo = 50 <= tx <= 69 and 36 <= ty <= 75
+        if art < 0.55:                                                # Laub: 2-4 Blaetter
+            farben = [(232, 196, 64), (214, 160, 40), (244, 214, 96)] if ginkgo else \
+                [(150, 104, 52), (122, 140, 60), (176, 120, 56)]
+            for _ in range(rs.randint(3, 7)):
+                bx, by = x0 + rs.randint(-5, 6), y0 + rs.randint(-3, 4)
+                c = farben[rs.randint(len(farben))]
+                a[by, bx:bx + 3] = c; a[by - 1, bx + 1] = c                      # Blatt 3 px mit Spitze
+                a[by + 1, bx:bx + 2] = tuple(int(v * 0.65) for v in c)          # Schatten
+        elif art < 0.75:                                              # Papierschnipsel
+            a[y0:y0 + 3, x0:x0 + 4] = (232, 234, 238)
+            a[y0, x0 + 3] = (200, 204, 212); a[y0 + 1, x0 + 1:x0 + 3] = (180, 186, 196)
+            a[y0 + 3, x0 + 1:x0 + 4] = (120, 124, 134)
+        elif art < 0.9:                                               # Dose (rot oder silber)
+            c = (196, 60, 52) if rs.rand() < 0.5 else (190, 196, 206)
+            a[y0:y0 + 3, x0:x0 + 4] = c
+            a[y0, x0] = (240, 240, 240); a[y0:y0 + 3, x0 + 3] = tuple(int(v * 0.7) for v in c)
+            a[y0 + 3, x0:x0 + 4] = (70, 72, 80)
+        else:                                                         # Kippen
+            for _ in range(2):
+                bx, by = x0 + rs.randint(0, 4), y0 + rs.randint(0, 3)
+                a[by, bx] = (236, 228, 210); a[by, bx + 1] = (210, 140, 80)
+
+
 def leitstreifen(a, m):
     """Gelbe Blindenleitstreifen (Vorlage): gelbe Platten mit Noppenreihen, 1 px Fuge."""
     ys, xs = np.nonzero(m)
@@ -245,6 +289,7 @@ def bauen(frame=None, speichern=True):
     k18.mittelstreifen(a, gross(kl == 'h'), k18.textur('n', cols, rows)) if False else None
     hecke(a, gross(kl == 'h'))
     leitstreifen(a, gross(kl == 'y'))
+    streugut(a, kl)
     mauerfront(a, gross(kl == 'W'), lvl, gross(kl == 'T'))
     treppe(a, gross(kl == 'T'), lvl)
     tx0, ty0, tx1, ty1 = lay['terrasse']                              # Terrassenseite: schmale Kontur + gruener Zaun
