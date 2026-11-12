@@ -519,40 +519,46 @@
 "anim": "lampe"
 },
 {
-"datei": "varianten/raum-01.png",
-"basis": "raum/01",
-"x": 654,
-"y": 423,
+"datei": "varianten/raum-01_gefuellt.png",
+"basis": "raum/01_gefuellt",
+"x": 666,
+"y": 436,
 "fuss": 41,
 "kachel": [
-42,
+43,
 28
 ],
 "block": [
-40,
+41,
 26,
 3,
 3
 ],
-"ebene": 1
+"ebene": 1,
+"an_wand": true,
+"kein_schatten": true,
+"keine_verdeckung": true
 },
 {
-"datei": "varianten/raum-01.png",
-"basis": "raum/01",
-"x": 758,
-"y": 423,
+"datei": "varianten/raum-01_gefuellt.png",
+"basis": "raum/01_gefuellt",
+"x": 746,
+"y": 436,
 "fuss": 41,
 "kachel": [
 48,
 28
 ],
 "block": [
-47,
+46,
 26,
 3,
 3
 ],
-"ebene": 1
+"ebene": 1,
+"an_wand": true,
+"kein_schatten": true,
+"keine_verdeckung": true
 },
 {
 "datei": "varianten/portal2-00_lila.png",
@@ -667,76 +673,88 @@
 "ebene": 1
 },
 {
-"datei": "varianten/raum-01.png",
-"basis": "raum/01",
-"x": 120,
-"y": 759,
-"fuss": 41,
+"datei": "varianten/schild-00.png",
+"basis": "schild/00",
+"x": 228,
+"y": 774,
+"fuss": 20,
 "kachel": [
-8,
+14,
 49
 ],
 "block": [
-7,
-47,
-3,
-3
+14,
+48,
+2,
+2
 ],
-"ebene": 1
+"ebene": 1,
+"an_wand": true,
+"kein_schatten": true,
+"keine_verdeckung": true
 },
 {
-"datei": "varianten/raum-01.png",
-"basis": "raum/01",
-"x": 505,
-"y": 759,
-"fuss": 41,
+"datei": "varianten/schild-00.png",
+"basis": "schild/00",
+"x": 548,
+"y": 774,
+"fuss": 20,
 "kachel": [
-32,
+34,
 49
 ],
 "block": [
-31,
-47,
-3,
-3
+34,
+48,
+2,
+2
 ],
-"ebene": 1
+"ebene": 1,
+"an_wand": true,
+"kein_schatten": true,
+"keine_verdeckung": true
 },
 {
-"datei": "varianten/raum-01.png",
-"basis": "raum/01",
-"x": 985,
-"y": 759,
-"fuss": 41,
+"datei": "varianten/schild-00.png",
+"basis": "schild/00",
+"x": 868,
+"y": 774,
+"fuss": 20,
 "kachel": [
-62,
+54,
 49
 ],
 "block": [
-61,
-47,
-3,
-3
+54,
+48,
+2,
+2
 ],
-"ebene": 1
+"ebene": 1,
+"an_wand": true,
+"kein_schatten": true,
+"keine_verdeckung": true
 },
 {
-"datei": "varianten/raum-01.png",
-"basis": "raum/01",
-"x": 1178,
-"y": 759,
-"fuss": 41,
+"datei": "varianten/schild-00.png",
+"basis": "schild/00",
+"x": 1188,
+"y": 774,
+"fuss": 20,
 "kachel": [
-75,
+74,
 49
 ],
 "block": [
-73,
-47,
-3,
-3
+74,
+48,
+2,
+2
 ],
-"ebene": 1
+"ebene": 1,
+"an_wand": true,
+"kein_schatten": true,
+"keine_verdeckung": true
 },
 {
 "datei": "varianten/raum-00.png",

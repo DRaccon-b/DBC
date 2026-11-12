@@ -59,7 +59,8 @@ AXS = 728                                                        # Achse des Sae
 SAEULENRAUM = (
     [('obelisk_bau/00', 42, {'px': AXS - 96}), ('obelisk_bau/00', 42, {'px': AXS + 96, 'spiegeln': True})]   # Obelisken im Bau mit Geruest (Nutzer)
     + [('raum/00', r, {'px': AXS + d, 'anim': 'lampe'}) for r in (31, 46) for d in (-112, 112)]
-    + [('raum/01', 28, {'px': AXS - 52, 'wand': True}), ('raum/01', 28, {'px': AXS + 52, 'wand': True})]   # Wandschilder
+    + [('raum/01_gefuellt', 28, {'px': AXS + d, 'wand': True, 'oben': 27 * T + 4}) for d in (-40, 40)]    # Wandschilder
+    # (Nutzer): frei auf der Wand, symmetrisch zur Raumachse wie die Lampen, ganz auf der Wandflaeche, Inneres gefuellt
 )
 
 PORTALRAUM = (                                                   # Portalraum Mitte rechts nach der Vorlage
@@ -68,9 +69,11 @@ PORTALRAUM = (                                                   # Portalraum Mi
     + [('portalraum/01', 32, {'px': 926}), ('portalraum/01', 45, {'px': 926})]   # Rohre an den Waenden
 )
 
+HALLE_ACHSE = 718                                                # Mitte zwischen den Lampen (87 / 1350)
 KISTEN, KANISTER, LADEROBOTER, FAESSER2 = 'halle/00', 'halle/01', 'halle/02', 'halle/15'
 HALLE = (                                                        # grosse Halle (Frachtdeck) nach der Vorlage, sparsam
-    [('raum/01', 49, {'px': x, 'wand': True}) for x in (142, 527, 1007, 1200)]               # Wandschilder (eigenes Abzeichen)
+    [('schild/00', 49, {'px': HALLE_ACHSE + d, 'wand': True, 'oben': 48 * T + 6}) for d in (-480, -160, 160, 480)]   # kleine
+    # Wandschilder (PixelLab k26_schild, 20 px: die Hallenwand ist nur 2 Kacheln hoch), fester Rhythmus symmetrisch zur Halle
     + [('raum/00', 51, {'px': 87, 'anim': 'lampe'}), ('raum/00', 62, {'px': 87, 'anim': 'lampe'}),
        ('raum/00', 51, {'px': 1350, 'anim': 'lampe'}), ('raum/00', 62, {'px': 1350, 'anim': 'lampe'})]
     + [(KISTEN, 52, {'px': 136}), (KISTEN, 61, {'px': 304}), (KISTEN, 58, {'px': 568}),
@@ -108,7 +111,8 @@ def main():
         bw = ux1 - ux0 + 1
         px = opt.pop('px')
         x = px - (ux0 + bw // 2)
-        y = (fy + 1) * T - 1 - uy1
+        oben = opt.pop('oben', None)
+        y = (fy + 1) * T - 1 - uy1 if oben is None else oben - uy0       # Wandobjekt: Oberkante mit Abstand zur Krone
         tx0, tx1 = (x + ux0) // T, (x + ux1) // T
         wandobj = opt.pop('wand', False)
         if not wandobj and any(cls[r][c] not in '.pgr' for c in range(tx0, tx1 + 1) for r in (fy, fy - 1)):
@@ -117,6 +121,8 @@ def main():
         wt, ht = math.ceil(bw / T), math.ceil((uy1 - uy0 + 1) / T)
         o = {'datei': datei, 'basis': name, 'x': x, 'y': y, 'fuss': h, 'kachel': [px // T, fy],
              'block': [tx0, fy - ht + 1, wt, ht], 'ebene': 1}
+        if wandobj:                                                  # haengt frei an der Wand: kein Bodenschatten
+            o.update({'an_wand': True, 'kein_schatten': True, 'keine_verdeckung': True})
         o.update(opt)
         objekte.append(o)
     json.dump(objekte, open(os.path.join(OBJ, 'platzierung.json'), 'w'), indent=0)

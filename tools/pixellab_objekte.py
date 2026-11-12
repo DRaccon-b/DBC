@@ -1582,7 +1582,9 @@ def herunterladen(oid, d):
 
 
 def speichern(gruppe, ims, ids):
-    if gruppe.startswith('k33_'):
+    if gruppe.startswith('k26_'):
+        ziel = os.path.join(ROOT, 'assets', 'objekte', 'karte26', gruppe[4:])
+    elif gruppe.startswith('k33_'):
         ziel = os.path.join(ROOT, 'assets', 'objekte', 'karte33', gruppe[4:])
     elif gruppe.startswith('k32_'):
         ziel = os.path.join(ROOT, 'assets', 'objekte', 'karte32', gruppe[4:])
@@ -2054,6 +2056,9 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'surreal floating eyeball with small white feathered wings and a violet iris, dreamlike, classic 2D handheld RPG style, transparent background',
         'surreal lone wooden door standing in nothing, half open with a starry night sky inside, dreamlike, classic 2D handheld RPG style, transparent background',
         'surreal porcelain teacup tilted in the air pouring out a swirling purple galaxy instead of tea, dreamlike, classic 2D handheld RPG style, transparent background',
+    ]},
+    'k26_schild': {'size': 32, 'items': [   # Nutzer: Wandschilder in der Halle (Wand nur 2 Kacheln hoch)
+        'small square golden wall plaque with a dark red border and a winged eye emblem in the middle, hanging flat on a wall, ' + FR14,
     ]},
     'k31_muell': {'size': 32, 'items': [
         'small pile of fallen golden yellow ginkgo leaves lying flat on the ground, seen from above, classic 2D handheld RPG style',
