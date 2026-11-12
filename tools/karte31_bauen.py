@@ -265,6 +265,50 @@ def hochbahn(img, lay, zug_sp=None):
     return img
 
 
+def weg_rund(kl, lay):
+    """Erdweg-Pixelmaske direkt aus den Wegkurven des Layouts (runde Kanten, Regel 6): je Kurvenpunkt ein Kreis mit
+    der halben Wegbreite. Platz-, Treppen- und Mauerkacheln werden ausgespart (der Weg laeuft bis an ihre Kante)."""
+    from PIL import ImageDraw
+    rows, cols = kl.shape
+    bild = Image.new('L', (cols * T, rows * T), 0)
+    d = ImageDraw.Draw(bild)
+    for pts, r in lay.get('parkwege', []):
+        rp = r * T
+        dichte = []
+        for (x0, y0), (x1, y1) in zip(pts[:-1], pts[1:]):
+            n = max(1, int(np.hypot(x1 - x0, y1 - y0) * 4))
+            dichte += [(x0 + (x1 - x0) * t, y0 + (y1 - y0) * t) for t in np.linspace(0, 1, n, endpoint=False)]
+        dichte.append(tuple(pts[-1]))
+        for (x, y) in dichte:
+            d.ellipse((x * T - rp, y * T - rp, x * T + rp, y * T + rp), fill=255)
+    m = np.array(bild) > 0
+    anschluss = gross(np.isin(kl, ['g', 'T', 'W', 'p', 'd', 's', 'h', 'f']))
+    park = np.zeros_like(m); park[:26 * T] = True
+    m = (m & park & ~anschluss) | (gross(kl == 'w') & ~park)
+    # Regel 2: direkt ober- und unterhalb einer Treppe ist der Weg genau so breit wie die Treppe (eine Kachelreihe)
+    for (ty, tx) in zip(*np.nonzero(kl == 'T')):
+        for dy in (-1, 1):
+            yy = ty + dy
+            if 0 <= yy < rows and kl[yy, tx] == 'w':
+                xs = np.nonzero(kl[ty] == 'T')[0]
+                x0 = xs[xs <= tx]; x1 = xs[xs >= tx]
+                x0 = x0[-1] if len(x0) else tx
+                while x0 - 1 >= 0 and kl[ty, x0 - 1] == 'T':
+                    x0 -= 1
+                x1 = tx
+                while x1 + 1 < cols and kl[ty, x1 + 1] == 'T':
+                    x1 += 1
+                for py in range(yy * T, (yy + 1) * T):              # zur Treppe hin schraeg zulaufend (45 Grad)
+                    e = (yy * T + T - 1 - py) if dy == -1 else (py - yy * T)
+                    l_, r_ = x0 * T - e, (x1 + 1) * T + e
+                    m[py, max(0, l_ - 3 * T):max(0, l_)] = False
+                    m[py, r_:r_ + 3 * T] = False
+                    m[py, x0 * T:(x1 + 1) * T] = True
+    weich = np.array(Image.fromarray(((m | anschluss) * 255).astype(np.uint8)).filter(ImageFilter.GaussianBlur(1.5))) > 127
+    m = (weich & ~anschluss & park) | (m & ~park)
+    return m
+
+
 def bauen(frame=None, speichern=True):
     lay = json.load(open(os.path.join(KARTE, 'layout.json')))
     cols, rows = lay['groesse']
@@ -276,16 +320,24 @@ def bauen(frame=None, speichern=True):
         m = gross(kl == art)
         a[m] = k18.textur(tex, cols, rows)[m]
     m = gross(kl == 'e'); a[m] = erde(cols, rows, (0.93, 0.9, 0.86))[m]
-    m = gross(kl == 'w'); a[m] = erde(cols, rows, (1.0, 0.95, 0.88))[m]
+    weg_px = weg_rund(kl, lay)                                             # Parkwege mit runden Kanten (Regel 6)
+    w_kach = gross(kl == 'w')
+    a[w_kach & ~weg_px] = k18.textur('n', cols, rows)[w_kach & ~weg_px]
+    a[weg_px] = erde(cols, rows, (1.0, 0.95, 0.88))[weg_px]
     pm = gross(kl == 'p'); a[pm] = k30.sandstein(cols, rows)[pm]
     lvl = np.kron(hk, np.ones((T, T), int)).astype(np.uint8)
     asphalt = gross(kl == 's')
     k18.bordsteine(a, asphalt, ~asphalt)
     markierungen(a, asphalt, lay)
-    k18.rasen_kanten(a, gross(np.isin(kl, ['n', 'f'])))
-    for art in ('w', 'e', 'd'):                                       # Erd-/Sandflaechen: feine dunkle Kante zum Rest
+    rasen_px = (gross(np.isin(kl, ['n', 'f'])) | w_kach) & ~weg_px
+    k18.rasen_kanten(a, rasen_px | weg_px)                            # Steinkante nur zu Gehweg/Platz, nicht zum Erdweg
+    a[weg_px] = erde(cols, rows, (1.0, 0.95, 0.88))[weg_px]
+    for art in ('e', 'd'):                                            # Erd-/Sandflaechen: feine dunkle Kante zum Rest
         m = gross(kl == art)
         dunkeln(a, kontur(m) & ~gross(np.isin(kl, ['w', 'e', 'd'])), 0.85)
+    rand_w = kontur(weg_px) & ~gross(np.isin(kl, ['g', 'T', 'W', 'p', 'd']))   # Erdweg: weiche Kante zum Rasen
+    dunkeln(a, rand_w, 0.8)
+    dunkeln(a, kontur(weg_px & ~rand_w) & ~gross(np.isin(kl, ['g', 'T', 'W', 'p', 'd'])), 0.92)
     k18.mittelstreifen(a, gross(kl == 'h'), k18.textur('n', cols, rows)) if False else None
     hecke(a, gross(kl == 'h'))
     leitstreifen(a, gross(kl == 'y'))

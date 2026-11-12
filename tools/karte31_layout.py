@@ -34,6 +34,41 @@ TERRASSE_TREPPE = (95, 98)
 HOCHBAHN = {'x0': 0, 'x1': 27, 'y0': 72, 'y1': 75, 'zug': [1, 18], 'pfeiler': [3]}
 
 
+WEGE = [  # (Stuetzpunkte in Kacheln, halbe Breite) -> Catmull-Rom-Kurven
+    ([(13.5, 25.5), (12, 21), (14, 16.5), (12.8, 11), (15, 7.2), (22, 6.4), (31, 7)], 1.45),     # links hoch zum Pavillon
+    ([(36, 7.5), (38.5, 9.5), (38, 13)], 1.2),                                                 # Pavillon -> Hauptweg
+    ([(12.5, 13), (20, 14.2), (28, 13), (36, 12.6), (44, 14.3), (50, 13.6), (56, 13.2)], 1.5),   # Hauptweg -> Uhrplatz
+    ([(65, 13), (71, 12.2), (77, 14), (82, 13.2), (84, 16), (82.6, 20.5), (84.5, 25.5)], 1.45),   # Uhrplatz -> Osten -> Promenade
+    ([(60.5, 16.5), (59.2, 20), (61.5, 23), (60.5, 25.8)], 2.2),                               # Uhrplatz -> Treppe Mitte
+    ([(77, 13.5), (77.5, 15.6)], 0.9),                                                          # Kiosk
+]
+WEGE_TERRASSE = [
+    ([(103, 15.5), (100.5, 17), (97, 18.6)], 1.6),                                            # Portalplatz -> Terrassentreppe
+    ([(96.5, 21), (98.5, 23), (100.5, 25.8)], 1.6),                                           # Terrassentreppe -> Promenadentreppe
+]
+
+
+def _kurve(pts, n=24):
+    p = [pts[0]] + list(pts) + [pts[-1]]
+    out = []
+    for i in range(1, len(p) - 2):
+        p0, p1, p2, p3 = (np.array(q, float) for q in p[i - 1:i + 3])
+        for t in np.linspace(0, 1, n, endpoint=False):
+            out.append(0.5 * ((2 * p1) + (-p0 + p2) * t + (2 * p0 - 5 * p1 + 4 * p2 - p3) * t * t
+                              + (-p0 + 3 * p1 - 3 * p2 + p3) * t ** 3))
+    out.append(np.array(pts[-1], float))
+    return np.array(out)
+
+
+def _weg(k, pts, r, erlaubt):
+    c = _kurve(pts)
+    yy, xx = np.mgrid[0:R, 0:C]
+    cx, cy = xx + 0.5, yy + 0.5
+    d = np.min([(cx - px) ** 2 + (cy - py) ** 2 for px, py in c], axis=0)
+    m = (d <= r * r) & erlaubt & np.isin(k, ['n', 'h', 'w'])
+    k[m] = 'w'
+
+
 def r_(k, x0, y0, x1, y1, art):
     k[y0:y1 + 1, x0:x1 + 1] = art
 
@@ -109,6 +144,14 @@ def main():
     r_(k, 0, 26, 119, 29, 'g')                                       # Promenade auf der Mauer
     hecken = [(x0, x1) for (x0, x1) in _laeufe(k[25], 'h')]           # Heckenbeete -> Rasen, Hecken als Objekte
     k[25][k[25] == 'h'] = 'n'
+    # ---- Parkwege natuerlich (Regel 6: nie nur gerade, Boegen/Diagonalen): Vorlagen-Rechteckwege -> Kurven
+    park = np.zeros((R, C), bool); park[2:26, 2:118] = True
+    park[TERRASSE[1]:TERRASSE[3] + 1, TERRASSE[0]:TERRASSE[2] + 1] &= False
+    k[park & (k == 'w')] = 'n'
+    terr = np.zeros((R, C), bool); terr[2:19, TERRASSE[0] + 1:118] = True
+    k[terr & (k == 'w')] = 'n'
+    for pts, r in WEGE + WEGE_TERRASSE:
+        _weg(k, pts, r, np.arange(R)[:, None] < 26)
     # ---- Stuetzmauer und Treppen
     r_(k, 0, MAUER[0], 119, MAUER[1], 'W')
     for (x0, x1) in MAUER_TREPPEN:
@@ -146,6 +189,7 @@ def main():
            'treppen_sued': [[x0, x1, 2, MAUER[0] - 1] for (x0, x1) in MAUER_TREPPEN] +
                            [[TERRASSE_TREPPE[0], TERRASSE_TREPPE[1], 3, TERRASSE_FRONT[0] - 1]],
            'hecken': hecken,
+           'parkwege': [[[list(map(float, q)) for q in _kurve(pts).tolist()], r] for pts, r in WEGE + WEGE_TERRASSE],
            'teleporter': [{'x': 103, 'y': 2, 'b': 3, 'h': 3, 'farbe': 'violett'}]}
     json.dump(lay, open(os.path.join(KARTE, 'layout.json'), 'w'), indent=0)
     F = {'n': (99, 142, 67), 'w': (187, 163, 118), 'e': (173, 155, 113), 'g': (147, 158, 155), 's': (52, 61, 73),

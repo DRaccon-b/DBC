@@ -144,9 +144,18 @@ def main():
     for dx in (-56, 56):                                             # Steinlaternen exakt symmetrisch zum Pavillon (Achse)
         if not setze(STEINLATERNE, 33 * T + 8 + dx, 9 * T - 1, {'anim': 'lampe'}, raster=False):
             print('Steinlaterne nicht gesetzt:', dx)
-    for (tx, ty) in ((21, 12), (44, 17), (88, 12), (113, 12), (69, 12)):                         # Baenke
+    for (tx, ty) in ((21, 12), (44, 18), (88, 12), (113, 12), (69, 12)):                         # Baenke
         setze('karte18/strasse/14', tx * T + 8, ty * T - 1, {})
-    for i, (x0, x1) in enumerate(lay.get('hecken', [])):                                          # Hecken an der Promenade
+    laeufe = []                                                      # Heckenbeete ohne Wegkacheln (Wege laufen durch)
+    for (x0, x1) in lay.get('hecken', []):
+        frei_ = [x for x in range(x0, x1 + 1) if all(kl[y][xx] != 'w' for y in (24, 25) for xx in (x - 1, x, x + 1)
+                                                      if 0 <= xx < cols)]
+        for x in frei_:
+            if laeufe and laeufe[-1][1] == x - 1:
+                laeufe[-1][1] = x
+            else:
+                laeufe.append([x, x])
+    for i, (x0, x1) in enumerate(laeufe):                                                         # Hecken an der Promenade
         n = ['karte01/baeume/14', 'karte01/baeume/12', 'karte01/baeume/14', 'karte01/baeume/13'][i % 4] \
             if x1 - x0 >= 2 else 'karte01/deko/%02d' % (25, 27)[i % 2]                          # (K01-Buesche, schmal: Busch)
         setze(n, (x0 + x1 + 1) * T // 2, 26 * T - 1, {'anim': 'wehen'}, i % 2 == 0, pruefen=False)
