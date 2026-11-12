@@ -538,7 +538,11 @@ def zip_neu(karte, name, version, out):
 
 def main():
     karte = sys.argv[1]
-    modname, name, version = KARTEN[karte]
+    if karte in KARTEN:
+        modname, name, version = KARTEN[karte]
+    else:                                                   # neue Karte (tools/neue_karte.py): maps/karteNN/karte.json
+        info = json.load(open(os.path.join(ROOT, 'maps', karte, 'karte.json')))
+        modname, name, version = karte + '_bauen', info['name'], info.get('version', 'v1.0')
     mod = importlib.import_module(modname)
     global N
     N = getattr(mod, 'N_FRAMES', 16)

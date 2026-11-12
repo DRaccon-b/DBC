@@ -75,8 +75,16 @@ Erzeugt mit `tools/{karte}_*.py`, `tools/kollision.py`, `tools/tileset_export.py
 """
 
 
+def karten_info(karte):
+    """Name, Version, Gebiet, Beschreibung: aus KARTEN oder aus maps/karteNN/karte.json (neue Karten, neue_karte.py)."""
+    if karte in KARTEN:
+        return KARTEN[karte]
+    d = json.load(open(os.path.join(ROOT, 'maps', karte, 'karte.json')))
+    return d['name'], d.get('version', 'v1.0'), d.get('gebiet', ''), d.get('beschreibung', '')
+
+
 def paket(karte, ohne_tileset=False):
-    name, version, gebiet, text = KARTEN[karte]
+    name, version, gebiet, text = karten_info(karte)
     K = os.path.join(ROOT, 'maps', karte)
     tools = os.path.dirname(os.path.abspath(__file__))
     subprocess.run([sys.executable, os.path.join(tools, 'kollision.py'), karte], check=True)

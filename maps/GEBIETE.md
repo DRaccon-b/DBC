@@ -31,6 +31,11 @@ Aufstellfelds (cyan = Ankunft, gold = weiter; Funktion `pfeil_marke` in `tools/k
 | 14 | Karte 33 – The World of Dreams | Regeln angewendet, Animation 4+16 Bilder; offen: Kollision, Tileset, v1.0 |
 | … | weitere Karten folgen | – |
 
+## A03 *(in Planung)*
+| Nr. | Karte | Stand |
+|---|---|---|
+| … | Karten folgen (Skill `neue-karte`) | – |
+
 ## A0S – Sondergebiet
 | Nr. | Karte | Stand |
 |---|---|---|

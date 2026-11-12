@@ -188,3 +188,31 @@ Wenn eine Karte fertig scheint: noch einmal komplett auf **Pixelfehler** und **L
 - **Unklares erst fragen:** Bei mehrdeutigen Wünschen kurz nachfragen (z. B. welche Variante gemeint ist), sonst ohne
   Zögern umsetzen.
 - **Ablauf:** Jede Änderung committen und pushen, Bilder/GIFs an den Nutzer schicken, auf Deutsch erklären.
+
+## Prüfliste: häufige Fehler (aus Nutzer-Korrekturen und der Agenten-Gesamtprüfung)
+
+Vor jeder Abgabe Punkt für Punkt prüfen (vergrößert, Standbild und mehrere Animationsbilder):
+
+- **Weg ↔ Treppe/Brücke:** Weg läuft in voller Treppen-/Brückenbreite an (je 2 Reihen davor und danach), ohne Gras-
+  streifen am Brückenende; keine Kerbe in der Plateaukante über der Treppe (ganze Treppenbreite auf Plateauhöhe, Front
+  links/rechts 2 Kacheln gerade weiter). Wege in Senken/Terrassen haben an jeder Stufenkante eine Treppe in Wegbreite.
+- **Einzelkacheln:** keine Ein-Kachel-Inseln oder -Löcher (Wasser, Moor, Sandfleck, Tiefenstufe) – sie werden durch das
+  45°-Raster zu runden Punkten. Mindestens 2–3 Kacheln oder an die Nachbarn angleichen.
+- **Kartenrand:** Abstands-/Weichzeichner-Berechnungen nie über den Rand laufen lassen (kein `np.roll`, Rand
+  fortsetzen) – sonst Schaum/Ufer gegenüber am anderen Rand.
+- **Objekte:** nichts auf Pflaster/Weg/Mauerkrone/Klippenkante; keine Überlappung (Schild↔Feuerstelle, Wagen↔Scheune,
+  Laterne↔Silo, Netz↔Netz, Stein auf Obelisk); Waldbäume/Felsnadeln nie über Teleportern; Waldrand nie vor Fassaden;
+  keine Laternen in Riesenrad/Gebäuden; Autos in Fahrtrichtung; Kronen nicht am Kartenrand abgeschnitten.
+- **Begleiter am Stumpf (5d):** keine 1-Kachel-Blumen auf dem Stumpf, kein Blumenklumpen; Begleiter überlappen sich nicht.
+- **Paare/Achsen:** Paare vor Toren/Bauwerken exakt gespiegelt (Mitte und Fuß), gleiche Objekte auf gleicher Höhe;
+  Druckplatten, Obelisken usw. symmetrisch zur berechneten Achse.
+- **Streudeko:** nie an Portalen, Objekten (2 px Abstand) oder Gittern; keine regelmäßigen Raster (Vogelscheuchen-Gitter).
+- **Animation:** Fahnen/Banner – nur das Tuch, Stange und Fuß fest, Motiv bleibt ganz (`standarte`/`wimpel`); Feuer ohne
+  Löcher; Pumpen/Arme/Schaukeln drehen um den echten Drehpunkt, alle Gestänge folgen; Bildschirm-/LED-Effekte nur in
+  der Bildfläche (Box), nie auf Gehäuse, Kabel, Reagenzgläsern; Leuchtschein auf der Lichtquelle, nicht auf dem Sockel;
+  Rauch nur aus der Öffnung; Kristalle glitzern selbst; graue/andersfarbige Portale drehen (`portal_box`); Gondeln
+  ruhig (ein Schwung je Schleife); Schleife Bild 15→0 ohne Sprung (Wasserstriche, Schaum, Riesenrad, Farbmuster).
+- **Zeichenreihenfolge:** Wolken/Wellen/Seegras nie über Mauern, Felsen, Stegen; schwebende Objekte ohne Bodenwall.
+- **Wasser:** Schaum und Stufen parallel zur 45°-Küste (`wasser_details.RASTER45`), keine dünnen Stufen-Grate in Kanälen,
+  keine Felsspitzen an Brücken/Teleportern, keine Schaumringe auf Land; Brückenringe nur auf Wasser.
+- **Kollision:** Treppen/Brücken begehbar, Risse/Leere/Wasser gesperrt; Overlay ansehen.
