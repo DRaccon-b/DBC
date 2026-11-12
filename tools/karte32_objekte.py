@@ -133,8 +133,6 @@ def main():
     setze('karte32/saeule_k/01', 52 * T + 8, fuss(24), {}, spiegeln=True)
     setze('karte32/leuchter/00', 24 * T + 8, fuss(22), {'liegend': True, 'versatz': 2})   # Nutzer: weniger Kronleuchter, kaputt am Boden
     paar(K9 + 'moebel/01', 7 * T, fuss(16), {'anim': 'kerzen'})                      # Kandelaber am Teppich
-    for (x, y) in ((13, 16), (13, 25), (55, 16)):
-        setze(K9 + 'moebel/01', x * T + 8, fuss(y), {'anim': 'kerzen'})
     for (x, y) in ((53, 21), (54, 25), (51, 17)):                     # Truemmer an der abgebrochenen Kante
         setze(K9 + 'wand/45', x * T + 8, fuss(y))
     # ------------------------------------------------------------------ Bannerhalle
@@ -142,15 +140,12 @@ def main():
     setze('karte32/saeule_k/00', 46 * T + 8, fuss(47), {'liegend': True, 'versatz': 2}, spiegeln=True)
     setze('karte32/leuchter/01', 42 * T + 8, fuss(45), {'liegend': True, 'versatz': 2, 'anim': 'kerzen'}, spiegeln=True)
     paar(K9 + 'moebel/01', 5 * T, fuss(34), {'anim': 'kerzen'})
-    for (x, y) in ((13, 35), (13, 40), (13, 49), (57, 35), (57, 40), (57, 49)):
-        setze(K9 + 'moebel/01', x * T + 8, fuss(y), {'anim': 'kerzen'})
     for (x, y) in ((20, 44), (13, 46), (16, 49)):                     # Truemmer am Loch
         setze(K9 + 'wand/45', x * T + 8, fuss(y))
     # ------------------------------------------------------------------ Festsaal (Achse 74.5)
     FA = 74.5 * T
     setze('karte32/leuchter/00', 70 * T + 8, fuss(42), {'liegend': True, 'versatz': 2}, spiegeln=True)
-    for y in (36, 40, 44, 48):
-        paar(K9 + 'moebel/01', 10 * T, fuss(y), {'anim': 'kerzen'}, achse=FA)
+    paar(K9 + 'moebel/01', 10 * T, fuss(42), {'anim': 'kerzen'}, achse=FA)            # Nutzer: Kerzen reduziert
     # ------------------------------------------------------------------ Friedhof
     rnd = random.Random(3232)
     GRAEBER = ['k8/mittel/00', 'k8/mittel/01', 'k8/mittel/02', 'k8/mittel/03', 'wand/21', 'wand/22']
