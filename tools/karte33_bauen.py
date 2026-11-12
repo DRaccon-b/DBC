@@ -127,63 +127,73 @@ def quellbild(karte, frame):
     return _QUELLEN[schluessel]
 
 
-def risse(a, lay, frame):
-    """Raum-Zeit-Risse (Nutzer): gezackte Oeffnungen in der Leere, durch die ein Ausschnitt einer anderen A02-Karte
-    im selben Massstab zu sehen ist (Startkarte mit Fernseher, Holy Peaks, Sunset Bay, Destiny Lake). Innen am Rand eine
-    dunkle Tiefenkante, aussen eine leuchtende Risskante (weiss -> violett -> cyan) die flackert, dazu kleine Splitter.
+def risse(a, lay, frame, land):
+    """Raum-Zeit-Risse (Nutzer): die Ecken der Karte reissen entlang einer Kante auf (Nutzer-Skizze), dahinter ist ein
+    Ausschnitt einer anderen A02-Karte im selben Massstab zu sehen (animiert aus deren Animation). Die Risskante liegt
+    am 45-Grad-Raster (Kachelmaske, Gauss 5 px, Schwelle 50 % wie Regel 6b) und haelt 1 Kachel Abstand zur Plattform.
+    Innen eine dunkle Tiefenkante, aussen eine leuchtende, flackernde Kante (weiss -> violett -> cyan) mit Funken.
     -> Maske aller Risse (fuer Objekte: frei halten)."""
     import random
+    from PIL import ImageDraw, ImageFilter
     Hp, Wp = a.shape[:2]
+    rows, cols = Hp // T, Wp // T
     gesamt = np.zeros((Hp, Wp), bool)
     f = frame or 0
+    sperre = np.array(Image.fromarray((land * 255).astype(np.uint8)).filter(ImageFilter.MaxFilter(2 * T + 1))) > 0
     for i, r in enumerate(lay.get('risse', [])):
-        cx, cy = r['cx'] * T, r['cy'] * T
-        rr = random.Random(3300 + i)
-        n = 40                                                          # aufgerissener Umriss: Radius je Winkel
-        achse = math.atan2(22 * T - cy, 20 * T - cx)                    # laenglich Richtung Plattform (Diagonale)
-        rad = []
-        for k in range(n):
-            w = 2 * math.pi * k / n
-            ell = 1.0 / math.sqrt((math.cos(w - achse) / 92.0) ** 2 + (math.sin(w - achse) / 56.0) ** 2)
-            zacke = rr.uniform(-9, 6)
-            if rr.random() < 0.15:
-                zacke -= rr.uniform(10, 20)                             # tiefer Einriss
-            if rr.random() < 0.12:
-                zacke += rr.uniform(8, 16)                              # ausgerissene Spitze
-            rad.append(max(24.0, ell + zacke))
-        yy, xx = np.mgrid[0:Hp, 0:Wp]
-        ang = (np.arctan2(yy - cy, xx - cx) % (2 * np.pi)) / (2 * np.pi) * n
-        k0 = np.floor(ang).astype(int) % n; t = ang - np.floor(ang)
-        grenze = np.array(rad)[k0] * (1 - t) + np.array(rad)[(k0 + 1) % n] * t
-        dist = np.hypot(xx - cx, yy - cy)
-        innen = dist < grenze
+        poly = [tuple(p) for p in r['kante']]
+        ex, ey = r['ecke']
+        poly += [(ex, ey if ey == 0 else rows)] if False else []
+        ecken = {(0, 0): [(0, 0)], (44, 0): [(cols, 0)], (0, 44): [(0, rows)], (44, 44): [(cols, rows)]}[(ex, ey)]
+        flaeche = Image.new('L', (cols, rows), 0)
+        ImageDraw.Draw(flaeche).polygon([(x - 0.5, y - 0.5) for (x, y) in poly + ecken], fill=255)
+        kach = np.array(flaeche) > 0
+        m = np.kron(kach, np.ones((T, T), np.uint8)).astype(np.uint8) * 255
+        m = np.pad(m, T, mode='edge')                                   # Kartenrand: keine Kante dort
+        m = np.array(Image.fromarray(m).filter(ImageFilter.GaussianBlur(5)))[T:-T, T:-T] > 127
+        m &= ~sperre
         quelle = quellbild(r['karte'], frame)
+        ys, xs = np.nonzero(m)
+        bx0, by0 = xs.min(), ys.min()
         qx, qy = r['quelle']
-        x0, y0 = int(cx - 96), int(cy - 96)
-        for y in range(max(0, y0), min(Hp, y0 + 192)):
-            row = innen[y, max(0, x0):min(Wp, x0 + 192)]
-            xs = np.arange(max(0, x0), min(Wp, x0 + 192))
-            a[y, xs[row]] = quelle[qy + y - y0, qx + xs[row] - x0]
-        tief = innen & (dist > grenze - 5)                              # dunkle Tiefenkante innen
-        stufe = np.clip((dist - (grenze - 5)) / 5.0, 0, 1)
-        a[tief] = (a[tief] * (1 - 0.55 * stufe[tief])[:, None]).astype(np.uint8)
+        sy = np.clip(qy + ys - by0, 0, quelle.shape[0] - 1)
+        sx = np.clip(qx + xs - bx0, 0, quelle.shape[1] - 1)
+        a[ys, xs] = quelle[sy, sx]
+        # Abstand zur Risskante innen/aussen (Pixel), ueber wiederholtes Erodieren/Dilatieren
+        def ring(maske, n, wachsen):
+            out = []
+            cur = maske.copy()
+            for _ in range(n):
+                nb = np.roll(cur, 1, 0) | np.roll(cur, -1, 0) | np.roll(cur, 1, 1) | np.roll(cur, -1, 1) if wachsen \
+                    else np.roll(cur, 1, 0) & np.roll(cur, -1, 0) & np.roll(cur, 1, 1) & np.roll(cur, -1, 1)
+                neu = (nb & ~cur) if wachsen else (cur & ~nb)
+                rand_ = np.zeros_like(neu); rand_[10:-10, 10:-10] = True  # am Kartenrand keine Kante
+                out.append(neu & rand_)
+                cur = nb if wachsen else (cur & nb)
+            return out
+        for k_, ringm in enumerate(ring(m, 5, False)):                 # dunkle Tiefenkante innen
+            fa = 0.45 + 0.11 * k_
+            a[ringm] = (a[ringm] * fa).astype(np.uint8)
         puls = 0.75 + 0.25 * math.sin(2 * math.pi * f / N_FRAMES + i * 1.3)
-        for d0, d1, farbe, st in ((0, 1.5, (255, 250, 255), 1.0), (1.5, 3.5, (200, 140, 255), 0.85),
-                                  (3.5, 7.0, (110, 200, 255), 0.45)):
-            m = (dist >= grenze + d0) & (dist < grenze + d1)
+        aussen = ring(m, 7, True)
+        for k_, ringm in enumerate(aussen):
+            farbe, st = ((255, 250, 255), 1.0) if k_ < 1 else (((200, 140, 255), 0.85) if k_ < 3 else ((110, 200, 255), 0.5 - 0.08 * (k_ - 3)))
             al = st * puls
-            a[m] = np.clip(a[m] * (1 - al) + np.array(farbe) * al, 0, 255).astype(np.uint8)
-        rs = random.Random(3400 + i * 7 + f)                            # Splitter/Funken am Rand (wandern je Bild)
-        for _ in range(14):
-            w = rs.uniform(0, 2 * np.pi)
-            kk = int((w / (2 * np.pi)) * n) % n
-            rd = rad[kk] + rs.uniform(4, 14)
-            px, py = int(cx + math.cos(w) * rd), int(cy + math.sin(w) * rd)
-            if 1 <= px < Wp - 1 and 1 <= py < Hp - 1:
+            ringm = ringm & ~land
+            a[ringm] = np.clip(a[ringm] * (1 - al) + np.array(farbe) * al, 0, 255).astype(np.uint8)
+        kante = aussen[2]
+        ky, kx = np.nonzero(kante)
+        rs = random.Random(3400 + i * 7 + f)                            # Funken an der Kante (wandern je Bild)
+        for _ in range(min(26, len(ky))):
+            j = rs.randrange(len(ky))
+            py, px = ky[j] + rs.randint(-6, 6), kx[j] + rs.randint(-6, 6)
+            if 1 <= px < Wp - 1 and 1 <= py < Hp - 1 and not m[py, px] and not land[py, px]:
                 a[py, px] = (240, 220, 255)
                 if rs.random() < 0.5:
                     a[py, px + 1] = a[py + 1, px] = (170, 120, 240)
-        gesamt |= innen | (dist < grenze + 7)
+        gesamt |= m
+        for ringm in aussen:
+            gesamt |= ringm
     return gesamt
 
 
@@ -195,7 +205,7 @@ def bauen(frame=None, speichern=True):
     leer = gross(kl == '.')
     land = ~leer
     a = k32.leere(Hp, Wp, frame)
-    rissmaske = risse(a, lay, frame)                                  # Raum-Zeit-Risse in den Ecken
+    rissmaske = risse(a, lay, frame, land)                            # Raum-Zeit-Risse in den Ecken
     for art in 'irmp':
         m = gross(kl == art)
         a[m] = textur(art, cols, rows)[m]

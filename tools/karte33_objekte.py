@@ -23,6 +23,13 @@ def main():
     cols, rows = lay['groesse']
     os.makedirs(os.path.join(OBJ, 'fremd'), exist_ok=True)
     leer = np.array([[c == '.' for c in z] for z in kl])
+    from PIL import ImageDraw, ImageFilter
+    riss = Image.new('L', (cols, rows), 0)                            # Rissflaechen (+2 Kacheln) frei halten
+    for r in lay.get('risse', []):
+        ex, ey = r['ecke']
+        ecke = [(0 if ex == 0 else cols, 0 if ey == 0 else rows)]
+        ImageDraw.Draw(riss).polygon([(x - 0.5, y - 0.5) for (x, y) in [tuple(p) for p in r['kante']] + ecke], fill=255)
+    rissnah = np.array(riss.filter(ImageFilter.MaxFilter(5))) > 0
     rnd = random.Random(3333)
     objekte, gesetzt = [], []
     for _ in range(8000):
@@ -33,7 +40,7 @@ def main():
             continue
         if any(abs(tx - x) + abs(ty - y) < 6 for (x, y) in gesetzt):
             continue
-        if any(math.hypot(tx + 0.5 - r['cx'], ty + 0.5 - r['cy']) < 7.5 for r in lay.get('risse', [])):
+        if rissnah[ty, tx]:
             continue
         name = rnd.choice(TRAUM)
         ziel = 'fremd/' + name.replace('/', '-') + '.png'

@@ -49,11 +49,17 @@ def main():
            'hoehe': [''.join('0' if c == '.' else ('2' if c == 'w' else '1') for c in z) for z in k],
            'runen_px': [[MX * T + sx * 72, MY * T + sy * 72] for sy in (-1, 1) for sx in (-1, 1)],   # 4 Runen diagonal
            'mitte': [MX, MY],
-           # Raum-Zeit-Risse in den vier Ecken (Nutzer): darunter erscheinen andere A02-Karten (Ausschnitt in Pixeln)
-           'risse': [{'cx': 6.0, 'cy': 6.0, 'karte': 'karte20', 'quelle': [48, 104]},      # Startkarte mit Fernseher
-                     {'cx': 38.0, 'cy': 6.0, 'karte': 'karte07', 'quelle': [560, 40]},     # The Holy Peaks
-                     {'cx': 6.0, 'cy': 38.0, 'karte': 'karte25', 'quelle': [560, 560]},    # Sunset Bay (Strand)
-                     {'cx': 38.0, 'cy': 38.0, 'karte': 'karte27', 'quelle': [560, 260]}]}  # Destiny Lake
+           # Raum-Zeit-Risse in den vier Ecken (Nutzer-Skizze): Risskante als Linie von Kartenrand zu Kartenrand (Kacheln),
+           # die Ecke dahinter ist der Riss; darunter eine andere A02-Karte (quelle = Pixel der Quellkarte an der
+           # linken oberen Ecke des Riss-Rahmens)
+           'risse': [{'kante': [(0, 15.1), (2.8, 15), (3.1, 10.9), (9.4, 10.6), (10, 5.9), (15, 5.9), (16.6, 3.4),
+                                (20.6, 3.1), (22.2, 0)], 'ecke': (0, 0), 'karte': 'karte20', 'quelle': [50, 116]},
+                     {'kante': [(30.6, 0), (30.9, 3.1), (35, 5), (38.8, 5.9), (36.9, 8.8), (37.5, 11.6), (44, 11.9)],
+                      'ecke': (44, 0), 'karte': 'karte07', 'quelle': [480, 0]},
+                     {'kante': [(0, 23.8), (1.6, 23.8), (5.3, 26.9), (6.3, 33.8), (9.4, 35.6), (10.6, 36.3), (14.7, 38.1),
+                                (16.6, 40.6), (16.6, 44)], 'ecke': (0, 44), 'karte': 'karte25', 'quelle': [440, 400]},
+                     {'kante': [(44, 25.6), (40.9, 25.9), (40.6, 27.5), (35, 30), (34, 35.6), (29.4, 36.6), (28.4, 40),
+                                (28.8, 44)], 'ecke': (44, 44), 'karte': 'karte27', 'quelle': [520, 230]}]}
     os.makedirs(KARTE, exist_ok=True)
     json.dump(lay, open(os.path.join(KARTE, 'layout.json'), 'w'), indent=0)
     F = {'w': (90, 86, 120), '.': (12, 14, 38), 'i': (178, 170, 205), 'r': (205, 200, 225), 'm': (140, 140, 180), 'p': (190, 185, 215),
