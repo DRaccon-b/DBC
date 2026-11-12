@@ -225,8 +225,9 @@ RASTER45 = False                                                # True: Kueste/S
 def raster45(kachel_maske, T=16):
     """Kachelmaske -> Pixelmaske mit 45-Grad-Schraegen an den Ecken (Gauss 5 px, Schwelle 50 %, wie Regel 6b)."""
     px = np.kron(np.asarray(kachel_maske, bool), np.ones((T, T), bool))
+    px = np.pad(px, 16, mode='edge')                                # Kartenrand fortsetzen (keine Kante am Rand)
     b = np.array(Image.fromarray((px * 255).astype(np.uint8)).filter(ImageFilter.GaussianBlur(5)))
-    return b >= 128
+    return (b >= 128)[16:-16, 16:-16]
 
 
 def abstand45(quelle, schritte=200):
@@ -239,7 +240,8 @@ def abstand45(quelle, schritte=200):
         if i % 2:
             k2 = np.array(Image.fromarray((k * 255).astype(np.uint8)).filter(ImageFilter.MaxFilter(3))) > 0
         else:
-            k2 = k | np.roll(k, 1, 0) | np.roll(k, -1, 0) | np.roll(k, 1, 1) | np.roll(k, -1, 1)
+            k2 = k.copy()                                          # Kreuz-Dehnung ohne Umlauf ueber den Kartenrand
+            k2[1:] |= k[:-1]; k2[:-1] |= k[1:]; k2[:, 1:] |= k[:, :-1]; k2[:, :-1] |= k[:, 1:]
         neu = k2 & ~k
         if not neu.any():
             break
@@ -295,8 +297,8 @@ def meer_terrassen(img, region, frame=None, meiden=None, maske=None, dist=None):
     if RASTER45:                                                   # keine duennen Stufen-Grate in engen Kanaelen
         for st_ in (STUFE1, STUFE2):
             tiefer = m & (d >= st_)
-            k_ = Image.fromarray((tiefer * 255).astype(np.uint8))
-            offen = np.array(k_.filter(ImageFilter.MinFilter(9)).filter(ImageFilter.MaxFilter(9))) > 0
+            k_ = Image.fromarray((np.pad(tiefer, 6, mode='edge') * 255).astype(np.uint8))   # Rand fortsetzen
+            offen = (np.array(k_.filter(ImageFilter.MinFilter(9)).filter(ImageFilter.MaxFilter(9))) > 0)[6:-6, 6:-6]
             grat = tiefer & ~offen
             d[grat] = st_ - 1
     sand = _kacheln('sand', Hh, W)
