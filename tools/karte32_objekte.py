@@ -118,7 +118,7 @@ def main():
     for x in (13, 25, 48, 60, 72, 84):                                 # Aussenmauer: schmale Fenster zwischen Tuermen
         wand(K9 + 'wand/03', (x + 0.5) * T, 54)
     # ------------------------------------------------------------------ Thron, Tor, Tuerme (feste Achsen)
-    setze(K9 + 'moebel/07', ACHSE, fuss(8), {'achse': True}, raster=False)          # Thron im Thronturm
+    setze('karte32/portal/00_frei', ACHSE, fuss(8), {'achse': True, 'anim': 'portal'}, raster=False)   # Nutzer: surreales Portal statt Thron
     setze(K9 + 'moebel/07', ACHSE, fuss(15), {'achse': True}, raster=False, pruefen=False)   # Nischenthron
     for dx in (5, 17, 29, 41):                                        # Tuerme alle 12 Kacheln, symmetrisch zum Tor
         for s in (-1, 1):

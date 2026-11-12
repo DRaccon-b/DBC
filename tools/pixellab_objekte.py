@@ -2039,6 +2039,10 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'fallen dark grey gothic stone column lying flat on a stone floor, broken into two pieces with a decorated capital, small rubble around, seen from above, classic 2D handheld RPG style, transparent background',
         'broken dark grey gothic stone column stump standing on its square base, snapped off at half height with jagged top, fallen capital and rubble lying beside it, perfectly straight front elevation view, classic 2D handheld RPG style, transparent background',
     ]},
+    'k32_portal': {'size': 80, 'items': [   # Nutzer: Thron oben weg, surreales Portal
+        'surreal dream portal standing on a stone floor: a tall twisted golden arch frame that melts and drips like a clock, with tiny floating stars and broken stones around it, inside a swirling violet and pink vortex with stars, ' + FR14,
+        'surreal floating dream portal: an oval doorway of floating cracked stone pieces and golden clock gears hovering in a ring above a small stone base, inside a deep swirling violet vortex with tiny stars, ' + FR14,
+    ]},
     'k31_muell': {'size': 32, 'items': [
         'small pile of fallen golden yellow ginkgo leaves lying flat on the ground, seen from above, classic 2D handheld RPG style',
         'small pile of fallen brown and orange autumn leaves lying flat on the ground, seen from above, classic 2D handheld RPG style',
