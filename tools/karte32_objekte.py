@@ -177,8 +177,9 @@ def main():
         setze(K9 + 'turm/15', x * T + 8, fuss(y), {})
     for (x, y) in ((5, 66), (20, 66)):
         setze(K9 + 'wand/45', x * T + 8, fuss(y), {})
-    setze(K9 + 'moebel/04', 11.5 * T, fuss(75), {}, raster=False)   # Traumspiegel (Portal)
     paar(K9 + 'moebel/01', 3.5 * T, fuss(75), {'anim': 'kerzen'}, achse=11.5 * T)
+    for tp in lay.get('teleporter', []):                               # Teleporterfeld frei von Kleinkram
+        belegt.append(((tp['x'] - 4) * T, (tp['y'] - 4) * T, (tp['x'] + tp['b'] + 4) * T, (tp['y'] + tp['h'] + 1) * T))
     STREU = ['k8/klein/04', 'k8/klein/05', 'k8/klein/07', 'k8/klein/12', 'k8/klein/47', 'k8/klein/48', 'k8/klein/06']
     n = 0
     for _ in range(3000):

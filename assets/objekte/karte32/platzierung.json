@@ -1840,18 +1840,6 @@
 "ebene": 1
 },
 {
-"datei": "fremd/karte09-moebel-04.png",
-"basis": "karte09/moebel/04",
-"x": 160,
-"y": 1156,
-"fuss": 59,
-"kachel": [
-11,
-75
-],
-"ebene": 1
-},
-{
 "datei": "fremd/karte09-moebel-01.png",
 "basis": "karte09/moebel/01",
 "x": 115,
@@ -2094,19 +2082,6 @@
 "kachel": [
 50,
 68
-],
-"ebene": 1,
-"anim": "wehen"
-},
-{
-"datei": "fremd/karte09-k8-klein-47.png",
-"basis": "karte09/k8/klein/47",
-"x": 117,
-"y": 1140,
-"fuss": 27,
-"kachel": [
-8,
-72
 ],
 "ebene": 1,
 "anim": "wehen"
@@ -2450,72 +2425,40 @@
 "anim": "wehen"
 },
 {
+"datei": "fremd/karte09-k8-klein-07.png",
+"basis": "karte09/k8/klein/07",
+"x": 885,
+"y": 923,
+"fuss": 20,
+"kachel": [
+56,
+58
+],
+"ebene": 1,
+"anim": "wehen"
+},
+{
 "datei": "fremd/karte09-k8-klein-06.png",
 "basis": "karte09/k8/klein/06",
-"x": 195,
-"y": 1095,
+"x": 1107,
+"y": 1063,
 "fuss": 24,
 "kachel": [
-12,
-69
+69,
+67
 ],
 "ebene": 1,
 "anim": "kerzen"
 },
 {
-"datei": "traum/00.png",
-"basis": "karte32/traum/00",
-"x": 1366,
-"y": 420,
-"fuss": 27,
-"kachel": [
-86,
-27
-],
-"ebene": 1,
-"schwebend": true,
-"kein_schatten": true,
-"phase": 2
-},
-{
-"datei": "traum/07.png",
-"basis": "karte32/traum/07",
-"x": 1111,
-"y": 419,
-"fuss": 28,
-"kachel": [
-70,
-27
-],
-"ebene": 1,
-"schwebend": true,
-"kein_schatten": true,
-"phase": 2
-},
-{
-"datei": "traum/27.png",
-"basis": "karte32/traum/27",
-"x": 1042,
-"y": 7,
-"fuss": 24,
-"kachel": [
-66,
-1
-],
-"ebene": 1,
-"schwebend": true,
-"kein_schatten": true,
-"phase": 0
-},
-{
 "datei": "traum/02.png",
 "basis": "karte32/traum/02",
-"x": 1078,
-"y": 311,
+"x": 982,
+"y": 71,
 "fuss": 24,
 "kachel": [
-68,
-20
+62,
+5
 ],
 "ebene": 1,
 "schwebend": true,
@@ -2641,36 +2584,6 @@
 "schwebend": true,
 "kein_schatten": true,
 "phase": 0
-},
-{
-"datei": "traum/05.png",
-"basis": "karte32/traum/05",
-"x": 977,
-"y": 67,
-"fuss": 28,
-"kachel": [
-61,
-5
-],
-"ebene": 1,
-"schwebend": true,
-"kein_schatten": true,
-"phase": 2
-},
-{
-"datei": "traum/63.png",
-"basis": "karte32/traum/63",
-"x": 1268,
-"y": 355,
-"fuss": 28,
-"kachel": [
-80,
-23
-],
-"ebene": 1,
-"schwebend": true,
-"kein_schatten": true,
-"phase": 2
 },
 {
 "datei": "traum/00.png",
@@ -2898,6 +2811,21 @@
 "phase": 1
 },
 {
+"datei": "traum/01.png",
+"basis": "karte32/traum/01",
+"x": 1074,
+"y": 307,
+"fuss": 28,
+"kachel": [
+68,
+20
+],
+"ebene": 1,
+"schwebend": true,
+"kein_schatten": true,
+"phase": 1
+},
+{
 "datei": "traum/54.png",
 "basis": "karte32/traum/54",
 "x": 21,
@@ -2928,19 +2856,49 @@
 "phase": 0
 },
 {
-"datei": "traum/54.png",
-"basis": "karte32/traum/54",
-"x": 1237,
-"y": 166,
-"fuss": 25,
+"datei": "traum/62.png",
+"basis": "karte32/traum/62",
+"x": 1270,
+"y": 355,
+"fuss": 28,
 "kachel": [
-78,
-11
+80,
+23
 ],
 "ebene": 1,
 "schwebend": true,
 "kein_schatten": true,
-"phase": 2
+"phase": 0
+},
+{
+"datei": "traum/47.png",
+"basis": "karte32/traum/47",
+"x": 86,
+"y": 5,
+"fuss": 26,
+"kachel": [
+6,
+1
+],
+"ebene": 1,
+"schwebend": true,
+"kein_schatten": true,
+"phase": 0
+},
+{
+"datei": "traum/03.png",
+"basis": "karte32/traum/03",
+"x": 1301,
+"y": 417,
+"fuss": 30,
+"kachel": [
+82,
+27
+],
+"ebene": 1,
+"schwebend": true,
+"kein_schatten": true,
+"phase": 1
 },
 {
 "datei": "traum/38.png",
@@ -2958,18 +2916,48 @@
 "phase": 2
 },
 {
-"datei": "traum/27.png",
-"basis": "karte32/traum/27",
-"x": 50,
-"y": 23,
-"fuss": 24,
+"datei": "traum/51.png",
+"basis": "karte32/traum/51",
+"x": 21,
+"y": 453,
+"fuss": 26,
 "kachel": [
-4,
-2
+2,
+29
 ],
 "ebene": 1,
 "schwebend": true,
 "kein_schatten": true,
 "phase": 2
+},
+{
+"datei": "traum/05.png",
+"basis": "karte32/traum/05",
+"x": 961,
+"y": 3,
+"fuss": 28,
+"kachel": [
+60,
+1
+],
+"ebene": 1,
+"schwebend": true,
+"kein_schatten": true,
+"phase": 2
+},
+{
+"datei": "traum/01.png",
+"basis": "karte32/traum/01",
+"x": 1138,
+"y": 275,
+"fuss": 28,
+"kachel": [
+72,
+18
+],
+"ebene": 1,
+"schwebend": true,
+"kein_schatten": true,
+"phase": 0
 }
 ]
