@@ -47,7 +47,7 @@ MAUER_DEKO = [                                                 # exakt spiegelsy
     ('k01/baum01', 43, 60, {'px': 45 * 16 - 23, 'py': 60 * 16 + 15, 'nur_blume': True}),  # links ein Baum statt Busch, ohne Fels (Nutzer)
     ('k01/deko25', 47, 60, {'an_wand': True, 'spiegeln': True}),
     ('k01/laterne', 27, 61, {'anim': 'laterne'}), ('k01/laterne', 63, 61, {'anim': 'laterne'}),
-    ('lager/banner', 34, 62, {'anim': 'fahne'}), ('lager/banner', 56, 62, {'anim': 'fahne', 'spiegeln': True}),
+    ('lager/banner', 34, 62, {'anim': 'standarte'}), ('lager/banner', 56, 62, {'anim': 'standarte', 'spiegeln': True}),
 ]
 # Lager unten auf dem Sand (Positionen nach der Vorlage, eher etwas weniger Kleinkram)
 FREMD.update({'k03/schild': 'karte03/klein/19.png', 'k04/zirkuszelt': 'karte04/zelte/00.png'})   # rundes Zelt (Nutzer)

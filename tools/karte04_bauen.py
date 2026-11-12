@@ -549,6 +549,8 @@ def objekte_zeichnen(img, objs, cache, boden, frame, ebenen=None):
             sp = baum_wind(sp, frame, o['x'] + o['y'] * 0.3)
         elif frame is not None and o.get('anim') == 'fahne':
             sp = fahne_wehen(sp, frame, o['x'] * 0.37)
+        elif frame is not None and o.get('anim') == 'standarte':
+            sp = standarte(sp, frame, o['x'] * 0.37)
         elif frame is not None and o.get('anim') == 'reaktor':
             sp = reaktor_ruetteln(sp, frame, o['x'])
         elif frame is not None and o.get('anim') in ('kerzen', 'feuer_kamin', 'feuer', 'feuer_lila'):
@@ -1031,6 +1033,41 @@ def fahne_wehen(sp, frame, phase=0.0):
             if 0 <= xn < a.shape[1]:
                 out[y, xn] = a[y, x]
     return Image.fromarray(np.clip(out, 0, 255).astype(np.uint8), 'RGBA')
+
+
+def standarte(sp, frame, phase=0.0):
+    """Haengendes Banner an Querstange (Standarte, Lagerbanner): nur das Tuch unter der Querstange schwingt -
+    Spitze, Querstange, Stange darunter und Fuss bleiben vollkommen ruhig (Regel "Wehen nur am beweglichen Teil").
+    Das Tuch wird zeilenweise als Ganzes (mit Motiv und Rand) verschoben: oben fest an der Stange, nach unten
+    zunehmend bis 1-2 px, so reisst weder Rand noch Wappen auseinander."""
+    a = np.array(sp.convert('RGBA'))
+    al = a[..., 3] > 0
+    breite = al.sum(1)
+    zeilen = np.nonzero(breite)[0]
+    if len(zeilen) < 8:
+        return sp
+    stange_b = int(np.percentile(breite[zeilen], 15))
+    q = int(np.argmax(breite[:len(breite) * 2 // 3]))             # Querstange = breiteste Zeile oben
+    while q + 1 < len(breite) and breite[q + 1] >= breite[q] - 2 and breite[q + 1] > stange_b + 4:
+        q += 1
+    t0 = q + 1
+    t1 = t0
+    while t1 + 1 < len(breite) and breite[t1 + 1] > stange_b + 1:
+        t1 += 1
+    if t1 - t0 < 4:
+        return sp
+    out = a.copy()
+    ph = 2 * math.pi * frame / N_FRAMES + phase
+    for y in range(t0, t1 + 1):
+        t = (y - t0) / (t1 - t0)
+        d = int(round(1.7 * t ** 1.6 * math.sin(ph - t * 1.2)))
+        if d:
+            out[y] = 0
+            if d > 0:
+                out[y, d:] = a[y, :-d]
+            else:
+                out[y, :d] = a[y, -d:]
+    return Image.fromarray(out, 'RGBA')
 
 
 def bodenwall(img, grund, o, sp):

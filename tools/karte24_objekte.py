@@ -86,7 +86,7 @@ def _p(name, dx, reihe, opt=None):                              # Paar spiegelsy
     return [(name, (AX - dx) / T, reihe, dict(o, px=AX - dx)), (name, (AX + dx) / T, reihe, dict(o, px=AX + dx, spiegeln=True))]
 SCHREIN_OBJ = (
     [(THRON, AX / T, 10, {'px': AX})]                           # Thron oben auf der Achse
-    + _p(BANNER, 96, 12, {'anim': 'fahne'}) + _p(BANNER, 96, 16, {'anim': 'fahne'})
+    + _p(BANNER, 96, 12, {'anim': 'standarte'}) + _p(BANNER, 96, 16, {'anim': 'standarte'})
     + _p(LATERNE, 40, 19, {'anim': 'lampe'})                    # Laternen links und rechts der Treppe
     + [(PULT, 75, 9, {}), (SAECKE, 65, 9, {})]
 )
@@ -97,7 +97,7 @@ def _pa(name, dx, reihe, opt=None):
 ARENA_OBJ = (                                                   # reduziert (Nutzer): Tuerme, je ein Banner und eine Laterne
     _pa(OBELISK, 128, 37)                                       # zwei Obelisken oben, spiegelsymmetrisch
     + _pa(LATERNE, 80, 35, {'anim': 'lampe'})                   # Laternen neben den Obelisken
-    + _pa(BANNER, 160, 41, {'anim': 'fahne'})                   # Banner an den Seiten
+    + _pa(BANNER, 160, 41, {'anim': 'standarte'})                   # Banner an den Seiten
 )
 GOLD, RUBIN, SAPHIR = 'loren/00', 'loren/01', 'loren/02'
 GL = 75                                                         # Gleisreihe (layout 'gleis')
