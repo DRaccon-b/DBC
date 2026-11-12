@@ -152,7 +152,7 @@ def gleis(a, x0, x1, y):
 
 def seilbahn(img, maste, cache, frame):
     """Seilbahn vom Schrein zu den Kraenen: Seil von Radmitte zu Radmitte (laeuft hinter dem unteren Mast),
-    zwei Gondeln haengen am Seil und fahren gegenlaeufig (4 Bilder). Kein Bodenschatten: die Gondeln haengen
+    zwei Gondeln haengen am Seil und wippen am Haken (Nutzer: nicht fahren, 4 Bilder). Kein Bodenschatten: die Gondeln haengen
     hoch ueber Fels und Canyon."""
     oben = [o for o in maste if o['seil'] == 'oben']
     unten = [o for o in maste if o['seil'] == 'unten']
@@ -172,9 +172,11 @@ def seilbahn(img, maste, cache, frame):
     gon = Image.open(os.path.join(OBJ, 'gondel', '00.png')).convert('RGBA')
     im = Image.fromarray(a).convert("RGBA")
     L = y1 - y0 - gon.height - 24
-    for i, f in enumerate((0.25, 0.62)):                              # gegenlaeufig, je 6 px pro Bild
-        gy = y0 + 12 + int(f * L) + (6 * frame if i == 0 else -6 * frame)
-        im.alpha_composite(gon, (cx - 11 + 1, gy))
+    for i, f in enumerate((0.25, 0.62)):                              # stehen still und wippen (Nutzer)
+        gy = y0 + 12 + int(f * L)
+        winkel = (0.0, 3.0, 0.0, -3.0)[(frame + 2 * i) % 4]
+        g = gon.rotate(winkel, resample=Image.NEAREST, center=(gon.width // 2, 0)) if winkel else gon
+        im.alpha_composite(g, (cx - 11 + 1, gy))
     img.paste(im.convert(img.mode))
 
 
@@ -224,7 +226,7 @@ SEIL_ENDE = (1600, 150)               # das Seil laeuft nach Nordosten aus der K
 
 def stahlseil(img, stationen, frame):
     """Stahlseil von der Bergstation nach Nordosten, daran eine grosse Gondel (Nutzer: lila). Das Seil haengt hoch
-    ueber dem Fels: kein Bodenschatten. Die Gondel faehrt je Bild ein Stueck das Seil hinauf (4 Bilder)."""
+    ueber dem Fels: kein Bodenschatten. Die Gondeln fahren nicht, sie wippen am Haken (Nutzer, 4 Bilder)."""
     if not stationen:
         return
     o = stationen[0]
@@ -238,10 +240,14 @@ def stahlseil(img, stationen, frame):
             a[y, x, :3] = (24, 28, 36); a[y, x + 1, :3] = (110, 120, 138); a[y, x + 2, :3] = (24, 28, 36)
     im = Image.fromarray(a).convert('RGBA')
     gon = Image.open(os.path.join(OBJ, 'gondel_gross', '00.png')).convert('RGBA')
-    for t0 in (0.32, 0.72):                                          # zwei Gondeln (Nutzer), fahren mit dem Seil
-        t = t0 + 0.02 * frame
+    ga = np.array(gon)[..., 3] > 0                                    # Haken = Mitte der obersten Pixelzeile
+    hy = int(np.nonzero(ga.any(1))[0][0]); hx = np.nonzero(ga[hy])[0]
+    HAKEN = (int(round(hx.mean())), hy)
+    for i, t in enumerate((0.32, 0.72)):                             # zwei Gondeln (Nutzer): stehen still und wippen
         gx, gy = x0 + (x1 - x0) * t, y0 + (y1 - y0) * t
-        im.alpha_composite(gon, (int(gx) - 32 + 1, int(gy) - 2))
+        winkel = (0.0, 2.5, 0.0, -2.5)[(frame + 2 * i) % 4]           # Schaukeln als Ganzes um den Haken am Seil
+        g = gon.rotate(winkel, resample=Image.NEAREST, center=(HAKEN[0], HAKEN[1])) if winkel else gon
+        im.alpha_composite(g, (int(gx) - HAKEN[0], int(gy) - HAKEN[1]))
     img.paste(im.convert(img.mode))
 
 
