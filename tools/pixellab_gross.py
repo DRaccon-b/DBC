@@ -326,6 +326,23 @@ AUFTRAEGE['k39_turm_c'] = dict(AUFTRAEGE['k39_turm'], ziel='assets/objekte/karte
          'rooftop equipment, a two-storey stone podium with a wide glass entrance at the bottom, grey base, daytime, clean '
          'crisp pixel art, light from the top left, sharp dark outlines, nothing touches the image border, ' + FR14)
 
+_BR = (' about 450 pixels wide, centered with an empty magenta margin of at least 24 pixels on all sides, clean crisp pixel '
+       'art matching a top-down Japanese city RPG map, light from the top left, sharp dark outlines, NO road, NO ground, '
+       'nothing touches the image border, ')
+AUFTRAEGE['k39_bruecke_d'] = dict(AUFTRAEGE['k39_bruecke'], ziel='assets/objekte/karte39/gross_bruecke_d',
+    groesse=(512, 192), text='Japanese pedestrian overpass seen from above in a top-down RPG view: a straight light grey '
+         'walkway deck crossing horizontally with teal steel railings on both long sides, at each end the deck turns into '
+         'a staircase that goes down towards the viewer, grey square columns visible under the deck,' + _BR + FR14)
+AUFTRAEGE['k39_bruecke_e'] = dict(AUFTRAEGE['k39_bruecke'], ziel='assets/objekte/karte39/gross_bruecke_e',
+    text='modern Shinjuku pedestrian bridge seen from the front and slightly above: a long horizontal walkway with a light '
+         'grey floor, a teal-green steel frame and light blue glass panels as railing, a small sign in the middle, two '
+         'pairs of slim teal columns, at both ends a straight staircase with teal railings goes diagonally down to the '
+         'ground, about 110 pixels tall,' + _BR + FR14)
+AUFTRAEGE['k39_bruecke_f'] = dict(AUFTRAEGE['k39_bruecke'], ziel='assets/objekte/karte39/gross_bruecke_f',
+    text='wide modern concrete pedestrian deck bridge seen from the front and slightly above: a broad light concrete '
+         'walkway with low parapet walls, small planters with green shrubs along the parapet, two thick rectangular '
+         'concrete piers, gentle ramps with railings down to the ground at both ends, about 110 pixels tall,' + _BR + FR14)
+
 
 def main(name):
     a = AUFTRAEGE[name]

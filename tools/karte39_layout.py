@@ -89,7 +89,8 @@ def main():
     C2, R2 = C + 2 * P, R + 2 * P
     k2 = np.full((R2, C2), 'h')
     k2[P:P + R, P:P + C] = k
-    tps = []
+    k2[19 + P:46 + P, 94 + P:97 + P] = 'g'                         # Hochhaus-Block Richtung Guertel erweitert (Gehweg
+    tps = []                                                        # links frei, kein kahler Grasstreifen rechts)
     for (art, i, seite) in AUSGAENGE:                              # Ausgaenge: Fahrbahn bis an den neuen Rand
         if art == 'h':
             y0_, y1_ = STRASSEN_H[i][0] + P, STRASSEN_H[i][1] + P

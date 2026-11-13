@@ -32,7 +32,7 @@ STADTBAUM = ['k01/baum%02d' % i for i in (0, 2, 4)]
 LAMPE = {'anim': 'leuchten', 'licht': [4, 7], 'licht_box': [2, 5, 6, 10], 'licht_r': 9}
 
 # (sprite, Mitte x Vorlagen-px, Fusszeile Vorlage)
-GEBAEUDE = [('gross/turm', 1404, 44), ('gross/buero_oben', 1297, 10), ('gross/buero_links', 192, 29),   # Gehwegreihe
+GEBAEUDE = [('gross/turm', 1439, 44), ('gross/buero_oben', 1297, 10), ('gross/buero_links', 192, 29),   # Gehwegreihe
             ('gross/buero_unten_links', 222, 75), ('gross/buero_unten', 750, 76)]                    # vor jeder Front
 RATHAUS_ACHSE = None                                              # aus der hellen Rathausflaeche berechnet
 BRUECKE = (465, 42)                                               # Mitte x, Fusszeile (ueber der linken Hauptstrasse)
@@ -71,6 +71,16 @@ def weiss_freistellen(quelle, ziel):
         if len(ys) >= 12:
             ar[ys, xs, 3] = 0
     im = Image.fromarray(ar.astype(np.uint8))
+    im.crop(im.getbbox()).save(os.path.join(OBJ, ziel))
+
+
+def magenta_umfaerben(quelle, ziel, farbe):
+    """Magenta-Reste der Freistellung (Gelaender) auf eine passende Farbe umfaerben, Helligkeit bleibt erhalten."""
+    a = np.array(Image.open(os.path.join(OBJ, quelle)).convert('RGBA')).astype(np.float32)
+    mg = (a[..., 3] > 0) & (a[..., 0] > 120) & (a[..., 2] > 120) & (a[..., 1] < a[..., 0] - 50)
+    hell = a[..., :3].max(-1) / 255.0
+    a[mg, :3] = np.clip(np.array(farbe, np.float32)[None] * (0.55 + 0.6 * hell[mg, None]), 0, 255)
+    im = Image.fromarray(a.astype(np.uint8))
     im.crop(im.getbbox()).save(os.path.join(OBJ, ziel))
 
 
@@ -125,7 +135,11 @@ def main():
     # Nutzer-Auswahl (Kandidaten neben der Vorlage gezeigt): Hochhaus C, Bruecke C, Rathaus B
     if os.path.exists(os.path.join(OBJ, 'gross_turm_c/00.png')):          # Glasfassade gleichfarbig bei y 164 / 264
         stockwerke_entfernen('gross_turm_c/00.png', 'gross/turm.png', 164, 1, 100)
-    if os.path.exists(os.path.join(OBJ, 'gross_bruecke_c/00.png')):
+    variante = os.environ.get('BRUECKE', 'd')                       # Nutzer: Varianten mit Bruecke D und F
+    if variante in ('d', 'f'):
+        magenta_umfaerben('gross_bruecke_%s/00.png' % variante, 'gross/bruecke.png',
+                          (52, 128, 124) if variante == 'd' else (196, 194, 186))
+    elif os.path.exists(os.path.join(OBJ, 'gross_bruecke_c/00.png')):
         weiss_freistellen('gross_bruecke_c/00.png', 'gross/bruecke.png')
     tps = [(t['x'] * T - 2 * T, t['y'] * T - 2 * T, (t['x'] + t['b'] + 2) * T, (t['y'] + t['h'] + 2) * T)
            for t in lay['teleporter']]
@@ -223,6 +237,14 @@ def main():
         kachel(n_, tx + P, ty + P, {})
     for (n_, cx, fy, sp) in AUTOS:                                 # Autos auf der Fahrbahn (Linksverkehr)
         setze(n_, cx + OFF, fy + OFF, {'nur_kontakt': True}, sp, art='auto', klassen='a')
+    tu = [o for o in objekte if o['basis'] == 'gross/turm']       # Hochhaus: Kuebelpaar an der Eingangsachse
+    if tu:
+        tw = Image.open(os.path.join(OBJ, tu[0]['datei'])).getbbox()
+        ax = tu[0]['x'] + (tw[0] + tw[2]) / 2.0
+        ft = tu[0]['y'] + tu[0]['fuss'] + 16
+        for d_ in (72, 80, 88):
+            if all(setze('platz/01', ax + s_ * d_, ft, {}, klassen='gkq') for s_ in (-1, 1)):
+                break
     # ---------------------------------------------------------------- Plaetze beleben (Nutzer: Karte etwas leer)
     gk = np.array([list(z) for z in cls])
 

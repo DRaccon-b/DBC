@@ -245,30 +245,45 @@ def plaetze_boden(a, kl, objs):
         sil[fuss + 6:] = 0
         sil = np.array(Image.fromarray((sil * 255).astype(np.uint8)).filter(ImageFilter.GaussianBlur(5))).astype(np.float32) / 255
         a[:] = np.clip(a * (1 - 0.22 * sil[..., None]), 0, 255).astype(np.uint8)
-        # Treppenabsaetze: Granit-Podest unter beiden Treppenfuessen (Breite des Treppenlaufs)
-        unten = al[h_ - 4:].any(0)
-        laeufe, xg = [], 0
+        # Treppen-/Rampenfuesse: unterster deckender Punkt in den aeussersten 24 Spalten links und rechts
+        for (c0, c1) in ((0, 24), (w_ - 24, w_)):
+            sp_ = al[:, c0:c1]
+            ys_e = np.nonzero(sp_.any(1))[0]
+            yb = ys_e.max()
+            xs_e = np.nonzero(sp_[yb - 3:yb + 1].any(0))[0] + c0
+            fx0, fx1 = X + xs_e.min(), X + xs_e.max() + 1
+            fy_ = Y + yb
+            m = (xx >= fx0 - 10) & (xx < fx1 + 10) & (yy >= fy_ - 8) & (yy < fy_ + 24) & erlaubt
+            a[m] = (178, 174, 164)
+            a[m & ((xx - fx0) % 24 == 0)] = (150, 146, 138)
+            kante(m)
+        unten = al[h_ - 4:].any(0)                                # Stuetzen/Pfeiler: Kontaktschatten am Fuss
+        xg = 0
         while xg < w_:
             if unten[xg]:
                 e = xg
                 while e < w_ and unten[e]:
                     e += 1
-                laeufe.append((xg, e)); xg = e
+                if xg > 24 and e < w_ - 24:
+                    sm = (xx >= X + xg - 1) & (xx < X + e + 4) & (yy > fuss) & (yy <= fuss + 4)
+                    a[sm] = (a[sm] * 0.72).astype(np.uint8)
+                xg = e
             else:
                 xg += 1
-        for i_, (l0, l1) in enumerate(laeufe):
-            if i_ in (0, len(laeufe) - 1):                        # Treppenfuesse (erster/letzter Lauf am Rand)
-                m = (xx >= X + l0 - 10) & (xx < X + l1 + 10) & (yy >= fuss - 8) & (yy < fuss + 24) & erlaubt
-                a[m] = (178, 174, 164)
-                a[m & ((xx - X - l0) % 24 == 0)] = (150, 146, 138)
-                kante(m)
-            else:                                                 # Stuetze: Betonfundament mit Kontaktschatten
-                cx_ = X + (l0 + l1) // 2
-                m = (np.abs(xx - cx_) <= 6) & (yy >= fuss - 3) & (yy <= fuss + 2)
-                a[m] = (120, 122, 126)
-                a[m & (yy == fuss - 3)] = (156, 158, 162)
-                sm = (np.abs(xx - cx_ - 2) <= 8) & (yy > fuss + 2) & (yy <= fuss + 4)
-                a[sm] = (a[sm] * 0.75).astype(np.uint8)
+    for o in box('gross/turm'):                                   # Hochhaus: Sockelschatten + Granit-Vorplatz am Eingang
+        al = np.array(Image.open(os.path.join(OBJ, o['datei'])).convert('RGBA'))[..., 3] > 0
+        bb_ = Image.fromarray(al.astype(np.uint8) * 255).getbbox()
+        x0, x1 = o['x'] + bb_[0], o['x'] + bb_[2]
+        fuss = o['y'] + o['fuss']
+        ax = (x0 + x1) // 2
+        m = (xx >= ax - 64) & (xx < ax + 64) & (yy > fuss - 4) & (yy <= fuss + 16) & erlaubt
+        a[m] = (178, 174, 164)
+        a[m & ((xx - ax) % 32 == 0)] = (150, 146, 138)
+        kante(m)
+        sm = (xx >= x0 - 2) & (xx < x1 + 4) & (yy > fuss) & (yy <= fuss + 3) & erlaubt
+        a[sm] = (a[sm] * 0.8).astype(np.uint8)
+        rs_ = (xx >= x1) & (xx < x1 + 5) & (yy >= o['y'] + bb_[1] + 20) & (yy <= fuss) & erlaubt   # Schatten rechts
+        a[rs_] = (a[rs_] * 0.82).astype(np.uint8)
     for o in box('k38/kiosk'):                                    # Pflasterflaeche am Kiosk
         m = (xx >= o['x'] - 10) & (xx < o['x'] + 86) & (yy >= o['y'] + o['fuss'] - 24) & (yy < o['y'] + o['fuss'] + 16)
         m &= erlaubt
