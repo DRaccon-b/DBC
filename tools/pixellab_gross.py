@@ -235,6 +235,10 @@ for _v in ('d', 'e'):                                                           
         'outline on the outer side, the roof eave wraps cleanly around both upper corners, the base plinth ends cleanly '
         'at both sides, nothing touches the image border.')
 
+for _v in ('f', 'g'):                                                           # Leinwand 456: fuellt fast ganz -> ~450 px breit
+    AUFTRAEGE['k35_buero_mitte_' + _v] = dict(AUFTRAEGE['k35_buero_mitte_b'], ziel='assets/objekte/karte35/gross_buero_mitte_' + _v,
+        groesse=(456, 200))
+
 
 def main(name):
     a = AUFTRAEGE[name]
