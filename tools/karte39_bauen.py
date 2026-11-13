@@ -232,6 +232,43 @@ def plaetze_boden(a, kl, objs):
         a[m] = (190, 186, 176)
         a[m & ((xx - cx) % 32 == 0)] = (160, 156, 148)
         kante(m)
+    for o in box('gross/bruecke'):                                # Bruecke in den Boden einbinden (Nutzer: Uebergang hart)
+        al = np.array(Image.open(os.path.join(OBJ, o['datei'])).convert('RGBA'))[..., 3] > 0
+        h_, w_ = al.shape
+        X, Y = o['x'], o['y']
+        fuss = Y + h_ - 1
+        # weicher Schatten der Bruecke: Silhouette nach unten auf den Boden gelegt (Deck ~60 px hoch), stark verwischt
+        sil = np.zeros((Hh, W), np.float32)
+        ys_, xs_ = np.nonzero(al)
+        ty_ = np.clip(ys_ + Y + 44, 0, Hh - 1); tx_ = np.clip(xs_ + X + 8, 0, W - 1)
+        sil[ty_, tx_] = 1.0
+        sil[fuss + 6:] = 0
+        sil = np.array(Image.fromarray((sil * 255).astype(np.uint8)).filter(ImageFilter.GaussianBlur(5))).astype(np.float32) / 255
+        a[:] = np.clip(a * (1 - 0.22 * sil[..., None]), 0, 255).astype(np.uint8)
+        # Treppenabsaetze: Granit-Podest unter beiden Treppenfuessen (Breite des Treppenlaufs)
+        unten = al[h_ - 4:].any(0)
+        laeufe, xg = [], 0
+        while xg < w_:
+            if unten[xg]:
+                e = xg
+                while e < w_ and unten[e]:
+                    e += 1
+                laeufe.append((xg, e)); xg = e
+            else:
+                xg += 1
+        for i_, (l0, l1) in enumerate(laeufe):
+            if i_ in (0, len(laeufe) - 1):                        # Treppenfuesse (erster/letzter Lauf am Rand)
+                m = (xx >= X + l0 - 10) & (xx < X + l1 + 10) & (yy >= fuss - 8) & (yy < fuss + 24) & erlaubt
+                a[m] = (178, 174, 164)
+                a[m & ((xx - X - l0) % 24 == 0)] = (150, 146, 138)
+                kante(m)
+            else:                                                 # Stuetze: Betonfundament mit Kontaktschatten
+                cx_ = X + (l0 + l1) // 2
+                m = (np.abs(xx - cx_) <= 6) & (yy >= fuss - 3) & (yy <= fuss + 2)
+                a[m] = (120, 122, 126)
+                a[m & (yy == fuss - 3)] = (156, 158, 162)
+                sm = (np.abs(xx - cx_ - 2) <= 8) & (yy > fuss + 2) & (yy <= fuss + 4)
+                a[sm] = (a[sm] * 0.75).astype(np.uint8)
     for o in box('k38/kiosk'):                                    # Pflasterflaeche am Kiosk
         m = (xx >= o['x'] - 10) & (xx < o['x'] + 86) & (yy >= o['y'] + o['fuss'] - 24) & (yy < o['y'] + o['fuss'] + 16)
         m &= erlaubt
