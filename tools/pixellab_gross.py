@@ -270,6 +270,35 @@ AUFTRAEGE['k36_lila_halb_b'] = dict(AUFTRAEGE['k36_lila_halb'], ziel='assets/obj
     groesse=(160, 200), text=AUFTRAEGE['k36_lila_halb']['text'] + ' The complete roof edge is visible at the top and the '
     'complete grey base plinth at the bottom, with empty magenta space above the roof and below the base.')
 
+# ---- A03 Karte 39 West Shinjuku Siege
+_V39 = 'assets/vorlagen/karte39_vorlage.png'
+AUFTRAEGE['k39_turm'] = {'ziel': 'assets/objekte/karte39/gross_turm', 'groesse': (240, 512), 'magenta': True,
+    'vorlage': (_V39, (1320, 300, 1500, 740)), 'stil': 'assets/objekte/karte35/wohnblock_b/00.png',
+    'text': 'tall modern Tokyo glass office tower, about 165 pixels wide and 430 pixels tall, centered with an empty '
+            'magenta margin of at least 30 pixels on all sides: a light grey flat roof with a parapet and one rooftop '
+            'unit visible from slightly above at the top, ten storeys of dark steel-blue glass window bands with light '
+            'concrete floor slabs and corner pillars, a two-storey lobby at the bottom with a lavender band and a glass '
+            'entrance door in the middle, grey base plinth, daytime, clean crisp pixel art, light from the top left, '
+            'sharp dark outlines, both corner pillars complete with dark outline, nothing touches the image border, ' + FR14}
+AUFTRAEGE['k39_bruecke'] = {'ziel': 'assets/objekte/karte39/gross_bruecke', 'groesse': (512, 176), 'magenta': True,
+    'vorlage': (_V39, (232, 570, 700, 700)), 'stil': 'assets/objekte/karte35/bruecke_a/00.png',
+    'text': 'long Japanese pedestrian overpass seen from the side and slightly above, about 450 pixels wide and 110 '
+            'pixels tall, centered with an empty magenta margin of at least 24 pixels on all sides: a straight flat deck '
+            'with teal steel railings in the middle on four slim grey pillars, a small white sign in the middle of the '
+            'deck, a long diagonal staircase with teal railings going down at the left end and another one at the '
+            'right end, light grey deck surface, clean crisp pixel art, light from the top left, sharp dark outlines, '
+            'NO road, NO ground, nothing touches the image border, ' + FR14}
+
+for _v, _gr in (('', (176, 144)), ('_b', (176, 160))):
+    AUFTRAEGE['k39_beige_flach_halb' + _v] = {'ziel': 'assets/objekte/karte39/gross_beige_flach_halb' + _v, 'groesse': _gr,
+        'magenta': True, 'vorlage': (_V39, (1150, 60, 1300, 186)), 'stil': 'assets/objekte/karte35/wohnblock_b/00.png',
+        'text': 'long two-storey Tokyo office building: a light grey flat roof band with a parapet and one small rooftop '
+                'unit visible from slightly above, an upper floor with a warm beige facade and a row of tall narrow windows '
+                'with white frames, a dark blue glass ground floor shop front with thin mullions, light end pillar, '
+                + _HALB + ' Tokyo daytime, clean crisp pixel art, light from the top left, sharp dark outlines, The '
+                'complete roof edge is visible at the top and the complete grey base plinth at the bottom, with empty '
+                'magenta space above the roof and below the base, ' + FR14}
+
 
 def main(name):
     a = AUFTRAEGE[name]

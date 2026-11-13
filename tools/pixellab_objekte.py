@@ -2085,6 +2085,17 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'coiled black electric cable lying flat on the floor, seen from above, ' + FR14,
         'small square grey metal roof access hatch with a handle, flat on the floor, seen from above, ' + FR14,
     ]},
+    # ---- A03 Karte 39 West Shinjuku Siege
+    'k39_rathaus': {'size': 256, 'freie_farben': True, 'items': [
+        'grand Tokyo city hall: two tall identical square towers side by side with a clock near the top of each tower, '
+        'cream stone facades with deep vertical window grids, a lower central block between the towers with a wide '
+        'columned entrance and stairs, symmetrical, seen from the front and slightly above, fully in frame, ' + FR14,
+    ]},
+    'k39_rathaus_b': {'size': 256, 'freie_farben': True, 'items': [
+        'monumental symmetrical twin-tower government building: two tall beige stone towers with clocks and dark blue '
+        'window grids, connected by a lower central hall with a broad entrance stair and pillars, flat roofs visible '
+        'from slightly above, fully in frame, ' + FR14,
+    ]},
     # ---- A03 Karte 38 Deva Transit (Bahnhof)
     'k38_bahnhof_glas': {'size': 192, 'freie_farben': True, 'items': [
         'modern two-storey train station building, wider than tall: a flat light grey roof band with a thin parapet seen '
