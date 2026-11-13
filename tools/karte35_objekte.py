@@ -75,7 +75,7 @@ def halb_gespiegelt(quelle, ziel, breite_halb, eingang=True):
     va[unten + 1:] = 0
     voll = Image.fromarray(va).crop((0, 0, voll.width, unten + 1))
     if eingang:                                                  # Eingang mittig im Erdgeschoss (wie Glasbuero Mitte)
-        tuer = Image.open(os.path.join(OBJ, 'gross_buero_mitte/00.png')).convert('RGBA').crop((170, 136, 248, 181))
+        tuer = Image.open(os.path.join(OBJ, 'gross_buero_mitte/00.png')).convert('RGBA').crop((170, 136, 248, 180))   # ohne Umrisszeile darunter (lose Pixel)
         voll.alpha_composite(tuer, (voll.width // 2 - tuer.width // 2, voll.height - tuer.height))
     os.makedirs(os.path.dirname(os.path.join(OBJ, ziel)), exist_ok=True)
     voll.save(os.path.join(OBJ, ziel))
@@ -158,14 +158,14 @@ def main():
 
     # ---------------------------------------------------------------- Gebaeude und Bruecke
     for (name, cx, fy, sp) in GEBAEUDE:
-        if not setze(name, cx, fy * T + T - 1, {'gebaeude': True}, sp, 'gebaeude'):
+        if not setze(name, cx, fy * T + T - 1, {'gebaeude': True, 'ohne_wall': True}, sp, 'gebaeude'):
             print('Gebaeude ueberlappt:', name)
     n_, cx, fy = BRUECKE
     if not setze(n_, cx, fy * T + T - 1, {'gebaeude': True}, False, 'gebaeude'):
         print('Bruecke nicht gesetzt')
     # ---------------------------------------------------------------- Strassenbaeume mit Bueschen an den Stammecken
     for i, (tx, ty) in enumerate(BAEUME):
-        if kachel('k01/baum%02d' % (i % 3), tx, ty, {'anim': 'baum'}, i % 2 == 1, 'baum', 'n'):
+        if kachel('k01/baum%02d' % (i % 3), tx, ty, {'anim': 'baum', 'ohne_wall': True}, i % 2 == 1, 'baum', 'n'):
             b = objekte[-1]
             seite = 1 if i % 2 else -1
             bb_ = Image.open(os.path.join(OBJ, b['datei'])).getbbox()
@@ -173,7 +173,7 @@ def main():
             bx = int(mitte + seite * 17)                          # Busch an der Stammecke (gewollte Ueberdeckung)
             fy_b = b['y'] + bb_[3] - 1
             if all(k(xx // T, fy_b // T) == 'n' for xx in (bx - 12, bx + 12)):
-                setze('k01/deko%02d' % (25, 26)[i % 2], bx, fy_b - 1, {'anim': 'wehen', 'nur_kontakt': True}, i % 3 == 0,
+                setze('k01/deko%02d' % (25, 26)[i % 2], bx, fy_b - 1, {'anim': 'wehen', 'nur_kontakt': True, 'ohne_wall': True}, i % 3 == 0,
                       'klein', pruefen=False)
     # ---------------------------------------------------------------- Strassenmoebel (sparsam, Vorlage)
     for (tx, ty) in LATERNEN:
@@ -201,7 +201,7 @@ def main():
         if any(abs(tx - x) < 12 and abs(ty - y) < 4 and m == motiv for (x, y, m) in gesetzt_m):
             continue                                              # gleiches Motiv nicht auf demselben Streifen
         if setze('k01/deko%02d' % motiv, tx * T + rnd.randint(5, 11), ty * T + 11,
-                 {'anim': 'wehen', 'nur_kontakt': True}, rnd.random() < 0.5, 'klein'):
+                 {'anim': 'wehen', 'nur_kontakt': True, 'ohne_wall': True}, rnd.random() < 0.5, 'klein'):
             gesetzt_m.append((tx, ty, motiv))
             gesetzt.append((tx, ty))
     MUELL = sorted(f[:-4] for f in os.listdir(os.path.join(OBJ, 'muell_klein')) if f.endswith('.png') and not f.endswith('_m.png'))

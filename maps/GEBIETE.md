@@ -36,7 +36,7 @@ Aufstellfelds (cyan = Ankunft, gold = weiter; Funktion `pfeil_marke` in `tools/k
 |---|---|---|
 | … | Karten folgen (Skill `neue-karte`) | – |
 | 1 | Karte 34 – Shinjuku Central Park | v1.0 fertig (3 Agenten-Prüfrunden), ZIP in maps/karte34/v1.0 |
-| 2 | Karte 35 – Shinjuku Digital Fog | in Arbeit (Vorbild karte31) |
+| 2 | Karte 35 – Shinjuku Digital Fog | v1.0 fertig (3 Agenten-Prüfrunden), ZIP in maps/karte35/v1.0 |
 
 ## A0S – Sondergebiet
 | Nr. | Karte | Stand |

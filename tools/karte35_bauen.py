@@ -57,7 +57,7 @@ def markierungen(a, kl, lay):
     roh = a.copy()
     _markierungen(a, kl, lay)
     gelb = np.all(a == GELB, axis=-1) & ~np.all(roh == GELB, axis=-1)
-    rest = gelb & ~k4.splitter_weg(gelb, 10)
+    rest = gelb & ~k4.splitter_weg(gelb, 14)                          # auch 2x6-Stummel vor Zebrastreifen
     a[rest] = roh[rest]
 
 

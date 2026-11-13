@@ -63,7 +63,7 @@ def main():
     k[70:74, 19:27] = 'n'
     # Gruenstreifen an die (hoeheren) Gebaeude angepasst (Regel: Karte passt sich dem Gebaeude an):
     k[9:12, 44:70][k[9:12, 44:70] == 'n'] = 'g'                      # oben: Beete vor dem Glasbuero eine Reihe tiefer
-    k[12:14, 47:54] = 'n'; k[12:14, 57:67] = 'n'
+    k[12:14, 47:51] = 'n'; k[12:14, 55:67] = 'n'                      # Luecke 51-54 genau vor der Tuer (Achse 848)
     k[22:26, 4:27][k[22:26, 4:27] == 'n'] = 'g'                      # links: Tuerme hoeher -> kleines Beet zwischen
     k[21:23, 14:17] = 'n'                                              # den Tuermen statt Streifen davor
     k[1, 2:94] = 'g'                                                   # oberste Stadtreihe: Gehweg hinter den Tuermen
@@ -79,7 +79,7 @@ def main():
         k[y:y + h, x:x + b] = 'e'
     lay = {'groesse': [C, R], 'klassen': [''.join(z) for z in k], 'hoehe': ['1' * C for _ in range(R)],
            'teleporter': [{'x': x, 'y': y, 'b': b, 'h': h} for (x, y, b, h) in AUSGAENGE],
-           'zebra': [[x0, x1, y0, y1, 'h'] for (x0, x1, y0, y1) in ZEBRA], 'gebaeude': GEBAEUDE, 'bruecke': BRUECKE,
+           'zebra': [[x0, x1, y0, y1, 'h'] for (x0, x1, y0, y1) in ZEBRA], 'gebaeude_flaechen': GEBAEUDE, 'fussgaengerbruecke': BRUECKE,
            'stadt': STADT}
     os.makedirs(KARTE, exist_ok=True)
     json.dump(lay, open(os.path.join(KARTE, 'layout.json'), 'w'), indent=0)

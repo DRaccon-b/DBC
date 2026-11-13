@@ -575,7 +575,7 @@ def objekte_zeichnen(img, objs, cache, boden, frame, ebenen=None):
         if frame is not None and o.get('anim') == 'blume':
             bluete_puls(img, o, sp, frame)
         if not o['basis'].startswith(('rand/', 'klein/0', 'klein/1', 'klein/2', 'klein/5')) and not o.get('an_wand') \
-                and not o.get('schwebend'):
+                and not o.get('schwebend') and not o.get('ohne_wall'):
             bodenwall(img, grund, o, cache[o['datei']])     # Wandobjekte (Fenster, Banner ...) stehen nicht am Boden
 
 
