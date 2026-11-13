@@ -2065,6 +2065,19 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'surreal lone wooden door standing in nothing, half open with a starry night sky inside, dreamlike, classic 2D handheld RPG style, transparent background',
         'surreal porcelain teacup tilted in the air pouring out a swirling purple galaxy instead of tea, dreamlike, classic 2D handheld RPG style, transparent background',
     ]},
+    # ---- Karte 35: Fussgaengerbruecke neu (Nutzer: mit PixelLab, Draufsicht wie die Vorlage)
+    'k35_bruecke_a': {'size': 224, 'freie_farben': True, 'items': [
+        'pedestrian overpass footbridge over a city street, top-down RPG view from above and slightly from the front, NOT a side view: a straight horizontal concrete deck with a yellow walkway surface and bright blue steel railings along its back and front edge, at BOTH ends a straight staircase going straight DOWN towards the viewer (south), the steps seen from above as horizontal stripes with yellow step edges, blue railings on both sides of each staircase, under the deck only two thick grey concrete pillars at the left and right end of the deck (none in the middle), the whole bridge about two and a half times as wide as tall, fully in frame, ' + FR14,
+    ]},
+    'k35_bruecke_b': {'size': 224, 'freie_farben': True, 'items': [
+        'clean light grey concrete, ' + 'pedestrian overpass footbridge over a city street, top-down RPG view from above and slightly from the front, NOT a side view: a straight horizontal concrete deck with a yellow walkway surface and bright blue steel railings along its back and front edge, at BOTH ends a straight staircase going straight DOWN towards the viewer (south), the steps seen from above as horizontal stripes with yellow step edges, blue railings on both sides of each staircase, under the deck only two thick grey concrete pillars at the left and right end of the deck (none in the middle), the whole bridge about two and a half times as wide as tall, fully in frame, ' + FR14,
+    ]},
+    'k35_bruecke_c': {'size': 224, 'freie_farben': True, 'items': [
+        'slightly weathered concrete with a few stains, ' + 'pedestrian overpass footbridge over a city street, top-down RPG view from above and slightly from the front, NOT a side view: a straight horizontal concrete deck with a yellow walkway surface and bright blue steel railings along its back and front edge, at BOTH ends a straight staircase going straight DOWN towards the viewer (south), the steps seen from above as horizontal stripes with yellow step edges, blue railings on both sides of each staircase, under the deck only two thick grey concrete pillars at the left and right end of the deck (none in the middle), the whole bridge about two and a half times as wide as tall, fully in frame, ' + FR14,
+    ]},
+    'k35_bruecke_d': {'size': 224, 'freie_farben': True, 'items': [
+        'the stairs are long and the deck is short, ' + 'pedestrian overpass footbridge over a city street, top-down RPG view from above and slightly from the front, NOT a side view: a straight horizontal concrete deck with a yellow walkway surface and bright blue steel railings along its back and front edge, at BOTH ends a straight staircase going straight DOWN towards the viewer (south), the steps seen from above as horizontal stripes with yellow step edges, blue railings on both sides of each staircase, under the deck only two thick grey concrete pillars at the left and right end of the deck (none in the middle), the whole bridge about two and a half times as wide as tall, fully in frame, ' + FR14,
+    ]},
     # ---- A03 Karte 35 Shinjuku Digital Fog
     'k35_wohnblock_a': {'size': 256, 'freie_farben': True, 'items': [
         'wide three-storey Japanese apartment building, about one and a half times as wide as tall: a light grey flat roof '
