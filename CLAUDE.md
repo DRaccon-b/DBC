@@ -277,6 +277,15 @@ Vor jeder Abgabe Punkt für Punkt prüfen (vergrößert, Standbild und mehrere A
   16-Bilder-GIF mit gemeinsamer Palette (sonst flackern Asphalt und Fassaden). Krater/Furchen als Bodenobjekt (zuerst
   gezeichnet, schattenlos, gesperrt); verlängern durch Wiederholen des Mittelteils an einer nahtlosen Stelle; Baumgürtel
   gegen die echten Kraterpixel prüfen (nur der Fuß), damit keine kahle Lücke neben der Furche bleibt.
+- **Wüste mit Plateaus (Karte 41):** Felsfronten der Vorlage gehören auf Bodenhöhe unter die Plateaukante (bauen zeichnet sie);
+  kleine Plateauflächen mit Front darunter sind echte Grate und werden nicht weggeglättet. Zipfel/Inseln aller Bodenklassen
+  (Kachel mit ≤ 1 gleichen Nachbarn, Flecken < 6 Kacheln) nach jeder Glättung erneut angleichen; Grasring um Teiche mind.
+  2 Kacheln. Teleporter gehören zur Fläche des umgebenden Bodens (sonst bleibt an der Plateauecke ein Sandkeil). Felsfronten
+  in `pixelhoehe` als Wand (9) speichern, sonst sind sie in der Kollision begehbar. Begleiter nach 5d mit eigenen 2 Kacheln
+  hohen Sprites, abwechselnd vor dem Stumpf/hinter der Krone/seitlich, Motive ohne Wiederholung; tote Bäume (ohne Krone)
+  bekommen keinen Fels „hinter den Blättern“; Sperrzone um jeden Stumpf für alle übrigen Objekte. Sprites, deren Halme tiefer
+  reichen als der Körper, schweben (Schatten an den Halmen) – ersetzen. Paare mit Objekt dazwischen: gemeinsame Fußzeile und
+  Achse, bei Platzmangel die Achse verschieben statt einzeln suchen.
 - **Begleiter am Stumpf (5d):** keine 1-Kachel-Blumen auf dem Stumpf, kein Blumenklumpen; Begleiter überlappen sich nicht.
 - **Paare/Achsen:** Paare vor Toren/Bauwerken exakt gespiegelt (Mitte und Fuß), gleiche Objekte auf gleicher Höhe;
   Druckplatten, Obelisken usw. symmetrisch zur berechneten Achse.

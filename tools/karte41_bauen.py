@@ -65,7 +65,7 @@ def bauen(frame=None, speichern=True):
     tex = texturen(cols, rows)
     a = tex['s'].copy()
     for art, blur, seed in (('b', 5.0, 3), ('d', 5.0, 4), ('k', 4.0, 5), ('n', 4.0, 6)):
-        m = weich(zell_maske(cls, art + ('xT' if art == 'n' else ''), cols, rows), blur, 0, seed)
+        m = weich(zell_maske(cls, art + ('xT' if art == 'n' else 'T' if art == 'b' else ''), cols, rows), blur, 0, seed)
         if art == 'b':                                               # Windbahnen: leichter dunkler Saum
             saum = weich(zell_maske(cls, 'b', cols, rows), blur, 0, seed, 0.36) & ~m
             a[saum] = (a[saum] * 0.95).astype(np.uint8)
@@ -93,6 +93,7 @@ def bauen(frame=None, speichern=True):
         k4.teleporter_zeichnen(a, tp['x'], tp['y'], tp['b'], tp['h'], frame)
     img = Image.fromarray(a).convert('RGBA')
     lvl = hp.astype(np.uint8) + 1
+    lvl[wand] = 9                                                    # Felsfront = Wand (Kollision, Schatten)
     if speichern and frame is None:
         img.save(os.path.join(KARTE, 'terrain_basis.png'))
         np.save(os.path.join(KARTE, 'pixelhoehe.npy'), lvl)

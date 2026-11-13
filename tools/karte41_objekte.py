@@ -19,7 +19,8 @@ OBJ = os.path.join(ROOT, 'assets', 'objekte', 'karte41')
 T = 16
 FREMD = {
     'akazie': 'karte04/baeume/00.png', 'akazie_klein': 'karte04/baeume/03.png', 'totbaum': 'karte04/baeume/02.png',
-    'felsen': 'karte04/baeume/08.png', 'fels_sand': 'karte03/mittel/07.png', 'fels_grau': 'karte04/mittel/00.png',
+    'felsen': 'karte41/begleiter/58.png',   # K04-Fels schwebte (Halme unter dem Fuss) -> PixelLab-Fels
+    'fels_sand': 'karte03/mittel/07.png', 'fels_grau': 'karte04/mittel/00.png',
     'skelett': 'karte03/mittel/06.png', 'knochen': 'karte04/mittel/08.png', 'schaedel': 'karte04/mittel/09.png',
     'busch_tot': 'karte04/mittel/10.png', 'steinhaufen': 'karte04/mittel/15.png',
     'banner': 'karte03/mittel3/01.png', 'laubbaum': 'karte01/baeume/00.png',
@@ -177,13 +178,17 @@ def main():
                        for d in (24, 32))
         def seitlich(sd):
             return any(setze(naechster('b'), sx + sd * d, sy + dy, {'begleiter': True, 'ebene': 0}, sd > 0, kl)
-                       for d in (40, 48, 56) for dy in (0, T))
+                       for d in (40, 48, 56, 64) for dy in (0, T, -T))
         nah = sum(1 for (_, _, _, _, _, x2, y2) in gesetzte_baeume if (x2, y2) != (sx, sy)
                   and abs(x2 - sx) < 6 * T and abs(y2 - sy) < 5 * T)
         soll = 1 if nah else 2
-        plan = [[vor, lambda: seitlich(-seite)], [lambda: hinter(seite), lambda: seitlich(-seite)],
-                [vor, lambda: hinter(-seite)]][i % 3]
-        ersatz = [lambda: hinter(-seite), lambda: hinter(seite), lambda: seitlich(seite), lambda: seitlich(-seite), vor]
+        if n == 'totbaum':                                            # ohne Krone: kein Fels 'hinter den Blaettern'
+            plan = [vor, lambda: seitlich(-seite)]
+            ersatz = [lambda: seitlich(seite), vor]
+        else:
+            plan = [[vor, lambda: seitlich(-seite)], [lambda: hinter(seite), lambda: seitlich(-seite)],
+                    [vor, lambda: hinter(-seite)]][i % 3]
+            ersatz = [lambda: hinter(-seite), lambda: hinter(seite), lambda: seitlich(seite), lambda: seitlich(-seite), vor]
         hat = 0
         for f_ in plan + ersatz:
             if hat >= soll and f_ not in plan:
