@@ -31,7 +31,7 @@ AUTOMAT = {'anim': 'leuchten', 'licht_box': [3, 3, 17, 18], 'licht_r': 7}
 GEBAEUDE = [('bahnhof_glas/00', 152, 14), ('bahnhof_glas_b/01', 160, 42), ('bahnhof_beige/00', 1376, 70)]
 # Wartehaeuschen (Mitte x Vorlagen-px, Fusszeile) - Bahnsteige oben und Mitte wie in der Vorlage
 UNTERSTAENDE = [(560, 23), (1055, 23), (575, 47), (1100, 47)]
-TREPPEN = [('treppe/00', 76 * 16 + 8, 13), ('treppe_breit/00', 87 * 16 + 8, 21), ('treppe/00', 12 * 16 + 8, 61),
+TREPPEN = [('treppe/01', 76 * 16 + 8, 13), ('treppe_breit/00', 87 * 16 + 8, 22), ('treppe/01', 12 * 16 + 8, 61),
            ('treppe_schmal/01', 17 * 16 + 16, 13)]   # breite offene Treppe oben rechts (vor dem mittleren Bahnhof: Eingang frei)   # (sprite, Mitte x px, Fusszeile)
 # Poller-Paare mit Verbotsschild genau auf ihrer Achse (Vorlage): (Kachel links, Kachel rechts, Fusszeile)
 POLLER = [(43, 47, 13), (54, 58, 73), (33, 37, 73)]
@@ -43,7 +43,7 @@ KLEIN = [
     ('klein/02', 47, 17, {}), ('klein/02', 74, 17, {}), ('klein/01', 79, 21, {}),
     ('k18s/18', 41, 21, LAMPE), ('k18s/18', 72, 21, LAMPE), ('klein/03', 17, 6, {'liegend': True, 'schattenlos': True}),
     ('klein/03', 78, 6, {'liegend': True, 'schattenlos': True}), 
-    ('k18s/00', 28, 35, {}), ('k18s/01', 17, 36, {}), ('k18s/42', 82, 45, {}),
+    ('k18s/12', 8, 47, {}), ('k18s/00', 28, 35, {}), ('k18s/01', 17, 36, {}), ('k18s/42', 82, 45, {}),
     ('klein/09', 19, 38, {}), ('klein/09', 77, 36, {}), ('k18s/12', 22, 38, {}), ('k18s/12', 80, 36, {}),
     ('klein/02', 24, 42, {}), ('klein/02', 47, 42, {}), ('klein/02', 75, 42, {}),
     ('k18s/18', 26, 45, LAMPE), ('k18s/18', 57, 45, LAMPE), ('klein/01', 16, 33, {}),
@@ -150,11 +150,12 @@ def main():
                      pruefen=False):
             print('Gebaeude nicht gesetzt:', name)
     for i, (cx, fy) in enumerate(UNTERSTAENDE):
-        o = setze('unterstand/00', cx + OFF, (fy + P) * T + T - 1, {'gebaeude': True, 'nur_kontakt': True}, art='gebaeude')
+        cx = int(cx // T) * T + 8                                   # 144 px = 9 Kacheln: linke Kante auf dem Raster
+        o = setze('unterstand/00', cx + OFF, (fy + P) * T + T - 1, {'gebaeude': True, 'schattenlos': True}, art='gebaeude')
         if not o:
             print('Unterstand nicht gesetzt:', cx, fy); continue
         # Bank unter dem Dach vor der Glaswand (gewollt im Unterstand, nach ihm gezeichnet)
-        setze('klein/09', cx + OFF + (-18 if i % 2 else 18), (fy + P) * T + T - 4, {'nur_kontakt': True}, pruefen=False,
+        setze('klein/09', cx + OFF - 8 + (-16 if i % 2 else 16), (fy + P) * T + T - 4, {'nur_kontakt': True}, pruefen=False,
               sortier=o['y'] + o['fuss'] + 1)
     for (name, cx, fy) in TREPPEN:
         if not os.path.exists(os.path.join(OBJ, name + '.png')):
