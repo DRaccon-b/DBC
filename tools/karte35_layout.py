@@ -68,6 +68,8 @@ def main():
     k[21:23, 14:17] = 'n'                                              # den Tuermen statt Streifen davor
     k[1, 2:94] = 'g'                                                   # oberste Stadtreihe: Gehweg hinter den Tuermen
     k[24:26, 45:72][k[24:26, 45:72] == 'n'] = 'g'                    # Mitte: Streifen ueber dem Glasbuero 2 Reihen
+    k[21, 83] = 'g'; k[13, 82] = 'g'                                  # Bordstein-Kerben an Blockecken (Pruefung)
+    k[45:50, 19:21][k[45:50, 19:21] == 'n'] = 'g'                     # Gehweg zwischen Gruenstreifen und Wohnblock
     k = l34.zipfel_weg(k, 'gn')
     k = l34.kleine_weg(k, 'n', 6, 'g')
     x0, y0, x1, y1 = STADT

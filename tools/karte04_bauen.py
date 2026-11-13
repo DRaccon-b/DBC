@@ -1357,7 +1357,8 @@ def animieren(img, objs, cache, frame, ruhig=False):
                     rr, gg, bb, _ = px[o['x'] + x_, o['y'] + y_]
                     k_ = 0.9 + 0.25 * puls
                     px[o['x'] + x_, o['y'] + y_] = (min(255, int(rr * k_)), min(255, int(gg * k_)), min(255, int(bb * k_)), 255)
-            for r, al in ((14, 30), (7, 50)):
+            rl = o.get('licht_r', 14)                          # Scheingroesse je Lichtquelle (Automatenfenster klein)
+            for r, al in ((rl, 30), (rl // 2, 50)):
                 gd.ellipse((cx - r, cy - r, cx + r, cy + r), fill=(255, 200, 110, int(al * (0.6 + 0.4 * puls))))
     img.alpha_composite(glut)
 

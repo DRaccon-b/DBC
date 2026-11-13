@@ -81,6 +81,12 @@ ANIM = {
         'gebaeude/laden_4': {'anim': 'lampions', 'lampions': [[4, 77, 11, 87], [24, 77, 31, 87], [64, 77, 72, 87],
                                                               [84, 77, 91, 87]]},
     },
+    'karte35': {   # Shinjuku Digital Fog: Schein nur am Lampenkopf bzw. am Warenfenster der Automaten
+        'k18s/18': {'anim': 'leuchten', 'licht': [4, 7], 'licht_box': [2, 5, 6, 10], 'licht_r': 9},
+        'k18s/00': {'anim': 'leuchten', 'licht': [10, 10], 'licht_box': [2, 5, 18, 16], 'licht_r': 7},
+        'k18s/01': {'anim': 'leuchten', 'licht': [10, 11], 'licht_box': [2, 5, 18, 17], 'licht_r': 7},
+        'k18s/42': {'anim': 'leuchten', 'licht': [10, 9], 'licht_box': [2, 1, 19, 18], 'licht_r': 7},
+    },
     'karte34': {   # Shinjuku Central Park: Schaukeln schwingen um die Kettenaufhaengung
         'spiel/schaukel': {'anim': 'teil_drehen', 'dreh': [
             {'box': [13, 6, 30, 40], 'punkt': [21, 5], 'amp': 3},

@@ -52,7 +52,16 @@ def lauflaenge(m, achse):
 
 
 def markierungen(a, kl, lay):
-    """Mittelstriche (gelb, gestrichelt) auf den geraden Strassenstuecken, Zebrastreifen weiss."""
+    """Mittelstriche (gelb, gestrichelt) auf den geraden Strassenstuecken, Zebrastreifen weiss. Abgeschnittene
+    Strichreste unter 10 px werden verworfen (keine gelben Fremdpixel an Kreuzungen)."""
+    roh = a.copy()
+    _markierungen(a, kl, lay)
+    gelb = np.all(a == GELB, axis=-1) & ~np.all(roh == GELB, axis=-1)
+    rest = gelb & ~k4.splitter_weg(gelb, 10)
+    a[rest] = roh[rest]
+
+
+def _markierungen(a, kl, lay):
     asph_k = kl == 'a'
     asphalt = gross(asph_k)
     senk = lauflaenge(asph_k, 0)                                       # Kachel-Lauflaengen der Fahrbahn
@@ -81,8 +90,10 @@ def kanaldeckel(a, kl, seed=35):
     """Wenige runde Kanaldeckel und Gullys am Fahrbahnrand (Vorlage), unregelmaessig, fest (kein Flimmern)."""
     rs = np.random.RandomState(seed)
     rows, cols = kl.shape
+    mitte_y, mitte_x = (17, 18, 39, 59), (38, 39, 78, 79)              # Kachelreihen/-spalten der Mittellinien
     kand = [(y, x) for y in range(3, rows - 3) for x in range(3, cols - 3) if kl[y, x] == 'a'
-            and all(kl[y + dy, x + dx] == 'a' for dy in (-1, 0, 1) for dx in (-1, 0, 1))]
+            and all(kl[y + dy, x + dx] == 'a' for dy in (-1, 0, 1) for dx in (-1, 0, 1))
+            and y not in mitte_y and x not in mitte_x]
     rs.shuffle(kand)
     gesetzt = []
     for (y, x) in kand:

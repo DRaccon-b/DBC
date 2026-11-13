@@ -42,7 +42,7 @@ GEBAEUDE = [
 ]
 BRUECKE = ('fussgaengerbruecke/00', 632, 31)                                    # Achse der Strasse (Spalten 36-42)
 BAEUME = [(49, 13), (60, 13), (47, 23), (63, 23), (70, 23), (7, 48), (18, 48), (50, 48), (70, 48)]
-LATERNEN = [(29, 12), (44, 12), (74, 12), (29, 33), (44, 33), (73, 33), (19, 53), (44, 53), (74, 53), (19, 67),
+LATERNEN = [(29, 12), (44, 12), (74, 12), (29, 33), (73, 33), (19, 53), (44, 53), (74, 53), (23, 70),
             (74, 73)]
 BAENKE = [(6, 55), (28, 65), (90, 73)]
 MOEBEL = [('k18s/41', 23, 34), ('k18s/12', 26, 34), ('k18s/41', 69, 54), ('k18s/00', 72, 29), ('k18s/01', 17, 65),
@@ -50,15 +50,20 @@ MOEBEL = [('k18s/41', 23, 34), ('k18s/12', 26, 34), ('k18s/41', 69, 54), ('k18s/
           ('k18s/05', 66, 54)]
 # Fahrzeuge (Linksverkehr): (sprite, Mitte x px, Fuss y px, spiegeln). Waagerecht: Nordspur nach Osten (gespiegelt),
 # Suedspur nach Westen; senkrecht: Ostspur nach Sueden.
-AUTOS = [('k18a/05', 312, 622, True), ('k18a/bus', 1096, 620, True), ('k18a/00', 824, 942, True),
-         ('k18a/11', 380, 990, False), ('k18a/06', 1288, 494, False), ('k18a/07', 656, 812, False),
-         ('k18a/06', 1288, 866, False), ('k18a/01', 560, 334, False)]
+AUTOS = [('k18a/05', 312, 622, True), ('k18a/bus', 1096, 620, False), ('k18a/00', 824, 942, True),
+         ('k18a/11', 380, 990, False), ('k18a/06', 1288, 494, False), ('k18a/07', 600, 812, False),
+         ('k18a/06', 1288, 846, False), ('k18a/01', 560, 334, False)]
 
 
 def halb_gespiegelt(quelle, ziel, breite_halb):
     """Langes symmetrisches Gebaeude aus der generierten linken Haelfte: Haelfte auf die halbe Vorlagenbreite
     (gleichfoermige Glasfront in der Mitte), dann gespiegelt angesetzt."""
     h = Image.open(os.path.join(OBJ, quelle)).convert('RGBA')
+    ar = np.array(h)
+    ar[ar[..., 3] < 200] = 0                                     # halbtransparente Rauschpixel (Saum) weg
+    import karte04_bauen as k4
+    ar[~k4.splitter_weg(ar[..., 3] > 0, 40)] = 0                 # lose Splitter weg
+    h = Image.fromarray(ar)
     bb = h.getbbox()
     h = h.crop((bb[0], bb[1], bb[0] + breite_halb, bb[3]))
     voll = Image.new('RGBA', (2 * breite_halb, h.height), (0, 0, 0, 0))
@@ -155,10 +160,13 @@ def main():
         if kachel('k01/baum%02d' % (i % 3), tx, ty, {'anim': 'baum'}, i % 2 == 1, 'baum', 'n', 'gras'):
             b = objekte[-1]
             seite = 1 if i % 2 else -1
-            bx = b['x'] + (24 + seite * 22)
-            if k(bx // T, ty) == 'n':
-                setze('k01/deko%02d' % (25, 26)[i % 2], bx, ty * T + T - 1, {'anim': 'wehen'}, i % 3 == 0, 'klein',
-                      boden='gras')
+            bb_ = Image.open(os.path.join(OBJ, b['datei'])).getbbox()
+            mitte = b['x'] + (bb_[0] + bb_[2]) / 2.0
+            bx = int(mitte + seite * 17)                          # Busch an der Stammecke (gewollte Ueberdeckung)
+            fy_b = b['y'] + bb_[3] - 1
+            if all(k(xx // T, fy_b // T) == 'n' for xx in (bx - 12, bx + 12)):
+                setze('k01/deko%02d' % (25, 26)[i % 2], bx, fy_b + 2, {'anim': 'wehen'}, i % 3 == 0, 'klein',
+                      pruefen=False, boden='gras')
     # ---------------------------------------------------------------- Strassenmoebel (sparsam, Vorlage)
     for (tx, ty) in LATERNEN:
         kachel('k18s/18', tx, ty, {'anim': 'leuchten'}, klassen='g')
@@ -179,12 +187,15 @@ def main():
             break
         if any(abs(tx - x) + abs(ty - y) < 5 or (y == ty and abs(tx - x) < 8) for (x, y) in gesetzt):
             continue
+        if not all(k(tx + d, ty) == 'n' for d in (-1, 0, 1)):
+            continue
         if setze('k01/deko%02d' % (0, 1, 2, 27, 30)[len(gesetzt) % 5], tx * T + rnd.randint(5, 11), ty * T + 13,
                  {'anim': 'wehen'}, rnd.random() < 0.5, 'klein'):
             gesetzt.append((tx, ty))
     MUELL = sorted(f[:-4] for f in os.listdir(os.path.join(OBJ, 'muell_klein')) if f.endswith('.png') and not f.endswith('_m.png'))
     kand = [(tx, ty) for ty in range(rows) for tx in range(cols) if cls[ty][tx] == 'g'
-            and any(k(tx + dx, ty + dy) == 'a' for dx in (-1, 0, 1) for dy in (-1, 0, 1))]
+            and any(k(tx + dx, ty + dy) == 'a' for dx in (-2, -1, 0, 1, 2) for dy in (-2, -1, 0, 1, 2))
+            and all(k(tx + dx, ty + dy) == 'g' for dx in (-1, 0, 1) for dy in (-1, 0, 1))]   # nicht auf dem Bordstein
     rnd.shuffle(kand)
     gesetzt = []
     for (tx, ty) in kand:
