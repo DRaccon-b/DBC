@@ -150,6 +150,91 @@ def leitstreifen(a, lay):
         a[m + 4, X0:X1] = H('#8a7430')
 
 
+def weichen(a, lay):
+    """Je Gleisband eine Weichenverbindung (Gleiswechsel) zwischen den beiden Gleisen: Schwellen und zwei Schienen
+    schraeg (45 Grad) vom oberen zum unteren Gleis, ausserhalb der Bahnuebergaenge."""
+    for bi, (y0, y1) in enumerate(lay['gleisbaender']):
+        gl = [g for g in lay['gleise'] if y0 <= g <= y1]
+        if len(gl) < 2:
+            continue
+        m1, m2 = gl[0] * T + 8, gl[1] * T + 8
+        dy = m2 - m1
+        x0 = (lay['uebergaenge'][1][1] + 6 + bi * 6) * T          # rechts neben dem mittleren Uebergang
+        for t in range(-6, dy + 7, 5):                             # Schwellen der Verbindung (quer zur Schraege)
+            yc, xc = m1 + t, x0 + t
+            for d in range(-7, 8):
+                if 0 <= yc + d < a.shape[0]:
+                    a[yc + d, xc - d:xc - d + 2] = H('#6c6c72')
+        for off in (-6, 6):                                        # zwei Schienen schraeg, Spurweite wie die Gleise
+            for t in range(-2, dy + 3):
+                yy, xx = m1 + t, x0 + t + off
+                a[yy, xx - 1] = H('#9aa0aa'); a[yy, xx] = H('#d6dae2'); a[yy, xx + 1] = H('#4a4e58')
+
+
+def gleis_spuren(a, lay, cols):
+    """Rost an einzelnen Schwellen und wenige Oelflecken zwischen den Schienen (fest, kein Flimmern)."""
+    rs = np.random.RandomState(3838)
+    W = cols * T
+    for g in lay['gleise']:
+        m = g * T + 8
+        for x in range(0, W - 3, 6):
+            if rs.rand() < 0.18:
+                a[m - 8:m + 8, x:x + 3] = (a[m - 8:m + 8, x:x + 3] * np.array((1.02, 0.92, 0.84))).clip(0, 255).astype(np.uint8)
+        for _ in range(W // 220):
+            cx, rx, ry = rs.randint(20, W - 20), rs.randint(4, 9), rs.randint(2, 3)
+            yy, xx = np.ogrid[-ry:ry + 1, -rx:rx + 1]
+            f = (yy / max(ry, 1)) ** 2 + (xx / rx) ** 2 <= 1
+            sub = a[m - ry:m + ry + 1, cx - rx:cx + rx + 1]
+            sub[f] = (sub[f] * 0.72).astype(np.uint8)
+
+
+def boden_leben(a, kl, frame):
+    """Abnutzung (Nutzer: Karte lebendiger, dezent): einzelne gesprungene Bahnsteigplatten, Flecken auf Ziegeln und
+    Platten, wenige Pfuetzen mit Himmelsspiegelung und wanderndem Glanz. Alles flach und begehbar."""
+    rs = np.random.RandomState(38)
+    rows, cols = kl.shape
+    frei = lambda x, y: kl[y, x] in 'kp' and all(kl[y + dy, x + dx] in 'kp' for dy in (-1, 0, 1) for dx in (-1, 0, 1))
+    kand = [(x, y) for y in range(2, rows - 2) for x in range(2, cols - 2) if frei(x, y)]
+    rs.shuffle(kand)
+    for (x, y) in kand[:40]:                                       # Risse in Platten (nur 'p')
+        if kl[y, x] != 'p':
+            continue
+        X, Y = x * T, y * T
+        px, py = X + rs.randint(2, 6), Y + rs.randint(2, 5)
+        for i in range(rs.randint(7, 12)):
+            a[py, px] = (a[py, px] * 0.68).astype(np.uint8)
+            px += 1; py += rs.choice((0, 1, 1))
+            if px >= X + 15 or py >= Y + 15:
+                break
+    for (x, y) in kand[40:70]:                                     # Flecken
+        cx, cy, r = x * T + 8, y * T + 8, rs.randint(3, 6)
+        yy, xx = np.ogrid[-r:r + 1, -r:r + 1]
+        f = (yy ** 2 + xx ** 2 <= r * r) & (rs.rand(2 * r + 1, 2 * r + 1) < 0.8)
+        sub = a[cy - r:cy + r + 1, cx - r:cx + r + 1]
+        sub[f] = (sub[f] * 0.9).astype(np.uint8)
+    f_ = frame or 0
+    gesetzt = []
+    for (x, y) in kand[70:]:                                       # Pfuetzen (wenige, Abstand)
+        if len(gesetzt) >= 6:
+            break
+        if any(abs(x - gx) + abs(y - gy) < 14 for gx, gy in gesetzt):
+            continue
+        gesetzt.append((x, y))
+        cx, cy = x * T + 8, y * T + 8
+        rx, ry = rs.randint(9, 14), rs.randint(4, 6)
+        yy, xx = np.ogrid[-ry:ry + 1, -rx:rx + 1]
+        f = (yy / ry) ** 2 + (xx / rx) ** 2 <= 1
+        sub = a[cy - ry:cy + ry + 1, cx - rx:cx + rx + 1]
+        sub[f] = np.clip(sub[f] * 0.55 + np.array((120, 140, 170)) * 0.45, 0, 255).astype(np.uint8)
+        rand_ = f & ~((yy / max(ry - 1, 1)) ** 2 + (xx / max(rx - 1, 1)) ** 2 <= 1)
+        sub[rand_] = (sub[rand_] * 0.85).astype(np.uint8)
+        gx = -rx + 3 + (f_ * 4 + x) % (2 * rx - 6)                 # Glanzstrich wandert
+        for d in range(3):
+            yy_, xx_ = -1 + (d % 2), gx + d
+            if f[yy_ + ry, xx_ + rx]:
+                sub[yy_ + ry, xx_ + rx] = (220, 230, 240)
+
+
 def bauen(frame=None, speichern=True):
     lay = json.load(open(os.path.join(KARTE, 'layout.json')))
     cols, rows = lay['groesse']
@@ -174,9 +259,12 @@ def bauen(frame=None, speichern=True):
     wald = gross(kl == 'h')
     a[wald] = k18.textur('n', cols, rows)[wald]
     gleisbett(a, lay, cols)
+    gleis_spuren(a, lay, cols)
+    weichen(a, lay)
     uebergaenge(a, lay)
     bahnsteigkanten(a, lay, kl)
     leitstreifen(a, lay)
+    boden_leben(a, kl, frame)
     land = np.zeros((Hp, Wp), bool)
     land[T:-T, T:-T] = True
     lvl = np.ones((Hp, Wp), np.uint8)
@@ -203,6 +291,12 @@ def bauen(frame=None, speichern=True):
             k4.animieren(img, objs, cache, frame or 0)
             k6.animieren_k6(img, objs, cache, frame or 0)
     a = np.array(img.convert('RGB'))
+    if os.path.exists(pf):                                            # Fahrdraehte der Oberleitung: in Auslegerhoehe
+        for y_ in sorted({o['y'] for o in json.load(open(pf)) if o.get('oberleitung')}):   # ueber die ganze Breite
+            for dy, f in ((7, 0.15), (18, 0.25)):
+                yy = y_ + dy
+                if 0 <= yy < Hp:
+                    a[yy] = (a[yy] * f + np.array((40, 44, 52)) * (1 - f)).astype(np.uint8)
     for tp in lay['teleporter']:
         k4.teleporter_zeichnen(a, tp['x'], tp['y'], tp['b'], tp['h'], frame)
     img = Image.fromarray(a).convert('RGBA')

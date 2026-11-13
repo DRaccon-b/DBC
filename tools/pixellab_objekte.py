@@ -2150,6 +2150,35 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'slightly above, ' + FR14,
         'compact grey metal bike rack with two bicycles locked to it, seen from the front and slightly above, ' + FR14,
     ]},
+    'k38_zug_kopf': {'size': 256, 'freie_farben': True, 'items': [
+        'modern Japanese commuter train end car seen from the side and slightly above, very long and low, about four '
+        'times as wide as tall, silver stainless steel body with a green stripe, rounded driver cab at the right end with '
+        'a small destination display, a row of windows and three sliding doors, grey roof with a pantograph, wheels and '
+        'bogies at the bottom, fully in frame, ' + FR14,
+    ]},
+    'k38_zug_wagen': {'size': 256, 'freie_farben': True, 'items': [
+        'modern Japanese commuter train middle car seen from the side and slightly above, very long and low, about four '
+        'times as wide as tall, silver stainless steel body with a green stripe, a row of windows and three sliding '
+        'doors, flat ends with gangway, grey roof, wheels and bogies at the bottom, fully in frame, ' + FR14,
+    ]},
+    'k38_bahn': {'size': 64, 'freie_farben': True, 'items': [
+        'railway overhead line catenary mast: a thin grey steel pole with a horizontal cantilever arm and insulators at '
+        'the top, ' + FR14,
+        'railway level crossing barrier: a red and white striped boom arm lowered horizontally on a short post with a '
+        'white crossbuck sign and two round red warning lights, ' + FR14,
+        'railway light signal on a thin grey mast with a black signal head showing one red and one green lamp, ' + FR14,
+        'station departure board: a wide black LED display panel with amber text rows mounted on two grey posts, ' + FR14,
+    ]},
+    'k38_bahn_klein': {'size': 32, 'freie_farben': True, 'items': [
+        'round station clock with a white face on a thin grey pole, ' + FR14,
+        'square grey concrete planter with a small green shrub, ' + FR14,
+        'grey city pigeon standing on the ground, ' + FR14,
+        'folded newspaper lying flat on the ground, seen from above, ' + FR14,
+    ]},
+    'k38_kiosk': {'size': 96, 'freie_farben': True, 'items': [
+        'small station coffee and newspaper kiosk: a compact booth with a flat grey roof, a serving window with a small '
+        'awning, magazines and drinks on display, fully in frame, ' + FR14,
+    ]},
     'k38_klein': {'size': 32, 'freie_farben': True, 'items': [
         'short grey metal platform bollard, ' + FR14,
         'round red no-entry traffic sign with a white bar on a thin grey pole, ' + FR14,

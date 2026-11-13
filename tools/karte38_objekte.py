@@ -42,19 +42,19 @@ KLEIN = [
     ('k18s/00', 28, 6, {}), ('k18s/42', 69, 6, {}), ('k18s/01', 69, 16, {}), ('k18s/00', 20, 19, {}),
     ('k18s/42', 12, 20, {}), ('klein/09', 19, 9, {}), ('klein/09', 28, 9, {}), ('k18s/12', 30, 9, {}),
     ('klein/09', 58, 21, {}), ('klein/09', 80, 18, {}), ('k18s/12', 82, 18, {}),
-    ('klein/02', 47, 17, {}), ('klein/02', 74, 17, {}), ('klein/01', 79, 21, {}),
-    ('k18s/18', 41, 21, LAMPE), ('k18s/18', 72, 21, LAMPE), ('klein/03', 17, 6, {'liegend': True, 'schattenlos': True}),
-    ('klein/03', 78, 6, {'liegend': True, 'schattenlos': True}), 
+    ('klein/02', 47, 17, {}), 
+    ('k18s/18', 41, 21, LAMPE), ('k18s/18', 72, 21, LAMPE), ('klein/03', 17, 6, {'liegend': True, 'schattenlos': True, 'ebene': 0}),
+    ('klein/03', 78, 6, {'liegend': True, 'schattenlos': True, 'ebene': 0}), 
     ('k18s/12', 8, 47, {}), ('k18s/00', 28, 35, {}), ('k18s/01', 17, 36, {}), ('k18s/42', 82, 45, {}),
     ('klein/09', 19, 38, {}), ('klein/09', 77, 36, {}), ('k18s/12', 22, 38, {}), ('k18s/12', 80, 36, {}),
-    ('klein/02', 24, 42, {}), ('klein/02', 47, 42, {}), ('klein/02', 75, 42, {}),
+    ('klein/02', 75, 42, {}),
     ('k18s/18', 26, 45, LAMPE), ('k18s/18', 57, 45, LAMPE), 
-    ('klein/03', 17, 41, {'liegend': True, 'schattenlos': True}), ('klein/03', 78, 34, {'liegend': True, 'schattenlos': True}),
+    ('klein/03', 17, 41, {'liegend': True, 'schattenlos': True, 'ebene': 0}), ('klein/03', 78, 34, {'liegend': True, 'schattenlos': True, 'ebene': 0}),
     ('k18s/42', 51, 62, {}), ('k18s/00', 79, 58, {}), ('k18s/01', 77, 68, {}), ('k18s/40', 74, 71, {}),
     ('klein/09', 21, 62, {}), ('klein/09', 45, 70, {}), ('klein/09', 65, 64, {}), ('klein/09', 26, 72, {}),
-    ('k18s/12', 24, 62, {}), ('k18s/12', 73, 64, {}), ('klein/01', 19, 59, {}), ('klein/01', 65, 59, {}),
-    ('klein/01', 88, 57, {}), ('klein/02', 27, 65, {}), ('klein/02', 69, 65, {}),
-    ('k18s/18', 30, 69, LAMPE), ('k18s/18', 71, 70, LAMPE), ('klein/03', 17, 69, {'liegend': True, 'schattenlos': True}),
+    ('k18s/12', 24, 62, {}), ('k18s/12', 73, 64, {}), 
+    ('klein/02', 27, 65, {}), 
+    ('k18s/18', 30, 69, LAMPE), ('k18s/18', 71, 70, LAMPE), ('klein/03', 17, 69, {'liegend': True, 'schattenlos': True, 'ebene': 0}),
 ]
 
 
@@ -172,6 +172,46 @@ def main():
             setze('klein/01', (ca + cb) / 2.0, fyp, {})
     for i, (name, tx, fy, opt) in enumerate(KLEIN):
         kachel(name, tx + P, fy + P, dict(opt), spiegeln=(name == 'klein/09' and i % 3 == 0))
+    # ---------------------------------------------------------------- Bahnbetrieb (Nutzer: Karte lebendiger)
+    # Masten, Andreaskreuze, Signale und der Zug stehen im ohnehin gesperrten Gleisbett (keine neue Kollision).
+    ueb = [((a0) * T, (a1 + 1) * T - 1) for (a0, a1) in lay['uebergaenge']]
+    def am_uebergang(x0, x1, rand=6):
+        return any(not (x1 < u0 - rand or x0 > u1 + rand) for (u0, u1) in ueb)
+    for bi, (g0, g1) in enumerate(lay['gleisbaender']):
+        g_oben = [g for g in lay['gleise'] if g0 <= g <= g1][0]
+        fy = g_oben * T + 8 + 13                                  # Mastfuss hinter dem oberen Gleis: Fahrdraht auf
+                                                                  # Hoehe des Stromabnehmers (Zug am unteren Gleis)
+        for tx in range(6 + bi * 7, cols - 4, 14):                # Oberleitungsmasten im festen Abstand
+            cx = tx * T + 8
+            if am_uebergang(cx - 4, cx + 44, 8):
+                continue
+            setze('bahn/00', cx + 14, fy, {'schattenlos': True, 'oberleitung': True}, art='bahn', pruefen=False)
+        for (u0, u1) in ueb:                                     # Andreaskreuz je Uebergang: links oben, rechts unten
+            setze('bahn/01_kreuz', u0 - 10, g0 * T + 13, {'nur_kontakt': True, 'anim': 'wechselblinker',
+                  'blinker': [[5, 23, 4], [20, 23, 4]]}, art='bahn', pruefen=False)
+            setze('bahn/01_kreuz', u1 + 10, g1 * T + 6, {'nur_kontakt': True, 'anim': 'wechselblinker',
+                  'blinker': [[5, 23, 4], [20, 23, 4]]}, True, art='bahn', pruefen=False)
+        for sx in (lay['stadt'][0] * T - 24, (lay['stadt'][2] + 1) * T + 24):   # Signale an den Bahnhofsenden
+            setze('bahn/02', sx, g0 * T + 2 * T + 10, {'nur_kontakt': True, 'anim': 'leuchten', 'licht': [8, 9],
+                  'licht_box': [4, 6, 12, 12], 'licht_r': 6}, art='bahn', pruefen=False)
+    # Zug am Bahnsteig: Triebwagen auf dem unteren Gleis des oberen Bandes, zwischen zwei Uebergaengen
+    g_unten = [g for g in lay['gleise'] if lay['gleisbaender'][0][0] <= g <= lay['gleisbaender'][0][1]][-1]
+    zx = (ueb[1][1] + ueb[2][0]) / 2.0
+    setze('zug_kopf/00', zx, g_unten * T + 8 + 6, {'nur_kontakt': True, 'anim': 'maschine', 'leds': True,
+          'led_box': [[205, 40, 247, 100]], 'led_max': 30}, art='bahn', pruefen=False)
+    # Bahnsteig-Ausstattung (sparsam): Abfahrtstafeln, Bahnhofsuhren, Kiosk, Pflanzkuebel an den Bahnhofseingaengen
+    for (tx, ty) in ((37, 13), (58, 44), (40, 63)):
+        kachel('bahn/03', tx + P, ty + P, {'anim': 'maschine', 'schirm': [[4, 6, 56, 24]]})
+    for (tx, ty) in ((53, 9), (31, 70)):
+        kachel('bahn_klein/00', tx + P, ty + P, {})
+    kachel('kiosk/00', 54 + P, 45 + P, {})
+    for (cx_, fy_) in ((144 - 48, 16), (144 + 48, 16), (1376 - 56, 73), (1376 + 56, 73)):
+        setze('bahn_klein/01', cx_ + OFF, (fy_ + P) * T + T - 1, {})
+    # flach und begehbar: Tauben und Zeitungen (wenige)
+    for i, (tx, ty) in enumerate(((33, 7), (62, 11), (48, 60), (66, 69))):
+        kachel('bahn_klein/02', tx + P, ty + P, {'ebene': 0}, spiegeln=i % 2 == 1)
+    for (tx, ty) in ((24, 15), (57, 66)):
+        kachel('bahn_klein/03', tx + P, ty + P, {'ebene': 0, 'liegend': True})
     # ---------------------------------------------------------------- Baumguertel am Kartenrand (Nutzer)
     n_w = 0
     for ty in range(rows):

@@ -1969,3 +1969,21 @@ def flammen_boxen(sp, frame, o):
 
 
 TEILANIM.update({'flammen_boxen': flammen_boxen})
+
+
+def wechselblinker(sp, frame, o):
+    """Bahnuebergang (Karte 38): zwei rote Warnlampen leuchten abwechselnd (o['blinker'] = [[x, y, r], [x, y, r]]);
+    nur die Lampenpixel aendern sich, Mast und Kreuz bleiben unveraendert."""
+    a = np.array(sp.convert('RGBA')).astype(np.int16)
+    yy, xx = np.mgrid[0:a.shape[0], 0:a.shape[1]]
+    for i, (x, y, r) in enumerate(o.get('blinker', [])):
+        m = ((yy - y) ** 2 + (xx - x) ** 2 <= r * r) & (a[..., 3] > 0) & (a[..., 0] > a[..., 1] + 30)
+        an = (frame + i) % 2 == 0
+        if an:
+            a[m, 0] = np.minimum(255, a[m, 0] + 90); a[m, 1] = np.minimum(255, a[m, 1] + 40); a[m, 2] = np.minimum(255, a[m, 2] + 30)
+        else:
+            a[m, :3] = (a[m, :3] * 0.55).astype(np.int16)
+    return Image.fromarray(np.clip(a, 0, 255).astype(np.uint8), 'RGBA')
+
+
+TEILANIM.update({'wechselblinker': wechselblinker})
