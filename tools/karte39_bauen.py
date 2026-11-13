@@ -240,11 +240,11 @@ def plaetze_boden(a, kl, objs):
         # weicher Schatten der Bruecke: Silhouette nach unten auf den Boden gelegt (Deck ~60 px hoch), stark verwischt
         sil = np.zeros((Hh, W), np.float32)
         ys_, xs_ = np.nonzero(al)
-        ty_ = np.clip(ys_ + Y + 44, 0, Hh - 1); tx_ = np.clip(xs_ + X + 8, 0, W - 1)
+        ty_ = np.clip(ys_ + Y + 8, 0, Hh - 1); tx_ = np.clip(xs_ + X + 6, 0, W - 1)   # Draufsicht: knapp versetzt
         sil[ty_, tx_] = 1.0
         sil[fuss + 6:] = 0
-        sil = np.array(Image.fromarray((sil * 255).astype(np.uint8)).filter(ImageFilter.GaussianBlur(5))).astype(np.float32) / 255
-        a[:] = np.clip(a * (1 - 0.22 * sil[..., None]), 0, 255).astype(np.uint8)
+        sil = np.array(Image.fromarray((sil * 255).astype(np.uint8)).filter(ImageFilter.GaussianBlur(3))).astype(np.float32) / 255
+        a[:] = np.clip(a * (1 - 0.28 * sil[..., None]), 0, 255).astype(np.uint8)
         # Treppen-/Rampenfuesse: unterster deckender Punkt in den aeussersten 24 Spalten links und rechts
         for (c0, c1) in ((0, 24), (w_ - 24, w_)):
             sp_ = al[:, c0:c1]

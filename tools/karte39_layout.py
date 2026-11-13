@@ -89,6 +89,11 @@ def main():
     C2, R2 = C + 2 * P, R + 2 * P
     k2 = np.full((R2, C2), 'h')
     k2[P:P + R, P:P + C] = k
+    zone = k2[36:48, 17:49]                                        # Bruecke D: einheitlicher Ziegel-Vorplatz unter der
+    zone[zone != 'a'] = 'k'
+    zone[:, :STRASSEN_V[0][0] + P - 17][zone[:, :STRASSEN_V[0][0] + P - 17] == 'a'] = 'k'   # Asphalt nur im Band
+    zone[:, STRASSEN_V[0][1] + P + 1 - 17:][zone[:, STRASSEN_V[0][1] + P + 1 - 17:] == 'a'] = 'k'
+    # (Kleinflecken-Bereinigung hatte Gehwegkacheln neben der Fahrbahn zu Asphalt gemacht)                                        # ganzen Bruecke (Nutzer: Karte an die Bruecke anpassen)
     k2[19 + P:46 + P, 94 + P:97 + P] = 'g'                         # Hochhaus-Block Richtung Guertel erweitert (Gehweg
     tps = []                                                        # links frei, kein kahler Grasstreifen rechts)
     for (art, i, seite) in AUSGAENGE:                              # Ausgaenge: Fahrbahn bis an den neuen Rand
