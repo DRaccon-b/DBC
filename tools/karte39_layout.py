@@ -73,7 +73,9 @@ def main():
     for art in 'bnq':                                              # Einzelkacheln angleichen
         k = l34.kleine_weg(k, art, 4)
     k = l34.kleine_weg(k, 'k', 14)                                 # Flecken unter Objekten der Vorlage
-    k = l34.kleine_weg(k, 'g', 6)
+    k = l34.kleine_weg(k, 'g', 16)                                 # Brueckenpfeiler/Schatten der Vorlage
+    k[30:42, 10:14][k[30:42, 10:14] == 'n'] = 'g'                  # Weg vom Eingang buero_links durch den Rasen
+    k[40:42, 15:18][k[40:42, 15:18] == 'n'] = 'k'                  # Rasenzunge unter dem Brueckenfuss
     x0, y0, x1, y1 = STADT
     stadt = np.zeros((R, C), bool); stadt[y0:y1 + 1, x0:x1 + 1] = True
     k[~stadt] = 'h'

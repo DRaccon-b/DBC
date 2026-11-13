@@ -31,16 +31,16 @@ STADTBAUM = ['k01/baum%02d' % i for i in (0, 2, 4)]
 LAMPE = {'anim': 'leuchten', 'licht': [4, 7], 'licht_box': [2, 5, 6, 10], 'licht_r': 9}
 
 # (sprite, Mitte x Vorlagen-px, Fusszeile Vorlage)
-GEBAEUDE = [('gross/turm', 1410, 45), ('gross/buero_oben', 1297, 11), ('gross/buero_links', 192, 29),
-            ('gross/buero_unten_links', 222, 75), ('gross/buero_unten', 750, 77)]
+GEBAEUDE = [('gross/turm', 1410, 44), ('gross/buero_oben', 1297, 10), ('gross/buero_links', 192, 29),   # Gehwegreihe
+            ('gross/buero_unten_links', 222, 75), ('gross/buero_unten', 750, 76)]                    # vor jeder Front
 RATHAUS_ACHSE = None                                              # aus der hellen Rathausflaeche berechnet
 BRUECKE = (465, 42)                                               # Mitte x, Fusszeile (ueber der linken Hauptstrasse)
 UBAHN = [(607, 20), (1073, 43)]
-BAEUME = [(39, 13), (64, 14), (65, 23), (40, 29), (64, 29), (10, 33), (15, 31), (20, 30), (9, 38), (11, 59),
+BAEUME = [(39, 13), (64, 14), (65, 23), (39, 30), (63, 30), (8, 33), (15, 31), (20, 30), (9, 38), (11, 59),
           (22, 59), (60, 72), (66, 72)]
-LATERNEN = [(5, 5), (21, 5), (65, 7), (34, 7), (70, 36), (5, 43), (14, 43), (6, 57), (71, 57), (90, 57), (93, 43)]
-BAENKE = [(10, 20), (17, 20), (46, 26), (56, 26), (46, 35), (63, 38), (40, 61), (66, 63)]
-MOEBEL = [('k18s/00', 21, 18), ('k18s/41', 46, 45), ('k18s/41', 65, 56)]
+LATERNEN = [(5, 5), (21, 5), (65, 7), (34, 7), (70, 36), (5, 43), (11, 43), (6, 57), (71, 57), (90, 57), (93, 43)]
+BAENKE = [(10, 20), (17, 20), (46, 35), (63, 38), (40, 61), (66, 63)]   # + Paar am Rathaus (Achse)
+MOEBEL = [('k18s/00', 21, 18), ('k18s/41', 52, 45), ('k18s/41', 65, 56)]   # Bushaeuschen nicht im Treppenaustritt
 # Autos (Linksverkehr): waagerecht Nordspur nach Osten (gespiegelt), Suedspur nach Westen; senkrecht Ostspur nach Sueden
 AUTOS = [('k18a/06', 495, 168, False), ('k18a/06', 1264, 535, False), ('k18a/05', 232, 785, True),
          ('k18a/02', 950, 785, True), ('k18a/11', 1415, 785, True), ('k18a/04', 700, 858, False)]
@@ -189,10 +189,15 @@ def main():
     rat = 'rathaus/00' if not os.path.exists(os.path.join(OBJ, 'rathaus_wahl.txt')) else \
         open(os.path.join(OBJ, 'rathaus_wahl.txt')).read().strip()
     setze(rat, (x0 + x1 + 1) * T / 2.0, y1 * T + T - 1, {'gebaeude': True}, art='gebaeude', pruefen=False)
+    ra = objekte[-1]                                              # Bankpaar exakt gespiegelt an der Rathausachse
+    achse = (x0 + x1 + 1) * T / 2.0
+    for d_ in (80, 96, 112):
+        if all(setze('k38/bank', achse + s_ * d_, (26 + P) * T + T - 1, {}, s_ > 0) for s_ in (-1, 1)):
+            break
     setze('gross/bruecke', BRUECKE[0] + OFF, (BRUECKE[1] + P) * T + T - 1, {'schattenlos': True}, art='gebaeude',
           pruefen=False)
     for (cx, fy) in UBAHN:
-        setze('k38/treppe', cx + OFF, (fy + P) * T + T - 1, {'liegend': True, 'schattenlos': True}, art='gebaeude')
+        setze('ubahn/00', cx + OFF, (fy + P) * T + T - 1, {}, art='gebaeude')   # ueberdachter Eingang, vorne offen
     # ---------------------------------------------------------------- Baeume mittig auf Gruenflaechen, Moebel sparsam
     for i, (tx, ty) in enumerate(BAEUME):
         kachel(STADTBAUM[i % len(STADTBAUM)], tx + P, ty + P, {'anim': 'baum'}, i % 2 == 1, klassen='gkqbn')

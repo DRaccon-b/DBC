@@ -2086,6 +2086,24 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'small square grey metal roof access hatch with a handle, flat on the floor, seen from above, ' + FR14,
     ]},
     # ---- A03 Karte 39 West Shinjuku Siege
+    'k39_rathaus_c': {'size': 256, 'freie_farben': True, 'items': [
+        'modern Tokyo metropolitan government building: two tall identical square skyscraper towers side by side, cream '
+        'stone frames around dense dark blue glass window grids, a round clock near the top of each tower, a lower wide '
+        'modern central block between the towers with a glass entrance hall and broad steps, flat roofs visible from '
+        'slightly above, symmetrical, fully in frame, ' + FR14,
+    ]},
+    'k39_rathaus_d': {'size': 256, 'freie_farben': True, 'items': [
+        'symmetrical modern twin-tower city hall skyscraper complex, light beige concrete grid facades with blue glass '
+        'windows, each of the two towers topped with a clock, a lower glass-fronted lobby wing connecting them with wide '
+        'entrance stairs, seen from the front and slightly above, fully in frame, ' + FR14,
+    ]},
+    'k39_ubahn': {'size': 96, 'freie_farben': True, 'items': [
+        'small covered Tokyo subway station entrance: a flat teal metal canopy roof on four slim pillars with a small blue '
+        'subway sign on top, grey stairs going down into the ground underneath, glass side panels, open at the front, '
+        'seen from the front and slightly above, ' + FR14,
+        'compact covered metro entrance kiosk with a flat grey roof, glass walls on the sides and back, a wide open front '
+        'with stairs leading down, a lit sign above the opening, seen from the front and slightly above, ' + FR14,
+    ]},
     'k39_rathaus': {'size': 256, 'freie_farben': True, 'items': [
         'grand Tokyo city hall: two tall identical square towers side by side with a clock near the top of each tower, '
         'cream stone facades with deep vertical window grids, a lower central block between the towers with a wide '
