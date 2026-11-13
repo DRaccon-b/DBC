@@ -2086,6 +2086,18 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'small square grey metal roof access hatch with a handle, flat on the floor, seen from above, ' + FR14,
     ]},
     # ---- A03 Karte 39 West Shinjuku Siege
+    'k40_krater': {'size': 256, 'freie_farben': True, 'items': [   # Nutzer: Meteor-Furche (256 px: ein Motiv je Auftrag)
+        'long deep impact furrow crater seen from directly above, a straight trench gouged north to south through a dark asphalt city road, brown earth and dark soil inside, broken grey asphalt slabs and dirt pushed up and piled along the left and right rims, cracks radiating outward, no meteor visible, transparent background around the rims',
+    ]},
+    'k40_krater_b': {'size': 256, 'freie_farben': True, 'items': [   # Nutzer: Meteor-Furche (256 px: ein Motiv je Auftrag)
+        'top-down view of a long meteor impact gouge in a city street running vertically, deep scorched dark brown trench with rubble at the bottom end, chunks of torn asphalt and earth thrown outward to both sides forming raised ridges, fine radial cracks, no rock or meteor visible, transparent background',
+    ]},
+    'k40_krater_c': {'size': 256, 'freie_farben': True, 'items': [   # Nutzer: Meteor-Furche (256 px: ein Motiv je Auftrag)
+        'aerial top-down impact crater trail, elongated oval trench running from top to bottom, wider and deeper at the lower end, earth and asphalt plates bulldozed to the left and right as raised walls of dirt and broken road, a few small wisps of smoke from the bottom, no meteor visible, transparent background',
+    ]},
+    'k40_krater_d': {'size': 256, 'freie_farben': True, 'items': [   # Nutzer: Meteor-Furche (256 px: ein Motiv je Auftrag)
+        'long skid crater furrow from a fallen meteor seen from above, vertical, a deep groove of churned brown soil and gravel, edges lined with uplifted cracked asphalt slabs tilted outward, scattered debris pieces beside it, no meteor visible, transparent background',
+    ]},
     'k39_brunnen': {'size': 128, 'freie_farben': True, 'items': [
         'modern city plaza fountain: a wide round grey granite basin with clear blue water and three water jets in the '
         'middle, seen from the front and slightly above, ' + FR14,

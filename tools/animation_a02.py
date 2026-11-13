@@ -44,7 +44,12 @@ def main(karte, bilder=None):
     alt = (ab.OUT, ab.DAUER)
     ab.OUT, ab.DAUER = out, dauer
     if bilder:                                                    # 16 Bilder: Originalgroesse, alle Bilder behalten
-        q = [fr.quantize(colors=255, method=Image.Quantize.MAXCOVERAGE) for fr in frames]
+        # eine gemeinsame Palette fuer alle Bilder (sonst flackern ruhige Flaechen, Pruefung K40)
+        coll = Image.new('RGB', (frames[0].width, frames[0].height * len(frames)))
+        for i_, fr in enumerate(frames):
+            coll.paste(fr, (0, i_ * frames[0].height))
+        pal = coll.quantize(colors=255, method=Image.Quantize.MAXCOVERAGE)
+        q = [fr.quantize(palette=pal, dither=Image.Dither.NONE) for fr in frames]
         q[0].save(os.path.join(out, 'karte01_discord.gif'), save_all=True, append_images=q[1:], duration=dauer,
                   loop=0, disposal=1, optimize=True)
     else:
