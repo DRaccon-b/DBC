@@ -42,6 +42,7 @@ Aufstellfelds (cyan = Ankunft, gold = weiter; Funktion `pfeil_marke` in `tools/k
 | 5 | Karte 38 – Deva Transit | v1.0 fertig (3 Agenten-Prüfrunden), ZIP in maps/karte38/v1.0 |
 | 6 | Karte 39 – West Shinjuku Siege | v1.0 fertig (2 Agenten-Prüfrunden), ZIP in maps/karte39/v1.0 |
 | 7 | Karte 40 – Shinjuku Siege | v1.0 fertig (3 Agenten-Prüfrunden), Meteor-Furche auf der Nordstraße (Nutzer), ZIP in maps/karte40/v1.0 |
+| 8 | Karte 41 – Digital World: Wind Desert | in Arbeit (Vorbild karte24) |
 
 ## A0S – Sondergebiet
 | Nr. | Karte | Stand |

@@ -2086,6 +2086,14 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'small square grey metal roof access hatch with a handle, flat on the floor, seen from above, ' + FR14,
     ]},
     # ---- A03 Karte 39 West Shinjuku Siege
+    'k41_wueste': {'size': 64, 'freie_farben': True, 'items': [   # Karte 41 Wind Desert (Vorlage)
+        'red drink vending machine standing alone, glass front with rows of colorful cans, small slot and buttons, '
+        'slightly weathered by sand, seen from the front and slightly above, ' + FR14,
+        'short weathered dark grey stone pillar, square cross-section, cracked top, a little sand at the base, ' + FR14,
+        'small nomad lean-to shelter: a tan animal hide stretched over wooden poles, resting on a pile of grey rocks, '
+        'open dark side, seen from the front and slightly above, ' + FR14,
+        'short weathered dark grey stone pillar with a broken jagged top and a carved ring band, sand at the base, ' + FR14,
+    ]},
     'k40_krater': {'size': 256, 'freie_farben': True, 'items': [   # Nutzer: Meteor-Furche (256 px: ein Motiv je Auftrag)
         'long deep impact furrow crater seen from directly above, a straight trench gouged north to south through a dark asphalt city road, brown earth and dark soil inside, broken grey asphalt slabs and dirt pushed up and piled along the left and right rims, cracks radiating outward, no meteor visible, transparent background around the rims',
     ]},
