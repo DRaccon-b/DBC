@@ -239,6 +239,33 @@ for _v in ('f', 'g'):                                                           
     AUFTRAEGE['k35_buero_mitte_' + _v] = dict(AUFTRAEGE['k35_buero_mitte_b'], ziel='assets/objekte/karte35/gross_buero_mitte_' + _v,
         groesse=(456, 200))
 
+# ---- A03 Karte 36 Shinjuku Backstreets: lange Gebaeude als linke Haelfte (gespiegelt auf Vorlagenbreite)
+_K36 = ('Tokyo Shinjuku backstreet building, daytime, seen from the front with the flat roof visible from slightly above, '
+        'clean crisp pixel art, light from the top left, sharp dark outlines, ')
+_V36 = 'assets/vorlagen/karte36_vorlage.png'
+for _n, _box, _gr, _t in (
+        ('beige_halb_hoch', (60, 40, 300, 232), (288, 176), 'long four-storey Japanese apartment and office block: a light '
+         'grey flat roof band with a parapet and one rooftop air conditioning unit, a warm beige facade with three even rows of '
+         'tall narrow windows with white frames, a dark blue glass ground floor shop front, light end pillar, ' + _HALB),
+        ('beige_halb_flach', (60, 444, 240, 592), (288, 144), 'long three-storey Japanese apartment block: a light grey flat '
+         'roof band with a parapet and a rooftop unit, a warm beige facade with two even rows of tall narrow windows with white '
+         'frames, a dark blue glass ground floor shop front, light end pillar, ' + _HALB),
+        ('lila_halb', (650, 40, 800, 195), (160, 144), 'three-storey Japanese apartment building: a light grey flat roof band '
+         'with a parapet and a rooftop unit, a soft lavender facade with two rows of narrow windows with white frames, a dark '
+         'blue glass ground floor, light end pillar, ' + _HALB),
+        ('flach_halb', (108, 860, 256, 945), (160, 96), 'low one-storey Japanese shop building: a light grey flat roof band '
+         'with a parapet and a rooftop unit visible from slightly above, a dark blue glass shop front with thin mullions, '
+         'light end pillar, ' + _HALB),
+):
+    AUFTRAEGE['k36_' + _n] = {'ziel': 'assets/objekte/karte36/gross_' + _n, 'groesse': _gr, 'magenta': True,
+                             'vorlage': (_V36, _box), 'stil': 'assets/objekte/karte35/wohnblock_b/00.png',
+                             'text': _t + _K36 + FR14}
+
+for _n, _gr in (('beige_halb_hoch', (288, 232)), ('beige_halb_flach', (288, 200))):   # hoehere Leinwand (angeschnitten)
+    AUFTRAEGE['k36_' + _n + '_b'] = dict(AUFTRAEGE['k36_' + _n], ziel='assets/objekte/karte36/gross_' + _n + '_b',
+        groesse=_gr, text=AUFTRAEGE['k36_' + _n]['text'] + ' The complete roof edge is visible at the top and the complete '
+        'grey base plinth at the bottom, with empty magenta space above the roof and below the base.')
+
 
 def main(name):
     a = AUFTRAEGE[name]
