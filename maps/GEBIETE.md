@@ -38,7 +38,7 @@ Aufstellfelds (cyan = Ankunft, gold = weiter; Funktion `pfeil_marke` in `tools/k
 | 1 | Karte 34 – Shinjuku Central Park | v1.0 fertig (3 Agenten-Prüfrunden), ZIP in maps/karte34/v1.0 |
 | 2 | Karte 35 – Shinjuku Digital Fog | v1.0 fertig (3 Agenten-Prüfrunden), ZIP in maps/karte35/v1.0 |
 | 3 | Karte 36 – Shinjuku Backstreets | v1.0 fertig (3 Agenten-Prüfrunden), ZIP in maps/karte36/v1.0 |
-| 4 | Karte 37 – Hypnos Rooftop | in Arbeit (Vorbild karte36) |
+| 4 | Karte 37 – Hypnos Rooftop | v1.0 fertig (3 Agenten-Prüfrunden), Blick auf Karte 35 im Ring, ZIP in maps/karte37/v1.0 |
 
 ## A0S – Sondergebiet
 | Nr. | Karte | Stand |

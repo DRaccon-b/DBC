@@ -243,6 +243,13 @@ Vor jeder Abgabe Punkt für Punkt prüfen (vergrößert, Standbild und mehrere A
   2-px-Prüfung untereinander). Wiederverwendete Sprites ebenfalls auf Schnittkanten prüfen (oben/unten/links/rechts),
   Magenta-Reste der Freistellung und dunkle Saumbalken unter gespiegelten Hälften entfernen. Bäume auf Pflasterflächen
   und im Gürtel nur mit Kontaktschatten (der gestufte Schlagschatten wird auf hellem Pflaster zum Rechteck-Stummel).
+- **Dach/Blick nach unten (Karte 37):** Ein Ring „über einer anderen Karte“ zeigt deren echte Animation verkleinert (halber
+  Maßstab), entsättigt mit Höhendunst, darüber Schatten des Daches und sichtbar abfallende Südfassade; der Ring ist Leere
+  (`pixelhoehe` 0, gesperrt). Tiefer liegende Dachflächen sind eigene Schattenebenen (Schatten nicht über den Bordstein);
+  Objekte, deren Fuß an einer solchen Kante steht, so setzen, dass auch das Pixel unter dem Fuß noch auf ihrer Ebene liegt.
+  Brüstung/Kontur nie am Kartenrand (Teleporter-Ausgang bleibt offen). Flache Gitter, Kabel, Luken sind begehbar
+  (`ebene` 0), Lüfterräder drehen (`portal_box` mit `wirbel`), Generatoren rütteln. Gitter, die höher als eine Kachel
+  sind, ganz auf ihre Fläche setzen (nicht halb über die Kante); Paare an der aus den Reihen berechneten Achse spiegeln.
 - **Begleiter am Stumpf (5d):** keine 1-Kachel-Blumen auf dem Stumpf, kein Blumenklumpen; Begleiter überlappen sich nicht.
 - **Paare/Achsen:** Paare vor Toren/Bauwerken exakt gespiegelt (Mitte und Fuß), gleiche Objekte auf gleicher Höhe;
   Druckplatten, Obelisken usw. symmetrisch zur berechneten Achse.

@@ -20,7 +20,7 @@ FREMD = {'fass/blau': 'karte02/klein/00.png', 'fass/grau': 'karte02/klein/01.png
 # (sprite, Kachel-x, Fusszeile) der Vorlage
 FAESSER = [('fass/blau', 6, 7), ('fass/grau', 8, 7), ('fass/grau', 6, 11), ('fass/blau', 8, 11),
            ('fass/grau', 41, 7), ('fass/blau', 43, 7), ('fass/blau', 41, 12), ('fass/grau', 43, 12)]
-GITTER = [(5, 9), (7, 9), (5, 14), (42, 9), (40, 14), (42, 14), (18, 27), (20, 27), (36, 27), (38, 27)]
+GITTER = [(5, 9), (7, 9), (5, 14), (42, 9), (40, 14), (42, 14), (18, 27), (20, 27)]
 GITTERREIHEN = [(12, 37, 5), (17, 38, 25), (17, 38, 31)]          # Lueftungsreihen der Vorlage (jede 2. Kachel)
 LATERNEN = [(4, 19), (43, 19),               # Bucht-Laternen eine Reihe hoeher: Schatten bleibt auf der Flaeche
             (16, 29), (38, 29)]
@@ -30,6 +30,7 @@ GEN_ANIM = {'anim': 'maschine', 'ruetteln': True, 'leds': True, 'led_box': [[34,
             'fluessig': [[27, 2, 36, 15, 'gruen'], [0, 20, 9, 42, 'cyan'], [53, 14, 62, 40, 'cyan']]}
 # Rohre der Vorlage unter der Ziegelkante der Seitenbuchten (PixelLab k37_rohr, Mittelstueck gekuerzt): (sprite, cx, Fuss-y)
 ROHRE = [('rohr/lang', 120, 273), ('rohr/kurz', 664, 289)]
+ACHSE_S = 447.5                                                   # Achse der suedlichen Lueftungsreihen (x 274-621)
 KABEL = [(6, 12), (13, 9), (29, 8), (11, 15), (6, 18), (14, 26), (36, 30), (40, 15)]
 
 
@@ -77,7 +78,11 @@ def main():
                     return None
         o = {'datei': datei, 'basis': name, 'x': x, 'y': y, 'fuss': bb[3] - 1, 'kachel': [int(cx) // T, int(fy) // T],
              'ebene': 1, 'ohne_wall': True}
+        if not o.get('liegend') and not (opt or {}).get('liegend'):
+            o['nur_kontakt'] = True                                   # helles Dach: nur Kontaktschatten (Pruefliste K36)
         o.update(opt or {})
+        if name in ('dach/00', 'dach/02', 'dach/03'):
+            o['ebene'] = 0                                            # Gitter, Kabel, Luke liegen flach: begehbar
         objekte.append(o)
         rects.append(r)
         return o
@@ -97,13 +102,16 @@ def main():
         if not setze(n_, tx, ty, {'nur_kontakt': True}, i % 3 == 0):          # dicht an dicht: nur Kontaktschatten
             print('nicht gesetzt:', n_, tx, ty)
     for (tx, ty) in LATERNEN:
-        fy_ = 322 if ty == 19 else None                                 # Bucht: Fuss 13 px ueber der Kante (Rohr darueber)
-        if not setze('k18s/18', tx, ty, fy=fy_, opt={'anim': 'leuchten', 'licht': [4, 7], 'licht_box': [2, 5, 6, 10], 'licht_r': 9}):
+        fy_ = 322 if ty == 19 else None
+        cx_ = 2 * ACHSE_S - 264 if (tx, ty) == (38, 29) else None       # suedliches Paar gespiegelt zur Reihenachse                                 # Bucht: Fuss 13 px ueber der Kante (Rohr darueber)
+        if not setze('k18s/18', tx, ty, fy=fy_, cx=cx_, opt={'anim': 'leuchten', 'licht': [4, 7], 'licht_box': [2, 5, 6, 10], 'licht_r': 9}):
             print('Laterne nicht gesetzt:', tx, ty)
     gitter = 'dach/00' if os.path.exists(os.path.join(OBJ, 'dach/00.png')) else None
     if gitter:
         for (tx, ty) in GITTER:
             setze(gitter, tx, ty, {'liegend': True, 'schattenlos': True})
+        for cx_ in (2 * ACHSE_S - 336, 2 * ACHSE_S - 304):                 # rechtes Paar an der Reihenachse gespiegelt
+            setze(gitter, 0, 27, {'liegend': True, 'schattenlos': True}, cx=cx_)
         for (x0, x1, ty) in GITTERREIHEN:
             for tx in range(x0, x1 + 1, 2):
                 setze(gitter, tx, ty, {'liegend': True, 'schattenlos': True})

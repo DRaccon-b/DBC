@@ -11,6 +11,7 @@
 ],
 "ebene": 1,
 "ohne_wall": true,
+"nur_kontakt": true,
 "anim": "maschine",
 "ruetteln": true,
 "leds": true,
@@ -64,6 +65,7 @@
 ],
 "ebene": 1,
 "ohne_wall": true,
+"nur_kontakt": true,
 "anim": "maschine",
 "ruetteln": true,
 "leds": true,
@@ -117,6 +119,7 @@
 ],
 "ebene": 1,
 "ohne_wall": true,
+"nur_kontakt": true,
 "anim": "maschine",
 "schirm": [
 [
@@ -279,6 +282,7 @@
 ],
 "ebene": 1,
 "ohne_wall": true,
+"nur_kontakt": true,
 "anim": "leuchten",
 "licht": [
 4,
@@ -304,6 +308,7 @@
 ],
 "ebene": 1,
 "ohne_wall": true,
+"nur_kontakt": true,
 "anim": "leuchten",
 "licht": [
 4,
@@ -329,6 +334,7 @@
 ],
 "ebene": 1,
 "ohne_wall": true,
+"nur_kontakt": true,
 "anim": "leuchten",
 "licht": [
 4,
@@ -345,15 +351,16 @@
 {
 "datei": "varianten/k18s-18.png",
 "basis": "k18s/18",
-"x": 612,
+"x": 627,
 "y": 450,
 "fuss": 29,
 "kachel": [
-38,
+39,
 29
 ],
 "ebene": 1,
 "ohne_wall": true,
+"nur_kontakt": true,
 "anim": "leuchten",
 "licht": [
 4,
@@ -377,7 +384,7 @@
 6,
 9
 ],
-"ebene": 1,
+"ebene": 0,
 "ohne_wall": true,
 "liegend": true,
 "schattenlos": true
@@ -392,7 +399,7 @@
 8,
 9
 ],
-"ebene": 1,
+"ebene": 0,
 "ohne_wall": true,
 "liegend": true,
 "schattenlos": true
@@ -407,7 +414,7 @@
 6,
 14
 ],
-"ebene": 1,
+"ebene": 0,
 "ohne_wall": true,
 "liegend": true,
 "schattenlos": true
@@ -422,7 +429,7 @@
 43,
 9
 ],
-"ebene": 1,
+"ebene": 0,
 "ohne_wall": true,
 "liegend": true,
 "schattenlos": true
@@ -437,7 +444,7 @@
 41,
 14
 ],
-"ebene": 1,
+"ebene": 0,
 "ohne_wall": true,
 "liegend": true,
 "schattenlos": true
@@ -452,7 +459,7 @@
 43,
 14
 ],
-"ebene": 1,
+"ebene": 0,
 "ohne_wall": true,
 "liegend": true,
 "schattenlos": true
@@ -467,7 +474,7 @@
 19,
 27
 ],
-"ebene": 1,
+"ebene": 0,
 "ohne_wall": true,
 "liegend": true,
 "schattenlos": true
@@ -482,7 +489,7 @@
 21,
 27
 ],
-"ebene": 1,
+"ebene": 0,
 "ohne_wall": true,
 "liegend": true,
 "schattenlos": true
@@ -490,14 +497,14 @@
 {
 "datei": "varianten/dach-00.png",
 "basis": "dach/00",
-"x": 578,
+"x": 545,
 "y": 420,
 "fuss": 27,
 "kachel": [
-37,
+34,
 27
 ],
-"ebene": 1,
+"ebene": 0,
 "ohne_wall": true,
 "liegend": true,
 "schattenlos": true
@@ -505,14 +512,14 @@
 {
 "datei": "varianten/dach-00.png",
 "basis": "dach/00",
-"x": 610,
+"x": 577,
 "y": 420,
 "fuss": 27,
 "kachel": [
-39,
+36,
 27
 ],
-"ebene": 1,
+"ebene": 0,
 "ohne_wall": true,
 "liegend": true,
 "schattenlos": true
@@ -527,7 +534,7 @@
 13,
 5
 ],
-"ebene": 1,
+"ebene": 0,
 "ohne_wall": true,
 "liegend": true,
 "schattenlos": true
@@ -542,7 +549,7 @@
 15,
 5
 ],
-"ebene": 1,
+"ebene": 0,
 "ohne_wall": true,
 "liegend": true,
 "schattenlos": true
@@ -557,7 +564,7 @@
 17,
 5
 ],
-"ebene": 1,
+"ebene": 0,
 "ohne_wall": true,
 "liegend": true,
 "schattenlos": true
@@ -572,7 +579,7 @@
 19,
 5
 ],
-"ebene": 1,
+"ebene": 0,
 "ohne_wall": true,
 "liegend": true,
 "schattenlos": true
@@ -587,7 +594,7 @@
 21,
 5
 ],
-"ebene": 1,
+"ebene": 0,
 "ohne_wall": true,
 "liegend": true,
 "schattenlos": true
@@ -602,7 +609,7 @@
 23,
 5
 ],
-"ebene": 1,
+"ebene": 0,
 "ohne_wall": true,
 "liegend": true,
 "schattenlos": true
@@ -617,7 +624,7 @@
 25,
 5
 ],
-"ebene": 1,
+"ebene": 0,
 "ohne_wall": true,
 "liegend": true,
 "schattenlos": true
@@ -632,7 +639,7 @@
 27,
 5
 ],
-"ebene": 1,
+"ebene": 0,
 "ohne_wall": true,
 "liegend": true,
 "schattenlos": true
@@ -647,7 +654,7 @@
 29,
 5
 ],
-"ebene": 1,
+"ebene": 0,
 "ohne_wall": true,
 "liegend": true,
 "schattenlos": true
@@ -662,7 +669,7 @@
 31,
 5
 ],
-"ebene": 1,
+"ebene": 0,
 "ohne_wall": true,
 "liegend": true,
 "schattenlos": true
@@ -677,7 +684,7 @@
 33,
 5
 ],
-"ebene": 1,
+"ebene": 0,
 "ohne_wall": true,
 "liegend": true,
 "schattenlos": true
@@ -692,7 +699,7 @@
 35,
 5
 ],
-"ebene": 1,
+"ebene": 0,
 "ohne_wall": true,
 "liegend": true,
 "schattenlos": true
@@ -707,7 +714,7 @@
 37,
 5
 ],
-"ebene": 1,
+"ebene": 0,
 "ohne_wall": true,
 "liegend": true,
 "schattenlos": true
@@ -722,7 +729,7 @@
 18,
 25
 ],
-"ebene": 1,
+"ebene": 0,
 "ohne_wall": true,
 "liegend": true,
 "schattenlos": true
@@ -737,7 +744,7 @@
 20,
 25
 ],
-"ebene": 1,
+"ebene": 0,
 "ohne_wall": true,
 "liegend": true,
 "schattenlos": true
@@ -752,7 +759,7 @@
 22,
 25
 ],
-"ebene": 1,
+"ebene": 0,
 "ohne_wall": true,
 "liegend": true,
 "schattenlos": true
@@ -767,7 +774,7 @@
 24,
 25
 ],
-"ebene": 1,
+"ebene": 0,
 "ohne_wall": true,
 "liegend": true,
 "schattenlos": true
@@ -782,7 +789,7 @@
 26,
 25
 ],
-"ebene": 1,
+"ebene": 0,
 "ohne_wall": true,
 "liegend": true,
 "schattenlos": true
@@ -797,7 +804,7 @@
 28,
 25
 ],
-"ebene": 1,
+"ebene": 0,
 "ohne_wall": true,
 "liegend": true,
 "schattenlos": true
@@ -812,7 +819,7 @@
 30,
 25
 ],
-"ebene": 1,
+"ebene": 0,
 "ohne_wall": true,
 "liegend": true,
 "schattenlos": true
@@ -827,7 +834,7 @@
 32,
 25
 ],
-"ebene": 1,
+"ebene": 0,
 "ohne_wall": true,
 "liegend": true,
 "schattenlos": true
@@ -842,7 +849,7 @@
 34,
 25
 ],
-"ebene": 1,
+"ebene": 0,
 "ohne_wall": true,
 "liegend": true,
 "schattenlos": true
@@ -857,7 +864,7 @@
 36,
 25
 ],
-"ebene": 1,
+"ebene": 0,
 "ohne_wall": true,
 "liegend": true,
 "schattenlos": true
@@ -872,7 +879,7 @@
 38,
 25
 ],
-"ebene": 1,
+"ebene": 0,
 "ohne_wall": true,
 "liegend": true,
 "schattenlos": true
@@ -887,7 +894,7 @@
 18,
 31
 ],
-"ebene": 1,
+"ebene": 0,
 "ohne_wall": true,
 "liegend": true,
 "schattenlos": true
@@ -902,7 +909,7 @@
 20,
 31
 ],
-"ebene": 1,
+"ebene": 0,
 "ohne_wall": true,
 "liegend": true,
 "schattenlos": true
@@ -917,7 +924,7 @@
 22,
 31
 ],
-"ebene": 1,
+"ebene": 0,
 "ohne_wall": true,
 "liegend": true,
 "schattenlos": true
@@ -932,7 +939,7 @@
 24,
 31
 ],
-"ebene": 1,
+"ebene": 0,
 "ohne_wall": true,
 "liegend": true,
 "schattenlos": true
@@ -947,7 +954,7 @@
 26,
 31
 ],
-"ebene": 1,
+"ebene": 0,
 "ohne_wall": true,
 "liegend": true,
 "schattenlos": true
@@ -962,7 +969,7 @@
 28,
 31
 ],
-"ebene": 1,
+"ebene": 0,
 "ohne_wall": true,
 "liegend": true,
 "schattenlos": true
@@ -977,7 +984,7 @@
 30,
 31
 ],
-"ebene": 1,
+"ebene": 0,
 "ohne_wall": true,
 "liegend": true,
 "schattenlos": true
@@ -992,7 +999,7 @@
 32,
 31
 ],
-"ebene": 1,
+"ebene": 0,
 "ohne_wall": true,
 "liegend": true,
 "schattenlos": true
@@ -1007,7 +1014,7 @@
 34,
 31
 ],
-"ebene": 1,
+"ebene": 0,
 "ohne_wall": true,
 "liegend": true,
 "schattenlos": true
@@ -1022,7 +1029,7 @@
 36,
 31
 ],
-"ebene": 1,
+"ebene": 0,
 "ohne_wall": true,
 "liegend": true,
 "schattenlos": true
@@ -1037,7 +1044,7 @@
 38,
 31
 ],
-"ebene": 1,
+"ebene": 0,
 "ohne_wall": true,
 "liegend": true,
 "schattenlos": true
@@ -1052,7 +1059,7 @@
 14,
 9
 ],
-"ebene": 1,
+"ebene": 0,
 "ohne_wall": true,
 "liegend": true
 },
@@ -1066,7 +1073,7 @@
 30,
 8
 ],
-"ebene": 1,
+"ebene": 0,
 "ohne_wall": true,
 "liegend": true
 },
@@ -1080,7 +1087,7 @@
 12,
 15
 ],
-"ebene": 1,
+"ebene": 0,
 "ohne_wall": true,
 "liegend": true
 },
@@ -1094,7 +1101,7 @@
 7,
 18
 ],
-"ebene": 1,
+"ebene": 0,
 "ohne_wall": true,
 "liegend": true
 },
@@ -1108,7 +1115,7 @@
 15,
 26
 ],
-"ebene": 1,
+"ebene": 0,
 "ohne_wall": true,
 "liegend": true
 },
@@ -1122,7 +1129,7 @@
 25,
 22
 ],
-"ebene": 1,
+"ebene": 0,
 "ohne_wall": true,
 "liegend": true,
 "schattenlos": true
@@ -1139,6 +1146,7 @@
 ],
 "ebene": 1,
 "ohne_wall": true,
+"nur_kontakt": true,
 "anim": "portal_box",
 "wirbel": [
 11.5,
@@ -1158,6 +1166,7 @@
 ],
 "ebene": 1,
 "ohne_wall": true,
+"nur_kontakt": true,
 "anim": "portal_box",
 "wirbel": [
 11.5,
@@ -1176,7 +1185,8 @@
 9
 ],
 "ebene": 1,
-"ohne_wall": true
+"ohne_wall": true,
+"nur_kontakt": true
 },
 {
 "datei": "varianten/dach-38.png",
@@ -1189,7 +1199,8 @@
 12
 ],
 "ebene": 1,
-"ohne_wall": true
+"ohne_wall": true,
+"nur_kontakt": true
 },
 {
 "datei": "varianten/dach-38.png",
@@ -1202,6 +1213,7 @@
 17
 ],
 "ebene": 1,
-"ohne_wall": true
+"ohne_wall": true,
+"nur_kontakt": true
 }
 ]

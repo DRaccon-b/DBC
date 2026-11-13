@@ -86,12 +86,15 @@ def bauen(frame=None, speichern=True):
         if d in (5, 10):
             a[f] = (c * 0.8).astype(np.uint8)                          # Geschossfuge
     # Bruestung: 1 px dunkle Aussenkontur, 2 px helle Abdeckung mit Lichtkante
-    rand = kontur(dach)
-    rand2 = kontur(dach & ~rand)
+    dp = np.vstack([dach, dach[-1:]])                                  # Kartenrand ist keine Dachkante (Teleporter-Ausgang offen)
+    rand = kontur(dp)
+    rand2 = kontur(dp & ~rand)[:-1]
+    rand = rand[:-1]
     a[rand2] = H('#d8dce2')
     a[rand] = H('#3a404c')
     lvl = np.ones((Hp, Wp), np.uint8)
     leere = ~dach
+    lvl[leere] = 0                                                     # Ring = Abgrund (Kollision: Leere)
     if speichern and frame is None:
         np.save(os.path.join(KARTE, 'pixelhoehe.npy'), lvl)
         np.save(os.path.join(KARTE, 'wasser.npy'), np.packbits(np.zeros((Hp, Wp), bool)))
@@ -104,7 +107,7 @@ def bauen(frame=None, speichern=True):
         if objs:
             cache = {o['datei']: Image.open(os.path.join(OBJ, o['datei'])).convert('RGBA') for o in objs}
             ebenen = lvl.astype(np.int16)
-            ebenen[deck] = 0                                               # tiefere Flaeche: Schatten bleiben auf ihrer Ebene
+            ebenen[deck] = 0; ebenen[leere] = 2                                              # tiefere Flaeche: Schatten bleiben auf ihrer Ebene
             k4.objekte_zeichnen(img, objs, cache, dach, frame, ebenen=ebenen)
             k4.animieren(img, objs, cache, frame or 0)
             k6.animieren_k6(img, objs, cache, frame or 0)
