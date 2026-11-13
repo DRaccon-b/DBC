@@ -44,11 +44,11 @@
    "slot_kacheln": {
     "x": 6,
     "y": 0,
-    "breite": 4,
+    "breite": 5,
     "hoehe": 5
    },
    "objektblock_im_slot": {
-    "x": 0,
+    "x": 1,
     "y": 0,
     "breite": 4,
     "hoehe": 4
@@ -56,14 +56,14 @@
    "fundstellen_karte": [
     {
      "block": [
-      28,
-      28,
+      26,
+      33,
       4,
       4
      ],
      "fusskachel": [
-      29,
-      31
+      27,
+      36
      ]
     }
    ]
@@ -73,7 +73,7 @@
    "datei": "varianten/k01-deko04_gras.png",
    "animation": "wehen",
    "slot_kacheln": {
-    "x": 10,
+    "x": 11,
     "y": 0,
     "breite": 3,
     "hoehe": 3
@@ -128,7 +128,7 @@
    "datei": "varianten/k01-deko27_gras.png",
    "animation": "wehen",
    "slot_kacheln": {
-    "x": 13,
+    "x": 14,
     "y": 0,
     "breite": 3,
     "hoehe": 3
@@ -183,7 +183,7 @@
    "datei": "varianten/moebel-laterne_beton.png",
    "animation": "lampe",
    "slot_kacheln": {
-    "x": 16,
+    "x": 17,
     "y": 0,
     "breite": 3,
     "hoehe": 3
@@ -226,7 +226,7 @@
    "datei": "varianten/moebel-laterne_gras.png",
    "animation": "lampe",
    "slot_kacheln": {
-    "x": 19,
+    "x": 20,
     "y": 0,
     "breite": 3,
     "hoehe": 3
@@ -265,13 +265,13 @@
     {
      "block": [
       32,
-      25,
+      27,
       1,
       3
      ],
      "fusskachel": [
       32,
-      27
+      29
      ]
     }
    ]
@@ -281,7 +281,7 @@
    "datei": "varianten/k01-deko00_gras.png",
    "animation": "wehen",
    "slot_kacheln": {
-    "x": 22,
+    "x": 23,
     "y": 0,
     "breite": 2,
     "hoehe": 3
@@ -312,7 +312,7 @@
    "datei": "varianten/k01-deko01_gras.png",
    "animation": "wehen",
    "slot_kacheln": {
-    "x": 24,
+    "x": 25,
     "y": 0,
     "breite": 2,
     "hoehe": 3
@@ -928,6 +928,18 @@
      "fusskachel": [
       3,
       19
+     ]
+    },
+    {
+     "block": [
+      4,
+      39,
+      3,
+      3
+     ],
+     "fusskachel": [
+      5,
+      41
      ]
     },
     {
@@ -1885,6 +1897,18 @@
      "fusskachel": [
       0,
       38
+     ]
+    },
+    {
+     "block": [
+      3,
+      38,
+      3,
+      3
+     ],
+     "fusskachel": [
+      4,
+      40
      ]
     },
     {
@@ -3608,18 +3632,6 @@
       62,
       34
      ]
-    },
-    {
-     "block": [
-      10,
-      52,
-      3,
-      3
-     ],
-     "fusskachel": [
-      11,
-      54
-     ]
     }
    ]
   },
@@ -4220,6 +4232,18 @@
      ],
      "fusskachel": [
       63,
+      55
+     ]
+    },
+    {
+     "block": [
+      10,
+      53,
+      3,
+      3
+     ],
+     "fusskachel": [
+      11,
       55
      ]
     }
@@ -5198,6 +5222,18 @@
    "fundstellen_karte": [
     {
      "block": [
+      27,
+      26,
+      2,
+      3
+     ],
+     "fusskachel": [
+      27,
+      28
+     ]
+    },
+    {
+     "block": [
       22,
       48,
       2,
@@ -5608,18 +5644,6 @@
     },
     {
      "block": [
-      35,
-      50,
-      3,
-      2
-     ],
-     "fusskachel": [
-      36,
-      51
-     ]
-    },
-    {
-     "block": [
       22,
       51,
       3,
@@ -5855,26 +5879,14 @@
     },
     {
      "block": [
-      4,
-      40,
-      3,
-      2
-     ],
-     "fusskachel": [
-      5,
-      41
-     ]
-    },
-    {
-     "block": [
       10,
-      54,
+      53,
       3,
       2
      ],
      "fusskachel": [
       11,
-      55
+      54
      ]
     }
    ]
@@ -5935,11 +5947,54 @@
    ]
   },
   {
+   "name": "moebel/bank",
+   "datei": "varianten/moebel-bank_beton.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 17,
+    "y": 20,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "objektblock_im_slot": {
+    "x": 1,
+    "y": 0,
+    "breite": 2,
+    "hoehe": 2
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      23,
+      35,
+      2,
+      2
+     ],
+     "fusskachel": [
+      23,
+      36
+     ]
+    },
+    {
+     "block": [
+      31,
+      35,
+      2,
+      2
+     ],
+     "fusskachel": [
+      31,
+      36
+     ]
+    }
+   ]
+  },
+  {
    "name": "spiel/kuppel",
    "datei": "varianten/spiel-kuppel_sand.png",
    "animation": null,
    "slot_kacheln": {
-    "x": 17,
+    "x": 20,
     "y": 20,
     "breite": 3,
     "hoehe": 3
@@ -5970,7 +6025,7 @@
    "datei": "varianten/k01-deko09_sand.png",
    "animation": null,
    "slot_kacheln": {
-    "x": 20,
+    "x": 23,
     "y": 20,
     "breite": 2,
     "hoehe": 3
@@ -5984,13 +6039,13 @@
    "fundstellen_karte": [
     {
      "block": [
-      43,
+      42,
       38,
       2,
       2
      ],
      "fusskachel": [
-      43,
+      42,
       39
      ]
     }
@@ -6001,7 +6056,7 @@
    "datei": "varianten/k01-deko10_gras.png",
    "animation": null,
    "slot_kacheln": {
-    "x": 22,
+    "x": 25,
     "y": 20,
     "breite": 2,
     "hoehe": 3
@@ -6032,7 +6087,7 @@
    "datei": "varianten/k01-deko10_sand.png",
    "animation": null,
    "slot_kacheln": {
-    "x": 24,
+    "x": 27,
     "y": 20,
     "breite": 2,
     "hoehe": 3
@@ -6058,14 +6113,14 @@
     },
     {
      "block": [
-      40,
-      25,
+      48,
+      39,
       2,
       2
      ],
      "fusskachel": [
-      40,
-      26
+      48,
+      40
      ]
     }
    ]
@@ -6075,7 +6130,7 @@
    "datei": "varianten/k01-deko11_sand.png",
    "animation": null,
    "slot_kacheln": {
-    "x": 26,
+    "x": 29,
     "y": 20,
     "breite": 2,
     "hoehe": 3
@@ -6089,13 +6144,13 @@
    "fundstellen_karte": [
     {
      "block": [
-      52,
+      39,
       26,
       2,
       2
      ],
      "fusskachel": [
-      52,
+      39,
       27
      ]
     }
@@ -6106,7 +6161,7 @@
    "datei": "varianten/k01-deko14_gras.png",
    "animation": null,
    "slot_kacheln": {
-    "x": 28,
+    "x": 31,
     "y": 20,
     "breite": 2,
     "hoehe": 3
@@ -6161,7 +6216,7 @@
    "datei": "varianten/k01-deko31_gras.png",
    "animation": null,
    "slot_kacheln": {
-    "x": 30,
+    "x": 33,
     "y": 20,
     "breite": 2,
     "hoehe": 3
@@ -6225,41 +6280,10 @@
   },
   {
    "name": "moebel/bank",
-   "datei": "varianten/moebel-bank_beton.png",
-   "animation": null,
-   "slot_kacheln": {
-    "x": 32,
-    "y": 20,
-    "breite": 2,
-    "hoehe": 3
-   },
-   "objektblock_im_slot": {
-    "x": 0,
-    "y": 0,
-    "breite": 2,
-    "hoehe": 2
-   },
-   "fundstellen_karte": [
-    {
-     "block": [
-      31,
-      33,
-      2,
-      2
-     ],
-     "fusskachel": [
-      31,
-      34
-     ]
-    }
-   ]
-  },
-  {
-   "name": "moebel/bank",
    "datei": "varianten/moebel-bank_gras.png",
    "animation": null,
    "slot_kacheln": {
-    "x": 34,
+    "x": 35,
     "y": 20,
     "breite": 2,
     "hoehe": 3
@@ -6273,38 +6297,14 @@
    "fundstellen_karte": [
     {
      "block": [
-      23,
+      36,
       29,
       2,
       2
      ],
      "fusskachel": [
-      23,
-      30
-     ]
-    },
-    {
-     "block": [
-      20,
       36,
-      2,
-      2
-     ],
-     "fusskachel": [
-      20,
-      37
-     ]
-    },
-    {
-     "block": [
-      25,
-      41,
-      2,
-      2
-     ],
-     "fusskachel": [
-      25,
-      42
+      30
      ]
     },
     {
@@ -6317,54 +6317,6 @@
      "fusskachel": [
       12,
       40
-     ]
-    },
-    {
-     "block": [
-      5,
-      38,
-      2,
-      2
-     ],
-     "fusskachel": [
-      5,
-      39
-     ]
-    },
-    {
-     "block": [
-      33,
-      36,
-      2,
-      2
-     ],
-     "fusskachel": [
-      33,
-      37
-     ]
-    },
-    {
-     "block": [
-      36,
-      38,
-      2,
-      2
-     ],
-     "fusskachel": [
-      36,
-      39
-     ]
-    },
-    {
-     "block": [
-      36,
-      29,
-      2,
-      2
-     ],
-     "fusskachel": [
-      36,
-      30
      ]
     },
     {
@@ -6386,7 +6338,7 @@
    "datei": "k01/deko18.png",
    "animation": null,
    "slot_kacheln": {
-    "x": 36,
+    "x": 37,
     "y": 20,
     "breite": 3,
     "hoehe": 2

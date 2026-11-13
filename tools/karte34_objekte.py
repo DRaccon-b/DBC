@@ -41,12 +41,14 @@ HOCH_FELS = ['k01/deko09', 'k01/deko11']
 HOCH_BLUME = ['k01/deko04', 'k01/deko27', 'k01/deko30']
 OHNE_FUSS = ('rathaus/', 'buero/', 'pavillon/', 'moebel/laterne', 'k01/deko17', 'k01/deko18', 'k01/deko19')
 
+BRUNNEN_ACHSE = (440, 562)                                   # aus der Platzflaeche berechnet (Mitte exakt bestimmen)
 # Gebaeude und grosse Objekte: (sprite, Kachel-x der Mitte, Fusszeile, Optionen) - Lage nach der Vorlage
 GEBAEUDE = [
     ('rathaus/00', 46.5, 21, {'gebaeude': True}),             # Doppelturm-Rathaus auf dem Platz oben rechts
     ('buero/00', 10, 36, {'gebaeude': True}),                 # glaesernes Buerohaus links
     ('pavillon/00', 14.5, 17, {'gebaeude': True}),            # kleiner Steinpavillon oben links
-    ('spiel/brunnen', 29, 31, {'anim': 'brunnen'}),           # Brunnen auf dem mittleren Platz
+    # Brunnen exakt auf der Mitte des Brunnenplatzes (Platz symmetrisch um Spalte 27 / Reihe 35: Achse px 440 / 560)
+    ('spiel/brunnen', 27, 36, {'anim': 'brunnen', 'px': BRUNNEN_ACHSE[0], 'py': BRUNNEN_ACHSE[1] + 29}),
     ('spiel/schaukel', 45.5, 46, {}), ('spiel/rutsche', 50.5, 47, {}), ('spiel/kuppel', 47, 48, {}),
 ]
 # Wiesenbaeume nach der Vorlage (Fussmitte, Fusszeile); werden bei Bedarf auf die naechste freie Graskachel geschoben
@@ -56,8 +58,8 @@ BAEUME = [
     (LAUB[1], 3, 31), (LAUB[2], 3, 46), (LAUB[0], 27, 45), (GROSS, 36, 48), (LAUB[1], 58, 47), (LAUB[2], 60, 44),
 ]
 ZYPRESSEN = [(2, 10), (8, 13), (2, 17), (26, 27), (20, 28), (4, 35), (23, 47), (25, 46), (19, 50), (24, 49)]
-BAENKE = [(18.5, 21), (23.5, 31), (22.5, 36), (23.5, 40), (12.5, 40), (6.5, 38), (33.5, 32), (33.5, 38), (37.5, 40),
-          (38.5, 30), (50.5, 25)]
+BAENKE = [(36.5, 30), (12.5, 40), (52.5, 25)]                # wenige Baenke (Nutzer): Teich, Buerohaus, Rathaus
+BANK_PAAR_DX = 64                                            # + Paar spiegelgleich links/rechts vom Brunnen
 LATERNEN = [(42, 22), (51, 22), (19, 35), (21, 46), (32, 29)]   # Paar 42/51 symmetrisch zum Rathaus
 
 
@@ -219,6 +221,10 @@ def main():
                 for y in (by + ht - 1, by + ht, by + ht + 1):
                     gesperrt.add((x, y))
     # ---------------------------------------------------------------- Parkmoebel (nie auf dem Weg, beide Fusskacheln)
+    for d in (-BANK_PAAR_DX, BANK_PAAR_DX):                     # Bankpaar exakt gespiegelt zur Brunnenachse
+        if not setze('moebel/bank', (BRUNNEN_ACHSE[0] + d) / T, 36, {'px': BRUNNEN_ACHSE[0] + d, 'py': 36 * T + 15},
+                     frei=True):
+            print('Bankpaar nicht gesetzt', d)
     for (fx, fy) in BAENKE:
         if not versuche('moebel/bank', fx, fy, {}, 'g', 2, 2):          # beide Fuesse auf demselben Boden
             versuche('moebel/bank', fx, fy, {}, 'p', 2, 2)

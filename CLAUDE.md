@@ -207,6 +207,9 @@ Vor jeder Abgabe Punkt für Punkt prüfen (vergrößert, Standbild und mehrere A
   (2 px Abstand, auch über verschiedene Deko-Listen hinweg), nicht nur die Fußkachel; Bänke/Möbel mit allen Fußkacheln
   neben dem Weg; Waldrand **nach** Bäumen/Möbeln setzen, nie über deren Fuß oder Teleporter, Lücken im Waldrand mit
   Büschen schließen (kein nackter Waldboden); Streudeko erst danach, nie unter Waldkronen.
+- **Platzmitte und Möbel (Nutzer, Karte 34):** Brunnen, Denkmäler u. Ä. stehen exakt auf der aus der Platzfläche
+  berechneten Mitte (nicht auf der Vorlagenkachel); Bänke sparsam – höchstens eine je Ort bzw. ein gespiegeltes Paar am
+  Platzobjekt, nie viele Bänke verteilt.
 - **Begleiter am Stumpf (5d):** keine 1-Kachel-Blumen auf dem Stumpf, kein Blumenklumpen; Begleiter überlappen sich nicht.
 - **Paare/Achsen:** Paare vor Toren/Bauwerken exakt gespiegelt (Mitte und Fuß), gleiche Objekte auf gleicher Höhe;
   Druckplatten, Obelisken usw. symmetrisch zur berechneten Achse.
