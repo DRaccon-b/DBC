@@ -37,7 +37,7 @@ GEBAEUDE = {
     'flach': (7, 54, 24, 58), 'wohn_unten': (39, 67, 68, 77),
 }
 # Beete unter Baeumen, die in der Vorlage auf dem Gehweg stehen (3x2, Baum mittig auf dem Gruen)
-BEETE = [(21, 75, 23, 76), (35, 75, 37, 76), (78, 75, 80, 76), (4, 68, 7, 70)]
+BEETE = [(21, 75, 23, 76), (35, 75, 37, 76), (78, 75, 80, 76), (5, 68, 8, 70)]
 
 
 def vorlage_klassen():
@@ -75,6 +75,9 @@ def main():
     k[15:18, 77:82] = 'g'                                             # Beetluecke vor der Tuer des Glasbueros oben
     k[55:57, 74:77] = 'g'                                             # Beet rechts Mitte erst rechts der Tuer
     k[78, 4:94] = 'g'                                                 # Gehweg vor dem unteren Block (Tueren nicht im Wald)
+    k[14:18, 45:48] = 'g'; k[14:18, 53:56] = 'g'                      # Beetluecken vor den Tueren des lila Hauses
+    k[16:21, 10:14] = 'g'                                             # Beetluecke vor der linken Tuer des oberen Blocks
+    k[:, 4][k[:, 4] == 'n'] = 'g'                                     # Beete nicht an den Guertel (keine Kantennaht)
     # Fahrbahn nur in den Strassenbaendern/Zebrastreifen: Asphaltreste der Vorlage (Tueren, Staemme) werden Gehweg
     band = np.zeros((R, C), bool)
     for (y0, y1, x0, x1) in STRASSEN_H:

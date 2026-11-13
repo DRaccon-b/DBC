@@ -47,7 +47,7 @@ GEBAEUDE = [                                   # (sprite, Mitte x in px, Fusszei
 ]
 LAEDEN = ['k31/laden_2', 'k31/laden_0', 'k31/laden_7', 'k31/laden_1']   # Cafe, Mart, Drogerie, Ramen (Karte 31)
 LAEDEN_MITTE, LAEDEN_FUSS = 744, 43
-BAEUME = [(40, 16), (47, 16), (52, 16), (56, 16), (72, 16), (84, 16), (90, 17), (47, 33), (6, 41), (24, 41),
+BAEUME = [(41, 16), (50, 16), (72, 16), (84, 16), (90, 17), (47, 33), (6, 41), (24, 41),
           (80, 55), (5, 69), (22, 75), (36, 75), (79, 75), (81, 70)]
 LATERNEN = [(25, 20), (57, 20), (68, 21), (25, 41), (36, 42), (68, 41), (25, 57), (84, 65)]
 BAENKE = [(19, 20), (72, 31), (15, 44), (85, 57), (12, 73), (73, 73)]
@@ -99,7 +99,7 @@ def halb_gespiegelt(quelle, ziel, breite_halb, eingang=True):
                 neu[y, 0, :3] = (ar[y, 0, :3].astype(int) * 0.4).astype(np.uint8); neu[y, 0, 3] = 255
         ar = neu
     hh_, ww_ = ar.shape[:2]
-    if (ar[-1, :, 3] > 0).sum() > ww_ * 0.3:                     # Sockel unten angeschnitten: 2 Zeilen + Kontur
+    if (ar[-1, :, 3] > 0).sum() > ww_ * 0.3 and ar[-1, :, :3].astype(int).sum(-1).mean() > 150:   # Sockel angeschnitten
         neu = np.zeros((hh_ + 3, ww_, 4), np.uint8); neu[:hh_] = ar
         for x in range(ww_):
             if ar[-1, x, 3] > 0:
@@ -113,6 +113,15 @@ def halb_gespiegelt(quelle, ziel, breite_halb, eingang=True):
     voll.paste(h, (0, 0))
     voll.paste(h.transpose(Image.FLIP_LEFT_RIGHT), (breite_halb, 0))
     va = np.array(voll)
+    hv = va.shape[0]
+    wand = (va[max(0, hv - 14):hv - 6, :, 3] > 0).any(0)           # Spalten mit Wand/Sockel kurz ueber dem Fuss
+    va[hv - 6:, ~wand] = 0                                       # Saum/Balken seitlich ueber die Wand hinaus weg
+    dunkel = (va[..., :3].astype(int).sum(-1) < 90) & (va[..., 3] > 0)
+    for yy in range(hv - 1, hv - 7, -1):                         # fast schwarze volle Fusszeilen (Freistell-Rest) weg
+        if dunkel[yy].mean() > 0.6:
+            va[yy] = 0
+        else:
+            break
     deck = (va[..., 3] > 0).mean(1)                              # Unterkante: gezackte Saumzeilen (< 90 % deckend) weg
     unten = max(i for i in range(len(deck)) if deck[i] > 0.9)
     va[unten + 1:] = 0
@@ -170,6 +179,15 @@ def main():
         if art == 'wald':                                        # Baumguertel: nie ueber Teleporter oder andere Objekte
             if any(schnitt(r, t_, 3) for t_ in tps):
                 return None
+            y_a, y_b = max(0, r[1] // T), min(rows - 1, r[3] // T)
+            x_a, x_b = max(0, r[0] // T), min(cols - 1, r[2] // T)
+            for yy in range(y_a, y_b + 1):                       # Krone nicht ueber Stadt/Ausgang (max. 4 px)
+                for xx in range(x_a, x_b + 1):
+                    if cls[yy][xx] != 'h':
+                        ov_y = min(r[3], yy * T + T - 1) - max(r[1], yy * T) + 1
+                        ov_x = min(r[2], xx * T + T - 1) - max(r[0], xx * T) + 1
+                        if ov_y > 4 and ov_x > 4:
+                            return None
             if any(art2 != 'wald' and schnitt(r, (a0, a1, a2, a3), 2) for (a0, a1, a2, a3, art2, fy2) in rects):
                 return None
         elif pruefen:
@@ -264,7 +282,7 @@ def main():
         kachel(n_, tx + P, ty + P, {'anim': 'leuchten'} if n_ in ('k18s/00', 'k18s/01', 'k18s/42') else {}, klassen='g')
     # ---------------------------------------------------------------- Fahrzeuge in ihrer Spur
     for (n_, cx, fy, sp) in AUTOS:
-        if not setze(n_, cx + OFF, fy + OFF, {'auto': True, 'fest_pos': True}, sp, 'auto'):
+        if not setze(n_, cx + OFF, fy + OFF, {'auto': True, 'fest_pos': True, 'nur_kontakt': True}, sp, 'auto'):
             print('Auto nicht gesetzt:', n_, cx, fy)
     # ---------------------------------------------------------------- Kleinkram: Blumen auf den Streifen, Muell am Rand
     gesetzt, gesetzt_m = [], []
