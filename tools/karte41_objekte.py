@@ -36,8 +36,8 @@ BAEUME = [('totbaum', 29, 11), ('totbaum', 36, 27), ('totbaum', 72, 28), ('totba
 GROSS = [('unterstand', 13, 56), ('skelett', 80, 44), ('skelett', 59, 72),
          ('automat', 82, 28), ('automat', 13, 61), ('automat', 20, 72),
          ('banner', 75, 29), ('banner', 56, 74),
-         ('saeule', 57, 8), ('saeule', 28, 31), ('saeule_kaputt', 34, 31), ('saeule', 73, 24), ('saeule_kaputt', 74, 77),
-         ('fels_sand', 30, 7), ('felsen', 31, 31), ('fels_sand', 52, 33), ('felsen', 78, 19), ('fels_sand', 84, 34),
+         ('saeule', 57, 8), ('saeule', 73, 24), ('saeule_kaputt', 74, 77),
+         ('fels_sand', 30, 7), ('fels_sand', 52, 33), ('felsen', 78, 19), ('fels_sand', 84, 34),
          ('felsen', 12, 48), ('fels_sand', 77, 48), ('felsen', 57, 58), ('fels_sand', 44, 72), ('felsen', 72, 72)]
 STREU = ['gras', 'gras2', 'gras3', 'kiesel', 'zweig', 'knochen_k', 'kristall', 'stein']
 BODEN = 'sbdk'                       # begehbarer Wuestenboden (kein Gras/Teich/Teleporter/Plateau)
@@ -120,33 +120,50 @@ def main():
 
     rnd = random.Random(41)
     # ---------------- Baeume (gross zuerst), Begleiter nach Regel 5/5d
+    gesetzte_baeume = []
     for i, (n, tx, ty) in enumerate(BAEUME):
         kl = BODEN + ('n' if n in ('laubbaum', 'akazie', 'akazie_klein') else '')
         o = kachel(n, tx, ty, {'anim': 'baum'} if n != 'totbaum' else {}, i % 2 == 1, kl)
         if not o:
             continue
-        idx = len(rects) - 1
-        fx, fy = o['kachel']
-        seite = 1 if i % 2 == 0 else -1
-        art = i % 3                                                   # abwechseln: Fels hinter den Blaettern / Busch / beides
-        if art in (0, 2):                                             # Fels eine Reihe hoeher, seitlich hinter der Krone
-            for dx in (3, 4):
-                if setze(rnd.choice(['fels_grau', 'steinhaufen']), (fx + seite * dx) * T + 8, (fy - 1) * T + T - 1,
-                         {}, seite < 0, kl):
-                    break
-        if art in (1, 2):                                             # trockener Busch / Gras schraeg vor dem Baum
-            for dx in (3, 4, 5):
-                if setze('busch_tot' if n == 'totbaum' else 'gras3', (fx - seite * dx) * T + 8, (fy + 1) * T + T - 1,
-                         {'ebene': 0}, seite > 0, kl):
-                    break
-    # ---------------- grosse Einzelobjekte
+        gesetzte_baeume.append((i, n, o, kl))
+    # ---------------- grosse Einzelobjekte (vor den Begleitern: Grosses zuerst)
     for i, (n, tx, ty) in enumerate(GROSS):
         opt = {}
         if n == 'banner':
             opt = {'anim': 'standarte'}
         if n == 'skelett':
             opt = {'liegend': True}
-        kachel(n, tx, ty, opt, n in ('skelett',) and i % 2 == 1)
+        kachel(n, tx, ty, opt, n in ('skelett',) and i % 2 == 1, klassen='sbd')   # nie auf Pflaster
+    # Saeulenpaar mit Fels dazwischen (Vorlage): gleiche Fusszeile, spiegelsymmetrisch zur Felsmitte
+    ax = 31 * T - 4                                      # Achse etwas links: Platz zur Akazie (2 px)
+    for fy_ in (31, 30, 32, 33, 29):
+        n0 = len(objekte)
+        ok = (setze('fels_sand', ax, fy_ * T + T - 1, {}, False, 'sbd') and
+              setze('saeule', ax - 48, fy_ * T + T - 1, {}, False, 'sbd') and
+              setze('saeule', ax + 48, fy_ * T + T - 1, {}, True, 'sbd'))
+        if ok:
+            break
+        del objekte[n0:]; del rects[n0:]
+    for (i, n, o, kl) in gesetzte_baeume:
+        fx, fy = o['kachel']
+        seite = 1 if i % 2 == 0 else -1
+        art = i % 3                                                   # abwechseln: Fels hinter den Blaettern / Busch / beides
+        def fels(sd):
+            return any(setze(rnd.choice(['fels_grau', 'steinhaufen']), (fx + sd * dx) * T + 8, (fy - 1) * T + T - 1,
+                             {}, sd < 0, kl) for dx in (3, 4))
+        def busch(sd):
+            return any(setze('busch_tot' if n == 'totbaum' else 'gras3', (fx - sd * dx) * T + 8, (fy + 1) * T + T - 1,
+                             {'ebene': 0}, sd > 0, kl) for dx in (3, 4, 5))
+        hat = False
+        if art in (0, 2):
+            hat |= fels(seite)
+        if art in (1, 2):
+            hat |= busch(seite)
+        if not hat:                                                   # Ersatz: andere Seite / andere Art (Regel 5)
+            hat = fels(-seite) or busch(-seite) or fels(seite) or busch(seite)
+        if not hat:
+            print('  Baum ohne Begleiter:', n, fx, fy)
     # Pilze am Teich (Gras)
     for (tx, ty) in ((23, 67), (37, 71)):
         kachel('pilz', tx, ty, {'ebene': 0}, klassen='n')
@@ -163,7 +180,10 @@ def main():
         wahl = [s for s in STREU if s != letzte]
         n = rnd.choice(wahl)
         lieg = n in ('zweig', 'knochen_k')
-        if setze(n, x * T + rnd.randint(4, 12), y * T + rnd.randint(10, 15), {'ebene': 0, 'streu': True, 'liegend': lieg},
+        opt_ = {'ebene': 0, 'streu': True, 'liegend': lieg}
+        if n == 'kristall':
+            opt_['anim'] = 'glitzern'                               # Kristalle glitzern selbst (Regel)
+        if setze(n, x * T + rnd.randint(4, 12), y * T + rnd.randint(10, 15), opt_,
                  rnd.random() < 0.5):
             gesetzt += 1; letzte = n
     json.dump(objekte, open(os.path.join(OBJ, 'platzierung.json'), 'w'), indent=0)

@@ -44,6 +44,33 @@ def flaechen(m):
     return out
 
 
+def zipfel_weg(k):
+    """Zipfel/Kerben (Pruefung K41): Kachel mit <= 1 gleichen Nachbarn -> haeufigster Nachbar; Kleinflecken < 6."""
+    for _ in range(6):                                # Zipfel/Kerben (Pruefung): Kachel mit <= 1 gleichen Nachbarn
+        geaendert = False                             # -> haeufigster Nachbar (wird sonst zum runden Punkt)
+        for y in range(R):
+            for x in range(C):
+                if k[y, x] == 'r':
+                    continue
+                nb = [k[yy, xx] for yy, xx in ((y - 1, x), (y + 1, x), (y, x - 1), (y, x + 1))
+                      if 0 <= yy < R and 0 <= xx < C]
+                if nb.count(k[y, x]) <= 1:
+                    fremd = [c for c in nb if c != k[y, x] and c != 'r']
+                    if fremd:
+                        k[y, x] = max(set(fremd), key=fremd.count); geaendert = True
+        for art in 'bsdkn':
+            for teil in flaechen(k == art):
+                if len(teil) < 6:
+                    for (y, x) in teil:
+                        nb = [k[yy, xx] for yy, xx in ((y - 1, x), (y + 1, x), (y, x - 1), (y, x + 1))
+                              if 0 <= yy < R and 0 <= xx < C and k[yy, xx] not in (art, 'r')]
+                        if nb:
+                            k[y, x] = max(set(nb), key=nb.count); geaendert = True
+        if not geaendert:
+            break
+    return k
+
+
 def main():
     os.makedirs(KARTE, exist_ok=True)
     a = np.array(Image.open(VORLAGE).convert('RGB')).astype(int)
@@ -79,6 +106,7 @@ def main():
                     nb = [k[yy, xx] for yy, xx in ((y - 1, x), (y + 1, x), (y, x - 1), (y, x + 1))
                           if 0 <= yy < R and 0 <= xx < C and k[yy, xx] != art]
                     k[y, x] = max(set(nb), key=nb.count) if nb else 'b'
+    k = zipfel_weg(k)
     for teil in flaechen(k != 'r'):                   # Bodenloecher im Plateau -> Plateau
         if len(teil) < 16:
             for (y, x) in teil:
@@ -91,11 +119,26 @@ def main():
                     k[y, x] = 'r'
                 elif k[y, x] == 'r' and nb.count('r') <= 1:
                     k[y, x] = 'b'
+    k = zipfel_weg(k)
     # Teich und Gras: Gras ringsum um das Wasser (mind. 1 Kachel), kein Wasser direkt am Sand
     x_ = k == 'x'
     um = x_.copy()
     um[1:] |= x_[:-1]; um[:-1] |= x_[1:]; um[:, 1:] |= x_[:, :-1]; um[:, :-1] |= x_[:, 1:]
+    for _ in range(1):                                # Grasring 2 Kacheln breit (kein 1-Kachel-Grat am Ufer)
+        um2 = um.copy()
+        um2[1:] |= um[:-1]; um2[:-1] |= um[1:]; um2[:, 1:] |= um[:, :-1]; um2[:, :-1] |= um[:, 1:]
+        um = um2
     k[um & ~x_ & (k != 'r')] = 'n'
+    for _ in range(3):                                # Wasser-/Graszipfel und -kerben angleichen
+        for y in range(1, R - 1):
+            for x in range(1, C - 1):
+                nb = [k[y - 1, x], k[y + 1, x], k[y, x - 1], k[y, x + 1]]
+                if k[y, x] == 'x' and nb.count('x') <= 1:
+                    k[y, x] = 'n'
+                elif k[y, x] == 'n' and nb.count('x') >= 3:
+                    k[y, x] = 'x'
+                elif k[y, x] in 'sbdk' and nb.count('n') >= 3:
+                    k[y, x] = 'n'
     h = np.where(k == 'r', 2, 0)
     for (tx, ty, b, hh) in TELEPORTER:                # Ausgang: Boden bis an den Rand, Teleporter darauf
         k[ty:ty + hh, tx:tx + b] = 'T'; h[ty:ty + hh, tx:tx + b] = 0
