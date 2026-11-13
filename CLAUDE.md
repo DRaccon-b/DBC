@@ -210,6 +210,11 @@ Vor jeder Abgabe Punkt für Punkt prüfen (vergrößert, Standbild und mehrere A
 - **Platzmitte und Möbel (Nutzer, Karte 34):** Brunnen, Denkmäler u. Ä. stehen exakt auf der aus der Platzfläche
   berechneten Mitte (nicht auf der Vorlagenkachel); Bänke sparsam – höchstens eine je Ort bzw. ein gespiegeltes Paar am
   Platzobjekt, nie viele Bänke verteilt.
+- **Stadt (Karte 35):** Fahrtrichtung je Sprite an Front/Scheinwerfern prüfen, nicht an der Spiegel-Annahme (Bus und
+  Autos können unterschiedlich gezeichnet sein; Linksverkehr); Laternen/Möbel nie im Austritt von Treppen und Brücken
+  (2 Reihen frei); Leuchtschein mit `licht`/`licht_box`/`licht_r` nur am Lampenkopf bzw. Warenfenster; gewollte
+  Begleiter (Busch an der Stammecke) ohne 2-px-Prüfung gegen den eigenen Baum setzen und ihr Setzen kontrollieren;
+  abgeschnittene Markierungsreste (< 10 px) entfernen; Gebäude, die höher als in der Vorlage sind: Karte anpassen.
 - **Begleiter am Stumpf (5d):** keine 1-Kachel-Blumen auf dem Stumpf, kein Blumenklumpen; Begleiter überlappen sich nicht.
 - **Paare/Achsen:** Paare vor Toren/Bauwerken exakt gespiegelt (Mitte und Fuß), gleiche Objekte auf gleicher Höhe;
   Druckplatten, Obelisken usw. symmetrisch zur berechneten Achse.
