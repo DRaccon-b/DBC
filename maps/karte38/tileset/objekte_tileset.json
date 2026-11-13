@@ -1,17 +1,328 @@
 {
  "kachel": 16,
  "breite_kacheln": 40,
- "hoehe_kacheln": 21,
- "animationsbereich_hoehe_kacheln": 6,
+ "hoehe_kacheln": 31,
+ "animationsbereich_hoehe_kacheln": 14,
  "animationsbilder": 4,
  "bilddauer_ms": 250,
  "objekte": [
+  {
+   "name": "zug_kopf/00",
+   "datei": "varianten/zug_kopf-00.png",
+   "animation": "maschine",
+   "slot_kacheln": {
+    "x": 0,
+    "y": 0,
+    "breite": 16,
+    "hoehe": 8
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 16,
+    "hoehe": 8
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      57,
+      27,
+      16,
+      8
+     ],
+     "fusskachel": [
+      64,
+      34
+     ]
+    }
+   ]
+  },
+  {
+   "name": "bahn/01_kreuz",
+   "datei": "varianten/bahn-01_kreuz_m.png",
+   "animation": "wechselblinker",
+   "slot_kacheln": {
+    "x": 16,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 5
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 5
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      30,
+      31,
+      3,
+      5
+     ],
+     "fusskachel": [
+      31,
+      35
+     ]
+    },
+    {
+     "block": [
+      53,
+      31,
+      3,
+      5
+     ],
+     "fusskachel": [
+      54,
+      35
+     ]
+    },
+    {
+     "block": [
+      82,
+      31,
+      3,
+      5
+     ],
+     "fusskachel": [
+      83,
+      35
+     ]
+    },
+    {
+     "block": [
+      30,
+      55,
+      3,
+      5
+     ],
+     "fusskachel": [
+      31,
+      59
+     ]
+    },
+    {
+     "block": [
+      53,
+      55,
+      3,
+      5
+     ],
+     "fusskachel": [
+      54,
+      59
+     ]
+    },
+    {
+     "block": [
+      82,
+      55,
+      3,
+      5
+     ],
+     "fusskachel": [
+      83,
+      59
+     ]
+    }
+   ]
+  },
+  {
+   "name": "bahn/02",
+   "datei": "varianten/bahn-02.png",
+   "animation": "leuchten",
+   "slot_kacheln": {
+    "x": 19,
+    "y": 0,
+    "breite": 1,
+    "hoehe": 5
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 1,
+    "hoehe": 5
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      4,
+      27,
+      1,
+      5
+     ],
+     "fusskachel": [
+      4,
+      31
+     ]
+    },
+    {
+     "block": [
+      98,
+      27,
+      1,
+      5
+     ],
+     "fusskachel": [
+      98,
+      31
+     ]
+    },
+    {
+     "block": [
+      5,
+      51,
+      1,
+      5
+     ],
+     "fusskachel": [
+      5,
+      55
+     ]
+    },
+    {
+     "block": [
+      100,
+      51,
+      1,
+      5
+     ],
+     "fusskachel": [
+      100,
+      55
+     ]
+    }
+   ]
+  },
+  {
+   "name": "bahn/03",
+   "datei": "varianten/bahn-03.png",
+   "animation": "maschine",
+   "slot_kacheln": {
+    "x": 20,
+    "y": 0,
+    "breite": 4,
+    "hoehe": 4
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 4,
+    "hoehe": 4
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      40,
+      14,
+      4,
+      4
+     ],
+     "fusskachel": [
+      42,
+      17
+     ]
+    },
+    {
+     "block": [
+      60,
+      44,
+      4,
+      4
+     ],
+     "fusskachel": [
+      62,
+      47
+     ]
+    },
+    {
+     "block": [
+      43,
+      64,
+      4,
+      4
+     ],
+     "fusskachel": [
+      45,
+      67
+     ]
+    }
+   ]
+  },
+  {
+   "name": "bahn/01_kreuz",
+   "datei": "varianten/bahn-01_kreuz.png",
+   "animation": "wechselblinker",
+   "slot_kacheln": {
+    "x": 24,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 4
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 4
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      46,
+      26,
+      3,
+      4
+     ],
+     "fusskachel": [
+      47,
+      29
+     ]
+    },
+    {
+     "block": [
+      74,
+      26,
+      3,
+      4
+     ],
+     "fusskachel": [
+      75,
+      29
+     ]
+    },
+    {
+     "block": [
+      22,
+      50,
+      3,
+      4
+     ],
+     "fusskachel": [
+      23,
+      53
+     ]
+    },
+    {
+     "block": [
+      46,
+      50,
+      3,
+      4
+     ],
+     "fusskachel": [
+      47,
+      53
+     ]
+    }
+   ]
+  },
   {
    "name": "k01/baum00",
    "datei": "varianten/k01-baum00.png",
    "animation": "baum",
    "slot_kacheln": {
-    "x": 0,
+    "x": 27,
     "y": 0,
     "breite": 3,
     "hoehe": 3
@@ -858,7 +1169,7 @@
    "datei": "varianten/k01-baum00.png",
    "animation": "wehen",
    "slot_kacheln": {
-    "x": 3,
+    "x": 30,
     "y": 0,
     "breite": 3,
     "hoehe": 3
@@ -921,72 +1232,60 @@
     {
      "block": [
       4,
-      26,
+      24,
       3,
       3
      ],
      "fusskachel": [
       5,
+      26
+     ]
+    },
+    {
+     "block": [
+      97,
+      24,
+      3,
+      3
+     ],
+     "fusskachel": [
+      98,
+      26
+     ]
+    },
+    {
+     "block": [
+      -1,
+      26,
+      3,
+      3
+     ],
+     "fusskachel": [
+      0,
       28
      ]
     },
     {
      "block": [
-      0,
+      2,
       50,
       3,
       3
      ],
      "fusskachel": [
-      1,
+      3,
       52
      ]
     },
     {
      "block": [
-      98,
-      50,
-      3,
-      3
-     ],
-     "fusskachel": [
-      99,
-      52
-     ]
-    },
-    {
-     "block": [
-      9,
+      7,
       85,
       3,
       3
      ],
      "fusskachel": [
-      10,
-      87
-     ]
-    },
-    {
-     "block": [
-      14,
-      85,
-      3,
-      3
-     ],
-     "fusskachel": [
-      15,
-      87
-     ]
-    },
-    {
-     "block": [
-      42,
-      85,
-      3,
-      3
-     ],
-     "fusskachel": [
-      43,
+      8,
       87
      ]
     }
@@ -997,7 +1296,7 @@
    "datei": "varianten/k01-baum00_m.png",
    "animation": "baum",
    "slot_kacheln": {
-    "x": 6,
+    "x": 33,
     "y": 0,
     "breite": 3,
     "hoehe": 3
@@ -1491,30 +1790,6 @@
     },
     {
      "block": [
-      4,
-      25,
-      3,
-      3
-     ],
-     "fusskachel": [
-      5,
-      27
-     ]
-    },
-    {
-     "block": [
-      97,
-      26,
-      3,
-      3
-     ],
-     "fusskachel": [
-      98,
-      28
-     ]
-    },
-    {
-     "block": [
       -1,
       36,
       3,
@@ -1988,7 +2263,7 @@
    "datei": "varianten/k01-baum00_m.png",
    "animation": "wehen",
    "slot_kacheln": {
-    "x": 9,
+    "x": 36,
     "y": 0,
     "breite": 3,
     "hoehe": 3
@@ -2038,121 +2313,73 @@
     },
     {
      "block": [
-      1,
+      -1,
       85,
       3,
       3
      ],
      "fusskachel": [
-      2,
+      0,
       87
      ]
     },
     {
      "block": [
-      7,
+      11,
       85,
       3,
       3
      ],
      "fusskachel": [
-      8,
+      12,
       87
      ]
     },
     {
      "block": [
+      12,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
       13,
-      85,
-      3,
-      3
-     ],
-     "fusskachel": [
-      14,
       87
      ]
     },
     {
      "block": [
-      23,
+      17,
       85,
       3,
       3
      ],
      "fusskachel": [
-      24,
+      18,
       87
      ]
     },
     {
      "block": [
-      37,
+      39,
       85,
       3,
       3
      ],
      "fusskachel": [
-      38,
+      40,
       87
      ]
     },
     {
      "block": [
-      47,
+      59,
       85,
       3,
       3
      ],
      "fusskachel": [
-      48,
-      87
-     ]
-    },
-    {
-     "block": [
-      48,
-      85,
-      3,
-      3
-     ],
-     "fusskachel": [
-      49,
-      87
-     ]
-    },
-    {
-     "block": [
-      53,
-      85,
-      3,
-      3
-     ],
-     "fusskachel": [
-      54,
-      87
-     ]
-    },
-    {
-     "block": [
-      75,
-      85,
-      3,
-      3
-     ],
-     "fusskachel": [
-      76,
-      87
-     ]
-    },
-    {
-     "block": [
-      95,
-      85,
-      3,
-      3
-     ],
-     "fusskachel": [
-      96,
+      60,
       87
      ]
     }
@@ -2163,8 +2390,8 @@
    "datei": "varianten/k01-baum01.png",
    "animation": "baum",
    "slot_kacheln": {
-    "x": 12,
-    "y": 0,
+    "x": 0,
+    "y": 8,
     "breite": 3,
     "hoehe": 3
    },
@@ -3022,8 +3249,8 @@
    "datei": "varianten/k01-baum01.png",
    "animation": "wehen",
    "slot_kacheln": {
-    "x": 15,
-    "y": 0,
+    "x": 3,
+    "y": 8,
     "breite": 3,
     "hoehe": 3
    },
@@ -3156,14 +3383,26 @@
     },
     {
      "block": [
-      8,
-      85,
+      98,
+      24,
       3,
       3
      ],
      "fusskachel": [
-      9,
-      87
+      99,
+      26
+     ]
+    },
+    {
+     "block": [
+      0,
+      50,
+      3,
+      3
+     ],
+     "fusskachel": [
+      1,
+      52
      ]
     },
     {
@@ -3180,25 +3419,37 @@
     },
     {
      "block": [
-      67,
+      46,
       85,
       3,
       3
      ],
      "fusskachel": [
-      68,
+      47,
       87
      ]
     },
     {
      "block": [
-      91,
+      53,
       85,
       3,
       3
      ],
      "fusskachel": [
-      92,
+      54,
+      87
+     ]
+    },
+    {
+     "block": [
+      97,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      98,
       87
      ]
     }
@@ -3209,8 +3460,8 @@
    "datei": "varianten/k01-baum01_m.png",
    "animation": "baum",
    "slot_kacheln": {
-    "x": 18,
-    "y": 0,
+    "x": 6,
+    "y": 8,
     "breite": 3,
     "hoehe": 3
    },
@@ -3739,18 +3990,6 @@
     },
     {
      "block": [
-      4,
-      49,
-      3,
-      3
-     ],
-     "fusskachel": [
-      5,
-      51
-     ]
-    },
-    {
-     "block": [
       -1,
       50,
       3,
@@ -3758,30 +3997,6 @@
      ],
      "fusskachel": [
       0,
-      52
-     ]
-    },
-    {
-     "block": [
-      3,
-      50,
-      3,
-      3
-     ],
-     "fusskachel": [
-      4,
-      52
-     ]
-    },
-    {
-     "block": [
-      97,
-      50,
-      3,
-      3
-     ],
-     "fusskachel": [
-      98,
       52
      ]
     },
@@ -4080,8 +4295,8 @@
    "datei": "varianten/k01-baum01_m.png",
    "animation": "wehen",
    "slot_kacheln": {
-    "x": 21,
-    "y": 0,
+    "x": 9,
+    "y": 8,
     "breite": 3,
     "hoehe": 3
    },
@@ -4142,85 +4357,85 @@
     },
     {
      "block": [
+      5,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      6,
+      87
+     ]
+    },
+    {
+     "block": [
+      15,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      16,
+      87
+     ]
+    },
+    {
+     "block": [
+      27,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      28,
+      87
+     ]
+    },
+    {
+     "block": [
+      33,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      34,
+      87
+     ]
+    },
+    {
+     "block": [
+      43,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      44,
+      87
+     ]
+    },
+    {
+     "block": [
+      45,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      46,
+      87
+     ]
+    },
+    {
+     "block": [
       98,
-      26,
+      85,
       3,
       3
      ],
      "fusskachel": [
       99,
-      28
-     ]
-    },
-    {
-     "block": [
-      24,
-      85,
-      3,
-      3
-     ],
-     "fusskachel": [
-      25,
-      87
-     ]
-    },
-    {
-     "block": [
-      41,
-      85,
-      3,
-      3
-     ],
-     "fusskachel": [
-      42,
-      87
-     ]
-    },
-    {
-     "block": [
-      51,
-      85,
-      3,
-      3
-     ],
-     "fusskachel": [
-      52,
-      87
-     ]
-    },
-    {
-     "block": [
-      63,
-      85,
-      3,
-      3
-     ],
-     "fusskachel": [
-      64,
-      87
-     ]
-    },
-    {
-     "block": [
-      69,
-      85,
-      3,
-      3
-     ],
-     "fusskachel": [
-      70,
-      87
-     ]
-    },
-    {
-     "block": [
-      79,
-      85,
-      3,
-      3
-     ],
-     "fusskachel": [
-      80,
       87
      ]
     }
@@ -4231,8 +4446,8 @@
    "datei": "varianten/k01-baum02.png",
    "animation": "baum",
    "slot_kacheln": {
-    "x": 24,
-    "y": 0,
+    "x": 12,
+    "y": 8,
     "breite": 3,
     "hoehe": 3
    },
@@ -4845,18 +5060,6 @@
     },
     {
      "block": [
-      2,
-      25,
-      3,
-      3
-     ],
-     "fusskachel": [
-      3,
-      27
-     ]
-    },
-    {
-     "block": [
       -1,
       26,
       3,
@@ -5294,8 +5497,8 @@
    "datei": "varianten/k01-baum02_m.png",
    "animation": "baum",
    "slot_kacheln": {
-    "x": 27,
-    "y": 0,
+    "x": 15,
+    "y": 8,
     "breite": 3,
     "hoehe": 3
    },
@@ -6393,8 +6596,8 @@
    "datei": "varianten/k01-baum04.png",
    "animation": "baum",
    "slot_kacheln": {
-    "x": 30,
-    "y": 0,
+    "x": 18,
+    "y": 8,
     "breite": 3,
     "hoehe": 3
    },
@@ -6924,18 +7127,6 @@
     {
      "block": [
       100,
-      49,
-      3,
-      3
-     ],
-     "fusskachel": [
-      101,
-      51
-     ]
-    },
-    {
-     "block": [
-      100,
       63,
       3,
       3
@@ -7288,8 +7479,8 @@
    "datei": "varianten/k01-baum04_m.png",
    "animation": "baum",
    "slot_kacheln": {
-    "x": 33,
-    "y": 0,
+    "x": 21,
+    "y": 8,
     "breite": 3,
     "hoehe": 3
    },
@@ -7754,18 +7945,6 @@
      "fusskachel": [
       5,
       25
-     ]
-    },
-    {
-     "block": [
-      3,
-      26,
-      3,
-      3
-     ],
-     "fusskachel": [
-      4,
-      28
      ]
     },
     {
@@ -8351,8 +8530,8 @@
    "datei": "varianten/k01-baum09.png",
    "animation": "baum",
    "slot_kacheln": {
-    "x": 36,
-    "y": 0,
+    "x": 24,
+    "y": 8,
     "breite": 3,
     "hoehe": 3
    },
@@ -8785,18 +8964,6 @@
     },
     {
      "block": [
-      98,
-      25,
-      3,
-      3
-     ],
-     "fusskachel": [
-      99,
-      27
-     ]
-    },
-    {
-     "block": [
       102,
       25,
       3,
@@ -8925,18 +9092,6 @@
      "fusskachel": [
       3,
       51
-     ]
-    },
-    {
-     "block": [
-      99,
-      50,
-      3,
-      3
-     ],
-     "fusskachel": [
-      100,
-      52
      ]
     },
     {
@@ -9246,8 +9401,8 @@
    "datei": "varianten/k01-baum09_m.png",
    "animation": "baum",
    "slot_kacheln": {
-    "x": 0,
-    "y": 3,
+    "x": 27,
+    "y": 8,
     "breite": 3,
     "hoehe": 3
    },
@@ -10273,8 +10428,8 @@
    "datei": "varianten/k01-baum12.png",
    "animation": "wehen",
    "slot_kacheln": {
-    "x": 3,
-    "y": 3,
+    "x": 30,
+    "y": 8,
     "breite": 3,
     "hoehe": 3
    },
@@ -10395,49 +10550,49 @@
     },
     {
      "block": [
-      -1,
-      26,
       3,
-      3
-     ],
-     "fusskachel": [
-      0,
-      28
-     ]
-    },
-    {
-     "block": [
-      5,
-      80,
-      3,
-      3
-     ],
-     "fusskachel": [
-      6,
-      82
-     ]
-    },
-    {
-     "block": [
-      10,
       85,
       3,
       3
      ],
      "fusskachel": [
-      11,
+      4,
       87
      ]
     },
     {
      "block": [
-      21,
+      13,
       85,
       3,
       3
      ],
      "fusskachel": [
-      22,
+      14,
+      87
+     ]
+    },
+    {
+     "block": [
+      19,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      20,
+      87
+     ]
+    },
+    {
+     "block": [
+      28,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      29,
       87
      ]
     },
@@ -10455,73 +10610,25 @@
     },
     {
      "block": [
-      39,
+      93,
       85,
       3,
       3
      ],
      "fusskachel": [
-      40,
+      94,
       87
      ]
     },
     {
      "block": [
-      49,
+      101,
       85,
       3,
       3
      ],
      "fusskachel": [
-      50,
-      87
-     ]
-    },
-    {
-     "block": [
-      55,
-      85,
-      3,
-      3
-     ],
-     "fusskachel": [
-      56,
-      87
-     ]
-    },
-    {
-     "block": [
-      64,
-      85,
-      3,
-      3
-     ],
-     "fusskachel": [
-      65,
-      87
-     ]
-    },
-    {
-     "block": [
-      71,
-      85,
-      3,
-      3
-     ],
-     "fusskachel": [
-      72,
-      87
-     ]
-    },
-    {
-     "block": [
-      80,
-      85,
-      3,
-      3
-     ],
-     "fusskachel": [
-      81,
+      102,
       87
      ]
     }
@@ -10532,8 +10639,8 @@
    "datei": "varianten/k01-baum12_m.png",
    "animation": "wehen",
    "slot_kacheln": {
-    "x": 6,
-    "y": 3,
+    "x": 33,
+    "y": 8,
     "breite": 3,
     "hoehe": 3
    },
@@ -10631,13 +10738,13 @@
     {
      "block": [
       2,
-      26,
+      24,
       3,
       3
      ],
      "fusskachel": [
       3,
-      28
+      26
      ]
     },
     {
@@ -10654,86 +10761,134 @@
     },
     {
      "block": [
-      2,
-      50,
+      4,
+      48,
       3,
       3
      ],
      "fusskachel": [
-      3,
-      52
-     ]
-    },
-    {
-     "block": [
       5,
+      50
+     ]
+    },
+    {
+     "block": [
+      100,
+      48,
+      3,
+      3
+     ],
+     "fusskachel": [
+      101,
+      50
+     ]
+    },
+    {
+     "block": [
+      4,
+      59,
+      3,
+      3
+     ],
+     "fusskachel": [
+      5,
+      61
+     ]
+    },
+    {
+     "block": [
+      18,
       85,
       3,
       3
      ],
      "fusskachel": [
-      6,
+      19,
       87
      ]
     },
     {
      "block": [
-      25,
+      60,
       85,
       3,
       3
      ],
      "fusskachel": [
-      26,
+      61,
       87
      ]
     },
     {
      "block": [
-      29,
+      61,
       85,
       3,
       3
      ],
      "fusskachel": [
-      30,
+      62,
       87
      ]
     },
     {
      "block": [
-      54,
+      67,
       85,
       3,
       3
      ],
      "fusskachel": [
-      55,
+      68,
       87
      ]
     },
     {
      "block": [
-      96,
+      69,
       85,
       3,
       3
      ],
      "fusskachel": [
-      97,
+      70,
       87
      ]
     },
     {
      "block": [
-      97,
+      91,
       85,
       3,
       3
      ],
      "fusskachel": [
-      98,
+      92,
       87
+     ]
+    },
+    {
+     "block": [
+      99,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      100,
+      87
+     ]
+    },
+    {
+     "block": [
+      22,
+      0,
+      3,
+      3
+     ],
+     "fusskachel": [
+      23,
+      2
      ]
     }
    ]
@@ -10743,8 +10898,8 @@
    "datei": "varianten/k01-baum13.png",
    "animation": "wehen",
    "slot_kacheln": {
-    "x": 9,
-    "y": 3,
+    "x": 36,
+    "y": 8,
     "breite": 3,
     "hoehe": 3
    },
@@ -10781,109 +10936,109 @@
     },
     {
      "block": [
-      102,
-      35,
+      98,
+      48,
       3,
       3
      ],
      "fusskachel": [
-      103,
-      37
+      99,
+      50
      ]
     },
     {
      "block": [
+      98,
+      59,
+      3,
+      3
+     ],
+     "fusskachel": [
+      99,
+      61
+     ]
+    },
+    {
+     "block": [
+      7,
       80,
-      84,
       3,
       3
      ],
      "fusskachel": [
-      81,
-      86
+      8,
+      82
      ]
     },
     {
      "block": [
-      3,
+      1,
       85,
       3,
       3
      ],
      "fusskachel": [
-      4,
+      2,
       87
      ]
     },
     {
      "block": [
-      15,
+      8,
       85,
       3,
       3
      ],
      "fusskachel": [
-      16,
+      9,
       87
      ]
     },
     {
      "block": [
-      17,
+      37,
       85,
       3,
       3
      ],
      "fusskachel": [
-      18,
-      87
-     ]
-    },
-    {
-     "block": [
       38,
-      85,
-      3,
-      3
-     ],
-     "fusskachel": [
-      39,
       87
      ]
     },
     {
      "block": [
-      43,
+      49,
       85,
       3,
       3
      ],
      "fusskachel": [
-      44,
+      50,
       87
      ]
     },
     {
      "block": [
-      73,
+      77,
       85,
       3,
       3
      ],
      "fusskachel": [
-      74,
+      78,
       87
      ]
     },
     {
      "block": [
-      87,
+      95,
       85,
       3,
       3
      ],
      "fusskachel": [
-      88,
+      96,
       87
      ]
     }
@@ -10894,8 +11049,8 @@
    "datei": "varianten/k01-baum13_m.png",
    "animation": "wehen",
    "slot_kacheln": {
-    "x": 12,
-    "y": 3,
+    "x": 0,
+    "y": 11,
     "breite": 3,
     "hoehe": 3
    },
@@ -10956,86 +11111,74 @@
     },
     {
      "block": [
-      100,
-      50,
-      3,
-      3
-     ],
-     "fusskachel": [
-      101,
-      52
-     ]
-    },
-    {
-     "block": [
-      -1,
+      9,
       85,
       3,
       3
      ],
      "fusskachel": [
-      0,
+      10,
       87
      ]
     },
     {
      "block": [
-      45,
+      57,
       85,
       3,
       3
      ],
      "fusskachel": [
-      46,
+      58,
       87
      ]
     },
     {
      "block": [
-      94,
+      63,
       85,
       3,
       3
      ],
      "fusskachel": [
-      95,
+      64,
       87
      ]
     },
     {
      "block": [
-      99,
+      65,
       85,
       3,
       3
      ],
      "fusskachel": [
-      100,
+      66,
       87
      ]
     },
     {
      "block": [
-      101,
+      80,
       85,
       3,
       3
      ],
      "fusskachel": [
-      102,
+      81,
       87
      ]
     },
     {
      "block": [
-      22,
-      0,
+      29,
+      1,
       3,
       3
      ],
      "fusskachel": [
-      23,
-      2
+      30,
+      3
      ]
     }
    ]
@@ -11045,8 +11188,8 @@
    "datei": "varianten/k01-baum15.png",
    "animation": "baum",
    "slot_kacheln": {
-    "x": 15,
-    "y": 3,
+    "x": 3,
+    "y": 11,
     "breite": 3,
     "hoehe": 3
    },
@@ -12024,8 +12167,8 @@
    "datei": "varianten/k01-baum15_m.png",
    "animation": "baum",
    "slot_kacheln": {
-    "x": 18,
-    "y": 3,
+    "x": 6,
+    "y": 11,
     "breite": 3,
     "hoehe": 3
    },
@@ -12530,18 +12673,6 @@
     },
     {
      "block": [
-      98,
-      49,
-      3,
-      3
-     ],
-     "fusskachel": [
-      99,
-      51
-     ]
-    },
-    {
-     "block": [
       1,
       60,
       3,
@@ -12859,8 +12990,8 @@
    "datei": "varianten/k01-baum14.png",
    "animation": "wehen",
    "slot_kacheln": {
-    "x": 21,
-    "y": 3,
+    "x": 9,
+    "y": 11,
     "breite": 3,
     "hoehe": 2
    },
@@ -12921,122 +13052,122 @@
     },
     {
      "block": [
-      19,
+      21,
       86,
       3,
       2
      ],
      "fusskachel": [
-      20,
+      22,
       87
      ]
     },
     {
      "block": [
-      27,
+      23,
       86,
       3,
       2
      ],
      "fusskachel": [
-      28,
+      24,
       87
      ]
     },
     {
      "block": [
-      33,
+      29,
       86,
       3,
       2
      ],
      "fusskachel": [
-      34,
+      30,
       87
      ]
     },
     {
      "block": [
-      57,
+      41,
       86,
       3,
       2
      ],
      "fusskachel": [
-      58,
+      42,
       87
      ]
     },
     {
      "block": [
-      59,
+      47,
       86,
       3,
       2
      ],
      "fusskachel": [
-      60,
+      48,
       87
      ]
     },
     {
      "block": [
-      65,
+      54,
       86,
       3,
       2
      ],
      "fusskachel": [
-      66,
+      55,
       87
      ]
     },
     {
      "block": [
-      77,
+      73,
       86,
       3,
       2
      ],
      "fusskachel": [
-      78,
+      74,
       87
      ]
     },
     {
      "block": [
-      92,
+      75,
       86,
       3,
       2
      ],
      "fusskachel": [
-      93,
+      76,
       87
      ]
     },
     {
      "block": [
-      98,
-      60,
+      87,
+      86,
       3,
       2
      ],
      "fusskachel": [
-      99,
-      61
+      88,
+      87
      ]
     },
     {
      "block": [
-      7,
-      81,
+      102,
+      36,
       3,
       2
      ],
      "fusskachel": [
-      8,
-      82
+      103,
+      37
      ]
     }
    ]
@@ -13046,8 +13177,8 @@
    "datei": "varianten/k01-baum14_m.png",
    "animation": "wehen",
    "slot_kacheln": {
-    "x": 24,
-    "y": 3,
+    "x": 12,
+    "y": 11,
     "breite": 3,
     "hoehe": 2
    },
@@ -13120,37 +13251,61 @@
     },
     {
      "block": [
-      4,
-      51,
+      0,
+      27,
       3,
       2
      ],
      "fusskachel": [
-      5,
-      52
+      1,
+      28
      ]
     },
     {
      "block": [
-      11,
+      25,
       86,
       3,
       2
      ],
      "fusskachel": [
-      12,
+      26,
       87
      ]
     },
     {
      "block": [
-      61,
+      51,
       86,
       3,
       2
      ],
      "fusskachel": [
-      62,
+      52,
+      87
+     ]
+    },
+    {
+     "block": [
+      71,
+      86,
+      3,
+      2
+     ],
+     "fusskachel": [
+      72,
+      87
+     ]
+    },
+    {
+     "block": [
+      79,
+      86,
+      3,
+      2
+     ],
+     "fusskachel": [
+      80,
       87
      ]
     },
@@ -13168,26 +13323,14 @@
     },
     {
      "block": [
-      29,
-      2,
-      3,
-      2
-     ],
-     "fusskachel": [
-      30,
-      3
-     ]
-    },
-    {
-     "block": [
-      4,
-      60,
-      3,
-      2
-     ],
-     "fusskachel": [
       5,
-      61
+      81,
+      3,
+      2
+     ],
+     "fusskachel": [
+      6,
+      82
      ]
     }
    ]
@@ -13197,8 +13340,8 @@
    "datei": "varianten/k18s-18.png",
    "animation": "leuchten",
    "slot_kacheln": {
-    "x": 27,
-    "y": 3,
+    "x": 15,
+    "y": 11,
     "breite": 3,
     "hoehe": 2
    },
@@ -13288,8 +13431,8 @@
    "datei": "varianten/k18s-00.png",
    "animation": "leuchten",
    "slot_kacheln": {
-    "x": 30,
-    "y": 3,
+    "x": 18,
+    "y": 11,
     "breite": 2,
     "hoehe": 2
    },
@@ -13355,8 +13498,8 @@
    "datei": "varianten/k18s-01.png",
    "animation": "leuchten",
    "slot_kacheln": {
-    "x": 32,
-    "y": 3,
+    "x": 20,
+    "y": 11,
     "breite": 2,
     "hoehe": 2
    },
@@ -13381,14 +13524,14 @@
     },
     {
      "block": [
-      21,
-      39,
+      20,
+      38,
       2,
       2
      ],
      "fusskachel": [
-      22,
-      40
+      21,
+      39
      ]
     },
     {
@@ -13410,8 +13553,8 @@
    "datei": "varianten/k18s-42.png",
    "animation": "leuchten",
    "slot_kacheln": {
-    "x": 34,
-    "y": 3,
+    "x": 22,
+    "y": 11,
     "breite": 2,
     "hoehe": 2
    },
@@ -13477,8 +13620,8 @@
    "datei": "varianten/k18s-40.png",
    "animation": "maschine",
    "slot_kacheln": {
-    "x": 36,
-    "y": 3,
+    "x": 24,
+    "y": 11,
     "breite": 1,
     "hoehe": 2
    },
@@ -13509,7 +13652,7 @@
    "animation": null,
    "slot_kacheln": {
     "x": 0,
-    "y": 6,
+    "y": 14,
     "breite": 12,
     "hoehe": 10
    },
@@ -13540,7 +13683,7 @@
    "animation": null,
    "slot_kacheln": {
     "x": 12,
-    "y": 6,
+    "y": 14,
     "breite": 10,
     "hoehe": 8
    },
@@ -13571,7 +13714,7 @@
    "animation": null,
    "slot_kacheln": {
     "x": 22,
-    "y": 6,
+    "y": 14,
     "breite": 10,
     "hoehe": 7
    },
@@ -13597,55 +13740,12 @@
    ]
   },
   {
-   "name": "treppe/01",
-   "datei": "varianten/treppe-01.png",
-   "animation": null,
-   "slot_kacheln": {
-    "x": 32,
-    "y": 6,
-    "breite": 7,
-    "hoehe": 6
-   },
-   "objektblock_im_slot": {
-    "x": 0,
-    "y": 0,
-    "breite": 7,
-    "hoehe": 6
-   },
-   "fundstellen_karte": [
-    {
-     "block": [
-      77,
-      12,
-      7,
-      6
-     ],
-     "fusskachel": [
-      80,
-      17
-     ]
-    },
-    {
-     "block": [
-      13,
-      61,
-      7,
-      6
-     ],
-     "fusskachel": [
-      16,
-      66
-     ]
-    }
-   ]
-  },
-  {
    "name": "unterstand/00",
    "datei": "varianten/unterstand-00.png",
    "animation": null,
    "slot_kacheln": {
     "x": 0,
-    "y": 16,
+    "y": 24,
     "breite": 9,
     "hoehe": 5
    },
@@ -13707,71 +13807,248 @@
    ]
   },
   {
-   "name": "treppe_breit/00",
-   "datei": "varianten/treppe_breit-00.png",
+   "name": "fahrrad_breit/00",
+   "datei": "varianten/fahrrad_breit-00.png",
    "animation": null,
    "slot_kacheln": {
     "x": 9,
-    "y": 16,
-    "breite": 7,
+    "y": 24,
+    "breite": 6,
     "hoehe": 5
    },
    "objektblock_im_slot": {
     "x": 0,
     "y": 0,
-    "breite": 7,
+    "breite": 6,
     "hoehe": 5
    },
    "fundstellen_karte": [
     {
      "block": [
-      88,
-      22,
-      7,
+      77,
+      13,
+      6,
       5
      ],
      "fusskachel": [
-      91,
-      26
+      80,
+      17
      ]
     },
     {
      "block": [
       13,
-      47,
+      61,
       6,
       5
      ],
      "fusskachel": [
       16,
-      51
+      65
      ]
     }
    ]
   },
   {
-   "name": "treppe_schmal/02",
-   "datei": "varianten/treppe_schmal-02.png",
+   "name": "kiosk/00",
+   "datei": "varianten/kiosk-00.png",
    "animation": null,
    "slot_kacheln": {
-    "x": 16,
-    "y": 16,
+    "x": 15,
+    "y": 24,
+    "breite": 6,
+    "hoehe": 5
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 6,
+    "hoehe": 5
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      54,
+      44,
+      6,
+      5
+     ],
+     "fusskachel": [
+      57,
+      48
+     ]
+    }
+   ]
+  },
+  {
+   "name": "bahn/00",
+   "datei": "varianten/bahn-00.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 21,
+    "y": 24,
+    "breite": 3,
+    "hoehe": 5
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 5
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      6,
+      27,
+      3,
+      5
+     ],
+     "fusskachel": [
+      7,
+      31
+     ]
+    },
+    {
+     "block": [
+      20,
+      27,
+      3,
+      5
+     ],
+     "fusskachel": [
+      21,
+      31
+     ]
+    },
+    {
+     "block": [
+      32,
+      27,
+      3,
+      5
+     ],
+     "fusskachel": [
+      33,
+      31
+     ]
+    },
+    {
+     "block": [
+      62,
+      27,
+      3,
+      5
+     ],
+     "fusskachel": [
+      63,
+      31
+     ]
+    },
+    {
+     "block": [
+      90,
+      27,
+      3,
+      5
+     ],
+     "fusskachel": [
+      91,
+      31
+     ]
+    },
+    {
+     "block": [
+      14,
+      51,
+      3,
+      5
+     ],
+     "fusskachel": [
+      15,
+      55
+     ]
+    },
+    {
+     "block": [
+      55,
+      51,
+      3,
+      5
+     ],
+     "fusskachel": [
+      56,
+      55
+     ]
+    },
+    {
+     "block": [
+      97,
+      51,
+      3,
+      5
+     ],
+     "fusskachel": [
+      98,
+      55
+     ]
+    }
+   ]
+  },
+  {
+   "name": "fahrrad_breit/01",
+   "datei": "varianten/fahrrad_breit-01.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 24,
+    "y": 24,
+    "breite": 6,
+    "hoehe": 3
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 6,
+    "hoehe": 3
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      88,
+      23,
+      6,
+      3
+     ],
+     "fusskachel": [
+      91,
+      25
+     ]
+    }
+   ]
+  },
+  {
+   "name": "fahrrad_schmal/00",
+   "datei": "varianten/fahrrad_schmal-00.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 30,
+    "y": 24,
     "breite": 4,
-    "hoehe": 4
+    "hoehe": 3
    },
    "objektblock_im_slot": {
     "x": 0,
     "y": 0,
     "breite": 4,
-    "hoehe": 4
+    "hoehe": 3
    },
    "fundstellen_karte": [
     {
      "block": [
       20,
-      14,
+      15,
       4,
-      4
+      3
      ],
      "fusskachel": [
       22,
@@ -13781,91 +14058,98 @@
    ]
   },
   {
-   "name": "klein/00",
-   "datei": "varianten/klein-00.png",
+   "name": "bahn_klein/00",
+   "datei": "varianten/bahn_klein-00.png",
    "animation": null,
    "slot_kacheln": {
-    "x": 20,
-    "y": 16,
-    "breite": 3,
+    "x": 34,
+    "y": 24,
+    "breite": 2,
     "hoehe": 2
    },
    "objektblock_im_slot": {
     "x": 0,
     "y": 0,
-    "breite": 3,
+    "breite": 2,
     "hoehe": 2
    },
    "fundstellen_karte": [
     {
      "block": [
-      46,
-      16,
-      3,
-      2
-     ],
-     "fusskachel": [
-      47,
-      17
-     ]
-    },
-    {
-     "block": [
-      50,
-      16,
-      3,
-      2
-     ],
-     "fusskachel": [
-      51,
-      17
-     ]
-    },
-    {
-     "block": [
       57,
-      76,
-      3,
+      12,
+      2,
       2
      ],
      "fusskachel": [
       58,
-      77
+      13
      ]
     },
     {
      "block": [
-      61,
-      76,
-      3,
+      35,
+      73,
+      2,
       2
      ],
      "fusskachel": [
-      62,
-      77
-     ]
-    },
-    {
-     "block": [
       36,
-      76,
-      3,
+      74
+     ]
+    }
+   ]
+  },
+  {
+   "name": "bahn_klein/01",
+   "datei": "varianten/bahn_klein-01.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 36,
+    "y": 24,
+    "breite": 2,
+    "hoehe": 2
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 2,
+    "hoehe": 2
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      9,
+      19,
+      2,
       2
      ],
      "fusskachel": [
-      37,
-      77
+      10,
+      20
      ]
     },
     {
      "block": [
-      40,
+      15,
+      19,
+      2,
+      2
+     ],
+     "fusskachel": [
+      16,
+      20
+     ]
+    },
+    {
+     "block": [
+      92,
       76,
       3,
       2
      ],
      "fusskachel": [
-      41,
+      93,
       77
      ]
     }
@@ -13876,8 +14160,8 @@
    "datei": "varianten/k18s-12.png",
    "animation": null,
    "slot_kacheln": {
-    "x": 23,
-    "y": 16,
+    "x": 38,
+    "y": 24,
     "breite": 2,
     "hoehe": 2
    },
@@ -13914,14 +14198,14 @@
     },
     {
      "block": [
-      11,
-      49,
+      12,
+      50,
       2,
       2
      ],
      "fusskachel": [
-      12,
-      50
+      13,
+      51
      ]
     },
     {
@@ -13979,8 +14263,8 @@
    "datei": "varianten/klein-02.png",
    "animation": null,
    "slot_kacheln": {
-    "x": 25,
-    "y": 16,
+    "x": 0,
+    "y": 29,
     "breite": 2,
     "hoehe": 2
    },
@@ -14001,42 +14285,6 @@
      "fusskachel": [
       52,
       21
-     ]
-    },
-    {
-     "block": [
-      78,
-      20,
-      2,
-      2
-     ],
-     "fusskachel": [
-      79,
-      21
-     ]
-    },
-    {
-     "block": [
-      28,
-      45,
-      2,
-      2
-     ],
-     "fusskachel": [
-      29,
-      46
-     ]
-    },
-    {
-     "block": [
-      51,
-      45,
-      2,
-      2
-     ],
-     "fusskachel": [
-      52,
-      46
      ]
     },
     {
@@ -14062,18 +14310,6 @@
       32,
       69
      ]
-    },
-    {
-     "block": [
-      73,
-      68,
-      2,
-      2
-     ],
-     "fusskachel": [
-      74,
-      69
-     ]
     }
    ]
   },
@@ -14082,8 +14318,8 @@
    "datei": "varianten/klein-09.png",
    "animation": null,
    "slot_kacheln": {
-    "x": 27,
-    "y": 16,
+    "x": 2,
+    "y": 29,
     "breite": 2,
     "hoehe": 2
    },
@@ -14144,14 +14380,14 @@
     },
     {
      "block": [
-      23,
-      12,
+      22,
+      11,
       2,
       2
      ],
      "fusskachel": [
-      24,
-      13
+      23,
+      12
      ]
     },
     {
@@ -14168,38 +14404,14 @@
     },
     {
      "block": [
+      22,
+      40,
+      2,
+      2
+     ],
+     "fusskachel": [
       23,
-      41,
-      2,
-      2
-     ],
-     "fusskachel": [
-      24,
-      42
-     ]
-    },
-    {
-     "block": [
-      81,
-      39,
-      2,
-      2
-     ],
-     "fusskachel": [
-      82,
-      40
-     ]
-    },
-    {
-     "block": [
-      25,
-      65,
-      2,
-      2
-     ],
-     "fusskachel": [
-      26,
-      66
+      41
      ]
     },
     {
@@ -14216,14 +14428,14 @@
     },
     {
      "block": [
-      30,
-      75,
+      69,
+      67,
       2,
       2
      ],
      "fusskachel": [
-      31,
-      76
+      70,
+      68
      ]
     }
    ]
@@ -14233,8 +14445,8 @@
    "datei": "varianten/klein-09_m.png",
    "animation": null,
    "slot_kacheln": {
-    "x": 29,
-    "y": 16,
+    "x": 4,
+    "y": 29,
     "breite": 2,
     "hoehe": 2
    },
@@ -14271,117 +14483,81 @@
     },
     {
      "block": [
-      69,
-      67,
+      80,
+      38,
       2,
       2
      ],
      "fusskachel": [
-      70,
-      68
+      81,
+      39
+     ]
+    },
+    {
+     "block": [
+      25,
+      65,
+      2,
+      2
+     ],
+     "fusskachel": [
+      26,
+      66
+     ]
+    },
+    {
+     "block": [
+      29,
+      74,
+      2,
+      2
+     ],
+     "fusskachel": [
+      30,
+      75
      ]
     }
    ]
   },
   {
-   "name": "klein/01",
-   "datei": "varianten/klein-01.png",
+   "name": "bahn_klein/03",
+   "datei": "varianten/bahn_klein-03.png",
    "animation": null,
    "slot_kacheln": {
-    "x": 31,
-    "y": 16,
-    "breite": 1,
-    "hoehe": 2
+    "x": 6,
+    "y": 29,
+    "breite": 2,
+    "hoehe": 1
    },
    "objektblock_im_slot": {
     "x": 0,
     "y": 0,
-    "breite": 1,
-    "hoehe": 2
+    "breite": 2,
+    "hoehe": 1
    },
    "fundstellen_karte": [
     {
      "block": [
-      49,
-      16,
-      1,
-      2
+      28,
+      19,
+      2,
+      1
      ],
      "fusskachel": [
-      49,
-      17
+      29,
+      19
      ]
     },
     {
      "block": [
-      60,
-      76,
-      1,
-      2
-     ],
-     "fusskachel": [
-      60,
-      77
-     ]
-    },
-    {
-     "block": [
-      39,
-      76,
-      1,
-      2
-     ],
-     "fusskachel": [
-      39,
-      77
-     ]
-    },
-    {
-     "block": [
-      83,
-      24,
-      1,
-      2
-     ],
-     "fusskachel": [
-      83,
-      25
-     ]
-    },
-    {
-     "block": [
-      23,
-      62,
-      1,
-      2
-     ],
-     "fusskachel": [
-      23,
-      63
-     ]
-    },
-    {
-     "block": [
-      69,
-      62,
-      1,
-      2
-     ],
-     "fusskachel": [
-      69,
-      63
-     ]
-    },
-    {
-     "block": [
-      91,
       61,
-      1,
-      2
+      70,
+      2,
+      1
      ],
      "fusskachel": [
-      91,
-      62
+      62,
+      70
      ]
     }
    ]
@@ -14391,8 +14567,8 @@
    "datei": "varianten/klein-03.png",
    "animation": null,
    "slot_kacheln": {
-    "x": 32,
-    "y": 16,
+    "x": 8,
+    "y": 29,
     "breite": 2,
     "hoehe": 1
    },
@@ -14417,26 +14593,26 @@
     },
     {
      "block": [
-      82,
-      10,
+      81,
+      9,
       2,
       1
      ],
      "fusskachel": [
-      83,
-      10
+      82,
+      9
      ]
     },
     {
      "block": [
-      21,
-      45,
+      22,
+      44,
       2,
       1
      ],
      "fusskachel": [
-      22,
-      45
+      23,
+      44
      ]
     },
     {
@@ -14460,6 +14636,92 @@
      ],
      "fusskachel": [
       22,
+      73
+     ]
+    }
+   ]
+  },
+  {
+   "name": "bahn_klein/02",
+   "datei": "varianten/bahn_klein-02.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 10,
+    "y": 29,
+    "breite": 1,
+    "hoehe": 1
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 1,
+    "hoehe": 1
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      37,
+      11,
+      1,
+      1
+     ],
+     "fusskachel": [
+      37,
+      11
+     ]
+    },
+    {
+     "block": [
+      52,
+      64,
+      1,
+      1
+     ],
+     "fusskachel": [
+      52,
+      64
+     ]
+    }
+   ]
+  },
+  {
+   "name": "bahn_klein/02",
+   "datei": "varianten/bahn_klein-02_m.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 11,
+    "y": 29,
+    "breite": 1,
+    "hoehe": 1
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 1,
+    "hoehe": 1
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      66,
+      15,
+      1,
+      1
+     ],
+     "fusskachel": [
+      66,
+      15
+     ]
+    },
+    {
+     "block": [
+      70,
+      73,
+      1,
+      1
+     ],
+     "fusskachel": [
+      70,
       73
      ]
     }

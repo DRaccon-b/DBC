@@ -36,7 +36,7 @@ UNTERSTAENDE = [(560, 23), (1055, 23), (575, 47), (1084, 47)]
 FAHRRAD = [('fahrrad_breit/00', 73, 13), ('fahrrad_breit/01', 84, 21), ('fahrrad_breit/00', 9, 61),
            ('fahrrad_schmal/00', 16, 13)]
 # Poller-Paare mit Verbotsschild genau auf ihrer Achse (Vorlage): (Kachel links, Kachel rechts, Fusszeile)
-POLLER = [(43, 47, 13), (54, 58, 73), (33, 37, 73)]
+POLLER = []                                            # entfernt: sperrten je 7 Kacheln (Nutzer: wenig Kollision)
 # (sprite, Kachel x, Fusszeile, Optionen) - Vorlagenkacheln
 KLEIN = [
     ('k18s/00', 28, 6, {}), ('k18s/42', 69, 6, {}), ('k18s/01', 69, 16, {}), ('k18s/00', 20, 19, {}),
@@ -115,10 +115,10 @@ def main():
                 return None                                       # nie auf/vor Leitstreifen
             if any(r[1] <= kz * T + T - 1 and r[3] >= kz * T for kz in kanten):
                 return None                                       # nie auf/ueber der Bahnsteigkante
-            for xx in range(r[0] // T, r[2] // T + 1):            # Fuss auf Bahnsteig, nie auf Gleis/Kante/Guertel
-                ty_ = r[3] // T
-                if k(xx, ty_) not in 'kpd' or ty_ in kanten:
-                    return None
+            ty_ = r[3] // T
+            belag = {k(xx, ty_) for xx in range(r[0] // T, r[2] // T + 1)}
+            if not belag <= set('kpd') or ty_ in kanten or (len(belag) > 1 and art != 'gebaeude'):
+                return None                                       # Fuss ganz auf einem Belag (nie ueber Belagsgrenzen)
         o = {'datei': datei, 'basis': name, 'x': x, 'y': y, 'fuss': bb[3] - 1, 'kachel': [int(cx) // T, int(fy) // T],
              'ebene': 1, 'ohne_wall': True}
         if art not in ('wald',) and not (opt or {}).get('liegend'):
@@ -153,7 +153,7 @@ def main():
             print('Gebaeude nicht gesetzt:', name)
     for i, (cx, fy) in enumerate(UNTERSTAENDE):
         cx = int(cx // T) * T + 8                                   # 144 px = 9 Kacheln: linke Kante auf dem Raster
-        o = setze('unterstand/00', cx + OFF, (fy + P) * T + T - 1, {'gebaeude': True, 'schattenlos': True}, art='gebaeude')
+        o = setze('unterstand/00', cx + OFF, (fy + P) * T + T - 1, {'schattenlos': True}, art='gebaeude')   # nur Sockel sperrt
         if not o:
             print('Unterstand nicht gesetzt:', cx, fy); continue
         # Bank unter dem Dach vor der Glaswand (gewollt im Unterstand, nach ihm gezeichnet)
@@ -177,6 +177,20 @@ def main():
     ueb = [((a0) * T, (a1 + 1) * T - 1) for (a0, a1) in lay['uebergaenge']]
     def am_uebergang(x0, x1, rand=6):
         return any(not (x1 < u0 - rand or x0 > u1 + rand) for (u0, u1) in ueb)
+
+    def bahn_setze(name, cx, fy, opt, spiegeln=False, schritte=(0,)):
+        """Bahn-Objekt im Gleisbett: pixelgenau gegen alle Nicht-Wald-Objekte (2 px) pruefen, sonst ausweichen."""
+        for d in schritte:
+            sp = Image.open(os.path.join(OBJ, name + '.png')).convert('RGBA')
+            bb = sp.getbbox()
+            x = int(round(cx + d - (bb[0] + bb[2]) / 2.0)); y = int(fy - (bb[3] - 1))
+            r = (x + bb[0], y + bb[1], x + bb[2] - 1, y + bb[3] - 1)
+            if any(art2 != 'wald' and schnitt(r, tuple(rr), 2) for (*rr, art2) in rects):
+                continue
+            if name == 'bahn/00' and am_uebergang(r[0], r[2], 4):
+                continue
+            return setze(name, cx + d, fy, opt, spiegeln, art='bahn', pruefen=False)
+        return None
     for bi, (g0, g1) in enumerate(lay['gleisbaender']):
         g_oben = [g for g in lay['gleise'] if g0 <= g <= g1][0]
         fy = g_oben * T + 8 + 13                                  # Mastfuss hinter dem oberen Gleis: Fahrdraht auf
@@ -185,20 +199,20 @@ def main():
             cx = tx * T + 8
             if am_uebergang(cx - 4, cx + 44, 8):
                 continue
-            setze('bahn/00', cx + 14, fy, {'schattenlos': True, 'oberleitung': True}, art='bahn', pruefen=False)
+            bahn_setze('bahn/00', cx + 14, fy, {'schattenlos': True, 'oberleitung': True}, schritte=(0, -16, 16, -32, 32))
         for (u0, u1) in ueb:                                     # Andreaskreuz je Uebergang: links oben, rechts unten
-            setze('bahn/01_kreuz', u0 - 10, g0 * T + 13, {'nur_kontakt': True, 'anim': 'wechselblinker',
-                  'blinker': [[5, 23, 4], [20, 23, 4]]}, art='bahn', pruefen=False)
-            setze('bahn/01_kreuz', u1 + 10, g1 * T + 6, {'nur_kontakt': True, 'anim': 'wechselblinker',
-                  'blinker': [[5, 23, 4], [20, 23, 4]]}, True, art='bahn', pruefen=False)
+            bahn_setze('bahn/01_kreuz', u0 - 10, g0 * T + 13, {'nur_kontakt': True, 'anim': 'wechselblinker',
+                       'blinker': [[5, 23, 4], [20, 23, 4]]}, schritte=(0, -16, -32))
+            bahn_setze('bahn/01_kreuz', u1 + 10, g1 * T + 6, {'nur_kontakt': True, 'anim': 'wechselblinker',
+                       'blinker': [[20, 23, 4], [5, 23, 4]]}, True, schritte=(0, 16, 32))
         for sx in (lay['stadt'][0] * T - 24, (lay['stadt'][2] + 1) * T + 24):   # Signale an den Bahnhofsenden
-            setze('bahn/02', sx, g0 * T + 2 * T + 10, {'nur_kontakt': True, 'anim': 'leuchten', 'licht': [8, 9],
-                  'licht_box': [4, 6, 12, 12], 'licht_r': 6}, art='bahn', pruefen=False)
+            bahn_setze('bahn/02', sx, g0 * T + 2 * T + 10, {'nur_kontakt': True, 'anim': 'leuchten', 'licht': [8, 9],
+                       'licht_box': [4, 6, 12, 12], 'licht_r': 6}, schritte=(0, -16, 16, -32, 32))
     # Zug am Bahnsteig: Triebwagen auf dem unteren Gleis des oberen Bandes, zwischen zwei Uebergaengen
     g_unten = [g for g in lay['gleise'] if lay['gleisbaender'][0][0] <= g <= lay['gleisbaender'][0][1]][-1]
     zx = (ueb[1][1] + ueb[2][0]) / 2.0
     setze('zug_kopf/00', zx, g_unten * T + 8 + 6, {'nur_kontakt': True, 'anim': 'maschine', 'leds': True,
-          'led_box': [[205, 40, 247, 100]], 'led_max': 30}, art='bahn', pruefen=False)
+          'led_box': [[226, 76, 246, 93]], 'led_max': 4}, art='bahn', pruefen=False)
     # Bahnsteig-Ausstattung (sparsam): Abfahrtstafeln, Bahnhofsuhren, Kiosk, Pflanzkuebel an den Bahnhofseingaengen
     for (tx, ty) in ((37, 13), (58, 44), (40, 63)):
         kachel('bahn/03', tx + P, ty + P, {'anim': 'maschine', 'schirm': [[4, 6, 56, 24]]})

@@ -30,7 +30,7 @@ UEBERGAENGE = [(20, 26), (44, 49), (72, 78)]                      # Bahnuebergae
 AUSGAENGE = [(21, 0, 4, 3), (79, 77, 4, 3)]                       # (x, y, b, h): oben, unten
 LEITZEILEN = [16, 39, 67]                                         # Leitstreifen auf den Bahnsteigen (Vorlage)
 # Gebaeude auf dunklem Pflaster (x0, y0, x1, y1), Fusszeile = y1
-GEBAEUDE = {'glas_oben': (4, 5, 13, 13), 'glas_mitte': (4, 33, 15, 38), 'beige_unten': (81, 64, 90, 70)}
+GEBAEUDE = {'glas_oben': (4, 5, 13, 13), 'glas_mitte': (4, 33, 16, 38), 'beige_unten': (81, 64, 90, 70)}
 
 
 def main():

@@ -151,24 +151,26 @@ def leitstreifen(a, lay):
 
 
 def weichen(a, lay):
-    """Je Gleisband eine Weichenverbindung (Gleiswechsel) zwischen den beiden Gleisen: Schwellen und zwei Schienen
-    schraeg (45 Grad) vom oberen zum unteren Gleis, ausserhalb der Bahnuebergaenge."""
+    """Je Gleisband ein Gleiswechsel zwischen den beiden Gleisen: flache Schraege (1:3), Schwellen und Schienen nur
+    zwischen den beiden Gleisachsen, Weichenzungen enden auf den Gleisen; nicht unter dem stehenden Zug."""
     for bi, (y0, y1) in enumerate(lay['gleisbaender']):
         gl = [g for g in lay['gleise'] if y0 <= g <= y1]
         if len(gl) < 2:
             continue
         m1, m2 = gl[0] * T + 8, gl[1] * T + 8
         dy = m2 - m1
-        x0 = (lay['uebergaenge'][1][1] + 6 + bi * 6) * T          # rechts neben dem mittleren Uebergang
-        for t in range(-6, dy + 7, 5):                             # Schwellen der Verbindung (quer zur Schraege)
-            yc, xc = m1 + t, x0 + t
-            for d in range(-7, 8):
-                if 0 <= yc + d < a.shape[0]:
-                    a[yc + d, xc - d:xc - d + 2] = H('#6c6c72')
-        for off in (-6, 6):                                        # zwei Schienen schraeg, Spurweite wie die Gleise
-            for t in range(-2, dy + 3):
-                yy, xx = m1 + t, x0 + t + off
-                a[yy, xx - 1] = H('#9aa0aa'); a[yy, xx] = H('#d6dae2'); a[yy, xx + 1] = H('#4a4e58')
+        u = lay['uebergaenge'][0 if bi == 0 else 1]
+        x0 = (u[1] + 4) * T                                        # rechts neben einem Uebergang, frei vom Zug
+        for t in range(4, dy - 3, 4):                              # Schwellen nur zwischen den Gleisen
+            yc, xc = m1 + t, x0 + 3 * t
+            a[yc - 1:yc + 1, xc - 7:xc + 8] = H('#6c6c72')
+        for off in (-5, 4):                                        # Schienen: Spurweite wie die Gleise
+            for t in range(0, dy + 1):
+                yy = m1 + off + t
+                if not (m1 - 5 <= yy <= m2 + 4):
+                    continue
+                for xx in range(x0 + 3 * t, x0 + 3 * t + 3):
+                    a[yy - 1, xx] = H('#9aa0aa'); a[yy, xx] = H('#d6dae2'); a[yy + 1, xx] = H('#4a4e58')
 
 
 def gleis_spuren(a, lay, cols):
