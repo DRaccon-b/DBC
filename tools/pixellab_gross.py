@@ -266,6 +266,10 @@ for _n, _gr in (('beige_halb_hoch', (288, 232)), ('beige_halb_flach', (288, 200)
         groesse=_gr, text=AUFTRAEGE['k36_' + _n]['text'] + ' The complete roof edge is visible at the top and the complete '
         'grey base plinth at the bottom, with empty magenta space above the roof and below the base.')
 
+AUFTRAEGE['k36_lila_halb_b'] = dict(AUFTRAEGE['k36_lila_halb'], ziel='assets/objekte/karte36/gross_lila_halb_b',
+    groesse=(160, 200), text=AUFTRAEGE['k36_lila_halb']['text'] + ' The complete roof edge is visible at the top and the '
+    'complete grey base plinth at the bottom, with empty magenta space above the roof and below the base.')
+
 
 def main(name):
     a = AUFTRAEGE[name]

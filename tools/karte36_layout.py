@@ -20,7 +20,7 @@ KARTE = os.path.join(ROOT, 'maps', 'karte36')
 VORLAGE = os.path.join(ROOT, 'assets', 'vorlagen', 'karte36_vorlage.png')
 C, R, T = 96, 80, 16
 RAND = 4                                                          # Baumguertel ringsum (Kacheln, Nutzer)
-STADT = (4, 3, 93, 77)                                            # Stadtflaeche der Vorlage (x0, y0, x1, y1)
+STADT = (4, 2, 93, 77)                                            # Stadtflaeche (oben eine Reihe mehr: Bloecke hoeher)
 AUSGAENGE = [(35, 0, 4, 3), (0, 72, 3, 4)]                        # (x, y, b, h): oben, links (Vorlage)
 # Zebrastreifen (x0, x1, y0, y1, art): 'h' = quer ueber eine Nord-Sued-Strasse, 'v' = quer ueber eine Ost-West-Strasse
 ZEBRA = [(59, 65, 21, 21, 'h'), (27, 33, 32, 32, 'h'), (27, 33, 42, 42, 'h'), (27, 33, 53, 53, 'h'),
@@ -32,7 +32,7 @@ STRASSEN_V = [(27, 33, 28, 77), (59, 65, 3, 77), (86, 93, 23, 77)]
 # Gebaeude: Name -> (x0, y0, x1, y1) Grundflaeche der Vorlage in Kacheln (Fusszeile = y1)
 GEBAEUDE = {
     'wohn_oben': (4, 3, 33, 13), 'lila': (41, 3, 58, 11), 'glas_oben': (69, 3, 90, 13),
-    'wohn_links': (4, 28, 25, 36), 'laeden': (38, 36, 58, 43), 'glas_rechts': (69, 44, 82, 54),
+    'wohn_links': (4, 28, 25, 39),                               # Block hoeher als die Vorlage: Fuss 3 Reihen tiefer 'laeden': (38, 36, 58, 43), 'glas_rechts': (69, 44, 82, 54),
     'flach': (7, 54, 24, 58), 'wohn_unten': (39, 67, 68, 77),
 }
 # Beete unter Baeumen, die in der Vorlage auf dem Gehweg stehen (3x2, Baum mittig auf dem Gruen)
@@ -67,6 +67,9 @@ def main():
         k[y0:y1 + 1, x0:x1 + 1] = 'g'
     for (x0, y0, x1, y1) in BEETE:
         k[y0:y1 + 1, x0:x1 + 1] = 'n'
+    k[2, 4:94][k[2, 4:94] == 'a'] = 'g'                               # oberste Stadtreihe Gehweg hinter den Bloecken
+    k[37:39, 4:26][k[37:39, 4:26] == 'n'] = 'g'                       # Gruenstreifen vor den linken Block verlegt
+    k[40:42, 4:25] = 'n'
     k = l34.zipfel_weg(k, 'gn')
     k = l34.kleine_weg(k, 'n', 6, 'g')
     x0, y0, x1, y1 = STADT

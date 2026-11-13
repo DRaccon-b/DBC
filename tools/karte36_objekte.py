@@ -37,22 +37,22 @@ BUSCH = ['k01/baum%02d' % i for i in (12, 13, 14)]                             #
 
 # Gebaeude: (sprite, Mitte x in px, Fusszeile, spiegeln) - Flaechen der Vorlage, an die Sprite-Hoehen angepasst
 GEBAEUDE = [                                   # (sprite, Mitte x in px, Fusszeile, spiegeln) - Vorlagenkacheln
-    ('gross/wohn_oben', 304, 13, False),       # langer beiger Block oben links (Haelfte gespiegelt)
+    ('gross/wohn_oben', 304, 14, False),       # langer beiger Block oben links (Haelfte gespiegelt)
     ('gross/lila', 800, 11, False),            # lila Haus oben Mitte
     ('gross/buero_mitte', 1272, 13, False),    # Glasbuero oben rechts (Karte 35, Kanten repariert)
-    ('gross/wohn_links', 240, 36, False),      # beiger Block links Mitte
+    ('gross/wohn_links', 240, 39, False),      # beiger Block links Mitte
     ('k30/buero_glas', 1216, 54, False),       # Glasbuero rechts Mitte (Karte 30)
     ('gross/flach', 256, 58, False),           # flacher Ladenbau links unten
     ('gross/wohn_unten', 864, 77, False),      # langer beiger Block unten
 ]
 LAEDEN = ['k31/laden_2', 'k31/laden_0', 'k31/laden_7', 'k31/laden_1']   # Cafe, Mart, Drogerie, Ramen (Karte 31)
 LAEDEN_MITTE, LAEDEN_FUSS = 744, 43
-BAEUME = [(40, 16), (47, 16), (52, 16), (56, 16), (72, 16), (80, 16), (85, 16), (90, 17), (47, 33), (6, 37), (24, 37),
+BAEUME = [(40, 16), (47, 16), (52, 16), (56, 16), (72, 16), (80, 16), (85, 16), (90, 17), (47, 33), (6, 41), (24, 41),
           (39, 41), (56, 41), (76, 55), (5, 69), (22, 75), (36, 75), (79, 75), (81, 70)]
 LATERNEN = [(25, 20), (57, 20), (68, 21), (25, 41), (36, 42), (68, 41), (25, 57), (84, 65)]
-BAENKE = [(19, 20), (72, 31), (6, 42), (79, 56), (36, 67), (73, 73)]
-MOEBEL = [('k18s/41', 47, 22), ('k18s/00', 45, 44), ('k18s/00', 76, 65), ('k18s/12', 9, 42), ('k18s/12', 38, 67),
-          ('k18s/04', 11, 42), ('k18s/04', 79, 31)]
+BAENKE = [(19, 20), (72, 31), (15, 43), (79, 56), (36, 67), (73, 73)]
+MOEBEL = [('k18s/41', 47, 22), ('k18s/00', 45, 44), ('k18s/00', 76, 65), ('k18s/12', 9, 43), ('k18s/12', 38, 67),
+          ('k18s/04', 11, 43), ('k18s/04', 79, 31)]
 # Fahrzeuge (Linksverkehr): waagerecht Nordspur nach Osten (Van gespiegelt), senkrecht Ostspur nach Sueden (k18a/06)
 AUTOS = [('k18a/06', 1024, 270, False), ('k18a/11', 792, 408, True), ('k18a/06', 512, 588, False),
          ('k18a/06', 1464, 600, False), ('k18a/11', 1144, 975, True), ('k18a/06', 1464, 1120, False)]
@@ -118,10 +118,10 @@ def main():
         os.makedirs(os.path.dirname(ziel), exist_ok=True)
         shutil.copy(os.path.join(ROOT, 'assets', 'objekte', quelle), ziel)
     kanten_ergaenzen('gross_buero_mitte/00.png', 'gross/buero_mitte.png')   # Kanten waren abgeschnitten (Karte 35)
-    halb_gespiegelt('gross_beige_halb_hoch/00.png', 'gross/wohn_oben.png', 240, eingang=False)   # Vorlagenbreiten
-    halb_gespiegelt('gross_beige_halb_hoch/00.png', 'gross/wohn_unten.png', 240, eingang=False)
-    halb_gespiegelt('gross_beige_halb_flach/00.png', 'gross/wohn_links.png', 176, eingang=False)
-    halb_gespiegelt('gross_lila_halb/00.png', 'gross/lila.png', 144, eingang=False)
+    halb_gespiegelt('gross_beige_halb_hoch_b/00.png', 'gross/wohn_oben.png', 240, eingang=False)   # Vorlagenbreiten
+    halb_gespiegelt('gross_beige_halb_hoch_b/00.png', 'gross/wohn_unten.png', 240, eingang=False)
+    halb_gespiegelt('gross_beige_halb_flach_b/00.png', 'gross/wohn_links.png', 176, eingang=False)
+    halb_gespiegelt('gross_lila_halb_b/00.png', 'gross/lila.png', 144, eingang=False)
     halb_gespiegelt('gross_flach_halb/00.png', 'gross/flach.png', 144, eingang=False)
     os.makedirs(os.path.join(OBJ, 'gross'), exist_ok=True)
     objekte, rects = [], []                                      # rects: (x0, y0, x1, y1, art, fuss_y)
