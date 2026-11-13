@@ -1,8 +1,8 @@
 {
  "kachel": 16,
  "breite_kacheln": 42,
- "hoehe_kacheln": 86,
- "animationsbereich_hoehe_kacheln": 5,
+ "hoehe_kacheln": 87,
+ "animationsbereich_hoehe_kacheln": 6,
  "animationsbilder": 4,
  "bilddauer_ms": 250,
  "objekte": [
@@ -14,21 +14,21 @@
     "x": 0,
     "y": 0,
     "breite": 3,
-    "hoehe": 3
+    "hoehe": 4
    },
    "objektblock_im_slot": {
     "x": 0,
     "y": 0,
     "breite": 3,
-    "hoehe": 3
+    "hoehe": 4
    },
    "fundstellen_karte": [
     {
      "block": [
       48,
-      11,
+      10,
       3,
-      3
+      4
      ],
      "fusskachel": [
       49,
@@ -57,21 +57,21 @@
     "x": 3,
     "y": 0,
     "breite": 3,
-    "hoehe": 3
+    "hoehe": 4
    },
    "objektblock_im_slot": {
     "x": 0,
     "y": 0,
     "breite": 3,
-    "hoehe": 3
+    "hoehe": 4
    },
    "fundstellen_karte": [
     {
      "block": [
       62,
-      21,
+      20,
       3,
-      3
+      4
      ],
      "fusskachel": [
       63,
@@ -88,21 +88,21 @@
     "x": 6,
     "y": 0,
     "breite": 3,
-    "hoehe": 3
+    "hoehe": 4
    },
    "objektblock_im_slot": {
     "x": 0,
     "y": 0,
     "breite": 3,
-    "hoehe": 3
+    "hoehe": 4
    },
    "fundstellen_karte": [
     {
      "block": [
       69,
-      21,
+      20,
       3,
-      3
+      4
      ],
      "fusskachel": [
       70,
@@ -119,21 +119,21 @@
     "x": 9,
     "y": 0,
     "breite": 3,
-    "hoehe": 3
+    "hoehe": 4
    },
    "objektblock_im_slot": {
     "x": 0,
     "y": 0,
     "breite": 3,
-    "hoehe": 3
+    "hoehe": 4
    },
    "fundstellen_karte": [
     {
      "block": [
       59,
-      11,
+      10,
       3,
-      3
+      4
      ],
      "fusskachel": [
       60,
@@ -143,13 +143,13 @@
     {
      "block": [
       49,
-      46,
+      44,
       3,
-      3
+      4
      ],
      "fusskachel": [
       50,
-      48
+      47
      ]
     }
    ]
@@ -162,21 +162,21 @@
     "x": 12,
     "y": 0,
     "breite": 3,
-    "hoehe": 3
+    "hoehe": 4
    },
    "objektblock_im_slot": {
     "x": 0,
     "y": 0,
     "breite": 3,
-    "hoehe": 3
+    "hoehe": 4
    },
    "fundstellen_karte": [
     {
      "block": [
       46,
-      21,
+      20,
       3,
-      3
+      4
      ],
      "fusskachel": [
       47,
@@ -186,13 +186,13 @@
     {
      "block": [
       69,
-      46,
+      44,
       3,
-      3
+      4
      ],
      "fusskachel": [
       70,
-      48
+      47
      ]
     }
    ]
@@ -217,20 +217,20 @@
     {
      "block": [
       6,
-      46,
+      45,
       3,
       3
      ],
      "fusskachel": [
       7,
-      48
+      47
      ]
     }
    ]
   },
   {
-   "name": "k01/deko30",
-   "datei": "varianten/k01-deko30_m.png",
+   "name": "k01/deko25",
+   "datei": "varianten/k01-deko25.png",
    "animation": "wehen",
    "slot_kacheln": {
     "x": 18,
@@ -247,186 +247,38 @@
    "fundstellen_karte": [
     {
      "block": [
-      46,
       45,
-      3,
-      3
-     ],
-     "fusskachel": [
-      47,
-      47
-     ]
-    },
-    {
-     "block": [
-      20,
-      71,
-      3,
-      3
-     ],
-     "fusskachel": [
       21,
-      73
-     ]
-    }
-   ]
-  },
-  {
-   "name": "k01/deko00",
-   "datei": "varianten/k01-deko00.png",
-   "animation": "wehen",
-   "slot_kacheln": {
-    "x": 21,
-    "y": 0,
-    "breite": 3,
-    "hoehe": 2
-   },
-   "objektblock_im_slot": {
-    "x": 0,
-    "y": 0,
-    "breite": 3,
-    "hoehe": 2
-   },
-   "fundstellen_karte": [
-    {
-     "block": [
-      50,
-      22,
       3,
-      2
+      3
      ],
      "fusskachel": [
-      51,
-      23
-     ]
-    }
-   ]
-  },
-  {
-   "name": "k01/deko00",
-   "datei": "varianten/k01-deko00_m.png",
-   "animation": "wehen",
-   "slot_kacheln": {
-    "x": 24,
-    "y": 0,
-    "breite": 3,
-    "hoehe": 2
-   },
-   "objektblock_im_slot": {
-    "x": 0,
-    "y": 0,
-    "breite": 3,
-    "hoehe": 2
-   },
-   "fundstellen_karte": [
-    {
-     "block": [
-      22,
-      69,
-      3,
-      2
-     ],
-     "fusskachel": [
-      23,
-      70
-     ]
-    }
-   ]
-  },
-  {
-   "name": "k01/deko01",
-   "datei": "varianten/k01-deko01.png",
-   "animation": "wehen",
-   "slot_kacheln": {
-    "x": 27,
-    "y": 0,
-    "breite": 3,
-    "hoehe": 2
-   },
-   "objektblock_im_slot": {
-    "x": 0,
-    "y": 0,
-    "breite": 3,
-    "hoehe": 2
-   },
-   "fundstellen_karte": [
-    {
-     "block": [
-      59,
       46,
-      3,
-      2
-     ],
-     "fusskachel": [
-      60,
-      47
+      23
      ]
     },
     {
      "block": [
-      60,
-      22,
-      2,
-      2
+      68,
+      21,
+      3,
+      3
      ],
      "fusskachel": [
-      61,
+      69,
       23
      ]
-    }
-   ]
-  },
-  {
-   "name": "k01/deko25",
-   "datei": "varianten/k01-deko25.png",
-   "animation": "wehen",
-   "slot_kacheln": {
-    "x": 30,
-    "y": 0,
-    "breite": 3,
-    "hoehe": 2
-   },
-   "objektblock_im_slot": {
-    "x": 0,
-    "y": 0,
-    "breite": 3,
-    "hoehe": 2
-   },
-   "fundstellen_karte": [
+    },
     {
      "block": [
+      68,
       45,
-      22,
       3,
-      2
-     ],
-     "fusskachel": [
-      46,
-      23
-     ]
-    },
-    {
-     "block": [
-      68,
-      22,
-      3,
-      2
+      3
      ],
      "fusskachel": [
       69,
-      23
-     ]
-    },
-    {
-     "block": [
-      68,
-      47,
-      3,
-      2
-     ],
-     "fusskachel": [
-      69,
-      48
+      47
      ]
     }
    ]
@@ -436,24 +288,24 @@
    "datei": "varianten/k01-deko25_m.png",
    "animation": "wehen",
    "slot_kacheln": {
-    "x": 33,
+    "x": 21,
     "y": 0,
     "breite": 3,
-    "hoehe": 2
+    "hoehe": 3
    },
    "objektblock_im_slot": {
     "x": 0,
     "y": 0,
     "breite": 3,
-    "hoehe": 2
+    "hoehe": 3
    },
    "fundstellen_karte": [
     {
      "block": [
       47,
-      12,
+      11,
       3,
-      2
+      3
      ],
      "fusskachel": [
       48,
@@ -479,6 +331,154 @@
    "datei": "varianten/k01-deko26.png",
    "animation": "wehen",
    "slot_kacheln": {
+    "x": 24,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      60,
+      11,
+      3,
+      3
+     ],
+     "fusskachel": [
+      61,
+      13
+     ]
+    },
+    {
+     "block": [
+      7,
+      46,
+      3,
+      2
+     ],
+     "fusskachel": [
+      8,
+      47
+     ]
+    },
+    {
+     "block": [
+      50,
+      45,
+      3,
+      3
+     ],
+     "fusskachel": [
+      51,
+      47
+     ]
+    }
+   ]
+  },
+  {
+   "name": "k01/deko26",
+   "datei": "varianten/k01-deko26_m.png",
+   "animation": "wehen",
+   "slot_kacheln": {
+    "x": 27,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      63,
+      21,
+      3,
+      3
+     ],
+     "fusskachel": [
+      64,
+      23
+     ]
+    }
+   ]
+  },
+  {
+   "name": "k01/deko30",
+   "datei": "varianten/k01-deko30.png",
+   "animation": "wehen",
+   "slot_kacheln": {
+    "x": 30,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      9,
+      44,
+      3,
+      3
+     ],
+     "fusskachel": [
+      10,
+      46
+     ]
+    }
+   ]
+  },
+  {
+   "name": "k01/deko30",
+   "datei": "varianten/k01-deko30_m.png",
+   "animation": "wehen",
+   "slot_kacheln": {
+    "x": 33,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      20,
+      71,
+      3,
+      3
+     ],
+     "fusskachel": [
+      21,
+      73
+     ]
+    }
+   ]
+  },
+  {
+   "name": "k01/deko00",
+   "datei": "varianten/k01-deko00_m.png",
+   "animation": "wehen",
+   "slot_kacheln": {
     "x": 36,
     "y": 0,
     "breite": 3,
@@ -493,45 +493,33 @@
    "fundstellen_karte": [
     {
      "block": [
-      60,
-      12,
+      22,
+      69,
       3,
       2
      ],
      "fusskachel": [
-      61,
-      13
+      23,
+      70
      ]
     },
     {
      "block": [
-      7,
-      47,
+      46,
+      46,
       3,
       2
      ],
      "fusskachel": [
-      8,
-      48
-     ]
-    },
-    {
-     "block": [
-      50,
       47,
-      3,
-      2
-     ],
-     "fusskachel": [
-      51,
-      48
+      47
      ]
     }
    ]
   },
   {
-   "name": "k01/deko26",
-   "datei": "varianten/k01-deko26_m.png",
+   "name": "k01/deko01",
+   "datei": "varianten/k01-deko01.png",
    "animation": "wehen",
    "slot_kacheln": {
     "x": 39,
@@ -548,25 +536,37 @@
    "fundstellen_karte": [
     {
      "block": [
-      63,
-      22,
+      59,
+      46,
       3,
       2
      ],
      "fusskachel": [
-      64,
-      23
+      60,
+      47
+     ]
+    },
+    {
+     "block": [
+      4,
+      47,
+      3,
+      2
+     ],
+     "fusskachel": [
+      5,
+      48
      ]
     }
    ]
   },
   {
-   "name": "k01/deko27",
-   "datei": "varianten/k01-deko27.png",
+   "name": "k01/deko02",
+   "datei": "varianten/k01-deko02.png",
    "animation": "wehen",
    "slot_kacheln": {
     "x": 0,
-    "y": 3,
+    "y": 4,
     "breite": 3,
     "hoehe": 2
    },
@@ -579,25 +579,68 @@
    "fundstellen_karte": [
     {
      "block": [
-      9,
-      45,
-      3,
-      2
-     ],
-     "fusskachel": [
-      10,
-      46
-     ]
-    },
-    {
-     "block": [
-      64,
+      70,
       47,
       3,
       2
      ],
      "fusskachel": [
-      65,
+      71,
+      48
+     ]
+    },
+    {
+     "block": [
+      50,
+      22,
+      2,
+      2
+     ],
+     "fusskachel": [
+      51,
+      23
+     ]
+    }
+   ]
+  },
+  {
+   "name": "k01/deko27",
+   "datei": "varianten/k01-deko27.png",
+   "animation": "wehen",
+   "slot_kacheln": {
+    "x": 3,
+    "y": 4,
+    "breite": 3,
+    "hoehe": 2
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 2
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      54,
+      21,
+      3,
+      2
+     ],
+     "fusskachel": [
+      55,
+      22
+     ]
+    },
+    {
+     "block": [
+      54,
+      47,
+      3,
+      2
+     ],
+     "fusskachel": [
+      55,
       48
      ]
     }
@@ -608,8 +651,8 @@
    "datei": "varianten/k18s-18.png",
    "animation": "leuchten",
    "slot_kacheln": {
-    "x": 3,
-    "y": 3,
+    "x": 6,
+    "y": 4,
     "breite": 3,
     "hoehe": 2
    },
@@ -743,55 +786,12 @@
    ]
   },
   {
-   "name": "k01/deko02",
-   "datei": "varianten/k01-deko02.png",
-   "animation": "wehen",
-   "slot_kacheln": {
-    "x": 6,
-    "y": 3,
-    "breite": 2,
-    "hoehe": 2
-   },
-   "objektblock_im_slot": {
-    "x": 0,
-    "y": 0,
-    "breite": 2,
-    "hoehe": 2
-   },
-   "fundstellen_karte": [
-    {
-     "block": [
-      54,
-      21,
-      2,
-      2
-     ],
-     "fusskachel": [
-      55,
-      22
-     ]
-    },
-    {
-     "block": [
-      51,
-      44,
-      3,
-      2
-     ],
-     "fusskachel": [
-      52,
-      45
-     ]
-    }
-   ]
-  },
-  {
    "name": "k18s/00",
    "datei": "varianten/k18s-00.png",
    "animation": "leuchten",
    "slot_kacheln": {
-    "x": 8,
-    "y": 3,
+    "x": 9,
+    "y": 4,
     "breite": 2,
     "hoehe": 2
    },
@@ -821,8 +821,8 @@
    "datei": "varianten/k18s-01.png",
    "animation": "leuchten",
    "slot_kacheln": {
-    "x": 10,
-    "y": 3,
+    "x": 11,
+    "y": 4,
     "breite": 2,
     "hoehe": 2
    },
@@ -852,8 +852,8 @@
    "datei": "varianten/k18s-42.png",
    "animation": "leuchten",
    "slot_kacheln": {
-    "x": 12,
-    "y": 3,
+    "x": 13,
+    "y": 4,
     "breite": 2,
     "hoehe": 2
    },
@@ -884,7 +884,7 @@
    "animation": null,
    "slot_kacheln": {
     "x": 0,
-    "y": 5,
+    "y": 6,
     "breite": 8,
     "hoehe": 22
    },
@@ -915,7 +915,7 @@
    "animation": null,
    "slot_kacheln": {
     "x": 8,
-    "y": 5,
+    "y": 6,
     "breite": 8,
     "hoehe": 22
    },
@@ -946,7 +946,7 @@
    "animation": null,
    "slot_kacheln": {
     "x": 0,
-    "y": 27,
+    "y": 28,
     "breite": 31,
     "hoehe": 14
    },
@@ -977,7 +977,7 @@
    "animation": null,
    "slot_kacheln": {
     "x": 0,
-    "y": 41,
+    "y": 42,
     "breite": 17,
     "hoehe": 12
    },
@@ -1008,7 +1008,7 @@
    "animation": null,
    "slot_kacheln": {
     "x": 17,
-    "y": 41,
+    "y": 42,
     "breite": 16,
     "hoehe": 12
    },
@@ -1039,7 +1039,7 @@
    "animation": null,
    "slot_kacheln": {
     "x": 0,
-    "y": 53,
+    "y": 54,
     "breite": 27,
     "hoehe": 11
    },
@@ -1070,7 +1070,7 @@
    "animation": null,
    "slot_kacheln": {
     "x": 27,
-    "y": 53,
+    "y": 54,
     "breite": 6,
     "hoehe": 11
    },
@@ -1101,7 +1101,7 @@
    "animation": null,
    "slot_kacheln": {
     "x": 0,
-    "y": 64,
+    "y": 65,
     "breite": 42,
     "hoehe": 10
    },
@@ -1132,7 +1132,7 @@
    "animation": null,
    "slot_kacheln": {
     "x": 0,
-    "y": 74,
+    "y": 75,
     "breite": 6,
     "hoehe": 10
    },
@@ -1163,7 +1163,7 @@
    "animation": null,
    "slot_kacheln": {
     "x": 6,
-    "y": 74,
+    "y": 75,
     "breite": 13,
     "hoehe": 5
    },
@@ -1194,7 +1194,7 @@
    "animation": null,
    "slot_kacheln": {
     "x": 19,
-    "y": 74,
+    "y": 75,
     "breite": 3,
     "hoehe": 4
    },
@@ -1237,7 +1237,7 @@
    "animation": null,
    "slot_kacheln": {
     "x": 22,
-    "y": 74,
+    "y": 75,
     "breite": 3,
     "hoehe": 4
    },
@@ -1268,7 +1268,7 @@
    "animation": null,
    "slot_kacheln": {
     "x": 25,
-    "y": 74,
+    "y": 75,
     "breite": 9,
     "hoehe": 3
    },
@@ -1299,7 +1299,7 @@
    "animation": null,
    "slot_kacheln": {
     "x": 34,
-    "y": 74,
+    "y": 75,
     "breite": 4,
     "hoehe": 3
    },
@@ -1330,7 +1330,7 @@
    "animation": null,
    "slot_kacheln": {
     "x": 38,
-    "y": 74,
+    "y": 75,
     "breite": 4,
     "hoehe": 3
    },
@@ -1361,7 +1361,7 @@
    "animation": null,
    "slot_kacheln": {
     "x": 0,
-    "y": 84,
+    "y": 85,
     "breite": 5,
     "hoehe": 2
    },
@@ -1392,7 +1392,7 @@
    "animation": null,
    "slot_kacheln": {
     "x": 5,
-    "y": 84,
+    "y": 85,
     "breite": 4,
     "hoehe": 2
    },
@@ -1423,7 +1423,7 @@
    "animation": null,
    "slot_kacheln": {
     "x": 9,
-    "y": 84,
+    "y": 85,
     "breite": 2,
     "hoehe": 2
    },
@@ -1466,7 +1466,7 @@
    "animation": null,
    "slot_kacheln": {
     "x": 11,
-    "y": 84,
+    "y": 85,
     "breite": 2,
     "hoehe": 2
    },
@@ -1509,7 +1509,7 @@
    "animation": null,
    "slot_kacheln": {
     "x": 13,
-    "y": 84,
+    "y": 85,
     "breite": 2,
     "hoehe": 2
    },
@@ -1564,7 +1564,7 @@
    "animation": null,
    "slot_kacheln": {
     "x": 15,
-    "y": 84,
+    "y": 85,
     "breite": 2,
     "hoehe": 2
    },
@@ -1607,7 +1607,7 @@
    "animation": null,
    "slot_kacheln": {
     "x": 17,
-    "y": 84,
+    "y": 85,
     "breite": 2,
     "hoehe": 2
    },
@@ -1662,7 +1662,7 @@
    "animation": null,
    "slot_kacheln": {
     "x": 19,
-    "y": 84,
+    "y": 85,
     "breite": 2,
     "hoehe": 2
    },
@@ -1717,7 +1717,7 @@
    "animation": null,
    "slot_kacheln": {
     "x": 21,
-    "y": 84,
+    "y": 85,
     "breite": 2,
     "hoehe": 2
    },
@@ -1748,7 +1748,7 @@
    "animation": null,
    "slot_kacheln": {
     "x": 23,
-    "y": 84,
+    "y": 85,
     "breite": 2,
     "hoehe": 2
    },
@@ -1779,7 +1779,7 @@
    "animation": null,
    "slot_kacheln": {
     "x": 25,
-    "y": 84,
+    "y": 85,
     "breite": 2,
     "hoehe": 2
    },
@@ -1810,7 +1810,7 @@
    "animation": null,
    "slot_kacheln": {
     "x": 27,
-    "y": 84,
+    "y": 85,
     "breite": 1,
     "hoehe": 2
    },
@@ -1841,7 +1841,7 @@
    "animation": null,
    "slot_kacheln": {
     "x": 28,
-    "y": 84,
+    "y": 85,
     "breite": 1,
     "hoehe": 2
    },
@@ -1872,7 +1872,7 @@
    "animation": null,
    "slot_kacheln": {
     "x": 29,
-    "y": 84,
+    "y": 85,
     "breite": 1,
     "hoehe": 2
    },
@@ -1903,7 +1903,7 @@
    "animation": null,
    "slot_kacheln": {
     "x": 30,
-    "y": 84,
+    "y": 85,
     "breite": 1,
     "hoehe": 2
    },
@@ -1946,7 +1946,7 @@
    "animation": null,
    "slot_kacheln": {
     "x": 31,
-    "y": 84,
+    "y": 85,
     "breite": 2,
     "hoehe": 1
    },
@@ -2001,7 +2001,7 @@
    "animation": null,
    "slot_kacheln": {
     "x": 33,
-    "y": 84,
+    "y": 85,
     "breite": 2,
     "hoehe": 1
    },
@@ -2032,7 +2032,7 @@
    "animation": null,
    "slot_kacheln": {
     "x": 35,
-    "y": 84,
+    "y": 85,
     "breite": 2,
     "hoehe": 1
    },
@@ -2063,7 +2063,7 @@
    "animation": null,
    "slot_kacheln": {
     "x": 37,
-    "y": 84,
+    "y": 85,
     "breite": 2,
     "hoehe": 1
    },
@@ -2094,7 +2094,7 @@
    "animation": null,
    "slot_kacheln": {
     "x": 39,
-    "y": 84,
+    "y": 85,
     "breite": 1,
     "hoehe": 1
    },

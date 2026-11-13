@@ -133,6 +133,7 @@ def main():
         o = {'datei': datei, 'basis': name, 'x': x, 'y': y, 'fuss': bb[3] - 1, 'kachel': [int(cx) // T, int(fy) // T],
              'ebene': 1}
         o.update(opt or {})
+        o.setdefault('ohne_wall', True)                          # Stadt: harte Kanten, kein Bodenwall aus Pflaster/Asphalt
         objekte.append(o)
         rects.append(r + (art, fy))
         return o
@@ -164,8 +165,26 @@ def main():
     if not setze(n_, cx, fy * T + T - 1, {'gebaeude': True}, False, 'gebaeude'):
         print('Bruecke nicht gesetzt')
     # ---------------------------------------------------------------- Strassenbaeume mit Bueschen an den Stammecken
+    def baum_mittig(name, tx, ty, opt, spiegeln):
+        """Strassenbaum mittig auf dem Gruenstreifen (Nutzer): Stammfuss auf der senkrechten Mitte des Streifens,
+        waagerecht auf der Kachelmitte; weicht bei Ueberlappung um bis zu 2 Spalten aus."""
+        for dx in (0, 1, -1, 2, -2):
+            x = tx + dx
+            if k(x, ty) != 'n' or k(x - 1, ty) != 'n' or k(x + 1, ty) != 'n':
+                continue
+            oben, unten = ty, ty
+            while k(x, oben - 1) == 'n':
+                oben -= 1
+            while k(x, unten + 1) == 'n':
+                unten += 1
+            fy = (oben * T + (unten + 1) * T) // 2 + 4
+            if setze(name, x * T + T / 2.0, fy, opt, spiegeln, 'baum'):
+                return True
+        print('Baum nicht gesetzt:', tx, ty)
+        return False
+
     for i, (tx, ty) in enumerate(BAEUME):
-        if kachel('k01/baum%02d' % (i % 3), tx, ty, {'anim': 'baum', 'ohne_wall': True}, i % 2 == 1, 'baum', 'n'):
+        if baum_mittig('k01/baum%02d' % (i % 3), tx, ty, {'anim': 'baum'}, i % 2 == 1):
             b = objekte[-1]
             seite = 1 if i % 2 else -1
             bb_ = Image.open(os.path.join(OBJ, b['datei'])).getbbox()

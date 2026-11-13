@@ -215,6 +215,10 @@ Vor jeder Abgabe Punkt für Punkt prüfen (vergrößert, Standbild und mehrere A
   (2 Reihen frei); Leuchtschein mit `licht`/`licht_box`/`licht_r` nur am Lampenkopf bzw. Warenfenster; gewollte
   Begleiter (Busch an der Stammecke) ohne 2-px-Prüfung gegen den eigenen Baum setzen und ihr Setzen kontrollieren;
   abgeschnittene Markierungsreste (< 10 px) entfernen; Gebäude, die höher als in der Vorlage sind: Karte anpassen.
+- **Bäume auf Grünstreifen und Bodenwall in der Stadt (Nutzer, Karte 35):** Bäume auf schmalen Grünstreifen/Beeten stehen
+  mit dem Stammfuß auf der senkrechten Mitte des Streifens, nicht am unteren Rand (geht vor Regel 1b). Auf Gehweg,
+  Pflaster und Asphalt bekommen Objekte keinen Bodenwall (`ohne_wall`) – Straßen haben harte Kanten, nichts wird
+  aus der Bodentextur an den Fuß gepixelt.
 - **Begleiter am Stumpf (5d):** keine 1-Kachel-Blumen auf dem Stumpf, kein Blumenklumpen; Begleiter überlappen sich nicht.
 - **Paare/Achsen:** Paare vor Toren/Bauwerken exakt gespiegelt (Mitte und Fuß), gleiche Objekte auf gleicher Höhe;
   Druckplatten, Obelisken usw. symmetrisch zur berechneten Achse.
