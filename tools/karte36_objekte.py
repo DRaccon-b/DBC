@@ -147,6 +147,12 @@ def main():
         os.makedirs(os.path.dirname(ziel), exist_ok=True)
         shutil.copy(os.path.join(ROOT, 'assets', 'objekte', quelle), ziel)
     kanten_ergaenzen('gross_buero_mitte/00.png', 'gross/buero_mitte.png')   # Kanten waren abgeschnitten (Karte 35)
+    a_ = np.array(Image.open(os.path.join(OBJ, 'k30/buero_glas.png')).convert('RGBA'))   # Oberkante abgeschnitten (Pruefung)
+    neu_ = np.zeros((a_.shape[0] + 2, a_.shape[1], 4), np.uint8); neu_[2:] = a_
+    oben_ = a_[0, :, 3] > 0
+    neu_[1, oben_] = a_[0, oben_]
+    neu_[0, oben_, :3] = (a_[0, oben_, :3].astype(int) * 0.4).astype(np.uint8); neu_[0, oben_, 3] = 255
+    Image.fromarray(neu_).save(os.path.join(OBJ, 'k30/buero_glas.png'))
     halb_gespiegelt('gross_beige_halb_hoch_b/00.png', 'gross/wohn_oben.png', 240, eingang=False)   # Vorlagenbreiten
     halb_gespiegelt('gross_beige_halb_hoch_b/00.png', 'gross/wohn_unten.png', 240, eingang=False)
     halb_gespiegelt('gross_beige_halb_flach_b/00.png', 'gross/wohn_links.png', 176, eingang=False)
@@ -258,7 +264,7 @@ def main():
 
     for i, (tx, ty) in enumerate(BAEUME):
         tx, ty = tx + P, ty + P
-        if baum_mittig('k01/baum%02d' % (i % 3), tx, ty, {'anim': 'baum'}, i % 2 == 1):
+        if baum_mittig('k01/baum%02d' % (i % 3), tx, ty, {'anim': 'baum', 'nur_kontakt': True}, i % 2 == 1):   # kein Stufenschatten auf Pflaster
             b = objekte[-1]
             seite = 1 if i % 2 else -1
             bb_ = Image.open(os.path.join(OBJ, b['datei'])).getbbox()
@@ -324,7 +330,8 @@ def main():
     for ty in range(rows):
         for tx in range(cols):
             if cls[ty][tx] == 'h' and (tx + ty) % 2 == 0:
-                if setze(rnd.choice(WALD), tx * T + T / 2.0, ty * T + T - 1, {'anim': 'baum'}, rnd.random() < 0.5, 'wald'):
+                if setze(rnd.choice(WALD), tx * T + T / 2.0, ty * T + T - 1, {'anim': 'baum', 'nur_kontakt': True},
+                         rnd.random() < 0.5, 'wald'):
                     n_w += 1
     deck = np.zeros((rows * T, cols * T), bool)                  # Luecken schliessen (kein leerer Rasen im Guertel)
     for (a0, a1, a2, a3, art2, fy2) in rects:
@@ -333,7 +340,8 @@ def main():
     for ty in range(rows):
         for tx in range(cols):
             if cls[ty][tx] == 'h' and deck[ty * T:(ty + 1) * T, tx * T:(tx + 1) * T].mean() < 0.7:
-                if setze(rnd.choice(BUSCH), tx * T + T / 2.0, ty * T + T - 1, {'anim': 'wehen'}, rnd.random() < 0.5, 'wald'):
+                if setze(rnd.choice(BUSCH), tx * T + T / 2.0, ty * T + T - 1, {'anim': 'wehen', 'nur_kontakt': True},
+                         rnd.random() < 0.5, 'wald'):
                     a0, a1, a2, a3 = rects[-1][:4]
                     deck[max(0, a1):a3 + 1, max(0, a0):a2 + 1] = True
                     luecken += 1

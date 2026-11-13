@@ -236,6 +236,13 @@ Vor jeder Abgabe Punkt für Punkt prüfen (vergrößert, Standbild und mehrere A
   Vorschau neben der Vorlage zur Auswahl zeigen. Reparaturen an generierten Sprites (Kanten, Fremdpixel) sind erlaubt.
 - **Eingänge frei (Karte 35):** Vor jeder Tür liegt Gehweg/Weg auf der Türachse (Beetlücke genau vor dem Eingang);
   aus Hälften gespiegelte Gebäude bekommen einen Eingang auf der Achse, Saum- und Rauschpixel werden entfernt.
+- **Stadtkarten-Layout (Karte 36):** Asphalt nur innerhalb der Straßenbänder/Zebrastreifen übernehmen – dunkle
+  Vorlagenpixel (Türen, Stämme, Schatten) werden sonst zu Fahrbahn-Kerben im Gehweg. Gebäudeflächen im Layout prüfen
+  (keine Einträge im Kommentar verloren). Gebäude brauchen eine Gehwegreihe vor der Front, auch am Kartenrand; Kronen des
+  Baumgürtels ragen nie über Stadtfläche, Türen oder Straßenenden. Ladenzeilen stoßen gewollt aneinander (ohne
+  2-px-Prüfung untereinander). Wiederverwendete Sprites ebenfalls auf Schnittkanten prüfen (oben/unten/links/rechts),
+  Magenta-Reste der Freistellung und dunkle Saumbalken unter gespiegelten Hälften entfernen. Bäume auf Pflasterflächen
+  und im Gürtel nur mit Kontaktschatten (der gestufte Schlagschatten wird auf hellem Pflaster zum Rechteck-Stummel).
 - **Begleiter am Stumpf (5d):** keine 1-Kachel-Blumen auf dem Stumpf, kein Blumenklumpen; Begleiter überlappen sich nicht.
 - **Paare/Achsen:** Paare vor Toren/Bauwerken exakt gespiegelt (Mitte und Fuß), gleiche Objekte auf gleicher Höhe;
   Druckplatten, Obelisken usw. symmetrisch zur berechneten Achse.
