@@ -189,6 +189,37 @@ for _v in ('b', 'c'):                                                           
         groesse=(512, 176), text=AUFTRAEGE['k31_bruecke']['text'].replace(_VOLL, '') + ' The whole bridge including both '
              'staircases is about 440 pixels wide, centered, with a wide empty magenta margin on all four sides.')
 
+# ---- A03 Karte 35 Shinjuku Digital Fog: grosse Gebaeude (> 256 px) nach der Vorlage (Nutzer-Ausnahme Karte 25)
+_K35 = ('Tokyo Shinjuku office district building, evening, seen from the front with the flat roof visible from slightly '
+        'above, clean crisp pixel art, light from the top left, sharp dark outlines, ')
+_K35_STIL = 'assets/objekte/karte30/gross_buero_flach_s/00.png'
+_V35 = 'assets/vorlagen/karte35_vorlage.png'
+for _n, _box, _gr, _t in (
+        ('turm', (46, 29, 238, 368), (224, 384), 'tall slim glass office tower: a light grey flat roof band with a small '
+         'rooftop air conditioning unit and a parapet visible from slightly above, below it a tall facade of dark blue glass '
+         'curtain wall in many even horizontal floor bands with thin light grey mullions, light concrete corner pillars on both '
+         'sides, a glass lobby with a double entrance door in the middle of the ground floor, grey base plinth, ' + _VOLL),
+        ('buero_oben_halb', (504, 37, 856, 135), (400, 176), 'very long low glass office building: a deep light grey flat '
+         'roof with a parapet and two rooftop air conditioning units visible from slightly above, a facade of one tall band '
+         'of dark blue glass windows with thin mullions, light concrete end pillar, ' + _HALB),
+        ('buero_mitte', (720, 420, 1100, 555), (416, 192), 'long low glass office building: a light grey flat roof with a '
+         'parapet and a rooftop air conditioning unit visible from slightly above, a facade of dark blue glass curtain wall in '
+         'two even horizontal bands, light concrete corner pillars on both sides, a glass entrance in the middle of the '
+         'ground floor, grey base plinth, ' + _VOLL),
+        ('buero_unten_halb', (680, 1080, 935, 1240), (320, 224), 'long three-storey glass office building: a light grey flat '
+         'roof with a parapet and two rooftop air conditioning units visible from slightly above, a facade of dark blue glass '
+         'curtain wall in three even horizontal bands, light concrete end pillar, grey base plinth, ' + _HALB),
+):
+    AUFTRAEGE['k35_' + _n] = {'ziel': 'assets/objekte/karte35/gross_' + _n, 'groesse': _gr, 'magenta': True,
+                             'vorlage': (_V35, _box), 'stil': _K35_STIL, 'text': _t + _K35 + FR14}
+
+for _v in ('b', 'c'):                                                           # Turm mit Rand, ohne Boden (Pruefung)
+    AUFTRAEGE['k35_turm_' + _v] = dict(AUFTRAEGE['k35_turm'], ziel='assets/objekte/karte35/gross_turm_' + _v,
+        groesse=(256, 400), text=AUFTRAEGE['k35_turm']['text'].replace(_VOLL, '') + ' The tower is exactly about 160 '
+        'pixels wide and 310 pixels tall, centered, with a wide empty magenta margin of at least 40 pixels on all four '
+        'sides: the complete flat roof with its parapet and all corners is visible at the top, the grey base plinth ends '
+        'cleanly at the bottom, NO pavement, NO ground, NO sidewalk tiles, nothing touches the image border.')
+
 
 def main(name):
     a = AUFTRAEGE[name]

@@ -2065,6 +2065,36 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'surreal lone wooden door standing in nothing, half open with a starry night sky inside, dreamlike, classic 2D handheld RPG style, transparent background',
         'surreal porcelain teacup tilted in the air pouring out a swirling purple galaxy instead of tea, dreamlike, classic 2D handheld RPG style, transparent background',
     ]},
+    # ---- A03 Karte 35 Shinjuku Digital Fog
+    'k35_wohnblock_a': {'size': 256, 'freie_farben': True, 'items': [
+        'wide three-storey Japanese apartment building, about one and a half times as wide as tall: a light grey flat roof '
+        'band with a parapet and one small rooftop air conditioning unit visible from slightly above, a warm beige facade '
+        'with two rows of small dark blue windows with white frames and tiny balconies, the ground floor a dark blue glass '
+        'shop front with a glass entrance door in the middle under a small orange sign, grey base, fully in frame, ' + FR14,
+    ]},
+    'k35_wohnblock_b': {'size': 256, 'freie_farben': True, 'items': [
+        'wide three-storey Japanese apartment building, about one and a half times as wide as tall: a light grey flat roof '
+        'band with a parapet and one small rooftop unit visible from slightly above, a light sand beige facade with two rows '
+        'of small blue windows with white frames, the ground floor a glass shop front with a glass entrance door in the '
+        'middle under a small orange sign, grey base, fully in frame, ' + FR14,
+    ]},
+    'k35_schmal_a': {'size': 192, 'freie_farben': True, 'items': [
+        'narrow four-storey Japanese apartment building, slightly taller than wide: a light grey flat roof band with a '
+        'parapet and a small rooftop unit visible from slightly above, a warm beige facade with three rows of small dark blue '
+        'windows with white frames, the ground floor a glass front with a glass entrance door under a small orange sign, '
+        'grey base, fully in frame, ' + FR14,
+    ]},
+    'k35_schmal_b': {'size': 192, 'freie_farben': True, 'items': [
+        'narrow four-storey Japanese apartment building, slightly taller than wide: a light grey flat roof band with a '
+        'parapet and a small rooftop unit visible from slightly above, a soft lavender pink facade with three rows of small '
+        'dark blue windows with white frames, the ground floor a glass front with a glass entrance door under a small pink '
+        'sign, grey base, fully in frame, ' + FR14,
+    ]},
+    'k35_fussgaengerbruecke': {'size': 192, 'freie_farben': True, 'items': [
+        'short pedestrian overpass footbridge crossing a street: a straight flat walkway deck with bright blue steel railings '
+        'on both sides, a staircase with blue railings going down at the left end and at the right end, four grey steel '
+        'support pillars, the whole bridge about three times as wide as tall, fully in frame, ' + FR14,
+    ]},
     # ---- A03 Karte 34 Shinjuku Central Park
     'k34_rathaus': {'size': 176, 'freie_farben': True, 'items': [
         'grand modern city hall skyscraper complex in light grey granite: two tall identical towers side by side, each tower '
