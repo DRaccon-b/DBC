@@ -28,11 +28,11 @@ WALD = ['k01/baum%02d' % i for i in (0, 1, 2, 4, 9, 15)]
 BUSCH = ['k01/baum%02d' % i for i in (12, 13, 14)]
 LAMPE = {'anim': 'leuchten', 'licht': [4, 7], 'licht_box': [2, 5, 6, 10], 'licht_r': 9}
 # Gebaeude: (sprite, Mitte x Vorlagen-px, Fusszeile Vorlage, Haelfte, halbe Breite)
-GEBAEUDE = [('gross/beige', 127, 9, 'gross_beige_halb/00.png', 112), ('gross/glas', 671, 11, 'gross_glas_halb/00.png', 81),
+GEBAEUDE = [('gross/beige', 127, 10, 'gross_beige_halb/00.png', 112), ('gross/glas', 671, 11, 'gross_glas_halb/00.png', 81),
             ('gross/lila', 447, 35, 'gross_lila_halb/00.png', 142)]
-BAEUME = [((2, 8, 12, 13), (0.3, 0.75)), ((39, 44, 25, 26), (0.25, 0.75))]   # Beet (x0,x1,y0,y1), Anteile in x
+BAEUME = [((2, 8, 12, 13), (0.06, 0.86)), ((39, 44, 25, 26), (0.25, 0.75))]   # Beet (x0,x1,y0,y1), Anteile in x; links Tuerachsen frei
 LATERNEN = [(16, 8), (35, 8), (15, 24)]
-MUELL = [(11, 11), (36, 4)]
+MUELL = [(1, 11), (36, 4)]                               # nicht vor Tueren
 # Fahrzeuge (Linksverkehr): Suedspur nach Westen (Seitenansicht schaut nach links)
 AUTOS = [('k18a/12', 135, 318, False), ('k18a/05', 695, 318, False), ('k18a/11', 665, 382, False)]
 
@@ -141,9 +141,11 @@ def main():
             print('Gebaeude nicht gesetzt:', name)
     for i, ((x0, x1, y0, y1), anteile) in enumerate(BAEUME):      # Stammfuss auf der senkrechten Beetmitte (Pruefliste)
         fy = (y0 + P) * T + (y1 - y0 + 1) * T // 2 + 3
+        arten = ['k01/baum14', 'k01/baum13'] if i == 0 else ['k01/baum00', 'k01/baum02']   # links Bueche: Block steht dicht davor
         for j, f in enumerate(anteile):
-            cx = (x0 + P) * T + f * (x1 - x0 + 1) * T
-            setze(['k01/baum00', 'k01/baum02'][j % 2], cx, fy, {'anim': 'baum'}, (i + j) % 2 == 1, klassen='n')
+            hw = (lambda b: (b[2] - b[0]) / 2.0 + 1)(Image.open(os.path.join(OBJ, arten[j % 2] + '.png')).getbbox())
+            cx = min(max((x0 + P) * T + f * (x1 - x0 + 1) * T, (x0 + P) * T + hw), (x1 + P + 1) * T - hw)   # ganz im Beet
+            setze(arten[j % 2], cx, fy, {'anim': 'baum'}, (i + j) % 2 == 1, klassen='n')
     for (tx, ty) in LATERNEN:
         kachel('k18s/18', tx + P, ty + P, dict(LAMPE))
     for (tx, ty) in MUELL:

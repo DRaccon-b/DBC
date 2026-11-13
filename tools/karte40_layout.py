@@ -41,6 +41,7 @@ def main():
     k[band] = 'a'                                                    # Beet links oben liegt am Strassenrand: Fahrbahn bleibt
     k[12:14, 2:9] = 'n'; k[12:14, 0:15][k[12:14, 0:15] == 'a'] = 'k'  # linkes Beet + Gehweg davor (Vorlage)
     band[12:14, 0:15] = False
+    k[0, 18:32] = 'k'; k[12:22, 0] = 'k'; k[13:25, C - 1] = 'k'        # Strassenenden ohne Ausgang: Gehweg-/Bordsteinreihe
     k[26:R, 0:18][k[26:R, 0:18] == 'k'] = 'q'                        # Platz unten links (Teleporter-Platz)
     P = RAND
     C2, R2 = C + 2 * P, R + 2 * P + 1                                # unten eine Reihe mehr: Gehweg vor dem lila Block

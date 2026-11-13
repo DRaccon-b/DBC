@@ -131,8 +131,9 @@ def kanaldeckel(a, kl, seed=36, P=0, lay=None):
     mitte_x = tuple(x for (x0, x1, _, _) in lay['strassen_v'] for x in range((x0 + x1) // 2 - 1, (x0 + x1) // 2 + 2))              # Kachelreihen/-spalten der Mittellinien
     kand = [(y, x) for y in range(3, rows - 3) for x in range(3, cols - 3) if kl[y, x] == 'a'
             and all(kl[y + dy, x + dx] == 'a' for dy in (-1, 0, 1) for dx in (-1, 0, 1))
-            and y not in mitte_y and x not in mitte_x]
-    rs.shuffle(kand)
+            and y not in mitte_y and x not in mitte_x
+            and not any(x0 - 1 <= x <= x1 + 1 and y0 - 1 <= y <= y1 + 1 for (x0, x1, y0, y1, _) in lay.get('zebra', []))]
+    rs.shuffle(kand)                                                   # nie auf/an Zebrastreifen (Pruefung K40)
     gesetzt = []
     for (y, x) in kand:
         if len(gesetzt) >= 14:
@@ -309,7 +310,8 @@ def plaetze_boden(a, kl, objs):
         sm = (xx >= o['x'] + bb_[0]) & (xx < o['x'] + bb_[2] + 3) & (yy > fuss) & (yy <= fuss + 3) & erlaubt
         a[sm] = (a[sm] * 0.8).astype(np.uint8)
     for o in [o for o in objs if o.get('sockel')]:                # Sockelplatz unter dem Kuebel mit Bankpaar
-        cx, fy = o['x'] + 29, o['y'] + o['fuss']
+        bbk = Image.open(os.path.join(OBJ, o['datei'])).getbbox()
+        cx, fy = o['x'] + (bbk[0] + bbk[2]) // 2, o['y'] + o['fuss']   # Mitte aus der Bildbox (Pruefung K40)
         m = (np.abs(xx - cx) < 100) & (yy > fy - 22) & (yy <= fy + 6) & erlaubt
         a[m] = (190, 186, 176)
         a[m & ((xx - cx) % 32 == 0)] = (160, 156, 148)
