@@ -3,7 +3,7 @@
   python3 tools/karte38_objekte.py && python3 tools/karte38_bauen.py
 
 Grosse Objekte zuerst: drei Bahnhofsgebaeude (neu mit PixelLab: k38_bahnhof_glas, _glas_b, _beige - Nutzer: grosse
-Gebaeude gern neu erzeugen), Wartehaeuschen auf den Bahnsteigen (k38_unterstand), Treppenabgaenge (k38_treppe); dann
+Gebaeude gern neu erzeugen), Wartehaeuschen auf den Bahnsteigen (k38_unterstand), Fahrradabstellplaetze (k38_fahrrad_*, Nutzer: statt Treppen); dann
 Automaten, Baenke (unter den Daechern und frei), Muelleimer, Laternen, Infostaender, Verbotsschilder, Poller und
 Bodengitter nach der Vorlage (Karte 18 + k38_klein), sparsam und ohne Reihen; zuletzt der Baumguertel am Rand.
 Pixelgenaue Pruefung (2 px), kein Bodenwall, Teleporter frei, nichts auf Gleisen und Bahnsteigkanten.
@@ -31,9 +31,10 @@ AUTOMAT = {'anim': 'leuchten', 'licht_box': [3, 3, 17, 18], 'licht_r': 7}
 GEBAEUDE = [('bahnhof_glas_c/00', 144, 14), ('bahnhof_glas_b/01', 160, 42), ('bahnhof_beige/00', 1376, 70)]
 # Wartehaeuschen (Mitte x Vorlagen-px, Fusszeile) - Bahnsteige oben und Mitte wie in der Vorlage
 UNTERSTAENDE = [(560, 23), (1055, 23), (575, 47), (1084, 47)]
-TREPPEN = [('treppe/01', 76 * 16 + 8, 13), ('treppe_breit/00', 87 * 16 + 8, 22), ('treppe/01', 12 * 16 + 8, 61),
-           ('treppe_schmal/02', 17 * 16 + 16, 13),
-           ('treppe_breit/00', 12 * 16, 47)]   # (sprite, Mitte x px, Fusszeile); vor dem mittleren Bahnhof wie in der Vorlage, linke Tuer frei
+# Fahrradabstellplaetze (Nutzer: die 'Treppen' der Vorlage sind Fahrradstaender) - PixelLab k38_fahrrad_*:
+# (sprite, linke Kachel x, Fusszeile) am Raster, Breite = kleinster Kachelblock (Regel 1b)
+FAHRRAD = [('fahrrad_breit/00', 73, 13), ('fahrrad_breit/01', 84, 21), ('fahrrad_breit/00', 9, 61),
+           ('fahrrad_schmal/00', 16, 13)]
 # Poller-Paare mit Verbotsschild genau auf ihrer Achse (Vorlage): (Kachel links, Kachel rechts, Fusszeile)
 POLLER = [(43, 47, 13), (54, 58, 73), (33, 37, 73)]
 # (sprite, Kachel x, Fusszeile, Optionen) - Vorlagenkacheln
@@ -158,12 +159,12 @@ def main():
         # Bank unter dem Dach vor der Glaswand (gewollt im Unterstand, nach ihm gezeichnet)
         setze('klein/09', cx + OFF - 8 + (-16 if i % 2 else 16), (fy + P) * T + T - 4, {'nur_kontakt': True}, pruefen=False,
               sortier=o['y'] + o['fuss'] + 1)
-    for (name, cx, fy) in TREPPEN:
-        if not os.path.exists(os.path.join(OBJ, name + '.png')):
-            print('fehlt:', name); continue
-        if not any(setze(name, cx + OFF, (fy + P + d) * T + T - 1, {'liegend': True, 'schattenlos': True}, art='gebaeude')
-                   for d in (0, 1, 2, -1)):
-            print('Treppe nicht gesetzt:', name, cx, fy)
+    for (name, x0, fy) in FAHRRAD:
+        bw = Image.open(os.path.join(OBJ, name + '.png')).getbbox()
+        wt = math.ceil((bw[2] - bw[0]) / T)
+        cx = (x0 + P) * T + wt * T / 2.0
+        if not any(setze(name, cx, (fy + P + d) * T + T - 1, {}, art='gebaeude') for d in (0, 1, -1)):
+            print('Fahrradstaender nicht gesetzt:', name, x0, fy)
     for (xa, xb, fy) in POLLER:                                    # Paar + Schild exakt auf der Achse
         ca, cb = (xa + P) * T + T / 2.0, (xb + P) * T + T / 2.0
         fyp = (fy + P) * T + T - 1

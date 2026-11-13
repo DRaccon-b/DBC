@@ -2139,6 +2139,17 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'concrete steps fill the whole opening and get darker towards the bottom, stone border around it, one white '
         'metal handrail on the left edge, no gaps, flat top-down view, ' + FR14,
     ]},
+    'k38_fahrrad_breit': {'size': 96, 'freie_farben': True, 'items': [
+        'wide covered bicycle parking area: a row of five parked bicycles side by side in a grey metal bike rack, seen from '
+        'the front and slightly above, about twice as wide as tall, short white metal railings at both ends, ' + FR14,
+        'wide bicycle parking rack with six bicycles standing next to each other, grey steel stand, seen from the front '
+        'and slightly above, much wider than tall, ' + FR14,
+    ]},
+    'k38_fahrrad_schmal': {'size': 64, 'freie_farben': True, 'items': [
+        'small bicycle parking rack with three parked bicycles side by side, grey metal stand, seen from the front and '
+        'slightly above, ' + FR14,
+        'compact grey metal bike rack with two bicycles locked to it, seen from the front and slightly above, ' + FR14,
+    ]},
     'k38_klein': {'size': 32, 'freie_farben': True, 'items': [
         'short grey metal platform bollard, ' + FR14,
         'round red no-entry traffic sign with a white bar on a thin grey pole, ' + FR14,
