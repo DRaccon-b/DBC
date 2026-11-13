@@ -10,7 +10,7 @@ Sockel am Kuebel) zeichnet karte40_bauen.plaetze_boden aus den echten Positionen
 import json, math, os, random, shutil, sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import numpy as np
-from PIL import Image
+from PIL import Image, ImageFilter
 
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
 KARTE = os.path.join(ROOT, 'maps', 'karte40')
@@ -32,7 +32,9 @@ GEBAEUDE = [('gross/beige', 127, 10, 'gross_beige_halb/00.png', 112), ('gross/gl
             ('gross/lila', 447, 35, 'gross_lila_halb/00.png', 142)]
 BAEUME = [((0, 3, 12, 13), (0.5,)), ((39, 44, 25, 26), (0.25, 0.75))]   # Beet (x0,x1,y0,y1), Anteile in x; links Tuerachsen frei
 LATERNEN = [(16, 8), (35, 8), (15, 24)]
-MUELL = [(9, 13), (36, 4)]                               # nicht vor Tueren
+MUELL = [(9, 13), (36, 4)]
+KRATER_X = 25                                            # Achse der Nordstrasse (Spalten 18-31), Vorlagenkacheln
+KRATER_FUSS = 255                                        # unteres Ende (Kartenpixel): ueber dem Zebrastreifen hinaus                               # nicht vor Tueren
 # Fahrzeuge (Linksverkehr): Suedspur nach Westen (Seitenansicht schaut nach links)
 AUTOS = [('k18a/12', 135, 318, False), ('k18a/05', 695, 318, False), ('k18a/11', 665, 382, False)]
 
@@ -79,6 +81,8 @@ def main():
     def schnitt(a, b, rand=0):
         return not (a[2] + rand < b[0] or b[2] + rand < a[0] or a[3] + rand < b[1] or b[3] + rand < a[1])
 
+    krater_maske = None
+
     def setze(name, cx, fy, opt=None, spiegeln=False, art='objekt', pruefen=True, klassen='kqn'):
         if not os.path.exists(os.path.join(OBJ, name + '.png')):
             print('fehlt:', name); return None
@@ -102,8 +106,10 @@ def main():
                         ov_x = min(r[2], xx * T + T - 1) - max(r[0], xx * T) + 1
                         if ov_y > 4 and ov_x > 4:
                             return None
-            if any(art2 != 'wald' and schnitt(r, tuple(rr), 2) for (*rr, art2) in rects):
+            if any(art2 not in ('wald', 'krater') and schnitt(r, tuple(rr), 2) for (*rr, art2) in rects):
                 return None
+            if krater_maske is not None and krater_maske[max(0, r[3] - 12):r[3] + 1, max(0, r[0] + 6):r[2] - 5].any():
+                return None                                          # Guertel dicht an die Furche (echte Pixel statt Rechteck)
         elif pruefen:
             if any(schnitt(r, tuple(rr), 2) for (*rr, art2) in rects) or any(schnitt(r, t_, 0) for t_ in tps):
                 return None
@@ -139,6 +145,17 @@ def main():
         if not setze(name, cx + OFF, (fy + P) * T + T - 1, {'gebaeude': True, 'vorplatz': True}, art='gebaeude',
                      pruefen=False):
             print('Gebaeude nicht gesetzt:', name)
+    # Meteor-Furche (Nutzer): laeuft auf der Nordstrasse vom Zebrastreifen bis an den Kartenrand durch den Guertel,
+    # Erde/Asphalt nach links und rechts weggedrueckt, Meteor selbst unsichtbar. Bodenobjekt: zuerst gezeichnet, ohne Schatten.
+    kx = (KRATER_X + P) * T
+    setze('krater/lang', kx, KRATER_FUSS, {'gebaeude': True, 'schattenlos': True, 'sortier': -1, 'krater': True},
+          art='krater', pruefen=False)
+    ko = objekte[-1]
+    ka = np.array(Image.open(os.path.join(OBJ, ko['datei'])).convert('RGBA'))[:, :, 3] > 0
+    krater_maske = np.zeros((rows * T, cols * T), bool)
+    h_, w_ = ka.shape
+    krater_maske[max(0, ko['y']):ko['y'] + h_, ko['x']:ko['x'] + w_] = ka[max(0, -ko['y']):, :]
+    krater_maske = np.array(Image.fromarray(krater_maske.astype(np.uint8) * 255).filter(ImageFilter.MaxFilter(7))) > 0
     for i, ((x0, x1, y0, y1), anteile) in enumerate(BAEUME):      # Stammfuss auf der senkrechten Beetmitte (Pruefliste)
         fy = (y0 + P) * T + (y1 - y0 + 1) * T // 2 + 3
         arten = ['k01/baum14', 'k01/baum13'] if i == 0 else ['k01/baum00', 'k01/baum02']   # links Bueche: Block steht dicht davor

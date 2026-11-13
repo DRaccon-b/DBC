@@ -271,6 +271,12 @@ Vor jeder Abgabe Punkt für Punkt prüfen (vergrößert, Standbild und mehrere A
   Ringpflaster um Brunnen, Terrasse unter Café-Tischen, Sockelplatz unter Skulpturen, Granitfläche mit Zugang an
   U-Bahn-Eingängen, einheitlicher Belag unter Brücken mit Treppenabsätzen und Pfeilerschatten – aus den echten
   Objektpositionen berechnet. Bei Gestaltungsfragen Varianten als Vorschau zeigen und den Nutzer wählen lassen.
+- **Kreuzung und Krater (Karte 40):** Beete und Bäume aus der Vorlage an die Türen des neuen Gebäudesprites anpassen
+  (Türachsen frei, Beet notfalls verschieben); Gebäuderückseiten brauchen ebenfalls eine Gehwegreihe zur Fahrbahn (Straße
+  kürzen statt Gebäude über den Bordstein); Zebrastreifen nur aus ganzen Streifen; Kanaldeckel nie auf/an Zebrastreifen;
+  16-Bilder-GIF mit gemeinsamer Palette (sonst flackern Asphalt und Fassaden). Krater/Furchen als Bodenobjekt (zuerst
+  gezeichnet, schattenlos, gesperrt); verlängern durch Wiederholen des Mittelteils an einer nahtlosen Stelle; Baumgürtel
+  gegen die echten Kraterpixel prüfen (nur der Fuß), damit keine kahle Lücke neben der Furche bleibt.
 - **Begleiter am Stumpf (5d):** keine 1-Kachel-Blumen auf dem Stumpf, kein Blumenklumpen; Begleiter überlappen sich nicht.
 - **Paare/Achsen:** Paare vor Toren/Bauwerken exakt gespiegelt (Mitte und Fuß), gleiche Objekte auf gleicher Höhe;
   Druckplatten, Obelisken usw. symmetrisch zur berechneten Achse.

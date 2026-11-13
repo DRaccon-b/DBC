@@ -41,7 +41,7 @@ Aufstellfelds (cyan = Ankunft, gold = weiter; Funktion `pfeil_marke` in `tools/k
 | 4 | Karte 37 – Hypnos Rooftop | v1.0 fertig (3 Agenten-Prüfrunden), Blick auf Karte 35 im Ring, ZIP in maps/karte37/v1.0 |
 | 5 | Karte 38 – Deva Transit | v1.0 fertig (3 Agenten-Prüfrunden), ZIP in maps/karte38/v1.0 |
 | 6 | Karte 39 – West Shinjuku Siege | v1.0 fertig (2 Agenten-Prüfrunden), ZIP in maps/karte39/v1.0 |
-| 7 | Karte 40 – Shinjuku Siege | in Arbeit (Vorbild karte39) |
+| 7 | Karte 40 – Shinjuku Siege | v1.0 fertig (3 Agenten-Prüfrunden), Meteor-Furche auf der Nordstraße (Nutzer), ZIP in maps/karte40/v1.0 |
 
 ## A0S – Sondergebiet
 | Nr. | Karte | Stand |
