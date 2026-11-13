@@ -70,15 +70,43 @@ def _markierungen(a, kl, lay):
     for (x0, x1, y0, y1, art) in lay['zebra']:
         zebra[y0 * T:(y1 + 1) * T, x0 * T:(x1 + 1) * T] = True
     sperre = np.array(Image.fromarray((zebra * 255).astype(np.uint8)).filter(ImageFilter.MaxFilter(21))) > 0
-    # waagerechte Strassen: Zeilen-Mitte je Strassenband; nur wo die Strasse schmal ist (keine Kreuzung)
-    for (y0, y1, x0, x1) in ((14, 21, 30, 93), (36, 42, 4, 81), (56, 62, 18, 93), (56, 59, 4, 17)):
-        y = (y0 + y1 + 1) * T // 2 - 1
-        frei = asphalt & ~sperre & gross(senk <= (y1 - y0 + 1))
-        k30.striche(a, frei, x0 * T, (x1 + 1) * T, y, GELB)
-    for (x0, x1, y0, y1) in ((36, 42, 22, 77), (76, 82, 2, 77)):
-        x = (x0 + x1 + 1) * T // 2 - 1
-        frei = asphalt & ~sperre & gross(waag <= (x1 - x0 + 1))
-        k30.striche(a, frei, y0 * T, (y1 + 1) * T, x, GELB, senkrecht=True)
+    tp = np.zeros_like(asphalt)                                        # Teleporter: Striche enden mit Abstand
+    for t_ in lay['teleporter']:
+        tp[t_['y'] * T:(t_['y'] + t_['h']) * T, t_['x'] * T:(t_['x'] + t_['b']) * T] = True
+    sperre |= np.array(Image.fromarray((tp * 255).astype(np.uint8)).filter(ImageFilter.MaxFilter(25))) > 0
+    # Mittellinie exakt in der Mitte der jeweiligen Fahrbahn: je Kachelspalte (bzw. -zeile) den Fahrbahnlauf durch das
+    # Strassenband suchen, gleiche Mitten zu Abschnitten zusammenfassen; Kreuzungen (zu breite Laeufe) bleiben frei
+    def abschnitte(band, quer):
+        y0, y1, x0, x1 = band
+        stuecke = []
+        for x in range(x0, x1 + 1):
+            spalte = asph_k[:, x] if quer else asph_k[x, :]
+            m = (y0 + y1) // 2
+            if not spalte[m]:
+                stuecke.append(None); continue
+            a_, b_ = m, m
+            while a_ - 1 >= 0 and spalte[a_ - 1]:
+                a_ -= 1
+            while b_ + 1 < len(spalte) and spalte[b_ + 1]:
+                b_ += 1
+            stuecke.append((a_, b_) if b_ - a_ + 1 <= (y1 - y0 + 1) else None)
+        out, i = [], 0
+        while i < len(stuecke):
+            if stuecke[i] is None:
+                i += 1; continue
+            j = i
+            while j + 1 < len(stuecke) and stuecke[j + 1] == stuecke[i]:
+                j += 1
+            out.append((x0 + i, x0 + j, stuecke[i]))
+            i = j + 1
+        return out
+    frei = asphalt & ~sperre
+    for band in ((14, 21, 30, 93), (36, 42, 4, 81), (56, 62, 4, 93)):
+        for (xa, xb, (ya, yb)) in abschnitte(band, True):
+            k30.striche(a, frei, xa * T, (xb + 1) * T, (ya + yb + 1) * T // 2 - 1, GELB)
+    for band in ((36, 42, 22, 77), (76, 82, 1, 77)):
+        for (ya, yb, (xa, xb)) in abschnitte(band, False):
+            k30.striche(a, frei, ya * T, (yb + 1) * T, (xa + xb + 1) * T // 2 - 1, GELB, senkrecht=True)
     for (x0, x1, y0, y1, art) in lay['zebra']:
         for y in range(y0 * T + 2, (y1 + 1) * T - 2):
             for x in range(x0 * T, (x1 + 1) * T):
@@ -90,7 +118,7 @@ def kanaldeckel(a, kl, seed=35):
     """Wenige runde Kanaldeckel und Gullys am Fahrbahnrand (Vorlage), unregelmaessig, fest (kein Flimmern)."""
     rs = np.random.RandomState(seed)
     rows, cols = kl.shape
-    mitte_y, mitte_x = (17, 18, 39, 59), (38, 39, 78, 79)              # Kachelreihen/-spalten der Mittellinien
+    mitte_y, mitte_x = (17, 18, 19, 39, 57, 58, 59), (38, 39, 78, 79)              # Kachelreihen/-spalten der Mittellinien
     kand = [(y, x) for y in range(3, rows - 3) for x in range(3, cols - 3) if kl[y, x] == 'a'
             and all(kl[y + dy, x + dx] == 'a' for dy in (-1, 0, 1) for dx in (-1, 0, 1))
             and y not in mitte_y and x not in mitte_x]
