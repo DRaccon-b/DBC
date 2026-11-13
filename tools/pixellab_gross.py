@@ -343,6 +343,27 @@ AUFTRAEGE['k39_bruecke_f'] = dict(AUFTRAEGE['k39_bruecke'], ziel='assets/objekte
          'walkway with low parapet walls, small planters with green shrubs along the parapet, two thick rectangular '
          'concrete piers, gentle ramps with railings down to the ground at both ends, about 110 pixels tall,' + _BR + FR14)
 
+# ---- A03 Karte 40 Shinjuku Siege: drei Buerobloecke als linke Haelften (gespiegelt auf Vorlagenbreite)
+_V40 = 'assets/vorlagen/karte40_vorlage.png'
+_K40 = (' Tokyo daytime, seen from the front with the flat roof visible from slightly above, clean crisp pixel art, light '
+        'from the top left, sharp dark outlines, the complete roof edge is visible at the top and the complete grey base '
+        'plinth at the bottom, with empty magenta space above the roof and below the base, ')
+for _n, _box, _gr, _t in (
+        ('beige_halb', (15, 15, 130, 165), (128, 176), 'long four-storey Tokyo office block: a light grey flat roof band '
+         'with a parapet and a small rooftop unit, a warm cream-beige facade with three even rows of tall narrow windows '
+         'with white frames, a dark blue glass ground floor with an entrance under a small orange frame, light end '
+         'pillar, '),
+        ('glas_halb', (590, 25, 680, 210), (112, 208), 'tall five-storey Tokyo glass office building: a light grey flat '
+         'roof band with a parapet and a rooftop unit, four floors of steel-blue glass window bands with light grey '
+         'spandrels, a glass ground floor lobby with doors, light concrete corner pillar, '),
+        ('lila_halb', (305, 425, 450, 576), (160, 176), 'long four-storey Tokyo office block: a light grey flat roof band '
+         'with a parapet and a rooftop unit, a soft lavender facade with three even rows of tall narrow cream windows '
+         'with white frames, a dark blue glass ground floor shop front with a pink entrance frame, light end pillar, '),
+):
+    AUFTRAEGE['k40_' + _n] = {'ziel': 'assets/objekte/karte40/gross_' + _n, 'groesse': _gr, 'magenta': True,
+                             'vorlage': (_V40, _box), 'stil': 'assets/objekte/karte35/wohnblock_b/00.png',
+                             'text': _t + _HALB + _K40 + FR14}
+
 
 def main(name):
     a = AUFTRAEGE[name]
