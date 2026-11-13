@@ -267,6 +267,10 @@ Vor jeder Abgabe Punkt für Punkt prüfen (vergrößert, Standbild und mehrere A
   Hintergrund: vom Rand her freistellen; lila/magentafarbene Saumzeilen unter gespiegelten Hälften entfernen. Wahrzeichen
   im Stil der Vorlage (modern statt klassizistisch) – Kandidaten vergleichen. Straßenenden ohne Ausgang brauchen eine
   sichtbare Gehweg-/Bordsteinreihe vor dem Baumgürtel; Baumgürtel als Leere (`pixelhoehe` 0) sperren.
+  Neue Objekte in den Boden einbinden (Nutzer: „wirken nur draufgesetzt“): Vorplatz in Gebäudebreite mit Achsweg,
+  Ringpflaster um Brunnen, Terrasse unter Café-Tischen, Sockelplatz unter Skulpturen, Granitfläche mit Zugang an
+  U-Bahn-Eingängen, einheitlicher Belag unter Brücken mit Treppenabsätzen und Pfeilerschatten – aus den echten
+  Objektpositionen berechnet. Bei Gestaltungsfragen Varianten als Vorschau zeigen und den Nutzer wählen lassen.
 - **Begleiter am Stumpf (5d):** keine 1-Kachel-Blumen auf dem Stumpf, kein Blumenklumpen; Begleiter überlappen sich nicht.
 - **Paare/Achsen:** Paare vor Toren/Bauwerken exakt gespiegelt (Mitte und Fuß), gleiche Objekte auf gleicher Höhe;
   Druckplatten, Obelisken usw. symmetrisch zur berechneten Achse.
