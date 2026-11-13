@@ -48,10 +48,10 @@ GEBAEUDE = [                                   # (sprite, Mitte x in px, Fusszei
 LAEDEN = ['k31/laden_2', 'k31/laden_0', 'k31/laden_7', 'k31/laden_1']   # Cafe, Mart, Drogerie, Ramen (Karte 31)
 LAEDEN_MITTE, LAEDEN_FUSS = 744, 43
 BAEUME = [(40, 16), (47, 16), (52, 16), (56, 16), (72, 16), (80, 16), (85, 16), (90, 17), (47, 33), (6, 41), (24, 41),
-          (39, 41), (56, 41), (76, 55), (5, 69), (22, 75), (36, 75), (79, 75), (81, 70)]
+          (76, 55), (5, 69), (22, 75), (36, 75), (79, 75), (81, 70)]
 LATERNEN = [(25, 20), (57, 20), (68, 21), (25, 41), (36, 42), (68, 41), (25, 57), (84, 65)]
 BAENKE = [(19, 20), (72, 31), (15, 43), (79, 56), (36, 67), (73, 73)]
-MOEBEL = [('k18s/41', 47, 22), ('k18s/00', 45, 44), ('k18s/00', 76, 65), ('k18s/12', 9, 43), ('k18s/12', 38, 67),
+MOEBEL = [('k18s/41', 47, 22), ('k18s/00', 76, 65), ('k18s/12', 9, 43), ('k18s/12', 38, 67),
           ('k18s/04', 11, 43), ('k18s/04', 79, 31)]
 # Fahrzeuge (Linksverkehr): waagerecht Nordspur nach Osten (Van gespiegelt), senkrecht Ostspur nach Sueden (k18a/06)
 AUTOS = [('k18a/06', 1024, 270, False), ('k18a/11', 792, 408, True), ('k18a/06', 512, 588, False),
@@ -86,6 +86,22 @@ def halb_gespiegelt(quelle, ziel, breite_halb, eingang=True):
     ar[ar[..., 3] < 200] = 0                                     # halbtransparente Rauschpixel (Saum) weg
     import karte04_bauen as k4
     ar[~k4.splitter_weg(ar[..., 3] > 0, 40)] = 0                 # lose Splitter weg
+    hh_, ww_ = ar.shape[:2]                                       # Schnittkanten am Bildrand reparieren (Pruefliste)
+    if (ar[:, 0, 3] > 0).sum() > hh_ * 0.3:                      # linke Kante angeschnitten: Pfeiler + Kontur ergaenzen
+        neu = np.zeros((hh_, ww_ + 3, 4), np.uint8); neu[:, 3:] = ar
+        for y in range(hh_):
+            if ar[y, 0, 3] > 0:
+                neu[y, 1:3] = ar[y, 0]
+                neu[y, 0, :3] = (ar[y, 0, :3].astype(int) * 0.4).astype(np.uint8); neu[y, 0, 3] = 255
+        ar = neu
+    hh_, ww_ = ar.shape[:2]
+    if (ar[-1, :, 3] > 0).sum() > ww_ * 0.3:                     # Sockel unten angeschnitten: 2 Zeilen + Kontur
+        neu = np.zeros((hh_ + 3, ww_, 4), np.uint8); neu[:hh_] = ar
+        for x in range(ww_):
+            if ar[-1, x, 3] > 0:
+                neu[hh_:hh_ + 2, x] = ar[-1, x]
+                neu[hh_ + 2, x, :3] = (ar[-1, x, :3].astype(int) * 0.4).astype(np.uint8); neu[hh_ + 2, x, 3] = 255
+        ar = neu
     h = Image.fromarray(ar)
     bb = h.getbbox()
     h = h.crop((bb[0], bb[1], bb[0] + breite_halb, bb[3]))
@@ -124,6 +140,9 @@ def main():
     halb_gespiegelt('gross_lila_halb_b/00.png', 'gross/lila.png', 144, eingang=False)
     halb_gespiegelt('gross_flach_halb/00.png', 'gross/flach.png', 144, eingang=False)
     os.makedirs(os.path.join(OBJ, 'gross'), exist_ok=True)
+    P = lay.get('versatz', 0)                                    # Karte ringsum erweitert: alle Vorlagenpositionen + P
+    OFF = P * T
+    tps = [(t['x'] * T, t['y'] * T, (t['x'] + t['b']) * T - 1, (t['y'] + t['h']) * T - 1) for t in lay['teleporter']]
     objekte, rects = [], []                                      # rects: (x0, y0, x1, y1, art, fuss_y)
 
     def schnitt(a, b, rand=0):
@@ -192,7 +211,8 @@ def main():
     x = LAEDEN_MITTE + OFF - sum(bb[2] - bb[0] for bb in breiten) // 2
     for n_, bb in zip(LAEDEN, breiten):
         w = bb[2] - bb[0]
-        if not setze(n_, x + w / 2.0, (LAEDEN_FUSS + P) * T + T - 1, {'gebaeude': True}, False, 'gebaeude'):
+        if not setze(n_, x + w / 2.0, (LAEDEN_FUSS + P) * T + T - 1, {'gebaeude': True}, False, 'gebaeude',
+                     pruefen=False):                             # Ladenzeile: Fronten stossen gewollt aneinander
             print('Laden ueberlappt:', n_)
         x += w
     # ---------------------------------------------------------------- Strassenbaeume mit Bueschen an den Stammecken

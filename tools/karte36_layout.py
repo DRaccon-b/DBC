@@ -36,7 +36,7 @@ GEBAEUDE = {
     'flach': (7, 54, 24, 58), 'wohn_unten': (39, 67, 68, 77),
 }
 # Beete unter Baeumen, die in der Vorlage auf dem Gehweg stehen (3x2, Baum mittig auf dem Gruen)
-BEETE = [(38, 41, 40, 42), (55, 41, 57, 42), (21, 75, 23, 76), (35, 75, 37, 76), (78, 75, 80, 76), (4, 68, 7, 70)]
+BEETE = [(21, 75, 23, 76), (35, 75, 37, 76), (78, 75, 80, 76), (4, 68, 7, 70)]
 
 
 def vorlage_klassen():
