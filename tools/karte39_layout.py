@@ -61,8 +61,8 @@ def main():
     k[(k == 'a') & ~band] = '?'
     for (x0, y0, x1, y1) in GEBAEUDE.values():                    # Gebaeude stehen auf Gehweg
         k[y0:y1 + 1, x0:x1 + 1] = 'g'
-    x0, y0, x1, y1 = RATHAUS
-    k[y0:y1 + 1, x0:x1 + 1] = 'g'
+    x0, y0, x1, y1 = RATHAUS                                       # alte Vorlagen-Flaeche passt nicht zum neuen Rathaus:
+    k[y0:y1 + 1, x0:x1 + 1] = 'q'                                  # Platzpflaster, Vorplatz zeichnet bauen() passend
     for _ in range(8):                                             # Objekte der Vorlage: Boden der Nachbarn
         for y, x in zip(*np.nonzero(k == '?')):
             nb = [k[yy, xx] for yy, xx in ((y - 1, x), (y + 1, x), (y, x - 1), (y, x + 1))

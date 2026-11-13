@@ -174,6 +174,72 @@ def nebel_digital(a, land, frame):
     return dichte
 
 
+def plaetze_boden(a, kl, objs):
+    """Boden passend zu den Platz-Objekten (Nutzer: neue Sachen wirken nur draufgesetzt): Granit-Vorplatz vor dem
+    Rathaus mit Achsweg, rundes Ringpflaster um den Brunnen, Holzterrasse unter der Cafe-Ecke, Steinsockel-Platz unter
+    Skulptur und Kuebeln, Pflasterflaeche am Kiosk. Nur auf Platz-/Gehwegflaeche, nie auf der Fahrbahn."""
+    Hh, W = a.shape[:2]
+    erlaubt = gross(np.isin(kl, ['q', 'g', 'b', 'k']))
+    yy, xx = np.mgrid[0:Hh, 0:W]
+
+    def kante(m, c=(96, 100, 108)):
+        p_ = np.pad(m, 1)
+        r = m & ~(p_[:-2, 1:-1] & p_[2:, 1:-1] & p_[1:-1, :-2] & p_[1:-1, 2:])
+        a[r & erlaubt] = c
+
+    def box(name):
+        return [o for o in objs if o['basis'].startswith(name)]
+    for o in box('rathaus'):                                      # Vorplatz in Gebaeudebreite + Achsweg nach Sueden
+        sp_w = 210
+        x0, x1 = o['x'] - 56, o['x'] + sp_w + 56
+        fuss = o['y'] + o['fuss']
+        m = (xx >= x0) & (xx < x1) & (yy >= fuss - 24) & (yy < fuss + 56)
+        ax = o['x'] + sp_w // 2
+        m |= (abs(xx - ax) < 40) & (yy >= fuss + 56) & (yy < fuss + 120)
+        m &= erlaubt
+        g = ((xx // 32 + yy // 24) % 2).astype(np.float32)
+        basis = np.array((176, 172, 162), np.float32)
+        a[m] = np.clip(basis * (0.96 + 0.04 * g[m, None]), 0, 255).astype(np.uint8)
+        a[m & ((xx % 32 == 0) | (yy % 24 == 0))] = (150, 146, 138)
+        kante(m)
+    for o in box('brunnen'):                                      # Ringpflaster
+        cx, cy = o['x'] + 54, o['y'] + o['fuss'] - 34
+        r = np.sqrt((xx - cx) ** 2 + ((yy - cy) * 1.5) ** 2)
+        m = (r < 96) & erlaubt
+        band = (r // 12).astype(int) % 2
+        a[m & (band == 0)] = (186, 186, 178)
+        a[m & (band == 1)] = (168, 168, 160)
+        fuge = m & (np.abs(r % 12) < 1)
+        a[fuge] = (140, 140, 134)
+        kante(m)
+    cafe = box('platz/03') + box('platz/12')                      # Holzterrasse
+    if cafe:
+        x0 = min(o['x'] for o in cafe) - 10; x1 = max(o['x'] + 57 for o in cafe) + 10
+        y0 = min(o['y'] + o['fuss'] for o in cafe) - 30; y1 = max(o['y'] + o['fuss'] for o in cafe) + 10
+        m = (xx >= x0) & (xx < x1) & (yy >= y0) & (yy < y1) & erlaubt
+        holz = np.array((150, 112, 78), np.float32)
+        streifen = ((yy // 6) % 2 == 0)
+        a[m] = holz.astype(np.uint8)
+        a[m & streifen] = (162, 122, 86)
+        a[m & (yy % 6 == 0)] = (112, 82, 56)
+        a[m & ((xx + (yy // 6) * 23) % 48 == 0)] = (112, 82, 56)
+        kante(m, (92, 66, 44))
+    sk = box('platz/02')
+    if sk:                                                        # Sockelplatz unter Skulptur und Kuebeln
+        o = sk[0]
+        cx, cy = o['x'] + 30, o['y'] + o['fuss'] - 6
+        m = (np.abs(xx - cx) < 116) & (np.abs(yy - cy) < 22) & erlaubt
+        a[m] = (190, 186, 176)
+        a[m & ((xx - cx) % 32 == 0)] = (160, 156, 148)
+        kante(m)
+    for o in box('k38/kiosk'):                                    # Pflasterflaeche am Kiosk
+        m = (xx >= o['x'] - 10) & (xx < o['x'] + 86) & (yy >= o['y'] + o['fuss'] - 24) & (yy < o['y'] + o['fuss'] + 16)
+        m &= erlaubt
+        a[m] = (172, 168, 160)
+        a[m & ((xx + yy) % 16 == 0)] = (150, 146, 140)
+        kante(m)
+
+
 def bauen(frame=None, speichern=True):
     lay = json.load(open(os.path.join(KARTE, 'layout.json')))
     cols, rows = lay['groesse']
@@ -197,6 +263,9 @@ def bauen(frame=None, speichern=True):
     import karte38_bauen as k38b                                      # Bodenleben (Nutzer: Karte etwas leer): Risse,
     kl38 = np.where(kl == 'q', 'p', np.where(np.isin(kl, ['g', 'k', 'b']), 'k', 'x'))   # Flecken, Pfuetzen - flach
     k38b.boden_leben(a, kl38, frame)
+    pf_ = os.path.join(OBJ, 'platzierung.json')
+    if os.path.exists(pf_):
+        plaetze_boden(a, kl, json.load(open(pf_)))
     land = np.zeros((Hp, Wp), bool)                                   # Nebel nur am aeussersten Rand ueber den Baeumen
     land[T:-T, T:-T] = True
     lvl = np.ones((Hp, Wp), np.uint8)
