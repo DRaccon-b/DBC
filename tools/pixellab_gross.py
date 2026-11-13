@@ -227,6 +227,14 @@ for _v in ('b', 'c'):                                                           
         'sides: both light concrete corner pillars are complete with their dark outline on the outer side, the roof eave '
         'wraps cleanly around both upper corners, the base plinth ends cleanly at both sides, nothing touches the image border.')
 
+for _v in ('d', 'e'):                                                           # kleiner: passt zwischen Bruecke und Strasse
+    AUFTRAEGE['k35_buero_mitte_' + _v] = dict(AUFTRAEGE['k35_buero_mitte'], ziel='assets/objekte/karte35/gross_buero_mitte_' + _v,
+        groesse=(416, 224), text=AUFTRAEGE['k35_buero_mitte']['text'].replace(_VOLL, '') + ' A compact two-storey '
+        'building, about 340 pixels wide and only 130 pixels tall (low and wide), centered, with a wide empty magenta '
+        'margin of at least 36 pixels on all four sides: both light concrete corner pillars are complete with their dark '
+        'outline on the outer side, the roof eave wraps cleanly around both upper corners, the base plinth ends cleanly '
+        'at both sides, nothing touches the image border.')
+
 
 def main(name):
     a = AUFTRAEGE[name]
