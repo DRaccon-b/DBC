@@ -220,6 +220,13 @@ for _v in ('b', 'c'):                                                           
         'sides: the complete flat roof with its parapet and all corners is visible at the top, the grey base plinth ends '
         'cleanly at the bottom, NO pavement, NO ground, NO sidewalk tiles, nothing touches the image border.')
 
+for _v in ('b', 'c'):                                                           # Glasbuero Mitte vollstaendig (Nutzer: Kanten)
+    AUFTRAEGE['k35_buero_mitte_' + _v] = dict(AUFTRAEGE['k35_buero_mitte'], ziel='assets/objekte/karte35/gross_buero_mitte_' + _v,
+        groesse=(480, 256), text=AUFTRAEGE['k35_buero_mitte']['text'].replace(_VOLL, '') + ' The building is about 380 '
+        'pixels wide and 160 pixels tall, centered, with a wide empty magenta margin of at least 40 pixels on all four '
+        'sides: both light concrete corner pillars are complete with their dark outline on the outer side, the roof eave '
+        'wraps cleanly around both upper corners, the base plinth ends cleanly at both sides, nothing touches the image border.')
+
 
 def main(name):
     a = AUFTRAEGE[name]
