@@ -149,7 +149,6 @@ def main():
         os.makedirs(os.path.join(OBJ, 'gross'), exist_ok=True)
         sp.crop(sp.getbbox()).save(os.path.join(OBJ, 'gross', 'turm_%s.png' % v))
     os.makedirs(os.path.join(OBJ, 'gross'), exist_ok=True)
-    bruecke_zeichnen('gross/fussgaengerbruecke.png')
     P = lay.get('versatz', 0)                                    # Karte ringsum erweitert: alle Vorlagenpositionen + P
     OFF = P * T
     tps = [(t['x'] * T, t['y'] * T, (t['x'] + t['b']) * T - 1, (t['y'] + t['h']) * T - 1) for t in lay['teleporter']]
@@ -218,7 +217,7 @@ def main():
         if not setze(name, cx + OFF, (fy + P) * T + T - 1, {'gebaeude': True, 'ohne_wall': True}, sp, 'gebaeude'):
             print('Gebaeude ueberlappt:', name)
     n_, cx, fy = BRUECKE                                         # neu gezeichnet (Draufsicht wie die Vorlage)
-    if not setze('gross/fussgaengerbruecke', cx + OFF, (fy + P) * T + T + 1, {'schattenlos': True, 'fest_pos': True},
+    if not setze('bruecke_a/00', cx + OFF, 532 + OFF, {'fest_pos': True, 'schattenlos': True},           # PixelLab-Kandidat A (Nutzer)
                  False, 'gebaeude'):
         print('Bruecke nicht gesetzt')
     # ---------------------------------------------------------------- Strassenbaeume mit Bueschen an den Stammecken
