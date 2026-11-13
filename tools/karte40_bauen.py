@@ -117,9 +117,12 @@ def _markierungen(a, kl, lay):
             for x in range(x0 * T + (0 if art == 'h' else 2), (x1 + 1) * T - (0 if art == 'h' else 2)):
                 if not asphalt[y, x]:
                     continue
-                if art == 'h' and (x % 8) < 5 and 3 <= x - x0 * T < (x1 - x0 + 1) * T - 3:
+                # nur ganze Streifen (5 px) auf Asphalt - keine abgeschnittenen Reste am Bordstein (Pruefung K40)
+                if art == 'h' and (x % 8) < 5 and all(3 <= xx - x0 * T < (x1 - x0 + 1) * T - 3 and asphalt[y, xx]
+                                                     for xx in range(x - x % 8, x - x % 8 + 5)):
                     a[y, x] = WEISS
-                if art == 'v' and (y % 8) < 5 and 3 <= y - y0 * T < (y1 - y0 + 1) * T - 3:
+                if art == 'v' and (y % 8) < 5 and all(3 <= yy - y0 * T < (y1 - y0 + 1) * T - 3 and asphalt[yy, x]
+                                                     for yy in range(y - y % 8, y - y % 8 + 5)):
                     a[y, x] = WEISS
 
 

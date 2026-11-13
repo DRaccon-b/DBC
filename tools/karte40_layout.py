@@ -24,7 +24,7 @@ STRASSEN_H = [(12, 21, 0, 15), (12, 24, 16, 36), (13, 24, 37, 47)]   # (y0, y1, 
 STRASSEN_V = [(18, 31, 0, 11)]                                       # (x0, x1, y0, y1)
 ZEBRA = [(18, 31, 10, 10, 'h'), (17, 32, 22, 22, 'h'), (14, 14, 12, 21, 'v'), (34, 34, 13, 24, 'v')]
 GEBAEUDE = {'beige': (1, 1, 14, 9), 'glas': (37, 2, 46, 11), 'lila': (19, 27, 36, 35)}
-BEETE = [(2, 12, 8, 13), (39, 25, 44, 26)]                           # (x0, y0, x1, y1) Rasen mit Baeumen
+BEETE = [(0, 12, 3, 13), (39, 25, 44, 26)]                           # (x0, y0, x1, y1) Rasen mit Baeumen
 TELEPORTER_X = (6, 9)                                                # unten links (Vorlage), Weg durch den Guertel
 
 
@@ -39,9 +39,9 @@ def main():
     for (x0, y0, x1, y1) in BEETE:
         k[y0:y1 + 1, x0:x1 + 1] = 'n'
     k[band] = 'a'                                                    # Beet links oben liegt am Strassenrand: Fahrbahn bleibt
-    k[12:14, 2:9] = 'n'; k[12:14, 0:15][k[12:14, 0:15] == 'a'] = 'k'  # linkes Beet + Gehweg davor (Vorlage)
+    k[12:14, 0:4] = 'n'; k[12:14, 0:15][k[12:14, 0:15] == 'a'] = 'k'  # linkes Beet (links der Seitentuer, Tuerachsen frei) + Gehweg
     band[12:14, 0:15] = False
-    k[0, 18:32] = 'k'; k[12:22, 0] = 'k'; k[13:25, C - 1] = 'k'        # Strassenenden ohne Ausgang: Gehweg-/Bordsteinreihe
+    k[0, 18:32] = 'k'; k[14:22, 0] = 'k'; k[13:25, C - 1] = 'k'        # Strassenenden ohne Ausgang: Gehweg-/Bordsteinreihe
     k[26:R, 0:18][k[26:R, 0:18] == 'k'] = 'q'                        # Platz unten links (Teleporter-Platz)
     P = RAND
     C2, R2 = C + 2 * P, R + 2 * P + 1                                # unten eine Reihe mehr: Gehweg vor dem lila Block

@@ -30,9 +30,9 @@ LAMPE = {'anim': 'leuchten', 'licht': [4, 7], 'licht_box': [2, 5, 6, 10], 'licht
 # Gebaeude: (sprite, Mitte x Vorlagen-px, Fusszeile Vorlage, Haelfte, halbe Breite)
 GEBAEUDE = [('gross/beige', 127, 10, 'gross_beige_halb/00.png', 112), ('gross/glas', 671, 11, 'gross_glas_halb/00.png', 81),
             ('gross/lila', 447, 35, 'gross_lila_halb/00.png', 142)]
-BAEUME = [((2, 8, 12, 13), (0.06, 0.86)), ((39, 44, 25, 26), (0.25, 0.75))]   # Beet (x0,x1,y0,y1), Anteile in x; links Tuerachsen frei
+BAEUME = [((0, 3, 12, 13), (0.5,)), ((39, 44, 25, 26), (0.25, 0.75))]   # Beet (x0,x1,y0,y1), Anteile in x; links Tuerachsen frei
 LATERNEN = [(16, 8), (35, 8), (15, 24)]
-MUELL = [(1, 11), (36, 4)]                               # nicht vor Tueren
+MUELL = [(9, 13), (36, 4)]                               # nicht vor Tueren
 # Fahrzeuge (Linksverkehr): Suedspur nach Westen (Seitenansicht schaut nach links)
 AUTOS = [('k18a/12', 135, 318, False), ('k18a/05', 695, 318, False), ('k18a/11', 665, 382, False)]
 
