@@ -37,7 +37,7 @@ GEBAEUDE = [
     ('gross/turm_a', 144, 22, False), ('gross/turm_b', 352, 22, False),          # zwei Glastuerme oben links
     ('gross/buero_oben', 848, 11, False),                                       # langes Glasbuero oben
     ('wohnblock_b/00', 176, 34, False),                                          # Wohnblock links
-    ('gross_buero_mitte/00', 962, 34, False),   # rechts: Austritt der Brueckentreppe frei                                    # Glasbuero Mitte
+    ('gross/buero_mitte', 962, 34, False),   # rechts: Austritt der Brueckentreppe frei                                    # Glasbuero Mitte
     ('schmal_a/00', 1424, 32, False), ('schmal_b/00', 1424, 54, False),          # schmale Wohnhaeuser rechts
     ('wohnblock_b/00', 440, 54, True),                                           # Wohnblock Mitte links (gespiegelt)
     ('gross/buero_unten', 952, 76, False),                                       # Glasbuero unten
@@ -101,6 +101,26 @@ def bruecke_zeichnen(ziel):
     Image.fromarray(a).save(os.path.join(OBJ, ziel))
 
 
+def kanten_ergaenzen(quelle, ziel, breite=2):
+    """Generiertes Gebaeude mit links/rechts abgeschnittener Kante reparieren (Nutzer, Regel 'Sprites auf Schnittkanten
+    pruefen'): je Seite `breite` px Eckpfeiler in der Farbe der Randspalte ergaenzen und 1 px dunkle Aussenkontur."""
+    a = np.array(Image.open(os.path.join(OBJ, quelle)).convert('RGBA'))
+    h, w = a.shape[:2]
+    n = breite + 1
+    out = np.zeros((h, w + 2 * n, 4), np.uint8)
+    out[:, n:n + w] = a
+    for y in range(h):
+        for seite, x_rand, x_neu in ((-1, 0, range(1, n)), (1, w - 1, range(n + w, n + w + breite))):
+            if a[y, x_rand, 3] < 200:
+                continue
+            for x in x_neu:
+                out[y, x] = a[y, x_rand]
+            k = 0 if seite < 0 else n + w + breite
+            out[y, k, :3] = (a[y, x_rand, :3].astype(int) * 0.4).astype(np.uint8)
+            out[y, k, 3] = 255
+    Image.fromarray(out).save(os.path.join(OBJ, ziel))
+
+
 def halb_gespiegelt(quelle, ziel, breite_halb, eingang=True):
     """Langes symmetrisches Gebaeude aus der generierten linken Haelfte: Haelfte auf die halbe Vorlagenbreite
     (gleichfoermige Glasfront in der Mitte), dann gespiegelt angesetzt."""
@@ -140,6 +160,7 @@ def main():
         ziel = os.path.join(OBJ, name + '.png')
         os.makedirs(os.path.dirname(ziel), exist_ok=True)
         shutil.copy(os.path.join(ROOT, 'assets', 'objekte', quelle), ziel)
+    kanten_ergaenzen('gross_buero_mitte/00.png', 'gross/buero_mitte.png')   # Kanten waren abgeschnitten (Nutzer)
     halb_gespiegelt('gross_buero_oben_halb/00.png', 'gross/buero_oben.png', 336)
     halb_gespiegelt('gross_buero_unten_halb/00.png', 'gross/buero_unten.png', 248)
     for v, q in (('a', 'gross_turm_c/00.png'), ('b', 'gross_turm_c/00.png')):   # Variante c: vollstaendig, mit Rand

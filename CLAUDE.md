@@ -219,6 +219,10 @@ Vor jeder Abgabe Punkt für Punkt prüfen (vergrößert, Standbild und mehrere A
   mit dem Stammfuß auf der senkrechten Mitte des Streifens, nicht am unteren Rand (geht vor Regel 1b). Auf Gehweg,
   Pflaster und Asphalt bekommen Objekte keinen Bodenwall (`ohne_wall`) – Straßen haben harte Kanten, nichts wird
   aus der Bodentextur an den Fuß gepixelt.
+- **Generierte Gebäude auf Schnittkanten prüfen (Nutzer, Karte 35):** Nach jeder Generierung die äußersten Pixelspalten
+  und -zeilen ansehen – helles Wand-/Pfeilermaterial ohne dunkle Kontur am Bildrand heißt: abgeschnitten. Der Pro-Generator
+  füllt die Leinwand oft ganz aus (Rand im Prompt wird ignoriert); dann das Sprite reparieren (Kante/Pfeiler ergänzen,
+  Kontur setzen) statt es angeschnitten einzusetzen.
 - **Begleiter am Stumpf (5d):** keine 1-Kachel-Blumen auf dem Stumpf, kein Blumenklumpen; Begleiter überlappen sich nicht.
 - **Paare/Achsen:** Paare vor Toren/Bauwerken exakt gespiegelt (Mitte und Fuß), gleiche Objekte auf gleicher Höhe;
   Druckplatten, Obelisken usw. symmetrisch zur berechneten Achse.
