@@ -39,6 +39,10 @@ GROSS = [('unterstand', 13, 56), ('skelett', 80, 44), ('skelett', 59, 72),
          ('saeule', 57, 8), ('saeule', 73, 24), ('saeule_kaputt', 74, 77),
          ('fels_sand', 30, 7), ('fels_sand', 52, 33), ('felsen', 78, 19), ('fels_sand', 84, 34),
          ('felsen', 12, 48), ('fels_sand', 77, 48), ('felsen', 57, 58), ('fels_sand', 44, 72), ('felsen', 72, 72)]
+BG_FELS = ['00', '02', '08', '16', '18', '24', '26', '32', '34', '40', '48', '58']   # PixelLab k41_begleiter, 2 Kacheln
+BG_BUSCH = ['01', '03', '09', '11', '19', '33', '41', '49', '57']
+for _n in BG_FELS + BG_BUSCH:
+    FREMD['bg' + _n] = 'karte41/begleiter/%s.png' % _n
 STREU = ['gras', 'gras2', 'gras3', 'kiesel', 'zweig', 'knochen_k', 'kristall', 'stein']
 BODEN = 'sbdk'                       # begehbarer Wuestenboden (kein Gras/Teich/Teleporter/Plateau)
 
@@ -61,7 +65,7 @@ def main():
         else os.path.join(OBJ, 'fremd', n + '.png')
     tps = [(t['x'] * T - 2 * T, t['y'] * T - 2 * T, (t['x'] + t['b'] + 2) * T, (t['y'] + t['h'] + 2) * T)
            for t in lay['teleporter']]
-    objekte, rects = [], []
+    objekte, rects, stumpf = [], [], []
     k = lambda tx, ty: cls[ty][tx] if 0 <= tx < cols and 0 <= ty < rows else 'r'
 
     def schnitt(a, b, d):
@@ -80,8 +84,11 @@ def main():
         if r[0] < 0 or r[1] < 0 or r[2] >= cols * T or r[3] >= rows * T:
             return None
         if pruefen:
-            if any(schnitt(r, tuple(rr[:4]), 2) for i_, rr in enumerate(rects) if i_ not in ohne):
+            gap = 2 if (opt or {}).get('streu') else 4                 # Grosses mit etwas mehr Luft (nicht gestapelt)
+            if any(schnitt(r, tuple(rr[:4]), gap) for i_, rr in enumerate(rects) if i_ not in ohne):
                 return None
+            if not (opt or {}).get('begleiter') and any(schnitt(r, z, 0) for z in stumpf):
+                return None                                          # Regel 5d: nichts auf Stammhoehe (Sperrzone)
             if any(schnitt(r, t_, 0) for t_ in tps):
                 return None
             ty_ = r[3] // T
@@ -126,7 +133,12 @@ def main():
         o = kachel(n, tx, ty, {'anim': 'baum'} if n != 'totbaum' else {}, i % 2 == 1, kl)
         if not o:
             continue
-        gesetzte_baeume.append((i, n, o, kl))
+        tsp = np.array(Image.open(os.path.join(OBJ, o['datei'])).convert('RGBA'))[..., 3] > 0
+        zl = np.nonzero(tsp.any(1))[0][-1]
+        sx = o['x'] + int(np.nonzero(tsp[zl - 3:zl + 1].any(0))[0].mean())   # Stammmitte am Fuss
+        sy = o['y'] + int(zl)
+        stumpf.append((sx - 24, sy - 24, sx + 24, sy + 18))
+        gesetzte_baeume.append((i, n, o, kl, len(rects) - 1, sx, sy))
     # ---------------- grosse Einzelobjekte (vor den Begleitern: Grosses zuerst)
     for i, (n, tx, ty) in enumerate(GROSS):
         opt = {}
@@ -145,25 +157,41 @@ def main():
         if ok:
             break
         del objekte[n0:]; del rects[n0:]
-    for (i, n, o, kl) in gesetzte_baeume:
-        fx, fy = o['kachel']
+    # Begleiter (Regel 5/5d): vor dem Stumpf nur 2 Kacheln hohe Objekte eine Reihe tiefer (oberste Kachel deckt den
+    # Stumpf), Fels hinter den Blaettern eine Reihe hoeher, Busch seitlich ausserhalb der Stammzone; abwechselnd, Motive
+    # ohne Wiederholung, mind. 2 Begleiter bei einzeln stehenden Baeumen
+    felsen_ = BG_FELS[:]; buesche_ = BG_BUSCH[:]
+    rnd.shuffle(felsen_); rnd.shuffle(buesche_)
+    zug = {'f': 0, 'b': 0}
+    def naechster(art):
+        liste = felsen_ if art == 'f' else buesche_
+        zug[art] += 1
+        return 'bg' + liste[zug[art] % len(liste)]
+    for (i, n, o, kl, ti, sx, sy) in gesetzte_baeume:
         seite = 1 if i % 2 == 0 else -1
-        art = i % 3                                                   # abwechseln: Fels hinter den Blaettern / Busch / beides
-        def fels(sd):
-            return any(setze(rnd.choice(['fels_grau', 'steinhaufen']), (fx + sd * dx) * T + 8, (fy - 1) * T + T - 1,
-                             {}, sd < 0, kl) for dx in (3, 4))
-        def busch(sd):
-            return any(setze('busch_tot' if n == 'totbaum' else 'gras3', (fx - sd * dx) * T + 8, (fy + 1) * T + T - 1,
-                             {'ebene': 0}, sd > 0, kl) for dx in (3, 4, 5))
-        hat = False
-        if art in (0, 2):
-            hat |= fels(seite)
-        if art in (1, 2):
-            hat |= busch(seite)
-        if not hat:                                                   # Ersatz: andere Seite / andere Art (Regel 5)
-            hat = fels(-seite) or busch(-seite) or fels(seite) or busch(seite)
-        if not hat:
-            print('  Baum ohne Begleiter:', n, fx, fy)
+        def vor():
+            return any(setze(naechster('f' if i % 2 else 'b'), sx + d, sy + T, {'begleiter': True}, seite < 0, kl,
+                             ohne=(ti,)) for d in (0, 3, -3))
+        def hinter(sd):
+            return any(setze(naechster('f'), sx + sd * d, sy - T, {'begleiter': True}, sd < 0, kl, ohne=(ti,))
+                       for d in (24, 32))
+        def seitlich(sd):
+            return any(setze(naechster('b'), sx + sd * d, sy + dy, {'begleiter': True, 'ebene': 0}, sd > 0, kl)
+                       for d in (40, 48, 56) for dy in (0, T))
+        nah = sum(1 for (_, _, _, _, _, x2, y2) in gesetzte_baeume if (x2, y2) != (sx, sy)
+                  and abs(x2 - sx) < 6 * T and abs(y2 - sy) < 5 * T)
+        soll = 1 if nah else 2
+        plan = [[vor, lambda: seitlich(-seite)], [lambda: hinter(seite), lambda: seitlich(-seite)],
+                [vor, lambda: hinter(-seite)]][i % 3]
+        ersatz = [lambda: hinter(-seite), lambda: hinter(seite), lambda: seitlich(seite), lambda: seitlich(-seite), vor]
+        hat = 0
+        for f_ in plan + ersatz:
+            if hat >= soll and f_ not in plan:
+                break
+            if f_():
+                hat += 1
+        if hat < soll:
+            print('  Baum mit zu wenig Begleitern:', n, o['kachel'], hat)
     # Pilze am Teich (Gras)
     for (tx, ty) in ((23, 67), (37, 71)):
         kachel('pilz', tx, ty, {'ebene': 0}, klassen='n')
@@ -182,7 +210,7 @@ def main():
         lieg = n in ('zweig', 'knochen_k')
         opt_ = {'ebene': 0, 'streu': True, 'liegend': lieg}
         if n == 'kristall':
-            opt_['anim'] = 'glitzern'                               # Kristalle glitzern selbst (Regel)
+            opt_['anim'] = 'glitzern'; opt_['glitzer'] = 'cyan'      # Kristalle glitzern selbst (Flaechen schimmern)
         if setze(n, x * T + rnd.randint(4, 12), y * T + rnd.randint(10, 15), opt_,
                  rnd.random() < 0.5):
             gesetzt += 1; letzte = n

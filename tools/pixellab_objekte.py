@@ -2094,6 +2094,12 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'open dark side, seen from the front and slightly above, ' + FR14,
         'short weathered dark grey stone pillar with a broken jagged top and a carved ring band, sand at the base, ' + FR14,
     ]},
+    'k41_begleiter': {'size': 32, 'freie_farben': True, 'items': [   # Karte 41: 2 Kacheln hohe Begleiter (Regel 5d)
+        'small weathered sandstone boulder with a few dry grass tufts at its base, ' + FR14,
+        'low round dry desert shrub with tiny pale leaves and dry grass, ' + FR14,
+        'small pile of three reddish desert rocks with sand at the base, ' + FR14,
+        'clump of tall dry golden desert grass with a small grey stone, ' + FR14,
+    ]},
     'k40_krater': {'size': 256, 'freie_farben': True, 'items': [   # Nutzer: Meteor-Furche (256 px: ein Motiv je Auftrag)
         'long deep impact furrow crater seen from directly above, a straight trench gouged north to south through a dark asphalt city road, brown earth and dark soil inside, broken grey asphalt slabs and dirt pushed up and piled along the left and right rims, cracks radiating outward, no meteor visible, transparent background around the rims',
     ]},

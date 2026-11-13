@@ -82,6 +82,7 @@ def main():
     ref = np.array([REF[k] for k in ks], float)
     k = np.array(ks)[((M[:, :, None, :] - ref[None, None]) ** 2).sum(-1).argmin(-1)]
     # Felsfront der Vorlage ('f') liegt unter der Plateaukante auf Bodenhoehe: dort zeichnet bauen() die Front
+    front = k == 'f'                                  # Frontkacheln merken: kleine Plateaus mit Front sind echte Grate
     k[k == 'f'] = 'b'
     r_ = k == 'r'                                     # Felsfront-Pixel unter der Plateaukante sind kein Pflaster
     nah = r_.copy()
@@ -96,7 +97,8 @@ def main():
         unter[d:] |= r_[:-d]
     k[(k == 'd') & unter] = 'b'                       # dunkle Frontpixel direkt unter der Kante -> Boden
     for teil in flaechen(k == 'r'):                   # kleine orange Flecken (Objekte) -> Boden
-        if len(teil) < 20:
+        mit_front = any(front[y + d, x] for (y, x) in teil for d in (1, 2) if y + d < R)
+        if len(teil) < 20 and not (mit_front and len(teil) >= 4):
             for (y, x) in teil:
                 k[y, x] = 'b'
     for art, mind in (('k', 4), ('d', 4), ('b', 3), ('s', 3), ('n', 4), ('x', 6)):   # Kleinflecken -> Nachbarn
@@ -120,6 +122,12 @@ def main():
                 elif k[y, x] == 'r' and nb.count('r') <= 1:
                     k[y, x] = 'b'
     k = zipfel_weg(k)
+    # Grat unten rechts (Pruefung: Vorlage): treppenfoermig nach rechts unten abfallendes Plateau mit Felsfront
+    sub = k[64:77, 74:93]
+    sub[sub == 'r'] = 'b'
+    for (x0, x1, y0, y1) in ((80, 80, 67, 68), (81, 81, 67, 71), (82, 83, 69, 71), (84, 95, 70, 73)):
+        k[y0:y1 + 1, x0:x1 + 1] = 'r'
+    k[74:76, 79:93][k[74:76, 79:93] == 'r'] = 'b'
     # Teich und Gras: Gras ringsum um das Wasser (mind. 1 Kachel), kein Wasser direkt am Sand
     x_ = k == 'x'
     um = x_.copy()
