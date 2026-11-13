@@ -22,7 +22,7 @@ T = 16
 FREMD = {}
 for i in (0, 1, 4, 5, 12, 14, 18, 41, 42):
     FREMD['k18s/%02d' % i] = 'karte18/strasse/%02d.png' % i
-for i in (0, 5, 6, 7, 11):
+for i in (0, 1, 5, 6, 7, 11):
     FREMD['k18a/%02d' % i] = 'karte18/autos/%02d.png' % i
 FREMD['k18a/bus'] = 'karte18/gebaeude/bus.png'
 for i in (0, 1, 2, 25, 26, 27, 30):
@@ -32,10 +32,10 @@ for i in (0, 1, 2):
 
 # Gebaeude: (sprite, Mitte x in px, Fusszeile, spiegeln) - Flaechen der Vorlage, an die Sprite-Hoehen angepasst
 GEBAEUDE = [
-    ('gross/turm_a', 144, 21, False), ('gross/turm_b', 352, 21, False),          # zwei Glastuerme oben links
+    ('gross/turm_a', 144, 22, False), ('gross/turm_b', 352, 22, False),          # zwei Glastuerme oben links
     ('gross/buero_oben', 848, 11, False),                                       # langes Glasbuero oben
     ('wohnblock_b/00', 176, 34, False),                                          # Wohnblock links
-    ('gross_buero_mitte/00', 912, 34, False),                                    # Glasbuero Mitte
+    ('gross_buero_mitte/00', 936, 34, False),   # 24 px rechts: Platz fuer die Bruecke                                    # Glasbuero Mitte
     ('schmal_a/00', 1424, 32, False), ('schmal_b/00', 1424, 54, False),          # schmale Wohnhaeuser rechts
     ('wohnblock_b/00', 440, 54, True),                                           # Wohnblock Mitte links (gespiegelt)
     ('gross/buero_unten', 952, 76, False),                                       # Glasbuero unten
@@ -44,14 +44,14 @@ BRUECKE = ('fussgaengerbruecke/00', 632, 31)                                    
 BAEUME = [(49, 13), (60, 13), (47, 23), (63, 23), (70, 23), (7, 48), (18, 48), (50, 48), (70, 48)]
 LATERNEN = [(29, 12), (44, 12), (74, 12), (29, 33), (44, 33), (73, 33), (19, 53), (44, 53), (74, 53), (19, 67),
             (74, 73)]
-BAENKE = [(6, 55), (28, 65), (48, 66), (90, 73)]
+BAENKE = [(6, 55), (28, 65), (90, 73)]
 MOEBEL = [('k18s/41', 23, 34), ('k18s/12', 26, 34), ('k18s/41', 69, 54), ('k18s/00', 72, 29), ('k18s/01', 17, 65),
-          ('k18s/42', 19, 65), ('k18s/12', 50, 66), ('k18s/04', 72, 31), ('k18s/04', 11, 52), ('k18s/04', 53, 66),
+          ('k18s/42', 19, 65), ('k18s/12', 31, 65), ('k18s/04', 72, 31), ('k18s/04', 11, 52), ('k18s/04', 12, 72),
           ('k18s/05', 66, 54)]
 # Fahrzeuge (Linksverkehr): (sprite, Mitte x px, Fuss y px, spiegeln). Waagerecht: Nordspur nach Osten (gespiegelt),
 # Suedspur nach Westen; senkrecht: Ostspur nach Sueden.
 AUTOS = [('k18a/05', 312, 622, True), ('k18a/bus', 1096, 620, True), ('k18a/00', 824, 942, True),
-         ('k18a/11', 300, 990, False), ('k18a/06', 1288, 494, False), ('k18a/07', 656, 812, False),
+         ('k18a/11', 380, 990, False), ('k18a/06', 1288, 494, False), ('k18a/07', 656, 812, False),
          ('k18a/06', 1288, 866, False), ('k18a/01', 560, 334, False)]
 
 
@@ -83,7 +83,7 @@ def main():
         shutil.copy(os.path.join(ROOT, 'assets', 'objekte', quelle), ziel)
     halb_gespiegelt('gross_buero_oben_halb/00.png', 'gross/buero_oben.png', 336)
     halb_gespiegelt('gross_buero_unten_halb/00.png', 'gross/buero_unten.png', 248)
-    for v, q in (('a', 'gross_turm_b/00.png'), ('b', 'gross_turm_c/00.png')):
+    for v, q in (('a', 'gross_turm_c/00.png'), ('b', 'gross_turm_c/00.png')):   # Variante c: vollstaendig, mit Rand
         if not os.path.exists(os.path.join(OBJ, q)):
             q = 'gross_turm_b/00.png'
         sp = Image.open(os.path.join(OBJ, q)).convert('RGBA')
@@ -148,7 +148,8 @@ def main():
         if not setze(name, cx, fy * T + T - 1, {'gebaeude': True}, sp, 'gebaeude'):
             print('Gebaeude ueberlappt:', name)
     n_, cx, fy = BRUECKE
-    setze(n_, cx, fy * T + T - 1, {'gebaeude': True}, False, 'gebaeude')
+    if not setze(n_, cx, fy * T + T - 1, {'gebaeude': True}, False, 'gebaeude'):
+        print('Bruecke nicht gesetzt')
     # ---------------------------------------------------------------- Strassenbaeume mit Bueschen an den Stammecken
     for i, (tx, ty) in enumerate(BAEUME):
         if kachel('k01/baum%02d' % (i % 3), tx, ty, {'anim': 'baum'}, i % 2 == 1, 'baum', 'n', 'gras'):

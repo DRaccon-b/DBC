@@ -17,7 +17,7 @@ ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
 KARTE = os.path.join(ROOT, 'maps', 'karte35')
 VORLAGE = os.path.join(ROOT, 'assets', 'vorlagen', 'karte35_vorlage.png')
 C, R, T = 96, 80, 16
-STADT = (2, 2, 93, 77)                                            # Stadtflaeche (x0, y0, x1, y1), aussen Nebel
+STADT = (2, 1, 93, 77)                                            # oben eine Reihe mehr (Tuerme ganz auf Land)                                            # Stadtflaeche (x0, y0, x1, y1), aussen Nebel
 AUSGAENGE = [(84, 0, 4, 3), (93, 58, 3, 4), (20, 77, 4, 3), (77, 77, 4, 3)]   # (x, y, b, h): oben rechts, rechts, unten
 # Zebrastreifen (x0, x1, y0, y1): ueber die Nord-Sued-Strassen an den Blockkanten (Streifen senkrecht, Laufrichtung W-O)
 ZEBRA = [(76, 81, 12, 12), (36, 42, 23, 23), (36, 42, 34, 34), (76, 82, 23, 23), (76, 82, 34, 34),
@@ -64,9 +64,9 @@ def main():
     # Gruenstreifen an die (hoeheren) Gebaeude angepasst (Regel: Karte passt sich dem Gebaeude an):
     k[9:12, 44:70][k[9:12, 44:70] == 'n'] = 'g'                      # oben: Beete vor dem Glasbuero eine Reihe tiefer
     k[12:14, 47:54] = 'n'; k[12:14, 57:67] = 'n'
-    k[22:26, 4:27][k[22:26, 4:27] == 'n'] = 'g'                      # links: Streifen vor den Tuermen (Tueren frei)
-    for (x0, x1) in ((4, 7), (11, 20), (24, 26)):
-        k[22:24, x0:x1 + 1] = 'n'
+    k[22:26, 4:27][k[22:26, 4:27] == 'n'] = 'g'                      # links: Tuerme hoeher -> kleines Beet zwischen
+    k[21:23, 14:17] = 'n'                                              # den Tuermen statt Streifen davor
+    k[1, 2:94] = 'g'                                                   # oberste Stadtreihe: Gehweg hinter den Tuermen
     k[24:26, 45:72][k[24:26, 45:72] == 'n'] = 'g'                    # Mitte: Streifen ueber dem Glasbuero 2 Reihen
     k = l34.zipfel_weg(k, 'gn')
     k = l34.kleine_weg(k, 'n', 6, 'g')
