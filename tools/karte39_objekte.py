@@ -225,7 +225,7 @@ def main():
     setze('gross/bruecke', BRUECKE[0] + OFF, (BRUECKE[1] + P) * T + T - 1, {'schattenlos': True}, art='gebaeude',
           pruefen=False)
     for (cx, fy) in UBAHN:
-        setze('ubahn/00', cx + OFF, (fy + P) * T + T - 1, {}, art='gebaeude')   # ueberdachter Eingang, vorne offen
+        setze({'a': 'ubahn_b/00', 'b': 'ubahn_b/01'}.get(os.environ.get('UBAHN', 'a'), 'ubahn_b/00'), cx + OFF, (fy + P) * T + T - 1, {}, art='gebaeude')   # ueberdachter Eingang, vorne offen
     # ---------------------------------------------------------------- Baeume mittig auf Gruenflaechen, Moebel sparsam
     for i, (tx, ty) in enumerate(BAEUME):
         kachel(STADTBAUM[i % len(STADTBAUM)], tx + P, ty + P, {'anim': 'baum'}, i % 2 == 1, klassen='gkqbn')

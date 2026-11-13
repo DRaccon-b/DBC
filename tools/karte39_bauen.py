@@ -284,6 +284,18 @@ def plaetze_boden(a, kl, objs):
         a[sm] = (a[sm] * 0.8).astype(np.uint8)
         rs_ = (xx >= x1) & (xx < x1 + 5) & (yy >= o['y'] + bb_[1] + 20) & (yy <= fuss) & erlaubt   # Schatten rechts
         a[rs_] = (a[rs_] * 0.82).astype(np.uint8)
+    for o in box('ubahn'):                                        # U-Bahn-Eingang: Granitflaeche + Zugang vor der Oeffnung
+        al = np.array(Image.open(os.path.join(OBJ, o['datei'])).convert('RGBA'))[..., 3] > 0
+        bb_ = Image.fromarray(al.astype(np.uint8) * 255).getbbox()
+        x0, x1 = o['x'] + bb_[0], o['x'] + bb_[2]
+        fuss = o['y'] + o['fuss']
+        m = (xx >= x0 - 12) & (xx < x1 + 12) & (yy >= o['y'] + bb_[1] + (bb_[3] - bb_[1]) // 2) & (yy <= fuss + 20)
+        m &= erlaubt
+        a[m] = (176, 172, 162)
+        a[m & (((xx - x0) % 24 == 0) | ((yy - fuss) % 20 == 0))] = (150, 146, 138)
+        kante(m)
+        sm = (xx >= x0) & (xx < x1 + 3) & (yy > fuss) & (yy <= fuss + 3) & erlaubt
+        a[sm] = (a[sm] * 0.78).astype(np.uint8)
     for o in box('k38/kiosk'):                                    # Pflasterflaeche am Kiosk
         m = (xx >= o['x'] - 10) & (xx < o['x'] + 86) & (yy >= o['y'] + o['fuss'] - 24) & (yy < o['y'] + o['fuss'] + 16)
         m &= erlaubt

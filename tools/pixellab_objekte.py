@@ -2126,6 +2126,19 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'windows, each of the two towers topped with a clock, a lower glass-fronted lobby wing connecting them with wide '
         'entrance stairs, seen from the front and slightly above, fully in frame, ' + FR14,
     ]},
+    'k39_ubahn_b': {'size': 96, 'freie_farben': True, 'items': [
+        'Tokyo subway station entrance seen from the front and slightly above: a modern curved glass canopy roof on a '
+        'slim steel frame over a wide grey staircase going down into the ground, low stainless steel railings on both '
+        'sides, a small round blue station sign on a short post beside it, ' + FR14,
+        'open subway stairwell entrance in a plaza seen from the front and slightly above: a rectangular opening with '
+        'grey steps going down, polished stainless steel railings around three sides, open at the front, a tall slim '
+        'sign pillar with a blue light box next to it, ' + FR14,
+        'small modern metro entrance pavilion: a flat dark grey roof slab on glass walls, an open front with escalator '
+        'and stairs leading down, a lit blue sign above the opening, seen from the front and slightly above, ' + FR14,
+        'Japanese underground station entrance with a light concrete frame and a teal metal roof, stairs going down '
+        'between low granite walls with handrails, a small station name board on top, seen from the front and slightly '
+        'above, ' + FR14,
+    ]},
     'k39_ubahn': {'size': 96, 'freie_farben': True, 'items': [
         'small covered Tokyo subway station entrance: a flat teal metal canopy roof on four slim pillars with a small blue '
         'subway sign on top, grey stairs going down into the ground underneath, glass side panels, open at the front, '
