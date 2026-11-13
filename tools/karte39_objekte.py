@@ -17,7 +17,8 @@ ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
 KARTE = os.path.join(ROOT, 'maps', 'karte39')
 OBJ = os.path.join(ROOT, 'assets', 'objekte', 'karte39')
 T = 16
-FREMD = {'k38/treppe': 'karte38/treppe/01.png', 'k38/bank': 'karte38/klein/09.png', 'k36/halb_hoch':
+FREMD = {'k38/kiosk': 'karte38/kiosk/00.png', 'k38/taube': 'karte38/bahn_klein/02.png',
+         'k38/zeitung': 'karte38/bahn_klein/03.png', 'k38/treppe': 'karte38/treppe/01.png', 'k38/bank': 'karte38/klein/09.png', 'k36/halb_hoch':
          'karte36/gross_beige_halb_hoch_b/00.png', 'k35/tuer_quelle': 'karte35/gross_buero_mitte/00.png'}
 for i in (0, 1, 12, 18, 41, 42):
     FREMD['k18s/%02d' % i] = 'karte18/strasse/%02d.png' % i
@@ -39,7 +40,7 @@ UBAHN = [(607, 20), (1073, 43)]
 BAEUME = [(39, 13), (64, 14), (65, 23), (39, 30), (63, 30), (8, 33), (15, 31), (20, 30), (9, 38), (11, 59),
           (20, 59), (60, 72), (66, 72)]
 LATERNEN = [(5, 5), (21, 5), (65, 7), (34, 7), (70, 36), (5, 43), (11, 43), (6, 57), (71, 57), (90, 57), (93, 43)]
-BAENKE = [(10, 20), (17, 20), (46, 35), (63, 38), (40, 61), (66, 63)]   # + Paar am Rathaus (Achse)
+BAENKE = [(10, 20), (17, 20), (46, 35), (63, 38)]          # + Paare an Rathaus und Brunnen (Achsen)   # + Paar am Rathaus (Achse)
 MOEBEL = [('k18s/00', 21, 18), ('k18s/41', 52, 45), ('k18s/41', 65, 55)]   # Bushaeuschen nicht im Treppenaustritt
 # Autos (Linksverkehr): waagerecht Nordspur nach Osten (gespiegelt), Suedspur nach Westen; senkrecht Ostspur nach Sueden
 AUTOS = [('k18a/06', 495, 168, False), ('k18a/06', 1264, 535, False), ('k18a/05', 232, 785, True),
@@ -217,6 +218,51 @@ def main():
         kachel(n_, tx + P, ty + P, {})
     for (n_, cx, fy, sp) in AUTOS:                                 # Autos auf der Fahrbahn (Linksverkehr)
         setze(n_, cx + OFF, fy + OFF, {'nur_kontakt': True}, sp, art='auto', klassen='a')
+    # ---------------------------------------------------------------- Plaetze beleben (Nutzer: Karte etwas leer)
+    gk = np.array([list(z) for z in cls])
+
+    def mitte(maske):
+        ys, xs = np.nonzero(maske)
+        return (xs.min() + xs.max() + 1) * T / 2.0, (ys.min() + ys.max() + 1) * T / 2.0
+    sued = np.zeros_like(gk, bool); sued[60 + P:68 + P, 34 + P:84 + P] = True   # offene Platzflaeche ueber dem Buerobau
+    bx, by = mitte((gk == 'q') & sued)                           # grosser Platz unten: Mitte aus der Flaeche
+    fb = int(by + 40)
+    if setze('brunnen/00', bx, fb, {'anim': 'maschine', 'fluessig': [[12, 0, 95, 68, 'cyan']]}, art='gebaeude'):
+        for d_ in (80, 96, 112):                                  # Bankpaar gespiegelt an der Brunnenachse
+            if all(setze('k38/bank', bx + s_ * d_, fb, {}, s_ > 0) for s_ in (-1, 1)):
+                break
+    for (tx, ty, sp) in ((72, 66, False), (75, 69, True)):        # Cafe-Ecke rechts vom Brunnen (locker, keine Reihe)
+        kachel('platz/03', tx + P, ty + P, {}, sp, klassen='q')
+    kachel('platz/12', 70 + P, 70 + P, {}, klassen='q')
+    kachel('k38/kiosk', 40 + P, 62 + P, {}, klassen='q')
+    nord = np.zeros_like(gk, bool); nord[:30 + P, :24 + P] = True
+    sx, sy = mitte((gk == 'b') & nord)                           # Ziegelplatz oben links: Skulptur auf der Mitte
+    fs = int(sy + 15)
+    if setze('platz/02', sx, fs, {}, art='gebaeude', klassen='b'):
+        for d_ in (64, 80):
+            if all(setze('platz/01', sx + s_ * d_, fs, {}, klassen='b') for s_ in (-1, 1)):
+                break
+    achse_r = (x0 + x1 + 1) * T / 2.0                             # Fahnenpaar am Rathaus, gespiegelt
+    fertig = False
+    for zeile in (26, 27, 25, 28):                                # vordere Ecken der Rathausflaeche
+        for d_ in (136, 144, 152):
+            n0 = len(objekte)
+            a_ = setze('platz/00', achse_r - d_, (zeile + P) * T + T - 1, {'anim': 'wimpel', 'wimpel': [[12, 1, 31, 16]]},
+                       False, klassen='gq')
+            b_ = setze('platz/00', achse_r + d_, (zeile + P) * T + T - 1, {'anim': 'wimpel', 'wimpel': [[0, 1, 19, 16]]},
+                       True, klassen='gq') if a_ else None
+            if a_ and b_:
+                fertig = True; break
+            while len(objekte) > n0:
+                objekte.pop(); rects.pop()
+        if fertig:
+            break
+    if not fertig:
+        print('Fahnenpaar nicht gesetzt')
+    for i, (tx, ty) in enumerate(((48, 32), (57, 64), (14, 12), (80, 30))):   # flach und begehbar
+        kachel('k38/taube', tx + P, ty + P, {'ebene': 0}, i % 2 == 1)
+    for (tx, ty) in ((60, 13), (50, 70)):
+        kachel('k38/zeitung', tx + P, ty + P, {'ebene': 0, 'liegend': True})
     # ---------------------------------------------------------------- Baumguertel am Kartenrand (Nutzer)
     n_w = 0
     for ty in range(rows):

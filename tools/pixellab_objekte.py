@@ -2086,6 +2086,18 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'small square grey metal roof access hatch with a handle, flat on the floor, seen from above, ' + FR14,
     ]},
     # ---- A03 Karte 39 West Shinjuku Siege
+    'k39_brunnen': {'size': 128, 'freie_farben': True, 'items': [
+        'modern city plaza fountain: a wide round grey granite basin with clear blue water and three water jets in the '
+        'middle, seen from the front and slightly above, ' + FR14,
+        'modern square plaza fountain with a low light stone rim, blue water and a tall central water spout, seen from '
+        'the front and slightly above, ' + FR14,
+    ]},
+    'k39_platz': {'size': 64, 'freie_farben': True, 'items': [
+        'tall white flagpole on a small stone base with a plain light blue flag with a white stripe, ' + FR14,
+        'large square grey granite planter with a round green shrub with small pink flowers, ' + FR14,
+        'modern abstract stainless steel sculpture of interlocking rings on a square stone pedestal, ' + FR14,
+        'small outdoor cafe table with a cream parasol and two metal chairs, ' + FR14,
+    ]},
     'k39_rathaus_c': {'size': 256, 'freie_farben': True, 'items': [
         'modern Tokyo metropolitan government building: two tall identical square skyscraper towers side by side, cream '
         'stone frames around dense dark blue glass window grids, a round clock near the top of each tower, a lower wide '

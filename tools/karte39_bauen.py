@@ -194,6 +194,9 @@ def bauen(frame=None, speichern=True):
     k18.bordsteine(a, asphalt, ~asphalt)
     markierungen(a, kl, lay)
     kanaldeckel(a, kl, P=lay.get('versatz', 0), lay=lay)
+    import karte38_bauen as k38b                                      # Bodenleben (Nutzer: Karte etwas leer): Risse,
+    kl38 = np.where(kl == 'q', 'p', np.where(np.isin(kl, ['g', 'k', 'b']), 'k', 'x'))   # Flecken, Pfuetzen - flach
+    k38b.boden_leben(a, kl38, frame)
     land = np.zeros((Hp, Wp), bool)                                   # Nebel nur am aeussersten Rand ueber den Baeumen
     land[T:-T, T:-T] = True
     lvl = np.ones((Hp, Wp), np.uint8)

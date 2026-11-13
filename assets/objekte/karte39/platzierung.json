@@ -672,34 +672,6 @@
 "nur_kontakt": true
 },
 {
-"datei": "varianten/k38-bank.png",
-"basis": "k38/bank",
-"x": 706,
-"y": 1032,
-"fuss": 23,
-"kachel": [
-45,
-65
-],
-"ebene": 1,
-"ohne_wall": true,
-"nur_kontakt": true
-},
-{
-"datei": "varianten/k38-bank_m.png",
-"basis": "k38/bank",
-"x": 1122,
-"y": 1064,
-"fuss": 23,
-"kachel": [
-71,
-67
-],
-"ebene": 1,
-"ohne_wall": true,
-"nur_kontakt": true
-},
-{
 "datei": "varianten/k18s-00.png",
 "basis": "k18s/00",
 "x": 406,
@@ -836,6 +808,272 @@
 "ebene": 1,
 "ohne_wall": true,
 "nur_kontakt": true
+},
+{
+"datei": "varianten/brunnen-00.png",
+"basis": "brunnen/00",
+"x": 970,
+"y": 1036,
+"fuss": 92,
+"kachel": [
+64,
+70
+],
+"ebene": 1,
+"ohne_wall": true,
+"nur_kontakt": true,
+"anim": "maschine",
+"fluessig": [
+[
+12,
+0,
+95,
+68,
+"cyan"
+]
+]
+},
+{
+"datei": "varianten/k38-bank.png",
+"basis": "k38/bank",
+"x": 930,
+"y": 1105,
+"fuss": 23,
+"kachel": [
+59,
+70
+],
+"ebene": 1,
+"ohne_wall": true,
+"nur_kontakt": true
+},
+{
+"datei": "varianten/k38-bank_m.png",
+"basis": "k38/bank",
+"x": 1090,
+"y": 1105,
+"fuss": 23,
+"kachel": [
+69,
+70
+],
+"ebene": 1,
+"ohne_wall": true,
+"nur_kontakt": true
+},
+{
+"datei": "varianten/platz-03.png",
+"basis": "platz/03",
+"x": 1201,
+"y": 1079,
+"fuss": 56,
+"kachel": [
+77,
+70
+],
+"ebene": 1,
+"ohne_wall": true,
+"nur_kontakt": true
+},
+{
+"datei": "varianten/platz-03_m.png",
+"basis": "platz/03",
+"x": 1265,
+"y": 1111,
+"fuss": 56,
+"kachel": [
+81,
+72
+],
+"ebene": 1,
+"ohne_wall": true,
+"nur_kontakt": true
+},
+{
+"datei": "varianten/platz-12.png",
+"basis": "platz/12",
+"x": 1172,
+"y": 1151,
+"fuss": 48,
+"kachel": [
+74,
+74
+],
+"ebene": 1,
+"ohne_wall": true,
+"nur_kontakt": true
+},
+{
+"datei": "varianten/k38-kiosk.png",
+"basis": "k38/kiosk",
+"x": 680,
+"y": 997,
+"fuss": 74,
+"kachel": [
+45,
+66
+],
+"ebene": 1,
+"ohne_wall": true,
+"nur_kontakt": true
+},
+{
+"datei": "varianten/platz-02.png",
+"basis": "platz/02",
+"x": 265,
+"y": 227,
+"fuss": 60,
+"kachel": [
+17,
+17
+],
+"ebene": 1,
+"ohne_wall": true,
+"nur_kontakt": true
+},
+{
+"datei": "varianten/platz-01.png",
+"basis": "platz/01",
+"x": 197,
+"y": 230,
+"fuss": 57,
+"kachel": [
+13,
+17
+],
+"ebene": 1,
+"ohne_wall": true,
+"nur_kontakt": true
+},
+{
+"datei": "varianten/platz-01.png",
+"basis": "platz/01",
+"x": 325,
+"y": 230,
+"fuss": 57,
+"kachel": [
+21,
+17
+],
+"ebene": 1,
+"ohne_wall": true,
+"nur_kontakt": true
+},
+{
+"datei": "varianten/platz-00.png",
+"basis": "platz/00",
+"x": 704,
+"y": 434,
+"fuss": 61,
+"kachel": [
+45,
+30
+],
+"ebene": 1,
+"ohne_wall": true,
+"nur_kontakt": true,
+"anim": "wimpel",
+"wimpel": [
+[
+12,
+1,
+31,
+16
+]
+]
+},
+{
+"datei": "varianten/platz-00_m.png",
+"basis": "platz/00",
+"x": 976,
+"y": 434,
+"fuss": 61,
+"kachel": [
+62,
+30
+],
+"ebene": 1,
+"ohne_wall": true,
+"nur_kontakt": true,
+"anim": "wimpel",
+"wimpel": [
+[
+0,
+1,
+19,
+16
+]
+]
+},
+{
+"datei": "varianten/k38-taube.png",
+"basis": "k38/taube",
+"x": 833,
+"y": 579,
+"fuss": 12,
+"kachel": [
+52,
+36
+],
+"ebene": 0,
+"ohne_wall": true,
+"nur_kontakt": true
+},
+{
+"datei": "varianten/k38-taube_m.png",
+"basis": "k38/taube",
+"x": 945,
+"y": 1059,
+"fuss": 12,
+"kachel": [
+59,
+66
+],
+"ebene": 0,
+"ohne_wall": true,
+"nur_kontakt": true
+},
+{
+"datei": "varianten/k38-taube.png",
+"basis": "k38/taube",
+"x": 305,
+"y": 243,
+"fuss": 12,
+"kachel": [
+19,
+15
+],
+"ebene": 0,
+"ohne_wall": true,
+"nur_kontakt": true
+},
+{
+"datei": "varianten/k38-taube_m.png",
+"basis": "k38/taube",
+"x": 1361,
+"y": 531,
+"fuss": 12,
+"kachel": [
+85,
+33
+],
+"ebene": 0,
+"ohne_wall": true,
+"nur_kontakt": true
+},
+{
+"datei": "varianten/k38-zeitung.png",
+"basis": "k38/zeitung",
+"x": 1029,
+"y": 273,
+"fuss": 14,
+"kachel": [
+65,
+17
+],
+"ebene": 0,
+"ohne_wall": true,
+"liegend": true
 },
 {
 "datei": "varianten/k01-baum01_m.png",
