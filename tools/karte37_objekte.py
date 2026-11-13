@@ -22,10 +22,11 @@ FAESSER = [('fass/blau', 6, 7), ('fass/grau', 8, 7), ('fass/grau', 6, 11), ('fas
            ('fass/grau', 41, 7), ('fass/blau', 43, 7), ('fass/blau', 41, 12), ('fass/grau', 43, 12)]
 GITTER = [(5, 9), (7, 9), (5, 14), (42, 9), (40, 14), (42, 14), (18, 27), (20, 27), (36, 27), (38, 27)]
 GITTERREIHEN = [(12, 37, 5), (17, 38, 25), (17, 38, 31)]          # Lueftungsreihen der Vorlage (jede 2. Kachel)
-LATERNEN = [(4, 20), (43, 20), (16, 29), (38, 29)]
+LATERNEN = [(4, 19), (43, 19),               # Bucht-Laternen eine Reihe hoeher: Schatten bleibt auf der Flaeche
+            (16, 29), (38, 29)]
 GROSS = [('gen/00', 5, 28), ('gen/00', 41, 28), ('terminal/00', 7, 31)]
 # Generator laeuft: Tanks blubbern, Anzeigen blinken (Regel Maschinen-Animation)
-GEN_ANIM = {'anim': 'maschine', 'leds': True, 'led_box': [[34, 18, 48, 30], [9, 41, 15, 47]],
+GEN_ANIM = {'anim': 'maschine', 'ruetteln': True, 'leds': True, 'led_box': [[34, 18, 48, 30], [9, 41, 15, 47]],
             'fluessig': [[27, 2, 36, 15, 'gruen'], [0, 20, 9, 42, 'cyan'], [53, 14, 62, 40, 'cyan']]}
 # Rohre der Vorlage unter der Ziegelkante der Seitenbuchten (PixelLab k37_rohr, Mittelstueck gekuerzt): (sprite, cx, Fuss-y)
 ROHRE = [('rohr/lang', 120, 273), ('rohr/kurz', 664, 289)]
@@ -93,10 +94,11 @@ def main():
         if not setze(n_, 0, 0, {'liegend': True}, cx=cx_, fy=fy_):
             print('Rohr nicht gesetzt:', n_)
     for i, (n_, tx, ty) in enumerate(FAESSER):
-        if not setze(n_, tx, ty, {}, i % 3 == 0):
+        if not setze(n_, tx, ty, {'nur_kontakt': True}, i % 3 == 0):          # dicht an dicht: nur Kontaktschatten
             print('nicht gesetzt:', n_, tx, ty)
     for (tx, ty) in LATERNEN:
-        if not setze('k18s/18', tx, ty, {'anim': 'leuchten', 'licht': [4, 7], 'licht_box': [2, 5, 6, 10], 'licht_r': 9}):
+        fy_ = 322 if ty == 19 else None                                 # Bucht: Fuss 13 px ueber der Kante (Rohr darueber)
+        if not setze('k18s/18', tx, ty, fy=fy_, opt={'anim': 'leuchten', 'licht': [4, 7], 'licht_box': [2, 5, 6, 10], 'licht_r': 9}):
             print('Laterne nicht gesetzt:', tx, ty)
     gitter = 'dach/00' if os.path.exists(os.path.join(OBJ, 'dach/00.png')) else None
     if gitter:
@@ -109,7 +111,7 @@ def main():
             setze('dach/02', tx, ty, {'liegend': True}, i % 2 == 1)
         setze('dach/03', 24, 22, {'liegend': True, 'schattenlos': True})          # Dachluke
         for (tx, ty) in ((14, 23), (33, 23)):                                     # zwei Klimageraete am Weg
-            setze('dach/01', tx, ty, {})
+            setze('dach/01', tx, ty, {'anim': 'portal_box', 'wirbel': [11.5, 8.5, 5]})   # Luefterrad dreht sich
         setze('dach/04', 33, 9, {})                                               # Satellitenschuessel (sparsam)
         for (tx, ty) in ((17, 12), (25, 17)):                                     # Lueftungshauben auf der Flaeche
             setze('dach/38', tx, ty, {})

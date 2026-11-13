@@ -12,6 +12,7 @@
 "ebene": 1,
 "ohne_wall": true,
 "anim": "maschine",
+"ruetteln": true,
 "leds": true,
 "led_box": [
 [
@@ -64,6 +65,7 @@
 "ebene": 1,
 "ohne_wall": true,
 "anim": "maschine",
+"ruetteln": true,
 "leds": true,
 "led_box": [
 [
@@ -164,7 +166,8 @@
 7
 ],
 "ebene": 1,
-"ohne_wall": true
+"ohne_wall": true,
+"nur_kontakt": true
 },
 {
 "datei": "varianten/fass-grau.png",
@@ -177,7 +180,8 @@
 7
 ],
 "ebene": 1,
-"ohne_wall": true
+"ohne_wall": true,
+"nur_kontakt": true
 },
 {
 "datei": "varianten/fass-grau.png",
@@ -190,7 +194,8 @@
 11
 ],
 "ebene": 1,
-"ohne_wall": true
+"ohne_wall": true,
+"nur_kontakt": true
 },
 {
 "datei": "varianten/fass-blau_m.png",
@@ -203,7 +208,8 @@
 11
 ],
 "ebene": 1,
-"ohne_wall": true
+"ohne_wall": true,
+"nur_kontakt": true
 },
 {
 "datei": "varianten/fass-grau.png",
@@ -216,7 +222,8 @@
 7
 ],
 "ebene": 1,
-"ohne_wall": true
+"ohne_wall": true,
+"nur_kontakt": true
 },
 {
 "datei": "varianten/fass-blau.png",
@@ -229,7 +236,8 @@
 7
 ],
 "ebene": 1,
-"ohne_wall": true
+"ohne_wall": true,
+"nur_kontakt": true
 },
 {
 "datei": "varianten/fass-blau_m.png",
@@ -242,7 +250,8 @@
 12
 ],
 "ebene": 1,
-"ohne_wall": true
+"ohne_wall": true,
+"nur_kontakt": true
 },
 {
 "datei": "varianten/fass-grau.png",
@@ -255,13 +264,14 @@
 12
 ],
 "ebene": 1,
-"ohne_wall": true
+"ohne_wall": true,
+"nur_kontakt": true
 },
 {
 "datei": "varianten/k18s-18.png",
 "basis": "k18s/18",
 "x": 68,
-"y": 306,
+"y": 293,
 "fuss": 29,
 "kachel": [
 4,
@@ -286,7 +296,7 @@
 "datei": "varianten/k18s-18.png",
 "basis": "k18s/18",
 "x": 692,
-"y": 306,
+"y": 293,
 "fuss": 29,
 "kachel": [
 43,
@@ -1128,7 +1138,13 @@
 23
 ],
 "ebene": 1,
-"ohne_wall": true
+"ohne_wall": true,
+"anim": "portal_box",
+"wirbel": [
+11.5,
+8.5,
+5
+]
 },
 {
 "datei": "varianten/dach-01.png",
@@ -1141,7 +1157,13 @@
 23
 ],
 "ebene": 1,
-"ohne_wall": true
+"ohne_wall": true,
+"anim": "portal_box",
+"wirbel": [
+11.5,
+8.5,
+5
+]
 },
 {
 "datei": "varianten/dach-04.png",
