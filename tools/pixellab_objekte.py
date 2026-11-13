@@ -2098,6 +2098,23 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'modern abstract stainless steel sculpture of interlocking rings on a square stone pedestal, ' + FR14,
         'small outdoor cafe table with a cream parasol and two metal chairs, ' + FR14,
     ]},
+    'k39_rathaus_e': {'size': 256, 'freie_farben': True, 'items': [
+        'Tokyo city hall complex: two tall twin towers of light cream stone with deep vertical window grids in dark blue '
+        'glass and a large round clock near the top of each, the towers step back at the top like a crown, a lower wide '
+        'central hall between them with a row of columns and a broad stepped entrance stair at the front, symmetrical, '
+        'seen from the front and slightly above with flat roofs visible, fully in frame, ' + FR14,
+    ]},
+    'k39_rathaus_f': {'size': 256, 'freie_farben': True, 'items': [
+        'monumental symmetrical twin-tower government headquarters: two identical tall towers with stone grid facades '
+        'and blue windows, a clock at the top of each tower, side wings with windows on both outer sides, a central '
+        'lower block with the main entrance and wide steps, cream and grey colours, seen from the front and slightly '
+        'above, fully in frame, ' + FR14,
+    ]},
+    'k39_rathaus_g': {'size': 256, 'freie_farben': True, 'items': [
+        'grand modern city hall with two twin towers joined by a low central building, beige stone frame with a dense '
+        'grid of dark blue windows, clocks on both towers, wide entrance plaza steps in front, small trees in planters '
+        'beside the entrance, seen from the front and slightly above, fully in frame, ' + FR14,
+    ]},
     'k39_rathaus_c': {'size': 256, 'freie_farben': True, 'items': [
         'modern Tokyo metropolitan government building: two tall identical square skyscraper towers side by side, cream '
         'stone frames around dense dark blue glass window grids, a round clock near the top of each tower, a lower wide '

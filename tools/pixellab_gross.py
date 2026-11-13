@@ -299,6 +299,33 @@ for _v, _gr in (('', (176, 144)), ('_b', (176, 160))):
                 'complete roof edge is visible at the top and the complete grey base plinth at the bottom, with empty '
                 'magenta space above the roof and below the base, ' + FR14}
 
+AUFTRAEGE['k39_bruecke_b'] = dict(AUFTRAEGE['k39_bruecke'], ziel='assets/objekte/karte39/gross_bruecke_b',
+    text='modern Tokyo pedestrian footbridge over a road, seen from the front and slightly above: a long straight walkway '
+         'deck with light grey concrete sides and a glass-and-steel railing on top, a small blue station sign in the '
+         'middle, the deck rests on two pairs of round concrete columns, at both ends a straight staircase descends '
+         'diagonally to the ground with its own railing, about 450 pixels wide and 110 pixels tall, centered with an '
+         'empty magenta margin of at least 24 pixels on all sides, clean crisp pixel art, light from the top left, '
+         'sharp dark outlines, NO road, NO ground, nothing touches the image border, ' + FR14)
+AUFTRAEGE['k39_bruecke_c'] = dict(AUFTRAEGE['k39_bruecke'], ziel='assets/objekte/karte39/gross_bruecke_c',
+    text='Japanese elevated pedestrian bridge with a dark green steel truss railing and a light grey deck, seen from '
+         'the side and slightly above, flat middle span on four slim steel legs, long stairs going down at the left and '
+         'right ends parallel to the deck, a small name plate in the middle, about 450 pixels wide and 110 pixels tall, '
+         'centered with an empty magenta margin of at least 24 pixels on all sides, clean crisp pixel art, light from '
+         'the top left, sharp dark outlines, NO road, NO ground, nothing touches the image border, ' + FR14)
+AUFTRAEGE['k39_turm_b'] = dict(AUFTRAEGE['k39_turm'], ziel='assets/objekte/karte39/gross_turm_b',
+    text='tall modern Tokyo office skyscraper seen from the front with the flat roof visible from slightly above, about '
+         '160 pixels wide and 410 pixels tall, centered with an empty magenta margin of at least 30 pixels on all sides: '
+         'light beige stone frame with a regular grid of blue reflective windows, a rooftop with a parapet, helipad '
+         'marking and antenna, a glass lobby with a revolving door at the bottom, grey base plinth, daytime, clean crisp '
+         'pixel art, light from the top left, sharp dark outlines, both side walls complete with dark outline, nothing '
+         'touches the image border, ' + FR14)
+AUFTRAEGE['k39_turm_c'] = dict(AUFTRAEGE['k39_turm'], ziel='assets/objekte/karte39/gross_turm_c',
+    text='slender modern glass office tower in West Shinjuku seen from the front with the roof visible from slightly '
+         'above, about 160 pixels wide and 410 pixels tall, centered with an empty magenta margin of at least 30 pixels on '
+         'all sides: teal-blue glass curtain wall with thin silver vertical mullions, a stepped crown at the top with '
+         'rooftop equipment, a two-storey stone podium with a wide glass entrance at the bottom, grey base, daytime, clean '
+         'crisp pixel art, light from the top left, sharp dark outlines, nothing touches the image border, ' + FR14)
+
 
 def main(name):
     a = AUFTRAEGE[name]

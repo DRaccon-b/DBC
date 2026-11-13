@@ -32,7 +32,7 @@ STADTBAUM = ['k01/baum%02d' % i for i in (0, 2, 4)]
 LAMPE = {'anim': 'leuchten', 'licht': [4, 7], 'licht_box': [2, 5, 6, 10], 'licht_r': 9}
 
 # (sprite, Mitte x Vorlagen-px, Fusszeile Vorlage)
-GEBAEUDE = [('gross/turm', 1410, 44), ('gross/buero_oben', 1297, 10), ('gross/buero_links', 192, 29),   # Gehwegreihe
+GEBAEUDE = [('gross/turm', 1404, 44), ('gross/buero_oben', 1297, 10), ('gross/buero_links', 192, 29),   # Gehwegreihe
             ('gross/buero_unten_links', 222, 75), ('gross/buero_unten', 750, 76)]                    # vor jeder Front
 RATHAUS_ACHSE = None                                              # aus der hellen Rathausflaeche berechnet
 BRUECKE = (465, 42)                                               # Mitte x, Fusszeile (ueber der linken Hauptstrasse)
@@ -66,6 +66,10 @@ def weiss_freistellen(quelle, ziel):
             if 0 <= y2 < hh and 0 <= x2 < ww and w_[y2, x2] and not weg[y2, x2]:
                 weg[y2, x2] = True; q.append((y2, x2))
     ar[weg, 3] = 0
+    import karte04_bauen as k4                                    # eingeschlossene weisse Felder (Fachwerk) auch weg,
+    for ys, xs in k4._komponenten(w_ & ~weg):                     # kleine helle Details (Schild, Glanz) bleiben
+        if len(ys) >= 12:
+            ar[ys, xs, 3] = 0
     im = Image.fromarray(ar.astype(np.uint8))
     im.crop(im.getbbox()).save(os.path.join(OBJ, ziel))
 
@@ -118,10 +122,11 @@ def main():
         halb_gespiegelt(flach, 'gross/buero_links.png', 112)
         halb_gespiegelt(flach, 'gross/buero_unten.png', 176)
     halb_gespiegelt('k36/halb_hoch.png', 'gross/buero_unten_links.png', 142)
-    if os.path.exists(os.path.join(OBJ, 'gross_turm/00.png')):
-        stockwerke_entfernen('gross_turm/00.png', 'gross/turm.png', 150, 2, 34)
-    if os.path.exists(os.path.join(OBJ, 'gross_bruecke/00.png')):
-        weiss_freistellen('gross_bruecke/00.png', 'gross/bruecke.png')
+    # Nutzer-Auswahl (Kandidaten neben der Vorlage gezeigt): Hochhaus C, Bruecke C, Rathaus B
+    if os.path.exists(os.path.join(OBJ, 'gross_turm_c/00.png')):          # Glasfassade gleichfarbig bei y 164 / 264
+        stockwerke_entfernen('gross_turm_c/00.png', 'gross/turm.png', 164, 1, 100)
+    if os.path.exists(os.path.join(OBJ, 'gross_bruecke_c/00.png')):
+        weiss_freistellen('gross_bruecke_c/00.png', 'gross/bruecke.png')
     tps = [(t['x'] * T - 2 * T, t['y'] * T - 2 * T, (t['x'] + t['b'] + 2) * T, (t['y'] + t['h'] + 2) * T)
            for t in lay['teleporter']]
     tps_eng = [(t['x'] * T, t['y'] * T, (t['x'] + t['b']) * T - 1, (t['y'] + t['h']) * T - 1) for t in lay['teleporter']]
