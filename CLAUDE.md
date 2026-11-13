@@ -250,6 +250,13 @@ Vor jeder Abgabe Punkt für Punkt prüfen (vergrößert, Standbild und mehrere A
   Brüstung/Kontur nie am Kartenrand (Teleporter-Ausgang bleibt offen). Flache Gitter, Kabel, Luken sind begehbar
   (`ebene` 0), Lüfterräder drehen (`portal_box` mit `wirbel`), Generatoren rütteln. Gitter, die höher als eine Kachel
   sind, ganz auf ihre Fläche setzen (nicht halb über die Kante); Paare an der aus den Reihen berechneten Achse spiegeln.
+- **Bahnhof (Karte 38):** Gleise liegen tiefer als die Bahnsteige (Bahnsteigfront nur an der Südkante sichtbar, Kante mit
+  Sicherheitslinie und Noppen), Gleise gesperrt, Bahnübergänge exakt so breit wie die Ziegelwege und begehbar; nichts auf
+  Bahnsteigkanten oder Leitstreifen (ganzes Bildrechteck prüfen, nicht nur den Fuß). Dunkle Objektpixel der Vorlage
+  (Automaten) außerhalb der Gleisbänder nie als Gleis/Boden übernehmen, 1-Kachel-Kerben und -Zipfel im Pflaster angleichen.
+  Treppenabgänge müssen zum Weg hin offen sein (kein geschlossener Steinrahmen), mit einer freien Reihe zu anderen Flächen.
+  Große Sprites (Wartehäuschen) mit Kachelbreite am Raster ausrichten; Schilder genau auf die Achse ihres Poller-Paars.
+  Generierte Gebäude zeigen die Dachfläche von leicht oben (sonst neu erzeugen); grelle Glasfarben auf die Palette dämpfen.
 - **Begleiter am Stumpf (5d):** keine 1-Kachel-Blumen auf dem Stumpf, kein Blumenklumpen; Begleiter überlappen sich nicht.
 - **Paare/Achsen:** Paare vor Toren/Bauwerken exakt gespiegelt (Mitte und Fuß), gleiche Objekte auf gleicher Höhe;
   Druckplatten, Obelisken usw. symmetrisch zur berechneten Achse.

@@ -1,10 +1,10 @@
 [
 {
-"datei": "varianten/bahnhof_glas-00.png",
-"basis": "bahnhof_glas/00",
-"x": 131,
-"y": 163,
-"fuss": 140,
+"datei": "varianten/bahnhof_glas_c-00.png",
+"basis": "bahnhof_glas_c/00",
+"x": 139,
+"y": 190,
+"fuss": 113,
 "kachel": [
 13,
 18
@@ -140,11 +140,11 @@
 {
 "datei": "varianten/unterstand-00.png",
 "basis": "unterstand/00",
-"x": 1088,
+"x": 1072,
 "y": 757,
 "fuss": 74,
 "kachel": [
-72,
+71,
 51
 ],
 "ebene": 1,
@@ -156,11 +156,11 @@
 {
 "datei": "varianten/klein-09.png",
 "basis": "klein/09",
-"x": 1122,
+"x": 1106,
 "y": 805,
 "fuss": 23,
 "kachel": [
-71,
+70,
 51
 ],
 "ebene": 1,
@@ -214,14 +214,29 @@
 "schattenlos": true
 },
 {
-"datei": "varianten/treppe_schmal-01.png",
-"basis": "treppe_schmal/01",
+"datei": "varianten/treppe_schmal-02.png",
+"basis": "treppe_schmal/02",
 "x": 322,
-"y": 220,
-"fuss": 67,
+"y": 234,
+"fuss": 53,
 "kachel": [
 22,
 17
+],
+"ebene": 1,
+"ohne_wall": true,
+"liegend": true,
+"schattenlos": true
+},
+{
+"datei": "varianten/treppe_breit-00.png",
+"basis": "treppe_breit/00",
+"x": 212,
+"y": 763,
+"fuss": 68,
+"kachel": [
+16,
+51
 ],
 "ebene": 1,
 "ohne_wall": true,
@@ -487,12 +502,12 @@
 {
 "datei": "varianten/klein-09.png",
 "basis": "klein/09",
-"x": 354,
-"y": 184,
+"x": 370,
+"y": 200,
 "fuss": 23,
 "kachel": [
-23,
-12
+24,
+13
 ],
 "ebene": 1,
 "ohne_wall": true,
@@ -695,12 +710,12 @@
 {
 "datei": "varianten/k18s-12.png",
 "basis": "k18s/12",
-"x": 196,
-"y": 807,
+"x": 180,
+"y": 791,
 "fuss": 24,
 "kachel": [
-13,
-51
+12,
+50
 ],
 "ebene": 1,
 "ohne_wall": true,
@@ -935,20 +950,6 @@
 "licht_r": 9
 },
 {
-"datei": "varianten/klein-01.png",
-"basis": "klein/01",
-"x": 320,
-"y": 594,
-"fuss": 29,
-"kachel": [
-20,
-38
-],
-"ebene": 1,
-"ohne_wall": true,
-"nur_kontakt": true
-},
-{
 "datei": "varianten/klein-03.png",
 "basis": "klein/03",
 "x": 342,
@@ -1094,7 +1095,7 @@
 "nur_kontakt": true
 },
 {
-"datei": "varianten/klein-09_m.png",
+"datei": "varianten/klein-09.png",
 "basis": "klein/09",
 "x": 786,
 "y": 1176,
@@ -1108,7 +1109,7 @@
 "nur_kontakt": true
 },
 {
-"datei": "varianten/klein-09.png",
+"datei": "varianten/klein-09_m.png",
 "basis": "klein/09",
 "x": 1106,
 "y": 1080,

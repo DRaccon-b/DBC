@@ -2108,6 +2108,18 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'from slightly above, a row of small windows upstairs, glass entrance doors with an orange canopy downstairs, '
         'fully in frame with margin, ' + FR14,
     ]},
+    'k38_bahnhof_glas_c': {'size': 192, 'freie_farben': True, 'items': [
+        'modern two-storey glass train station building seen from the front and slightly above, wider than tall: the flat '
+        'light grey roof surface is clearly visible from above as a wide band on top with a parapet edge, two small '
+        'rooftop air conditioning units on it, below a light steel-blue glass curtain facade with two rows of tall '
+        'windows with white mullions, a large clock above a glass double entrance door in the middle, grey base, fully '
+        'in frame with margin, ' + FR14,
+    ]},
+    'k38_bahnhof_glas_d': {'size': 192, 'freie_farben': True, 'items': [
+        'modern glass railway station hall, viewed from the front and slightly above so the flat grey roof deck with its '
+        'parapet is visible on top, muted steel-blue glass facade with white frames, glass entrance doors in the center, '
+        'fully in frame with margin, ' + FR14,
+    ]},
     'k38_unterstand': {'size': 160, 'freie_farben': True, 'items': [
         'long empty train platform waiting shelter, much wider than tall: a flat light grey steel canopy roof seen from '
         'slightly above, a dark blue-grey glass back wall under it, standing on two dark steel pillars, nothing else, '

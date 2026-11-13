@@ -39,7 +39,7 @@ Aufstellfelds (cyan = Ankunft, gold = weiter; Funktion `pfeil_marke` in `tools/k
 | 2 | Karte 35 – Shinjuku Digital Fog | v1.0 fertig (3 Agenten-Prüfrunden), ZIP in maps/karte35/v1.0 |
 | 3 | Karte 36 – Shinjuku Backstreets | v1.0 fertig (3 Agenten-Prüfrunden), ZIP in maps/karte36/v1.0 |
 | 4 | Karte 37 – Hypnos Rooftop | v1.0 fertig (3 Agenten-Prüfrunden), Blick auf Karte 35 im Ring, ZIP in maps/karte37/v1.0 |
-| 5 | Karte 38 – Deva Transit | in Arbeit (Vorbild karte36) |
+| 5 | Karte 38 – Deva Transit | v1.0 fertig (3 Agenten-Prüfrunden), ZIP in maps/karte38/v1.0 |
 
 ## A0S – Sondergebiet
 | Nr. | Karte | Stand |

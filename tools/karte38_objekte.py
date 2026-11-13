@@ -28,11 +28,12 @@ LAMPE = {'anim': 'leuchten', 'licht': [4, 7], 'licht_box': [2, 5, 6, 10], 'licht
 AUTOMAT = {'anim': 'leuchten', 'licht_box': [3, 3, 17, 18], 'licht_r': 7}
 
 # Gebaeude (sprite, Mitte x in Vorlagen-px, Fusszeile Vorlage)
-GEBAEUDE = [('bahnhof_glas/00', 152, 14), ('bahnhof_glas_b/01', 160, 42), ('bahnhof_beige/00', 1376, 70)]
+GEBAEUDE = [('bahnhof_glas_c/00', 144, 14), ('bahnhof_glas_b/01', 160, 42), ('bahnhof_beige/00', 1376, 70)]
 # Wartehaeuschen (Mitte x Vorlagen-px, Fusszeile) - Bahnsteige oben und Mitte wie in der Vorlage
-UNTERSTAENDE = [(560, 23), (1055, 23), (575, 47), (1100, 47)]
+UNTERSTAENDE = [(560, 23), (1055, 23), (575, 47), (1084, 47)]
 TREPPEN = [('treppe/01', 76 * 16 + 8, 13), ('treppe_breit/00', 87 * 16 + 8, 22), ('treppe/01', 12 * 16 + 8, 61),
-           ('treppe_schmal/01', 17 * 16 + 16, 13)]   # breite offene Treppe oben rechts (vor dem mittleren Bahnhof: Eingang frei)   # (sprite, Mitte x px, Fusszeile)
+           ('treppe_schmal/02', 17 * 16 + 16, 13),
+           ('treppe_breit/00', 12 * 16, 47)]   # (sprite, Mitte x px, Fusszeile); vor dem mittleren Bahnhof wie in der Vorlage, linke Tuer frei
 # Poller-Paare mit Verbotsschild genau auf ihrer Achse (Vorlage): (Kachel links, Kachel rechts, Fusszeile)
 POLLER = [(43, 47, 13), (54, 58, 73), (33, 37, 73)]
 # (sprite, Kachel x, Fusszeile, Optionen) - Vorlagenkacheln
@@ -46,7 +47,7 @@ KLEIN = [
     ('k18s/12', 8, 47, {}), ('k18s/00', 28, 35, {}), ('k18s/01', 17, 36, {}), ('k18s/42', 82, 45, {}),
     ('klein/09', 19, 38, {}), ('klein/09', 77, 36, {}), ('k18s/12', 22, 38, {}), ('k18s/12', 80, 36, {}),
     ('klein/02', 24, 42, {}), ('klein/02', 47, 42, {}), ('klein/02', 75, 42, {}),
-    ('k18s/18', 26, 45, LAMPE), ('k18s/18', 57, 45, LAMPE), ('klein/01', 16, 33, {}),
+    ('k18s/18', 26, 45, LAMPE), ('k18s/18', 57, 45, LAMPE), 
     ('klein/03', 17, 41, {'liegend': True, 'schattenlos': True}), ('klein/03', 78, 34, {'liegend': True, 'schattenlos': True}),
     ('k18s/42', 51, 62, {}), ('k18s/00', 79, 58, {}), ('k18s/01', 77, 68, {}), ('k18s/40', 74, 71, {}),
     ('klein/09', 21, 62, {}), ('klein/09', 45, 70, {}), ('klein/09', 65, 64, {}), ('klein/09', 26, 72, {}),
