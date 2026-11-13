@@ -2085,6 +2085,44 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'coiled black electric cable lying flat on the floor, seen from above, ' + FR14,
         'small square grey metal roof access hatch with a handle, flat on the floor, seen from above, ' + FR14,
     ]},
+    # ---- A03 Karte 38 Deva Transit (Bahnhof)
+    'k38_bahnhof_glas': {'size': 192, 'freie_farben': True, 'items': [
+        'modern two-storey train station building, wider than tall: a flat light grey roof band with a thin parapet seen '
+        'from slightly above, a light steel-blue glass curtain facade with two rows of tall narrow windows with white '
+        'mullions, a wide glass double entrance door in the middle of the ground floor, grey base, fully in frame with '
+        'margin, ' + FR14,
+    ]},
+    'k38_bahnhof_glas_b': {'size': 192, 'freie_farben': True, 'items': [
+        'modern two-storey glass train station hall, wider than tall, flat grey roof with parapet visible from slightly '
+        'above, blue glass facade with vertical white steel frames, two pairs of glass sliding doors on the ground floor, '
+        'fully in frame with margin, ' + FR14,
+    ]},
+    'k38_bahnhof_beige': {'size': 192, 'freie_farben': True, 'items': [
+        'two-storey Japanese railway station building, wider than tall: flat grey roof band with parapet seen from '
+        'slightly above, cream beige facade with an upper row of small dark blue windows with white frames, ground floor '
+        'dark blue glass front with an entrance under a small orange frame in the right half, grey base, fully in frame '
+        'with margin, ' + FR14,
+    ]},
+    'k38_bahnhof_beige_b': {'size': 192, 'freie_farben': True, 'items': [
+        'small two-storey commuter train station building with a warm beige facade, flat grey roof with a parapet visible '
+        'from slightly above, a row of small windows upstairs, glass entrance doors with an orange canopy downstairs, '
+        'fully in frame with margin, ' + FR14,
+    ]},
+    'k38_unterstand': {'size': 160, 'freie_farben': True, 'items': [
+        'long empty train platform waiting shelter, much wider than tall: a flat light grey steel canopy roof seen from '
+        'slightly above, a dark blue-grey glass back wall under it, standing on two dark steel pillars, nothing else, '
+        'fully in frame, ' + FR14,
+    ]},
+    'k38_treppe': {'size': 96, 'freie_farben': True, 'items': [
+        'rectangular subway stairway opening in the pavement seen straight from above, grey concrete steps going down '
+        'into darkness, short white metal handrails along both sides, flat top-down view, ' + FR14,
+    ]},
+    'k38_klein': {'size': 32, 'freie_farben': True, 'items': [
+        'short grey metal platform bollard, ' + FR14,
+        'round red no-entry traffic sign with a white bar on a thin grey pole, ' + FR14,
+        'small dark steel information stand with a flat top on a single post, ' + FR14,
+        'small square grey metal floor drain grate flat on the ground, seen from above, ' + FR14,
+    ]},
     'k37_rohr': {'size': 128, 'freie_farben': True, 'items': [
         'one long straight horizontal light steel-blue metal pipe lying on a rooftop, very long and thin, spanning the whole '
         'image width, about twelve times as long as thick, light top highlight and dark bottom edge, no fittings, ' + FR14,
