@@ -21,9 +21,14 @@ FREMD = {'fass/blau': 'karte02/klein/00.png', 'fass/grau': 'karte02/klein/01.png
 FAESSER = [('fass/blau', 6, 7), ('fass/grau', 8, 7), ('fass/grau', 6, 11), ('fass/blau', 8, 11),
            ('fass/grau', 41, 7), ('fass/blau', 43, 7), ('fass/blau', 41, 12), ('fass/grau', 43, 12)]
 GITTER = [(5, 9), (7, 9), (5, 14), (42, 9), (40, 14), (42, 14), (18, 27), (20, 27), (36, 27), (38, 27)]
-GITTERREIHEN = [(12, 37, 4), (17, 38, 25), (17, 38, 31)]          # Lueftungsreihen der Vorlage (jede 2. Kachel)
+GITTERREIHEN = [(12, 37, 5), (17, 38, 25), (17, 38, 31)]          # Lueftungsreihen der Vorlage (jede 2. Kachel)
 LATERNEN = [(4, 20), (43, 20), (16, 29), (38, 29)]
-GROSS = [('gen/00', 6, 28), ('gen/00', 41, 28), ('terminal/00', 7, 31)]
+GROSS = [('gen/00', 5, 28), ('gen/00', 41, 28), ('terminal/00', 7, 31)]
+# Generator laeuft: Tanks blubbern, Anzeigen blinken (Regel Maschinen-Animation)
+GEN_ANIM = {'anim': 'maschine', 'leds': True, 'led_box': [[34, 18, 48, 30], [9, 41, 15, 47]],
+            'fluessig': [[27, 2, 36, 15, 'gruen'], [0, 20, 9, 42, 'cyan'], [53, 14, 62, 40, 'cyan']]}
+# Rohre der Vorlage unter der Ziegelkante der Seitenbuchten (PixelLab k37_rohr, Mittelstueck gekuerzt): (sprite, cx, Fuss-y)
+ROHRE = [('rohr/lang', 120, 273), ('rohr/kurz', 664, 289)]
 KABEL = [(6, 12), (13, 9), (29, 8), (11, 15), (6, 18), (14, 26), (36, 30), (40, 15)]
 
 
@@ -82,8 +87,11 @@ def main():
                        for (x_, y_) in ((tx, ty), (10, 30), (11, 31), (12, 30))):
                 print('nicht gesetzt:', n_, tx, ty)
             continue
-        if not setze(n_, tx, ty, {'anim': 'maschine', 'schirm': [[7, 2, 28, 13]]} if n_.startswith('terminal') else {}):
+        if not setze(n_, tx, ty, GEN_ANIM):
             print('nicht gesetzt:', n_, tx, ty)
+    for (n_, cx_, fy_) in ROHRE:
+        if not setze(n_, 0, 0, {'liegend': True}, cx=cx_, fy=fy_):
+            print('Rohr nicht gesetzt:', n_)
     for i, (n_, tx, ty) in enumerate(FAESSER):
         if not setze(n_, tx, ty, {}, i % 3 == 0):
             print('nicht gesetzt:', n_, tx, ty)

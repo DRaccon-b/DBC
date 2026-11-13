@@ -103,7 +103,9 @@ def bauen(frame=None, speichern=True):
                       key=lambda o: o.get('sortier', o['y'] + o['fuss']))
         if objs:
             cache = {o['datei']: Image.open(os.path.join(OBJ, o['datei'])).convert('RGBA') for o in objs}
-            k4.objekte_zeichnen(img, objs, cache, dach, frame, ebenen=lvl.astype(np.int16))
+            ebenen = lvl.astype(np.int16)
+            ebenen[deck] = 0                                               # tiefere Flaeche: Schatten bleiben auf ihrer Ebene
+            k4.objekte_zeichnen(img, objs, cache, dach, frame, ebenen=ebenen)
             k4.animieren(img, objs, cache, frame or 0)
             k6.animieren_k6(img, objs, cache, frame or 0)
     a = np.array(img.convert('RGB'))

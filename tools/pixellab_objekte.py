@@ -2085,6 +2085,10 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'coiled black electric cable lying flat on the floor, seen from above, ' + FR14,
         'small square grey metal roof access hatch with a handle, flat on the floor, seen from above, ' + FR14,
     ]},
+    'k37_rohr': {'size': 128, 'freie_farben': True, 'items': [
+        'one long straight horizontal light steel-blue metal pipe lying on a rooftop, very long and thin, spanning the whole '
+        'image width, about twelve times as long as thick, light top highlight and dark bottom edge, no fittings, ' + FR14,
+    ]},
     # ---- A03 Karte 35 Shinjuku Digital Fog
     'k35_wohnblock_a': {'size': 256, 'freie_farben': True, 'items': [
         'wide three-storey Japanese apartment building, about one and a half times as wide as tall: a light grey flat roof '

@@ -2,15 +2,54 @@
 {
 "datei": "varianten/gen-00.png",
 "basis": "gen/00",
-"x": 81,
+"x": 65,
 "y": 415,
 "fuss": 48,
 "kachel": [
-7,
+6,
 28
 ],
 "ebene": 1,
-"ohne_wall": true
+"ohne_wall": true,
+"anim": "maschine",
+"leds": true,
+"led_box": [
+[
+34,
+18,
+48,
+30
+],
+[
+9,
+41,
+15,
+47
+]
+],
+"fluessig": [
+[
+27,
+2,
+36,
+15,
+"gruen"
+],
+[
+0,
+20,
+9,
+42,
+"cyan"
+],
+[
+53,
+14,
+62,
+40,
+"cyan"
+]
+]
 },
 {
 "datei": "varianten/gen-00.png",
@@ -23,7 +62,46 @@
 28
 ],
 "ebene": 1,
-"ohne_wall": true
+"ohne_wall": true,
+"anim": "maschine",
+"leds": true,
+"led_box": [
+[
+34,
+18,
+48,
+30
+],
+[
+9,
+41,
+15,
+47
+]
+],
+"fluessig": [
+[
+27,
+2,
+36,
+15,
+"gruen"
+],
+[
+0,
+20,
+9,
+42,
+"cyan"
+],
+[
+53,
+14,
+62,
+40,
+"cyan"
+]
+]
 },
 {
 "datei": "varianten/terminal-00.png",
@@ -46,6 +124,34 @@
 13
 ]
 ]
+},
+{
+"datei": "varianten/rohr-lang.png",
+"basis": "rohr/lang",
+"x": 68,
+"y": 256,
+"fuss": 17,
+"kachel": [
+7,
+17
+],
+"ebene": 1,
+"ohne_wall": true,
+"liegend": true
+},
+{
+"datei": "varianten/rohr-kurz.png",
+"basis": "rohr/kurz",
+"x": 624,
+"y": 272,
+"fuss": 17,
+"kachel": [
+41,
+18
+],
+"ebene": 1,
+"ohne_wall": true,
+"liegend": true
 },
 {
 "datei": "varianten/fass-blau_m.png",
@@ -405,11 +511,11 @@
 "datei": "varianten/dach-00.png",
 "basis": "dach/00",
 "x": 194,
-"y": 52,
+"y": 68,
 "fuss": 27,
 "kachel": [
 13,
-4
+5
 ],
 "ebene": 1,
 "ohne_wall": true,
@@ -420,11 +526,11 @@
 "datei": "varianten/dach-00.png",
 "basis": "dach/00",
 "x": 226,
-"y": 52,
+"y": 68,
 "fuss": 27,
 "kachel": [
 15,
-4
+5
 ],
 "ebene": 1,
 "ohne_wall": true,
@@ -435,11 +541,11 @@
 "datei": "varianten/dach-00.png",
 "basis": "dach/00",
 "x": 258,
-"y": 52,
+"y": 68,
 "fuss": 27,
 "kachel": [
 17,
-4
+5
 ],
 "ebene": 1,
 "ohne_wall": true,
@@ -450,11 +556,11 @@
 "datei": "varianten/dach-00.png",
 "basis": "dach/00",
 "x": 290,
-"y": 52,
+"y": 68,
 "fuss": 27,
 "kachel": [
 19,
-4
+5
 ],
 "ebene": 1,
 "ohne_wall": true,
@@ -465,11 +571,11 @@
 "datei": "varianten/dach-00.png",
 "basis": "dach/00",
 "x": 322,
-"y": 52,
+"y": 68,
 "fuss": 27,
 "kachel": [
 21,
-4
+5
 ],
 "ebene": 1,
 "ohne_wall": true,
@@ -480,11 +586,11 @@
 "datei": "varianten/dach-00.png",
 "basis": "dach/00",
 "x": 354,
-"y": 52,
+"y": 68,
 "fuss": 27,
 "kachel": [
 23,
-4
+5
 ],
 "ebene": 1,
 "ohne_wall": true,
@@ -495,11 +601,11 @@
 "datei": "varianten/dach-00.png",
 "basis": "dach/00",
 "x": 386,
-"y": 52,
+"y": 68,
 "fuss": 27,
 "kachel": [
 25,
-4
+5
 ],
 "ebene": 1,
 "ohne_wall": true,
@@ -510,11 +616,11 @@
 "datei": "varianten/dach-00.png",
 "basis": "dach/00",
 "x": 418,
-"y": 52,
+"y": 68,
 "fuss": 27,
 "kachel": [
 27,
-4
+5
 ],
 "ebene": 1,
 "ohne_wall": true,
@@ -525,11 +631,11 @@
 "datei": "varianten/dach-00.png",
 "basis": "dach/00",
 "x": 450,
-"y": 52,
+"y": 68,
 "fuss": 27,
 "kachel": [
 29,
-4
+5
 ],
 "ebene": 1,
 "ohne_wall": true,
@@ -540,11 +646,11 @@
 "datei": "varianten/dach-00.png",
 "basis": "dach/00",
 "x": 482,
-"y": 52,
+"y": 68,
 "fuss": 27,
 "kachel": [
 31,
-4
+5
 ],
 "ebene": 1,
 "ohne_wall": true,
@@ -555,11 +661,11 @@
 "datei": "varianten/dach-00.png",
 "basis": "dach/00",
 "x": 514,
-"y": 52,
+"y": 68,
 "fuss": 27,
 "kachel": [
 33,
-4
+5
 ],
 "ebene": 1,
 "ohne_wall": true,
@@ -570,11 +676,11 @@
 "datei": "varianten/dach-00.png",
 "basis": "dach/00",
 "x": 546,
-"y": 52,
+"y": 68,
 "fuss": 27,
 "kachel": [
 35,
-4
+5
 ],
 "ebene": 1,
 "ohne_wall": true,
@@ -585,11 +691,11 @@
 "datei": "varianten/dach-00.png",
 "basis": "dach/00",
 "x": 578,
-"y": 52,
+"y": 68,
 "fuss": 27,
 "kachel": [
 37,
-4
+5
 ],
 "ebene": 1,
 "ohne_wall": true,
