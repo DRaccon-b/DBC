@@ -107,6 +107,22 @@ def bahnsteigkanten(a, lay, kl):
         for seite, ky in (('nord', y0 * T - 1), ('sued', (y1 + 1) * T)):
             xs = np.arange(cols * T)
             auf = (kl[ky // T, xs // T] != 'h') & (kl[ky // T, xs // T] != 'a')
+            gras = kl[ky // T, xs // T] == 'h'                     # Baumguertel: Grasboeschung auf Bahnsteighoehe
+            if seite == 'nord':
+                for d in range(6):
+                    c = np.array(H('#4e7a3a'), np.float32) * (1 - 0.07 * d)
+                    a[y0 * T + d, gras] = c.astype(np.uint8)
+                a[y0 * T + 6, gras] = (a[y0 * T + 6, gras] * 0.6).astype(np.uint8)
+                a[y0 * T - 1, gras] = H('#3c6a2c')
+            else:
+                a[(y1 + 1) * T - 3:(y1 + 1) * T, gras] = (a[(y1 + 1) * T - 3:(y1 + 1) * T, gras] * 0.7).astype(np.uint8)
+                a[(y1 + 1) * T, gras] = H('#3c6a2c')
+            for xe in np.nonzero(np.diff(auf.astype(int)) != 0)[0]:  # Bahnsteigende: senkrechte Abschlusskontur
+                xk = xe + 1 if auf[xe + 1] else xe
+                if seite == 'nord':
+                    a[ky - 9:y0 * T + 6, xk] = H('#5a606a')
+                else:
+                    a[(y1 + 1) * T - 3:ky + 10, xk] = H('#5a606a')
             if seite == 'nord':                                    # Bahnsteig oberhalb: Front faellt nach Sueden ab
                 for d in range(6):
                     f = auf & ~ueb
@@ -190,13 +206,14 @@ def gleis_spuren(a, lay, cols):
             sub[f] = (sub[f] * 0.72).astype(np.uint8)
 
 
-def boden_leben(a, kl, frame):
+def boden_leben(a, kl, frame, leit=()):
     """Abnutzung (Nutzer: Karte lebendiger, dezent): einzelne gesprungene Bahnsteigplatten, Flecken auf Ziegeln und
     Platten, wenige Pfuetzen mit Himmelsspiegelung und wanderndem Glanz. Alles flach und begehbar."""
     rs = np.random.RandomState(38)
     rows, cols = kl.shape
     frei = lambda x, y: kl[y, x] in 'kp' and all(kl[y + dy, x + dx] in 'kp' for dy in (-1, 0, 1) for dx in (-1, 0, 1))
-    kand = [(x, y) for y in range(2, rows - 2) for x in range(2, cols - 2) if frei(x, y)]
+    gesperrt = {(x, y + d) for (x0, x1, y) in leit for x in range(x0 - 1, x1 + 2) for d in (-1, 0, 1)}
+    kand = [(x, y) for y in range(2, rows - 2) for x in range(2, cols - 2) if frei(x, y) and (x, y) not in gesperrt]
     rs.shuffle(kand)
     for (x, y) in kand[:40]:                                       # Risse in Platten (nur 'p')
         if kl[y, x] != 'p':
@@ -266,7 +283,7 @@ def bauen(frame=None, speichern=True):
     uebergaenge(a, lay)
     bahnsteigkanten(a, lay, kl)
     leitstreifen(a, lay)
-    boden_leben(a, kl, frame)
+    boden_leben(a, kl, frame, lay['leitstreifen'])
     land = np.zeros((Hp, Wp), bool)
     land[T:-T, T:-T] = True
     lvl = np.ones((Hp, Wp), np.uint8)

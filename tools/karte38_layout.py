@@ -101,6 +101,8 @@ def main():
                     k[y, x] = k[y + 1, x]
                 if k[y, x] != 'd' and k[y, x - 1] == 'd' and k[y, x + 1] == 'd':
                     k[y, x] = 'd'
+    sp17 = k[34:37, 17]                                            # Automat der Vorlage als dunkler Zipfel (Pruefung)
+    sp17[sp17 == 'd'] = 'k'
     sub = k[71:73, 81:91]                                          # Eingangsstufen des beigen Bahnhofs -> Pflaster
     sub[sub == 'k'] = 'd'
     x0, y0, x1, y1 = STADT

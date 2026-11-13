@@ -257,6 +257,10 @@ Vor jeder Abgabe Punkt für Punkt prüfen (vergrößert, Standbild und mehrere A
   Treppenabgänge müssen zum Weg hin offen sein (kein geschlossener Steinrahmen), mit einer freien Reihe zu anderen Flächen.
   Große Sprites (Wartehäuschen) mit Kachelbreite am Raster ausrichten; Schilder genau auf die Achse ihres Poller-Paars.
   Generierte Gebäude zeigen die Dachfläche von leicht oben (sonst neu erzeugen); grelle Glasfarben auf die Palette dämpfen.
+  Karte lebendiger ohne Kollisionsballast (Nutzer): Bahntechnik (Masten, Andreaskreuze, Signale, Zug) ins ohnehin gesperrte
+  Gleisbett, Bodenleben flach und begehbar (`ebene` 0), offene Unterstände ohne `gebaeude` (nur Sockel sperrt), keine
+  Poller-Reihen. Masten im festen Rhythmus (Abstand/Versatz mit den wenigsten Konflikten wählen), Kreuze je Übergang als
+  Paar, Fahrdraht auf Höhe des Stromabnehmers; Boden am Gürtelrand mit Böschung zur tieferen Gleisebene.
 - **Begleiter am Stumpf (5d):** keine 1-Kachel-Blumen auf dem Stumpf, kein Blumenklumpen; Begleiter überlappen sich nicht.
 - **Paare/Achsen:** Paare vor Toren/Bauwerken exakt gespiegelt (Mitte und Fuß), gleiche Objekte auf gleicher Höhe;
   Druckplatten, Obelisken usw. symmetrisch zur berechneten Achse.
