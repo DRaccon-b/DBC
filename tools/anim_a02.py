@@ -87,6 +87,13 @@ ANIM = {
         'k18s/01': {'anim': 'leuchten', 'licht': [10, 11], 'licht_box': [2, 5, 18, 17], 'licht_r': 7},
         'k18s/42': {'anim': 'leuchten', 'licht': [10, 9], 'licht_box': [2, 1, 19, 18], 'licht_r': 7},
     },
+    'karte38': {   # Deva Transit: Schein nur am Lampenkopf bzw. am Warenfenster der Automaten
+        'k18s/18': {'anim': 'leuchten', 'licht': [4, 7], 'licht_box': [2, 5, 6, 10], 'licht_r': 9},
+        'k18s/00': {'anim': 'leuchten', 'licht': [10, 10], 'licht_box': [2, 5, 18, 16], 'licht_r': 7},
+        'k18s/01': {'anim': 'leuchten', 'licht': [10, 11], 'licht_box': [2, 5, 18, 17], 'licht_r': 7},
+        'k18s/42': {'anim': 'leuchten', 'licht': [10, 9], 'licht_box': [2, 1, 19, 18], 'licht_r': 7},
+        'k18s/40': {'anim': 'maschine', 'schirm': [[3, 9, 9, 14]]},   # Fahrkartenautomat: nur der Bildschirm
+    },
     'karte36': {   # Shinjuku Backstreets: Schein nur am Lampenkopf bzw. am Warenfenster der Automaten
         'k31/laden_1': {'anim': 'lampions', 'lampions': [[0, 77, 10, 92]]},   # Papierlaterne am Ramen-Laden glimmt
         'k18s/18': {'anim': 'leuchten', 'licht': [4, 7], 'licht_box': [2, 5, 6, 10], 'licht_r': 9},

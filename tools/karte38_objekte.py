@@ -28,29 +28,31 @@ LAMPE = {'anim': 'leuchten', 'licht': [4, 7], 'licht_box': [2, 5, 6, 10], 'licht
 AUTOMAT = {'anim': 'leuchten', 'licht_box': [3, 3, 17, 18], 'licht_r': 7}
 
 # Gebaeude (sprite, Mitte x in Vorlagen-px, Fusszeile Vorlage)
-GEBAEUDE = [('bahnhof_glas/00', 152, 14), ('bahnhof_glas_b/01', 160, 43), ('bahnhof_beige/00', 1376, 70)]
+GEBAEUDE = [('bahnhof_glas/00', 152, 14), ('bahnhof_glas_b/01', 160, 42), ('bahnhof_beige/00', 1376, 70)]
 # Wartehaeuschen (Mitte x Vorlagen-px, Fusszeile) - Bahnsteige oben und Mitte wie in der Vorlage
 UNTERSTAENDE = [(560, 23), (1055, 23), (575, 47), (1100, 47)]
-TREPPEN = [(76, 13), (87, 21), (12, 61)]                           # Treppenabgaenge (Mitte Kachel x, Fusszeile)
+TREPPEN = [('treppe/00', 76 * 16 + 8, 13), ('treppe_breit/00', 87 * 16 + 8, 21), ('treppe/00', 12 * 16 + 8, 61),
+           ('treppe_schmal/01', 17 * 16 + 16, 13)]   # breite offene Treppe oben rechts (vor dem mittleren Bahnhof: Eingang frei)   # (sprite, Mitte x px, Fusszeile)
+# Poller-Paare mit Verbotsschild genau auf ihrer Achse (Vorlage): (Kachel links, Kachel rechts, Fusszeile)
+POLLER = [(43, 47, 13), (54, 58, 73), (33, 37, 73)]
 # (sprite, Kachel x, Fusszeile, Optionen) - Vorlagenkacheln
 KLEIN = [
-    ('k18s/00', 28, 6, AUTOMAT), ('k18s/42', 69, 6, AUTOMAT), ('k18s/01', 69, 16, AUTOMAT), ('k18s/00', 20, 19, AUTOMAT),
-    ('k18s/42', 12, 20, AUTOMAT), ('klein/09', 19, 9, {}), ('klein/09', 28, 9, {}), ('k18s/12', 30, 9, {}),
+    ('k18s/00', 28, 6, {}), ('k18s/42', 69, 6, {}), ('k18s/01', 69, 16, {}), ('k18s/00', 20, 19, {}),
+    ('k18s/42', 12, 20, {}), ('klein/09', 19, 9, {}), ('klein/09', 28, 9, {}), ('k18s/12', 30, 9, {}),
     ('klein/09', 58, 21, {}), ('klein/09', 80, 18, {}), ('k18s/12', 82, 18, {}),
-    ('klein/02', 47, 17, {}), ('klein/02', 74, 17, {}), ('klein/01', 45, 12, {}), ('klein/01', 79, 21, {}),
+    ('klein/02', 47, 17, {}), ('klein/02', 74, 17, {}), ('klein/01', 79, 21, {}),
     ('k18s/18', 41, 21, LAMPE), ('k18s/18', 72, 21, LAMPE), ('klein/03', 17, 6, {'liegend': True, 'schattenlos': True}),
-    ('klein/03', 78, 6, {'liegend': True, 'schattenlos': True}), ('klein/00', 43, 13, {}), ('klein/00', 47, 13, {}),
-    ('k18s/00', 28, 35, AUTOMAT), ('k18s/01', 17, 36, AUTOMAT), ('k18s/42', 82, 45, AUTOMAT),
+    ('klein/03', 78, 6, {'liegend': True, 'schattenlos': True}), 
+    ('k18s/00', 28, 35, {}), ('k18s/01', 17, 36, {}), ('k18s/42', 82, 45, {}),
     ('klein/09', 19, 38, {}), ('klein/09', 77, 36, {}), ('k18s/12', 22, 38, {}), ('k18s/12', 80, 36, {}),
     ('klein/02', 24, 42, {}), ('klein/02', 47, 42, {}), ('klein/02', 75, 42, {}),
     ('k18s/18', 26, 45, LAMPE), ('k18s/18', 57, 45, LAMPE), ('klein/01', 16, 33, {}),
     ('klein/03', 17, 41, {'liegend': True, 'schattenlos': True}), ('klein/03', 78, 34, {'liegend': True, 'schattenlos': True}),
-    ('k18s/42', 51, 62, AUTOMAT), ('k18s/00', 79, 58, AUTOMAT), ('k18s/01', 77, 68, AUTOMAT), ('k18s/40', 74, 71, {}),
+    ('k18s/42', 51, 62, {}), ('k18s/00', 79, 58, {}), ('k18s/01', 77, 68, {}), ('k18s/40', 74, 71, {}),
     ('klein/09', 21, 62, {}), ('klein/09', 45, 70, {}), ('klein/09', 65, 64, {}), ('klein/09', 26, 72, {}),
     ('k18s/12', 24, 62, {}), ('k18s/12', 73, 64, {}), ('klein/01', 19, 59, {}), ('klein/01', 65, 59, {}),
-    ('klein/01', 88, 57, {}), ('klein/01', 56, 72, {}), ('klein/02', 27, 65, {}), ('klein/02', 69, 65, {}),
+    ('klein/01', 88, 57, {}), ('klein/02', 27, 65, {}), ('klein/02', 69, 65, {}),
     ('k18s/18', 30, 69, LAMPE), ('k18s/18', 71, 70, LAMPE), ('klein/03', 17, 69, {'liegend': True, 'schattenlos': True}),
-    ('klein/00', 33, 73, {}), ('klein/00', 37, 73, {}), ('klein/00', 54, 73, {}), ('klein/00', 58, 73, {}),
 ]
 
 
@@ -72,6 +74,7 @@ def main():
     tps = [(t['x'] * T - 2 * T, t['y'] * T - 2 * T, (t['x'] + t['b'] + 2) * T, (t['y'] + t['h'] + 2) * T)
            for t in lay['teleporter']]
     tps_eng = [(t['x'] * T, t['y'] * T, (t['x'] + t['b']) * T - 1, (t['y'] + t['h']) * T - 1) for t in lay['teleporter']]
+    leit_r = [((x0 + 0) * T, y * T + 3, (x1 + 1) * T - 1, y * T + 12) for (x0, x1, y) in lay['leitstreifen']]
     kanten = set()                                               # Bahnsteigkanten-Zeilen (nichts darauf)
     for (y0, y1) in lay['gleisbaender']:
         kanten |= {y0 - 1, y1 + 1}
@@ -106,6 +109,10 @@ def main():
         elif pruefen:
             if any(schnitt(r, tuple(rr), 2) for (*rr, art2) in rects) or any(schnitt(r, t_, 0) for t_ in tps):
                 return None
+            if not (opt or {}).get('liegend') and any(schnitt(r, l_, 1) for l_ in leit_r):
+                return None                                       # nie auf/vor Leitstreifen
+            if any(r[1] <= kz * T + T - 1 and r[3] >= kz * T for kz in kanten):
+                return None                                       # nie auf/ueber der Bahnsteigkante
             for xx in range(r[0] // T, r[2] // T + 1):            # Fuss auf Bahnsteig, nie auf Gleis/Kante/Guertel
                 ty_ = r[3] // T
                 if k(xx, ty_) not in 'kpd' or ty_ in kanten:
@@ -149,10 +156,17 @@ def main():
         # Bank unter dem Dach vor der Glaswand (gewollt im Unterstand, nach ihm gezeichnet)
         setze('klein/09', cx + OFF + (-18 if i % 2 else 18), (fy + P) * T + T - 4, {'nur_kontakt': True}, pruefen=False,
               sortier=o['y'] + o['fuss'] + 1)
-    for (tx, fy) in TREPPEN:
-        if not setze('treppe/00', (tx + P) * T + T / 2.0, (fy + P) * T + T - 1, {'liegend': True, 'schattenlos': True},
-                     art='gebaeude'):
-            print('Treppe nicht gesetzt:', tx, fy)
+    for (name, cx, fy) in TREPPEN:
+        if not os.path.exists(os.path.join(OBJ, name + '.png')):
+            print('fehlt:', name); continue
+        if not any(setze(name, cx + OFF, (fy + P + d) * T + T - 1, {'liegend': True, 'schattenlos': True}, art='gebaeude')
+                   for d in (0, 1, 2, -1)):
+            print('Treppe nicht gesetzt:', name, cx, fy)
+    for (xa, xb, fy) in POLLER:                                    # Paar + Schild exakt auf der Achse
+        ca, cb = (xa + P) * T + T / 2.0, (xb + P) * T + T / 2.0
+        fyp = (fy + P) * T + T - 1
+        if setze('klein/00', ca, fyp, {}) and setze('klein/00', cb, fyp, {}):
+            setze('klein/01', (ca + cb) / 2.0, fyp, {})
     for i, (name, tx, fy, opt) in enumerate(KLEIN):
         kachel(name, tx + P, fy + P, dict(opt), spiegeln=(name == 'klein/09' and i % 3 == 0))
     # ---------------------------------------------------------------- Baumguertel am Kartenrand (Nutzer)

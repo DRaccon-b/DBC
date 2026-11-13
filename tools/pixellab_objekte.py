@@ -2117,6 +2117,16 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'rectangular subway stairway opening in the pavement seen straight from above, grey concrete steps going down '
         'into darkness, short white metal handrails along both sides, flat top-down view, ' + FR14,
     ]},
+    'k38_treppe_breit': {'size': 96, 'freie_farben': True, 'items': [
+        'wide open concrete stairway going down into the ground seen straight from above, much wider than deep, about '
+        'twice as wide as deep, grey steps as horizontal lines, short white metal handrails on the left and right ends, '
+        'no roof, flat top-down view, ' + FR14,
+    ]},
+    'k38_treppe_schmal': {'size': 64, 'freie_farben': True, 'items': [
+        'narrow solid stone stairway going down into the ground seen straight from above, taller than wide, solid grey '
+        'concrete steps fill the whole opening and get darker towards the bottom, stone border around it, one white '
+        'metal handrail on the left edge, no gaps, flat top-down view, ' + FR14,
+    ]},
     'k38_klein': {'size': 32, 'freie_farben': True, 'items': [
         'short grey metal platform bollard, ' + FR14,
         'round red no-entry traffic sign with a white bar on a thin grey pole, ' + FR14,

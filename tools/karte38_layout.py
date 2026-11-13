@@ -62,6 +62,10 @@ def main():
         for x in range(C):
             if k[y, x] in 'l?':
                 k[y, x] = k[y - 1, x] if k[y - 1, x] not in 'l?' else k[y + 1, x]
+    band_z = np.zeros(R, bool)
+    for (g0, g1) in GLEISBAENDER:
+        band_z[g0:g1 + 1] = True
+    k[(np.isin(k, ['a', 'x'])) & ~band_z[:, None]] = '?'           # dunkle Objektpixel ausserhalb der Gleise (Automaten)
     k[np.isin(k, ['y', 'l'])] = 'k'                                # Bahnsteigkanten: Ziegel (Kante in bauen)
     k[k == 'x'] = 'a'                                              # Uebergaenge liegen auf dem Gleisbett
     for (y0, y1) in GLEISBAENDER:
@@ -90,6 +94,15 @@ def main():
             maj = 'p' if (sp == 'p').sum() > (sp == 'k').sum() else 'k'
             sp[kp & (np.arange(len(sp)) > 0) & (np.arange(len(sp)) < len(sp) - 1)] = maj
     k = l34.kleine_weg(k, 'p', 3, 'k')
+    for _ in range(2):                                             # 1-Kachel-Zipfel/Kerben im dunklen Pflaster (Pruefliste)
+        for y in range(1, R - 1):
+            for x in range(1, C - 1):
+                if k[y, x] == 'd' and k[y - 1, x] == 'd' and k[y + 1, x] != 'd' and k[y, x - 1] != 'd' and k[y, x + 1] != 'd':
+                    k[y, x] = k[y + 1, x]
+                if k[y, x] != 'd' and k[y, x - 1] == 'd' and k[y, x + 1] == 'd':
+                    k[y, x] = 'd'
+    sub = k[71:73, 81:91]                                          # Eingangsstufen des beigen Bahnhofs -> Pflaster
+    sub[sub == 'k'] = 'd'
     x0, y0, x1, y1 = STADT
     innen = np.zeros((R, C), bool); innen[y0:y1 + 1, x0:x1 + 1] = True
     for (g0, g1) in GLEISBAENDER:
