@@ -42,17 +42,17 @@ GEBAEUDE = [                                   # (sprite, Mitte x in px, Fusszei
     ('gross/buero_mitte', 1272, 13, False),    # Glasbuero oben rechts (Karte 35, Kanten repariert)
     ('gross/wohn_links', 240, 39, False),      # beiger Block links Mitte
     ('k30/buero_glas', 1216, 54, False),       # Glasbuero rechts Mitte (Karte 30)
-    ('gross/flach', 256, 58, False),           # flacher Ladenbau links unten
+    ('gross/flach', 256, 57, False),   # eine Gehwegreihe vor der Front           # flacher Ladenbau links unten
     ('gross/wohn_unten', 864, 77, False),      # langer beiger Block unten
 ]
 LAEDEN = ['k31/laden_2', 'k31/laden_0', 'k31/laden_7', 'k31/laden_1']   # Cafe, Mart, Drogerie, Ramen (Karte 31)
 LAEDEN_MITTE, LAEDEN_FUSS = 744, 43
-BAEUME = [(40, 16), (47, 16), (52, 16), (56, 16), (72, 16), (80, 16), (85, 16), (90, 17), (47, 33), (6, 41), (24, 41),
-          (76, 55), (5, 69), (22, 75), (36, 75), (79, 75), (81, 70)]
+BAEUME = [(40, 16), (47, 16), (52, 16), (56, 16), (72, 16), (84, 16), (90, 17), (47, 33), (6, 41), (24, 41),
+          (80, 55), (5, 69), (22, 75), (36, 75), (79, 75), (81, 70)]
 LATERNEN = [(25, 20), (57, 20), (68, 21), (25, 41), (36, 42), (68, 41), (25, 57), (84, 65)]
-BAENKE = [(19, 20), (72, 31), (15, 43), (79, 56), (36, 67), (73, 73)]
-MOEBEL = [('k18s/41', 47, 22), ('k18s/00', 76, 65), ('k18s/12', 9, 43), ('k18s/12', 38, 67),
-          ('k18s/04', 11, 43), ('k18s/04', 79, 31)]
+BAENKE = [(19, 20), (72, 31), (15, 44), (85, 57), (12, 73), (73, 73)]
+MOEBEL = [('k18s/41', 47, 22), ('k18s/00', 76, 65), ('k18s/12', 9, 44), ('k18s/12', 15, 73),
+          ('k18s/04', 23, 46), ('k18s/04', 79, 31)]
 # Fahrzeuge (Linksverkehr): waagerecht Nordspur nach Osten (Van gespiegelt), senkrecht Ostspur nach Sueden (k18a/06)
 AUTOS = [('k18a/06', 1024, 270, False), ('k18a/11', 792, 408, True), ('k18a/06', 512, 588, False),
          ('k18a/06', 1464, 600, False), ('k18a/11', 1144, 975, True), ('k18a/06', 1464, 1120, False)]
@@ -84,6 +84,10 @@ def halb_gespiegelt(quelle, ziel, breite_halb, eingang=True):
     h = Image.open(os.path.join(OBJ, quelle)).convert('RGBA')
     ar = np.array(h)
     ar[ar[..., 3] < 200] = 0                                     # halbtransparente Rauschpixel (Saum) weg
+    r_, g_, b_ = ar[..., 0].astype(int), ar[..., 1].astype(int), ar[..., 2].astype(int)
+    mg = (ar[..., 3] > 0) & (r_ - g_ > 60) & (b_ - g_ > 60)          # Magenta-Reste der Freistellung (Pruefung)
+    hell = mg & ((r_ + g_ + b_) > 420)
+    ar[hell, :3] = (176, 180, 186); ar[mg & ~hell, :3] = (58, 60, 70)
     import karte04_bauen as k4
     ar[~k4.splitter_weg(ar[..., 3] > 0, 40)] = 0                 # lose Splitter weg
     hh_, ww_ = ar.shape[:2]                                       # Schnittkanten am Bildrand reparieren (Pruefliste)
@@ -243,7 +247,12 @@ def main():
             mitte = b['x'] + (bb_[0] + bb_[2]) / 2.0
             bx = int(mitte + seite * 17)                          # Busch an der Stammecke (gewollte Ueberdeckung)
             fy_b = b['y'] + bb_[3] - 1
-            if all(k(xx // T, fy_b // T) == 'n' for xx in (bx - 12, bx + 12)):
+            for bx in (bx, int(mitte - seite * 17), int(mitte + seite * 13), int(mitte - seite * 13)):  # andere Ecke / naeher
+                if all(k(xx // T, fy_b // T) == 'n' for xx in (bx - 9, bx + 9)):
+                    break
+            else:
+                bx = None
+            if bx is not None:
                 setze('k01/deko%02d' % (25, 26)[i % 2], bx, fy_b - 1, {'anim': 'wehen', 'nur_kontakt': True, 'ohne_wall': True}, i % 3 == 0,
                       'klein', pruefen=False)
     # ---------------------------------------------------------------- Strassenmoebel (sparsam, Vorlage)
@@ -268,6 +277,9 @@ def main():
             continue
         if not all(k(tx + d, ty) == 'n' for d in (-1, 0, 1)):
             continue
+        if any(o_['basis'].startswith('k01/baum') and abs(o_['kachel'][0] - tx) <= 2 and abs(o_['kachel'][1] - ty) <= 1
+               for o_ in objekte):
+            continue                                              # Regel 5d: nichts auf Stammhoehe neben dem Baum
         motiv = (0, 1, 2, 27, 30)[len(gesetzt) % 5]
         if any(abs(tx - x) < 12 and abs(ty - y) < 4 and m == motiv for (x, y, m) in gesetzt_m):
             continue                                              # gleiches Motiv nicht auf demselben Streifen
