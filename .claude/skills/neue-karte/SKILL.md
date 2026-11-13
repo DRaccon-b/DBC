@@ -25,8 +25,13 @@ Nutzer-Korrekturen und wird bei jedem Schritt mitgedacht, nicht erst am Ende.
 `python3 tools/karteNN_layout.py` -> `karteNN_bauen.py` -> `karteNN_objekte.py` -> `karteNN_bauen.py`
 - Gelaende: `k4.RASTER45 = True`, Wege mit `regeln_a02.wege_schwingen`, Meer mit `wasser_details.RASTER45 = True`,
   `raster45`/`abstand45`; Kollisionsdaten speichern (`pixelhoehe.npy`, `wasser.npy`, bei Leere `leere.npy`).
+- Kartenrand: ringsum um einige Kacheln erweitern und mit Baumguertel umschliessen (Ausgaenge in voller Breite
+  hindurch, Teleporter am neuen Rand); Effekte wie Nebel nur ganz aussen (Pruefliste "Kartenrand mit Baumguertel").
 - Objekte: grosse zuerst, **erst wiederverwenden** (`assets/objekte/karteXX/`), fehlende mit PixelLab Objekt-Creator
-  (`tools/pixellab_objekte.py`, Frontal-Zusatz), umfaerben auf die Kartenpalette. `regeln_a02.objekte_pruefen` laeuft
+  (`tools/pixellab_objekte.py`, Frontal-Zusatz), umfaerben auf die Kartenpalette. Nie selbst zeichnen. Jedes generierte
+  Gebaeude an den aeussersten Pixelspalten/-zeilen auf Schnittkanten pruefen (helles Material ohne Kontur = angeschnitten
+  -> reparieren). Ansicht wie die Vorlage (Bruecken in Draufsicht, Pfeiler am Fahrbahnrand); Gebaeude hoeher als in der
+  Vorlage -> Karte anpassen. `regeln_a02.objekte_pruefen` laeuft
   automatisch (nichts auf Wegen, Teleporter frei) und wendet `anim_a02` und `korrektur_a02` an.
 - Animation: `anim_a02.ANIM['karteNN']` fuer Fahnen (`standarte`/`wimpel`), Bildschirme, LEDs, Maschinen, Feuer
   (`flammen_box`), Portale, Lampen (`lampe_box`) - immer mit Box auf das bewegliche Teil.
@@ -43,6 +48,7 @@ Nutzer-Korrekturen und wird bei jedem Schritt mitgedacht, nicht erst am Ende.
 5. Neue Fehlerarten, die die Pruefung findet, als Zeile in `CLAUDE.md` -> "Pruefliste: haeufige Fehler" ergaenzen.
 
 ## 4. Abgabe
+- Wichtige Einzelobjekte (Bruecke, Wahrzeichen): mehrere PixelLab-Kandidaten als Vorschau neben der Vorlage zeigen.
 - `python3 tools/paket_a02.py karteNN` (Kollision mit Overlay ansehen!, Tileset, README, ZIP mit GIF 4+16).
 - `maps/GEBIETE.md` Stand aktualisieren; committen und pushen.
 - An den Nutzer (SendUserFile): Standbild, `..._discord_16.gif`, ZIP; auf Deutsch kurz: was die Karte enthaelt, welche

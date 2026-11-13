@@ -223,6 +223,19 @@ Vor jeder Abgabe Punkt für Punkt prüfen (vergrößert, Standbild und mehrere A
   und -zeilen ansehen – helles Wand-/Pfeilermaterial ohne dunkle Kontur am Bildrand heißt: abgeschnitten. Der Pro-Generator
   füllt die Leinwand oft ganz aus (Rand im Prompt wird ignoriert); dann das Sprite reparieren (Kante/Pfeiler ergänzen,
   Kontur setzen) statt es angeschnitten einzusetzen.
+- **Kartenrand mit Baumgürtel (Nutzer, Karte 35):** Eine Karte endet nie direkt im Nichts/Nebel/Kartenrand. Ringsum
+  wird sie um einige Kacheln erweitert und mit einem dichten Baumgürtel (nicht begehbar, Lücken mit Büschen gefüllt)
+  umschlossen; Nebel/Effekte liegen nur ganz außen darüber. Ausgänge laufen in voller Weg-/Fahrbahnbreite durch den
+  Gürtel bis zum Teleporter am neuen Rand (Teleporter mittig im Weg); Straßen ohne Ausgang enden mit Bordstein.
+- **Brücken und Bauwerke wie in der Vorlage (Nutzer, Karte 35):** Ansicht und Aufbau aus der Vorlage übernehmen (z. B.
+  Fußgängerbrücke in Draufsicht: gerade Treppen auf den Gehwegen, Pfeiler am Fahrbahnrand – nie Stelzen auf der
+  Fahrbahnmitte); zwischen Zebrastreifen, nie darauf. Breite Bauwerke über Straßen ohne automatischen Schattenbalken
+  (`schattenlos`, wenn Kontakt-/Schlagschatten als Balken quer über die Fahrbahn fällt).
+- **Neue Objekte nie selbst zeichnen (Nutzer, Karte 35):** Fehlt ein Objekt, wird es mit PixelLab erzeugt – nicht
+  per Code gemalt. Bei wichtigen Einzelobjekten (Brücke, Wahrzeichen) mehrere Kandidaten erzeugen und dem Nutzer als
+  Vorschau neben der Vorlage zur Auswahl zeigen. Reparaturen an generierten Sprites (Kanten, Fremdpixel) sind erlaubt.
+- **Eingänge frei (Karte 35):** Vor jeder Tür liegt Gehweg/Weg auf der Türachse (Beetlücke genau vor dem Eingang);
+  aus Hälften gespiegelte Gebäude bekommen einen Eingang auf der Achse, Saum- und Rauschpixel werden entfernt.
 - **Begleiter am Stumpf (5d):** keine 1-Kachel-Blumen auf dem Stumpf, kein Blumenklumpen; Begleiter überlappen sich nicht.
 - **Paare/Achsen:** Paare vor Toren/Bauwerken exakt gespiegelt (Mitte und Fuß), gleiche Objekte auf gleicher Höhe;
   Druckplatten, Obelisken usw. symmetrisch zur berechneten Achse.
