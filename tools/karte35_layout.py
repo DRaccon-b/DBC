@@ -7,7 +7,7 @@ Strassenraster (dunkler Asphalt, gelbe Mittelstriche, Zebrastreifen), erhoehte G
 Gruenstreifen mit Baeumen, Fussgaengerbruecke ueber der mittleren Nord-Sued-Strasse, neun Gebaeude. Ausserhalb des
 Stadtrands (aeusserer Ring) liegt der digitale Nebel - nicht begehbar; vier Ausgaenge mit Teleportern fuehren hinein.
 
-Klassen:  a Fahrbahn  g Gehweg  n Rasen  x Nebel (Rand, gesperrt)  e Ausgang (Teleporter)
+Klassen:  a Fahrbahn  g Gehweg  n Rasen  h Baumguertel (Rand, gesperrt)  e Ausgang (Teleporter)\nDie Karte ist ringsum um RAND Kacheln erweitert (Nutzer); alle Koordinaten der Vorlage + RAND.
 """
 import json, os, sys
 import numpy as np
@@ -28,7 +28,8 @@ GEBAEUDE = {
     'wohn_links': (4, 26, 17, 34), 'buero_mitte': (46, 27, 67, 33), 'schmal_rechts_oben': (84, 21, 93, 31),
     'wohn_mitte': (21, 45, 34, 53), 'schmal_rechts_unten': (84, 44, 93, 54), 'buero_unten': (43, 68, 72, 76),
 }
-BRUECKE = (34, 27, 44, 31)                                        # Fussgaengerbruecke ueber der Strasse (Spalten 36-42)
+BRUECKE = (34, 27, 44, 31)
+RAND = 4                                                          # Baumguertel ringsum (Kacheln, Nutzer)                                        # Fussgaengerbruecke ueber der Strasse (Spalten 36-42)
 
 
 def vorlage_klassen():
@@ -74,25 +75,63 @@ def main():
     k = l34.kleine_weg(k, 'n', 6, 'g')
     x0, y0, x1, y1 = STADT
     stadt = np.zeros((R, C), bool); stadt[y0:y1 + 1, x0:x1 + 1] = True
-    k[~stadt] = 'x'
-    for (x, y, b, h) in AUSGAENGE:                                    # Zugang zum Teleporter: Gehweg/Strasse fuehrt hinein
-        k[y:y + h, x:x + b] = 'e'
-    lay = {'groesse': [C, R], 'klassen': [''.join(z) for z in k], 'hoehe': ['1' * C for _ in range(R)],
-           'teleporter': [{'x': x, 'y': y, 'b': b, 'h': h} for (x, y, b, h) in AUSGAENGE],
-           'zebra': [[x0, x1, y0, y1, 'h'] for (x0, x1, y0, y1) in ZEBRA], 'gebaeude_flaechen': GEBAEUDE, 'fussgaengerbruecke': BRUECKE,
-           'stadt': STADT}
+    k[~stadt] = 'h'                                                    # Rand: Baumguertel statt Nebel (Nutzer)
+    # Karte nach aussen erweitert (Nutzer): RAND Kacheln Baumguertel ringsum, Nebel nur ganz aussen (bauen)
+    P = RAND
+    C2, R2 = C + 2 * P, R + 2 * P
+    k2 = np.full((R2, C2), 'h')
+    k2[P:P + R, P:P + C] = k
+    tps = []
+    for (x, y, b, h) in AUSGAENGE:                                    # Ausgaenge bis an den neuen Rand verlaengern
+        x, y = x + P, y + P
+        if y == P:                                                     # oben
+            innen = k2[y + h, x:x + b].copy()
+            for yy in range(0, y + h):
+                k2[yy, x:x + b] = innen
+            tps.append((x, 0, b, 3))
+        elif y + h == P + R:                                           # unten
+            a0, a1 = x, x + b - 1
+            if k2[y - 1, x] == 'a':                                    # Strasse: volle Fahrbahnbreite, Teleporter mittig
+                while k2[y - 1, a0 - 1] == 'a':
+                    a0 -= 1
+                while k2[y - 1, a1 + 1] == 'a':
+                    a1 += 1
+            innen = k2[y - 1, a0:a1 + 1].copy()
+            for yy in range(y, R2):
+                k2[yy, a0:a1 + 1] = innen
+            tps.append(((a0 + a1 + 1 - b) // 2, R2 - 3, b, 3))
+        elif x + b == P + C:                                           # rechts
+            a0, a1 = y, y + h - 1
+            if k2[y, x - 1] == 'a':
+                while k2[a0 - 1, x - 1] == 'a':
+                    a0 -= 1
+                while k2[a1 + 1, x - 1] == 'a':
+                    a1 += 1
+            innen = k2[a0:a1 + 1, x - 1].copy()
+            for xx in range(x, C2):
+                k2[a0:a1 + 1, xx] = innen
+            tps.append((C2 - 3, (a0 + a1 + 1 - h) // 2, 3, h))
+    for (x, y, b, h) in tps:
+        k2[y:y + h, x:x + b] = 'e'
+    k = k2
+    lay = {'groesse': [C2, R2], 'klassen': [''.join(z) for z in k], 'hoehe': ['1' * C2 for _ in range(R2)],
+           'versatz': P, 'teleporter': [{'x': x, 'y': y, 'b': b, 'h': h} for (x, y, b, h) in tps],
+           'zebra': [[x0 + P, x1 + P, y0 + P, y1 + P, 'h'] for (x0, x1, y0, y1) in ZEBRA],
+           'gebaeude_flaechen': {n: [v[0] + P, v[1] + P, v[2] + P, v[3] + P] for n, v in GEBAEUDE.items()},
+           'fussgaengerbruecke': [BRUECKE[0] + P, BRUECKE[1] + P, BRUECKE[2] + P, BRUECKE[3] + P],
+           'stadt': [STADT[0] + P, STADT[1] + P, STADT[2] + P, STADT[3] + P]}
     os.makedirs(KARTE, exist_ok=True)
     json.dump(lay, open(os.path.join(KARTE, 'layout.json'), 'w'), indent=0)
-    F = {'a': (50, 56, 70), 'g': (170, 170, 170), 'n': (80, 140, 60), 'x': (150, 120, 200), 'e': (120, 220, 255)}
-    out = np.zeros((R, C, 3), np.uint8)
+    F = {'a': (50, 56, 70), 'g': (170, 170, 170), 'n': (80, 140, 60), 'h': (30, 80, 30), 'e': (120, 220, 255)}
+    out = np.zeros((R2, C2, 3), np.uint8)
     for kk, c in F.items():
         out[k == kk] = c
     vor = Image.open(VORLAGE).convert('RGB').resize((C * 8, R * 8))
-    bild = Image.new('RGB', (C * 16 + 8, R * 8))
-    bild.paste(vor, (0, 0))
-    bild.paste(Image.fromarray(out).resize((C * 8, R * 8), 0), (C * 8 + 8, 0))
+    bild = Image.new('RGB', (C2 * 16 + 8, R2 * 8))
+    bild.paste(vor, (P * 8, P * 8))
+    bild.paste(Image.fromarray(out).resize((C2 * 8, R2 * 8), 0), (C2 * 8 + 8, 0))
     bild.save(os.path.join(KARTE, 'layout_vergleich.png'))
-    print('Karte 35 Layout %dx%d' % (C, R))
+    print('Karte 35 Layout %dx%d' % (C2, R2))
 
 
 if __name__ == '__main__':

@@ -27,8 +27,10 @@ for i in (0, 1, 5, 6, 7, 11):
 FREMD['k18a/bus'] = 'karte18/gebaeude/bus.png'
 for i in (0, 1, 2, 25, 26, 27, 30):
     FREMD['k01/deko%02d' % i] = 'karte01/deko/%02d.png' % i
-for i in (0, 1, 2):
+for i in (0, 1, 2, 4, 9, 12, 13, 14, 15):
     FREMD['k01/baum%02d' % i] = 'karte01/baeume/%02d.png' % i
+WALD = ['k01/baum%02d' % i for i in (0, 1, 2, 4, 9, 15)]                      # Baumguertel am Kartenrand (Nutzer)
+BUSCH = ['k01/baum%02d' % i for i in (12, 13, 14)]                             # Luecken im Guertel schliessen
 
 # Gebaeude: (sprite, Mitte x in px, Fusszeile, spiegeln) - Flaechen der Vorlage, an die Sprite-Hoehen angepasst
 GEBAEUDE = [
@@ -53,6 +55,50 @@ MOEBEL = [('k18s/41', 23, 34), ('k18s/12', 26, 34), ('k18s/41', 69, 54), ('k18s/
 AUTOS = [('k18a/05', 312, 622, True), ('k18a/bus', 1096, 620, False), ('k18a/00', 824, 942, True),
          ('k18a/11', 380, 990, False), ('k18a/06', 1298, 494, False), ('k18a/07', 612, 812, False),
          ('k18a/06', 1298, 846, False), ('k18a/01', 560, 334, False)]
+
+
+def bruecke_zeichnen(ziel):
+    """Fussgaengerbruecke wie die Vorlage, von oben gesehen (Nutzer): Betondeck mit gelbem Gehbelag und blauem
+    Gelaender ueber der Fahrbahn, an beiden Enden gerade Treppen, die auf dem Gehweg nach Sueden hinabfuehren, zwei
+    Betonpfeiler am Fahrbahnrand (nicht auf der Fahrbahnmitte). Schlagschatten des Decks diagonal nach rechts unten.
+    Lokale Koordinaten: Fahrbahn x 48-159 (7 Kacheln), Gehwege links/rechts, Treppenfuss unten (y 81)."""
+    W, Hh = 208, 82
+    a = np.zeros((Hh, W, 4), np.uint8)
+    def f(x0, y0, x1, y1, c, al=255):
+        a[y0:y1, x0:x1, :3] = c; a[y0:y1, x0:x1, 3] = al
+    B, BH, BD = (42, 106, 184), (110, 170, 236), (20, 52, 104)          # Gelaender blau / Licht / Kontur
+    BET, BETH, BETD = (192, 188, 180), (220, 216, 208), (112, 108, 100)  # Beton
+    GELB, GELBD = (214, 176, 72), (170, 134, 46)
+    # Schlagschatten (Deck + Pfeiler) auf Fahrbahn und Gehweg: diagonal nach rechts unten, halb transparent
+    for (x0, y0, x1, y1) in ((40, 40, 184, 52), (58, 58, 70, 64), (156, 58, 168, 64)):
+        f(x0, y0, x1, y1, (20, 22, 30), 70)
+    # Pfeiler am Fahrbahnrand
+    for px in (50, 148):
+        f(px, 28, px + 10, 58, BET); f(px, 28, px + 2, 58, BETH); f(px + 8, 28, px + 10, 58, BETD)
+        f(px - 1, 54, px + 11, 58, BETD); f(px - 1, 28, px + 11, 30, BETD)
+    # Treppen (gerade nach Sueden): Stufen alle 4 px, gelbe Kante, Setzstufe dunkel; Gelaender beidseitig
+    for sx in (8, 168):
+        for y in range(10, 80):
+            d = (y - 10) % 4
+            f(sx + 2, y, sx + 30, y + 1, GELB if d == 0 else (BET if d < 3 else (128, 124, 116)))
+        f(sx + 2, 79, sx + 30, 81, BETD)                                # Antrittsstufe
+        for gx in (sx, sx + 30):
+            f(gx, 8, gx + 2, 81, B); f(gx, 8, gx + 1, 81, BH)
+            for y in range(10, 81, 8):
+                f(gx - 1, y, gx + 3, y + 2, BD)
+    # Deck: hinteres Gelaender, gelber Gehbelag, vorderes Gelaender, Betonstirn
+    f(32, 0, 176, 2, BH); f(32, 2, 176, 3, BD)
+    for x in range(32, 176, 8):
+        f(x, 2, x + 2, 8, B)
+    f(32, 8, 176, 20, GELB)
+    for x in range(36, 176, 16):
+        f(x, 8, x + 1, 20, GELBD)                                       # Fugen im Belag
+    f(32, 16, 176, 17, BH); f(32, 17, 176, 18, B)                       # vorderer Handlauf
+    for x in range(34, 176, 6):
+        f(x, 18, x + 2, 24, B)
+    f(32, 24, 176, 30, BET); f(32, 24, 176, 25, BETH); f(32, 29, 176, 30, BETD)
+    f(31, 0, 32, 30, BD); f(176, 0, 177, 30, BD)                        # Kontur an den Deckenden
+    Image.fromarray(a).save(os.path.join(OBJ, ziel))
 
 
 def halb_gespiegelt(quelle, ziel, breite_halb, eingang=True):
@@ -102,6 +148,11 @@ def main():
         sp = Image.open(os.path.join(OBJ, q)).convert('RGBA')
         os.makedirs(os.path.join(OBJ, 'gross'), exist_ok=True)
         sp.crop(sp.getbbox()).save(os.path.join(OBJ, 'gross', 'turm_%s.png' % v))
+    os.makedirs(os.path.join(OBJ, 'gross'), exist_ok=True)
+    bruecke_zeichnen('gross/fussgaengerbruecke.png')
+    P = lay.get('versatz', 0)                                    # Karte ringsum erweitert: alle Vorlagenpositionen + P
+    OFF = P * T
+    tps = [(t['x'] * T, t['y'] * T, (t['x'] + t['b']) * T - 1, (t['y'] + t['h']) * T - 1) for t in lay['teleporter']]
     objekte, rects = [], []                                      # rects: (x0, y0, x1, y1, art, fuss_y)
 
     def schnitt(a, b, rand=0):
@@ -122,7 +173,12 @@ def main():
         x = int(round(cx - (bb[0] + bb[2]) / 2.0))
         y = int(fy - (bb[3] - 1))
         r = (x + bb[0], y + bb[1], x + bb[2] - 1, y + bb[3] - 1)
-        if pruefen:
+        if art == 'wald':                                        # Baumguertel: nie ueber Teleporter oder andere Objekte
+            if any(schnitt(r, t_, 3) for t_ in tps):
+                return None
+            if any(art2 != 'wald' and schnitt(r, (a0, a1, a2, a3), 2) for (a0, a1, a2, a3, art2, fy2) in rects):
+                return None
+        elif pruefen:
             for (a0, a1, a2, a3, art2, fy2) in rects:
                 if art == 'baum' and art2 == 'gebaeude' and fy > fy2 + 8:
                     continue                                     # Strassenbaum vor der Fassade (gewollt)
@@ -159,10 +215,11 @@ def main():
 
     # ---------------------------------------------------------------- Gebaeude und Bruecke
     for (name, cx, fy, sp) in GEBAEUDE:
-        if not setze(name, cx, fy * T + T - 1, {'gebaeude': True, 'ohne_wall': True}, sp, 'gebaeude'):
+        if not setze(name, cx + OFF, (fy + P) * T + T - 1, {'gebaeude': True, 'ohne_wall': True}, sp, 'gebaeude'):
             print('Gebaeude ueberlappt:', name)
-    n_, cx, fy = BRUECKE
-    if not setze(n_, cx, fy * T + T - 1, {'gebaeude': True}, False, 'gebaeude'):
+    n_, cx, fy = BRUECKE                                         # neu gezeichnet (Draufsicht wie die Vorlage)
+    if not setze('gross/fussgaengerbruecke', cx + OFF, (fy + P) * T + T + 1, {'schattenlos': True, 'fest_pos': True},
+                 False, 'gebaeude'):
         print('Bruecke nicht gesetzt')
     # ---------------------------------------------------------------- Strassenbaeume mit Bueschen an den Stammecken
     def baum_mittig(name, tx, ty, opt, spiegeln):
@@ -184,6 +241,7 @@ def main():
         return False
 
     for i, (tx, ty) in enumerate(BAEUME):
+        tx, ty = tx + P, ty + P
         if baum_mittig('k01/baum%02d' % (i % 3), tx, ty, {'anim': 'baum'}, i % 2 == 1):
             b = objekte[-1]
             seite = 1 if i % 2 else -1
@@ -196,14 +254,14 @@ def main():
                       'klein', pruefen=False)
     # ---------------------------------------------------------------- Strassenmoebel (sparsam, Vorlage)
     for (tx, ty) in LATERNEN:
-        kachel('k18s/18', tx, ty, {'anim': 'leuchten'}, klassen='g')
+        kachel('k18s/18', tx + P, ty + P, {'anim': 'leuchten'}, klassen='g')
     for (tx, ty) in BAENKE:
-        kachel('k18s/14', tx, ty, {}, klassen='g')
+        kachel('k18s/14', tx + P, ty + P, {}, klassen='g')
     for (n_, tx, ty) in MOEBEL:
-        kachel(n_, tx, ty, {'anim': 'leuchten'} if n_ in ('k18s/00', 'k18s/01', 'k18s/42') else {}, klassen='g')
+        kachel(n_, tx + P, ty + P, {'anim': 'leuchten'} if n_ in ('k18s/00', 'k18s/01', 'k18s/42') else {}, klassen='g')
     # ---------------------------------------------------------------- Fahrzeuge in ihrer Spur
     for (n_, cx, fy, sp) in AUTOS:
-        if not setze(n_, cx, fy, {'auto': True, 'fest_pos': True}, sp, 'auto'):
+        if not setze(n_, cx + OFF, fy + OFF, {'auto': True, 'fest_pos': True}, sp, 'auto'):
             print('Auto nicht gesetzt:', n_, cx, fy)
     # ---------------------------------------------------------------- Kleinkram: Blumen auf den Streifen, Muell am Rand
     gesetzt, gesetzt_m = [], []
@@ -237,6 +295,25 @@ def main():
         if setze('muell_klein/' + MUELL[len(gesetzt) % len(MUELL)], tx * T + rnd.randint(4, 12), ty * T + rnd.randint(8, 14),
                  {'liegend': True}, rnd.random() < 0.5, 'klein'):
             gesetzt.append((tx, ty))
+    # ---------------------------------------------------------------- Baumguertel am Kartenrand (Nutzer)
+    n_w = 0
+    for ty in range(rows):
+        for tx in range(cols):
+            if cls[ty][tx] == 'h' and (tx + ty) % 2 == 0:
+                if setze(rnd.choice(WALD), tx * T + T / 2.0, ty * T + T - 1, {'anim': 'baum'}, rnd.random() < 0.5, 'wald'):
+                    n_w += 1
+    deck = np.zeros((rows * T, cols * T), bool)                  # Luecken schliessen (kein leerer Rasen im Guertel)
+    for (a0, a1, a2, a3, art2, fy2) in rects:
+        deck[max(0, a1):a3 + 1, max(0, a0):a2 + 1] = True
+    luecken = 0
+    for ty in range(rows):
+        for tx in range(cols):
+            if cls[ty][tx] == 'h' and deck[ty * T:(ty + 1) * T, tx * T:(tx + 1) * T].mean() < 0.7:
+                if setze(rnd.choice(BUSCH), tx * T + T / 2.0, ty * T + T - 1, {'anim': 'wehen'}, rnd.random() < 0.5, 'wald'):
+                    a0, a1, a2, a3 = rects[-1][:4]
+                    deck[max(0, a1):a3 + 1, max(0, a0):a2 + 1] = True
+                    luecken += 1
+    print('Baumguertel:', n_w, 'Baeume,', luecken, 'Buesche')
     json.dump(objekte, open(os.path.join(OBJ, 'platzierung.json'), 'w'), indent=0)
     print(len(objekte), 'Objekte')
 

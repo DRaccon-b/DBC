@@ -1,6 +1,6 @@
 # Shinjuku Digital Fog (A03 Nr. 2) v1.0
 
-96 x 80 Kacheln zu 16 px (1536 x 1280 px).
+104 x 88 Kacheln zu 16 px (1664 x 1408 px).
 
 ## Inhalt
 Shinjuku bei Nacht im digitalen Nebel: Strassenraster mit Zebrastreifen und Fussgaengerbruecke, Buerotuerme, Glasbueros und Wohnbloecke, Gruenstreifen mit Baeumen, Autos und Bus, Bushaltestellen und Automaten.

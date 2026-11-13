@@ -101,10 +101,12 @@ def _markierungen(a, kl, lay):
             i = j + 1
         return out
     frei = asphalt & ~sperre
-    for band in ((14, 21, 30, 93), (36, 42, 4, 81), (56, 62, 4, 93)):
+    P = lay.get('versatz', 0)                                          # Karte ringsum erweitert (Baumguertel)
+    rows_, cols_ = kl.shape
+    for band in ((14 + P, 21 + P, 30 + P, 93 + P), (36 + P, 42 + P, 4 + P, 81 + P), (56 + P, 62 + P, 4 + P, cols_ - 1)):
         for (xa, xb, (ya, yb)) in abschnitte(band, True):
             k30.striche(a, frei, xa * T, (xb + 1) * T, (ya + yb + 1) * T // 2 - 1, GELB)
-    for band in ((36, 42, 22, 77), (76, 82, 1, 77)):
+    for band in ((36 + P, 42 + P, 22 + P, 77 + P), (76 + P, 82 + P, 1 + P, rows_ - 1)):
         for (ya, yb, (xa, xb)) in abschnitte(band, False):
             k30.striche(a, frei, ya * T, (yb + 1) * T, (xa + xb + 1) * T // 2 - 1, GELB, senkrecht=True)
     for (x0, x1, y0, y1, art) in lay['zebra']:
@@ -114,11 +116,12 @@ def _markierungen(a, kl, lay):
                     a[y, x] = WEISS
 
 
-def kanaldeckel(a, kl, seed=35):
+def kanaldeckel(a, kl, seed=35, P=0):
     """Wenige runde Kanaldeckel und Gullys am Fahrbahnrand (Vorlage), unregelmaessig, fest (kein Flimmern)."""
     rs = np.random.RandomState(seed)
     rows, cols = kl.shape
-    mitte_y, mitte_x = (17, 18, 19, 39, 57, 58, 59), (38, 39, 78, 79)              # Kachelreihen/-spalten der Mittellinien
+    mitte_y = tuple(v + P for v in (17, 18, 19, 39, 57, 58, 59))
+    mitte_x = tuple(v + P for v in (38, 39, 78, 79))              # Kachelreihen/-spalten der Mittellinien
     kand = [(y, x) for y in range(3, rows - 3) for x in range(3, cols - 3) if kl[y, x] == 'a'
             and all(kl[y + dy, x + dx] == 'a' for dy in (-1, 0, 1) for dx in (-1, 0, 1))
             and y not in mitte_y and x not in mitte_x]
@@ -174,14 +177,17 @@ def bauen(frame=None, speichern=True):
     asph_k = np.isin(kl, ['a', 'x'])
     asphalt = gross(asph_k)
     a[asphalt] = k18.textur('s', cols, rows)[asphalt]
+    wald = gross(kl == 'h')                                           # Boden im Baumguertel: Rasen (ohne Steinkante)
+    a[wald] = k18.textur('n', cols, rows)[wald]
     rasen = gross(kl == 'n')
     k18.mittelstreifen(a, rasen, k18.textur('n', cols, rows))         # Gruenstreifen mit Steinkante
     k18.bordsteine(a, asphalt, ~asphalt)
     markierungen(a, kl, lay)
-    kanaldeckel(a, kl)
-    land = ~gross(kl == 'x')
+    kanaldeckel(a, kl, P=lay.get('versatz', 0))
+    land = np.zeros((Hp, Wp), bool)                                   # Nebel nur am aeussersten Rand ueber den Baeumen
+    land[T:-T, T:-T] = True
     lvl = np.ones((Hp, Wp), np.uint8)
-    leere = ~land
+    leere = gross(kl == 'h')                                          # Baumguertel nicht begehbar (Kartenrand)
     if speichern and frame is None:
         np.save(os.path.join(KARTE, 'pixelhoehe.npy'), lvl)
         np.save(os.path.join(KARTE, 'wasser.npy'), np.packbits(np.zeros((Hp, Wp), bool)))
