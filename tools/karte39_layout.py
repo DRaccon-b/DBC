@@ -69,10 +69,16 @@ def main():
                   if 0 <= yy < R and 0 <= xx < C and k[yy, xx] != '?']
             if nb:
                 k[y, x] = max(set(nb), key=nb.count)
+    k[2, 24:34] = 'k'                                              # Nordende der Hauptstrasse: Gehweg/Bordstein (kein Ausgang)
     k[(k == 'a') & ~band] = 'k'                                    # nie Fahrbahn ausserhalb der Baender (Bruecke)
     for art in 'bnq':                                              # Einzelkacheln angleichen
-        k = l34.kleine_weg(k, art, 4)
+        k = l34.kleine_weg(k, art, 6)
     k = l34.kleine_weg(k, 'k', 14)                                 # Flecken unter Objekten der Vorlage
+    for y in range(1, R - 1):                                      # 1-Kachel-Kerben (k mit q an drei Seiten)
+        for x in range(1, C - 1):
+            nb = [k[y - 1, x], k[y + 1, x], k[y, x - 1], k[y, x + 1]]
+            if k[y, x] == 'k' and nb.count('q') >= 3:
+                k[y, x] = 'q'
     k = l34.kleine_weg(k, 'g', 16)                                 # Brueckenpfeiler/Schatten der Vorlage
     k[30:42, 10:14][k[30:42, 10:14] == 'n'] = 'g'                  # Weg vom Eingang buero_links durch den Rasen
     k[40:42, 15:18][k[40:42, 15:18] == 'n'] = 'k'                  # Rasenzunge unter dem Brueckenfuss

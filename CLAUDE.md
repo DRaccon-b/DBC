@@ -261,6 +261,12 @@ Vor jeder Abgabe Punkt für Punkt prüfen (vergrößert, Standbild und mehrere A
   Gleisbett, Bodenleben flach und begehbar (`ebene` 0), offene Unterstände ohne `gebaeude` (nur Sockel sperrt), keine
   Poller-Reihen. Masten im festen Rhythmus (Abstand/Versatz mit den wenigsten Konflikten wählen), Kreuze je Übergang als
   Paar, Fahrdraht auf Höhe des Stromabnehmers; Boden am Gürtelrand mit Böschung zur tieferen Gleisebene.
+- **Stadtplatz mit Wahrzeichen (Karte 39):** Gebäudefront nie direkt an Fahrbahn, Wald oder Rasen – Gebäude eine Reihe höher
+  setzen bzw. Gehwegreihe/Weg vor der Tür anlegen. Zu hohe generierte Hochhäuser um ganze Stockwerke kürzen (Periode des
+  Fensterrasters messen, Schnitt auf einer Stockwerksgrenze). Liefert der Pro-Generator weißen statt magentafarbenen
+  Hintergrund: vom Rand her freistellen; lila/magentafarbene Saumzeilen unter gespiegelten Hälften entfernen. Wahrzeichen
+  im Stil der Vorlage (modern statt klassizistisch) – Kandidaten vergleichen. Straßenenden ohne Ausgang brauchen eine
+  sichtbare Gehweg-/Bordsteinreihe vor dem Baumgürtel; Baumgürtel als Leere (`pixelhoehe` 0) sperren.
 - **Begleiter am Stumpf (5d):** keine 1-Kachel-Blumen auf dem Stumpf, kein Blumenklumpen; Begleiter überlappen sich nicht.
 - **Paare/Achsen:** Paare vor Toren/Bauwerken exakt gespiegelt (Mitte und Fuß), gleiche Objekte auf gleicher Höhe;
   Druckplatten, Obelisken usw. symmetrisch zur berechneten Achse.

@@ -37,10 +37,10 @@ RATHAUS_ACHSE = None                                              # aus der hell
 BRUECKE = (465, 42)                                               # Mitte x, Fusszeile (ueber der linken Hauptstrasse)
 UBAHN = [(607, 20), (1073, 43)]
 BAEUME = [(39, 13), (64, 14), (65, 23), (39, 30), (63, 30), (8, 33), (15, 31), (20, 30), (9, 38), (11, 59),
-          (22, 59), (60, 72), (66, 72)]
+          (20, 59), (60, 72), (66, 72)]
 LATERNEN = [(5, 5), (21, 5), (65, 7), (34, 7), (70, 36), (5, 43), (11, 43), (6, 57), (71, 57), (90, 57), (93, 43)]
 BAENKE = [(10, 20), (17, 20), (46, 35), (63, 38), (40, 61), (66, 63)]   # + Paar am Rathaus (Achse)
-MOEBEL = [('k18s/00', 21, 18), ('k18s/41', 52, 45), ('k18s/41', 65, 56)]   # Bushaeuschen nicht im Treppenaustritt
+MOEBEL = [('k18s/00', 21, 18), ('k18s/41', 52, 45), ('k18s/41', 65, 55)]   # Bushaeuschen nicht im Treppenaustritt
 # Autos (Linksverkehr): waagerecht Nordspur nach Osten (gespiegelt), Suedspur nach Westen; senkrecht Ostspur nach Sueden
 AUTOS = [('k18a/06', 495, 168, False), ('k18a/06', 1264, 535, False), ('k18a/05', 232, 785, True),
          ('k18a/02', 950, 785, True), ('k18a/11', 1415, 785, True), ('k18a/04', 700, 858, False)]
@@ -82,6 +82,14 @@ def halb_gespiegelt(quelle, ziel, breite_halb, eingang=True):
     import karte36_objekte as k36o
     k36o.OBJ = OBJ
     k36o.halb_gespiegelt(quelle, ziel, breite_halb, eingang)
+    a = np.array(Image.open(os.path.join(OBJ, ziel)).convert('RGBA')).astype(int)   # lila/magenta Freistellsaum unten weg
+    r_, g_, b_ = a[..., 0], a[..., 1], a[..., 2]
+    mg = (a[..., 3] > 0) & (b_ > g_ + 8) & (r_ > g_ + 6)
+    for yy in range(a.shape[0] - 1, a.shape[0] - 6, -1):
+        if mg[yy].mean() > 0.3:
+            a[yy, :, 3] = 0
+    im = Image.fromarray(a.astype(np.uint8))
+    im.crop(im.getbbox()).save(os.path.join(OBJ, ziel))
 
 
 def main():

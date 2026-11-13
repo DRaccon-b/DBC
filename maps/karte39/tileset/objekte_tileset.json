@@ -1,0 +1,12722 @@
+{
+ "kachel": 16,
+ "breite_kacheln": 40,
+ "hoehe_kacheln": 79,
+ "animationsbereich_hoehe_kacheln": 6,
+ "animationsbilder": 4,
+ "bilddauer_ms": 250,
+ "objekte": [
+  {
+   "name": "k01/baum00",
+   "datei": "varianten/k01-baum00.png",
+   "animation": "baum",
+   "slot_kacheln": {
+    "x": 0,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      42,
+      15,
+      3,
+      3
+     ],
+     "fusskachel": [
+      43,
+      17
+     ]
+    },
+    {
+     "block": [
+      18,
+      34,
+      3,
+      3
+     ],
+     "fusskachel": [
+      19,
+      36
+     ]
+    },
+    {
+     "block": [
+      68,
+      73,
+      3,
+      3
+     ],
+     "fusskachel": [
+      69,
+      75
+     ]
+    },
+    {
+     "block": [
+      5,
+      -2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      6,
+      0
+     ]
+    },
+    {
+     "block": [
+      19,
+      -2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      20,
+      0
+     ]
+    },
+    {
+     "block": [
+      29,
+      -2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      30,
+      0
+     ]
+    },
+    {
+     "block": [
+      31,
+      -2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      32,
+      0
+     ]
+    },
+    {
+     "block": [
+      65,
+      -2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      66,
+      0
+     ]
+    },
+    {
+     "block": [
+      75,
+      -2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      76,
+      0
+     ]
+    },
+    {
+     "block": [
+      101,
+      -2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      102,
+      0
+     ]
+    },
+    {
+     "block": [
+      0,
+      -1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      1,
+      1
+     ]
+    },
+    {
+     "block": [
+      4,
+      -1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      5,
+      1
+     ]
+    },
+    {
+     "block": [
+      14,
+      -1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      15,
+      1
+     ]
+    },
+    {
+     "block": [
+      18,
+      -1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      19,
+      1
+     ]
+    },
+    {
+     "block": [
+      36,
+      -1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      37,
+      1
+     ]
+    },
+    {
+     "block": [
+      48,
+      -1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      49,
+      1
+     ]
+    },
+    {
+     "block": [
+      56,
+      -1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      57,
+      1
+     ]
+    },
+    {
+     "block": [
+      78,
+      -1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      79,
+      1
+     ]
+    },
+    {
+     "block": [
+      84,
+      -1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      85,
+      1
+     ]
+    },
+    {
+     "block": [
+      94,
+      -1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      95,
+      1
+     ]
+    },
+    {
+     "block": [
+      11,
+      0,
+      3,
+      3
+     ],
+     "fusskachel": [
+      12,
+      2
+     ]
+    },
+    {
+     "block": [
+      27,
+      0,
+      3,
+      3
+     ],
+     "fusskachel": [
+      28,
+      2
+     ]
+    },
+    {
+     "block": [
+      63,
+      0,
+      3,
+      3
+     ],
+     "fusskachel": [
+      64,
+      2
+     ]
+    },
+    {
+     "block": [
+      77,
+      0,
+      3,
+      3
+     ],
+     "fusskachel": [
+      78,
+      2
+     ]
+    },
+    {
+     "block": [
+      14,
+      1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      15,
+      3
+     ]
+    },
+    {
+     "block": [
+      18,
+      1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      19,
+      3
+     ]
+    },
+    {
+     "block": [
+      34,
+      1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      35,
+      3
+     ]
+    },
+    {
+     "block": [
+      52,
+      1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      53,
+      3
+     ]
+    },
+    {
+     "block": [
+      54,
+      1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      55,
+      3
+     ]
+    },
+    {
+     "block": [
+      62,
+      1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      63,
+      3
+     ]
+    },
+    {
+     "block": [
+      72,
+      1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      73,
+      3
+     ]
+    },
+    {
+     "block": [
+      74,
+      1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      75,
+      3
+     ]
+    },
+    {
+     "block": [
+      102,
+      1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      103,
+      3
+     ]
+    },
+    {
+     "block": [
+      59,
+      2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      60,
+      4
+     ]
+    },
+    {
+     "block": [
+      69,
+      2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      70,
+      4
+     ]
+    },
+    {
+     "block": [
+      28,
+      3,
+      3,
+      3
+     ],
+     "fusskachel": [
+      29,
+      5
+     ]
+    },
+    {
+     "block": [
+      62,
+      3,
+      3,
+      3
+     ],
+     "fusskachel": [
+      63,
+      5
+     ]
+    },
+    {
+     "block": [
+      102,
+      3,
+      3,
+      3
+     ],
+     "fusskachel": [
+      103,
+      5
+     ]
+    },
+    {
+     "block": [
+      1,
+      4,
+      3,
+      3
+     ],
+     "fusskachel": [
+      2,
+      6
+     ]
+    },
+    {
+     "block": [
+      101,
+      4,
+      3,
+      3
+     ],
+     "fusskachel": [
+      102,
+      6
+     ]
+    },
+    {
+     "block": [
+      0,
+      7,
+      3,
+      3
+     ],
+     "fusskachel": [
+      1,
+      9
+     ]
+    },
+    {
+     "block": [
+      2,
+      7,
+      3,
+      3
+     ],
+     "fusskachel": [
+      3,
+      9
+     ]
+    },
+    {
+     "block": [
+      3,
+      8,
+      3,
+      3
+     ],
+     "fusskachel": [
+      4,
+      10
+     ]
+    },
+    {
+     "block": [
+      99,
+      8,
+      3,
+      3
+     ],
+     "fusskachel": [
+      100,
+      10
+     ]
+    },
+    {
+     "block": [
+      101,
+      8,
+      3,
+      3
+     ],
+     "fusskachel": [
+      102,
+      10
+     ]
+    },
+    {
+     "block": [
+      98,
+      9,
+      3,
+      3
+     ],
+     "fusskachel": [
+      99,
+      11
+     ]
+    },
+    {
+     "block": [
+      0,
+      15,
+      3,
+      3
+     ],
+     "fusskachel": [
+      1,
+      17
+     ]
+    },
+    {
+     "block": [
+      1,
+      16,
+      3,
+      3
+     ],
+     "fusskachel": [
+      2,
+      18
+     ]
+    },
+    {
+     "block": [
+      0,
+      19,
+      3,
+      3
+     ],
+     "fusskachel": [
+      1,
+      21
+     ]
+    },
+    {
+     "block": [
+      -1,
+      28,
+      3,
+      3
+     ],
+     "fusskachel": [
+      0,
+      30
+     ]
+    },
+    {
+     "block": [
+      99,
+      30,
+      3,
+      3
+     ],
+     "fusskachel": [
+      100,
+      32
+     ]
+    },
+    {
+     "block": [
+      2,
+      31,
+      3,
+      3
+     ],
+     "fusskachel": [
+      3,
+      33
+     ]
+    },
+    {
+     "block": [
+      0,
+      39,
+      3,
+      3
+     ],
+     "fusskachel": [
+      1,
+      41
+     ]
+    },
+    {
+     "block": [
+      99,
+      40,
+      3,
+      3
+     ],
+     "fusskachel": [
+      100,
+      42
+     ]
+    },
+    {
+     "block": [
+      102,
+      41,
+      3,
+      3
+     ],
+     "fusskachel": [
+      103,
+      43
+     ]
+    },
+    {
+     "block": [
+      -1,
+      44,
+      3,
+      3
+     ],
+     "fusskachel": [
+      0,
+      46
+     ]
+    },
+    {
+     "block": [
+      102,
+      47,
+      3,
+      3
+     ],
+     "fusskachel": [
+      103,
+      49
+     ]
+    },
+    {
+     "block": [
+      -1,
+      58,
+      3,
+      3
+     ],
+     "fusskachel": [
+      0,
+      60
+     ]
+    },
+    {
+     "block": [
+      0,
+      61,
+      3,
+      3
+     ],
+     "fusskachel": [
+      1,
+      63
+     ]
+    },
+    {
+     "block": [
+      98,
+      65,
+      3,
+      3
+     ],
+     "fusskachel": [
+      99,
+      67
+     ]
+    },
+    {
+     "block": [
+      1,
+      78,
+      3,
+      3
+     ],
+     "fusskachel": [
+      2,
+      80
+     ]
+    },
+    {
+     "block": [
+      99,
+      78,
+      3,
+      3
+     ],
+     "fusskachel": [
+      100,
+      80
+     ]
+    },
+    {
+     "block": [
+      -1,
+      80,
+      3,
+      3
+     ],
+     "fusskachel": [
+      0,
+      82
+     ]
+    },
+    {
+     "block": [
+      3,
+      80,
+      3,
+      3
+     ],
+     "fusskachel": [
+      4,
+      82
+     ]
+    },
+    {
+     "block": [
+      0,
+      81,
+      3,
+      3
+     ],
+     "fusskachel": [
+      1,
+      83
+     ]
+    },
+    {
+     "block": [
+      43,
+      82,
+      3,
+      3
+     ],
+     "fusskachel": [
+      44,
+      84
+     ]
+    },
+    {
+     "block": [
+      63,
+      82,
+      3,
+      3
+     ],
+     "fusskachel": [
+      64,
+      84
+     ]
+    },
+    {
+     "block": [
+      93,
+      82,
+      3,
+      3
+     ],
+     "fusskachel": [
+      94,
+      84
+     ]
+    },
+    {
+     "block": [
+      56,
+      83,
+      3,
+      3
+     ],
+     "fusskachel": [
+      57,
+      85
+     ]
+    },
+    {
+     "block": [
+      19,
+      84,
+      3,
+      3
+     ],
+     "fusskachel": [
+      20,
+      86
+     ]
+    },
+    {
+     "block": [
+      49,
+      84,
+      3,
+      3
+     ],
+     "fusskachel": [
+      50,
+      86
+     ]
+    },
+    {
+     "block": [
+      57,
+      84,
+      3,
+      3
+     ],
+     "fusskachel": [
+      58,
+      86
+     ]
+    },
+    {
+     "block": [
+      65,
+      84,
+      3,
+      3
+     ],
+     "fusskachel": [
+      66,
+      86
+     ]
+    },
+    {
+     "block": [
+      79,
+      84,
+      3,
+      3
+     ],
+     "fusskachel": [
+      80,
+      86
+     ]
+    },
+    {
+     "block": [
+      81,
+      84,
+      3,
+      3
+     ],
+     "fusskachel": [
+      82,
+      86
+     ]
+    },
+    {
+     "block": [
+      83,
+      84,
+      3,
+      3
+     ],
+     "fusskachel": [
+      84,
+      86
+     ]
+    },
+    {
+     "block": [
+      6,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      7,
+      87
+     ]
+    },
+    {
+     "block": [
+      40,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      41,
+      87
+     ]
+    },
+    {
+     "block": [
+      84,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      85,
+      87
+     ]
+    },
+    {
+     "block": [
+      96,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      97,
+      87
+     ]
+    }
+   ]
+  },
+  {
+   "name": "k01/baum00",
+   "datei": "varianten/k01-baum00.png",
+   "animation": "wehen",
+   "slot_kacheln": {
+    "x": 3,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      76,
+      2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      77,
+      4
+     ]
+    },
+    {
+     "block": [
+      84,
+      2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      85,
+      4
+     ]
+    },
+    {
+     "block": [
+      7,
+      3,
+      3,
+      3
+     ],
+     "fusskachel": [
+      8,
+      5
+     ]
+    },
+    {
+     "block": [
+      8,
+      3,
+      3,
+      3
+     ],
+     "fusskachel": [
+      9,
+      5
+     ]
+    },
+    {
+     "block": [
+      27,
+      3,
+      3,
+      3
+     ],
+     "fusskachel": [
+      28,
+      5
+     ]
+    },
+    {
+     "block": [
+      29,
+      3,
+      3,
+      3
+     ],
+     "fusskachel": [
+      30,
+      5
+     ]
+    },
+    {
+     "block": [
+      35,
+      3,
+      3,
+      3
+     ],
+     "fusskachel": [
+      36,
+      5
+     ]
+    },
+    {
+     "block": [
+      60,
+      3,
+      3,
+      3
+     ],
+     "fusskachel": [
+      61,
+      5
+     ]
+    },
+    {
+     "block": [
+      -1,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      0,
+      87
+     ]
+    },
+    {
+     "block": [
+      23,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      24,
+      87
+     ]
+    },
+    {
+     "block": [
+      47,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      48,
+      87
+     ]
+    },
+    {
+     "block": [
+      55,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      56,
+      87
+     ]
+    },
+    {
+     "block": [
+      83,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      84,
+      87
+     ]
+    },
+    {
+     "block": [
+      97,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      98,
+      87
+     ]
+    }
+   ]
+  },
+  {
+   "name": "k01/baum00",
+   "datei": "varianten/k01-baum00_m.png",
+   "animation": "baum",
+   "slot_kacheln": {
+    "x": 6,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      42,
+      32,
+      3,
+      3
+     ],
+     "fusskachel": [
+      43,
+      34
+     ]
+    },
+    {
+     "block": [
+      14,
+      61,
+      3,
+      3
+     ],
+     "fusskachel": [
+      15,
+      63
+     ]
+    },
+    {
+     "block": [
+      1,
+      -2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      2,
+      0
+     ]
+    },
+    {
+     "block": [
+      11,
+      -2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      12,
+      0
+     ]
+    },
+    {
+     "block": [
+      13,
+      -2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      14,
+      0
+     ]
+    },
+    {
+     "block": [
+      15,
+      -2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      16,
+      0
+     ]
+    },
+    {
+     "block": [
+      55,
+      -2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      56,
+      0
+     ]
+    },
+    {
+     "block": [
+      61,
+      -2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      62,
+      0
+     ]
+    },
+    {
+     "block": [
+      99,
+      -2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      100,
+      0
+     ]
+    },
+    {
+     "block": [
+      52,
+      -1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      53,
+      1
+     ]
+    },
+    {
+     "block": [
+      68,
+      -1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      69,
+      1
+     ]
+    },
+    {
+     "block": [
+      82,
+      -1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      83,
+      1
+     ]
+    },
+    {
+     "block": [
+      21,
+      0,
+      3,
+      3
+     ],
+     "fusskachel": [
+      22,
+      2
+     ]
+    },
+    {
+     "block": [
+      37,
+      0,
+      3,
+      3
+     ],
+     "fusskachel": [
+      38,
+      2
+     ]
+    },
+    {
+     "block": [
+      45,
+      0,
+      3,
+      3
+     ],
+     "fusskachel": [
+      46,
+      2
+     ]
+    },
+    {
+     "block": [
+      49,
+      0,
+      3,
+      3
+     ],
+     "fusskachel": [
+      50,
+      2
+     ]
+    },
+    {
+     "block": [
+      97,
+      0,
+      3,
+      3
+     ],
+     "fusskachel": [
+      98,
+      2
+     ]
+    },
+    {
+     "block": [
+      2,
+      1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      3,
+      3
+     ]
+    },
+    {
+     "block": [
+      4,
+      1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      5,
+      3
+     ]
+    },
+    {
+     "block": [
+      6,
+      1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      7,
+      3
+     ]
+    },
+    {
+     "block": [
+      12,
+      1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      13,
+      3
+     ]
+    },
+    {
+     "block": [
+      50,
+      1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      51,
+      3
+     ]
+    },
+    {
+     "block": [
+      68,
+      1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      69,
+      3
+     ]
+    },
+    {
+     "block": [
+      90,
+      1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      91,
+      3
+     ]
+    },
+    {
+     "block": [
+      5,
+      2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      6,
+      4
+     ]
+    },
+    {
+     "block": [
+      21,
+      2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      22,
+      4
+     ]
+    },
+    {
+     "block": [
+      27,
+      2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      28,
+      4
+     ]
+    },
+    {
+     "block": [
+      35,
+      2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      36,
+      4
+     ]
+    },
+    {
+     "block": [
+      53,
+      2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      54,
+      4
+     ]
+    },
+    {
+     "block": [
+      6,
+      3,
+      3,
+      3
+     ],
+     "fusskachel": [
+      7,
+      5
+     ]
+    },
+    {
+     "block": [
+      38,
+      3,
+      3,
+      3
+     ],
+     "fusskachel": [
+      39,
+      5
+     ]
+    },
+    {
+     "block": [
+      100,
+      3,
+      3,
+      3
+     ],
+     "fusskachel": [
+      101,
+      5
+     ]
+    },
+    {
+     "block": [
+      2,
+      5,
+      3,
+      3
+     ],
+     "fusskachel": [
+      3,
+      7
+     ]
+    },
+    {
+     "block": [
+      98,
+      5,
+      3,
+      3
+     ],
+     "fusskachel": [
+      99,
+      7
+     ]
+    },
+    {
+     "block": [
+      99,
+      6,
+      3,
+      3
+     ],
+     "fusskachel": [
+      100,
+      8
+     ]
+    },
+    {
+     "block": [
+      99,
+      12,
+      3,
+      3
+     ],
+     "fusskachel": [
+      100,
+      14
+     ]
+    },
+    {
+     "block": [
+      -1,
+      16,
+      3,
+      3
+     ],
+     "fusskachel": [
+      0,
+      18
+     ]
+    },
+    {
+     "block": [
+      1,
+      18,
+      3,
+      3
+     ],
+     "fusskachel": [
+      2,
+      20
+     ]
+    },
+    {
+     "block": [
+      3,
+      22,
+      3,
+      3
+     ],
+     "fusskachel": [
+      4,
+      24
+     ]
+    },
+    {
+     "block": [
+      101,
+      26,
+      3,
+      3
+     ],
+     "fusskachel": [
+      102,
+      28
+     ]
+    },
+    {
+     "block": [
+      1,
+      30,
+      3,
+      3
+     ],
+     "fusskachel": [
+      2,
+      32
+     ]
+    },
+    {
+     "block": [
+      -1,
+      32,
+      3,
+      3
+     ],
+     "fusskachel": [
+      0,
+      34
+     ]
+    },
+    {
+     "block": [
+      99,
+      32,
+      3,
+      3
+     ],
+     "fusskachel": [
+      100,
+      34
+     ]
+    },
+    {
+     "block": [
+      102,
+      33,
+      3,
+      3
+     ],
+     "fusskachel": [
+      103,
+      35
+     ]
+    },
+    {
+     "block": [
+      100,
+      35,
+      3,
+      3
+     ],
+     "fusskachel": [
+      101,
+      37
+     ]
+    },
+    {
+     "block": [
+      2,
+      39,
+      3,
+      3
+     ],
+     "fusskachel": [
+      3,
+      41
+     ]
+    },
+    {
+     "block": [
+      102,
+      39,
+      3,
+      3
+     ],
+     "fusskachel": [
+      103,
+      41
+     ]
+    },
+    {
+     "block": [
+      1,
+      44,
+      3,
+      3
+     ],
+     "fusskachel": [
+      2,
+      46
+     ]
+    },
+    {
+     "block": [
+      3,
+      44,
+      3,
+      3
+     ],
+     "fusskachel": [
+      4,
+      46
+     ]
+    },
+    {
+     "block": [
+      2,
+      45,
+      3,
+      3
+     ],
+     "fusskachel": [
+      3,
+      47
+     ]
+    },
+    {
+     "block": [
+      1,
+      50,
+      3,
+      3
+     ],
+     "fusskachel": [
+      2,
+      52
+     ]
+    },
+    {
+     "block": [
+      3,
+      50,
+      3,
+      3
+     ],
+     "fusskachel": [
+      4,
+      52
+     ]
+    },
+    {
+     "block": [
+      2,
+      55,
+      3,
+      3
+     ],
+     "fusskachel": [
+      3,
+      57
+     ]
+    },
+    {
+     "block": [
+      101,
+      60,
+      3,
+      3
+     ],
+     "fusskachel": [
+      102,
+      62
+     ]
+    },
+    {
+     "block": [
+      0,
+      63,
+      3,
+      3
+     ],
+     "fusskachel": [
+      1,
+      65
+     ]
+    },
+    {
+     "block": [
+      101,
+      66,
+      3,
+      3
+     ],
+     "fusskachel": [
+      102,
+      68
+     ]
+    },
+    {
+     "block": [
+      -1,
+      70,
+      3,
+      3
+     ],
+     "fusskachel": [
+      0,
+      72
+     ]
+    },
+    {
+     "block": [
+      100,
+      79,
+      3,
+      3
+     ],
+     "fusskachel": [
+      101,
+      81
+     ]
+    },
+    {
+     "block": [
+      7,
+      82,
+      3,
+      3
+     ],
+     "fusskachel": [
+      8,
+      84
+     ]
+    },
+    {
+     "block": [
+      39,
+      82,
+      3,
+      3
+     ],
+     "fusskachel": [
+      40,
+      84
+     ]
+    },
+    {
+     "block": [
+      41,
+      82,
+      3,
+      3
+     ],
+     "fusskachel": [
+      42,
+      84
+     ]
+    },
+    {
+     "block": [
+      83,
+      82,
+      3,
+      3
+     ],
+     "fusskachel": [
+      84,
+      84
+     ]
+    },
+    {
+     "block": [
+      22,
+      83,
+      3,
+      3
+     ],
+     "fusskachel": [
+      23,
+      85
+     ]
+    },
+    {
+     "block": [
+      42,
+      83,
+      3,
+      3
+     ],
+     "fusskachel": [
+      43,
+      85
+     ]
+    },
+    {
+     "block": [
+      44,
+      83,
+      3,
+      3
+     ],
+     "fusskachel": [
+      45,
+      85
+     ]
+    },
+    {
+     "block": [
+      62,
+      83,
+      3,
+      3
+     ],
+     "fusskachel": [
+      63,
+      85
+     ]
+    },
+    {
+     "block": [
+      70,
+      83,
+      3,
+      3
+     ],
+     "fusskachel": [
+      71,
+      85
+     ]
+    },
+    {
+     "block": [
+      80,
+      83,
+      3,
+      3
+     ],
+     "fusskachel": [
+      81,
+      85
+     ]
+    },
+    {
+     "block": [
+      88,
+      83,
+      3,
+      3
+     ],
+     "fusskachel": [
+      89,
+      85
+     ]
+    },
+    {
+     "block": [
+      41,
+      84,
+      3,
+      3
+     ],
+     "fusskachel": [
+      42,
+      86
+     ]
+    },
+    {
+     "block": [
+      63,
+      84,
+      3,
+      3
+     ],
+     "fusskachel": [
+      64,
+      86
+     ]
+    },
+    {
+     "block": [
+      69,
+      84,
+      3,
+      3
+     ],
+     "fusskachel": [
+      70,
+      86
+     ]
+    },
+    {
+     "block": [
+      75,
+      84,
+      3,
+      3
+     ],
+     "fusskachel": [
+      76,
+      86
+     ]
+    },
+    {
+     "block": [
+      85,
+      84,
+      3,
+      3
+     ],
+     "fusskachel": [
+      86,
+      86
+     ]
+    },
+    {
+     "block": [
+      91,
+      84,
+      3,
+      3
+     ],
+     "fusskachel": [
+      92,
+      86
+     ]
+    },
+    {
+     "block": [
+      14,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      15,
+      87
+     ]
+    },
+    {
+     "block": [
+      22,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      23,
+      87
+     ]
+    },
+    {
+     "block": [
+      46,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      47,
+      87
+     ]
+    },
+    {
+     "block": [
+      82,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      83,
+      87
+     ]
+    }
+   ]
+  },
+  {
+   "name": "k01/baum00",
+   "datei": "varianten/k01-baum00_m.png",
+   "animation": "wehen",
+   "slot_kacheln": {
+    "x": 9,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      90,
+      2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      91,
+      4
+     ]
+    },
+    {
+     "block": [
+      19,
+      3,
+      3,
+      3
+     ],
+     "fusskachel": [
+      20,
+      5
+     ]
+    },
+    {
+     "block": [
+      21,
+      3,
+      3,
+      3
+     ],
+     "fusskachel": [
+      22,
+      5
+     ]
+    },
+    {
+     "block": [
+      22,
+      3,
+      3,
+      3
+     ],
+     "fusskachel": [
+      23,
+      5
+     ]
+    },
+    {
+     "block": [
+      25,
+      3,
+      3,
+      3
+     ],
+     "fusskachel": [
+      26,
+      5
+     ]
+    },
+    {
+     "block": [
+      59,
+      3,
+      3,
+      3
+     ],
+     "fusskachel": [
+      60,
+      5
+     ]
+    },
+    {
+     "block": [
+      61,
+      3,
+      3,
+      3
+     ],
+     "fusskachel": [
+      62,
+      5
+     ]
+    },
+    {
+     "block": [
+      98,
+      13,
+      3,
+      3
+     ],
+     "fusskachel": [
+      99,
+      15
+     ]
+    },
+    {
+     "block": [
+      1,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      2,
+      87
+     ]
+    },
+    {
+     "block": [
+      45,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      46,
+      87
+     ]
+    },
+    {
+     "block": [
+      77,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      78,
+      87
+     ]
+    },
+    {
+     "block": [
+      80,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      81,
+      87
+     ]
+    },
+    {
+     "block": [
+      91,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      92,
+      87
+     ]
+    }
+   ]
+  },
+  {
+   "name": "k01/baum01",
+   "datei": "varianten/k01-baum01.png",
+   "animation": "baum",
+   "slot_kacheln": {
+    "x": 12,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      51,
+      -2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      52,
+      0
+     ]
+    },
+    {
+     "block": [
+      79,
+      -2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      80,
+      0
+     ]
+    },
+    {
+     "block": [
+      22,
+      -1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      23,
+      1
+     ]
+    },
+    {
+     "block": [
+      26,
+      -1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      27,
+      1
+     ]
+    },
+    {
+     "block": [
+      46,
+      -1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      47,
+      1
+     ]
+    },
+    {
+     "block": [
+      54,
+      -1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      55,
+      1
+     ]
+    },
+    {
+     "block": [
+      60,
+      -1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      61,
+      1
+     ]
+    },
+    {
+     "block": [
+      86,
+      -1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      87,
+      1
+     ]
+    },
+    {
+     "block": [
+      91,
+      0,
+      3,
+      3
+     ],
+     "fusskachel": [
+      92,
+      2
+     ]
+    },
+    {
+     "block": [
+      88,
+      1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      89,
+      3
+     ]
+    },
+    {
+     "block": [
+      13,
+      2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      14,
+      4
+     ]
+    },
+    {
+     "block": [
+      45,
+      2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      46,
+      4
+     ]
+    },
+    {
+     "block": [
+      57,
+      2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      58,
+      4
+     ]
+    },
+    {
+     "block": [
+      63,
+      2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      64,
+      4
+     ]
+    },
+    {
+     "block": [
+      73,
+      2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      74,
+      4
+     ]
+    },
+    {
+     "block": [
+      83,
+      2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      84,
+      4
+     ]
+    },
+    {
+     "block": [
+      16,
+      3,
+      3,
+      3
+     ],
+     "fusskachel": [
+      17,
+      5
+     ]
+    },
+    {
+     "block": [
+      -1,
+      4,
+      3,
+      3
+     ],
+     "fusskachel": [
+      0,
+      6
+     ]
+    },
+    {
+     "block": [
+      102,
+      5,
+      3,
+      3
+     ],
+     "fusskachel": [
+      103,
+      7
+     ]
+    },
+    {
+     "block": [
+      100,
+      11,
+      3,
+      3
+     ],
+     "fusskachel": [
+      101,
+      13
+     ]
+    },
+    {
+     "block": [
+      100,
+      13,
+      3,
+      3
+     ],
+     "fusskachel": [
+      101,
+      15
+     ]
+    },
+    {
+     "block": [
+      2,
+      19,
+      3,
+      3
+     ],
+     "fusskachel": [
+      3,
+      21
+     ]
+    },
+    {
+     "block": [
+      0,
+      23,
+      3,
+      3
+     ],
+     "fusskachel": [
+      1,
+      25
+     ]
+    },
+    {
+     "block": [
+      0,
+      29,
+      3,
+      3
+     ],
+     "fusskachel": [
+      1,
+      31
+     ]
+    },
+    {
+     "block": [
+      3,
+      30,
+      3,
+      3
+     ],
+     "fusskachel": [
+      4,
+      32
+     ]
+    },
+    {
+     "block": [
+      101,
+      32,
+      3,
+      3
+     ],
+     "fusskachel": [
+      102,
+      34
+     ]
+    },
+    {
+     "block": [
+      2,
+      33,
+      3,
+      3
+     ],
+     "fusskachel": [
+      3,
+      35
+     ]
+    },
+    {
+     "block": [
+      3,
+      40,
+      3,
+      3
+     ],
+     "fusskachel": [
+      4,
+      42
+     ]
+    },
+    {
+     "block": [
+      1,
+      46,
+      3,
+      3
+     ],
+     "fusskachel": [
+      2,
+      48
+     ]
+    },
+    {
+     "block": [
+      2,
+      47,
+      3,
+      3
+     ],
+     "fusskachel": [
+      3,
+      49
+     ]
+    },
+    {
+     "block": [
+      0,
+      49,
+      3,
+      3
+     ],
+     "fusskachel": [
+      1,
+      51
+     ]
+    },
+    {
+     "block": [
+      3,
+      52,
+      3,
+      3
+     ],
+     "fusskachel": [
+      4,
+      54
+     ]
+    },
+    {
+     "block": [
+      0,
+      53,
+      3,
+      3
+     ],
+     "fusskachel": [
+      1,
+      55
+     ]
+    },
+    {
+     "block": [
+      102,
+      63,
+      3,
+      3
+     ],
+     "fusskachel": [
+      103,
+      65
+     ]
+    },
+    {
+     "block": [
+      1,
+      66,
+      3,
+      3
+     ],
+     "fusskachel": [
+      2,
+      68
+     ]
+    },
+    {
+     "block": [
+      3,
+      68,
+      3,
+      3
+     ],
+     "fusskachel": [
+      4,
+      70
+     ]
+    },
+    {
+     "block": [
+      0,
+      73,
+      3,
+      3
+     ],
+     "fusskachel": [
+      1,
+      75
+     ]
+    },
+    {
+     "block": [
+      101,
+      74,
+      3,
+      3
+     ],
+     "fusskachel": [
+      102,
+      76
+     ]
+    },
+    {
+     "block": [
+      1,
+      76,
+      3,
+      3
+     ],
+     "fusskachel": [
+      2,
+      78
+     ]
+    },
+    {
+     "block": [
+      21,
+      82,
+      3,
+      3
+     ],
+     "fusskachel": [
+      22,
+      84
+     ]
+    },
+    {
+     "block": [
+      25,
+      82,
+      3,
+      3
+     ],
+     "fusskachel": [
+      26,
+      84
+     ]
+    },
+    {
+     "block": [
+      67,
+      82,
+      3,
+      3
+     ],
+     "fusskachel": [
+      68,
+      84
+     ]
+    },
+    {
+     "block": [
+      75,
+      82,
+      3,
+      3
+     ],
+     "fusskachel": [
+      76,
+      84
+     ]
+    },
+    {
+     "block": [
+      85,
+      82,
+      3,
+      3
+     ],
+     "fusskachel": [
+      86,
+      84
+     ]
+    },
+    {
+     "block": [
+      89,
+      82,
+      3,
+      3
+     ],
+     "fusskachel": [
+      90,
+      84
+     ]
+    },
+    {
+     "block": [
+      99,
+      82,
+      3,
+      3
+     ],
+     "fusskachel": [
+      100,
+      84
+     ]
+    },
+    {
+     "block": [
+      18,
+      83,
+      3,
+      3
+     ],
+     "fusskachel": [
+      19,
+      85
+     ]
+    },
+    {
+     "block": [
+      96,
+      83,
+      3,
+      3
+     ],
+     "fusskachel": [
+      97,
+      85
+     ]
+    },
+    {
+     "block": [
+      102,
+      83,
+      3,
+      3
+     ],
+     "fusskachel": [
+      103,
+      85
+     ]
+    },
+    {
+     "block": [
+      3,
+      84,
+      3,
+      3
+     ],
+     "fusskachel": [
+      4,
+      86
+     ]
+    },
+    {
+     "block": [
+      43,
+      84,
+      3,
+      3
+     ],
+     "fusskachel": [
+      44,
+      86
+     ]
+    },
+    {
+     "block": [
+      55,
+      84,
+      3,
+      3
+     ],
+     "fusskachel": [
+      56,
+      86
+     ]
+    },
+    {
+     "block": [
+      70,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      71,
+      87
+     ]
+    }
+   ]
+  },
+  {
+   "name": "k01/baum01",
+   "datei": "varianten/k01-baum01.png",
+   "animation": "wehen",
+   "slot_kacheln": {
+    "x": 15,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      43,
+      3,
+      3,
+      3
+     ],
+     "fusskachel": [
+      44,
+      5
+     ]
+    },
+    {
+     "block": [
+      53,
+      3,
+      3,
+      3
+     ],
+     "fusskachel": [
+      54,
+      5
+     ]
+    },
+    {
+     "block": [
+      69,
+      3,
+      3,
+      3
+     ],
+     "fusskachel": [
+      70,
+      5
+     ]
+    },
+    {
+     "block": [
+      11,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      12,
+      87
+     ]
+    },
+    {
+     "block": [
+      24,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      25,
+      87
+     ]
+    },
+    {
+     "block": [
+      39,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      40,
+      87
+     ]
+    },
+    {
+     "block": [
+      60,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      61,
+      87
+     ]
+    },
+    {
+     "block": [
+      79,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      80,
+      87
+     ]
+    },
+    {
+     "block": [
+      85,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      86,
+      87
+     ]
+    },
+    {
+     "block": [
+      89,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      90,
+      87
+     ]
+    }
+   ]
+  },
+  {
+   "name": "k01/baum01",
+   "datei": "varianten/k01-baum01_m.png",
+   "animation": "baum",
+   "slot_kacheln": {
+    "x": 18,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      -1,
+      -2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      0,
+      0
+     ]
+    },
+    {
+     "block": [
+      47,
+      -2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      48,
+      0
+     ]
+    },
+    {
+     "block": [
+      95,
+      -2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      96,
+      0
+     ]
+    },
+    {
+     "block": [
+      10,
+      -1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      11,
+      1
+     ]
+    },
+    {
+     "block": [
+      12,
+      -1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      13,
+      1
+     ]
+    },
+    {
+     "block": [
+      20,
+      -1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      21,
+      1
+     ]
+    },
+    {
+     "block": [
+      24,
+      -1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      25,
+      1
+     ]
+    },
+    {
+     "block": [
+      30,
+      -1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      31,
+      1
+     ]
+    },
+    {
+     "block": [
+      76,
+      -1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      77,
+      1
+     ]
+    },
+    {
+     "block": [
+      100,
+      -1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      101,
+      1
+     ]
+    },
+    {
+     "block": [
+      102,
+      -1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      103,
+      1
+     ]
+    },
+    {
+     "block": [
+      1,
+      0,
+      3,
+      3
+     ],
+     "fusskachel": [
+      2,
+      2
+     ]
+    },
+    {
+     "block": [
+      3,
+      0,
+      3,
+      3
+     ],
+     "fusskachel": [
+      4,
+      2
+     ]
+    },
+    {
+     "block": [
+      31,
+      0,
+      3,
+      3
+     ],
+     "fusskachel": [
+      32,
+      2
+     ]
+    },
+    {
+     "block": [
+      43,
+      0,
+      3,
+      3
+     ],
+     "fusskachel": [
+      44,
+      2
+     ]
+    },
+    {
+     "block": [
+      51,
+      0,
+      3,
+      3
+     ],
+     "fusskachel": [
+      52,
+      2
+     ]
+    },
+    {
+     "block": [
+      89,
+      0,
+      3,
+      3
+     ],
+     "fusskachel": [
+      90,
+      2
+     ]
+    },
+    {
+     "block": [
+      95,
+      0,
+      3,
+      3
+     ],
+     "fusskachel": [
+      96,
+      2
+     ]
+    },
+    {
+     "block": [
+      82,
+      1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      83,
+      3
+     ]
+    },
+    {
+     "block": [
+      7,
+      2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      8,
+      4
+     ]
+    },
+    {
+     "block": [
+      9,
+      2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      10,
+      4
+     ]
+    },
+    {
+     "block": [
+      11,
+      2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      12,
+      4
+     ]
+    },
+    {
+     "block": [
+      15,
+      2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      16,
+      4
+     ]
+    },
+    {
+     "block": [
+      47,
+      2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      48,
+      4
+     ]
+    },
+    {
+     "block": [
+      81,
+      2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      82,
+      4
+     ]
+    },
+    {
+     "block": [
+      10,
+      3,
+      3,
+      3
+     ],
+     "fusskachel": [
+      11,
+      5
+     ]
+    },
+    {
+     "block": [
+      42,
+      3,
+      3,
+      3
+     ],
+     "fusskachel": [
+      43,
+      5
+     ]
+    },
+    {
+     "block": [
+      64,
+      3,
+      3,
+      3
+     ],
+     "fusskachel": [
+      65,
+      5
+     ]
+    },
+    {
+     "block": [
+      68,
+      3,
+      3,
+      3
+     ],
+     "fusskachel": [
+      69,
+      5
+     ]
+    },
+    {
+     "block": [
+      0,
+      5,
+      3,
+      3
+     ],
+     "fusskachel": [
+      1,
+      7
+     ]
+    },
+    {
+     "block": [
+      98,
+      11,
+      3,
+      3
+     ],
+     "fusskachel": [
+      99,
+      13
+     ]
+    },
+    {
+     "block": [
+      102,
+      13,
+      3,
+      3
+     ],
+     "fusskachel": [
+      103,
+      15
+     ]
+    },
+    {
+     "block": [
+      2,
+      21,
+      3,
+      3
+     ],
+     "fusskachel": [
+      3,
+      23
+     ]
+    },
+    {
+     "block": [
+      2,
+      23,
+      3,
+      3
+     ],
+     "fusskachel": [
+      3,
+      25
+     ]
+    },
+    {
+     "block": [
+      100,
+      23,
+      3,
+      3
+     ],
+     "fusskachel": [
+      101,
+      25
+     ]
+    },
+    {
+     "block": [
+      102,
+      23,
+      3,
+      3
+     ],
+     "fusskachel": [
+      103,
+      25
+     ]
+    },
+    {
+     "block": [
+      -1,
+      26,
+      3,
+      3
+     ],
+     "fusskachel": [
+      0,
+      28
+     ]
+    },
+    {
+     "block": [
+      0,
+      27,
+      3,
+      3
+     ],
+     "fusskachel": [
+      1,
+      29
+     ]
+    },
+    {
+     "block": [
+      -1,
+      34,
+      3,
+      3
+     ],
+     "fusskachel": [
+      0,
+      36
+     ]
+    },
+    {
+     "block": [
+      2,
+      37,
+      3,
+      3
+     ],
+     "fusskachel": [
+      3,
+      39
+     ]
+    },
+    {
+     "block": [
+      99,
+      42,
+      3,
+      3
+     ],
+     "fusskachel": [
+      100,
+      44
+     ]
+    },
+    {
+     "block": [
+      -1,
+      48,
+      3,
+      3
+     ],
+     "fusskachel": [
+      0,
+      50
+     ]
+    },
+    {
+     "block": [
+      0,
+      55,
+      3,
+      3
+     ],
+     "fusskachel": [
+      1,
+      57
+     ]
+    },
+    {
+     "block": [
+      100,
+      59,
+      3,
+      3
+     ],
+     "fusskachel": [
+      101,
+      61
+     ]
+    },
+    {
+     "block": [
+      1,
+      60,
+      3,
+      3
+     ],
+     "fusskachel": [
+      2,
+      62
+     ]
+    },
+    {
+     "block": [
+      2,
+      63,
+      3,
+      3
+     ],
+     "fusskachel": [
+      3,
+      65
+     ]
+    },
+    {
+     "block": [
+      100,
+      63,
+      3,
+      3
+     ],
+     "fusskachel": [
+      101,
+      65
+     ]
+    },
+    {
+     "block": [
+      -1,
+      66,
+      3,
+      3
+     ],
+     "fusskachel": [
+      0,
+      68
+     ]
+    },
+    {
+     "block": [
+      99,
+      66,
+      3,
+      3
+     ],
+     "fusskachel": [
+      100,
+      68
+     ]
+    },
+    {
+     "block": [
+      0,
+      69,
+      3,
+      3
+     ],
+     "fusskachel": [
+      1,
+      71
+     ]
+    },
+    {
+     "block": [
+      98,
+      71,
+      3,
+      3
+     ],
+     "fusskachel": [
+      99,
+      73
+     ]
+    },
+    {
+     "block": [
+      100,
+      71,
+      3,
+      3
+     ],
+     "fusskachel": [
+      101,
+      73
+     ]
+    },
+    {
+     "block": [
+      102,
+      71,
+      3,
+      3
+     ],
+     "fusskachel": [
+      103,
+      73
+     ]
+    },
+    {
+     "block": [
+      0,
+      77,
+      3,
+      3
+     ],
+     "fusskachel": [
+      1,
+      79
+     ]
+    },
+    {
+     "block": [
+      2,
+      77,
+      3,
+      3
+     ],
+     "fusskachel": [
+      3,
+      79
+     ]
+    },
+    {
+     "block": [
+      98,
+      81,
+      3,
+      3
+     ],
+     "fusskachel": [
+      99,
+      83
+     ]
+    },
+    {
+     "block": [
+      1,
+      82,
+      3,
+      3
+     ],
+     "fusskachel": [
+      2,
+      84
+     ]
+    },
+    {
+     "block": [
+      49,
+      82,
+      3,
+      3
+     ],
+     "fusskachel": [
+      50,
+      84
+     ]
+    },
+    {
+     "block": [
+      81,
+      82,
+      3,
+      3
+     ],
+     "fusskachel": [
+      82,
+      84
+     ]
+    },
+    {
+     "block": [
+      78,
+      83,
+      3,
+      3
+     ],
+     "fusskachel": [
+      79,
+      85
+     ]
+    },
+    {
+     "block": [
+      86,
+      83,
+      3,
+      3
+     ],
+     "fusskachel": [
+      87,
+      85
+     ]
+    },
+    {
+     "block": [
+      98,
+      83,
+      3,
+      3
+     ],
+     "fusskachel": [
+      99,
+      85
+     ]
+    },
+    {
+     "block": [
+      100,
+      83,
+      3,
+      3
+     ],
+     "fusskachel": [
+      101,
+      85
+     ]
+    },
+    {
+     "block": [
+      9,
+      84,
+      3,
+      3
+     ],
+     "fusskachel": [
+      10,
+      86
+     ]
+    },
+    {
+     "block": [
+      25,
+      84,
+      3,
+      3
+     ],
+     "fusskachel": [
+      26,
+      86
+     ]
+    },
+    {
+     "block": [
+      59,
+      84,
+      3,
+      3
+     ],
+     "fusskachel": [
+      60,
+      86
+     ]
+    },
+    {
+     "block": [
+      71,
+      84,
+      3,
+      3
+     ],
+     "fusskachel": [
+      72,
+      86
+     ]
+    },
+    {
+     "block": [
+      42,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      43,
+      87
+     ]
+    },
+    {
+     "block": [
+      50,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      51,
+      87
+     ]
+    },
+    {
+     "block": [
+      68,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      69,
+      87
+     ]
+    }
+   ]
+  },
+  {
+   "name": "k01/baum01",
+   "datei": "varianten/k01-baum01_m.png",
+   "animation": "wehen",
+   "slot_kacheln": {
+    "x": 21,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      11,
+      3,
+      3,
+      3
+     ],
+     "fusskachel": [
+      12,
+      5
+     ]
+    },
+    {
+     "block": [
+      12,
+      3,
+      3,
+      3
+     ],
+     "fusskachel": [
+      13,
+      5
+     ]
+    },
+    {
+     "block": [
+      36,
+      3,
+      3,
+      3
+     ],
+     "fusskachel": [
+      37,
+      5
+     ]
+    },
+    {
+     "block": [
+      95,
+      3,
+      3,
+      3
+     ],
+     "fusskachel": [
+      96,
+      5
+     ]
+    },
+    {
+     "block": [
+      12,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      13,
+      87
+     ]
+    },
+    {
+     "block": [
+      25,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      26,
+      87
+     ]
+    },
+    {
+     "block": [
+      51,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      52,
+      87
+     ]
+    },
+    {
+     "block": [
+      59,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      60,
+      87
+     ]
+    },
+    {
+     "block": [
+      63,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      64,
+      87
+     ]
+    },
+    {
+     "block": [
+      90,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      91,
+      87
+     ]
+    }
+   ]
+  },
+  {
+   "name": "k01/baum02",
+   "datei": "varianten/k01-baum02.png",
+   "animation": "baum",
+   "slot_kacheln": {
+    "x": 24,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      66,
+      32,
+      3,
+      3
+     ],
+     "fusskachel": [
+      67,
+      34
+     ]
+    },
+    {
+     "block": [
+      23,
+      61,
+      3,
+      3
+     ],
+     "fusskachel": [
+      24,
+      63
+     ]
+    },
+    {
+     "block": [
+      7,
+      -2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      8,
+      0
+     ]
+    },
+    {
+     "block": [
+      23,
+      -2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      24,
+      0
+     ]
+    },
+    {
+     "block": [
+      39,
+      -2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      40,
+      0
+     ]
+    },
+    {
+     "block": [
+      34,
+      -1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      35,
+      1
+     ]
+    },
+    {
+     "block": [
+      66,
+      -1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      67,
+      1
+     ]
+    },
+    {
+     "block": [
+      80,
+      -1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      81,
+      1
+     ]
+    },
+    {
+     "block": [
+      5,
+      0,
+      3,
+      3
+     ],
+     "fusskachel": [
+      6,
+      2
+     ]
+    },
+    {
+     "block": [
+      25,
+      0,
+      3,
+      3
+     ],
+     "fusskachel": [
+      26,
+      2
+     ]
+    },
+    {
+     "block": [
+      29,
+      0,
+      3,
+      3
+     ],
+     "fusskachel": [
+      30,
+      2
+     ]
+    },
+    {
+     "block": [
+      71,
+      0,
+      3,
+      3
+     ],
+     "fusskachel": [
+      72,
+      2
+     ]
+    },
+    {
+     "block": [
+      87,
+      0,
+      3,
+      3
+     ],
+     "fusskachel": [
+      88,
+      2
+     ]
+    },
+    {
+     "block": [
+      26,
+      1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      27,
+      3
+     ]
+    },
+    {
+     "block": [
+      28,
+      1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      29,
+      3
+     ]
+    },
+    {
+     "block": [
+      32,
+      1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      33,
+      3
+     ]
+    },
+    {
+     "block": [
+      58,
+      1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      59,
+      3
+     ]
+    },
+    {
+     "block": [
+      78,
+      1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      79,
+      3
+     ]
+    },
+    {
+     "block": [
+      -1,
+      2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      0,
+      4
+     ]
+    },
+    {
+     "block": [
+      43,
+      2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      44,
+      4
+     ]
+    },
+    {
+     "block": [
+      67,
+      2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      68,
+      4
+     ]
+    },
+    {
+     "block": [
+      75,
+      2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      76,
+      4
+     ]
+    },
+    {
+     "block": [
+      97,
+      2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      98,
+      4
+     ]
+    },
+    {
+     "block": [
+      0,
+      3,
+      3,
+      3
+     ],
+     "fusskachel": [
+      1,
+      5
+     ]
+    },
+    {
+     "block": [
+      12,
+      3,
+      3,
+      3
+     ],
+     "fusskachel": [
+      13,
+      5
+     ]
+    },
+    {
+     "block": [
+      18,
+      3,
+      3,
+      3
+     ],
+     "fusskachel": [
+      19,
+      5
+     ]
+    },
+    {
+     "block": [
+      32,
+      3,
+      3,
+      3
+     ],
+     "fusskachel": [
+      33,
+      5
+     ]
+    },
+    {
+     "block": [
+      40,
+      3,
+      3,
+      3
+     ],
+     "fusskachel": [
+      41,
+      5
+     ]
+    },
+    {
+     "block": [
+      48,
+      3,
+      3,
+      3
+     ],
+     "fusskachel": [
+      49,
+      5
+     ]
+    },
+    {
+     "block": [
+      56,
+      3,
+      3,
+      3
+     ],
+     "fusskachel": [
+      57,
+      5
+     ]
+    },
+    {
+     "block": [
+      0,
+      17,
+      3,
+      3
+     ],
+     "fusskachel": [
+      1,
+      19
+     ]
+    },
+    {
+     "block": [
+      -1,
+      18,
+      3,
+      3
+     ],
+     "fusskachel": [
+      0,
+      20
+     ]
+    },
+    {
+     "block": [
+      99,
+      24,
+      3,
+      3
+     ],
+     "fusskachel": [
+      100,
+      26
+     ]
+    },
+    {
+     "block": [
+      100,
+      27,
+      3,
+      3
+     ],
+     "fusskachel": [
+      101,
+      29
+     ]
+    },
+    {
+     "block": [
+      101,
+      28,
+      3,
+      3
+     ],
+     "fusskachel": [
+      102,
+      30
+     ]
+    },
+    {
+     "block": [
+      1,
+      32,
+      3,
+      3
+     ],
+     "fusskachel": [
+      2,
+      34
+     ]
+    },
+    {
+     "block": [
+      3,
+      32,
+      3,
+      3
+     ],
+     "fusskachel": [
+      4,
+      34
+     ]
+    },
+    {
+     "block": [
+      102,
+      37,
+      3,
+      3
+     ],
+     "fusskachel": [
+      103,
+      39
+     ]
+    },
+    {
+     "block": [
+      0,
+      41,
+      3,
+      3
+     ],
+     "fusskachel": [
+      1,
+      43
+     ]
+    },
+    {
+     "block": [
+      2,
+      41,
+      3,
+      3
+     ],
+     "fusskachel": [
+      3,
+      43
+     ]
+    },
+    {
+     "block": [
+      -1,
+      46,
+      3,
+      3
+     ],
+     "fusskachel": [
+      0,
+      48
+     ]
+    },
+    {
+     "block": [
+      3,
+      46,
+      3,
+      3
+     ],
+     "fusskachel": [
+      4,
+      48
+     ]
+    },
+    {
+     "block": [
+      0,
+      47,
+      3,
+      3
+     ],
+     "fusskachel": [
+      1,
+      49
+     ]
+    },
+    {
+     "block": [
+      2,
+      51,
+      3,
+      3
+     ],
+     "fusskachel": [
+      3,
+      53
+     ]
+    },
+    {
+     "block": [
+      2,
+      53,
+      3,
+      3
+     ],
+     "fusskachel": [
+      3,
+      55
+     ]
+    },
+    {
+     "block": [
+      1,
+      54,
+      3,
+      3
+     ],
+     "fusskachel": [
+      2,
+      56
+     ]
+    },
+    {
+     "block": [
+      1,
+      56,
+      3,
+      3
+     ],
+     "fusskachel": [
+      2,
+      58
+     ]
+    },
+    {
+     "block": [
+      99,
+      60,
+      3,
+      3
+     ],
+     "fusskachel": [
+      100,
+      62
+     ]
+    },
+    {
+     "block": [
+      3,
+      62,
+      3,
+      3
+     ],
+     "fusskachel": [
+      4,
+      64
+     ]
+    },
+    {
+     "block": [
+      99,
+      64,
+      3,
+      3
+     ],
+     "fusskachel": [
+      100,
+      66
+     ]
+    },
+    {
+     "block": [
+      1,
+      72,
+      3,
+      3
+     ],
+     "fusskachel": [
+      2,
+      74
+     ]
+    },
+    {
+     "block": [
+      3,
+      72,
+      3,
+      3
+     ],
+     "fusskachel": [
+      4,
+      74
+     ]
+    },
+    {
+     "block": [
+      2,
+      73,
+      3,
+      3
+     ],
+     "fusskachel": [
+      3,
+      75
+     ]
+    },
+    {
+     "block": [
+      98,
+      73,
+      3,
+      3
+     ],
+     "fusskachel": [
+      99,
+      75
+     ]
+    },
+    {
+     "block": [
+      102,
+      73,
+      3,
+      3
+     ],
+     "fusskachel": [
+      103,
+      75
+     ]
+    },
+    {
+     "block": [
+      -1,
+      74,
+      3,
+      3
+     ],
+     "fusskachel": [
+      0,
+      76
+     ]
+    },
+    {
+     "block": [
+      100,
+      75,
+      3,
+      3
+     ],
+     "fusskachel": [
+      101,
+      77
+     ]
+    },
+    {
+     "block": [
+      0,
+      79,
+      3,
+      3
+     ],
+     "fusskachel": [
+      1,
+      81
+     ]
+    },
+    {
+     "block": [
+      2,
+      79,
+      3,
+      3
+     ],
+     "fusskachel": [
+      3,
+      81
+     ]
+    },
+    {
+     "block": [
+      102,
+      79,
+      3,
+      3
+     ],
+     "fusskachel": [
+      103,
+      81
+     ]
+    },
+    {
+     "block": [
+      1,
+      80,
+      3,
+      3
+     ],
+     "fusskachel": [
+      2,
+      82
+     ]
+    },
+    {
+     "block": [
+      99,
+      80,
+      3,
+      3
+     ],
+     "fusskachel": [
+      100,
+      82
+     ]
+    },
+    {
+     "block": [
+      15,
+      82,
+      3,
+      3
+     ],
+     "fusskachel": [
+      16,
+      84
+     ]
+    },
+    {
+     "block": [
+      17,
+      82,
+      3,
+      3
+     ],
+     "fusskachel": [
+      18,
+      84
+     ]
+    },
+    {
+     "block": [
+      12,
+      83,
+      3,
+      3
+     ],
+     "fusskachel": [
+      13,
+      85
+     ]
+    },
+    {
+     "block": [
+      38,
+      83,
+      3,
+      3
+     ],
+     "fusskachel": [
+      39,
+      85
+     ]
+    },
+    {
+     "block": [
+      94,
+      83,
+      3,
+      3
+     ],
+     "fusskachel": [
+      95,
+      85
+     ]
+    },
+    {
+     "block": [
+      13,
+      84,
+      3,
+      3
+     ],
+     "fusskachel": [
+      14,
+      86
+     ]
+    },
+    {
+     "block": [
+      21,
+      84,
+      3,
+      3
+     ],
+     "fusskachel": [
+      22,
+      86
+     ]
+    },
+    {
+     "block": [
+      99,
+      84,
+      3,
+      3
+     ],
+     "fusskachel": [
+      100,
+      86
+     ]
+    },
+    {
+     "block": [
+      0,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      1,
+      87
+     ]
+    },
+    {
+     "block": [
+      8,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      9,
+      87
+     ]
+    },
+    {
+     "block": [
+      66,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      67,
+      87
+     ]
+    },
+    {
+     "block": [
+      88,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      89,
+      87
+     ]
+    }
+   ]
+  },
+  {
+   "name": "k01/baum02",
+   "datei": "varianten/k01-baum02_m.png",
+   "animation": "baum",
+   "slot_kacheln": {
+    "x": 27,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      67,
+      16,
+      3,
+      3
+     ],
+     "fusskachel": [
+      68,
+      18
+     ]
+    },
+    {
+     "block": [
+      23,
+      32,
+      3,
+      3
+     ],
+     "fusskachel": [
+      24,
+      34
+     ]
+    },
+    {
+     "block": [
+      41,
+      -2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      42,
+      0
+     ]
+    },
+    {
+     "block": [
+      43,
+      -2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      44,
+      0
+     ]
+    },
+    {
+     "block": [
+      97,
+      -2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      98,
+      0
+     ]
+    },
+    {
+     "block": [
+      8,
+      -1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      9,
+      1
+     ]
+    },
+    {
+     "block": [
+      40,
+      -1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      41,
+      1
+     ]
+    },
+    {
+     "block": [
+      9,
+      0,
+      3,
+      3
+     ],
+     "fusskachel": [
+      10,
+      2
+     ]
+    },
+    {
+     "block": [
+      41,
+      0,
+      3,
+      3
+     ],
+     "fusskachel": [
+      42,
+      2
+     ]
+    },
+    {
+     "block": [
+      75,
+      0,
+      3,
+      3
+     ],
+     "fusskachel": [
+      76,
+      2
+     ]
+    },
+    {
+     "block": [
+      0,
+      1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      1,
+      3
+     ]
+    },
+    {
+     "block": [
+      10,
+      1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      11,
+      3
+     ]
+    },
+    {
+     "block": [
+      22,
+      1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      23,
+      3
+     ]
+    },
+    {
+     "block": [
+      38,
+      1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      39,
+      3
+     ]
+    },
+    {
+     "block": [
+      1,
+      2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      2,
+      4
+     ]
+    },
+    {
+     "block": [
+      17,
+      2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      18,
+      4
+     ]
+    },
+    {
+     "block": [
+      25,
+      2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      26,
+      4
+     ]
+    },
+    {
+     "block": [
+      65,
+      2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      66,
+      4
+     ]
+    },
+    {
+     "block": [
+      79,
+      2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      80,
+      4
+     ]
+    },
+    {
+     "block": [
+      34,
+      3,
+      3,
+      3
+     ],
+     "fusskachel": [
+      35,
+      5
+     ]
+    },
+    {
+     "block": [
+      50,
+      3,
+      3,
+      3
+     ],
+     "fusskachel": [
+      51,
+      5
+     ]
+    },
+    {
+     "block": [
+      60,
+      3,
+      3,
+      3
+     ],
+     "fusskachel": [
+      61,
+      5
+     ]
+    },
+    {
+     "block": [
+      99,
+      4,
+      3,
+      3
+     ],
+     "fusskachel": [
+      100,
+      6
+     ]
+    },
+    {
+     "block": [
+      1,
+      6,
+      3,
+      3
+     ],
+     "fusskachel": [
+      2,
+      8
+     ]
+    },
+    {
+     "block": [
+      102,
+      7,
+      3,
+      3
+     ],
+     "fusskachel": [
+      103,
+      9
+     ]
+    },
+    {
+     "block": [
+      0,
+      13,
+      3,
+      3
+     ],
+     "fusskachel": [
+      1,
+      15
+     ]
+    },
+    {
+     "block": [
+      1,
+      14,
+      3,
+      3
+     ],
+     "fusskachel": [
+      2,
+      16
+     ]
+    },
+    {
+     "block": [
+      3,
+      16,
+      3,
+      3
+     ],
+     "fusskachel": [
+      4,
+      18
+     ]
+    },
+    {
+     "block": [
+      1,
+      20,
+      3,
+      3
+     ],
+     "fusskachel": [
+      2,
+      22
+     ]
+    },
+    {
+     "block": [
+      -1,
+      22,
+      3,
+      3
+     ],
+     "fusskachel": [
+      0,
+      24
+     ]
+    },
+    {
+     "block": [
+      2,
+      27,
+      3,
+      3
+     ],
+     "fusskachel": [
+      3,
+      29
+     ]
+    },
+    {
+     "block": [
+      1,
+      34,
+      3,
+      3
+     ],
+     "fusskachel": [
+      2,
+      36
+     ]
+    },
+    {
+     "block": [
+      101,
+      34,
+      3,
+      3
+     ],
+     "fusskachel": [
+      102,
+      36
+     ]
+    },
+    {
+     "block": [
+      0,
+      35,
+      3,
+      3
+     ],
+     "fusskachel": [
+      1,
+      37
+     ]
+    },
+    {
+     "block": [
+      -1,
+      36,
+      3,
+      3
+     ],
+     "fusskachel": [
+      0,
+      38
+     ]
+    },
+    {
+     "block": [
+      1,
+      38,
+      3,
+      3
+     ],
+     "fusskachel": [
+      2,
+      40
+     ]
+    },
+    {
+     "block": [
+      99,
+      38,
+      3,
+      3
+     ],
+     "fusskachel": [
+      100,
+      40
+     ]
+    },
+    {
+     "block": [
+      100,
+      39,
+      3,
+      3
+     ],
+     "fusskachel": [
+      101,
+      41
+     ]
+    },
+    {
+     "block": [
+      101,
+      40,
+      3,
+      3
+     ],
+     "fusskachel": [
+      102,
+      42
+     ]
+    },
+    {
+     "block": [
+      99,
+      46,
+      3,
+      3
+     ],
+     "fusskachel": [
+      100,
+      48
+     ]
+    },
+    {
+     "block": [
+      3,
+      48,
+      3,
+      3
+     ],
+     "fusskachel": [
+      4,
+      50
+     ]
+    },
+    {
+     "block": [
+      -1,
+      50,
+      3,
+      3
+     ],
+     "fusskachel": [
+      0,
+      52
+     ]
+    },
+    {
+     "block": [
+      -1,
+      52,
+      3,
+      3
+     ],
+     "fusskachel": [
+      0,
+      54
+     ]
+    },
+    {
+     "block": [
+      -1,
+      56,
+      3,
+      3
+     ],
+     "fusskachel": [
+      0,
+      58
+     ]
+    },
+    {
+     "block": [
+      0,
+      57,
+      3,
+      3
+     ],
+     "fusskachel": [
+      1,
+      59
+     ]
+    },
+    {
+     "block": [
+      100,
+      61,
+      3,
+      3
+     ],
+     "fusskachel": [
+      101,
+      63
+     ]
+    },
+    {
+     "block": [
+      1,
+      64,
+      3,
+      3
+     ],
+     "fusskachel": [
+      2,
+      66
+     ]
+    },
+    {
+     "block": [
+      2,
+      65,
+      3,
+      3
+     ],
+     "fusskachel": [
+      3,
+      67
+     ]
+    },
+    {
+     "block": [
+      100,
+      65,
+      3,
+      3
+     ],
+     "fusskachel": [
+      101,
+      67
+     ]
+    },
+    {
+     "block": [
+      2,
+      67,
+      3,
+      3
+     ],
+     "fusskachel": [
+      3,
+      69
+     ]
+    },
+    {
+     "block": [
+      -1,
+      68,
+      3,
+      3
+     ],
+     "fusskachel": [
+      0,
+      70
+     ]
+    },
+    {
+     "block": [
+      2,
+      69,
+      3,
+      3
+     ],
+     "fusskachel": [
+      3,
+      71
+     ]
+    },
+    {
+     "block": [
+      98,
+      69,
+      3,
+      3
+     ],
+     "fusskachel": [
+      99,
+      71
+     ]
+    },
+    {
+     "block": [
+      101,
+      70,
+      3,
+      3
+     ],
+     "fusskachel": [
+      102,
+      72
+     ]
+    },
+    {
+     "block": [
+      102,
+      81,
+      3,
+      3
+     ],
+     "fusskachel": [
+      103,
+      83
+     ]
+    },
+    {
+     "block": [
+      9,
+      82,
+      3,
+      3
+     ],
+     "fusskachel": [
+      10,
+      84
+     ]
+    },
+    {
+     "block": [
+      65,
+      82,
+      3,
+      3
+     ],
+     "fusskachel": [
+      66,
+      84
+     ]
+    },
+    {
+     "block": [
+      87,
+      82,
+      3,
+      3
+     ],
+     "fusskachel": [
+      88,
+      84
+     ]
+    },
+    {
+     "block": [
+      0,
+      83,
+      3,
+      3
+     ],
+     "fusskachel": [
+      1,
+      85
+     ]
+    },
+    {
+     "block": [
+      6,
+      83,
+      3,
+      3
+     ],
+     "fusskachel": [
+      7,
+      85
+     ]
+    },
+    {
+     "block": [
+      52,
+      83,
+      3,
+      3
+     ],
+     "fusskachel": [
+      53,
+      85
+     ]
+    },
+    {
+     "block": [
+      72,
+      83,
+      3,
+      3
+     ],
+     "fusskachel": [
+      73,
+      85
+     ]
+    },
+    {
+     "block": [
+      74,
+      83,
+      3,
+      3
+     ],
+     "fusskachel": [
+      75,
+      85
+     ]
+    },
+    {
+     "block": [
+      92,
+      83,
+      3,
+      3
+     ],
+     "fusskachel": [
+      93,
+      85
+     ]
+    },
+    {
+     "block": [
+      1,
+      84,
+      3,
+      3
+     ],
+     "fusskachel": [
+      2,
+      86
+     ]
+    },
+    {
+     "block": [
+      23,
+      84,
+      3,
+      3
+     ],
+     "fusskachel": [
+      24,
+      86
+     ]
+    },
+    {
+     "block": [
+      45,
+      84,
+      3,
+      3
+     ],
+     "fusskachel": [
+      46,
+      86
+     ]
+    },
+    {
+     "block": [
+      73,
+      84,
+      3,
+      3
+     ],
+     "fusskachel": [
+      74,
+      86
+     ]
+    },
+    {
+     "block": [
+      77,
+      84,
+      3,
+      3
+     ],
+     "fusskachel": [
+      78,
+      86
+     ]
+    },
+    {
+     "block": [
+      95,
+      84,
+      3,
+      3
+     ],
+     "fusskachel": [
+      96,
+      86
+     ]
+    },
+    {
+     "block": [
+      10,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      11,
+      87
+     ]
+    },
+    {
+     "block": [
+      20,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      21,
+      87
+     ]
+    },
+    {
+     "block": [
+      52,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      53,
+      87
+     ]
+    },
+    {
+     "block": [
+      56,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      57,
+      87
+     ]
+    },
+    {
+     "block": [
+      60,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      61,
+      87
+     ]
+    },
+    {
+     "block": [
+      62,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      63,
+      87
+     ]
+    },
+    {
+     "block": [
+      92,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      93,
+      87
+     ]
+    },
+    {
+     "block": [
+      94,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      95,
+      87
+     ]
+    },
+    {
+     "block": [
+      100,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      101,
+      87
+     ]
+    }
+   ]
+  },
+  {
+   "name": "k01/baum04",
+   "datei": "varianten/k01-baum04.png",
+   "animation": "baum",
+   "slot_kacheln": {
+    "x": 30,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      68,
+      25,
+      3,
+      3
+     ],
+     "fusskachel": [
+      69,
+      27
+     ]
+    },
+    {
+     "block": [
+      11,
+      39,
+      3,
+      3
+     ],
+     "fusskachel": [
+      12,
+      41
+     ]
+    },
+    {
+     "block": [
+      3,
+      -2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      4,
+      0
+     ]
+    },
+    {
+     "block": [
+      17,
+      -2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      18,
+      0
+     ]
+    },
+    {
+     "block": [
+      35,
+      -2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      36,
+      0
+     ]
+    },
+    {
+     "block": [
+      69,
+      -2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      70,
+      0
+     ]
+    },
+    {
+     "block": [
+      28,
+      -1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      29,
+      1
+     ]
+    },
+    {
+     "block": [
+      42,
+      -1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      43,
+      1
+     ]
+    },
+    {
+     "block": [
+      17,
+      0,
+      3,
+      3
+     ],
+     "fusskachel": [
+      18,
+      2
+     ]
+    },
+    {
+     "block": [
+      19,
+      0,
+      3,
+      3
+     ],
+     "fusskachel": [
+      20,
+      2
+     ]
+    },
+    {
+     "block": [
+      55,
+      0,
+      3,
+      3
+     ],
+     "fusskachel": [
+      56,
+      2
+     ]
+    },
+    {
+     "block": [
+      59,
+      0,
+      3,
+      3
+     ],
+     "fusskachel": [
+      60,
+      2
+     ]
+    },
+    {
+     "block": [
+      61,
+      0,
+      3,
+      3
+     ],
+     "fusskachel": [
+      62,
+      2
+     ]
+    },
+    {
+     "block": [
+      36,
+      1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      37,
+      3
+     ]
+    },
+    {
+     "block": [
+      80,
+      1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      81,
+      3
+     ]
+    },
+    {
+     "block": [
+      3,
+      2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      4,
+      4
+     ]
+    },
+    {
+     "block": [
+      31,
+      2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      32,
+      4
+     ]
+    },
+    {
+     "block": [
+      85,
+      2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      86,
+      4
+     ]
+    },
+    {
+     "block": [
+      95,
+      2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      96,
+      4
+     ]
+    },
+    {
+     "block": [
+      4,
+      3,
+      3,
+      3
+     ],
+     "fusskachel": [
+      5,
+      5
+     ]
+    },
+    {
+     "block": [
+      30,
+      3,
+      3,
+      3
+     ],
+     "fusskachel": [
+      31,
+      5
+     ]
+    },
+    {
+     "block": [
+      36,
+      3,
+      3,
+      3
+     ],
+     "fusskachel": [
+      37,
+      5
+     ]
+    },
+    {
+     "block": [
+      72,
+      3,
+      3,
+      3
+     ],
+     "fusskachel": [
+      73,
+      5
+     ]
+    },
+    {
+     "block": [
+      101,
+      6,
+      3,
+      3
+     ],
+     "fusskachel": [
+      102,
+      8
+     ]
+    },
+    {
+     "block": [
+      2,
+      9,
+      3,
+      3
+     ],
+     "fusskachel": [
+      3,
+      11
+     ]
+    },
+    {
+     "block": [
+      3,
+      12,
+      3,
+      3
+     ],
+     "fusskachel": [
+      4,
+      14
+     ]
+    },
+    {
+     "block": [
+      3,
+      14,
+      3,
+      3
+     ],
+     "fusskachel": [
+      4,
+      16
+     ]
+    },
+    {
+     "block": [
+      3,
+      18,
+      3,
+      3
+     ],
+     "fusskachel": [
+      4,
+      20
+     ]
+    },
+    {
+     "block": [
+      101,
+      24,
+      3,
+      3
+     ],
+     "fusskachel": [
+      102,
+      26
+     ]
+    },
+    {
+     "block": [
+      102,
+      29,
+      3,
+      3
+     ],
+     "fusskachel": [
+      103,
+      31
+     ]
+    },
+    {
+     "block": [
+      101,
+      30,
+      3,
+      3
+     ],
+     "fusskachel": [
+      102,
+      32
+     ]
+    },
+    {
+     "block": [
+      99,
+      34,
+      3,
+      3
+     ],
+     "fusskachel": [
+      100,
+      36
+     ]
+    },
+    {
+     "block": [
+      2,
+      35,
+      3,
+      3
+     ],
+     "fusskachel": [
+      3,
+      37
+     ]
+    },
+    {
+     "block": [
+      102,
+      35,
+      3,
+      3
+     ],
+     "fusskachel": [
+      103,
+      37
+     ]
+    },
+    {
+     "block": [
+      -1,
+      42,
+      3,
+      3
+     ],
+     "fusskachel": [
+      0,
+      44
+     ]
+    },
+    {
+     "block": [
+      3,
+      42,
+      3,
+      3
+     ],
+     "fusskachel": [
+      4,
+      44
+     ]
+    },
+    {
+     "block": [
+      2,
+      43,
+      3,
+      3
+     ],
+     "fusskachel": [
+      3,
+      45
+     ]
+    },
+    {
+     "block": [
+      99,
+      44,
+      3,
+      3
+     ],
+     "fusskachel": [
+      100,
+      46
+     ]
+    },
+    {
+     "block": [
+      -1,
+      60,
+      3,
+      3
+     ],
+     "fusskachel": [
+      0,
+      62
+     ]
+    },
+    {
+     "block": [
+      1,
+      62,
+      3,
+      3
+     ],
+     "fusskachel": [
+      2,
+      64
+     ]
+    },
+    {
+     "block": [
+      0,
+      65,
+      3,
+      3
+     ],
+     "fusskachel": [
+      1,
+      67
+     ]
+    },
+    {
+     "block": [
+      0,
+      71,
+      3,
+      3
+     ],
+     "fusskachel": [
+      1,
+      73
+     ]
+    },
+    {
+     "block": [
+      101,
+      72,
+      3,
+      3
+     ],
+     "fusskachel": [
+      102,
+      74
+     ]
+    },
+    {
+     "block": [
+      1,
+      74,
+      3,
+      3
+     ],
+     "fusskachel": [
+      2,
+      76
+     ]
+    },
+    {
+     "block": [
+      102,
+      75,
+      3,
+      3
+     ],
+     "fusskachel": [
+      103,
+      77
+     ]
+    },
+    {
+     "block": [
+      98,
+      79,
+      3,
+      3
+     ],
+     "fusskachel": [
+      99,
+      81
+     ]
+    },
+    {
+     "block": [
+      5,
+      82,
+      3,
+      3
+     ],
+     "fusskachel": [
+      6,
+      84
+     ]
+    },
+    {
+     "block": [
+      61,
+      82,
+      3,
+      3
+     ],
+     "fusskachel": [
+      62,
+      84
+     ]
+    },
+    {
+     "block": [
+      91,
+      82,
+      3,
+      3
+     ],
+     "fusskachel": [
+      92,
+      84
+     ]
+    },
+    {
+     "block": [
+      97,
+      82,
+      3,
+      3
+     ],
+     "fusskachel": [
+      98,
+      84
+     ]
+    },
+    {
+     "block": [
+      101,
+      82,
+      3,
+      3
+     ],
+     "fusskachel": [
+      102,
+      84
+     ]
+    },
+    {
+     "block": [
+      68,
+      83,
+      3,
+      3
+     ],
+     "fusskachel": [
+      69,
+      85
+     ]
+    },
+    {
+     "block": [
+      76,
+      83,
+      3,
+      3
+     ],
+     "fusskachel": [
+      77,
+      85
+     ]
+    },
+    {
+     "block": [
+      90,
+      83,
+      3,
+      3
+     ],
+     "fusskachel": [
+      91,
+      85
+     ]
+    },
+    {
+     "block": [
+      17,
+      84,
+      3,
+      3
+     ],
+     "fusskachel": [
+      18,
+      86
+     ]
+    },
+    {
+     "block": [
+      101,
+      84,
+      3,
+      3
+     ],
+     "fusskachel": [
+      102,
+      86
+     ]
+    },
+    {
+     "block": [
+      4,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      5,
+      87
+     ]
+    },
+    {
+     "block": [
+      16,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      17,
+      87
+     ]
+    },
+    {
+     "block": [
+      58,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      59,
+      87
+     ]
+    },
+    {
+     "block": [
+      80,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      81,
+      87
+     ]
+    },
+    {
+     "block": [
+      102,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      103,
+      87
+     ]
+    }
+   ]
+  },
+  {
+   "name": "k01/baum04",
+   "datei": "varianten/k01-baum04_m.png",
+   "animation": "baum",
+   "slot_kacheln": {
+    "x": 33,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      11,
+      35,
+      3,
+      3
+     ],
+     "fusskachel": [
+      12,
+      37
+     ]
+    },
+    {
+     "block": [
+      63,
+      74,
+      3,
+      3
+     ],
+     "fusskachel": [
+      64,
+      76
+     ]
+    },
+    {
+     "block": [
+      25,
+      -2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      26,
+      0
+     ]
+    },
+    {
+     "block": [
+      85,
+      -2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      86,
+      0
+     ]
+    },
+    {
+     "block": [
+      16,
+      -1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      17,
+      1
+     ]
+    },
+    {
+     "block": [
+      38,
+      -1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      39,
+      1
+     ]
+    },
+    {
+     "block": [
+      92,
+      -1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      93,
+      1
+     ]
+    },
+    {
+     "block": [
+      13,
+      0,
+      3,
+      3
+     ],
+     "fusskachel": [
+      14,
+      2
+     ]
+    },
+    {
+     "block": [
+      15,
+      0,
+      3,
+      3
+     ],
+     "fusskachel": [
+      16,
+      2
+     ]
+    },
+    {
+     "block": [
+      67,
+      0,
+      3,
+      3
+     ],
+     "fusskachel": [
+      68,
+      2
+     ]
+    },
+    {
+     "block": [
+      73,
+      0,
+      3,
+      3
+     ],
+     "fusskachel": [
+      74,
+      2
+     ]
+    },
+    {
+     "block": [
+      99,
+      0,
+      3,
+      3
+     ],
+     "fusskachel": [
+      100,
+      2
+     ]
+    },
+    {
+     "block": [
+      76,
+      1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      77,
+      3
+     ]
+    },
+    {
+     "block": [
+      98,
+      1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      99,
+      3
+     ]
+    },
+    {
+     "block": [
+      49,
+      2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      50,
+      4
+     ]
+    },
+    {
+     "block": [
+      61,
+      2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      62,
+      4
+     ]
+    },
+    {
+     "block": [
+      87,
+      2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      88,
+      4
+     ]
+    },
+    {
+     "block": [
+      91,
+      2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      92,
+      4
+     ]
+    },
+    {
+     "block": [
+      99,
+      2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      100,
+      4
+     ]
+    },
+    {
+     "block": [
+      8,
+      3,
+      3,
+      3
+     ],
+     "fusskachel": [
+      9,
+      5
+     ]
+    },
+    {
+     "block": [
+      22,
+      3,
+      3,
+      3
+     ],
+     "fusskachel": [
+      23,
+      5
+     ]
+    },
+    {
+     "block": [
+      24,
+      3,
+      3,
+      3
+     ],
+     "fusskachel": [
+      25,
+      5
+     ]
+    },
+    {
+     "block": [
+      66,
+      3,
+      3,
+      3
+     ],
+     "fusskachel": [
+      67,
+      5
+     ]
+    },
+    {
+     "block": [
+      70,
+      3,
+      3,
+      3
+     ],
+     "fusskachel": [
+      71,
+      5
+     ]
+    },
+    {
+     "block": [
+      -1,
+      6,
+      3,
+      3
+     ],
+     "fusskachel": [
+      0,
+      8
+     ]
+    },
+    {
+     "block": [
+      98,
+      7,
+      3,
+      3
+     ],
+     "fusskachel": [
+      99,
+      9
+     ]
+    },
+    {
+     "block": [
+      -1,
+      8,
+      3,
+      3
+     ],
+     "fusskachel": [
+      0,
+      10
+     ]
+    },
+    {
+     "block": [
+      100,
+      9,
+      3,
+      3
+     ],
+     "fusskachel": [
+      101,
+      11
+     ]
+    },
+    {
+     "block": [
+      102,
+      9,
+      3,
+      3
+     ],
+     "fusskachel": [
+      103,
+      11
+     ]
+    },
+    {
+     "block": [
+      1,
+      10,
+      3,
+      3
+     ],
+     "fusskachel": [
+      2,
+      12
+     ]
+    },
+    {
+     "block": [
+      2,
+      13,
+      3,
+      3
+     ],
+     "fusskachel": [
+      3,
+      15
+     ]
+    },
+    {
+     "block": [
+      3,
+      24,
+      3,
+      3
+     ],
+     "fusskachel": [
+      4,
+      26
+     ]
+    },
+    {
+     "block": [
+      100,
+      25,
+      3,
+      3
+     ],
+     "fusskachel": [
+      101,
+      27
+     ]
+    },
+    {
+     "block": [
+      3,
+      26,
+      3,
+      3
+     ],
+     "fusskachel": [
+      4,
+      28
+     ]
+    },
+    {
+     "block": [
+      0,
+      31,
+      3,
+      3
+     ],
+     "fusskachel": [
+      1,
+      33
+     ]
+    },
+    {
+     "block": [
+      0,
+      37,
+      3,
+      3
+     ],
+     "fusskachel": [
+      1,
+      39
+     ]
+    },
+    {
+     "block": [
+      3,
+      38,
+      3,
+      3
+     ],
+     "fusskachel": [
+      4,
+      40
+     ]
+    },
+    {
+     "block": [
+      101,
+      42,
+      3,
+      3
+     ],
+     "fusskachel": [
+      102,
+      44
+     ]
+    },
+    {
+     "block": [
+      100,
+      43,
+      3,
+      3
+     ],
+     "fusskachel": [
+      101,
+      45
+     ]
+    },
+    {
+     "block": [
+      100,
+      45,
+      3,
+      3
+     ],
+     "fusskachel": [
+      101,
+      47
+     ]
+    },
+    {
+     "block": [
+      100,
+      47,
+      3,
+      3
+     ],
+     "fusskachel": [
+      101,
+      49
+     ]
+    },
+    {
+     "block": [
+      2,
+      49,
+      3,
+      3
+     ],
+     "fusskachel": [
+      3,
+      51
+     ]
+    },
+    {
+     "block": [
+      0,
+      59,
+      3,
+      3
+     ],
+     "fusskachel": [
+      1,
+      61
+     ]
+    },
+    {
+     "block": [
+      3,
+      60,
+      3,
+      3
+     ],
+     "fusskachel": [
+      4,
+      62
+     ]
+    },
+    {
+     "block": [
+      2,
+      61,
+      3,
+      3
+     ],
+     "fusskachel": [
+      3,
+      63
+     ]
+    },
+    {
+     "block": [
+      101,
+      62,
+      3,
+      3
+     ],
+     "fusskachel": [
+      102,
+      64
+     ]
+    },
+    {
+     "block": [
+      102,
+      65,
+      3,
+      3
+     ],
+     "fusskachel": [
+      103,
+      67
+     ]
+    },
+    {
+     "block": [
+      0,
+      67,
+      3,
+      3
+     ],
+     "fusskachel": [
+      1,
+      69
+     ]
+    },
+    {
+     "block": [
+      2,
+      71,
+      3,
+      3
+     ],
+     "fusskachel": [
+      3,
+      73
+     ]
+    },
+    {
+     "block": [
+      2,
+      75,
+      3,
+      3
+     ],
+     "fusskachel": [
+      3,
+      77
+     ]
+    },
+    {
+     "block": [
+      99,
+      76,
+      3,
+      3
+     ],
+     "fusskachel": [
+      100,
+      78
+     ]
+    },
+    {
+     "block": [
+      100,
+      77,
+      3,
+      3
+     ],
+     "fusskachel": [
+      101,
+      79
+     ]
+    },
+    {
+     "block": [
+      -1,
+      82,
+      3,
+      3
+     ],
+     "fusskachel": [
+      0,
+      84
+     ]
+    },
+    {
+     "block": [
+      11,
+      82,
+      3,
+      3
+     ],
+     "fusskachel": [
+      12,
+      84
+     ]
+    },
+    {
+     "block": [
+      23,
+      82,
+      3,
+      3
+     ],
+     "fusskachel": [
+      24,
+      84
+     ]
+    },
+    {
+     "block": [
+      45,
+      82,
+      3,
+      3
+     ],
+     "fusskachel": [
+      46,
+      84
+     ]
+    },
+    {
+     "block": [
+      59,
+      82,
+      3,
+      3
+     ],
+     "fusskachel": [
+      60,
+      84
+     ]
+    },
+    {
+     "block": [
+      77,
+      82,
+      3,
+      3
+     ],
+     "fusskachel": [
+      78,
+      84
+     ]
+    },
+    {
+     "block": [
+      2,
+      83,
+      3,
+      3
+     ],
+     "fusskachel": [
+      3,
+      85
+     ]
+    },
+    {
+     "block": [
+      54,
+      83,
+      3,
+      3
+     ],
+     "fusskachel": [
+      55,
+      85
+     ]
+    },
+    {
+     "block": [
+      51,
+      84,
+      3,
+      3
+     ],
+     "fusskachel": [
+      52,
+      86
+     ]
+    },
+    {
+     "block": [
+      61,
+      84,
+      3,
+      3
+     ],
+     "fusskachel": [
+      62,
+      86
+     ]
+    },
+    {
+     "block": [
+      89,
+      84,
+      3,
+      3
+     ],
+     "fusskachel": [
+      90,
+      86
+     ]
+    },
+    {
+     "block": [
+      97,
+      84,
+      3,
+      3
+     ],
+     "fusskachel": [
+      98,
+      86
+     ]
+    },
+    {
+     "block": [
+      24,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      25,
+      87
+     ]
+    },
+    {
+     "block": [
+      54,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      55,
+      87
+     ]
+    },
+    {
+     "block": [
+      72,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      73,
+      87
+     ]
+    },
+    {
+     "block": [
+      76,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      77,
+      87
+     ]
+    }
+   ]
+  },
+  {
+   "name": "k01/baum09",
+   "datei": "varianten/k01-baum09.png",
+   "animation": "baum",
+   "slot_kacheln": {
+    "x": 36,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      21,
+      -2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      22,
+      0
+     ]
+    },
+    {
+     "block": [
+      33,
+      -2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      34,
+      0
+     ]
+    },
+    {
+     "block": [
+      67,
+      -2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      68,
+      0
+     ]
+    },
+    {
+     "block": [
+      73,
+      -2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      74,
+      0
+     ]
+    },
+    {
+     "block": [
+      91,
+      -2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      92,
+      0
+     ]
+    },
+    {
+     "block": [
+      32,
+      -1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      33,
+      1
+     ]
+    },
+    {
+     "block": [
+      -1,
+      0,
+      3,
+      3
+     ],
+     "fusskachel": [
+      0,
+      2
+     ]
+    },
+    {
+     "block": [
+      8,
+      1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      9,
+      3
+     ]
+    },
+    {
+     "block": [
+      20,
+      1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      21,
+      3
+     ]
+    },
+    {
+     "block": [
+      66,
+      1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      67,
+      3
+     ]
+    },
+    {
+     "block": [
+      19,
+      2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      20,
+      4
+     ]
+    },
+    {
+     "block": [
+      33,
+      2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      34,
+      4
+     ]
+    },
+    {
+     "block": [
+      37,
+      2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      38,
+      4
+     ]
+    },
+    {
+     "block": [
+      89,
+      2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      90,
+      4
+     ]
+    },
+    {
+     "block": [
+      26,
+      3,
+      3,
+      3
+     ],
+     "fusskachel": [
+      27,
+      5
+     ]
+    },
+    {
+     "block": [
+      52,
+      3,
+      3,
+      3
+     ],
+     "fusskachel": [
+      53,
+      5
+     ]
+    },
+    {
+     "block": [
+      54,
+      3,
+      3,
+      3
+     ],
+     "fusskachel": [
+      55,
+      5
+     ]
+    },
+    {
+     "block": [
+      98,
+      3,
+      3,
+      3
+     ],
+     "fusskachel": [
+      99,
+      5
+     ]
+    },
+    {
+     "block": [
+      3,
+      6,
+      3,
+      3
+     ],
+     "fusskachel": [
+      4,
+      8
+     ]
+    },
+    {
+     "block": [
+      -1,
+      10,
+      3,
+      3
+     ],
+     "fusskachel": [
+      0,
+      12
+     ]
+    },
+    {
+     "block": [
+      -1,
+      14,
+      3,
+      3
+     ],
+     "fusskachel": [
+      0,
+      16
+     ]
+    },
+    {
+     "block": [
+      2,
+      17,
+      3,
+      3
+     ],
+     "fusskachel": [
+      3,
+      19
+     ]
+    },
+    {
+     "block": [
+      1,
+      22,
+      3,
+      3
+     ],
+     "fusskachel": [
+      2,
+      24
+     ]
+    },
+    {
+     "block": [
+      98,
+      25,
+      3,
+      3
+     ],
+     "fusskachel": [
+      99,
+      27
+     ]
+    },
+    {
+     "block": [
+      2,
+      29,
+      3,
+      3
+     ],
+     "fusskachel": [
+      3,
+      31
+     ]
+    },
+    {
+     "block": [
+      100,
+      29,
+      3,
+      3
+     ],
+     "fusskachel": [
+      101,
+      31
+     ]
+    },
+    {
+     "block": [
+      -1,
+      30,
+      3,
+      3
+     ],
+     "fusskachel": [
+      0,
+      32
+     ]
+    },
+    {
+     "block": [
+      98,
+      37,
+      3,
+      3
+     ],
+     "fusskachel": [
+      99,
+      39
+     ]
+    },
+    {
+     "block": [
+      1,
+      42,
+      3,
+      3
+     ],
+     "fusskachel": [
+      2,
+      44
+     ]
+    },
+    {
+     "block": [
+      0,
+      45,
+      3,
+      3
+     ],
+     "fusskachel": [
+      1,
+      47
+     ]
+    },
+    {
+     "block": [
+      102,
+      45,
+      3,
+      3
+     ],
+     "fusskachel": [
+      103,
+      47
+     ]
+    },
+    {
+     "block": [
+      1,
+      48,
+      3,
+      3
+     ],
+     "fusskachel": [
+      2,
+      50
+     ]
+    },
+    {
+     "block": [
+      1,
+      52,
+      3,
+      3
+     ],
+     "fusskachel": [
+      2,
+      54
+     ]
+    },
+    {
+     "block": [
+      1,
+      58,
+      3,
+      3
+     ],
+     "fusskachel": [
+      2,
+      60
+     ]
+    },
+    {
+     "block": [
+      102,
+      59,
+      3,
+      3
+     ],
+     "fusskachel": [
+      103,
+      61
+     ]
+    },
+    {
+     "block": [
+      98,
+      61,
+      3,
+      3
+     ],
+     "fusskachel": [
+      99,
+      63
+     ]
+    },
+    {
+     "block": [
+      -1,
+      64,
+      3,
+      3
+     ],
+     "fusskachel": [
+      0,
+      66
+     ]
+    },
+    {
+     "block": [
+      101,
+      68,
+      3,
+      3
+     ],
+     "fusskachel": [
+      102,
+      70
+     ]
+    },
+    {
+     "block": [
+      100,
+      69,
+      3,
+      3
+     ],
+     "fusskachel": [
+      101,
+      71
+     ]
+    },
+    {
+     "block": [
+      1,
+      70,
+      3,
+      3
+     ],
+     "fusskachel": [
+      2,
+      72
+     ]
+    },
+    {
+     "block": [
+      3,
+      70,
+      3,
+      3
+     ],
+     "fusskachel": [
+      4,
+      72
+     ]
+    },
+    {
+     "block": [
+      -1,
+      72,
+      3,
+      3
+     ],
+     "fusskachel": [
+      0,
+      74
+     ]
+    },
+    {
+     "block": [
+      101,
+      76,
+      3,
+      3
+     ],
+     "fusskachel": [
+      102,
+      78
+     ]
+    },
+    {
+     "block": [
+      102,
+      77,
+      3,
+      3
+     ],
+     "fusskachel": [
+      103,
+      79
+     ]
+    },
+    {
+     "block": [
+      -1,
+      78,
+      3,
+      3
+     ],
+     "fusskachel": [
+      0,
+      80
+     ]
+    },
+    {
+     "block": [
+      3,
+      78,
+      3,
+      3
+     ],
+     "fusskachel": [
+      4,
+      80
+     ]
+    },
+    {
+     "block": [
+      19,
+      82,
+      3,
+      3
+     ],
+     "fusskachel": [
+      20,
+      84
+     ]
+    },
+    {
+     "block": [
+      55,
+      82,
+      3,
+      3
+     ],
+     "fusskachel": [
+      56,
+      84
+     ]
+    },
+    {
+     "block": [
+      95,
+      82,
+      3,
+      3
+     ],
+     "fusskachel": [
+      96,
+      84
+     ]
+    },
+    {
+     "block": [
+      4,
+      83,
+      3,
+      3
+     ],
+     "fusskachel": [
+      5,
+      85
+     ]
+    },
+    {
+     "block": [
+      8,
+      83,
+      3,
+      3
+     ],
+     "fusskachel": [
+      9,
+      85
+     ]
+    },
+    {
+     "block": [
+      10,
+      83,
+      3,
+      3
+     ],
+     "fusskachel": [
+      11,
+      85
+     ]
+    },
+    {
+     "block": [
+      40,
+      83,
+      3,
+      3
+     ],
+     "fusskachel": [
+      41,
+      85
+     ]
+    },
+    {
+     "block": [
+      66,
+      83,
+      3,
+      3
+     ],
+     "fusskachel": [
+      67,
+      85
+     ]
+    },
+    {
+     "block": [
+      84,
+      83,
+      3,
+      3
+     ],
+     "fusskachel": [
+      85,
+      85
+     ]
+    },
+    {
+     "block": [
+      47,
+      84,
+      3,
+      3
+     ],
+     "fusskachel": [
+      48,
+      86
+     ]
+    },
+    {
+     "block": [
+      44,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      45,
+      87
+     ]
+    },
+    {
+     "block": [
+      78,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      79,
+      87
+     ]
+    },
+    {
+     "block": [
+      86,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      87,
+      87
+     ]
+    }
+   ]
+  },
+  {
+   "name": "k01/baum09",
+   "datei": "varianten/k01-baum09_m.png",
+   "animation": "baum",
+   "slot_kacheln": {
+    "x": 0,
+    "y": 3,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      27,
+      -2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      28,
+      0
+     ]
+    },
+    {
+     "block": [
+      45,
+      -2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      46,
+      0
+     ]
+    },
+    {
+     "block": [
+      59,
+      -2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      60,
+      0
+     ]
+    },
+    {
+     "block": [
+      83,
+      -2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      84,
+      0
+     ]
+    },
+    {
+     "block": [
+      87,
+      -2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      88,
+      0
+     ]
+    },
+    {
+     "block": [
+      93,
+      -2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      94,
+      0
+     ]
+    },
+    {
+     "block": [
+      6,
+      -1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      7,
+      1
+     ]
+    },
+    {
+     "block": [
+      44,
+      -1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      45,
+      1
+     ]
+    },
+    {
+     "block": [
+      58,
+      -1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      59,
+      1
+     ]
+    },
+    {
+     "block": [
+      70,
+      -1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      71,
+      1
+     ]
+    },
+    {
+     "block": [
+      88,
+      -1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      89,
+      1
+     ]
+    },
+    {
+     "block": [
+      96,
+      -1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      97,
+      1
+     ]
+    },
+    {
+     "block": [
+      33,
+      0,
+      3,
+      3
+     ],
+     "fusskachel": [
+      34,
+      2
+     ]
+    },
+    {
+     "block": [
+      47,
+      0,
+      3,
+      3
+     ],
+     "fusskachel": [
+      48,
+      2
+     ]
+    },
+    {
+     "block": [
+      79,
+      0,
+      3,
+      3
+     ],
+     "fusskachel": [
+      80,
+      2
+     ]
+    },
+    {
+     "block": [
+      85,
+      0,
+      3,
+      3
+     ],
+     "fusskachel": [
+      86,
+      2
+     ]
+    },
+    {
+     "block": [
+      30,
+      1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      31,
+      3
+     ]
+    },
+    {
+     "block": [
+      40,
+      1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      41,
+      3
+     ]
+    },
+    {
+     "block": [
+      42,
+      1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      43,
+      3
+     ]
+    },
+    {
+     "block": [
+      44,
+      1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      45,
+      3
+     ]
+    },
+    {
+     "block": [
+      46,
+      1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      47,
+      3
+     ]
+    },
+    {
+     "block": [
+      70,
+      1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      71,
+      3
+     ]
+    },
+    {
+     "block": [
+      86,
+      1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      87,
+      3
+     ]
+    },
+    {
+     "block": [
+      92,
+      1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      93,
+      3
+     ]
+    },
+    {
+     "block": [
+      94,
+      1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      95,
+      3
+     ]
+    },
+    {
+     "block": [
+      96,
+      1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      97,
+      3
+     ]
+    },
+    {
+     "block": [
+      100,
+      1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      101,
+      3
+     ]
+    },
+    {
+     "block": [
+      29,
+      2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      30,
+      4
+     ]
+    },
+    {
+     "block": [
+      41,
+      2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      42,
+      4
+     ]
+    },
+    {
+     "block": [
+      55,
+      2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      56,
+      4
+     ]
+    },
+    {
+     "block": [
+      96,
+      3,
+      3,
+      3
+     ],
+     "fusskachel": [
+      97,
+      5
+     ]
+    },
+    {
+     "block": [
+      100,
+      5,
+      3,
+      3
+     ],
+     "fusskachel": [
+      101,
+      7
+     ]
+    },
+    {
+     "block": [
+      100,
+      7,
+      3,
+      3
+     ],
+     "fusskachel": [
+      101,
+      9
+     ]
+    },
+    {
+     "block": [
+      3,
+      10,
+      3,
+      3
+     ],
+     "fusskachel": [
+      4,
+      12
+     ]
+    },
+    {
+     "block": [
+      -1,
+      12,
+      3,
+      3
+     ],
+     "fusskachel": [
+      0,
+      14
+     ]
+    },
+    {
+     "block": [
+      2,
+      15,
+      3,
+      3
+     ],
+     "fusskachel": [
+      3,
+      17
+     ]
+    },
+    {
+     "block": [
+      -1,
+      20,
+      3,
+      3
+     ],
+     "fusskachel": [
+      0,
+      22
+     ]
+    },
+    {
+     "block": [
+      -1,
+      24,
+      3,
+      3
+     ],
+     "fusskachel": [
+      0,
+      26
+     ]
+    },
+    {
+     "block": [
+      1,
+      24,
+      3,
+      3
+     ],
+     "fusskachel": [
+      2,
+      26
+     ]
+    },
+    {
+     "block": [
+      2,
+      25,
+      3,
+      3
+     ],
+     "fusskachel": [
+      3,
+      27
+     ]
+    },
+    {
+     "block": [
+      99,
+      26,
+      3,
+      3
+     ],
+     "fusskachel": [
+      100,
+      28
+     ]
+    },
+    {
+     "block": [
+      1,
+      28,
+      3,
+      3
+     ],
+     "fusskachel": [
+      2,
+      30
+     ]
+    },
+    {
+     "block": [
+      98,
+      33,
+      3,
+      3
+     ],
+     "fusskachel": [
+      99,
+      35
+     ]
+    },
+    {
+     "block": [
+      1,
+      36,
+      3,
+      3
+     ],
+     "fusskachel": [
+      2,
+      38
+     ]
+    },
+    {
+     "block": [
+      100,
+      37,
+      3,
+      3
+     ],
+     "fusskachel": [
+      101,
+      39
+     ]
+    },
+    {
+     "block": [
+      101,
+      38,
+      3,
+      3
+     ],
+     "fusskachel": [
+      102,
+      40
+     ]
+    },
+    {
+     "block": [
+      102,
+      43,
+      3,
+      3
+     ],
+     "fusskachel": [
+      103,
+      45
+     ]
+    },
+    {
+     "block": [
+      101,
+      44,
+      3,
+      3
+     ],
+     "fusskachel": [
+      102,
+      46
+     ]
+    },
+    {
+     "block": [
+      3,
+      56,
+      3,
+      3
+     ],
+     "fusskachel": [
+      4,
+      58
+     ]
+    },
+    {
+     "block": [
+      2,
+      57,
+      3,
+      3
+     ],
+     "fusskachel": [
+      3,
+      59
+     ]
+    },
+    {
+     "block": [
+      98,
+      59,
+      3,
+      3
+     ],
+     "fusskachel": [
+      99,
+      61
+     ]
+    },
+    {
+     "block": [
+      98,
+      63,
+      3,
+      3
+     ],
+     "fusskachel": [
+      99,
+      65
+     ]
+    },
+    {
+     "block": [
+      3,
+      64,
+      3,
+      3
+     ],
+     "fusskachel": [
+      4,
+      66
+     ]
+    },
+    {
+     "block": [
+      101,
+      64,
+      3,
+      3
+     ],
+     "fusskachel": [
+      102,
+      66
+     ]
+    },
+    {
+     "block": [
+      3,
+      66,
+      3,
+      3
+     ],
+     "fusskachel": [
+      4,
+      68
+     ]
+    },
+    {
+     "block": [
+      98,
+      67,
+      3,
+      3
+     ],
+     "fusskachel": [
+      99,
+      69
+     ]
+    },
+    {
+     "block": [
+      100,
+      67,
+      3,
+      3
+     ],
+     "fusskachel": [
+      101,
+      69
+     ]
+    },
+    {
+     "block": [
+      99,
+      72,
+      3,
+      3
+     ],
+     "fusskachel": [
+      100,
+      74
+     ]
+    },
+    {
+     "block": [
+      3,
+      74,
+      3,
+      3
+     ],
+     "fusskachel": [
+      4,
+      76
+     ]
+    },
+    {
+     "block": [
+      99,
+      74,
+      3,
+      3
+     ],
+     "fusskachel": [
+      100,
+      76
+     ]
+    },
+    {
+     "block": [
+      0,
+      75,
+      3,
+      3
+     ],
+     "fusskachel": [
+      1,
+      77
+     ]
+    },
+    {
+     "block": [
+      98,
+      77,
+      3,
+      3
+     ],
+     "fusskachel": [
+      99,
+      79
+     ]
+    },
+    {
+     "block": [
+      101,
+      80,
+      3,
+      3
+     ],
+     "fusskachel": [
+      102,
+      82
+     ]
+    },
+    {
+     "block": [
+      100,
+      81,
+      3,
+      3
+     ],
+     "fusskachel": [
+      101,
+      83
+     ]
+    },
+    {
+     "block": [
+      51,
+      82,
+      3,
+      3
+     ],
+     "fusskachel": [
+      52,
+      84
+     ]
+    },
+    {
+     "block": [
+      73,
+      82,
+      3,
+      3
+     ],
+     "fusskachel": [
+      74,
+      84
+     ]
+    },
+    {
+     "block": [
+      14,
+      83,
+      3,
+      3
+     ],
+     "fusskachel": [
+      15,
+      85
+     ]
+    },
+    {
+     "block": [
+      16,
+      83,
+      3,
+      3
+     ],
+     "fusskachel": [
+      17,
+      85
+     ]
+    },
+    {
+     "block": [
+      24,
+      83,
+      3,
+      3
+     ],
+     "fusskachel": [
+      25,
+      85
+     ]
+    },
+    {
+     "block": [
+      46,
+      83,
+      3,
+      3
+     ],
+     "fusskachel": [
+      47,
+      85
+     ]
+    },
+    {
+     "block": [
+      58,
+      83,
+      3,
+      3
+     ],
+     "fusskachel": [
+      59,
+      85
+     ]
+    },
+    {
+     "block": [
+      82,
+      83,
+      3,
+      3
+     ],
+     "fusskachel": [
+      83,
+      85
+     ]
+    },
+    {
+     "block": [
+      -1,
+      84,
+      3,
+      3
+     ],
+     "fusskachel": [
+      0,
+      86
+     ]
+    },
+    {
+     "block": [
+      5,
+      84,
+      3,
+      3
+     ],
+     "fusskachel": [
+      6,
+      86
+     ]
+    },
+    {
+     "block": [
+      2,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      3,
+      87
+     ]
+    },
+    {
+     "block": [
+      38,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      39,
+      87
+     ]
+    },
+    {
+     "block": [
+      48,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      49,
+      87
+     ]
+    }
+   ]
+  },
+  {
+   "name": "k01/baum12",
+   "datei": "varianten/k01-baum12.png",
+   "animation": "wehen",
+   "slot_kacheln": {
+    "x": 3,
+    "y": 3,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      91,
+      2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      92,
+      4
+     ]
+    },
+    {
+     "block": [
+      17,
+      3,
+      3,
+      3
+     ],
+     "fusskachel": [
+      18,
+      5
+     ]
+    },
+    {
+     "block": [
+      33,
+      3,
+      3,
+      3
+     ],
+     "fusskachel": [
+      34,
+      5
+     ]
+    },
+    {
+     "block": [
+      41,
+      3,
+      3,
+      3
+     ],
+     "fusskachel": [
+      42,
+      5
+     ]
+    },
+    {
+     "block": [
+      49,
+      3,
+      3,
+      3
+     ],
+     "fusskachel": [
+      50,
+      5
+     ]
+    },
+    {
+     "block": [
+      55,
+      3,
+      3,
+      3
+     ],
+     "fusskachel": [
+      56,
+      5
+     ]
+    },
+    {
+     "block": [
+      63,
+      3,
+      3,
+      3
+     ],
+     "fusskachel": [
+      64,
+      5
+     ]
+    },
+    {
+     "block": [
+      67,
+      3,
+      3,
+      3
+     ],
+     "fusskachel": [
+      68,
+      5
+     ]
+    },
+    {
+     "block": [
+      71,
+      3,
+      3,
+      3
+     ],
+     "fusskachel": [
+      72,
+      5
+     ]
+    },
+    {
+     "block": [
+      101,
+      13,
+      3,
+      3
+     ],
+     "fusskachel": [
+      102,
+      15
+     ]
+    },
+    {
+     "block": [
+      5,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      6,
+      87
+     ]
+    },
+    {
+     "block": [
+      17,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      18,
+      87
+     ]
+    },
+    {
+     "block": [
+      52,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      53,
+      87
+     ]
+    },
+    {
+     "block": [
+      61,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      62,
+      87
+     ]
+    },
+    {
+     "block": [
+      81,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      82,
+      87
+     ]
+    },
+    {
+     "block": [
+      94,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      95,
+      87
+     ]
+    },
+    {
+     "block": [
+      72,
+      3,
+      4,
+      3
+     ],
+     "fusskachel": [
+      74,
+      5
+     ]
+    },
+    {
+     "block": [
+      98,
+      22,
+      4,
+      3
+     ],
+     "fusskachel": [
+      99,
+      24
+     ]
+    }
+   ]
+  },
+  {
+   "name": "k01/baum12",
+   "datei": "varianten/k01-baum12_m.png",
+   "animation": "wehen",
+   "slot_kacheln": {
+    "x": 6,
+    "y": 3,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      13,
+      3,
+      3,
+      3
+     ],
+     "fusskachel": [
+      14,
+      5
+     ]
+    },
+    {
+     "block": [
+      15,
+      3,
+      3,
+      3
+     ],
+     "fusskachel": [
+      16,
+      5
+     ]
+    },
+    {
+     "block": [
+      23,
+      3,
+      3,
+      3
+     ],
+     "fusskachel": [
+      24,
+      5
+     ]
+    },
+    {
+     "block": [
+      44,
+      3,
+      3,
+      3
+     ],
+     "fusskachel": [
+      45,
+      5
+     ]
+    },
+    {
+     "block": [
+      65,
+      3,
+      3,
+      3
+     ],
+     "fusskachel": [
+      66,
+      5
+     ]
+    },
+    {
+     "block": [
+      99,
+      47,
+      3,
+      3
+     ],
+     "fusskachel": [
+      100,
+      49
+     ]
+    },
+    {
+     "block": [
+      101,
+      47,
+      3,
+      3
+     ],
+     "fusskachel": [
+      102,
+      49
+     ]
+    },
+    {
+     "block": [
+      0,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      1,
+      87
+     ]
+    },
+    {
+     "block": [
+      3,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      4,
+      87
+     ]
+    },
+    {
+     "block": [
+      13,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      14,
+      87
+     ]
+    },
+    {
+     "block": [
+      15,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      16,
+      87
+     ]
+    },
+    {
+     "block": [
+      49,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      50,
+      87
+     ]
+    },
+    {
+     "block": [
+      56,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      57,
+      87
+     ]
+    },
+    {
+     "block": [
+      73,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      74,
+      87
+     ]
+    },
+    {
+     "block": [
+      95,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      96,
+      87
+     ]
+    },
+    {
+     "block": [
+      98,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      99,
+      87
+     ]
+    },
+    {
+     "block": [
+      101,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      102,
+      87
+     ]
+    },
+    {
+     "block": [
+      98,
+      38,
+      4,
+      3
+     ],
+     "fusskachel": [
+      99,
+      40
+     ]
+    }
+   ]
+  },
+  {
+   "name": "k01/baum13",
+   "datei": "varianten/k01-baum13.png",
+   "animation": "wehen",
+   "slot_kacheln": {
+    "x": 9,
+    "y": 3,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      20,
+      3,
+      3,
+      3
+     ],
+     "fusskachel": [
+      21,
+      5
+     ]
+    },
+    {
+     "block": [
+      45,
+      3,
+      3,
+      3
+     ],
+     "fusskachel": [
+      46,
+      5
+     ]
+    },
+    {
+     "block": [
+      47,
+      3,
+      3,
+      3
+     ],
+     "fusskachel": [
+      48,
+      5
+     ]
+    },
+    {
+     "block": [
+      51,
+      3,
+      3,
+      3
+     ],
+     "fusskachel": [
+      52,
+      5
+     ]
+    },
+    {
+     "block": [
+      70,
+      3,
+      3,
+      3
+     ],
+     "fusskachel": [
+      71,
+      5
+     ]
+    },
+    {
+     "block": [
+      98,
+      28,
+      3,
+      3
+     ],
+     "fusskachel": [
+      99,
+      30
+     ]
+    },
+    {
+     "block": [
+      53,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      54,
+      87
+     ]
+    },
+    {
+     "block": [
+      69,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      70,
+      87
+     ]
+    },
+    {
+     "block": [
+      87,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      88,
+      87
+     ]
+    },
+    {
+     "block": [
+      98,
+      23,
+      3,
+      3
+     ],
+     "fusskachel": [
+      99,
+      25
+     ]
+    }
+   ]
+  },
+  {
+   "name": "k01/baum13",
+   "datei": "varianten/k01-baum13_m.png",
+   "animation": "wehen",
+   "slot_kacheln": {
+    "x": 12,
+    "y": 3,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      74,
+      2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      75,
+      4
+     ]
+    },
+    {
+     "block": [
+      5,
+      3,
+      3,
+      3
+     ],
+     "fusskachel": [
+      6,
+      5
+     ]
+    },
+    {
+     "block": [
+      30,
+      3,
+      3,
+      3
+     ],
+     "fusskachel": [
+      31,
+      5
+     ]
+    },
+    {
+     "block": [
+      19,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      20,
+      87
+     ]
+    },
+    {
+     "block": [
+      43,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      44,
+      87
+     ]
+    },
+    {
+     "block": [
+      71,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      72,
+      87
+     ]
+    },
+    {
+     "block": [
+      98,
+      26,
+      3,
+      3
+     ],
+     "fusskachel": [
+      99,
+      28
+     ]
+    },
+    {
+     "block": [
+      98,
+      46,
+      3,
+      3
+     ],
+     "fusskachel": [
+      99,
+      48
+     ]
+    }
+   ]
+  },
+  {
+   "name": "k01/baum15",
+   "datei": "varianten/k01-baum15.png",
+   "animation": "baum",
+   "slot_kacheln": {
+    "x": 15,
+    "y": 3,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      49,
+      -2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      50,
+      0
+     ]
+    },
+    {
+     "block": [
+      53,
+      -2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      54,
+      0
+     ]
+    },
+    {
+     "block": [
+      57,
+      -2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      58,
+      0
+     ]
+    },
+    {
+     "block": [
+      63,
+      -2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      64,
+      0
+     ]
+    },
+    {
+     "block": [
+      71,
+      -2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      72,
+      0
+     ]
+    },
+    {
+     "block": [
+      89,
+      -2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      90,
+      0
+     ]
+    },
+    {
+     "block": [
+      2,
+      -1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      3,
+      1
+     ]
+    },
+    {
+     "block": [
+      50,
+      -1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      51,
+      1
+     ]
+    },
+    {
+     "block": [
+      64,
+      -1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      65,
+      1
+     ]
+    },
+    {
+     "block": [
+      98,
+      -1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      99,
+      1
+     ]
+    },
+    {
+     "block": [
+      23,
+      0,
+      3,
+      3
+     ],
+     "fusskachel": [
+      24,
+      2
+     ]
+    },
+    {
+     "block": [
+      35,
+      0,
+      3,
+      3
+     ],
+     "fusskachel": [
+      36,
+      2
+     ]
+    },
+    {
+     "block": [
+      69,
+      0,
+      3,
+      3
+     ],
+     "fusskachel": [
+      70,
+      2
+     ]
+    },
+    {
+     "block": [
+      81,
+      0,
+      3,
+      3
+     ],
+     "fusskachel": [
+      82,
+      2
+     ]
+    },
+    {
+     "block": [
+      83,
+      0,
+      3,
+      3
+     ],
+     "fusskachel": [
+      84,
+      2
+     ]
+    },
+    {
+     "block": [
+      101,
+      0,
+      3,
+      3
+     ],
+     "fusskachel": [
+      102,
+      2
+     ]
+    },
+    {
+     "block": [
+      16,
+      1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      17,
+      3
+     ]
+    },
+    {
+     "block": [
+      84,
+      1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      85,
+      3
+     ]
+    },
+    {
+     "block": [
+      23,
+      2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      24,
+      4
+     ]
+    },
+    {
+     "block": [
+      39,
+      2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      40,
+      4
+     ]
+    },
+    {
+     "block": [
+      77,
+      2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      78,
+      4
+     ]
+    },
+    {
+     "block": [
+      20,
+      3,
+      3,
+      3
+     ],
+     "fusskachel": [
+      21,
+      5
+     ]
+    },
+    {
+     "block": [
+      58,
+      3,
+      3,
+      3
+     ],
+     "fusskachel": [
+      59,
+      5
+     ]
+    },
+    {
+     "block": [
+      1,
+      8,
+      3,
+      3
+     ],
+     "fusskachel": [
+      2,
+      10
+     ]
+    },
+    {
+     "block": [
+      99,
+      10,
+      3,
+      3
+     ],
+     "fusskachel": [
+      100,
+      12
+     ]
+    },
+    {
+     "block": [
+      101,
+      10,
+      3,
+      3
+     ],
+     "fusskachel": [
+      102,
+      12
+     ]
+    },
+    {
+     "block": [
+      0,
+      11,
+      3,
+      3
+     ],
+     "fusskachel": [
+      1,
+      13
+     ]
+    },
+    {
+     "block": [
+      98,
+      13,
+      3,
+      3
+     ],
+     "fusskachel": [
+      99,
+      15
+     ]
+    },
+    {
+     "block": [
+      3,
+      20,
+      3,
+      3
+     ],
+     "fusskachel": [
+      4,
+      22
+     ]
+    },
+    {
+     "block": [
+      0,
+      21,
+      3,
+      3
+     ],
+     "fusskachel": [
+      1,
+      23
+     ]
+    },
+    {
+     "block": [
+      102,
+      25,
+      3,
+      3
+     ],
+     "fusskachel": [
+      103,
+      27
+     ]
+    },
+    {
+     "block": [
+      1,
+      26,
+      3,
+      3
+     ],
+     "fusskachel": [
+      2,
+      28
+     ]
+    },
+    {
+     "block": [
+      102,
+      27,
+      3,
+      3
+     ],
+     "fusskachel": [
+      103,
+      29
+     ]
+    },
+    {
+     "block": [
+      3,
+      28,
+      3,
+      3
+     ],
+     "fusskachel": [
+      4,
+      30
+     ]
+    },
+    {
+     "block": [
+      98,
+      31,
+      3,
+      3
+     ],
+     "fusskachel": [
+      99,
+      33
+     ]
+    },
+    {
+     "block": [
+      102,
+      31,
+      3,
+      3
+     ],
+     "fusskachel": [
+      103,
+      33
+     ]
+    },
+    {
+     "block": [
+      0,
+      33,
+      3,
+      3
+     ],
+     "fusskachel": [
+      1,
+      35
+     ]
+    },
+    {
+     "block": [
+      3,
+      34,
+      3,
+      3
+     ],
+     "fusskachel": [
+      4,
+      36
+     ]
+    },
+    {
+     "block": [
+      98,
+      35,
+      3,
+      3
+     ],
+     "fusskachel": [
+      99,
+      37
+     ]
+    },
+    {
+     "block": [
+      99,
+      36,
+      3,
+      3
+     ],
+     "fusskachel": [
+      100,
+      38
+     ]
+    },
+    {
+     "block": [
+      101,
+      36,
+      3,
+      3
+     ],
+     "fusskachel": [
+      102,
+      38
+     ]
+    },
+    {
+     "block": [
+      -1,
+      40,
+      3,
+      3
+     ],
+     "fusskachel": [
+      0,
+      42
+     ]
+    },
+    {
+     "block": [
+      1,
+      40,
+      3,
+      3
+     ],
+     "fusskachel": [
+      2,
+      42
+     ]
+    },
+    {
+     "block": [
+      0,
+      43,
+      3,
+      3
+     ],
+     "fusskachel": [
+      1,
+      45
+     ]
+    },
+    {
+     "block": [
+      98,
+      45,
+      3,
+      3
+     ],
+     "fusskachel": [
+      99,
+      47
+     ]
+    },
+    {
+     "block": [
+      101,
+      46,
+      3,
+      3
+     ],
+     "fusskachel": [
+      102,
+      48
+     ]
+    },
+    {
+     "block": [
+      -1,
+      54,
+      3,
+      3
+     ],
+     "fusskachel": [
+      0,
+      56
+     ]
+    },
+    {
+     "block": [
+      2,
+      59,
+      3,
+      3
+     ],
+     "fusskachel": [
+      3,
+      61
+     ]
+    },
+    {
+     "block": [
+      -1,
+      62,
+      3,
+      3
+     ],
+     "fusskachel": [
+      0,
+      64
+     ]
+    },
+    {
+     "block": [
+      102,
+      67,
+      3,
+      3
+     ],
+     "fusskachel": [
+      103,
+      69
+     ]
+    },
+    {
+     "block": [
+      1,
+      68,
+      3,
+      3
+     ],
+     "fusskachel": [
+      2,
+      70
+     ]
+    },
+    {
+     "block": [
+      102,
+      69,
+      3,
+      3
+     ],
+     "fusskachel": [
+      103,
+      71
+     ]
+    },
+    {
+     "block": [
+      99,
+      70,
+      3,
+      3
+     ],
+     "fusskachel": [
+      100,
+      72
+     ]
+    },
+    {
+     "block": [
+      100,
+      73,
+      3,
+      3
+     ],
+     "fusskachel": [
+      101,
+      75
+     ]
+    },
+    {
+     "block": [
+      98,
+      75,
+      3,
+      3
+     ],
+     "fusskachel": [
+      99,
+      77
+     ]
+    },
+    {
+     "block": [
+      3,
+      76,
+      3,
+      3
+     ],
+     "fusskachel": [
+      4,
+      78
+     ]
+    },
+    {
+     "block": [
+      101,
+      78,
+      3,
+      3
+     ],
+     "fusskachel": [
+      102,
+      80
+     ]
+    },
+    {
+     "block": [
+      3,
+      82,
+      3,
+      3
+     ],
+     "fusskachel": [
+      4,
+      84
+     ]
+    },
+    {
+     "block": [
+      53,
+      82,
+      3,
+      3
+     ],
+     "fusskachel": [
+      54,
+      84
+     ]
+    },
+    {
+     "block": [
+      57,
+      82,
+      3,
+      3
+     ],
+     "fusskachel": [
+      58,
+      84
+     ]
+    },
+    {
+     "block": [
+      79,
+      82,
+      3,
+      3
+     ],
+     "fusskachel": [
+      80,
+      84
+     ]
+    },
+    {
+     "block": [
+      48,
+      83,
+      3,
+      3
+     ],
+     "fusskachel": [
+      49,
+      85
+     ]
+    },
+    {
+     "block": [
+      64,
+      83,
+      3,
+      3
+     ],
+     "fusskachel": [
+      65,
+      85
+     ]
+    },
+    {
+     "block": [
+      7,
+      84,
+      3,
+      3
+     ],
+     "fusskachel": [
+      8,
+      86
+     ]
+    },
+    {
+     "block": [
+      39,
+      84,
+      3,
+      3
+     ],
+     "fusskachel": [
+      40,
+      86
+     ]
+    },
+    {
+     "block": [
+      67,
+      84,
+      3,
+      3
+     ],
+     "fusskachel": [
+      68,
+      86
+     ]
+    },
+    {
+     "block": [
+      87,
+      84,
+      3,
+      3
+     ],
+     "fusskachel": [
+      88,
+      86
+     ]
+    },
+    {
+     "block": [
+      12,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      13,
+      87
+     ]
+    },
+    {
+     "block": [
+      18,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      19,
+      87
+     ]
+    },
+    {
+     "block": [
+      74,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      75,
+      87
+     ]
+    },
+    {
+     "block": [
+      98,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      99,
+      87
+     ]
+    }
+   ]
+  },
+  {
+   "name": "k01/baum15",
+   "datei": "varianten/k01-baum15_m.png",
+   "animation": "baum",
+   "slot_kacheln": {
+    "x": 18,
+    "y": 3,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      9,
+      -2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      10,
+      0
+     ]
+    },
+    {
+     "block": [
+      37,
+      -2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      38,
+      0
+     ]
+    },
+    {
+     "block": [
+      77,
+      -2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      78,
+      0
+     ]
+    },
+    {
+     "block": [
+      81,
+      -2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      82,
+      0
+     ]
+    },
+    {
+     "block": [
+      62,
+      -1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      63,
+      1
+     ]
+    },
+    {
+     "block": [
+      72,
+      -1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      73,
+      1
+     ]
+    },
+    {
+     "block": [
+      74,
+      -1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      75,
+      1
+     ]
+    },
+    {
+     "block": [
+      90,
+      -1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      91,
+      1
+     ]
+    },
+    {
+     "block": [
+      7,
+      0,
+      3,
+      3
+     ],
+     "fusskachel": [
+      8,
+      2
+     ]
+    },
+    {
+     "block": [
+      39,
+      0,
+      3,
+      3
+     ],
+     "fusskachel": [
+      40,
+      2
+     ]
+    },
+    {
+     "block": [
+      53,
+      0,
+      3,
+      3
+     ],
+     "fusskachel": [
+      54,
+      2
+     ]
+    },
+    {
+     "block": [
+      57,
+      0,
+      3,
+      3
+     ],
+     "fusskachel": [
+      58,
+      2
+     ]
+    },
+    {
+     "block": [
+      65,
+      0,
+      3,
+      3
+     ],
+     "fusskachel": [
+      66,
+      2
+     ]
+    },
+    {
+     "block": [
+      93,
+      0,
+      3,
+      3
+     ],
+     "fusskachel": [
+      94,
+      2
+     ]
+    },
+    {
+     "block": [
+      24,
+      1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      25,
+      3
+     ]
+    },
+    {
+     "block": [
+      48,
+      1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      49,
+      3
+     ]
+    },
+    {
+     "block": [
+      56,
+      1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      57,
+      3
+     ]
+    },
+    {
+     "block": [
+      60,
+      1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      61,
+      3
+     ]
+    },
+    {
+     "block": [
+      64,
+      1,
+      3,
+      3
+     ],
+     "fusskachel": [
+      65,
+      3
+     ]
+    },
+    {
+     "block": [
+      51,
+      2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      52,
+      4
+     ]
+    },
+    {
+     "block": [
+      71,
+      2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      72,
+      4
+     ]
+    },
+    {
+     "block": [
+      93,
+      2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      94,
+      4
+     ]
+    },
+    {
+     "block": [
+      101,
+      2,
+      3,
+      3
+     ],
+     "fusskachel": [
+      102,
+      4
+     ]
+    },
+    {
+     "block": [
+      2,
+      3,
+      3,
+      3
+     ],
+     "fusskachel": [
+      3,
+      5
+     ]
+    },
+    {
+     "block": [
+      14,
+      3,
+      3,
+      3
+     ],
+     "fusskachel": [
+      15,
+      5
+     ]
+    },
+    {
+     "block": [
+      44,
+      3,
+      3,
+      3
+     ],
+     "fusskachel": [
+      45,
+      5
+     ]
+    },
+    {
+     "block": [
+      46,
+      3,
+      3,
+      3
+     ],
+     "fusskachel": [
+      47,
+      5
+     ]
+    },
+    {
+     "block": [
+      3,
+      4,
+      3,
+      3
+     ],
+     "fusskachel": [
+      4,
+      6
+     ]
+    },
+    {
+     "block": [
+      0,
+      9,
+      3,
+      3
+     ],
+     "fusskachel": [
+      1,
+      11
+     ]
+    },
+    {
+     "block": [
+      2,
+      11,
+      3,
+      3
+     ],
+     "fusskachel": [
+      3,
+      13
+     ]
+    },
+    {
+     "block": [
+      102,
+      11,
+      3,
+      3
+     ],
+     "fusskachel": [
+      103,
+      13
+     ]
+    },
+    {
+     "block": [
+      1,
+      12,
+      3,
+      3
+     ],
+     "fusskachel": [
+      2,
+      14
+     ]
+    },
+    {
+     "block": [
+      101,
+      12,
+      3,
+      3
+     ],
+     "fusskachel": [
+      102,
+      14
+     ]
+    },
+    {
+     "block": [
+      0,
+      25,
+      3,
+      3
+     ],
+     "fusskachel": [
+      1,
+      27
+     ]
+    },
+    {
+     "block": [
+      99,
+      28,
+      3,
+      3
+     ],
+     "fusskachel": [
+      100,
+      30
+     ]
+    },
+    {
+     "block": [
+      100,
+      31,
+      3,
+      3
+     ],
+     "fusskachel": [
+      101,
+      33
+     ]
+    },
+    {
+     "block": [
+      100,
+      33,
+      3,
+      3
+     ],
+     "fusskachel": [
+      101,
+      35
+     ]
+    },
+    {
+     "block": [
+      3,
+      36,
+      3,
+      3
+     ],
+     "fusskachel": [
+      4,
+      38
+     ]
+    },
+    {
+     "block": [
+      -1,
+      38,
+      3,
+      3
+     ],
+     "fusskachel": [
+      0,
+      40
+     ]
+    },
+    {
+     "block": [
+      100,
+      41,
+      3,
+      3
+     ],
+     "fusskachel": [
+      101,
+      43
+     ]
+    },
+    {
+     "block": [
+      0,
+      51,
+      3,
+      3
+     ],
+     "fusskachel": [
+      1,
+      53
+     ]
+    },
+    {
+     "block": [
+      3,
+      54,
+      3,
+      3
+     ],
+     "fusskachel": [
+      4,
+      56
+     ]
+    },
+    {
+     "block": [
+      3,
+      58,
+      3,
+      3
+     ],
+     "fusskachel": [
+      4,
+      60
+     ]
+    },
+    {
+     "block": [
+      102,
+      61,
+      3,
+      3
+     ],
+     "fusskachel": [
+      103,
+      63
+     ]
+    },
+    {
+     "block": [
+      99,
+      62,
+      3,
+      3
+     ],
+     "fusskachel": [
+      100,
+      64
+     ]
+    },
+    {
+     "block": [
+      99,
+      68,
+      3,
+      3
+     ],
+     "fusskachel": [
+      100,
+      70
+     ]
+    },
+    {
+     "block": [
+      -1,
+      76,
+      3,
+      3
+     ],
+     "fusskachel": [
+      0,
+      78
+     ]
+    },
+    {
+     "block": [
+      2,
+      81,
+      3,
+      3
+     ],
+     "fusskachel": [
+      3,
+      83
+     ]
+    },
+    {
+     "block": [
+      13,
+      82,
+      3,
+      3
+     ],
+     "fusskachel": [
+      14,
+      84
+     ]
+    },
+    {
+     "block": [
+      47,
+      82,
+      3,
+      3
+     ],
+     "fusskachel": [
+      48,
+      84
+     ]
+    },
+    {
+     "block": [
+      69,
+      82,
+      3,
+      3
+     ],
+     "fusskachel": [
+      70,
+      84
+     ]
+    },
+    {
+     "block": [
+      71,
+      82,
+      3,
+      3
+     ],
+     "fusskachel": [
+      72,
+      84
+     ]
+    },
+    {
+     "block": [
+      20,
+      83,
+      3,
+      3
+     ],
+     "fusskachel": [
+      21,
+      85
+     ]
+    },
+    {
+     "block": [
+      50,
+      83,
+      3,
+      3
+     ],
+     "fusskachel": [
+      51,
+      85
+     ]
+    },
+    {
+     "block": [
+      60,
+      83,
+      3,
+      3
+     ],
+     "fusskachel": [
+      61,
+      85
+     ]
+    },
+    {
+     "block": [
+      11,
+      84,
+      3,
+      3
+     ],
+     "fusskachel": [
+      12,
+      86
+     ]
+    },
+    {
+     "block": [
+      15,
+      84,
+      3,
+      3
+     ],
+     "fusskachel": [
+      16,
+      86
+     ]
+    },
+    {
+     "block": [
+      53,
+      84,
+      3,
+      3
+     ],
+     "fusskachel": [
+      54,
+      86
+     ]
+    },
+    {
+     "block": [
+      93,
+      84,
+      3,
+      3
+     ],
+     "fusskachel": [
+      94,
+      86
+     ]
+    },
+    {
+     "block": [
+      64,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      65,
+      87
+     ]
+    },
+    {
+     "block": [
+      90,
+      85,
+      3,
+      3
+     ],
+     "fusskachel": [
+      91,
+      87
+     ]
+    }
+   ]
+  },
+  {
+   "name": "k01/baum14",
+   "datei": "varianten/k01-baum14.png",
+   "animation": "wehen",
+   "slot_kacheln": {
+    "x": 21,
+    "y": 3,
+    "breite": 3,
+    "hoehe": 2
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 2
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      79,
+      3,
+      3,
+      2
+     ],
+     "fusskachel": [
+      80,
+      4
+     ]
+    },
+    {
+     "block": [
+      85,
+      3,
+      3,
+      2
+     ],
+     "fusskachel": [
+      86,
+      4
+     ]
+    },
+    {
+     "block": [
+      92,
+      3,
+      3,
+      2
+     ],
+     "fusskachel": [
+      93,
+      4
+     ]
+    },
+    {
+     "block": [
+      31,
+      4,
+      3,
+      2
+     ],
+     "fusskachel": [
+      32,
+      5
+     ]
+    },
+    {
+     "block": [
+      21,
+      86,
+      3,
+      2
+     ],
+     "fusskachel": [
+      22,
+      87
+     ]
+    },
+    {
+     "block": [
+      41,
+      86,
+      3,
+      2
+     ],
+     "fusskachel": [
+      42,
+      87
+     ]
+    },
+    {
+     "block": [
+      57,
+      86,
+      3,
+      2
+     ],
+     "fusskachel": [
+      58,
+      87
+     ]
+    },
+    {
+     "block": [
+      75,
+      86,
+      3,
+      2
+     ],
+     "fusskachel": [
+      76,
+      87
+     ]
+    },
+    {
+     "block": [
+      94,
+      4,
+      4,
+      2
+     ],
+     "fusskachel": [
+      95,
+      5
+     ]
+    },
+    {
+     "block": [
+      98,
+      41,
+      4,
+      2
+     ],
+     "fusskachel": [
+      99,
+      42
+     ]
+    },
+    {
+     "block": [
+      98,
+      43,
+      4,
+      2
+     ],
+     "fusskachel": [
+      99,
+      44
+     ]
+    },
+    {
+     "block": [
+      98,
+      48,
+      4,
+      2
+     ],
+     "fusskachel": [
+      99,
+      49
+     ]
+    }
+   ]
+  },
+  {
+   "name": "k01/baum14",
+   "datei": "varianten/k01-baum14_m.png",
+   "animation": "wehen",
+   "slot_kacheln": {
+    "x": 24,
+    "y": 3,
+    "breite": 3,
+    "hoehe": 2
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 2
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      77,
+      3,
+      3,
+      2
+     ],
+     "fusskachel": [
+      78,
+      4
+     ]
+    },
+    {
+     "block": [
+      82,
+      3,
+      3,
+      2
+     ],
+     "fusskachel": [
+      83,
+      4
+     ]
+    },
+    {
+     "block": [
+      87,
+      3,
+      3,
+      2
+     ],
+     "fusskachel": [
+      88,
+      4
+     ]
+    },
+    {
+     "block": [
+      94,
+      3,
+      3,
+      2
+     ],
+     "fusskachel": [
+      95,
+      4
+     ]
+    },
+    {
+     "block": [
+      9,
+      4,
+      3,
+      2
+     ],
+     "fusskachel": [
+      10,
+      5
+     ]
+    },
+    {
+     "block": [
+      37,
+      4,
+      3,
+      2
+     ],
+     "fusskachel": [
+      38,
+      5
+     ]
+    },
+    {
+     "block": [
+      39,
+      4,
+      3,
+      2
+     ],
+     "fusskachel": [
+      40,
+      5
+     ]
+    },
+    {
+     "block": [
+      57,
+      4,
+      3,
+      2
+     ],
+     "fusskachel": [
+      58,
+      5
+     ]
+    },
+    {
+     "block": [
+      99,
+      14,
+      3,
+      2
+     ],
+     "fusskachel": [
+      100,
+      15
+     ]
+    },
+    {
+     "block": [
+      7,
+      86,
+      3,
+      2
+     ],
+     "fusskachel": [
+      8,
+      87
+     ]
+    },
+    {
+     "block": [
+      9,
+      86,
+      3,
+      2
+     ],
+     "fusskachel": [
+      10,
+      87
+     ]
+    },
+    {
+     "block": [
+      64,
+      86,
+      3,
+      2
+     ],
+     "fusskachel": [
+      65,
+      87
+     ]
+    },
+    {
+     "block": [
+      66,
+      86,
+      3,
+      2
+     ],
+     "fusskachel": [
+      67,
+      87
+     ]
+    },
+    {
+     "block": [
+      92,
+      86,
+      3,
+      2
+     ],
+     "fusskachel": [
+      93,
+      87
+     ]
+    },
+    {
+     "block": [
+      99,
+      86,
+      3,
+      2
+     ],
+     "fusskachel": [
+      100,
+      87
+     ]
+    }
+   ]
+  },
+  {
+   "name": "k18s/18",
+   "datei": "varianten/k18s-18.png",
+   "animation": "leuchten",
+   "slot_kacheln": {
+    "x": 27,
+    "y": 3,
+    "breite": 3,
+    "hoehe": 2
+   },
+   "objektblock_im_slot": {
+    "x": 1,
+    "y": 0,
+    "breite": 1,
+    "hoehe": 2
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      9,
+      8,
+      1,
+      2
+     ],
+     "fusskachel": [
+      9,
+      9
+     ]
+    },
+    {
+     "block": [
+      25,
+      8,
+      1,
+      2
+     ],
+     "fusskachel": [
+      25,
+      9
+     ]
+    },
+    {
+     "block": [
+      69,
+      10,
+      1,
+      2
+     ],
+     "fusskachel": [
+      69,
+      11
+     ]
+    },
+    {
+     "block": [
+      38,
+      10,
+      1,
+      2
+     ],
+     "fusskachel": [
+      38,
+      11
+     ]
+    },
+    {
+     "block": [
+      74,
+      39,
+      1,
+      2
+     ],
+     "fusskachel": [
+      74,
+      40
+     ]
+    },
+    {
+     "block": [
+      9,
+      46,
+      1,
+      2
+     ],
+     "fusskachel": [
+      9,
+      47
+     ]
+    },
+    {
+     "block": [
+      15,
+      46,
+      1,
+      2
+     ],
+     "fusskachel": [
+      15,
+      47
+     ]
+    },
+    {
+     "block": [
+      10,
+      60,
+      1,
+      2
+     ],
+     "fusskachel": [
+      10,
+      61
+     ]
+    },
+    {
+     "block": [
+      75,
+      60,
+      1,
+      2
+     ],
+     "fusskachel": [
+      75,
+      61
+     ]
+    },
+    {
+     "block": [
+      94,
+      60,
+      1,
+      2
+     ],
+     "fusskachel": [
+      94,
+      61
+     ]
+    }
+   ]
+  },
+  {
+   "name": "k18s/00",
+   "datei": "varianten/k18s-00.png",
+   "animation": "leuchten",
+   "slot_kacheln": {
+    "x": 30,
+    "y": 3,
+    "breite": 2,
+    "hoehe": 2
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 2,
+    "hoehe": 2
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      25,
+      21,
+      2,
+      2
+     ],
+     "fusskachel": [
+      26,
+      22
+     ]
+    }
+   ]
+  },
+  {
+   "name": "gross/turm",
+   "datei": "varianten/gross-turm.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 0,
+    "y": 6,
+    "breite": 13,
+    "hoehe": 26
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 13,
+    "hoehe": 26
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      86,
+      23,
+      13,
+      26
+     ],
+     "fusskachel": [
+      92,
+      48
+     ]
+    }
+   ]
+  },
+  {
+   "name": "rathaus_c/00",
+   "datei": "varianten/rathaus_c-00.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 13,
+    "y": 6,
+    "breite": 15,
+    "hoehe": 15
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 15,
+    "hoehe": 15
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      46,
+      13,
+      15,
+      15
+     ],
+     "fusskachel": [
+      53,
+      27
+     ]
+    }
+   ]
+  },
+  {
+   "name": "gross/buero_unten_links",
+   "datei": "varianten/gross-buero_unten_links.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 0,
+    "y": 32,
+    "breite": 18,
+    "hoehe": 13
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 18,
+    "hoehe": 13
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      9,
+      67,
+      18,
+      13
+     ],
+     "fusskachel": [
+      17,
+      79
+     ]
+    }
+   ]
+  },
+  {
+   "name": "gross/bruecke",
+   "datei": "varianten/gross-bruecke.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 0,
+    "y": 45,
+    "breite": 32,
+    "hoehe": 10
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 32,
+    "hoehe": 10
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      17,
+      37,
+      32,
+      10
+     ],
+     "fusskachel": [
+      33,
+      46
+     ]
+    }
+   ]
+  },
+  {
+   "name": "gross/buero_unten",
+   "datei": "varianten/gross-buero_unten.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 0,
+    "y": 55,
+    "breite": 23,
+    "hoehe": 10
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 23,
+    "hoehe": 10
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      39,
+      71,
+      23,
+      10
+     ],
+     "fusskachel": [
+      50,
+      80
+     ]
+    }
+   ]
+  },
+  {
+   "name": "gross/buero_oben",
+   "datei": "varianten/gross-buero_oben.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 0,
+    "y": 65,
+    "breite": 20,
+    "hoehe": 10
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 20,
+    "hoehe": 10
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      75,
+      5,
+      20,
+      10
+     ],
+     "fusskachel": [
+      85,
+      14
+     ]
+    }
+   ]
+  },
+  {
+   "name": "gross/buero_links",
+   "datei": "varianten/gross-buero_links.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 20,
+    "y": 65,
+    "breite": 14,
+    "hoehe": 10
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 14,
+    "hoehe": 10
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      9,
+      24,
+      14,
+      10
+     ],
+     "fusskachel": [
+      16,
+      33
+     ]
+    }
+   ]
+  },
+  {
+   "name": "ubahn/00",
+   "datei": "varianten/ubahn-00.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 34,
+    "y": 65,
+    "breite": 6,
+    "hoehe": 6
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 6,
+    "hoehe": 6
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      39,
+      19,
+      6,
+      6
+     ],
+     "fusskachel": [
+      41,
+      24
+     ]
+    },
+    {
+     "block": [
+      68,
+      42,
+      6,
+      6
+     ],
+     "fusskachel": [
+      71,
+      47
+     ]
+    }
+   ]
+  },
+  {
+   "name": "k18a/11",
+   "datei": "varianten/k18a-11_m.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 0,
+    "y": 75,
+    "breite": 5,
+    "hoehe": 4
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 5,
+    "hoehe": 4
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      90,
+      50,
+      5,
+      4
+     ],
+     "fusskachel": [
+      92,
+      53
+     ]
+    }
+   ]
+  },
+  {
+   "name": "k18a/06",
+   "datei": "varianten/k18a-06.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 5,
+    "y": 75,
+    "breite": 4,
+    "hoehe": 4
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 4,
+    "hoehe": 4
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      33,
+      11,
+      4,
+      4
+     ],
+     "fusskachel": [
+      34,
+      14
+     ]
+    },
+    {
+     "block": [
+      81,
+      34,
+      4,
+      4
+     ],
+     "fusskachel": [
+      83,
+      37
+     ]
+    }
+   ]
+  },
+  {
+   "name": "k18a/02",
+   "datei": "varianten/k18a-02_m.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 9,
+    "y": 75,
+    "breite": 5,
+    "hoehe": 3
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 5,
+    "hoehe": 3
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      61,
+      51,
+      5,
+      3
+     ],
+     "fusskachel": [
+      63,
+      53
+     ]
+    }
+   ]
+  },
+  {
+   "name": "k18a/04",
+   "datei": "varianten/k18a-04.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 14,
+    "y": 75,
+    "breite": 4,
+    "hoehe": 3
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 4,
+    "hoehe": 3
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      46,
+      55,
+      4,
+      3
+     ],
+     "fusskachel": [
+      47,
+      57
+     ]
+    }
+   ]
+  },
+  {
+   "name": "k18a/05",
+   "datei": "varianten/k18a-05_m.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 18,
+    "y": 75,
+    "breite": 4,
+    "hoehe": 3
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 4,
+    "hoehe": 3
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      17,
+      51,
+      4,
+      3
+     ],
+     "fusskachel": [
+      18,
+      53
+     ]
+    }
+   ]
+  },
+  {
+   "name": "k38/bank",
+   "datei": "varianten/k38-bank.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 22,
+    "y": 75,
+    "breite": 3,
+    "hoehe": 2
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 2
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      47,
+      29,
+      3,
+      2
+     ],
+     "fusskachel": [
+      48,
+      30
+     ]
+    },
+    {
+     "block": [
+      13,
+      22,
+      2,
+      2
+     ],
+     "fusskachel": [
+      14,
+      23
+     ]
+    },
+    {
+     "block": [
+      50,
+      38,
+      2,
+      2
+     ],
+     "fusskachel": [
+      51,
+      39
+     ]
+    },
+    {
+     "block": [
+      44,
+      64,
+      2,
+      2
+     ],
+     "fusskachel": [
+      45,
+      65
+     ]
+    }
+   ]
+  },
+  {
+   "name": "k38/bank",
+   "datei": "varianten/k38-bank_m.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 25,
+    "y": 75,
+    "breite": 3,
+    "hoehe": 2
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 2
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      57,
+      29,
+      3,
+      2
+     ],
+     "fusskachel": [
+      58,
+      30
+     ]
+    },
+    {
+     "block": [
+      20,
+      22,
+      2,
+      2
+     ],
+     "fusskachel": [
+      21,
+      23
+     ]
+    },
+    {
+     "block": [
+      66,
+      40,
+      2,
+      2
+     ],
+     "fusskachel": [
+      67,
+      41
+     ]
+    },
+    {
+     "block": [
+      70,
+      66,
+      2,
+      2
+     ],
+     "fusskachel": [
+      71,
+      67
+     ]
+    }
+   ]
+  },
+  {
+   "name": "k18s/41",
+   "datei": "varianten/k18s-41.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 28,
+    "y": 75,
+    "breite": 2,
+    "hoehe": 2
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 2,
+    "hoehe": 2
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      56,
+      48,
+      2,
+      2
+     ],
+     "fusskachel": [
+      57,
+      49
+     ]
+    },
+    {
+     "block": [
+      69,
+      58,
+      2,
+      2
+     ],
+     "fusskachel": [
+      70,
+      59
+     ]
+    }
+   ]
+  }
+ ]
+}

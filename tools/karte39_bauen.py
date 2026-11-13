@@ -198,6 +198,7 @@ def bauen(frame=None, speichern=True):
     land[T:-T, T:-T] = True
     lvl = np.ones((Hp, Wp), np.uint8)
     leere = gross(kl == 'h')                                          # Baumguertel nicht begehbar (Kartenrand)
+    lvl[leere] = 0                                                    # Kollision: Leere
     if speichern and frame is None:
         np.save(os.path.join(KARTE, 'pixelhoehe.npy'), lvl)
         np.save(os.path.join(KARTE, 'wasser.npy'), np.packbits(np.zeros((Hp, Wp), bool)))

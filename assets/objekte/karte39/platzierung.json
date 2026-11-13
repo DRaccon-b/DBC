@@ -313,12 +313,12 @@
 {
 "datei": "varianten/k01-baum02.png",
 "basis": "k01/baum02",
-"x": 388,
-"y": 967,
+"x": 372,
+"y": 983,
 "fuss": 40,
 "kachel": [
-25,
-62
+24,
+63
 ],
 "ebene": 1,
 "ohne_wall": true,
@@ -711,7 +711,19 @@
 ],
 "ebene": 1,
 "ohne_wall": true,
-"nur_kontakt": true
+"nur_kontakt": true,
+"anim": "leuchten",
+"licht": [
+10,
+10
+],
+"licht_box": [
+2,
+5,
+18,
+16
+],
+"licht_r": 7
 },
 {
 "datei": "varianten/k18s-41.png",
@@ -731,11 +743,11 @@
 "datei": "varianten/k18s-41.png",
 "basis": "k18s/41",
 "x": 1104,
-"y": 948,
+"y": 932,
 "fuss": 27,
 "kachel": [
 70,
-60
+59
 ],
 "ebene": 1,
 "ohne_wall": true,
