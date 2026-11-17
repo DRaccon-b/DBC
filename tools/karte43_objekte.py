@@ -32,12 +32,12 @@ for _i in KLEINFELS:
 WALD = ['b00', 'b01', 'b02', 'b05', 'b06', 'b09']
 BUSCH = ['b12', 'b13']                                        # ohne Kastenhecke b14 (wirkt als Reihe)
 # Baeume der Vorlage (Sprite, Kachel-x, Fusszeile); Reihen der Vorlage (oben 4, unten 4) auf versetzte Einzelbaeume reduziert
-BAEUME = [('b00', 42, 7), ('b02', 52, 7), ('b01', 10, 18), ('b03', 20, 17), ('b05', 18, 21), ('b02', 23, 26),
+BAEUME = [('b00', 42, 7), ('b02', 54, 9), ('b01', 10, 18), ('b03', 20, 17), ('b05', 18, 21), ('b02', 23, 26),
           ('b00', 30, 19), ('b01', 49, 18), ('b03', 55, 21), ('b02', 55, 29), ('b05', 63, 33), ('b01', 40, 42),
           ('b00', 35, 49), ('b03', 25, 58), ('b02', 31, 61), ('b05', 6, 54), ('b01', 5, 61), ('b03', 42, 55),
           ('b02', 52, 64), ('b00', 40, 71), ('b01', 25, 74), ('b05', 49, 74), ('b03', 65, 68), ('b00', 77, 69),
           ('b02', 82, 68), ('b01', 64, 45), ('b03', 70, 44), ('b05', 63, 51), ('b00', 69, 53), ('b02', 82, 57),
-          ('b01', 90, 42), ('b03', 92, 56),
+          ('b01', 88, 44),
           ('b00', 58, 15), ('b01', 17, 35), ('b05', 48, 59), ('b00', 76, 61),                       # grosse Laubbaeume
           ('totbaum', 42, 36), ('totbaum', 28, 56), ('totbaum', 55, 66)]
 
@@ -133,7 +133,7 @@ def main():
     tx0, ty0, tx1, ty1 = lay['tor']
     setze('tor', 37.5 * T, (ty1 + 1) * T - 1, {'gebaeude': True}, False, 'g', pruefen=False)
     # Platzpaare exakt gespiegelt zur Burgachse (gemeinsame Fusszeile)
-    for (n, dxs, reihen, opt) in (('schale', (104, 96, 112, 88), (33, 34, 32), {'anim': 'feuer', 'flammen_box': None}),
+    for (n, dxs, reihen, opt) in (('schale', (104, 96, 112, 88), (33, 34, 32), {'anim': 'feuer_kamin', 'flammen_box': [[5, 4, 23, 24]]}),
                                   ('speier', (152, 144, 136, 160, 128, 120), (36, 35, 37, 34, 38), {}),
                                   ('bank', (64, 72, 80, 56, 88, 96), (39, 38, 40, 37, 36), {})):
         ok = False
@@ -149,11 +149,14 @@ def main():
                 break
         if not ok:
             print('  Paar nicht gesetzt:', n)
-    # Uebergang Torbau -> Waldmauer: Busch links und rechts (Regel)
+    # Uebergang Torbau -> Waldmauer: Busch links und rechts (Regel), gewollt dicht am Torbau (ohne Abstandspruefung)
     for sd in (-1, 1):
-        for d in (96, 104, 112):
-            if setze('b13' if sd < 0 else 'b12', 37.5 * T + sd * d, (ty1 + 1) * T - 1, {'anim': 'baum'}, sd > 0, 'g'):
+        for d in (88, 92, 96, 100, 104):
+            if setze('b13' if sd < 0 else 'b12', 37.5 * T + sd * d, (ty1 + 1) * T - 1, {'anim': 'baum'}, sd > 0, 'gw',
+                     ohne=(1,)):
                 break
+        else:
+            print('  Uebergangsbusch fehlt', sd)
     # ---------------- Baeume der Vorlage mit Begleitern
     felsen = ['fels02', 'fels03', 'fels14']
     klein = ['kf%02d' % i for i in KLEINFELS]
@@ -165,7 +168,7 @@ def main():
         return klein[zug[art] % len(klein)] if art == 'k' else felsen[zug[art] % len(felsen)]
     gesetzt = []
     for i, (n, tx, ty) in enumerate(BAEUME):
-        o = kachel(n, tx, ty, {'anim': 'baum'} if n != 'totbaum' else {}, i % 2 == 1)
+        o = kachel(n, tx, ty, {'anim': 'baum'} if n != 'totbaum' else {'nur_kontakt': True}, i % 2 == 1)   # Astwerk: kein Balkenschatten
         if not o:
             continue
         tsp = np.array(Image.open(os.path.join(OBJ, o['datei'])).convert('RGBA'))[..., 3] > 0
@@ -201,7 +204,7 @@ def main():
                  rnd.random() < 0.5, art='wald'):
             n_w += 1
             rects[-1][4] = 'wald'
-    for (x, y) in hk:                                                 # Luecken: Buesche
+    for (x, y) in hk + [(x, y) for y in range(rows) for x in range(cols) if cls[y][x] == 'h' and y > rows - 4]:   # Luecken: Buesche
         r_ = (x * T, y * T, x * T + T, y * T + T)
         if not any(art2 == 'wald' and schnitt(r_, tuple(rr), -6) for (*rr, art2) in rects):
             if setze(rnd.choice(BUSCH), x * T + 8, y * T + T - 5, {'anim': 'baum', 'nur_kontakt': True}, rnd.random() < 0.5,
@@ -217,7 +220,8 @@ def main():
             break
         if any(o.get('streu') and abs(o['kachel'][0] - x) < 4 and abs(o['kachel'][1] - y) < 4 for o in objekte):
             continue
-        if any(o.get('streu') and o['kachel'][1] == y and abs(o['kachel'][0] - x) < 15 for o in objekte):
+        if any(abs(o['kachel'][1] - y) <= 1 and abs(o['kachel'][0] - x) < 15 for o in objekte if not o.get('gebaeude')
+               and 'wald' not in o.get('datei', '')):
             continue
         wahl = [s for s in streu if s != letzte and not any(o.get('basis') == s and abs(o['kachel'][0] - x) < 12
                                                             and abs(o['kachel'][1] - y) < 12 for o in objekte)]

@@ -23,7 +23,7 @@ REF = {'g': (87, 142, 61), 'w': (200, 173, 119), 'h': (44, 104, 40), 'k': (137, 
        'y': (102, 107, 122), 'z': (24, 98, 38)}
 BURG = (66, 17, 89, 29)          # Burg-Grundflaeche (x0, y0, x1, y1) in Kacheln, auf dem Vorplatz
 TOR = (30, 30, 41, 34)           # Torbau (Vorlage x 480-670, y 480-560)
-TELEPORTER = [(93, 8, 3, 4), (7, 77, 4, 3)]
+TELEPORTER = [(93, 9, 3, 3), (7, 77, 4, 3)]     # oben rechts unter der Guertelfront (nicht auf der Mauer)
 
 
 def flaechen(m):
@@ -102,6 +102,33 @@ def main():
         k[ty:ty + hh, tx:tx + b] = 'T'
     k[8:12, 88:93] = np.where(k[8:12, 88:93] == 'h', 'w', k[8:12, 88:93])
     k[74:77, 7:11] = np.where(k[74:77, 7:11] == 'h', 'w', k[74:77, 7:11])
+    k[6, 36:58] = 'w'; k[7, 36:58] = np.where(k[7, 36:58] == 'g', 'w', k[7, 36:58])   # obere Wegkante ohne Zinnen
+    k[8, 93:96] = 'w'                                                # Reihe ueber dem Teleporter: Weg (Front darueber)
+    # 1-Spalten-Vorspruenge an Wald-Seitenkanten (Wandstummel) angleichen
+    for _ in range(2):
+        for y in range(1, R - 1):
+            for x in range(1, C - 1):
+                if k[y, x] == 'h' and k[y, x - 1] != 'h' and k[y, x + 1] == 'h' and k[y + 1, x] != 'h' and \
+                        sum(1 for yy in range(max(0, y - 20), y) if k[yy, x - 1] == 'h') < 2:
+                    pass
+        for x in range(1, C - 1):                                   # senkrechte Kante: Spalte, die nur teilweise h ist
+            col = (k[:, x] == 'h') & (k[:, x - 1] != 'h') & (k[:, x + 1] == 'h')
+            col2 = (k[:, x] == 'h') & (k[:, x + 1] != 'h') & (k[:, x - 1] == 'h')
+            for c_, m_ in ((x, col), (x, col2)):
+                ys = np.nonzero(m_)[0]
+                if 0 < len(ys) <= 16:
+                    for y in ys:
+                        if k[y + 1 if y + 1 < R else y, c_] != 'h':
+                            k[y, c_] = 'g' if k[y, c_ - 1] == 'g' or k[y, c_ + 1] == 'g' else 'w'
+    # Wege leicht schwingen (Regel 6): lange gerade Raender mit 1-Kachel-Versaetzen
+    import math as _m
+    for y in range(12, 60):                                         # linker Aussenweg: rechte Kante pendelt
+        off = int(round(1.2 * _m.sin(y / 5.0)))
+        x_r = max(x for x in range(3, 12) if k[y, x] == 'w') if any(k[y, x] == 'w' for x in range(3, 12)) else None
+        if x_r is not None and off > 0 and k[y, x_r + 1] == 'g':
+            k[y, x_r + 1] = 'w'
+        elif x_r is not None and off < 0 and k[y, x_r - 2] == 'w':
+            k[y, x_r] = 'g'
     k = zipfel_weg(k, 'gwh')
     h = np.where(k == 'h', 1, 0)
     lay = {'groesse': [C, R], 'klassen': [''.join(z) for z in k], 'hoehe': [''.join(str(c) for c in z) for z in h],
