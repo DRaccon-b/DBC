@@ -55,7 +55,7 @@ Aufstellfelds (cyan = Ankunft, gold = weiter; Funktion `pfeil_marke` in `tools/k
 | 18 | Karte 51 – Suzaku Gate | v1.0 fertig (3 Agenten-Prüfrunden), Zhuqiaomons Arena mit Torii und Brandflecken (Nutzer), ZIP in maps/karte51/v1.0 |
 | 19 | Karte 52 – D-Reaper: Shinjuku | in Arbeit (Vorbild karte40) |
 | 20 | Karte 53 – Shinjuku Evacuation District | in Arbeit (Vorbild karte40) |
-| 21 | Karte 54 – D-Reaper Kernel | in Arbeit (Vorbild karte49) |
+| 21 | Karte 54 – D-Reaper Kernel | v1.0 fertig (3 Agenten-Prüfrunden), Herz des Kernels, Vorlagenfehler (Teleporter im Becken) korrigiert, ZIP in maps/karte54/v1.0 |
 
 ## A0S – Sondergebiet
 | Nr. | Karte | Stand |

@@ -379,6 +379,19 @@ Vor jeder Abgabe Punkt für Punkt prüfen (vergrößert, Standbild und mehrere A
   Bodenfläche eine Treppe (Flood-Fill); Nordtreppen in den Platz einschneiden. Muster (Raute) als durchgehendes Pixelband auf
   der berechneten Mitte zeichnen, nicht als Kachelring (zerfällt in Kugeln). Laternen/Feuerschalen als Platzbeleuchtung auf
   dem Platz erlaubt, wenn daneben kein Boden frei ist (sonst fehlen Lichtquellen); breite Tore `schattenlos`.
+- **Stadt unter dem D-Reaper (Karten 52-54):** D-Reaper-Masse als eigene Bodenklasse (`tools/dreaper.py`, 45-Grad-Raster,
+  pulsierende Adern, gesperrt); in Karte 54 als flacher, begehbarer Gewebebelag (`flach=True`). Unter der Masse den Boden der
+  Nachbarkacheln fortsetzen (sonst Bordstein- bzw. Asphaltkeile in den 45-Grad-Ecken). Gebäude aus Hälften verbreitern nur an
+  einem Fassadenfeld ohne Tür (rosa Ladentüren nie zerschneiden), eingesetzte Glastür am Boden (Tür reicht bis zur Fußkante),
+  angeschnittenen Sockel ergänzen; keine Magenta-Saum-Entfernung über ganze Zeilen bei lila Fassaden (macht den Fuß
+  transparent). Gebäude brauchen auch an Seiten und Rückseite eine Gehwegreihe zur Fahrbahn; Beete vor allen Türen (auch
+  Seitentüren) unterbrechen. Bäume im Beet vor einer Fassade nur mit dem Fuß gegen das Gebäude prüfen. Autos in Draufsicht nach
+  der Front ausrichten (senkrecht spiegeln geht nicht – passendes Sprite nehmen). Feuer/Flammen-Animationen im Vierertakt
+  (`feuer` läuft im Dreiertakt – `kerzen` mit `flammen_box` genau auf den Flammenpixeln). Objekte in 2 Kacheln breiten Gängen
+  sperren den Gang (Flood-Fill nach jeder Platzierung); zentrale Objekte auf einer Achse ohne Raster-Einrasten setzen
+  (`round(22.5)` rundet auf 22). Paare mit Abständen in ganzen Kacheln von einer Kachelmitte-Achse (zugleich gespiegelt und 1b).
+  Felsfront oben nie direkt auf ein Bauwerk: eine Bodenreihe dazwischen. Generierte Schräg-/Isometrie-Sprites (Feldbett)
+  frontal bzw. in Draufsicht neu erzeugen.
 - **Begleiter am Stumpf (5d):** keine 1-Kachel-Blumen auf dem Stumpf, kein Blumenklumpen; Begleiter überlappen sich nicht.
 - **Paare/Achsen:** Paare vor Toren/Bauwerken exakt gespiegelt (Mitte und Fuß), gleiche Objekte auf gleicher Höhe;
   Druckplatten, Obelisken usw. symmetrisch zur berechneten Achse.
