@@ -99,6 +99,8 @@ def main():
             ty_ = r[3] // T
             if any(k(xx, ty_) not in klassen for xx in range(r[0] // T, r[2] // T + 1)):
                 return None
+            if any(k(xx // T, yy // T) not in klassen for yy in (r[3] - 6, r[3] + 6) for xx in range(r[0] - 3, r[2] + 4, 4)):
+                return None                                          # Fuss und Schatten mit Abstand zu Weg/Pflaster
             if ebene_soll != 1:                                      # Plateau: ganzes Bild mit Rand auf dem Plateau
                 y0_, x0_ = max(0, r[1] - 6), max(0, r[0] - 6)
                 if (lvl[y0_:r[3] + 2 * T, x0_:r[2] + 7] != ebene_soll).any():
@@ -146,7 +148,7 @@ def main():
         zl = np.nonzero(tsp.any(1))[0][-1]
         sx = o['x'] + int(np.nonzero(tsp[zl - 3:zl + 1].any(0))[0].mean())   # Stammmitte am Fuss
         sy = o['y'] + int(zl)
-        stumpf.append((sx - 24, sy - 24, sx + 24, sy + 18))
+        stumpf.append((sx - 24, sy - 24, sx + 24, sy + 30))
         gesetzte_baeume.append((i, n, o, kl, len(rects) - 1, sx, sy, eb))
     # ---------------- grosse Einzelobjekte (vor den Begleitern: Grosses zuerst)
     for i, (n, tx, ty, eb) in enumerate(GROSS):
@@ -180,13 +182,13 @@ def main():
                        for d in (24, 32))
         def seitlich(sd):
             return any(setze(naechster('b'), sx + sd * d, sy + dy, {'begleiter': True, 'ebene': 0}, sd > 0, kl, ebene_soll=eb)
-                       for d in (40, 48, 56, 64) for dy in (T, -T))   # nie in der Stammreihe (keine Reihe Busch-Baum-Busch)
+                       for d in (40, 48, 56, 64) for dy in (-T, 2 * T))   # nie in der Stammreihe (keine Reihe Busch-Baum-Busch)
         nah = sum(1 for (_, _, _, _, _, x2, y2, _) in gesetzte_baeume if (x2, y2) != (sx, sy)
                   and abs(x2 - sx) < 6 * T and abs(y2 - sy) < 5 * T)
         soll = 1 if nah else 2
         if n == 'totbaum':                                            # ohne Krone: kein Fels 'hinter den Blaettern'
-            plan = [vor, lambda: seitlich(-seite)]
-            ersatz = [lambda: seitlich(seite), vor]
+            plan = [[vor, lambda: seitlich(-seite)], [lambda: seitlich(seite), lambda: seitlich(-seite)]][i % 2]
+            ersatz = [lambda: seitlich(seite), vor]                   # abwechseln (Pruefung: alle gleich aufgebaut)
         else:
             plan = [[vor, lambda: seitlich(-seite)], [vor, lambda: hinter(seite)],
                     [vor, lambda: hinter(-seite)]][i % 3]                 # immer etwas vor dem Stumpf (Einbettung)
@@ -245,7 +247,10 @@ def main():
         nb = [o for o in objekte if abs(o['kachel'][0] - x) < 4 and abs(o['kachel'][1] - y) < 4 and o.get('streu')]
         if nb:
             continue
-        wahl = [s for s in STREU if s != letzte]
+        wahl = [s for s in STREU if s != letzte and not any(o.get('basis') == s and abs(o['kachel'][0] - x) < 9
+                                                           and abs(o['kachel'][1] - y) < 9 for o in objekte)]
+        if not wahl:
+            continue
         n = rnd.choice(wahl)
         lieg = n in ('zweig', 'knochen_k')
         opt_ = {'ebene': 0, 'streu': True, 'liegend': lieg}

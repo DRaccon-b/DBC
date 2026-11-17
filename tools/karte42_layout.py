@@ -139,7 +139,6 @@ def main():
             for x in range(tx, tx + b_):
                 if k[y, x] == 'r':
                     k[y, x] = 'b'
-    k[77:80, 6:12][k[77:80, 6:12] == 'r'] = 'b'       # Ausgang unten links: Weg bis an den Rand
     k[77:80, 7:11] = 'T'
     # Vorlagenfehler: Huette stand mitten auf der Windbahn, Zeltreste als b-Zacken -> Sandplaetze fuer Huette und Lager
     k[33:38, 14:24] = 's'                             # Platz der Huette (links neben dem Weg, nicht am Treppenaustritt)
@@ -149,6 +148,20 @@ def main():
         for x in range(x0, x1 + 1):
             if k[FRONT_REIHE + 2, x] == 'r' and k[FRONT_REIHE, x] != 't':
                 k[FRONT_REIHE:FRONT_REIHE + 2, x] = 'r'
+    # Pruefung: Talstreifen <= 2 Reihen zwischen Felsrand (oben) und Plateau (unten) verschwindet unter der Front ->
+    # Rand und Plateau schliessen dort auf gleicher Hoehe an (keine Wandstummel mitten im Plateausand)
+    for x in range(C):
+        y = 1
+        while y < R - 1:
+            if k[y, x] in 'sbk' and k[y - 1, x] == 'r':
+                e = y
+                while e < R and k[e, x] in 'sbk':
+                    e += 1
+                if e < R and k[e, x] == 'p' and e - y <= 2:
+                    k[y:e, x] = 'p'
+                y = e
+            else:
+                y += 1
     k = zipfel_weg(k)
     h = np.zeros((R, C), int)
     h[k == 'r'] = 2
