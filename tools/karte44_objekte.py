@@ -116,6 +116,8 @@ def main():
                 return None                                          # nichts auf Weg/Wasser (ganzes Bildrechteck)                                          # Fuss und Schatten mit Abstand zu Weg/Platz/Wald
             if (lvl[r[3] - 3:r[3] + 9, r[0]:r[2] + 1] != 1).any() or wand[r[3] - 3:r[3] + 2, r[0]:r[2] + 1].any():
                 return None
+            if (lvl[max(0, r[3] - 2 * T + 1):r[3] + 1, max(0, r[0] - 3):r[2] + 4] != 1).any():
+                return None                                          # untere zwei Reihen mit 3 px Abstand zu Kanten
             hoch = lvl[max(0, r[1]):r[3] - T, r[0]:r[2] + 1] > 1     # Verdeckung durch Hoehen: Wald seitlich davor
             if hoch.any() and hoch[-T:].any():
                 return None
@@ -235,11 +237,12 @@ def main():
     for (x, y) in sorted(hk, key=lambda p_: (p_[1], p_[0])):
         if deck[y * T:(y + 1) * T, x * T:(x + 1) * T].mean() > 0.75:
             continue
-        for n_ in (rnd.choice(BUSCH), rnd.choice(WALD)):
+        for n_ in (rnd.choice(WALD), rnd.choice(BUSCH)):        # erst Baeume (Busch-Reihen wirken als Hecke)
             o_ = None
-            for cx_ in (x * T + 8, x * T + 2, x * T + 14):
+            for cx_, fy_ in ((x * T + 8, y * T + T - 3), (x * T + 2, y * T + T - 3), (x * T + 14, y * T + T - 3),
+                             (x * T + 8, y * T + 6), (x * T + 2, y * T + 6), (x * T + 14, y * T + 6)):
                 cx_ = min(max(cx_, 17), cols * T - 17)                   # am Kartenrand ganz im Bild
-                o_ = setze(n_, cx_, min(y * T + T - 3, rows * T - 1), {'anim': 'baum', 'nur_kontakt': True},
+                o_ = setze(n_, cx_, min(fy_, rows * T - 1), {'anim': 'baum', 'nur_kontakt': True},
                            rnd.random() < 0.5, art='wald')
                 if o_:
                     break

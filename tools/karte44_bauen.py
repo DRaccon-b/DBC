@@ -110,6 +110,7 @@ def bauen(frame=None, speichern=True):
             py, px = yy * T + rs.randint(0, T - min(h_, T) + 1), xx * T + rs.randint(0, T - min(w_, T) + 1)
             if py + h_ > Hp or px + w_ > Wp or belegt[py:py + h_, px:px + w_].any():
                 continue
+            belegt[py - 2:py + h_ + 2, px - 2:px + w_ + 2] = True       # Bueschel ueberlappen sich nicht
             al = sp[..., 3:4] / 255.0
             a[py:py + h_, px:px + w_] = (a[py:py + h_, px:px + w_] * (1 - al) + sp[..., :3] * al).astype(np.uint8)
     hoch = weich((hp >= 1).astype(np.float32), 5, 0.0, 7, 0.5)       # Wald erhoeht

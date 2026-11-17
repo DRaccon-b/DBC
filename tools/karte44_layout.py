@@ -23,9 +23,9 @@ C, R, T = 96, 80, 16
 REF = {'g': (87, 142, 61), 'g2': (72, 132, 48), 'w': (200, 173, 119), 'h': (44, 104, 40), 'h2': (36, 96, 36),
        'x': (49, 124, 170), 'b': (174, 122, 64)}
 BRUECKEN = [(42, 15, 48, 18), (47, 26, 53, 29), (46, 39, 52, 42), (57, 53, 63, 56), (59, 61, 65, 64)]
-TELEPORTER = [(78, 0, 4, 3), (0, 33, 3, 4), (0, 54, 3, 4), (93, 66, 3, 4), (61, 77, 4, 3), (77, 77, 4, 3)]   # unten: 3 Spalten Wald bis zum Bach
+TELEPORTER = [(78, 0, 4, 3), (0, 22, 3, 4), (0, 54, 3, 4), (93, 66, 3, 4), (61, 77, 4, 3), (77, 77, 4, 3)]   # unten: 3 Spalten Wald bis zum Bach
 # Huetten der Vorlage (Mitte in px) - Flaechen werden Wiese, die Huetten setzt objekte()
-HUETTEN = [(370, 470), (1070, 355), (1200, 320), (590, 505), (1085, 800), (165, 880), (512, 1045), (320, 1150),
+HUETTEN = [(370, 470), (1070, 355), (1200, 320), (590, 505), (1085, 800), (260, 700), (512, 1045), (320, 1150),
            (465, 1165), (1378, 915)]
 
 
@@ -82,6 +82,11 @@ def main():
     k[rand & (k != 'x')] = 'h'                                        # Guertel geschlossen (Bach laeuft hindurch)
     k[:, 3:5][k[:, 3:5] == 'g'] = 'h'                                  # Seitenguertel mind. 5 Kacheln (sonst nur eine
     k[:, C - 5:C - 3][k[:, C - 5:C - 3] == 'g'] = 'h'                  # Baumsaeule mit kahlem Boden)
+    for y in range(R):                                                # Wege ohne Ausgang enden vor dem Guertel
+        if not any(tx == 0 and ty - 1 <= y <= ty + hh for (tx, ty, b, hh) in TELEPORTER):
+            k[y, 3:5] = np.where(k[y, 3:5] == 'w', 'h', k[y, 3:5])
+        if not any(tx + b == C and ty - 1 <= y <= ty + hh for (tx, ty, b, hh) in TELEPORTER):
+            k[y, C - 5:C - 3] = np.where(k[y, C - 5:C - 3] == 'w', 'h', k[y, C - 5:C - 3])
     k = k43.zipfel_weg(k, 'gwh')
     bru = BRUECKEN + [(64, 68, 70, 71)]
     for y in (65, 66, 67):                                            # Bach zwischen den Bruecken im Gras
@@ -98,6 +103,7 @@ def main():
     for (tx, ty, b, hh) in TELEPORTER:                                # Ausgaenge: Weg durch den Guertel
         k[ty:ty + hh, tx:tx + b] = 'T'
         if tx == 0:
+            k[ty:ty + hh, tx + b:tx + b + 2] = 'w'                     # durch den Guertel bis in die Wiese
             k[ty:ty + hh, tx + b:tx + b + 4] = np.where(k[ty:ty + hh, tx + b:tx + b + 4] == 'x', 'x', 'w')
         elif tx + b == C:
             k[ty:ty + hh, tx - 4:tx] = np.where(k[ty:ty + hh, tx - 4:tx] == 'x', 'x', 'w')
@@ -117,6 +123,8 @@ def main():
             if k[y, x] == 'g' and sum(k[y + dy, x + dx] == 'g' for dy, dx in ((1, 0), (-1, 0), (0, 1), (0, -1))) <= 1 \
                     and sum(k[y + dy, x + dx] in 'wb' for dy, dx in ((1, 0), (-1, 0), (0, 1), (0, -1))) >= 2:
                 k[y, x] = 'w'
+    for y in (73, 74):                                                # Waldblock unten: Mauer frei vor den Guertelkronen
+        k[y, 28:46] = np.where(k[y, 28:46] == 'h', 'g', k[y, 28:46])
     for y in range(R - 5, R - 3):                                      # 1-Kachel-Waldnasen ueber dem Bachauslauf
         for x in range(1, C - 1):
             if k[y, x] == 'h' and k[y, x - 1] != 'h' and k[y, x + 1] != 'h':
