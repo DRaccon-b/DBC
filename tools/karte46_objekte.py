@@ -40,7 +40,7 @@ BUSCH = ['b12', 'b13']
 BAEUME = [('b03', 25, 11), ('b02', 29, 14), ('b00', 12, 18), ('b03', 16, 22), ('b00', 58, 17), ('b03', 67, 13),
           ('b02', 77, 20), ('b03', 60, 31), ('b02', 57, 42), ('b00', 59, 49), ('b03', 56, 52), ('b02', 69, 50),
           ('b03', 20, 48), ('b02', 32, 57), ('b03', 37, 61), ('b02', 46, 59), ('b03', 22, 66), ('b02', 26, 66),
-          ('b00', 41, 69), ('b03', 74, 60), ('b02', 80, 63), ('b03', 85, 47)]
+          ('b00', 41, 69), ('b03', 74, 60), ('b02', 80, 63)]
 
 
 def main():
@@ -115,7 +115,7 @@ def main():
             if hoch.any() and hoch[-T:].any():
                 return None
         if opt.pop('_reihe', False) and any(not o_.get('nur_kontakt') and not o_.get('streu') and not o_.get('wasserdeko') and
-                                             abs(o_['y'] + o_['fuss'] - (y + bb[3] - 1)) < 12 and abs(o_['x'] - x) < 110
+                                             abs(o_['y'] + o_['fuss'] - (y + bb[3] - 1)) < 12 and abs(o_['x'] - x) < 220
                                              for o_ in objekte):
             objekte_rm = None
             return None                                              # Baeume nie auf derselben Fusszeile nebeneinander
@@ -146,7 +146,7 @@ def main():
     # ---------------- Bauernhaus (Kandidat D) auf dem Hof, Fuss auf der Hausreihe der Vorlage, Achse = Vorlagenhaus
     hx0, hy0, hx1, hy1 = lay['haus']
     ax = (hx0 + hx1 + 1) * T / 2.0
-    setze('haus', ax, (hy1 + 1) * T - 1, {'gebaeude': True, 'nur_kontakt': True}, False, 'w', pruefen=False)
+    setze('haus', ax, (hy1 + 1) * T - 1, {'gebaeude': True, 'nur_kontakt': True, 'ohne_wall': True}, False, 'w', pruefen=False)
     # Hof: Faesser paarweise gespiegelt zur Hausachse (Vorlage: vier Faesser an den Hofecken), Karren, Brunnen, Bank
     for (dxs_, rys_) in (((150, 140, 160), (29,)), ((150, 140, 130, 120), (36, 35, 34))):
         ok_ = False
@@ -217,7 +217,7 @@ def main():
             if f_():
                 hat += 1
         if hat < soll:                                            # Ersatz: Begleiter weiter weg (Regel 5b)
-            for dx_, dy_ in ((-40, T), (40, T), (-56, 0), (56, 0), (0, 2 * T), (-72, T), (72, T)):
+            for dx_, dy_ in ((-40, T), (40, T), (-56, T), (56, T), (0, 2 * T), (-72, T), (72, T)):
                 if hat >= soll:
                     break
                 if setze(naechster('k'), sx + dx_, sy + dy_, {'begleiter': True, 'ebene': 0}, dx_ > 0, 'g'):

@@ -22,7 +22,7 @@ C, R, T = 96, 80, 16
 REF = {'g': (82, 138, 59), 'w': (200, 173, 119), 'h': (44, 104, 40), 'x': (49, 91, 135), 'p': (174, 122, 64)}
 BRUECKEN = [(35, 15, 50, 20), (30, 35, 46, 40)]
 HAUS = (71, 24, 84, 29)                 # Bauernhaus der Vorlage (Kacheln), Fuss auf Reihe 29
-TELEPORTER = [(88, 0, 4, 3), (0, 70, 3, 4)]
+TELEPORTER = [(87, 0, 4, 3), (0, 70, 3, 4)]       # oben rechts mittig im Damm-Weg
 k43.R, k43.C = R, C
 
 
@@ -51,12 +51,20 @@ def main():
             for (y, x) in teil:
                 k[y, x] = 'x'
     k = k43.zipfel_weg(k, 'gwh')
-    for _ in range(4):                                                # schmale Landzungen (Sandbaenke der Vorlage) -> Wasser
+    for _ in range(2):                                                # schmale Landzungen (Sandbaenke der Vorlage) -> Wasser
         for y in range(1, R - 1):
             for x in range(1, C - 1):
                 if k[y, x] in 'gw' and sum(k[y + dy, x + dx] == 'x' for dy, dx in ((1, 0), (-1, 0), (0, 1), (0, -1))) >= 2 \
                         and (k[y - 1, x] == 'x' and k[y + 1, x] == 'x' or k[y, x - 1] == 'x' and k[y, x + 1] == 'x'):
                     k[y, x] = 'x'
+    for _ in range(3):                                                # Wasserfinger (1 Kachel breit) -> Land
+        for y in range(1, R - 1):
+            for x in range(1, C - 1):
+                if k[y, x] == 'x':
+                    nb = [k[y + dy, x + dx] for dy, dx in ((1, 0), (-1, 0), (0, 1), (0, -1))]
+                    if nb.count('x') <= 1:
+                        fremd = [c for c in nb if c != 'x']
+                        k[y, x] = max(set(fremd), key=fremd.count)
     for _ in range(3):
         for y in range(1, R - 2):                                     # Hecken: ringsum Land, unter der Front 2 Reihen
             for x in range(1, C - 1):
