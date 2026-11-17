@@ -59,7 +59,7 @@ def verkohlen(a, lay, cols, rows, frame, wand=None):
         return
     Hp, Wp = rows * T, cols * T
     km = np.kron(np.array([[c == '1' for c in z] for z in lay['brand']]), np.ones((T, T))).astype(np.float32)
-    m = weich(km, 6.0, 0.0, 77, 0.5)
+    m = weich(km, 5.0, 0.0, 77, 0.5)
     if os.environ.get('K50_RANDFREI', '1') == '1':                   # Nutzer: flache Bergkante (Felsrand) bleibt unverbrannt
         rp = np.kron(np.array([[c == 'h' for c in z] for z in lay['klassen']]), np.ones((T, T), bool))
         rand_frei = rp.copy()
@@ -76,7 +76,9 @@ def verkohlen(a, lay, cols, rows, frame, wand=None):
     kohle = np.array([38, 34, 36], np.float32)
     l_ = af.mean(axis=2, keepdims=True) / 255.0
     neu = kohle + (np.array([96, 90, 92], np.float32) - kohle) * np.clip(l_ * 1.3 - 0.15, 0, 1)
-    flecken = weich((rs.rand(rows, cols) < 0.35).astype(np.float32).repeat(T, 0).repeat(T, 1), 5.0, 0.0, 79, 0.5)
+    from PIL import ImageFilter as _IF2
+    fl_ = Image.fromarray((rs.rand(Hp // 4, Wp // 4) * 255).astype(np.uint8)).resize((Wp, Hp), Image.BICUBIC).filter(_IF2.GaussianBlur(6))
+    flecken = np.array(fl_) < 120                                    # weiche Russflecken (kein Kachelraster)
     boden = m & ~(wand if wand is not None else np.zeros_like(m))
     tief = np.where(flecken, 0.36, 0.5)[..., None]                    # Russflecken: Textur bleibt sichtbar
     af[boden] = (af * tief + kohle * (1 - tief) * 0.55)[boden]
@@ -86,7 +88,8 @@ def verkohlen(a, lay, cols, rows, frame, wand=None):
     kern = weich(np.kron(kern_k, np.ones((T, T))).astype(np.float32), 6.0, 0.0, 80, 0.5) & m
     kb_ = kern & boden
     af[kb_] = neu[kb_]
-    gras_ = boden & ~kern & (af[..., 1] > af[..., 0] + 6)             # verbrannte Wiese: braun-schwarz statt gruen
+    m_weit = np.array(Image.fromarray((m * 255).astype(np.uint8)).filter(_IF2.MaxFilter(9))) > 0
+    gras_ = m_weit & ~(wand if wand is not None else np.zeros_like(m)) & ~kern & (af[..., 1] > af[..., 0] + 6)   # Wiese ganz
     lg_ = af[gras_].mean(axis=1, keepdims=True)
     af[gras_] = lg_ * np.array([1.05, 0.88, 0.72]) * 0.9
     if wand is not None:                                             # Felsfronten nur verrusst (Relief bleibt)
@@ -129,10 +132,10 @@ def bodenstruktur(a, cls, cols, rows):
     klein = [lade('karte50/klein/03.png'), lade('karte04/klein/09.png', (0.85, 0.85, 0.9)), lade('karte04/klein/02.png')]
     kl = np.array([list(z) for z in cls])
     hpk = np.array([[int(c) for c in z] for z in json.load(open(os.path.join(KARTE, 'layout.json')))['hoehe']])
-    innen = np.isin(kl, ['g', 'n', 'w'])
+    innen = np.isin(kl, ['g', 'n'])
     for dy in (-1, 0, 1):
         for dx in (-1, 0, 1):
-            p_ = np.pad(np.isin(kl, ['g', 'n', 'w']) & (hpk == np.pad(hpk, 1, mode='edge')[1 + dy:1 + dy + rows, 1 + dx:1 + dx + cols]),
+            p_ = np.pad(np.isin(kl, ['g', 'n']) & (hpk == np.pad(hpk, 1, mode='edge')[1 + dy:1 + dy + rows, 1 + dx:1 + dx + cols]),
                         1, mode='edge')
             innen &= p_[1 + dy:1 + dy + rows, 1 + dx:1 + dx + cols]
     kante = np.zeros((rows, cols), bool)                             # 2 Reihen unter jeder Hoehenkante frei (Front)
@@ -241,6 +244,15 @@ def bauen(frame=None, speichern=True):
             k4.treppe(a, x0 * T, (x1 + 1) * T, ry * T - 8, 'n', FRONT, 'berg47', tex['w'])
             treppe_m[ry * T - 10:(ry + 1) * T + 8, x0 * T:(x1 + 1) * T] = True
     verkohlen(a, lay, cols, rows, frame, wand)
+    F_ = [np.array(H(c)) for c in k4.FELS['berg47']]
+    for (x0, x1, ry, r_) in lay['treppen']:                          # breite Treppe: Licht/Schatten-Naht weich verteilen
+        if r_ == 's':
+            seg = a[ry * T:ry * T + FRONT + 4, x0 * T + 3:(x1 + 1) * T - 3]
+            for (c_d, c_h) in ((F_[4], F_[5]), (F_[2], F_[3])):
+                mk = np.all(seg == c_d, axis=-1)
+                xx_ = np.arange(seg.shape[1])[None, :].repeat(seg.shape[0], 0)
+                hell_ = mk & ((xx_ + np.arange(seg.shape[0])[:, None]) % 2 == 0) & (xx_ < seg.shape[1] * 0.85)
+                seg[hell_] = c_h
     for tp in lay['teleporter']:
         k4.teleporter_zeichnen(a, tp['x'], tp['y'], tp['b'], tp['h'], frame)
     img = Image.fromarray(a).convert('RGBA')

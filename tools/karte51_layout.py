@@ -24,11 +24,11 @@ C, R, T = 48, 36, 16
 REF = {'h': (137, 151, 165), 'g': (115, 131, 147), 'z': (124, 135, 136), 'w': (138, 146, 155), 'n': (82, 138, 59),
        'y': (106, 126, 141), 'r': (89, 109, 128), 'q': (116, 131, 136)}
 ARENA = (15, 7, 34, 21)                  # Pflasterquadrat (x0, y0, x1, y1) in Kacheln
-TREPPE = (20, 27, 29)                    # Spalten x0..x1, Frontreihe (8 breit: Torii-Pfeiler am Treppenfuss, wie K50)
+TREPPE = (21, 28, 29)                    # Spalten x0..x1, Frontreihe (8 breit: Torii-Pfeiler am Treppenfuss, wie K50)
 TELEPORTER = [(6, 33, 4, 3)]
 # Brandflecken (Nutzer: etwas verbrannt) - Polygone in Pixeln
 BRAND = [
-    [(372, 200), (400, 188), (440, 196), (452, 232), (436, 268), (400, 278), (366, 262), (352, 230)],   # Arenamitte (Einschlag)
+    [(400, 168), (464, 232), (400, 296), (336, 232)],                                                 # Arenamitte: Raute im Rautenband
     [(610, 230), (680, 220), (712, 260), (700, 320), (640, 330), (600, 290)],                            # Wiese rechts
     [(470, 440), (560, 430), (610, 470), (590, 520), (500, 525), (460, 490)],                            # unten rechts
     [(60, 380), (130, 370), (150, 420), (110, 460), (60, 450)],                                         # links
@@ -69,9 +69,15 @@ def main():
                     k[y + 1, x] = q[0, 0]
     # Treppe: Platz endet ueber der Frontreihe, 2 Reihen Boden davor, 2 Reihen Platz dahinter
     tx0, tx1, ry = TREPPE
-    k[23:ry, tx0:tx1 + 1] = 'z'                                         # Platzzunge zur Treppe in Treppenbreite
+    k[23:ry, tx0 - 3:tx1 + 4] = 'z'                                     # Platzkante 2+ Kacheln gerade neben der Treppe
+    k[4:7, 12:15] = np.where(k[4:7, 12:15] == 'z', 'g', k[4:7, 12:15])   # Nordecken ohne 1-Spalten-Stufen unter der Front
+    k[4:7, 35:38] = np.where(k[4:7, 35:38] == 'z', 'g', k[4:7, 35:38])
     k[ry:ry + 3, tx0 - 1:tx1 + 2] = np.where(np.isin(k[ry:ry + 3, tx0 - 1:tx1 + 2], ['z', 'n']), 'g', k[ry:ry + 3, tx0 - 1:tx1 + 2])
     k[ry, tx0:tx1 + 1] = 't'
+    wt = (7, 10, 22)                                                 # Nordtreppe: Westboden -> Ziegelweg (Reihe 22 = Boden)
+    k[wt[2] - 2:wt[2] + 1, wt[0] - 1:wt[1] + 2] = np.where(np.isin(k[wt[2] - 2:wt[2] + 1, wt[0] - 1:wt[1] + 2], ['z', 'n', 'h']), 'g',
+                                                           k[wt[2] - 2:wt[2] + 1, wt[0] - 1:wt[1] + 2])
+    k[wt[2] + 1:wt[2] + 4, wt[0]:wt[1] + 1] = 'z'
     for (tx, ty, b, hh) in TELEPORTER:                               # Ausgang am Ende des Ziegelwegs
         k[ty:ty + hh, tx:tx + b] = 'T'
     hp = np.where(np.isin(k, list('zwT')), 1, 0)
@@ -80,8 +86,12 @@ def main():
     for poly in BRAND:
         ImageDraw.Draw(brand).polygon([(x / T, y / T) for (x, y) in poly], fill=255)
     brand = (np.array(brand) > 0).astype(int)
+    for _ in range(2):                                               # keine Einzelkachel-Spitzen (werden runde Knubbel)
+        nb = sum(np.roll(np.roll(np.pad(brand, 1), dy, 0), dx, 1)[1:-1, 1:-1] for dy, dx in ((1, 0), (-1, 0), (0, 1), (0, -1)))
+        brand[(brand == 1) & (nb <= 1)] = 0
+        brand[(brand == 0) & (nb >= 3)] = 1
     lay = {'groesse': [C, R], 'klassen': [''.join(z) for z in k], 'hoehe': [''.join(str(c) for c in z) for z in hp],
-           'treppen': [[tx0, tx1, ry, 's']], 'arena': [x0, y0, x1, y1], 'brand': [''.join(str(c) for c in z) for z in brand],
+           'treppen': [[tx0, tx1, ry, 's'], [wt[0], wt[1], wt[2], 'n']], 'arena': [x0, y0, x1, y1], 'brand': [''.join(str(c) for c in z) for z in brand],
            'bruecken': [], 'stege': [], 'teleporter': [{'x': tx, 'y': ty, 'b': b, 'h': hh} for (tx, ty, b, hh) in TELEPORTER]}
     json.dump(lay, open(os.path.join(KARTE, 'layout.json'), 'w'), indent=0)
     F = {'g': (115, 131, 147), 'n': (80, 150, 60), 'z': (150, 120, 110), 'w': (175, 175, 170), 'h': (210, 215, 225),

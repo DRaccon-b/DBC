@@ -55,12 +55,17 @@ def main():
 
     brand_k = [[c == '1' for c in z] for z in lay.get('brand', ['0' * cols] * rows)]
 
+    def _dbg(k_, name, cx, fy):
+        if os.environ.get('K51_DEBUG') and name in os.environ.get('K51_DEBUG'):
+            print('    abgelehnt', name, int(cx), int(fy), 'Grund', k_)
+        return None
+
     def setze(name, cx, fy, opt=None, spiegeln=False, gap=2, pruefen=True, klassen='gwknd'):
         opt = dict(opt or {})
         if 0 <= int(fy) // T < rows and 0 <= int(cx) // T < cols and brand_k[int(fy) // T][int(cx) // T] and name in VERBRANNT:
             name = VERBRANNT[name]                                   # Nutzer: im Brandbereich verkohlte Varianten
             if name is None:
-                return None
+                return _dbg(1, name, cx, fy)
             if name == 'baum_b':
                 opt['anim'] = 'kerzen'                               # Glut in der Rinde glimmt
         sp = Image.open(os.path.join(A, D[name])).convert('RGBA')
@@ -80,23 +85,23 @@ def main():
         y = int(fy - (bb[3] - 1))
         r = (x + bb[0], y + bb[1], x + bb[2] - 1, y + bb[3] - 1)
         if r[0] < 2 or r[1] < 2 or r[2] >= cols * T - 2 or r[3] >= rows * T - 2:
-            return None
+            return _dbg(2, name, cx, fy)
         if pruefen:
             if any(schnitt(r, tuple(rr[:4]), gap) for rr in rects):
-                return None
+                return _dbg(3, name, cx, fy)
             if any(schnitt(r, s_, 0) for s_ in sperr):
-                return None
+                return _dbg(4, name, cx, fy)
             y_ab = r[1] if opt.get('liegend') else max(r[1], r[3] - 2 * T + 1)
             reg = lvl[y_ab:r[3] + 4, max(0, r[0] - 3):r[2] + 4]
             if len(np.unique(reg)) != 1 or reg[0, 0] == 9 or reg[0, 0] >= 5:
-                return None                                          # untere zwei Reihen ganz auf einer Ebene, nicht am Rand
+                return _dbg(5, name, cx, fy)                                          # untere zwei Reihen ganz auf einer Ebene, nicht am Rand
             if wand[max(0, r[1]):r[3] + 1, r[0]:r[2] + 1].any():
-                return None
+                return _dbg(6, name, cx, fy)
             if any(cls[yy // T][xx // T] not in klassen for yy in range(y_ab, r[3] + 1, 4) for xx in range(r[0], r[2] + 1, 4)):
-                return None
+                return _dbg(7, name, cx, fy)
             hoch = lvl[max(0, r[1]):r[3] - T, r[0]:r[2] + 1]          # Verdeckung: nicht vor eine hoehere Terrasse daneben
             if ((hoch > lvl[r[3], (r[0] + r[2]) // 2]) & (hoch != 9)).any() and not opt.get('vor_wand'):
-                return None
+                return _dbg(8, name, cx, fy)
         o = {'datei': datei, 'basis': name, 'x': x, 'y': y, 'fuss': bb[3] - 1, 'kachel': [int(cx) // T, int(fy) // T],
              'ebene': 1, 'ohne_wall': name not in ('baum', 'zypresse', 'kf00', 'kf24', 'kf52', 'lilie', 'gras', 'gras2')}
         o.update(opt)
@@ -117,12 +122,12 @@ def main():
 
     def paar(name, achse, abstand, fy, opt=None):
         """Gespiegeltes Paar auf gemeinsamer Fusszeile; bei Konflikt die Fusszeile gemeinsam verschieben."""
-        for dab in (0, 16, -16, 32, 48, 64, 80, 96, 112):         # Saeulen/Schalen nie auf Pflaster (Karte 47)
+        for dab in sorted(range(-120, 121, 8), key=abs):         # Saeulen/Schalen nie auf Pflaster (Karte 47)
             for dfy in (0, -T, T, -2 * T, 2 * T, -3 * T, 3 * T):
-                a_ = setze(name, achse - abstand - dab, fy + dfy, opt, False, klassen='gdz')
+                a_ = setze(name, achse - abstand - dab, fy + dfy, opt, False, klassen='gd')
                 if not a_:
                     continue
-                b_ = setze(name, achse + abstand + dab, fy + dfy, opt, True, klassen='gdz')
+                b_ = setze(name, achse + abstand + dab, fy + dfy, opt, True, klassen='gd')
                 if b_:
                     return True
                 objekte.pop(); rects.pop()
@@ -136,22 +141,31 @@ def main():
                                                     'sortier': (ry + 2) * T + T - 1}, pruefen=False)
     ax0, ay0, ax1, ay1 = lay['arena']
     achse = (ax0 + ax1 + 1) * T / 2.0
-    fl = {'anim': 'kerzen', 'flammen_box': [[4, 0, 24, 20]], 'flammen_alle': True, 'flammen_amp': 1.4}
-    la = {'anim': 'lampe', 'lampe_box': [8, 18, 20, 30], 'licht_farbe': [255, 200, 120]}
-    paar('laterne', achse, 184, 8 * T + 12, la)                      # Platzecken oben
-    paar('schale', achse, 248, 9 * T + 12, fl)                       # Boden neben dem Platz oben
-    paar('pfosten', achse, 264, 12 * T + 12)
-    paar('schale', achse, 248, 17 * T + 12, fl)
+    fl = {'vor_wand': True, 'anim': 'kerzen', 'flammen_box': [[4, 0, 24, 20]], 'flammen_alle': True, 'flammen_amp': 1.4}
+    la = {'vor_wand': True, 'anim': 'lampe', 'lampe_box': [8, 18, 20, 30], 'licht_farbe': [255, 200, 120]}
+    paar('laterne', achse, 232, 11 * T + 12, la)                      # Boden links/rechts des Platzes (nicht auf Pflaster)
+    paar('schale', achse, 280, 21 * T + 12, fl)
     paar('pfosten', achse, 272, 19 * T + 12)
-    paar('schale', t_achse, 120, 24 * T + 12, fl)                    # unterer Platz, Treppenachse
-    paar('laterne', t_achse, 184, 26 * T + 12, la)
+    paar('schale', t_achse, 112, 31 * T + 12, fl)                    # Boden vor der Treppe, neben dem Torii
     # Vorlage: Fels und Zypresse, Wiesen mit Bueschel (verbrannte Stellen: verkohlte Varianten)
-    for (n, px, py) in [('brocken', 145, 215), ('zypresse', 263, 488), ('baum', 650, 285), ('brocken', 520, 470),
+    for (n, px, py) in [('brocken', 145, 215), ('lilie', 263, 488), ('gras2', 272, 456), ('baum', 650, 285), ('brocken', 520, 470),
                         ('stamm_b', 560, 490), ('glut_b', 400, 236), ('asche_b', 110, 420), ('feder', 300, 120), ('feder2', 640, 400),
                         ('lilie', 140, 200), ('lilie', 660, 270)]:
-        suche(n, px, py, {'liegend': n in FLACH or n in ('stamm_b', 'glut_b', 'asche_b'),
+        o_ = suche(n, px, py, {'liegend': n in FLACH or n in ('stamm_b', 'glut_b', 'asche_b'),
                           'ebene': 0 if n in FLACH or n in ('glut_b', 'asche_b', 'lilie') else 1,
                           **({'anim': 'kerzen'} if n in ('stamm_b', 'glut_b', 'asche_b') else {})}, px > 400, r=3, klassen='gnwz')
+        if o_ and o_['basis'] in ('baum_b', 'zypresse', 'baum'):      # Regel 5: Begleiter vor dem Stumpf + seitlich tiefer
+            brn = o_['basis'] == 'baum_b'
+            sx = o_['x'] + (31 if brn else 13); sy = o_['y'] + o_['fuss']
+            hat = any(setze('brocken_b' if brn else 'kf52', sx + d, sy + T - 2, {'begleiter': True}, d < 0, gap=-30,
+                            klassen='gnwz') for d in (14, -14, 18, -18))
+            hat += any(setze('busch_b' if brn else 'kf24', sx + s_ * d, sy + T + 6, {'begleiter': True}, s_ > 0, klassen='gnwz')
+                       for d in (36, 44, 28) for s_ in (-1, 1))
+            if hat < 2:                                                  # Ersatz: Asche/Glut an der Stammecke (flach)
+                hat += any(setze('asche_b', sx + s_ * d, sy + 4, {'begleiter': True, 'ebene': 0, 'liegend': True, 'anim': 'kerzen'},
+                                 s_ > 0, gap=-4, klassen='gnwz') for d in (24, 30) for s_ in (-1, 1))
+            if hat < 2:
+                print('  Baum mit wenig Begleitern', o_['basis'], hat)
     for o in objekte:
         if o['basis'] in ('brocken_b', 'busch_b', 'stamm_b', 'baum_b'):
             o['nur_kontakt'] = True
