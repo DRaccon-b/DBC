@@ -333,6 +333,11 @@ Vor jeder Abgabe Punkt für Punkt prüfen (vergrößert, Standbild und mehrere A
   Treibende Objekte: halb versunkene PixelLab-Sprites, 1 px Auf-und-ab mit eigenem Takt, Wasserring, kein Schatten,
   über den See verteilt. Automatische Felsspitzen der Wasserroutine abschalten, wenn sie als Kegel wirken. Kleine Bäume
   (b03) ohne Begleiter vor dem Stumpf; Fässer u. Ä. „in den Bäumen“ direkt neben einen Baum setzen, nie frei auf die Wiese.
+- **Bauernhaus mit Tiefe (Karte 46, Nutzer):** Häuser mit dem Pro-Generator „von schräg oben“ (Dachfläche, Gauben, Walmdach)
+  in mehreren Kandidaten erzeugen; nur Kandidaten ganz im Bild nehmen. Angeschnittene Seiten durch Spiegeln der intakten
+  Seite reparieren, zurückgesetzte Anbauten brauchen einen eigenen Sockel bis zum Boden (sonst schweben sie); am Hausfuß
+  `ohne_wall` (kein heller Saum). Brücken enden wie in der Vorlage an einer Landestelle, nie lang parallel am Ufer;
+  Bänke nur auf Gras neben dem Weg. Kleine Teiche ohne Tiefenstufen (`stufen=[]`).
 - **Begleiter am Stumpf (5d):** keine 1-Kachel-Blumen auf dem Stumpf, kein Blumenklumpen; Begleiter überlappen sich nicht.
 - **Paare/Achsen:** Paare vor Toren/Bauwerken exakt gespiegelt (Mitte und Fuß), gleiche Objekte auf gleicher Höhe;
   Druckplatten, Obelisken usw. symmetrisch zur berechneten Achse.

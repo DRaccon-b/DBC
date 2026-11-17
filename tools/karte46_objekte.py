@@ -84,7 +84,7 @@ def main():
                                                           (t['y'] + t['h']) * T - 1), 1) for t in lay['teleporter']):
                 return None                                          # nur der Fuss nie auf dem Teleporter
             cxw = (r[0] + r[2]) // 2
-            if (lvl[r[3] - 2:min(r[3] + 3, lvl.shape[0]), cxw - 3:cxw + 4] != 2).any():
+            if (lvl[r[3] - 2:min(r[3] + 3, lvl.shape[0]), cxw - 9:cxw + 10] != 2).any():
                 return None                                          # Fuss auf dem Waldboden (nicht auf der Mauer)
             for yy in range(max(0, r[1] // T), r[3] // T + 1):
                 for xx in range(r[0] // T, r[2] // T + 1):
@@ -165,7 +165,7 @@ def main():
     kachel('karren', 69, 32, {}, False, 'w', suche=2)
     kachel('brunnen', 86, 34, {}, False, 'w', suche=2)
     for (tx_, ty_) in ((76, 37), (16, 35), (11, 59)):
-        kachel('bank', tx_, ty_, {}, False, 'gw', suche=2)
+        kachel('bank', tx_, ty_, {}, False, 'g', suche=3)
     # ---------------- Baeume der Vorlage mit Begleitern
     felsen = ['kf52', 'kf00']                       # hinter den Blaettern: 2 Kacheln hohe Felsen
     klein = ['kf%02d' % i for i in KLEINFELS]
@@ -260,7 +260,7 @@ def main():
             continue
         n_ = pflanzen[n_wp]
         if im_wasser(n_, x * T + 8, y * T + 12, dict({'wasserdeko': True, 'ebene': 0, 'schattenlos': True,
-                                                      'ohne_wall': True}, **({'anim': 'wehen'} if n_ == 'kolben' else {})),
+                                                      'ohne_wall': True}, **({'anim': 'baum'} if n_ == 'kolben' else {})),
                      rnd.random() < 0.5, rand=3):
             n_wp += 1
     weit = [(x, y) for y in range(rows) for x in range(cols) if 3 <= dist[y, x] <= 6 and cls[y][x] == 'x']

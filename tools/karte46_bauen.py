@@ -232,7 +232,7 @@ def bauen(frame=None, speichern=True):
     ag = np.pad(a, ((P, P), (P, P), (0, 0)), mode='edge')
     mg = np.pad(xm, ((P, P), (P, P)), mode='edge')
     ag = np.array(wasser_vertieft.vertiefen(Image.fromarray(ag), np.ones_like(mg), frame, maske=mg,
-                                            stufen=[(26, 0.8, 8)]).convert('RGB'))   # nur eine Tiefenstufe (keine Einzelloecher)
+                                            stufen=[]).convert('RGB'))   # keine Tiefenstufen (sonst Einzelloecher im Teich)
     a = ag[P:-P, P:-P].copy()
     a[wand] = vor_wasser[wand]
     img_b = Image.fromarray(a).convert('RGBA')                       # breite Holzbruecken (Planken quer, Gelaender)

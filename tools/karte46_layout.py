@@ -78,6 +78,7 @@ def main():
                     nb = [k[y + dy, x + dx] for dy, dx in ((1, 0), (-1, 0), (0, 1), (0, -1))]
                     if nb.count('g') + nb.count('w') <= 1 and 'h' in nb:
                         k[y, x] = 'h'
+    k[35:41, 47:51] = np.where(k[35:41, 47:51] == 'x', 'w', k[35:41, 47:51])   # untere Bruecke endet wie in der Vorlage
     bruecken = []
     for (bx0, by0, bx1, by1) in BRUECKEN:                              # Bruecke = Wasserbreite, Weg 2 Spalten davor/dahinter
         xs = [x for y in range(by0, by1 + 1) for x in range(bx0 - 4, bx1 + 5) if k[y, x] == 'x']
