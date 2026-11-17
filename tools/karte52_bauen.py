@@ -329,7 +329,15 @@ def bauen(frame=None, speichern=True):
     Wp, Hp = cols * T, rows * T
     kl = np.array([list(r) for r in lay['klassen']])
     a = k18.textur('g', cols, rows)                                   # Gehwegplatten
-    asph_k = np.isin(kl, ['a', 'x', 'r', 'h'])                      # unter der Masse liegt Asphalt (keine Bordsteinecken)
+    kl_m = kl                                                         # Masse (r/h) bleibt fuer die Masse-Maske
+    kl = kl.copy()                                                    # Boden unter der Masse: Platz/Gehweg daneben fortsetzen
+    for y in range(rows):                                             # (sonst Asphaltkeile in den 45-Grad-Ecken am Platz)
+        for x in range(cols):
+            if kl_m[y, x] in 'rh':
+                nb = [kl_m[y + dy, x + dx] for dy, dx in ((1, 0), (-1, 0), (0, 1), (0, -1))
+                      if 0 <= y + dy < rows and 0 <= x + dx < cols]
+                kl[y, x] = 'q' if 'q' in nb else 'b' if 'b' in nb else 'a'
+    asph_k = np.isin(kl, ['a', 'x'])
     asphalt = gross(asph_k)
     a[asphalt] = k18.textur('s', cols, rows)[asphalt]
     for kk, art, f in (('q', 'v', (1.0, 1.0, 0.95)), ('b', 'k', (1.16, 1.04, 0.86)), ('k', 'k', (1.0, 1.0, 1.0))):
@@ -353,7 +361,7 @@ def bauen(frame=None, speichern=True):
     land = np.zeros((Hp, Wp), bool)                                   # Nebel nur am aeussersten Rand ueber den Baeumen
     land[T:-T, T:-T] = True
     lvl = np.ones((Hp, Wp), np.uint8)
-    leere = gross(kl == 'h')                                          # Baumguertel nicht begehbar (Kartenrand)
+    leere = gross(kl_m == 'h')                                          # Baumguertel nicht begehbar (Kartenrand)
     lvl[leere] = 0                                                    # Kollision: Leere
     lvl[reaper] = 9                                                   # D-Reaper-Masse: gesperrt
     if speichern and frame is None:

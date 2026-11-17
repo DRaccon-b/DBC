@@ -206,18 +206,25 @@ def main():
                              ('reaper/wrack', 28, 74, True), ('k18a/02', 60, 37, False), ('k18a/05', 14, 68, True)):
         kachel(n_, tx + P, ty + P, {}, sp, klassen='a', weit=2)
     for (n_, tx, ty, sp) in (('reaper/sperre', 21, 28, False), ('reaper/sperre', 31, 23, True), ('reaper/sperre', 55, 46, False),
-                             ('reaper/sperre', 59, 58, True), ('reaper/block', 10, 12, False), ('reaper/block', 66, 63, True),
+                             ('reaper/sperre', 59, 58, True), ('reaper/block', 14, 20, False), ('reaper/block', 66, 63, True),
                              ('reaper/schutt', 36, 20, False), ('reaper/schutt', 13, 55, True), ('reaper/schutt', 70, 25, False),
                              ('reaper/fass', 25, 16, False), ('reaper/laterne_kaputt', 33, 66, False),
                              ('reaper/laterne_kaputt', 80, 52, True)):
-        kachel(n_, tx + P, ty + P, {}, sp, klassen='a' + G, weit=2)
+        kachel(n_, tx + P, ty + P, {'anim': 'lampe'} if 'laterne_kaputt' in n_ else {}, sp, klassen='a' + G, weit=2)
     # ---------------------------------------------------------------- Bahnhofsvorplatz (Ziegelplatz unten rechts)
-    for (tx, ty) in ((75, 58), (91, 58), (75, 75), (91, 75)):              # Laternen an den Platzecken
-        kachel('k18s/18', tx + P, ty + P, dict(LAMPE), klassen='b', weit=1)
+    gk_ = np.array([list(z) for z in cls])                              # Laternen an den Platzecken, exakt gespiegelt
+    ys_b, xs_b = np.nonzero(gk_ == 'b')
+    bx0, bx1, by0, by1 = xs_b.min(), xs_b.max(), ys_b.min(), ys_b.max()
+    lw = Image.open(os.path.join(OBJ, 'k18s/18.png')).getbbox()
+    lw = lw[2] - lw[0]
+    xl = bx0 * T + 20
+    for fy_ in ((by0 + 1) * T + 15, by1 * T + 11):
+        setze('k18s/18', xl + lw / 2.0, fy_, dict(LAMPE), klassen='b')
+        setze('k18s/18', (bx1 + 1) * T - 20 - lw / 2.0, fy_, dict(LAMPE), klassen='b')
     for (n_, tx, ty, sp) in (('k18s/13', 80, 62, False), ('k18s/01', 88, 61, False), ('k18s/12', 84, 70, False)):
         kachel(n_, tx + P, ty + P, {}, sp, klassen='b', weit=2)
-    kachel('k18s/41', 61 + P, 75 + P, {}, klassen='k', weit=2)             # Haltestelle (Vorlage) am Gehweg
-    for (tx, ty) in ((6, 2), (40, 46), (64, 46), (88, 30), (22, 76 - 1)):
+    kachel('k18s/41', 78 + P, 72 + P, {}, klassen='b', weit=3)             # Haltestelle (Vorlage) auf dem Vorplatz
+    for (tx, ty) in ((18, 12), (40, 46), (60, 45), (22, 76 - 1)):
         kachel('k18s/18', tx + P, ty + P, dict(LAMPE), klassen='k', weit=2)
     # ---------------------------------------------------------------- D-Reaper: Auslaeufer an den Masseraendern
     gk = np.array([list(z) for z in cls])
@@ -240,7 +247,7 @@ def main():
         if setze(n_, tx * T + T / 2.0, ty * T + T - 1, {}, rnd.random() < 0.5, klassen='a' + G):
             gesetzt_r.append((tx, ty))
     for (tx, ty) in ((30, 20), (62, 44), (52, 30 + 10), (12, 22), (86, 48)):   # Waechter-Wesen patrouillieren
-        kachel('reaper/waechter', tx + P, ty + P, {}, tx % 2 == 0, klassen='a' + G, weit=3)
+        kachel('reaper/waechter', tx + P, ty + P, {}, (tx // 2) % 2 == 0, klassen='a' + G, weit=3)
     # ---------------------------------------------------------------- flacher Kleinkram (begehbar)
     klein = ['klein/pfuetze', 'klein/brocken', 'klein/glas', 'klein/zeitung']
     for i in range(40):

@@ -210,12 +210,12 @@
 {
 "datei": "varianten/reaper-block.png",
 "basis": "reaper/block",
-"x": 183,
-"y": 218,
+"x": 247,
+"y": 346,
 "fuss": 21,
 "kachel": [
-12,
-14
+16,
+22
 ],
 "ebene": 1,
 "ohne_wall": true,
@@ -275,7 +275,8 @@
 ],
 "ebene": 1,
 "ohne_wall": true,
-"nur_kontakt": true
+"nur_kontakt": true,
+"anim": "lampe"
 },
 {
 "datei": "varianten/reaper-laterne_kaputt_m.png",
@@ -289,16 +290,17 @@
 ],
 "ebene": 1,
 "ohne_wall": true,
-"nur_kontakt": true
+"nur_kontakt": true,
+"anim": "lampe"
 },
 {
 "datei": "varianten/k18s-18.png",
 "basis": "k18s/18",
-"x": 1220,
+"x": 1236,
 "y": 962,
 "fuss": 29,
 "kachel": [
-76,
+77,
 61
 ],
 "ebene": 1,
@@ -320,11 +322,11 @@
 {
 "datei": "varianten/k18s-18.png",
 "basis": "k18s/18",
-"x": 1476,
+"x": 1492,
 "y": 962,
 "fuss": 29,
 "kachel": [
-92,
+93,
 61
 ],
 "ebene": 1,
@@ -347,7 +349,7 @@
 "datei": "varianten/k18s-18.png",
 "basis": "k18s/18",
 "x": 1236,
-"y": 1218,
+"y": 1214,
 "fuss": 29,
 "kachel": [
 77,
@@ -373,7 +375,7 @@
 "datei": "varianten/k18s-18.png",
 "basis": "k18s/18",
 "x": 1492,
-"y": 1218,
+"y": 1214,
 "fuss": 29,
 "kachel": [
 93,
@@ -438,6 +440,46 @@
 "nur_kontakt": true
 },
 {
+"datei": "varianten/k18s-41.png",
+"basis": "k18s/41",
+"x": 1280,
+"y": 1172,
+"fuss": 27,
+"kachel": [
+81,
+74
+],
+"ebene": 1,
+"ohne_wall": true,
+"nur_kontakt": true
+},
+{
+"datei": "varianten/k18s-18.png",
+"basis": "k18s/18",
+"x": 292,
+"y": 210,
+"fuss": 29,
+"kachel": [
+18,
+14
+],
+"ebene": 1,
+"ohne_wall": true,
+"nur_kontakt": true,
+"anim": "leuchten",
+"licht": [
+4,
+7
+],
+"licht_box": [
+2,
+5,
+6,
+10
+],
+"licht_r": 9
+},
+{
 "datei": "varianten/k18s-18.png",
 "basis": "k18s/18",
 "x": 660,
@@ -466,12 +508,12 @@
 {
 "datei": "varianten/k18s-18.png",
 "basis": "k18s/18",
-"x": 1444,
-"y": 498,
+"x": 996,
+"y": 738,
 "fuss": 29,
 "kachel": [
-90,
-32
+62,
+47
 ],
 "ebene": 1,
 "ohne_wall": true,
@@ -518,54 +560,54 @@
 {
 "datei": "varianten/reaper-ranke_m.png",
 "basis": "reaper/ranke",
-"x": 968,
-"y": 752,
+"x": 456,
+"y": 448,
 "fuss": 31,
 "kachel": [
-61,
-48
+29,
+29
 ],
 "ebene": 1,
 "ohne_wall": true,
 "nur_kontakt": true
 },
 {
-"datei": "varianten/reaper-blasen.png",
+"datei": "varianten/reaper-blasen_m.png",
 "basis": "reaper/blasen",
-"x": 1065,
-"y": 966,
+"x": 105,
+"y": 870,
 "fuss": 25,
 "kachel": [
-67,
-61
+7,
+55
 ],
 "ebene": 1,
 "ohne_wall": true,
 "nur_kontakt": true
 },
 {
-"datei": "varianten/reaper-kapsel_m.png",
+"datei": "varianten/reaper-kapsel.png",
 "basis": "reaper/kapsel",
-"x": 1340,
-"y": 584,
+"x": 540,
+"y": 72,
 "fuss": 23,
 "kachel": [
-84,
-37
+34,
+5
 ],
 "ebene": 1,
 "ohne_wall": true,
 "nur_kontakt": true
 },
 {
-"datei": "varianten/reaper-ei_m.png",
+"datei": "varianten/reaper-ei.png",
 "basis": "reaper/ei",
-"x": 170,
-"y": 840,
+"x": 1002,
+"y": 824,
 "fuss": 23,
 "kachel": [
-11,
-53
+63,
+52
 ],
 "ebene": 1,
 "ohne_wall": true,
@@ -573,6 +615,34 @@
 },
 {
 "datei": "varianten/reaper-ranke.png",
+"basis": "reaper/ranke",
+"x": 1080,
+"y": 960,
+"fuss": 31,
+"kachel": [
+68,
+61
+],
+"ebene": 1,
+"ohne_wall": true,
+"nur_kontakt": true
+},
+{
+"datei": "varianten/reaper-blasen_m.png",
+"basis": "reaper/blasen",
+"x": 857,
+"y": 70,
+"fuss": 25,
+"kachel": [
+54,
+5
+],
+"ebene": 1,
+"ohne_wall": true,
+"nur_kontakt": true
+},
+{
+"datei": "varianten/reaper-ranke_m.png",
 "basis": "reaper/ranke",
 "x": 1288,
 "y": 160,
@@ -586,53 +656,11 @@
 "nur_kontakt": true
 },
 {
-"datei": "varianten/reaper-blasen.png",
+"datei": "varianten/reaper-blasen_m.png",
 "basis": "reaper/blasen",
-"x": 473,
-"y": 454,
+"x": 649,
+"y": 358,
 "fuss": 25,
-"kachel": [
-30,
-29
-],
-"ebene": 1,
-"ohne_wall": true,
-"nur_kontakt": true
-},
-{
-"datei": "varianten/reaper-ranke.png",
-"basis": "reaper/ranke",
-"x": 856,
-"y": 64,
-"fuss": 31,
-"kachel": [
-54,
-5
-],
-"ebene": 1,
-"ohne_wall": true,
-"nur_kontakt": true
-},
-{
-"datei": "varianten/reaper-blasen.png",
-"basis": "reaper/blasen",
-"x": 521,
-"y": 70,
-"fuss": 25,
-"kachel": [
-33,
-5
-],
-"ebene": 1,
-"ohne_wall": true,
-"nur_kontakt": true
-},
-{
-"datei": "varianten/reaper-kapsel.png",
-"basis": "reaper/kapsel",
-"x": 652,
-"y": 360,
-"fuss": 23,
 "kachel": [
 41,
 23
@@ -642,11 +670,53 @@
 "nur_kontakt": true
 },
 {
-"datei": "varianten/reaper-ei_m.png",
-"basis": "reaper/ei",
-"x": 970,
+"datei": "varianten/reaper-kapsel.png",
+"basis": "reaper/kapsel",
+"x": 1196,
 "y": 1016,
 "fuss": 23,
+"kachel": [
+75,
+64
+],
+"ebene": 1,
+"ohne_wall": true,
+"nur_kontakt": true
+},
+{
+"datei": "varianten/reaper-ei_m.png",
+"basis": "reaper/ei",
+"x": 1322,
+"y": 584,
+"fuss": 23,
+"kachel": [
+83,
+37
+],
+"ebene": 1,
+"ohne_wall": true,
+"nur_kontakt": true
+},
+{
+"datei": "varianten/reaper-ranke_m.png",
+"basis": "reaper/ranke",
+"x": 712,
+"y": 416,
+"fuss": 31,
+"kachel": [
+45,
+27
+],
+"ebene": 1,
+"ohne_wall": true,
+"nur_kontakt": true
+},
+{
+"datei": "varianten/reaper-blasen_m.png",
+"basis": "reaper/blasen",
+"x": 969,
+"y": 1014,
+"fuss": 25,
 "kachel": [
 61,
 64
@@ -656,7 +726,7 @@
 "nur_kontakt": true
 },
 {
-"datei": "varianten/reaper-ranke.png",
+"datei": "varianten/reaper-ranke_m.png",
 "basis": "reaper/ranke",
 "x": 1192,
 "y": 80,
@@ -672,12 +742,40 @@
 {
 "datei": "varianten/reaper-blasen.png",
 "basis": "reaper/blasen",
-"x": 713,
-"y": 422,
+"x": 857,
+"y": 774,
 "fuss": 25,
 "kachel": [
-45,
-27
+54,
+49
+],
+"ebene": 1,
+"ohne_wall": true,
+"nur_kontakt": true
+},
+{
+"datei": "varianten/reaper-kapsel.png",
+"basis": "reaper/kapsel",
+"x": 220,
+"y": 856,
+"fuss": 23,
+"kachel": [
+14,
+54
+],
+"ebene": 1,
+"ohne_wall": true,
+"nur_kontakt": true
+},
+{
+"datei": "varianten/reaper-ei_m.png",
+"basis": "reaper/ei",
+"x": 250,
+"y": 936,
+"fuss": 23,
+"kachel": [
+16,
+59
 ],
 "ebene": 1,
 "ohne_wall": true,
@@ -685,6 +783,34 @@
 },
 {
 "datei": "varianten/reaper-ranke.png",
+"basis": "reaper/ranke",
+"x": 936,
+"y": 736,
+"fuss": 31,
+"kachel": [
+59,
+47
+],
+"ebene": 1,
+"ohne_wall": true,
+"nur_kontakt": true
+},
+{
+"datei": "varianten/reaper-blasen_m.png",
+"basis": "reaper/blasen",
+"x": 569,
+"y": 454,
+"fuss": 25,
+"kachel": [
+36,
+29
+],
+"ebene": 1,
+"ohne_wall": true,
+"nur_kontakt": true
+},
+{
+"datei": "varianten/reaper-ranke_m.png",
 "basis": "reaper/ranke",
 "x": 600,
 "y": 112,
@@ -698,14 +824,14 @@
 "nur_kontakt": true
 },
 {
-"datei": "varianten/reaper-blasen.png",
+"datei": "varianten/reaper-blasen_m.png",
 "basis": "reaper/blasen",
-"x": 841,
-"y": 822,
+"x": 473,
+"y": 118,
 "fuss": 25,
 "kachel": [
-53,
-52
+30,
+8
 ],
 "ebene": 1,
 "ohne_wall": true,
@@ -714,37 +840,9 @@
 {
 "datei": "varianten/reaper-kapsel.png",
 "basis": "reaper/kapsel",
-"x": 1164,
-"y": 984,
+"x": 780,
+"y": 120,
 "fuss": 23,
-"kachel": [
-73,
-62
-],
-"ebene": 1,
-"ohne_wall": true,
-"nur_kontakt": true
-},
-{
-"datei": "varianten/reaper-ei.png",
-"basis": "reaper/ei",
-"x": 90,
-"y": 936,
-"fuss": 23,
-"kachel": [
-6,
-59
-],
-"ebene": 1,
-"ohne_wall": true,
-"nur_kontakt": true
-},
-{
-"datei": "varianten/reaper-ranke_m.png",
-"basis": "reaper/ranke",
-"x": 776,
-"y": 112,
-"fuss": 31,
 "kachel": [
 49,
 8
@@ -754,35 +852,7 @@
 "nur_kontakt": true
 },
 {
-"datei": "varianten/reaper-blasen_m.png",
-"basis": "reaper/blasen",
-"x": 457,
-"y": 166,
-"fuss": 25,
-"kachel": [
-29,
-11
-],
-"ebene": 1,
-"ohne_wall": true,
-"nur_kontakt": true
-},
-{
-"datei": "varianten/reaper-ranke.png",
-"basis": "reaper/ranke",
-"x": 248,
-"y": 928,
-"fuss": 31,
-"kachel": [
-16,
-59
-],
-"ebene": 1,
-"ohne_wall": true,
-"nur_kontakt": true
-},
-{
-"datei": "varianten/reaper-waechter_m.png",
+"datei": "varianten/reaper-waechter.png",
 "basis": "reaper/waechter",
 "x": 500,
 "y": 353,
@@ -796,7 +866,7 @@
 "nur_kontakt": true
 },
 {
-"datei": "varianten/reaper-waechter_m.png",
+"datei": "varianten/reaper-waechter.png",
 "basis": "reaper/waechter",
 "x": 1028,
 "y": 721,
@@ -826,19 +896,19 @@
 {
 "datei": "varianten/reaper-waechter_m.png",
 "basis": "reaper/waechter",
-"x": 228,
-"y": 369,
+"x": 212,
+"y": 353,
 "fuss": 30,
 "kachel": [
-15,
-24
+14,
+23
 ],
 "ebene": 1,
 "ohne_wall": true,
 "nur_kontakt": true
 },
 {
-"datei": "varianten/reaper-waechter_m.png",
+"datei": "varianten/reaper-waechter.png",
 "basis": "reaper/waechter",
 "x": 1412,
 "y": 785,
@@ -850,6 +920,81 @@
 "ebene": 1,
 "ohne_wall": true,
 "nur_kontakt": true
+},
+{
+"datei": "varianten/klein-pfuetze.png",
+"basis": "klein/pfuetze",
+"x": 140,
+"y": 782,
+"fuss": 15,
+"kachel": [
+9,
+49
+],
+"ebene": 0,
+"ohne_wall": true,
+"liegend": true,
+"schattenlos": true
+},
+{
+"datei": "varianten/klein-zeitung_m.png",
+"basis": "klein/zeitung",
+"x": 297,
+"y": 367,
+"fuss": 15,
+"kachel": [
+19,
+23
+],
+"ebene": 0,
+"ohne_wall": true,
+"liegend": true,
+"schattenlos": true
+},
+{
+"datei": "varianten/klein-pfuetze_m.png",
+"basis": "klein/pfuetze",
+"x": 336,
+"y": 432,
+"fuss": 15,
+"kachel": [
+21,
+27
+],
+"ebene": 0,
+"ohne_wall": true,
+"liegend": true,
+"schattenlos": true
+},
+{
+"datei": "varianten/klein-glas.png",
+"basis": "klein/glas",
+"x": 219,
+"y": 253,
+"fuss": 15,
+"kachel": [
+14,
+16
+],
+"ebene": 0,
+"ohne_wall": true,
+"liegend": true,
+"schattenlos": true
+},
+{
+"datei": "varianten/klein-zeitung.png",
+"basis": "klein/zeitung",
+"x": 1423,
+"y": 939,
+"fuss": 15,
+"kachel": [
+89,
+59
+],
+"ebene": 0,
+"ohne_wall": true,
+"liegend": true,
+"schattenlos": true
 },
 {
 "datei": "varianten/klein-brocken_m.png",
@@ -920,21 +1065,6 @@
 "kachel": [
 9,
 33
-],
-"ebene": 0,
-"ohne_wall": true,
-"liegend": true,
-"schattenlos": true
-},
-{
-"datei": "varianten/klein-pfuetze_m.png",
-"basis": "klein/pfuetze",
-"x": 286,
-"y": 382,
-"fuss": 15,
-"kachel": [
-18,
-24
 ],
 "ebene": 0,
 "ohne_wall": true,
@@ -1070,66 +1200,6 @@
 "kachel": [
 42,
 15
-],
-"ebene": 0,
-"ohne_wall": true,
-"liegend": true,
-"schattenlos": true
-},
-{
-"datei": "varianten/klein-brocken.png",
-"basis": "klein/brocken",
-"x": 300,
-"y": 964,
-"fuss": 21,
-"kachel": [
-19,
-61
-],
-"ebene": 0,
-"ohne_wall": true,
-"liegend": true,
-"schattenlos": true
-},
-{
-"datei": "varianten/klein-zeitung.png",
-"basis": "klein/zeitung",
-"x": 719,
-"y": 265,
-"fuss": 15,
-"kachel": [
-45,
-17
-],
-"ebene": 0,
-"ohne_wall": true,
-"liegend": true,
-"schattenlos": true
-},
-{
-"datei": "varianten/klein-glas.png",
-"basis": "klein/glas",
-"x": 348,
-"y": 398,
-"fuss": 15,
-"kachel": [
-22,
-25
-],
-"ebene": 0,
-"ohne_wall": true,
-"liegend": true,
-"schattenlos": true
-},
-{
-"datei": "varianten/klein-zeitung.png",
-"basis": "klein/zeitung",
-"x": 889,
-"y": 991,
-"fuss": 15,
-"kachel": [
-56,
-62
 ],
 "ebene": 0,
 "ohne_wall": true,

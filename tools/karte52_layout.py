@@ -58,6 +58,11 @@ def main():
     k[45, 2:46] = np.where(k[45, 2:46] == 'a', 'k', k[45, 2:46])       # vor den beiden mittleren Gebaeuden
     k[0:2, :] = 'h'; k[78:, :] = 'h'; k[:, 0:2] = 'h'; k[:, 94:] = 'h'
     k = k43.zipfel_weg(k, 'r')
+    for _ in range(2):                                                 # Gehweg-/Platzinseln, die die Masse fast umschliesst
+        for y in range(1, R - 1):
+            for x in range(1, C - 1):
+                if k[y, x] not in 'rh' and sum(k[y + dy, x + dx] == 'r' for dy, dx in ((1, 0), (-1, 0), (0, 1), (0, -1))) >= 3:
+                    k[y, x] = 'r'
     for teil in k43.flaechen(k == 'r'):                                 # winzige Masseflecken weg
         if len(teil) < 6:
             for (y, x) in teil:
