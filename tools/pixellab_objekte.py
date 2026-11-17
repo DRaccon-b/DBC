@@ -2185,6 +2185,22 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'wooden wine barrel floating in water, lying on its side, only the upper half above the waterline is visible, flat straight bottom edge at the waterline, iron hoops, no water drawn, ' + FR14,
         'old oak barrel drifting, lying sideways, half sunk, round wooden end showing, upper half only, flat cut bottom edge at the waterline, no water drawn, ' + FR14,
     ]},
+    'k48_deko': {'size': 64, 'freie_farben': True, 'items': [   # Karte 48 Water Realm: Wassertempel/Bibliothek
+        'tall slender dark slate-blue stone temple column with a small golden-orange capital and a square base, smooth polished stone, ' + FR14,
+        'old wooden bookshelf full of colorful books, two shelves, carved dark wood frame with brass corners, ' + FR14,
+        'long low dark wooden reading table with thick legs, a closed book and a candle on top, ' + FR14,
+        'fallen broken slate-blue stone column lying on its side, cracked into two pieces, golden capital broken off, ' + FR14,
+        'simple light wooden park bench with two stone feet, sun-bleached planks, ' + FR14,
+        'small iron lamp post with a glowing glass lantern on top, dark metal, ' + FR14,
+    ]},
+    'k48_wasser': {'size': 32, 'freie_farben': True, 'items': [   # Karte 48: Pflanzen und Steine im Flachwasser
+        'small clump of green seaweed and water plants growing out of shallow water, a few leaves above the surface, no water drawn, ' + FR14,
+        'tuft of tall sea grass with yellow-green blades, standing in shallow water, no water drawn, ' + FR14,
+        'small pile of pale grey stone rubble and broken tile pieces, ' + FR14,
+        'small round pink and orange coral cluster with a few shells, no water drawn, ' + FR14,
+        'three smooth grey pebbles with a tiny starfish, flat ground detail, ' + FR14,
+        'lily pad cluster with a small white water flower, flat, seen from above, no water drawn, ' + FR14,
+    ]},
     'k47_deko': {'size': 48, 'freie_farben': True, 'items': [   # Karte 47 Deva Mountain: Banner, Saeulen, Felsen
         'tall red cloth banner hanging from a dark wooden pole with a crossbar, a golden round sun emblem with flame rays on the cloth, the pole stands on a small stone base, ' + FR14,
         'short weathered grey stone pillar post with a square cap, cracks and a bit of moss, ' + FR14,
