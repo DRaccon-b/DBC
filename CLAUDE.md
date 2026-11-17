@@ -298,6 +298,9 @@ Vor jeder Abgabe Punkt für Punkt prüfen (vergrößert, Standbild und mehrere A
   wie der Teleporter (keine Kerben daneben). Hütten u. Ä. nie auf Wegen: eigenen Sandplatz neben dem Weg anlegen, nicht am
   Treppenaustritt. Begleiter und Streudeko nie auf derselben Fußzeile nebeneinander (Busch–Busch–Busch); Fuß und Schatten
   mit Abstand zu Weg/Pflaster und zur Kante darunter (sonst Bodenwall in fremder Farbe).
+  Liegen Rand und Plateau gleich hoch, trennt eine Bergkette (eine Stufe höher, eigene dunklere Felstextur, wenige große
+  Felsformationen ohne Reihen) den Rand vom Plateau (Nutzer); sie läuft bis an die Kartenränder aus (oben/links bzw. rechts)
+  und hält mind. 4 Kacheln Abstand zum Talboden (keine doppelten Wände).
 - **Begleiter am Stumpf (5d):** keine 1-Kachel-Blumen auf dem Stumpf, kein Blumenklumpen; Begleiter überlappen sich nicht.
 - **Paare/Achsen:** Paare vor Toren/Bauwerken exakt gespiegelt (Mitte und Fuß), gleiche Objekte auf gleicher Höhe;
   Druckplatten, Obelisken usw. symmetrisch zur berechneten Achse.

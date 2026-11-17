@@ -196,6 +196,7 @@ def main():
     # Nutzer: links laeuft die Kette nach oben UND nach links bis an den Kartenrand aus (ganze Ecke oben links)
     x0_, y0_, x1_, y1_ = PLATEAUS[0]
     kette |= (k == 'r') & (yy_ < y0_) & (xx_ <= x1_) & (d_b >= 4)
+    kette |= (k == 'r') & (xx_ < x0_) & (yy_ <= y1_ + 6) & (d_b >= 4)   # und an der Westseite herunter bis zum Rand
     for teil in flaechen(kette):                      # kleine Kettenstuecke weglassen
         if len(teil) < 12:
             for (y, x) in teil:
