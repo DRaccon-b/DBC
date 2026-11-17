@@ -2185,6 +2185,12 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'wooden wine barrel floating in water, lying on its side, only the upper half above the waterline is visible, flat straight bottom edge at the waterline, iron hoops, no water drawn, ' + FR14,
         'old oak barrel drifting, lying sideways, half sunk, round wooden end showing, upper half only, flat cut bottom edge at the waterline, no water drawn, ' + FR14,
     ]},
+    'k47_deko': {'size': 48, 'freie_farben': True, 'items': [   # Karte 47 Deva Mountain: Banner, Saeulen, Felsen
+        'tall red cloth banner hanging from a dark wooden pole with a crossbar, a golden round sun emblem with flame rays on the cloth, the pole stands on a small stone base, ' + FR14,
+        'short weathered grey stone pillar post with a square cap, cracks and a bit of moss, ' + FR14,
+        'broken grey stone pillar stump, cracked top, small rubble at the base, ' + FR14,
+        'large grey-blue mountain boulder with soft shading and a few cracks, ' + FR14,
+    ]},
     'k43_halme': {'size': 32, 'freie_farben': True, 'items': [   # Karte 43: flache Grashalm-Bueschel als Bodenstruktur
         'tiny tuft of short green grass blades seen from above, flat ground detail, no shadow, ' + FR14,
         'small cluster of thin dark green grass blades and two tiny white clover flowers, flat ground detail, ' + FR14,
