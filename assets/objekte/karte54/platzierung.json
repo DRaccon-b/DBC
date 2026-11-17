@@ -2,7 +2,7 @@
 {
 "datei": "varianten/herz.png",
 "basis": "herz",
-"x": 363,
+"x": 355,
 "y": 171,
 "fuss": 68,
 "kachel": [
@@ -82,103 +82,13 @@
 "nur_kontakt": true
 },
 {
-"datei": "varianten/lampe.png",
-"basis": "lampe",
-"x": 282,
-"y": 460,
-"fuss": 35,
-"kachel": [
-0,
-30
-],
-"ebene": 1,
-"ohne_wall": true,
-"nur_kontakt": true,
-"anim": "lampe"
-},
-{
-"datei": "varianten/lampe_m.png",
-"basis": "lampe",
-"x": 491,
-"y": 460,
-"fuss": 35,
-"kachel": [
-0,
-30
-],
-"ebene": 1,
-"ohne_wall": true,
-"nur_kontakt": true,
-"anim": "lampe"
-},
-{
-"datei": "varianten/terminal.png",
-"basis": "terminal",
-"x": 216,
-"y": 434,
-"fuss": 29,
-"kachel": [
-0,
-28
-],
-"ebene": 1,
-"ohne_wall": true,
-"nur_kontakt": true,
-"anim": "maschine",
-"leds": true
-},
-{
-"datei": "varianten/terminal_m.png",
-"basis": "terminal",
-"x": 552,
-"y": 434,
-"fuss": 29,
-"kachel": [
-0,
-28
-],
-"ebene": 1,
-"ohne_wall": true,
-"nur_kontakt": true,
-"anim": "maschine",
-"leds": true
-},
-{
-"datei": "varianten/kapsel.png",
-"basis": "kapsel",
-"x": 206,
-"y": 493,
-"fuss": 18,
-"kachel": [
-0,
-31
-],
-"ebene": 1,
-"ohne_wall": true,
-"nur_kontakt": true
-},
-{
-"datei": "varianten/kapsel_m.png",
-"basis": "kapsel",
-"x": 541,
-"y": 493,
-"fuss": 18,
-"kachel": [
-0,
-31
-],
-"ebene": 1,
-"ohne_wall": true,
-"nur_kontakt": true
-},
-{
 "datei": "varianten/mech.png",
 "basis": "mech",
-"x": 87,
+"x": 89,
 "y": 148,
 "fuss": 43,
 "kachel": [
-6,
+7,
 11
 ],
 "ebene": 1,
@@ -200,13 +110,103 @@
 "nur_kontakt": true
 },
 {
+"datei": "varianten/lampe.png",
+"basis": "lampe",
+"x": 290,
+"y": 460,
+"fuss": 35,
+"kachel": [
+0,
+30
+],
+"ebene": 1,
+"ohne_wall": true,
+"nur_kontakt": true,
+"anim": "lampe"
+},
+{
+"datei": "varianten/lampe_m.png",
+"basis": "lampe",
+"x": 483,
+"y": 460,
+"fuss": 35,
+"kachel": [
+0,
+30
+],
+"ebene": 1,
+"ohne_wall": true,
+"nur_kontakt": true,
+"anim": "lampe"
+},
+{
+"datei": "varianten/terminal.png",
+"basis": "terminal",
+"x": 224,
+"y": 434,
+"fuss": 29,
+"kachel": [
+0,
+28
+],
+"ebene": 1,
+"ohne_wall": true,
+"nur_kontakt": true,
+"anim": "maschine",
+"leds": true
+},
+{
+"datei": "varianten/terminal_m.png",
+"basis": "terminal",
+"x": 544,
+"y": 434,
+"fuss": 29,
+"kachel": [
+0,
+28
+],
+"ebene": 1,
+"ohne_wall": true,
+"nur_kontakt": true,
+"anim": "maschine",
+"leds": true
+},
+{
+"datei": "varianten/kapsel.png",
+"basis": "kapsel",
+"x": 198,
+"y": 493,
+"fuss": 18,
+"kachel": [
+0,
+31
+],
+"ebene": 1,
+"ohne_wall": true,
+"nur_kontakt": true
+},
+{
+"datei": "varianten/kapsel_m.png",
+"basis": "kapsel",
+"x": 549,
+"y": 493,
+"fuss": 18,
+"kachel": [
+0,
+31
+],
+"ebene": 1,
+"ohne_wall": true,
+"nur_kontakt": true
+},
+{
 "datei": "varianten/mech_m.png",
 "basis": "mech",
-"x": 649,
+"x": 641,
 "y": 452,
 "fuss": 43,
 "kachel": [
-42,
+41,
 30
 ],
 "ebene": 1,
@@ -286,11 +286,11 @@
 {
 "datei": "varianten/flasche.png",
 "basis": "flasche",
-"x": 696,
+"x": 688,
 "y": 370,
 "fuss": 29,
 "kachel": [
-44,
+43,
 24
 ],
 "ebene": 1,
@@ -315,7 +315,7 @@
 {
 "datei": "varianten/lampe_m.png",
 "basis": "lampe",
-"x": 694,
+"x": 690,
 "y": 300,
 "fuss": 35,
 "kachel": [
@@ -330,26 +330,11 @@
 {
 "datei": "varianten/gitter.png",
 "basis": "gitter",
-"x": 370,
-"y": 471,
-"fuss": 19,
-"kachel": [
-23,
-30
-],
-"ebene": 0,
-"ohne_wall": true,
-"liegend": true,
-"schattenlos": true
-},
-{
-"datei": "varianten/gitter.png",
-"basis": "gitter",
-"x": 430,
+"x": 590,
 "y": 451,
 "fuss": 19,
 "kachel": [
-27,
+37,
 29
 ],
 "ebene": 0,
@@ -448,42 +433,13 @@
 "schattenlos": true
 },
 {
-"datei": "varianten/pfuetze.png",
-"basis": "pfuetze",
-"x": 494,
-"y": 381,
-"fuss": 15,
-"kachel": [
-31,
-24
-],
-"ebene": 0,
-"ohne_wall": true,
-"liegend": true,
-"schattenlos": true
-},
-{
-"datei": "varianten/flasche_m.png",
-"basis": "flasche",
-"x": 696,
-"y": 402,
-"fuss": 29,
-"kachel": [
-44,
-26
-],
-"ebene": 1,
-"ohne_wall": true,
-"nur_kontakt": true
-},
-{
 "datei": "varianten/konsole.png",
 "basis": "konsole",
-"x": 398,
+"x": 374,
 "y": 484,
 "fuss": 27,
 "kachel": [
-26,
+24,
 31
 ],
 "ebene": 1,
@@ -495,12 +451,12 @@
 {
 "datei": "varianten/ranke.png",
 "basis": "ranke",
-"x": 476,
-"y": 400,
+"x": 480,
+"y": 384,
 "fuss": 31,
 "kachel": [
-30,
-26
+31,
+25
 ],
 "ebene": 1,
 "ohne_wall": true,
@@ -515,6 +471,20 @@
 "kachel": [
 13,
 12
+],
+"ebene": 1,
+"ohne_wall": true,
+"nur_kontakt": true
+},
+{
+"datei": "varianten/waechter_m.png",
+"basis": "waechter",
+"x": 564,
+"y": 97,
+"fuss": 30,
+"kachel": [
+36,
+7
 ],
 "ebene": 1,
 "ohne_wall": true,

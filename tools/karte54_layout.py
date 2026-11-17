@@ -40,7 +40,7 @@ def main():
         k[b0:b1 + 1, a0:a1 + 1] = 'f'
     x0, y0, x1, y1 = BECKEN
     k[y0:y1 + 1, x0:x1 + 1] = 'w'
-    k[0:3, :] = 'h'; k[-3:, :] = 'h'; k[:, 0:3] = 'h'; k[:, -3:] = 'h'
+    k[0:2, :] = 'h'; k[-3:, :] = 'h'; k[:, 0:3] = 'h'; k[:, -3:] = 'h'   # oben 2 Reihen: Front + Bodenreihe vor dem Ring
     for (tx, ty, b, hh) in TELEPORTER:
         k[ty:ty + hh, tx:tx + b] = 'T'
     hp = np.where(k == 'h', 2, np.where(k == 'm', 1, 0))

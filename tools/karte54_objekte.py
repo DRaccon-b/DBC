@@ -50,7 +50,7 @@ def main():
     def schnitt(a, b, d):
         return not (a[2] + d < b[0] or b[2] + d < a[0] or a[3] + d < b[1] or b[3] + d < a[1])
 
-    def setze(name, cx, fy, opt=None, spiegeln=False, gap=2, pruefen=True, belag='gf', x_fest=None):
+    def setze(name, cx, fy, opt=None, spiegeln=False, gap=2, pruefen=True, belag='gf', x_fest=None, raster=True):
         opt = dict(opt or {})
         q, f = D[name]
         sp = Image.open(os.path.join(ROOT, 'assets', 'objekte', q)).convert('RGBA')
@@ -65,6 +65,9 @@ def main():
         liegend = name in FLACH
         if not liegend:
             fy = int(fy) // T * T + T - 1                            # Regel 1b: Fuss buendig auf der Kachelunterkante
+            if raster and x_fest is None:                            # Regel 1b: waagerecht mittig im kleinsten Kachelblock
+                wt = max(1, -(-(bb[2] - bb[0]) // T))
+                cx = (round(cx / T - wt / 2.0) + wt / 2.0) * T
         x = int(round(cx - (bb[0] + bb[2]) / 2.0)) if x_fest is None else x_fest
         y = int(fy - (bb[3] - 1))
         r = (x + bb[0], y + bb[1], x + bb[2] - 1, y + bb[3] - 1)
@@ -139,21 +142,26 @@ def main():
     paar('saeule', achse, 6 * T, (my + 1) * T + 15, dfy=(0,))
     paar('nest', achse, 6 * T, (iy1 - 2) * T + 15, dfy=(0, -T))
     # Vorlage: Mechs auf den Gewebebahnen, Traeger, Flaschen, Lampen, Terminals, Kapseln
-    paar('lampe', achse, 104, 30 * T + 15, {'anim': 'lampe'})          # Suedseite: Paare gespiegelt zur Kammerachse
-    paar('terminal', achse, 168, 28 * T + 15, {'anim': 'maschine', 'leds': True})
-    paar('kapsel', achse, 168, 31 * T + 15)
-    for (n, px, py, sp_) in [('mech', 110, 180, False), ('mech', 656, 190, True), ('mech', 672, 495, True),
+    for (bx0, bx1, fy_, sp_) in ((5, 8, 11 * T + 15, False), (39, 42, 11 * T + 15, True)):   # Mechs mittig auf ihren Bahnen
+        mx_ = (bx0 + bx1 + 1) * T / 2.0
+        for dy_ in (0, T, -T):
+            if setze('mech', mx_, fy_ + dy_, {}, sp_, raster=False):
+                break
+    paar('lampe', achse, 96, 30 * T + 15, {'anim': 'lampe'})          # Suedseite: Paare gespiegelt zur Kammerachse
+    paar('terminal', achse, 160, 28 * T + 15, {'anim': 'maschine', 'leds': True})
+    paar('kapsel', achse, 176, 31 * T + 15)
+    for (n, px, py, sp_) in [('mech', 672, 495, True),
                              ('rohr', 112, 96, False), ('rohr', 656, 112, True), ('rohr', 656, 448, False),
                              ('flasche', 72, 80, False), ('flasche', 664, 80, True), ('flasche', 704, 392, False),
                              ('lampe', 72, 300, False), ('lampe', 700, 330, True)]:
         o = suche(n, px, py, {'anim': 'lampe'} if n == 'lampe' else {}, sp_, r=3, schritt=8)
-    for (n, px, py, sp_) in [('gitter', 380, 490, False), ('gitter', 440, 470, False), ('kabel', 50, 200, False),
+    for (n, px, py, sp_) in [('gitter', 600, 470, False), ('kabel', 50, 200, False),
                              ('kabel', 712, 250, True), ('kabel', 160, 300, False), ('bolzen', 190, 330, False),
-                             ('bolzen', 330, 445, True), ('bolzen', 640, 230, False), ('pfuetze', 520, 380, False),
+                             ('bolzen', 330, 445, True), ('bolzen', 640, 230, False), 
                              ('pfuetze', 140, 520, True)]:
         suche(n, px, py, {}, sp_, r=3, schritt=8)
     # Kernel: befallene Technik, Ranken, Waechter-Wesen in den Gaengen
-    for (n, px, py, sp_) in [('befallen', 60, 470, False), ('flasche', 720, 440, True), ('konsole', 392, 525, False),
+    for (n, px, py, sp_) in [('befallen', 60, 470, False), ('konsole', 392, 504, False),
                              ('ranke', 208, 120, False), ('ranke', 576, 280, True), ('ranke', 500, 410, False),
                              ('waechter', 200, 200, False), ('waechter', 570, 100, True), ('waechter', 400, 340, False)]:
         suche(n, px, py, {'anim': 'maschine', 'leds': True} if n in ('rack', 'konsole', 'befallen') else {}, sp_, r=3,
