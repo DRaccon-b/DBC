@@ -159,8 +159,7 @@ def main():
     for xb_ in [bx1_ + d_ for d_ in range(3, 7)] + [bx0_ - d_ for d_ in range(3, 8)]:   # zuerst auf der Arenaseite
         for (ya_, yb_) in ((by0_ - 1, by1_ + 2), (by0_ - 2, by1_ + 3), (by0_, by1_ + 1)):
             n0_ = len(objekte)
-            ok_ = setze('banner', xb_ * T + 8, ya_ * T - 1, {'anim': 'standarte'}, False, 'gkd') and \
-                setze('banner', xb_ * T + 8, yb_ * T - 1, {'anim': 'standarte'}, False, 'gkd')
+            ok_ = setze('banner', xb_ * T + 8, ya_ * T - 1, {'anim': 'standarte'}, False, 'gkd')   # Nutzer: nur eine Flagge
             if ok_:
                 break
             del objekte[n0_:]; del rects[n0_:]

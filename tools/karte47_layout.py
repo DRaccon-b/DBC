@@ -59,7 +59,7 @@ def main():
     # Plateau; zwei Bruecken an der Westseite (Hauptweg bei den Flaggen und unten links)
     yy_, xx_ = np.mgrid[0:R, 0:C]
     d_aussen = ((xx_ - GRABEN[0]) / GRABEN[2]) ** 2 + ((yy_ - GRABEN[1]) / GRABEN[3]) ** 2
-    d_innen = ((xx_ - GRABEN[0]) / (GRABEN[2] - 2)) ** 2 + ((yy_ - GRABEN[1]) / (GRABEN[3] - 2)) ** 2
+    d_innen = ((xx_ - GRABEN[0]) / (GRABEN[2] - 3)) ** 2 + ((yy_ - GRABEN[1]) / (GRABEN[3] - 3)) ** 2   # 3 Kacheln breit (tiefer)
     graben = (d_aussen <= 1.0) & (d_innen > 1.0) & (k != 'h')
     k[graben] = 'x'
     for _ in range(3):

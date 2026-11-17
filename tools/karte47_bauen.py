@@ -230,8 +230,18 @@ def bauen(frame=None, speichern=True):
     wand = k4.hoehenkanten(a, hoch, 'berg47', FRONT, SEITE, LIPPE, frei, 47, berg=False)
     # Graben um die Arena (Nutzer): tiefer Felsgraben mit Klippenwaenden, die Arena wirkt wie ein Plateau
     tm = weich(zell_maske(cls, 'xb', cols, rows), 4, 0, 8, 0.5)
-    a[tm] = (tex['d'][tm] * 0.55).astype(np.uint8)
-    gw = k4.hoehenkanten(a, ~tm, 'berg47', 16, SEITE, LIPPE, np.zeros((Hp, Wp), bool), 48, berg=False)
+    a[tm] = (tex['d'][tm] * 0.42).astype(np.uint8)                   # tiefe, dunkle Grabensohle
+    gw = k4.hoehenkanten(a, ~tm, 'berg47', 30, SEITE, LIPPE, np.zeros((Hp, Wp), bool), 48, berg=False)   # hohe Waende
+    # Tiefe: Sohle unter den Waenden und an den Raendern zusaetzlich verschattet (Licht faellt kaum hinein)
+    rand_ = np.zeros((Hp, Wp), np.float32)
+    frei_ = tm & ~gw
+    for d_ in range(1, 13):
+        p_ = np.pad(~tm | gw, d_, mode='edge')
+        nah_ = (p_[:Hp, d_:d_ + Wp] | p_[2 * d_:2 * d_ + Hp, d_:d_ + Wp] | p_[d_:d_ + Hp, :Wp] | p_[d_:d_ + Hp, 2 * d_:2 * d_ + Wp])
+        rand_ = np.where(frei_ & nah_ & (rand_ == 0), d_, rand_)
+    f_ = np.where(rand_ > 0, 0.62 + 0.38 * np.clip(rand_ / 12.0, 0, 1), 1.0)
+    f_ = np.round(f_ * 6) / 6                                        # wenige Stufen (Pixel-Look)
+    a[frei_] = (a[frei_] * f_[frei_][:, None]).astype(np.uint8)
     wand |= gw & tm
     img_b = Image.fromarray(a).convert('RGBA')
     for (bx0, by0, bx1, by1) in lay['bruecken']:
