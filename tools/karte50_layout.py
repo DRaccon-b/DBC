@@ -64,6 +64,7 @@ def main():
     for (hoehe, seg, _) in KANTEN:
         for (x0, x1, ry) in seg:
             hp[:ry, x0:x1 + 1] = np.maximum(hp[:ry, x0:x1 + 1], hoehe)
+    hp_ter = hp.copy()                                                # Terrassenhoehe je Kachel (auch unter dem Rand)
     # Hof oben links: zwei Stufen tiefer als die oberste Terrasse liegt er nicht - eine Stufe (Hoehe 2)
     hx0, hy0, hx1, hy1 = HOF
     k[hy0:hy1 + 1, hx0:hx1 + 1] = 'd'
@@ -75,7 +76,7 @@ def main():
             if k[y, x] == 'h':
                 k[y, x] = 'g'
     # Felsrand: ueber allen Terrassen
-    hp[k == 'h'] = 4
+    hp[k == 'h'] = hp_ter[k == 'h'] + 1                               # Nutzer: Berg folgt den Terrassen (immer 1 hoeher)
     # An jeder Terrassenkante: Pflaster/Wiese enden 2 Reihen vor und nach der Front (kein Weg durch die Wand, kein Ueberstand)
     for (hoehe, seg, (tx0, tx1)) in KANTEN:
         for (x0, x1, ry) in seg:
@@ -113,7 +114,7 @@ def main():
                 if y - y0 <= 8 and y0 > 0 and y < R and k[y0 - 1, x] == 'h' and k[y, x] == 'h':
                     k[y0:y, x] = 'h'
             y += 1
-    hp[k == 'h'] = 4                                                  # geschlossene Einspruenge gehoeren zum Rand
+    hp[k == 'h'] = hp_ter[k == 'h'] + 1                               # geschlossene Einspruenge gehoeren zum Rand
     # Wiesen der Vorlage, die an den Kanten verloren gingen, ganz auf ihrer Ebene neu anlegen (Baeume der Vorlage)
     for (y0, y1, x0, x1) in ((63, 68, 20, 28), (31, 35, 36, 42)):
         for y in range(y0, y1 + 1):
@@ -154,7 +155,7 @@ def main():
         else:
             k[ty - 3:ty, tx:tx + b] = np.where(k[ty - 3:ty, tx:tx + b] == 'h', 'g', k[ty - 3:ty, tx:tx + b])
             hp[ty - 3:R, tx:tx + b] = 0                                   # unterste Ebene
-    hp[(k != 'h') & (hp == 4)] = 3
+    hp[(k != 'h') & (hp > hp_ter)] = hp_ter[(k != 'h') & (hp > hp_ter)]
     lay = {'groesse': [C, R], 'klassen': [''.join(z) for z in k], 'hoehe': [''.join(str(c) for c in z) for z in hp],
            'treppen': treppen, 'hof': list(HOF), 'bruecken': [], 'stege': [],
            'teleporter': [{'x': tx, 'y': ty, 'b': b, 'h': hh} for (tx, ty, b, hh) in TELEPORTER]}
