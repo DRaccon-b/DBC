@@ -222,6 +222,22 @@ def main():
         nb = np.zeros((R, C), int)
         nb[1:] += kette[:-1]; nb[:-1] += kette[1:]; nb[:, 1:] += kette[:, :-1]; nb[:, :-1] += kette[:, 1:]
         kette = (kette & (nb >= 2)) | ((k == 'r') & (nb >= 3) & (d_b >= 4))
+    # Pruefung: Kette nur, wo darunter mind. 4 Reihen bis zum Talboden liegen (keine doppelten Waende/Stummel); Rand-
+    # Taschen zwischen Kette oben und Kette unten fuellen
+    tal = np.isin(k, ['s', 'b', 'k', 't', 'T'])
+    for y in range(R):
+        for x in range(C):
+            if kette[y, x] and tal[y + 1:min(R, y + 5), x].any():
+                kette[y, x] = False
+    for _ in range(2):
+        for y in range(1, R - 1):
+            for x in range(C):
+                if k[y, x] == 'r' and not kette[y, x] and kette[max(0, y - 2):y, x].any() and kette[y + 1:y + 3, x].any():
+                    kette[y, x] = True
+    for teil in flaechen(kette):
+        if len(teil) < 12:
+            for (y, x) in teil:
+                kette[y, x] = False
     k[kette] = 'm'
     h[kette] = 3
     lay = {'groesse': [C, R], 'klassen': [''.join(z) for z in k], 'hoehe': [''.join(str(c) for c in z) for z in h],

@@ -144,6 +144,9 @@ def main():
 
     rnd = random.Random(41)
     # ---------------- Baeume (gross zuerst), Begleiter nach Regel 5/5d
+    # Lagerplaetze zuerst (gross, feste Orte: Huette, Unterstand) - sonst sperrt die Stumpfzone der Baeume ihren Platz
+    for (n, tx, ty, eb) in [g for g in GROSS if g[0] in ('huette', 'kruege', 'unterstand', 'bank')]:
+        kachel(n, tx, ty, {'fuss_dy': 7} if n == 'unterstand' else {}, False, klassen=KL[eb], ebene_soll=eb, suche=8)
     gesetzte_baeume = []
     for i, (n, tx, ty, eb) in enumerate(BAEUME):
         kl = KL[eb]
@@ -154,10 +157,12 @@ def main():
         zl = np.nonzero(tsp.any(1))[0][-1]
         sx = o['x'] + int(np.nonzero(tsp[zl - 3:zl + 1].any(0))[0].mean())   # Stammmitte am Fuss
         sy = o['y'] + int(zl)
-        stumpf.append((sx - 24, sy - 24, sx + 24, sy + 30))
+        stumpf.append((sx - 40, sy - 28, sx + 40, sy + 30))
         gesetzte_baeume.append((i, n, o, kl, len(rects) - 1, sx, sy, eb))
     # ---------------- grosse Einzelobjekte (vor den Begleitern: Grosses zuerst)
     for i, (n, tx, ty, eb) in enumerate(GROSS):
+        if n in ('huette', 'kruege', 'unterstand', 'bank'):
+            continue
         opt = {}
         if n == 'banner':
             opt = {'anim': 'standarte'}
@@ -188,7 +193,7 @@ def main():
                        for d in (24, 32))
         def seitlich(sd):
             return any(setze(naechster('b'), sx + sd * d, sy + dy, {'begleiter': True, 'ebene': 0}, sd > 0, kl, ebene_soll=eb)
-                       for d in (40, 48, 56, 64) for dy in (-T, 2 * T))   # nie in der Stammreihe (keine Reihe Busch-Baum-Busch)
+                       for d in (48, 56, 64) for dy in (-T, 2 * T))   # nie in der Stammreihe (keine Reihe Busch-Baum-Busch)
         nah = sum(1 for (_, _, _, _, _, x2, y2, _) in gesetzte_baeume if (x2, y2) != (sx, sy)
                   and abs(x2 - sx) < 6 * T and abs(y2 - sy) < 5 * T)
         soll = 1 if nah else 2
@@ -198,7 +203,7 @@ def main():
         else:
             plan = [[vor, lambda: seitlich(-seite)], [vor, lambda: hinter(seite)],
                     [vor, lambda: hinter(-seite)]][i % 3]                 # immer etwas vor dem Stumpf (Einbettung)
-            ersatz = [lambda: hinter(-seite), lambda: hinter(seite), lambda: seitlich(seite), lambda: seitlich(-seite), vor]
+            ersatz = [lambda: seitlich(seite), lambda: seitlich(-seite), lambda: hinter(-seite), vor]   # kein gespiegeltes Paar
         hat = 0
         for f_ in plan + ersatz:
             if hat >= soll and f_ not in plan:
@@ -252,7 +257,9 @@ def main():
             break
         if any(max(abs(x - a_), abs(y - b_)) < 6 or (abs(y - b_) < 2 and abs(x - a_) < 13) for (a_, b_, _) in mpos):
             continue
-        frei_ = [m_ for m_ in berg_ if not any(m2 == m_ and abs(x - a_) < 16 and abs(y - b_) < 16 for (a_, b_, m2) in mpos)]
+        if sum(1 for xx in range(x - 4, x + 5) if 0 <= xx < cols and cls[y][xx] == 'm') < 8:
+            continue                                                  # schmaler Kettenarm: keine senkrechte Reihe
+        frei_ = [m_ for m_ in berg_ if not any(m2 == m_ and abs(x - a_) < 20 and abs(y - b_) < 20 for (a_, b_, m2) in mpos)]
         if not frei_:
             continue
         m_ = frei_[(x * 7 + y * 3) % len(frei_)]
@@ -267,10 +274,11 @@ def main():
         if gesetzt >= n_soll:
             break
         nb = [o for o in objekte if abs(o['kachel'][0] - x) < 4 and abs(o['kachel'][1] - y) < 4 and o.get('streu')]
-        if nb or any(o['kachel'][1] == y and abs(o['kachel'][0] - x) < 6 for o in objekte):
+        if nb or any(abs(o['kachel'][1] - y) < 1 and abs(o['kachel'][0] - x) < 15 for o in objekte if o.get('streu')) \
+                or any(o['kachel'][1] == y and abs(o['kachel'][0] - x) < 6 for o in objekte):
             continue                                                  # keine Reihe mit Begleitern auf derselben Fusszeile
-        wahl = [s for s in STREU if s != letzte and not any(o.get('basis') == s and abs(o['kachel'][0] - x) < 9
-                                                           and abs(o['kachel'][1] - y) < 9 for o in objekte)]
+        wahl = [s for s in STREU if s != letzte and not any(o.get('basis') == s and abs(o['kachel'][0] - x) < 13
+                                                           and abs(o['kachel'][1] - y) < 13 for o in objekte)]
         if not wahl:
             continue
         n = rnd.choice(wahl)
