@@ -1,0 +1,357 @@
+[
+{
+"datei": "varianten/torii.png",
+"basis": "torii",
+"x": 273,
+"y": 376,
+"fuss": 135,
+"kachel": [
+24,
+31
+],
+"ebene": 1,
+"ohne_wall": true,
+"fest_pos": true,
+"vor_wand": true,
+"nur_kontakt": true,
+"sortier": 511
+},
+{
+"datei": "varianten/laterne.png",
+"basis": "laterne",
+"x": 202,
+"y": 131,
+"fuss": 60,
+"kachel": [
+13,
+11
+],
+"ebene": 1,
+"ohne_wall": true,
+"anim": "lampe",
+"lampe_box": [
+8,
+18,
+20,
+30
+],
+"licht_farbe": [
+255,
+200,
+120
+]
+},
+{
+"datei": "varianten/laterne_m.png",
+"basis": "laterne",
+"x": 570,
+"y": 131,
+"fuss": 60,
+"kachel": [
+36,
+11
+],
+"ebene": 1,
+"ohne_wall": true,
+"anim": "lampe",
+"lampe_box": [
+8,
+18,
+20,
+30
+],
+"licht_farbe": [
+255,
+200,
+120
+]
+},
+{
+"datei": "varianten/pfosten.png",
+"basis": "pfosten",
+"x": 134,
+"y": 303,
+"fuss": 48,
+"kachel": [
+9,
+21
+],
+"ebene": 1,
+"ohne_wall": true,
+"nur_kontakt": true
+},
+{
+"datei": "varianten/pfosten_m.png",
+"basis": "pfosten",
+"x": 646,
+"y": 303,
+"fuss": 48,
+"kachel": [
+41,
+21
+],
+"ebene": 1,
+"ohne_wall": true,
+"nur_kontakt": true
+},
+{
+"datei": "varianten/schale.png",
+"basis": "schale",
+"x": 234,
+"y": 329,
+"fuss": 54,
+"kachel": [
+15,
+23
+],
+"ebene": 1,
+"ohne_wall": true,
+"anim": "kerzen",
+"flammen_box": [
+[
+4,
+0,
+24,
+20
+]
+],
+"flammen_alle": true,
+"flammen_amp": 1.4
+},
+{
+"datei": "varianten/schale_m.png",
+"basis": "schale",
+"x": 506,
+"y": 329,
+"fuss": 54,
+"kachel": [
+32,
+23
+],
+"ebene": 1,
+"ohne_wall": true,
+"anim": "kerzen",
+"flammen_box": [
+[
+4,
+0,
+24,
+20
+]
+],
+"flammen_alle": true,
+"flammen_amp": 1.4
+},
+{
+"datei": "varianten/laterne.png",
+"basis": "laterne",
+"x": 138,
+"y": 387,
+"fuss": 60,
+"kachel": [
+9,
+27
+],
+"ebene": 1,
+"ohne_wall": true,
+"anim": "lampe",
+"lampe_box": [
+8,
+18,
+20,
+30
+],
+"licht_farbe": [
+255,
+200,
+120
+]
+},
+{
+"datei": "varianten/laterne_m.png",
+"basis": "laterne",
+"x": 602,
+"y": 387,
+"fuss": 60,
+"kachel": [
+38,
+27
+],
+"ebene": 1,
+"ohne_wall": true,
+"anim": "lampe",
+"lampe_box": [
+8,
+18,
+20,
+30
+],
+"licht_farbe": [
+255,
+200,
+120
+]
+},
+{
+"datei": "varianten/brocken.png",
+"basis": "brocken",
+"x": 124,
+"y": 184,
+"fuss": 39,
+"kachel": [
+9,
+13
+],
+"ebene": 1,
+"ohne_wall": true,
+"liegend": false,
+"nur_kontakt": true
+},
+{
+"datei": "varianten/zypresse.png",
+"basis": "zypresse",
+"x": 234,
+"y": 471,
+"fuss": 40,
+"kachel": [
+15,
+31
+],
+"ebene": 1,
+"ohne_wall": false,
+"liegend": false
+},
+{
+"datei": "varianten/baum_b_m.png",
+"basis": "baum_b",
+"x": 626,
+"y": 226,
+"fuss": 61,
+"kachel": [
+40,
+17
+],
+"ebene": 1,
+"ohne_wall": true,
+"liegend": false,
+"anim": "kerzen",
+"nur_kontakt": true
+},
+{
+"datei": "varianten/brocken_b_m.png",
+"basis": "brocken_b",
+"x": 509,
+"y": 435,
+"fuss": 44,
+"kachel": [
+33,
+29
+],
+"ebene": 1,
+"ohne_wall": true,
+"liegend": false,
+"nur_kontakt": true
+},
+{
+"datei": "varianten/stamm_b_m.png",
+"basis": "stamm_b",
+"x": 497,
+"y": 490,
+"fuss": 32,
+"kachel": [
+33,
+32
+],
+"ebene": 1,
+"ohne_wall": true,
+"liegend": true,
+"anim": "kerzen",
+"nur_kontakt": true
+},
+{
+"datei": "varianten/glut_b.png",
+"basis": "glut_b",
+"x": 387,
+"y": 221,
+"fuss": 15,
+"kachel": [
+25,
+14
+],
+"ebene": 0,
+"ohne_wall": true,
+"liegend": true,
+"anim": "kerzen"
+},
+{
+"datei": "varianten/asche_b.png",
+"basis": "asche_b",
+"x": 64,
+"y": 390,
+"fuss": 14,
+"kachel": [
+4,
+25
+],
+"ebene": 0,
+"ohne_wall": true,
+"liegend": true,
+"anim": "kerzen"
+},
+{
+"datei": "varianten/feder.png",
+"basis": "feder",
+"x": 286,
+"y": 92,
+"fuss": 28,
+"kachel": [
+18,
+7
+],
+"ebene": 0,
+"ohne_wall": true,
+"liegend": true
+},
+{
+"datei": "varianten/feder2_m.png",
+"basis": "feder2",
+"x": 611,
+"y": 365,
+"fuss": 19,
+"kachel": [
+39,
+24
+],
+"ebene": 0,
+"ohne_wall": true,
+"liegend": true
+},
+{
+"datei": "varianten/lilie.png",
+"basis": "lilie",
+"x": 141,
+"y": 141,
+"fuss": 27,
+"kachel": [
+9,
+10
+],
+"ebene": 0,
+"ohne_wall": false,
+"liegend": false
+},
+{
+"datei": "varianten/lilie_m.png",
+"basis": "lilie",
+"x": 629,
+"y": 195,
+"fuss": 27,
+"kachel": [
+40,
+13
+],
+"ebene": 0,
+"ohne_wall": false,
+"liegend": false
+}
+]
