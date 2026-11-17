@@ -154,6 +154,8 @@ def main():
             opt = {'anim': 'standarte'}
         if n == 'skelett':
             opt = {'liegend': True}
+        if n == 'unterstand':
+            opt = {'fuss_dy': 7}                                      # Schatten an der Felsunterkante, nicht an der Stangenspitze
         kachel(n, tx, ty, opt, n in ('skelett',) and i % 2 == 1, klassen='sbd')   # nie auf Pflaster
     # Saeulenpaar mit Fels dazwischen (Vorlage): gleiche Fusszeile, spiegelsymmetrisch zur Felsmitte
     bw_ = lambda n_: (lambda b: b[2] - b[0])(Image.open(pfad(n_)).getbbox())
