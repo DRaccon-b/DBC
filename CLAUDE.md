@@ -310,8 +310,17 @@ Vor jeder Abgabe Punkt für Punkt prüfen (vergrößert, Standbild und mehrere A
   Gürtelbäume nur gegen das Teleporterfeld selbst prüfen (sonst kahler Waldboden am Ausgang). Begleitmotive nie doppelt in
   der Nähe; Flammen-Animation füllt verschobene Pixel nach (keine Löcher im Feuer).
   Nutzer: Torbauten, in die man nicht hineingeht, bleiben innen dunkel (kein Blick ins Haus); Bodenstruktur ohne Objekte
-  über dezente Tonflecken (dunkleres/helleres Gras, ausgefahrene Wegstellen, Moos im Pflaster) aus grobem Rauschen, nur
-  innerhalb der Fläche und weich am 45°-Raster.
+  über flache Grashalm-Büschel (PixelLab, auf die Grastöne abgestimmt) direkt in die Wiesentextur gestempelt – locker in
+  kleinen Gruppen, nur im Inneren der Wiese, nie unter Objekten; **keine Tonflecken** (Nutzer: rückgängig gemacht).
+- **Dorf am Bach (Karte 44):** Verschwindet ein Bach der Vorlage unter einem Weg, läuft er bei uns durch und bekommt eine
+  Brücke (Lauf zwischen den Brücken mit Grasufer). Schmale Bäche ohne Tiefenstufen (`stufen=[]`, sonst runde Löcher).
+  Seitliche Ausgänge: die Reihe über dem Teleporter (und 1-Spalten-Vorsprünge daneben) wird Weg, damit die Gürtelfront
+  nicht auf den Platten liegt; Ausgänge neben dem Bach mit mind. 3 Spalten Wald bis zum Ufer (keine offenen
+  Wiesenstreifen ins Nichts). Seitengürtel mind. 5 Kacheln und ein zweiter Fülldurchgang über die Deckung (kahler
+  Waldboden am Rand). Objekte mit ihrem ganzen Bildrechteck auf ihrer Klasse prüfen (untere zwei Reihen, liegende ganz) –
+  nicht nur die Fußzeile. Hütten der Vorlage, die im Layout auf Sand landen, auf die nächste Grasfläche setzen (nie
+  stillschweigend weglassen); vor der Tür mind. eine freie Reihe, nicht unter Gürtelkronen. Bäume mit Leuchtrunen nur,
+  wenn das Leuchten animiert wird.
 - **Begleiter am Stumpf (5d):** keine 1-Kachel-Blumen auf dem Stumpf, kein Blumenklumpen; Begleiter überlappen sich nicht.
 - **Paare/Achsen:** Paare vor Toren/Bauwerken exakt gespiegelt (Mitte und Fuß), gleiche Objekte auf gleicher Höhe;
   Druckplatten, Obelisken usw. symmetrisch zur berechneten Achse.
