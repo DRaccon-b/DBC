@@ -329,7 +329,7 @@ def bauen(frame=None, speichern=True):
     Wp, Hp = cols * T, rows * T
     kl = np.array([list(r) for r in lay['klassen']])
     a = k18.textur('g', cols, rows)                                   # Gehwegplatten
-    asph_k = np.isin(kl, ['a', 'x'])
+    asph_k = np.isin(kl, ['a', 'x', 'r', 'h'])                      # unter der Masse liegt Asphalt (keine Bordsteinecken)
     asphalt = gross(asph_k)
     a[asphalt] = k18.textur('s', cols, rows)[asphalt]
     for kk, art, f in (('q', 'v', (1.0, 1.0, 0.95)), ('b', 'k', (1.16, 1.04, 0.86)), ('k', 'k', (1.0, 1.0, 1.0))):

@@ -140,7 +140,9 @@ def main():
             if any(art2 not in ('wald',) and schnitt(r, tuple(rr), 2) for (*rr, art2) in rects):
                 return None
         elif pruefen:
-            if any(schnitt(r, tuple(rr), 2) for (*rr, art2) in rects) or any(schnitt(r, t_, 0) for t_ in tps):
+            fuss_r = (r[0], max(r[1], r[3] - T + 1), r[2], r[3])           # vor Gebaeuden zaehlt nur der Fuss
+            if any(schnitt(fuss_r, tuple(rr), -1) if art2 == 'gebaeude' else schnitt(r, tuple(rr), 2) for (*rr, art2) in rects) or \
+                    any(schnitt(r, t_, 0) for t_ in tps):
                 return None
             # ganzes Bildrechteck auf erlaubtem Boden (untere zwei Reihen; liegende ganz) - Pruefliste K44
             ry0 = r[1] // T if (opt or {}).get('liegend') else max(r[1] // T, r[3] // T - 1)
@@ -177,6 +179,24 @@ def main():
         if not setze('geb/' + n_, (x0 + x1 + 1) * T / 2.0, (y1 + 1) * T - 1, {'gebaeude': True, 'vorplatz': True},
                      art='gebaeude', pruefen=False):
             print('Gebaeude nicht gesetzt:', n_)
+    # Seitentueren (rosa Ladentueren) der gesetzten Gebaeude: Beet davor wird Gehweg (Eingaenge frei, Pruefliste K35)
+    zeilen = [list(z) for z in cls]
+    for o in [o for o in objekte if o['basis'].startswith('geb/')]:
+        sp_ = np.array(Image.open(os.path.join(OBJ, o['datei'])).convert('RGBA')).astype(int)
+        u = sp_[-24:]
+        rosa = (u[..., 3] > 0) & (u[..., 0] > 170) & (u[..., 1] < 120) & (u[..., 2] > 100)
+        spalten = np.nonzero(rosa.sum(0) >= 3)[0]
+        if not len(spalten):
+            continue
+        fy_ = (o['y'] + o['fuss']) // T
+        tx_ = sorted({(o['x'] + c) // T for c in spalten})
+        for tx in tx_:
+            for ty in range(fy_ + 1, fy_ + 5):
+                if 0 <= ty < rows and zeilen[ty][tx] == 'n':
+                    zeilen[ty][tx] = 'k'
+    cls = [''.join(z) for z in zeilen]
+    lay['klassen'] = cls
+    json.dump(lay, open(os.path.join(KARTE, 'layout.json'), 'w'), indent=0)
     # ---------------------------------------------------------------- Baeume auf den Beeten (Stamm auf der Beetmitte)
     gk = np.array([list(z) for z in cls])
     import karte43_layout as k43

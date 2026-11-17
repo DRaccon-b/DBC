@@ -142,7 +142,9 @@ def main():
             if any(art2 not in ('wald',) and schnitt(r, tuple(rr), 2) for (*rr, art2) in rects):
                 return None
         elif pruefen:
-            if any(schnitt(r, tuple(rr), 2) for (*rr, art2) in rects) or any(schnitt(r, t_, 0) for t_ in tps):
+            fuss_r = (r[0], max(r[1], r[3] - T + 1), r[2], r[3])           # vor Gebaeuden zaehlt nur der Fuss
+            if any(schnitt(fuss_r, tuple(rr), -1) if art2 == 'gebaeude' else schnitt(r, tuple(rr), 2) for (*rr, art2) in rects) or \
+                    any(schnitt(r, t_, 0) for t_ in tps):
                 return None
             # ganzes Bildrechteck auf erlaubtem Boden (untere zwei Reihen; liegende ganz) - Pruefliste K44
             ry0 = r[1] // T if (opt or {}).get('liegend') else max(r[1] // T, r[3] // T - 1)
@@ -184,7 +186,7 @@ def main():
     for (n_, tx, ty, sp) in (('reaper/wrack', 17, 30, False), ('reaper/wrack', 47, 38, True), ('reaper/wrack', 77, 40, False),
                              ('reaper/wrack', 28, 74, True), ('k18a/02', 60, 37, False), ('k18a/05', 14, 68, True)):
         kachel(n_, tx + P, ty + P, {}, sp, klassen='a', weit=2)
-    for (n_, tx, ty, sp) in (('reaper/sperre', 21, 28, False), ('reaper/sperre', 28, 28, True), ('reaper/sperre', 55, 46, False),
+    for (n_, tx, ty, sp) in (('reaper/sperre', 21, 28, False), ('reaper/sperre', 31, 23, True), ('reaper/sperre', 55, 46, False),
                              ('reaper/sperre', 59, 58, True), ('reaper/block', 10, 12, False), ('reaper/block', 66, 63, True),
                              ('reaper/schutt', 36, 20, False), ('reaper/schutt', 13, 55, True), ('reaper/schutt', 70, 25, False),
                              ('reaper/fass', 25, 16, False), ('reaper/laterne_kaputt', 33, 66, False),

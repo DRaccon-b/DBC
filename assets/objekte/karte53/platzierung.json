@@ -96,6 +96,51 @@
 "vorplatz": true
 },
 {
+"datei": "varianten/k01-baum00.png",
+"basis": "k01/baum00",
+"x": 1266,
+"y": 289,
+"fuss": 42,
+"kachel": [
+80,
+20
+],
+"ebene": 1,
+"ohne_wall": true,
+"nur_kontakt": true,
+"anim": "baum"
+},
+{
+"datei": "varianten/k01-baum02_m.png",
+"basis": "k01/baum02",
+"x": 1417,
+"y": 283,
+"fuss": 40,
+"kachel": [
+89,
+20
+],
+"ebene": 1,
+"ohne_wall": true,
+"nur_kontakt": true,
+"anim": "baum"
+},
+{
+"datei": "varianten/k01-baum01.png",
+"basis": "k01/baum01",
+"x": 1501,
+"y": 281,
+"fuss": 42,
+"kachel": [
+95,
+20
+],
+"ebene": 1,
+"ohne_wall": true,
+"nur_kontakt": true,
+"anim": "baum"
+},
+{
 "datei": "varianten/k01-baum04_m.png",
 "basis": "k01/baum04",
 "x": 694,
@@ -141,11 +186,71 @@
 "anim": "baum"
 },
 {
+"datei": "varianten/k01-baum04_m.png",
+"basis": "k01/baum04",
+"x": 300,
+"y": 345,
+"fuss": 42,
+"kachel": [
+20,
+24
+],
+"ebene": 1,
+"ohne_wall": true,
+"nur_kontakt": true,
+"anim": "baum"
+},
+{
+"datei": "varianten/k01-baum00.png",
+"basis": "k01/baum00",
+"x": 442,
+"y": 345,
+"fuss": 42,
+"kachel": [
+29,
+24
+],
+"ebene": 1,
+"ohne_wall": true,
+"nur_kontakt": true,
+"anim": "baum"
+},
+{
 "datei": "varianten/k01-baum02_m.png",
 "basis": "k01/baum02",
-"x": 1260,
-"y": 1027,
+"x": 132,
+"y": 651,
 "fuss": 40,
+"kachel": [
+9,
+43
+],
+"ebene": 1,
+"ohne_wall": true,
+"nur_kontakt": true,
+"anim": "baum"
+},
+{
+"datei": "varianten/k01-baum01.png",
+"basis": "k01/baum01",
+"x": 442,
+"y": 649,
+"fuss": 42,
+"kachel": [
+29,
+43
+],
+"ebene": 1,
+"ohne_wall": true,
+"nur_kontakt": true,
+"anim": "baum"
+},
+{
+"datei": "varianten/k01-baum04_m.png",
+"basis": "k01/baum04",
+"x": 1260,
+"y": 1025,
+"fuss": 42,
 "kachel": [
 80,
 66
@@ -156,8 +261,8 @@
 "anim": "baum"
 },
 {
-"datei": "varianten/k01-baum01.png",
-"basis": "k01/baum01",
+"datei": "varianten/k01-baum00.png",
+"basis": "k01/baum00",
 "x": 962,
 "y": 1209,
 "fuss": 42,
@@ -171,11 +276,11 @@
 "anim": "baum"
 },
 {
-"datei": "varianten/k01-baum04_m.png",
-"basis": "k01/baum04",
+"datei": "varianten/k01-baum02_m.png",
+"basis": "k01/baum02",
 "x": 412,
-"y": 1233,
-"fuss": 42,
+"y": 1235,
+"fuss": 40,
 "kachel": [
 27,
 79
@@ -550,12 +655,12 @@
 {
 "datei": "varianten/k18s-00.png",
 "basis": "k18s/00",
-"x": 1574,
-"y": 480,
+"x": 1542,
+"y": 512,
 "fuss": 31,
 "kachel": [
-99,
-31
+97,
+33
 ],
 "ebene": 1,
 "ohne_wall": true,
