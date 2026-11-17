@@ -29,7 +29,7 @@ TELEPORTER = [(6, 33, 4, 3)]
 # Brandflecken (Nutzer: etwas verbrannt) - Polygone in Pixeln
 BRAND = [
     [(400, 168), (464, 232), (400, 296), (336, 232)],                                                 # Arenamitte: Raute im Rautenband
-    [(610, 230), (680, 220), (712, 260), (700, 320), (640, 330), (600, 290)],                            # Wiese rechts
+    [(590, 205), (690, 200), (716, 240), (716, 330), (640, 340), (590, 330)],                            # Wiese rechts (ganz)
     [(470, 440), (560, 430), (610, 470), (590, 520), (500, 525), (460, 490)],                            # unten rechts
     [(60, 380), (130, 370), (150, 420), (110, 460), (60, 450)],                                         # links
 ]
@@ -82,10 +82,14 @@ def main():
         k[ty:ty + hh, tx:tx + b] = 'T'
     hp = np.where(np.isin(k, list('zwT')), 1, 0)
     hp[k == 'h'] = 2
-    brand = Image.new('L', (C, R), 0)
-    for poly in BRAND:
-        ImageDraw.Draw(brand).polygon([(x / T, y / T) for (x, y) in poly], fill=255)
-    brand = (np.array(brand) > 0).astype(int)
+    brand = np.zeros((R, C), int)
+    for poly in BRAND:                                               # je Fleck nur die Hoehenebene seiner Mitte (nie ueber Kanten)
+        bm_ = Image.new('L', (C, R), 0)
+        ImageDraw.Draw(bm_).polygon([(x / T, y / T) for (x, y) in poly], fill=255)
+        bm_ = np.array(bm_) > 0
+        mx_, my_ = int(np.mean([p_[0] for p_ in poly]) // T), int(np.mean([p_[1] for p_ in poly]) // T)
+        bm_ &= (hp == hp[my_, mx_]) & (k != 't') & (k != 'h')
+        brand |= bm_.astype(int)
     for _ in range(2):                                               # keine Einzelkachel-Spitzen (werden runde Knubbel)
         nb = sum(np.roll(np.roll(np.pad(brand, 1), dy, 0), dx, 1)[1:-1, 1:-1] for dy, dx in ((1, 0), (-1, 0), (0, 1), (0, -1)))
         brand[(brand == 1) & (nb <= 1)] = 0

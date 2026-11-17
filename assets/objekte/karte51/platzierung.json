@@ -17,6 +17,112 @@
 "sortier": 511
 },
 {
+"datei": "varianten/laterne.png",
+"basis": "laterne",
+"x": 202,
+"y": 115,
+"fuss": 60,
+"kachel": [
+13,
+10
+],
+"ebene": 1,
+"ohne_wall": true,
+"vor_wand": true,
+"anim": "lampe",
+"lampe_box": [
+8,
+18,
+20,
+30
+],
+"licht_farbe": [
+255,
+200,
+120
+],
+"_kl": "gdz"
+},
+{
+"datei": "varianten/laterne_m.png",
+"basis": "laterne",
+"x": 570,
+"y": 115,
+"fuss": 60,
+"kachel": [
+36,
+10
+],
+"ebene": 1,
+"ohne_wall": true,
+"vor_wand": true,
+"anim": "lampe",
+"lampe_box": [
+8,
+18,
+20,
+30
+],
+"licht_farbe": [
+255,
+200,
+120
+],
+"_kl": "gdz"
+},
+{
+"datei": "varianten/schale.png",
+"basis": "schale",
+"x": 258,
+"y": 329,
+"fuss": 54,
+"kachel": [
+17,
+23
+],
+"ebene": 1,
+"ohne_wall": true,
+"vor_wand": true,
+"anim": "kerzen",
+"flammen_box": [
+[
+4,
+0,
+24,
+20
+]
+],
+"flammen_alle": true,
+"flammen_amp": 1.4,
+"_kl": "gdz"
+},
+{
+"datei": "varianten/schale_m.png",
+"basis": "schale",
+"x": 514,
+"y": 329,
+"fuss": 54,
+"kachel": [
+33,
+23
+],
+"ebene": 1,
+"ohne_wall": true,
+"vor_wand": true,
+"anim": "kerzen",
+"flammen_box": [
+[
+4,
+0,
+24,
+20
+]
+],
+"flammen_alle": true,
+"flammen_amp": 1.4,
+"_kl": "gdz"
+},
+{
 "datei": "varianten/pfosten.png",
 "basis": "pfosten",
 "x": 86,
@@ -76,12 +182,12 @@
 {
 "datei": "varianten/gras2.png",
 "basis": "gras2",
-"x": 214,
-"y": 396,
+"x": 230,
+"y": 492,
 "fuss": 19,
 "kachel": [
-14,
-25
+15,
+31
 ],
 "ebene": 1,
 "ohne_wall": false,
@@ -90,7 +196,7 @@
 {
 "datei": "varianten/baum_b_m.png",
 "basis": "baum_b",
-"x": 626,
+"x": 620,
 "y": 226,
 "fuss": 61,
 "kachel": [
@@ -101,21 +207,6 @@
 "ohne_wall": true,
 "liegend": false,
 "anim": "kerzen",
-"nur_kontakt": true
-},
-{
-"datei": "varianten/brocken_b.png",
-"basis": "brocken_b",
-"x": 644,
-"y": 259,
-"fuss": 44,
-"kachel": [
-41,
-18
-],
-"ebene": 1,
-"ohne_wall": true,
-"begleiter": true,
 "nur_kontakt": true
 },
 {
@@ -180,20 +271,6 @@
 "anim": "kerzen"
 },
 {
-"datei": "varianten/feder.png",
-"basis": "feder",
-"x": 286,
-"y": 92,
-"fuss": 28,
-"kachel": [
-18,
-7
-],
-"ebene": 0,
-"ohne_wall": true,
-"liegend": true
-},
-{
 "datei": "varianten/feder2_m.png",
 "basis": "feder2",
 "x": 627,
@@ -216,20 +293,6 @@
 "kachel": [
 9,
 10
-],
-"ebene": 0,
-"ohne_wall": false,
-"liegend": false
-},
-{
-"datei": "varianten/lilie_m.png",
-"basis": "lilie",
-"x": 629,
-"y": 195,
-"fuss": 27,
-"kachel": [
-40,
-13
 ],
 "ebene": 0,
 "ohne_wall": false,

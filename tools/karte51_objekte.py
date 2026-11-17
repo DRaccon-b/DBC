@@ -124,10 +124,10 @@ def main():
         """Gespiegeltes Paar auf gemeinsamer Fusszeile; bei Konflikt die Fusszeile gemeinsam verschieben."""
         for dab in sorted(range(-120, 121, 8), key=abs):         # Saeulen/Schalen nie auf Pflaster (Karte 47)
             for dfy in (0, -T, T, -2 * T, 2 * T, -3 * T, 3 * T):
-                a_ = setze(name, achse - abstand - dab, fy + dfy, opt, False, klassen='gd')
+                a_ = setze(name, achse - abstand - dab, fy + dfy, opt, False, klassen=(opt or {}).get('_kl', 'gd'))
                 if not a_:
                     continue
-                b_ = setze(name, achse + abstand + dab, fy + dfy, opt, True, klassen='gd')
+                b_ = setze(name, achse + abstand + dab, fy + dfy, opt, True, klassen=(opt or {}).get('_kl', 'gd'))
                 if b_:
                     return True
                 objekte.pop(); rects.pop()
@@ -143,27 +143,29 @@ def main():
     achse = (ax0 + ax1 + 1) * T / 2.0
     fl = {'vor_wand': True, 'anim': 'kerzen', 'flammen_box': [[4, 0, 24, 20]], 'flammen_alle': True, 'flammen_amp': 1.4}
     la = {'vor_wand': True, 'anim': 'lampe', 'lampe_box': [8, 18, 20, 30], 'licht_farbe': [255, 200, 120]}
-    paar('laterne', achse, 232, 11 * T + 12, la)                      # Boden links/rechts des Platzes (nicht auf Pflaster)
-    paar('schale', achse, 280, 21 * T + 12, fl)
+    la['_kl'] = 'gdz'; fl['_kl'] = 'gdz'                              # Platzbeleuchtung: Laternen/Schalen auf dem Platz (wie Brunnen)
+    paar('laterne', achse, 184, 8 * T + 12, la)
+    paar('schale', t_achse, 120, 24 * T + 12, fl)
     paar('pfosten', achse, 272, 19 * T + 12)
-    paar('schale', t_achse, 112, 31 * T + 12, fl)                    # Boden vor der Treppe, neben dem Torii
+
     # Vorlage: Fels und Zypresse, Wiesen mit Bueschel (verbrannte Stellen: verkohlte Varianten)
-    for (n, px, py) in [('brocken', 145, 215), ('lilie', 263, 488), ('gras2', 272, 456), ('baum', 650, 285), ('brocken', 520, 470),
+    for (n, px, py) in [('brocken', 145, 215), ('lilie', 263, 488), ('gras2', 272, 456), ('baum', 628, 300), ('brocken', 520, 470),
                         ('stamm_b', 560, 490), ('glut_b', 400, 236), ('asche_b', 110, 420), ('feder', 300, 120), ('feder2', 640, 400),
                         ('lilie', 140, 200), ('lilie', 660, 270)]:
         o_ = suche(n, px, py, {'liegend': n in FLACH or n in ('stamm_b', 'glut_b', 'asche_b'),
                           'ebene': 0 if n in FLACH or n in ('glut_b', 'asche_b', 'lilie') else 1,
-                          **({'anim': 'kerzen'} if n in ('stamm_b', 'glut_b', 'asche_b') else {})}, px > 400, r=3, klassen='gnwz')
+                          **({'anim': 'kerzen'} if n in ('stamm_b', 'glut_b', 'asche_b') else {})}, px > 400, r=3,
+                   klassen='gnw' if n in ('glut_b',) else 'gn')
         if o_ and o_['basis'] in ('baum_b', 'zypresse', 'baum'):      # Regel 5: Begleiter vor dem Stumpf + seitlich tiefer
             brn = o_['basis'] == 'baum_b'
             sx = o_['x'] + (31 if brn else 13); sy = o_['y'] + o_['fuss']
-            hat = any(setze('brocken_b' if brn else 'kf52', sx + d, sy + T - 2, {'begleiter': True}, d < 0, gap=-30,
-                            klassen='gnwz') for d in (14, -14, 18, -18))
-            hat += any(setze('busch_b' if brn else 'kf24', sx + s_ * d, sy + T + 6, {'begleiter': True}, s_ > 0, klassen='gnwz')
-                       for d in (36, 44, 28) for s_ in (-1, 1))
+            hat = 0 if brn else any(setze('kf52', sx + d, sy + T - 2, {'begleiter': True}, d < 0, gap=-30,
+                                          klassen='gn') for d in (14, -14, 18, -18))
+            hat += any(setze('busch_b' if brn else 'kf24', sx + s_ * d, sy + dy_, {'begleiter': True}, s_ > 0, klassen='gn')
+                       for dy_ in (T + 6, 2 * T) for d in (36, 44, 28) for s_ in (-1, 1))
             if hat < 2:                                                  # Ersatz: Asche/Glut an der Stammecke (flach)
                 hat += any(setze('asche_b', sx + s_ * d, sy + 4, {'begleiter': True, 'ebene': 0, 'liegend': True, 'anim': 'kerzen'},
-                                 s_ > 0, gap=-4, klassen='gnwz') for d in (24, 30) for s_ in (-1, 1))
+                                 s_ > 0, gap=2, klassen='gn') for d in (28, 34, 40) for s_ in (-1, 1))
             if hat < 2:
                 print('  Baum mit wenig Begleitern', o_['basis'], hat)
     for o in objekte:

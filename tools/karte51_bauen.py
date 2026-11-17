@@ -60,13 +60,17 @@ def verkohlen(a, lay, cols, rows, frame, wand=None):
     Hp, Wp = rows * T, cols * T
     km = np.kron(np.array([[c == '1' for c in z] for z in lay['brand']]), np.ones((T, T))).astype(np.float32)
     m = weich(km, 5.0, 0.0, 77, 0.5)
+    tm_ = np.zeros((Hp, Wp), bool)
+    for (x0, x1, ry, r_) in lay['treppen']:
+        tm_[max(0, ry * T - 4):(ry + 2) * T + 12, x0 * T - 4:(x1 + 1) * T + 4] = True
+    m &= ~tm_ & ~(wand if wand is not None else np.zeros_like(m))     # Treppen und Felsfronten bleiben sauber
     if os.environ.get('K50_RANDFREI', '1') == '1':                   # Nutzer: flache Bergkante (Felsrand) bleibt unverbrannt
         rp = np.kron(np.array([[c == 'h' for c in z] for z in lay['klassen']]), np.ones((T, T), bool))
         rand_frei = rp.copy()
         for d in range(1, 30):                                       # Fronten im Fels gehoeren zum Rand
             rand_frei[d:] |= rp[:-d] & (wand[d:] if wand is not None else False)
         m &= ~rand_frei
-    weit = weich(km, 12.0, 0.0, 78, 0.25) & ~m                        # Uebergang: gesprenkelt
+    weit = weich(km, 12.0, 0.0, 78, 0.25) & ~m & ~tm_ & ~(wand if wand is not None else np.zeros_like(m))   # Uebergang
     if os.environ.get('K50_RANDFREI', '1') == '1':
         weit &= ~rand_frei
     rs = np.random.RandomState(5077)
@@ -88,10 +92,13 @@ def verkohlen(a, lay, cols, rows, frame, wand=None):
     kern = weich(np.kron(kern_k, np.ones((T, T))).astype(np.float32), 6.0, 0.0, 80, 0.5) & m
     kb_ = kern & boden
     af[kb_] = neu[kb_]
-    m_weit = np.array(Image.fromarray((m * 255).astype(np.uint8)).filter(_IF2.MaxFilter(9))) > 0
-    gras_ = m_weit & ~(wand if wand is not None else np.zeros_like(m)) & ~kern & (af[..., 1] > af[..., 0] + 6)   # Wiese ganz
-    lg_ = af[gras_].mean(axis=1, keepdims=True)
-    af[gras_] = lg_ * np.array([1.05, 0.88, 0.72]) * 0.9
+    gras_ = m & ~kern & (af[..., 1] > af[..., 0] + 6)                # Wiese im Band: wie der Boden verkohlt (kein Braun-Balken)
+    af[gras_] = neu[gras_] * 1.1
+    m7_ = np.array(Image.fromarray((m * 255).astype(np.uint8)).filter(_IF2.MaxFilter(7))) > 0   # keine gruenen Saeume am Rand
+    g7_ = m7_ & ~m & ~tm_ & ~(wand if wand is not None else np.zeros_like(m)) & (af[..., 1] > af[..., 0] + 6)
+    if os.environ.get('K50_RANDFREI', '1') == '1':
+        g7_ &= ~rand_frei
+    af[g7_] = neu[g7_] * 1.15
     if wand is not None:                                             # Felsfronten nur verrusst (Relief bleibt)
         wm_ = m & wand
         af[wm_] = af[wm_] * np.where(kern[wm_], 0.48, 0.62)[:, None]
@@ -241,8 +248,8 @@ def bauen(frame=None, speichern=True):
             k4.treppe(a, x0 * T, (x1 + 1) * T, ry * T - 1, 's', FRONT, 'berg47', tex['z'])
             treppe_m[ry * T:(ry + 1) * T + 8, x0 * T:(x1 + 1) * T] = True
         else:                                                        # Hof: Treppe fuehrt vom Suedrand in den Hof hinunter
-            k4.treppe(a, x0 * T, (x1 + 1) * T, ry * T - 8, 'n', FRONT, 'berg47', tex['w'])
-            treppe_m[ry * T - 10:(ry + 1) * T + 8, x0 * T:(x1 + 1) * T] = True
+            k4.treppe(a, x0 * T, (x1 + 1) * T, (ry + 1) * T + 1, 'n', FRONT, 'berg47', tex['z'])   # in den Ziegelweg geschnitten
+            treppe_m[(ry + 1) * T:(ry + 2) * T + 8, x0 * T:(x1 + 1) * T] = True
     verkohlen(a, lay, cols, rows, frame, wand)
     F_ = [np.array(H(c)) for c in k4.FELS['berg47']]
     for (x0, x1, ry, r_) in lay['treppen']:                          # breite Treppe: Licht/Schatten-Naht weich verteilen
