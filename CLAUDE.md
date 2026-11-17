@@ -336,7 +336,9 @@ Vor jeder Abgabe Punkt für Punkt prüfen (vergrößert, Standbild und mehrere A
 - **Bauernhaus mit Tiefe (Karte 46, Nutzer):** Häuser mit dem Pro-Generator „von schräg oben“ (Dachfläche, Gauben, Walmdach)
   in mehreren Kandidaten erzeugen; nur Kandidaten ganz im Bild nehmen. Angeschnittene Seiten durch Spiegeln der intakten
   Seite reparieren, zurückgesetzte Anbauten brauchen einen eigenen Sockel bis zum Boden (sonst schweben sie); am Hausfuß
-  `ohne_wall` (kein heller Saum). Brücken enden wie in der Vorlage an einer Landestelle, nie lang parallel am Ufer;
+  `ohne_wall` (kein heller Saum). Brücken enden wie in der Vorlage an einer Landestelle, nie lang parallel am Ufer; unter der
+  Brücke und 2 Reihen davor/danach genau die Brückenspalten Wasser, an beiden Enden gerade Uferkanten (Nutzer: Brücke
+  passt sonst nicht ans Wasser);
   Bänke nur auf Gras neben dem Weg. Kleine Teiche ohne Tiefenstufen (`stufen=[]`).
 - **Begleiter am Stumpf (5d):** keine 1-Kachel-Blumen auf dem Stumpf, kein Blumenklumpen; Begleiter überlappen sich nicht.
 - **Paare/Achsen:** Paare vor Toren/Bauwerken exakt gespiegelt (Mitte und Fuß), gleiche Objekte auf gleicher Höhe;

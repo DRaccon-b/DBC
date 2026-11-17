@@ -78,15 +78,16 @@ def main():
                     nb = [k[y + dy, x + dx] for dy, dx in ((1, 0), (-1, 0), (0, 1), (0, -1))]
                     if nb.count('g') + nb.count('w') <= 1 and 'h' in nb:
                         k[y, x] = 'h'
-    k[35:41, 47:51] = np.where(k[35:41, 47:51] == 'x', 'w', k[35:41, 47:51])   # untere Bruecke endet wie in der Vorlage
+    # Bruecken (Nutzer: exakt ans Wasser): unter der Bruecke und 2 Reihen davor/danach genau die Brueckenspalten Wasser,
+    # an beiden Enden gerade Uferkanten (3 Spalten Land) - so liegt kein Brueckenende auf Land und kein Wasser daneben
     bruecken = []
-    for (bx0, by0, bx1, by1) in BRUECKEN:                              # Bruecke = Wasserbreite, Weg 2 Spalten davor/dahinter
-        xs = [x for y in range(by0, by1 + 1) for x in range(bx0 - 4, bx1 + 5) if k[y, x] == 'x']
-        bx0, bx1 = min(xs), max(xs)
+    for (bx0, by0, bx1, by1) in BRUECKEN:
+        k[by0 - 2:by1 + 3, bx0:bx1 + 1] = 'x'
+        for x in list(range(bx0 - 3, bx0)) + list(range(bx1 + 1, bx1 + 4)):
+            k[by0 - 1:by1 + 2, x] = np.where(k[by0 - 1:by1 + 2, x] == 'x', 'w', k[by0 - 1:by1 + 2, x])
+            k[by0:by1 + 1, x] = 'w'                                   # Weg in voller Brueckenbreite
         k[by0:by1 + 1, bx0:bx1 + 1] = 'b'
-        for x in list(range(bx0 - 2, bx0)) + list(range(bx1 + 1, bx1 + 3)):
-            k[by0:by1 + 1, x] = 'w'
-        bruecken.append([int(bx0), by0, int(bx1), by1])
+        bruecken.append([bx0, by0, bx1, by1])
     for (tx, ty, b, hh) in TELEPORTER:
         k[ty:ty + hh, tx:tx + b] = 'T'
     k[70:74, 3:5] = 'w'                                                # Westausgang: Weg bis zum Teleporter
