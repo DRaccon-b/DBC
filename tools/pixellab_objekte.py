@@ -2144,6 +2144,16 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'old weathered tombstone with a cross, tilted, moss at the base, ' + FR14,
         'wooden park bench with dark iron legs, ' + FR14,
     ]},
+    'k43_tor2': {'size': 192, 'freie_farben': True, 'items': [   # Karte 43: Torbau mit Tiefe (Nutzer: nicht so flach)
+        'small ruined gothic gatehouse of dark blue-grey stone seen from the front and from above at a steep top-down angle '
+        'like a classic handheld RPG map building: large visible dark slate roof with ridge and roof slopes, two short square '
+        'towers with pointed roofs seen from above, battlements, a wide open pointed archway in the front wall, moss, visible '
+        'depth and volume, not a flat facade, symmetric, ' + FR14,
+    ]},
+    'k43_tor3': {'size': 192, 'freie_farben': True, 'items': [
+        'compact haunted stone gate tower with a deep pitched slate roof seen from above, thick side walls showing depth, '
+        'open arched passage in the front, ivy and cracks, classic handheld RPG top-down map style, symmetric, ' + FR14,
+    ]},
     'k40_krater': {'size': 256, 'freie_farben': True, 'items': [   # Nutzer: Meteor-Furche (256 px: ein Motiv je Auftrag)
         'long deep impact furrow crater seen from directly above, a straight trench gouged north to south through a dark asphalt city road, brown earth and dark soil inside, broken grey asphalt slabs and dirt pushed up and piled along the left and right rims, cracks radiating outward, no meteor visible, transparent background around the rims',
     ]},

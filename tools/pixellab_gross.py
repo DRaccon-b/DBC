@@ -378,6 +378,19 @@ AUFTRAEGE['k43_burg_b'] = {'ziel': 'assets/objekte/karte43/burg_b', 'groesse': (
                            'vorlage': None, 'stil': 'assets/objekte/karte09/tor2/00.png',
                            'text': _B43 + 'crumbling haunted look with cracks and ivy, ' + FR14}
 
+_T43 = ('haunted gothic castle of dark blue-grey stone, seen from the front and from above at a steep top-down angle like a '
+        'classic handheld RPG town map building: a large deep dark slate roof with a visible ridge and roof slopes taking up '
+        'the upper half, a battlement walkway on top of the front wall, two round corner towers with conical roofs seen from '
+        'above, a shorter front wall with a tall open pointed arch gate (dark passage) and two violet glowing windows, '
+        'visible depth and volume, not a flat facade, symmetric, fully in frame with margin, ')
+AUFTRAEGE['k43_burg_c'] = {'ziel': 'assets/objekte/karte43/burg_c', 'groesse': (400, 280), 'magenta': True,
+                           'vorlage': None, 'stil': 'assets/objekte/karte06/haus/00.png' if os.path.exists(
+                               os.path.join(ROOT, 'assets/objekte/karte06/haus/00.png')) else 'assets/objekte/karte09/tor2/00.png',
+                           'text': _T43 + FR14}
+AUFTRAEGE['k43_burg_d'] = {'ziel': 'assets/objekte/karte43/burg_d', 'groesse': (400, 280), 'magenta': True,
+                           'vorlage': (_V43, (1050, 270, 1445, 485)), 'stil': 'assets/objekte/karte43/burg_a/00.png',
+                           'text': _T43 + 'same colours and towers as the reference, ' + FR14}
+
 
 def main(name):
     a = AUFTRAEGE[name]
