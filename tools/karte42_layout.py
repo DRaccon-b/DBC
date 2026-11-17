@@ -186,6 +186,14 @@ def main():
     d_p = abstand(np.isin(k, ['p', 'q']))
     d_b = abstand(np.isin(k, ['s', 'b', 'k', 't', 'T']))
     kette = (k == 'r') & (d_p <= 5) & (d_b >= 4)
+    # Nutzer: Kette nur hinter (noerdlich) den Plateaus, seitlich laeuft sie nach hinten aus (wie rechts) - kein Arm
+    # an der Westseite des linken Plateaus herunter
+    yy_, xx_ = np.mgrid[0:R, 0:C]
+    nur_hinten = np.zeros((R, C), bool)
+    for (x0, y0, x1, y1) in PLATEAUS:
+        nur_hinten |= (yy_ < y0) & (xx_ >= x0) & (xx_ <= x1)              # direkt hinter dem Plateau
+        nur_hinten |= (yy_ < y0 - 3) & (xx_ >= x0 - 4) & (xx_ < x0)       # links nach hinten auslaufend (Stufe)
+    kette &= nur_hinten
     for teil in flaechen(kette):                      # kleine Kettenstuecke weglassen
         if len(teil) < 12:
             for (y, x) in teil:
