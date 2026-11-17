@@ -1,0 +1,276 @@
+"""Objekte fuer Karte 53 (Shinjuku Evacuation District, A03 Nr. 20) -> assets/objekte/karte53/platzierung.json
+
+  python3 tools/karte53_objekte.py && python3 tools/karte53_bauen.py
+
+Sechs Buerobloecke aus vorhandenen generierten Haelften (Karte 35/36/40), auf die Vorlagenbreite verbreitert (Fassadenfeld
+wiederholt) und gespiegelt, Eingang auf der Achse. Baeume mittig auf den Beeten (Tuerluecken frei), verlassene Busse und
+Autos im Linksverkehr, Bushaltestellen. Evakuierung (PixelLab, Gruppe k53_evak/k53_gross): Hilfslager mit Zelt, Feldbetten,
+Vorraeten und Wasserspender, Sanitaetsposten mit Generator und Flutlicht, Sandsack- und Barrierensperren, liegengebliebenes
+Gepaeck; D-Reaper-Auslaeufer (Ranken, Blasen) nur direkt an den roten Flecken. Ringsum Baumguertel.
+"""
+import json, math, os, random, shutil, sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import numpy as np
+from PIL import Image
+
+ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
+KARTE = os.path.join(ROOT, 'maps', 'karte53')
+OBJ = os.path.join(ROOT, 'assets', 'objekte', 'karte53')
+T = 16
+# name -> (Quelle unter assets/objekte, Skalierung)
+FREMD = {'k38/bank': ('karte38/klein/09.png', 1), 'k38/taube': ('karte38/bahn_klein/02.png', 1),
+         'k35/tuer_quelle': ('karte35/gross_buero_mitte/00.png', 1),
+         'halb/glas_gross': ('karte35/gross_buero_unten_halb/00.png', 1),
+         'halb/glas_mitte': ('karte35/gross_buero_oben_halb/00.png', 1),
+         'halb/beige': ('karte36/gross_beige_halb_hoch/00.png', 1),
+         'halb/lila': ('karte40/gross_lila_halb/00.png', 1), 'halb/glas': ('karte40/gross_glas_halb/00.png', 1)}
+for i in (0, 1, 5, 7, 12, 13, 18, 34, 41, 44):
+    FREMD['k18s/%02d' % i] = ('karte18/strasse/%02d.png' % i, 1)
+for i in (0, 2, 5, 6, 7, 12):
+    FREMD['k18a/%02d' % i] = ('karte18/autos/%02d.png' % i, 1)
+for i in (0, 1, 2, 4, 9, 12, 13, 14, 15):
+    FREMD['k01/baum%02d' % i] = ('karte01/baeume/%02d.png' % i, 1)
+EVAK = {'bett': (0, 0.5), 'sandsack': (1, 0.6), 'gepaeck': (2, 0.5), 'schild': (3, 0.55), 'kisten': (4, 0.5),
+        'flutlicht': (5, 0.65), 'kegel': (6, 0.5), 'tisch': (7, 0.5), 'generator': (8, 0.55), 'wasser': (9, 0.5),
+        'sperre': (12, 0.5), 'kocher': (14, 0.5), 'rucksack': (15, 0.45)}
+for n_, (i, f) in EVAK.items():
+    FREMD['evak/' + n_] = ('karte53/evak/%02d.png' % i, f)
+for n_, (i, f) in {'zelt': (0, 0.75), 'lkw': (1, 0.75), 'vorrat': (2, 0.6)}.items():
+    FREMD['evak/' + n_] = ('karte53/gross/%02d.png' % i, f)
+for n_, (i, f) in {'ranke': (0, 0.55), 'blasen': (7, 0.5), 'kapsel': (1, 0.5)}.items():
+    FREMD['reaper/' + n_] = ('karte52/reaper/%02d.png' % i, f)
+WALD = ['k01/baum%02d' % i for i in (0, 1, 2, 4, 9, 15)]
+BUSCH = ['k01/baum%02d' % i for i in (12, 13, 14)]
+LAMPE = {'anim': 'leuchten', 'licht': [4, 7], 'licht_box': [2, 5, 6, 10], 'licht_r': 9}
+# Gebaeude: Flaeche aus dem Layout, Haelfte, Fassade
+GEB = {'glas_gross': 'halb/glas_gross', 'glas_mitte': 'halb/glas_mitte', 'beige': 'halb/beige',
+       'lila_rechts': 'halb/lila', 'lila_links': 'halb/lila', 'glas_zentrum': 'halb/glas'}
+
+
+def kopieren(name, quelle, f):
+    ziel = os.path.join(OBJ, name + '.png')
+    os.makedirs(os.path.dirname(ziel), exist_ok=True)
+    im = Image.open(os.path.join(ROOT, 'assets', 'objekte', quelle)).convert('RGBA')
+    im = im.crop(im.getbbox())
+    if f != 1:
+        im = im.resize((max(1, round(im.width * f)), max(1, round(im.height * f))), Image.NEAREST)
+    im.save(ziel)
+
+
+def verbreitern(quelle, ziel, breite_halb):
+    """Haelfte auf breite_halb verbreitern: ein Fassadenfeld (Periode der Fensterachsen) innen wiederholen."""
+    im = Image.open(os.path.join(OBJ, quelle)).convert('RGBA')
+    im = im.crop(im.getbbox())
+    a = np.array(im).astype(int)
+    h, w = a.shape[:2]
+    if w >= breite_halb + 4:
+        im.save(os.path.join(OBJ, ziel)); return
+    fass = a[int(h * 0.3):int(h * 0.85), :, :3]
+    x0 = int(w * 0.35)
+    best, bp = 1e9, 16
+    for p in range(10, min(80, (w - x0) // 2)):
+        e = np.abs(fass[:, x0:x0 + p] - fass[:, x0 + p:x0 + 2 * p]).mean()
+        if e < best - 0.5:
+            best, bp = e, p
+    seg = a[:, x0:x0 + bp]
+    n = math.ceil((breite_halb + 4 - w) / bp)
+    neu = np.concatenate([a[:, :x0]] + [seg] * (n + 1) + [a[:, x0 + bp:]], 1)
+    Image.fromarray(neu.astype(np.uint8)).save(os.path.join(OBJ, ziel))
+
+
+def main():
+    rnd = random.Random(53)
+    lay = json.load(open(os.path.join(KARTE, 'layout.json')))
+    cls = lay['klassen']
+    cols, rows = lay['groesse']
+    P = lay['versatz']
+    OFF = P * T
+
+    def k(tx, ty):
+        return cls[min(rows - 1, max(0, ty))][min(cols - 1, max(0, tx))]
+
+    for name, (quelle, f) in FREMD.items():
+        kopieren(name, quelle, f)
+    os.makedirs(os.path.join(OBJ, 'gross_buero_mitte'), exist_ok=True)
+    shutil.copy(os.path.join(OBJ, 'k35/tuer_quelle.png'), os.path.join(OBJ, 'gross_buero_mitte/00.png'))
+    import karte36_objekte as k36o
+    k36o.OBJ = OBJ
+    for n_, (x0, y0, x1, y1) in lay['gebaeude_flaechen'].items():
+        bh = (x1 - x0 + 1) * T // 2
+        verbreitern(GEB[n_] + '.png', 'halb/%s_breit.png' % n_, bh)
+        k36o.halb_gespiegelt('halb/%s_breit.png' % n_, 'geb/%s.png' % n_, bh, True)
+        a = np.array(Image.open(os.path.join(OBJ, 'geb/%s.png' % n_)).convert('RGBA')).astype(int)
+        mg = (a[..., 3] > 0) & (a[..., 2] > a[..., 1] + 8) & (a[..., 0] > a[..., 1] + 6) & (a[..., 0] > 150)
+        for yy in range(a.shape[0] - 1, a.shape[0] - 6, -1):                # magenta Saum unten weg
+            if mg[yy].mean() > 0.3:
+                a[yy, :, 3] = 0
+        im = Image.fromarray(a.astype(np.uint8))
+        im.crop(im.getbbox()).save(os.path.join(OBJ, 'geb/%s.png' % n_))
+    tps = [(t['x'] * T - 2 * T, t['y'] * T - 2 * T, (t['x'] + t['b'] + 2) * T, (t['y'] + t['h'] + 2) * T)
+           for t in lay['teleporter']]
+    tps_eng = [(t['x'] * T, t['y'] * T, (t['x'] + t['b']) * T - 1, (t['y'] + t['h']) * T - 1) for t in lay['teleporter']]
+    objekte, rects = [], []
+
+    def schnitt(a, b, rand=0):
+        return not (a[2] + rand < b[0] or b[2] + rand < a[0] or a[3] + rand < b[1] or b[3] + rand < a[1])
+
+    def setze(name, cx, fy, opt=None, spiegeln=False, art='objekt', pruefen=True, klassen='k'):
+        if not os.path.exists(os.path.join(OBJ, name + '.png')):
+            print('fehlt:', name); return None
+        sp = Image.open(os.path.join(OBJ, name + '.png')).convert('RGBA')
+        if spiegeln:
+            sp = sp.transpose(Image.FLIP_LEFT_RIGHT)
+        datei = 'varianten/%s%s.png' % (name.replace('/', '-'), '_m' if spiegeln else '')
+        os.makedirs(os.path.join(OBJ, 'varianten'), exist_ok=True)
+        sp.save(os.path.join(OBJ, datei))
+        bb = sp.getbbox()
+        x = int(round(cx - (bb[0] + bb[2]) / 2.0))
+        y = int(fy - (bb[3] - 1))
+        r = (x + bb[0], y + bb[1], x + bb[2] - 1, y + bb[3] - 1)
+        if art == 'wald':
+            if any(schnitt(r, t_, 3) for t_ in tps_eng):
+                return None
+            for yy in range(max(0, r[1] // T), min(rows - 1, r[3] // T) + 1):
+                for xx in range(max(0, r[0] // T), min(cols - 1, r[2] // T) + 1):
+                    if cls[yy][xx] != 'h':
+                        ov_y = min(r[3], yy * T + T - 1) - max(r[1], yy * T) + 1
+                        ov_x = min(r[2], xx * T + T - 1) - max(r[0], xx * T) + 1
+                        if ov_y > 4 and ov_x > 4 and not (yy * T >= r[1] and r[3] - yy * T > 40 and False):
+                            return None
+            if any(art2 not in ('wald',) and schnitt(r, tuple(rr), 2) for (*rr, art2) in rects):
+                return None
+        elif pruefen:
+            if any(schnitt(r, tuple(rr), 2) for (*rr, art2) in rects) or any(schnitt(r, t_, 0) for t_ in tps):
+                return None
+            # ganzes Bildrechteck auf erlaubtem Boden (untere zwei Reihen; liegende ganz) - Pruefliste K44
+            ry0 = r[1] // T if (opt or {}).get('liegend') else max(r[1] // T, r[3] // T - 1)
+            belag = {k(xx, yy) for yy in range(ry0, r[3] // T + 1) for xx in range(r[0] // T, r[2] // T + 1)}
+            if not belag <= set(klassen):
+                return None
+        o = {'datei': datei, 'basis': name, 'x': x, 'y': y, 'fuss': bb[3] - 1, 'kachel': [int(cx) // T, int(fy) // T],
+             'ebene': 1, 'ohne_wall': True}
+        if art != 'wald' and not (opt or {}).get('liegend'):
+            o['nur_kontakt'] = True
+        o.update(opt or {})
+        objekte.append(o)
+        rects.append(list(r) + [art])
+        return o
+
+    def kachel(name, tx, fy_tile, opt=None, spiegeln=False, klassen='k', weit=3):
+        sp = Image.open(os.path.join(OBJ, name + '.png'))
+        bw = sp.getbbox()[2] - sp.getbbox()[0]
+        wt = max(1, math.ceil(bw / T))
+        for d in range(weit + 1):
+            for dy in range(-d, d + 1):
+                for dx in range(-d, d + 1):
+                    if max(abs(dx), abs(dy)) != d:
+                        continue
+                    x0, y = tx + dx - (wt - 1) // 2, fy_tile + dy
+                    o = setze(name, x0 * T + wt * T / 2.0, y * T + T - 1, opt, spiegeln, klassen=klassen)
+                    if o:
+                        return o
+        print('nicht gesetzt:', name, tx - P, fy_tile - P)
+        return None
+
+    # ---------------------------------------------------------------- Gebaeude (zuerst)
+    for n_, (x0, y0, x1, y1) in lay['gebaeude_flaechen'].items():
+        if not setze('geb/' + n_, (x0 + x1 + 1) * T / 2.0, (y1 + 1) * T - 1, {'gebaeude': True, 'vorplatz': True},
+                     art='gebaeude', pruefen=False):
+            print('Gebaeude nicht gesetzt:', n_)
+    # ---------------------------------------------------------------- Baeume auf den Beeten (Stamm auf der Beetmitte)
+    gk = np.array([list(z) for z in cls])
+    import karte43_layout as k43
+    k43.R, k43.C = rows, cols
+    beete = [t_ for t_ in k43.flaechen(gk == 'n')]
+    arten = ['k01/baum00', 'k01/baum02', 'k01/baum01', 'k01/baum04']
+    nb = 0
+    for teil in beete:
+        ys_ = [p_[0] for p_ in teil]; xs_ = [p_[1] for p_ in teil]
+        y0, y1, x0, x1 = min(ys_), max(ys_), min(xs_), max(xs_)
+        if y0 < P or y1 >= rows - P:
+            continue
+        fy = y0 * T + (y1 - y0 + 1) * T // 2 + 3
+        breite = x1 - x0 + 1
+        anteile = (0.5,) if breite < 9 else (0.2, 0.8) if breite < 18 else (0.12, 0.45, 0.88)
+        for j, f in enumerate(anteile):
+            art_ = arten[(nb + j) % len(arten)]
+            hw = (lambda b: (b[2] - b[0]) / 2.0 + 1)(Image.open(os.path.join(OBJ, art_ + '.png')).getbbox())
+            cx = min(max(x0 * T + f * breite * T, x0 * T + hw), (x1 + 1) * T - hw)
+            for dx in (0, -16, 16, -32, 32):
+                if setze(art_, cx + dx, fy, {'anim': 'baum'}, (nb + j) % 2 == 1, klassen='n'):
+                    break
+        nb += len(anteile)
+    # ---------------------------------------------------------------- Fahrzeuge (verlassen, Linksverkehr)
+    oben_y, unten_y = (56 + P) * T + 4, (59 + P) * T + 6                  # Hauptstrasse: Nordspur nach Osten, Suedspur nach Westen
+    for (n_, x_, y_, sp) in (('k18a/12', 14, oben_y, True), ('k18a/12', 79, oben_y, True), ('k18a/02', 22, unten_y, False),
+                             ('k18a/05', 48, oben_y, True), ('k18a/00', 58, unten_y, False)):
+        setze(n_, (x_ + P) * T, y_, {}, sp, art='auto', klassen='a')
+    setze('k18a/07', (34 + P) * T, (43 + P) * T, {}, False, art='auto', klassen='a')      # Nord-Sued: Ostspur nach Sueden
+    setze('k18a/06', (89 + P) * T + 8, (70 + P) * T, {}, False, art='auto', klassen='a')
+    setze('evak/lkw', (46 + P) * T, (28 + P) * T + 8, {}, False, art='auto', klassen='a')  # Militaer-LKW an der Querstrasse
+    # ---------------------------------------------------------------- Strassenmoebel
+    for (tx, ty) in ((5, 51), (73, 51)):                                 # Bushaltestellen an der Hauptstrasse
+        kachel('k18s/41', tx + P, ty + P, {}, weit=2)
+    for (tx, ty) in ((27, 44), (37, 33), (62, 60 + 2), (71, 33), (36, 76), (85, 64), (5, 24 - 2), (62, 22)):
+        kachel('k18s/18', tx + P, ty + P, dict(LAMPE), weit=2)
+    for (n_, tx, ty) in (('k18s/12', 26, 49), ('k18s/00', 92, 29), ('k18s/12', 60, 31), ('k18s/01', 24, 31)):
+        kachel(n_, tx + P, ty + P, {}, weit=2)
+    # ---------------------------------------------------------------- Evakuierung
+    # Hilfslager (Block unten links): Zelt, Feldbetten, Vorraete, Wasserspender, Tisch
+    for (n_, tx, ty, sp) in (('evak/zelt', 11, 68, False), ('evak/vorrat', 21, 67, False), ('evak/bett', 7, 74, False),
+                             ('evak/bett', 12, 75, True), ('evak/wasser', 17, 72, False), ('evak/tisch', 16, 64, False),
+                             ('evak/kocher', 25, 71, False), ('evak/schild', 26, 63, False)):
+        kachel(n_, tx + P, ty + P, {}, sp)
+    # Sanitaetsposten (Block unten rechts): Generator, Flutlicht, Betten
+    for (n_, tx, ty, sp) in (('evak/generator', 78, 64, False), ('evak/flutlicht', 82, 66, False),
+                             ('evak/bett', 75, 70, False), ('evak/bett', 80, 71, True), ('evak/kisten', 84, 75, False)):
+        kachel(n_, tx + P, ty + P, {'anim': 'leuchten', 'licht': [6, 4], 'licht_box': [2, 1, 18, 8], 'licht_r': 12}
+               if n_ == 'evak/flutlicht' else {}, sp)
+    # Sperren und Zurueckgelassenes
+    for (n_, tx, ty, sp) in (('evak/sandsack', 33, 22, False), ('evak/sperre', 9, 46, False), ('evak/kegel', 44, 66, False),
+                             ('evak/sperre', 58, 69, True), ('evak/gepaeck', 19, 47, False), ('evak/rucksack', 48, 74, False),
+                             ('evak/sandsack', 78, 48, True), ('evak/kegel', 88, 40, False), ('evak/gepaeck', 50, 35, True),
+                             ('evak/schild', 39, 61, False), ('evak/kisten', 90, 22, True), ('evak/rucksack', 76, 37, True),
+                             ('k18s/44', 61, 74, False), ('k18s/07', 13, 33, False)):
+        kachel(n_, tx + P, ty + P, {}, sp)
+    for i, (tx, ty) in enumerate(((44, 37), (13, 56 + 8), (84, 31))):
+        kachel('k38/taube', tx + P, ty + P, {'ebene': 0}, i % 2 == 1)
+    # D-Reaper-Auslaeufer: Ranken und Blasen direkt an den roten Flecken
+    for (n_, tx, ty, sp) in (('reaper/ranke', 41, 12, False), ('reaper/blasen', 37, 13, True), ('reaper/ranke', 11, 22, True),
+                             ('reaper/kapsel', 12, 19, False)):
+        kachel(n_, tx + P, ty + P, {}, sp, klassen='kn', weit=1)
+    # ---------------------------------------------------------------- Baumguertel
+    for ty in range(rows):
+        for tx in range(cols):
+            if cls[ty][tx] == 'h' and (tx + ty) % 2 == 0:
+                setze(rnd.choice(WALD), tx * T + T / 2.0, ty * T + T - 1, {'anim': 'baum'}, rnd.random() < 0.5, 'wald')
+    deck = np.zeros((rows * T, cols * T), bool)
+
+    def decken(o):
+        al = np.array(Image.open(os.path.join(OBJ, o['datei'])).convert('RGBA'))[..., 3] > 0
+        yy, xx = np.nonzero(al)
+        yy, xx = yy + o['y'], xx + o['x']
+        ok = (yy >= 0) & (yy < rows * T) & (xx >= 0) & (xx < cols * T)
+        deck[yy[ok], xx[ok]] = True
+    for o in objekte:
+        decken(o)
+    for durchgang in range(2):
+        for ty in range(rows):
+            for tx in range(cols):
+                if cls[ty][tx] == 'h' and deck[ty * T:(ty + 1) * T, tx * T:(tx + 1) * T].mean() < 0.75:
+                    for dx in ((0, -5, 5) if durchgang else (0,)):
+                        o = setze(rnd.choice(BUSCH + WALD[:2] if durchgang == 0 else BUSCH), tx * T + T / 2.0 + dx,
+                                  ty * T + T - 1, {'anim': 'wehen'}, rnd.random() < 0.5, 'wald')
+                        if o:
+                            decken(o); break
+    for o in objekte:
+        if o['basis'].startswith('k01/'):
+            o['nur_kontakt'] = True
+    json.dump(objekte, open(os.path.join(OBJ, 'platzierung.json'), 'w'), indent=0)
+    print(len(objekte), 'Objekte')
+
+
+if __name__ == '__main__':
+    main()
+    import regeln_a02
+    regeln_a02.objekte_pruefen('karte53', '')
