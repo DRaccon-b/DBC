@@ -154,8 +154,20 @@ def main():
         return None
 
     # ---------------- Deva-Banner (Tuch weht, Stange fest) und Saeulen - an den Plaetzen der Vorlage
-    for (px_, py_) in BANNER:                                        # nie auf dem Pflaster (Fuss, Schatten)
-        kachel('banner', int(px_ / 20), int(py_ / 20), {'anim': 'standarte'}, False, 'gkd', suche=7)
+    bx0_, by0_, bx1_, by1_ = lay['bruecken'][0]                     # Flaggenpaar am Eingang: Westende der Hauptbruecke,
+    ok_ = False                                                        # gespiegelt zur Brueckenachse
+    for xb_ in [bx1_ + d_ for d_ in range(3, 7)] + [bx0_ - d_ for d_ in range(3, 8)]:   # zuerst auf der Arenaseite
+        for (ya_, yb_) in ((by0_ - 1, by1_ + 2), (by0_ - 2, by1_ + 3), (by0_, by1_ + 1)):
+            n0_ = len(objekte)
+            ok_ = setze('banner', xb_ * T + 8, ya_ * T - 1, {'anim': 'standarte'}, False, 'gkd') and \
+                setze('banner', xb_ * T + 8, yb_ * T - 1, {'anim': 'standarte'}, False, 'gkd')
+            if ok_:
+                break
+            del objekte[n0_:]; del rects[n0_:]
+        if ok_:
+            break
+    if not ok_:
+        print('  Flaggenpaar nicht gesetzt')
     paare = {}
     for i_, (px_, py_) in enumerate(SAEULEN):
         paare.setdefault(py_, []).append((i_, px_))

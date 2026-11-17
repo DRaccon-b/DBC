@@ -228,17 +228,33 @@ def bauen(frame=None, speichern=True):
     a[hoch] = tex['h'][hoch]
     frei = np.zeros((Hp, Wp), bool)
     wand = k4.hoehenkanten(a, hoch, 'berg47', FRONT, SEITE, LIPPE, frei, 47, berg=False)
+    # Graben um die Arena (Nutzer): tiefer Felsgraben mit Klippenwaenden, die Arena wirkt wie ein Plateau
+    tm = weich(zell_maske(cls, 'xb', cols, rows), 4, 0, 8, 0.5)
+    a[tm] = (tex['d'][tm] * 0.55).astype(np.uint8)
+    gw = k4.hoehenkanten(a, ~tm, 'berg47', 16, SEITE, LIPPE, np.zeros((Hp, Wp), bool), 48, berg=False)
+    wand |= gw & tm
+    img_b = Image.fromarray(a).convert('RGBA')
+    for (bx0, by0, bx1, by1) in lay['bruecken']:
+        bauwerke.zeichne_bruecke(img_b, bx0 * T - 6, (bx1 + 1) * T + 6, by0 * T, (by1 + 1) * T - 4, frame=frame or 0)
+    a = np.array(img_b.convert('RGB'))
+    bm = np.zeros((Hp, Wp), bool)
+    for (bx0, by0, bx1, by1) in lay['bruecken']:
+        bm[by0 * T:(by1 + 1) * T, bx0 * T:(bx1 + 1) * T] = True
+    leere = tm & ~bm
+    wand &= ~bm
     xm = np.zeros((Hp, Wp), bool)                                    # kein Wasser auf dieser Karte
     for tp in lay['teleporter']:
         k4.teleporter_zeichnen(a, tp['x'], tp['y'], tp['b'], tp['h'], frame)
     img = Image.fromarray(a).convert('RGBA')
     lvl = hp.astype(np.uint8) + 1
     lvl[wand] = 9                                                    # Felsfront = Wand (Kollision, Schatten)
+    lvl[leere & ~wand] = 0                                           # Grabensohle: tiefer, gesperrt
     if speichern and frame is None:
         img.save(os.path.join(KARTE, 'terrain_basis.png'))
         np.save(os.path.join(KARTE, 'pixelhoehe.npy'), lvl)
         np.save(os.path.join(KARTE, 'wand.npy'), np.packbits(wand))
         np.save(os.path.join(KARTE, 'wasser.npy'), np.packbits(xm))
+        np.save(os.path.join(KARTE, 'leere.npy'), np.packbits(leere))
 
     pf = os.path.join(OBJ, 'platzierung.json')
     if os.path.exists(pf):

@@ -22,6 +22,8 @@ VORLAGE = os.path.join(ROOT, 'assets', 'vorlagen', 'karte47_vorlage.png')
 C, R, T = 100, 75, 16
 REF = {'g': (101, 118, 138), 'h': (137, 151, 165), 'w': (136, 144, 144), 'k': (118, 125, 127), 'n': (80, 136, 56),
        'd': (64, 72, 88), 'c': (90, 100, 112)}
+GRABEN = (82.5, 50.5, 14.5, 17.5)       # Ellipse um die Arena (Mitte x, y, Halbachsen) in Kacheln
+BRUECKEN_Y = [(42, 44), (57, 59)]       # Reihen der Grabenbruecken (Westseite)
 TELEPORTER = [(19, 0, 3, 2), (62, 0, 3, 2), (97, 23, 3, 3), (0, 62, 3, 3), (22, 72, 3, 3)]
 k43.R, k43.C = R, C
 
@@ -53,6 +55,13 @@ def main():
                             k[y + dy, x + dx] = 'g'
         k = k43.zipfel_weg(k, 'gwknhd')
     k[0:2, :] = 'h'; k[-1, :] = 'h'; k[:, 0] = 'h'; k[:, -1] = 'h'     # Felsrand ringsum geschlossen
+    # Graben um die Arena (Nutzer): Ring aus tieferem Fels (Klasse x, gesperrt), die Arena liegt dadurch wie auf einem
+    # Plateau; zwei Bruecken an der Westseite (Hauptweg bei den Flaggen und unten links)
+    yy_, xx_ = np.mgrid[0:R, 0:C]
+    d_aussen = ((xx_ - GRABEN[0]) / GRABEN[2]) ** 2 + ((yy_ - GRABEN[1]) / GRABEN[3]) ** 2
+    d_innen = ((xx_ - GRABEN[0]) / (GRABEN[2] - 2)) ** 2 + ((yy_ - GRABEN[1]) / (GRABEN[3] - 2)) ** 2
+    graben = (d_aussen <= 1.0) & (d_innen > 1.0) & (k != 'h')
+    k[graben] = 'x'
     for _ in range(3):
         for y in range(1, R - 1):                                     # 1-Spalten-Kerben/-Vorspruenge im Fels (Wandstummel)
             for x in range(1, C - 1):
@@ -94,12 +103,21 @@ def main():
         else:
             k[ty:ty + hh, tx - 3:tx] = np.where(k[ty:ty + hh, tx - 3:tx] == 'h', 'g', k[ty:ty + hh, tx - 3:tx])
             k[ty - 2:ty, tx - 3:C] = np.where(k[ty - 2:ty, tx - 3:C] == 'h', 'g', k[ty - 2:ty, tx - 3:C])
+    bruecken = []
+    for (by0, by1) in BRUECKEN_Y:                                     # Bruecke = Grabenbreite, Weg 2 Kacheln davor/dahinter
+        xs = [x for y in range(by0, by1 + 1) for x in range(C) if k[y, x] == 'x' and x < GRABEN[0]]
+        bx0, bx1 = min(xs), max(xs)
+        k[by0 - 1:by1 + 2, bx0:bx1 + 1] = 'x'
+        k[by0:by1 + 1, bx0:bx1 + 1] = 'b'
+        for x in list(range(bx0 - 2, bx0)) + list(range(bx1 + 1, bx1 + 3)):
+            k[by0:by1 + 1, x] = 'w'
+        bruecken.append([int(bx0), by0, int(bx1), by1])
     h = np.where(k == 'h', 1, 0)
     lay = {'groesse': [C, R], 'klassen': [''.join(z) for z in k], 'hoehe': [''.join(str(c) for c in z) for z in h],
-           'bruecken': [], 'stege': [],
+           'bruecken': bruecken, 'stege': [], 'graben': list(GRABEN),
            'teleporter': [{'x': tx, 'y': ty, 'b': b, 'h': hh} for (tx, ty, b, hh) in TELEPORTER]}
     json.dump(lay, open(os.path.join(KARTE, 'layout.json'), 'w'), indent=0)
-    F = {'g': (101, 118, 138), 'w': (170, 170, 165), 'h': (190, 200, 215), 'k': (130, 135, 120), 'n': (80, 150, 60),
+    F = {'x': (30, 32, 40), 'b': (150, 100, 50), 'g': (101, 118, 138), 'w': (170, 170, 165), 'h': (190, 200, 215), 'k': (130, 135, 120), 'n': (80, 150, 60),
          'd': (50, 55, 70), 'T': (80, 220, 240)}
     S_ = 6
     im = Image.new('RGB', (C * S_, R * S_))
