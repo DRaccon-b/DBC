@@ -321,6 +321,11 @@ Vor jeder Abgabe Punkt für Punkt prüfen (vergrößert, Standbild und mehrere A
   nicht nur die Fußzeile. Hütten der Vorlage, die im Layout auf Sand landen, auf die nächste Grasfläche setzen (nie
   stillschweigend weglassen); vor der Tür mind. eine freie Reihe, nicht unter Gürtelkronen. Bäume mit Leuchtrunen nur,
   wenn das Leuchten animiert wird.
+  Nutzer-Korrekturen: Brücken nie auf Land – der Bach läuft unter jeder Brücke gerade, Brücke exakt so breit wie das
+  Wasser. Generierte Hütten mit schwarzer Kontur auf die Eigenfarbe umfärben (Selout), Trampelpfad von der Tür zum Weg und
+  kurze Büschel an den Sockelecken (nie vor der Tür). Schatten auf Wiese kühl (dunkles Grün statt Braungrau) und kompakt
+  (`k4.SCHATTEN` je Karte). Boden nicht platt, ohne neue Objekte/Texturen: sanftes Geländerelief (glattes Höhenfeld, Licht
+  oben links, wenige Stufen) und vertiefte Wege (Schattenkante unter der Wiese, Lichtkante an der Böschung) – Variante B.
 - **Begleiter am Stumpf (5d):** keine 1-Kachel-Blumen auf dem Stumpf, kein Blumenklumpen; Begleiter überlappen sich nicht.
 - **Paare/Achsen:** Paare vor Toren/Bauwerken exakt gespiegelt (Mitte und Fuß), gleiche Objekte auf gleicher Höhe;
   Druckplatten, Obelisken usw. symmetrisch zur berechneten Achse.
