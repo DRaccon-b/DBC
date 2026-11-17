@@ -50,6 +50,62 @@ def texturen(cols, rows):
     }
 
 
+def bodenstruktur(a, cls, cols, rows):
+    """Nutzer: mehr Bodentextur wie in der Vorlage - flache Grasbueschel (PixelLab, Karte 45), Kiesel und Zweige direkt in
+    den Felsboden und die Wiesen gestempelt (kein Objekt, kein Schatten, begehbar); locker in kleinen Gruppen, nicht auf
+    Pflaster/Hof, nicht unter Objekten, nicht an Terrassenkanten."""
+    Hp, Wp = rows * T, cols * T
+    O = os.path.join(ROOT, 'assets', 'objekte')
+    def lade(p_, ton=None):
+        sp = np.array(Image.open(os.path.join(O, p_)).convert('RGBA')).astype(float)
+        bb = Image.fromarray(sp.astype(np.uint8)).getbbox()
+        sp = sp[bb[1]:bb[3], bb[0]:bb[2]]
+        if ton is not None:
+            sp[..., :3] *= np.array(ton)
+        return sp
+    gras = [lade('karte45/halme/%s.png' % n_, (0.92, 0.95, 0.9)) for n_ in ('00', '02', '03', '06')]
+    klein = [lade('karte50/klein/03.png'), lade('karte04/klein/09.png', (0.85, 0.85, 0.9)), lade('karte04/klein/02.png')]
+    kl = np.array([list(z) for z in cls])
+    hpk = np.array([[int(c) for c in z] for z in json.load(open(os.path.join(KARTE, 'layout.json')))['hoehe']])
+    innen = np.isin(kl, ['g', 'n', 'w'])
+    for dy in (-1, 0, 1):
+        for dx in (-1, 0, 1):
+            p_ = np.pad(np.isin(kl, ['g', 'n', 'w']) & (hpk == np.pad(hpk, 1, mode='edge')[1 + dy:1 + dy + rows, 1 + dx:1 + dx + cols]),
+                        1, mode='edge')
+            innen &= p_[1 + dy:1 + dy + rows, 1 + dx:1 + dx + cols]
+    kante = np.zeros((rows, cols), bool)                             # 2 Reihen unter jeder Hoehenkante frei (Front)
+    kante[1:] |= hpk[:-1] > hpk[1:]
+    kante[2:] |= hpk[:-2] > hpk[2:]
+    innen &= ~kante
+    belegt = np.zeros((Hp, Wp), bool)
+    pf_ = os.path.join(OBJ, 'platzierung.json')
+    if os.path.exists(pf_):
+        for o in json.load(open(pf_)):
+            if os.path.exists(os.path.join(OBJ, o['datei'])):
+                bb_ = Image.open(os.path.join(OBJ, o['datei'])).getbbox()
+                if bb_:
+                    belegt[max(0, o['y'] + bb_[3] - 40):o['y'] + bb_[3] + 8, max(0, o['x'] + bb_[0] - 6):o['x'] + bb_[2] + 6] = True
+    for t in json.load(open(os.path.join(KARTE, 'layout.json')))['teleporter']:
+        belegt[max(0, (t['y'] - 2) * T):(t['y'] + t['h'] + 2) * T, max(0, (t['x'] - 2) * T):(t['x'] + t['b'] + 2) * T] = True
+    rs = np.random.RandomState(5050)
+    zentren = [(y, x) for y in range(rows) for x in range(cols) if innen[y, x] and rs.rand() < (0.03 if kl[y, x] == 'w' else 0.13)]
+    for (cy, cx) in zentren:
+        for _ in range(rs.randint(1, 4)):
+            yy, xx = cy + rs.randint(-1, 2), cx + rs.randint(-1, 2)
+            if not (0 <= yy < rows and 0 <= xx < cols and innen[yy, xx]):
+                continue
+            sp = gras[rs.randint(0, 4)] if rs.rand() < 0.75 else klein[rs.randint(0, 3)]
+            if rs.rand() < 0.5:
+                sp = sp[:, ::-1]
+            h_, w_ = sp.shape[:2]
+            py, px = yy * T + rs.randint(0, max(1, T - min(h_, T))), xx * T + rs.randint(0, max(1, T - min(w_, T)))
+            if py + h_ > Hp or px + w_ > Wp or belegt[py:py + h_, px:px + w_].any():
+                continue
+            belegt[py - 3:py + h_ + 3, px - 3:px + w_ + 3] = True
+            al = sp[..., 3:4] / 255.0
+            a[py:py + h_, px:px + w_] = (a[py:py + h_, px:px + w_] * (1 - al) + sp[..., :3] * al).astype(np.uint8)
+
+
 def bauen(frame=None, speichern=True):
     lay = json.load(open(os.path.join(KARTE, 'layout.json')))
     cls = lay['klassen']
@@ -64,6 +120,7 @@ def bauen(frame=None, speichern=True):
             saum = weich(zell_maske(cls, art, cols, rows), 5.0, 0, sd, 0.36) & ~m
             a0[saum] = (a0[saum] * 0.93).astype(np.uint8)
         a0[m] = tex[art][m]
+    bodenstruktur(a0, cls, cols, rows)
     a = a0.copy()
     frei = np.zeros((Hp, Wp), bool)
     for (x0, x1, ry, r_) in lay['treppen']:

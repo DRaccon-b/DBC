@@ -2185,6 +2185,9 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'wooden wine barrel floating in water, lying on its side, only the upper half above the waterline is visible, flat straight bottom edge at the waterline, iron hoops, no water drawn, ' + FR14,
         'old oak barrel drifting, lying sideways, half sunk, round wooden end showing, upper half only, flat cut bottom edge at the waterline, no water drawn, ' + FR14,
     ]},
+    'k50_torii_gross': {'size': 192, 'freie_farben': True, 'items': [   # Karte 50 (Nutzer): Torii so breit wie die Treppe
+        'grand wide vermilion red torii shrine gate, two thick round red pillars standing far apart with black bases, a wide open passage between them, long black curved top beam (kasagi) and a straight red tie beam below, much wider than tall, ' + FR14,
+    ]},
     'k50_torii': {'size': 96, 'freie_farben': True, 'items': [   # Karte 50 Zhuqiaomon's Sanctuary: Torii
         'traditional vermilion red torii shrine gate, two round red pillars with black bases, black curved top beam (kasagi) and a straight red tie beam below, ' + FR14,
     ]},

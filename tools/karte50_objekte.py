@@ -19,7 +19,8 @@ KARTE = os.path.join(ROOT, 'maps', 'karte50')
 OBJ = os.path.join(ROOT, 'assets', 'objekte', 'karte50')
 T = 16
 A = os.path.join(ROOT, 'assets', 'objekte')
-D = {'torii': 'karte50/torii/00.png', 'becken': 'karte50/torii/02.png', 'laterne': 'karte50/deko/00.png',
+D = {'torii': 'karte50/torii_gross/00b.png',   # Nutzer: Pfeiler stehen am Treppenfuss, man geht darunter durch
+     'torii_klein': 'karte50/torii/00.png', 'becken': 'karte50/torii/02.png', 'laterne': 'karte50/deko/00.png',
      'pfosten': 'karte50/deko/01.png', 'unterstand': 'karte50/deko/02.png', 'opfer': 'karte50/deko/03.png',
      'schale': 'karte50/deko/04.png', 'schrein': 'karte50/deko/09.png', 'feder': 'karte50/klein/00.png',
      'feder2': 'karte50/klein/01.png', 'lilie': 'karte50/klein/02.png', 'kiesel': 'karte50/klein/03.png',
@@ -121,7 +122,8 @@ def main():
             continue
         achse = (x0 * T + (x1 + 1) * T) / 2.0
         if ry < 60:                                                  # die beiden Torii (untere Treppe ohne Tor)
-            setze('torii', achse, (ry - 1) * T + T - 1, {'fest_pos': True, 'vor_wand': True, 'nur_kontakt': True}, pruefen=False)
+            setze('torii', achse, (ry + 1) * T + T - 1, {'fest_pos': True, 'vor_wand': True, 'nur_kontakt': True,
+                                                         'sortier': (ry + 1) * T + T - 1}, pruefen=False)
         paar('schale', achse, (x1 - x0 + 1) * T / 2.0 + 24, (ry - 1) * T + 12, {'anim': 'kerzen', 'flammen_box': [[4, 0, 24, 20]],
                                                                               'flammen_alle': True, 'flammen_amp': 1.4})
         paar('pfosten', achse, (x1 - x0 + 1) * T / 2.0 + 24, (ry + 4) * T + 12)

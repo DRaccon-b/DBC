@@ -28,8 +28,8 @@ REF = {'g': (115, 131, 147), 'w': (138, 146, 155), 'h': (137, 151, 165), 'f': (1
        't': (129, 135, 149), 'y': (89, 109, 128)}
 # Terrassenkanten: erste Reihe der tieferen Ebene je Spaltenbereich (Front liegt dort); Treppen (x0, x1) darin
 KANTEN = [  # (Hoehe darueber, [(x0, x1, Reihe)], Treppe)
-    (3, [(0, 27, 34), (28, 66, 25), (67, 81, 24), (82, 95, 30)], (50, 59)),   # Teleporter links/rechts auf Ebene 3
-    (2, [(0, 23, 53), (24, 59, 48), (60, 75, 47), (76, 95, 46)], (46, 55)),   # links Abstand zum Felsrand
+    (3, [(0, 27, 34), (28, 66, 25), (67, 81, 24), (82, 95, 30)], (51, 58)),   # Teleporter links/rechts auf Ebene 3
+    (2, [(0, 23, 53), (24, 59, 48), (60, 75, 47), (76, 95, 46)], (47, 54)),   # links Abstand zum Felsrand
     (1, [(0, 29, 72), (30, 63, 70), (64, 95, 69)], (41, 46)),
 ]
 HOF = (12, 9, 26, 17)                    # abgesenkter Hof (x0, y0, x1, y1), Treppe in der Suedreihe darunter
