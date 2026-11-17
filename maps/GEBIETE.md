@@ -47,6 +47,7 @@ Aufstellfelds (cyan = Ankunft, gold = weiter; Funktion `pfeil_marke` in `tools/k
 | 10 | Karte 43 – Haunted Castle Outskirts | v1.0 fertig (3 Agenten-Prüfrunden), ZIP in maps/karte43/v1.0 |
 | 11 | Karte 44 – Chuchidarumon Village | v1.0 fertig (3 Agenten-Prüfrunden), Bach unter dem Weg ergänzt (6. Brücke), ZIP in maps/karte44/v1.0 |
 | 12 | Karte 45 – Orochimon's Marsh | v1.0 fertig (2 Agenten-Prüfrunden), Steg ganz über Wasser, treibende Weinfässer, ZIP in maps/karte45/v1.0 |
+| 13 | Karte 46 – Gekomon Marsh | in Arbeit (Vorbild karte45) |
 
 ## A0S – Sondergebiet
 | Nr. | Karte | Stand |

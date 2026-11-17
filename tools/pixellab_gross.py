@@ -392,6 +392,30 @@ AUFTRAEGE['k43_burg_d'] = {'ziel': 'assets/objekte/karte43/burg_d', 'groesse': (
                            'text': _T43 + 'same colours and towers as the reference, ' + FR14}
 
 
+_V46 = 'assets/vorlagen/karte46_vorlage.png'
+_H46 = ('long rustic farmhouse barn of the Gekomon frog village, seen from the front and from above at a steep top-down angle '
+        'like a classic handheld RPG town map building: a large deep red clay tile roof with a visible ridge and two roof slopes '
+        'taking up the upper half, small dormer windows on the roof, a lower front wall of cream plaster with dark brown timber '
+        'framing and small blue windows, a big red double barn door with a white X brace in the middle, a grey stone base, '
+        'visible depth and volume, not a flat facade, symmetric, fully in frame with margin on all sides, ')
+AUFTRAEGE['k46_haus_a'] = {'ziel': 'assets/objekte/karte46/haus_a', 'groesse': (256, 176), 'magenta': True,
+                           'vorlage': (_V46, (1130, 380, 1350, 470)), 'stil': 'assets/objekte/karte43/burg_c/00.png',
+                           'text': _H46 + FR14}
+AUFTRAEGE['k46_haus_b'] = {'ziel': 'assets/objekte/karte46/haus_b', 'groesse': (256, 176), 'magenta': True,
+                           'vorlage': None, 'stil': 'assets/objekte/karte44/huette2/04.png',
+                           'text': _H46 + 'warm cozy colours, ' + FR14}
+AUFTRAEGE['k46_haus_d'] = {'ziel': 'assets/objekte/karte46/haus_d', 'groesse': (256, 176), 'magenta': True,
+                           'vorlage': None, 'stil': 'assets/objekte/karte06/gebaeude/00.png',
+                           'text': _H46 + 'no snow, summer, a hipped roof that ends well inside the image with the eaves and both '
+                                   'side walls fully visible, a wide empty margin of background on the left and right, ' + FR14}
+AUFTRAEGE['k46_haus_e'] = {'ziel': 'assets/objekte/karte46/haus_e', 'groesse': (256, 176), 'magenta': True,
+                           'vorlage': None, 'stil': 'assets/objekte/karte46/haus_b/00.png',
+                           'text': _H46 + 'no snow at all, summer, wooden barrels and a cart beside the door, ' + FR14}
+AUFTRAEGE['k46_haus_c'] = {'ziel': 'assets/objekte/karte46/haus_c', 'groesse': (256, 192), 'magenta': True,
+                           'vorlage': (_V46, (1130, 380, 1350, 470)), 'stil': 'assets/objekte/karte43/burg_c/00.png',
+                           'text': _H46 + 'a small chimney on the roof, a wooden porch roof over the barn door, ' + FR14}
+
+
 def main(name):
     a = AUFTRAEGE[name]
     w, h = a['groesse']
