@@ -239,12 +239,12 @@ def main():
     # Bergkette (Nutzer): Felsnadeln, Felsgruppen und Platten auf dem Kamm, locker verteilt
     mk = [(x, y) for y in range(0, rows - 1) for x in range(1, cols - 1) if cls[y][x] == 'm']
     rnd.shuffle(mk)
-    berg_ = ['pl01', 'pl00', 'pl03', 'pl09', 'bg58', 'bg40', 'bg26', 'bg08', 'pl15', 'bg32']   # Motive gemischt
+    berg_ = ['pl01', 'pl00', 'pl03', 'pl09', 'pl15', 'pl13']   # nur grosse Formationen (Kamm), Motive gemischt
     pl_m, mpos = 0, []
     for (x, y) in mk:
-        if pl_m >= 12:
+        if pl_m >= 8:
             break
-        if any(abs(x - a_) < 6 and abs(y - b_) < 5 for (a_, b_, _) in mpos):
+        if any(max(abs(x - a_), abs(y - b_)) < 9 for (a_, b_, _) in mpos):
             continue
         frei_ = [m_ for m_ in berg_ if not any(m2 == m_ and abs(x - a_) < 16 and abs(y - b_) < 16 for (a_, b_, m2) in mpos)]
         if not frei_:
