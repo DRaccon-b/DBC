@@ -113,6 +113,20 @@ def main():
                 if y - y0 <= 8 and y0 > 0 and y < R and k[y0 - 1, x] == 'h' and k[y, x] == 'h':
                     k[y0:y, x] = 'h'
             y += 1
+    hp[k == 'h'] = 4                                                  # geschlossene Einspruenge gehoeren zum Rand
+    # Wiesen der Vorlage, die an den Kanten verloren gingen, ganz auf ihrer Ebene neu anlegen (Baeume der Vorlage)
+    for (y0, y1, x0, x1) in ((63, 68, 20, 28), (31, 35, 36, 42)):
+        for y in range(y0, y1 + 1):
+            for x in range(x0, x1 + 1):
+                if k[y, x] in 'gwk' and hp[y, x] == hp[y0, x0] and not ((y in (y0, y1)) and (x in (x0, x1))):
+                    k[y, x] = 'n'
+    for _ in range(2):                                                # Finger/Zipfel der Wiesen angleichen
+        for y in range(1, R - 1):
+            for x in range(1, C - 1):
+                if k[y, x] == 'n':
+                    gleich = sum(k[y + dy, x + dx] == 'n' for dy, dx in ((0, 1), (0, -1), (1, 0), (-1, 0)))
+                    if gleich <= 1 or (k[y, x - 1] != 'n' and k[y, x + 1] != 'n'):
+                        k[y, x] = 'g'
     # Treppen: Frontreihe 't', 2 Reihen frei davor/dahinter (kein Rand, kein Gras-Zipfel)
     treppen = []
     for (hoehe, seg, (tx0, tx1)) in KANTEN:

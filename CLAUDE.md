@@ -360,6 +360,12 @@ Vor jeder Abgabe Punkt für Punkt prüfen (vergrößert, Standbild und mehrere A
   (Ketten, Knochen, Platten) behalten den flachen Schatten. Violette Flammen: `anim: 'feuer_lila'` mit `flammen_box`
   (sonst kein Leuchtschein). Fuß stehender Objekte immer auf die Kachelunterkante einrasten (auch bei Positionen aus der
   Vorlage); kahle Bäume und Felsen auf Fels/Pflaster nur mit Kontaktschatten (Silhouettenschatten wird zum Balken).
+- **Terrassen nachträglich einziehen (Karte 50):** Zeigt die Vorlage Treppen ohne Höhenunterschied, durchgehende Terrassenkanten
+  am 45°-Raster ergänzen (Nutzer). Danach Pflaster/Wiese 2 Reihen vor und nach jeder Front und 1 Kachel neben Seitenkanten
+  angleichen (sonst Wege durch die Wand, Gras über die Kante), vor/hinter jeder Treppe Pflaster in voller Breite; dabei
+  verlorene Wiesen der Vorlage ganz auf einer Ebene neu anlegen (Bäume dort wieder setzen). Seitliche Teleporter nie direkt
+  unter zwei Fronten (Terrassenkante unter den Teleporter legen). Nachträglich geschlossene Randkacheln bekommen auch die
+  Randhöhe. Säulen/Schalen-Paare neben dem Pflaster auf gemeinsamer Fußzeile und Achse suchen (Abstand variieren).
 - **Begleiter am Stumpf (5d):** keine 1-Kachel-Blumen auf dem Stumpf, kein Blumenklumpen; Begleiter überlappen sich nicht.
 - **Paare/Achsen:** Paare vor Toren/Bauwerken exakt gespiegelt (Mitte und Fuß), gleiche Objekte auf gleicher Höhe;
   Druckplatten, Obelisken usw. symmetrisch zur berechneten Achse.

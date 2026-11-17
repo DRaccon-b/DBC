@@ -105,10 +105,10 @@ def main():
         """Gespiegeltes Paar auf gemeinsamer Fusszeile; bei Konflikt die Fusszeile gemeinsam verschieben."""
         for dab in (0, 16, -16, 32, 48, 64, 80, 96, 112):         # Saeulen/Schalen nie auf Pflaster (Karte 47)
             for dfy in (0, -T, T, -2 * T, 2 * T, -3 * T, 3 * T):
-                a_ = setze(name, achse - abstand - dab, fy + dfy, opt, False, klassen='gkd')
+                a_ = setze(name, achse - abstand - dab, fy + dfy, opt, False, klassen='gd')
                 if not a_:
                     continue
-                b_ = setze(name, achse + abstand + dab, fy + dfy, opt, True, klassen='gkd')
+                b_ = setze(name, achse + abstand + dab, fy + dfy, opt, True, klassen='gd')
                 if b_:
                     return True
                 objekte.pop(); rects.pop()
@@ -145,7 +145,7 @@ def main():
         print('  Wasserbecken im Hof nicht gesetzt')
     # ---------------- Vorlage: Baeume (mit Begleitern), Laternen, Felsbrocken, Unterstand
     baeume = [('baum', 608, 528), ('baum', 655, 528), ('baum', 330, 690), ('baum', 1300, 400),
-              ('baum', 1248, 912), ('baum', 1296, 912), ('baum', 384, 1138), ('zypresse', 1080, 552)]   # nur auf Wiese
+              ('baum', 1248, 912), ('baum', 1296, 912), ('baum', 360, 1060), ('baum', 420, 1084), ('zypresse', 1080, 552)]   # nur auf Wiese
     gesetzt = []
     for i, (n, px, py) in enumerate(baeume):
         o = suche(n, px, py, {'anim': 'baum', 'nur_kontakt': True}, i % 2 == 1, r=3, klassen='n')
