@@ -2114,6 +2114,13 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'large dry thorny desert bush with a few small pale flowers, ' + FR14,
         'flat layered orange sandstone rock outcrop with a few pebbles and dry grass, ' + FR14,
     ]},
+    'k42_dorf': {'size': 64, 'freie_farben': True, 'items': [   # Karte 42 Wind Valley: Huette, Bank, Lagerkram
+        'small round desert hut with a yellow and green thatched dome roof of dry grass, mud wall, round wooden door, '
+        'seen from the front and slightly above, ' + FR14,
+        'low wooden log bench made of a split tree trunk on two short stumps, ' + FR14,
+        'two clay water jars and a woven basket on the sand, ' + FR14,
+        'small round desert hut with a straw dome roof tied with rope and a dark doorway, seen from the front and slightly above, ' + FR14,
+    ]},
     'k40_krater': {'size': 256, 'freie_farben': True, 'items': [   # Nutzer: Meteor-Furche (256 px: ein Motiv je Auftrag)
         'long deep impact furrow crater seen from directly above, a straight trench gouged north to south through a dark asphalt city road, brown earth and dark soil inside, broken grey asphalt slabs and dirt pushed up and piled along the left and right rims, cracks radiating outward, no meteor visible, transparent background around the rims',
     ]},
