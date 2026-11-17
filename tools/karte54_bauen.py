@@ -167,7 +167,7 @@ def bauen(frame=None, speichern=True):
         k4.teleporter_zeichnen(a, tp['x'], tp['y'], tp['b'], tp['h'], frame)
     img = Image.fromarray(a).convert('RGBA')
     lvl = np.ones((Hp, Wp), np.uint8)
-    lvl[rand] = 3                                                    # Felsrand: eigene Ebene (gesperrt)
+    lvl[rand] = 9                                                    # Felsrand: gesperrt (auch in der Kollision)
     lvl[wand] = 9
     lvl[sperre_m] = 9
     for tp in lay['teleporter']:

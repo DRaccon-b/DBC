@@ -155,17 +155,17 @@ def main():
                              ('flasche', 72, 80, False), ('flasche', 664, 80, True), ('flasche', 704, 392, False),
                              ('lampe', 72, 300, False), ('lampe', 700, 330, True)]:
         o = suche(n, px, py, {'anim': 'lampe'} if n == 'lampe' else {}, sp_, r=3, schritt=8)
-    for (n, px, py, sp_) in [('gitter', 600, 470, False), ('kabel', 50, 200, False),
-                             ('kabel', 712, 250, True), ('kabel', 160, 300, False), ('bolzen', 190, 330, False),
+    for (n, px, py, sp_) in [('gitter', 600, 470, False), 
+                              ('kabel', 160, 300, False), ('bolzen', 190, 330, False),
                              ('bolzen', 330, 475, True), ('bolzen', 640, 230, False), 
                              ('pfuetze', 140, 520, True)]:
         suche(n, px, py, {}, sp_, r=3, schritt=8)
     # Kernel: befallene Technik, Ranken, Waechter-Wesen in den Gaengen
     for (n, px, py, sp_) in [('befallen', 60, 470, False), ('konsole', 392, 504, False),
-                             ('ranke', 208, 120, False), ('ranke', 576, 280, True), ('ranke', 500, 410, False),
+                             ('ranke', 536, 456, False), ('ranke', 168, 520, True), ('ranke', 712, 140, False),
                              ('waechter', 104, 536, False), ('waechter', 664, 88, True), ('waechter', 392, 216, False)]:
         suche(n, px, py, {'anim': 'maschine', 'leds': True} if n in ('rack', 'konsole', 'befallen') else {}, sp_, r=3,
-              schritt=8)
+              schritt=8, belag='g' if n == 'ranke' else 'gf')   # Ranke mit Steinkranz nur auf Metallboden
     json.dump(objekte, open(os.path.join(OBJ, 'platzierung.json'), 'w'), indent=0)
     print(len(objekte), 'Objekte')
 

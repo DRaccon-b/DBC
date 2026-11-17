@@ -415,42 +415,11 @@
    ]
   },
   {
-   "name": "kabel",
-   "datei": "varianten/kabel_m.png",
-   "animation": null,
-   "slot_kacheln": {
-    "x": 20,
-    "y": 5,
-    "breite": 2,
-    "hoehe": 3
-   },
-   "objektblock_im_slot": {
-    "x": 0,
-    "y": 0,
-    "breite": 2,
-    "hoehe": 3
-   },
-   "fundstellen_karte": [
-    {
-     "block": [
-      43,
-      13,
-      2,
-      3
-     ],
-     "fusskachel": [
-      44,
-      15
-     ]
-    }
-   ]
-  },
-  {
    "name": "rohr",
    "datei": "varianten/rohr.png",
    "animation": null,
    "slot_kacheln": {
-    "x": 22,
+    "x": 20,
     "y": 5,
     "breite": 4,
     "hoehe": 2
@@ -481,7 +450,7 @@
    "datei": "varianten/rohr_m.png",
    "animation": null,
    "slot_kacheln": {
-    "x": 26,
+    "x": 24,
     "y": 5,
     "breite": 4,
     "hoehe": 2
@@ -512,7 +481,7 @@
    "datei": "varianten/gitter.png",
    "animation": null,
    "slot_kacheln": {
-    "x": 30,
+    "x": 28,
     "y": 5,
     "breite": 3,
     "hoehe": 2
@@ -543,7 +512,7 @@
    "datei": "varianten/kapsel.png",
    "animation": null,
    "slot_kacheln": {
-    "x": 33,
+    "x": 31,
     "y": 5,
     "breite": 3,
     "hoehe": 2
@@ -574,7 +543,7 @@
    "datei": "varianten/kapsel_m.png",
    "animation": null,
    "slot_kacheln": {
-    "x": 36,
+    "x": 34,
     "y": 5,
     "breite": 3,
     "hoehe": 2
@@ -605,8 +574,8 @@
    "datei": "varianten/bolzen.png",
    "animation": null,
    "slot_kacheln": {
-    "x": 0,
-    "y": 9,
+    "x": 37,
+    "y": 5,
     "breite": 2,
     "hoehe": 2
    },
@@ -648,7 +617,7 @@
    "datei": "varianten/bolzen_m.png",
    "animation": null,
    "slot_kacheln": {
-    "x": 2,
+    "x": 0,
     "y": 9,
     "breite": 2,
     "hoehe": 2
@@ -679,7 +648,7 @@
    "datei": "varianten/kabel.png",
    "animation": null,
    "slot_kacheln": {
-    "x": 4,
+    "x": 2,
     "y": 9,
     "breite": 2,
     "hoehe": 2
@@ -691,18 +660,6 @@
     "hoehe": 2
    },
    "fundstellen_karte": [
-    {
-     "block": [
-      3,
-      10,
-      2,
-      2
-     ],
-     "fusskachel": [
-      4,
-      11
-     ]
-    },
     {
      "block": [
       9,
@@ -722,7 +679,7 @@
    "datei": "varianten/ranke.png",
    "animation": null,
    "slot_kacheln": {
-    "x": 6,
+    "x": 4,
     "y": 9,
     "breite": 2,
     "hoehe": 2
@@ -736,14 +693,14 @@
    "fundstellen_karte": [
     {
      "block": [
-      30,
-      24,
+      31,
+      27,
       2,
       2
      ],
      "fusskachel": [
-      31,
-      25
+      32,
+      28
      ]
     }
    ]
@@ -753,7 +710,7 @@
    "datei": "varianten/waechter_m.png",
    "animation": null,
    "slot_kacheln": {
-    "x": 8,
+    "x": 6,
     "y": 9,
     "breite": 2,
     "hoehe": 2
@@ -784,7 +741,7 @@
    "datei": "varianten/flasche.png",
    "animation": null,
    "slot_kacheln": {
-    "x": 10,
+    "x": 8,
     "y": 9,
     "breite": 1,
     "hoehe": 2
@@ -827,7 +784,7 @@
    "datei": "varianten/flasche_m.png",
    "animation": null,
    "slot_kacheln": {
-    "x": 11,
+    "x": 9,
     "y": 9,
     "breite": 1,
     "hoehe": 2
