@@ -111,6 +111,15 @@ def main():
                 while r_ < C - 1 and k[y, r_ + 1] == 'h': r_ += 1
                 if r_ - l_ < 2 and 'x' in k[y, max(0, l_ - 2):r_ + 3]:
                     k[y, l_:r_ + 1] = 'g'
+    for (tx, ty, b, hh) in TELEPORTER:                                # Seitenausgaenge: Reihe ueber dem Teleporter Weg
+        if (tx == 0 or tx + b == C) and k[ty - 1, tx] == 'h':          # (die Guertelfront liegt dort, nicht auf den
+            k[ty - 1, tx:tx + b] = 'w'                                # Teleporterplatten; Karte 43)
+    k[57, 8] = 'w'                                                    # Schachbrett-Ecke Weg/Gras aufgeloest
+    for y in range(1, R - 1):                                         # einzelne Graskacheln im Weg (Brueckenende)
+        for x in range(1, C - 1):
+            if k[y, x] == 'g' and sum(k[y + dy, x + dx] == 'g' for dy, dx in ((1, 0), (-1, 0), (0, 1), (0, -1))) <= 1 \
+                    and sum(k[y + dy, x + dx] in 'wb' for dy, dx in ((1, 0), (-1, 0), (0, 1), (0, -1))) >= 2:
+                k[y, x] = 'w'
     h = np.where(k == 'h', 1, 0)
     bruecken = []
     for (x0, y0, x1, y1) in bru:

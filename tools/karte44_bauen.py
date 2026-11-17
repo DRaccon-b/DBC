@@ -122,7 +122,7 @@ def bauen(frame=None, speichern=True):
     P = 24
     ag = np.pad(a, ((P, P), (P, P), (0, 0)), mode='edge')
     mg = np.pad(xm, ((P, P), (P, P)), mode='edge')
-    ag = np.array(wasser_vertieft.vertiefen(Image.fromarray(ag), np.ones_like(mg), frame, maske=mg).convert('RGB'))
+    ag = np.array(wasser_vertieft.vertiefen(Image.fromarray(ag), np.ones_like(mg), frame, maske=mg, stufen=[]).convert('RGB'))   # schmaler Bach: keine Tiefenstufen (sonst Loecher)
     a = ag[P:-P, P:-P].copy()
     a[wand] = vor_bach[wand]                                         # Mauerfronten bleiben (Bach laeuft im Guertel davor)
     img_b = Image.fromarray(a).convert('RGBA')

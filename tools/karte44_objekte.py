@@ -106,17 +106,21 @@ def main():
             gap = 2 if opt.get('streu') else 4
             if any(schnitt(r, tuple(rr), gap) for i_, (*rr, art2) in enumerate(rects) if i_ not in ohne):
                 return None
-            if not opt.get('begleiter') and any(schnitt(r, z, 0) for z in stumpf):
-                return None
+            if any(schnitt(r, z, 0) for j_, z in enumerate(stumpf) if j_ != opt.get('_eigen')):
+                return None                                          # Stammzonen (Begleiter nur an ihrem eigenen Baum)
             if any(schnitt(r, t_, 0) for t_ in tps):
                 return None
             if any(k(xx // T, yy // T) not in klassen for yy in (r[3] - 6, r[3] + 6) for xx in range(r[0] - 3, r[2] + 4, 4)):
-                return None                                          # Fuss und Schatten mit Abstand zu Weg/Platz/Wald
+                return None
+            y_ab = r[1] if opt.get('liegend') else max(r[1], r[3] - 2 * T + 1)   # untere zwei Reihen (liegend: alles)
+            if any(k(xx // T, yy // T) not in klassen for yy in range(y_ab, r[3] + 1, 4) for xx in range(r[0], r[2] + 1, 4)):
+                return None                                          # nichts auf Weg/Wasser (ganzes Bildrechteck)                                          # Fuss und Schatten mit Abstand zu Weg/Platz/Wald
             if (lvl[r[3] - 3:r[3] + 9, r[0]:r[2] + 1] != 1).any() or wand[r[3] - 3:r[3] + 2, r[0]:r[2] + 1].any():
                 return None
             hoch = lvl[max(0, r[1]):r[3] - T, r[0]:r[2] + 1] > 1     # Verdeckung durch Hoehen: Wald seitlich davor
             if hoch.any() and hoch[-T:].any():
                 return None
+        opt.pop('_eigen', None)
         o = {'datei': datei, 'basis': name, 'x': x, 'y': y, 'fuss': bb[3] - 1, 'kachel': [int(cx) // T, int(fy) // T],
              'ebene': 1}
         o.update(opt)
@@ -172,14 +176,17 @@ def main():
         sx = o['x'] + int(np.nonzero(tsp[zl - 3:zl + 1].any(0))[0].mean()); sy = o['y'] + int(zl)
         stumpf.append((sx - 32, sy - 28, sx + 32, sy + 30))
         gesetzt.append((i, n, len(rects) - 1, sx, sy))
-    for (i, n, ti, sx, sy) in gesetzt:
+    vorne = ['kf00', 'kf24', 'kf26', 'kf31', 'kf52']                # vor dem Stumpf nur 2 Kacheln hohe Begleiter
+    zug['v'] = 0
+    for j_eig, (i, n, ti, sx, sy) in enumerate(gesetzt):
         seite = 1 if i % 2 == 0 else -1
-        vor = lambda: any(setze(naechster('k'), sx + d, sy + T, {'begleiter': True}, seite < 0, 'g', ohne=(ti,))
+        vor = lambda: any(setze(vorne[(zug.__setitem__('v', zug['v'] + 1) or zug['v']) % len(vorne)], sx + d, sy + T,
+                                {'begleiter': True, '_eigen': j_eig}, seite < 0, 'g', ohne=(ti,))
                           for d in (0, 3, -3, 6, -6))
-        hinter = lambda sd: (n != 'totbaum') and any(setze(naechster('f'), sx + sd * d, sy - T, {'begleiter': True}, sd < 0,
+        hinter = lambda sd: (n != 'totbaum') and any(setze(naechster('f'), sx + sd * d, sy - T, {'begleiter': True, '_eigen': j_eig}, sd < 0,
                                                            'g', ohne=(ti,)) for d in (24, 32))
         seitlich = lambda sd: any(setze(naechster('k'), sx + sd * d, sy + dy, {'begleiter': True, 'ebene': 0}, sd > 0, 'g')
-                                  for d in (48, 56, 64, 72) for dy in (-T, 2 * T, -2 * T)
+                                  for d in (48, 56, 64, 72) for dy in (2 * T, -2 * T)
                                   if not any(abs(o_['y'] + o_['fuss'] - (sy + dy)) < 10 and abs(o_['x'] - (sx + sd * d)) < 140
                                              for o_ in objekte if o_.get('begleiter')))
         nah = sum(1 for (_, _, _, x2, y2) in gesetzt if (x2, y2) != (sx, sy) and abs(x2 - sx) < 6 * T and abs(y2 - sy) < 5 * T)
@@ -202,7 +209,7 @@ def main():
     # ---------------- Dorfdeko der Vorlage (Baenke, Staemme, Zaun, Felsen) und neue Dorfmotive
     for (n_, px_, py_) in DEKO:
         opt_ = {'liegend': True} if n_ in ('stamm',) else {}
-        o_ = kachel(n_, px_ // T, py_ // T, opt_, (px_ // T) % 2 == 1, 'g', suche=3)
+        o_ = kachel(n_, px_ // T, py_ // T, opt_, (px_ // T) % 2 == 1, 'g', suche=6)
     # ---------------- Wald fuellen (Guertel und Bloecke): dichte Laub-/Nadelbaeume, Luecken mit Bueschen
     hk = [(x, y) for y in range(rows) for x in range(cols) if cls[y][x] == 'h']
     rnd.shuffle(hk)
