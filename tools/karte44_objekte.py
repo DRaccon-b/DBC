@@ -22,6 +22,11 @@ FREMD = {'gras': 'karte04/klein/00.png', 'gras2': 'karte04/klein/01.png',
          'blume': 'karte04/klein/07.png', 'gras3': 'karte04/klein/27.png'}
 for _i in range(16):
     FREMD['h%02d' % _i] = 'karte44/huette/%02d.png' % _i
+for _i in (0, 3, 4):                                               # Nutzer: Huetten 0, 3, 4 (k44_huette2)
+    FREMD['hn%d' % _i] = 'karte44/huette2/%02d.png' % _i
+FASS = [0, 1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 13, 14, 15]             # Nutzer: alle Weinfaesser ausser 9 und 12
+for _i in FASS:
+    FREMD['fass%02d' % _i] = 'karte44/fass_klein/%02d.png' % _i      # auf ~60 % verkleinert (Massstab zu den Huetten)
 for _n, _i in (('bank', 0), ('stamm', 1), ('fels', 2), ('zaun', 3), ('schneemann', 4), ('schild', 5), ('stumpf', 6),
                ('brunnen', 7), ('steine', 10), ('farn', 15)):
     FREMD[_n] = 'karte44/deko/%02d.png' % _i
@@ -45,7 +50,9 @@ BAEUME = [('b00', 21, 5), ('b03', 25, 5), ('b00', 24, 9), ('b08', 21, 10), ('b00
           ('b03', 81, 56), ('b07', 90, 56), ('b00', 77, 58),
           ('b03', 25, 73), ('b02', 45, 72), ('b03', 49, 75), ('b08', 43, 76), ('b03', 52, 69)]
 # Huetten der Vorlage (Mitte px) mit Variante; Dorfdeko der Vorlage (Name, px-Mitte, Fuss-px)
-HUETTE_VAR = ['h00', 'h03', 'h08', 'h02', 'h11', 'h13', 'h04', 'h10', 'h06', 'h05']
+HUETTE_VAR = ['hn0', 'hn3', 'hn4', 'hn3', 'hn0', 'hn4', 'hn0', 'hn3', 'hn4', 'hn0']
+HUETTE_OPT = {'hn0': {'anim': 'lampe', 'lampe_box': [37, 31, 45, 45]},   # Laterne neben der Tuer leuchtet
+              'hn4': {'anim': 'lampe', 'lampe_box': [41, 33, 48, 44]}}
 DEKO = [('stamm', 1010, 416), ('stamm', 475, 624), ('stamm', 300, 846), ('stamm', 595, 1134),
         ('bank', 1100, 432), ('bank', 1167, 560), ('bank', 607, 656), ('bank', 1070, 958),
         ('fels', 640, 200), ('fels', 640, 360), ('fels', 865, 536), ('fels', 880, 760), ('fels', 1152, 856),
@@ -148,7 +155,7 @@ def main():
     # ---------------- Kuppelhuetten (Plaetze der Vorlage), Tuer nach Sueden frei
     for i_, (hx, hy) in enumerate(lay['huetten']):
         n_ = HUETTE_VAR[i_ % len(HUETTE_VAR)]
-        o_ = kachel(n_, int(hx) // T, int(hy + 26) // T, {}, i_ % 3 == 1, 'g', suche=3)
+        o_ = kachel(n_, int(hx) // T, int(hy + 26) // T, dict(HUETTE_OPT.get(n_, {})), False, 'g', suche=3)
         if not o_:
             print('  Huette nicht gesetzt', hx, hy)
             continue
@@ -156,7 +163,9 @@ def main():
         sp_ = np.array(Image.open(os.path.join(OBJ, o_['datei'])).convert('RGBA')).astype(int)
         al_ = sp_[..., 3] > 0
         lum_ = sp_[..., :3].mean(-1)
-        dunkel_ = al_ & (lum_ < 50)
+        rand_ = np.zeros_like(al_)                                           # nur die Aussenkontur
+        rand_[1:] |= ~al_[:-1]; rand_[:-1] |= ~al_[1:]; rand_[:, 1:] |= ~al_[:, :-1]; rand_[:, :-1] |= ~al_[:, 1:]
+        dunkel_ = al_ & (lum_ < 50) & rand_
         neu_ = sp_.copy()
         for (yy_, xx_) in zip(*np.nonzero(dunkel_)):
             fen = sp_[max(0, yy_ - 2):yy_ + 3, max(0, xx_ - 2):xx_ + 3]
@@ -204,6 +213,58 @@ def main():
             for j in (0, 1):
                 if cls[wy_][wx_ + j] == 'g':
                     cls[wy_][wx_ + j] = 'w'
+    # ---------------- Weinfaesser (Nutzer): neben einigen Huetten, wo Platz ist - ohne Wiederholung
+    faesser = ['fass%02d' % i for i in FASS]
+    rnd.shuffle(faesser)
+    huetten_ = [o for o in objekte if o['basis'].startswith('hn')]
+    n_f = 0
+    for j_, h_ in enumerate(huetten_):
+        if not faesser or j_ % 3 == 1:                                  # nicht neben jedem Haus
+            continue                                                       # nicht neben jedem Haus
+        hb_ = Image.open(os.path.join(OBJ, h_['datei'])).getbbox()
+        fy_ = h_['y'] + h_['fuss']
+        for anz_ in range(3 if rnd.random() < 0.5 else 2):
+            if not faesser:
+                break
+            f_ = faesser[0]
+            fb_ = Image.open(pfad(f_)).getbbox(); fw_ = fb_[2] - fb_[0]
+            seiten = [1, -1] if rnd.random() < 0.5 else [-1, 1]
+            ok_ = None
+            for sd_ in seiten:
+                for gap_ in (4, 8, 12, 16):
+                    cx_ = (h_['x'] + hb_[2] + gap_ + fw_ / 2.0) if sd_ > 0 else (h_['x'] + hb_[0] - gap_ - fw_ / 2.0)
+                    for dy_ in (0, -6, 6):
+                        ok_ = setze(f_, cx_, fy_ + dy_, {}, False, 'g')
+                        if ok_:
+                            break
+                    if ok_:
+                        break
+                if ok_:
+                    break
+            if ok_:
+                faesser.pop(0); n_f += 1
+    for h_ in huetten_:                                                # zweiter Durchgang: etwas weiter weg vom Haus
+        hb_ = Image.open(os.path.join(OBJ, h_['datei'])).getbbox()
+        fy_ = h_['y'] + h_['fuss']
+        if not faesser:
+            break
+        f_ = faesser[0]
+        fb_ = Image.open(pfad(f_)).getbbox(); fw_ = fb_[2] - fb_[0]
+        ok_ = None
+        for gap_ in (20, 28, 36, 44):
+            for sd_ in (1, -1):
+                for dy_ in (0, -T, T, -2 * T):
+                    cx_ = (h_['x'] + hb_[2] + gap_ + fw_ / 2.0) if sd_ > 0 else (h_['x'] + hb_[0] - gap_ - fw_ / 2.0)
+                    ok_ = setze(f_, cx_, fy_ + dy_, {}, False, 'g')
+                    if ok_:
+                        break
+                if ok_:
+                    break
+            if ok_:
+                break
+        if ok_:
+            faesser.pop(0); n_f += 1
+    print('  Weinfaesser neben Huetten:', n_f, 'uebrig', faesser)
     # ---------------- Baeume der Vorlage mit Begleitern
     felsen = ['fels02', 'fels03', 'fels14']
     klein = ['kf%02d' % i for i in KLEINFELS]
