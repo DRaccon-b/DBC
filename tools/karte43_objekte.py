@@ -17,7 +17,8 @@ ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
 KARTE = os.path.join(ROOT, 'maps', 'karte43')
 OBJ = os.path.join(ROOT, 'assets', 'objekte', 'karte43')
 T = 16
-FREMD = {'burg': 'karte43/burg_a/00.png', 'tor': 'karte43/tor/00.png', 'speier': 'karte43/deko/00.png',
+FREMD = {'burg': 'karte43/burg_c/00.png', 'tor': 'karte43/tor2/00.png',   # Nutzer: mit Tiefe (Burg C, Tor 2)
+         'speier': 'karte43/deko/00.png',
          'schale': 'karte43/deko/01.png', 'bank': 'karte43/deko/03.png',
          'totbaum': 'karte04/baeume/02.png', 'gras': 'karte04/klein/00.png', 'gras2': 'karte04/klein/01.png',
          'pilz': 'karte04/klein/11.png', 'kiesel': 'karte04/klein/02.png', 'zweig': 'karte04/klein/09.png',
