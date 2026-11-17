@@ -24,7 +24,7 @@ REF = {'g': (101, 118, 138), 'h': (137, 151, 165), 'w': (136, 144, 144), 'k': (1
        'd': (64, 72, 88), 'c': (90, 100, 112)}
 GRABEN = (82.5, 50.5, 14.5, 17.5)       # Ellipse um die Arena (Mitte x, y, Halbachsen) in Kacheln
 BRUECKEN_Y = [(42, 44), (57, 59)]       # Reihen der Grabenbruecken (Westseite)
-FLUSS = [(0, 74), (18, 74), (22, 76), (25, 78), (33, 78)]   # (Reihe, linke Spalte), 2 Kacheln breit, endet am Graben
+FLUSS = [(4, 74), (18, 74), (22, 76), (25, 78), (33, 78)]   # (Reihe, linke Spalte): Quelle am Fuss des Felsrands, endet am Graben
 FLUSS_BRUECKE = (27, 31)                                     # Reihen der Bruecke, wo der Pflasterring den Fluss kreuzt
 TELEPORTER = [(19, 0, 3, 2), (62, 0, 3, 2), (97, 23, 3, 3), (0, 62, 3, 3), (22, 72, 3, 3)]
 k43.R, k43.C = R, C
@@ -107,12 +107,14 @@ def main():
             k[ty - 2:ty, tx - 3:C] = np.where(k[ty - 2:ty, tx - 3:C] == 'h', 'g', k[ty - 2:ty, tx - 3:C])
     # Fluss (Nutzer): kommt oben durch die Felsspalte, laeuft ueber den Felsboden und stuerzt als Wasserfall in den Graben
     fluss_x = np.interp(np.arange(0, 34), [p_[0] for p_ in FLUSS], [p_[1] for p_ in FLUSS]).round().astype(int)
-    for y in range(0, 34):
+    y_q = FLUSS[0][0]
+    for y in range(y_q, 34):
         k[y, fluss_x[y]:fluss_x[y] + 2] = 'f'
-    for y in range(1, 34):                                            # diagonale Stufen ohne Luecke (4er-Nachbarschaft)
+    k[y_q:y_q + 3, fluss_x[y_q] - 1:fluss_x[y_q] + 3] = 'f'          # Quelltopf am Fuss der Felswand (breiter)
+    for y in range(y_q + 1, 34):                                            # diagonale Stufen ohne Luecke (4er-Nachbarschaft)
         if fluss_x[y] != fluss_x[y - 1]:
             k[y, min(fluss_x[y], fluss_x[y - 1]):max(fluss_x[y], fluss_x[y - 1]) + 2] = 'f'
-    for y in range(0, 34):                                            # Ufer: 1 Kachel Boden neben dem Fluss (nicht Rand/Pflaster-Zipfel)
+    for y in range(y_q, 34):                                          # Ufer: 1 Kachel Boden neben dem Fluss (nicht Rand/Pflaster-Zipfel)
         for x in (fluss_x[y] - 1, fluss_x[y] + 2):
             if k[y, x] == 'h' and y >= 4:
                 k[y, x] = 'g'

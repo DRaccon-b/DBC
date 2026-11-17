@@ -293,6 +293,7 @@ def bauen(frame=None, speichern=True):
     wfx, wfy = lay['wasserfall']
     fm_ext = fm.copy()
     fm_ext[wfy * T - 4:wfy * T + 14, wfx * T:(wfx + 2) * T] = True
+    fm &= ~wand; fm_ext &= ~wand                                     # Quelltopf liegt vor der Felswand (Wand bleibt)
     P = 24
     ag = np.pad(a, ((P, P), (P, P), (0, 0)), mode='edge')
     mg = np.pad(fm_ext, ((P, P), (P, P)), mode='edge')
