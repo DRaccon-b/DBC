@@ -347,6 +347,13 @@ Vor jeder Abgabe Punkt für Punkt prüfen (vergrößert, Standbild und mehrere A
   angleichen. Säulenpaare der Vorlage gemeinsam setzen (gleiche Fußzeile); Banner/Säulen nie auf Pflaster; Randfelsen ohne
   Reihen und ohne gleiches Motiv in der Nähe; Streudeko mit größerem Abstand zu Säulen/Bannern; übernommene Sprites mit
   roter Kontur (Karte 27) auf die kühle Kartenpalette umfärben; die Regelprüfung darf keine Objekte auf Streudeko schieben.
+- **Wasserwelt mit Flach-/Tiefwasser (Karte 48):** Jede Plattform braucht eine Treppe mit Anschluss an die begehbare Fläche –
+  nach jeder Layout-Korrektur per Flood-Fill von einem Teleporter aus prüfen, dass alle Plattformen und beide Teleporter
+  erreichbar sind (Treppen, die in eine von Tiefwasser umschlossene Tasche führen, gelten als Fehler). Nordtreppen in die
+  Plattform einschneiden (nicht als Sprite auf die Kante legen). Tiefenstufen mit `MIN_FLAECHE` und stärkerem Öffnen
+  (`wasser_vertieft.OEFFNEN`), sonst bleiben Einzellöcher und dünne Finger. Wandernde Muster: Periode × Schritt muss die
+  Bildzahl teilen (sonst stockt die Schleife). Objekte auf Steinplatten `ohne_wall`; winzige Kerzenflammen nur mit kleiner
+  Amplitude (≤ 1) bewegen, sonst zerreißen sie.
 - **Begleiter am Stumpf (5d):** keine 1-Kachel-Blumen auf dem Stumpf, kein Blumenklumpen; Begleiter überlappen sich nicht.
 - **Paare/Achsen:** Paare vor Toren/Bauwerken exakt gespiegelt (Mitte und Fuß), gleiche Objekte auf gleicher Höhe;
   Druckplatten, Obelisken usw. symmetrisch zur berechneten Achse.

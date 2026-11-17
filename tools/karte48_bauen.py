@@ -199,14 +199,14 @@ def bauen(frame=None, speichern=True):
     unter = np.zeros_like(wand)
     unter[1:] = wand[:-1] & ~wand[1:] & ~hoch[1:]
     xs_ = np.nonzero(unter)
-    sel = ((xs_[1] + (frame or 0) * 2) % 6) < 3
+    sel = ((xs_[1] + (frame or 0) * 2) % 8) < 4                     # Periode 8 px: Schleife ohne Stocken
     a[xs_[0][sel], xs_[1][sel]] = (150, 210, 208)
     a[xs_[0][~sel], xs_[1][~sel]] = (98, 168, 170)
     for (x0, x1, ry, r_) in lay['treppen']:
         if r_ == 's':
             k4.treppe(a, x0 * T, (x1 + 1) * T, ry * T - 1, 's', FRONT, 'stein48', tex_p)
         else:
-            k4.treppe(a, x0 * T, (x1 + 1) * T, (ry + 1) * T - 12, 'n', FRONT, 'stein48', tex_p)
+            k4.treppe(a, x0 * T, (x1 + 1) * T, (ry + 1) * T + 1, 'n', FRONT, 'stein48', tex_p)   # in die Plattform eingeschnitten
     hallenwaende(a, lay, wand)
     for tp in lay['teleporter']:
         k4.teleporter_zeichnen(a, tp['x'], tp['y'], tp['b'], tp['h'], frame)

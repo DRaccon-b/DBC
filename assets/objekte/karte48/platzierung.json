@@ -82,7 +82,7 @@
 ]
 ],
 "flammen_alle": true,
-"flammen_amp": 2.2
+"flammen_amp": 0.9
 },
 {
 "datei": "varianten/saeule.png",
@@ -539,14 +539,14 @@
 "anim": "wehen"
 },
 {
-"datei": "varianten/kolben.png",
-"basis": "kolben",
-"x": 883,
-"y": 629,
-"fuss": 29,
+"datei": "varianten/seerose.png",
+"basis": "seerose",
+"x": 801,
+"y": 652,
+"fuss": 22,
 "kachel": [
-55,
-41
+50,
+42
 ],
 "ebene": 0,
 "ohne_wall": true,
@@ -555,11 +555,27 @@
 "anim": "wehen"
 },
 {
-"datei": "varianten/seegras2_m.png",
-"basis": "seegras2",
-"x": 760,
-"y": 890,
-"fuss": 29,
+"datei": "varianten/seegras.png",
+"basis": "seegras",
+"x": 857,
+"y": 654,
+"fuss": 28,
+"kachel": [
+54,
+42
+],
+"ebene": 0,
+"ohne_wall": true,
+"wasserdeko": true,
+"nur_kontakt": true,
+"anim": "wehen"
+},
+{
+"datei": "varianten/halme_gelb.png",
+"basis": "halme_gelb",
+"x": 762,
+"y": 892,
+"fuss": 27,
 "kachel": [
 48,
 57
@@ -571,9 +587,9 @@
 "anim": "wehen"
 },
 {
-"datei": "varianten/gras_dicht_m.png",
-"basis": "gras_dicht",
-"x": 921,
+"datei": "varianten/farn_m.png",
+"basis": "farn",
+"x": 922,
 "y": 874,
 "fuss": 29,
 "kachel": [
@@ -587,11 +603,11 @@
 "anim": "wehen"
 },
 {
-"datei": "varianten/kraut.png",
-"basis": "kraut",
-"x": 1225,
-"y": 1019,
-"fuss": 27,
+"datei": "varianten/kolben_m.png",
+"basis": "kolben",
+"x": 1227,
+"y": 1017,
+"fuss": 29,
 "kachel": [
 77,
 65
@@ -603,14 +619,14 @@
 "anim": "wehen"
 },
 {
-"datei": "varianten/gelbalge.png",
-"basis": "gelbalge",
-"x": 1184,
-"y": 1028,
-"fuss": 27,
+"datei": "varianten/seegras2.png",
+"basis": "seegras2",
+"x": 1192,
+"y": 1034,
+"fuss": 29,
 "kachel": [
-74,
-65
+75,
+66
 ],
 "ebene": 0,
 "ohne_wall": true,
@@ -619,14 +635,14 @@
 "anim": "wehen"
 },
 {
-"datei": "varianten/seerose.png",
-"basis": "seerose",
-"x": 1226,
-"y": 742,
-"fuss": 22,
+"datei": "varianten/gras_dicht_m.png",
+"basis": "gras_dicht",
+"x": 666,
+"y": 319,
+"fuss": 29,
 "kachel": [
-77,
-47
+42,
+21
 ],
 "ebene": 0,
 "ohne_wall": true,
@@ -635,48 +651,48 @@
 "anim": "wehen"
 },
 {
-"datei": "varianten/schnecke_m.png",
-"basis": "schnecke",
-"x": 172,
-"y": 434,
-"fuss": 23,
-"kachel": [
-11,
-28
-],
-"ebene": 0,
-"ohne_wall": true,
-"wasserdeko": true,
-"nur_kontakt": true,
-"streu": true,
-"liegend": false
-},
-{
-"datei": "varianten/schnecke.png",
-"basis": "schnecke",
-"x": 187,
-"y": 183,
-"fuss": 23,
-"kachel": [
-12,
-12
-],
-"ebene": 0,
-"ohne_wall": true,
-"wasserdeko": true,
-"nur_kontakt": true,
-"streu": true,
-"liegend": false
-},
-{
-"datei": "varianten/seegras_m.png",
-"basis": "seegras",
-"x": 362,
-"y": 1040,
+"datei": "varianten/schwamm_m.png",
+"basis": "schwamm",
+"x": 1196,
+"y": 720,
 "fuss": 28,
 "kachel": [
-23,
-66
+75,
+46
+],
+"ebene": 0,
+"ohne_wall": true,
+"wasserdeko": true,
+"nur_kontakt": true,
+"streu": true,
+"liegend": false
+},
+{
+"datei": "varianten/koralle_lila_m.png",
+"basis": "koralle_lila",
+"x": 921,
+"y": 765,
+"fuss": 28,
+"kachel": [
+58,
+49
+],
+"ebene": 0,
+"ohne_wall": true,
+"wasserdeko": true,
+"nur_kontakt": true,
+"streu": true,
+"liegend": false
+},
+{
+"datei": "varianten/kraut.png",
+"basis": "kraut",
+"x": 474,
+"y": 145,
+"fuss": 27,
+"kachel": [
+30,
+10
 ],
 "ebene": 0,
 "ohne_wall": true,
@@ -687,12 +703,62 @@
 {
 "datei": "varianten/schwamm.png",
 "basis": "schwamm",
-"x": 395,
-"y": 910,
+"x": 216,
+"y": 317,
 "fuss": 28,
 "kachel": [
-25,
-58
+14,
+21
+],
+"ebene": 0,
+"ohne_wall": true,
+"wasserdeko": true,
+"nur_kontakt": true,
+"streu": true,
+"liegend": false
+},
+{
+"datei": "varianten/koralle_orange.png",
+"basis": "koralle_orange",
+"x": 157,
+"y": 396,
+"fuss": 29,
+"kachel": [
+10,
+26
+],
+"ebene": 0,
+"ohne_wall": true,
+"wasserdeko": true,
+"nur_kontakt": true,
+"streu": true,
+"liegend": false
+},
+{
+"datei": "varianten/gelbalge.png",
+"basis": "gelbalge",
+"x": 426,
+"y": 849,
+"fuss": 27,
+"kachel": [
+27,
+54
+],
+"ebene": 0,
+"ohne_wall": true,
+"wasserdeko": true,
+"nur_kontakt": true,
+"anim": "wehen"
+},
+{
+"datei": "varianten/koralle_orange.png",
+"basis": "koralle_orange",
+"x": 1320,
+"y": 878,
+"fuss": 29,
+"kachel": [
+83,
+56
 ],
 "ebene": 0,
 "ohne_wall": true,
@@ -704,11 +770,211 @@
 {
 "datei": "varianten/steine_m.png",
 "basis": "steine",
-"x": 521,
-"y": 242,
+"x": 952,
+"y": 160,
 "fuss": 25,
 "kachel": [
-33,
+60,
+11
+],
+"ebene": 0,
+"ohne_wall": true,
+"wasserdeko": true,
+"nur_kontakt": true,
+"streu": true,
+"liegend": true
+},
+{
+"datei": "varianten/seerose_m.png",
+"basis": "seerose",
+"x": 1050,
+"y": 294,
+"fuss": 22,
+"kachel": [
+66,
+19
+],
+"ebene": 0,
+"ohne_wall": true,
+"wasserdeko": true,
+"nur_kontakt": true,
+"anim": "wehen"
+},
+{
+"datei": "varianten/koralle_lila.png",
+"basis": "koralle_lila",
+"x": 1307,
+"y": 225,
+"fuss": 28,
+"kachel": [
+82,
+15
+],
+"ebene": 0,
+"ohne_wall": true,
+"wasserdeko": true,
+"nur_kontakt": true,
+"streu": true,
+"liegend": false
+},
+{
+"datei": "varianten/koralle_orange_m.png",
+"basis": "koralle_orange",
+"x": 860,
+"y": 224,
+"fuss": 29,
+"kachel": [
+54,
+15
+],
+"ebene": 0,
+"ohne_wall": true,
+"wasserdeko": true,
+"nur_kontakt": true,
+"streu": true,
+"liegend": false
+},
+{
+"datei": "varianten/seegras.png",
+"basis": "seegras",
+"x": 474,
+"y": 1040,
+"fuss": 28,
+"kachel": [
+30,
+66
+],
+"ebene": 0,
+"ohne_wall": true,
+"wasserdeko": true,
+"nur_kontakt": true,
+"anim": "wehen"
+},
+{
+"datei": "varianten/muscheln_m.png",
+"basis": "muscheln",
+"x": 1081,
+"y": 658,
+"fuss": 28,
+"kachel": [
+68,
+42
+],
+"ebene": 0,
+"ohne_wall": true,
+"wasserdeko": true,
+"nur_kontakt": true,
+"streu": true,
+"liegend": true
+},
+{
+"datei": "varianten/muschel.png",
+"basis": "muschel",
+"x": 892,
+"y": 543,
+"fuss": 26,
+"kachel": [
+56,
+35
+],
+"ebene": 0,
+"ohne_wall": true,
+"wasserdeko": true,
+"nur_kontakt": true,
+"streu": true,
+"liegend": true
+},
+{
+"datei": "varianten/halme_gelb.png",
+"basis": "halme_gelb",
+"x": 667,
+"y": 1137,
+"fuss": 27,
+"kachel": [
+42,
+72
+],
+"ebene": 0,
+"ohne_wall": true,
+"wasserdeko": true,
+"nur_kontakt": true,
+"anim": "wehen"
+},
+{
+"datei": "varianten/koralle_rot.png",
+"basis": "koralle_rot",
+"x": 1213,
+"y": 911,
+"fuss": 29,
+"kachel": [
+76,
+58
+],
+"ebene": 0,
+"ohne_wall": true,
+"wasserdeko": true,
+"nur_kontakt": true,
+"streu": true,
+"liegend": false
+},
+{
+"datei": "varianten/schwamm.png",
+"basis": "schwamm",
+"x": 584,
+"y": 864,
+"fuss": 28,
+"kachel": [
+37,
+55
+],
+"ebene": 0,
+"ohne_wall": true,
+"wasserdeko": true,
+"nur_kontakt": true,
+"streu": true,
+"liegend": false
+},
+{
+"datei": "varianten/kolben_m.png",
+"basis": "kolben",
+"x": 588,
+"y": 271,
+"fuss": 29,
+"kachel": [
+37,
+18
+],
+"ebene": 0,
+"ohne_wall": true,
+"wasserdeko": true,
+"nur_kontakt": true,
+"anim": "wehen"
+},
+{
+"datei": "varianten/muscheln_m.png",
+"basis": "muscheln",
+"x": 1323,
+"y": 721,
+"fuss": 28,
+"kachel": [
+83,
+46
+],
+"ebene": 0,
+"ohne_wall": true,
+"wasserdeko": true,
+"nur_kontakt": true,
+"streu": true,
+"liegend": true
+},
+{
+"datei": "varianten/kiesel.png",
+"basis": "kiesel",
+"x": 204,
+"y": 242,
+"fuss": 23,
+"kachel": [
+13,
 16
 ],
 "ebene": 0,
@@ -719,214 +985,14 @@
 "liegend": true
 },
 {
-"datei": "varianten/halme_gelb_m.png",
-"basis": "halme_gelb",
-"x": 1195,
-"y": 273,
-"fuss": 27,
-"kachel": [
-75,
-18
-],
-"ebene": 0,
-"ohne_wall": true,
-"wasserdeko": true,
-"nur_kontakt": true,
-"anim": "wehen"
-},
-{
-"datei": "varianten/sterne.png",
-"basis": "sterne",
-"x": 392,
-"y": 181,
-"fuss": 22,
-"kachel": [
-25,
-12
-],
-"ebene": 0,
-"ohne_wall": true,
-"wasserdeko": true,
-"nur_kontakt": true,
-"streu": true,
-"liegend": true
-},
-{
-"datei": "varianten/muscheln_m.png",
-"basis": "muscheln",
-"x": 1288,
-"y": 206,
-"fuss": 28,
-"kachel": [
-81,
-14
-],
-"ebene": 0,
-"ohne_wall": true,
-"wasserdeko": true,
-"nur_kontakt": true,
-"streu": true,
-"liegend": true
-},
-{
-"datei": "varianten/farn_m.png",
-"basis": "farn",
-"x": 1178,
-"y": 127,
-"fuss": 29,
-"kachel": [
-74,
-9
-],
-"ebene": 0,
-"ohne_wall": true,
-"wasserdeko": true,
-"nur_kontakt": true,
-"anim": "wehen"
-},
-{
-"datei": "varianten/koralle_blau_m.png",
-"basis": "koralle_blau",
-"x": 1001,
-"y": 447,
-"fuss": 27,
-"kachel": [
-63,
-29
-],
-"ebene": 0,
-"ohne_wall": true,
-"wasserdeko": true,
-"nur_kontakt": true,
-"streu": true,
-"liegend": false
-},
-{
-"datei": "varianten/koralle.png",
-"basis": "koralle",
-"x": 1099,
-"y": 82,
-"fuss": 26,
-"kachel": [
-69,
-6
-],
-"ebene": 0,
-"ohne_wall": true,
-"wasserdeko": true,
-"nur_kontakt": true,
-"streu": true,
-"liegend": false
-},
-{
-"datei": "varianten/kolben.png",
-"basis": "kolben",
-"x": 908,
-"y": 799,
-"fuss": 29,
-"kachel": [
-57,
-51
-],
-"ebene": 0,
-"ohne_wall": true,
-"wasserdeko": true,
-"nur_kontakt": true,
-"anim": "wehen"
-},
-{
-"datei": "varianten/hirnkoralle_m.png",
-"basis": "hirnkoralle",
-"x": 842,
-"y": 313,
-"fuss": 21,
-"kachel": [
-53,
-20
-],
-"ebene": 0,
-"ohne_wall": true,
-"wasserdeko": true,
-"nur_kontakt": true,
-"streu": true,
-"liegend": false
-},
-{
-"datei": "varianten/muscheln.png",
-"basis": "muscheln",
-"x": 587,
-"y": 989,
-"fuss": 28,
-"kachel": [
-37,
-63
-],
-"ebene": 0,
-"ohne_wall": true,
-"wasserdeko": true,
-"nur_kontakt": true,
-"streu": true,
-"liegend": true
-},
-{
-"datei": "varianten/seegras2.png",
-"basis": "seegras2",
-"x": 842,
-"y": 223,
-"fuss": 29,
-"kachel": [
-53,
-15
-],
-"ebene": 0,
-"ohne_wall": true,
-"wasserdeko": true,
-"nur_kontakt": true,
-"anim": "wehen"
-},
-{
-"datei": "varianten/kiesel.png",
-"basis": "kiesel",
-"x": 315,
-"y": 388,
-"fuss": 23,
-"kachel": [
-20,
-25
-],
-"ebene": 0,
-"ohne_wall": true,
-"wasserdeko": true,
-"nur_kontakt": true,
-"streu": true,
-"liegend": true
-},
-{
-"datei": "varianten/koralle_lila_m.png",
-"basis": "koralle_lila",
-"x": 1032,
-"y": 688,
-"fuss": 28,
-"kachel": [
-65,
-44
-],
-"ebene": 0,
-"ohne_wall": true,
-"wasserdeko": true,
-"nur_kontakt": true,
-"streu": true,
-"liegend": false
-},
-{
-"datei": "varianten/kraut_m.png",
+"datei": "varianten/kraut.png",
 "basis": "kraut",
-"x": 1034,
-"y": 785,
+"x": 1258,
+"y": 113,
 "fuss": 27,
 "kachel": [
-65,
-50
+79,
+8
 ],
 "ebene": 0,
 "ohne_wall": true,
@@ -937,12 +1003,12 @@
 {
 "datei": "varianten/koralle.png",
 "basis": "koralle",
-"x": 1063,
-"y": 964,
+"x": 971,
+"y": 399,
 "fuss": 26,
 "kachel": [
-67,
-61
+61,
+26
 ],
 "ebene": 0,
 "ohne_wall": true,
@@ -952,64 +1018,14 @@
 "liegend": false
 },
 {
-"datei": "varianten/koralle_m.png",
-"basis": "koralle",
-"x": 104,
-"y": 319,
-"fuss": 26,
-"kachel": [
-7,
-21
-],
-"ebene": 0,
-"ohne_wall": true,
-"wasserdeko": true,
-"nur_kontakt": true,
-"streu": true,
-"liegend": false
-},
-{
-"datei": "varianten/gelbalge_m.png",
-"basis": "gelbalge",
-"x": 346,
-"y": 801,
+"datei": "varianten/koralle_blau.png",
+"basis": "koralle_blau",
+"x": 983,
+"y": 575,
 "fuss": 27,
 "kachel": [
-22,
-51
-],
-"ebene": 0,
-"ohne_wall": true,
-"wasserdeko": true,
-"nur_kontakt": true,
-"anim": "wehen"
-},
-{
-"datei": "varianten/kiesel.png",
-"basis": "kiesel",
-"x": 1049,
-"y": 882,
-"fuss": 23,
-"kachel": [
-66,
-56
-],
-"ebene": 0,
-"ohne_wall": true,
-"wasserdeko": true,
-"nur_kontakt": true,
-"streu": true,
-"liegend": true
-},
-{
-"datei": "varianten/koralle_orange.png",
-"basis": "koralle_orange",
-"x": 1034,
-"y": 272,
-"fuss": 29,
-"kachel": [
-65,
-18
+62,
+37
 ],
 "ebene": 0,
 "ohne_wall": true,
@@ -1021,12 +1037,12 @@
 {
 "datei": "varianten/seerose_m.png",
 "basis": "seerose",
-"x": 314,
-"y": 262,
+"x": 378,
+"y": 982,
 "fuss": 22,
 "kachel": [
-20,
-17
+24,
+62
 ],
 "ebene": 0,
 "ohne_wall": true,
@@ -1035,80 +1051,113 @@
 "anim": "wehen"
 },
 {
-"datei": "varianten/schwamm.png",
-"basis": "schwamm",
-"x": 1210,
-"y": 817,
+"datei": "varianten/koralle_rot.png",
+"basis": "koralle_rot",
+"x": 637,
+"y": 733,
+"fuss": 29,
+"kachel": [
+40,
+47
+],
+"ebene": 0,
+"ohne_wall": true,
+"wasserdeko": true,
+"nur_kontakt": true,
+"streu": true,
+"liegend": false
+},
+{
+"datei": "varianten/muschel.png",
+"basis": "muschel",
+"x": 189,
+"y": 143,
+"fuss": 26,
+"kachel": [
+12,
+10
+],
+"ebene": 0,
+"ohne_wall": true,
+"wasserdeko": true,
+"nur_kontakt": true,
+"streu": true,
+"liegend": true
+},
+{
+"datei": "varianten/seegras.png",
+"basis": "seegras",
+"x": 266,
+"y": 896,
 "fuss": 28,
 "kachel": [
-76,
+17,
+57
+],
+"ebene": 0,
+"ohne_wall": true,
+"wasserdeko": true,
+"nur_kontakt": true,
+"anim": "wehen"
+},
+{
+"datei": "varianten/koralle_orange_m.png",
+"basis": "koralle_orange",
+"x": 696,
+"y": 1024,
+"fuss": 29,
+"kachel": [
+44,
+65
+],
+"ebene": 0,
+"ohne_wall": true,
+"wasserdeko": true,
+"nur_kontakt": true,
+"streu": true,
+"liegend": false
+},
+{
+"datei": "varianten/kiesel.png",
+"basis": "kiesel",
+"x": 1179,
+"y": 228,
+"fuss": 23,
+"kachel": [
+74,
+15
+],
+"ebene": 0,
+"ohne_wall": true,
+"wasserdeko": true,
+"nur_kontakt": true,
+"streu": true,
+"liegend": true
+},
+{
+"datei": "varianten/kolben_m.png",
+"basis": "kolben",
+"x": 748,
+"y": 815,
+"fuss": 29,
+"kachel": [
+47,
 52
 ],
 "ebene": 0,
 "ohne_wall": true,
 "wasserdeko": true,
 "nur_kontakt": true,
-"streu": true,
-"liegend": false
-},
-{
-"datei": "varianten/koralle_orange.png",
-"basis": "koralle_orange",
-"x": 315,
-"y": 127,
-"fuss": 29,
-"kachel": [
-20,
-9
-],
-"ebene": 0,
-"ohne_wall": true,
-"wasserdeko": true,
-"nur_kontakt": true,
-"streu": true,
-"liegend": false
-},
-{
-"datei": "varianten/seegras_m.png",
-"basis": "seegras",
-"x": 1018,
-"y": 592,
-"fuss": 28,
-"kachel": [
-64,
-38
-],
-"ebene": 0,
-"ohne_wall": true,
-"wasserdeko": true,
-"nur_kontakt": true,
 "anim": "wehen"
 },
 {
-"datei": "varianten/koralle_lila_m.png",
-"basis": "koralle_lila",
-"x": 780,
-"y": 1008,
-"fuss": 28,
+"datei": "varianten/steine.png",
+"basis": "steine",
+"x": 312,
+"y": 165,
+"fuss": 25,
 "kachel": [
-49,
-64
-],
-"ebene": 0,
-"ohne_wall": true,
-"wasserdeko": true,
-"nur_kontakt": true,
-"streu": true,
-"liegend": false
-},
-{
-"datei": "varianten/koralle_rot_m.png",
-"basis": "koralle_rot",
-"x": 986,
-"y": 156,
-"fuss": 29,
-"kachel": [
-62,
+20,
 11
 ],
 "ebene": 0,
@@ -1116,33 +1165,17 @@
 "wasserdeko": true,
 "nur_kontakt": true,
 "streu": true,
-"liegend": false
-},
-{
-"datei": "varianten/halme_gelb_m.png",
-"basis": "halme_gelb",
-"x": 1083,
-"y": 1057,
-"fuss": 27,
-"kachel": [
-68,
-67
-],
-"ebene": 0,
-"ohne_wall": true,
-"wasserdeko": true,
-"nur_kontakt": true,
-"anim": "wehen"
+"liegend": true
 },
 {
 "datei": "varianten/koralle_blau.png",
 "basis": "koralle_blau",
-"x": 602,
-"y": 895,
+"x": 1020,
+"y": 929,
 "fuss": 27,
 "kachel": [
-38,
-57
+64,
+59
 ],
 "ebene": 0,
 "ohne_wall": true,
@@ -1152,31 +1185,14 @@
 "liegend": false
 },
 {
-"datei": "varianten/ammonit_m.png",
-"basis": "ammonit",
-"x": 443,
-"y": 324,
-"fuss": 24,
-"kachel": [
-28,
-21
-],
-"ebene": 0,
-"ohne_wall": true,
-"wasserdeko": true,
-"nur_kontakt": true,
-"streu": true,
-"liegend": false
-},
-{
-"datei": "varianten/farn.png",
-"basis": "farn",
-"x": 682,
-"y": 1087,
+"datei": "varianten/gras_dicht_m.png",
+"basis": "gras_dicht",
+"x": 314,
+"y": 399,
 "fuss": 29,
 "kachel": [
-43,
-69
+20,
+26
 ],
 "ebene": 0,
 "ohne_wall": true,
