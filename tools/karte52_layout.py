@@ -124,6 +124,33 @@ def main():
             tps.append((C2 - 3, y0_, 3, b))
     for (x, y, b, h) in tps:
         k2[y:y + h, x:x + b] = 'e'
+    for y in range(R2):                                                # schmale Asphaltschlitze (<= 2 Kacheln) zwischen Masse
+        x = 0
+        while x < C2:
+            if k2[y, x] == 'a':
+                e = x
+                while e < C2 and k2[y, e] == 'a':
+                    e += 1
+                if x > 0 and e < C2 and ((e - x <= 2 and k2[y, x - 1] == 'r' and k2[y, e] == 'r') or (e - x <= 3 and y > 0 and (k2[y - 1, x:e] == 'r').all() and 'r' in (k2[y, x - 1], k2[y, e]))):
+                    k2[y, x:e] = 'r'
+                x = e
+            else:
+                x += 1
+    # Taschen, die vom Teleporter aus nicht erreichbar sind (hinter Gebaeuden/zwischen Masse), werden Masse
+    from collections import deque
+    sperr = np.isin(k2, ['r', 'h'])
+    for n_, (x0, y0, x1, y1) in GEBAEUDE.items():
+        sperr[y0 + P - 2:y1 + P + 1, x0 + P:x1 + P + 1] = True          # Gebaeude inkl. Dachueberstand (Ring hinten)
+    gesehen = np.zeros_like(sperr)
+    q = deque([(tps[0][1], tps[0][0])]); gesehen[tps[0][1], tps[0][0]] = True
+    while q:
+        y, x = q.popleft()
+        for dy, dx in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+            yy, xx = y + dy, x + dx
+            if 0 <= yy < R2 and 0 <= xx < C2 and not sperr[yy, xx] and not gesehen[yy, xx]:
+                gesehen[yy, xx] = True; q.append((yy, xx))
+    tasche = ~sperr & ~gesehen & (k2 == 'a')
+    k2[tasche] = 'r'
     k43.R, k43.C = R2, C2
     for _ in range(2):                                                 # Zipfel im Rand nach den Ausgaengen
         for y in range(1, R2 - 1):

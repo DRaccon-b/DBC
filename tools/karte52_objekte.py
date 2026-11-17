@@ -211,7 +211,7 @@ def main():
             print('Gebaeude nicht gesetzt:', n_)
     G = 'kqb'                                                          # begehbarer Belag fuer Deko
     # ---------------------------------------------------------------- Wracks und Sperren (Vorlage: Autos, X-Sperren)
-    for (n_, tx, ty, sp) in (('k18a/03', 17, 30, False), ('k18a/01', 47, 39, True), ('k18a/03', 77, 40, True),
+    for (n_, tx, ty, sp) in (('k18a/03', 13, 29, False), ('k18a/01', 47, 39, True), ('k18a/03', 77, 40, True),
                              ('k18a/01', 28, 74, False), ('k18a/02', 60, 38, False), ('k18a/05', 14, 68, True)):   # verlassene Autos (Seitenansicht)
         kachel(n_, tx + P, ty + P, {}, sp, klassen='a', weit=2)
     for (n_, tx, ty, sp) in (('reaper/sperre', 21, 28, False), ('reaper/sperre', 31, 23, True), ('reaper/sperre', 55, 46, False),
