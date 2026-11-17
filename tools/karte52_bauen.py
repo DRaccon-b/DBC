@@ -1,15 +1,10 @@
-# Grundgeruest aus karte40 (tools/neue_karte.py) - an die Vorlage von karte52 "D-Reaper: Shinjuku" anpassen!
-# Grundgeruest aus karte52 (tools/neue_karte.py) - an die Vorlage von karte52 "Shinjuku Siege" anpassen!
-# Grundgeruest aus karte52 (tools/neue_karte.py) - an die Vorlage von karte52 "West Shinjuku Siege" anpassen!
-# Grundgeruest aus karte35 (tools/neue_karte.py) - an die Vorlage von karte52 "Shinjuku Backstreets" anpassen!
-"""Karte 52 - Shinjuku Backstreets (A03 Nr. 3), Gelaende + Objekte + Animation (4 Bilder).
+"""Karte 52 - D-Reaper: Shinjuku (A03 Nr. 19), Gelaende + Objekte + Animation (4 Bilder).
 
   python3 tools/karte52_layout.py && python3 tools/karte52_bauen.py && python3 tools/karte52_objekte.py && python3 tools/karte52_bauen.py
 
-Kacheln wie Karte 18/31 (Gehwegplatten, Asphalt, Rasen): Bordsteine an allen Fahrbahnkanten, gelbe Mittelstriche nur
-auf geraden Strassenstuecken (nicht auf Kreuzungen und Zebrastreifen), Zebrastreifen quer ueber die Nord-Sued-Strassen,
-Gruenstreifen mit Steinkante. Ausserhalb der Stadt liegt der digitale Nebel (cyan-violett, Schwaden ziehen nahtlos,
-dazu blinkende Datenpixel) - nicht begehbar; die Ausgaenge fuehren mit Teleportern hinein.
+Grundgeruest Karte 53/40: dunkler Asphalt mit Bordsteinen, Ziegel-Gehwegstreifen, helle Plattenplaetze, Ziegelplatz,
+Bodenleben (Risse, Flecken). Die D-Reaper-Masse (tools/dreaper.py) bedeckt grosse Flaechen und umschliesst die Stadt am
+Kartenrand (statt Baumguertel); sie pulsiert (4 Bilder) und ist gesperrt.
 """
 import json, os, sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -341,8 +336,6 @@ def bauen(frame=None, speichern=True):
         m_ = gross(kl == kk)                                          # Platzpflaster, Ziegelplatz, dunkle Gehwegstreifen
         t_ = np.clip(k18.textur(art, cols, rows).astype(np.float32) * np.array(f), 0, 255).astype(np.uint8)
         a[m_] = t_[m_]
-    wald = gross(kl == 'h')                                           # Boden im Baumguertel: Rasen (ohne Steinkante)
-    a[wald] = k18.textur('n', cols, rows)[wald]
     rasen = gross(kl == 'n')
     k18.mittelstreifen(a, rasen, k18.textur('n', cols, rows))         # Gruenstreifen mit Steinkante
     k18.bordsteine(a, asphalt, ~asphalt)
@@ -351,6 +344,9 @@ def bauen(frame=None, speichern=True):
     import karte38_bauen as k38b                                      # Bodenleben (Nutzer: Karte etwas leer): Risse,
     kl38 = np.where(kl == 'q', 'p', np.where(np.isin(kl, ['g', 'k', 'b']), 'k', 'x'))   # Flecken, Pfuetzen - flach
     k38b.boden_leben(a, kl38, frame)
+    import dreaper                                                    # D-Reaper-Flecken (45-Grad-Raster, pulsierend)
+    reaper = k4.weich(k4.zell_maske(lay['klassen'], 'rh', cols, rows), 5, 0.0, 7, 0.5)
+    dreaper.masse(a, reaper, frame, 52, boden=~reaper)
     pf_ = os.path.join(OBJ, 'platzierung.json')
     if os.path.exists(pf_):
         plaetze_boden(a, kl, json.load(open(pf_)))
@@ -359,6 +355,7 @@ def bauen(frame=None, speichern=True):
     lvl = np.ones((Hp, Wp), np.uint8)
     leere = gross(kl == 'h')                                          # Baumguertel nicht begehbar (Kartenrand)
     lvl[leere] = 0                                                    # Kollision: Leere
+    lvl[reaper] = 9                                                   # D-Reaper-Masse: gesperrt
     if speichern and frame is None:
         np.save(os.path.join(KARTE, 'pixelhoehe.npy'), lvl)
         np.save(os.path.join(KARTE, 'wasser.npy'), np.packbits(np.zeros((Hp, Wp), bool)))

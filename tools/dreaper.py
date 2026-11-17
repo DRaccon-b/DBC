@@ -31,8 +31,9 @@ def _blur(m, r):
                     np.float32) / 255.0
 
 
-def masse(a, m, frame=None, seed=52, boden=None):
-    """Zeichnet die Masse in a (H x W x 3 uint8) auf die Pixelmaske m. boden: Maske, auf die der Schatten darf."""
+def masse(a, m, frame=None, seed=52, boden=None, flach=False):
+    """Zeichnet die Masse in a (H x W x 3 uint8) auf die Pixelmaske m. boden: Maske, auf die der Schatten darf.
+    flach: begehbarer Belag (Karte 54) - keine Stirnseite, kein Schatten, flachere Beulen."""
     f = (frame or 0) % 4
     Hh, W = m.shape
     ys, xs = np.nonzero(m)
@@ -47,6 +48,8 @@ def masse(a, m, frame=None, seed=52, boden=None):
     sch = np.zeros((h, w), bool)
     sch[4:, 2:] = mm[:-4, :-2]
     sch &= ~mm
+    if flach:
+        sch[:] = False
     if boden is not None:
         sch &= boden[y0:y1, x0:x1]
     sub[sch] *= 0.62
@@ -81,9 +84,11 @@ def masse(a, m, frame=None, seed=52, boden=None):
     oben = np.zeros((h, w), bool)
     oben[2:] = mm[2:] & ~mm[:-2]
     oben[:, 2:] |= mm[:, 2:] & ~mm[:, :-2]
+    if flach:
+        unten[:] = False
     col[oben & ~unten] = col[oben & ~unten] * 0.6 + HELL * 0.4
     tief = np.zeros((h, w), np.float32)
-    for d in range(1, 6):
+    for d in (range(1, 6) if not flach else []):
         r_ = np.zeros((h, w), bool)
         r_[:-d] = mm[:-d] & ~mm[d:]
         tief = np.maximum(tief, r_ * (1.0 - (d - 1) / 6.0))

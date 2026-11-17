@@ -1,60 +1,83 @@
-# Grundgeruest aus karte40 (tools/neue_karte.py) - an die Vorlage von karte52 "D-Reaper: Shinjuku" anpassen!
-"""Objekte fuer Karte 52 (Shinjuku Siege, A03 Nr. 7) -> assets/objekte/karte52/platzierung.json
+"""Objekte fuer Karte 52 (D-Reaper: Shinjuku, A03 Nr. 19) -> assets/objekte/karte52/platzierung.json
 
   python3 tools/karte52_objekte.py && python3 tools/karte52_bauen.py
 
-Drei Buerobloecke neu mit PixelLab (Pro-Generator, linke Haelften k52_*_halb, gespiegelt auf Vorlagenbreite), Baeume mittig
-auf den Beeten, Bus und Autos im Linksverkehr, sparsame Strassenmoebel (keine Pollerreihen: wenig Kollision, Nutzer),
-Bankpaar mit Pflanzkuebel auf dem Platz unten links, Baumguertel. Boden unter den Objekten (Vorplaetze an den Tueren,
-Sockel am Kuebel) zeichnet karte52_bauen.plaetze_boden aus den echten Positionen (Nutzer K39: nicht nur draufsetzen).
+Sechs Buerogebaeude aus vorhandenen generierten Haelften (Karte 35/36/40), auf die Vorlagenbreite gebracht und gespiegelt,
+Eingang auf der Achse. Ruinenstadt unter dem D-Reaper (PixelLab k52_reaper/k52_klein): Panzersperren statt der Vorlagen-X,
+ausgebrannte Autowracks, Schutt, umgeknickte Laternen; an den Masserandern Ranken, Blasen, Kapseln und Waechter-Wesen.
+Der Ziegelplatz unten rechts bleibt ein Bahnhofsvorplatz (Haltestelle, Automat, Bank, Laternen). Kein Baumguertel:
+die Masse umschliesst die Karte (bauen).
 """
 import json, math, os, random, shutil, sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import numpy as np
-from PIL import Image, ImageFilter
+from PIL import Image
 
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
 KARTE = os.path.join(ROOT, 'maps', 'karte52')
 OBJ = os.path.join(ROOT, 'assets', 'objekte', 'karte52')
 T = 16
-FREMD = {'k38/bank': 'karte38/klein/09.png', 'k39/kuebel': 'karte39/platz/01.png', 'k38/taube': 'karte38/bahn_klein/02.png',
-         'k35/tuer_quelle': 'karte35/gross_buero_mitte/00.png'}
-for i in (12, 18):
-    FREMD['k18s/%02d' % i] = 'karte18/strasse/%02d.png' % i
-for i in (5, 11, 12):
-    FREMD['k18a/%02d' % i] = 'karte18/autos/%02d.png' % i
+# name -> (Quelle unter assets/objekte, Skalierung)
+FREMD = {'k38/bank': ('karte38/klein/09.png', 1), 'k38/taube': ('karte38/bahn_klein/02.png', 1),
+         'k35/tuer_quelle': ('karte35/gross_buero_mitte/00.png', 1),
+         'halb/buero_links': ('karte39/gross/buero_links.png', 1), 'halb/buero_unten': ('karte39/gross/buero_unten.png', 1),
+         'halb/beige_flach': ('karte36/gross_beige_halb_flach/00.png', 1),
+         'halb/glas_mitte': ('karte35/gross_buero_oben_halb/00.png', 1),
+         'halb/beige': ('karte40/gross_beige_flach_halb/00.png', 1), 'halb/glas': ('karte40/gross_glas_halb/00.png', 1)}
+for i in (0, 1, 5, 7, 12, 13, 18, 34, 41, 44):
+    FREMD['k18s/%02d' % i] = ('karte18/strasse/%02d.png' % i, 1)
+for i in (0, 2, 5, 6, 7, 12):
+    FREMD['k18a/%02d' % i] = ('karte18/autos/%02d.png' % i, 1)
 for i in (0, 1, 2, 4, 9, 12, 13, 14, 15):
-    FREMD['k01/baum%02d' % i] = 'karte01/baeume/%02d.png' % i
+    FREMD['k01/baum%02d' % i] = ('karte01/baeume/%02d.png' % i, 1)
+for n_, (i, f) in {'ranke': (0, 0.55), 'kapsel': (1, 0.5), 'waechter': (2, 0.6), 'sperre': (3, 0.5), 'schutt': (4, 0.6),
+                   'block': (5, 0.55), 'wrack': (6, 1.0), 'blasen': (7, 0.5), 'fass': (8, 0.5), 'laterne_kaputt': (9, 0.6),
+                   'ei': (12, 0.5)}.items():
+    FREMD['reaper/' + n_] = ('karte52/reaper/%02d.png' % i, f)
+for n_, i in {'pfuetze': 0, 'brocken': 1, 'glas': 2, 'zeitung': 3}.items():
+    FREMD['klein/' + n_] = ('karte52/klein/%02d.png' % i, 0.75)
+GANZ = ('halb/buero_links', 'halb/buero_unten')                     # fertige Gebaeude in Vorlagenbreite
 WALD = ['k01/baum%02d' % i for i in (0, 1, 2, 4, 9, 15)]
 BUSCH = ['k01/baum%02d' % i for i in (12, 13, 14)]
 LAMPE = {'anim': 'leuchten', 'licht': [4, 7], 'licht_box': [2, 5, 6, 10], 'licht_r': 9}
-# Gebaeude: (sprite, Mitte x Vorlagen-px, Fusszeile Vorlage, Haelfte, halbe Breite)
-GEBAEUDE = [('gross/beige', 127, 10, 'gross_beige_halb/00.png', 112), ('gross/glas', 671, 11, 'gross_glas_halb/00.png', 81),
-            ('gross/lila', 447, 35, 'gross_lila_halb/00.png', 142)]
-BAEUME = [((0, 3, 12, 13), (0.5,)), ((39, 44, 25, 26), (0.25, 0.75))]   # Beet (x0,x1,y0,y1), Anteile in x; links Tuerachsen frei
-LATERNEN = [(16, 8), (35, 8), (15, 24)]
-MUELL = [(9, 13), (36, 4)]
-KRATER_X = 25                                            # Achse der Nordstrasse (Spalten 18-31), Vorlagenkacheln
-KRATER_FUSS = 255                                        # unteres Ende (Kartenpixel): ueber dem Zebrastreifen hinaus                               # nicht vor Tueren
-# Fahrzeuge (Linksverkehr): Suedspur nach Westen (Seitenansicht schaut nach links)
-AUTOS = [('k18a/12', 135, 318, False), ('k18a/05', 695, 318, False), ('k18a/11', 665, 382, False)]
+# Gebaeude: Flaeche aus dem Layout, Haelfte, Fassade
+GEB = {'oben_links': 'halb/buero_links', 'beige_links': 'halb/beige', 'glas_mitte': 'halb/glas_mitte',
+       'glas_rechts': 'halb/glas', 'beige_rechts': 'halb/beige_flach', 'lila_unten': 'halb/buero_unten'}
 
 
-def halb(quelle, ziel, breite_halb):
-    import karte36_objekte as k36o
-    k36o.OBJ = OBJ
-    k36o.halb_gespiegelt(quelle, ziel, breite_halb, True)
-    a = np.array(Image.open(os.path.join(OBJ, ziel)).convert('RGBA')).astype(int)   # lila/magenta Saum unten weg
-    mg = (a[..., 3] > 0) & (a[..., 2] > a[..., 1] + 8) & (a[..., 0] > a[..., 1] + 6)
-    for yy in range(a.shape[0] - 1, a.shape[0] - 6, -1):
-        if mg[yy].mean() > 0.3:
-            a[yy, :, 3] = 0
-    im = Image.fromarray(a.astype(np.uint8))
-    im.crop(im.getbbox()).save(os.path.join(OBJ, ziel))
+def kopieren(name, quelle, f):
+    ziel = os.path.join(OBJ, name + '.png')
+    os.makedirs(os.path.dirname(ziel), exist_ok=True)
+    im = Image.open(os.path.join(ROOT, 'assets', 'objekte', quelle)).convert('RGBA')
+    im = im.crop(im.getbbox())
+    if f != 1:
+        im = im.resize((max(1, round(im.width * f)), max(1, round(im.height * f))), Image.NEAREST)
+    im.save(ziel)
+
+
+def verbreitern(quelle, ziel, breite_halb):
+    """Haelfte auf breite_halb verbreitern: ein Fassadenfeld (Periode der Fensterachsen) innen wiederholen."""
+    im = Image.open(os.path.join(OBJ, quelle)).convert('RGBA')
+    im = im.crop(im.getbbox())
+    a = np.array(im).astype(int)
+    h, w = a.shape[:2]
+    if w >= breite_halb + 4:
+        im.save(os.path.join(OBJ, ziel)); return
+    fass = a[int(h * 0.3):int(h * 0.85), :, :3]
+    x0 = int(w * 0.35)
+    best, bp = 1e9, 16
+    for p in range(10, min(80, (w - x0) // 2)):
+        e = np.abs(fass[:, x0:x0 + p] - fass[:, x0 + p:x0 + 2 * p]).mean()
+        if e < best - 0.5:
+            best, bp = e, p
+    seg = a[:, x0:x0 + bp]
+    n = math.ceil((breite_halb + 4 - w) / bp)
+    neu = np.concatenate([a[:, :x0]] + [seg] * (n + 1) + [a[:, x0 + bp:]], 1)
+    Image.fromarray(neu.astype(np.uint8)).save(os.path.join(OBJ, ziel))
 
 
 def main():
-    rnd = random.Random(40)
+    rnd = random.Random(53)
     lay = json.load(open(os.path.join(KARTE, 'layout.json')))
     cls = lay['klassen']
     cols, rows = lay['groesse']
@@ -64,16 +87,27 @@ def main():
     def k(tx, ty):
         return cls[min(rows - 1, max(0, ty))][min(cols - 1, max(0, tx))]
 
-    for name, quelle in FREMD.items():
-        ziel = os.path.join(OBJ, name + '.png')
-        os.makedirs(os.path.dirname(ziel), exist_ok=True)
-        shutil.copy(os.path.join(ROOT, 'assets', 'objekte', quelle), ziel)
+    for name, (quelle, f) in FREMD.items():
+        kopieren(name, quelle, f)
     os.makedirs(os.path.join(OBJ, 'gross_buero_mitte'), exist_ok=True)
     shutil.copy(os.path.join(OBJ, 'k35/tuer_quelle.png'), os.path.join(OBJ, 'gross_buero_mitte/00.png'))
-    os.makedirs(os.path.join(OBJ, 'gross'), exist_ok=True)
-    for (name, cx, fy, h_, bh) in GEBAEUDE:
-        if os.path.exists(os.path.join(OBJ, h_)):
-            halb(h_, name + '.png', bh)
+    import karte36_objekte as k36o
+    k36o.OBJ = OBJ
+    for n_, (x0, y0, x1, y1) in lay['gebaeude_flaechen'].items():
+        bh = (x1 - x0 + 1) * T // 2
+        if GEB[n_] in GANZ:
+            os.makedirs(os.path.join(OBJ, 'geb'), exist_ok=True)
+            shutil.copy(os.path.join(OBJ, GEB[n_] + '.png'), os.path.join(OBJ, 'geb/%s.png' % n_))
+            continue
+        verbreitern(GEB[n_] + '.png', 'halb/%s_breit.png' % n_, bh)
+        k36o.halb_gespiegelt('halb/%s_breit.png' % n_, 'geb/%s.png' % n_, bh, True)
+        a = np.array(Image.open(os.path.join(OBJ, 'geb/%s.png' % n_)).convert('RGBA')).astype(int)
+        mg = (a[..., 3] > 0) & (a[..., 2] > a[..., 1] + 8) & (a[..., 0] > a[..., 1] + 6) & (a[..., 0] > 150)
+        for yy in range(a.shape[0] - 1, a.shape[0] - 6, -1):                # magenta Saum unten weg
+            if mg[yy].mean() > 0.3:
+                a[yy, :, 3] = 0
+        im = Image.fromarray(a.astype(np.uint8))
+        im.crop(im.getbbox()).save(os.path.join(OBJ, 'geb/%s.png' % n_))
     tps = [(t['x'] * T - 2 * T, t['y'] * T - 2 * T, (t['x'] + t['b'] + 2) * T, (t['y'] + t['h'] + 2) * T)
            for t in lay['teleporter']]
     tps_eng = [(t['x'] * T, t['y'] * T, (t['x'] + t['b']) * T - 1, (t['y'] + t['h']) * T - 1) for t in lay['teleporter']]
@@ -82,9 +116,7 @@ def main():
     def schnitt(a, b, rand=0):
         return not (a[2] + rand < b[0] or b[2] + rand < a[0] or a[3] + rand < b[1] or b[3] + rand < a[1])
 
-    krater_maske = None
-
-    def setze(name, cx, fy, opt=None, spiegeln=False, art='objekt', pruefen=True, klassen='kqn'):
+    def setze(name, cx, fy, opt=None, spiegeln=False, art='objekt', pruefen=True, klassen='k'):
         if not os.path.exists(os.path.join(OBJ, name + '.png')):
             print('fehlt:', name); return None
         sp = Image.open(os.path.join(OBJ, name + '.png')).convert('RGBA')
@@ -105,18 +137,17 @@ def main():
                     if cls[yy][xx] != 'h':
                         ov_y = min(r[3], yy * T + T - 1) - max(r[1], yy * T) + 1
                         ov_x = min(r[2], xx * T + T - 1) - max(r[0], xx * T) + 1
-                        if ov_y > 4 and ov_x > 4:
+                        if ov_y > 4 and ov_x > 4 and not (yy * T >= r[1] and r[3] - yy * T > 40 and False):
                             return None
-            if any(art2 not in ('wald', 'krater') and schnitt(r, tuple(rr), 2) for (*rr, art2) in rects):
+            if any(art2 not in ('wald',) and schnitt(r, tuple(rr), 2) for (*rr, art2) in rects):
                 return None
-            if krater_maske is not None and krater_maske[max(0, r[3] - 12):r[3] + 1, max(0, r[0] + 6):r[2] - 5].any():
-                return None                                          # Guertel dicht an die Furche (echte Pixel statt Rechteck)
         elif pruefen:
             if any(schnitt(r, tuple(rr), 2) for (*rr, art2) in rects) or any(schnitt(r, t_, 0) for t_ in tps):
                 return None
-            ty_ = r[3] // T
-            belag = {k(xx, ty_) for xx in range(r[0] // T, r[2] // T + 1)}
-            if not belag <= set(klassen) or (len(belag) > 1 and art not in ('gebaeude', 'auto')):
+            # ganzes Bildrechteck auf erlaubtem Boden (untere zwei Reihen; liegende ganz) - Pruefliste K44
+            ry0 = r[1] // T if (opt or {}).get('liegend') else max(r[1] // T, r[3] // T - 1)
+            belag = {k(xx, yy) for yy in range(ry0, r[3] // T + 1) for xx in range(r[0] // T, r[2] // T + 1)}
+            if not belag <= set(klassen):
                 return None
         o = {'datei': datei, 'basis': name, 'x': x, 'y': y, 'fuss': bb[3] - 1, 'kachel': [int(cx) // T, int(fy) // T],
              'ebene': 1, 'ohne_wall': True}
@@ -127,84 +158,75 @@ def main():
         rects.append(list(r) + [art])
         return o
 
-    def kachel(name, tx, fy_tile, opt=None, spiegeln=False, klassen='kq'):
+    def kachel(name, tx, fy_tile, opt=None, spiegeln=False, klassen='k', weit=3):
         sp = Image.open(os.path.join(OBJ, name + '.png'))
         bw = sp.getbbox()[2] - sp.getbbox()[0]
         wt = max(1, math.ceil(bw / T))
-        for d in range(3):
+        for d in range(weit + 1):
             for dy in range(-d, d + 1):
                 for dx in range(-d, d + 1):
                     if max(abs(dx), abs(dy)) != d:
                         continue
                     x0, y = tx + dx - (wt - 1) // 2, fy_tile + dy
-                    if setze(name, x0 * T + wt * T / 2.0, y * T + T - 1, opt, spiegeln, klassen=klassen):
-                        return True
+                    o = setze(name, x0 * T + wt * T / 2.0, y * T + T - 1, opt, spiegeln, klassen=klassen)
+                    if o:
+                        return o
         print('nicht gesetzt:', name, tx - P, fy_tile - P)
-        return False
+        return None
 
-    for (name, cx, fy, h_, bh) in GEBAEUDE:
-        if not setze(name, cx + OFF, (fy + P) * T + T - 1, {'gebaeude': True, 'vorplatz': True}, art='gebaeude',
-                     pruefen=False):
-            print('Gebaeude nicht gesetzt:', name)
-    # Meteor-Furche (Nutzer): laeuft auf der Nordstrasse vom Zebrastreifen bis an den Kartenrand durch den Guertel,
-    # Erde/Asphalt nach links und rechts weggedrueckt, Meteor selbst unsichtbar. Bodenobjekt: zuerst gezeichnet, ohne Schatten.
-    kx = (KRATER_X + P) * T
-    setze('krater/lang', kx, KRATER_FUSS, {'gebaeude': True, 'schattenlos': True, 'sortier': -1, 'krater': True},
-          art='krater', pruefen=False)
-    ko = objekte[-1]
-    ka = np.array(Image.open(os.path.join(OBJ, ko['datei'])).convert('RGBA'))[:, :, 3] > 0
-    krater_maske = np.zeros((rows * T, cols * T), bool)
-    h_, w_ = ka.shape
-    krater_maske[max(0, ko['y']):ko['y'] + h_, ko['x']:ko['x'] + w_] = ka[max(0, -ko['y']):, :]
-    krater_maske = np.array(Image.fromarray(krater_maske.astype(np.uint8) * 255).filter(ImageFilter.MaxFilter(7))) > 0
-    for i, ((x0, x1, y0, y1), anteile) in enumerate(BAEUME):      # Stammfuss auf der senkrechten Beetmitte (Pruefliste)
-        fy = (y0 + P) * T + (y1 - y0 + 1) * T // 2 + 3
-        arten = ['k01/baum14', 'k01/baum13'] if i == 0 else ['k01/baum00', 'k01/baum02']   # links Bueche: Block steht dicht davor
-        for j, f in enumerate(anteile):
-            hw = (lambda b: (b[2] - b[0]) / 2.0 + 1)(Image.open(os.path.join(OBJ, arten[j % 2] + '.png')).getbbox())
-            cx = min(max((x0 + P) * T + f * (x1 - x0 + 1) * T, (x0 + P) * T + hw), (x1 + P + 1) * T - hw)   # ganz im Beet
-            setze(arten[j % 2], cx, fy, {'anim': 'baum'}, (i + j) % 2 == 1, klassen='n')
-    for (tx, ty) in LATERNEN:
-        kachel('k18s/18', tx + P, ty + P, dict(LAMPE))
-    for (tx, ty) in MUELL:
-        kachel('k18s/12', tx + P, ty + P, {})
-    for (n_, cx, fy, sp) in AUTOS:
-        setze(n_, cx + OFF, fy + OFF, {'nur_kontakt': True}, sp, art='auto', klassen='a')
-    # Platz unten links: Pflanzkuebel auf der Platzmitte, Bankpaar gespiegelt daneben
+    # ---------------------------------------------------------------- Gebaeude (zuerst)
+    for n_, (x0, y0, x1, y1) in lay['gebaeude_flaechen'].items():
+        if not setze('geb/' + n_, (x0 + x1 + 1) * T / 2.0, (y1 + 1) * T - 1, {'gebaeude': True, 'vorplatz': True},
+                     art='gebaeude', pruefen=False):
+            print('Gebaeude nicht gesetzt:', n_)
+    G = 'kqb'                                                          # begehbarer Belag fuer Deko
+    # ---------------------------------------------------------------- Wracks und Sperren (Vorlage: Autos, X-Sperren)
+    for (n_, tx, ty, sp) in (('reaper/wrack', 17, 30, False), ('reaper/wrack', 47, 38, True), ('reaper/wrack', 77, 40, False),
+                             ('reaper/wrack', 28, 74, True), ('k18a/02', 60, 37, False), ('k18a/05', 14, 68, True)):
+        kachel(n_, tx + P, ty + P, {}, sp, klassen='a', weit=2)
+    for (n_, tx, ty, sp) in (('reaper/sperre', 21, 28, False), ('reaper/sperre', 28, 28, True), ('reaper/sperre', 55, 46, False),
+                             ('reaper/sperre', 59, 58, True), ('reaper/block', 10, 12, False), ('reaper/block', 66, 63, True),
+                             ('reaper/schutt', 36, 20, False), ('reaper/schutt', 13, 55, True), ('reaper/schutt', 70, 25, False),
+                             ('reaper/fass', 25, 16, False), ('reaper/laterne_kaputt', 33, 66, False),
+                             ('reaper/laterne_kaputt', 80, 52, True)):
+        kachel(n_, tx + P, ty + P, {}, sp, klassen='a' + G, weit=2)
+    # ---------------------------------------------------------------- Bahnhofsvorplatz (Ziegelplatz unten rechts)
+    for (tx, ty) in ((75, 58), (91, 58), (75, 75), (91, 75)):              # Laternen an den Platzecken
+        kachel('k18s/18', tx + P, ty + P, dict(LAMPE), klassen='b', weit=1)
+    for (n_, tx, ty, sp) in (('k18s/13', 80, 62, False), ('k18s/01', 88, 61, False), ('k18s/12', 84, 70, False)):
+        kachel(n_, tx + P, ty + P, {}, sp, klassen='b', weit=2)
+    kachel('k18s/41', 61 + P, 75 + P, {}, klassen='k', weit=2)             # Haltestelle (Vorlage) am Gehweg
+    for (tx, ty) in ((6, 2), (40, 46), (64, 46), (88, 30), (22, 76 - 1)):
+        kachel('k18s/18', tx + P, ty + P, dict(LAMPE), klassen='k', weit=2)
+    # ---------------------------------------------------------------- D-Reaper: Auslaeufer an den Masseraendern
     gk = np.array([list(z) for z in cls])
-    ys, xs = np.nonzero(gk[:, :] == 'q')
-    ys, xs = ys[ys < 36 + P], xs[ys < 36 + P]
-    mx, my = (xs.min() + xs.max() + 1) * T / 2.0, (ys.min() + ys.max() + 1) * T / 2.0
-    if setze('k39/kuebel', mx, my + 18, {'sockel': True}, art='gebaeude', klassen='q'):
-        for d_ in (56, 64, 72):
-            if all(setze('k38/bank', mx + s_ * d_, my + 18, {}, s_ > 0, klassen='q') for s_ in (-1, 1)):
-                break
-    for i, (tx, ty) in enumerate(((10, 28), (40, 31))):
-        kachel('k38/taube', tx + P, ty + P, {'ebene': 0}, i % 2 == 1)
-    # ---------------------------------------------------------------- Baumguertel
-    for ty in range(rows):
-        for tx in range(cols):
-            if cls[ty][tx] == 'h' and (tx + ty) % 2 == 0:
-                setze(rnd.choice(WALD), tx * T + T / 2.0, ty * T + T - 1, {'anim': 'baum'}, rnd.random() < 0.5, 'wald')
-    deck = np.zeros((rows * T, cols * T), bool)
-
-    def decken(o):
-        al = np.array(Image.open(os.path.join(OBJ, o['datei'])).convert('RGBA'))[..., 3] > 0
-        yy, xx = np.nonzero(al)
-        yy, xx = yy + o['y'], xx + o['x']
-        ok = (yy >= 0) & (yy < rows * T) & (xx >= 0) & (xx < cols * T)
-        deck[yy[ok], xx[ok]] = True
-    for o in objekte:
-        decken(o)
-    for durchgang in range(2):
-        for ty in range(rows):
-            for tx in range(cols):
-                if cls[ty][tx] == 'h' and deck[ty * T:(ty + 1) * T, tx * T:(tx + 1) * T].mean() < 0.75:
-                    for dx in ((0, -5, 5) if durchgang else (0,)):
-                        o = setze(rnd.choice(BUSCH + WALD[:2] if durchgang == 0 else BUSCH), tx * T + T / 2.0 + dx,
-                                  ty * T + T - 1, {'anim': 'wehen'}, rnd.random() < 0.5, 'wald')
-                        if o:
-                            decken(o); break
+    masse = np.isin(gk, ['r', 'h'])
+    rand_k = []
+    for ty in range(P + 3, rows - P - 3):
+        for tx in range(P + 3, cols - P - 3):
+            if gk[ty, tx] in 'akqb' and masse[ty - 1:ty + 2, tx - 1:tx + 2].any() and gk[ty, tx] != 'e' \
+                    and not masse[ty, tx]:
+                rand_k.append((tx, ty))
+    rnd.shuffle(rand_k)
+    motive = ['reaper/ranke', 'reaper/blasen', 'reaper/kapsel', 'reaper/ei', 'reaper/ranke', 'reaper/blasen']
+    gesetzt_r = []
+    for (tx, ty) in rand_k:
+        if len(gesetzt_r) >= 26:
+            break
+        if any(abs(tx - x_) + abs(ty - y_) < 7 for (x_, y_) in gesetzt_r):
+            continue
+        n_ = motive[len(gesetzt_r) % len(motive)]
+        if setze(n_, tx * T + T / 2.0, ty * T + T - 1, {}, rnd.random() < 0.5, klassen='a' + G):
+            gesetzt_r.append((tx, ty))
+    for (tx, ty) in ((30, 20), (62, 44), (52, 30 + 10), (12, 22), (86, 48)):   # Waechter-Wesen patrouillieren
+        kachel('reaper/waechter', tx + P, ty + P, {}, tx % 2 == 0, klassen='a' + G, weit=3)
+    # ---------------------------------------------------------------- flacher Kleinkram (begehbar)
+    klein = ['klein/pfuetze', 'klein/brocken', 'klein/glas', 'klein/zeitung']
+    for i in range(40):
+        tx, ty = rnd.randint(P + 3, cols - P - 4), rnd.randint(P + 3, rows - P - 4)
+        if gk[ty, tx] in 'akq':
+            setze(klein[i % 4], tx * T + rnd.randint(3, 13), ty * T + rnd.randint(8, 15), {'ebene': 0, 'liegend': True,
+                  'schattenlos': True}, rnd.random() < 0.5, klassen='akqb')
     for o in objekte:
         if o['basis'].startswith('k01/'):
             o['nur_kontakt'] = True

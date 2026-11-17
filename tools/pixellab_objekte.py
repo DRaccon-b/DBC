@@ -2225,6 +2225,10 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'dark purple server rack cabinet with blinking red lights, ' + FR14,
         'broken dark metal pipe segment lying on the floor, ' + FR14,
     ]},
+    'k54_kern_gross': {'size': 96, 'freie_farben': True, 'items': [   # Karte 54: Herz des Kernels in der Mitte
+        'large pulsing crimson organic core sphere with dark veins, held by black metal claws on a round dark steel pedestal, glowing red, ' + FR14,
+        'tall crimson organic pillar of twisted flesh tendrils growing out of a dark metal floor plate, ' + FR14,
+    ]},
     'k54_klein': {'size': 32, 'freie_farben': True, 'items': [
         'coiled thick black power cable with a brass plug lying on the floor, flat ground detail, ' + FR14,
         'grey metal floor vent grate, flat ground detail, ' + FR14,
