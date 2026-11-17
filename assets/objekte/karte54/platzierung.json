@@ -2,7 +2,7 @@
 {
 "datei": "varianten/herz.png",
 "basis": "herz",
-"x": 355,
+"x": 363,
 "y": 171,
 "fuss": 68,
 "kachel": [
@@ -242,20 +242,6 @@
 "liegend": true
 },
 {
-"datei": "varianten/rohr.png",
-"basis": "rohr",
-"x": 638,
-"y": 438,
-"fuss": 10,
-"kachel": [
-41,
-28
-],
-"ebene": 0,
-"ohne_wall": true,
-"liegend": true
-},
-{
 "datei": "varianten/flasche.png",
 "basis": "flasche",
 "x": 64,
@@ -406,11 +392,11 @@
 "datei": "varianten/bolzen_m.png",
 "basis": "bolzen",
 "x": 322,
-"y": 430,
+"y": 460,
 "fuss": 15,
 "kachel": [
 20,
-27
+29
 ],
 "ebene": 0,
 "ohne_wall": true,
@@ -463,28 +449,14 @@
 "nur_kontakt": true
 },
 {
-"datei": "varianten/waechter.png",
-"basis": "waechter",
-"x": 196,
-"y": 177,
-"fuss": 30,
-"kachel": [
-13,
-12
-],
-"ebene": 1,
-"ohne_wall": true,
-"nur_kontakt": true
-},
-{
 "datei": "varianten/waechter_m.png",
 "basis": "waechter",
-"x": 564,
-"y": 97,
+"x": 676,
+"y": 65,
 "fuss": 30,
 "kachel": [
-36,
-7
+43,
+5
 ],
 "ebene": 1,
 "ohne_wall": true,

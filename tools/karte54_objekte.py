@@ -138,7 +138,7 @@ def main():
     rot = (ha[..., 3] > 0) & (ha[..., 0] > 120) & (ha[..., 0] > ha[..., 1] + 60)          # nur die rote Kugel pulsiert
     ys_, xs_ = np.nonzero(rot)
     herz = setze('herz', achse, (my + 1) * T + 15, {'anim': 'lampe', 'lampe_box': [int(xs_.min()), int(ys_.min()),
-                 int(xs_.max()) + 1, int(ys_.max()) + 1], 'licht_farbe': (255, 60, 90)}, pruefen=False)
+                 int(xs_.max()) + 1, int(ys_.max()) + 1], 'licht_farbe': (255, 60, 90)}, pruefen=False, raster=False)   # exakt auf der Achse
     paar('saeule', achse, 6 * T, (my + 1) * T + 15, dfy=(0,))
     paar('nest', achse, 6 * T, (iy1 - 2) * T + 15, dfy=(0, -T))
     # Vorlage: Mechs auf den Gewebebahnen, Traeger, Flaschen, Lampen, Terminals, Kapseln
@@ -151,19 +151,19 @@ def main():
     paar('terminal', achse, 160, 28 * T + 15, {'anim': 'maschine', 'leds': True})
     paar('kapsel', achse, 176, 31 * T + 15)
     for (n, px, py, sp_) in [('mech', 672, 495, True),
-                             ('rohr', 112, 96, False), ('rohr', 656, 112, True), ('rohr', 656, 448, False),
+                             ('rohr', 112, 96, False), ('rohr', 656, 112, True),
                              ('flasche', 72, 80, False), ('flasche', 664, 80, True), ('flasche', 704, 392, False),
                              ('lampe', 72, 300, False), ('lampe', 700, 330, True)]:
         o = suche(n, px, py, {'anim': 'lampe'} if n == 'lampe' else {}, sp_, r=3, schritt=8)
     for (n, px, py, sp_) in [('gitter', 600, 470, False), ('kabel', 50, 200, False),
                              ('kabel', 712, 250, True), ('kabel', 160, 300, False), ('bolzen', 190, 330, False),
-                             ('bolzen', 330, 445, True), ('bolzen', 640, 230, False), 
+                             ('bolzen', 330, 475, True), ('bolzen', 640, 230, False), 
                              ('pfuetze', 140, 520, True)]:
         suche(n, px, py, {}, sp_, r=3, schritt=8)
     # Kernel: befallene Technik, Ranken, Waechter-Wesen in den Gaengen
     for (n, px, py, sp_) in [('befallen', 60, 470, False), ('konsole', 392, 504, False),
                              ('ranke', 208, 120, False), ('ranke', 576, 280, True), ('ranke', 500, 410, False),
-                             ('waechter', 200, 200, False), ('waechter', 570, 100, True), ('waechter', 400, 340, False)]:
+                             ('waechter', 104, 536, False), ('waechter', 664, 88, True), ('waechter', 392, 216, False)]:
         suche(n, px, py, {'anim': 'maschine', 'leds': True} if n in ('rack', 'konsole', 'befallen') else {}, sp_, r=3,
               schritt=8)
     json.dump(objekte, open(os.path.join(OBJ, 'platzierung.json'), 'w'), indent=0)
