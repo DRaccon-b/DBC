@@ -20,6 +20,7 @@ import karte06_bauen as k6
 import karte20_bauen as k20
 import bauwerke
 import wasser_vertieft
+import klippen
 import wasser_details
 wasser_details.felsen_setzen = lambda *a_, **k_: None   # keine automatischen Felsspitzen (orange Kegel); Wasserfelsen als Objekte
 
@@ -289,7 +290,7 @@ def bauen(frame=None, speichern=True):
     wand = k4.hoehenkanten(a, hoch, 'berg47', FRONT, SEITE, LIPPE, frei, 47, berg=False)
     # Fluss (Nutzer): kommt oben durch die Felsspalte, vertieftes Wasser wie der Bach in Karte 44 (ohne Tiefenstufen);
     # am Graben laeuft er bis an die Kante weiter (kein Ufer), dort stuerzt er als Wasserfall hinunter
-    fm = weich(zell_maske(cls, 'fb', cols, rows), 4, 0, 9, 0.5)
+    fm = weich(zell_maske(cls, 'fbF', cols, rows), 4, 0, 9, 0.5)
     wfx, wfy = lay['wasserfall']
     fm_ext = fm.copy()
     fm_ext[wfy * T - 4:wfy * T + 14, wfx * T:(wfx + 2) * T] = True
@@ -299,6 +300,11 @@ def bauen(frame=None, speichern=True):
     mg = np.pad(fm_ext, ((P, P), (P, P)), mode='edge')
     ag = np.array(wasser_vertieft.vertiefen(Image.fromarray(ag), np.ones_like(mg), frame, maske=mg, stufen=[]).convert('RGB'))
     a = ag[P:-P, P:-P].copy()
+    # erster Wasserfall: vom Berg ueber die Felsfront in das Becken der Rinne (mit Gischt, er landet im Fluss)
+    bx_, by_ = lay['wasserfall_berg']
+    img_w = Image.fromarray(a).convert('RGBA')
+    klippen.zeichne_wasserfall(img_w, bx_ * T, (bx_ + 2) * T, by_ * T, by_ * T + FRONT + 4, seed=47, frame=frame or 0)
+    a = np.array(img_w.convert('RGB'))
     # Graben um die Arena (Nutzer): tiefer Felsgraben mit Klippenwaenden, die Arena wirkt wie ein Plateau
     tm = weich(zell_maske(cls, 'xb', cols, rows), 4, 0, 8, 0.5)
     a[tm] = (tex['d'][tm] * 0.42).astype(np.uint8)                   # tiefe, dunkle Grabensohle

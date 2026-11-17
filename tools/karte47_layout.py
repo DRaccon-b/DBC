@@ -110,7 +110,8 @@ def main():
     y_q = FLUSS[0][0]
     for y in range(y_q, 34):
         k[y, fluss_x[y]:fluss_x[y] + 2] = 'f'
-    k[y_q:y_q + 3, fluss_x[y_q] - 1:fluss_x[y_q] + 3] = 'f'          # Quelltopf am Fuss der Felswand (breiter)
+    k[y_q:y_q + 3, fluss_x[y_q] - 1:fluss_x[y_q] + 3] = 'f'          # Becken unter dem ersten Wasserfall (breiter)
+    k[0:y_q, fluss_x[y_q]:fluss_x[y_q] + 2] = 'F'                     # Fluss oben auf dem Berg (kommt von ausserhalb der Karte)
     for y in range(y_q + 1, 34):                                            # diagonale Stufen ohne Luecke (4er-Nachbarschaft)
         if fluss_x[y] != fluss_x[y - 1]:
             k[y, min(fluss_x[y], fluss_x[y - 1]):max(fluss_x[y], fluss_x[y - 1]) + 2] = 'f'
@@ -136,12 +137,12 @@ def main():
         for x in list(range(bx0 - 2, bx0)) + list(range(bx1 + 1, bx1 + 3)):
             k[by0:by1 + 1, x] = 'w'
         bruecken.append([int(bx0), by0, int(bx1), by1])
-    h = np.where(k == 'h', 1, 0)
+    h = np.where((k == 'h') | (k == 'F'), 1, 0)
     lay = {'groesse': [C, R], 'klassen': [''.join(z) for z in k], 'hoehe': [''.join(str(c) for c in z) for z in h],
-           'bruecken': bruecken, 'stege': [], 'graben': list(GRABEN), 'wasserfall': [int(fluss_x[33]), 34],
+           'bruecken': bruecken, 'stege': [], 'graben': list(GRABEN), 'wasserfall': [int(fluss_x[33]), 34], 'wasserfall_berg': [int(fluss_x[y_q]), y_q],
            'teleporter': [{'x': tx, 'y': ty, 'b': b, 'h': hh} for (tx, ty, b, hh) in TELEPORTER]}
     json.dump(lay, open(os.path.join(KARTE, 'layout.json'), 'w'), indent=0)
-    F = {'f': (60, 110, 190), 'x': (30, 32, 40), 'b': (150, 100, 50), 'g': (101, 118, 138), 'w': (170, 170, 165), 'h': (190, 200, 215), 'k': (130, 135, 120), 'n': (80, 150, 60),
+    F = {'F': (80, 130, 210), 'f': (60, 110, 190), 'x': (30, 32, 40), 'b': (150, 100, 50), 'g': (101, 118, 138), 'w': (170, 170, 165), 'h': (190, 200, 215), 'k': (130, 135, 120), 'n': (80, 150, 60),
          'd': (50, 55, 70), 'T': (80, 220, 240)}
     S_ = 6
     im = Image.new('RGB', (C * S_, R * S_))
