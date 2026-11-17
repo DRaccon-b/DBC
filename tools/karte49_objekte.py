@@ -115,7 +115,12 @@ def main():
         suche(n, px, py, {}, sp_, 1, r=3, schritt=8)
     # ---------------- Vorlage: Felsbrocken auf den Pflasterflecken, tote Baeume mit Begleitern
     for (px, py) in [(190, 125), (655, 280), (590, 360), (255, 472)]:
-        suche('brocken', px, py, {}, px > 400, 1, r=2, schritt=8)
+        o = suche('brocken', px, py, {}, px > 400, 1, r=2, schritt=8)
+        if o:                                                        # Einbettung: Kiesel an einer Sockelecke
+            bx0, bx1 = o['x'], o['x'] + 43
+            for (cx_, sp_) in ((bx1 + 4, False), (bx0 - 4, True)):
+                if setze('kiesel', cx_, o['y'] + o['fuss'] + 3, {'ebene': 0, 'liegend': True, 'einbettung': True}, sp_, 1, gap=-6):
+                    break
     for i, (px, py) in enumerate([(176, 236), (656, 364)]):
         o = suche('totbaum', px, py, {}, i == 1, 1, r=2, schritt=8)
         if not o:
@@ -129,7 +134,7 @@ def main():
             print('  Baum ohne Begleiter vor dem Stumpf', i)
     # ---------------- Gebrochenes Versprechen: zerrissene Ketten, Brandflecken, Kampfspuren (dezent, keine Reihen)
     for (n, px, py) in [('kette', 300, 330), ('kette', 520, 230), ('brand', 420, 180), ('brand', 200, 380),
-                        ('huelsen', 470, 300), ('kralle', 130, 300), ('knochen', 420, 120), ('schutt', 290, 538),
+                        ('huelsen', 470, 300), ('kralle', 130, 300), ('knochen', 420, 120), ('schutt', 290, 520),
                         ('sperre', 640, 200), ('huelsen', 290, 200)]:
         suche(n, px, py, {'liegend': n in FLACH, 'ebene': 0 if n in FLACH else 1}, rnd.random() < 0.5, 1, r=3, schritt=8)
     # ---------------- sparsame Streudeko wie in der Vorlage (Zweige, Kiesel)
@@ -145,8 +150,10 @@ def main():
         if setze(n_, x * T + rnd.randint(4, 12), y * T + rnd.randint(10, 15),
                  {'ebene': 0, 'streu': True, 'liegend': True}, rnd.random() < 0.5, 1, gap=6):
             n_s += 1
-    for o in objekte:
-        o.setdefault('ohne_wall', o['basis'] not in ('totbaum', 'brocken', 'rf1', 'rf2', 'rf3', 'rf4'))
+    for o in objekte:                                                # Fels auf Fels: kein Bodenwall; Felsen nur Kontaktschatten
+        o.setdefault('ohne_wall', True)
+        if o['basis'] in ('brocken', 'rf1', 'rf2', 'rf3', 'rf4', 'schutt'):
+            o['nur_kontakt'] = True
     json.dump(objekte, open(os.path.join(OBJ, 'platzierung.json'), 'w'), indent=0)
     print('Karte 49: %d Objekte (Streudeko %d)' % (len(objekte), n_s))
 

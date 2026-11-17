@@ -25,7 +25,7 @@
 "ebene": 1,
 "fest_pos": true,
 "ohne_wall": true,
-"anim": "kerzen",
+"anim": "feuer_lila",
 "flammen_box": [
 [
 2,
@@ -35,18 +35,7 @@
 ]
 ],
 "flammen_alle": true,
-"flammen_amp": 1.6,
-"lampe_box": [
-4,
-0,
-30,
-26
-],
-"licht_farbe": [
-190,
-110,
-255
-]
+"flammen_amp": 1.6
 },
 {
 "datei": "varianten/banner.png",
@@ -76,7 +65,7 @@
 "ebene": 1,
 "fest_pos": true,
 "ohne_wall": true,
-"anim": "kerzen",
+"anim": "feuer_lila",
 "flammen_box": [
 [
 1,
@@ -86,18 +75,7 @@
 ]
 ],
 "flammen_alle": true,
-"flammen_amp": 1.6,
-"lampe_box": [
-4,
-0,
-30,
-26
-],
-"licht_farbe": [
-190,
-110,
-255
-]
+"flammen_amp": 1.6
 },
 {
 "datei": "varianten/banner_m.png",
@@ -231,7 +209,8 @@
 7
 ],
 "ebene": 1,
-"ohne_wall": false
+"ohne_wall": true,
+"nur_kontakt": true
 },
 {
 "datei": "varianten/brocken_m.png",
@@ -244,7 +223,8 @@
 17
 ],
 "ebene": 1,
-"ohne_wall": false
+"ohne_wall": true,
+"nur_kontakt": true
 },
 {
 "datei": "varianten/brocken_m.png",
@@ -257,7 +237,8 @@
 22
 ],
 "ebene": 1,
-"ohne_wall": false
+"ohne_wall": true,
+"nur_kontakt": true
 },
 {
 "datei": "varianten/brocken.png",
@@ -270,7 +251,8 @@
 29
 ],
 "ebene": 1,
-"ohne_wall": false
+"ohne_wall": true,
+"nur_kontakt": true
 },
 {
 "datei": "varianten/totbaum.png",
@@ -283,7 +265,7 @@
 14
 ],
 "ebene": 1,
-"ohne_wall": false
+"ohne_wall": true
 },
 {
 "datei": "varianten/rf2.png",
@@ -297,7 +279,8 @@
 ],
 "ebene": 1,
 "begleiter": true,
-"ohne_wall": false
+"ohne_wall": true,
+"nur_kontakt": true
 },
 {
 "datei": "varianten/rf3_m.png",
@@ -311,7 +294,8 @@
 ],
 "ebene": 1,
 "begleiter": true,
-"ohne_wall": false
+"ohne_wall": true,
+"nur_kontakt": true
 },
 {
 "datei": "varianten/totbaum_m.png",
@@ -324,7 +308,7 @@
 22
 ],
 "ebene": 1,
-"ohne_wall": false
+"ohne_wall": true
 },
 {
 "datei": "varianten/rf4_m.png",
@@ -338,7 +322,8 @@
 ],
 "ebene": 1,
 "begleiter": true,
-"ohne_wall": false
+"ohne_wall": true,
+"nur_kontakt": true
 },
 {
 "datei": "varianten/rf1_m.png",
@@ -352,7 +337,8 @@
 ],
 "ebene": 1,
 "begleiter": true,
-"ohne_wall": false
+"ohne_wall": true,
+"nur_kontakt": true
 },
 {
 "datei": "varianten/kette_m.png",
@@ -394,7 +380,8 @@
 ],
 "ebene": 0,
 "liegend": true,
-"ohne_wall": true
+"ohne_wall": true,
+"anim": "kerzen"
 },
 {
 "datei": "varianten/brand.png",
@@ -408,7 +395,8 @@
 ],
 "ebene": 0,
 "liegend": true,
-"ohne_wall": true
+"ohne_wall": true,
+"anim": "kerzen"
 },
 {
 "datei": "varianten/huelsen.png",
@@ -455,16 +443,17 @@
 {
 "datei": "varianten/schutt.png",
 "basis": "schutt",
-"x": 263,
-"y": 488,
+"x": 255,
+"y": 478,
 "fuss": 50,
 "kachel": [
-18,
+17,
 33
 ],
 "ebene": 1,
 "liegend": false,
-"ohne_wall": true
+"ohne_wall": true,
+"nur_kontakt": true
 },
 {
 "datei": "varianten/sperre_m.png",

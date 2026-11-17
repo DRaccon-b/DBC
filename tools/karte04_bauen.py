@@ -1301,7 +1301,8 @@ def animieren(img, objs, cache, frame, ruhig=False):
                 q = (a[..., 3] > 0) & (b_ > 150) & (r_ > 120) & (g_ < r_ - 30)
                 farbe, rad = (190, 120, 255), (9, 4)
             if o.get('flammen_box'):                           # nur echte Flammen (nicht Wachs/Messing), Schein je Flamme
-                q = np.any([_box_maske(a.shape, b_) for b_ in o['flammen_box']], axis=0) & (a[..., 3] > 0) & (r_ > 200) & (r_ - b_ > 60)
+                farbmaske_ = ((b_ > 150) & (r_ > 120) & (g_ < r_ - 30)) if anim == 'feuer_lila' else ((r_ > 200) & (r_ - b_ > 60))
+                q = np.any([_box_maske(a.shape, bx_) for bx_ in o['flammen_box']], axis=0) & (a[..., 3] > 0) & farbmaske_   # K49: violett
                 for b_ in o['flammen_box']:
                     qq = q & _box_maske(a.shape, b_)
                     if qq.any():

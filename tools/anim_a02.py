@@ -106,8 +106,8 @@ ANIM = {
         'k18s/42': {'anim': 'leuchten', 'licht': [10, 9], 'licht_box': [2, 1, 19, 18], 'licht_r': 7},
     },
     'karte49': {   # Broken Promise: violette Flammen zuengeln, Banner wehen (nur das Tuch)
-        'schale': {'anim': 'kerzen', 'flammen_box': [[2, 0, 33, 24]], 'flammen_alle': True, 'flammen_amp': 1.6,
-                   'lampe_box': [4, 0, 30, 26], 'licht_farbe': [190, 110, 255]},
+        'schale': {'anim': 'feuer_lila', 'flammen_box': [[2, 0, 33, 24]], 'flammen_alle': True, 'flammen_amp': 1.6},
+        'brand': {'anim': 'kerzen'},                                   # Glut im Brandfleck glimmt
     },
     'karte48': {   # Water Realm: Laternen leuchten (nur das Glas)
         'lampe': {'anim': 'lampe', 'lampe_box': [4, 22, 18, 44], 'licht_farbe': [255, 220, 150]},
