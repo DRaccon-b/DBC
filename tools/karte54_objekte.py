@@ -153,7 +153,7 @@ def main():
                              ('pfuetze', 140, 520, True)]:
         suche(n, px, py, {}, sp_, r=3, schritt=8)
     # Kernel: befallene Technik, Ranken, Waechter-Wesen in den Gaengen
-    for (n, px, py, sp_) in [('befallen', 60, 470, False), ('rack', 720, 440, True), ('konsole', 392, 525, False),
+    for (n, px, py, sp_) in [('befallen', 60, 470, False), ('flasche', 720, 440, True), ('konsole', 392, 525, False),
                              ('ranke', 208, 120, False), ('ranke', 576, 280, True), ('ranke', 500, 410, False),
                              ('waechter', 200, 200, False), ('waechter', 570, 100, True), ('waechter', 400, 340, False)]:
         suche(n, px, py, {'anim': 'maschine', 'leds': True} if n in ('rack', 'konsole', 'befallen') else {}, sp_, r=3,
