@@ -2154,6 +2154,12 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'compact haunted stone gate tower with a deep pitched slate roof seen from above, thick side walls showing depth, '
         'open arched passage in the front, ivy and cracks, classic handheld RPG top-down map style, symmetric, ' + FR14,
     ]},
+    'k43_halme': {'size': 32, 'freie_farben': True, 'items': [   # Karte 43: flache Grashalm-Bueschel als Bodenstruktur
+        'tiny tuft of short green grass blades seen from above, flat ground detail, no shadow, ' + FR14,
+        'small cluster of thin dark green grass blades and two tiny white clover flowers, flat ground detail, ' + FR14,
+        'tiny patch of tall thin grass blades leaning in the wind, green and yellow-green, flat ground detail, ' + FR14,
+        'few scattered short grass blades and a tiny pebble, flat ground detail seen from above, ' + FR14,
+    ]},
     'k40_krater': {'size': 256, 'freie_farben': True, 'items': [   # Nutzer: Meteor-Furche (256 px: ein Motiv je Auftrag)
         'long deep impact furrow crater seen from directly above, a straight trench gouged north to south through a dark asphalt city road, brown earth and dark soil inside, broken grey asphalt slabs and dirt pushed up and piled along the left and right rims, cracks radiating outward, no meteor visible, transparent background around the rims',
     ]},

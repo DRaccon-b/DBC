@@ -68,24 +68,37 @@ def bauen(frame=None, speichern=True):
             saum = weich(zell_maske(cls, 'wT', cols, rows), blur, 0, seed, 0.36) & ~m
             a[saum] = (a[saum] * 0.9).astype(np.uint8)
         a[m] = tex[art][m]
-    # Bodenstruktur ohne Objekte (Nutzer): Flecken aus dunklerem/hellerem Gras, ausgefahrene Wegspuren, Moos im Pflaster -
-    # aus grobem Rauschen je Kachel, am 45-Grad-Raster wie alle Bodenkanten (Regel 6b)
-    rs = np.random.RandomState(4343)
-    grob = rs.rand(rows // 5 + 2, cols // 5 + 2)
-    feld = np.array(Image.fromarray((grob * 255).astype(np.uint8)).resize((cols, rows), Image.BICUBIC)).astype(float) / 255
-    fein = rs.rand(rows, cols) * 0.25
-    feld = feld * 0.8 + fein
+    # Bodenstruktur (Nutzer): flache Grashalm-Bueschel (PixelLab k43_halme) direkt in die Wiese gestempelt - kein Objekt,
+    # kein Schatten, begehbar; locker in Gruppen, nur innerhalb der Wiese (Abstand zu Weg/Platz/Wald)
+    halme = []
+    for n_ in ('00', '01', '02', '03', '06'):
+        sp = np.array(Image.open(os.path.join(OBJ, 'halme', n_ + '.png')).convert('RGBA')).astype(float)
+        bb = Image.fromarray(sp.astype(np.uint8)).getbbox()
+        sp = sp[bb[1]:bb[3], bb[0]:bb[2]]
+        gruen = (sp[..., 1] > sp[..., 0] + 10) & (sp[..., 3] > 0)          # Halme auf die Grastoene der Karte abdunkeln
+        sp[gruen, :3] = sp[gruen, :3] * np.array([0.78, 0.82, 0.74])
+        halme.append(sp)
     kl = np.array([list(z) for z in cls])
-    for art, sel, f_, seed in (('g', feld > 0.68, (0.88, 0.92, 0.86), 21), ('g', feld < 0.22, (1.05, 1.07, 1.01), 22),
-                               ('w', feld > 0.70, (0.94, 0.93, 0.92), 23), ('k', feld < 0.25, (0.84, 0.93, 0.82), 24)):
-        zell = (kl == art) & sel
-        innen = zell.copy()                                          # nur innerhalb der Flaeche (1 Kachel Abstand zum Rand)
-        for dy, dx in ((1, 0), (-1, 0), (0, 1), (0, -1)):
-            innen &= np.roll(np.roll(kl == art, dy, 0), dx, 1)
-        if not innen.any():
-            continue
-        m = weich(np.kron(innen, np.ones((T, T))).astype(np.float32), 7, 0.35, seed) & (zell_maske(cls, art, cols, rows) > 0.5)
-        a[m] = np.clip(a[m] * np.array(f_), 0, 255).astype(np.uint8)
+    innen = kl == 'g'
+    for dy in (-1, 0, 1):
+        for dx in (-1, 0, 1):
+            innen &= np.roll(np.roll(kl == 'g', dy, 0), dx, 1)
+    rs = np.random.RandomState(4343)
+    zentren = [(y, x) for y in range(rows) for x in range(cols) if innen[y, x] and rs.rand() < 0.045]
+    for (cy, cx) in zentren:
+        for _ in range(rs.randint(2, 5)):                                    # Gruppe aus 2-4 Bueschelchen
+            yy, xx = cy + rs.randint(-1, 2), cx + rs.randint(-1, 2)
+            if not (0 <= yy < rows and 0 <= xx < cols and innen[yy, xx]):
+                continue
+            sp = halme[rs.randint(0, 4) if rs.rand() < 0.85 else 4]
+            if rs.rand() < 0.5:
+                sp = sp[:, ::-1]
+            h_, w_ = sp.shape[:2]
+            py, px = yy * T + rs.randint(0, T - min(h_, T) + 1), xx * T + rs.randint(0, T - min(w_, T) + 1)
+            if py + h_ > Hp or px + w_ > Wp:
+                continue
+            al = sp[..., 3:4] / 255.0
+            a[py:py + h_, px:px + w_] = (a[py:py + h_, px:px + w_] * (1 - al) + sp[..., :3] * al).astype(np.uint8)
     hoch = weich((hp >= 1).astype(np.float32), 5, 0.0, 7, 0.5)       # Wald erhoeht
     a[hoch] = tex['h'][hoch]
     frei = np.zeros((Hp, Wp), bool)
