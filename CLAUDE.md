@@ -366,6 +366,13 @@ Vor jeder Abgabe Punkt für Punkt prüfen (vergrößert, Standbild und mehrere A
   verlorene Wiesen der Vorlage ganz auf einer Ebene neu anlegen (Bäume dort wieder setzen). Seitliche Teleporter nie direkt
   unter zwei Fronten (Terrassenkante unter den Teleporter legen). Nachträglich geschlossene Randkacheln bekommen auch die
   Randhöhe. Säulen/Schalen-Paare neben dem Pflaster auf gemeinsamer Fußzeile und Achse suchen (Abstand variieren).
+- **Heiligtum nachgebessert (Nutzer, Karte 50):** Felsrand ringsum folgt den Terrassen als „Berg mit Absätzen“ (eine Stufe
+  über der Terrasse daneben, Randstufen einige Reihen gegen die Terrassenkanten versetzt; am Teleporter früher absetzen, keine
+  gestapelten Fronten). Tore an Treppen so breit erzeugen, dass die Pfeiler außen neben der Treppe stehen (man geht darunter
+  durch), Fuß eine Kachel unter dem Treppenfuß; Breite notfalls über den Balken-Mittelteil verlängern. Mehr Bodentextur wie
+  in der Vorlage: flache Büschel/Kiesel/Zweige in Fels und Wiese gestempelt. Brandbereiche: Kern ganz verkohlt, ringsum ein
+  verrußtes Band (Textur sichtbar) und gesprenkelter Rand; Felsfronten nur nachdunkeln, flache Bergkante bleibt unverbrannt;
+  Objekte darin als neu erzeugte verkohlte Varianten, Glut animiert.
 - **Begleiter am Stumpf (5d):** keine 1-Kachel-Blumen auf dem Stumpf, kein Blumenklumpen; Begleiter überlappen sich nicht.
 - **Paare/Achsen:** Paare vor Toren/Bauwerken exakt gespiegelt (Mitte und Fuß), gleiche Objekte auf gleicher Höhe;
   Druckplatten, Obelisken usw. symmetrisch zur berechneten Achse.

@@ -199,7 +199,7 @@ def main():
               klassen='gn' if n in ('lilie', 'gras', 'gras2') else 'gwkn')
     # Brandbereich: glimmender Stamm, Asche und Glut (dezent)
     for (n, px, py, op) in [('stamm_b', 1440, 330, {'liegend': True, 'anim': 'kerzen'}), ('glut_b', 1330, 500, {'ebene': 0, 'liegend': True, 'anim': 'kerzen'}),
-                            ('asche_b', 1470, 200, {'ebene': 0, 'liegend': True, 'anim': 'kerzen'}), ('rauch_b', 1400, 610, {'ebene': 0, 'liegend': True, 'anim': 'kerzen'})]:
+                            ('asche_b', 1470, 200, {'ebene': 0, 'liegend': True, 'anim': 'kerzen'})]:
         suche(n, px, py, op, False, r=3, klassen='gnwk')
     for o in objekte:
         if o['basis'] in ('brocken_b', 'busch_b', 'stamm_b', 'baum_b'):

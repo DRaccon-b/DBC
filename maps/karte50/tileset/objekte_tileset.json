@@ -1,17 +1,48 @@
 {
  "kachel": 16,
  "breite_kacheln": 40,
- "hoehe_kacheln": 11,
+ "hoehe_kacheln": 16,
  "animationsbereich_hoehe_kacheln": 4,
  "animationsbilder": 4,
  "bilddauer_ms": 250,
  "objekte": [
   {
+   "name": "baum_b",
+   "datei": "varianten/baum_b_m.png",
+   "animation": "kerzen",
+   "slot_kacheln": {
+    "x": 0,
+    "y": 0,
+    "breite": 4,
+    "hoehe": 4
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 4,
+    "hoehe": 4
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      82,
+      20,
+      4,
+      4
+     ],
+     "fusskachel": [
+      84,
+      23
+     ]
+    }
+   ]
+  },
+  {
    "name": "schale",
    "datei": "varianten/schale.png",
    "animation": "kerzen",
    "slot_kacheln": {
-    "x": 0,
+    "x": 4,
     "y": 0,
     "breite": 3,
     "hoehe": 4
@@ -49,13 +80,13 @@
     },
     {
      "block": [
-      41,
+      40,
       40,
       2,
       4
      ],
      "fusskachel": [
-      42,
+      41,
       43
      ]
     }
@@ -66,7 +97,7 @@
    "datei": "varianten/schale_m.png",
    "animation": "kerzen",
    "slot_kacheln": {
-    "x": 3,
+    "x": 7,
     "y": 0,
     "breite": 3,
     "hoehe": 4
@@ -104,13 +135,13 @@
     },
     {
      "block": [
-      59,
+      60,
       40,
       2,
       4
      ],
      "fusskachel": [
-      60,
+      61,
       43
      ]
     }
@@ -121,7 +152,7 @@
    "datei": "varianten/laterne.png",
    "animation": "lampe",
    "slot_kacheln": {
-    "x": 6,
+    "x": 10,
     "y": 0,
     "breite": 2,
     "hoehe": 4
@@ -176,7 +207,7 @@
    "datei": "varianten/laterne_m.png",
    "animation": "lampe",
    "slot_kacheln": {
-    "x": 8,
+    "x": 12,
     "y": 0,
     "breite": 2,
     "hoehe": 4
@@ -219,7 +250,7 @@
    "datei": "varianten/baum.png",
    "animation": "baum",
    "slot_kacheln": {
-    "x": 10,
+    "x": 14,
     "y": 0,
     "breite": 4,
     "hoehe": 3
@@ -286,7 +317,7 @@
    "datei": "varianten/baum_m.png",
    "animation": "baum",
    "slot_kacheln": {
-    "x": 14,
+    "x": 18,
     "y": 0,
     "breite": 4,
     "hoehe": 3
@@ -312,18 +343,6 @@
     },
     {
      "block": [
-      82,
-      21,
-      4,
-      3
-     ],
-     "fusskachel": [
-      84,
-      23
-     ]
-    },
-    {
-     "block": [
       24,
       65,
       4,
@@ -337,44 +356,137 @@
    ]
   },
   {
+   "name": "stamm_b",
+   "datei": "varianten/stamm_b.png",
+   "animation": "kerzen",
+   "slot_kacheln": {
+    "x": 22,
+    "y": 0,
+    "breite": 4,
+    "hoehe": 3
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 4,
+    "hoehe": 3
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      88,
+      18,
+      4,
+      3
+     ],
+     "fusskachel": [
+      90,
+      20
+     ]
+    }
+   ]
+  },
+  {
+   "name": "asche_b",
+   "datei": "varianten/asche_b.png",
+   "animation": "kerzen",
+   "slot_kacheln": {
+    "x": 26,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 2
+   },
+   "objektblock_im_slot": {
+    "x": 1,
+    "y": 0,
+    "breite": 2,
+    "hoehe": 2
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      91,
+      11,
+      2,
+      2
+     ],
+     "fusskachel": [
+      91,
+      12
+     ]
+    }
+   ]
+  },
+  {
+   "name": "glut_b",
+   "datei": "varianten/glut_b.png",
+   "animation": "kerzen",
+   "slot_kacheln": {
+    "x": 29,
+    "y": 0,
+    "breite": 2,
+    "hoehe": 2
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 2,
+    "hoehe": 2
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      82,
+      28,
+      2,
+      2
+     ],
+     "fusskachel": [
+      83,
+      29
+     ]
+    }
+   ]
+  },
+  {
    "name": "torii",
    "datei": "varianten/torii.png",
    "animation": null,
    "slot_kacheln": {
     "x": 0,
     "y": 4,
-    "breite": 6,
-    "hoehe": 5
+    "breite": 14,
+    "hoehe": 9
    },
    "objektblock_im_slot": {
     "x": 0,
     "y": 0,
-    "breite": 6,
-    "hoehe": 5
+    "breite": 14,
+    "hoehe": 9
    },
    "fundstellen_karte": [
     {
      "block": [
-      52,
-      20,
-      6,
-      5
+      48,
+      19,
+      14,
+      9
      ],
      "fusskachel": [
       55,
-      24
+      27
      ]
     },
     {
      "block": [
-      48,
-      43,
-      6,
-      5
+      44,
+      42,
+      14,
+      9
      ],
      "fusskachel": [
       51,
-      47
+      50
      ]
     }
    ]
@@ -384,7 +496,7 @@
    "datei": "varianten/unterstand_m.png",
    "animation": null,
    "slot_kacheln": {
-    "x": 6,
+    "x": 14,
     "y": 4,
     "breite": 4,
     "hoehe": 4
@@ -415,7 +527,7 @@
    "datei": "varianten/pfosten.png",
    "animation": null,
    "slot_kacheln": {
-    "x": 10,
+    "x": 18,
     "y": 4,
     "breite": 3,
     "hoehe": 4
@@ -429,13 +541,13 @@
    "fundstellen_karte": [
     {
      "block": [
-      47,
+      48,
       29,
       3,
       4
      ],
      "fusskachel": [
-      48,
+      49,
       32
      ]
     },
@@ -465,13 +577,13 @@
     },
     {
      "block": [
-      43,
+      42,
       39,
       2,
       4
      ],
      "fusskachel": [
-      44,
+      43,
       42
      ]
     }
@@ -482,7 +594,7 @@
    "datei": "varianten/pfosten_m.png",
    "animation": null,
    "slot_kacheln": {
-    "x": 13,
+    "x": 21,
     "y": 4,
     "breite": 3,
     "hoehe": 4
@@ -496,13 +608,13 @@
    "fundstellen_karte": [
     {
      "block": [
-      60,
+      59,
       29,
       3,
       4
      ],
      "fusskachel": [
-      61,
+      60,
       32
      ]
     },
@@ -532,13 +644,13 @@
     },
     {
      "block": [
-      57,
+      58,
       39,
       2,
       4
      ],
      "fusskachel": [
-      58,
+      59,
       42
      ]
     }
@@ -549,7 +661,7 @@
    "datei": "varianten/schrein.png",
    "animation": null,
    "slot_kacheln": {
-    "x": 16,
+    "x": 24,
     "y": 4,
     "breite": 3,
     "hoehe": 4
@@ -580,7 +692,7 @@
    "datei": "varianten/brocken.png",
    "animation": null,
    "slot_kacheln": {
-    "x": 19,
+    "x": 27,
     "y": 4,
     "breite": 4,
     "hoehe": 3
@@ -619,11 +731,11 @@
    ]
   },
   {
-   "name": "brocken",
-   "datei": "varianten/brocken_m.png",
+   "name": "brocken_b",
+   "datei": "varianten/brocken_b_m.png",
    "animation": null,
    "slot_kacheln": {
-    "x": 23,
+    "x": 31,
     "y": 4,
     "breite": 4,
     "hoehe": 3
@@ -637,14 +749,14 @@
    "fundstellen_karte": [
     {
      "block": [
-      80,
-      18,
+      83,
+      17,
       4,
       3
      ],
      "fusskachel": [
-      82,
-      20
+      85,
+      19
      ]
     }
    ]
@@ -654,7 +766,7 @@
    "datei": "varianten/feder.png",
    "animation": null,
    "slot_kacheln": {
-    "x": 27,
+    "x": 35,
     "y": 4,
     "breite": 3,
     "hoehe": 3
@@ -685,8 +797,8 @@
    "datei": "varianten/lilie.png",
    "animation": null,
    "slot_kacheln": {
-    "x": 30,
-    "y": 4,
+    "x": 0,
+    "y": 13,
     "breite": 3,
     "hoehe": 3
    },
@@ -716,8 +828,8 @@
    "datei": "varianten/lilie_m.png",
    "animation": null,
    "slot_kacheln": {
-    "x": 33,
-    "y": 4,
+    "x": 3,
+    "y": 13,
     "breite": 3,
     "hoehe": 3
    },
@@ -759,8 +871,8 @@
    "datei": "varianten/gras_m.png",
    "animation": null,
    "slot_kacheln": {
-    "x": 36,
-    "y": 4,
+    "x": 6,
+    "y": 13,
     "breite": 2,
     "hoehe": 3
    },
@@ -790,8 +902,8 @@
    "datei": "varianten/feder2_m.png",
    "animation": null,
    "slot_kacheln": {
-    "x": 0,
-    "y": 9,
+    "x": 8,
+    "y": 13,
     "breite": 3,
     "hoehe": 2
    },
@@ -833,8 +945,8 @@
    "datei": "varianten/feder_m.png",
    "animation": null,
    "slot_kacheln": {
-    "x": 3,
-    "y": 9,
+    "x": 11,
+    "y": 13,
     "breite": 3,
     "hoehe": 2
    },
@@ -864,8 +976,8 @@
    "datei": "varianten/kf00.png",
    "animation": null,
    "slot_kacheln": {
-    "x": 6,
-    "y": 9,
+    "x": 14,
+    "y": 13,
     "breite": 3,
     "hoehe": 2
    },
@@ -902,18 +1014,6 @@
     },
     {
      "block": [
-      84,
-      23,
-      2,
-      2
-     ],
-     "fusskachel": [
-      85,
-      24
-     ]
-    },
-    {
-     "block": [
       19,
       67,
       3,
@@ -943,8 +1043,8 @@
    "datei": "varianten/kf00_m.png",
    "animation": null,
    "slot_kacheln": {
-    "x": 9,
-    "y": 9,
+    "x": 17,
+    "y": 13,
     "breite": 3,
     "hoehe": 2
    },
@@ -974,8 +1074,8 @@
    "datei": "varianten/kf24.png",
    "animation": null,
    "slot_kacheln": {
-    "x": 12,
-    "y": 9,
+    "x": 20,
+    "y": 13,
     "breite": 3,
     "hoehe": 2
    },
@@ -1017,8 +1117,8 @@
    "datei": "varianten/kf24_m.png",
    "animation": null,
    "slot_kacheln": {
-    "x": 15,
-    "y": 9,
+    "x": 23,
+    "y": 13,
     "breite": 3,
     "hoehe": 2
    },
@@ -1048,8 +1148,8 @@
    "datei": "varianten/kf52_m.png",
    "animation": null,
    "slot_kacheln": {
-    "x": 18,
-    "y": 9,
+    "x": 26,
+    "y": 13,
     "breite": 3,
     "hoehe": 2
    },
@@ -1071,18 +1171,6 @@
       40,
       35
      ]
-    },
-    {
-     "block": [
-      86,
-      24,
-      2,
-      2
-     ],
-     "fusskachel": [
-      87,
-      25
-     ]
     }
    ]
   },
@@ -1091,8 +1179,8 @@
    "datei": "varianten/opfer.png",
    "animation": null,
    "slot_kacheln": {
-    "x": 21,
-    "y": 9,
+    "x": 29,
+    "y": 13,
     "breite": 3,
     "hoehe": 2
    },
@@ -1122,8 +1210,8 @@
    "datei": "varianten/gras2.png",
    "animation": null,
    "slot_kacheln": {
-    "x": 24,
-    "y": 9,
+    "x": 32,
+    "y": 13,
     "breite": 2,
     "hoehe": 2
    },
