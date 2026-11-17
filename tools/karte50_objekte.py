@@ -135,8 +135,9 @@ def main():
             continue
         achse = (x0 * T + (x1 + 1) * T) / 2.0
         if ry < 60:                                                  # die beiden Torii (untere Treppe ohne Tor)
-            setze('torii', achse, (ry + 1) * T + T - 1, {'fest_pos': True, 'vor_wand': True, 'nur_kontakt': True,
-                                                         'sortier': (ry + 1) * T + T - 1}, pruefen=False)
+            dy_t = int(os.environ.get('K50_TORII_DY', '1'))           # Nutzer: Tor eine Kachel tiefer (Vorschau)
+            setze('torii', achse, (ry + 1 + dy_t) * T + T - 1, {'fest_pos': True, 'vor_wand': True, 'nur_kontakt': True,
+                                                                'sortier': (ry + 1 + dy_t) * T + T - 1}, pruefen=False)
         paar('schale', achse, (x1 - x0 + 1) * T / 2.0 + 24, (ry - 1) * T + 12, {'anim': 'kerzen', 'flammen_box': [[4, 0, 24, 20]],
                                                                               'flammen_alle': True, 'flammen_amp': 1.4})
         paar('pfosten', achse, (x1 - x0 + 1) * T / 2.0 + 24, (ry + 4) * T + 12)
