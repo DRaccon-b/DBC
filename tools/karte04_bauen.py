@@ -1965,6 +1965,12 @@ def flammen_boxen(sp, frame, o):
                     out[y - 1, X] = a[y, x]
         unten = m & (out[..., 3] == 0)                       # Flammenfuss bleibt am Docht
         out[unten & (np.arange(a.shape[0])[:, None] >= y1)] = a[unten & (np.arange(a.shape[0])[:, None] >= y1)]
+        luecke = m & (out[..., 3] == 0)                      # keine Loecher im Feuer: frei gewordene Flammenpixel fuellen
+        if luecke.any():
+            hz = np.where(out[..., 3:4] > 0, out, 0)
+            for y, x in zip(*np.nonzero(luecke)):
+                nb = [out[y, x + d] for d in (-1, 1) if 0 <= x + d < a.shape[1] and out[y, x + d, 3] > 0]
+                out[y, x] = nb[0] if nb else a[y, x]
     return Image.fromarray(out, 'RGBA')
 
 

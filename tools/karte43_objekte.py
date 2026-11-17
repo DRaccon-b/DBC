@@ -84,8 +84,8 @@ def main():
                 return None                                          # Fuss auf dem Waldboden (nicht auf der Mauer)
             for yy in range(max(0, r[1] // T), r[3] // T + 1):
                 for xx in range(r[0] // T, r[2] // T + 1):
-                    if k(xx, yy) in 'wkT' and not (yy < r[3] // T and k(xx, yy) == 'T' and False):
-                        return None
+                    if k(xx, yy) in 'kT' or (k(xx, yy) == 'w' and yy >= r[3] // T - 1):
+                        return None                                  # Krone darf etwas ueber den Weg ragen (Rand natuerlich)
             if any(art2 != 'wald' and schnitt(r, tuple(rr), 3) for (*rr, art2) in rects):
                 return None
         elif pruefen:
@@ -165,12 +165,19 @@ def main():
     rnd.shuffle(klein)
     zug = {'k': 0, 'f': 0}
 
-    def naechster(art):
+    def naechster(art):                                          # ohne Wiederholung: Motiv weiterdrehen
         zug[art] += 1
         return klein[zug[art] % len(klein)] if art == 'k' else felsen[zug[art] % len(felsen)]
+    _setze = setze
+
+    def setze(name, cx, fy, opt=None, *a_, **kw):                # gleiches Motiv nie in der Naehe (10 Kacheln)
+        if (opt or {}).get('begleiter') and any(o_['basis'] == name and abs(o_['x'] - cx) < 160 and abs(o_['y'] - fy) < 160
+                                               for o_ in objekte):
+            return None
+        return _setze(name, cx, fy, opt, *a_, **kw)
     gesetzt = []
     for i, (n, tx, ty) in enumerate(BAEUME):
-        o = kachel(n, tx, ty, {'anim': 'baum'} if n != 'totbaum' else {'nur_kontakt': True}, i % 2 == 1)   # Astwerk: kein Balkenschatten
+        o = kachel(n, tx, ty, {'anim': 'baum'} if n != 'totbaum' else {}, i % 2 == 1)
         if not o:
             continue
         tsp = np.array(Image.open(os.path.join(OBJ, o['datei'])).convert('RGBA'))[..., 3] > 0
@@ -186,7 +193,7 @@ def main():
                                                            'g', ohne=(ti,)) for d in (24, 32))
         seitlich = lambda sd: any(setze(naechster('k'), sx + sd * d, sy + dy, {'begleiter': True, 'ebene': 0}, sd > 0, 'g')
                                   for d in (48, 56, 64, 72) for dy in (-T, 2 * T, -2 * T)
-                                  if not any(abs(o_['y'] + o_['fuss'] - (sy + dy)) < 6 and abs(o_['x'] - (sx + sd * d)) < 96
+                                  if not any(abs(o_['y'] + o_['fuss'] - (sy + dy)) < 10 and abs(o_['x'] - (sx + sd * d)) < 140
                                              for o_ in objekte if o_.get('begleiter')))
         nah = sum(1 for (_, _, _, x2, y2) in gesetzt if (x2, y2) != (sx, sy) and abs(x2 - sx) < 6 * T and abs(y2 - sy) < 5 * T)
         soll = 1 if nah else 2
@@ -197,8 +204,14 @@ def main():
                 break
             if f_():
                 hat += 1
+        if hat < soll:                                            # Ersatz: Begleiter weiter weg (Regel 5b)
+            for dx_, dy_ in ((-40, T), (40, T), (-56, 0), (56, 0), (0, 2 * T), (-72, T), (72, T)):
+                if hat >= soll:
+                    break
+                if setze(naechster('k'), sx + dx_, sy + dy_, {'begleiter': True, 'ebene': 0}, dx_ > 0, 'g'):
+                    hat += 1
         if hat < soll:
-            print('  Baum mit zu wenig Begleitern:', n, o and o['kachel'], hat)
+            print('  Baum mit zu wenig Begleitern:', n, hat)
     # ---------------- Wald fuellen (Guertel und Bloecke): dichte Laub-/Nadelbaeume, Luecken mit Bueschen
     hk = [(x, y) for y in range(rows) for x in range(cols) if cls[y][x] == 'h']
     rnd.shuffle(hk)
