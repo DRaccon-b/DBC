@@ -72,8 +72,10 @@ def bauen(frame=None, speichern=True):
             a[saum] = (a[saum] * 0.95).astype(np.uint8)
         a[m] = tex[art][m]
     # ---------------- Hoehen: Hochplateaus (1, begehbar) und Felsrand/Raute (2); alle Suedkanten mit Felsfront
+    # Pruefung: Rand/Raute liegen auf Plateauhoehe (eine Front je Abfall, keine doppelten Waende); der Rand ist nur
+    # durch seine Felstextur und die Kollision (eigene Ebene 3) vom begehbaren Plateau getrennt
     h1m = weich((hp >= 1).astype(np.float32), 5, 0.0, 7, 0.5)
-    hoch2 = weich((hp >= 2).astype(np.float32), 5, 0.0, 9, 0.5)
+    hoch2 = weich((hp >= 2).astype(np.float32), 5, 0.0, 9, 0.5) & h1m
     a[h1m] = tex['p'][h1m]
     qm = weich(zell_maske(cls, 'qt', cols, rows), 4.0, 0, 11) & h1m   # Weg auf dem Plateau vor der Treppe
     a[qm] = tex['b'][qm]
@@ -82,7 +84,6 @@ def bauen(frame=None, speichern=True):
     for (x0, x1, ry) in lay['treppen']:                              # Treppen schneiden die Front
         frei[ry * T - 4:ry * T + FRONT + 10, x0 * T:(x1 + 1) * T] = True
     wand = k4.hoehenkanten(a, h1m, 'wueste', FRONT, SEITE, LIPPE, frei, 42, berg=False)
-    wand |= k4.hoehenkanten(a, hoch2, 'wueste', FRONT, SEITE, LIPPE, np.zeros_like(frei), 43, berg=False)
     for (x0, x1, ry) in lay['treppen']:                              # Steintreppe frontal, volle Breite
         k4.treppe(a, x0 * T, (x1 + 1) * T, ry * T - 1, 's', FRONT, 'wueste', tex['b'])
     xm = np.zeros((Hp, Wp), bool)                                    # kein Wasser auf dieser Karte

@@ -44,7 +44,7 @@ BG_FELS = ['00', '02', '08', '16', '18', '24', '26', '32', '34', '40', '48', '58
 BG_BUSCH = ['01', '03', '09', '11', '19', '33', '41', '49', '57']
 for _n in BG_FELS + BG_BUSCH:
     FREMD['bg' + _n] = 'karte42/begleiter/%s.png' % _n
-PLATEAU_GROSS = ['00', '01', '02', '03', '05', '09', '13', '15']   # PixelLab k42_plateau (Nutzer: Plateaus zu leer)
+PLATEAU_GROSS = ['00', '01', '02', '03', '09', '13', '15']   # ohne toten Baum (pl05: einzeln ohne Begleiter)   # PixelLab k42_plateau (Nutzer: Plateaus zu leer)
 for _n in PLATEAU_GROSS:
     FREMD['pl' + _n] = 'karte42/plateau/%s.png' % _n
 STREU = ['gras', 'gras2', 'gras3', 'kiesel', 'zweig', 'knochen_k', 'kristall', 'stein']
@@ -103,7 +103,7 @@ def main():
                 y0_, x0_ = max(0, r[1] - 6), max(0, r[0] - 6)
                 if (lvl[y0_:r[3] + 2 * T, x0_:r[2] + 7] != ebene_soll).any():
                     return None                                      # Fuss 2 Reihen von der Kante (Wandregel)
-            elif (lvl[r[3] - 3:r[3] + 2, r[0]:r[2] + 1] != 1).any() or wand[r[3] - 3:r[3] + 2, r[0]:r[2] + 1].any():
+            elif (lvl[r[3] - 3:r[3] + 9, r[0]:r[2] + 1] != 1).any() or wand[r[3] - 3:r[3] + 2, r[0]:r[2] + 1].any():
                 return None                                          # Fuss ganz auf dem Wuestenboden, nie an der Wand
             if wasser[max(0, r[1]):r[3] + 1, r[0]:r[2] + 1].any():
                 return None                                          # nichts auf Teich oder Ufer
@@ -188,8 +188,8 @@ def main():
             plan = [vor, lambda: seitlich(-seite)]
             ersatz = [lambda: seitlich(seite), vor]
         else:
-            plan = [[vor, lambda: seitlich(-seite)], [lambda: hinter(seite), lambda: seitlich(-seite)],
-                    [vor, lambda: hinter(-seite)]][i % 3]
+            plan = [[vor, lambda: seitlich(-seite)], [vor, lambda: hinter(seite)],
+                    [vor, lambda: hinter(-seite)]][i % 3]                 # immer etwas vor dem Stumpf (Einbettung)
             ersatz = [lambda: hinter(-seite), lambda: hinter(seite), lambda: seitlich(seite), lambda: seitlich(-seite), vor]
         hat = 0
         for f_ in plan + ersatz:
@@ -207,13 +207,16 @@ def main():
     klein_ = [('bg' + n_) for n_ in BG_FELS + BG_BUSCH] + ['gras', 'gras2', 'gras3']
     rnd.shuffle(klein_)
     pl_g, pl_k, gpos, pmotiv = 0, 0, [], []
-    breit_ok = lambda x, y: sum(1 for xx in range(x - 4, x + 5) if 0 <= xx < cols and cls[y][xx] == 'r') >= 7 and \
-        sum(1 for yy in range(y - 4, y + 5) if 0 <= yy < rows and cls[yy][x] == 'r') >= 7   # keine Reihen auf schmalen Streifen
+    breit_ok = lambda x, y: sum(1 for xx in range(x - 5, x + 6) if 0 <= xx < cols and cls[y][xx] == 'r') >= 10 and \
+        sum(1 for yy in range(y - 5, y + 6) if 0 <= yy < rows and cls[yy][x] == 'r') >= 8   # keine Reihen auf schmalen Streifen
     for (x, y) in pk:
         if pl_g >= 18:
             break
         if any(abs(x - a_) < 7 and abs(y - b_) < 6 for (a_, b_) in gpos):
             continue
+        if not (sum(1 for xx in range(x - 6, x + 7) if 0 <= xx < cols and cls[y][xx] == 'r') >= 11 and
+                sum(1 for yy in range(y - 5, y + 6) if 0 <= yy < rows and cls[yy][x] == 'r') >= 9):
+            continue                                                  # nur auf breiten Randflaechen (keine Reihen)
         nahe = {m_ for (a_, b_, m_) in pmotiv if abs(x - a_) < 14 and abs(y - b_) < 14}
         frei_ = [m_ for m_ in gross_ if m_ not in nahe]
         if not frei_:
@@ -224,7 +227,7 @@ def main():
     for (x, y) in pk[::-1]:
         if pl_k >= 26:
             break
-        if any(abs(x - a_) < 3 and abs(y - b_) < 3 for (a_, b_) in gpos):
+        if any(abs(x - a_) < 4 and abs(y - b_) < 4 for (a_, b_) in gpos):
             continue
         if not breit_ok(x, y):
             continue

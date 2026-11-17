@@ -144,6 +144,11 @@ def main():
     # Vorlagenfehler: Huette stand mitten auf der Windbahn, Zeltreste als b-Zacken -> Sandplaetze fuer Huette und Lager
     k[33:38, 14:24] = 's'                             # Platz der Huette (links neben dem Weg, nicht am Treppenaustritt)
     k[54:58, 4:14] = np.where(k[54:58, 4:14] == 'r', 'r', 's')   # Lagerplatz am Unterstand
+    # Pruefung: Plateaufront darf nicht auf dem Felsrand stehen (Graben ohne Breite) -> Rand schliesst an das Plateau an
+    for (x0, y0, x1, y1) in PLATEAUS:
+        for x in range(x0, x1 + 1):
+            if k[FRONT_REIHE + 2, x] == 'r' and k[FRONT_REIHE, x] != 't':
+                k[FRONT_REIHE:FRONT_REIHE + 2, x] = 'r'
     k = zipfel_weg(k)
     h = np.zeros((R, C), int)
     h[k == 'r'] = 2
