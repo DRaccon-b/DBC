@@ -2185,6 +2185,22 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'wooden wine barrel floating in water, lying on its side, only the upper half above the waterline is visible, flat straight bottom edge at the waterline, iron hoops, no water drawn, ' + FR14,
         'old oak barrel drifting, lying sideways, half sunk, round wooden end showing, upper half only, flat cut bottom edge at the waterline, no water drawn, ' + FR14,
     ]},
+    'k49_deko': {'size': 64, 'freie_farben': True, 'items': [   # Karte 49 The Broken Promise: Bossarena (Beelzemon-Anspielungen)
+        'heavy black chopper motorcycle parked on its kickstand, seen from the side and slightly from above, chrome engine and exhaust pipes, dark purple accents, single round headlight, ' + FR14,
+        'iron fire brazier on three legs with tall violet-purple flames and glowing embers, ' + FR14,
+        'broken heavy iron chain lying on the ground in a loose curve, dark rusty links, one link snapped open, flat ground detail, ' + FR14,
+        'scorched black burn mark on stone ground with a few glowing orange embers, flat ground decal seen from above, ' + FR14,
+        'small scattered pile of spent red shotgun shells with brass caps, flat ground detail, ' + FR14,
+        'tattered black leather banner on a dark iron pole, three purple claw slash marks on the cloth, the pole stands on a small stone base, ' + FR14,
+        'cracked stone slab with deep claw scratches, flat ground detail, ' + FR14,
+        'pile of broken grey rock rubble with a bent iron spike, ' + FR14,
+    ]},
+    'k49_spur': {'size': 64, 'freie_farben': True, 'items': [   # Karte 49: Motorradspuren als Bodendetail
+        'dark rubber motorcycle tire skid mark on grey stone ground, a single curved black track, flat ground decal seen from above, no shadow, no ground drawn, ' + FR14,
+        'motorcycle burnout mark, a black rubber circle of tire tracks, flat ground decal seen from above, no shadow, no ground drawn, ' + FR14,
+        'long straight black motorcycle tire track with a few scattered pebbles, flat ground decal seen from above, no shadow, no ground drawn, ' + FR14,
+        'S-shaped black motorcycle tire skid mark, flat ground decal seen from above, no shadow, no ground drawn, ' + FR14,
+    ]},
     'k48_deko': {'size': 64, 'freie_farben': True, 'items': [   # Karte 48 Water Realm: Wassertempel/Bibliothek
         'tall slender dark slate-blue stone temple column with a small golden-orange capital and a square base, smooth polished stone, ' + FR14,
         'old wooden bookshelf full of colorful books, two shelves, carved dark wood frame with brass corners, ' + FR14,
