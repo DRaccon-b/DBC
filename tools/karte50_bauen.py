@@ -58,7 +58,15 @@ def verkohlen(a, lay, cols, rows, frame, wand=None):
     Hp, Wp = rows * T, cols * T
     km = np.kron(np.array([[c == '1' for c in z] for z in lay['brand']]), np.ones((T, T))).astype(np.float32)
     m = weich(km, 6.0, 0.0, 77, 0.5)
+    if os.environ.get('K50_RANDFREI', '1') == '1':                   # Nutzer: flache Bergkante (Felsrand) bleibt unverbrannt
+        rp = np.kron(np.array([[c == 'h' for c in z] for z in lay['klassen']]), np.ones((T, T), bool))
+        rand_frei = rp.copy()
+        for d in range(1, 30):                                       # Fronten im Fels gehoeren zum Rand
+            rand_frei[d:] |= rp[:-d] & (wand[d:] if wand is not None else False)
+        m &= ~rand_frei
     weit = weich(km, 12.0, 0.0, 78, 0.25) & ~m                        # Uebergang: gesprenkelt
+    if os.environ.get('K50_RANDFREI', '1') == '1':
+        weit &= ~rand_frei
     rs = np.random.RandomState(5077)
     rausch = rs.rand(Hp, Wp)
     rand_ = weit & (rausch < 0.35)
