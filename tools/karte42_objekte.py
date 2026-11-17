@@ -269,7 +269,7 @@ def main():
     # ---------------- sparsame Streudeko (Kleinkram dezent, keine Wiederholung, nicht auf Wegen) - Tal und Hochplateaus
     kand = [(x, y, 1 if cls[y][x] == 's' else 2) for y in range(2, rows - 2) for x in range(2, cols - 2) if cls[y][x] in 'sp']
     rnd.shuffle(kand)
-    n_soll, gesetzt, letzte = 75, 0, None
+    n_soll, gesetzt, letzte = 40, 0, None   # Nutzer: weniger kleine begehbare Objekte
     for (x, y, eb) in kand:
         if gesetzt >= n_soll:
             break
