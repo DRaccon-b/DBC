@@ -2181,6 +2181,10 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'stack of three large wine barrels lying on their sides in a pyramid on a wooden rack, round fronts with iron hoops, ' + FR14,
         'huge old wine cask lying on a stone and wood base with a carved round front, iron hoops and a wooden tap, ' + FR14,
     ]},
+    'k45_treib': {'size': 32, 'freie_farben': True, 'items': [   # Karte 45: schwimmende Weinfaesser (Nutzer)
+        'wooden wine barrel floating in water, lying on its side, only the upper half above the waterline is visible, flat straight bottom edge at the waterline, iron hoops, no water drawn, ' + FR14,
+        'old oak barrel drifting, lying sideways, half sunk, round wooden end showing, upper half only, flat cut bottom edge at the waterline, no water drawn, ' + FR14,
+    ]},
     'k43_halme': {'size': 32, 'freie_farben': True, 'items': [   # Karte 43: flache Grashalm-Bueschel als Bodenstruktur
         'tiny tuft of short green grass blades seen from above, flat ground detail, no shadow, ' + FR14,
         'small cluster of thin dark green grass blades and two tiny white clover flowers, flat ground detail, ' + FR14,
