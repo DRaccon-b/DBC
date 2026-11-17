@@ -1360,11 +1360,73 @@
    ]
   },
   {
+   "name": "fass_d",
+   "datei": "varianten/fass_d.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 3,
+    "y": 3,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      18,
+      3,
+      3,
+      3
+     ],
+     "fusskachel": [
+      19,
+      5
+     ]
+    }
+   ]
+  },
+  {
+   "name": "fass_f",
+   "datei": "varianten/fass_f_m.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 6,
+    "y": 3,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      30,
+      3,
+      3,
+      3
+     ],
+     "fusskachel": [
+      31,
+      5
+     ]
+    }
+   ]
+  },
+  {
    "name": "treib1",
    "datei": "varianten/treib1.png",
    "animation": null,
    "slot_kacheln": {
-    "x": 3,
+    "x": 9,
     "y": 3,
     "breite": 3,
     "hoehe": 3
@@ -1395,7 +1457,7 @@
    "datei": "varianten/fass_c_m.png",
    "animation": null,
    "slot_kacheln": {
-    "x": 6,
+    "x": 12,
     "y": 3,
     "breite": 3,
     "hoehe": 2
@@ -1422,42 +1484,11 @@
    ]
   },
   {
-   "name": "fass_d",
-   "datei": "varianten/fass_d.png",
-   "animation": null,
-   "slot_kacheln": {
-    "x": 9,
-    "y": 3,
-    "breite": 3,
-    "hoehe": 2
-   },
-   "objektblock_im_slot": {
-    "x": 0,
-    "y": 0,
-    "breite": 3,
-    "hoehe": 2
-   },
-   "fundstellen_karte": [
-    {
-     "block": [
-      18,
-      4,
-      3,
-      2
-     ],
-     "fusskachel": [
-      19,
-      5
-     ]
-    }
-   ]
-  },
-  {
    "name": "fass_e",
    "datei": "varianten/fass_e_m.png",
    "animation": null,
    "slot_kacheln": {
-    "x": 12,
+    "x": 15,
     "y": 3,
     "breite": 3,
     "hoehe": 2
@@ -1479,37 +1510,6 @@
      "fusskachel": [
       35,
       21
-     ]
-    }
-   ]
-  },
-  {
-   "name": "fass_f",
-   "datei": "varianten/fass_f_m.png",
-   "animation": null,
-   "slot_kacheln": {
-    "x": 15,
-    "y": 3,
-    "breite": 3,
-    "hoehe": 2
-   },
-   "objektblock_im_slot": {
-    "x": 0,
-    "y": 0,
-    "breite": 3,
-    "hoehe": 2
-   },
-   "fundstellen_karte": [
-    {
-     "block": [
-      30,
-      4,
-      3,
-      2
-     ],
-     "fusskachel": [
-      31,
-      5
      ]
     }
    ]

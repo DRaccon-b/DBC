@@ -21,8 +21,8 @@ FREMD = {'gras': 'karte04/klein/00.png', 'gras2': 'karte04/klein/01.png',
          'pilz': 'karte04/klein/11.png', 'kiesel': 'karte04/klein/02.png', 'zweig': 'karte04/klein/09.png',
          'blume': 'karte04/klein/07.png', 'gras3': 'karte04/klein/27.png',
          'fass_a': 'karte45/fass_klein/01s.png', 'fass_b': 'karte45/fass_klein/02.png',
-         'fass_c': 'karte45/fass_klein/00s.png', 'fass_d': 'karte45/fass_klein/04s.png',
-         'fass_e': 'karte45/fass_klein/03s.png', 'fass_f': 'karte45/fass_klein/14s.png'}
+         'fass_c': 'karte45/fass_klein/01s.png', 'fass_d': 'karte45/fass_klein/02.png',   # Nutzer: wie die ersten beiden Faesser
+         'fass_e': 'karte45/fass_klein/01s.png', 'fass_f': 'karte45/fass_klein/02.png'}
 for _n, _i in (('rose', 17), ('lotus', 18), ('rose2', 19), ('kolben', 7), ('wfels', 22)):
     FREMD[_n] = 'karte01/deko/%02d.png' % _i                          # Wasserpflanzen und Wasserfels
 for _i in range(2):
