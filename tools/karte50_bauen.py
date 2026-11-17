@@ -70,12 +70,18 @@ def verkohlen(a, lay, cols, rows, frame, wand=None):
     boden = m & ~(wand if wand is not None else np.zeros_like(m))
     tief = np.where(flecken, 0.36, 0.5)[..., None]                    # Russflecken: Textur bleibt sichtbar
     af[boden] = (af * tief + kohle * (1 - tief) * 0.55)[boden]
-    gras_ = boden & (af[..., 1] > af[..., 0] + 6)                     # verbrannte Wiese: braun-schwarz statt gruen
+    # Kern (Nutzer: erste Version) - ganz verkohlt; das verrusste Band (zweite Version) bleibt als Uebergang ringsum
+    from PIL import ImageFilter as _IF
+    kern_k = np.array(Image.fromarray((km[::T, ::T] * 255).astype(np.uint8)).filter(_IF.MinFilter(5))) > 0   # 2 Kacheln
+    kern = weich(np.kron(kern_k, np.ones((T, T))).astype(np.float32), 6.0, 0.0, 80, 0.5) & m
+    kb_ = kern & boden
+    af[kb_] = neu[kb_]
+    gras_ = boden & ~kern & (af[..., 1] > af[..., 0] + 6)             # verbrannte Wiese: braun-schwarz statt gruen
     lg_ = af[gras_].mean(axis=1, keepdims=True)
     af[gras_] = lg_ * np.array([1.05, 0.88, 0.72]) * 0.9
     if wand is not None:                                             # Felsfronten nur verrusst (Relief bleibt)
         wm_ = m & wand
-        af[wm_] = af[wm_] * 0.62
+        af[wm_] = af[wm_] * np.where(kern[wm_], 0.48, 0.62)[:, None]
     af[rand_] = af[rand_] * 0.7 + (af[rand_] * 0.45 + kohle * 0.25) * 0.3
     asche = m & (rausch > 0.985)                                     # Ascheflocken
     af[asche] = np.array([140, 136, 134])
