@@ -32,27 +32,26 @@ for _i in (2, 3, 14):
 KLEINFELS = [0, 3, 4, 15, 24, 26, 27, 31, 52, 55]          # bemooste Felsen, Farn, Buesche, Pilze
 for _i in KLEINFELS:
     FREMD['kf%02d' % _i] = 'karte27/fels_klein/%02d.png' % _i
-WALD = ['b00', 'b01', 'b02', 'b05', 'b06', 'b09']
+WALD = ['b00', 'b02', 'b06', 'b07', 'b08']                   # ohne Runen-Baeume (b01/b05/b09: Leuchtrunen)
 BUSCH = ['b12', 'b13']
 # Baeume der Vorlage (Sprite, Kachel-x, Fusszeile): Eichen, runde Baeume, Zypressen; dichte Gruppen aufgelockert
-BAEUME = [('b05', 21, 5), ('b03', 25, 5), ('b00', 24, 9), ('b08', 21, 10), ('b05', 12, 17), ('b03', 7, 17),
+BAEUME = [('b00', 21, 5), ('b03', 25, 5), ('b00', 24, 9), ('b08', 21, 10), ('b00', 12, 17), ('b03', 7, 17),
           ('b02', 10, 21), ('b03', 15, 21), ('b03', 19, 17), ('b07', 17, 21), ('b02', 26, 16),
           ('b03', 58, 6), ('b08', 61, 4), ('b07', 64, 9),
-          ('b05', 18, 29),
-          ('b03', 76, 26), ('b02', 80, 24), ('b05', 89, 26), ('b03', 84, 29), ('b03', 74, 31), ('b07', 79, 30),
-          ('b03', 11, 42), ('b02', 15, 43), ('b03', 19, 45), ('b08', 16, 48), ('b03', 5, 59),
+          ('b00', 18, 29),
+          ('b03', 76, 26), ('b02', 80, 24), ('b00', 89, 26), ('b03', 84, 29), ('b03', 74, 31), ('b07', 79, 30),
+          ('b03', 11, 42), ('b02', 15, 43), ('b03', 19, 45), ('b08', 16, 48),
           ('b03', 81, 43), ('b02', 86, 44), ('b03', 90, 47), ('b08', 84, 48), ('b03', 78, 51), ('b02', 88, 52),
-          ('b03', 81, 56), ('b07', 90, 56), ('b05', 77, 58),
+          ('b03', 81, 56), ('b07', 90, 56), ('b00', 77, 58),
           ('b03', 25, 73), ('b02', 45, 72), ('b03', 49, 75), ('b08', 43, 76), ('b03', 52, 69)]
 # Huetten der Vorlage (Mitte px) mit Variante; Dorfdeko der Vorlage (Name, px-Mitte, Fuss-px)
 HUETTE_VAR = ['h00', 'h03', 'h08', 'h02', 'h11', 'h13', 'h04', 'h10', 'h06', 'h05']
 DEKO = [('stamm', 1010, 416), ('stamm', 475, 624), ('stamm', 300, 846), ('stamm', 595, 1134),
         ('bank', 1100, 432), ('bank', 1167, 560), ('bank', 607, 656), ('bank', 1070, 958),
-        ('zaun', 1080, 446), ('zaun', 1120, 446),
         ('fels', 640, 200), ('fels', 640, 360), ('fels', 865, 536), ('fels', 880, 760), ('fels', 1152, 856),
         ('brunnen', 700, 560), ('schneemann', 470, 500), ('schneemann', 1250, 360), ('schneemann', 230, 920),
         ('schneemann', 1300, 960), ('schild', 760, 230), ('schild', 330, 600), ('schild', 1200, 1010),
-        ('stumpf', 300, 360), ('steine', 1350, 140), ('farn', 140, 740), ('stumpf', 1420, 600)]
+        ('stumpf', 300, 360), ('steine', 1350, 140), ('stumpf', 1420, 600)]
 
 
 def main():
@@ -225,6 +224,32 @@ def main():
             if setze(rnd.choice(BUSCH), x * T + 8, y * T + T - 5, {'anim': 'baum', 'nur_kontakt': True}, rnd.random() < 0.5,
                      art='wald'):
                 n_w += 1
+    # zweiter Durchgang: Waldboden, der noch kahl ist (Guertelraender, Kartenrand), mit Bueschen/Baeumen schliessen
+    Hp_, Wp_ = rows * T, cols * T
+    deck = np.zeros((Hp_, Wp_), bool)
+    for o_ in objekte:
+        sp_ = np.array(Image.open(os.path.join(OBJ, o_['datei'])).convert('RGBA'))[..., 3] > 0
+        y0_, x0_ = o_['y'], o_['x']
+        ys_, xs_ = slice(max(0, y0_), min(Hp_, y0_ + sp_.shape[0])), slice(max(0, x0_), min(Wp_, x0_ + sp_.shape[1]))
+        deck[ys_, xs_] |= sp_[ys_.start - y0_:ys_.stop - y0_, xs_.start - x0_:xs_.stop - x0_]
+    for (x, y) in sorted(hk, key=lambda p_: (p_[1], p_[0])):
+        if deck[y * T:(y + 1) * T, x * T:(x + 1) * T].mean() > 0.75:
+            continue
+        for n_ in (rnd.choice(BUSCH), rnd.choice(WALD)):
+            o_ = None
+            for cx_ in (x * T + 8, x * T + 2, x * T + 14):
+                cx_ = min(max(cx_, 17), cols * T - 17)                   # am Kartenrand ganz im Bild
+                o_ = setze(n_, cx_, min(y * T + T - 3, rows * T - 1), {'anim': 'baum', 'nur_kontakt': True},
+                           rnd.random() < 0.5, art='wald')
+                if o_:
+                    break
+            if o_:
+                n_w += 1
+                sp_ = np.array(Image.open(os.path.join(OBJ, o_['datei'])).convert('RGBA'))[..., 3] > 0
+                y0_, x0_ = o_['y'], o_['x']
+                ys_, xs_ = slice(max(0, y0_), min(Hp_, y0_ + sp_.shape[0])), slice(max(0, x0_), min(Wp_, x0_ + sp_.shape[1]))
+                deck[ys_, xs_] |= sp_[ys_.start - y0_:ys_.stop - y0_, xs_.start - x0_:xs_.stop - x0_]
+                break
     # ---------------- sparsame Streudeko (begehbar), keine Reihen, keine Wiederholung
     streu = ['gras', 'gras2', 'gras3', 'pilz', 'kiesel', 'zweig', 'blume']
     kand = [(x, y) for y in range(3, rows - 3) for x in range(3, cols - 3) if cls[y][x] == 'g']

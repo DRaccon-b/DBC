@@ -23,10 +23,10 @@ C, R, T = 96, 80, 16
 REF = {'g': (87, 142, 61), 'g2': (72, 132, 48), 'w': (200, 173, 119), 'h': (44, 104, 40), 'h2': (36, 96, 36),
        'x': (49, 124, 170), 'b': (174, 122, 64)}
 BRUECKEN = [(42, 15, 48, 18), (47, 26, 53, 29), (46, 39, 52, 42), (57, 53, 63, 56), (59, 61, 65, 64)]
-TELEPORTER = [(78, 0, 4, 3), (0, 33, 3, 4), (0, 54, 3, 4), (93, 66, 3, 4), (62, 77, 4, 3), (76, 77, 4, 3)]
+TELEPORTER = [(78, 0, 4, 3), (0, 33, 3, 4), (0, 54, 3, 4), (93, 66, 3, 4), (61, 77, 4, 3), (77, 77, 4, 3)]   # unten: 3 Spalten Wald bis zum Bach
 # Huetten der Vorlage (Mitte in px) - Flaechen werden Wiese, die Huetten setzt objekte()
-HUETTEN = [(370, 470), (1070, 355), (1200, 320), (592, 580), (1085, 800), (175, 900), (512, 1045), (320, 1170),
-           (465, 1185), (1378, 915)]
+HUETTEN = [(370, 470), (1070, 355), (1200, 320), (590, 505), (1085, 800), (165, 880), (512, 1045), (320, 1150),
+           (465, 1165), (1378, 915)]
 
 
 def main():
@@ -80,6 +80,8 @@ def main():
     rand = np.zeros((R, C), bool)
     rand[0:3, :] = rand[-3:, :] = True; rand[:, 0:3] = rand[:, -3:] = True
     k[rand & (k != 'x')] = 'h'                                        # Guertel geschlossen (Bach laeuft hindurch)
+    k[:, 3:5][k[:, 3:5] == 'g'] = 'h'                                  # Seitenguertel mind. 5 Kacheln (sonst nur eine
+    k[:, C - 5:C - 3][k[:, C - 5:C - 3] == 'g'] = 'h'                  # Baumsaeule mit kahlem Boden)
     k = k43.zipfel_weg(k, 'gwh')
     bru = BRUECKEN + [(64, 68, 70, 71)]
     for y in (65, 66, 67):                                            # Bach zwischen den Bruecken im Gras
@@ -103,23 +105,22 @@ def main():
             k[ty + hh:ty + hh + 4, tx:tx + b] = 'w'
         else:
             k[ty - 4:ty, tx:tx + b] = np.where(k[ty - 4:ty, tx:tx + b] == 'x', 'x', 'w')
-    for y in range(R - 6, R):                                         # schmale Waldstreifen (< 3 Spalten) am Bach-
-        for x in range(1, C - 1):                                     # auslauf zwischen Teleporter und Wasser -> Wiese
-            if k[y, x] == 'h':
-                l_ = x; r_ = x
-                while l_ > 0 and k[y, l_ - 1] == 'h': l_ -= 1
-                while r_ < C - 1 and k[y, r_ + 1] == 'h': r_ += 1
-                if r_ - l_ < 2 and 'x' in k[y, max(0, l_ - 2):r_ + 3]:
-                    k[y, l_:r_ + 1] = 'g'
     for (tx, ty, b, hh) in TELEPORTER:                                # Seitenausgaenge: Reihe ueber dem Teleporter Weg
         if (tx == 0 or tx + b == C) and k[ty - 1, tx] == 'h':          # (die Guertelfront liegt dort, nicht auf den
             k[ty - 1, tx:tx + b] = 'w'                                # Teleporterplatten; Karte 43)
+            for x_ in list(range(tx + b, tx + b + 4)) + list(range(tx - 4, tx)):   # 1-Spalten-Vorsprung daneben
+                if 0 <= x_ < C and k[ty - 1, x_] == 'h' and k[ty, x_] == 'w':
+                    k[ty - 1, x_] = 'w'
     k[57, 8] = 'w'                                                    # Schachbrett-Ecke Weg/Gras aufgeloest
     for y in range(1, R - 1):                                         # einzelne Graskacheln im Weg (Brueckenende)
         for x in range(1, C - 1):
             if k[y, x] == 'g' and sum(k[y + dy, x + dx] == 'g' for dy, dx in ((1, 0), (-1, 0), (0, 1), (0, -1))) <= 1 \
                     and sum(k[y + dy, x + dx] in 'wb' for dy, dx in ((1, 0), (-1, 0), (0, 1), (0, -1))) >= 2:
                 k[y, x] = 'w'
+    for y in range(R - 5, R - 3):                                      # 1-Kachel-Waldnasen ueber dem Bachauslauf
+        for x in range(1, C - 1):
+            if k[y, x] == 'h' and k[y, x - 1] != 'h' and k[y, x + 1] != 'h':
+                k[y, x] = 'g'
     h = np.where(k == 'h', 1, 0)
     bruecken = []
     for (x0, y0, x1, y1) in bru:
