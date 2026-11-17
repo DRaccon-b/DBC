@@ -118,24 +118,33 @@ def main():
         o = suche('brocken', px, py, {}, px > 400, 1, r=2, schritt=8)
         if o:                                                        # Einbettung: Kiesel an einer Sockelecke
             bx0, bx1 = o['x'], o['x'] + 43
-            for (cx_, sp_) in ((bx1 + 4, False), (bx0 - 4, True)):
-                if setze('kiesel', cx_, o['y'] + o['fuss'] + 3, {'ebene': 0, 'liegend': True, 'einbettung': True}, sp_, 1, gap=-6):
+            fy_ = o['y'] + o['fuss'] + 3
+            for (cx_, sp_) in ((bx1 + 2, False), (bx0 + 2, True)):   # direkt an der Sockelecke (ueberlappt den Fels gewollt)
+                r_ = (int(cx_) - 11, fy_ - 18, int(cx_) + 11, fy_)
+                if (lvl[r_[1]:r_[3] + 3, r_[0]:r_[2] + 1] == 1).all() and not any(
+                        schnitt(r_, tuple(rr[:4]), 2) for rr in rects[:-1]):
+                    setze('kiesel', cx_, fy_, {'ebene': 0, 'liegend': True, 'einbettung': True, 'schattenlos': True},
+                          sp_, 1, pruefen=False)
                     break
-    for i, (px, py) in enumerate([(176, 236), (656, 364)]):
+            else:
+                print('  Fels ohne Einbettung', o['x'], o['y'])
+    for i, (px, py) in enumerate([(176, 236), (644, 364)]):
         o = suche('totbaum', px, py, {}, i == 1, 1, r=2, schritt=8)
         if not o:
             continue
         sx = o['x'] + 31; sy = o['y'] + o['fuss']
-        ok = any(setze('rf2' if i == 0 else 'rf4', sx + d, sy + T - 2, {'begleiter': True}, i == 1, 1, gap=-30)
-                 for d in (14, -14, 20, -20))                       # vor dem Stumpf, eine Kachel tiefer
-        any(setze('rf3' if i == 0 else 'rf1', sx + s * d, sy + 2, {'begleiter': True}, s > 0, 1)
-            for d in (40, 48, 56) for s in ((-1, 1) if i == 0 else (1, -1)))   # seitlich
+        if i == 0:                                                   # 5d abwechseln: Baum 1 Fels vor dem Stumpf + links tiefer
+            ok = any(setze('rf2', sx + d, sy + T - 2, {'begleiter': True}, False, 1, gap=-30) for d in (14, -14, 20, -20))
+            any(setze('rf3', sx - d, sy + T + 10, {'begleiter': True}, False, 1) for d in (40, 48, 56))
+        else:                                                        # Baum 2: seitlich, rechts tiefer und links hoeher
+            ok = any(setze('rf4', sx + d, sy + T + 8, {'begleiter': True}, True, 1) for d in (40, 48, 56))
+            any(setze('rf1', sx - d, sy - T + 2, {'begleiter': True}, False, 1) for d in (36, 44, 52))
         if not ok:
             print('  Baum ohne Begleiter vor dem Stumpf', i)
     # ---------------- Gebrochenes Versprechen: zerrissene Ketten, Brandflecken, Kampfspuren (dezent, keine Reihen)
     for (n, px, py) in [('kette', 300, 330), ('kette', 520, 230), ('brand', 420, 180), ('brand', 200, 380),
                         ('huelsen', 470, 300), ('kralle', 130, 300), ('knochen', 420, 120), ('schutt', 290, 520),
-                        ('sperre', 640, 200), ('huelsen', 290, 200)]:
+                        ('sperre', 95, 470), ('huelsen', 290, 200)]:
         suche(n, px, py, {'liegend': n in FLACH, 'ebene': 0 if n in FLACH else 1}, rnd.random() < 0.5, 1, r=3, schritt=8)
     # ---------------- sparsame Streudeko wie in der Vorlage (Zweige, Kiesel)
     kand = [(x, y) for y in range(4, rows - 3) for x in range(3, cols - 3) if cls[y][x] in 'gw']
@@ -152,7 +161,9 @@ def main():
             n_s += 1
     for o in objekte:                                                # Fels auf Fels: kein Bodenwall; Felsen nur Kontaktschatten
         o.setdefault('ohne_wall', True)
-        if o['basis'] in ('brocken', 'rf1', 'rf2', 'rf3', 'rf4', 'schutt'):
+        if o['basis'] in FLACH:                                      # Bodenmale/flache Teile ohne Schlagschatten
+            o['schattenlos'] = True
+        if o['basis'] in ('brocken', 'rf1', 'rf2', 'rf3', 'rf4', 'schutt', 'sperre'):
             o['nur_kontakt'] = True
     json.dump(objekte, open(os.path.join(OBJ, 'platzierung.json'), 'w'), indent=0)
     print('Karte 49: %d Objekte (Streudeko %d)' % (len(objekte), n_s))
