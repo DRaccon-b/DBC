@@ -154,7 +154,7 @@ def main():
         return None
 
     # ---------------- Deva-Banner (Tuch weht, Stange fest) und Saeulen - an den Plaetzen der Vorlage
-    bx0_, by0_, bx1_, by1_ = lay['bruecken'][0]                     # Flaggenpaar am Eingang: Westende der Hauptbruecke,
+    bx0_, by0_, bx1_, by1_ = lay['bruecken'][1]                     # Flaggenpaar am Eingang: Westende der Hauptbruecke,
     ok_ = False                                                        # gespiegelt zur Brueckenachse
     for xb_ in [bx1_ + d_ for d_ in range(3, 7)] + [bx0_ - d_ for d_ in range(3, 8)]:   # zuerst auf der Arenaseite
         for (ya_, yb_) in ((by0_ - 1, by1_ + 2), (by0_ - 2, by1_ + 3), (by0_, by1_ + 1)):

@@ -24,7 +24,7 @@ REF = {'g': (101, 118, 138), 'h': (137, 151, 165), 'w': (136, 144, 144), 'k': (1
        'd': (64, 72, 88), 'c': (90, 100, 112)}
 GRABEN = (82.5, 50.5, 14.5, 17.5)       # Ellipse um die Arena (Mitte x, y, Halbachsen) in Kacheln
 BRUECKEN_Y = [(42, 44), (57, 59)]       # Reihen der Grabenbruecken (Westseite)
-FLUSS = [(4, 74), (18, 74), (22, 76), (25, 78), (33, 78)]   # (Reihe, linke Spalte): Quelle am Fuss des Felsrands, endet am Graben
+FLUSS = [(19, 74), (21, 75), (24, 77), (25, 78), (33, 78)]   # (Reihe, linke Spalte): Quelle am Fuss des Felsrands, endet am Graben
 FLUSS_BRUECKE = (27, 31)                                     # Reihen der Bruecke, wo der Pflasterring den Fluss kreuzt
 TELEPORTER = [(19, 0, 3, 2), (62, 0, 3, 2), (97, 23, 3, 3), (0, 62, 3, 3), (22, 72, 3, 3)]
 k43.R, k43.C = R, C
@@ -111,6 +111,10 @@ def main():
     for y in range(y_q, 34):
         k[y, fluss_x[y]:fluss_x[y] + 2] = 'f'
     k[y_q:y_q + 3, fluss_x[y_q] - 1:fluss_x[y_q] + 3] = 'f'          # Becken unter dem ersten Wasserfall (breiter)
+    for y in range(4, y_q):                                           # Rinne wird Berg: der Fluss laeuft oben bis zur
+        for x in range(fluss_x[y_q] - 3, fluss_x[y_q] + 5):            # urspruenglichen Bergkante (Nutzer)
+            if k[y, x] in 'gwkn':
+                k[y, x] = 'h'
     k[0:y_q, fluss_x[y_q]:fluss_x[y_q] + 2] = 'F'                     # Fluss oben auf dem Berg (kommt von ausserhalb der Karte)
     for y in range(y_q + 1, 34):                                            # diagonale Stufen ohne Luecke (4er-Nachbarschaft)
         if fluss_x[y] != fluss_x[y - 1]:
