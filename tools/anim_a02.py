@@ -105,6 +105,10 @@ ANIM = {
         'k18s/01': {'anim': 'leuchten', 'licht': [10, 11], 'licht_box': [2, 5, 18, 17], 'licht_r': 7},
         'k18s/42': {'anim': 'leuchten', 'licht': [10, 9], 'licht_box': [2, 1, 19, 18], 'licht_r': 7},
     },
+    'karte48': {   # Water Realm: Laternen leuchten (nur das Glas)
+        'lampe': {'lampe_box': [4, 22, 18, 44], 'licht_farbe': [255, 220, 150]},
+        'tisch': {'anim': 'kerzen', 'flammen_box': [[47, 0, 54, 5]]},      # Kerze auf dem Lesetisch flackert
+    },
     'karte34': {   # Shinjuku Central Park: Schaukeln schwingen um die Kettenaufhaengung
         'spiel/schaukel': {'anim': 'teil_drehen', 'dreh': [
             {'box': [13, 6, 30, 40], 'punkt': [21, 5], 'amp': 3},
