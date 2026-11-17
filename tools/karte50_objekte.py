@@ -120,13 +120,17 @@ def main():
             continue
         achse = (x0 * T + (x1 + 1) * T) / 2.0
         if ry < 60:                                                  # die beiden Torii (untere Treppe ohne Tor)
-            setze('torii', achse, (ry - 1) * T + T - 1, {'fest_pos': True, 'vor_wand': True}, pruefen=False)
+            setze('torii', achse, (ry - 1) * T + T - 1, {'fest_pos': True, 'vor_wand': True, 'nur_kontakt': True}, pruefen=False)
         paar('schale', achse, (x1 - x0 + 1) * T / 2.0 + 24, (ry - 1) * T + 12, {'anim': 'kerzen', 'flammen_box': [[4, 0, 24, 20]],
                                                                               'flammen_alle': True, 'flammen_amp': 1.4})
         paar('pfosten', achse, (x1 - x0 + 1) * T / 2.0 + 24, (ry + 4) * T + 12)
     # Vorlage: Pfosten-/Schalenpaare auf den Terrassen (Achse der Torii-Plaetze), sparsam
-    for (n, achse, ab, fy) in [('pfosten', 871, 96, 222), ('schale', 871, 64, 228), ('pfosten', 808, 96, 672),
-                               ('schale', 808, 64, 690)]:
+    ax_ = [(x0 * T + (x1 + 1) * T) / 2.0 for (x0, x1, ry, r_) in lay['treppen'] if r_ == 's' and ry < 60]
+    ax_.sort()                                                       # [unteres Torii, oberes Torii] nach x
+    a_oben = [(x0 * T + (x1 + 1) * T) / 2.0 for (x0, x1, ry, r_) in lay['treppen'] if r_ == 's' and ry < 30][0]
+    a_mitte = [(x0 * T + (x1 + 1) * T) / 2.0 for (x0, x1, ry, r_) in lay['treppen'] if r_ == 's' and 30 < ry < 60][0]
+    for (n, achse, ab, fy) in [('pfosten', a_oben, 96, 222), ('schale', a_oben, 64, 228), ('pfosten', a_mitte, 96, 672),
+                               ('schale', a_mitte, 64, 690)]:   # exakt auf den Torii-Achsen
         paar(n, achse, ab, fy, {'anim': 'kerzen', 'flammen_box': [[4, 0, 24, 20]], 'flammen_alle': True, 'flammen_amp': 1.4}
              if n == 'schale' else {})
     # ---------------- Abgesenkter Hof (Nutzer): Schrein an der Nordwand, Laternenpaar, Opferkasten, Wasserbecken
@@ -139,28 +143,37 @@ def main():
     if not o_:
         print('  Wasserbecken im Hof nicht gesetzt')
     # ---------------- Vorlage: Baeume (mit Begleitern), Laternen, Felsbrocken, Unterstand
-    baeume = [('baum', 608, 528), ('baum', 655, 528), ('baum', 352, 688), ('baum', 368, 752), ('baum', 1280, 418),
-              ('baum', 1248, 912), ('baum', 1296, 912), ('baum', 384, 1138), ('baum', 400, 1182), ('zypresse', 695, 520),
-              ('zypresse', 1080, 552)]
+    baeume = [('baum', 608, 528), ('baum', 655, 528), ('baum', 330, 690), ('baum', 1300, 400),
+              ('baum', 1248, 912), ('baum', 1296, 912), ('baum', 384, 1138), ('zypresse', 1080, 552)]   # nur auf Wiese
     gesetzt = []
     for i, (n, px, py) in enumerate(baeume):
-        o = suche(n, px, py, {'anim': 'baum'}, i % 2 == 1, r=2, klassen='gnk')
+        o = suche(n, px, py, {'anim': 'baum', 'nur_kontakt': True}, i % 2 == 1, r=3, klassen='n')
         if o:
             gesetzt.append(o)
     vorne = ['kf00', 'kf24', 'kf52']
-    for j, o in enumerate(gesetzt):                                  # Regel 5d: abwechselnd vor dem Stumpf / seitlich tiefer
+    for j, o in enumerate(gesetzt):                                  # Regel 5d: Begleiter vor dem Stumpf + seitlich tiefer
         sx = o['x'] + 22 if o['basis'] == 'baum' else o['x'] + 13
         sy = o['y'] + o['fuss']
-        n_ = vorne[j % 3]
-        if j % 2 == 0 and o['basis'] == 'baum':
-            any(setze(n_, sx + d, sy + T - 2, {'begleiter': True}, d < 0, gap=-30, klassen='gnkw') for d in (12, -12, 16))
-        else:
-            any(setze(n_, sx + s_ * d, sy + T + 6, {'begleiter': True}, s_ > 0, klassen='gnkw')
-                for d in (36, 44) for s_ in ((-1, 1) if j % 4 < 2 else (1, -1)))
+        hat = 0
+        if o['basis'] == 'baum' and j % 3 != 2:
+            hat += any(setze(vorne[j % 3], sx + d, sy + T - 2, {'begleiter': True}, d < 0, gap=-30, klassen='gn')
+                       for d in (12, -12, 16, -16))
+        for (d, s_, dy) in ((36, -1, T + 6), (36, 1, T + 6), (44, -1, 2 * T), (44, 1, 2 * T), (40, 1, -T), (40, -1, -T)):
+            if hat >= 2:
+                break
+            if setze(vorne[(j + 1 + hat) % 3], sx + s_ * d, sy + dy, {'begleiter': True}, s_ > 0, klassen='gn'):
+                hat += 1
+        if hat < 2:
+            for (d, s_) in ((24, 1), (24, -1)):                      # kleine Blumen/Bueschel an den Sockelecken
+                if hat < 2 and setze('lilie' if j % 2 else 'gras', sx + s_ * d, sy + 4, {'begleiter': True, 'ebene': 0},
+                                     s_ > 0, gap=-4, klassen='gn'):
+                    hat += 1
+        if hat < 2:
+            print('  Baum mit wenig Begleitern', o['basis'], o['kachel'], hat)
     for (n, px, py) in [('laterne', 568, 552), ('laterne', 455, 888), ('laterne', 1224, 968), ('brocken', 384, 568),
                         ('brocken', 290, 680), ('brocken', 1328, 345), ('unterstand', 1390, 800)]:
         suche(n, px, py, {'anim': 'lampe', 'lampe_box': [8, 18, 20, 30], 'licht_farbe': [255, 200, 120]} if n == 'laterne' else {},
-              px > 800, r=3)
+              px > 800, r=3, klassen='gn')                          # nicht auf Pflaster
     # ---------------- Feuervogel: wenige Federn, rote Spinnenlilien auf den Wiesen, Grasbueschel - dezent
     for (n, px, py) in [('feder', 760, 300), ('feder2', 330, 470), ('feder', 1020, 640), ('feder2', 560, 1010),
                         ('lilie', 260, 640), ('lilie', 1300, 380), ('lilie', 250, 770), ('lilie', 1270, 880),

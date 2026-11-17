@@ -28,8 +28,8 @@ REF = {'g': (115, 131, 147), 'w': (138, 146, 155), 'h': (137, 151, 165), 'f': (1
        't': (129, 135, 149), 'y': (89, 109, 128)}
 # Terrassenkanten: erste Reihe der tieferen Ebene je Spaltenbereich (Front liegt dort); Treppen (x0, x1) darin
 KANTEN = [  # (Hoehe darueber, [(x0, x1, Reihe)], Treppe)
-    (3, [(0, 27, 28), (28, 66, 25), (67, 81, 24), (82, 95, 23)], (50, 59)),
-    (2, [(0, 23, 50), (24, 59, 48), (60, 75, 47), (76, 95, 46)], (46, 55)),
+    (3, [(0, 27, 34), (28, 66, 25), (67, 81, 24), (82, 95, 30)], (50, 59)),   # Teleporter links/rechts auf Ebene 3
+    (2, [(0, 23, 53), (24, 59, 48), (60, 75, 47), (76, 95, 46)], (46, 55)),   # links Abstand zum Felsrand
     (1, [(0, 29, 72), (30, 63, 70), (64, 95, 69)], (41, 46)),
 ]
 HOF = (12, 9, 26, 17)                    # abgesenkter Hof (x0, y0, x1, y1), Treppe in der Suedreihe darunter
@@ -76,13 +76,27 @@ def main():
                 k[y, x] = 'g'
     # Felsrand: ueber allen Terrassen
     hp[k == 'h'] = 4
+    # An jeder Terrassenkante: Pflaster/Wiese enden 2 Reihen vor und nach der Front (kein Weg durch die Wand, kein Ueberstand)
+    for (hoehe, seg, (tx0, tx1)) in KANTEN:
+        for (x0, x1, ry) in seg:
+            for x in range(x0, x1 + 1):
+                if tx0 - 1 <= x <= tx1 + 1:
+                    continue
+                for y in range(ry - 2, ry + 3):
+                    if 0 <= y < R and k[y, x] in 'wkn':
+                        k[y, x] = 'g'
+    for kl in ('n', 'k', 'w'):                                        # Reste (Zungen, Zipfel) angleichen
+        for teil in k43.flaechen(k == kl):
+            if len(teil) < 8:
+                for (y, x) in teil:
+                    k[y, x] = 'g'
     # Treppen: Frontreihe 't', 2 Reihen frei davor/dahinter (kein Rand, kein Gras-Zipfel)
     treppen = []
     for (hoehe, seg, (tx0, tx1)) in KANTEN:
         ry = [r_ for (x0, x1, r_) in seg if x0 <= tx0 <= x1][0]
-        for y in range(ry - 2, ry + 3):
+        for y in range(ry - 2, ry + 3):                                # Pflaster in voller Treppenbreite davor/dahinter
             for x in range(tx0 - 1, tx1 + 2):
-                if k[y, x] in 'hn':
+                if k[y, x] != 'T':
                     k[y, x] = 'w'
         k[ry, tx0:tx1 + 1] = 't'
         treppen.append([tx0, tx1, ry, 's'])
