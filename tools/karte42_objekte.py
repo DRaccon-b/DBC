@@ -187,7 +187,7 @@ def main():
                   and abs(x2 - sx) < 6 * T and abs(y2 - sy) < 5 * T)
         soll = 1 if nah else 2
         if n == 'totbaum':                                            # ohne Krone: kein Fels 'hinter den Blaettern'
-            plan = [[vor, lambda: seitlich(-seite)], [lambda: seitlich(seite), lambda: seitlich(-seite)]][i % 2]
+            plan = [[vor, lambda: seitlich(-seite)], [lambda: seitlich(seite), vor]][i % 2]
             ersatz = [lambda: seitlich(seite), vor]                   # abwechseln (Pruefung: alle gleich aufgebaut)
         else:
             plan = [[vor, lambda: seitlich(-seite)], [vor, lambda: hinter(seite)],
@@ -245,8 +245,8 @@ def main():
         if gesetzt >= n_soll:
             break
         nb = [o for o in objekte if abs(o['kachel'][0] - x) < 4 and abs(o['kachel'][1] - y) < 4 and o.get('streu')]
-        if nb:
-            continue
+        if nb or any(o['kachel'][1] == y and abs(o['kachel'][0] - x) < 6 for o in objekte):
+            continue                                                  # keine Reihe mit Begleitern auf derselben Fusszeile
         wahl = [s for s in STREU if s != letzte and not any(o.get('basis') == s and abs(o['kachel'][0] - x) < 9
                                                            and abs(o['kachel'][1] - y) < 9 for o in objekte)]
         if not wahl:

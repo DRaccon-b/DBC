@@ -162,6 +162,11 @@ def main():
                 y = e
             else:
                 y += 1
+    # Pruefung: 1-Kachel-Sandstufen zwischen Plateau und Felsfront (Wandknick auf dem Plateau) -> Plateau buendig
+    for (yy0, yy1, x_) in ((6, 9, 32), (6, 7, 77), (6, 7, 78)):
+        for y_ in range(yy0, yy1):
+            if k[y_, x_] in 'sb':
+                k[y_, x_] = 'p'
     k = zipfel_weg(k)
     h = np.zeros((R, C), int)
     h[k == 'r'] = 2

@@ -290,6 +290,14 @@ Vor jeder Abgabe Punkt für Punkt prüfen (vergrößert, Standbild und mehrere A
   breiten Plateauflächen (schmale Randstreifen erzeugen sonst eine senkrechte Reihe); Begleiter nie in der Stammreihe
   (Busch–Baum–Busch wirkt als Reihe). Sprites mit Stangen/Spitzen unter dem Körper (Zelt) bekommen `fuss_dy`, damit der
   Schatten am Körper beginnt.
+- **Tal mit Hochplateaus (Karte 42, Vorlage mit Fehlern):** Fehlende Felsfronten der Vorlage über Höhenstufen ergänzen; Holzgatter
+  als Treppen durch Steintreppen in voller Breite ersetzen (2 Reihen Weg davor/dahinter). Nicht begehbarer Felsrand liegt auf
+  Plateauhöhe (eine Front je Abfall, keine doppelten Wände) und unterscheidet sich durch Felstextur und eigene Kollisionsebene.
+  Talstreifen ≤ 2 Reihen unter einer Front und 1-Kachel-Sandstufen neben Plateaus verschwinden unter der Front bzw. erzeugen
+  Wandstummel – an Plateau/Rand angleichen; Plateaufront nie direkt auf dem Rand (Graben ohne Breite). Ausgänge exakt so breit
+  wie der Teleporter (keine Kerben daneben). Hütten u. Ä. nie auf Wegen: eigenen Sandplatz neben dem Weg anlegen, nicht am
+  Treppenaustritt. Begleiter und Streudeko nie auf derselben Fußzeile nebeneinander (Busch–Busch–Busch); Fuß und Schatten
+  mit Abstand zu Weg/Pflaster und zur Kante darunter (sonst Bodenwall in fremder Farbe).
 - **Begleiter am Stumpf (5d):** keine 1-Kachel-Blumen auf dem Stumpf, kein Blumenklumpen; Begleiter überlappen sich nicht.
 - **Paare/Achsen:** Paare vor Toren/Bauwerken exakt gespiegelt (Mitte und Fuß), gleiche Objekte auf gleicher Höhe;
   Druckplatten, Obelisken usw. symmetrisch zur berechneten Achse.
