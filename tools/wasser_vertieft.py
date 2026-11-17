@@ -92,7 +92,9 @@ def _kleine_weg(innen, minimum):
     if minimum <= 0 or not innen.any():
         return innen
     from collections import deque
-    k = innen[::4, ::4]
+    H_, W_ = innen.shape                                 # Bloecke 4x4 (max) - auch 1-3 px duenne Splitter erfassen
+    pad_ = np.pad(innen, ((0, (-H_) % 4), (0, (-W_) % 4)))
+    k = pad_.reshape(pad_.shape[0] // 4, 4, pad_.shape[1] // 4, 4).any(axis=(1, 3))
     h, w = k.shape
     gesehen = np.zeros_like(k)
     weg = np.zeros_like(k)

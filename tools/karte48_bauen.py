@@ -213,15 +213,19 @@ def bauen(frame=None, speichern=True):
     img = Image.fromarray(a).convert('RGBA')
     lvl = hp.astype(np.uint8) + 1
     lvl[wand] = 9                                                    # Fronten und Hallenwaende = Wand
-    for (x0, x1, ry, r_) in lay['treppen']:                          # Treppen begehbar
-        lvl[ry * T:(ry + 1) * T, x0 * T:(x1 + 1) * T] = 2
+    treppe_m = np.zeros((Hp, Wp), bool)
+    for (x0, x1, ry, r_) in lay['treppen']:                          # Treppen begehbar, Kollision = gezeichnete Stufen
+        if r_ == 's':
+            lvl[ry * T:(ry + 1) * T, x0 * T:(x1 + 1) * T] = 2
+            treppe_m[ry * T:(ry + 1) * T, x0 * T:(x1 + 1) * T] = True
+        else:                                                        # Nordtreppe in Reihe ry+1 (in die Plattform geschnitten)
+            treppe_m[(ry + 1) * T:(ry + 2) * T + 8, x0 * T:(x1 + 1) * T] = True
     if speichern and frame is None:
         img.save(os.path.join(KARTE, 'terrain_basis.png'))
         np.save(os.path.join(KARTE, 'pixelhoehe.npy'), lvl)
         np.save(os.path.join(KARTE, 'wand.npy'), np.packbits(wand))
         np.save(os.path.join(KARTE, 'wasser.npy'), np.packbits(xm))
-        np.save(os.path.join(KARTE, 'treppe.npy'), np.packbits(np.kron(np.array([[c == 't' for c in z] for z in cls]),
-                                                                       np.ones((T, T), bool))))
+        np.save(os.path.join(KARTE, 'treppe.npy'), np.packbits(treppe_m))
     pf = os.path.join(OBJ, 'platzierung.json')
     if os.path.exists(pf):
         objs = sorted((o for o in json.load(open(pf)) if os.path.exists(os.path.join(OBJ, o['datei']))),

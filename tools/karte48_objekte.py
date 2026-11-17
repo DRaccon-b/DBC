@@ -18,7 +18,7 @@ ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
 KARTE = os.path.join(ROOT, 'maps', 'karte48')
 OBJ = os.path.join(ROOT, 'assets', 'objekte', 'karte48')
 T = 16
-D = {'saeule': 'deko/00.png', 'regal': 'deko/01.png', 'tisch': 'deko/02.png', 'saeule_kaputt': 'deko/03.png',
+D = {'saeule': 'deko/00.png', 'regal': 'deko/01.png', 'tisch': 'deko/02k.png', 'saeule_kaputt': 'deko/03.png',
      'bank': 'deko/04.png', 'lampe': 'deko/05.png'}
 W = {'seegras': 0, 'halme_gelb': 1, 'geroell': 2, 'koralle': 3, 'kiesel': 4, 'seerose': 5, 'koralle_blau': 6,
      'schnecke': 7, 'farn': 10, 'kolben': 12, 'amphore': 13, 'schwamm': 14, 'muschel': 16, 'koralle_lila': 18,
@@ -45,7 +45,8 @@ def main():
     sperr = [(t['x'] * T - 2 * T, t['y'] * T - 2 * T, (t['x'] + t['b'] + 2) * T, (t['y'] + t['h'] + 2) * T)
              for t in lay['teleporter']]
     for (x0, x1, ry, r_) in lay['treppen']:                          # Treppen und ihr Austritt (2 Reihen) frei
-        sperr.append((x0 * T - 2, (ry - 2) * T, (x1 + 1) * T + 2, (ry + 3) * T))   # Saeulen duerfen flankieren
+        y0_, y1_ = ((ry - 2) * T, (ry + 3) * T) if r_ == 's' else ((ry - 2) * T, (ry + 5) * T)   # Nord: Stufen in ry+1,
+        sperr.append((x0 * T - 2, y0_, (x1 + 1) * T + 2, y1_))                # Austritt ry+2..ry+4; Saeulen flankieren
     objekte, rects = [], []
     rnd = random.Random(48)
 

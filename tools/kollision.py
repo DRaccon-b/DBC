@@ -68,7 +68,9 @@ def main(karte):
     for t_ in lay.get('treppen', []):                        # Treppen anderer Karten: (x0, x1, y0, y1) bzw. (x0, x1, ye)
         if isinstance(t_, dict):
             continue
-        if len(t_) == 4:
+        if len(t_) == 4 and isinstance(t_[3], str):          # (x0, x1, Reihe, 's'/'n') Karte 48
+            durch[max(0, t_[2] - 1):t_[2] + 4, t_[0]:t_[1] + 1] = True
+        elif len(t_) == 4:
             durch[max(0, t_[2] - 1):t_[3] + 2, t_[0]:t_[1] + 1] = True
         elif len(t_) == 3:
             durch[max(0, t_[2] - 1):t_[2] + 4, t_[0]:t_[1] + 1] = True

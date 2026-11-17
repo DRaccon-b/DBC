@@ -63,8 +63,8 @@
 "datei": "varianten/tisch.png",
 "basis": "tisch",
 "x": 1217,
-"y": 434,
-"fuss": 40,
+"y": 430,
+"fuss": 44,
 "kachel": [
 78,
 29
@@ -75,14 +75,14 @@
 "anim": "kerzen",
 "flammen_box": [
 [
-46,
+47,
 0,
-55,
+54,
 6
 ]
 ],
 "flammen_alle": true,
-"flammen_amp": 0.9
+"flammen_amp": 1.0
 },
 {
 "datei": "varianten/saeule.png",
@@ -331,20 +331,6 @@
 "ohne_wall": true
 },
 {
-"datei": "varianten/stumpf.png",
-"basis": "stumpf",
-"x": 1348,
-"y": 1027,
-"fuss": 28,
-"kachel": [
-85,
-65
-],
-"ebene": 1,
-"ohne_wall": true,
-"liegend": false
-},
-{
 "datei": "varianten/tafel_m.png",
 "basis": "tafel",
 "x": 1378,
@@ -375,12 +361,12 @@
 {
 "datei": "varianten/saeule_kaputt_m.png",
 "basis": "saeule_kaputt",
-"x": 162,
-"y": 1001,
+"x": 130,
+"y": 1033,
 "fuss": 38,
 "kachel": [
-12,
-64
+10,
+66
 ],
 "ebene": 1,
 "ohne_wall": true,
