@@ -2154,6 +2154,20 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'compact haunted stone gate tower with a deep pitched slate roof seen from above, thick side walls showing depth, '
         'open arched passage in the front, ivy and cracks, classic handheld RPG top-down map style, symmetric, ' + FR14,
     ]},
+    'k44_huette': {'size': 64, 'freie_farben': True, 'items': [   # Karte 44 Chuchidarumon Village: Kuppelhuetten mit Schneedach
+        'small round clay dome hut, warm orange-tan clay walls, a thick white snow cap with soft blue shading covering the top of the dome and dripping down in rounded lumps, small arched dark wooden door in the middle, seen from the front and slightly above, ' + FR14,
+        'small round igloo-like clay hut with a big fluffy white snow roof, peach orange walls, small round wooden door with a dark frame, seen from the front and slightly above, ' + FR14,
+        'cute round dome cottage of orange clay with a white snowy dome roof like a snowball, tiny chimney pipe, arched brown door, seen from the front and slightly above, ' + FR14,
+        'small round clay dome hut with snow on top, orange walls with a few stones at the base, arched door with a wooden plank door, seen from the front and slightly above, ' + FR14,
+    ]},
+    'k44_deko': {'size': 48, 'freie_farben': True, 'items': [   # Karte 44: Dorfdeko
+        'simple wooden log bench made of a split tree trunk on two short stumps, ' + FR14,
+        'fallen tree log lying on the ground, brown bark, light cut end with rings, ' + FR14,
+        'large grey round boulder with soft shading and a small moss patch, ' + FR14,
+        'short rustic wooden fence segment with two posts and two horizontal rails, ' + FR14,
+        'small snowman statue made of two snowballs with a little twig and coal eyes on a tiny stone base, ' + FR14,
+        'small wooden signpost with one arrow sign, ' + FR14,
+    ]},
     'k43_halme': {'size': 32, 'freie_farben': True, 'items': [   # Karte 43: flache Grashalm-Bueschel als Bodenstruktur
         'tiny tuft of short green grass blades seen from above, flat ground detail, no shadow, ' + FR14,
         'small cluster of thin dark green grass blades and two tiny white clover flowers, flat ground detail, ' + FR14,
