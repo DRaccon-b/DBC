@@ -27,8 +27,8 @@ FREMD = {
     'gras': 'karte04/klein/00.png', 'gras2': 'karte04/klein/01.png', 'gras3': 'karte04/klein/27.png',
     'kiesel': 'karte04/klein/02.png', 'zweig': 'karte04/klein/09.png', 'knochen_k': 'karte04/klein/03.png',
     'kristall': 'karte04/klein/05.png', 'pilz': 'karte04/klein/11.png', 'stein': 'karte04/klein/08.png',
-    'automat': 'karte41/wueste/00.png', 'saeule': 'karte41/wueste/01.png', 'unterstand': 'karte41/wueste/02.png',
-    'saeule_kaputt': 'karte41/wueste/03.png',
+    'automat': 'karte41/wueste/00.png', 'saeule': 'karte41/gross/00.png', 'unterstand': 'karte41/gross/02.png',   # groesser (Nutzer)
+    'saeule_kaputt': 'karte41/gross/01.png',
 }
 # (Sprite, Kachel-x der Fussmitte, Fusszeile) nach der Vorlage
 BAEUME = [('totbaum', 29, 11), ('totbaum', 36, 27), ('totbaum', 72, 28), ('totbaum', 48, 43), ('totbaum', 83, 55),
@@ -44,6 +44,9 @@ BG_FELS = ['00', '02', '08', '16', '18', '24', '26', '32', '34', '40', '48', '58
 BG_BUSCH = ['01', '03', '09', '11', '19', '33', '41', '49', '57']
 for _n in BG_FELS + BG_BUSCH:
     FREMD['bg' + _n] = 'karte41/begleiter/%s.png' % _n
+PLATEAU_GROSS = ['00', '01', '02', '03', '05', '09', '13', '15']   # PixelLab k41_plateau (Nutzer: Plateaus zu leer)
+for _n in PLATEAU_GROSS:
+    FREMD['pl' + _n] = 'karte41/plateau/%s.png' % _n
 STREU = ['gras', 'gras2', 'gras3', 'kiesel', 'zweig', 'knochen_k', 'kristall', 'stein']
 BODEN = 'sbdk'                       # begehbarer Wuestenboden (kein Gras/Teich/Teleporter/Plateau)
 
@@ -72,7 +75,7 @@ def main():
     def schnitt(a, b, d):
         return not (a[2] + d < b[0] or b[2] + d < a[0] or a[3] + d < b[1] or b[3] + d < a[1])
 
-    def setze(name, cx, fy, opt=None, spiegeln=False, klassen=BODEN, pruefen=True, ohne=()):
+    def setze(name, cx, fy, opt=None, spiegeln=False, klassen=BODEN, pruefen=True, ohne=(), ebene_soll=1):
         sp = Image.open(pfad(name)).convert('RGBA')
         if spiegeln:
             sp = sp.transpose(Image.FLIP_LEFT_RIGHT)
@@ -95,11 +98,15 @@ def main():
             ty_ = r[3] // T
             if any(k(xx, ty_) not in klassen for xx in range(r[0] // T, r[2] // T + 1)):
                 return None
-            if (lvl[r[3] - 3:r[3] + 2, r[0]:r[2] + 1] != 1).any() or wand[r[3] - 3:r[3] + 2, r[0]:r[2] + 1].any():
+            if ebene_soll != 1:                                      # Plateau: ganzes Bild mit Rand auf dem Plateau
+                y0_, x0_ = max(0, r[1] - 6), max(0, r[0] - 6)
+                if (lvl[y0_:r[3] + 2 * T, x0_:r[2] + 7] != ebene_soll).any():
+                    return None                                      # Fuss 2 Reihen von der Kante (Wandregel)
+            elif (lvl[r[3] - 3:r[3] + 2, r[0]:r[2] + 1] != 1).any() or wand[r[3] - 3:r[3] + 2, r[0]:r[2] + 1].any():
                 return None                                          # Fuss ganz auf dem Wuestenboden, nie an der Wand
             if wasser[max(0, r[1]):r[3] + 1, r[0]:r[2] + 1].any():
                 return None                                          # nichts auf Teich oder Ufer
-            if (lvl[max(0, r[1]):r[3], r[0]:r[2] + 1] > 1).any() and not (opt or {}).get('vor_fels'):
+            if ebene_soll == 1 and (lvl[max(0, r[1]):r[3], r[0]:r[2] + 1] > 1).any() and not (opt or {}).get('vor_fels'):
                 hoch = lvl[max(0, r[1]):r[3], r[0]:r[2] + 1] > 1     # Verdeckung durch Hoehen: nur Plateau im Norden
                 if hoch[:, :].any(axis=0).sum() and hoch[-T:].any():
                     return None
@@ -149,15 +156,22 @@ def main():
             opt = {'liegend': True}
         kachel(n, tx, ty, opt, n in ('skelett',) and i % 2 == 1, klassen='sbd')   # nie auf Pflaster
     # Saeulenpaar mit Fels dazwischen (Vorlage): gleiche Fusszeile, spiegelsymmetrisch zur Felsmitte
-    ax = 31 * T - 4                                      # Achse etwas links: Platz zur Akazie (2 px)
-    for fy_ in (31, 30, 32, 33, 29):
-        n0 = len(objekte)
-        ok = (setze('fels_sand', ax, fy_ * T + T - 1, {}, False, 'sbd') and
-              setze('saeule', ax - 48, fy_ * T + T - 1, {}, False, 'sbd') and
-              setze('saeule', ax + 48, fy_ * T + T - 1, {}, True, 'sbd'))
+    bw_ = lambda n_: (lambda b: b[2] - b[0])(Image.open(pfad(n_)).getbbox())
+    dxp = (bw_('fels_sand') + bw_('saeule')) // 2 + 5                 # Abstand aus den echten Breiten
+    ok = False
+    for ax in (31 * T - 4, 31 * T - 12, 31 * T - 20, 31 * T + 4, 30 * T):   # bei Platzmangel Achse verschieben
+        for fy_ in (31, 30, 32, 33, 29):
+            n0 = len(objekte)
+            ok = (setze('fels_sand', ax, fy_ * T + T - 1, {}, False, 'sbd') and
+                  setze('saeule', ax - dxp, fy_ * T + T - 1, {}, False, 'sbd') and
+                  setze('saeule', ax + dxp, fy_ * T + T - 1, {}, True, 'sbd'))
+            if ok:
+                break
+            del objekte[n0:]; del rects[n0:]
         if ok:
             break
-        del objekte[n0:]; del rects[n0:]
+    if not ok:
+        print('  Saeulenpaar nicht gesetzt')
     # Begleiter (Regel 5/5d): vor dem Stumpf nur 2 Kacheln hohe Objekte eine Reihe tiefer (oberste Kachel deckt den
     # Stumpf), Fels hinter den Blaettern eine Reihe hoeher, Busch seitlich ausserhalb der Stammzone; abwechselnd, Motive
     # ohne Wiederholung, mind. 2 Begleiter bei einzeln stehenden Baeumen
@@ -200,6 +214,30 @@ def main():
     # Pilze am Teich (Gras)
     for (tx, ty) in ((23, 67), (37, 71)):
         kachel('pilz', tx, ty, {'ebene': 0}, klassen='n')
+    # ---------------- Deko auf den Plateaus (Nutzer: zu leer): Felsgruppen, Felsnadeln, Bueschel; locker, ohne Reihen
+    pk = [(x, y) for y in range(1, rows - 1) for x in range(1, cols - 1) if cls[y][x] == 'r']
+    rnd.shuffle(pk)
+    gross_ = PLATEAU_GROSS[:]; rnd.shuffle(gross_)
+    klein_ = [('bg' + n_) for n_ in BG_FELS + BG_BUSCH] + ['gras', 'gras2', 'gras3']
+    rnd.shuffle(klein_)
+    pl_g, pl_k, gpos = 0, 0, []
+    for (x, y) in pk:
+        if pl_g >= 26:
+            break
+        if any(abs(x - a_) < 7 and abs(y - b_) < 6 for (a_, b_) in gpos):
+            continue
+        n_ = 'pl' + gross_[pl_g % len(gross_)]
+        if setze(n_, x * T + 8, y * T + T - 1, {}, rnd.random() < 0.5, 'r', ebene_soll=3):
+            pl_g += 1; gpos.append((x, y))
+    for (x, y) in pk[::-1]:
+        if pl_k >= 40:
+            break
+        if any(abs(x - a_) < 3 and abs(y - b_) < 3 for (a_, b_) in gpos):
+            continue
+        n_ = klein_[pl_k % len(klein_)]
+        if setze(n_, x * T + rnd.randint(4, 12), y * T + T - 1, {'streu': True}, rnd.random() < 0.5, 'r', ebene_soll=3):
+            pl_k += 1; gpos.append((x, y))
+    print('  Plateau: %d grosse, %d kleine Objekte' % (pl_g, pl_k))
     # ---------------- sparsame Streudeko (Kleinkram dezent, keine Wiederholung nebeneinander)
     kand = [(x, y) for y in range(2, rows - 2) for x in range(2, cols - 2) if cls[y][x] in BODEN]
     rnd.shuffle(kand)

@@ -2100,6 +2100,20 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'small pile of three reddish desert rocks with sand at the base, ' + FR14,
         'clump of tall dry golden desert grass with a small grey stone, ' + FR14,
     ]},
+    'k41_gross': {'size': 96, 'freie_farben': True, 'items': [   # Karte 41 (Nutzer): groessere Saeulen und Zelt
+        'tall weathered dark grey stone pillar, square cross-section, carved capital on top, cracked edges, sand drifted at the base, ' + FR14,
+        'tall weathered dark grey stone pillar broken off at the top with a jagged edge, carved ring band, rubble and sand at the base, ' + FR14,
+        'large nomad lean-to shelter: a big tan animal hide stretched over long wooden poles, resting on a pile of grey rocks, '
+        'open dark side with a bedroll inside, seen from the front and slightly above, ' + FR14,
+        'large desert nomad tent of patched tan hides on wooden poles, rocks weighing the edges, open dark entrance, '
+        'seen from the front and slightly above, ' + FR14,
+    ]},
+    'k41_plateau': {'size': 64, 'freie_farben': True, 'items': [   # Karte 41 (Nutzer): Deko auf den Plateaus
+        'cluster of weathered orange sandstone boulders with dry grass tufts, ' + FR14,
+        'tall narrow orange sandstone rock spire with layered stripes, sand at the base, ' + FR14,
+        'large dry thorny desert bush with a few small pale flowers, ' + FR14,
+        'flat layered orange sandstone rock outcrop with a few pebbles and dry grass, ' + FR14,
+    ]},
     'k40_krater': {'size': 256, 'freie_farben': True, 'items': [   # Nutzer: Meteor-Furche (256 px: ein Motiv je Auftrag)
         'long deep impact furrow crater seen from directly above, a straight trench gouged north to south through a dark asphalt city road, brown earth and dark soil inside, broken grey asphalt slabs and dirt pushed up and piled along the left and right rims, cracks radiating outward, no meteor visible, transparent background around the rims',
     ]},
