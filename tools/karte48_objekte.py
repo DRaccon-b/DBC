@@ -80,19 +80,23 @@ def main():
             if ebene_lvl == 1 and (lvl[max(0, r[1]):r[3] - T, r[0]:r[2] + 1] > 1).any():
                 return None                                          # Verdeckung: nichts im Wasser vor einer Plattform
         o = {'datei': datei, 'basis': name, 'x': x, 'y': y, 'fuss': bb[3] - 1, 'kachel': [int(cx) // T, int(fy) // T],
-             'ebene': 1}
+             'ebene': 1, 'ohne_wall': True}                          # Steinplatten/Wasser: kein Bodenwall (harte Kanten)
         o.update(opt)
         objekte.append(o)
         rects.append(r)
         return o
 
     def suche(name, cx, fy, opt=None, spiegeln=False, ebene_lvl=2, r=3, gap=2):
+        bb_ = Image.open(os.path.join(OBJ, D[name])).getbbox()       # Regel 1/1b: am 16er-Raster, im Kachelblock zentriert
+        wt = max(1, math.ceil((bb_[2] - bb_[0]) / T))
+        cx = round((cx - wt * T / 2.0) / T) * T + wt * T / 2.0
+        fy = int(fy) // T * T + T - 1
         for d in range(r + 1):
             for dy in range(-d, d + 1):
                 for dx in range(-d, d + 1):
                     if max(abs(dx), abs(dy)) != d:
                         continue
-                    o = setze(name, cx + dx * 8, fy + dy * 8, opt, spiegeln, ebene_lvl, gap=gap)
+                    o = setze(name, cx + dx * T, fy + dy * T, opt, spiegeln, ebene_lvl, gap=gap)
                     if o:
                         return o
         print('  nicht gesetzt:', name, cx // T, fy // T)
@@ -118,16 +122,20 @@ def main():
         setze('bank', achse + sx * 120, (ry1 + 3) * T + 6, {'fest_pos': True}, sx > 0, pruefen=False)
     # ---------------- Plattformen (Positionen der Vorlage, Pixel)
     PLATZ = [('bank', 256, 557), ('bank', 368, 657), ('geroell', 222, 668),            # linke Plattform
-             ('saeule', 497, 575), ('saeule_kaputt', 552, 592), ('geroell', 556, 556),   # kleine Plattform mit Saeule
+             ('saeule', 498, 575), ('saeule_kaputt', 541, 575),                         # kleine Plattform mit Saeule
              ('bank', 704, 543), ('bank', 768, 622), ('steinbrocken', 656, 621),         # mittlere Plattform
-             ('mauerrest', 848, 892), ('saeule_kaputt', 870, 926),                       # unten Mitte (Ruine)
+             ('saeule_kaputt', 856, 900),                                               # unten Mitte (Ruine)
              ('saeule', 1298, 1040), ('stumpf', 1372, 1040),    # unten rechts
              ('tafel', 1400, 200), ('stumpf', 1440, 120),                                # Teleporter-Plattform oben rechts
-             ('saeule_kaputt', 200, 1030), ('amphore', 300, 1140), ('stumpf', 120, 1100), ('tafel', 250, 1190)]  # unten links
+             ('saeule_kaputt', 200, 1030), ('mauerrest', 300, 1140), ('amphore', 180, 1180), ('stumpf', 120, 1100), ('tafel', 250, 1190)]  # unten links
     for i, (n, px, py) in enumerate(PLATZ):
         if n == 'saeule' and 1200 < px:                                # Saeulenpaar unten rechts: gemeinsame Fusszeile, ohne Suche
             setze(n, px, py, {}, px > 1340, 2)
             continue
+        if n == 'saeule' and px < 600 and setze(n, px, py, {}, False, 2):
+            continue                                                   # enge Plattform: Saeule genau an der Westkante
+        if n == 'saeule_kaputt' and setze(n, px, py, {'liegend': True}, i % 2 == 1, 2):
+            continue                                                   # liegende Saeule: genau zwischen Saeule und Rand
         if not suche(n, px, py, {'liegend': n in ('saeule_kaputt', 'steinbrocken')}, i % 2 == 1, 2, r=4) and n == 'saeule_kaputt':
             suche(n, px, py + 24, {'liegend': True, 'ebene': 0, 'ohne_wall': True}, i % 2 == 1, 1, r=4)   # liegt im Flachwasser
     # ---------------- Flachwasser: Pflanzen an den Plattformecken (Vorlage) und locker verteilt, Kleinkram dezent

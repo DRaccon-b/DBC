@@ -175,10 +175,12 @@ def bauen(frame=None, speichern=True):
     # tiefes Meer: Abbruchkante unter Wasser mit Tiefenstufen, laeuft ueber den Kartenrand
     xm = weich(zell_maske(cls, 'x', cols, rows), 4, 0.0, 8, 0.5)
     P = 24
+    wasser_vertieft.MIN_FLAECHE, wasser_vertieft.OEFFNEN = 3000, 5   # keine Einzelloecher und duennen Stufen-Finger
     ag = np.pad(a, ((P, P), (P, P), (0, 0)), mode='edge')
     mg = np.pad(xm, ((P, P), (P, P)), mode='edge')
     ag = np.array(wasser_vertieft.vertiefen(Image.fromarray(ag), np.ones_like(mg), frame, maske=mg, rand=RAND_FLACH,
                                             stufen=[(30, 0.82, 8), (64, 0.68, 7)]).convert('RGB'))
+    wasser_vertieft.MIN_FLAECHE, wasser_vertieft.OEFFNEN = 0, 3
     a = ag[P:-P, P:-P].copy()
     a[xm] = np.clip(a[xm].astype(float) * np.array([0.82, 0.9, 1.0]), 0, 255).astype(np.uint8)   # tiefer = blauer
     # Steinplattformen (Hoehe 1) mit Front

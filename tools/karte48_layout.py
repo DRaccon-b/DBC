@@ -55,6 +55,7 @@ def main():
                     k[y + 1, x] = q[0, 0]
         k = k43.zipfel_weg(k, 'xsp')
     k[54:59, 50:57] = 'p'                                             # Plattform unten Mitte rechteckig (Vorlage gestuft)
+    k[60:62, 55:58] = np.where(k[60:62, 55:58] == 'x', 's', k[60:62, 55:58])   # Tiefwasser-Zipfel neben der Treppe
     # Halle: Plattform rechteckig, Innenraum, Rueckwand und Seitenwaende
     x0, y0, x1, y1 = HALLE
     k[y0:y1 + 1, x0:x1 + 1] = 'p'

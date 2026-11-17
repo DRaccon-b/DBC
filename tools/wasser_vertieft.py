@@ -83,6 +83,7 @@ def _kopfsteine(h, w):
 
 UNTER = [H(c) for c in ('#1c3c6c', '#24508a', '#3466a0', '#6aa2d4')]   # Unterwasser-Stufenkanten
 STUFEN = [(26, 0.8, 8), (54, 0.64, 7)]    # (Abstand zum Ufer in px, Helligkeit des Grunds, Kantenhoehe)
+OEFFNEN = 3                               # Oeffnen der Stufenmaske (schmale Grate weg), K48: 5
 MIN_FLAECHE = 0                           # Tiefenstufen-Flecken unter dieser Pixelzahl weglassen (keine Einzelloecher, K46)
 
 
@@ -118,9 +119,9 @@ def _stufe(m, abstand):
     k = Image.fromarray((m * 255).astype(np.uint8))
     for _ in range(abstand // 2):
         k = k.filter(ImageFilter.MinFilter(5))
-    for _ in range(3):                                  # schmale Streifen (Fluss) entfernen, dann zurueckwachsen
+    for _ in range(OEFFNEN):                            # schmale Streifen (Fluss) entfernen, dann zurueckwachsen
         k = k.filter(ImageFilter.MinFilter(5))
-    for _ in range(3):
+    for _ in range(OEFFNEN):
         k = k.filter(ImageFilter.MaxFilter(5))
     k = k.filter(ImageFilter.GaussianBlur(6))
     return (np.array(k) > 128) & m
