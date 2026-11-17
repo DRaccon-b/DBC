@@ -58,7 +58,7 @@ def texturen(cols, rows):
     }
 
 
-BODEN = set(os.environ.get('K44_BODEN', 'relief,wege').split(',')) - {''}
+BODEN = set(os.environ.get('K44_BODEN', '').split(',')) - {''}   # Nutzer: Bodenschattierung (Relief/vertiefte Wege) wieder raus
 
 
 def boden_tiefe(a, cls, cols, rows, frame):

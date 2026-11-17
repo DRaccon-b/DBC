@@ -324,8 +324,8 @@ Vor jeder Abgabe Punkt für Punkt prüfen (vergrößert, Standbild und mehrere A
   Nutzer-Korrekturen: Brücken nie auf Land – der Bach läuft unter jeder Brücke gerade, Brücke exakt so breit wie das
   Wasser. Generierte Hütten mit schwarzer Kontur auf die Eigenfarbe umfärben (Selout), Trampelpfad von der Tür zum Weg und
   kurze Büschel an den Sockelecken (nie vor der Tür). Schatten auf Wiese kühl (dunkles Grün statt Braungrau) und kompakt
-  (`k4.SCHATTEN` je Karte). Boden nicht platt, ohne neue Objekte/Texturen: sanftes Geländerelief (glattes Höhenfeld, Licht
-  oben links, wenige Stufen) und vertiefte Wege (Schattenkante unter der Wiese, Lichtkante an der Böschung) – Variante B.
+  (`k4.SCHATTEN` je Karte). Bodenschattierung (Relief, vertiefte Wege) hat der Nutzer
+  danach wieder verworfen – keine großflächige Boden-Hell/Dunkel-Schattierung verwenden.
 - **Insel mit Steg (Karte 45):** Steg liegt ganz über Wasser und schließt an die Uferkante an (in der Vorlage teils auf
   Land); Wasserkeile zwischen 45°-Ufer und eckigem Steg nur in den Stegspalten mit Planken schließen (keine Laschen
   neben dem Steg). Waldblöcke ringsum mit 1 Reihe Land, unter der Front 2 Reihen (Front nie im Wasser); Gras-Inseln
