@@ -294,17 +294,33 @@ def bauen(frame=None, speichern=True):
     wfx, wfy = lay['wasserfall']
     fm_ext = fm.copy()
     fm_ext[wfy * T - 4:wfy * T + 14, wfx * T:(wfx + 2) * T] = True
-    fm &= ~wand; fm_ext &= ~wand                                     # Quelltopf liegt vor der Felswand (Wand bleibt)
+    fm &= ~wand; fm_ext &= ~wand                                     # Becken liegt vor der Felswand (Wand bleibt)
+    bx_, by_ = lay['wasserfall_berg']                                 # Wasser laeuft ohne Unterbrechung ueber die Kante
+    fm_ext[by_ * T - 10:by_ * T + FRONT + 10, bx_ * T:(bx_ + 2) * T] = True   # (keine Uferecken an der Fallkante)
+    wsp = np.nonzero(wand[by_ * T - 8:by_ * T + 40, bx_ * T - 4].astype(bool) | wand[by_ * T - 8:by_ * T + 40, (bx_ + 2) * T + 3].astype(bool))[0]
+    y_top_ = by_ * T - 8 + int(wsp.min()) if len(wsp) else by_ * T
+    y_bot_ = by_ * T - 8 + int(wsp.max()) + 3 if len(wsp) else by_ * T + FRONT
+    zl_ = fm_ext[by_ * T - 20:y_top_ + 2]                             # Fluss oben bis zur Kante exakt in Fallbreite
+    zl_[:, :bx_ * T] = False; zl_[:, (bx_ + 2) * T:] = False          # (keine aufgeweiteten Uferecken an der Lippe)
+    zl_[:, bx_ * T:(bx_ + 2) * T] = True
     P = 24
+    a_vor_ = a.copy()
     ag = np.pad(a, ((P, P), (P, P), (0, 0)), mode='edge')
     mg = np.pad(fm_ext, ((P, P), (P, P)), mode='edge')
     ag = np.array(wasser_vertieft.vertiefen(Image.fromarray(ag), np.ones_like(mg), frame, maske=mg, stufen=[]).convert('RGB'))
     a = ag[P:-P, P:-P].copy()
+    wr_ = wand.astype(bool) & ~fm_ext                                 # kein Uferrand auf der Felswand neben dem Fall
+    a[wr_] = a_vor_[wr_]
     # erster Wasserfall: vom Berg ueber die Felsfront in das Becken der Rinne (mit Gischt, er landet im Fluss)
     bx_, by_ = lay['wasserfall_berg']
     img_w = Image.fromarray(a).convert('RGBA')
-    klippen.zeichne_wasserfall(img_w, bx_ * T, (bx_ + 2) * T, by_ * T, by_ * T + FRONT + 4, seed=47, frame=frame or 0)
-    a = np.array(img_w.convert('RGB'))
+    klippen.zeichne_wasserfall(img_w, bx_ * T, (bx_ + 2) * T, y_top_, y_bot_, seed=47, frame=frame or 0)
+    neu_ = np.array(img_w.convert('RGB'))
+    erl_ = np.zeros((Hp, Wp), bool)                                    # Gischt/Nebel nur im Fall und knapp daneben im Becken
+    erl_[y_top_ - 8:y_bot_ + 12, bx_ * T - 1:(bx_ + 2) * T + 1] = True
+    erl_[y_bot_ - 2:y_bot_ + 12, bx_ * T - 4:(bx_ + 2) * T + 4] = True
+    erl_ &= fm_ext | wand
+    a[erl_] = neu_[erl_]
     # Graben um die Arena (Nutzer): tiefer Felsgraben mit Klippenwaenden, die Arena wirkt wie ein Plateau
     tm = weich(zell_maske(cls, 'xb', cols, rows), 4, 0, 8, 0.5)
     a[tm] = (tex['d'][tm] * 0.42).astype(np.uint8)                   # tiefe, dunkle Grabensohle

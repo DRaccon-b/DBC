@@ -116,6 +116,9 @@ def main():
             if k[y, x] in 'gwkn':
                 k[y, x] = 'h'
     k[0:y_q, fluss_x[y_q]:fluss_x[y_q] + 2] = 'F'                     # Fluss oben auf dem Berg (kommt von ausserhalb der Karte)
+    for x in range(fluss_x[y_q] - 4, fluss_x[y_q] + 7):              # Felskante um den Wasserfall gerade (gleiche Reihe)
+        if k[y_q, x] == 'h':
+            k[y_q, x] = 'g'
     for y in range(y_q + 1, 34):                                            # diagonale Stufen ohne Luecke (4er-Nachbarschaft)
         if fluss_x[y] != fluss_x[y - 1]:
             k[y, min(fluss_x[y], fluss_x[y - 1]):max(fluss_x[y], fluss_x[y - 1]) + 2] = 'f'
