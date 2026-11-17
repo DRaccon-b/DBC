@@ -37,6 +37,7 @@ for n_, (i, f) in EVAK.items():
     FREMD['evak/' + n_] = ('karte53/evak/%02d.png' % i, f)
 FREMD['evak/bett'] = ('karte53/bett/00.png', 0.7)                       # Feldbett in Draufsicht (Pruefung: frontal)
 FREMD['evak/kanister'] = ('karte53/bett/12.png', 0.5)
+FREMD['evak/kuehlbox'] = ('karte53/bett/07.png', 0.5)
 FREMD['evak/schlafsack'] = ('karte53/bett/09.png', 0.6)
 for n_, (i, f) in {'zelt': (0, 0.75), 'lkw': (1, 0.75), 'vorrat': (2, 0.6)}.items():
     FREMD['evak/' + n_] = ('karte53/gross/%02d.png' % i, f)
@@ -260,14 +261,14 @@ def main():
     # ---------------------------------------------------------------- Evakuierung
     # Hilfslager (Block unten links): Zelt, Feldbetten, Vorraete, Wasserspender, Tisch
     for (n_, tx, ty, sp) in (('evak/zelt', 11, 68, False), ('evak/vorrat', 21, 67, False), ('evak/bett', 7, 74, False),
-                             ('evak/schlafsack', 12, 75, False), ('evak/wasser', 17, 72, False), ('evak/tisch', 16, 64, False),
+                             ('evak/schlafsack', 12, 75, False), ('evak/wasser', 17, 72, False), ('evak/kuehlbox', 16, 64, False),
                              ('evak/kocher', 25, 71, False), ('evak/schild', 26, 63, False)):
         kachel(n_, tx + P, ty + P, {'anim': 'kerzen', 'flammen_box': [[12, 6, 20, 12]], 'flammen_alle': True, 'flammen_amp': 1} if n_ == 'evak/kocher' else {}, sp)
     # Sanitaetsposten (Block unten rechts): Generator, Flutlicht, Betten
     for (n_, tx, ty, sp) in (('evak/generator', 78, 64, False), ('evak/flutlicht', 82, 66, False),
                              ('evak/bett', 75, 70, False), ('evak/kanister', 80, 71, False), ('evak/kisten', 82, 73, False)):
         kachel(n_, tx + P, ty + P, {'anim': 'leuchten', 'licht': [13, 4], 'licht_box': [0, 0, 26, 9], 'licht_r': 16}
-               if n_ == 'evak/flutlicht' else {'anim': 'maschine', 'leds': True} if n_ == 'evak/generator' else {}, sp)
+               if n_ == 'evak/flutlicht' else {'anim': 'maschine', 'leds': True, 'ruetteln': True} if n_ == 'evak/generator' else {}, sp)
     # Sperren und Zurueckgelassenes
     for (n_, tx, ty, sp) in (('evak/sandsack', 33, 22, False), ('evak/sperre', 9, 46, False), ('evak/kegel', 44, 66, False),
                              ('evak/sperre', 58, 69, True), ('evak/gepaeck', 19, 47, False), ('evak/rucksack', 48, 74, False),

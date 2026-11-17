@@ -649,7 +649,19 @@
 ],
 "ebene": 1,
 "ohne_wall": true,
-"nur_kontakt": true
+"nur_kontakt": true,
+"anim": "leuchten",
+"licht": [
+10,
+10
+],
+"licht_box": [
+2,
+5,
+18,
+16
+],
+"licht_r": 7
 },
 {
 "datei": "varianten/k18s-12.png",
@@ -677,7 +689,19 @@
 ],
 "ebene": 1,
 "ohne_wall": true,
-"nur_kontakt": true
+"nur_kontakt": true,
+"anim": "leuchten",
+"licht": [
+10,
+11
+],
+"licht_box": [
+2,
+5,
+18,
+17
+],
+"licht_r": 7
 },
 {
 "datei": "varianten/evak-zelt.png",
@@ -750,11 +774,11 @@
 "nur_kontakt": true
 },
 {
-"datei": "varianten/evak-tisch.png",
-"basis": "evak/tisch",
-"x": 320,
-"y": 1078,
-"fuss": 25,
+"datei": "varianten/evak-kuehlbox.png",
+"basis": "evak/kuehlbox",
+"x": 326,
+"y": 1087,
+"fuss": 16,
 "kachel": [
 21,
 68
@@ -816,7 +840,8 @@
 "ohne_wall": true,
 "nur_kontakt": true,
 "anim": "maschine",
-"leds": true
+"leds": true,
+"ruetteln": true
 },
 {
 "datei": "varianten/evak-flutlicht.png",
