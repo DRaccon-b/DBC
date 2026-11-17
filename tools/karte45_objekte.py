@@ -20,7 +20,8 @@ T = 16
 FREMD = {'gras': 'karte04/klein/00.png', 'gras2': 'karte04/klein/01.png',
          'pilz': 'karte04/klein/11.png', 'kiesel': 'karte04/klein/02.png', 'zweig': 'karte04/klein/09.png',
          'blume': 'karte04/klein/07.png', 'gras3': 'karte04/klein/27.png',
-         'fass_a': 'karte45/fass_klein/01s.png', 'fass_b': 'karte45/fass_klein/02.png'}
+         'fass_a': 'karte45/fass_klein/01s.png', 'fass_b': 'karte45/fass_klein/02.png',
+         'fass_c': 'karte45/fass_klein/00s.png', 'fass_d': 'karte45/fass_klein/04s.png'}
 for _n, _i in (('rose', 17), ('lotus', 18), ('rose2', 19), ('kolben', 7), ('wfels', 22)):
     FREMD[_n] = 'karte01/deko/%02d.png' % _i                          # Wasserpflanzen und Wasserfels
 for _i in range(2):
@@ -218,6 +219,27 @@ def main():
                 if ok_:
                     break
         n_fass += 1 if ok_ else 0
+    # ---------------- Nutzer: noch 1-2 Faesser am Inselrand (nicht in der Mitte), 2-3 Kacheln vom Ufer, weit auseinander
+    wasser_t = np.array([[c == 'x' for c in z] for z in cls])
+    rand_k = []
+    for y in range(2, rows - 2):
+        for x in range(2, cols - 2):
+            if cls[y][x] != 'g':
+                continue
+            d_ = min((abs(yy - y) + abs(xx - x)) for yy in range(max(0, y - 4), min(rows, y + 5))
+                     for xx in range(max(0, x - 4), min(cols, x + 5)) if wasser_t[yy, xx]) \
+                if wasser_t[max(0, y - 4):y + 5, max(0, x - 4):x + 5].any() else 99
+            if 2 <= d_ <= 3 and y < 20:                                 # Nord-/Ost-/Westufer (nicht am Steg)
+                rand_k.append((x, y))
+    rnd.shuffle(rand_k)
+    for n_ in ('fass_c', 'fass_d'):
+        for (x, y) in rand_k:
+            if any(o_['basis'].startswith('fass') and abs(o_['kachel'][0] - x) < 10 and abs(o_['kachel'][1] - y) < 8
+                   for o_ in objekte):
+                continue
+            if setze(n_, x * T + 8, y * T + 13, {'_reihe': True}, rnd.random() < 0.5, 'g'):
+                n_fass += 1
+                break
     # ---------------- Wasser: Seerosen, Rohrkolben, Wasserfelsen nah am Ufer; treibende Faesser weiter draussen
     xmask = np.unpackbits(np.load(os.path.join(KARTE, 'wasser.npy')))[:lvl.size].reshape(lvl.shape).astype(bool)
 
