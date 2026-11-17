@@ -1,16 +1,18 @@
-# Grundgeruest aus karte47 (tools/neue_karte.py) - an die Vorlage von karte50 "Zhuqiaomon's Sanctuary" anpassen!
-"""Karte 50 - Deva Mountain (A03 Nr. 14), Layout nach der Vorlage -> maps/karte50/layout.json
+"""Karte 50 - Zhuqiaomon's Sanctuary (A03 Nr. 17), Layout nach der Vorlage -> maps/karte50/layout.json
 
   python3 tools/karte50_layout.py
 
-Vorlage assets/vorlagen/karte50_vorlage.png (auf 1600x1200 skaliert, Original 1,25-fach) = 100x75 Kacheln. Berg der Devas:
-graublauer Felsboden mit gepflasterten Wegen, erhoehter heller Felsrand und Felsinseln mit Klippen nach Sueden,
-Grasflecken mit Baeumen, Geroellflaechen, runde Arena rechts mit dunklem Boden (begehbar, Nutzer), fuenf Ausgaenge.
+Vorlage assets/vorlagen/karte50_vorlage.png (1536x1280 = 96x80 Kacheln), Kacheln wie Karte 47: Felsboden, Pflasterwege und
+-plaetze, Wiesenflecken, erhoehter Felsrand ringsum, abgesenkter Hof oben links, zwei rote Torii auf Treppen, untere Treppe,
+drei Teleporter (links, rechts, unten rechts).
 
-Klassen:  g Felsboden  w Pflasterweg  k Geroell  n Gras  d dunkler Boden  h heller Felsrand/Felsinsel (Hoehe 1, gesperrt)
-          T Teleporter
-Verbesserungen: Zipfel/Einzelkacheln aller Klassen geglaettet, Felsinseln mit Boden ringsum (Front nie am Rand eines
-anderen Bodens), Ausgaenge mit Weg in Teleporterbreite.
+Klassen:  g Felsboden  w Pflaster  k dunkles Pflaster  n Wiese  h Felsrand (gesperrt, ueber allen Terrassen)
+          d Hofboden (abgesenkter Hof)  t Treppe (Frontreihe)  T Teleporter
+Hoehen (Nutzer: echte Terrassen, das Heiligtum steigt nach Norden an):
+  0 unterste Ebene (Sueden)  1  2  3 oberste Terrasse (Norden)  Hof oben links = 2 (in Terrasse 3 abgesenkt)  Rand = 4
+Korrekturen der Vorlage: Torii-Treppen ohne Hoehenunterschied -> durchgehende Terrassenkanten (45-Grad-Raster) mit den
+Treppen als einzigem Uebergang; Felsbloecke neben den Treppen = Terrassenfront; Hof mit Nordtreppe hinunter (Nutzer:
+abgesenkter Hof); Zipfel/Einzelkacheln geglaettet; Ausgaenge in Teleporterbreite.
 """
 import json, os
 import numpy as np
@@ -20,14 +22,19 @@ import karte43_layout as k43
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
 KARTE = os.path.join(ROOT, 'maps', 'karte50')
 VORLAGE = os.path.join(ROOT, 'assets', 'vorlagen', 'karte50_vorlage.png')
-C, R, T = 100, 75, 16
-REF = {'g': (101, 118, 138), 'h': (137, 151, 165), 'w': (136, 144, 144), 'k': (118, 125, 127), 'n': (80, 136, 56),
-       'd': (64, 72, 88), 'c': (90, 100, 112)}
-GRABEN = (82.5, 50.5, 14.5, 17.5)       # Ellipse um die Arena (Mitte x, y, Halbachsen) in Kacheln
-BRUECKEN_Y = [(42, 44), (57, 59)]       # Reihen der Grabenbruecken (Westseite)
-FLUSS = [(19, 74), (21, 75), (24, 77), (25, 78), (33, 78)]   # (Reihe, linke Spalte): Quelle am Fuss des Felsrands, endet am Graben
-FLUSS_BRUECKE = (27, 31)                                     # Reihen der Bruecke, wo der Pflasterring den Fluss kreuzt
-TELEPORTER = [(19, 0, 3, 2), (62, 0, 3, 2), (97, 23, 3, 3), (0, 62, 3, 3), (22, 72, 3, 3)]
+C, R, T = 96, 80, 16
+REF = {'g': (115, 131, 147), 'w': (138, 146, 155), 'h': (137, 151, 165), 'f': (101, 118, 138), 'n': (82, 138, 59),
+       'W': (137, 144, 149), 'd': (68, 74, 90), 'r': (73, 91, 112), 'x': (125, 144, 155), 'k': (123, 128, 129),
+       't': (129, 135, 149), 'y': (89, 109, 128)}
+# Terrassenkanten: erste Reihe der tieferen Ebene je Spaltenbereich (Front liegt dort); Treppen (x0, x1) darin
+KANTEN = [  # (Hoehe darueber, [(x0, x1, Reihe)], Treppe)
+    (3, [(0, 27, 28), (28, 66, 25), (67, 81, 24), (82, 95, 23)], (50, 59)),
+    (2, [(0, 23, 50), (24, 59, 48), (60, 75, 47), (76, 95, 46)], (46, 55)),
+    (1, [(0, 29, 72), (30, 63, 70), (64, 95, 69)], (41, 46)),
+]
+HOF = (12, 9, 26, 17)                    # abgesenkter Hof (x0, y0, x1, y1), Treppe in der Suedreihe darunter
+HOF_TREPPE = (17, 20)
+TELEPORTER = [(0, 29, 3, 4), (93, 24, 3, 4), (85, 77, 4, 3)]
 k43.R, k43.C = R, C
 
 
@@ -38,126 +45,78 @@ def main():
     ks = list(REF)
     ref = np.array([REF[c] for c in ks], float)
     k = np.array(ks)[((M[:, :, None, :] - ref[None, None]) ** 2).sum(-1).argmin(-1)].astype('<U1')
-    k[k == 'c'] = 'h'                                                 # Klippenfronten der Vorlage gehoeren zum Fels
-    for teil in k43.flaechen(k == 'n'):                               # Baumkronen/Einzelgras -> Boden
-        if len(teil) < 6:
+    k[np.isin(k, list('frxyt'))] = 'g'
+    k[k == 'W'] = 'w'
+    k[k == 'd'] = 'g'
+    for teil in k43.flaechen(k == 'h'):                               # kleine Fels-Einzelkacheln (Objekte) -> Boden
+        if len(teil) < 8:
             for (y, x) in teil:
-                k[y, x] = 'g'
-    k = k43.zipfel_weg(k, 'gwknhd')
-    insel = np.zeros((R, C), bool)                                    # nur kleine Felsinseln (nicht der Rand) bekommen
-    for teil in k43.flaechen(k == 'h'):                               # Boden ringsum - sonst verschwinden Wege am Rand
-        if len(teil) < 300:
-            for (y, x) in teil:
-                insel[y, x] = True
-    for _ in range(3):                                                # Felsinseln: 1 Reihe Boden ringsum, 2 unter der Front
-        for y in range(1, R - 2):
-            for x in range(1, C - 1):
-                if k[y, x] == 'h' and insel[y, x]:
-                    for dy, dx in [(d, e) for d in (1, 2) for e in (-1, 0, 1)]:
-                        if 0 <= y + dy < R and k[y + dy, x + dx] in 'wknd':
-                            k[y + dy, x + dx] = 'g'
-        k = k43.zipfel_weg(k, 'gwknhd')
-    k[0:2, :] = 'h'; k[-1, :] = 'h'; k[:, 0] = 'h'; k[:, -1] = 'h'     # Felsrand ringsum geschlossen
-    # Graben um die Arena (Nutzer): Ring aus tieferem Fels (Klasse x, gesperrt), die Arena liegt dadurch wie auf einem
-    # Plateau; zwei Bruecken an der Westseite (Hauptweg bei den Flaggen und unten links)
-    yy_, xx_ = np.mgrid[0:R, 0:C]
-    d_aussen = ((xx_ - GRABEN[0]) / GRABEN[2]) ** 2 + ((yy_ - GRABEN[1]) / GRABEN[3]) ** 2
-    d_innen = ((xx_ - GRABEN[0]) / (GRABEN[2] - 3)) ** 2 + ((yy_ - GRABEN[1]) / (GRABEN[3] - 3)) ** 2   # 3 Kacheln breit (tiefer)
-    graben = (d_aussen <= 1.0) & (d_innen > 1.0) & (k != 'h')
-    k[graben] = 'x'
-    for _ in range(3):
-        for y in range(1, R - 1):                                     # 1-Spalten-Kerben/-Vorspruenge im Fels (Wandstummel)
-            for x in range(1, C - 1):
-                if k[y, x] != 'h' and k[y, x - 1] == 'h' and k[y, x + 1] == 'h':
-                    k[y, x] = 'h'
-                elif k[y, x] == 'h' and k[y, x - 1] != 'h' and k[y, x + 1] != 'h':
+                k[y, x] = 'n' if any(k[yy, xx] == 'n' for yy, xx in ((y, x - 1), (y, x + 1), (y - 1, x), (y + 1, x))
+                                     if 0 <= yy < R and 0 <= xx < C) else 'g'
+    for kl in ('n', 'k', 'w'):
+        for teil in k43.flaechen(k == kl):
+            if len(teil) < 5:
+                for (y, x) in teil:
                     k[y, x] = 'g'
-        for x in (1, C - 2):                                          # Seitenrand: kurze Kerben (<= 5 Reihen) schliessen
-            y = 0
-            while y < R:
-                if k[y, x] != 'h':
-                    y0 = y
-                    while y < R and k[y, x] != 'h':
-                        y += 1
-                    if y - y0 <= 5 and y0 > 0 and y < R and k[y0:y, x - 1 if x == 1 else x + 1].tolist().count('h') == y - y0:
-                        k[y0:y, x] = 'h'
-                y += 1
-        for y in range(1, R - 1):                                     # 1-Spalten-Vorsprung an Seitenkanten (Ende einer Stufe)
-            for x in range(1, C - 1):
-                if k[y, x] == 'h' and k[y, x + 1] != 'h' and k[y + 1, x] != 'h' and k[y - 1, x] != 'h' and k[y, x - 1] == 'h':
-                    k[y, x] = k[y + 1, x]
-                if k[y, x] == 'h' and k[y, x + 1] != 'h' and k[y + 1, x] != 'h' and k[y - 1, x] == 'h' and \
-                        k[y - 1, x + 1] != 'h' and k[y - 2, x] != 'h' and k[y, x - 1] == 'h':
-                    k[y, x] = k[y + 1, x]; k[y - 1, x] = k[y + 1, x]
-        for y in range(R - 1):                                        # Schachbrett-Ecken (nur diagonal beruehrend)
-            for x in range(C - 1):
-                q = k[y:y + 2, x:x + 2]
-                if q[0, 0] == q[1, 1] and q[0, 1] == q[1, 0] and q[0, 0] != q[0, 1]:
-                    k[y + 1, x] = q[0, 0]
-    for (tx, ty, b, hh) in TELEPORTER:                                # Ausgaenge: Weg in Teleporterbreite durch den Rand
-        k[ty:ty + hh, tx:tx + b] = 'T'
-        if ty == 0:
-            k[ty + hh:ty + hh + 3, tx:tx + b] = np.where(k[ty + hh:ty + hh + 3, tx:tx + b] == 'h', 'g', k[ty + hh:ty + hh + 3, tx:tx + b])
-        elif ty + hh == R:
-            k[ty - 3:ty, tx:tx + b] = np.where(k[ty - 3:ty, tx:tx + b] == 'h', 'g', k[ty - 3:ty, tx:tx + b])
-        elif tx == 0:
-            k[ty:ty + hh, tx + b:tx + b + 3] = np.where(k[ty:ty + hh, tx + b:tx + b + 3] == 'h', 'g', k[ty:ty + hh, tx + b:tx + b + 3])
-            k[ty - 2:ty, 0:tx + b + 3] = np.where(k[ty - 2:ty, 0:tx + b + 3] == 'h', 'g', k[ty - 2:ty, 0:tx + b + 3])
-        else:
-            k[ty:ty + hh, tx - 3:tx] = np.where(k[ty:ty + hh, tx - 3:tx] == 'h', 'g', k[ty:ty + hh, tx - 3:tx])
-            k[ty - 2:ty, tx - 3:C] = np.where(k[ty - 2:ty, tx - 3:C] == 'h', 'g', k[ty - 2:ty, tx - 3:C])
-    # Fluss (Nutzer): kommt oben durch die Felsspalte, laeuft ueber den Felsboden und stuerzt als Wasserfall in den Graben
-    fluss_x = np.interp(np.arange(0, 34), [p_[0] for p_ in FLUSS], [p_[1] for p_ in FLUSS]).round().astype(int)
-    y_q = FLUSS[0][0]
-    for y in range(y_q, 34):
-        k[y, fluss_x[y]:fluss_x[y] + 2] = 'f'
-    k[y_q:y_q + 3, fluss_x[y_q] - 1:fluss_x[y_q] + 3] = 'f'          # Becken unter dem ersten Wasserfall (breiter)
-    for y in range(4, y_q):                                           # Rinne wird Berg: der Fluss laeuft oben bis zur
-        for x in range(fluss_x[y_q] - 3, fluss_x[y_q] + 5):            # urspruenglichen Bergkante (Nutzer)
-            if k[y, x] in 'gwkn':
-                k[y, x] = 'h'
-    k[0:y_q, fluss_x[y_q]:fluss_x[y_q] + 2] = 'F'                     # Fluss oben auf dem Berg (kommt von ausserhalb der Karte)
-    for x in range(fluss_x[y_q] - 4, fluss_x[y_q] + 7):              # Felskante um den Wasserfall gerade (gleiche Reihe)
-        if k[y_q, x] == 'h':
-            k[y_q, x] = 'g'
-    for y in range(y_q + 1, 34):                                            # diagonale Stufen ohne Luecke (4er-Nachbarschaft)
-        if fluss_x[y] != fluss_x[y - 1]:
-            k[y, min(fluss_x[y], fluss_x[y - 1]):max(fluss_x[y], fluss_x[y - 1]) + 2] = 'f'
-    for y in range(y_q, 34):                                          # Ufer: 1 Kachel Boden neben dem Fluss (nicht Rand/Pflaster-Zipfel)
-        for x in (fluss_x[y] - 1, fluss_x[y] + 2):
-            if k[y, x] == 'h' and y >= 4:
+    k = k43.zipfel_weg(k, 'gwknh')
+    # Hoehen: Terrassen nach Norden ansteigend
+    hp = np.zeros((R, C), int)
+    for (hoehe, seg, _) in KANTEN:
+        for (x0, x1, ry) in seg:
+            hp[:ry, x0:x1 + 1] = np.maximum(hp[:ry, x0:x1 + 1], hoehe)
+    # Hof oben links: zwei Stufen tiefer als die oberste Terrasse liegt er nicht - eine Stufe (Hoehe 2)
+    hx0, hy0, hx1, hy1 = HOF
+    k[hy0:hy1 + 1, hx0:hx1 + 1] = 'd'
+    hp[hy0:hy1 + 1, hx0:hx1 + 1] = 2
+    k[hy1 + 1:hy1 + 4, hx0 - 1:hx1 + 2] = np.where(k[hy1 + 1:hy1 + 4, hx0 - 1:hx1 + 2] == 'h', 'g', k[hy1 + 1:hy1 + 4, hx0 - 1:hx1 + 2])
+    k[hy0 - 1, hx0 - 1:hx1 + 2] = np.where(k[hy0 - 1, hx0 - 1:hx1 + 2] == 'h', 'g', k[hy0 - 1, hx0 - 1:hx1 + 2])   # Rand um den Hof
+    for y in range(hy0 - 1, hy1 + 2):
+        for x in (hx0 - 1, hx1 + 1):
+            if k[y, x] == 'h':
                 k[y, x] = 'g'
-    bx0f = fluss_x[FLUSS_BRUECKE[0]]                                  # Bruecke ueber den Fluss am Pflasterring
-    k[FLUSS_BRUECKE[0]:FLUSS_BRUECKE[1] + 1, bx0f:bx0f + 2] = 'b'
-    for x in (bx0f - 2, bx0f - 1, bx0f + 2, bx0f + 3):
-        k[FLUSS_BRUECKE[0]:FLUSS_BRUECKE[1] + 1, x] = 'w'
-    bruecken = [[int(bx0f), FLUSS_BRUECKE[0], int(bx0f + 1), FLUSS_BRUECKE[1]]]
-    wx_ = int(fluss_x[33])                                            # Sturzbecken: Graben unter dem Wasserfall tiefer in die
-    for y in range(34, 40):                                           # Arena hinein (Platz zum Verschwinden in der Tiefe)
-        for x in range(wx_ - 2 + max(0, y - 37), wx_ + 4 - max(0, y - 37)):
-            if k[y, x] in 'gwkdn':
-                k[y, x] = 'x'
-    for (by0, by1) in BRUECKEN_Y:                                     # Bruecke = Grabenbreite, Weg 2 Kacheln davor/dahinter
-        xs = [x for y in range(by0, by1 + 1) for x in range(C) if k[y, x] == 'x' and x < GRABEN[0]]
-        bx0, bx1 = min(xs), max(xs)
-        k[by0 - 1:by1 + 2, bx0:bx1 + 1] = 'x'
-        k[by0:by1 + 1, bx0:bx1 + 1] = 'b'
-        for x in list(range(bx0 - 2, bx0)) + list(range(bx1 + 1, bx1 + 3)):
-            k[by0:by1 + 1, x] = 'w'
-        bruecken.append([int(bx0), by0, int(bx1), by1])
-    h = np.where((k == 'h') | (k == 'F'), 1, 0)
-    lay = {'groesse': [C, R], 'klassen': [''.join(z) for z in k], 'hoehe': [''.join(str(c) for c in z) for z in h],
-           'bruecken': bruecken, 'stege': [], 'graben': list(GRABEN), 'wasserfall': [int(fluss_x[33]), 34], 'wasserfall_berg': [int(fluss_x[y_q]), y_q],
+    # Felsrand: ueber allen Terrassen
+    hp[k == 'h'] = 4
+    # Treppen: Frontreihe 't', 2 Reihen frei davor/dahinter (kein Rand, kein Gras-Zipfel)
+    treppen = []
+    for (hoehe, seg, (tx0, tx1)) in KANTEN:
+        ry = [r_ for (x0, x1, r_) in seg if x0 <= tx0 <= x1][0]
+        for y in range(ry - 2, ry + 3):
+            for x in range(tx0 - 1, tx1 + 2):
+                if k[y, x] in 'hn':
+                    k[y, x] = 'w'
+        k[ry, tx0:tx1 + 1] = 't'
+        treppen.append([tx0, tx1, ry, 's'])
+    # Hoftreppe (von Sueden hinunter nach Norden) liegt im Hof selbst (bauen), kein Pflasterstummel davor
+    treppen.append([HOF_TREPPE[0], HOF_TREPPE[1], hy1, 'n'])
+    for (tx, ty, b, hh) in TELEPORTER:                                # Ausgaenge in Teleporterbreite durch den Rand
+        k[ty:ty + hh, tx:tx + b] = 'T'
+        if tx == 0 or tx + b == C:                                      # seitlich: 2 Reihen frei unter der Randfront (K47)
+            xs_ = slice(0, b + 3) if tx == 0 else slice(tx - 3, C)
+            k[ty - 2:ty, xs_] = np.where(k[ty - 2:ty, xs_] == 'h', 'g', k[ty - 2:ty, xs_])
+        if tx == 0:
+            hp[ty - 2:ty, 0:b + 3] = hp[ty - 2:ty, b + 3:b + 4]
+            k[ty:ty + hh, b:b + 3] = np.where(k[ty:ty + hh, b:b + 3] == 'h', 'g', k[ty:ty + hh, b:b + 3])
+            hp[ty:ty + hh, 0:b + 3] = hp[ty:ty + hh, b + 3:b + 4]  # Ebene des Bodens daneben
+        elif tx + b == C:
+            k[ty:ty + hh, tx - 3:tx] = np.where(k[ty:ty + hh, tx - 3:tx] == 'h', 'g', k[ty:ty + hh, tx - 3:tx])
+            hp[ty - 2:ty + hh, tx - 3:C] = hp[ty - 2:ty + hh, tx - 4:tx - 3]
+        else:
+            k[ty - 3:ty, tx:tx + b] = np.where(k[ty - 3:ty, tx:tx + b] == 'h', 'g', k[ty - 3:ty, tx:tx + b])
+            hp[ty - 3:R, tx:tx + b] = 0                                   # unterste Ebene
+    hp[(k != 'h') & (hp == 4)] = 3
+    lay = {'groesse': [C, R], 'klassen': [''.join(z) for z in k], 'hoehe': [''.join(str(c) for c in z) for z in hp],
+           'treppen': treppen, 'hof': list(HOF), 'bruecken': [], 'stege': [],
            'teleporter': [{'x': tx, 'y': ty, 'b': b, 'h': hh} for (tx, ty, b, hh) in TELEPORTER]}
     json.dump(lay, open(os.path.join(KARTE, 'layout.json'), 'w'), indent=0)
-    F = {'F': (80, 130, 210), 'f': (60, 110, 190), 'x': (30, 32, 40), 'b': (150, 100, 50), 'g': (101, 118, 138), 'w': (170, 170, 165), 'h': (190, 200, 215), 'k': (130, 135, 120), 'n': (80, 150, 60),
-         'd': (50, 55, 70), 'T': (80, 220, 240)}
+    F = {'g': (115, 131, 147), 'w': (170, 170, 165), 'k': (120, 120, 110), 'n': (80, 150, 60), 'h': (210, 215, 225),
+         'd': (60, 60, 80), 't': (240, 170, 60), 'T': (80, 220, 240)}
     S_ = 6
     im = Image.new('RGB', (C * S_, R * S_))
     dr = ImageDraw.Draw(im)
     for y in range(R):
         for x in range(C):
-            dr.rectangle((x * S_, y * S_, x * S_ + S_ - 1, y * S_ + S_ - 1), fill=F[k[y, x]])
+            c = np.array(F[k[y, x]]) * (0.7 + 0.1 * min(hp[y, x], 3))
+            dr.rectangle((x * S_, y * S_, x * S_ + S_ - 1, y * S_ + S_ - 1), fill=tuple(int(v) for v in np.clip(c, 0, 255)))
     vg = Image.open(VORLAGE).convert('RGB').resize((C * S_, R * S_))
     both = Image.new('RGB', (C * S_ * 2 + 8, R * S_))
     both.paste(vg, (0, 0)); both.paste(im, (C * S_ + 8, 0))

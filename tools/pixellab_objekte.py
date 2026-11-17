@@ -2185,6 +2185,22 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'wooden wine barrel floating in water, lying on its side, only the upper half above the waterline is visible, flat straight bottom edge at the waterline, iron hoops, no water drawn, ' + FR14,
         'old oak barrel drifting, lying sideways, half sunk, round wooden end showing, upper half only, flat cut bottom edge at the waterline, no water drawn, ' + FR14,
     ]},
+    'k50_torii': {'size': 96, 'freie_farben': True, 'items': [   # Karte 50 Zhuqiaomon's Sanctuary: Torii
+        'traditional vermilion red torii shrine gate, two round red pillars with black bases, black curved top beam (kasagi) and a straight red tie beam below, ' + FR14,
+    ]},
+    'k50_deko': {'size': 64, 'freie_farben': True, 'items': [   # Karte 50: Heiligtum
+        'japanese stone lantern (toro) of grey granite, square fire box with a small warm light, roof cap with curled corners, stepped base, ' + FR14,
+        'short dark slate stone pillar post with a flat cap, weathered, ' + FR14,
+        'small straw lean-to shelter on wooden poles with a rock pile at its base, golden thatch roof, ' + FR14,
+        'small wooden offering box with a slatted top and red trim, ' + FR14,
+        'iron fire brazier on three legs with tall orange-red flames and glowing embers, ' + FR14,
+    ]},
+    'k50_klein': {'size': 32, 'freie_farben': True, 'items': [   # Karte 50: Federn des Feuervogels und Kleinkram
+        'single long red and orange phoenix feather lying on the ground, golden tip, flat ground detail, ' + FR14,
+        'two small crimson feathers lying on stone ground, flat ground detail, ' + FR14,
+        'small cluster of red spider lily flowers, ' + FR14,
+        'tiny pile of grey pebbles, flat ground detail, ' + FR14,
+    ]},
     'k49_deko': {'size': 64, 'freie_farben': True, 'items': [   # Karte 49 The Broken Promise: Bossarena (Beelzemon-Anspielungen)
         'heavy black chopper motorcycle parked on its kickstand, seen from the side and slightly from above, chrome engine and exhaust pipes, dark purple accents, single round headlight, ' + FR14,
         'iron fire brazier on three legs with tall violet-purple flames and glowing embers, ' + FR14,

@@ -1,13 +1,8 @@
-# Grundgeruest aus karte47 (tools/neue_karte.py) - an die Vorlage von karte50 "Zhuqiaomon's Sanctuary" anpassen!
-# Grundgeruest aus karte46 (tools/neue_karte.py) - an die Vorlage von karte50 "Deva Mountain" anpassen!
-# Grundgeruest aus karte45 (tools/neue_karte.py) - an die Vorlage von karte50 "Gekomon Marsh" anpassen!
-# Grundgeruest aus karte44 (tools/neue_karte.py) - an die Vorlage von karte50 "Orochimon's Marsh" anpassen!
-# Grundgeruest aus karte43 (tools/neue_karte.py) - an die Vorlage von karte50 "Chuchidarumon Village" anpassen!
-"""Karte 50 - Deva Mountain (A03 Nr. 14), Gelaende nach maps/karte50/layout.json.
+"""Karte 50 - Zhuqiaomon's Sanctuary (A03 Nr. 17), Gelaende nach maps/karte50/layout.json.
 
-Berg der Devas: graublauer Felsboden, gepflasterte Wege (Kies grau), Geroellflaechen, Grasflecken mit Grashalm-Bueschel,
-dunkler Boden in der Arena (begehbar, Nutzer), heller Felsrand und Felsinseln erhoeht mit grauen Felsklippen nach Sueden
-und schmalen Seitenkanten, Teleporter an den fuenf Ausgaengen. Bodenkanten am 45-Grad-Raster (Regel 6b).
+Heiligtum auf Terrassen (Nutzer: echte Terrassen, steigt nach Norden an): Felsboden, Pflasterwege und -plaetze, Wiesen,
+drei Terrassenkanten mit Felsfront (45-Grad-Raster), Steintreppen unter den Torii als einziger Uebergang, abgesenkter Hof
+oben links (Nutzer) mit Steinplattenboden und eingeschnittener Treppe von Sueden, erhoehter Felsrand ringsum (gesperrt).
 
   python3 tools/karte50_layout.py && python3 tools/karte50_bauen.py
 """
@@ -19,11 +14,7 @@ import karte_bauen as kb
 import karte04_bauen as k4
 import karte06_bauen as k6
 import karte20_bauen as k20
-import bauwerke
-import wasser_vertieft
-import klippen
-import wasser_details
-wasser_details.felsen_setzen = lambda *a_, **k_: None   # keine automatischen Felsspitzen (orange Kegel); Wasserfelsen als Objekte
+import karte48_bauen as k48
 
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
 KARTE = os.path.join(ROOT, 'maps', 'karte50')
@@ -35,20 +26,13 @@ k4.N_FRAMES = N_FRAMES
 kb.N_FRAMES = N_FRAMES
 H = k4.H
 weich, zell_maske, flaeche = k4.weich, k4.zell_maske, k20.flaeche
-k4.SCHATTEN = {'farbe': (22, 28, 44), 'dx': 0.3, 'dy': 0.15, 'kern': 100, 'wurf': (66, 52)}   # kuehler, kompakter (Nutzer)
-k4.RASTER45 = True                       # Regel 6b: alle Bodenkanten am 16er-Raster mit 45 Grad
-# niedrige Steinmauer der Waldbloecke (grauer Bruchstein wie in der Vorlage), Kante oben mit Waldboden
+k4.SCHATTEN = {'farbe': (22, 28, 44), 'dx': 0.3, 'dy': 0.15, 'kern': 100, 'wurf': (66, 52)}
+k4.RASTER45 = True
 k4.FELS['berg47'] = ['#262b38', '#353d4e', '#465064', '#59657a', '#6e7b90', '#8693a8', '#a3afc2']   # graublauer Fels
-LIPPE = ['#4e5868', '#5e6878', '#6e7888', '#7e8898', '#8e98a8', '#a0aab8']   # helle Felskante oben
-FRONT = 24
-SEITE = 6                                # seitliche Plateaukanten nur schmal (Regel)
-
-
-def faerben(lo, hi, a0=0.35, a1=0.5):
-    def f(a):
-        l = a.mean(axis=2, keepdims=True) / 255.0
-        return np.array(lo, np.float32) + (np.array(hi, np.float32) - np.array(lo, np.float32)) * np.clip((l - a0) / a1, 0, 1)
-    return f
+LIPPE = ['#4e5868', '#5e6878', '#6e7888', '#7e8898', '#8e98a8', '#a0aab8']
+FRONT = 24                               # Terrassen und Felsrand
+SEITE = 6
+faerben = k48.faerben
 
 
 def texturen(cols, rows):
@@ -57,175 +41,13 @@ def texturen(cols, rows):
     gras = os.path.join(basis, 'gras_%d.png')
     kies = os.path.join(ROOT, 'assets', 'karte03', 'basis', 'kies_%d.png')
     return {
-        'g': flaeche(k6.kacheln(sand, 5, faerben((84, 100, 122), (124, 140, 160), 0.3, 0.5)), cols, rows),   # Felsboden
-        'w': flaeche(k6.kacheln(kies, 5, faerben((118, 124, 126), (172, 176, 174), 0.25, 0.6)), cols, rows),  # Pflaster
-        'k': flaeche(k6.kacheln(kies, 5, faerben((100, 106, 108), (146, 150, 150), 0.25, 0.6)), cols, rows),  # Geroell
-        'n': flaeche(k6.kacheln(gras, 5, faerben((62, 112, 46), (108, 158, 72), 0.3, 0.5)), cols, rows),     # Gras
-        'd': flaeche(k6.kacheln(sand, 5, faerben((44, 50, 64), (78, 86, 104), 0.3, 0.5)), cols, rows),      # dunkler Boden
-        'h': flaeche(k6.kacheln(sand, 5, faerben((128, 142, 158), (170, 182, 196), 0.3, 0.5)), cols, rows),  # Felsrand
+        'g': flaeche(k6.kacheln(sand, 5, faerben((96, 112, 132), (138, 152, 168), 0.3, 0.5)), cols, rows),   # Felsboden
+        'w': flaeche(k6.kacheln(kies, 5, faerben((118, 124, 132), (172, 176, 182), 0.25, 0.6)), cols, rows),  # Pflaster
+        'k': flaeche(k6.kacheln(kies, 5, faerben((96, 100, 104), (142, 146, 148), 0.25, 0.6)), cols, rows),   # dunkles Pflaster
+        'n': flaeche(k6.kacheln(gras, 5, faerben((62, 112, 46), (108, 158, 72), 0.3, 0.5)), cols, rows),     # Wiese
+        'h': flaeche(k6.kacheln(kies, 5, faerben((120, 134, 150), (172, 184, 198), 0.25, 0.6)), cols, rows),  # Felsrand (rau)
+        'd': k48.platten(cols, rows, basis=(84, 92, 110), fuge=(52, 58, 72), seed=50),                       # Hofboden
     }
-
-
-BODEN = set(os.environ.get('K44_BODEN', '').split(',')) - {''}   # Nutzer: Bodenschattierung (Relief/vertiefte Wege) wieder raus
-
-
-def boden_tiefe(a, cls, cols, rows, frame):
-    """Boden nicht platt (Nutzer): ohne neue Objekte/Texturen.
-    relief: sanfte Huegel der Wiese - Hoehenfeld aus grobem Rauschen, Licht von oben links, in 3 Stufen (Pixel-Look)
-    wege:   Erdwege liegen etwas tiefer - Schattenkante unter der Wiese im Norden/Westen, Lichtkante im Sueden/Osten
-    wind:   Windboeen ziehen als helle Wellen ueber die Wiese (animiert, 4 Bilder)"""
-    def gauss(m, sig):                                                 # separabler Gauss (Rand fortgesetzt)
-        r_ = int(3 * sig) + 1
-        k_ = np.exp(-0.5 * (np.arange(-r_, r_ + 1) / sig) ** 2); k_ /= k_.sum()
-        p_ = np.pad(m, r_, mode='edge')
-        p_ = np.apply_along_axis(lambda v: np.convolve(v, k_, 'valid'), 0, p_)
-        return np.apply_along_axis(lambda v: np.convolve(v, k_, 'valid'), 1, p_)
-    Hp, Wp = rows * T, cols * T
-    g = weich(zell_maske(cls, 'g', cols, rows), 5.0, 0, 3)
-    w = weich(zell_maske(cls, 'wT', cols, rows), 5.0, 0, 3)
-    af = a.astype(np.float32)
-    if 'relief' in BODEN:
-        rs = np.random.RandomState(4401)
-        hf = gauss(rs.rand(Hp // 16 + 2, Wp // 16 + 2).astype(np.float32), 2.0)
-        hf = np.array(Image.fromarray(hf.astype(np.float32), 'F').resize((Wp + 32, Hp + 32), Image.BICUBIC))[16:Hp + 16, 16:Wp + 16]
-        hf = (hf - hf.min()) / (hf.max() - hf.min() + 1e-6) * 160.0
-        gy, gx = np.gradient(hf)
-        licht = -(gx + gy)                                           # Hang nach oben links -> hell
-        licht = licht / (np.abs(licht).max() + 1e-6)
-        stufe = np.where(licht > 0.18, 1.07, np.where(licht < -0.18, 0.91, 1.0))
-        stufe = np.where(licht > 0.5, 1.13, np.where(licht < -0.5, 0.85, stufe))
-        f_ = np.where(g, stufe, np.where(w, 1 + (stufe - 1) * 0.5, 1.0))
-        af *= f_[..., None]
-    if 'wege' in BODEN:
-        tief = w.copy()
-        gras_ob = np.zeros_like(tief); gras_li = np.zeros_like(tief)
-        for d in (1, 2, 3):
-            gras_ob[d:] |= ~w[:-d] & g[:-d]
-            gras_li[:, d:] |= ~w[:, :-d] & g[:, :-d]
-        schatten = tief & (gras_ob | gras_li)
-        nah = np.zeros_like(tief)
-        for d in (1, 2):
-            nah[d:] |= ~w[:-d] & g[:-d]
-        af[schatten] *= 0.86
-        af[tief & nah] *= 0.92
-        licht_ = np.zeros_like(tief)                                  # Lichtkante: Boeschung im Sueden/Osten
-        licht_[:-1] |= tief[:-1] & ~w[1:] & g[1:]
-        licht_[:, :-1] |= tief[:, :-1] & ~w[:, 1:] & g[:, 1:]
-        af[licht_] = np.minimum(af[licht_] * 1.12, 255)
-        kante = np.zeros_like(tief)                                   # Grasrand ueber dem Weg: dunkle Kante (Abbruch)
-        kante[:-1] |= g[:-1] & ~w[:-1] & w[1:]
-        af[kante] *= 0.8
-    if 'wind' in BODEN and frame is not None:
-        yy, xx = np.mgrid[0:Hp, 0:Wp].astype(np.float32)
-        ph = 2 * np.pi * (frame % N_FRAMES) / N_FRAMES
-        welle = np.sin((xx * 0.8 + yy) / 46.0 - ph) + 0.6 * np.sin((xx - yy * 0.4) / 23.0 - 2 * ph + 1.3)
-        rs2 = np.random.RandomState(4402)
-        korn = gauss(rs2.rand(Hp // 2 + 1, Wp // 2 + 1).astype(np.float32), 0.8) > 0.5
-        korn = np.kron(korn, np.ones((2, 2), bool))[:Hp, :Wp]
-        hell = (welle > 1.05) & korn & g
-        af[hell] = np.minimum(af[hell] * np.array([1.06, 1.1, 1.02]), 255)
-    a[:] = np.clip(af, 0, 255).astype(np.uint8)
-
-
-def stege(a, lay, wasser, extra=None):
-    """Holzsteg (wie Karte 25): Planken quer zur Laufrichtung, Kontur nur am Aussenrand der ganzen Anlage, Suedfront mit
-    Pfaehlen ins Wasser, Schatten aufs Wasser rechts unten. Verschiebungen mit Randfortsetzung (kein np.roll)."""
-    HELL, MITTE, DUNKEL, KONTUR = H('#a8784a'), H('#8a5e38'), H('#6a4428'), H('#3a2616')
-    oben = np.zeros(wasser.shape, bool)
-    for (x0, y0, x1, y1) in lay['stege']:
-        oben[y0 * T:(y1 + 1) * T, x0 * T:(x1 + 1) * T] = True
-    if extra is not None:
-        oben |= extra
-    Hh, W = oben.shape
-    yy, xx = np.mgrid[0:Hh, 0:W]
-    i_ = xx                                                          # Planken senkrecht (Laufrichtung N-S/O-W gemischt)
-    c = np.where((i_ % 4 == 0)[..., None], HELL, np.where((i_ % 4 == 3)[..., None], DUNKEL, MITTE))
-    c = np.where(((xx * 7 + yy * 3) % 23 == 0)[..., None], DUNKEL, c)
-    fuge = (yy % 48 == 0)                                            # Querfugen der Planken
-    c = np.where(fuge[..., None], DUNKEL, c)
-    a[oben] = c[oben]
-
-    def sh(m, dy, dx):
-        p_ = np.pad(m, ((abs(dy), abs(dy)), (abs(dx), abs(dx))), mode='edge')
-        return p_[abs(dy) - dy:abs(dy) - dy + Hh, abs(dx) - dx:abs(dx) - dx + W]
-    rand = oben & (~sh(oben, 0, 1) | ~sh(oben, 0, -1) | ~sh(oben, 1, 0))
-    a[rand] = KONTUR
-    unten = oben & ~sh(oben, -1, 0)
-    front = np.zeros_like(oben)
-    for y, x in zip(*np.nonzero(unten)):
-        for d in range(1, 10):
-            y2 = y + d
-            if y2 >= Hh or oben[y2, x]:
-                break
-            front[y2, x] = True
-            if d < 6:
-                a[y2, x] = HELL if d == 1 else DUNKEL
-            elif (x % 16) in (3, 4, 5, 11, 12, 13):
-                a[y2, x] = KONTUR
-            else:
-                front[y2, x] = False
-    sch = sh(sh(oben | front, 4, 0), 0, 6) & ~oben & ~front & wasser
-    a[sch] = (a[sch] * 0.68).astype(np.uint8)
-    return oben
-
-
-def wasserfall_tief(a, x0, x1, y_ref, gw, frame, tm=None):
-    """Wasserfall ueber die Grabenwand, der in der Tiefe verschwindet (Nutzer: kein Aufschlag auf der Sohle): Abbruchkante,
-    fallendes Wasser mit wandernden Streifen ueber die ganze Wandhoehe, darunter blendet der Fall in die Dunkelheit aus,
-    nur feiner Spruehnebel - kein Gischtbecken, keine Ringe."""
-    import random
-    from klippen import WS, WEISS
-    rnd = random.Random(47)
-    Hp, Wp = gw.shape
-    breite = x1 - x0
-    sp_ = gw[y_ref - 4:y_ref + 60, x0:x1]
-    ys = np.nonzero(sp_.any(1))[0]
-    y_top = y_ref - 4 + int(ys.min()) if len(ys) else y_ref
-    y_wb = y_ref - 4 + int(ys.max()) if len(ys) else y_ref + 30
-    FADE = 34
-    if tm is not None:                                               # nur bis zum Ende der Grabensohle (nie auf die Arena)
-        sohle = tm[y_wb + 1:y_wb + 60, x0:x1].all(1)
-        n_ = int(np.argmin(sohle)) if not sohle.all() else 59
-        FADE = max(8, n_)
-    for i in range(breite):
-        x = x0 + i
-        rand = min(i, breite - 1 - i)
-        basis = WS['w0'] if rand == 0 else WS['w1'] if rand == 1 else WS['w2'] if rand <= 3 else WS['w3']
-        art, phase, laenge = rnd.random(), rnd.randint(0, 60), rnd.choice((16, 24, 24, 48))
-        for y in range(y_top - 2, y_wb + FADE):
-            if not (0 <= y < Hp):
-                continue
-            c = basis
-            if rand >= 2:
-                v = (y + phase - frame * 3) % laenge
-                if art < 0.45 and v < laenge * 2 // 3:
-                    c = WS['w4'] if 0 < v < laenge * 2 // 3 - 1 else WS['w3']
-                elif art < 0.6 and v < 6:
-                    c = WS['w5']
-                elif art > 0.8 and v < laenge // 2:
-                    c = WS['w2']
-            c = np.array(c[:3], np.float32)
-            if y > y_wb and tm is not None and not tm[y, x]:
-                continue
-            if y > y_wb:                                             # in die Tiefe ausblenden (Dunkelheit verschluckt den Fall)
-                t_ = (y - y_wb) / float(FADE)
-                al = max(0.0, 1.0 - t_) ** 1.4
-                c = c * (1 - 0.55 * t_)
-                a[y, x] = (c * al + a[y, x] * (1 - al)).astype(np.uint8)
-            else:
-                a[y, x] = c.astype(np.uint8)
-    for i in range(breite):                                          # Abbruchkante oben
-        x = x0 + i
-        rand = min(i, breite - 1 - i)
-        for dy, cc in ((-1, WS['w3'] if rand else WS['w1']), (0, WS['w4'] if rand else WS['w1']),
-                       (1, WS['w5'] if rand >= 2 and i % 5 != 4 else WS['w4'] if rand else WS['w1'])):
-            a[y_top + dy, x] = cc[:3]
-    rn = random.Random(4700 + frame)                                 # feiner Nebel, der aus der Tiefe aufsteigt
-    for _ in range(breite * 3):
-        x = int(rn.uniform(x0 - 6, x1 + 6)); y = int(rn.uniform(y_wb - 6, y_wb + FADE))
-        if 0 <= x < Wp and 0 <= y < Hp and (tm is None or tm[y, x]):
-            al = 0.18 + 0.22 * (1 - (y - y_wb + 4) / float(FADE))
-            a[y, x] = (np.array((225, 238, 250)) * al + a[y, x] * (1 - al)).astype(np.uint8)
 
 
 def bauen(frame=None, speichern=True):
@@ -235,132 +57,46 @@ def bauen(frame=None, speichern=True):
     Wp, Hp = cols * T, rows * T
     hp = np.kron(np.array([[int(c) for c in z] for z in lay['hoehe']]), np.ones((T, T), int))
     tex = texturen(cols, rows)
-    a = tex['g'].copy()
-    for art, blur, seed in (('k', 5.0, 5), ('d', 5.0, 6), ('n', 5.0, 4), ('w', 5.0, 3)):
-        m = weich(zell_maske(cls, art + ('T' if art == 'w' else ''), cols, rows), blur, 0, seed)
-        if art == 'w':                                               # Wegrand: leichter dunkler Saum im Gras
-            saum = weich(zell_maske(cls, 'wT', cols, rows), blur, 0, seed, 0.36) & ~m
-            a[saum] = (a[saum] * 0.9).astype(np.uint8)
-        a[m] = tex[art][m]
-    # Bodenstruktur (Nutzer): flache Grashalm-Bueschel (PixelLab k50_halme) direkt in die Wiese gestempelt - kein Objekt,
-    # kein Schatten, begehbar; locker in Gruppen, nur innerhalb der Wiese (Abstand zu Weg/Platz/Wald)
-    halme = []
-    for n_ in ('00', '02', '03', '06'):              # ohne 01 (zu dunkel auf der hellen Wiese)
-        sp = np.array(Image.open(os.path.join(OBJ, 'halme', n_ + '.png')).convert('RGBA')).astype(float)
-        bb = Image.fromarray(sp.astype(np.uint8)).getbbox()
-        sp = sp[bb[1]:bb[3], bb[0]:bb[2]]
-        gruen = (sp[..., 1] > sp[..., 0] + 10) & (sp[..., 3] > 0)          # Halme auf die Grastoene der Karte abdunkeln
-        sp[gruen, :3] = sp[gruen, :3] * np.array([0.9, 0.93, 0.86])
-        halme.append(sp)
-    kl = np.array([list(z) for z in cls])
-    innen = kl == 'n'                                                 # Halme nur im Gras
-    rs_rand = np.pad(kl == 'n', 1, mode='edge')
-    for dy in (-1, 0, 1):
-        for dx in (-1, 0, 1):
-            innen &= rs_rand[1 + dy:1 + dy + rows, 1 + dx:1 + dx + cols]      # Rand fortsetzen (kein np.roll)
-    belegt = np.zeros((Hp, Wp), bool)                                 # keine Halme unter/an Objekten
-    pf_ = os.path.join(OBJ, 'platzierung.json')
-    if os.path.exists(pf_):
-        for o in json.load(open(pf_)):
-            if 'wald' in o['datei'] or not os.path.exists(os.path.join(OBJ, o['datei'])):
-                continue
-            bb_ = Image.open(os.path.join(OBJ, o['datei'])).getbbox()
-            if bb_:
-                belegt[max(0, o['y'] + bb_[1] - 4):o['y'] + bb_[3] + 6, max(0, o['x'] + bb_[0] - 6):o['x'] + bb_[2] + 6] = True
-    rs = np.random.RandomState(4444)
-    zentren = [(y, x) for y in range(rows) for x in range(cols) if innen[y, x] and rs.rand() < 0.12]
-    for (cy, cx) in zentren:
-        for _ in range(rs.randint(2, 5)):                                    # Gruppe aus 2-4 Bueschelchen
-            yy, xx = cy + rs.randint(-1, 2), cx + rs.randint(-1, 2)
-            if not (0 <= yy < rows and 0 <= xx < cols and innen[yy, xx]):
-                continue
-            sp = halme[rs.randint(0, 3) if rs.rand() < 0.9 else 3]
-            if rs.rand() < 0.5:
-                sp = sp[:, ::-1]
-            h_, w_ = sp.shape[:2]
-            py, px = yy * T + rs.randint(0, T - min(h_, T) + 1), xx * T + rs.randint(0, T - min(w_, T) + 1)
-            if py + h_ > Hp or px + w_ > Wp or belegt[py:py + h_, px:px + w_].any():
-                continue
-            belegt[py - 2:py + h_ + 2, px - 2:px + w_ + 2] = True       # Bueschel ueberlappen sich nicht
-            al = sp[..., 3:4] / 255.0
-            a[py:py + h_, px:px + w_] = (a[py:py + h_, px:px + w_] * (1 - al) + sp[..., :3] * al).astype(np.uint8)
-    boden_tiefe(a, cls, cols, rows, frame)
-    hoch = weich((hp >= 1).astype(np.float32), 5, 0.0, 7, 0.5)       # Felsrand erhoeht
-    a[hoch] = tex['h'][hoch]
+    a0 = tex['g'].copy()
+    for art, sd in (('w', 3), ('k', 5), ('n', 7), ('d', 9), ('h', 11)):
+        m = weich(zell_maske(cls, art + ('tT' if art == 'w' else ''), cols, rows), 5.0, 0, sd)
+        if art in 'wkn':
+            saum = weich(zell_maske(cls, art, cols, rows), 5.0, 0, sd, 0.36) & ~m
+            a0[saum] = (a0[saum] * 0.93).astype(np.uint8)
+        a0[m] = tex[art][m]
+    a = a0.copy()
     frei = np.zeros((Hp, Wp), bool)
-    wand = k4.hoehenkanten(a, hoch, 'berg47', FRONT, SEITE, LIPPE, frei, 47, berg=False)
-    # Fluss (Nutzer): kommt oben durch die Felsspalte, vertieftes Wasser wie der Bach in Karte 44 (ohne Tiefenstufen);
-    # am Graben laeuft er bis an die Kante weiter (kein Ufer), dort stuerzt er als Wasserfall hinunter
-    fm = weich(zell_maske(cls, 'fbF', cols, rows), 4, 0, 9, 0.5)
-    wfx, wfy = lay['wasserfall']
-    fm_ext = fm.copy()
-    fm_ext[wfy * T - 4:wfy * T + 14, wfx * T:(wfx + 2) * T] = True
-    fm &= ~wand; fm_ext &= ~wand                                     # Becken liegt vor der Felswand (Wand bleibt)
-    bx_, by_ = lay['wasserfall_berg']                                 # Wasser laeuft ohne Unterbrechung ueber die Kante
-    fm_ext[by_ * T - 10:by_ * T + FRONT + 10, bx_ * T:(bx_ + 2) * T] = True   # (keine Uferecken an der Fallkante)
-    wsp = np.nonzero(wand[by_ * T - 8:by_ * T + 40, bx_ * T - 4].astype(bool) | wand[by_ * T - 8:by_ * T + 40, (bx_ + 2) * T + 3].astype(bool))[0]
-    y_top_ = by_ * T - 8 + int(wsp.min()) if len(wsp) else by_ * T
-    y_bot_ = by_ * T - 8 + int(wsp.max()) + 3 if len(wsp) else by_ * T + FRONT
-    zl_ = fm_ext[by_ * T - 20:y_top_ + 2]                             # Fluss oben bis zur Kante exakt in Fallbreite
-    zl_[:, :bx_ * T] = False; zl_[:, (bx_ + 2) * T:] = False          # (keine aufgeweiteten Uferecken an der Lippe)
-    zl_[:, bx_ * T:(bx_ + 2) * T] = True
-    P = 24
-    a_vor_ = a.copy()
-    ag = np.pad(a, ((P, P), (P, P), (0, 0)), mode='edge')
-    mg = np.pad(fm_ext, ((P, P), (P, P)), mode='edge')
-    ag = np.array(wasser_vertieft.vertiefen(Image.fromarray(ag), np.ones_like(mg), frame, maske=mg, stufen=[]).convert('RGB'))
-    a = ag[P:-P, P:-P].copy()
-    wr_ = wand.astype(bool) & ~fm_ext                                 # kein Uferrand auf der Felswand neben dem Fall
-    a[wr_] = a_vor_[wr_]
-    # erster Wasserfall: vom Berg ueber die Felsfront in das Becken der Rinne (mit Gischt, er landet im Fluss)
-    bx_, by_ = lay['wasserfall_berg']
-    img_w = Image.fromarray(a).convert('RGBA')
-    klippen.zeichne_wasserfall(img_w, bx_ * T, (bx_ + 2) * T, y_top_, y_bot_, seed=47, frame=frame or 0)
-    neu_ = np.array(img_w.convert('RGB'))
-    erl_ = np.zeros((Hp, Wp), bool)                                    # Gischt/Nebel nur im Fall und knapp daneben im Becken
-    erl_[y_top_ - 8:y_bot_ + 12, bx_ * T - 1:(bx_ + 2) * T + 1] = True
-    erl_[y_bot_ - 2:y_bot_ + 12, bx_ * T - 4:(bx_ + 2) * T + 4] = True
-    erl_ &= fm_ext | wand
-    a[erl_] = neu_[erl_]
-    # Graben um die Arena (Nutzer): tiefer Felsgraben mit Klippenwaenden, die Arena wirkt wie ein Plateau
-    tm = weich(zell_maske(cls, 'xb', cols, rows), 4, 0, 8, 0.5)
-    a[tm] = (tex['d'][tm] * 0.42).astype(np.uint8)                   # tiefe, dunkle Grabensohle
-    gw = k4.hoehenkanten(a, ~tm, 'berg47', 30, SEITE, LIPPE, np.zeros((Hp, Wp), bool), 48, berg=False)   # hohe Waende
-    # Tiefe: Sohle unter den Waenden und an den Raendern zusaetzlich verschattet (Licht faellt kaum hinein)
-    rand_ = np.zeros((Hp, Wp), np.float32)
-    frei_ = tm & ~gw
-    for d_ in range(1, 13):
-        p_ = np.pad(~tm | gw, d_, mode='edge')
-        nah_ = (p_[:Hp, d_:d_ + Wp] | p_[2 * d_:2 * d_ + Hp, d_:d_ + Wp] | p_[d_:d_ + Hp, :Wp] | p_[d_:d_ + Hp, 2 * d_:2 * d_ + Wp])
-        rand_ = np.where(frei_ & nah_ & (rand_ == 0), d_, rand_)
-    f_ = np.where(rand_ > 0, 0.62 + 0.38 * np.clip(rand_ / 12.0, 0, 1), 1.0)
-    f_ = np.round(f_ * 6) / 6                                        # wenige Stufen (Pixel-Look)
-    a[frei_] = (a[frei_] * f_[frei_][:, None]).astype(np.uint8)
-    wand |= gw & tm
-    wasserfall_tief(a, wfx * T, (wfx + 2) * T, wfy * T, gw, frame or 0, tm)
-    img_b = Image.fromarray(a).convert('RGBA')
-    for (bx0, by0, bx1, by1) in lay['bruecken']:
-        bauwerke.zeichne_bruecke(img_b, bx0 * T - 6, (bx1 + 1) * T + 6, by0 * T, (by1 + 1) * T - 4, frame=frame or 0)
-    a = np.array(img_b.convert('RGB'))
-    bm = np.zeros((Hp, Wp), bool)
-    for (bx0, by0, bx1, by1) in lay['bruecken']:
-        bm[by0 * T:(by1 + 1) * T, bx0 * T:(bx1 + 1) * T] = True
-    leere = tm & ~bm
-    wand &= ~bm
-    xm = fm & ~bm & ~tm                                              # Fluss gesperrt, Bruecke begehbar
+    for (x0, x1, ry, r_) in lay['treppen']:
+        if r_ == 's':
+            frei[ry * T - 4:ry * T + FRONT + 10, x0 * T:(x1 + 1) * T] = True
+    wand = np.zeros((Hp, Wp), bool)
+    for L in (1, 2, 3, 4):                                           # Terrassen von unten nach oben, je mit Front
+        m = weich((hp >= L).astype(np.float32), 5, 0.0, 7 + L, 0.5)
+        a[m] = a0[m]
+        wand &= ~m
+        wand |= k4.hoehenkanten(a, m, 'berg47', FRONT, SEITE, LIPPE, frei if L < 4 else np.zeros((Hp, Wp), bool), 50 + L,
+                                berg=False)
+    treppe_m = np.zeros((Hp, Wp), bool)
+    for (x0, x1, ry, r_) in lay['treppen']:
+        if r_ == 's':
+            k4.treppe(a, x0 * T, (x1 + 1) * T, ry * T - 1, 's', FRONT, 'berg47', tex['w'])
+            treppe_m[ry * T:(ry + 1) * T + 8, x0 * T:(x1 + 1) * T] = True
+        else:                                                        # Hof: Treppe fuehrt vom Suedrand in den Hof hinunter
+            k4.treppe(a, x0 * T, (x1 + 1) * T, ry * T - 8, 'n', FRONT, 'berg47', tex['w'])
+            treppe_m[ry * T - 10:(ry + 1) * T + 8, x0 * T:(x1 + 1) * T] = True
     for tp in lay['teleporter']:
         k4.teleporter_zeichnen(a, tp['x'], tp['y'], tp['b'], tp['h'], frame)
     img = Image.fromarray(a).convert('RGBA')
-    lvl = hp.astype(np.uint8) + 1
-    lvl[wand] = 9                                                    # Felsfront = Wand (Kollision, Schatten)
-    lvl[leere & ~wand] = 0                                           # Grabensohle: tiefer, gesperrt
+    lvl = (hp + 1).astype(np.uint8)
+    lvl[wand] = 9
+    lvl[treppe_m] = 2                                                # Treppen begehbar (eigene Ebene, Uebergang)
+    xm = np.zeros((Hp, Wp), bool)
     if speichern and frame is None:
         img.save(os.path.join(KARTE, 'terrain_basis.png'))
         np.save(os.path.join(KARTE, 'pixelhoehe.npy'), lvl)
         np.save(os.path.join(KARTE, 'wand.npy'), np.packbits(wand))
         np.save(os.path.join(KARTE, 'wasser.npy'), np.packbits(xm))
-        np.save(os.path.join(KARTE, 'leere.npy'), np.packbits(leere))
-
+        np.save(os.path.join(KARTE, 'treppe.npy'), np.packbits(treppe_m))
     pf = os.path.join(OBJ, 'platzierung.json')
     if os.path.exists(pf):
         objs = sorted((o for o in json.load(open(pf)) if os.path.exists(os.path.join(OBJ, o['datei']))),
@@ -368,44 +104,8 @@ def bauen(frame=None, speichern=True):
         if objs:
             cache = {o['datei']: Image.open(os.path.join(OBJ, o['datei'])).convert('RGBA') for o in objs}
             ebenen = lvl.copy().astype(np.int16)
-            ebenen[wand] = 9
-            ebenen[xm] = 7
-            if frame is not None:                                          # treibende Faesser: 1 px auf und ab
-                objs = [dict(o, y=o['y'] + (1 if math.sin(2 * math.pi * (frame + o.get('phase', 0)) / N_FRAMES) > 0
-                                            else 0)) if o.get('treibend') else o for o in objs]
-            for o in objs:                                                 # Wasserring um treibende Faesser
-                if o.get('treibend'):
-                    bb_ = cache[o['datei']].getbbox()
-                    cx_, cy_ = o['x'] + (bb_[0] + bb_[2]) / 2.0, o['y'] + bb_[3] - 2
-                    rw_ = (bb_[2] - bb_[0]) / 2.0 + 3 + ((frame or 0) % 2)
-                    for t_ in np.linspace(0, 2 * np.pi, 90):
-                        px_, py_ = int(cx_ + rw_ * math.cos(t_)), int(cy_ + rw_ * 0.32 * math.sin(t_))
-                        if 0 <= px_ < Wp and 0 <= py_ < Hp and xm[py_, px_]:
-                            r_, g_, b_, _ = img.getpixel((px_, py_))
-                            img.putpixel((px_, py_), (min(255, r_ + 40), min(255, g_ + 50), min(255, b_ + 55), 255))
-            k4.objekte_zeichnen(img, objs, cache, ~xm & ~wand, frame, ebenen=ebenen)
+            k4.objekte_zeichnen(img, objs, cache, ~wand, frame, ebenen=ebenen)
             k4.animieren(img, objs, cache, frame or 0)
-            # Einbettung (Regel): Grasbueschel an den Sockelecken der Huetten, damit sie im Boden sitzen
-            for o in objs:
-                if not (o['basis'].startswith('h') and len(o['basis']) == 3):
-                    continue
-                al_ = np.array(cache[o['datei']].getchannel('A')) > 0
-                zl_ = np.nonzero(al_.any(1))[0].max()
-                xs_ = np.nonzero(al_[zl_ - 2:zl_ + 1].any(0))[0]
-                ar_ = np.array(cache[o['datei']]).astype(int)
-                b_ = ar_[ar_.shape[0] * 2 // 3:]
-                md_ = (b_[..., 3] > 0) & (b_[..., 0] > 30) & (b_[..., 0] < 150) & (b_[..., 1] < 100) & \
-                      (b_[..., 2] < 80) & (b_[..., 0] > b_[..., 2] + 10)
-                tuer_ = np.nonzero(md_.sum(0) >= 6)[0] + o['x'] if md_.sum() > 10 else np.array([-999])   # Tuer: hohe braune Spalten
-                for j_ in (0, 1):
-                    sp_ = halme[0][:, ::-1] if j_ == 0 else halme[0]               # kurzes Bueschel, nicht vor der Tuer
-                    hh_, ww_ = sp_.shape[:2]
-                    bx_ = o['x'] + xs_.min() - ww_ + 5 if j_ == 0 else o['x'] + xs_.max() - 4   # aussen an den Ecken
-                    py_ = o['y'] + zl_ - hh_ + 3
-                    if ((tuer_ >= bx_ - 2) & (tuer_ <= bx_ + ww_ + 2)).any():
-                        continue                                                     # nie vor der Tuer
-                    st_ = Image.fromarray(sp_.astype(np.uint8))
-                    img.alpha_composite(st_, (int(bx_), int(py_)))
     if speichern and frame is None:
         img.save(os.path.join(KARTE, 'terrain.png'))
     print('Karte 50 %dx%d gebaut' % (cols, rows))
