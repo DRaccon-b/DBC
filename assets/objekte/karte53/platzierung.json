@@ -98,11 +98,11 @@
 {
 "datei": "varianten/k01-baum00.png",
 "basis": "k01/baum00",
-"x": 1274,
-"y": 281,
+"x": 1250,
+"y": 289,
 "fuss": 42,
 "kachel": [
-81,
+79,
 20
 ],
 "ebene": 1,
@@ -113,11 +113,11 @@
 {
 "datei": "varianten/k01-baum02_m.png",
 "basis": "k01/baum02",
-"x": 1468,
-"y": 283,
+"x": 1492,
+"y": 291,
 "fuss": 40,
 "kachel": [
-93,
+94,
 20
 ],
 "ebene": 1,
@@ -204,7 +204,7 @@
 "datei": "varianten/k01-baum04_m.png",
 "basis": "k01/baum04",
 "x": 132,
-"y": 665,
+"y": 673,
 "fuss": 42,
 "kachel": [
 9,
@@ -219,7 +219,7 @@
 "datei": "varianten/k01-baum00.png",
 "basis": "k01/baum00",
 "x": 442,
-"y": 665,
+"y": 673,
 "fuss": 42,
 "kachel": [
 29,
@@ -841,7 +841,15 @@
 "nur_kontakt": true,
 "anim": "maschine",
 "leds": true,
-"ruetteln": true
+"ruetteln": true,
+"led_box": [
+[
+18,
+22,
+21,
+25
+]
+]
 },
 {
 "datei": "varianten/evak-flutlicht.png",

@@ -87,6 +87,9 @@ def verbreitern(quelle, ziel, breite_halb):
     Image.fromarray(neu.astype(np.uint8)).save(os.path.join(OBJ, ziel))
 
 
+TUEREN_BLAU = {'geb/beige': [(106, 136), (215, 245)]}                 # Spritespalten der Seitentueren
+
+
 def tuer_einsetzen(ziel):
     """Glastuer mit Vordach mittig am Boden einsetzen (Tuer reicht bis zur Fusskante), fehlenden Sockel ergaenzen."""
     im = Image.open(os.path.join(OBJ, ziel)).convert('RGBA')
@@ -98,6 +101,9 @@ def tuer_einsetzen(ziel):
         neu[h:h + 2, deck] = (120, 120, 128, 255)
         neu[h + 2, deck] = (36, 36, 44, 255)
         a, h = neu, h + 3
+    for xr in (0, a.shape[1] - 1):                                       # helle Dachkanten am Bildrand: Kontur
+        hell = (a[:, xr, 3] > 0) & (a[:, xr, :3].astype(int).sum(-1) > 450)
+        a[hell, xr, :3] = (40, 40, 48)
     im = Image.fromarray(a)
     t = Image.open(os.path.join(OBJ, 'gross_buero_mitte/00.png')).convert('RGBA').crop((170, 136, 248, 180))
     t = t.crop(t.getbbox())
@@ -164,7 +170,7 @@ def main():
                 return None
         elif pruefen:
             fuss_r = (r[0], max(r[1], r[3] - T + 1), r[2], r[3])           # vor Gebaeuden zaehlt nur der Fuss
-            if any(schnitt(fuss_r, tuple(rr), -1) if (art2 == 'gebaeude' and klassen == 'n') else schnitt(r, tuple(rr), 2) for (*rr, art2) in rects) or \
+            if any(schnitt(r, tuple(rr), 1) if (art2 == 'gebaeude' and klassen == 'n') else schnitt(r, tuple(rr), 2) for (*rr, art2) in rects) or \
                     any(schnitt(r, t_, 0) for t_ in tps):
                 return None
             # ganzes Bildrechteck auf erlaubtem Boden (untere zwei Reihen; liegende ganz) - Pruefliste K44
@@ -208,7 +214,9 @@ def main():
         sp_ = np.array(Image.open(os.path.join(OBJ, o['datei'])).convert('RGBA')).astype(int)
         u = sp_[-24:]
         rosa = (u[..., 3] > 0) & (u[..., 0] > 170) & (u[..., 1] < 120) & (u[..., 2] > 100)
-        spalten = np.nonzero(rosa.sum(0) >= 3)[0]
+        spalten = list(np.nonzero(rosa.sum(0) >= 3)[0])
+        for (a0, a1) in TUEREN_BLAU.get(o['basis'], []):                  # blaue Ladentueren (beige Block)
+            spalten += list(range(a0, a1 + 1))
         if not len(spalten):
             continue
         fy_ = (o['y'] + o['fuss']) // T
@@ -217,6 +225,13 @@ def main():
             for ty in range(fy_ + 1, fy_ + 5):
                 if 0 <= ty < rows and zeilen[ty][tx] == 'n':
                     zeilen[ty][tx] = 'k'
+    import karte43_layout as k43_
+    k43_.R, k43_.C = rows, cols
+    zz = np.array(zeilen)
+    for teil in k43_.flaechen(zz == 'n'):                                   # Beetreste unter 6 Kacheln -> Gehweg
+        if len(teil) < 6:
+            for (y, x) in teil:
+                zeilen[y][x] = 'k'
     cls = [''.join(z) for z in zeilen]
     lay['klassen'] = cls
     json.dump(lay, open(os.path.join(KARTE, 'layout.json'), 'w'), indent=0)
@@ -239,8 +254,8 @@ def main():
             art_ = arten[(nb + j) % len(arten)]
             hw = (lambda b: (b[2] - b[0]) / 2.0 + 1)(Image.open(os.path.join(OBJ, art_ + '.png')).getbbox())
             cx = min(max(x0 * T + f * breite * T, x0 * T + hw), (x1 + 1) * T - hw)
-            for dx in (0, -16, 16, -32, 32):
-                if setze(art_, cx + dx, fy, {'anim': 'baum'}, (nb + j) % 2 == 1, klassen='n'):
+            for dy_, dx in [(dy_, dx) for dy_ in (0, 8, 12) for dx in (0, -16, 16, -32, 32)]:
+                if setze(art_, cx + dx, fy + dy_, {'anim': 'baum'}, (nb + j) % 2 == 1, klassen='n'):
                     break
         nb += len(anteile)
     # ---------------------------------------------------------------- Fahrzeuge (verlassen, Linksverkehr)
@@ -268,7 +283,7 @@ def main():
     for (n_, tx, ty, sp) in (('evak/generator', 78, 64, False), ('evak/flutlicht', 82, 66, False),
                              ('evak/bett', 75, 70, False), ('evak/kanister', 80, 71, False), ('evak/kisten', 82, 73, False)):
         kachel(n_, tx + P, ty + P, {'anim': 'leuchten', 'licht': [13, 4], 'licht_box': [0, 0, 26, 9], 'licht_r': 16}
-               if n_ == 'evak/flutlicht' else {'anim': 'maschine', 'leds': True, 'ruetteln': True} if n_ == 'evak/generator' else {}, sp)
+               if n_ == 'evak/flutlicht' else {'anim': 'maschine', 'leds': True, 'ruetteln': True, 'led_box': [[18, 22, 21, 25]]} if n_ == 'evak/generator' else {}, sp)
     # Sperren und Zurueckgelassenes
     for (n_, tx, ty, sp) in (('evak/sandsack', 33, 22, False), ('evak/sperre', 9, 46, False), ('evak/kegel', 44, 66, False),
                              ('evak/sperre', 58, 69, True), ('evak/gepaeck', 19, 47, False), ('evak/rucksack', 48, 74, False),
