@@ -262,7 +262,7 @@ def main():
     for (n_, tx, ty, sp) in (('evak/zelt', 11, 68, False), ('evak/vorrat', 21, 67, False), ('evak/bett', 7, 74, False),
                              ('evak/schlafsack', 12, 75, False), ('evak/wasser', 17, 72, False), ('evak/tisch', 16, 64, False),
                              ('evak/kocher', 25, 71, False), ('evak/schild', 26, 63, False)):
-        kachel(n_, tx + P, ty + P, {'anim': 'kerzen', 'flammen_box': [[4, 12, 22, 26]], 'flammen_alle': True, 'flammen_amp': 1} if n_ == 'evak/kocher' else {}, sp)
+        kachel(n_, tx + P, ty + P, {'anim': 'kerzen', 'flammen_box': [[12, 6, 20, 12]], 'flammen_alle': True, 'flammen_amp': 1} if n_ == 'evak/kocher' else {}, sp)
     # Sanitaetsposten (Block unten rechts): Generator, Flutlicht, Betten
     for (n_, tx, ty, sp) in (('evak/generator', 78, 64, False), ('evak/flutlicht', 82, 66, False),
                              ('evak/bett', 75, 70, False), ('evak/kanister', 80, 71, False), ('evak/kisten', 82, 73, False)):
