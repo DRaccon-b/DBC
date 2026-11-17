@@ -167,38 +167,6 @@
 "sortier": -991
 },
 {
-"datei": "varianten/profil.png",
-"basis": "profil",
-"x": 123,
-"y": 337,
-"fuss": 63,
-"kachel": [
-8,
-25
-],
-"ebene": 0,
-"schattenlos": true,
-"ohne_wall": true,
-"liegend": true,
-"sortier": -990
-},
-{
-"datei": "varianten/bogen2_m.png",
-"basis": "bogen2",
-"x": 518,
-"y": 132,
-"fuss": 54,
-"kachel": [
-34,
-11
-],
-"ebene": 0,
-"schattenlos": true,
-"ohne_wall": true,
-"liegend": true,
-"sortier": -989
-},
-{
 "datei": "varianten/brocken.png",
 "basis": "brocken",
 "x": 168,
@@ -406,37 +374,7 @@
 "ohne_wall": true
 },
 {
-"datei": "varianten/kette_m.png",
-"basis": "kette",
-"x": 484,
-"y": 195,
-"fuss": 43,
-"kachel": [
-32,
-14
-],
-"ebene": 0,
-"liegend": true,
-"ohne_wall": true
-},
-{
 "datei": "varianten/brand_m.png",
-"basis": "brand",
-"x": 388,
-"y": 124,
-"fuss": 56,
-"kachel": [
-26,
-11
-],
-"ebene": 0,
-"liegend": true,
-"ohne_wall": true,
-"schattenlos": true,
-"anim": "kerzen"
-},
-{
-"datei": "varianten/brand.png",
 "basis": "brand",
 "x": 168,
 "y": 324,
@@ -452,21 +390,21 @@
 "anim": "kerzen"
 },
 {
-"datei": "varianten/huelsen.png",
+"datei": "varianten/huelsen_m.png",
 "basis": "huelsen",
-"x": 440,
-"y": 257,
+"x": 458,
+"y": 195,
 "fuss": 35,
 "kachel": [
-28,
-18
+30,
+14
 ],
 "ebene": 0,
 "liegend": true,
 "ohne_wall": true
 },
 {
-"datei": "varianten/kralle_m.png",
+"datei": "varianten/kralle.png",
 "basis": "kralle",
 "x": 104,
 "y": 276,
@@ -480,117 +418,14 @@
 "ohne_wall": true
 },
 {
-"datei": "varianten/knochen_m.png",
-"basis": "knochen",
-"x": 391,
-"y": 83,
-"fuss": 37,
-"kachel": [
-26,
-7
-],
-"ebene": 0,
-"liegend": true,
-"ohne_wall": true
-},
-{
-"datei": "varianten/sperre.png",
-"basis": "sperre",
-"x": 65,
-"y": 424,
-"fuss": 55,
-"kachel": [
-5,
-29
-],
-"ebene": 1,
-"liegend": false,
-"ohne_wall": true,
-"nur_kontakt": true
-},
-{
-"datei": "varianten/huelsen_m.png",
-"basis": "huelsen",
-"x": 268,
-"y": 165,
-"fuss": 35,
-"kachel": [
-18,
-12
-],
-"ebene": 0,
-"liegend": true,
-"ohne_wall": true
-},
-{
 "datei": "varianten/kiesel.png",
 "basis": "kiesel",
-"x": 78,
-"y": 380,
+"x": 384,
+"y": 507,
 "fuss": 17,
 "kachel": [
-5,
-24
-],
-"ebene": 0,
-"streu": true,
-"liegend": true,
-"ohne_wall": true
-},
-{
-"datei": "varianten/zweig.png",
-"basis": "zweig",
-"x": 472,
-"y": 98,
-"fuss": 25,
-"kachel": [
-30,
-7
-],
-"ebene": 0,
-"streu": true,
-"liegend": true,
-"ohne_wall": true
-},
-{
-"datei": "varianten/kiesel.png",
-"basis": "kiesel",
-"x": 588,
-"y": 219,
-"fuss": 17,
-"kachel": [
-37,
-14
-],
-"ebene": 0,
-"streu": true,
-"liegend": true,
-"ohne_wall": true
-},
-{
-"datei": "varianten/zweig.png",
-"basis": "zweig",
-"x": 141,
-"y": 453,
-"fuss": 25,
-"kachel": [
-9,
-29
-],
-"ebene": 0,
-"streu": true,
-"liegend": true,
-"ohne_wall": true
-},
-{
-"datei": "varianten/kiesel.png",
-"basis": "kiesel",
-"x": 514,
-"y": 265,
-"fuss": 17,
-"kachel": [
-32,
-17
+24,
+32
 ],
 "ebene": 0,
 "streu": true,
@@ -600,11 +435,11 @@
 {
 "datei": "varianten/zweig_m.png",
 "basis": "zweig",
-"x": 313,
-"y": 130,
+"x": 555,
+"y": 134,
 "fuss": 25,
 "kachel": [
-20,
+35,
 9
 ],
 "ebene": 0,
@@ -613,29 +448,14 @@
 "ohne_wall": true
 },
 {
-"datei": "varianten/kiesel.png",
+"datei": "varianten/kiesel_m.png",
 "basis": "kiesel",
-"x": 156,
-"y": 397,
+"x": 316,
+"y": 106,
 "fuss": 17,
 "kachel": [
-10,
-25
-],
-"ebene": 0,
-"streu": true,
-"liegend": true,
-"ohne_wall": true
-},
-{
-"datei": "varianten/zweig.png",
-"basis": "zweig",
-"x": 398,
-"y": 225,
-"fuss": 25,
-"kachel": [
-25,
-15
+20,
+7
 ],
 "ebene": 0,
 "streu": true,

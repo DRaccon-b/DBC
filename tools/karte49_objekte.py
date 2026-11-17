@@ -112,8 +112,7 @@ def main():
     suche('reifen', 600, 110, {}, False, 1, r=3, schritt=8)          # Werkstattecke oben rechts am Rand
     suche('fass', 555, 110, {}, False, 1, r=3, schritt=8)
     # ---------------- Motorradspuren (Nutzer): Burnout in der Arenamitte, Boegen und Profilspur Richtung Buehne
-    for (n, px, py, sp_) in [('burnout', 360, 270, False), ('bogen', 250, 150, False), ('schlange', 470, 360, True),
-                             ('profil', 130, 400, False), ('bogen2', 560, 170, True)]:
+    for (n, px, py, sp_) in [('burnout', 360, 270, False), ('bogen', 250, 150, False), ('schlange', 470, 360, True)]:   # Nutzer: cleaner
         suche(n, px, py, {}, sp_, 1, r=3, schritt=8)
     # ---------------- Vorlage: Felsbrocken auf den Pflasterflecken, tote Baeume mit Begleitern
     for (px, py) in [(190, 125), (655, 280), (590, 360), (255, 472)]:
@@ -146,16 +145,14 @@ def main():
         if not ok:
             print('  Baum ohne Begleiter vor dem Stumpf', i)
     # ---------------- Gebrochenes Versprechen: zerrissene Ketten, Brandflecken, Kampfspuren (dezent, keine Reihen)
-    for (n, px, py) in [('kette', 300, 330), ('kette', 520, 230), ('brand', 420, 180), ('brand', 200, 380),
-                        ('huelsen', 470, 300), ('kralle', 130, 300), ('knochen', 420, 120),
-                        ('sperre', 95, 470), ('huelsen', 290, 200)]:
+    for (n, px, py) in [('kette', 300, 330), ('brand', 200, 380), ('huelsen', 480, 230), ('kralle', 130, 300)]:   # Nutzer: cleaner
         suche(n, px, py, {'liegend': n in FLACH, 'ebene': 0 if n in FLACH else 1}, rnd.random() < 0.5, 1, r=3, schritt=8)
     # ---------------- sparsame Streudeko wie in der Vorlage (Zweige, Kiesel)
     kand = [(x, y) for y in range(4, rows - 3) for x in range(3, cols - 3) if cls[y][x] in 'gw']
     rnd.shuffle(kand)
     n_s = 0
     for (x, y) in kand:
-        if n_s >= 8:
+        if n_s >= 3:
             break
         if any(abs(o['kachel'][0] - x) < 5 and abs(o['kachel'][1] - y) < 4 for o in objekte if o.get('streu')):
             continue
