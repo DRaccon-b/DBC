@@ -48,6 +48,28 @@ def main():
                             k[y + dy, x + dx] = 'g'
         k = k43.zipfel_weg(k, 'gwknhd')
     k[0:2, :] = 'h'; k[-1, :] = 'h'; k[:, 0] = 'h'; k[:, -1] = 'h'     # Felsrand ringsum geschlossen
+    for _ in range(3):
+        for y in range(1, R - 1):                                     # 1-Spalten-Kerben/-Vorspruenge im Fels (Wandstummel)
+            for x in range(1, C - 1):
+                if k[y, x] != 'h' and k[y, x - 1] == 'h' and k[y, x + 1] == 'h':
+                    k[y, x] = 'h'
+                elif k[y, x] == 'h' and k[y, x - 1] != 'h' and k[y, x + 1] != 'h':
+                    k[y, x] = 'g'
+        for x in (1, C - 2):                                          # Seitenrand: kurze Kerben (<= 5 Reihen) schliessen
+            y = 0
+            while y < R:
+                if k[y, x] != 'h':
+                    y0 = y
+                    while y < R and k[y, x] != 'h':
+                        y += 1
+                    if y - y0 <= 5 and y0 > 0 and y < R and k[y0:y, x - 1 if x == 1 else x + 1].tolist().count('h') == y - y0:
+                        k[y0:y, x] = 'h'
+                y += 1
+        for y in range(R - 1):                                        # Schachbrett-Ecken (nur diagonal beruehrend)
+            for x in range(C - 1):
+                q = k[y:y + 2, x:x + 2]
+                if q[0, 0] == q[1, 1] and q[0, 1] == q[1, 0] and q[0, 0] != q[0, 1]:
+                    k[y + 1, x] = q[0, 0]
     for (tx, ty, b, hh) in TELEPORTER:                                # Ausgaenge: Weg in Teleporterbreite durch den Rand
         k[ty:ty + hh, tx:tx + b] = 'T'
         if ty == 0:
@@ -56,10 +78,10 @@ def main():
             k[ty - 3:ty, tx:tx + b] = np.where(k[ty - 3:ty, tx:tx + b] == 'h', 'g', k[ty - 3:ty, tx:tx + b])
         elif tx == 0:
             k[ty:ty + hh, tx + b:tx + b + 3] = np.where(k[ty:ty + hh, tx + b:tx + b + 3] == 'h', 'g', k[ty:ty + hh, tx + b:tx + b + 3])
-            k[ty - 1, 0:tx + b + 3] = np.where(k[ty - 1, 0:tx + b + 3] == 'h', 'g', k[ty - 1, 0:tx + b + 3])
+            k[ty - 2:ty, 0:tx + b + 3] = np.where(k[ty - 2:ty, 0:tx + b + 3] == 'h', 'g', k[ty - 2:ty, 0:tx + b + 3])
         else:
             k[ty:ty + hh, tx - 3:tx] = np.where(k[ty:ty + hh, tx - 3:tx] == 'h', 'g', k[ty:ty + hh, tx - 3:tx])
-            k[ty - 1, tx - 3:C] = np.where(k[ty - 1, tx - 3:C] == 'h', 'g', k[ty - 1, tx - 3:C])
+            k[ty - 2:ty, tx - 3:C] = np.where(k[ty - 2:ty, tx - 3:C] == 'h', 'g', k[ty - 2:ty, tx - 3:C])
     h = np.where(k == 'h', 1, 0)
     lay = {'groesse': [C, R], 'klassen': [''.join(z) for z in k], 'hoehe': [''.join(str(c) for c in z) for z in h],
            'bruecken': [], 'stege': [],

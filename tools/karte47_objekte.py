@@ -144,10 +144,29 @@ def main():
         return None
 
     # ---------------- Deva-Banner (Tuch weht, Stange fest) und Saeulen - an den Plaetzen der Vorlage
-    for (px_, py_) in BANNER:
-        kachel('banner', int(px_ / 20), int(py_ / 20), {'anim': 'standarte'}, False, 'gwkd', suche=3)
-    for i_, (px_, py_) in enumerate(SAEULEN):                        # Ruinen-Logik: intakt und abgebrochen gemischt
-        kachel('saeule' if i_ % 3 else 'stumpf_s', int(px_ / 20), int(py_ / 20), {}, i_ % 2 == 1, 'gwkd', suche=3)
+    for (px_, py_) in BANNER:                                        # nie auf dem Pflaster (Fuss, Schatten)
+        kachel('banner', int(px_ / 20), int(py_ / 20), {'anim': 'standarte'}, False, 'gkd', suche=7)
+    paare = {}
+    for i_, (px_, py_) in enumerate(SAEULEN):
+        paare.setdefault(py_, []).append((i_, px_))
+    for py_, liste in paare.items():                                 # Paare der Vorlage (gleiche Hoehe) gemeinsam setzen
+        if len(liste) == 2:
+            ok_ = False
+            for dy_ in (0, -1, 1, -2, 2, -3, 3):
+                for dx_ in (0, -1, 1, -2, 2):
+                    n0_ = len(objekte)
+                    ok_ = all(setze('saeule', (int(px_ / 20) + dx_ * (1 if j_ == 0 else -1)) * T + 8,
+                                    (int(py_ / 20) + dy_) * T + T - 1, {}, j_ == 1, 'gkd') for j_, (i_, px_) in enumerate(liste))
+                    if ok_:
+                        break
+                    del objekte[n0_:]; del rects[n0_:]
+                if ok_:
+                    break
+            if not ok_:
+                print('  Saeulenpaar nicht gesetzt', py_)
+        else:
+            for (i_, px_) in liste:                                   # Ruinen-Logik: einzelne Saeulen teils abgebrochen
+                kachel('saeule' if i_ % 3 else 'stumpf_s', int(px_ / 20), int(py_ / 20), {}, i_ % 2 == 1, 'gkd', suche=4)
     # ---------------- Baeume der Vorlage mit Begleitern
     felsen = ['kf52', 'kf00']                       # hinter den Blaettern: 2 Kacheln hohe Felsen
     klein = ['kf%02d' % i for i in KLEINFELS]
@@ -190,10 +209,10 @@ def main():
         nah = sum(1 for (_, _, _, x2, y2) in gesetzt if (x2, y2) != (sx, sy) and abs(x2 - sx) < 6 * T and abs(y2 - sy) < 5 * T)
         soll = 1 if nah else 2
         plan = [[vor, lambda: seitlich(-seite)], [vor, lambda: hinter(seite)], [lambda: hinter(-seite), lambda: seitlich(seite)]][i % 3]
-        if n == 'b03':                                            # kleiner Baum: kein Begleiter vor dem Stumpf (verdeckt sonst
+        if n in ('b03', 'b07', 'b08'):                                            # kleiner Baum: kein Begleiter vor dem Stumpf (verdeckt sonst
             plan = [lambda: hinter(seite), lambda: seitlich(-seite)]   # Stamm und Krone)
         hat = 0
-        for f_ in plan + [lambda: seitlich(seite), lambda: seitlich(-seite)] + ([] if n == 'b03' else [vor]):
+        for f_ in plan + [lambda: seitlich(seite), lambda: seitlich(-seite)] + ([] if n in ('b03', 'b07', 'b08') else [vor]):
             if hat >= soll and f_ not in plan:
                 break
             if f_():
