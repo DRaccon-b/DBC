@@ -197,6 +197,23 @@ def main():
     x0_, y0_, x1_, y1_ = PLATEAUS[0]
     kette |= (k == 'r') & (yy_ < y0_) & (xx_ <= x1_) & (d_b >= 4)
     kette |= (k == 'r') & (xx_ < x0_) & (yy_ <= y1_ + 6) & (d_b >= 4)   # und an der Westseite herunter bis zum Rand
+    # Nutzer: alle Uebergaenge Plateau -> Rand schliessen: jede Randkachel an einem Plateau (auch diagonal) wird Kette,
+    # ausser direkt ueber Talboden (dort waere es eine doppelte Wand)
+    pq = np.isin(k, ['p', 'q'])
+    an_p = np.zeros((R, C), bool)
+    for dy in (-2, -1, 0, 1, 2):
+        for dx in (-2, -1, 0, 1, 2):
+            an_p |= np.roll(np.roll(pq, dy, 0), dx, 1)
+    unten_tal = np.zeros((R, C), bool)
+    unten_tal[:-1] |= np.isin(k[1:], ['s', 'b', 'k', 't', 'T'])
+    kette |= (k == 'r') & an_p & ~unten_tal
+    # verbleibende Randkacheln direkt am Plateau mit Talboden darunter -> Plateau (Front 1->0 statt offener Naht)
+    neu_p = [(y, x) for y in range(R) for x in range(C)
+             if k[y, x] == 'r' and not kette[y, x] and unten_tal[y, x] and any(
+                 0 <= y + dy < R and 0 <= x + dx < C and k[y + dy, x + dx] in 'pq'
+                 for dy, dx in ((-1, 0), (0, -1), (0, 1)))]                # nur ein Durchgang (kein Ausbreiten)
+    for (y, x) in neu_p:
+        k[y, x] = 'p'; h[y, x] = 1
     for teil in flaechen(kette):                      # kleine Kettenstuecke weglassen
         if len(teil) < 12:
             for (y, x) in teil:

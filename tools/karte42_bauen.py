@@ -85,6 +85,14 @@ def bauen(frame=None, speichern=True):
     for (x0, x1, ry) in lay['treppen']:                              # Treppen schneiden die Front
         frei[ry * T - 4:ry * T + FRONT + 10, x0 * T:(x1 + 1) * T] = True
     wand = k4.hoehenkanten(a, h1m, 'wueste', FRONT, SEITE, LIPPE, frei, 42, berg=False)
+    # Restnaehte Plateau|Rand (gleiche Hoehe, ohne Bergkette): schmale Kontur mit leichtem Schatten (Nutzer: alle
+    # Uebergaenge abgrenzen)
+    from PIL import ImageFilter as _IF
+    p_m = np.array(Image.fromarray(((hp == 1) * 255).astype(np.uint8)).filter(_IF.MaxFilter(3))) > 0
+    naht = (hp == 2) & p_m
+    a[naht] = H('#4a2c18')
+    sch = (hp == 1) & (np.array(Image.fromarray((naht * 255).astype(np.uint8)).filter(_IF.MaxFilter(5))) > 0)
+    a[sch] = (a[sch] * 0.86).astype(np.uint8)
     # Bergkette auf dem Felsrand (Nutzer): eine Stufe hoeher, Front zum Plateau bzw. Rand
     hoch3 = weich((hp >= 3).astype(np.float32), 5, 0.0, 13, 0.5) & h1m
     a[hoch3] = tex['m'][hoch3]
