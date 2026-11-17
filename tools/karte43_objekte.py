@@ -32,11 +32,10 @@ for _i in KLEINFELS:
 WALD = ['b00', 'b01', 'b02', 'b05', 'b06', 'b09']
 BUSCH = ['b12', 'b13']                                        # ohne Kastenhecke b14 (wirkt als Reihe)
 # Baeume der Vorlage (Sprite, Kachel-x, Fusszeile); Reihen der Vorlage (oben 4, unten 4) auf versetzte Einzelbaeume reduziert
-BAEUME = [('b00', 42, 7), ('b02', 54, 9), ('b01', 10, 18), ('b03', 20, 17), ('b05', 18, 21), ('b02', 23, 26),
+BAEUME = [('b00', 42, 7), ('b02', 55, 10), ('b01', 10, 18), ('b03', 20, 17), ('b05', 18, 21), ('b02', 23, 26),
           ('b00', 30, 19), ('b01', 49, 18), ('b03', 55, 21), ('b02', 55, 29), ('b05', 63, 33), ('b01', 40, 42),
           ('b00', 35, 49), ('b03', 25, 58), ('b02', 31, 61), ('b05', 6, 54), ('b01', 5, 61), ('b03', 42, 55),
-          ('b02', 52, 64), ('b00', 40, 71), ('b01', 25, 74), ('b05', 49, 74), ('b03', 65, 68), ('b00', 77, 69),
-          ('b02', 82, 68), ('b01', 64, 45), ('b03', 70, 44), ('b05', 63, 51), ('b00', 69, 53), ('b02', 82, 57),
+          ('b02', 52, 64), ('b00', 40, 71), ('b01', 25, 74), ('b05', 49, 74), ('b03', 63, 66), ('b00', 75, 70), ('b01', 64, 45), ('b03', 70, 44), ('b05', 63, 51), ('b00', 69, 53), ('b02', 82, 57),
           ('b01', 88, 44),
           ('b00', 58, 15), ('b01', 17, 35), ('b05', 48, 59), ('b00', 76, 61),                       # grosse Laubbaeume
           ('totbaum', 42, 36), ('totbaum', 28, 56), ('totbaum', 55, 66)]
@@ -78,13 +77,14 @@ def main():
         if r[0] < 0 or r[1] < 0 or r[2] >= cols * T or r[3] >= rows * T:
             return None
         if art == 'wald':                                          # Waldbaeume: Fuss im Wald, 1 Reihe von der Mauer,
-            if any(schnitt(r, t_, 2) for t_ in tps):               # Krone nicht ueber Wege/Platz/Teleporter
-                return None
+            if any(schnitt((r[0], r[3] - 8, r[2], r[3]), (t['x'] * T, t['y'] * T, (t['x'] + t['b']) * T - 1,
+                                                          (t['y'] + t['h']) * T - 1), 1) for t in lay['teleporter']):
+                return None                                          # nur der Fuss nie auf dem Teleporter
             if (lvl[r[3] - 2:min(r[3] + 3, lvl.shape[0]), r[0] + 6:r[2] - 5] != 2).any():
                 return None                                          # Fuss auf dem Waldboden (nicht auf der Mauer)
             for yy in range(max(0, r[1] // T), r[3] // T + 1):
                 for xx in range(r[0] // T, r[2] // T + 1):
-                    if k(xx, yy) in 'wkT':
+                    if k(xx, yy) in 'wkT' and not (yy < r[3] // T and k(xx, yy) == 'T' and False):
                         return None
             if any(art2 != 'wald' and schnitt(r, tuple(rr), 3) for (*rr, art2) in rects):
                 return None
@@ -129,9 +129,9 @@ def main():
     # ---------------- Burg auf dem Vorplatz, Torbau am Waldblock
     bx0, by0, bx1, by1 = lay['burg']
     ax = (bx0 + bx1 + 1) * T / 2.0                                    # Burgachse
-    setze('burg', ax, (by1 + 1) * T - 1, {'gebaeude': True}, False, 'k', pruefen=False)
+    setze('burg', ax, (by1 + 1) * T - 1, {'gebaeude': True, 'nur_kontakt': True}, False, 'k', pruefen=False)   # kein Balkenschatten
     tx0, ty0, tx1, ty1 = lay['tor']
-    setze('tor', 37.5 * T, (ty1 + 1) * T - 1, {'gebaeude': True}, False, 'g', pruefen=False)
+    setze('tor', 37.5 * T, (ty1 + 1) * T - 1, {'nur_kontakt': True}, False, 'g', pruefen=False)   # offener Bogen: nur Sockel sperrt
     # Platzpaare exakt gespiegelt zur Burgachse (gemeinsame Fusszeile)
     for (n, dxs, reihen, opt) in (('schale', (104, 96, 112, 88), (33, 34, 32), {'anim': 'feuer_kamin', 'flammen_box': [[5, 4, 23, 24]]}),
                                   ('speier', (152, 144, 136, 160, 128, 120), (36, 35, 37, 34, 38), {}),
@@ -151,9 +151,11 @@ def main():
             print('  Paar nicht gesetzt:', n)
     # Uebergang Torbau -> Waldmauer: Busch links und rechts (Regel), gewollt dicht am Torbau (ohne Abstandspruefung)
     for sd in (-1, 1):
-        for d in (88, 92, 96, 100, 104):
-            if setze('b13' if sd < 0 else 'b12', 37.5 * T + sd * d, (ty1 + 1) * T - 1, {'anim': 'baum'}, sd > 0, 'gw',
-                     ohne=(1,)):
+        for d in (88, 92, 96, 100, 104, 108, 112):
+            if setze('b13' if sd < 0 else 'b12', 37.5 * T + sd * d, (ty1 + 1) * T - 1, {'anim': 'baum'}, sd > 0, 'g',
+                     ohne=(1,), pruefen=True) or setze('b13' if sd < 0 else 'b12', 37.5 * T + sd * d, (ty1 + 1) * T - 1,
+                                                       {'anim': 'baum'}, sd > 0, 'g', ohne=(1,), pruefen=False) \
+                    if (lambda xx: all(cls[yy][xx] == 'g' for yy in (ty1 - 1, ty1)))(int(37.5 + sd * d / T)) else False:
                 break
         else:
             print('  Uebergangsbusch fehlt', sd)
@@ -183,7 +185,9 @@ def main():
         hinter = lambda sd: (n != 'totbaum') and any(setze(naechster('f'), sx + sd * d, sy - T, {'begleiter': True}, sd < 0,
                                                            'g', ohne=(ti,)) for d in (24, 32))
         seitlich = lambda sd: any(setze(naechster('k'), sx + sd * d, sy + dy, {'begleiter': True, 'ebene': 0}, sd > 0, 'g')
-                                  for d in (48, 56, 64, 72) for dy in (-T, 2 * T, -2 * T))
+                                  for d in (48, 56, 64, 72) for dy in (-T, 2 * T, -2 * T)
+                                  if not any(abs(o_['y'] + o_['fuss'] - (sy + dy)) < 6 and abs(o_['x'] - (sx + sd * d)) < 96
+                                             for o_ in objekte if o_.get('begleiter')))
         nah = sum(1 for (_, _, _, x2, y2) in gesetzt if (x2, y2) != (sx, sy) and abs(x2 - sx) < 6 * T and abs(y2 - sy) < 5 * T)
         soll = 1 if nah else 2
         plan = [[vor, lambda: seitlich(-seite)], [vor, lambda: hinter(seite)], [lambda: hinter(-seite), lambda: seitlich(seite)]][i % 3]

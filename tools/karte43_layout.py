@@ -130,6 +130,10 @@ def main():
         elif x_r is not None and off < 0 and k[y, x_r - 2] == 'w':
             k[y, x_r] = 'g'
     k = zipfel_weg(k, 'gwh')
+    k[8, 93:96] = 'w'                                                # nach der Glaettung: Front ueber dem Teleporter
+    k[:, 92] = np.where((k[:, 92] == 'h') & (k[:, 91] != 'h'), np.where(k[:, 91] == 'w', 'w', 'g'), k[:, 92])   # Guertel einheitlich
+    k[38:42, 41:44] = np.where(k[38:42, 41:44] == 'w', 'g', k[38:42, 41:44]) if False else k[38:42, 41:44]
+    k[32:35, 42:45] = np.where(k[32:35, 42:45] == 'w', 'g', k[32:35, 42:45])   # Graszunge rechts vom Torbau (Busch)
     h = np.where(k == 'h', 1, 0)
     lay = {'groesse': [C, R], 'klassen': [''.join(z) for z in k], 'hoehe': [''.join(str(c) for c in z) for z in h],
            'burg': list(BURG), 'tor': list(TOR),
