@@ -56,7 +56,7 @@ DEKO = [('stamm', 1010, 416), ('stamm', 475, 624), ('stamm', 300, 846), ('stamm'
 
 def main():
     lay = json.load(open(os.path.join(KARTE, 'layout.json')))
-    cls = lay['klassen']
+    cls = [list(z) for z in lay['klassen']]
     cols, rows = lay['groesse']
     lvl = np.load(os.path.join(KARTE, 'pixelhoehe.npy'))
     wand = np.unpackbits(np.load(os.path.join(KARTE, 'wand.npy')))[:lvl.size].reshape(lvl.shape).astype(bool)
@@ -151,6 +151,59 @@ def main():
         o_ = kachel(n_, int(hx) // T, int(hy + 26) // T, {}, i_ % 3 == 1, 'g', suche=3)
         if not o_:
             print('  Huette nicht gesetzt', hx, hy)
+            continue
+        # Kontur weicher (Nutzer: Huetten passen nicht in die Karte): schwarze Aussenkontur -> dunkle Eigenfarbe
+        sp_ = np.array(Image.open(os.path.join(OBJ, o_['datei'])).convert('RGBA')).astype(int)
+        al_ = sp_[..., 3] > 0
+        lum_ = sp_[..., :3].mean(-1)
+        dunkel_ = al_ & (lum_ < 50)
+        neu_ = sp_.copy()
+        for (yy_, xx_) in zip(*np.nonzero(dunkel_)):
+            fen = sp_[max(0, yy_ - 2):yy_ + 3, max(0, xx_ - 2):xx_ + 3]
+            m_ = (fen[..., 3] > 0) & (fen[..., :3].mean(-1) >= 50)
+            if m_.any():
+                neu_[yy_, xx_, :3] = (fen[..., :3][m_].mean(0) * 0.42).astype(int)
+        Image.fromarray(neu_.astype(np.uint8)).save(os.path.join(OBJ, o_['datei']))
+        # Trampelpfad von der Tuer zum naechsten Weg (2 Kacheln breit), sonst kleiner Vorplatz
+        a_ = np.array(Image.open(os.path.join(OBJ, o_['datei'])).convert('RGBA')).astype(int)
+        hh_, ww_ = a_.shape[:2]
+        b_ = a_[hh_ * 2 // 3:]
+        md_ = (b_[..., 3] > 0) & (b_[..., 0] > 30) & (b_[..., 0] < 150) & (b_[..., 1] < 100) & (b_[..., 2] < 80) & \
+              (b_[..., 0] > b_[..., 2] + 10)
+        tx_ = (o_['x'] + (np.nonzero(md_)[1].mean() if md_.sum() > 10 else ww_ / 2.0))
+        dx0 = int(tx_ // T) if (tx_ % T) >= 8 else int(tx_ // T) - 1           # zwei Spalten um die Tuer
+        fy_ = (o_['y'] + o_['fuss']) // T + 1
+        from collections import deque as _dq
+        start = [(fy_, dx0)]
+        prev = {start[0]: None}
+        q_ = _dq(start); ziel_ = None
+        while q_:
+            cy_, cx_ = q_.popleft()
+            if cls[cy_][cx_] in 'wb' or cls[cy_][cx_ + 1] in 'wb':
+                ziel_ = (cy_, cx_); break
+            d_ = 0; p_ = (cy_, cx_)
+            while prev[p_] is not None:
+                p_ = prev[p_]; d_ += 1
+            if d_ >= 9:
+                continue
+            for (ny_, nx_) in ((cy_ + 1, cx_), (cy_, cx_ - 1), (cy_, cx_ + 1), (cy_ - 1, cx_)):
+                if (ny_, nx_) in prev or not (2 < ny_ < rows - 3 and 2 < nx_ < cols - 4):
+                    continue
+                if ny_ <= fy_ - 1:
+                    continue                                                 # nicht hinter die Huette
+                if all(cls[ny_][nx_ + j] in 'gwb' for j in (0, 1)):
+                    prev[(ny_, nx_)] = (cy_, cx_); q_.append((ny_, nx_))
+        weg_ = []
+        if ziel_:
+            p_ = ziel_
+            while p_ is not None:
+                weg_.append(p_); p_ = prev[p_]
+        else:
+            weg_ = []                                                        # kein Weg in Reichweite: Wiese bleibt
+        for (wy_, wx_) in weg_:
+            for j in (0, 1):
+                if cls[wy_][wx_ + j] == 'g':
+                    cls[wy_][wx_ + j] = 'w'
     # ---------------- Baeume der Vorlage mit Begleitern
     felsen = ['fels02', 'fels03', 'fels14']
     klein = ['kf%02d' % i for i in KLEINFELS]
@@ -275,6 +328,8 @@ def main():
                  {'ebene': 0, 'streu': True, 'liegend': n_ in ('zweig',)}, rnd.random() < 0.5):
             n_s += 1; letzte = n_
     json.dump(objekte, open(os.path.join(OBJ, 'platzierung.json'), 'w'), indent=0)
+    lay['klassen'] = [''.join(z) for z in cls]                          # Trampelpfade der Huetten
+    json.dump(lay, open(os.path.join(KARTE, 'layout.json'), 'w'), indent=0)
     print('Karte 44: %d Objekte (Wald %d, Streudeko %d)' % (len(objekte), n_w, n_s))
 
 

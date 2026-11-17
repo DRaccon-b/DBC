@@ -29,6 +29,7 @@ k4.N_FRAMES = N_FRAMES
 kb.N_FRAMES = N_FRAMES
 H = k4.H
 weich, zell_maske, flaeche = k4.weich, k4.zell_maske, k20.flaeche
+k4.SCHATTEN = {'farbe': (18, 42, 34), 'dx': 0.3, 'dy': 0.15, 'kern': 100, 'wurf': (66, 52)}   # kuehler, kompakter (Nutzer)
 k4.RASTER45 = True                       # Regel 6b: alle Bodenkanten am 16er-Raster mit 45 Grad
 # niedrige Steinmauer der Waldbloecke (grauer Bruchstein wie in der Vorlage), Kante oben mit Waldboden
 k4.FELS['mauer43'] = ['#2c2f38', '#3e434e', '#545a66', '#6a717e', '#828a96', '#9aa2ac', '#b6bcc4']
@@ -55,6 +56,67 @@ def texturen(cols, rows):
         'k': flaeche(k6.kacheln(kies, 5, faerben((96, 100, 108), (168, 172, 178), 0.25, 0.6)), cols, rows),
         'h': flaeche(k6.kacheln(gras, 5, faerben((30, 70, 30), (64, 110, 50), 0.3, 0.5)), cols, rows),
     }
+
+
+BODEN = set(os.environ.get('K44_BODEN', 'relief,wege').split(',')) - {''}
+
+
+def boden_tiefe(a, cls, cols, rows, frame):
+    """Boden nicht platt (Nutzer): ohne neue Objekte/Texturen.
+    relief: sanfte Huegel der Wiese - Hoehenfeld aus grobem Rauschen, Licht von oben links, in 3 Stufen (Pixel-Look)
+    wege:   Erdwege liegen etwas tiefer - Schattenkante unter der Wiese im Norden/Westen, Lichtkante im Sueden/Osten
+    wind:   Windboeen ziehen als helle Wellen ueber die Wiese (animiert, 4 Bilder)"""
+    def gauss(m, sig):                                                 # separabler Gauss (Rand fortgesetzt)
+        r_ = int(3 * sig) + 1
+        k_ = np.exp(-0.5 * (np.arange(-r_, r_ + 1) / sig) ** 2); k_ /= k_.sum()
+        p_ = np.pad(m, r_, mode='edge')
+        p_ = np.apply_along_axis(lambda v: np.convolve(v, k_, 'valid'), 0, p_)
+        return np.apply_along_axis(lambda v: np.convolve(v, k_, 'valid'), 1, p_)
+    Hp, Wp = rows * T, cols * T
+    g = weich(zell_maske(cls, 'g', cols, rows), 5.0, 0, 3)
+    w = weich(zell_maske(cls, 'wT', cols, rows), 5.0, 0, 3)
+    af = a.astype(np.float32)
+    if 'relief' in BODEN:
+        rs = np.random.RandomState(4401)
+        hf = gauss(rs.rand(Hp // 16 + 2, Wp // 16 + 2).astype(np.float32), 2.0)
+        hf = np.array(Image.fromarray(hf.astype(np.float32), 'F').resize((Wp + 32, Hp + 32), Image.BICUBIC))[16:Hp + 16, 16:Wp + 16]
+        hf = (hf - hf.min()) / (hf.max() - hf.min() + 1e-6) * 160.0
+        gy, gx = np.gradient(hf)
+        licht = -(gx + gy)                                           # Hang nach oben links -> hell
+        licht = licht / (np.abs(licht).max() + 1e-6)
+        stufe = np.where(licht > 0.18, 1.07, np.where(licht < -0.18, 0.91, 1.0))
+        stufe = np.where(licht > 0.5, 1.13, np.where(licht < -0.5, 0.85, stufe))
+        f_ = np.where(g, stufe, np.where(w, 1 + (stufe - 1) * 0.5, 1.0))
+        af *= f_[..., None]
+    if 'wege' in BODEN:
+        tief = w.copy()
+        gras_ob = np.zeros_like(tief); gras_li = np.zeros_like(tief)
+        for d in (1, 2, 3):
+            gras_ob[d:] |= ~w[:-d] & g[:-d]
+            gras_li[:, d:] |= ~w[:, :-d] & g[:, :-d]
+        schatten = tief & (gras_ob | gras_li)
+        nah = np.zeros_like(tief)
+        for d in (1, 2):
+            nah[d:] |= ~w[:-d] & g[:-d]
+        af[schatten] *= 0.86
+        af[tief & nah] *= 0.92
+        licht_ = np.zeros_like(tief)                                  # Lichtkante: Boeschung im Sueden/Osten
+        licht_[:-1] |= tief[:-1] & ~w[1:] & g[1:]
+        licht_[:, :-1] |= tief[:, :-1] & ~w[:, 1:] & g[:, 1:]
+        af[licht_] = np.minimum(af[licht_] * 1.12, 255)
+        kante = np.zeros_like(tief)                                   # Grasrand ueber dem Weg: dunkle Kante (Abbruch)
+        kante[:-1] |= g[:-1] & ~w[:-1] & w[1:]
+        af[kante] *= 0.8
+    if 'wind' in BODEN and frame is not None:
+        yy, xx = np.mgrid[0:Hp, 0:Wp].astype(np.float32)
+        ph = 2 * np.pi * (frame % N_FRAMES) / N_FRAMES
+        welle = np.sin((xx * 0.8 + yy) / 46.0 - ph) + 0.6 * np.sin((xx - yy * 0.4) / 23.0 - 2 * ph + 1.3)
+        rs2 = np.random.RandomState(4402)
+        korn = gauss(rs2.rand(Hp // 2 + 1, Wp // 2 + 1).astype(np.float32), 0.8) > 0.5
+        korn = np.kron(korn, np.ones((2, 2), bool))[:Hp, :Wp]
+        hell = (welle > 1.05) & korn & g
+        af[hell] = np.minimum(af[hell] * np.array([1.06, 1.1, 1.02]), 255)
+    a[:] = np.clip(af, 0, 255).astype(np.uint8)
 
 
 def bauen(frame=None, speichern=True):
@@ -113,6 +175,7 @@ def bauen(frame=None, speichern=True):
             belegt[py - 2:py + h_ + 2, px - 2:px + w_ + 2] = True       # Bueschel ueberlappen sich nicht
             al = sp[..., 3:4] / 255.0
             a[py:py + h_, px:px + w_] = (a[py:py + h_, px:px + w_] * (1 - al) + sp[..., :3] * al).astype(np.uint8)
+    boden_tiefe(a, cls, cols, rows, frame)
     hoch = weich((hp >= 1).astype(np.float32), 5, 0.0, 7, 0.5)       # Wald erhoeht
     a[hoch] = tex['h'][hoch]
     frei = np.zeros((Hp, Wp), bool)
@@ -156,6 +219,27 @@ def bauen(frame=None, speichern=True):
             ebenen[xm] = 7
             k4.objekte_zeichnen(img, objs, cache, ~xm & ~wand, frame, ebenen=ebenen)
             k4.animieren(img, objs, cache, frame or 0)
+            # Einbettung (Regel): Grasbueschel an den Sockelecken der Huetten, damit sie im Boden sitzen
+            for o in objs:
+                if not (o['basis'].startswith('h') and len(o['basis']) == 3):
+                    continue
+                al_ = np.array(cache[o['datei']].getchannel('A')) > 0
+                zl_ = np.nonzero(al_.any(1))[0].max()
+                xs_ = np.nonzero(al_[zl_ - 2:zl_ + 1].any(0))[0]
+                ar_ = np.array(cache[o['datei']]).astype(int)
+                b_ = ar_[ar_.shape[0] * 2 // 3:]
+                md_ = (b_[..., 3] > 0) & (b_[..., 0] > 30) & (b_[..., 0] < 150) & (b_[..., 1] < 100) & \
+                      (b_[..., 2] < 80) & (b_[..., 0] > b_[..., 2] + 10)
+                tuer_ = np.nonzero(md_.sum(0) >= 6)[0] + o['x'] if md_.sum() > 10 else np.array([-999])   # Tuer: hohe braune Spalten
+                for j_ in (0, 1):
+                    sp_ = halme[0][:, ::-1] if j_ == 0 else halme[0]               # kurzes Bueschel, nicht vor der Tuer
+                    hh_, ww_ = sp_.shape[:2]
+                    bx_ = o['x'] + xs_.min() - ww_ + 5 if j_ == 0 else o['x'] + xs_.max() - 4   # aussen an den Ecken
+                    py_ = o['y'] + zl_ - hh_ + 3
+                    if ((tuer_ >= bx_ - 2) & (tuer_ <= bx_ + ww_ + 2)).any():
+                        continue                                                     # nie vor der Tuer
+                    st_ = Image.fromarray(sp_.astype(np.uint8))
+                    img.alpha_composite(st_, (int(bx_), int(py_)))
     if speichern and frame is None:
         img.save(os.path.join(KARTE, 'terrain.png'))
     print('Karte 44 %dx%d gebaut' % (cols, rows))

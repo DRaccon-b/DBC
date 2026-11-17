@@ -71,6 +71,18 @@ def main():
             t_ = (y - yo) / float(yu - yo)
             xr[y] = tuple(int(round(xr[yo][i] + (xr[yu][i] - xr[yo][i]) * t_)) for i in (0, 1))
     xr[0:3] = [xr[3]] * 3; xr[R - 3:] = [xr[R - 4]] * 3                 # Bach laeuft gerade aus der Karte
+    # Unter jeder Bruecke laeuft der Bach gerade (gleiche Breite wie die Bruecke, Nutzer: Bruecken nie auf Land);
+    # danach verlaeuft er in Stufen zum naechsten Abschnitt
+    for (x0b, y0b, x1b, y1b) in BRUECKEN + [(64, 68, 70, 71)]:
+        a_ = xr[y0b - 1]
+        for y in range(y0b, y1b + 1):
+            xr[y] = a_
+        ziel = y1b + 4
+        while ziel < R - 1 and any(b_[1] <= ziel <= b_[3] for b_ in BRUECKEN):
+            ziel += 1
+        for i_, y in enumerate(range(y1b + 1, min(ziel, R))):
+            t_ = (i_ + 1) / float(ziel - y1b)
+            xr[y] = tuple(int(round(a_[j] + (xr[ziel][j] - a_[j]) * t_)) for j in (0, 1))
     k[k == 'x'] = 'g'
     for y in range(R):
         x0, x1 = xr[y]

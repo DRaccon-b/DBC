@@ -471,6 +471,9 @@ def klippen_verdeckung(img, objs, cache, hoch, ebene_fuss, grund):
     img.paste(Image.fromarray(a))
 
 
+SCHATTEN = {'farbe': (60, 40, 24), 'dx': 0.45, 'dy': 0.24, 'kern': 92, 'wurf': (64, 50)}   # je Karte anpassbar
+
+
 def objekte_zeichnen(img, objs, cache, boden, frame, ebenen=None):
     """Kontaktschatten unter der Auflage + Schlagschatten der Silhouette nach rechts unten (2 Stufen),
     nur auf Boden (nicht auf Wasser); dann die Sprites (Wind fuer Akazien und Graeser)."""
@@ -523,8 +526,8 @@ def objekte_zeichnen(img, objs, cache, boden, frame, ebenen=None):
             continue
         for zi in zeilen:
             k = zu - zi
-            ty = int(fuss_y + k * 0.24)
-            dx = int(1 + k * 0.45)
+            ty = int(fuss_y + k * SCHATTEN['dy'])
+            dx = int(1 + k * SCHATTEN['dx'])
             if 0 <= ty < wurf.shape[0]:
                 xs = np.nonzero(a[zi])[0] + o['x'] + dx
                 xs = xs[(xs >= 0) & (xs < wurf.shape[1])]
@@ -532,12 +535,13 @@ def objekte_zeichnen(img, objs, cache, boden, frame, ebenen=None):
     sch = np.zeros(boden.shape, np.float32)
     for k_, (kern, wurf) in stufen.items():
         wurf = np.array(Image.fromarray((wurf * 255).astype(np.uint8)).filter(ImageFilter.MaxFilter(3))) / 255.0
-        s_ = np.where(kern > 0, 92, np.where(wurf > 0.82, 64, np.where(wurf > 0, 50, 0))).astype(np.float32)
+        s_ = np.where(kern > 0, SCHATTEN['kern'], np.where(wurf > 0.82, SCHATTEN['wurf'][0],
+                                                           np.where(wurf > 0, SCHATTEN['wurf'][1], 0))).astype(np.float32)
         if k_ is not None:
             s_ *= (ebenen == k_)
         sch = np.maximum(sch, s_)
     sch = (sch * boden).astype(np.uint8)
-    dunkel = Image.new('RGBA', img.size, (60, 40, 24, 255))
+    dunkel = Image.new('RGBA', img.size, tuple(SCHATTEN['farbe']) + (255,))
     dunkel.putalpha(Image.fromarray(sch))
     img.alpha_composite(dunkel)
     grund = np.array(img.convert('RGB'))
