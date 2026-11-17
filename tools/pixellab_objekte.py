@@ -2121,6 +2121,18 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'two clay water jars and a woven basket on the sand, ' + FR14,
         'small round desert hut with a straw dome roof tied with rope and a dark doorway, seen from the front and slightly above, ' + FR14,
     ]},
+    'k42_berg': {'size': 64, 'freie_farben': True, 'items': [   # Karte 42: Objekte fuer die Bergkette (dunkler Fels)
+        'jagged dark red-brown rock pinnacle with sharp layered strata, small scree at the base, ' + FR14,
+        'cluster of angular dark brown mountain boulders with cracks, ' + FR14,
+        'twisted dry mountain juniper shrub growing between dark rocks, ' + FR14,
+        'tall craggy dark rock outcrop with two sharp peaks and loose stones, ' + FR14,
+    ]},
+    'k42_rand': {'size': 64, 'freie_farben': True, 'items': [   # Karte 42: Objekte fuer den Felsrand (orange Sandstein)
+        'eroded orange sandstone hoodoo pillar with a flat cap stone, ' + FR14,
+        'low flat-topped orange sandstone mesa rock with layered stripes, ' + FR14,
+        'dry desert sagebrush with pale grey-green leaves, ' + FR14,
+        'small pile of weathered orange sandstone slabs with a dry grass tuft, ' + FR14,
+    ]},
     'k40_krater': {'size': 256, 'freie_farben': True, 'items': [   # Nutzer: Meteor-Furche (256 px: ein Motiv je Auftrag)
         'long deep impact furrow crater seen from directly above, a straight trench gouged north to south through a dark asphalt city road, brown earth and dark soil inside, broken grey asphalt slabs and dirt pushed up and piled along the left and right rims, cracks radiating outward, no meteor visible, transparent background around the rims',
     ]},

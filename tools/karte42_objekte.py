@@ -47,6 +47,12 @@ for _n in BG_FELS + BG_BUSCH:
 PLATEAU_GROSS = ['00', '01', '02', '03', '09', '13', '15']   # ohne toten Baum (pl05: einzeln ohne Begleiter)   # PixelLab k42_plateau (Nutzer: Plateaus zu leer)
 for _n in PLATEAU_GROSS:
     FREMD['pl' + _n] = 'karte42/plateau/%s.png' % _n
+BERG = ['00', '01', '02', '03', '06', '08', '12', '13', '14']          # PixelLab k42_berg (Bergkette)
+RAND = ['00', '01', '02', '03', '05', '09', '13', '14', '15']          # PixelLab k42_rand (Felsrand)
+for _n in BERG:
+    FREMD['be' + _n] = 'karte42/berg/%s.png' % _n
+for _n in RAND:
+    FREMD['ra' + _n] = 'karte42/rand/%s.png' % _n
 STREU = ['gras', 'gras2', 'gras3', 'kiesel', 'zweig', 'knochen_k', 'kristall', 'stein']
 BODEN = 's'                          # heller Sand: nichts auf Windbahn-Wegen (b) und Pflaster (k)
 KL = {1: 's', 2: 'p'}
@@ -205,14 +211,14 @@ def main():
     # ---------------- Deko auf den Plateaus (Nutzer: zu leer): Felsgruppen, Felsnadeln, Bueschel; locker, ohne Reihen
     pk = [(x, y) for y in range(1, rows - 1) for x in range(1, cols - 1) if cls[y][x] == 'r']
     rnd.shuffle(pk)
-    gross_ = PLATEAU_GROSS[:]; rnd.shuffle(gross_)
+    gross_ = ['ra' + n_ for n_ in RAND] + ['pl' + n_ for n_ in ('01', '03')]; rnd.shuffle(gross_)   # Felsrand: neue Motive
     klein_ = [('bg' + n_) for n_ in BG_FELS + BG_BUSCH] + ['gras', 'gras2', 'gras3']
     rnd.shuffle(klein_)
     pl_g, pl_k, gpos, pmotiv = 0, 0, [], []
     breit_ok = lambda x, y: sum(1 for xx in range(x - 5, x + 6) if 0 <= xx < cols and cls[y][xx] == 'r') >= 10 and \
         sum(1 for yy in range(y - 5, y + 6) if 0 <= yy < rows and cls[yy][x] == 'r') >= 8   # keine Reihen auf schmalen Streifen
     for (x, y) in pk:
-        if pl_g >= 18:
+        if pl_g >= 16:
             break
         if any(abs(x - a_) < 7 and abs(y - b_) < 6 for (a_, b_) in gpos):
             continue
@@ -223,11 +229,11 @@ def main():
         frei_ = [m_ for m_ in gross_ if m_ not in nahe]
         if not frei_:
             continue
-        n_ = 'pl' + frei_[pl_g % len(frei_)]
+        n_ = frei_[pl_g % len(frei_)]
         if setze(n_, x * T + 8, y * T + T - 1, {}, rnd.random() < 0.5, 'r', ebene_soll=3):
-            pl_g += 1; gpos.append((x, y)); pmotiv.append((x, y, n_[2:]))
+            pl_g += 1; gpos.append((x, y)); pmotiv.append((x, y, n_))
     for (x, y) in pk[::-1]:
-        if pl_k >= 26:
+        if pl_k >= 20:
             break
         if any(abs(x - a_) < 4 and abs(y - b_) < 4 for (a_, b_) in gpos):
             continue
@@ -239,12 +245,12 @@ def main():
     # Bergkette (Nutzer): Felsnadeln, Felsgruppen und Platten auf dem Kamm, locker verteilt
     mk = [(x, y) for y in range(0, rows - 1) for x in range(1, cols - 1) if cls[y][x] == 'm']
     rnd.shuffle(mk)
-    berg_ = ['pl01', 'pl00', 'pl03', 'pl09', 'pl15', 'pl13']   # nur grosse Formationen (Kamm), Motive gemischt
+    berg_ = ['be' + n_ for n_ in BERG]                       # Bergkette: neue PixelLab-Motive (k42_berg)
     pl_m, mpos = 0, []
     for (x, y) in mk:
-        if pl_m >= 8:
+        if pl_m >= 13:
             break
-        if any(max(abs(x - a_), abs(y - b_)) < 9 for (a_, b_, _) in mpos):
+        if any(max(abs(x - a_), abs(y - b_)) < 6 or (abs(y - b_) < 2 and abs(x - a_) < 13) for (a_, b_, _) in mpos):
             continue
         frei_ = [m_ for m_ in berg_ if not any(m2 == m_ and abs(x - a_) < 16 and abs(y - b_) < 16 for (a_, b_, m2) in mpos)]
         if not frei_:
