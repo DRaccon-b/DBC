@@ -20,7 +20,7 @@ T = 16
 # name -> (Quelle, Skalierung)
 D = {'mech': ('karte54/kern/00.png', 0.75), 'terminal': ('karte54/kern/01.png', 0.55), 'lampe': ('karte54/kern/02.png', 0.6),
      'kapsel': ('karte54/kern/03.png', 0.6), 'flasche': ('karte54/kern/04.png', 0.5), 'rack': ('karte54/kern/06.png', 0.6),
-     'traeger': ('karte54/kern/14.png', 0.8), 'rohr': ('karte54/kern/07.png', 0.6), 'konsole': ('karte54/kern/09.png', 0.6),
+     'rohr': ('karte54/kern/07.png', 0.6), 'konsole': ('karte54/kern/09.png', 0.6),
      'herz': ('karte54/kern_gross/00.png', 0.85), 'saeule': ('karte54/kern_gross/01.png', 0.6),
      'nest': ('karte54/kern_gross/02.png', 0.55), 'befallen': ('karte54/kern_gross/03.png', 0.5),
      'waechter': ('karte52/reaper/02.png', 0.6), 'ranke': ('karte52/reaper/00.png', 0.55),
@@ -50,7 +50,7 @@ def main():
     def schnitt(a, b, d):
         return not (a[2] + d < b[0] or b[2] + d < a[0] or a[3] + d < b[1] or b[3] + d < a[1])
 
-    def setze(name, cx, fy, opt=None, spiegeln=False, gap=2, pruefen=True, belag='gf'):
+    def setze(name, cx, fy, opt=None, spiegeln=False, gap=2, pruefen=True, belag='gf', x_fest=None):
         opt = dict(opt or {})
         q, f = D[name]
         sp = Image.open(os.path.join(ROOT, 'assets', 'objekte', q)).convert('RGBA')
@@ -65,7 +65,7 @@ def main():
         liegend = name in FLACH
         if not liegend:
             fy = int(fy) // T * T + T - 1                            # Regel 1b: Fuss buendig auf der Kachelunterkante
-        x = int(round(cx - (bb[0] + bb[2]) / 2.0))
+        x = int(round(cx - (bb[0] + bb[2]) / 2.0)) if x_fest is None else x_fest
         y = int(fy - (bb[3] - 1))
         r = (x + bb[0], y + bb[1], x + bb[2] - 1, y + bb[3] - 1)
         if r[0] < 2 or r[1] < 2 or r[2] >= cols * T - 2 or r[3] >= rows * T - 2:
@@ -107,21 +107,45 @@ def main():
         print('  nicht gesetzt:', name, int(cx) // T, int(fy) // T)
         return None
 
+    def paar(name, achse2, ab, fy, opt=None, dfy=(0, -T, T)):
+        """Paar exakt gespiegelt zur Pixelachse achse2 (Kachelkante): rechts x_r = 2*achse2 - x_l - w."""
+        w_ = D[name]
+        sp = Image.open(os.path.join(ROOT, 'assets', 'objekte', w_[0])).convert('RGBA')
+        sp = sp.crop(sp.getbbox())
+        breite = max(1, round(sp.width * w_[1]))
+        for dy_ in dfy:
+            for d_ in (0, 8, -8, 16, -16, 24, -24, 32):
+                xl = int(round(achse2 - (ab + d_) - breite / 2.0))
+                xr = int(2 * achse2 - xl - breite)
+                n0 = len(objekte)
+                ol = setze(name, 0, fy + dy_, opt, False, x_fest=xl)
+                orr = setze(name, 0, fy + dy_, opt, True, x_fest=xr) if ol else None
+                if ol and orr:
+                    return True
+                del objekte[n0:]; del rects[n0:]
+        print('  Paar nicht gesetzt:', name)
+        return False
+
     # Herz des Kernels exakt auf der Achse der inneren Kammer (aus dem Ring berechnet), Paare gespiegelt
     achse = (ix0 + ix1 + 1) * T / 2.0
     my = (iy0 + iy1 + 1) // 2
-    herz = setze('herz', achse, (my + 1) * T + 15, {'anim': 'lampe', 'lampe_box': [0, 0, 999, 999],
-                                                    'licht_farbe': (255, 60, 90)}, pruefen=False)
-    for s_ in (-1, 1):
-        setze('saeule', achse + s_ * 6 * T, (my + 1) * T + 15, {}, s_ > 0, pruefen=False)
-        setze('nest', achse + s_ * 6 * T, (iy0 + 3) * T + 15, {}, s_ > 0, pruefen=False)
+    hs = Image.open(os.path.join(ROOT, 'assets', 'objekte', D['herz'][0])).convert('RGBA')
+    hs = hs.crop(hs.getbbox()); hs = hs.resize((round(hs.width * D['herz'][1]), round(hs.height * D['herz'][1])), Image.NEAREST)
+    ha = np.array(hs).astype(int)
+    rot = (ha[..., 3] > 0) & (ha[..., 0] > 120) & (ha[..., 0] > ha[..., 1] + 60)          # nur die rote Kugel pulsiert
+    ys_, xs_ = np.nonzero(rot)
+    herz = setze('herz', achse, (my + 1) * T + 15, {'anim': 'lampe', 'lampe_box': [int(xs_.min()), int(ys_.min()),
+                 int(xs_.max()) + 1, int(ys_.max()) + 1], 'licht_farbe': (255, 60, 90)}, pruefen=False)
+    paar('saeule', achse, 6 * T, (my + 1) * T + 15, dfy=(0,))
+    paar('nest', achse, 6 * T, (iy1 - 2) * T + 15, dfy=(0, -T))
     # Vorlage: Mechs auf den Gewebebahnen, Traeger, Flaschen, Lampen, Terminals, Kapseln
-    for (n, px, py, sp_) in [('mech', 110, 180, False), ('mech', 672, 190, True), ('mech', 672, 495, True),
-                             ('traeger', 112, 96, False), ('traeger', 656, 112, True), ('traeger', 656, 448, False),
+    paar('lampe', achse, 104, 30 * T + 15, {'anim': 'lampe'})          # Suedseite: Paare gespiegelt zur Kammerachse
+    paar('terminal', achse, 168, 28 * T + 15, {'anim': 'maschine', 'leds': True})
+    paar('kapsel', achse, 168, 31 * T + 15)
+    for (n, px, py, sp_) in [('mech', 110, 180, False), ('mech', 656, 190, True), ('mech', 672, 495, True),
+                             ('rohr', 112, 96, False), ('rohr', 656, 112, True), ('rohr', 656, 448, False),
                              ('flasche', 72, 80, False), ('flasche', 664, 80, True), ('flasche', 704, 392, False),
-                             ('lampe', 88, 300, False), ('lampe', 680, 330, True), ('lampe', 296, 495, False),
-                             ('lampe', 536, 495, True), ('terminal', 296, 460, False), ('terminal', 552, 460, True),
-                             ('kapsel', 288, 515, False), ('kapsel', 560, 515, True), ('kapsel', 672, 528, False)]:
+                             ('lampe', 72, 300, False), ('lampe', 700, 330, True)]:
         o = suche(n, px, py, {'anim': 'lampe'} if n == 'lampe' else {}, sp_, r=3, schritt=8)
     for (n, px, py, sp_) in [('gitter', 380, 490, False), ('gitter', 440, 470, False), ('kabel', 50, 200, False),
                              ('kabel', 712, 250, True), ('kabel', 160, 300, False), ('bolzen', 190, 330, False),
@@ -129,10 +153,11 @@ def main():
                              ('pfuetze', 140, 520, True)]:
         suche(n, px, py, {}, sp_, r=3, schritt=8)
     # Kernel: befallene Technik, Ranken, Waechter-Wesen in den Gaengen
-    for (n, px, py, sp_) in [('befallen', 60, 470, False), ('rack', 720, 440, True), ('konsole', 450, 525, False),
+    for (n, px, py, sp_) in [('befallen', 60, 470, False), ('rack', 720, 440, True), ('konsole', 392, 525, False),
                              ('ranke', 208, 120, False), ('ranke', 576, 280, True), ('ranke', 500, 410, False),
                              ('waechter', 200, 200, False), ('waechter', 570, 100, True), ('waechter', 400, 340, False)]:
-        suche(n, px, py, {}, sp_, r=3, schritt=8)
+        suche(n, px, py, {'anim': 'maschine', 'leds': True} if n in ('rack', 'konsole', 'befallen') else {}, sp_, r=3,
+              schritt=8)
     json.dump(objekte, open(os.path.join(OBJ, 'platzierung.json'), 'w'), indent=0)
     print(len(objekte), 'Objekte')
 

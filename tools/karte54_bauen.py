@@ -32,7 +32,7 @@ k4.SCHATTEN = {'farbe': (18, 10, 22), 'dx': 0.3, 'dy': 0.15, 'kern': 100, 'wurf'
 k4.RASTER45 = True
 k4.FELS['kern54'] = ['#1c1220', '#2a1a2e', '#3a2440', '#4c3052', '#5e3c64', '#744a78', '#8c5a8c']
 LIPPE = ['#5a2a44', '#6c3050', '#80385c', '#943e66', '#a84a72', '#bc5a80']
-FRONT = 24
+FRONT = 16                               # Reihe 3 bleibt als Boden zwischen Rand und Mauerring sichtbar
 SEITE = 6
 faerben = k48.faerben
 
@@ -125,9 +125,10 @@ def becken(a, maske, frame):
         d += inn
     farbe = np.array((22, 30, 48), np.float32)[None, None] * (1.0 - 0.025 * d[..., None]) + \
         np.array((40, 52, 74), np.float32)[None, None] * (0.25 * (8 - d[..., None]) / 8)
-    welle = (yy % 10 == ((xx // 20) * 3) % 10) & (((xx + 5 * f) % 20) < 5) & (d >= 3)
+    zuf = ((xx // 20) * 7919 + (yy // 10) * 104729) % 13                   # unregelmaessig statt Raster
+    welle = (yy % 10 == (zuf % 10)) & (((xx + 5 * f + zuf * 3) % 20) < 5) & (d >= 3) & (zuf % 3 != 0)
     farbe[welle] = (44, 58, 82)
-    glanz = (yy % 10 == ((xx // 20) * 3 + 5) % 10) & (((xx + 5 * f + 10) % 40) < 3) & (d >= 5)
+    glanz = (yy % 10 == ((zuf + 5) % 10)) & (((xx + 5 * f + zuf * 7) % 40) < 3) & (d >= 5) & (zuf % 4 == 1)
     farbe[glanz] = (80, 46, 70)                                      # roter Widerschein der Masse
     a[maske] = np.clip(farbe[maske], 0, 255).astype(np.uint8)
     p_ = np.pad(maske, 3)

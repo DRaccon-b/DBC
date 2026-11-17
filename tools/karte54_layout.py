@@ -25,7 +25,7 @@ AUSSEN = (11, 4, 37, 22)                  # Aussenring (x0, y0, x1, y1), Zugang 
 INNEN = (14, 7, 34, 19)                   # Innenring, Tor unten mittig
 TOR = (22, 26)                            # Torspalten im Innenring (Vorlage x 352-432)
 GEWEBE = [(5, 7, 8, 18), (39, 9, 42, 26), (14, 23, 42, 26)]   # rote Gewebebahnen (x0, y0, x1, y1)
-BECKEN = (4, 21, 10, 29)
+BECKEN = (4, 21, 9, 29)
 TELEPORTER = [(6, 33, 4, 3)]
 
 
