@@ -50,13 +50,19 @@ def main():
         if len(teil) < 6:
             for (y, x) in teil:
                 k[y, x] = 'g'
-    for y in range(R - 2):                                            # unter jeder Waldfront mind. 2 Reihen Land
-        for x in range(1, C - 1):                                     # (Front nie direkt am Ufer/im Wasser)
-            if k[y, x] == 'h':
-                for d in (1, 2):
-                    for dx in (-1, 0, 1):
-                        if k[y + d, x + dx] == 'x':
-                            k[y + d, x + dx] = 'g'
+    for _ in range(3):
+        for y in range(1, R - 2):                                     # Wald: ringsum 1 Reihe Land, unter der Front 2
+            for x in range(1, C - 1):
+                if k[y, x] == 'h':
+                    for dy, dx in [(d, e) for d in (-1, 0, 1, 2) for e in (-1, 0, 1)]:
+                        if k[y + dy, x + dx] == 'x':
+                            k[y + dy, x + dx] = 'g'
+        for y in range(1, R - 1):                                     # Gras-Inseln/-Zipfel neben dem Wald -> Wald
+            for x in range(1, C - 1):
+                if k[y, x] == 'g':
+                    nb = [k[y + dy, x + dx] for dy, dx in ((1, 0), (-1, 0), (0, 1), (0, -1))]
+                    if nb.count('g') + nb.count('w') <= 1 and 'h' in nb:
+                        k[y, x] = 'h'
     for (tx, ty, b, hh) in TELEPORTER:
         k[ty:ty + hh, tx:tx + b] = 'T'
     h = np.where(k == 'h', 1, 0)

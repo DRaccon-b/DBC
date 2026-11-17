@@ -245,7 +245,12 @@ def bauen(frame=None, speichern=True):
             for dx in range(-r, r + 1):
                 o_ |= p_[r + dy:r + dy + Hp, r + dx:r + dx + Wp]
         return o_
-    keil = dil(st_, 8) & dil(land_, 8) & ~st_ & xm                  # Wasserpixel zwischen Ufer und Steg
+    def dil_v(m, r):                                                 # nur senkrecht (in den Stegspalten bleiben)
+        p_ = np.pad(m, ((r, r), (0, 0)), mode='edge'); o_ = np.zeros_like(m)
+        for dy in range(-r, r + 1):
+            o_ |= p_[r + dy:r + dy + Hp]
+        return o_
+    keil = dil_v(st_, 8) & dil(land_, 8) & ~st_ & xm                # Wasserpixel zwischen Ufer und Steg (Stegspalten)
     steg = stege(a, lay, xm, extra=keil)
     xm &= ~steg                                                      # Steg begehbar
     for tp in lay['teleporter']:

@@ -111,7 +111,7 @@ def main():
             hoch = lvl[max(0, r[1]):r[3] - T, r[0]:r[2] + 1] > 1     # Verdeckung durch Hoehen: Wald seitlich davor
             if hoch.any() and hoch[-T:].any():
                 return None
-        if opt.pop('_reihe', False) and any(o_.get('anim') == 'baum' and not o_.get('nur_kontakt') and
+        if opt.pop('_reihe', False) and any(not o_.get('nur_kontakt') and not o_.get('streu') and not o_.get('wasserdeko') and
                                              abs(o_['y'] + o_['fuss'] - (y + bb[3] - 1)) < 12 and abs(o_['x'] - x) < 110
                                              for o_ in objekte):
             objekte_rm = None
@@ -141,7 +141,7 @@ def main():
         return None
 
     # ---------------- Baeume der Vorlage mit Begleitern
-    felsen = ['fels02', 'fels03', 'fels14']
+    felsen = ['kf52', 'kf00']                       # hinter den Blaettern: 2 Kacheln hohe Felsen
     klein = ['kf%02d' % i for i in KLEINFELS]
     rnd.shuffle(klein)
     zug = {'k': 0, 'f': 0}
@@ -174,7 +174,7 @@ def main():
                                 {'begleiter': True, '_eigen': j_eig}, seite < 0, 'g', ohne=(ti,))
                           for d in (0, 3, -3, 6, -6))
         hinter = lambda sd: (n != 'totbaum') and any(setze(naechster('f'), sx + sd * d, sy - T, {'begleiter': True, '_eigen': j_eig}, sd < 0,
-                                                           'g', ohne=(ti,)) for d in (24, 32))
+                                                           'g', ohne=(ti,)) for d in (20, 28, 36))
         seitlich = lambda sd: any(setze(naechster('k'), sx + sd * d, sy + dy, {'begleiter': True, 'ebene': 0}, sd > 0, 'g')
                                   for d in (48, 56, 64, 72) for dy in (2 * T, -2 * T)
                                   if not any(abs(o_['y'] + o_['fuss'] - (sy + dy)) < 10 and abs(o_['x'] - (sx + sd * d)) < 140
@@ -182,8 +182,10 @@ def main():
         nah = sum(1 for (_, _, _, x2, y2) in gesetzt if (x2, y2) != (sx, sy) and abs(x2 - sx) < 6 * T and abs(y2 - sy) < 5 * T)
         soll = 1 if nah else 2
         plan = [[vor, lambda: seitlich(-seite)], [vor, lambda: hinter(seite)], [lambda: hinter(-seite), lambda: seitlich(seite)]][i % 3]
+        if n == 'b03':                                            # kleiner Baum: kein Begleiter vor dem Stumpf (verdeckt sonst
+            plan = [lambda: hinter(seite), lambda: seitlich(-seite)]   # Stamm und Krone)
         hat = 0
-        for f_ in plan + [lambda: seitlich(seite), lambda: seitlich(-seite), vor]:
+        for f_ in plan + [lambda: seitlich(seite), lambda: seitlich(-seite)] + ([] if n == 'b03' else [vor]):
             if hat >= soll and f_ not in plan:
                 break
             if f_():
@@ -198,11 +200,24 @@ def main():
             print('  Baum mit zu wenig Begleitern:', n, hat)
     # ---------------- Weinfaesser zwischen den Baeumen (Nutzer: ein, zwei)
     n_fass = 0
-    for (n_, ziele) in (('fass_a', [(18, 10), (15, 13), (21, 11), (11, 12), (19, 14), (14, 8)]), ('fass_b', [(28, 6), (31, 14), (32, 12), (29, 9), (26, 8)])):
-        for (tx_, ty_) in ziele:
-            if kachel(n_, tx_, ty_, {}, False, 'g', suche=2):
-                n_fass += 1
+    for n_ in ('fass_a', 'fass_b'):                                  # direkt neben einem Baum (nicht frei auf der Wiese)
+        ok_ = None
+        for (j_g, (i_, nb_, ti_, sx_, sy_)) in sorted(enumerate(gesetzt), key=lambda g_: abs(g_[1][3] - (18 if n_ == 'fass_a' else 30) * T)
+                                                              + abs(g_[1][4] - 10 * T)):
+            if any(o_['basis'].startswith('fass') and abs(o_['x'] - sx_) < 12 * T for o_ in objekte):
+                continue
+            for dx_, dy_ in ((36, 6), (-36, 6), (40, 12), (-40, 12), (34, -4), (-34, -4), (44, 0), (-44, 0), (50, 8), (-50, 8), (48, -8), (-48, -8)):
+                ok_ = setze(n_, sx_ + dx_, sy_ + dy_, {'begleiter': True, '_eigen': j_g}, dx_ < 0, 'g', ohne=(ti_,))
+                if ok_:
+                    break
+            if ok_:
                 break
+        if not ok_:                                                  # sonst am Waldrand (vor den Waldbloecken)
+            for (tx_, ty_) in ((36, 14), (12, 19), (35, 13), (11, 20)):
+                ok_ = kachel(n_, tx_, ty_, {}, False, 'g', suche=1)
+                if ok_:
+                    break
+        n_fass += 1 if ok_ else 0
     # ---------------- Wasser: Seerosen, Rohrkolben, Wasserfelsen nah am Ufer; treibende Faesser weiter draussen
     xmask = np.unpackbits(np.load(os.path.join(KARTE, 'wasser.npy')))[:lvl.size].reshape(lvl.shape).astype(bool)
 

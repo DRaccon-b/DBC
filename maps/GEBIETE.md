@@ -46,7 +46,7 @@ Aufstellfelds (cyan = Ankunft, gold = weiter; Funktion `pfeil_marke` in `tools/k
 | 9 | Karte 42 – Digital World: Wind Valley | v1.0 fertig (3 Agenten-Prüfrunden), Vorlagenfehler korrigiert, ZIP in maps/karte42/v1.0 |
 | 10 | Karte 43 – Haunted Castle Outskirts | v1.0 fertig (3 Agenten-Prüfrunden), ZIP in maps/karte43/v1.0 |
 | 11 | Karte 44 – Chuchidarumon Village | v1.0 fertig (3 Agenten-Prüfrunden), Bach unter dem Weg ergänzt (6. Brücke), ZIP in maps/karte44/v1.0 |
-| 12 | Karte 45 – Orochimon's Marsh | in Arbeit (Vorbild karte44) |
+| 12 | Karte 45 – Orochimon's Marsh | v1.0 fertig (2 Agenten-Prüfrunden), Steg ganz über Wasser, treibende Weinfässer, ZIP in maps/karte45/v1.0 |
 
 ## A0S – Sondergebiet
 | Nr. | Karte | Stand |

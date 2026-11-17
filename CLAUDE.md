@@ -326,6 +326,13 @@ Vor jeder Abgabe Punkt für Punkt prüfen (vergrößert, Standbild und mehrere A
   kurze Büschel an den Sockelecken (nie vor der Tür). Schatten auf Wiese kühl (dunkles Grün statt Braungrau) und kompakt
   (`k4.SCHATTEN` je Karte). Boden nicht platt, ohne neue Objekte/Texturen: sanftes Geländerelief (glattes Höhenfeld, Licht
   oben links, wenige Stufen) und vertiefte Wege (Schattenkante unter der Wiese, Lichtkante an der Böschung) – Variante B.
+- **Insel mit Steg (Karte 45):** Steg liegt ganz über Wasser und schließt an die Uferkante an (in der Vorlage teils auf
+  Land); Wasserkeile zwischen 45°-Ufer und eckigem Steg nur in den Stegspalten mit Planken schließen (keine Laschen
+  neben dem Steg). Waldblöcke ringsum mit 1 Reihe Land, unter der Front 2 Reihen (Front nie im Wasser); Gras-Inseln
+  neben dem Wald angleichen. Landobjekte gegen die Wassermaske prüfen (Uferkante hat dieselbe Höhe wie die Wiese).
+  Treibende Objekte: halb versunkene PixelLab-Sprites, 1 px Auf-und-ab mit eigenem Takt, Wasserring, kein Schatten,
+  über den See verteilt. Automatische Felsspitzen der Wasserroutine abschalten, wenn sie als Kegel wirken. Kleine Bäume
+  (b03) ohne Begleiter vor dem Stumpf; Fässer u. Ä. „in den Bäumen“ direkt neben einen Baum setzen, nie frei auf die Wiese.
 - **Begleiter am Stumpf (5d):** keine 1-Kachel-Blumen auf dem Stumpf, kein Blumenklumpen; Begleiter überlappen sich nicht.
 - **Paare/Achsen:** Paare vor Toren/Bauwerken exakt gespiegelt (Mitte und Fuß), gleiche Objekte auf gleicher Höhe;
   Druckplatten, Obelisken usw. symmetrisch zur berechneten Achse.
