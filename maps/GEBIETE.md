@@ -50,7 +50,7 @@ Aufstellfelds (cyan = Ankunft, gold = weiter; Funktion `pfeil_marke` in `tools/k
 | 13 | Karte 46 – Gekomon Marsh | v1.0 fertig (2 Agenten-Prüfrunden), Bauernhaus mit Tiefe (PixelLab Pro), ZIP in maps/karte46/v1.0 |
 | 14 | Karte 47 – Deva Mountain | v1.0 fertig (2 Agenten-Prüfrunden), Graben um die Arena, Fluss mit zwei Wasserfällen (Nutzer), ZIP in maps/karte47/v1.0 |
 | 15 | Karte 48 – Water Realm: Outer Currents | v1.0 fertig (3 Agenten-Prüfrunden), Flachwasser begehbar (Nutzer), Wasserbibliothek, ZIP in maps/karte48/v1.0 |
-| 16 | Karte 49 – The Broken Promise | in Arbeit (Vorbild karte47) |
+| 16 | Karte 49 – The Broken Promise | v1.0 fertig (3 Agenten-Prüfrunden), Bossarena Beelzemon, Vorlagenfehler korrigiert, Motorradspuren, ZIP in maps/karte49/v1.0 |
 
 ## A0S – Sondergebiet
 | Nr. | Karte | Stand |

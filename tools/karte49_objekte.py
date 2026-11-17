@@ -20,7 +20,7 @@ OBJ = os.path.join(ROOT, 'assets', 'objekte', 'karte49')
 T = 16
 A = os.path.join(ROOT, 'assets', 'objekte')
 D = {'motorrad': 'karte49/deko/00.png', 'schale': 'karte49/deko/01v.png', 'kette': 'karte49/deko/02.png',
-     'brand': 'karte49/deko/03.png', 'huelsen': 'karte49/deko/04.png', 'banner': 'karte49/deko/05.png',
+     'brand': 'karte49/deko/03r.png', 'huelsen': 'karte49/deko/04.png', 'banner': 'karte49/deko/05.png',
      'kralle': 'karte49/deko/06.png', 'schutt': 'karte49/deko/07.png', 'fass': 'karte49/deko/08.png',
      'reifen': 'karte49/deko/10.png', 'knochen': 'karte49/deko/11.png', 'sperre': 'karte49/deko/12.png',
      'burnout': 'karte49/spur/01a.png', 'spirale': 'karte49/spur/07a.png', 'bogen': 'karte49/spur/00a.png',
@@ -62,6 +62,8 @@ def main():
         datei = 'varianten/%s%s.png' % (name, '_m' if spiegeln else '')
         sp.save(os.path.join(OBJ, datei))
         bb = sp.getbbox()
+        if not (opt.get('liegend') or opt.get('ebene') == 0 or name in SPUR):
+            fy = int(fy) // T * T + T - 1                            # Regel 1b: Fuss buendig auf der Kachelunterkante
         x = int(round(cx - (bb[0] + bb[2]) / 2.0))
         y = int(fy - (bb[3] - 1))
         r = (x + bb[0], y + bb[1], x + bb[2] - 1, y + bb[3] - 1)
@@ -137,13 +139,15 @@ def main():
             ok = any(setze('rf2', sx + d, sy + T - 2, {'begleiter': True}, False, 1, gap=-30) for d in (14, -14, 20, -20))
             any(setze('rf3', sx - d, sy + T + 10, {'begleiter': True}, False, 1) for d in (40, 48, 56))
         else:                                                        # Baum 2: seitlich, rechts tiefer und links hoeher
-            ok = any(setze('rf4', sx + d, sy + T + 8, {'begleiter': True}, True, 1) for d in (40, 48, 56))
+            ok = any(setze('rf4', sx + d, sy + dy, {'begleiter': True}, True, 1) for dy in (T + 8, 2 * T) for d in (40, 48, 32, 56))
+            ok = ok or any(setze('rf4', sx + d, sy + dy, {'begleiter': True}, True, 1)
+                           for dy in (-T, -2 * T, T) for d in (48, 40, 56, -48, -56, -64))
             any(setze('rf1', sx - d, sy - T + 2, {'begleiter': True}, False, 1) for d in (36, 44, 52))
         if not ok:
             print('  Baum ohne Begleiter vor dem Stumpf', i)
     # ---------------- Gebrochenes Versprechen: zerrissene Ketten, Brandflecken, Kampfspuren (dezent, keine Reihen)
     for (n, px, py) in [('kette', 300, 330), ('kette', 520, 230), ('brand', 420, 180), ('brand', 200, 380),
-                        ('huelsen', 470, 300), ('kralle', 130, 300), ('knochen', 420, 120), ('schutt', 290, 520),
+                        ('huelsen', 470, 300), ('kralle', 130, 300), ('knochen', 420, 120),
                         ('sperre', 95, 470), ('huelsen', 290, 200)]:
         suche(n, px, py, {'liegend': n in FLACH, 'ebene': 0 if n in FLACH else 1}, rnd.random() < 0.5, 1, r=3, schritt=8)
     # ---------------- sparsame Streudeko wie in der Vorlage (Zweige, Kiesel)
@@ -161,9 +165,9 @@ def main():
             n_s += 1
     for o in objekte:                                                # Fels auf Fels: kein Bodenwall; Felsen nur Kontaktschatten
         o.setdefault('ohne_wall', True)
-        if o['basis'] in FLACH:                                      # Bodenmale/flache Teile ohne Schlagschatten
+        if o['basis'] == 'brand':                                    # nur das Bodenmal ohne Schatten; liegende Teile: flacher Schatten
             o['schattenlos'] = True
-        if o['basis'] in ('brocken', 'rf1', 'rf2', 'rf3', 'rf4', 'schutt', 'sperre'):
+        if o['basis'] in ('brocken', 'rf1', 'rf2', 'rf3', 'rf4', 'schutt', 'sperre', 'totbaum'):
             o['nur_kontakt'] = True
     json.dump(objekte, open(os.path.join(OBJ, 'platzierung.json'), 'w'), indent=0)
     print('Karte 49: %d Objekte (Streudeko %d)' % (len(objekte), n_s))

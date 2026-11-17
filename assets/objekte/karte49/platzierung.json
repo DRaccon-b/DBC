@@ -3,7 +3,7 @@
 "datei": "varianten/motorrad.png",
 "basis": "motorrad",
 "x": 498,
-"y": 378,
+"y": 380,
 "fuss": 51,
 "kachel": [
 33,
@@ -16,7 +16,7 @@
 "datei": "varianten/schale.png",
 "basis": "schale",
 "x": 439,
-"y": 401,
+"y": 404,
 "fuss": 59,
 "kachel": [
 28,
@@ -41,7 +41,7 @@
 "datei": "varianten/banner.png",
 "basis": "banner",
 "x": 360,
-"y": 399,
+"y": 402,
 "fuss": 61,
 "kachel": [
 23,
@@ -56,7 +56,7 @@
 "datei": "varianten/schale_m.png",
 "basis": "schale",
 "x": 583,
-"y": 401,
+"y": 404,
 "fuss": 59,
 "kachel": [
 37,
@@ -81,7 +81,7 @@
 "datei": "varianten/banner_m.png",
 "basis": "banner",
 "x": 660,
-"y": 399,
+"y": 402,
 "fuss": 61,
 "kachel": [
 42,
@@ -96,7 +96,7 @@
 "datei": "varianten/reifen.png",
 "basis": "reifen",
 "x": 564,
-"y": 73,
+"y": 82,
 "fuss": 45,
 "kachel": [
 37,
@@ -108,12 +108,12 @@
 {
 "datei": "varianten/fass.png",
 "basis": "fass",
-"x": 514,
-"y": 79,
+"x": 522,
+"y": 72,
 "fuss": 55,
 "kachel": [
 33,
-8
+7
 ],
 "ebene": 1,
 "ohne_wall": true
@@ -185,11 +185,11 @@
 {
 "datei": "varianten/bogen2_m.png",
 "basis": "bogen2",
-"x": 550,
-"y": 124,
+"x": 518,
+"y": 132,
 "fuss": 54,
 "kachel": [
-36,
+34,
 11
 ],
 "ebene": 0,
@@ -202,7 +202,7 @@
 "datei": "varianten/brocken.png",
 "basis": "brocken",
 "x": 168,
-"y": 86,
+"y": 88,
 "fuss": 39,
 "kachel": [
 11,
@@ -216,7 +216,7 @@
 "datei": "varianten/kiesel_m.png",
 "basis": "kiesel",
 "x": 160,
-"y": 111,
+"y": 113,
 "fuss": 17,
 "kachel": [
 10,
@@ -232,7 +232,7 @@
 "datei": "varianten/brocken_m.png",
 "basis": "brocken",
 "x": 634,
-"y": 241,
+"y": 248,
 "fuss": 39,
 "kachel": [
 40,
@@ -246,11 +246,11 @@
 "datei": "varianten/kiesel_m.png",
 "basis": "kiesel",
 "x": 626,
-"y": 266,
+"y": 273,
 "fuss": 17,
 "kachel": [
 39,
-17
+18
 ],
 "ebene": 0,
 "liegend": true,
@@ -262,7 +262,7 @@
 "datei": "varianten/brocken_m.png",
 "basis": "brocken",
 "x": 568,
-"y": 321,
+"y": 328,
 "fuss": 39,
 "kachel": [
 36,
@@ -276,11 +276,11 @@
 "datei": "varianten/kiesel.png",
 "basis": "kiesel",
 "x": 602,
-"y": 346,
+"y": 353,
 "fuss": 17,
 "kachel": [
 38,
-22
+23
 ],
 "ebene": 0,
 "liegend": true,
@@ -292,7 +292,7 @@
 "datei": "varianten/brocken.png",
 "basis": "brocken",
 "x": 234,
-"y": 433,
+"y": 440,
 "fuss": 39,
 "kachel": [
 15,
@@ -306,11 +306,11 @@
 "datei": "varianten/kiesel.png",
 "basis": "kiesel",
 "x": 268,
-"y": 458,
+"y": 465,
 "fuss": 17,
 "kachel": [
 17,
-29
+30
 ],
 "ebene": 0,
 "liegend": true,
@@ -322,20 +322,21 @@
 "datei": "varianten/totbaum.png",
 "basis": "totbaum",
 "x": 153,
-"y": 153,
+"y": 164,
 "fuss": 75,
 "kachel": [
 11,
 14
 ],
 "ebene": 1,
-"ohne_wall": true
+"ohne_wall": true,
+"nur_kontakt": true
 },
 {
 "datei": "varianten/rf2.png",
 "basis": "rf2",
 "x": 184,
-"y": 218,
+"y": 231,
 "fuss": 24,
 "kachel": [
 12,
@@ -350,11 +351,11 @@
 "datei": "varianten/rf3.png",
 "basis": "rf3",
 "x": 133,
-"y": 236,
+"y": 253,
 "fuss": 18,
 "kachel": [
 9,
-15
+16
 ],
 "ebene": 1,
 "begleiter": true,
@@ -365,24 +366,25 @@
 "datei": "varianten/totbaum_m.png",
 "basis": "totbaum",
 "x": 625,
-"y": 297,
+"y": 308,
 "fuss": 75,
 "kachel": [
 41,
 23
 ],
 "ebene": 1,
-"ohne_wall": true
+"ohne_wall": true,
+"nur_kontakt": true
 },
 {
 "datei": "varianten/rf4_m.png",
 "basis": "rf4",
 "x": 690,
-"y": 374,
+"y": 345,
 "fuss": 22,
 "kachel": [
 44,
-24
+22
 ],
 "ebene": 1,
 "begleiter": true,
@@ -401,14 +403,13 @@
 ],
 "ebene": 0,
 "liegend": true,
-"ohne_wall": true,
-"schattenlos": true
+"ohne_wall": true
 },
 {
 "datei": "varianten/kette_m.png",
 "basis": "kette",
-"x": 492,
-"y": 187,
+"x": 484,
+"y": 195,
 "fuss": 43,
 "kachel": [
 32,
@@ -416,15 +417,14 @@
 ],
 "ebene": 0,
 "liegend": true,
-"ohne_wall": true,
-"schattenlos": true
+"ohne_wall": true
 },
 {
 "datei": "varianten/brand_m.png",
 "basis": "brand",
 "x": 388,
-"y": 121,
-"fuss": 59,
+"y": 124,
+"fuss": 56,
 "kachel": [
 26,
 11
@@ -439,8 +439,8 @@
 "datei": "varianten/brand.png",
 "basis": "brand",
 "x": 168,
-"y": 321,
-"fuss": 59,
+"y": 324,
+"fuss": 56,
 "kachel": [
 12,
 23
@@ -463,59 +463,41 @@
 ],
 "ebene": 0,
 "liegend": true,
-"ohne_wall": true,
-"schattenlos": true
+"ohne_wall": true
 },
 {
 "datei": "varianten/kralle_m.png",
 "basis": "kralle",
 "x": 104,
-"y": 260,
+"y": 276,
 "fuss": 48,
 "kachel": [
 8,
-19
+20
 ],
 "ebene": 0,
 "liegend": true,
-"ohne_wall": true,
-"schattenlos": true
+"ohne_wall": true
 },
 {
 "datei": "varianten/knochen_m.png",
 "basis": "knochen",
-"x": 383,
-"y": 75,
+"x": 391,
+"y": 83,
 "fuss": 37,
 "kachel": [
-25,
+26,
 7
 ],
 "ebene": 0,
 "liegend": true,
-"ohne_wall": true,
-"schattenlos": true
+"ohne_wall": true
 },
 {
-"datei": "varianten/schutt.png",
-"basis": "schutt",
-"x": 255,
-"y": 478,
-"fuss": 50,
-"kachel": [
-17,
-33
-],
-"ebene": 1,
-"liegend": false,
-"ohne_wall": true,
-"nur_kontakt": true
-},
-{
-"datei": "varianten/sperre_m.png",
+"datei": "varianten/sperre.png",
 "basis": "sperre",
 "x": 65,
-"y": 415,
+"y": 424,
 "fuss": 55,
 "kachel": [
 5,
@@ -527,7 +509,7 @@
 "nur_kontakt": true
 },
 {
-"datei": "varianten/huelsen.png",
+"datei": "varianten/huelsen_m.png",
 "basis": "huelsen",
 "x": 268,
 "y": 165,
@@ -538,15 +520,29 @@
 ],
 "ebene": 0,
 "liegend": true,
-"ohne_wall": true,
-"schattenlos": true
+"ohne_wall": true
 },
 {
 "datei": "varianten/kiesel.png",
 "basis": "kiesel",
-"x": 474,
-"y": 106,
+"x": 78,
+"y": 380,
 "fuss": 17,
+"kachel": [
+5,
+24
+],
+"ebene": 0,
+"streu": true,
+"liegend": true,
+"ohne_wall": true
+},
+{
+"datei": "varianten/zweig.png",
+"basis": "zweig",
+"x": 472,
+"y": 98,
+"fuss": 25,
 "kachel": [
 30,
 7
@@ -554,78 +550,58 @@
 "ebene": 0,
 "streu": true,
 "liegend": true,
-"ohne_wall": true,
-"schattenlos": true
-},
-{
-"datei": "varianten/zweig.png",
-"basis": "zweig",
-"x": 169,
-"y": 278,
-"fuss": 25,
-"kachel": [
-11,
-18
-],
-"ebene": 0,
-"streu": true,
-"liegend": true,
-"ohne_wall": true,
-"schattenlos": true
+"ohne_wall": true
 },
 {
 "datei": "varianten/kiesel.png",
 "basis": "kiesel",
-"x": 604,
+"x": 588,
 "y": 219,
 "fuss": 17,
 "kachel": [
-38,
+37,
 14
 ],
 "ebene": 0,
 "streu": true,
 "liegend": true,
-"ohne_wall": true,
-"schattenlos": true
+"ohne_wall": true
 },
 {
-"datei": "varianten/zweig_m.png",
+"datei": "varianten/zweig.png",
 "basis": "zweig",
-"x": 167,
-"y": 451,
+"x": 141,
+"y": 453,
 "fuss": 25,
 "kachel": [
-11,
+9,
 29
 ],
 "ebene": 0,
 "streu": true,
 "liegend": true,
-"ohne_wall": true,
-"schattenlos": true
+"ohne_wall": true
 },
 {
 "datei": "varianten/kiesel.png",
 "basis": "kiesel",
-"x": 256,
-"y": 235,
+"x": 514,
+"y": 265,
 "fuss": 17,
 "kachel": [
-16,
-15
+32,
+17
 ],
 "ebene": 0,
 "streu": true,
 "liegend": true,
-"ohne_wall": true,
-"schattenlos": true
+"ohne_wall": true
 },
 {
-"datei": "varianten/zweig.png",
+"datei": "varianten/zweig_m.png",
 "basis": "zweig",
-"x": 319,
-"y": 129,
+"x": 313,
+"y": 130,
 "fuss": 25,
 "kachel": [
 20,
@@ -634,39 +610,36 @@
 "ebene": 0,
 "streu": true,
 "liegend": true,
-"ohne_wall": true,
-"schattenlos": true
+"ohne_wall": true
 },
 {
 "datei": "varianten/kiesel.png",
 "basis": "kiesel",
-"x": 524,
-"y": 269,
+"x": 156,
+"y": 397,
 "fuss": 17,
 "kachel": [
-33,
-17
+10,
+25
 ],
 "ebene": 0,
 "streu": true,
 "liegend": true,
-"ohne_wall": true,
-"schattenlos": true
+"ohne_wall": true
 },
 {
 "datei": "varianten/zweig.png",
 "basis": "zweig",
-"x": 443,
-"y": 214,
+"x": 398,
+"y": 225,
 "fuss": 25,
 "kachel": [
-28,
-14
+25,
+15
 ],
 "ebene": 0,
 "streu": true,
 "liegend": true,
-"ohne_wall": true,
-"schattenlos": true
+"ohne_wall": true
 }
 ]

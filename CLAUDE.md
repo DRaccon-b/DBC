@@ -354,6 +354,12 @@ Vor jeder Abgabe Punkt für Punkt prüfen (vergrößert, Standbild und mehrere A
   (`wasser_vertieft.OEFFNEN`), sonst bleiben Einzellöcher und dünne Finger. Wandernde Muster: Periode × Schritt muss die
   Bildzahl teilen (sonst stockt die Schleife). Objekte auf Steinplatten `ohne_wall`; winzige Kerzenflammen nur mit kleiner
   Amplitude (≤ 1) bewegen, sonst zerreißen sie.
+- **Bossarena mit Gimmicks (Karte 49):** Anspielungen auf den Boss über PixelLab-Objekte (Motorradspuren als halbtransparente
+  Bodenmale, zuerst gezeichnet, begehbar; Bühne mit gespiegelten Paaren zur Treppenachse). Generierte Bodenmale (Krater,
+  Brandflecken) auf gerade Schnittkanten prüfen und rund ausfransen; nur reine Bodenmale `schattenlos`, liegende Teile
+  (Ketten, Knochen, Platten) behalten den flachen Schatten. Violette Flammen: `anim: 'feuer_lila'` mit `flammen_box`
+  (sonst kein Leuchtschein). Fuß stehender Objekte immer auf die Kachelunterkante einrasten (auch bei Positionen aus der
+  Vorlage); kahle Bäume und Felsen auf Fels/Pflaster nur mit Kontaktschatten (Silhouettenschatten wird zum Balken).
 - **Begleiter am Stumpf (5d):** keine 1-Kachel-Blumen auf dem Stumpf, kein Blumenklumpen; Begleiter überlappen sich nicht.
 - **Paare/Achsen:** Paare vor Toren/Bauwerken exakt gespiegelt (Mitte und Fuß), gleiche Objekte auf gleicher Höhe;
   Druckplatten, Obelisken usw. symmetrisch zur berechneten Achse.
