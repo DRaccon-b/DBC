@@ -2168,6 +2168,19 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'small snowman statue made of two snowballs with a little twig and coal eyes on a tiny stone base, ' + FR14,
         'small wooden signpost with one arrow sign, ' + FR14,
     ]},
+    'k44_huette2': {'size': 64, 'freie_farben': True, 'items': [   # Karte 44: neue Huetten-Kandidaten (Nutzer)
+        'small round clay dome hut with a soft white snow cap, warm terracotta walls, dark brown outline (no black), small wooden door with a round top and a tiny lantern beside it, a few stones at the base, seen from the front and slightly above, ' + FR14,
+        'round snowball-shaped hut made of packed snow and clay, white snowy roof with light blue shading, small round porthole window, short wooden door, cozy and cute, seen from the front and slightly above, ' + FR14,
+        'small dome hut with walls of stacked round river stones and clay, snow-covered dome roof, wooden door with iron hinges, a little chimney with a snow cap, seen from the front and slightly above, ' + FR14,
+        'cute round mud hut shaped like a snowman head, white snow roof, two small round windows like eyes, wooden door in the middle, orange walls, seen from the front and slightly above, ' + FR14,
+        'small round clay hut with a thick straw ring under a white snow dome roof, light orange walls, wooden door with a small canopy, firewood stacked beside the door, seen from the front and slightly above, ' + FR14,
+    ]},
+    'k44_fass': {'size': 64, 'freie_farben': True, 'items': [   # Grosse Weinfaesser (Nutzer, fuer diese oder naechste Karte)
+        'large oak wine barrel lying on its side on a wooden cradle stand, round front face with iron hoops and a small brass tap, dark brown oak staves, ' + FR14,
+        'big standing wooden wine barrel with three dark iron hoops and a round wooden lid, warm brown oak, ' + FR14,
+        'stack of three large wine barrels lying on their sides in a pyramid on a wooden rack, round fronts with iron hoops, ' + FR14,
+        'huge old wine cask lying on a stone and wood base with a carved round front, iron hoops and a wooden tap, ' + FR14,
+    ]},
     'k43_halme': {'size': 32, 'freie_farben': True, 'items': [   # Karte 43: flache Grashalm-Bueschel als Bodenstruktur
         'tiny tuft of short green grass blades seen from above, flat ground detail, no shadow, ' + FR14,
         'small cluster of thin dark green grass blades and two tiny white clover flowers, flat ground detail, ' + FR14,
