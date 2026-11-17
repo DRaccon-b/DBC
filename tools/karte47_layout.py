@@ -24,6 +24,8 @@ REF = {'g': (101, 118, 138), 'h': (137, 151, 165), 'w': (136, 144, 144), 'k': (1
        'd': (64, 72, 88), 'c': (90, 100, 112)}
 GRABEN = (82.5, 50.5, 14.5, 17.5)       # Ellipse um die Arena (Mitte x, y, Halbachsen) in Kacheln
 BRUECKEN_Y = [(42, 44), (57, 59)]       # Reihen der Grabenbruecken (Westseite)
+FLUSS = [(0, 74), (18, 74), (22, 76), (25, 78), (33, 78)]   # (Reihe, linke Spalte), 2 Kacheln breit, endet am Graben
+FLUSS_BRUECKE = (27, 31)                                     # Reihen der Bruecke, wo der Pflasterring den Fluss kreuzt
 TELEPORTER = [(19, 0, 3, 2), (62, 0, 3, 2), (97, 23, 3, 3), (0, 62, 3, 3), (22, 72, 3, 3)]
 k43.R, k43.C = R, C
 
@@ -103,7 +105,27 @@ def main():
         else:
             k[ty:ty + hh, tx - 3:tx] = np.where(k[ty:ty + hh, tx - 3:tx] == 'h', 'g', k[ty:ty + hh, tx - 3:tx])
             k[ty - 2:ty, tx - 3:C] = np.where(k[ty - 2:ty, tx - 3:C] == 'h', 'g', k[ty - 2:ty, tx - 3:C])
-    bruecken = []
+    # Fluss (Nutzer): kommt oben durch die Felsspalte, laeuft ueber den Felsboden und stuerzt als Wasserfall in den Graben
+    fluss_x = np.interp(np.arange(0, 34), [p_[0] for p_ in FLUSS], [p_[1] for p_ in FLUSS]).round().astype(int)
+    for y in range(0, 34):
+        k[y, fluss_x[y]:fluss_x[y] + 2] = 'f'
+    for y in range(1, 34):                                            # diagonale Stufen ohne Luecke (4er-Nachbarschaft)
+        if fluss_x[y] != fluss_x[y - 1]:
+            k[y, min(fluss_x[y], fluss_x[y - 1]):max(fluss_x[y], fluss_x[y - 1]) + 2] = 'f'
+    for y in range(0, 34):                                            # Ufer: 1 Kachel Boden neben dem Fluss (nicht Rand/Pflaster-Zipfel)
+        for x in (fluss_x[y] - 1, fluss_x[y] + 2):
+            if k[y, x] == 'h' and y >= 4:
+                k[y, x] = 'g'
+    bx0f = fluss_x[FLUSS_BRUECKE[0]]                                  # Bruecke ueber den Fluss am Pflasterring
+    k[FLUSS_BRUECKE[0]:FLUSS_BRUECKE[1] + 1, bx0f:bx0f + 2] = 'b'
+    for x in (bx0f - 2, bx0f - 1, bx0f + 2, bx0f + 3):
+        k[FLUSS_BRUECKE[0]:FLUSS_BRUECKE[1] + 1, x] = 'w'
+    bruecken = [[int(bx0f), FLUSS_BRUECKE[0], int(bx0f + 1), FLUSS_BRUECKE[1]]]
+    wx_ = int(fluss_x[33])                                            # Sturzbecken: Graben unter dem Wasserfall tiefer in die
+    for y in range(34, 40):                                           # Arena hinein (Platz zum Verschwinden in der Tiefe)
+        for x in range(wx_ - 2 + max(0, y - 37), wx_ + 4 - max(0, y - 37)):
+            if k[y, x] in 'gwkdn':
+                k[y, x] = 'x'
     for (by0, by1) in BRUECKEN_Y:                                     # Bruecke = Grabenbreite, Weg 2 Kacheln davor/dahinter
         xs = [x for y in range(by0, by1 + 1) for x in range(C) if k[y, x] == 'x' and x < GRABEN[0]]
         bx0, bx1 = min(xs), max(xs)
@@ -114,10 +136,10 @@ def main():
         bruecken.append([int(bx0), by0, int(bx1), by1])
     h = np.where(k == 'h', 1, 0)
     lay = {'groesse': [C, R], 'klassen': [''.join(z) for z in k], 'hoehe': [''.join(str(c) for c in z) for z in h],
-           'bruecken': bruecken, 'stege': [], 'graben': list(GRABEN),
+           'bruecken': bruecken, 'stege': [], 'graben': list(GRABEN), 'wasserfall': [int(fluss_x[33]), 34],
            'teleporter': [{'x': tx, 'y': ty, 'b': b, 'h': hh} for (tx, ty, b, hh) in TELEPORTER]}
     json.dump(lay, open(os.path.join(KARTE, 'layout.json'), 'w'), indent=0)
-    F = {'x': (30, 32, 40), 'b': (150, 100, 50), 'g': (101, 118, 138), 'w': (170, 170, 165), 'h': (190, 200, 215), 'k': (130, 135, 120), 'n': (80, 150, 60),
+    F = {'f': (60, 110, 190), 'x': (30, 32, 40), 'b': (150, 100, 50), 'g': (101, 118, 138), 'w': (170, 170, 165), 'h': (190, 200, 215), 'k': (130, 135, 120), 'n': (80, 150, 60),
          'd': (50, 55, 70), 'T': (80, 220, 240)}
     S_ = 6
     im = Image.new('RGB', (C * S_, R * S_))

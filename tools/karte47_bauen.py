@@ -167,6 +167,65 @@ def stege(a, lay, wasser, extra=None):
     return oben
 
 
+def wasserfall_tief(a, x0, x1, y_ref, gw, frame, tm=None):
+    """Wasserfall ueber die Grabenwand, der in der Tiefe verschwindet (Nutzer: kein Aufschlag auf der Sohle): Abbruchkante,
+    fallendes Wasser mit wandernden Streifen ueber die ganze Wandhoehe, darunter blendet der Fall in die Dunkelheit aus,
+    nur feiner Spruehnebel - kein Gischtbecken, keine Ringe."""
+    import random
+    from klippen import WS, WEISS
+    rnd = random.Random(47)
+    Hp, Wp = gw.shape
+    breite = x1 - x0
+    sp_ = gw[y_ref - 4:y_ref + 60, x0:x1]
+    ys = np.nonzero(sp_.any(1))[0]
+    y_top = y_ref - 4 + int(ys.min()) if len(ys) else y_ref
+    y_wb = y_ref - 4 + int(ys.max()) if len(ys) else y_ref + 30
+    FADE = 34
+    if tm is not None:                                               # nur bis zum Ende der Grabensohle (nie auf die Arena)
+        sohle = tm[y_wb + 1:y_wb + 60, x0:x1].all(1)
+        n_ = int(np.argmin(sohle)) if not sohle.all() else 59
+        FADE = max(8, n_)
+    for i in range(breite):
+        x = x0 + i
+        rand = min(i, breite - 1 - i)
+        basis = WS['w0'] if rand == 0 else WS['w1'] if rand == 1 else WS['w2'] if rand <= 3 else WS['w3']
+        art, phase, laenge = rnd.random(), rnd.randint(0, 60), rnd.choice((16, 24, 24, 48))
+        for y in range(y_top - 2, y_wb + FADE):
+            if not (0 <= y < Hp):
+                continue
+            c = basis
+            if rand >= 2:
+                v = (y + phase - frame * 3) % laenge
+                if art < 0.45 and v < laenge * 2 // 3:
+                    c = WS['w4'] if 0 < v < laenge * 2 // 3 - 1 else WS['w3']
+                elif art < 0.6 and v < 6:
+                    c = WS['w5']
+                elif art > 0.8 and v < laenge // 2:
+                    c = WS['w2']
+            c = np.array(c[:3], np.float32)
+            if y > y_wb and tm is not None and not tm[y, x]:
+                continue
+            if y > y_wb:                                             # in die Tiefe ausblenden (Dunkelheit verschluckt den Fall)
+                t_ = (y - y_wb) / float(FADE)
+                al = max(0.0, 1.0 - t_) ** 1.4
+                c = c * (1 - 0.55 * t_)
+                a[y, x] = (c * al + a[y, x] * (1 - al)).astype(np.uint8)
+            else:
+                a[y, x] = c.astype(np.uint8)
+    for i in range(breite):                                          # Abbruchkante oben
+        x = x0 + i
+        rand = min(i, breite - 1 - i)
+        for dy, cc in ((-1, WS['w3'] if rand else WS['w1']), (0, WS['w4'] if rand else WS['w1']),
+                       (1, WS['w5'] if rand >= 2 and i % 5 != 4 else WS['w4'] if rand else WS['w1'])):
+            a[y_top + dy, x] = cc[:3]
+    rn = random.Random(4700 + frame)                                 # feiner Nebel, der aus der Tiefe aufsteigt
+    for _ in range(breite * 3):
+        x = int(rn.uniform(x0 - 6, x1 + 6)); y = int(rn.uniform(y_wb - 6, y_wb + FADE))
+        if 0 <= x < Wp and 0 <= y < Hp and (tm is None or tm[y, x]):
+            al = 0.18 + 0.22 * (1 - (y - y_wb + 4) / float(FADE))
+            a[y, x] = (np.array((225, 238, 250)) * al + a[y, x] * (1 - al)).astype(np.uint8)
+
+
 def bauen(frame=None, speichern=True):
     lay = json.load(open(os.path.join(KARTE, 'layout.json')))
     cls = lay['klassen']
@@ -228,6 +287,17 @@ def bauen(frame=None, speichern=True):
     a[hoch] = tex['h'][hoch]
     frei = np.zeros((Hp, Wp), bool)
     wand = k4.hoehenkanten(a, hoch, 'berg47', FRONT, SEITE, LIPPE, frei, 47, berg=False)
+    # Fluss (Nutzer): kommt oben durch die Felsspalte, vertieftes Wasser wie der Bach in Karte 44 (ohne Tiefenstufen);
+    # am Graben laeuft er bis an die Kante weiter (kein Ufer), dort stuerzt er als Wasserfall hinunter
+    fm = weich(zell_maske(cls, 'fb', cols, rows), 4, 0, 9, 0.5)
+    wfx, wfy = lay['wasserfall']
+    fm_ext = fm.copy()
+    fm_ext[wfy * T - 4:wfy * T + 14, wfx * T:(wfx + 2) * T] = True
+    P = 24
+    ag = np.pad(a, ((P, P), (P, P), (0, 0)), mode='edge')
+    mg = np.pad(fm_ext, ((P, P), (P, P)), mode='edge')
+    ag = np.array(wasser_vertieft.vertiefen(Image.fromarray(ag), np.ones_like(mg), frame, maske=mg, stufen=[]).convert('RGB'))
+    a = ag[P:-P, P:-P].copy()
     # Graben um die Arena (Nutzer): tiefer Felsgraben mit Klippenwaenden, die Arena wirkt wie ein Plateau
     tm = weich(zell_maske(cls, 'xb', cols, rows), 4, 0, 8, 0.5)
     a[tm] = (tex['d'][tm] * 0.42).astype(np.uint8)                   # tiefe, dunkle Grabensohle
@@ -243,6 +313,7 @@ def bauen(frame=None, speichern=True):
     f_ = np.round(f_ * 6) / 6                                        # wenige Stufen (Pixel-Look)
     a[frei_] = (a[frei_] * f_[frei_][:, None]).astype(np.uint8)
     wand |= gw & tm
+    wasserfall_tief(a, wfx * T, (wfx + 2) * T, wfy * T, gw, frame or 0, tm)
     img_b = Image.fromarray(a).convert('RGBA')
     for (bx0, by0, bx1, by1) in lay['bruecken']:
         bauwerke.zeichne_bruecke(img_b, bx0 * T - 6, (bx1 + 1) * T + 6, by0 * T, (by1 + 1) * T - 4, frame=frame or 0)
@@ -252,7 +323,7 @@ def bauen(frame=None, speichern=True):
         bm[by0 * T:(by1 + 1) * T, bx0 * T:(bx1 + 1) * T] = True
     leere = tm & ~bm
     wand &= ~bm
-    xm = np.zeros((Hp, Wp), bool)                                    # kein Wasser auf dieser Karte
+    xm = fm & ~bm & ~tm                                              # Fluss gesperrt, Bruecke begehbar
     for tp in lay['teleporter']:
         k4.teleporter_zeichnen(a, tp['x'], tp['y'], tp['b'], tp['h'], frame)
     img = Image.fromarray(a).convert('RGBA')
