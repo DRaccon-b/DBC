@@ -33,7 +33,7 @@ KANTEN = [  # (Hoehe darueber, [(x0, x1, Reihe)], Treppe)
     (1, [(0, 29, 72), (30, 63, 70), (64, 95, 69)], (41, 46)),
 ]
 HOF = (12, 9, 26, 17)                    # abgesenkter Hof (x0, y0, x1, y1), Treppe in der Suedreihe darunter
-HOF_TREPPE = (17, 20)
+HOF_TREPPE = (18, 20)                    # 3 Kacheln: Mitte = Hofachse (Hof 15 Kacheln breit)
 TELEPORTER = [(0, 29, 3, 4), (93, 24, 3, 4), (85, 77, 4, 3)]
 k43.R, k43.C = R, C
 
@@ -90,6 +90,29 @@ def main():
             if len(teil) < 8:
                 for (y, x) in teil:
                     k[y, x] = 'g'
+    # Seitenkanten der Terrassen: Pflaster/Wiese nie ueber eine Hoehengrenze (1 Kachel Abstand auf beiden Seiten)
+    hq = hp.copy(); hq[k == 'h'] = 4
+    for y in range(R):
+        for x in range(C):
+            if k[y, x] in 'wkn' and any(0 <= y + dy < R and 0 <= x + dx < C and hq[y + dy, x + dx] != hq[y, x]
+                                        and k[y + dy, x + dx] != 'h' for dy, dx in ((0, 1), (0, -1), (1, 0), (-1, 0))):
+                k[y, x] = 'g'
+    for kl in ('n', 'k', 'w'):
+        for teil in k43.flaechen(k == kl):
+            if len(teil) < 8:
+                for (y, x) in teil:
+                    k[y, x] = 'g'
+    # Felsrand links/rechts: kurze 1-Spalten-Einspruenge schliessen (kein Front-Stummel)
+    for x, nb in ((2, 1), (C - 3, C - 2)):
+        y = 0
+        while y < R:
+            if k[y, x] != 'h' and k[y, nb] == 'h':
+                y0 = y
+                while y < R and k[y, x] != 'h' and k[y, nb] == 'h':
+                    y += 1
+                if y - y0 <= 8 and y0 > 0 and y < R and k[y0 - 1, x] == 'h' and k[y, x] == 'h':
+                    k[y0:y, x] = 'h'
+            y += 1
     # Treppen: Frontreihe 't', 2 Reihen frei davor/dahinter (kein Rand, kein Gras-Zipfel)
     treppen = []
     for (hoehe, seg, (tx0, tx1)) in KANTEN:

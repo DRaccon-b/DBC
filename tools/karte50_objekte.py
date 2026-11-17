@@ -103,14 +103,15 @@ def main():
 
     def paar(name, achse, abstand, fy, opt=None):
         """Gespiegeltes Paar auf gemeinsamer Fusszeile; bei Konflikt die Fusszeile gemeinsam verschieben."""
-        for dfy in (0, -T, T, -2 * T, 2 * T):
-            a_ = setze(name, achse - abstand, fy + dfy, opt, False)
-            if not a_:
-                continue
-            b_ = setze(name, achse + abstand, fy + dfy, opt, True)
-            if b_:
-                return True
-            objekte.pop(); rects.pop()
+        for dab in (0, 16, -16, 32, 48, 64, 80, 96, 112):         # Saeulen/Schalen nie auf Pflaster (Karte 47)
+            for dfy in (0, -T, T, -2 * T, 2 * T, -3 * T, 3 * T):
+                a_ = setze(name, achse - abstand - dab, fy + dfy, opt, False, klassen='gkd')
+                if not a_:
+                    continue
+                b_ = setze(name, achse + abstand + dab, fy + dfy, opt, True, klassen='gkd')
+                if b_:
+                    return True
+                objekte.pop(); rects.pop()
         print('  Paar nicht gesetzt:', name, int(achse) // T, int(fy) // T)
         return False
 
@@ -158,7 +159,7 @@ def main():
         if o['basis'] == 'baum' and j % 3 != 2:
             hat += any(setze(vorne[j % 3], sx + d, sy + T - 2, {'begleiter': True}, d < 0, gap=-30, klassen='gn')
                        for d in (12, -12, 16, -16))
-        for (d, s_, dy) in ((36, -1, T + 6), (36, 1, T + 6), (44, -1, 2 * T), (44, 1, 2 * T), (40, 1, -T), (40, -1, -T)):
+        for (d, s_, dy) in ((36, -1, T + 6), (36, 1, T + 6), (44, -1, 2 * T), (44, 1, 2 * T)):   # nie in der Stammreihe
             if hat >= 2:
                 break
             if setze(vorne[(j + 1 + hat) % 3], sx + s_ * d, sy + dy, {'begleiter': True}, s_ > 0, klassen='gn'):
@@ -176,7 +177,7 @@ def main():
               px > 800, r=3, klassen='gn')                          # nicht auf Pflaster
     # ---------------- Feuervogel: wenige Federn, rote Spinnenlilien auf den Wiesen, Grasbueschel - dezent
     for (n, px, py) in [('feder', 760, 300), ('feder2', 330, 470), ('feder', 1020, 640), ('feder2', 560, 1010),
-                        ('lilie', 260, 640), ('lilie', 1300, 380), ('lilie', 250, 770), ('lilie', 1270, 880),
+                        ('lilie', 260, 640), ('lilie', 250, 770), ('lilie', 1270, 880),
                         ('gras', 640, 560), ('gras2', 400, 1160)]:
         suche(n, px, py, {'liegend': n in FLACH, 'ebene': 0, 'nur_kontakt': n not in FLACH}, rnd.random() < 0.5, r=3,
               klassen='gn' if n in ('lilie', 'gras', 'gras2') else 'gwkn')
