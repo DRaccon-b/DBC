@@ -20,7 +20,7 @@ T = 16
 FREMD = {'gras': 'karte04/klein/00.png', 'gras2': 'karte04/klein/01.png',
          'pilz': 'karte04/klein/11.png', 'kiesel': 'karte04/klein/02.png', 'zweig': 'karte04/klein/09.png',
          'blume': 'karte04/klein/07.png', 'gras3': 'karte04/klein/27.png',
-         'fass_a': 'karte45/fass_klein/01.png', 'fass_b': 'karte45/fass_klein/02.png'}
+         'fass_a': 'karte45/fass_klein/01s.png', 'fass_b': 'karte45/fass_klein/02.png'}
 for _n, _i in (('rose', 17), ('lotus', 18), ('rose2', 19), ('kolben', 7), ('wfels', 22)):
     FREMD[_n] = 'karte01/deko/%02d.png' % _i                          # Wasserpflanzen und Wasserfels
 for _i in range(2):
@@ -46,6 +46,7 @@ def main():
     cols, rows = lay['groesse']
     lvl = np.load(os.path.join(KARTE, 'pixelhoehe.npy'))
     wand = np.unpackbits(np.load(os.path.join(KARTE, 'wand.npy')))[:lvl.size].reshape(lvl.shape).astype(bool)
+    xmask_ = np.unpackbits(np.load(os.path.join(KARTE, 'wasser.npy')))[:lvl.size].reshape(lvl.shape).astype(bool)
     os.makedirs(os.path.join(OBJ, 'fremd'), exist_ok=True)
     os.makedirs(os.path.join(OBJ, 'varianten'), exist_ok=True)
     for n, q in FREMD.items():
@@ -79,7 +80,8 @@ def main():
             if any(schnitt((r[0], r[3] - 8, r[2], r[3]), (t['x'] * T, t['y'] * T, (t['x'] + t['b']) * T - 1,
                                                           (t['y'] + t['h']) * T - 1), 1) for t in lay['teleporter']):
                 return None                                          # nur der Fuss nie auf dem Teleporter
-            if (lvl[r[3] - 2:min(r[3] + 3, lvl.shape[0]), r[0] + 6:r[2] - 5] != 2).any():
+            cxw = (r[0] + r[2]) // 2
+            if (lvl[r[3] - 2:min(r[3] + 3, lvl.shape[0]), cxw - 3:cxw + 4] != 2).any():
                 return None                                          # Fuss auf dem Waldboden (nicht auf der Mauer)
             for yy in range(max(0, r[1] // T), r[3] // T + 1):
                 for xx in range(r[0] // T, r[2] // T + 1):
@@ -102,11 +104,18 @@ def main():
                 return None                                          # nichts auf Weg/Wasser (ganzes Bildrechteck)                                          # Fuss und Schatten mit Abstand zu Weg/Platz/Wald
             if (lvl[r[3] - 3:r[3] + 9, r[0]:r[2] + 1] != 1).any() or wand[r[3] - 3:r[3] + 2, r[0]:r[2] + 1].any():
                 return None
+            if xmask_[max(0, r[3] - 2 * T - 2):r[3] + 4, max(0, r[0] - 3):r[2] + 4].any():
+                return None                                          # untere zwei Reihen nie auf Ufer/Wasser
             if (lvl[max(0, r[3] - 2 * T + 1):r[3] + 1, max(0, r[0] - 3):r[2] + 4] != 1).any():
                 return None                                          # untere zwei Reihen mit 3 px Abstand zu Kanten
             hoch = lvl[max(0, r[1]):r[3] - T, r[0]:r[2] + 1] > 1     # Verdeckung durch Hoehen: Wald seitlich davor
             if hoch.any() and hoch[-T:].any():
                 return None
+        if opt.pop('_reihe', False) and any(o_.get('anim') == 'baum' and not o_.get('nur_kontakt') and
+                                             abs(o_['y'] + o_['fuss'] - (y + bb[3] - 1)) < 12 and abs(o_['x'] - x) < 110
+                                             for o_ in objekte):
+            objekte_rm = None
+            return None                                              # Baeume nie auf derselben Fusszeile nebeneinander
         opt.pop('_eigen', None)
         o = {'datei': datei, 'basis': name, 'x': x, 'y': y, 'fuss': bb[3] - 1, 'kachel': [int(cx) // T, int(fy) // T],
              'ebene': 1}
@@ -149,7 +158,7 @@ def main():
         return _setze(name, cx, fy, opt, *a_, **kw)
     gesetzt = []
     for i, (n, tx, ty) in enumerate(BAEUME):
-        o = kachel(n, tx, ty, {'anim': 'baum'} if n != 'totbaum' else {}, i % 2 == 1)
+        o = kachel(n, tx, ty, {'anim': 'baum', '_reihe': True}, i % 2 == 1)
         if not o:
             continue
         tsp = np.array(Image.open(os.path.join(OBJ, o['datei'])).convert('RGBA'))[..., 3] > 0
@@ -189,9 +198,11 @@ def main():
             print('  Baum mit zu wenig Begleitern:', n, hat)
     # ---------------- Weinfaesser zwischen den Baeumen (Nutzer: ein, zwei)
     n_fass = 0
-    for (n_, tx_, ty_) in (('fass_a', 21, 9), ('fass_b', 31, 14)):
-        if kachel(n_, tx_, ty_, {}, False, 'g', suche=9):
-            n_fass += 1
+    for (n_, ziele) in (('fass_a', [(18, 10), (15, 13), (21, 11), (11, 12), (19, 14), (14, 8)]), ('fass_b', [(28, 6), (31, 14), (32, 12), (29, 9), (26, 8)])):
+        for (tx_, ty_) in ziele:
+            if kachel(n_, tx_, ty_, {}, False, 'g', suche=2):
+                n_fass += 1
+                break
     # ---------------- Wasser: Seerosen, Rohrkolben, Wasserfelsen nah am Ufer; treibende Faesser weiter draussen
     xmask = np.unpackbits(np.load(os.path.join(KARTE, 'wasser.npy')))[:lvl.size].reshape(lvl.shape).astype(bool)
 
@@ -226,8 +237,9 @@ def main():
         if any(o_.get('wasserdeko') and abs(o_['kachel'][0] - x) < 5 and abs(o_['kachel'][1] - y) < 5 for o_ in objekte):
             continue
         n_ = pflanzen[n_wp]
-        if im_wasser(n_, x * T + 8, y * T + 12, {'wasserdeko': True, 'ebene': 0, 'schattenlos': True,
-                                                 'ohne_wall': True}, rnd.random() < 0.5, rand=3):
+        if im_wasser(n_, x * T + 8, y * T + 12, dict({'wasserdeko': True, 'ebene': 0, 'schattenlos': True,
+                                                      'ohne_wall': True}, **({'anim': 'wehen'} if n_ == 'kolben' else {})),
+                     rnd.random() < 0.5, rand=3):
             n_wp += 1
     weit = [(x, y) for y in range(rows) for x in range(cols) if 3 <= dist[y, x] <= 6 and cls[y][x] == 'x']
     rnd.shuffle(weit)
@@ -235,7 +247,7 @@ def main():
     for (x, y) in weit:
         if n_tr >= 3:
             break
-        if any(o_.get('treibend') and abs(o_['kachel'][0] - x) < 12 and abs(o_['kachel'][1] - y) < 8 for o_ in objekte):
+        if any(o_.get('treibend') and (o_['kachel'][0] - x) ** 2 + (o_['kachel'][1] - y) ** 2 < 15 ** 2 for o_ in objekte) or x > 44 or y < 3:
             continue
         if im_wasser('treib%d' % (n_tr % 2), x * T + 8, y * T + 10, {'treibend': True, 'schattenlos': True,
                                                                       'ohne_wall': True, 'phase': n_tr}, n_tr == 2):

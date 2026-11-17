@@ -121,13 +121,15 @@ def boden_tiefe(a, cls, cols, rows, frame):
     a[:] = np.clip(af, 0, 255).astype(np.uint8)
 
 
-def stege(a, lay, wasser):
+def stege(a, lay, wasser, extra=None):
     """Holzsteg (wie Karte 25): Planken quer zur Laufrichtung, Kontur nur am Aussenrand der ganzen Anlage, Suedfront mit
     Pfaehlen ins Wasser, Schatten aufs Wasser rechts unten. Verschiebungen mit Randfortsetzung (kein np.roll)."""
     HELL, MITTE, DUNKEL, KONTUR = H('#a8784a'), H('#8a5e38'), H('#6a4428'), H('#3a2616')
     oben = np.zeros(wasser.shape, bool)
     for (x0, y0, x1, y1) in lay['stege']:
         oben[y0 * T:(y1 + 1) * T, x0 * T:(x1 + 1) * T] = True
+    if extra is not None:
+        oben |= extra
     Hh, W = oben.shape
     yy, xx = np.mgrid[0:Hh, 0:W]
     i_ = xx                                                          # Planken senkrecht (Laufrichtung N-S/O-W gemischt)
@@ -231,7 +233,20 @@ def bauen(frame=None, speichern=True):
     ag = np.array(wasser_vertieft.vertiefen(Image.fromarray(ag), np.ones_like(mg), frame, maske=mg).convert('RGB'))
     a = ag[P:-P, P:-P].copy()
     a[wand] = vor_wasser[wand]
-    steg = stege(a, lay, xm)
+    # Stegecken: Wasserkeile zwischen 45-Grad-Ufer und eckigem Steg mit Planken schliessen
+    lay_st = dict(lay)
+    land_ = zell_maske(cls, 'gwh', cols, rows) > 0.5
+    st_ = np.zeros((Hp, Wp), bool)
+    for (x0, y0, x1, y1) in lay['stege']:
+        st_[y0 * T:(y1 + 1) * T, x0 * T:(x1 + 1) * T] = True
+    def dil(m, r):
+        p_ = np.pad(m, r, mode='edge'); o_ = np.zeros_like(m)
+        for dy in range(-r, r + 1):
+            for dx in range(-r, r + 1):
+                o_ |= p_[r + dy:r + dy + Hp, r + dx:r + dx + Wp]
+        return o_
+    keil = dil(st_, 8) & dil(land_, 8) & ~st_ & xm                  # Wasserpixel zwischen Ufer und Steg
+    steg = stege(a, lay, xm, extra=keil)
     xm &= ~steg                                                      # Steg begehbar
     for tp in lay['teleporter']:
         k4.teleporter_zeichnen(a, tp['x'], tp['y'], tp['b'], tp['h'], frame)
