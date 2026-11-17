@@ -21,7 +21,8 @@ FREMD = {'gras': 'karte04/klein/00.png', 'gras2': 'karte04/klein/01.png',
          'pilz': 'karte04/klein/11.png', 'kiesel': 'karte04/klein/02.png', 'zweig': 'karte04/klein/09.png',
          'blume': 'karte04/klein/07.png', 'gras3': 'karte04/klein/27.png',
          'fass_a': 'karte45/fass_klein/01s.png', 'fass_b': 'karte45/fass_klein/02.png',
-         'fass_c': 'karte45/fass_klein/00s.png', 'fass_d': 'karte45/fass_klein/04s.png'}
+         'fass_c': 'karte45/fass_klein/00s.png', 'fass_d': 'karte45/fass_klein/04s.png',
+         'fass_e': 'karte45/fass_klein/03s.png', 'fass_f': 'karte45/fass_klein/14s.png'}
 for _n, _i in (('rose', 17), ('lotus', 18), ('rose2', 19), ('kolben', 7), ('wfels', 22)):
     FREMD[_n] = 'karte01/deko/%02d.png' % _i                          # Wasserpflanzen und Wasserfels
 for _i in range(2):
@@ -235,6 +236,23 @@ def main():
     for n_ in ('fass_c', 'fass_d'):
         for (x, y) in rand_k:
             if any(o_['basis'].startswith('fass') and abs(o_['kachel'][0] - x) < 10 and abs(o_['kachel'][1] - y) < 8
+                   for o_ in objekte):
+                continue
+            if setze(n_, x * T + 8, y * T + 13, {'_reihe': True}, rnd.random() < 0.5, 'g'):
+                n_fass += 1
+                break
+    # ---------------- Nutzer: noch zwei Faesser auf der rechten Inselseite (am Rand, nicht in der Mitte)
+    rechts_k = []
+    for y in range(2, rows - 2):
+        for x in range(30, cols - 2):
+            if cls[y][x] != 'g':
+                continue
+            if wasser_t[max(0, y - 4):y + 5, max(0, x - 4):x + 5].any() or x >= 38:
+                rechts_k.append((x, y))
+    rnd.shuffle(rechts_k)
+    for n_ in ('fass_e', 'fass_f'):
+        for (x, y) in rechts_k:
+            if any(o_['basis'].startswith('fass') and abs(o_['kachel'][0] - x) < 5 and abs(o_['kachel'][1] - y) < 5
                    for o_ in objekte):
                 continue
             if setze(n_, x * T + 8, y * T + 13, {'_reihe': True}, rnd.random() < 0.5, 'g'):
