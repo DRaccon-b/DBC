@@ -192,8 +192,10 @@ def main():
     nur_hinten = np.zeros((R, C), bool)
     for (x0, y0, x1, y1) in PLATEAUS:
         nur_hinten |= (yy_ < y0) & (xx_ >= x0) & (xx_ <= x1)              # direkt hinter dem Plateau
-        nur_hinten |= (yy_ < y0 - 3) & (xx_ >= x0 - 4) & (xx_ < x0)       # links nach hinten auslaufend (Stufe)
     kette &= nur_hinten
+    # Nutzer: links laeuft die Kette nach oben UND nach links bis an den Kartenrand aus (ganze Ecke oben links)
+    x0_, y0_, x1_, y1_ = PLATEAUS[0]
+    kette |= (k == 'r') & (yy_ < y0_) & (xx_ <= x1_) & (d_b >= 4)
     for teil in flaechen(kette):                      # kleine Kettenstuecke weglassen
         if len(teil) < 12:
             for (y, x) in teil:
