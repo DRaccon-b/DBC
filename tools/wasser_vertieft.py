@@ -83,6 +83,34 @@ def _kopfsteine(h, w):
 
 UNTER = [H(c) for c in ('#1c3c6c', '#24508a', '#3466a0', '#6aa2d4')]   # Unterwasser-Stufenkanten
 STUFEN = [(26, 0.8, 8), (54, 0.64, 7)]    # (Abstand zum Ufer in px, Helligkeit des Grunds, Kantenhoehe)
+MIN_FLAECHE = 0                           # Tiefenstufen-Flecken unter dieser Pixelzahl weglassen (keine Einzelloecher, K46)
+
+
+def _kleine_weg(innen, minimum):
+    """Zusammenhaengende Teile der Stufenmaske unter `minimum` Pixeln entfernen (Labeling auf 4x verkleinertem Raster)."""
+    if minimum <= 0 or not innen.any():
+        return innen
+    from collections import deque
+    k = innen[::4, ::4]
+    h, w = k.shape
+    gesehen = np.zeros_like(k)
+    weg = np.zeros_like(k)
+    for y0, x0 in zip(*np.nonzero(k)):
+        if gesehen[y0, x0]:
+            continue
+        q, teil = deque([(y0, x0)]), [(y0, x0)]
+        gesehen[y0, x0] = True
+        while q:
+            y, x = q.popleft()
+            for dy, dx in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+                v, u = y + dy, x + dx
+                if 0 <= v < h and 0 <= u < w and k[v, u] and not gesehen[v, u]:
+                    gesehen[v, u] = True; q.append((v, u)); teil.append((v, u))
+        if len(teil) * 16 < minimum:
+            for (y, x) in teil:
+                weg[y, x] = True
+    weg_g = np.kron(weg, np.ones((4, 4), bool))[:innen.shape[0], :innen.shape[1]]
+    return innen & ~weg_g
 
 
 def _stufe(m, abstand):
@@ -183,7 +211,7 @@ def _vertiefen(img, region, frame, meiden, maske):
     zonen = []
     vorige = boden.copy()
     for (abstand, dunkel, mauer_h) in STUFEN:
-        innen = _stufe(m, abstand)
+        innen = _kleine_weg(_stufe(m, abstand), MIN_FLAECHE)
         if not innen.any():
             continue
         io = _lauf(innen, 0)
