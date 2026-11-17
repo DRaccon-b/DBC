@@ -2185,6 +2185,17 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'wooden wine barrel floating in water, lying on its side, only the upper half above the waterline is visible, flat straight bottom edge at the waterline, iron hoops, no water drawn, ' + FR14,
         'old oak barrel drifting, lying sideways, half sunk, round wooden end showing, upper half only, flat cut bottom edge at the waterline, no water drawn, ' + FR14,
     ]},
+    'k50_brand': {'size': 64, 'freie_farben': True, 'items': [   # Karte 50 (Nutzer): verbrannter Bereich
+        'charred burnt tree, black scorched trunk and bare broken branches, no leaves, a few glowing orange embers in the bark cracks, ' + FR14,
+        'burnt black shrub remains, charred twigs on a small ash mound, ' + FR14,
+        'scorched grey boulder covered with black soot marks, ' + FR14,
+        'charred fallen log with glowing orange embers and grey ash, ' + FR14,
+    ]},
+    'k50_brand_klein': {'size': 32, 'freie_farben': True, 'items': [
+        'small tuft of burnt grass, black and dark brown dry blades, flat ground detail, ' + FR14,
+        'small pile of grey ash with tiny glowing orange embers, flat ground detail, ' + FR14,
+        'a few scorched black pebbles, flat ground detail, ' + FR14,
+    ]},
     'k50_torii_gross': {'size': 192, 'freie_farben': True, 'items': [   # Karte 50 (Nutzer): Torii so breit wie die Treppe
         'grand wide vermilion red torii shrine gate, two thick round red pillars standing far apart with black bases, a wide open passage between them, long black curved top beam (kasagi) and a straight red tie beam below, much wider than tall, ' + FR14,
     ]},

@@ -50,6 +50,49 @@ def texturen(cols, rows):
     }
 
 
+def verkohlen(a, lay, cols, rows, frame, wand=None):
+    """Nutzer: verkohlter Bereich (Feuervogel) - Boden, Wiese, Pflaster und Felsfronten geschwaerzt (Russ, Asche),
+    unregelmaessig ausfransender Rand, einzelne Glutpunkte glimmen (animiert)."""
+    if 'brand' not in lay:
+        return
+    Hp, Wp = rows * T, cols * T
+    km = np.kron(np.array([[c == '1' for c in z] for z in lay['brand']]), np.ones((T, T))).astype(np.float32)
+    m = weich(km, 6.0, 0.0, 77, 0.5)
+    weit = weich(km, 12.0, 0.0, 78, 0.25) & ~m                        # Uebergang: gesprenkelt
+    rs = np.random.RandomState(5077)
+    rausch = rs.rand(Hp, Wp)
+    rand_ = weit & (rausch < 0.35)
+    af = a.astype(np.float32)
+    kohle = np.array([38, 34, 36], np.float32)
+    l_ = af.mean(axis=2, keepdims=True) / 255.0
+    neu = kohle + (np.array([96, 90, 92], np.float32) - kohle) * np.clip(l_ * 1.3 - 0.15, 0, 1)
+    flecken = weich((rs.rand(rows, cols) < 0.35).astype(np.float32).repeat(T, 0).repeat(T, 1), 5.0, 0.0, 79, 0.5)
+    boden = m & ~(wand if wand is not None else np.zeros_like(m))
+    tief = np.where(flecken, 0.36, 0.5)[..., None]                    # Russflecken: Textur bleibt sichtbar
+    af[boden] = (af * tief + kohle * (1 - tief) * 0.55)[boden]
+    gras_ = boden & (af[..., 1] > af[..., 0] + 6)                     # verbrannte Wiese: braun-schwarz statt gruen
+    lg_ = af[gras_].mean(axis=1, keepdims=True)
+    af[gras_] = lg_ * np.array([1.05, 0.88, 0.72]) * 0.9
+    if wand is not None:                                             # Felsfronten nur verrusst (Relief bleibt)
+        wm_ = m & wand
+        af[wm_] = af[wm_] * 0.62
+    af[rand_] = af[rand_] * 0.7 + (af[rand_] * 0.45 + kohle * 0.25) * 0.3
+    asche = m & (rausch > 0.985)                                     # Ascheflocken
+    af[asche] = np.array([140, 136, 134])
+    a[:] = np.clip(af, 0, 255).astype(np.uint8)
+    glut = m & (rausch < 0.0016)                                     # Glutpunkte glimmen (4er-Schleife)
+    ys, xs = np.nonzero(glut)
+    f = frame or 0
+    for i, (y, x) in enumerate(zip(ys, xs)):
+        stufe = (f + i) % 4
+        c = [(255, 170, 60), (255, 120, 40), (200, 70, 30), (255, 140, 50)][stufe]
+        a[y, x] = c
+        if stufe in (0, 3):
+            for dy, dx in ((0, 1), (1, 0)):
+                if y + dy < Hp and x + dx < Wp and m[y + dy, x + dx]:
+                    a[y + dy, x + dx] = (150, 60, 30)
+
+
 def bodenstruktur(a, cls, cols, rows):
     """Nutzer: mehr Bodentextur wie in der Vorlage - flache Grasbueschel (PixelLab, Karte 45), Kiesel und Zweige direkt in
     den Felsboden und die Wiesen gestempelt (kein Objekt, kein Schatten, begehbar); locker in kleinen Gruppen, nicht auf
@@ -64,6 +107,9 @@ def bodenstruktur(a, cls, cols, rows):
             sp[..., :3] *= np.array(ton)
         return sp
     gras = [lade('karte45/halme/%s.png' % n_, (0.92, 0.95, 0.9)) for n_ in ('00', '02', '03', '06')]
+    verbrannt = [lade('karte50/brand_klein/%02d.png' % n_) for n_ in (0, 2, 15, 0, 6)]
+    lay_ = json.load(open(os.path.join(KARTE, 'layout.json')))
+    brand_k = np.array([[c == '1' for c in z] for z in lay_.get('brand', ['0' * cols] * rows)])
     klein = [lade('karte50/klein/03.png'), lade('karte04/klein/09.png', (0.85, 0.85, 0.9)), lade('karte04/klein/02.png')]
     kl = np.array([list(z) for z in cls])
     hpk = np.array([[int(c) for c in z] for z in json.load(open(os.path.join(KARTE, 'layout.json')))['hoehe']])
@@ -95,6 +141,8 @@ def bodenstruktur(a, cls, cols, rows):
             if not (0 <= yy < rows and 0 <= xx < cols and innen[yy, xx]):
                 continue
             sp = gras[rs.randint(0, 4)] if rs.rand() < 0.75 else klein[rs.randint(0, 3)]
+            if brand_k[yy, xx]:
+                sp = verbrannt[rs.randint(0, len(verbrannt))]
             if rs.rand() < 0.5:
                 sp = sp[:, ::-1]
             h_, w_ = sp.shape[:2]
@@ -167,6 +215,7 @@ def bauen(frame=None, speichern=True):
         else:                                                        # Hof: Treppe fuehrt vom Suedrand in den Hof hinunter
             k4.treppe(a, x0 * T, (x1 + 1) * T, ry * T - 8, 'n', FRONT, 'berg47', tex['w'])
             treppe_m[ry * T - 10:(ry + 1) * T + 8, x0 * T:(x1 + 1) * T] = True
+    verkohlen(a, lay, cols, rows, frame, wand)
     for tp in lay['teleporter']:
         k4.teleporter_zeichnen(a, tp['x'], tp['y'], tp['b'], tp['h'], frame)
     img = Image.fromarray(a).convert('RGBA')

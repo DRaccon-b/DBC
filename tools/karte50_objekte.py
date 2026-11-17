@@ -27,6 +27,11 @@ D = {'torii': 'karte50/torii_gross/00b.png',   # Nutzer: Pfeiler stehen am Trepp
      'baum': 'karte01/baeume/00.png', 'zypresse': 'karte01/baeume/07.png', 'brocken': 'karte47/deko/03.png',
      'kf00': 'karte27/fels_klein/00.png', 'kf24': 'karte27/fels_klein/24.png', 'kf52': 'karte27/fels_klein/52.png',
      'gras': 'karte04/klein/00.png', 'gras2': 'karte04/klein/01.png', 'zweig': 'karte04/klein/09.png'}
+D.update({'baum_b': 'karte50/brand/00.png', 'busch_b': 'karte50/brand/01.png', 'brocken_b': 'karte50/brand/02.png',
+          'stamm_b': 'karte50/brand/03.png', 'asche_b': 'karte50/brand_klein/01.png', 'glut_b': 'karte50/brand_klein/11.png',
+          'rauch_b': 'karte50/brand_klein/29.png'})
+VERBRANNT = {'baum': 'baum_b', 'zypresse': 'baum_b', 'kf00': 'busch_b', 'kf24': 'busch_b', 'kf52': 'busch_b',
+             'brocken': 'brocken_b', 'lilie': None, 'gras': None, 'gras2': None}
 FLACH = {'feder', 'feder2', 'kiesel', 'zweig'}
 
 
@@ -48,8 +53,16 @@ def main():
     def schnitt(a, b, d):
         return not (a[2] + d < b[0] or b[2] + d < a[0] or a[3] + d < b[1] or b[3] + d < a[1])
 
+    brand_k = [[c == '1' for c in z] for z in lay.get('brand', ['0' * cols] * rows)]
+
     def setze(name, cx, fy, opt=None, spiegeln=False, gap=2, pruefen=True, klassen='gwknd'):
         opt = dict(opt or {})
+        if 0 <= int(fy) // T < rows and 0 <= int(cx) // T < cols and brand_k[int(fy) // T][int(cx) // T] and name in VERBRANNT:
+            name = VERBRANNT[name]                                   # Nutzer: im Brandbereich verkohlte Varianten
+            if name is None:
+                return None
+            if name == 'baum_b':
+                opt['anim'] = 'kerzen'                               # Glut in der Rinde glimmt
         sp = Image.open(os.path.join(A, D[name])).convert('RGBA')
         if spiegeln:
             sp = sp.transpose(Image.FLIP_LEFT_RIGHT)
@@ -183,7 +196,13 @@ def main():
                         ('gras', 640, 560), ('gras2', 400, 1160)]:
         suche(n, px, py, {'liegend': n in FLACH, 'ebene': 0, 'nur_kontakt': n not in FLACH}, rnd.random() < 0.5, r=3,
               klassen='gn' if n in ('lilie', 'gras', 'gras2') else 'gwkn')
+    # Brandbereich: glimmender Stamm, Asche und Glut (dezent)
+    for (n, px, py, op) in [('stamm_b', 1440, 330, {'liegend': True, 'anim': 'kerzen'}), ('glut_b', 1330, 500, {'ebene': 0, 'liegend': True, 'anim': 'kerzen'}),
+                            ('asche_b', 1470, 200, {'ebene': 0, 'liegend': True, 'anim': 'kerzen'}), ('rauch_b', 1400, 610, {'ebene': 0, 'liegend': True, 'anim': 'kerzen'})]:
+        suche(n, px, py, op, False, r=3, klassen='gnwk')
     for o in objekte:
+        if o['basis'] in ('brocken_b', 'busch_b', 'stamm_b', 'baum_b'):
+            o['nur_kontakt'] = True
         if o['basis'] in ('brocken', 'kf00', 'kf24', 'kf52', 'unterstand', 'pfosten', 'opfer'):
             o['nur_kontakt'] = True
     json.dump(objekte, open(os.path.join(OBJ, 'platzierung.json'), 'w'), indent=0)

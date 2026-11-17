@@ -34,6 +34,8 @@ KANTEN = [  # (Hoehe darueber, [(x0, x1, Reihe)], Treppe)
 ]
 HOF = (12, 9, 26, 17)                    # abgesenkter Hof (x0, y0, x1, y1), Treppe in der Suedreihe darunter
 HOF_TREPPE = (18, 20)                    # 3 Kacheln: Mitte = Hofachse (Hof 15 Kacheln breit)
+BRAND = [(1536, 100), (1450, 140), (1330, 220), (1240, 330), (1236, 410), (1290, 500), (1360, 560), (1395, 600),
+         (1410, 660), (1470, 685), (1536, 685)]   # Nutzer: verkohlter Bereich rechts (Pixel)
 TELEPORTER = [(0, 29, 3, 4), (93, 24, 3, 4), (85, 77, 4, 3)]
 k43.R, k43.C = R, C
 RAND = os.environ.get('K50_RAND', 'versetzt')   # folgt | hoch | versetzt | flanke (Nutzer: Varianten der Berglogik)
@@ -178,7 +180,10 @@ def main():
             hp[ty - 3:R, tx:tx + b] = 0                                   # unterste Ebene
     if RAND != 'flanke':
         hp[(k != 'h') & (hp > hp_ter)] = hp_ter[(k != 'h') & (hp > hp_ter)]
-    lay = {'rand': RAND, 'groesse': [C, R], 'klassen': [''.join(z) for z in k], 'hoehe': [''.join(str(c) for c in z) for z in hp],
+    bm = Image.new('L', (C, R), 0)
+    ImageDraw.Draw(bm).polygon([(x / T, y / T) for (x, y) in BRAND], fill=255)
+    brand = (np.array(bm) > 0).astype(int)
+    lay = {'brand': [''.join(str(c) for c in z) for z in brand], 'rand': RAND, 'groesse': [C, R], 'klassen': [''.join(z) for z in k], 'hoehe': [''.join(str(c) for c in z) for z in hp],
            'treppen': treppen, 'hof': list(HOF), 'bruecken': [], 'stege': [],
            'teleporter': [{'x': tx, 'y': ty, 'b': b, 'h': hh} for (tx, ty, b, hh) in TELEPORTER]}
     json.dump(lay, open(os.path.join(KARTE, 'layout.json'), 'w'), indent=0)
