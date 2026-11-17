@@ -48,7 +48,7 @@ PLATEAU_GROSS = ['00', '01', '02', '03', '09', '13', '15']   # ohne toten Baum (
 for _n in PLATEAU_GROSS:
     FREMD['pl' + _n] = 'karte42/plateau/%s.png' % _n
 BERG = ['00', '01', '02', '03', '06', '08', '12', '13', '14']          # PixelLab k42_berg (Bergkette)
-RAND = ['00', '01', '02', '03', '05', '09', '13', '14', '15']          # PixelLab k42_rand (Felsrand)
+RAND = ['00', '01', '02', '03', '05', '09', '13', '15']            # ohne 14 (Schmierfleck im Sprite)          # PixelLab k42_rand (Felsrand)
 for _n in BERG:
     FREMD['be' + _n] = 'karte42/berg/%s.png' % _n
 for _n in RAND:
@@ -193,7 +193,7 @@ def main():
                        for d in (24, 32))
         def seitlich(sd):
             return any(setze(naechster('b'), sx + sd * d, sy + dy, {'begleiter': True, 'ebene': 0}, sd > 0, kl, ebene_soll=eb)
-                       for d in (48, 56, 64) for dy in (-T, 2 * T))   # nie in der Stammreihe (keine Reihe Busch-Baum-Busch)
+                       for d in (48, 56, 64, 72, 80) for dy in (-T, 2 * T, -2 * T))   # nie in der Stammreihe (keine Reihe Busch-Baum-Busch)
         nah = sum(1 for (_, _, _, _, _, x2, y2, _) in gesetzte_baeume if (x2, y2) != (sx, sy)
                   and abs(x2 - sx) < 6 * T and abs(y2 - sy) < 5 * T)
         soll = 1 if nah else 2
@@ -203,7 +203,7 @@ def main():
         else:
             plan = [[vor, lambda: seitlich(-seite)], [vor, lambda: hinter(seite)],
                     [vor, lambda: hinter(-seite)]][i % 3]                 # immer etwas vor dem Stumpf (Einbettung)
-            ersatz = [lambda: seitlich(seite), lambda: seitlich(-seite), lambda: hinter(-seite), vor]   # kein gespiegeltes Paar
+            ersatz = [lambda: seitlich(seite), lambda: seitlich(-seite), vor]   # nie zwei 'hinter' (gespiegeltes Paar)
         hat = 0
         for f_ in plan + ersatz:
             if hat >= soll and f_ not in plan:

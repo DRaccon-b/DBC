@@ -240,6 +240,19 @@ def main():
                 kette[y, x] = False
     k[kette] = 'm'
     h[kette] = 3
+    # Pruefung: Plateaustreifen <= 2 Reihen zwischen Rand/Kette oben und Talboden unten (zwei Waende uebereinander) -> Rand
+    for x in range(C):
+        y = 1
+        while y < R - 1:
+            if k[y, x] in 'pq' and k[y - 1, x] in 'rm':
+                e = y
+                while e < R and k[e, x] in 'pq':
+                    e += 1
+                if e < R and k[e, x] in 'sbk' and e - y <= 2:
+                    k[y:e, x] = 'r'; h[y:e, x] = 2
+                y = e
+            else:
+                y += 1
     lay = {'groesse': [C, R], 'klassen': [''.join(z) for z in k], 'hoehe': [''.join(str(c) for c in z) for z in h],
            'treppen': [[x0, x1, FRONT_REIHE] for (x0, x1) in TREPPEN],
            'teleporter': [{'x': tx, 'y': ty, 'b': b_, 'h': hh} for (tx, ty, b_, hh) in TELEPORTER]}
