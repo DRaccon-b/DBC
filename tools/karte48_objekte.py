@@ -101,7 +101,7 @@ def main():
     # ---------------- Bibliothek: Regale im festen Rhythmus an der Rueckwand, Lesetisch auf der Achse
     rx0, ry0, rx1, ry1 = lay['raum']
     achse = (rx0 * T + (rx1 + 1) * T) / 2.0
-    fuss_regal = (ry0 + 3) * T + 14                                  # stehen auf dem Boden vor der Wandflaeche
+    fuss_regal = (ry0 + 4) * T + 12                                  # vor der Wandflaeche, Oberkante unter der Mauerabdeckung
     for dx in (-108, -36, 36, 108):
         setze('regal', achse + dx, fuss_regal, {'an_wand': True, 'fest_pos': True}, pruefen=False)
         rects[-1] = (rects[-1][0], rects[-1][1], rects[-1][2], rects[-1][3])
