@@ -13,7 +13,7 @@
 "ohne_wall": true,
 "fest_pos": true,
 "vor_wand": true,
-"nur_kontakt": true,
+"schattenlos": true,
 "sortier": 511
 },
 {
@@ -177,7 +177,8 @@
 ],
 "ebene": 0,
 "ohne_wall": false,
-"liegend": false
+"liegend": false,
+"nur_kontakt": true
 },
 {
 "datei": "varianten/gras2.png",
@@ -191,7 +192,8 @@
 ],
 "ebene": 1,
 "ohne_wall": false,
-"liegend": false
+"liegend": false,
+"nur_kontakt": true
 },
 {
 "datei": "varianten/baum_b_m.png",
@@ -207,6 +209,39 @@
 "ohne_wall": true,
 "liegend": false,
 "anim": "kerzen",
+"nur_kontakt": true
+},
+{
+"datei": "varianten/asche_b.png",
+"basis": "asche_b",
+"x": 616,
+"y": 278,
+"fuss": 14,
+"kachel": [
+39,
+18
+],
+"ebene": 0,
+"ohne_wall": true,
+"begleiter": true,
+"liegend": true,
+"nur_kontakt": true,
+"anim": "kerzen"
+},
+{
+"datei": "varianten/tuft_b_m.png",
+"basis": "tuft_b",
+"x": 663,
+"y": 273,
+"fuss": 19,
+"kachel": [
+42,
+18
+],
+"ebene": 0,
+"ohne_wall": true,
+"begleiter": true,
+"liegend": true,
 "nur_kontakt": true
 },
 {
@@ -259,11 +294,11 @@
 "datei": "varianten/asche_b.png",
 "basis": "asche_b",
 "x": 64,
-"y": 390,
+"y": 374,
 "fuss": 14,
 "kachel": [
 4,
-25
+24
 ],
 "ebene": 0,
 "ohne_wall": true,
@@ -287,15 +322,16 @@
 {
 "datei": "varianten/lilie.png",
 "basis": "lilie",
-"x": 141,
+"x": 109,
 "y": 141,
 "fuss": 27,
 "kachel": [
-9,
+7,
 10
 ],
 "ebene": 0,
 "ohne_wall": false,
-"liegend": false
+"liegend": false,
+"nur_kontakt": true
 }
 ]

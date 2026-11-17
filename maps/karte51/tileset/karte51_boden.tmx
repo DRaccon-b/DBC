@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" orientation="orthogonal" renderorder="right-down" width="48" height="36" tilewidth="16" tileheight="16" infinite="0">
+ <tileset firstgid="1" name="boden" tilewidth="16" tileheight="16" tilecount="832" columns="32">
+  <image source="boden_tileset.png" width="512" height="416"/>
+   <tile id="0"><animation><frame tileid="832" duration="250"/><frame tileid="896" duration="250"/><frame tileid="960" duration="250"/><frame tileid="1024" duration="250"/></animation></tile>
+   <tile id="1"><animation><frame tileid="833" duration="250"/><frame tileid="897" duration="250"/><frame tileid="961" duration="250"/><frame tileid="1025" duration="250"/></animation></tile>
+   <tile id="2"><animation><frame tileid="834" duration="250"/><frame tileid="898" duration="250"/><frame tileid="962" duration="250"/><frame tileid="1026" duration="250"/></animation></tile>
+   <tile id="3"><animation><frame tileid="835" duration="250"/><frame tileid="899" duration="250"/><frame tileid="963" duration="250"/><frame tileid="1027" duration="250"/></animation></tile>
+   <tile id="4"><animation><frame tileid="836" duration="250"/><frame tileid="900" duration="250"/><frame tileid="964" duration="250"/><frame tileid="1028" duration="250"/></animation></tile>
+   <tile id="5"><animation><frame tileid="837" duration="250"/><frame tileid="901" duration="250"/><frame tileid="965" duration="250"/><frame tileid="1029" duration="250"/></animation></tile>
+   <tile id="6"><animation><frame tileid="838" duration="250"/><frame tileid="902" duration="250"/><frame tileid="966" duration="250"/><frame tileid="1030" duration="250"/></animation></tile>
+   <tile id="7"><animation><frame tileid="839" duration="250"/><frame tileid="903" duration="250"/><frame tileid="967" duration="250"/><frame tileid="1031" duration="250"/></animation></tile>
+   <tile id="8"><animation><frame tileid="840" duration="250"/><frame tileid="904" duration="250"/><frame tileid="968" duration="250"/><frame tileid="1032" duration="250"/></animation></tile>
+   <tile id="9"><animation><frame tileid="841" duration="250"/><frame tileid="905" duration="250"/><frame tileid="969" duration="250"/><frame tileid="1033" duration="250"/></animation></tile>
+   <tile id="10"><animation><frame tileid="842" duration="250"/><frame tileid="906" duration="250"/><frame tileid="970" duration="250"/><frame tileid="1034" duration="250"/></animation></tile>
+   <tile id="11"><animation><frame tileid="843" duration="250"/><frame tileid="907" duration="250"/><frame tileid="971" duration="250"/><frame tileid="1035" duration="250"/></animation></tile>
+   <tile id="12"><animation><frame tileid="844" duration="250"/><frame tileid="908" duration="250"/><frame tileid="972" duration="250"/><frame tileid="1036" duration="250"/></animation></tile>
+   <tile id="13"><animation><frame tileid="845" duration="250"/><frame tileid="909" duration="250"/><frame tileid="973" duration="250"/><frame tileid="1037" duration="250"/></animation></tile>
+   <tile id="14"><animation><frame tileid="846" duration="250"/><frame tileid="910" duration="250"/><frame tileid="974" duration="250"/><frame tileid="1038" duration="250"/></animation></tile>
+   <tile id="15"><animation><frame tileid="847" duration="250"/><frame tileid="911" duration="250"/><frame tileid="975" duration="250"/><frame tileid="1039" duration="250"/></animation></tile>
+   <tile id="16"><animation><frame tileid="848" duration="250"/><frame tileid="912" duration="250"/><frame tileid="976" duration="250"/><frame tileid="1040" duration="250"/></animation></tile>
+   <tile id="17"><animation><frame tileid="849" duration="250"/><frame tileid="913" duration="250"/><frame tileid="977" duration="250"/><frame tileid="1041" duration="250"/></animation></tile>
+   <tile id="18"><animation><frame tileid="850" duration="250"/><frame tileid="914" duration="250"/><frame tileid="978" duration="250"/><frame tileid="1042" duration="250"/></animation></tile>
+   <tile id="19"><animation><frame tileid="851" duration="250"/><frame tileid="915" duration="250"/><frame tileid="979" duration="250"/><frame tileid="1043" duration="250"/></animation></tile>
+   <tile id="20"><animation><frame tileid="852" duration="250"/><frame tileid="916" duration="250"/><frame tileid="980" duration="250"/><frame tileid="1044" duration="250"/></animation></tile>
+   <tile id="21"><animation><frame tileid="853" duration="250"/><frame tileid="917" duration="250"/><frame tileid="981" duration="250"/><frame tileid="1045" duration="250"/></animation></tile>
+   <tile id="22"><animation><frame tileid="854" duration="250"/><frame tileid="918" duration="250"/><frame tileid="982" duration="250"/><frame tileid="1046" duration="250"/></animation></tile>
+   <tile id="23"><animation><frame tileid="855" duration="250"/><frame tileid="919" duration="250"/><frame tileid="983" duration="250"/><frame tileid="1047" duration="250"/></animation></tile>
+   <tile id="24"><animation><frame tileid="856" duration="250"/><frame tileid="920" duration="250"/><frame tileid="984" duration="250"/><frame tileid="1048" duration="250"/></animation></tile>
+   <tile id="25"><animation><frame tileid="857" duration="250"/><frame tileid="921" duration="250"/><frame tileid="985" duration="250"/><frame tileid="1049" duration="250"/></animation></tile>
+   <tile id="26"><animation><frame tileid="858" duration="250"/><frame tileid="922" duration="250"/><frame tileid="986" duration="250"/><frame tileid="1050" duration="250"/></animation></tile>
+   <tile id="27"><animation><frame tileid="859" duration="250"/><frame tileid="923" duration="250"/><frame tileid="987" duration="250"/><frame tileid="1051" duration="250"/></animation></tile>
+   <tile id="28"><animation><frame tileid="860" duration="250"/><frame tileid="924" duration="250"/><frame tileid="988" duration="250"/><frame tileid="1052" duration="250"/></animation></tile>
+   <tile id="29"><animation><frame tileid="861" duration="250"/><frame tileid="925" duration="250"/><frame tileid="989" duration="250"/><frame tileid="1053" duration="250"/></animation></tile>
+   <tile id="30"><animation><frame tileid="862" duration="250"/><frame tileid="926" duration="250"/><frame tileid="990" duration="250"/><frame tileid="1054" duration="250"/></animation></tile>
+   <tile id="31"><animation><frame tileid="863" duration="250"/><frame tileid="927" duration="250"/><frame tileid="991" duration="250"/><frame tileid="1055" duration="250"/></animation></tile>
+   <tile id="32"><animation><frame tileid="864" duration="250"/><frame tileid="928" duration="250"/><frame tileid="992" duration="250"/><frame tileid="1056" duration="250"/></animation></tile>
+   <tile id="33"><animation><frame tileid="865" duration="250"/><frame tileid="929" duration="250"/><frame tileid="993" duration="250"/><frame tileid="1057" duration="250"/></animation></tile>
+   <tile id="34"><animation><frame tileid="866" duration="250"/><frame tileid="930" duration="250"/><frame tileid="994" duration="250"/><frame tileid="1058" duration="250"/></animation></tile>
+   <tile id="35"><animation><frame tileid="867" duration="250"/><frame tileid="931" duration="250"/><frame tileid="995" duration="250"/><frame tileid="1059" duration="250"/></animation></tile>
+   <tile id="36"><animation><frame tileid="868" duration="250"/><frame tileid="932" duration="250"/><frame tileid="996" duration="250"/><frame tileid="1060" duration="250"/></animation></tile>
+   <tile id="37"><animation><frame tileid="869" duration="250"/><frame tileid="933" duration="250"/><frame tileid="997" duration="250"/><frame tileid="1061" duration="250"/></animation></tile>
+   <tile id="38"><animation><frame tileid="870" duration="250"/><frame tileid="934" duration="250"/><frame tileid="998" duration="250"/><frame tileid="1062" duration="250"/></animation></tile>
+   <tile id="39"><animation><frame tileid="871" duration="250"/><frame tileid="935" duration="250"/><frame tileid="999" duration="250"/><frame tileid="1063" duration="250"/></animation></tile>
+   <tile id="40"><animation><frame tileid="872" duration="250"/><frame tileid="936" duration="250"/><frame tileid="1000" duration="250"/><frame tileid="1064" duration="250"/></animation></tile>
+   <tile id="41"><animation><frame tileid="873" duration="250"/><frame tileid="937" duration="250"/><frame tileid="1001" duration="250"/><frame tileid="1065" duration="250"/></animation></tile>
+   <tile id="42"><animation><frame tileid="874" duration="250"/><frame tileid="938" duration="250"/><frame tileid="1002" duration="250"/><frame tileid="1066" duration="250"/></animation></tile>
+   <tile id="43"><animation><frame tileid="875" duration="250"/><frame tileid="939" duration="250"/><frame tileid="1003" duration="250"/><frame tileid="1067" duration="250"/></animation></tile>
+   <tile id="44"><animation><frame tileid="876" duration="250"/><frame tileid="940" duration="250"/><frame tileid="1004" duration="250"/><frame tileid="1068" duration="250"/></animation></tile>
+   <tile id="45"><animation><frame tileid="877" duration="250"/><frame tileid="941" duration="250"/><frame tileid="1005" duration="250"/><frame tileid="1069" duration="250"/></animation></tile>
+   <tile id="46"><animation><frame tileid="878" duration="250"/><frame tileid="942" duration="250"/><frame tileid="1006" duration="250"/><frame tileid="1070" duration="250"/></animation></tile>
+   <tile id="47"><animation><frame tileid="879" duration="250"/><frame tileid="943" duration="250"/><frame tileid="1007" duration="250"/><frame tileid="1071" duration="250"/></animation></tile>
+   <tile id="48"><animation><frame tileid="880" duration="250"/><frame tileid="944" duration="250"/><frame tileid="1008" duration="250"/><frame tileid="1072" duration="250"/></animation></tile>
+   <tile id="49"><animation><frame tileid="881" duration="250"/><frame tileid="945" duration="250"/><frame tileid="1009" duration="250"/><frame tileid="1073" duration="250"/></animation></tile>
+   <tile id="50"><animation><frame tileid="882" duration="250"/><frame tileid="946" duration="250"/><frame tileid="1010" duration="250"/><frame tileid="1074" duration="250"/></animation></tile>
+   <tile id="51"><animation><frame tileid="883" duration="250"/><frame tileid="947" duration="250"/><frame tileid="1011" duration="250"/><frame tileid="1075" duration="250"/></animation></tile>
+   <tile id="52"><animation><frame tileid="884" duration="250"/><frame tileid="948" duration="250"/><frame tileid="1012" duration="250"/><frame tileid="1076" duration="250"/></animation></tile>
+   <tile id="53"><animation><frame tileid="885" duration="250"/><frame tileid="949" duration="250"/><frame tileid="1013" duration="250"/><frame tileid="1077" duration="250"/></animation></tile>
+   <tile id="54"><animation><frame tileid="886" duration="250"/><frame tileid="950" duration="250"/><frame tileid="1014" duration="250"/><frame tileid="1078" duration="250"/></animation></tile>
+   <tile id="55"><animation><frame tileid="887" duration="250"/><frame tileid="951" duration="250"/><frame tileid="1015" duration="250"/><frame tileid="1079" duration="250"/></animation></tile>
+   <tile id="56"><animation><frame tileid="888" duration="250"/><frame tileid="952" duration="250"/><frame tileid="1016" duration="250"/><frame tileid="1080" duration="250"/></animation></tile>
+   <tile id="57"><animation><frame tileid="889" duration="250"/><frame tileid="953" duration="250"/><frame tileid="1017" duration="250"/><frame tileid="1081" duration="250"/></animation></tile>
+   <tile id="58"><animation><frame tileid="890" duration="250"/><frame tileid="954" duration="250"/><frame tileid="1018" duration="250"/><frame tileid="1082" duration="250"/></animation></tile>
+   <tile id="59"><animation><frame tileid="891" duration="250"/><frame tileid="955" duration="250"/><frame tileid="1019" duration="250"/><frame tileid="1083" duration="250"/></animation></tile>
+   <tile id="60"><animation><frame tileid="892" duration="250"/><frame tileid="956" duration="250"/><frame tileid="1020" duration="250"/><frame tileid="1084" duration="250"/></animation></tile>
+   <tile id="61"><animation><frame tileid="893" duration="250"/><frame tileid="957" duration="250"/><frame tileid="1021" duration="250"/><frame tileid="1085" duration="250"/></animation></tile>
+   <tile id="62"><animation><frame tileid="894" duration="250"/><frame tileid="958" duration="250"/><frame tileid="1022" duration="250"/><frame tileid="1086" duration="250"/></animation></tile>
+ </tileset>
+ <tileset firstgid="833" name="boden_animiert" tilewidth="16" tileheight="16" tilecount="256" columns="32">
+  <image source="boden_tileset_animiert.png" width="512" height="128"/>
+ </tileset>
+ <layer id="1" name="Boden" width="48" height="36">
+  <data encoding="csv">
+65,66,67,67,66,67,68,69,69,65,67,69,69,68,65,69,69,68,65,67,65,69,67,68,68,66,67,68,69,67,68,65,66,66,67,68,67,67,67,65,69,68,68,69,67,69,68,67
+68,67,68,67,68,65,67,67,67,69,68,65,67,65,69,67,65,68,69,69,65,69,66,65,66,69,69,69,66,69,66,66,65,67,66,68,67,66,69,68,68,65,66,66,66,66,69,69
+69,66,67,69,67,65,67,66,66,68,68,65,67,69,69,68,69,67,66,67,67,67,65,68,67,69,68,68,67,65,68,65,69,68,66,65,65,69,66,67,65,65,65,66,68,67,68,65
+68,66,69,69,66,65,65,66,70,71,72,73,74,75,72,71,71,74,72,73,71,73,72,73,74,73,71,71,75,73,72,71,73,71,71,74,73,72,76,69,68,67,67,66,66,65,66,68
+67,65,68,66,67,67,68,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100,101,102,103,104,105,106,107,108,109,67,68,65,68,69,67,69,67
+68,67,65,69,67,65,110,111,112,113,114,115,116,117,118,119,120,121,122,123,124,125,126,127,128,129,130,131,132,133,134,135,136,137,138,139,140,141,142,143,68,67,69,67,69,69,66,67
+68,69,68,69,65,144,145,146,147,148,148,149,149,150,151,152,153,154,155,155,156,157,158,159,160,161,162,163,155,164,159,165,155,155,166,167,168,169,170,171,73,172,65,65,69,68,65,68
+67,69,68,173,72,174,175,176,149,150,169,177,178,179,180,181,182,183,183,184,183,184,185,184,186,187,183,184,183,185,188,183,185,184,189,190,191,192,193,194,195,196,109,65,67,65,67,68
+69,65,197,198,199,200,201,169,149,150,149,202,203,204,205,183,183,185,183,182,183,183,183,206,207,208,209,182,188,188,183,183,182,185,188,210,211,212,213,214,215,216,217,67,66,67,66,67
+68,66,218,219,220,221,168,150,169,168,148,222,223,224,225,185,183,182,182,185,182,183,226,227,228,229,230,231,182,182,182,182,185,182,183,232,233,234,213,148,168,235,236,71,237,66,67,67
+69,65,218,238,169,150,239,240,240,241,241,242,243,244,245,182,183,183,182,188,182,246,247,248,249,250,251,252,253,182,188,185,188,183,188,254,255,256,257,148,148,168,258,259,260,261,65,68
+66,69,218,262,149,263,264,265,266,267,268,269,203,270,225,188,183,185,185,188,271,272,273,274,275,1,276,277,278,279,184,188,185,184,184,280,281,282,283,284,285,286,287,288,289,217,67,69
+66,65,290,291,168,292,265,293,265,294,295,296,297,298,299,183,182,183,185,300,301,302,303,304,305,2,306,307,308,309,310,183,185,182,185,311,312,313,314,315,316,317,318,3,319,143,69,68
+68,69,218,320,149,292,321,322,323,293,266,324,325,326,327,184,185,188,328,329,330,331,332,333,334,335,4,5,6,336,337,338,188,183,183,339,340,341,342,343,344,7,345,346,347,348,68,68
+65,68,218,291,149,349,350,351,352,353,293,354,355,356,357,185,185,188,358,359,188,360,361,8,362,363,9,10,364,365,366,367,183,185,185,368,369,370,11,12,13,371,14,372,15,373,65,69
+67,65,374,375,150,376,377,353,265,353,378,379,380,381,382,183,183,185,383,384,385,386,16,387,17,18,388,389,390,391,392,393,182,188,182,394,395,313,396,19,20,21,397,398,22,217,67,68
+67,68,65,399,400,401,402,403,404,405,406,407,408,326,409,184,184,183,184,410,411,412,413,414,415,416,417,418,419,420,421,188,182,182,184,422,326,423,424,23,425,24,426,25,26,143,67,68
+67,68,65,66,427,428,149,168,402,429,148,430,431,432,433,185,182,188,183,183,434,435,436,437,438,439,440,441,442,443,184,188,188,184,184,444,445,446,27,447,448,28,29,449,30,373,66,66
+67,67,66,65,450,428,149,150,451,452,150,407,453,454,455,182,184,182,183,184,183,456,457,458,459,460,461,462,463,184,185,185,188,184,182,464,465,466,467,468,469,470,471,31,472,348,65,68
+68,68,69,66,290,428,168,169,473,149,148,202,474,475,433,188,183,182,185,188,185,182,476,477,478,479,480,481,183,185,184,182,184,188,182,482,483,484,485,32,486,487,488,489,490,491,67,65
+69,66,66,70,492,493,148,148,169,149,149,430,494,495,496,185,188,183,188,184,184,183,183,497,498,499,500,182,188,184,182,183,188,182,188,482,501,502,503,504,33,505,506,507,508,69,66,68
+69,68,509,510,511,169,149,150,168,168,168,222,512,340,513,514,188,184,183,185,182,185,184,183,515,516,183,188,183,188,182,182,183,184,517,518,519,520,521,522,523,524,143,65,67,67,66,65
+68,67,450,525,526,527,528,149,169,150,148,529,530,531,532,533,534,535,536,537,538,539,540,540,541,542,543,540,540,544,545,545,546,547,548,549,550,551,169,148,169,552,217,67,65,68,69,65
+69,67,553,554,168,555,34,556,557,557,558,559,560,561,562,563,564,565,566,567,568,569,570,563,571,572,573,574,575,576,577,562,356,563,578,579,580,581,169,168,148,582,373,69,69,68,68,65
+66,67,218,291,148,583,35,36,584,585,586,587,588,589,590,591,591,592,381,593,594,270,270,595,596,597,572,572,598,599,326,600,601,602,603,604,605,606,150,148,148,607,608,71,609,69,69,66
+66,66,450,320,168,583,37,610,611,612,613,614,560,615,616,281,617,270,270,618,501,501,619,326,620,621,622,623,432,624,281,625,626,627,628,629,630,148,631,632,169,168,633,634,635,261,69,69
+67,67,553,291,148,636,637,638,639,640,641,326,642,356,643,644,645,646,647,648,649,650,651,652,653,270,654,270,270,655,501,484,656,657,658,659,660,169,169,149,149,169,661,662,663,348,66,65
+68,69,553,664,148,665,666,667,668,669,670,671,672,673,674,675,676,677,678,679,680,681,682,683,684,685,686,326,687,688,560,689,38,690,691,39,692,693,169,168,150,169,169,148,694,217,65,68
+67,66,450,428,150,695,696,697,698,699,326,326,700,313,701,702,703,704,705,706,707,340,340,708,709,710,381,381,711,712,712,713,40,714,715,41,716,717,718,150,148,149,148,148,552,217,68,66
+68,67,290,428,150,222,719,720,721,722,723,281,724,725,726,727,728,729,730,731,732,733,734,734,734,735,736,737,738,739,740,741,742,743,744,42,745,43,746,169,169,747,149,149,748,749,67,69
+67,66,218,664,169,202,750,751,651,651,752,381,381,753,257,754,323,353,755,756,757,758,759,759,759,760,761,762,763,764,765,766,767,768,769,770,44,45,771,149,150,772,773,168,552,217,68,69
+69,69,427,428,169,774,775,776,777,589,778,501,779,234,257,780,323,265,781,149,149,148,148,148,168,148,150,148,168,782,783,46,47,784,785,48,786,787,788,169,169,789,790,148,791,143,66,68
+65,69,792,793,169,794,795,796,797,798,799,432,800,801,802,803,804,405,805,149,150,149,149,169,150,150,168,150,148,149,49,806,50,51,807,808,809,810,168,169,150,148,168,168,811,812,68,65
+67,67,69,399,813,814,52,53,54,55,815,813,813,507,813,816,817,817,813,816,818,817,817,818,818,507,816,818,816,818,507,507,816,507,817,507,818,813,818,816,816,813,507,816,819,66,65,65
+68,66,66,67,66,218,56,57,58,59,143,66,69,67,69,68,67,67,66,65,66,68,67,65,67,67,66,67,66,65,68,69,66,66,66,67,68,68,65,65,69,68,68,65,68,68,69,66
+68,65,69,65,68,218,60,61,62,63,749,68,69,65,69,67,68,68,68,65,68,69,65,67,69,67,67,68,65,65,69,68,69,67,65,67,66,65,68,68,68,66,65,68,67,68,67,69
+  </data>
+ </layer>
+</map>

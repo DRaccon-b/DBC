@@ -59,7 +59,21 @@ def verkohlen(a, lay, cols, rows, frame, wand=None):
         return
     Hp, Wp = rows * T, cols * T
     km = np.kron(np.array([[c == '1' for c in z] for z in lay['brand']]), np.ones((T, T))).astype(np.float32)
-    m = weich(km, 5.0, 0.0, 77, 0.5)
+    # je Hoehenebene getrennt: weich zeichnen, dann pixelgenau auf die Ebene des Flecks begrenzen (nie ueber Kanten, kein
+    # Saum an der Kante: in Kacheln anderer Hoehe vorher um 1 Kachel erweitern)
+    hpk_ = np.array([[int(c) for c in z] for z in lay['hoehe']])
+    hp_px = np.kron(hpk_, np.ones((T, T), int))
+    bk_ = np.array([[c == '1' for c in z] for z in lay['brand']])
+    m = np.zeros((Hp, Wp), bool)
+    weit_l = np.zeros((Hp, Wp), bool)
+    for L in np.unique(hpk_[bk_]):
+        kL = bk_ & (hpk_ == L)
+        p_ = np.pad(kL, 1)
+        dil = p_[1:-1, 1:-1] | p_[:-2, 1:-1] | p_[2:, 1:-1] | p_[1:-1, :-2] | p_[1:-1, 2:]
+        kL2 = kL | (dil & (hpk_ != L))
+        kpx = np.kron(kL2, np.ones((T, T))).astype(np.float32)
+        m |= weich(kpx, 5.0, 0.0, 77, 0.5) & (hp_px == L)
+        weit_l |= weich(kpx, 12.0, 0.0, 78, 0.25) & (hp_px == L)
     tm_ = np.zeros((Hp, Wp), bool)
     for (x0, x1, ry, r_) in lay['treppen']:
         tm_[max(0, ry * T - 4):(ry + 2) * T + 12, x0 * T - 4:(x1 + 1) * T + 4] = True
@@ -70,7 +84,7 @@ def verkohlen(a, lay, cols, rows, frame, wand=None):
         for d in range(1, 30):                                       # Fronten im Fels gehoeren zum Rand
             rand_frei[d:] |= rp[:-d] & (wand[d:] if wand is not None else False)
         m &= ~rand_frei
-    weit = weich(km, 12.0, 0.0, 78, 0.25) & ~m & ~tm_ & ~(wand if wand is not None else np.zeros_like(m))   # Uebergang
+    weit = weit_l & ~m & ~tm_ & ~(wand if wand is not None else np.zeros_like(m))   # Uebergang
     if os.environ.get('K50_RANDFREI', '1') == '1':
         weit &= ~rand_frei
     rs = np.random.RandomState(5077)
@@ -95,10 +109,13 @@ def verkohlen(a, lay, cols, rows, frame, wand=None):
     gras_ = m & ~kern & (af[..., 1] > af[..., 0] + 6)                # Wiese im Band: wie der Boden verkohlt (kein Braun-Balken)
     af[gras_] = neu[gras_] * 1.1
     m7_ = np.array(Image.fromarray((m * 255).astype(np.uint8)).filter(_IF2.MaxFilter(7))) > 0   # keine gruenen Saeume am Rand
-    g7_ = m7_ & ~m & ~tm_ & ~(wand if wand is not None else np.zeros_like(m)) & (af[..., 1] > af[..., 0] + 6)
+    g7_ = m7_ & ~m & ~tm_ & np.isin(hp_px, np.unique(hpk_[bk_])) & ~(wand if wand is not None else np.zeros_like(m)) & (af[..., 1] > af[..., 0] + 6)
     if os.environ.get('K50_RANDFREI', '1') == '1':
         g7_ &= ~rand_frei
     af[g7_] = neu[g7_] * 1.15
+    if wand is not None:                                             # Wiesenpixel in der schmalen Seitenkante mitverkohlen
+        gw_ = wand & m7_ & (af[..., 1] > af[..., 0] + 20) & (af[..., 1] > af[..., 2] + 20)
+        af[gw_] = neu[gw_] * 1.15
     if wand is not None:                                             # Felsfronten nur verrusst (Relief bleibt)
         wm_ = m & wand
         af[wm_] = af[wm_] * np.where(kern[wm_], 0.48, 0.62)[:, None]
@@ -229,7 +246,7 @@ def bauen(frame=None, speichern=True):
                 if y < Hp and y0 > 0:
                     d = int(hpx[max(0, y0 - 2), x]) - int(hpx[min(Hp - 1, y + 2), x])
                     lauf = y - y0
-                    if d >= 2 and FRONT - 6 <= lauf <= FRONT + 6:            # nur Fronten, keine Seitenwaende
+                    if False and d >= 2 and FRONT - 6 <= lauf <= FRONT + 6:   # K51: aus (Spitzen an Platzecken)            # nur Fronten, keine Seitenwaende
                         for yy in range(y, min(Hp, y0 + lauf * d)):
                             a[yy, x] = a[y0 + (yy - y0) % lauf, x] if (yy - y0) % lauf > 2 else a[y0 + 4, x]
                             wand[yy, x] = True

@@ -29,7 +29,7 @@ D = {'torii': 'karte50/torii_gross/00b.png',   # Nutzer: Pfeiler stehen am Trepp
      'gras': 'karte04/klein/00.png', 'gras2': 'karte04/klein/01.png', 'zweig': 'karte04/klein/09.png'}
 D.update({'baum_b': 'karte50/brand/00.png', 'busch_b': 'karte50/brand/01.png', 'brocken_b': 'karte50/brand/02.png',
           'stamm_b': 'karte50/brand/03.png', 'asche_b': 'karte50/brand_klein/01.png', 'glut_b': 'karte50/brand_klein/11.png',
-          'rauch_b': 'karte50/brand_klein/29.png'})
+          'rauch_b': 'karte50/brand_klein/29.png', 'tuft_b': 'karte50/brand_klein/00.png'})
 VERBRANNT = {'baum': 'baum_b', 'zypresse': 'baum_b', 'kf00': 'busch_b', 'kf24': 'busch_b', 'kf52': 'busch_b',
              'brocken': 'brocken_b', 'lilie': None, 'gras': None, 'gras2': None}
 FLACH = {'feder', 'feder2', 'kiesel', 'zweig'}
@@ -137,7 +137,7 @@ def main():
     # ---------------- Suzaku Gate: grosses Torii ueber der Treppe (wie Karte 50), Paare symmetrisch zur Arena
     (tx0, tx1, ry, r_) = lay['treppen'][0]
     t_achse = (tx0 * T + (tx1 + 1) * T) / 2.0
-    setze('torii', t_achse, (ry + 2) * T + T - 1, {'fest_pos': True, 'vor_wand': True, 'nur_kontakt': True,
+    setze('torii', t_achse, (ry + 2) * T + T - 1, {'fest_pos': True, 'vor_wand': True, 'schattenlos': True,
                                                     'sortier': (ry + 2) * T + T - 1}, pruefen=False)
     ax0, ay0, ax1, ay1 = lay['arena']
     achse = (ax0 + ax1 + 1) * T / 2.0
@@ -166,9 +166,18 @@ def main():
             if hat < 2:                                                  # Ersatz: Asche/Glut an der Stammecke (flach)
                 hat += any(setze('asche_b', sx + s_ * d, sy + 4, {'begleiter': True, 'ebene': 0, 'liegend': True, 'anim': 'kerzen'},
                                  s_ > 0, gap=2, klassen='gn') for d in (28, 34, 40) for s_ in (-1, 1))
+            if hat < 2 and brn:                                          # flache Asche/verbrannte Bueschel an den Stammecken
+                for (dx_, n2) in ((-22, 'asche_b'), (22, 'tuft_b')):
+                    if hat >= 2:
+                        break
+                    if setze(n2, sx + dx_, sy + 5, {'begleiter': True, 'ebene': 0, 'liegend': True, 'nur_kontakt': True,
+                                                    **({'anim': 'kerzen'} if n2 == 'asche_b' else {})}, dx_ > 0, pruefen=False):
+                        hat += 1
             if hat < 2:
                 print('  Baum mit wenig Begleitern', o_['basis'], hat)
     for o in objekte:
+        if o['basis'] in ('lilie', 'gras', 'gras2'):
+            o['nur_kontakt'] = True
         if o['basis'] in ('brocken_b', 'busch_b', 'stamm_b', 'baum_b'):
             o['nur_kontakt'] = True
         if o['basis'] in ('brocken', 'kf00', 'kf24', 'kf52', 'unterstand', 'pfosten', 'opfer'):

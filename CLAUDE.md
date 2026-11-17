@@ -373,6 +373,12 @@ Vor jeder Abgabe Punkt für Punkt prüfen (vergrößert, Standbild und mehrere A
   in der Vorlage: flache Büschel/Kiesel/Zweige in Fels und Wiese gestempelt. Brandbereiche: Kern ganz verkohlt, ringsum ein
   verrußtes Band (Textur sichtbar) und gesprenkelter Rand; Felsfronten nur nachdunkeln, flache Bergkante bleibt unverbrannt;
   Objekte darin als neu erzeugte verkohlte Varianten, Glut animiert.
+- **Arena mit Brandflecken (Karte 51):** Brandflecken je Fleck nur auf der Höhenebene seiner Mitte und pixelgenau darauf
+  begrenzt (in Kacheln anderer Höhe vorher erweitern, sonst Saum an der Kante); Treppen, Felsfronten und Felsrand bleiben
+  frei, Wiesenpixel in schmalen Seitenkanten mitverkohlen (sonst grüne Linie). Erhöhte Plätze brauchen zu jeder angrenzenden
+  Bodenfläche eine Treppe (Flood-Fill); Nordtreppen in den Platz einschneiden. Muster (Raute) als durchgehendes Pixelband auf
+  der berechneten Mitte zeichnen, nicht als Kachelring (zerfällt in Kugeln). Laternen/Feuerschalen als Platzbeleuchtung auf
+  dem Platz erlaubt, wenn daneben kein Boden frei ist (sonst fehlen Lichtquellen); breite Tore `schattenlos`.
 - **Begleiter am Stumpf (5d):** keine 1-Kachel-Blumen auf dem Stumpf, kein Blumenklumpen; Begleiter überlappen sich nicht.
 - **Paare/Achsen:** Paare vor Toren/Bauwerken exakt gespiegelt (Mitte und Fuß), gleiche Objekte auf gleicher Höhe;
   Druckplatten, Obelisken usw. symmetrisch zur berechneten Achse.
