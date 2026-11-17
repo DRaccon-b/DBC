@@ -247,7 +247,8 @@ def boden_leben(a, kl, frame, leit=()):
         sub[f] = np.clip(sub[f] * 0.55 + np.array((120, 140, 170)) * 0.45, 0, 255).astype(np.uint8)
         rand_ = f & ~((yy / max(ry - 1, 1)) ** 2 + (xx / max(rx - 1, 1)) ** 2 <= 1)
         sub[rand_] = (sub[rand_] * 0.85).astype(np.uint8)
-        gx = -rx + 3 + (f_ * 4 + x) % (2 * rx - 6)                 # Glanzstrich wandert
+        L_ = 4 * max(1, (2 * rx - 6) // 4)                          # Glanzstrich wandert, Periode genau 4 Bilder (K52)
+        gx = -rx + 3 + (f_ * (L_ // 4) + x) % L_
         for d in range(3):
             yy_, xx_ = -1 + (d % 2), gx + d
             if f[yy_ + ry, xx_ + rx]:

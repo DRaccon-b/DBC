@@ -92,6 +92,15 @@ def tuer_einsetzen(ziel):
         neu[h:h + 2, deck] = (120, 120, 128, 255)
         neu[h + 2, deck] = (36, 36, 44, 255)
         a, h = neu, h + 3
+    ai = a.astype(int)                                                    # lila Freistell-Saum im Sockel -> Sockelgrau
+    saum = (ai[..., 3] > 0) & (ai[..., 2] > ai[..., 0]) & (ai[..., 0] - ai[..., 1] > 35)
+    saum[:h - 10] = False
+    a[saum, :3] = (120, 120, 128)
+    if (a[0, :, 3] > 0).mean() > 0.3 and a[0, :, :3].astype(int).sum(-1)[a[0, :, 3] > 0].mean() > 200:   # Dach oben beschnitten
+        neu = np.zeros((h + 2, w, 4), np.uint8); neu[2:] = a
+        deck = a[0, :, 3] > 0
+        neu[0, deck] = (40, 40, 48, 255); neu[1, deck] = (150, 146, 140, 255)
+        a, h = neu, h + 2
     im = Image.fromarray(a)
     t = Image.open(os.path.join(OBJ, 'gross_buero_mitte/00.png')).convert('RGBA').crop((170, 136, 248, 180))
     t = t.crop(t.getbbox())
@@ -168,8 +177,8 @@ def main():
             # ganzes Bildrechteck auf erlaubtem Boden (untere zwei Reihen; liegende ganz) - Pruefliste K44
             ry0 = r[1] // T if (opt or {}).get('liegend') else max(r[1] // T, r[3] // T - 1)
             belag = {k(xx, yy) for yy in range(ry0, r[3] // T + 1) for xx in range(r[0] // T, r[2] // T + 1)}
-            if not belag <= set(klassen):
-                return None
+            if not belag <= set(klassen) or (len(belag) > 1 and art not in ('gebaeude', 'auto')):
+                return None                                                # nie halb auf Gehweg/Platzkante
         o = {'datei': datei, 'basis': name, 'x': x, 'y': y, 'fuss': bb[3] - 1, 'kachel': [int(cx) // T, int(fy) // T],
              'ebene': 1, 'ohne_wall': True}
         if art != 'wald' and not (opt or {}).get('liegend'):

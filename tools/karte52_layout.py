@@ -73,6 +73,17 @@ def main():
                 q = k[y:y + 2, x:x + 2]
                 if q[0, 0] == q[1, 1] and q[0, 1] == q[1, 0] and q[0, 0] != q[0, 1]:
                     k[y + 1, x] = q[0, 0]
+    for _ in range(3):                                                 # letzte Glaettung: Massezipfel und Asphalttaschen
+        for y in range(2, R - 2):
+            for x in range(2, C - 2):
+                nb = [k[y + dy, x + dx] for dy, dx in ((1, 0), (-1, 0), (0, 1), (0, -1))]
+                if k[y, x] == 'r' and nb.count('r') <= 1:
+                    andere = [c for c in nb if c != 'r']
+                    k[y, x] = max(set(andere), key=andere.count)
+                elif k[y, x] == 'a' and nb.count('a') <= 1 and nb.count('r') >= 2:
+                    k[y, x] = 'r'
+    for n_, (x0, y0, x1, y1) in GEBAEUDE.items():                     # Gebaeudeflaechen bleiben Gehweg
+        k[y0:y1 + 1, x0:x1 + 1] = 'k'
     P = RAND
     C2, R2 = C + 2 * P, R + 2 * P
     k2 = np.full((R2, C2), 'h')
