@@ -89,7 +89,7 @@ def bauen(frame=None, speichern=True):
                 if y < Hp and y0 > 0:
                     d = int(hpx[max(0, y0 - 2), x]) - int(hpx[min(Hp - 1, y + 2), x])
                     lauf = y - y0
-                    if d >= 2 and lauf >= FRONT - 6:
+                    if d >= 2 and FRONT - 6 <= lauf <= FRONT + 6:            # nur Fronten, keine Seitenwaende
                         for yy in range(y, min(Hp, y0 + lauf * d)):
                             a[yy, x] = a[y0 + (yy - y0) % lauf, x] if (yy - y0) % lauf > 2 else a[y0 + 4, x]
                             wand[yy, x] = True

@@ -36,7 +36,7 @@ HOF = (12, 9, 26, 17)                    # abgesenkter Hof (x0, y0, x1, y1), Tre
 HOF_TREPPE = (18, 20)                    # 3 Kacheln: Mitte = Hofachse (Hof 15 Kacheln breit)
 TELEPORTER = [(0, 29, 3, 4), (93, 24, 3, 4), (85, 77, 4, 3)]
 k43.R, k43.C = R, C
-RAND = os.environ.get('K50_RAND', 'folgt')   # folgt | hoch | versetzt | flanke (Nutzer: Varianten der Berglogik)
+RAND = os.environ.get('K50_RAND', 'versetzt')   # folgt | hoch | versetzt | flanke (Nutzer: Varianten der Berglogik)
 
 
 def main():
@@ -72,7 +72,9 @@ def main():
         hp_rand = np.zeros((R, C), int)
         for (hoehe, seg, _) in KANTEN:
             for (x0, x1, ry) in seg:
-                hp_rand[:ry + 4, x0:x1 + 1] = np.maximum(hp_rand[:ry + 4, x0:x1 + 1], hoehe)
+                versatz = 1 if any(x0 <= tx_ <= x1 and ty_ > ry for (tx_, ty_, _b, _h) in TELEPORTER if ty_ + _h == R) else 4
+                hp_rand[:ry + versatz, x0:x1 + 1] = np.maximum(hp_rand[:ry + versatz, x0:x1 + 1], hoehe)   # unten am
+                # Teleporter frueher absetzen: sonst stapeln sich die Fronten direkt ueber dem Ausgang (Nutzer)
     else:
         hp_rand = hp_ter
     if RAND == 'flanke':                                              # Terrassenkanten steigen zum Rand schraeg an
