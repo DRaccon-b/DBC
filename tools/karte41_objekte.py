@@ -31,7 +31,7 @@ FREMD = {
     'saeule_kaputt': 'karte41/gross/01.png',
 }
 # (Sprite, Kachel-x der Fussmitte, Fusszeile) nach der Vorlage
-BAEUME = [('totbaum', 29, 11), ('totbaum', 36, 27), ('totbaum', 72, 28), ('totbaum', 48, 43), ('totbaum', 83, 55),
+BAEUME = [('totbaum', 29, 11), ('totbaum', 36, 27), ('totbaum', 72, 28), ('totbaum', 48, 41), ('totbaum', 83, 55),
           ('totbaum', 53, 69), ('akazie', 37, 35), ('akazie', 75, 55), ('akazie', 40, 62), ('akazie_klein', 38, 68),
           ('akazie', 28, 72), ('laubbaum', 24, 72), ('laubbaum', 40, 73)]
 GROSS = [('unterstand', 13, 56), ('skelett', 80, 44), ('skelett', 59, 72),
@@ -188,13 +188,13 @@ def main():
         seite = 1 if i % 2 == 0 else -1
         def vor():
             return any(setze(naechster('f' if i % 2 else 'b'), sx + d, sy + T, {'begleiter': True}, seite < 0, kl,
-                             ohne=(ti,)) for d in (0, 3, -3))
+                             ohne=(ti,)) for d in (0, 3, -3, 6, -6))
         def hinter(sd):
             return any(setze(naechster('f'), sx + sd * d, sy - T, {'begleiter': True}, sd < 0, kl, ohne=(ti,))
                        for d in (24, 32))
         def seitlich(sd):
             return any(setze(naechster('b'), sx + sd * d, sy + dy, {'begleiter': True, 'ebene': 0}, sd > 0, kl)
-                       for d in (40, 48, 56, 64) for dy in (0, T, -T))
+                       for d in (40, 48, 56, 64) for dy in (T, -T))   # nie in der Stammreihe (keine Reihe Busch-Baum-Busch)
         nah = sum(1 for (_, _, _, _, _, x2, y2) in gesetzte_baeume if (x2, y2) != (sx, sy)
                   and abs(x2 - sx) < 6 * T and abs(y2 - sy) < 5 * T)
         soll = 1 if nah else 2
@@ -222,19 +222,27 @@ def main():
     gross_ = PLATEAU_GROSS[:]; rnd.shuffle(gross_)
     klein_ = [('bg' + n_) for n_ in BG_FELS + BG_BUSCH] + ['gras', 'gras2', 'gras3']
     rnd.shuffle(klein_)
-    pl_g, pl_k, gpos = 0, 0, []
+    pl_g, pl_k, gpos, pmotiv = 0, 0, [], []
+    breit_ok = lambda x, y: sum(1 for xx in range(x - 4, x + 5) if 0 <= xx < cols and cls[y][xx] == 'r') >= 7 and \
+        sum(1 for yy in range(y - 4, y + 5) if 0 <= yy < rows and cls[yy][x] == 'r') >= 7   # keine Reihen auf schmalen Streifen
     for (x, y) in pk:
         if pl_g >= 26:
             break
         if any(abs(x - a_) < 7 and abs(y - b_) < 6 for (a_, b_) in gpos):
             continue
-        n_ = 'pl' + gross_[pl_g % len(gross_)]
+        nahe = {m_ for (a_, b_, m_) in pmotiv if abs(x - a_) < 14 and abs(y - b_) < 14}
+        frei_ = [m_ for m_ in gross_ if m_ not in nahe]
+        if not frei_:
+            continue
+        n_ = 'pl' + frei_[pl_g % len(frei_)]
         if setze(n_, x * T + 8, y * T + T - 1, {}, rnd.random() < 0.5, 'r', ebene_soll=3):
-            pl_g += 1; gpos.append((x, y))
+            pl_g += 1; gpos.append((x, y)); pmotiv.append((x, y, n_[2:]))
     for (x, y) in pk[::-1]:
         if pl_k >= 40:
             break
         if any(abs(x - a_) < 3 and abs(y - b_) < 3 for (a_, b_) in gpos):
+            continue
+        if not breit_ok(x, y):
             continue
         n_ = klein_[pl_k % len(klein_)]
         if setze(n_, x * T + rnd.randint(4, 12), y * T + T - 1, {'streu': True}, rnd.random() < 0.5, 'r', ebene_soll=3):

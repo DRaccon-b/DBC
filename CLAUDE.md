@@ -286,6 +286,10 @@ Vor jeder Abgabe Punkt für Punkt prüfen (vergrößert, Standbild und mehrere A
   bekommen keinen Fels „hinter den Blättern“; Sperrzone um jeden Stumpf für alle übrigen Objekte. Sprites, deren Halme tiefer
   reichen als der Körper, schweben (Schatten an den Halmen) – ersetzen. Paare mit Objekt dazwischen: gemeinsame Fußzeile und
   Achse, bei Platzmangel die Achse verschieben statt einzeln suchen.
+  Deko auf Plateaus (Nutzer: „zu leer“): große Motive mit Abstand und ohne gleiches Motiv in der Nähe, Kleinkram nur auf
+  breiten Plateauflächen (schmale Randstreifen erzeugen sonst eine senkrechte Reihe); Begleiter nie in der Stammreihe
+  (Busch–Baum–Busch wirkt als Reihe). Sprites mit Stangen/Spitzen unter dem Körper (Zelt) bekommen `fuss_dy`, damit der
+  Schatten am Körper beginnt.
 - **Begleiter am Stumpf (5d):** keine 1-Kachel-Blumen auf dem Stumpf, kein Blumenklumpen; Begleiter überlappen sich nicht.
 - **Paare/Achsen:** Paare vor Toren/Bauwerken exakt gespiegelt (Mitte und Fuß), gleiche Objekte auf gleicher Höhe;
   Druckplatten, Obelisken usw. symmetrisch zur berechneten Achse.
