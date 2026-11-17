@@ -152,6 +152,21 @@ def main():
     tasche = ~sperr & ~gesehen & (k2 == 'a')
     k2[tasche] = 'r'
     k43.R, k43.C = R2, C2
+    for _ in range(3):                                                 # Asphalt-Zipfel und kleine Asphaltflecken angleichen
+        for y in range(1, R2 - 1):
+            for x in range(1, C2 - 1):
+                nb = [k2[y + dy, x + dx] for dy, dx in ((1, 0), (-1, 0), (0, 1), (0, -1))]
+                if k2[y, x] == 'a' and nb.count('a') <= 1:
+                    andere = [c for c in nb if c not in 'ae']
+                    if andere:
+                        k2[y, x] = max(set(andere), key=andere.count)
+        for teil in k43.flaechen(k2 == 'a'):
+            if len(teil) < 6:
+                for (y, x) in teil:
+                    nb = [k2[y + dy, x + dx] for dy, dx in ((1, 0), (-1, 0), (0, 1), (0, -1))
+                          if 0 <= y + dy < R2 and 0 <= x + dx < C2 and k2[y + dy, x + dx] not in 'ae']
+                    if nb:
+                        k2[y, x] = max(set(nb), key=nb.count)
     for _ in range(2):                                                 # Zipfel im Rand nach den Ausgaengen
         for y in range(1, R2 - 1):
             for x in range(1, C2 - 1):

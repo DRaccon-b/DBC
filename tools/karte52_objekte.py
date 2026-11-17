@@ -170,6 +170,10 @@ def main():
             if any(art2 not in ('wald',) and schnitt(r, tuple(rr), 2) for (*rr, art2) in rects):
                 return None
         elif pruefen:
+            if art not in ('gebaeude', 'auto') and any(abs(o2['y'] + o2['fuss'] - r[3]) <= 6 and
+                                                       o2['x'] - 40 < r[2] and r[0] < o2['x'] + 72 for o2 in objekte
+                                                       if not o2.get('gebaeude') and not o2.get('liegend')):
+                return None                                                # keine Reihe auf derselben Fusszeile
             fuss_r = (r[0], max(r[1], r[3] - T + 1), r[2], r[3])           # vor Gebaeuden zaehlt nur der Fuss
             if any(schnitt(fuss_r, tuple(rr), -1) if (art2 == 'gebaeude' and klassen == 'n') else schnitt(r, tuple(rr), 2) for (*rr, art2) in rects) or \
                     any(schnitt(r, t_, 0) for t_ in tps):
@@ -219,7 +223,7 @@ def main():
                              ('reaper/schutt', 36, 20, False), ('reaper/schutt', 13, 55, True), ('reaper/schutt', 70, 25, False),
                              ('reaper/fass', 25, 16, False), ('reaper/laterne_kaputt', 33, 66, False),
                              ('reaper/laterne_kaputt', 80, 52, True)):
-        kachel(n_, tx + P, ty + P, {'anim': 'lampe'} if 'laterne_kaputt' in n_ else {}, sp, klassen='a' + G, weit=2)
+        kachel(n_, tx + P, ty + P, {'anim': 'lampe', 'lampe_box': [8, 0, 29, 9], 'licht_farbe': [255, 210, 120]} if 'laterne_kaputt' in n_ else {}, sp, klassen='a' + G, weit=2)
     # ---------------------------------------------------------------- Bahnhofsvorplatz (Ziegelplatz unten rechts)
     gk_ = np.array([list(z) for z in cls])                              # Laternen an den Platzecken, exakt gespiegelt
     ys_b, xs_b = np.nonzero(gk_ == 'b')

@@ -93,7 +93,7 @@ def masse(a, m, frame=None, seed=52, boden=None, flach=False):
         r_[:-d] = mm[:-d] & ~mm[d:]
         tief = np.maximum(tief, r_ * (1.0 - (d - 1) / 6.0))
     col = col * (1 - 0.55 * tief[..., None]) + DUNKEL * 0.55 * tief[..., None]
-    p_ = np.pad(mm, 1)
+    p_ = np.pad(mm, 1, mode='edge')                                   # Kartenrand fortsetzen (keine Konturlinie am Bildrand)
     rand = mm & ~(p_[:-2, 1:-1] & p_[2:, 1:-1] & p_[1:-1, :-2] & p_[1:-1, 2:])
     col[rand] = DUNKEL * 0.8
     sub[mm] = col[mm]

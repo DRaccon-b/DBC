@@ -53,7 +53,7 @@ Aufstellfelds (cyan = Ankunft, gold = weiter; Funktion `pfeil_marke` in `tools/k
 | 16 | Karte 49 – The Broken Promise | v1.0 fertig (3 Agenten-Prüfrunden), Bossarena Beelzemon, Vorlagenfehler korrigiert, Motorradspuren, ZIP in maps/karte49/v1.0 |
 | 17 | Karte 50 – Zhuqiaomon's Sanctuary | v1.0 fertig (3 Agenten-Prüfrunden), Terrassen mit Torii-Treppen, abgesenkter Hof (Nutzer), ZIP in maps/karte50/v1.0 |
 | 18 | Karte 51 – Suzaku Gate | v1.0 fertig (3 Agenten-Prüfrunden), Zhuqiaomons Arena mit Torii und Brandflecken (Nutzer), ZIP in maps/karte51/v1.0 |
-| 19 | Karte 52 – D-Reaper: Shinjuku | in Arbeit (Vorbild karte40) |
+| 19 | Karte 52 – D-Reaper: Shinjuku | v1.0 fertig (4 Agenten-Prüfrunden), D-Reaper-Masse ringsum statt Baumgürtel, Bahnhofsvorplatz, ZIP in maps/karte52/v1.0 |
 | 20 | Karte 53 – Shinjuku Evacuation District | v1.0 fertig (3 Agenten-Prüfrunden), Hilfslager und Sanitätsposten (PixelLab), erste D-Reaper-Flecken, ZIP in maps/karte53/v1.0 |
 | 21 | Karte 54 – D-Reaper Kernel | v1.0 fertig (3 Agenten-Prüfrunden), Herz des Kernels, Vorlagenfehler (Teleporter im Becken) korrigiert, ZIP in maps/karte54/v1.0 |
 

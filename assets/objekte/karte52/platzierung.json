@@ -276,7 +276,18 @@
 "ebene": 1,
 "ohne_wall": true,
 "nur_kontakt": true,
-"anim": "lampe"
+"anim": "lampe",
+"lampe_box": [
+8,
+0,
+29,
+9
+],
+"licht_farbe": [
+255,
+210,
+120
+]
 },
 {
 "datei": "varianten/reaper-laterne_kaputt_m.png",
@@ -291,7 +302,18 @@
 "ebene": 1,
 "ohne_wall": true,
 "nur_kontakt": true,
-"anim": "lampe"
+"anim": "lampe",
+"lampe_box": [
+8,
+0,
+29,
+9
+],
+"licht_farbe": [
+255,
+210,
+120
+]
 },
 {
 "datei": "varianten/k18s-18.png",
@@ -474,6 +496,32 @@
 "kachel": [
 19,
 13
+],
+"ebene": 1,
+"ohne_wall": true,
+"nur_kontakt": true,
+"anim": "leuchten",
+"licht": [
+4,
+7
+],
+"licht_box": [
+2,
+5,
+6,
+10
+],
+"licht_r": 9
+},
+{
+"datei": "varianten/k18s-18.png",
+"basis": "k18s/18",
+"x": 676,
+"y": 754,
+"fuss": 29,
+"kachel": [
+42,
+48
 ],
 "ebene": 1,
 "ohne_wall": true,
@@ -768,25 +816,11 @@
 "nur_kontakt": true
 },
 {
-"datei": "varianten/reaper-ranke.png",
+"datei": "varianten/reaper-ranke_m.png",
 "basis": "reaper/ranke",
-"x": 336,
+"x": 720,
 "y": 464,
 "fuss": 31,
-"kachel": [
-22,
-30
-],
-"ebene": 1,
-"ohne_wall": true,
-"nur_kontakt": true
-},
-{
-"datei": "varianten/reaper-blasen_m.png",
-"basis": "reaper/blasen",
-"x": 721,
-"y": 470,
-"fuss": 25,
 "kachel": [
 46,
 30
@@ -796,11 +830,11 @@
 "nur_kontakt": true
 },
 {
-"datei": "varianten/reaper-ranke.png",
-"basis": "reaper/ranke",
-"x": 1008,
-"y": 976,
-"fuss": 31,
+"datei": "varianten/reaper-blasen.png",
+"basis": "reaper/blasen",
+"x": 1009,
+"y": 982,
+"fuss": 25,
 "kachel": [
 64,
 62
@@ -810,25 +844,11 @@
 "nur_kontakt": true
 },
 {
-"datei": "varianten/reaper-blasen_m.png",
-"basis": "reaper/blasen",
-"x": 945,
-"y": 758,
-"fuss": 25,
-"kachel": [
-60,
-48
-],
-"ebene": 1,
-"ohne_wall": true,
-"nur_kontakt": true
-},
-{
-"datei": "varianten/reaper-kapsel_m.png",
-"basis": "reaper/kapsel",
-"x": 1012,
-"y": 856,
-"fuss": 23,
+"datei": "varianten/reaper-ranke_m.png",
+"basis": "reaper/ranke",
+"x": 1008,
+"y": 848,
+"fuss": 31,
 "kachel": [
 64,
 54
@@ -838,9 +858,23 @@
 "nur_kontakt": true
 },
 {
-"datei": "varianten/reaper-ei_m.png",
-"basis": "reaper/ei",
-"x": 1330,
+"datei": "varianten/reaper-blasen.png",
+"basis": "reaper/blasen",
+"x": 321,
+"y": 486,
+"fuss": 25,
+"kachel": [
+21,
+31
+],
+"ebene": 1,
+"ohne_wall": true,
+"nur_kontakt": true
+},
+{
+"datei": "varianten/reaper-kapsel.png",
+"basis": "reaper/kapsel",
+"x": 1332,
 "y": 680,
 "fuss": 23,
 "kachel": [
@@ -852,11 +886,11 @@
 "nur_kontakt": true
 },
 {
-"datei": "varianten/reaper-ranke.png",
-"basis": "reaper/ranke",
-"x": 608,
-"y": 288,
-"fuss": 31,
+"datei": "varianten/reaper-ei_m.png",
+"basis": "reaper/ei",
+"x": 610,
+"y": 296,
+"fuss": 23,
 "kachel": [
 39,
 19
@@ -866,14 +900,28 @@
 "nur_kontakt": true
 },
 {
-"datei": "varianten/reaper-blasen.png",
-"basis": "reaper/blasen",
-"x": 465,
-"y": 166,
-"fuss": 25,
+"datei": "varianten/reaper-ranke_m.png",
+"basis": "reaper/ranke",
+"x": 464,
+"y": 160,
+"fuss": 31,
 "kachel": [
 30,
 11
+],
+"ebene": 1,
+"ohne_wall": true,
+"nur_kontakt": true
+},
+{
+"datei": "varianten/reaper-blasen.png",
+"basis": "reaper/blasen",
+"x": 865,
+"y": 774,
+"fuss": 25,
+"kachel": [
+55,
+49
 ],
 "ebene": 1,
 "ohne_wall": true,
@@ -964,29 +1012,14 @@
 "nur_kontakt": true
 },
 {
-"datei": "varianten/klein-glas_m.png",
-"basis": "klein/glas",
-"x": 114,
-"y": 1181,
-"fuss": 15,
-"kachel": [
-7,
-74
-],
-"ebene": 0,
-"ohne_wall": true,
-"liegend": true,
-"schattenlos": true
-},
-{
-"datei": "varianten/klein-zeitung.png",
+"datei": "varianten/klein-zeitung_m.png",
 "basis": "klein/zeitung",
-"x": 680,
-"y": 332,
+"x": 257,
+"y": 683,
 "fuss": 15,
 "kachel": [
-43,
-21
+16,
+43
 ],
 "ebene": 0,
 "ohne_wall": true,
@@ -994,14 +1027,14 @@
 "schattenlos": true
 },
 {
-"datei": "varianten/klein-pfuetze_m.png",
+"datei": "varianten/klein-pfuetze.png",
 "basis": "klein/pfuetze",
-"x": 860,
-"y": 1130,
+"x": 558,
+"y": 813,
 "fuss": 15,
 "kachel": [
-54,
-71
+35,
+51
 ],
 "ebene": 0,
 "ohne_wall": true,
@@ -1011,12 +1044,12 @@
 {
 "datei": "varianten/klein-glas.png",
 "basis": "klein/glas",
-"x": 482,
-"y": 847,
+"x": 99,
+"y": 522,
 "fuss": 15,
 "kachel": [
-30,
-53
+6,
+33
 ],
 "ebene": 0,
 "ohne_wall": true,
