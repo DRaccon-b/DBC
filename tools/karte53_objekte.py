@@ -35,6 +35,9 @@ EVAK = {'bett': (0, 0.5), 'sandsack': (1, 0.6), 'gepaeck': (2, 0.5), 'schild': (
         'sperre': (12, 0.5), 'kocher': (14, 0.5), 'rucksack': (15, 0.45)}
 for n_, (i, f) in EVAK.items():
     FREMD['evak/' + n_] = ('karte53/evak/%02d.png' % i, f)
+FREMD['evak/bett'] = ('karte53/bett/00.png', 0.7)                       # Feldbett in Draufsicht (Pruefung: frontal)
+FREMD['evak/kanister'] = ('karte53/bett/12.png', 0.5)
+FREMD['evak/schlafsack'] = ('karte53/bett/09.png', 0.6)
 for n_, (i, f) in {'zelt': (0, 0.75), 'lkw': (1, 0.75), 'vorrat': (2, 0.6)}.items():
     FREMD['evak/' + n_] = ('karte53/gross/%02d.png' % i, f)
 for n_, (i, f) in {'ranke': (0, 0.55), 'blasen': (7, 0.5), 'kapsel': (1, 0.5)}.items():
@@ -66,12 +69,17 @@ def verbreitern(quelle, ziel, breite_halb):
     if w >= breite_halb + 4:
         im.save(os.path.join(OBJ, ziel)); return
     fass = a[int(h * 0.3):int(h * 0.85), :, :3]
-    x0 = int(w * 0.35)
-    best, bp = 1e9, 16
-    for p in range(10, min(80, (w - x0) // 2)):
-        e = np.abs(fass[:, x0:x0 + p] - fass[:, x0 + p:x0 + 2 * p]).mean()
-        if e < best - 0.5:
-            best, bp = e, p
+    rosa = (a[..., 3] > 0) & (a[..., 0] > 170) & (a[..., 1] < 120) & (a[..., 2] > 100)   # Tueren nie zerschneiden
+    tuer = rosa[h - 40:].any(0)
+    tuer = np.convolve(tuer.astype(int), np.ones(9), 'same') > 0
+    best, bp, x0 = 1e9, 16, int(w * 0.35)
+    for x0_ in range(int(w * 0.25), int(w * 0.8)):
+        for p in range(10, min(80, (w - x0_) // 2)):
+            if tuer[x0_:x0_ + 2 * p].any():
+                continue
+            e = np.abs(fass[:, x0_:x0_ + p] - fass[:, x0_ + p:x0_ + 2 * p]).mean() + 0.01 * p
+            if e < best - 0.5:
+                best, bp, x0 = e, p, x0_
     seg = a[:, x0:x0 + bp]
     n = math.ceil((breite_halb + 4 - w) / bp)
     neu = np.concatenate([a[:, :x0]] + [seg] * (n + 1) + [a[:, x0 + bp:]], 1)
@@ -118,12 +126,7 @@ def main():
         verbreitern(GEB[n_] + '.png', 'halb/%s_breit.png' % n_, bh)
         k36o.halb_gespiegelt('halb/%s_breit.png' % n_, 'geb/%s.png' % n_, bh, False)
         tuer_einsetzen('geb/%s.png' % n_)
-        a = np.array(Image.open(os.path.join(OBJ, 'geb/%s.png' % n_)).convert('RGBA')).astype(int)
-        mg = (a[..., 3] > 0) & (a[..., 2] > a[..., 1] + 8) & (a[..., 0] > a[..., 1] + 6) & (a[..., 0] > 150)
-        for yy in range(a.shape[0] - 1, a.shape[0] - 6, -1):                # magenta Saum unten weg
-            if mg[yy].mean() > 0.3:
-                a[yy, :, 3] = 0
-        im = Image.fromarray(a.astype(np.uint8))
+        im = Image.open(os.path.join(OBJ, 'geb/%s.png' % n_)).convert('RGBA')
         im.crop(im.getbbox()).save(os.path.join(OBJ, 'geb/%s.png' % n_))
     tps = [(t['x'] * T - 2 * T, t['y'] * T - 2 * T, (t['x'] + t['b'] + 2) * T, (t['y'] + t['h'] + 2) * T)
            for t in lay['teleporter']]
@@ -160,7 +163,7 @@ def main():
                 return None
         elif pruefen:
             fuss_r = (r[0], max(r[1], r[3] - T + 1), r[2], r[3])           # vor Gebaeuden zaehlt nur der Fuss
-            if any(schnitt(fuss_r, tuple(rr), -1) if art2 == 'gebaeude' else schnitt(r, tuple(rr), 2) for (*rr, art2) in rects) or \
+            if any(schnitt(fuss_r, tuple(rr), -1) if (art2 == 'gebaeude' and klassen == 'n') else schnitt(r, tuple(rr), 2) for (*rr, art2) in rects) or \
                     any(schnitt(r, t_, 0) for t_ in tps):
                 return None
             # ganzes Bildrechteck auf erlaubtem Boden (untere zwei Reihen; liegende ganz) - Pruefliste K44
@@ -257,12 +260,12 @@ def main():
     # ---------------------------------------------------------------- Evakuierung
     # Hilfslager (Block unten links): Zelt, Feldbetten, Vorraete, Wasserspender, Tisch
     for (n_, tx, ty, sp) in (('evak/zelt', 11, 68, False), ('evak/vorrat', 21, 67, False), ('evak/bett', 7, 74, False),
-                             ('evak/bett', 12, 75, True), ('evak/wasser', 17, 72, False), ('evak/tisch', 16, 64, False),
+                             ('evak/schlafsack', 12, 75, False), ('evak/wasser', 17, 72, False), ('evak/tisch', 16, 64, False),
                              ('evak/kocher', 25, 71, False), ('evak/schild', 26, 63, False)):
-        kachel(n_, tx + P, ty + P, {'anim': 'feuer', 'flammen_box': [[4, 14, 22, 26]]} if n_ == 'evak/kocher' else {}, sp)
+        kachel(n_, tx + P, ty + P, {'anim': 'kerzen', 'flammen_box': [[4, 12, 22, 26]], 'flammen_alle': True, 'flammen_amp': 1} if n_ == 'evak/kocher' else {}, sp)
     # Sanitaetsposten (Block unten rechts): Generator, Flutlicht, Betten
     for (n_, tx, ty, sp) in (('evak/generator', 78, 64, False), ('evak/flutlicht', 82, 66, False),
-                             ('evak/bett', 75, 70, False), ('evak/bett', 80, 71, True), ('evak/kisten', 82, 73, False)):
+                             ('evak/bett', 75, 70, False), ('evak/kanister', 80, 71, False), ('evak/kisten', 82, 73, False)):
         kachel(n_, tx + P, ty + P, {'anim': 'leuchten', 'licht': [13, 4], 'licht_box': [0, 0, 26, 9], 'licht_r': 16}
                if n_ == 'evak/flutlicht' else {'anim': 'maschine', 'leds': True} if n_ == 'evak/generator' else {}, sp)
     # Sperren und Zurueckgelassenes
@@ -305,6 +308,9 @@ def main():
     for o in objekte:
         if o['basis'].startswith('k01/'):
             o['nur_kontakt'] = True
+            fx, fy_ = (o['x'] + 24) // T, (o['y'] + o['fuss']) // T     # Guertelbaeume am Weg: kein Schatten aufs Pflaster
+            if cls[min(rows - 1, fy_ + 1)][min(cols - 1, fx)] not in 'hn' and cls[fy_][min(cols - 1, fx)] == 'h':
+                o['schattenlos'] = True
     json.dump(objekte, open(os.path.join(OBJ, 'platzierung.json'), 'w'), indent=0)
     print(len(objekte), 'Objekte')
 

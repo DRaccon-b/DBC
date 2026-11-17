@@ -64,12 +64,17 @@ def verbreitern(quelle, ziel, breite_halb):
     if w >= breite_halb + 4:
         im.save(os.path.join(OBJ, ziel)); return
     fass = a[int(h * 0.3):int(h * 0.85), :, :3]
-    x0 = int(w * 0.35)
-    best, bp = 1e9, 16
-    for p in range(10, min(80, (w - x0) // 2)):
-        e = np.abs(fass[:, x0:x0 + p] - fass[:, x0 + p:x0 + 2 * p]).mean()
-        if e < best - 0.5:
-            best, bp = e, p
+    rosa = (a[..., 3] > 0) & (a[..., 0] > 170) & (a[..., 1] < 120) & (a[..., 2] > 100)   # Tueren nie zerschneiden
+    tuer = rosa[h - 40:].any(0)
+    tuer = np.convolve(tuer.astype(int), np.ones(9), 'same') > 0
+    best, bp, x0 = 1e9, 16, int(w * 0.35)
+    for x0_ in range(int(w * 0.25), int(w * 0.8)):
+        for p in range(10, min(80, (w - x0_) // 2)):
+            if tuer[x0_:x0_ + 2 * p].any():
+                continue
+            e = np.abs(fass[:, x0_:x0_ + p] - fass[:, x0_ + p:x0_ + 2 * p]).mean() + 0.01 * p
+            if e < best - 0.5:
+                best, bp, x0 = e, p, x0_
     seg = a[:, x0:x0 + bp]
     n = math.ceil((breite_halb + 4 - w) / bp)
     neu = np.concatenate([a[:, :x0]] + [seg] * (n + 1) + [a[:, x0 + bp:]], 1)
@@ -120,12 +125,7 @@ def main():
         verbreitern(GEB[n_] + '.png', 'halb/%s_breit.png' % n_, bh)
         k36o.halb_gespiegelt('halb/%s_breit.png' % n_, 'geb/%s.png' % n_, bh, False)
         tuer_einsetzen('geb/%s.png' % n_)
-        a = np.array(Image.open(os.path.join(OBJ, 'geb/%s.png' % n_)).convert('RGBA')).astype(int)
-        mg = (a[..., 3] > 0) & (a[..., 2] > a[..., 1] + 8) & (a[..., 0] > a[..., 1] + 6) & (a[..., 0] > 150)
-        for yy in range(a.shape[0] - 1, a.shape[0] - 6, -1):                # magenta Saum unten weg
-            if mg[yy].mean() > 0.3:
-                a[yy, :, 3] = 0
-        im = Image.fromarray(a.astype(np.uint8))
+        im = Image.open(os.path.join(OBJ, 'geb/%s.png' % n_)).convert('RGBA')
         im.crop(im.getbbox()).save(os.path.join(OBJ, 'geb/%s.png' % n_))
     tps = [(t['x'] * T - 2 * T, t['y'] * T - 2 * T, (t['x'] + t['b'] + 2) * T, (t['y'] + t['h'] + 2) * T)
            for t in lay['teleporter']]
@@ -162,7 +162,7 @@ def main():
                 return None
         elif pruefen:
             fuss_r = (r[0], max(r[1], r[3] - T + 1), r[2], r[3])           # vor Gebaeuden zaehlt nur der Fuss
-            if any(schnitt(fuss_r, tuple(rr), -1) if art2 == 'gebaeude' else schnitt(r, tuple(rr), 2) for (*rr, art2) in rects) or \
+            if any(schnitt(fuss_r, tuple(rr), -1) if (art2 == 'gebaeude' and klassen == 'n') else schnitt(r, tuple(rr), 2) for (*rr, art2) in rects) or \
                     any(schnitt(r, t_, 0) for t_ in tps):
                 return None
             # ganzes Bildrechteck auf erlaubtem Boden (untere zwei Reihen; liegende ganz) - Pruefliste K44

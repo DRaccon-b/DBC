@@ -2195,6 +2195,9 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'group of three orange and white traffic cones, ' + FR14,
         'grey folding table with a radio and papers, ' + FR14,
     ]},
+    'k53_bett': {'size': 48, 'freie_farben': True, 'items': [   # Karte 53: Feldbett frontal (Pruefung: kein Schraegblick)
+        'folding camp cot with a grey blanket and a white pillow, seen from directly above, top-down view, straight rectangle aligned to the image axes, no perspective, no isometric, classic 2D handheld RPG style',
+    ]},
     'k53_gross': {'size': 128, 'freie_farben': True, 'items': [
         'white emergency relief tent with an open front entrance, orange stripe along the roof, tent pegs and ropes, ' + FR14,
         'olive green military supply truck parked, seen from the side, ' + FR14,
