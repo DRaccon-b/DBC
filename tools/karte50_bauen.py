@@ -76,6 +76,32 @@ def bauen(frame=None, speichern=True):
         wand &= ~m
         wand |= k4.hoehenkanten(a, m, 'berg47', FRONT, SEITE, LIPPE, frei if L < 4 else np.zeros((Hp, Wp), bool), 50 + L,
                                 berg=False)
+    # Hohe Felswand: liegt das Gelaende vor einer Front mehr als eine Stufe tiefer, waechst die Wand je Stufe um FRONT
+    hpx = hp.copy()
+    for x in range(Wp):
+        y = 1
+        col = wand[:, x]
+        while y < Hp:
+            if col[y] and not col[y - 1]:
+                y0 = y
+                while y < Hp and col[y]:
+                    y += 1
+                if y < Hp and y0 > 0:
+                    d = int(hpx[max(0, y0 - 2), x]) - int(hpx[min(Hp - 1, y + 2), x])
+                    lauf = y - y0
+                    if d >= 2 and lauf >= FRONT - 6:
+                        for yy in range(y, min(Hp, y0 + lauf * d)):
+                            a[yy, x] = a[y0 + (yy - y0) % lauf, x] if (yy - y0) % lauf > 2 else a[y0 + 4, x]
+                            wand[yy, x] = True
+                        ye = min(Hp - 1, y0 + lauf * d)
+                        for k_, f_ in ((0, 0.7), (1, 0.85)):
+                            if ye + k_ < Hp:
+                                a[ye + k_, x] = (a[ye + k_, x] * f_).astype(np.uint8)
+                        y = y0 + lauf * d
+            y += 1
+    if lay.get('rand') == 'flanke':                                   # eigener Bergzug: dunklere Felstextur auf dem Rand
+        rm = weich(zell_maske(cls, 'h', cols, rows), 5.0, 0, 11) & ~wand
+        a[rm] = (a[rm].astype(float) * np.array([0.78, 0.8, 0.86])).astype(np.uint8)
     treppe_m = np.zeros((Hp, Wp), bool)
     for (x0, x1, ry, r_) in lay['treppen']:
         if r_ == 's':
