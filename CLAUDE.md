@@ -309,6 +309,9 @@ Vor jeder Abgabe Punkt für Punkt prüfen (vergrößert, Standbild und mehrere A
   Silhouettenschatten wird zum Balken). Waldgürtel unten: Kronen dürfen über den Weg ragen (sonst gerade Schnittkante);
   Gürtelbäume nur gegen das Teleporterfeld selbst prüfen (sonst kahler Waldboden am Ausgang). Begleitmotive nie doppelt in
   der Nähe; Flammen-Animation füllt verschobene Pixel nach (keine Löcher im Feuer).
+  Nutzer: Torbauten, in die man nicht hineingeht, bleiben innen dunkel (kein Blick ins Haus); Bodenstruktur ohne Objekte
+  über dezente Tonflecken (dunkleres/helleres Gras, ausgefahrene Wegstellen, Moos im Pflaster) aus grobem Rauschen, nur
+  innerhalb der Fläche und weich am 45°-Raster.
 - **Begleiter am Stumpf (5d):** keine 1-Kachel-Blumen auf dem Stumpf, kein Blumenklumpen; Begleiter überlappen sich nicht.
 - **Paare/Achsen:** Paare vor Toren/Bauwerken exakt gespiegelt (Mitte und Fuß), gleiche Objekte auf gleicher Höhe;
   Druckplatten, Obelisken usw. symmetrisch zur berechneten Achse.

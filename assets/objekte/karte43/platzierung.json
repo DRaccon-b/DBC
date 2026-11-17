@@ -69,6 +69,30 @@
 ]
 },
 {
+"datei": "varianten/speier.png",
+"basis": "speier",
+"x": 1048,
+"y": 419,
+"fuss": 60,
+"kachel": [
+67,
+29
+],
+"ebene": 1
+},
+{
+"datei": "varianten/speier_m.png",
+"basis": "speier",
+"x": 1400,
+"y": 419,
+"fuss": 60,
+"kachel": [
+89,
+29
+],
+"ebene": 1
+},
+{
 "datei": "varianten/bank.png",
 "basis": "bank",
 "x": 1162,
@@ -12603,10 +12627,10 @@
 "liegend": true
 },
 {
-"datei": "varianten/pilz_m.png",
-"basis": "pilz",
-"x": 299,
-"y": 651,
+"datei": "varianten/gras2.png",
+"basis": "gras2",
+"x": 302,
+"y": 650,
 "fuss": 19,
 "kachel": [
 19,
@@ -12617,10 +12641,24 @@
 "liegend": false
 },
 {
-"datei": "varianten/gras2_m.png",
-"basis": "gras2",
-"x": 738,
-"y": 460,
+"datei": "varianten/gras.png",
+"basis": "gras",
+"x": 360,
+"y": 969,
+"fuss": 19,
+"kachel": [
+23,
+61
+],
+"ebene": 0,
+"streu": true,
+"liegend": false
+},
+{
+"datei": "varianten/pilz_m.png",
+"basis": "pilz",
+"x": 737,
+"y": 458,
 "fuss": 19,
 "kachel": [
 46,
@@ -12631,11 +12669,11 @@
 "liegend": false
 },
 {
-"datei": "varianten/gras_m.png",
-"basis": "gras",
-"x": 300,
-"y": 503,
-"fuss": 19,
+"datei": "varianten/gras3_m.png",
+"basis": "gras3",
+"x": 302,
+"y": 502,
+"fuss": 25,
 "kachel": [
 19,
 32

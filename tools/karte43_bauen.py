@@ -68,6 +68,24 @@ def bauen(frame=None, speichern=True):
             saum = weich(zell_maske(cls, 'wT', cols, rows), blur, 0, seed, 0.36) & ~m
             a[saum] = (a[saum] * 0.9).astype(np.uint8)
         a[m] = tex[art][m]
+    # Bodenstruktur ohne Objekte (Nutzer): Flecken aus dunklerem/hellerem Gras, ausgefahrene Wegspuren, Moos im Pflaster -
+    # aus grobem Rauschen je Kachel, am 45-Grad-Raster wie alle Bodenkanten (Regel 6b)
+    rs = np.random.RandomState(4343)
+    grob = rs.rand(rows // 5 + 2, cols // 5 + 2)
+    feld = np.array(Image.fromarray((grob * 255).astype(np.uint8)).resize((cols, rows), Image.BICUBIC)).astype(float) / 255
+    fein = rs.rand(rows, cols) * 0.25
+    feld = feld * 0.8 + fein
+    kl = np.array([list(z) for z in cls])
+    for art, sel, f_, seed in (('g', feld > 0.68, (0.88, 0.92, 0.86), 21), ('g', feld < 0.22, (1.05, 1.07, 1.01), 22),
+                               ('w', feld > 0.70, (0.94, 0.93, 0.92), 23), ('k', feld < 0.25, (0.84, 0.93, 0.82), 24)):
+        zell = (kl == art) & sel
+        innen = zell.copy()                                          # nur innerhalb der Flaeche (1 Kachel Abstand zum Rand)
+        for dy, dx in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+            innen &= np.roll(np.roll(kl == art, dy, 0), dx, 1)
+        if not innen.any():
+            continue
+        m = weich(np.kron(innen, np.ones((T, T))).astype(np.float32), 7, 0.35, seed) & (zell_maske(cls, art, cols, rows) > 0.5)
+        a[m] = np.clip(a[m] * np.array(f_), 0, 255).astype(np.uint8)
     hoch = weich((hp >= 1).astype(np.float32), 5, 0.0, 7, 0.5)       # Wald erhoeht
     a[hoch] = tex['h'][hoch]
     frei = np.zeros((Hp, Wp), bool)

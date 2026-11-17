@@ -19,7 +19,7 @@ OBJ = os.path.join(ROOT, 'assets', 'objekte', 'karte43')
 T = 16
 FREMD = {'burg': 'karte43/burg_c/00.png', 'tor': 'karte43/tor2/00.png',   # Nutzer: mit Tiefe (Burg C, Tor 2)
          'speier': 'karte43/deko/00.png',
-         'schale': 'karte43/deko/01.png', 'bank': 'karte43/deko/03.png',
+         'schale': 'karte43/deko/01.png', 'bank': 'karte43/deko/03.png', 'grab': 'karte43/deko/02.png',
          'totbaum': 'karte04/baeume/02.png', 'gras': 'karte04/klein/00.png', 'gras2': 'karte04/klein/01.png',
          'pilz': 'karte04/klein/11.png', 'kiesel': 'karte04/klein/02.png', 'zweig': 'karte04/klein/09.png',
          'blume': 'karte04/klein/07.png', 'gras3': 'karte04/klein/27.png'}
@@ -135,7 +135,8 @@ def main():
     setze('tor', 37.5 * T, (ty1 + 1) * T - 1, {'nur_kontakt': True}, False, 'g', pruefen=False)   # offener Bogen: nur Sockel sperrt
     # Platzpaare exakt gespiegelt zur Burgachse (gemeinsame Fusszeile)
     for (n, dxs, reihen, opt) in (('schale', (104, 96, 112, 88), (33, 34, 32), {'anim': 'feuer_kamin', 'flammen_box': [[5, 4, 23, 24]]}),
-                                  ('speier', (152, 144, 136, 160, 128, 120), (36, 35, 37, 34, 38), {}),
+                                  ('speier', (172, 176, 168, 180), (29, 30, 28), {}),          # neben der Burg (freier Platz)
+                                  ('grab', (150, 156, 144, 162), (37, 36, 38), {}),
                                   ('bank', (64, 72, 80, 56, 88, 96), (39, 38, 40, 37, 36), {})):
         ok = False
         for dx in dxs:
