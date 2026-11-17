@@ -24,7 +24,18 @@
 ],
 "ebene": 1,
 "fest_pos": true,
-"ohne_wall": true
+"ohne_wall": true,
+"anim": "feuer_lila",
+"flammen_box": [
+[
+2,
+0,
+33,
+24
+]
+],
+"flammen_alle": true,
+"flammen_amp": 1.6
 },
 {
 "datei": "varianten/banner.png",
@@ -53,7 +64,18 @@
 ],
 "ebene": 1,
 "fest_pos": true,
-"ohne_wall": true
+"ohne_wall": true,
+"anim": "feuer_lila",
+"flammen_box": [
+[
+1,
+0,
+32,
+24
+]
+],
+"flammen_alle": true,
+"flammen_amp": 1.6
 },
 {
 "datei": "varianten/banner_m.png",
@@ -340,6 +362,34 @@
 "nur_kontakt": true
 },
 {
+"datei": "varianten/totbaum_m.png",
+"basis": "totbaum",
+"x": 625,
+"y": 297,
+"fuss": 75,
+"kachel": [
+41,
+23
+],
+"ebene": 1,
+"ohne_wall": true
+},
+{
+"datei": "varianten/rf4_m.png",
+"basis": "rf4",
+"x": 690,
+"y": 374,
+"fuss": 22,
+"kachel": [
+44,
+24
+],
+"ebene": 1,
+"begleiter": true,
+"ohne_wall": true,
+"nur_kontakt": true
+},
+{
 "datei": "varianten/kette_m.png",
 "basis": "kette",
 "x": 272,
@@ -382,7 +432,8 @@
 "ebene": 0,
 "liegend": true,
 "ohne_wall": true,
-"schattenlos": true
+"schattenlos": true,
+"anim": "kerzen"
 },
 {
 "datei": "varianten/brand.png",
@@ -397,7 +448,8 @@
 "ebene": 0,
 "liegend": true,
 "ohne_wall": true,
-"schattenlos": true
+"schattenlos": true,
+"anim": "kerzen"
 },
 {
 "datei": "varianten/huelsen.png",

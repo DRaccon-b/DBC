@@ -128,7 +128,7 @@ def main():
                     break
             else:
                 print('  Fels ohne Einbettung', o['x'], o['y'])
-    for i, (px, py) in enumerate([(176, 236), (644, 364)]):
+    for i, (px, py) in enumerate([(176, 236), (656, 364)]):
         o = suche('totbaum', px, py, {}, i == 1, 1, r=2, schritt=8)
         if not o:
             continue
