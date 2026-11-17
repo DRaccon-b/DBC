@@ -26,7 +26,7 @@ FREMD = {'k38/bank': ('karte38/klein/09.png', 1), 'k38/taube': ('karte38/bahn_kl
          'halb/beige': ('karte40/gross_beige_flach_halb/00.png', 1), 'halb/glas': ('karte40/gross_glas_halb/00.png', 1)}
 for i in (0, 1, 5, 7, 12, 13, 18, 34, 41, 44):
     FREMD['k18s/%02d' % i] = ('karte18/strasse/%02d.png' % i, 1)
-for i in (0, 2, 5, 6, 7, 12):
+for i in (0, 1, 2, 3, 5, 6, 7, 12):
     FREMD['k18a/%02d' % i] = ('karte18/autos/%02d.png' % i, 1)
 for i in (0, 1, 2, 4, 9, 12, 13, 14, 15):
     FREMD['k01/baum%02d' % i] = ('karte01/baeume/%02d.png' % i, 1)
@@ -211,8 +211,8 @@ def main():
             print('Gebaeude nicht gesetzt:', n_)
     G = 'kqb'                                                          # begehbarer Belag fuer Deko
     # ---------------------------------------------------------------- Wracks und Sperren (Vorlage: Autos, X-Sperren)
-    for (n_, tx, ty, sp) in (('reaper/wrack', 17, 30, False), ('reaper/wrack', 47, 38, True), ('reaper/wrack', 77, 40, False),
-                             ('reaper/wrack', 28, 74, True), ('k18a/02', 60, 37, False), ('k18a/05', 14, 68, True)):
+    for (n_, tx, ty, sp) in (('k18a/03', 17, 30, False), ('k18a/01', 47, 39, True), ('k18a/03', 77, 40, True),
+                             ('k18a/01', 28, 74, False), ('k18a/02', 60, 38, False), ('k18a/05', 14, 68, True)):   # verlassene Autos (Seitenansicht)
         kachel(n_, tx + P, ty + P, {}, sp, klassen='a', weit=2)
     for (n_, tx, ty, sp) in (('reaper/sperre', 21, 28, False), ('reaper/sperre', 31, 23, True), ('reaper/sperre', 55, 46, False),
                              ('reaper/sperre', 59, 58, True), ('reaper/block', 14, 20, False), ('reaper/block', 66, 63, True),
@@ -232,7 +232,7 @@ def main():
         setze('k18s/18', (bx1 + 1) * T - 20 - lw / 2.0, fy_, dict(LAMPE), klassen='b')
     for (n_, tx, ty, sp) in (('k18s/13', 80, 62, False), ('k18s/01', 88, 61, False), ('k18s/12', 84, 70, False)):
         kachel(n_, tx + P, ty + P, {}, sp, klassen='b', weit=2)
-    kachel('k18s/41', 78 + P, 72 + P, {}, klassen='b', weit=3)             # Haltestelle (Vorlage) auf dem Vorplatz
+    kachel('k18s/41', 80 + P, 74 + P, {}, klassen='b', weit=3)             # Haltestelle (Vorlage) auf dem Vorplatz
     for (tx, ty) in ((18, 12), (40, 46), (60, 45), (22, 76 - 1)):
         kachel('k18s/18', tx + P, ty + P, dict(LAMPE), klassen='k', weit=2)
     # ---------------------------------------------------------------- D-Reaper: Auslaeufer an den Masseraendern
@@ -253,7 +253,9 @@ def main():
         if any(abs(tx - x_) + abs(ty - y_) < 7 for (x_, y_) in gesetzt_r):
             continue
         n_ = motive[len(gesetzt_r) % len(motive)]
-        if setze(n_, tx * T + T / 2.0, ty * T + T - 1, {}, rnd.random() < 0.5, klassen='a' + G):
+        bw_ = (lambda b: b[2] - b[0])(Image.open(os.path.join(OBJ, n_ + '.png')).getbbox())
+        wt_ = max(1, math.ceil(bw_ / T))                                   # Regel 1b: mittig im Kachelblock
+        if setze(n_, (tx - (wt_ - 1) // 2) * T + wt_ * T / 2.0, ty * T + T - 1, {}, rnd.random() < 0.5, klassen='a' + G):
             gesetzt_r.append((tx, ty))
     for (tx, ty) in ((30, 20), (62, 44), (52, 30 + 10), (12, 22), (86, 48)):   # Waechter-Wesen patrouillieren
         kachel('reaper/waechter', tx + P, ty + P, {}, (tx // 2) % 2 == 0, klassen='a' + G, weit=3)

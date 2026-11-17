@@ -82,8 +82,8 @@ def main():
                     k[y, x] = max(set(andere), key=andere.count)
                 elif k[y, x] == 'a' and nb.count('a') <= 1 and nb.count('r') >= 2:
                     k[y, x] = 'r'
-    for n_, (x0, y0, x1, y1) in GEBAEUDE.items():                     # Gebaeudeflaechen bleiben Gehweg
-        k[y0:y1 + 1, x0:x1 + 1] = 'k'
+    for n_, (x0, y0, x1, y1) in GEBAEUDE.items():                     # Gebaeudeflaechen + Gehwegring (Seiten 1, hinten 2 Reihen)
+        k[max(2, y0 - 2):min(R - 2, y1 + 2), max(2, x0 - 1):min(C - 2, x1 + 2)] = 'k'
     P = RAND
     C2, R2 = C + 2 * P, R + 2 * P
     k2 = np.full((R2, C2), 'h')
