@@ -1,0 +1,503 @@
+[
+{
+"datei": "varianten/herz.png",
+"basis": "herz",
+"x": 363,
+"y": 171,
+"fuss": 68,
+"kachel": [
+24,
+14
+],
+"ebene": 1,
+"ohne_wall": true,
+"nur_kontakt": true,
+"anim": "lampe",
+"lampe_box": [
+0,
+0,
+999,
+999
+],
+"licht_farbe": [
+255,
+60,
+90
+]
+},
+{
+"datei": "varianten/saeule.png",
+"basis": "saeule",
+"x": 280,
+"y": 188,
+"fuss": 51,
+"kachel": [
+18,
+14
+],
+"ebene": 1,
+"ohne_wall": true,
+"nur_kontakt": true
+},
+{
+"datei": "varianten/nest.png",
+"basis": "nest",
+"x": 274,
+"y": 134,
+"fuss": 41,
+"kachel": [
+18,
+10
+],
+"ebene": 1,
+"ohne_wall": true,
+"nur_kontakt": true
+},
+{
+"datei": "varianten/saeule_m.png",
+"basis": "saeule",
+"x": 472,
+"y": 188,
+"fuss": 51,
+"kachel": [
+30,
+14
+],
+"ebene": 1,
+"ohne_wall": true,
+"nur_kontakt": true
+},
+{
+"datei": "varianten/nest_m.png",
+"basis": "nest",
+"x": 466,
+"y": 134,
+"fuss": 41,
+"kachel": [
+30,
+10
+],
+"ebene": 1,
+"ohne_wall": true,
+"nur_kontakt": true
+},
+{
+"datei": "varianten/mech.png",
+"basis": "mech",
+"x": 87,
+"y": 148,
+"fuss": 43,
+"kachel": [
+6,
+11
+],
+"ebene": 1,
+"ohne_wall": true,
+"nur_kontakt": true
+},
+{
+"datei": "varianten/mech_m.png",
+"basis": "mech",
+"x": 649,
+"y": 148,
+"fuss": 43,
+"kachel": [
+42,
+11
+],
+"ebene": 1,
+"ohne_wall": true,
+"nur_kontakt": true
+},
+{
+"datei": "varianten/mech_m.png",
+"basis": "mech",
+"x": 649,
+"y": 452,
+"fuss": 43,
+"kachel": [
+42,
+30
+],
+"ebene": 1,
+"ohne_wall": true,
+"nur_kontakt": true
+},
+{
+"datei": "varianten/traeger.png",
+"basis": "traeger",
+"x": 87,
+"y": 75,
+"fuss": 21,
+"kachel": [
+7,
+6
+],
+"ebene": 0,
+"ohne_wall": true,
+"liegend": true
+},
+{
+"datei": "varianten/traeger_m.png",
+"basis": "traeger",
+"x": 631,
+"y": 91,
+"fuss": 21,
+"kachel": [
+41,
+7
+],
+"ebene": 0,
+"ohne_wall": true,
+"liegend": true
+},
+{
+"datei": "varianten/traeger.png",
+"basis": "traeger",
+"x": 631,
+"y": 427,
+"fuss": 21,
+"kachel": [
+41,
+28
+],
+"ebene": 0,
+"ohne_wall": true,
+"liegend": true
+},
+{
+"datei": "varianten/flasche.png",
+"basis": "flasche",
+"x": 56,
+"y": 82,
+"fuss": 29,
+"kachel": [
+4,
+6
+],
+"ebene": 1,
+"ohne_wall": true,
+"nur_kontakt": true
+},
+{
+"datei": "varianten/flasche.png",
+"basis": "flasche",
+"x": 696,
+"y": 370,
+"fuss": 29,
+"kachel": [
+44,
+24
+],
+"ebene": 1,
+"ohne_wall": true,
+"nur_kontakt": true
+},
+{
+"datei": "varianten/lampe.png",
+"basis": "lampe",
+"x": 82,
+"y": 268,
+"fuss": 35,
+"kachel": [
+5,
+18
+],
+"ebene": 1,
+"ohne_wall": true,
+"nur_kontakt": true,
+"anim": "lampe"
+},
+{
+"datei": "varianten/lampe_m.png",
+"basis": "lampe",
+"x": 674,
+"y": 300,
+"fuss": 35,
+"kachel": [
+42,
+20
+],
+"ebene": 1,
+"ohne_wall": true,
+"nur_kontakt": true,
+"anim": "lampe"
+},
+{
+"datei": "varianten/lampe.png",
+"basis": "lampe",
+"x": 290,
+"y": 460,
+"fuss": 35,
+"kachel": [
+18,
+30
+],
+"ebene": 1,
+"ohne_wall": true,
+"nur_kontakt": true,
+"anim": "lampe"
+},
+{
+"datei": "varianten/lampe_m.png",
+"basis": "lampe",
+"x": 530,
+"y": 460,
+"fuss": 35,
+"kachel": [
+33,
+30
+],
+"ebene": 1,
+"ohne_wall": true,
+"nur_kontakt": true,
+"anim": "lampe"
+},
+{
+"datei": "varianten/terminal.png",
+"basis": "terminal",
+"x": 272,
+"y": 418,
+"fuss": 29,
+"kachel": [
+17,
+27
+],
+"ebene": 1,
+"ohne_wall": true,
+"nur_kontakt": true
+},
+{
+"datei": "varianten/terminal_m.png",
+"basis": "terminal",
+"x": 544,
+"y": 434,
+"fuss": 29,
+"kachel": [
+34,
+28
+],
+"ebene": 1,
+"ohne_wall": true,
+"nur_kontakt": true
+},
+{
+"datei": "varianten/kapsel.png",
+"basis": "kapsel",
+"x": 246,
+"y": 477,
+"fuss": 18,
+"kachel": [
+16,
+30
+],
+"ebene": 1,
+"ohne_wall": true,
+"nur_kontakt": true
+},
+{
+"datei": "varianten/kapsel_m.png",
+"basis": "kapsel",
+"x": 550,
+"y": 493,
+"fuss": 18,
+"kachel": [
+35,
+31
+],
+"ebene": 1,
+"ohne_wall": true,
+"nur_kontakt": true
+},
+{
+"datei": "varianten/gitter.png",
+"basis": "gitter",
+"x": 370,
+"y": 471,
+"fuss": 19,
+"kachel": [
+23,
+30
+],
+"ebene": 0,
+"ohne_wall": true,
+"liegend": true,
+"schattenlos": true
+},
+{
+"datei": "varianten/gitter.png",
+"basis": "gitter",
+"x": 430,
+"y": 451,
+"fuss": 19,
+"kachel": [
+27,
+29
+],
+"ebene": 0,
+"ohne_wall": true,
+"liegend": true,
+"schattenlos": true
+},
+{
+"datei": "varianten/kabel.png",
+"basis": "kabel",
+"x": 55,
+"y": 164,
+"fuss": 20,
+"kachel": [
+4,
+11
+],
+"ebene": 0,
+"ohne_wall": true,
+"liegend": true,
+"schattenlos": true
+},
+{
+"datei": "varianten/kabel_m.png",
+"basis": "kabel",
+"x": 693,
+"y": 222,
+"fuss": 20,
+"kachel": [
+44,
+15
+],
+"ebene": 0,
+"ohne_wall": true,
+"liegend": true,
+"schattenlos": true
+},
+{
+"datei": "varianten/kabel.png",
+"basis": "kabel",
+"x": 149,
+"y": 280,
+"fuss": 20,
+"kachel": [
+10,
+18
+],
+"ebene": 0,
+"ohne_wall": true,
+"liegend": true,
+"schattenlos": true
+},
+{
+"datei": "varianten/bolzen.png",
+"basis": "bolzen",
+"x": 198,
+"y": 299,
+"fuss": 15,
+"kachel": [
+12,
+19
+],
+"ebene": 0,
+"ohne_wall": true,
+"liegend": true,
+"schattenlos": true
+},
+{
+"datei": "varianten/bolzen_m.png",
+"basis": "bolzen",
+"x": 322,
+"y": 430,
+"fuss": 15,
+"kachel": [
+20,
+27
+],
+"ebene": 0,
+"ohne_wall": true,
+"liegend": true,
+"schattenlos": true
+},
+{
+"datei": "varianten/bolzen.png",
+"basis": "bolzen",
+"x": 632,
+"y": 215,
+"fuss": 15,
+"kachel": [
+40,
+14
+],
+"ebene": 0,
+"ohne_wall": true,
+"liegend": true,
+"schattenlos": true
+},
+{
+"datei": "varianten/pfuetze.png",
+"basis": "pfuetze",
+"x": 494,
+"y": 381,
+"fuss": 15,
+"kachel": [
+31,
+24
+],
+"ebene": 0,
+"ohne_wall": true,
+"liegend": true,
+"schattenlos": true
+},
+{
+"datei": "varianten/rack_m.png",
+"basis": "rack",
+"x": 694,
+"y": 408,
+"fuss": 23,
+"kachel": [
+44,
+26
+],
+"ebene": 1,
+"ohne_wall": true,
+"nur_kontakt": true
+},
+{
+"datei": "varianten/konsole.png",
+"basis": "konsole",
+"x": 416,
+"y": 484,
+"fuss": 27,
+"kachel": [
+27,
+31
+],
+"ebene": 1,
+"ohne_wall": true,
+"nur_kontakt": true
+},
+{
+"datei": "varianten/ranke.png",
+"basis": "ranke",
+"x": 476,
+"y": 400,
+"fuss": 31,
+"kachel": [
+30,
+26
+],
+"ebene": 1,
+"ohne_wall": true,
+"nur_kontakt": true
+},
+{
+"datei": "varianten/waechter.png",
+"basis": "waechter",
+"x": 196,
+"y": 177,
+"fuss": 30,
+"kachel": [
+13,
+12
+],
+"ebene": 1,
+"ohne_wall": true,
+"nur_kontakt": true
+}
+]
