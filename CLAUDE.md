@@ -341,6 +341,12 @@ Vor jeder Abgabe Punkt für Punkt prüfen (vergrößert, Standbild und mehrere A
   passt sonst nicht ans Wasser);
   Bänke nur auf Gras neben dem Weg. Tiefenstufen im offenen Wasser (Nutzer: „eine Stufe tiefer“, hier 3 Stufen) mit
   `wasser_vertieft.MIN_FLAECHE` – kleine Stufenflecken (Einzellöcher in Teichen) fallen weg.
+- **Berg mit Felsrand (Karte 47):** Vorlagen im Maßstab ≠ 16 px (hier 1,25-fach) erst auf 16-px-Kacheln skalieren.
+  „Boden ringsum“ nur für kleine Felsinseln, nie für den großen Rand (sonst verschwinden Wege unter der Kante); seitliche
+  Ausgänge 2 Reihen unter einer 24-px-Front; 1-Spalten-Kerben/-Vorsprünge und Schachbrett-Ecken nach jeder Glättung
+  angleichen. Säulenpaare der Vorlage gemeinsam setzen (gleiche Fußzeile); Banner/Säulen nie auf Pflaster; Randfelsen ohne
+  Reihen und ohne gleiches Motiv in der Nähe; Streudeko mit größerem Abstand zu Säulen/Bannern; übernommene Sprites mit
+  roter Kontur (Karte 27) auf die kühle Kartenpalette umfärben; die Regelprüfung darf keine Objekte auf Streudeko schieben.
 - **Begleiter am Stumpf (5d):** keine 1-Kachel-Blumen auf dem Stumpf, kein Blumenklumpen; Begleiter überlappen sich nicht.
 - **Paare/Achsen:** Paare vor Toren/Bauwerken exakt gespiegelt (Mitte und Fuß), gleiche Objekte auf gleicher Höhe;
   Druckplatten, Obelisken usw. symmetrisch zur berechneten Achse.

@@ -52,6 +52,16 @@ def main():
     xmask_ = np.unpackbits(np.load(os.path.join(KARTE, 'wasser.npy')))[:lvl.size].reshape(lvl.shape).astype(bool)
     os.makedirs(os.path.join(OBJ, 'fremd'), exist_ok=True)
     os.makedirs(os.path.join(OBJ, 'varianten'), exist_ok=True)
+    _alt_copy = shutil.copy
+
+    def _copy_umfaerben(q_, z_):                                     # rote Kontur (Karte 27) -> kuehles Blaugrau
+        _alt_copy(q_, z_)
+        if 'fels_klein' in q_:
+            a_ = np.array(Image.open(z_).convert('RGBA')).astype(int)
+            m_ = (a_[..., 3] > 0) & (a_[..., 0] > a_[..., 1] + 20) & (a_[..., :3].mean(-1) < 80)
+            a_[m_, :3] = (34, 38, 50)
+            Image.fromarray(a_.astype(np.uint8)).save(z_)
+    shutil.copy = _copy_umfaerben
     for n, q in FREMD.items():
         if not q.startswith('karte47/'):
             shutil.copy(os.path.join(ROOT, 'assets', 'objekte', q), os.path.join(OBJ, 'fremd', n + '.png'))
@@ -93,7 +103,7 @@ def main():
             if any(art2 != 'wald' and schnitt(r, tuple(rr), 3) for (*rr, art2) in rects):
                 return None
         elif pruefen:
-            gap = 2 if opt.get('streu') else 4
+            gap = 10 if opt.get('streu') else 4                       # Streudeko nie an grossen Objekten
             if any(schnitt(r, tuple(rr), gap) for i_, (*rr, art2) in enumerate(rects) if i_ not in ohne):
                 return None
             if any(schnitt(r, z, 0) for j_, z in enumerate(stumpf) if j_ != opt.get('_eigen')):
@@ -237,7 +247,13 @@ def main():
             break
         if any(o_.get('randfels') and abs(o_['kachel'][0] - x) < 5 and abs(o_['kachel'][1] - y) < 4 for o_ in objekte):
             continue
-        n_ = rf[n_w % len(rf)]
+        if any(o_.get('randfels') and o_['kachel'][1] == y and abs(o_['kachel'][0] - x) < 12 for o_ in objekte):
+            continue                                                  # keine Reihen (gleiche Fusszeile)
+        wahl_ = [r_ for r_ in rf if not any(o_.get('basis') == r_ and abs(o_['kachel'][0] - x) < 10
+                                              and abs(o_['kachel'][1] - y) < 10 for o_ in objekte)]
+        if not wahl_:
+            continue
+        n_ = wahl_[n_w % len(wahl_)]
         if setze(n_, x * T + rnd.randint(2, 14), y * T + T - 1, {'randfels': True, 'nur_kontakt': True}, rnd.random() < 0.5,
                  'h', pruefen=False, art='rand'):
             n_w += 1

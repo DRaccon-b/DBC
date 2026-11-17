@@ -39,10 +39,15 @@ def main():
             for (y, x) in teil:
                 k[y, x] = 'g'
     k = k43.zipfel_weg(k, 'gwknhd')
+    insel = np.zeros((R, C), bool)                                    # nur kleine Felsinseln (nicht der Rand) bekommen
+    for teil in k43.flaechen(k == 'h'):                               # Boden ringsum - sonst verschwinden Wege am Rand
+        if len(teil) < 300:
+            for (y, x) in teil:
+                insel[y, x] = True
     for _ in range(3):                                                # Felsinseln: 1 Reihe Boden ringsum, 2 unter der Front
         for y in range(1, R - 2):
             for x in range(1, C - 1):
-                if k[y, x] == 'h':
+                if k[y, x] == 'h' and insel[y, x]:
                     for dy, dx in [(d, e) for d in (1, 2) for e in (-1, 0, 1)]:
                         if 0 <= y + dy < R and k[y + dy, x + dx] in 'wknd':
                             k[y + dy, x + dx] = 'g'
@@ -65,6 +70,13 @@ def main():
                     if y - y0 <= 5 and y0 > 0 and y < R and k[y0:y, x - 1 if x == 1 else x + 1].tolist().count('h') == y - y0:
                         k[y0:y, x] = 'h'
                 y += 1
+        for y in range(1, R - 1):                                     # 1-Spalten-Vorsprung an Seitenkanten (Ende einer Stufe)
+            for x in range(1, C - 1):
+                if k[y, x] == 'h' and k[y, x + 1] != 'h' and k[y + 1, x] != 'h' and k[y - 1, x] != 'h' and k[y, x - 1] == 'h':
+                    k[y, x] = k[y + 1, x]
+                if k[y, x] == 'h' and k[y, x + 1] != 'h' and k[y + 1, x] != 'h' and k[y - 1, x] == 'h' and \
+                        k[y - 1, x + 1] != 'h' and k[y - 2, x] != 'h' and k[y, x - 1] == 'h':
+                    k[y, x] = k[y + 1, x]; k[y - 1, x] = k[y + 1, x]
         for y in range(R - 1):                                        # Schachbrett-Ecken (nur diagonal beruehrend)
             for x in range(C - 1):
                 q = k[y:y + 2, x:x + 2]

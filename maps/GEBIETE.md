@@ -48,7 +48,7 @@ Aufstellfelds (cyan = Ankunft, gold = weiter; Funktion `pfeil_marke` in `tools/k
 | 11 | Karte 44 – Chuchidarumon Village | v1.0 fertig (3 Agenten-Prüfrunden), Bach unter dem Weg ergänzt (6. Brücke), ZIP in maps/karte44/v1.0 |
 | 12 | Karte 45 – Orochimon's Marsh | v1.0 fertig (2 Agenten-Prüfrunden), Steg ganz über Wasser, treibende Weinfässer, ZIP in maps/karte45/v1.0 |
 | 13 | Karte 46 – Gekomon Marsh | v1.0 fertig (2 Agenten-Prüfrunden), Bauernhaus mit Tiefe (PixelLab Pro), ZIP in maps/karte46/v1.0 |
-| 14 | Karte 47 – Deva Mountain | in Arbeit (Vorbild karte46) |
+| 14 | Karte 47 – Deva Mountain | v1.0 fertig (2 Agenten-Prüfrunden), ZIP in maps/karte47/v1.0 |
 
 ## A0S – Sondergebiet
 | Nr. | Karte | Stand |
