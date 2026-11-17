@@ -22,15 +22,15 @@ KARTE = os.path.join(ROOT, 'maps', 'karte53')
 VORLAGE = os.path.join(ROOT, 'assets', 'vorlagen', 'karte53_vorlage.png')
 C, R, T = 96, 80, 16
 RAND = 4
-BLOECKE = [(4, 3, 63, 23), (71, 3, 93, 52), (4, 27, 28, 52), (36, 31, 63, 52), (4, 61, 28, 77), (36, 61, 63, 77),
+BLOECKE = [(4, 3, 63, 23), (71, 3, 93, 52), (4, 26, 28, 52), (36, 31, 63, 52), (4, 61, 28, 77), (36, 61, 63, 77),
            (71, 61, 85, 77), (92, 53, 93, 77)]                       # (x0, y0, x1, y1) Gehwegbloecke
-RASEN = [(4, 18, 26, 21), (38, 16, 61, 17), (73, 15, 92, 16), (73, 17, 83, 17), (4, 38, 26, 39), (54, 72, 60, 75)]
+RASEN = [(4, 19, 26, 21), (38, 16, 61, 17), (73, 15, 92, 16), (4, 39, 26, 40), (54, 72, 60, 75)]
 BEETE_KLEIN = [(74, 61, 77, 63), (21, 74, 24, 76)]            # kleine Beete unter Einzelbaeumen (Vorlage: Baum auf Gehweg)
 REAPER = [(38, 3, 40, 12), (4, 19, 10, 21)]                           # D-Reaper-Flecken
 # Gebaeude (x0, y0, x1, y1) - Tuer auf der Achse, davor Beetluecke
-GEBAEUDE = {'glas_gross': (4, 3, 37, 17), 'glas_mitte': (42, 3, 63, 13), 'beige': (71, 3, 93, 13),
-            'lila_rechts': (71, 18, 93, 28), 'lila_links': (4, 27, 25, 37), 'glas_zentrum': (40, 39, 61, 51)}
-STRASSEN_H = [[53, 60, 0, 95], [24, 30, 29, 70]]                     # (y0, y1, x0, x1) fuer die Mittellinie
+GEBAEUDE = {'glas_gross': (4, 3, 37, 17), 'glas_mitte': (42, 3, 62, 13), 'beige': (72, 3, 93, 13),
+            'lila_rechts': (72, 18, 93, 28), 'lila_links': (4, 27, 25, 37), 'glas_zentrum': (40, 39, 61, 51)}
+STRASSEN_H = [[53, 60, 0, 95], [24, 30, 29, 70]]   # (y0, y1, x0, x1) Mittellinie; Querstrasse links nur 2 Reihen (Gehweg hinter lila_links)
 STRASSEN_V = [[29, 35, 24, 79], [64, 70, 0, 79], [86, 91, 61, 79]]    # (x0, x1, y0, y1)
 ZEBRA = [(64, 70, 21, 21, 'h'), (29, 35, 33, 33, 'h'), (64, 70, 33, 33, 'h'), (29, 35, 51, 51, 'h'), (64, 70, 51, 51, 'h'),
          (29, 35, 63, 63, 'h'), (64, 70, 63, 63, 'h'), (37, 37, 53, 60, 'v'), (72, 72, 53, 60, 'v')]

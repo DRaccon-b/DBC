@@ -76,6 +76,24 @@ def verbreitern(quelle, ziel, breite_halb):
     Image.fromarray(neu.astype(np.uint8)).save(os.path.join(OBJ, ziel))
 
 
+def tuer_einsetzen(ziel):
+    """Glastuer mit Vordach mittig am Boden einsetzen (Tuer reicht bis zur Fusskante), fehlenden Sockel ergaenzen."""
+    im = Image.open(os.path.join(OBJ, ziel)).convert('RGBA')
+    a = np.array(im)
+    h, w = a.shape[:2]
+    if a[-1, :, :3].astype(int).sum(-1)[a[-1, :, 3] > 0].mean() > 150:     # unten beschnitten: Sockel + Kontur anfuegen
+        neu = np.zeros((h + 3, w, 4), np.uint8); neu[:h] = a
+        deck = a[-1, :, 3] > 0
+        neu[h:h + 2, deck] = (120, 120, 128, 255)
+        neu[h + 2, deck] = (36, 36, 44, 255)
+        a, h = neu, h + 3
+    im = Image.fromarray(a)
+    t = Image.open(os.path.join(OBJ, 'gross_buero_mitte/00.png')).convert('RGBA').crop((170, 136, 248, 180))
+    t = t.crop(t.getbbox())
+    im.alpha_composite(t, (w // 2 - t.width // 2, h - t.height))
+    im.save(os.path.join(OBJ, ziel))
+
+
 def main():
     rnd = random.Random(53)
     lay = json.load(open(os.path.join(KARTE, 'layout.json')))
@@ -100,7 +118,8 @@ def main():
             shutil.copy(os.path.join(OBJ, GEB[n_] + '.png'), os.path.join(OBJ, 'geb/%s.png' % n_))
             continue
         verbreitern(GEB[n_] + '.png', 'halb/%s_breit.png' % n_, bh)
-        k36o.halb_gespiegelt('halb/%s_breit.png' % n_, 'geb/%s.png' % n_, bh, True)
+        k36o.halb_gespiegelt('halb/%s_breit.png' % n_, 'geb/%s.png' % n_, bh, False)
+        tuer_einsetzen('geb/%s.png' % n_)
         a = np.array(Image.open(os.path.join(OBJ, 'geb/%s.png' % n_)).convert('RGBA')).astype(int)
         mg = (a[..., 3] > 0) & (a[..., 2] > a[..., 1] + 8) & (a[..., 0] > a[..., 1] + 6) & (a[..., 0] > 150)
         for yy in range(a.shape[0] - 1, a.shape[0] - 6, -1):                # magenta Saum unten weg

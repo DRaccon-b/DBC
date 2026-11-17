@@ -19,8 +19,8 @@
 "datei": "varianten/geb-beige_links.png",
 "basis": "geb/beige_links",
 "x": 80,
-"y": 605,
-"fuss": 146,
+"y": 602,
+"fuss": 149,
 "kachel": [
 10,
 46
@@ -35,8 +35,8 @@
 "datei": "varianten/geb-glas_mitte.png",
 "basis": "geb/glas_mitte",
 "x": 400,
-"y": 596,
-"fuss": 155,
+"y": 593,
+"fuss": 158,
 "kachel": [
 36,
 46
@@ -51,8 +51,8 @@
 "datei": "varianten/geb-glas_rechts.png",
 "basis": "geb/glas_rechts",
 "x": 1376,
-"y": 314,
-"fuss": 181,
+"y": 311,
+"fuss": 184,
 "kachel": [
 91,
 30
@@ -168,12 +168,12 @@
 {
 "datei": "varianten/reaper-sperre_m.png",
 "basis": "reaper/sperre",
-"x": 482,
-"y": 465,
+"x": 530,
+"y": 385,
 "fuss": 30,
 "kachel": [
-31,
-30
+34,
+25
 ],
 "ebene": 1,
 "ohne_wall": true,
@@ -210,12 +210,12 @@
 {
 "datei": "varianten/reaper-block.png",
 "basis": "reaper/block",
-"x": 167,
-"y": 234,
+"x": 183,
+"y": 218,
 "fuss": 21,
 "kachel": [
-11,
-15
+12,
+14
 ],
 "ebene": 1,
 "ohne_wall": true,
@@ -440,6 +440,32 @@
 {
 "datei": "varianten/k18s-18.png",
 "basis": "k18s/18",
+"x": 660,
+"y": 738,
+"fuss": 29,
+"kachel": [
+41,
+47
+],
+"ebene": 1,
+"ohne_wall": true,
+"nur_kontakt": true,
+"anim": "leuchten",
+"licht": [
+4,
+7
+],
+"licht_box": [
+2,
+5,
+6,
+10
+],
+"licht_r": 9
+},
+{
+"datei": "varianten/k18s-18.png",
+"basis": "k18s/18",
 "x": 1444,
 "y": 498,
 "fuss": 29,
@@ -466,12 +492,12 @@
 {
 "datei": "varianten/k18s-18.png",
 "basis": "k18s/18",
-"x": 404,
-"y": 1250,
+"x": 420,
+"y": 1234,
 "fuss": 29,
 "kachel": [
-25,
-79
+26,
+78
 ],
 "ebene": 1,
 "ohne_wall": true,
@@ -562,9 +588,23 @@
 {
 "datei": "varianten/reaper-blasen.png",
 "basis": "reaper/blasen",
-"x": 857,
-"y": 70,
+"x": 473,
+"y": 454,
 "fuss": 25,
+"kachel": [
+30,
+29
+],
+"ebene": 1,
+"ohne_wall": true,
+"nur_kontakt": true
+},
+{
+"datei": "varianten/reaper-ranke.png",
+"basis": "reaper/ranke",
+"x": 856,
+"y": 64,
+"fuss": 31,
 "kachel": [
 54,
 5
@@ -574,21 +614,7 @@
 "nur_kontakt": true
 },
 {
-"datei": "varianten/reaper-ranke.png",
-"basis": "reaper/ranke",
-"x": 424,
-"y": 448,
-"fuss": 31,
-"kachel": [
-27,
-29
-],
-"ebene": 1,
-"ohne_wall": true,
-"nur_kontakt": true
-},
-{
-"datei": "varianten/reaper-blasen_m.png",
+"datei": "varianten/reaper-blasen.png",
 "basis": "reaper/blasen",
 "x": 521,
 "y": 70,
@@ -602,7 +628,7 @@
 "nur_kontakt": true
 },
 {
-"datei": "varianten/reaper-kapsel_m.png",
+"datei": "varianten/reaper-kapsel.png",
 "basis": "reaper/kapsel",
 "x": 652,
 "y": 360,
@@ -630,7 +656,7 @@
 "nur_kontakt": true
 },
 {
-"datei": "varianten/reaper-ranke_m.png",
+"datei": "varianten/reaper-ranke.png",
 "basis": "reaper/ranke",
 "x": 1192,
 "y": 80,
@@ -644,7 +670,7 @@
 "nur_kontakt": true
 },
 {
-"datei": "varianten/reaper-blasen_m.png",
+"datei": "varianten/reaper-blasen.png",
 "basis": "reaper/blasen",
 "x": 713,
 "y": 422,
@@ -658,25 +684,11 @@
 "nur_kontakt": true
 },
 {
-"datei": "varianten/reaper-ranke_m.png",
+"datei": "varianten/reaper-ranke.png",
 "basis": "reaper/ranke",
-"x": 536,
-"y": 464,
+"x": 600,
+"y": 112,
 "fuss": 31,
-"kachel": [
-34,
-30
-],
-"ebene": 1,
-"ohne_wall": true,
-"nur_kontakt": true
-},
-{
-"datei": "varianten/reaper-blasen.png",
-"basis": "reaper/blasen",
-"x": 601,
-"y": 118,
-"fuss": 25,
 "kachel": [
 38,
 8
@@ -686,11 +698,11 @@
 "nur_kontakt": true
 },
 {
-"datei": "varianten/reaper-kapsel_m.png",
-"basis": "reaper/kapsel",
-"x": 844,
-"y": 824,
-"fuss": 23,
+"datei": "varianten/reaper-blasen.png",
+"basis": "reaper/blasen",
+"x": 841,
+"y": 822,
+"fuss": 25,
 "kachel": [
 53,
 52
@@ -700,9 +712,9 @@
 "nur_kontakt": true
 },
 {
-"datei": "varianten/reaper-ei_m.png",
-"basis": "reaper/ei",
-"x": 1162,
+"datei": "varianten/reaper-kapsel.png",
+"basis": "reaper/kapsel",
+"x": 1164,
 "y": 984,
 "fuss": 23,
 "kachel": [
@@ -714,11 +726,11 @@
 "nur_kontakt": true
 },
 {
-"datei": "varianten/reaper-ranke_m.png",
-"basis": "reaper/ranke",
-"x": 88,
-"y": 928,
-"fuss": 31,
+"datei": "varianten/reaper-ei.png",
+"basis": "reaper/ei",
+"x": 90,
+"y": 936,
+"fuss": 23,
 "kachel": [
 6,
 59
@@ -728,11 +740,11 @@
 "nur_kontakt": true
 },
 {
-"datei": "varianten/reaper-blasen.png",
-"basis": "reaper/blasen",
-"x": 777,
-"y": 118,
-"fuss": 25,
+"datei": "varianten/reaper-ranke_m.png",
+"basis": "reaper/ranke",
+"x": 776,
+"y": 112,
+"fuss": 31,
 "kachel": [
 49,
 8
@@ -742,11 +754,11 @@
 "nur_kontakt": true
 },
 {
-"datei": "varianten/reaper-ranke_m.png",
-"basis": "reaper/ranke",
-"x": 456,
-"y": 160,
-"fuss": 31,
+"datei": "varianten/reaper-blasen_m.png",
+"basis": "reaper/blasen",
+"x": 457,
+"y": 166,
+"fuss": 25,
 "kachel": [
 29,
 11
@@ -756,11 +768,11 @@
 "nur_kontakt": true
 },
 {
-"datei": "varianten/reaper-blasen.png",
-"basis": "reaper/blasen",
-"x": 249,
-"y": 934,
-"fuss": 25,
+"datei": "varianten/reaper-ranke.png",
+"basis": "reaper/ranke",
+"x": 248,
+"y": 928,
+"fuss": 31,
 "kachel": [
 16,
 59
@@ -840,26 +852,11 @@
 "nur_kontakt": true
 },
 {
-"datei": "varianten/klein-brocken.png",
+"datei": "varianten/klein-brocken_m.png",
 "basis": "klein/brocken",
-"x": 1423,
-"y": 933,
-"fuss": 21,
-"kachel": [
-89,
-59
-],
-"ebene": 0,
-"ohne_wall": true,
-"liegend": true,
-"schattenlos": true
-},
-{
-"datei": "varianten/klein-zeitung_m.png",
-"basis": "klein/zeitung",
 "x": 154,
-"y": 1152,
-"fuss": 15,
+"y": 1146,
+"fuss": 21,
 "kachel": [
 10,
 72
@@ -870,9 +867,9 @@
 "schattenlos": true
 },
 {
-"datei": "varianten/klein-pfuetze.png",
-"basis": "klein/pfuetze",
-"x": 161,
+"datei": "varianten/klein-glas.png",
+"basis": "klein/glas",
+"x": 162,
 "y": 409,
 "fuss": 15,
 "kachel": [
@@ -885,9 +882,9 @@
 "schattenlos": true
 },
 {
-"datei": "varianten/klein-glas.png",
-"basis": "klein/glas",
-"x": 1258,
+"datei": "varianten/klein-pfuetze.png",
+"basis": "klein/pfuetze",
+"x": 1257,
 "y": 847,
 "fuss": 15,
 "kachel": [
@@ -900,11 +897,11 @@
 "schattenlos": true
 },
 {
-"datei": "varianten/klein-zeitung_m.png",
-"basis": "klein/zeitung",
+"datei": "varianten/klein-brocken_m.png",
+"basis": "klein/brocken",
 "x": 898,
-"y": 1117,
-"fuss": 15,
+"y": 1111,
+"fuss": 21,
 "kachel": [
 56,
 70
@@ -915,9 +912,9 @@
 "schattenlos": true
 },
 {
-"datei": "varianten/klein-pfuetze.png",
-"basis": "klein/pfuetze",
-"x": 142,
+"datei": "varianten/klein-glas.png",
+"basis": "klein/glas",
+"x": 143,
 "y": 522,
 "fuss": 15,
 "kachel": [
@@ -930,9 +927,9 @@
 "schattenlos": true
 },
 {
-"datei": "varianten/klein-glas_m.png",
-"basis": "klein/glas",
-"x": 287,
+"datei": "varianten/klein-pfuetze_m.png",
+"basis": "klein/pfuetze",
+"x": 286,
 "y": 382,
 "fuss": 15,
 "kachel": [
@@ -945,11 +942,11 @@
 "schattenlos": true
 },
 {
-"datei": "varianten/klein-zeitung_m.png",
-"basis": "klein/zeitung",
+"datei": "varianten/klein-brocken_m.png",
+"basis": "klein/brocken",
 "x": 264,
-"y": 846,
-"fuss": 15,
+"y": 840,
+"fuss": 21,
 "kachel": [
 17,
 53
@@ -960,9 +957,9 @@
 "schattenlos": true
 },
 {
-"datei": "varianten/klein-glas_m.png",
-"basis": "klein/glas",
-"x": 307,
+"datei": "varianten/klein-pfuetze_m.png",
+"basis": "klein/pfuetze",
+"x": 306,
 "y": 683,
 "fuss": 15,
 "kachel": [
@@ -975,11 +972,26 @@
 "schattenlos": true
 },
 {
-"datei": "varianten/klein-brocken_m.png",
-"basis": "klein/brocken",
+"datei": "varianten/klein-glas.png",
+"basis": "klein/glas",
+"x": 1120,
+"y": 988,
+"fuss": 15,
+"kachel": [
+70,
+62
+],
+"ebene": 0,
+"ohne_wall": true,
+"liegend": true,
+"schattenlos": true
+},
+{
+"datei": "varianten/klein-zeitung_m.png",
+"basis": "klein/zeitung",
 "x": 1336,
-"y": 900,
-"fuss": 21,
+"y": 906,
+"fuss": 15,
 "kachel": [
 84,
 57
@@ -990,9 +1002,9 @@
 "schattenlos": true
 },
 {
-"datei": "varianten/klein-glas_m.png",
-"basis": "klein/glas",
-"x": 107,
+"datei": "varianten/klein-pfuetze_m.png",
+"basis": "klein/pfuetze",
+"x": 106,
 "y": 1070,
 "fuss": 15,
 "kachel": [
@@ -1005,9 +1017,9 @@
 "schattenlos": true
 },
 {
-"datei": "varianten/klein-pfuetze_m.png",
-"basis": "klein/pfuetze",
-"x": 251,
+"datei": "varianten/klein-glas_m.png",
+"basis": "klein/glas",
+"x": 252,
 "y": 1194,
 "fuss": 15,
 "kachel": [
@@ -1020,11 +1032,11 @@
 "schattenlos": true
 },
 {
-"datei": "varianten/klein-brocken_m.png",
-"basis": "klein/brocken",
+"datei": "varianten/klein-zeitung_m.png",
+"basis": "klein/zeitung",
 "x": 587,
-"y": 374,
-"fuss": 21,
+"y": 380,
+"fuss": 15,
 "kachel": [
 37,
 24
@@ -1035,11 +1047,11 @@
 "schattenlos": true
 },
 {
-"datei": "varianten/klein-zeitung.png",
-"basis": "klein/zeitung",
+"datei": "varianten/klein-brocken.png",
+"basis": "klein/brocken",
 "x": 425,
-"y": 880,
-"fuss": 15,
+"y": 874,
+"fuss": 21,
 "kachel": [
 27,
 55
@@ -1050,11 +1062,11 @@
 "schattenlos": true
 },
 {
-"datei": "varianten/klein-brocken_m.png",
-"basis": "klein/brocken",
+"datei": "varianten/klein-zeitung_m.png",
+"basis": "klein/zeitung",
 "x": 673,
-"y": 233,
-"fuss": 21,
+"y": 239,
+"fuss": 15,
 "kachel": [
 42,
 15
@@ -1065,11 +1077,11 @@
 "schattenlos": true
 },
 {
-"datei": "varianten/klein-zeitung.png",
-"basis": "klein/zeitung",
+"datei": "varianten/klein-brocken.png",
+"basis": "klein/brocken",
 "x": 300,
-"y": 970,
-"fuss": 15,
+"y": 964,
+"fuss": 21,
 "kachel": [
 19,
 61
@@ -1080,14 +1092,44 @@
 "schattenlos": true
 },
 {
-"datei": "varianten/klein-brocken.png",
-"basis": "klein/brocken",
+"datei": "varianten/klein-zeitung.png",
+"basis": "klein/zeitung",
 "x": 719,
-"y": 259,
-"fuss": 21,
+"y": 265,
+"fuss": 15,
 "kachel": [
 45,
 17
+],
+"ebene": 0,
+"ohne_wall": true,
+"liegend": true,
+"schattenlos": true
+},
+{
+"datei": "varianten/klein-glas.png",
+"basis": "klein/glas",
+"x": 348,
+"y": 398,
+"fuss": 15,
+"kachel": [
+22,
+25
+],
+"ebene": 0,
+"ohne_wall": true,
+"liegend": true,
+"schattenlos": true
+},
+{
+"datei": "varianten/klein-zeitung.png",
+"basis": "klein/zeitung",
+"x": 889,
+"y": 991,
+"fuss": 15,
+"kachel": [
+56,
+62
 ],
 "ebene": 0,
 "ohne_wall": true,

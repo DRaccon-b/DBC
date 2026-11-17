@@ -78,6 +78,24 @@ def verbreitern(quelle, ziel, breite_halb):
     Image.fromarray(neu.astype(np.uint8)).save(os.path.join(OBJ, ziel))
 
 
+def tuer_einsetzen(ziel):
+    """Glastuer mit Vordach mittig am Boden einsetzen (Tuer reicht bis zur Fusskante), fehlenden Sockel ergaenzen."""
+    im = Image.open(os.path.join(OBJ, ziel)).convert('RGBA')
+    a = np.array(im)
+    h, w = a.shape[:2]
+    if a[-1, :, :3].astype(int).sum(-1)[a[-1, :, 3] > 0].mean() > 150:     # unten beschnitten: Sockel + Kontur anfuegen
+        neu = np.zeros((h + 3, w, 4), np.uint8); neu[:h] = a
+        deck = a[-1, :, 3] > 0
+        neu[h:h + 2, deck] = (120, 120, 128, 255)
+        neu[h + 2, deck] = (36, 36, 44, 255)
+        a, h = neu, h + 3
+    im = Image.fromarray(a)
+    t = Image.open(os.path.join(OBJ, 'gross_buero_mitte/00.png')).convert('RGBA').crop((170, 136, 248, 180))
+    t = t.crop(t.getbbox())
+    im.alpha_composite(t, (w // 2 - t.width // 2, h - t.height))
+    im.save(os.path.join(OBJ, ziel))
+
+
 def main():
     rnd = random.Random(53)
     lay = json.load(open(os.path.join(KARTE, 'layout.json')))
@@ -98,7 +116,8 @@ def main():
     for n_, (x0, y0, x1, y1) in lay['gebaeude_flaechen'].items():
         bh = (x1 - x0 + 1) * T // 2
         verbreitern(GEB[n_] + '.png', 'halb/%s_breit.png' % n_, bh)
-        k36o.halb_gespiegelt('halb/%s_breit.png' % n_, 'geb/%s.png' % n_, bh, True)
+        k36o.halb_gespiegelt('halb/%s_breit.png' % n_, 'geb/%s.png' % n_, bh, False)
+        tuer_einsetzen('geb/%s.png' % n_)
         a = np.array(Image.open(os.path.join(OBJ, 'geb/%s.png' % n_)).convert('RGBA')).astype(int)
         mg = (a[..., 3] > 0) & (a[..., 2] > a[..., 1] + 8) & (a[..., 0] > a[..., 1] + 6) & (a[..., 0] > 150)
         for yy in range(a.shape[0] - 1, a.shape[0] - 6, -1):                # magenta Saum unten weg
@@ -225,13 +244,13 @@ def main():
     for (n_, x_, y_, sp) in (('k18a/12', 14, oben_y, True), ('k18a/12', 79, oben_y, True), ('k18a/02', 22, unten_y, False),
                              ('k18a/05', 48, oben_y, True), ('k18a/00', 58, unten_y, False)):
         setze(n_, (x_ + P) * T, y_, {}, sp, art='auto', klassen='a')
-    setze('k18a/07', (34 + P) * T, (43 + P) * T, {}, False, art='auto', klassen='a')      # Nord-Sued: Ostspur nach Sueden
-    setze('k18a/06', (89 + P) * T + 8, (70 + P) * T, {}, False, art='auto', klassen='a')
+    setze('k18a/06', (32 + P) * T + 24, (43 + P) * T, {}, False, art='auto', klassen='a')   # Nord-Sued: Ostspur nach Sueden (Front unten)
+    setze('k18a/06', (89 + P) * T + 24, (70 + P) * T, {}, False, art='auto', klassen='a')
     setze('evak/lkw', (46 + P) * T, (28 + P) * T + 8, {}, False, art='auto', klassen='a')  # Militaer-LKW an der Querstrasse
     # ---------------------------------------------------------------- Strassenmoebel
     for (tx, ty) in ((5, 51), (73, 51)):                                 # Bushaltestellen an der Hauptstrasse
         kachel('k18s/41', tx + P, ty + P, {}, weit=2)
-    for (tx, ty) in ((27, 44), (37, 33), (62, 60 + 2), (71, 33), (36, 76), (85, 64), (5, 24 - 2), (62, 22)):
+    for (tx, ty) in ((27, 44), (37, 36), (62, 60 + 2), (71, 37), (36, 76), (85, 64), (5, 24 - 2), (58, 20)):
         kachel('k18s/18', tx + P, ty + P, dict(LAMPE), weit=2)
     for (n_, tx, ty) in (('k18s/12', 26, 49), ('k18s/00', 92, 29), ('k18s/12', 60, 31), ('k18s/01', 24, 31)):
         kachel(n_, tx + P, ty + P, {}, weit=2)
@@ -240,12 +259,12 @@ def main():
     for (n_, tx, ty, sp) in (('evak/zelt', 11, 68, False), ('evak/vorrat', 21, 67, False), ('evak/bett', 7, 74, False),
                              ('evak/bett', 12, 75, True), ('evak/wasser', 17, 72, False), ('evak/tisch', 16, 64, False),
                              ('evak/kocher', 25, 71, False), ('evak/schild', 26, 63, False)):
-        kachel(n_, tx + P, ty + P, {}, sp)
+        kachel(n_, tx + P, ty + P, {'anim': 'feuer', 'flammen_box': [[4, 14, 22, 26]]} if n_ == 'evak/kocher' else {}, sp)
     # Sanitaetsposten (Block unten rechts): Generator, Flutlicht, Betten
     for (n_, tx, ty, sp) in (('evak/generator', 78, 64, False), ('evak/flutlicht', 82, 66, False),
-                             ('evak/bett', 75, 70, False), ('evak/bett', 80, 71, True), ('evak/kisten', 84, 75, False)):
-        kachel(n_, tx + P, ty + P, {'anim': 'leuchten', 'licht': [6, 4], 'licht_box': [2, 1, 18, 8], 'licht_r': 12}
-               if n_ == 'evak/flutlicht' else {}, sp)
+                             ('evak/bett', 75, 70, False), ('evak/bett', 80, 71, True), ('evak/kisten', 82, 73, False)):
+        kachel(n_, tx + P, ty + P, {'anim': 'leuchten', 'licht': [13, 4], 'licht_box': [0, 0, 26, 9], 'licht_r': 16}
+               if n_ == 'evak/flutlicht' else {'anim': 'maschine', 'leds': True} if n_ == 'evak/generator' else {}, sp)
     # Sperren und Zurueckgelassenes
     for (n_, tx, ty, sp) in (('evak/sandsack', 33, 22, False), ('evak/sperre', 9, 46, False), ('evak/kegel', 44, 66, False),
                              ('evak/sperre', 58, 69, True), ('evak/gepaeck', 19, 47, False), ('evak/rucksack', 48, 74, False),
@@ -258,7 +277,7 @@ def main():
     # D-Reaper-Auslaeufer: Ranken und Blasen direkt an den roten Flecken
     for (n_, tx, ty, sp) in (('reaper/ranke', 41, 12, False), ('reaper/blasen', 37, 13, True), ('reaper/ranke', 11, 22, True),
                              ('reaper/kapsel', 12, 19, False)):
-        kachel(n_, tx + P, ty + P, {}, sp, klassen='kn', weit=1)
+        kachel(n_, tx + P, ty + P, {}, sp, klassen='kn', weit=2)
     # ---------------------------------------------------------------- Baumguertel
     for ty in range(rows):
         for tx in range(cols):
