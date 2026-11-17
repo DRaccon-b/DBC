@@ -44,6 +44,7 @@ Aufstellfelds (cyan = Ankunft, gold = weiter; Funktion `pfeil_marke` in `tools/k
 | 7 | Karte 40 – Shinjuku Siege | v1.0 fertig (3 Agenten-Prüfrunden), Meteor-Furche auf der Nordstraße (Nutzer), ZIP in maps/karte40/v1.0 |
 | 8 | Karte 41 – Digital World: Wind Desert | v1.0 fertig (3 Agenten-Prüfrunden), ZIP in maps/karte41/v1.0 |
 | 9 | Karte 42 – Digital World: Wind Valley | v1.0 fertig (3 Agenten-Prüfrunden), Vorlagenfehler korrigiert, ZIP in maps/karte42/v1.0 |
+| 10 | Karte 43 – Haunted Castle Outskirts | in Arbeit (Vorbild karte42) |
 
 ## A0S – Sondergebiet
 | Nr. | Karte | Stand |

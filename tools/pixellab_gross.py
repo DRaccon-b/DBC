@@ -364,6 +364,20 @@ for _n, _box, _gr, _t in (
                              'vorlage': (_V40, _box), 'stil': 'assets/objekte/karte35/wohnblock_b/00.png',
                              'text': _t + _HALB + _K40 + FR14}
 
+# Karte 43 Haunted Castle Outskirts: Spukburg auf dem Vorplatz (Vorlage ca. 395x215 px, > 256 px -> Pro-Generator)
+_V43 = 'assets/vorlagen/karte43_vorlage.png'
+_B43 = ('wide haunted gothic castle facade of dark blue-grey stone bricks, two tall round corner towers with pointed dark '
+        'slate cone roofs and small dark red banners, a long dark slate roof between them seen from slightly above so the '
+        'roof surface and ridge are visible, a central gatehouse with a tall pointed arch opening (open, dark passage), two '
+        'tall pointed stained glass windows glowing faint violet with a crescent moon, stone base, symmetric, fully in frame '
+        'with margin on all sides, ')
+AUFTRAEGE['k43_burg'] = {'ziel': 'assets/objekte/karte43/burg_a', 'groesse': (400, 240), 'magenta': True,
+                         'vorlage': (_V43, (1050, 270, 1445, 485)), 'stil': 'assets/objekte/karte09/tor2/00.png',
+                         'text': _B43 + FR14}
+AUFTRAEGE['k43_burg_b'] = {'ziel': 'assets/objekte/karte43/burg_b', 'groesse': (400, 240), 'magenta': True,
+                           'vorlage': None, 'stil': 'assets/objekte/karte09/tor2/00.png',
+                           'text': _B43 + 'crumbling haunted look with cracks and ivy, ' + FR14}
+
 
 def main(name):
     a = AUFTRAEGE[name]

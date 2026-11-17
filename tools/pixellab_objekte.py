@@ -2133,6 +2133,17 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'dry desert sagebrush with pale grey-green leaves, ' + FR14,
         'small pile of weathered orange sandstone slabs with a dry grass tuft, ' + FR14,
     ]},
+    'k43_tor': {'size': 192, 'freie_farben': True, 'items': [   # Karte 43: Torbau am Waldblock (Vorlage: flache Platte)
+        'small ruined gothic gatehouse of dark blue-grey stone bricks with a dark slate roof seen from slightly above, '
+        'a wide pointed archway in the middle with a dark open passage leading into the hill, two short square towers, '
+        'moss and cracks, symmetric, ' + FR14,
+    ]},
+    'k43_deko': {'size': 64, 'freie_farben': True, 'items': [   # Karte 43: Wasserspeier-Statuen, Feuerschalen, Grabsteine
+        'stone gargoyle statue crouching on a square pedestal, dark grey stone, bat wings folded, ' + FR14,
+        'iron fire brazier bowl on a tall black stand with burning orange flames, ' + FR14,
+        'old weathered tombstone with a cross, tilted, moss at the base, ' + FR14,
+        'wooden park bench with dark iron legs, ' + FR14,
+    ]},
     'k40_krater': {'size': 256, 'freie_farben': True, 'items': [   # Nutzer: Meteor-Furche (256 px: ein Motiv je Auftrag)
         'long deep impact furrow crater seen from directly above, a straight trench gouged north to south through a dark asphalt city road, brown earth and dark soil inside, broken grey asphalt slabs and dirt pushed up and piled along the left and right rims, cracks radiating outward, no meteor visible, transparent background around the rims',
     ]},
