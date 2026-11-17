@@ -76,7 +76,7 @@ def main():
     def schnitt(a, b, d):
         return not (a[2] + d < b[0] or b[2] + d < a[0] or a[3] + d < b[1] or b[3] + d < a[1])
 
-    def setze(name, cx, fy, opt=None, spiegeln=False, klassen=BODEN, pruefen=True, ohne=(), ebene_soll=1):
+    def setze(name, cx, fy, opt=None, spiegeln=False, klassen=BODEN, pruefen=True, ohne=(), ebene_soll=1, rand=2 * T):
         sp = Image.open(pfad(name)).convert('RGBA')
         if spiegeln:
             sp = sp.transpose(Image.FLIP_LEFT_RIGHT)
@@ -103,7 +103,7 @@ def main():
                 return None                                          # Fuss und Schatten mit Abstand zu Weg/Pflaster
             if ebene_soll != 1:                                      # Plateau: ganzes Bild mit Rand auf dem Plateau
                 y0_, x0_ = max(0, r[1] - 6), max(0, r[0] - 6)
-                if (lvl[y0_:r[3] + 2 * T, x0_:r[2] + 7] != ebene_soll).any():
+                if (lvl[max(y0_, r[3] - 8):r[3] + rand, x0_:r[2] + 7] != ebene_soll).any():
                     return None                                      # Fuss 2 Reihen von der Kante (Wandregel)
             elif (lvl[r[3] - 3:r[3] + 9, r[0]:r[2] + 1] != 1).any() or wand[r[3] - 3:r[3] + 2, r[0]:r[2] + 1].any():
                 return None                                          # Fuss ganz auf dem Wuestenboden, nie an der Wand
@@ -236,7 +236,23 @@ def main():
         n_ = klein_[pl_k % len(klein_)]
         if setze(n_, x * T + rnd.randint(4, 12), y * T + T - 1, {'streu': True}, rnd.random() < 0.5, 'r', ebene_soll=3):
             pl_k += 1; gpos.append((x, y))
-    print('  Plateau: %d grosse, %d kleine Objekte' % (pl_g, pl_k))
+    # Bergkette (Nutzer): Felsnadeln, Felsgruppen und Platten auf dem Kamm, locker verteilt
+    mk = [(x, y) for y in range(0, rows - 1) for x in range(1, cols - 1) if cls[y][x] == 'm']
+    rnd.shuffle(mk)
+    berg_ = ['pl01', 'pl00', 'pl03', 'pl09', 'bg58', 'bg40', 'bg26', 'bg08', 'pl15', 'bg32']   # Motive gemischt
+    pl_m, mpos = 0, []
+    for (x, y) in mk:
+        if pl_m >= 12:
+            break
+        if any(abs(x - a_) < 6 and abs(y - b_) < 5 for (a_, b_, _) in mpos):
+            continue
+        frei_ = [m_ for m_ in berg_ if not any(m2 == m_ and abs(x - a_) < 16 and abs(y - b_) < 16 for (a_, b_, m2) in mpos)]
+        if not frei_:
+            continue
+        m_ = frei_[(x * 7 + y * 3) % len(frei_)]
+        if setze(m_, x * T + rnd.randint(2, 14), y * T + T - 1, {}, rnd.random() < 0.5, 'm', ebene_soll=4, rand=8):
+            pl_m += 1; mpos.append((x, y, m_))
+    print('  Plateau: %d grosse, %d kleine Objekte, Bergkette %d' % (pl_g, pl_k, pl_m))
     # ---------------- sparsame Streudeko (Kleinkram dezent, keine Wiederholung, nicht auf Wegen) - Tal und Hochplateaus
     kand = [(x, y, 1 if cls[y][x] == 's' else 2) for y in range(2, rows - 2) for x in range(2, cols - 2) if cls[y][x] in 'sp']
     rnd.shuffle(kand)

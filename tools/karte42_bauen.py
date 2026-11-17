@@ -52,6 +52,7 @@ def texturen(cols, rows):
         'k': flaeche(k6.kacheln(kies, 5, faerben((118, 112, 96), (178, 172, 150), 0.25, 0.6)), cols, rows),
         'n': flaeche(k6.kacheln(os.path.join(basis, 'gras_%d.png'), 5, faerben((62, 112, 46), (112, 156, 74), 0.3, 0.5)), cols, rows),
         'r': flaeche(k6.kacheln(kies, 5, faerben((176, 118, 70), (226, 166, 108), 0.25, 0.6)), cols, rows),   # Felsrand (hoch)
+        'm': flaeche(k6.kacheln(kies, 5, faerben((140, 88, 52), (200, 140, 92), 0.25, 0.6)), cols, rows),   # Bergkette
         'p': flaeche(k6.kacheln(sand, 5, faerben((206, 160, 104), (242, 200, 140))), cols, rows),   # Hochplateau
     }
     return t
@@ -84,6 +85,10 @@ def bauen(frame=None, speichern=True):
     for (x0, x1, ry) in lay['treppen']:                              # Treppen schneiden die Front
         frei[ry * T - 4:ry * T + FRONT + 10, x0 * T:(x1 + 1) * T] = True
     wand = k4.hoehenkanten(a, h1m, 'wueste', FRONT, SEITE, LIPPE, frei, 42, berg=False)
+    # Bergkette auf dem Felsrand (Nutzer): eine Stufe hoeher, Front zum Plateau bzw. Rand
+    hoch3 = weich((hp >= 3).astype(np.float32), 5, 0.0, 13, 0.5) & h1m
+    a[hoch3] = tex['m'][hoch3]
+    wand |= k4.hoehenkanten(a, hoch3, 'wueste', FRONT, SEITE, LIPPE, np.zeros_like(frei), 44, berg=False)
     for (x0, x1, ry) in lay['treppen']:                              # Steintreppe frontal, volle Breite
         k4.treppe(a, x0 * T, (x1 + 1) * T, ry * T - 1, 's', FRONT, 'wueste', tex['b'])
     xm = np.zeros((Hp, Wp), bool)                                    # kein Wasser auf dieser Karte

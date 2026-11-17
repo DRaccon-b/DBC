@@ -171,11 +171,36 @@ def main():
     h = np.zeros((R, C), int)
     h[k == 'r'] = 2
     h[np.isin(k, ['p', 'q'])] = 1
+    # Nutzer: Bergkette auf dem Felsrand als Abgrenzung zum Plateau (Rand und Plateau liegen gleich hoch): Rand-Kacheln
+    # bis 5 Kacheln vom Plateau, mind. 3 Kacheln vom Talboden entfernt (sonst doppelte Waende), Hoehe 3, Klasse 'm'
+    def abstand(m):
+        d = np.full((R, C), 99)
+        d[m] = 0
+        for i in range(1, 8):
+            m2 = m.copy()
+            m2[1:] |= m[:-1]; m2[:-1] |= m[1:]; m2[:, 1:] |= m[:, :-1]; m2[:, :-1] |= m[:, 1:]
+            m2[1:, 1:] |= m[:-1, :-1]; m2[:-1, :-1] |= m[1:, 1:]; m2[1:, :-1] |= m[:-1, 1:]; m2[:-1, 1:] |= m[1:, :-1]
+            d[m2 & (d == 99)] = i
+            m = m2
+        return d
+    d_p = abstand(np.isin(k, ['p', 'q']))
+    d_b = abstand(np.isin(k, ['s', 'b', 'k', 't', 'T']))
+    kette = (k == 'r') & (d_p <= 5) & (d_b >= 4)
+    for teil in flaechen(kette):                      # kleine Kettenstuecke weglassen
+        if len(teil) < 12:
+            for (y, x) in teil:
+                kette[y, x] = False
+    for _ in range(2):                                # 1-Kachel-Zacken der Kette glaetten
+        nb = np.zeros((R, C), int)
+        nb[1:] += kette[:-1]; nb[:-1] += kette[1:]; nb[:, 1:] += kette[:, :-1]; nb[:, :-1] += kette[:, 1:]
+        kette = (kette & (nb >= 2)) | ((k == 'r') & (nb >= 3) & (d_b >= 4))
+    k[kette] = 'm'
+    h[kette] = 3
     lay = {'groesse': [C, R], 'klassen': [''.join(z) for z in k], 'hoehe': [''.join(str(c) for c in z) for z in h],
            'treppen': [[x0, x1, FRONT_REIHE] for (x0, x1) in TREPPEN],
            'teleporter': [{'x': tx, 'y': ty, 'b': b_, 'h': hh} for (tx, ty, b_, hh) in TELEPORTER]}
     json.dump(lay, open(os.path.join(KARTE, 'layout.json'), 'w'), indent=0)
-    F = {'r': (223, 150, 90), 'p': (240, 180, 120), 'q': (200, 160, 110), 's': (236, 216, 160), 'b': (190, 160, 110),
+    F = {'m': (150, 90, 50), 'r': (223, 150, 90), 'p': (240, 180, 120), 'q': (200, 160, 110), 's': (236, 216, 160), 'b': (190, 160, 110),
          'k': (140, 140, 140), 't': (120, 80, 40), 'T': (80, 220, 240)}
     S_ = 6
     im = Image.new('RGB', (C * S_, R * S_))
