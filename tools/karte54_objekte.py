@@ -23,7 +23,7 @@ D = {'ranke_a': 'karte54/ranke96/00.png', 'ranke_b': 'karte54/ranke96/01.png', '
      'quer_a': 'karte54/ranke_quer/00.png', 'quer_b': 'karte54/ranke_quer/01.png',
      'senk_a': 'karte54/ranke_quer/02.png', 'senk_b': 'karte54/ranke_quer/03.png',
      'saeule': 'karte52/n48/05.png', 'cluster': 'karte52/n48b/06.png', 'huegel': 'karte52/n48b/02.png'}
-RV = os.environ.get('K54_RANKEN')                                       # Nutzer: Rankenvarianten rv1..rv5 (PixelLab k54_rvN)
+RV = os.environ.get('K54_RANKEN', 'rv1')                                # Nutzer: Version 1 (tropfender Schlamm, k54_rv1)
 if RV:
     for i_, n_ in enumerate(('ranke_a', 'ranke_b', 'ranke_c', 'ranke_d')):
         D[n_] = 'karte54/%s/%02d.png' % (RV, i_)
@@ -34,6 +34,13 @@ if RV:
 LIEGEND = [('quer_a', 'w', -56), ('quer_b', 'w', 84), ('senk_a', 'n', -88), ('senk_b', 'n', 70)]
 # stehende Ranken und Begleiter: (Motiv, Winkel in Grad; 0 = Osten, 90 = Sueden, 270 = Norden), Spiegelbild (180 - w)
 RANKEN = [('ranke_a', 214), ('ranke_d', (240, 236, 246, 232)), ('ranke_b', 142), ('ranke_c', (118, 122, 114))]
+# Nutzer: unregelmaessiger, nicht spiegelgleich - die Ostseite bekommt ein anderes Motiv, einen versetzten Winkel und
+# eine andere Tiefe (Seite, Motiv, Versatz in Grad, Tiefe in px)
+PARTNER = {'ranke_a': 'ranke_c', 'ranke_c': 'ranke_a', 'ranke_b': 'ranke_d', 'ranke_d': 'ranke_b',
+           'quer_a': 'quer_b', 'quer_b': 'quer_a', 'huegel': 'cluster', 'cluster': 'huegel', 'saeule': 'saeule'}
+VERSATZ = {'ranke_a': (11, 16), 'ranke_d': (-9, 8), 'ranke_b': (-14, 24), 'ranke_c': (8, 4), 'huegel': (-12, 10),
+           'saeule': (18, 6), 'cluster': (-10, 20)}
+LIEGEND_VERSATZ = {'quer_a': 30, 'quer_b': -22}
 CLUSTER = [('huegel', 226), ('saeule', (256, 250, 262, 200)), ('cluster', (160, 132, 128, 105))]
 
 
@@ -110,12 +117,30 @@ def main():
             if not a_:
                 continue
             rects.append(a_[2])
-            b_ = pruefe(im_m, 2 * mx - cx, fy)
+            # Ostseite: anderes Motiv, Winkel und Tiefe versetzt (Nutzer: nicht alles spiegelgleich)
+            n2 = PARTNER.get(name, name)
+            dw, dt = VERSATZ.get(name, (0, 0))
+            im2, d2 = sprite(n2, (hash(name) % 3) != 0)
+            b_ = None
+            for t2 in range(tiefe + dt, tiefe + dt + 6 * T, 4):
+                for dw2 in (dw, dw * 0.5, dw * 1.5, 0):
+                    w2 = math.radians(180 - (w if not isinstance(w, tuple) else w[0]) + dw2)
+                    rr2 = rad - t2
+                    cx2 = mx + rr2 * math.cos(w2)
+                    wt2 = -(-im2.width // T)
+                    o2 = 0 if wt2 % 2 == 0 else T / 2.0
+                    cx2 = round((cx2 - o2) / T) * T + o2
+                    fy2 = int(my + rr2 * math.sin(w2)) // T * T + T - 1
+                    b_ = pruefe(im2, cx2, fy2)
+                    if b_:
+                        break
+                if b_:
+                    break
             if not b_:
                 rects.pop()
                 continue
             rects.append(b_[2])
-            for (x, y, r), d_, n_ in ((a_, datei, name), (b_, datei_m, name)):
+            for (x, y, r), d_, n_ in ((a_, datei, name), (b_, d2, n2)):
                 objekte.append({'datei': d_, 'basis': n_, 'x': x, 'y': y, 'fuss': r[3] - y, 'kachel': [int(r[0] + r[2]) // 2 // T, r[3] // T],
                                 'ebene': 1, 'ohne_wall': True, 'nur_kontakt': True})
             return True
@@ -131,7 +156,12 @@ def main():
             y = int(my + lage - im.height / 2)
             zeile = boden[min(rows * T - 1, max(0, y + im.height // 2))]
             x = int(np.argmax(zeile)) - 10                               # erste Membranspalte von links
-            setz = [(im, datei, x, y), (sprite(name, True)[0], sprite(name, True)[1], 2 * mx - x - im.width, y)]
+            n2 = PARTNER.get(name, name)                                 # Ostseite: anderes Motiv, versetzte Zeile
+            im2, d2 = sprite(n2, True)
+            y2 = int(my + lage + LIEGEND_VERSATZ.get(name, 0) - im2.height / 2)
+            z2 = boden[min(rows * T - 1, max(0, y2 + im2.height // 2))]
+            x2 = int(cols * T - 1 - np.argmax(z2[::-1])) + 10 - im2.width + 1   # letzte Membranspalte von rechts
+            setz = [(im, datei, x, y), (im2, d2, x2, y2)]
         else:
             x = int(mx + lage - im.width / 2)
             spalte = boden[:, min(cols * T - 1, max(0, x + im.width // 2))]
