@@ -24,7 +24,7 @@ GITTER = [(5, 9), (7, 9), (5, 14), (42, 9), (40, 14), (42, 14), (18, 27), (20, 2
 GITTERREIHEN = [(12, 37, 5), (17, 38, 25), (17, 38, 31)]          # Lueftungsreihen der Vorlage (jede 2. Kachel)
 LATERNEN = [(4, 19), (43, 19),               # Bucht-Laternen eine Reihe hoeher: Schatten bleibt auf der Flaeche
             (16, 29), (38, 29)]
-GROSS = [('gen/00', 5, 28), ('gen/00', 41, 28), ('terminal/00', 7, 31)]
+GROSS = [('gen/00', 5, 28), ('gen/00', 41, 28)]   # Terminal-Tisch unten entfernt (Nutzer)
 # Generator laeuft: Tanks blubbern, Anzeigen blinken (Regel Maschinen-Animation)
 GEN_ANIM = {'anim': 'maschine', 'ruetteln': True, 'leds': True, 'led_box': [[34, 18, 48, 30], [9, 41, 15, 47]],
             'fluessig': [[27, 2, 36, 15, 'gruen'], [0, 20, 9, 42, 'cyan'], [53, 14, 62, 40, 'cyan']]}
