@@ -5,7 +5,7 @@
 Das Dach des Hypnos-Hochhauses liegt hoch ueber Shinjuku (Nutzer): Im Ring der aeusseren 3 Kacheln sieht man tief unten
 die Stadt von Karte 35 (Shinjuku Digital Fog) - verkleinert (weit unten), mit Hoehendunst, aus deren eigener Animation
 gerendert (Nebel, Laternen, Teleporter bewegen sich mit). Das Dach wirft einen Schatten nach rechts unten auf die Stadt;
-die Dachkante hat eine Bruestung, im Sueden faellt die Fassade sichtbar ab. Dachflaeche: helle Ziegelwege (Karte 18 'k')
+die Dachkante hat eine Bruestung, im Sueden faellt eine Glasfassade (Karte-35-Buerogebaeude) bis zum Kartenrand ab. Dachflaeche: helle Ziegelwege (Karte 18 'k')
 und die tiefer liegende dunkle Flaeche mit Kante. Der Ring ist nicht begehbar (leere.npy).
 """
 import json, os, sys
@@ -56,6 +56,19 @@ def stadt_unten(frame, W, Hh):
     return np.array(Image.open(pfad).convert('RGB'))
 
 
+FASSADE = os.path.join(ROOT, 'assets', 'objekte', 'karte35', 'gross_buero_mitte_c', '00.png')
+
+
+def fassade_textur(breite):
+    """Fassadenband in Dachbreite aus dem Karte-35-Buerogebaeude: Eckpfeiler (x 5-31 / 447-473) + Glasraster
+    (Periode 16 px, Ausschnitt x 40-423 nahtlos wiederholt), Zeilen 65-112 (Gesims-Unterkante, Glasgeschoss, Deckenband)."""
+    q = np.array(Image.open(FASSADE).convert('RGB'))[65:113]
+    links, rechts, glas = q[:, 5:32], q[:, 447:474], q[:, 40:424]
+    n = breite - links.shape[1] - rechts.shape[1]
+    mitte = np.concatenate([glas] * (n // glas.shape[1] + 1), 1)[:, :n]
+    return np.concatenate([links, mitte, rechts], 1)
+
+
 def bauen(frame=None, speichern=True):
     lay = json.load(open(os.path.join(KARTE, 'layout.json')))
     cols, rows = lay['groesse']
@@ -77,14 +90,32 @@ def bauen(frame=None, speichern=True):
     s = np.array(Image.fromarray((sch * 255).astype(np.uint8)).filter(ImageFilter.GaussianBlur(4))).astype(np.float32) / 255
     s[dach] = 0
     a[:] = np.clip(a * (1 - 0.45 * s[..., None]), 0, 255).astype(np.uint8)
-    # Fassade faellt im Sueden ab (unter der Dachkante, auch unter der Plattform)
+    # Suedfassade (Nutzer): Glasfassade des PixelLab-Buerogebaeudes aus Karte 35 (1:1, nicht skaliert) faellt unter der
+    # Dachkante bis zum Kartenrand ab - Gesims, Glasgeschoss, Deckenband; Eckpfeiler links und rechts. Die Teleporter-
+    # Plattform (Dachhoehe) bleibt davor.
     unten = dach & ~np.vstack([dach[1:], np.zeros((1, Wp), bool)])
-    for d in range(1, 15):
-        f = np.vstack([np.zeros((d, Wp), bool), unten[:-d]]) & ~dach
-        c = np.array(H('#8a919c'), np.float32) * (1 - d * 0.035)
-        a[f] = c.astype(np.uint8)
-        if d in (5, 10):
-            a[f] = (c * 0.8).astype(np.uint8)                          # Geschossfuge
+    xs = np.where(dach.any(0))[0]
+    x0d = xs[0]
+    fas = fassade_textur(xs[-1] - x0d + 1)
+    fas_m = np.zeros((Hp, Wp), bool)
+    for x in range(Wp):
+        ys = np.where(unten[:, x])[0]
+        for y0 in ys:
+            if y0 + 1 >= Hp or dach[y0 + 1, x]:
+                continue
+            fx = x - x0d
+            if not (0 <= fx < fas.shape[1]):
+                continue
+            for d in range(min(fas.shape[0], Hp - y0 - 1)):
+                y = y0 + 1 + d
+                if dach[y, x]:
+                    break
+                a[y, x] = fas[d, fx]
+                fas_m[y, x] = True
+    # Schlagschatten der Teleporter-Plattform auf die Fassade (Licht oben links -> rechts daneben)
+    for dx in range(1, 7):
+        sm = np.hstack([np.zeros((Hp, dx), bool), dach[:, :-dx]]) & fas_m
+        a[sm] = (a[sm] * 0.82).astype(np.uint8)
     # Bruestung: 1 px dunkle Aussenkontur, 2 px helle Abdeckung mit Lichtkante
     dp = np.vstack([dach, dach[-1:]])                                  # Kartenrand ist keine Dachkante (Teleporter-Ausgang offen)
     rand = kontur(dp)
