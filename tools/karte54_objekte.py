@@ -18,14 +18,16 @@ KARTE = os.path.join(ROOT, 'maps', 'karte54')
 OBJ = os.path.join(ROOT, 'assets', 'objekte', 'karte54')
 T = 16
 # name -> (Quelle, Skalierung)
-D = {'mech': ('karte54/kern/00.png', 0.75), 'terminal': ('karte54/kern/01.png', 0.55), 'lampe': ('karte54/kern/02.png', 0.6),
-     'kapsel': ('karte54/kern/03.png', 0.6), 'flasche': ('karte54/kern/04.png', 0.5), 'rack': ('karte54/kern/06.png', 0.6),
-     'rohr': ('karte54/kern/07.png', 0.6), 'konsole': ('karte54/kern/09.png', 0.6),
-     'herz': ('karte54/anime/00.png', 0.8), 'saeule': ('karte52/anime/01.png', 0.75),          # Kernkugel wie im Anime
-     'nest': ('karte52/anime/04b.png', 0.8), 'befallen': ('karte54/kern_gross/03.png', 0.5),
-     'waechter': ('karte54/anime/01.png', 0.5), 'ranke': ('karte52/anime/07.png', 0.6),     # Agent, Tentakel
-     'kabel': ('karte54/klein/00.png', 0.75), 'gitter': ('karte54/klein/01.png', 0.75), 'bolzen': ('karte54/klein/02.png', 0.6),
-     'pfuetze': ('karte54/klein/03.png', 0.7)}
+# Nutzer (Karte 52): nie herunterskalieren -> alles in Originalgroesse (PixelLab k54_n48/n48b, Karte 52, Kernherz, Kleinkram)
+D = {'mech': ('karte54/n48/07.png', 1), 'terminal': ('karte54/n48/00.png', 1), 'lampe': ('karte54/n48/01.png', 1),
+     'kapsel': ('karte54/n48/13.png', 1), 'flasche': ('karte54/n48/02.png', 1), 'rack': ('karte54/n48/03.png', 1),
+     'rohr': ('karte54/n48b/01.png', 1), 'konsole': ('karte54/n48/04.png', 1),
+     'herz': ('karte54/anime/00.png', 1), 'saeule': ('karte52/n48/05.png', 1),          # Kernkugel wie im Anime
+     'nest': ('karte52/n48b/06.png', 1), 'befallen': ('karte54/n48/05.png', 1),
+     'ranke': ('karte52/n48/06.png', 1),
+     'kabel': ('karte54/klein/00.png', 1), 'gitter': ('karte54/klein/01.png', 1), 'bolzen': ('karte54/klein/02.png', 1),
+     'pfuetze': ('karte54/klein/03.png', 1)}
+assert all(f == 1 for (_, f) in D.values())                           # nie herunterskalieren
 FLACH = {'kabel', 'gitter', 'bolzen', 'pfuetze', 'traeger', 'rohr'}
 
 
@@ -56,7 +58,7 @@ def main():
         sp = Image.open(os.path.join(ROOT, 'assets', 'objekte', q)).convert('RGBA')
         sp = sp.crop(sp.getbbox())
         if f != 1:
-            sp = sp.resize((max(1, round(sp.width * f)), max(1, round(sp.height * f))), Image.NEAREST)
+            raise ValueError('nie herunterskalieren: %s' % name)
         if spiegeln:
             sp = sp.transpose(Image.FLIP_LEFT_RIGHT)
         datei = 'varianten/%s%s.png' % (name, '_m' if spiegeln else '')
@@ -133,7 +135,7 @@ def main():
     achse = (ix0 + ix1 + 1) * T / 2.0
     my = (iy0 + iy1 + 1) // 2
     hs = Image.open(os.path.join(ROOT, 'assets', 'objekte', D['herz'][0])).convert('RGBA')
-    hs = hs.crop(hs.getbbox()); hs = hs.resize((round(hs.width * D['herz'][1]), round(hs.height * D['herz'][1])), Image.NEAREST)
+    hs = hs.crop(hs.getbbox())
     ha = np.array(hs).astype(int)
     rot = (ha[..., 3] > 0) & (ha[..., 0] > 120) & (ha[..., 0] > ha[..., 1] + 60)          # nur die rote Kugel pulsiert
     ys_, xs_ = np.nonzero(rot)
@@ -154,17 +156,17 @@ def main():
                              ('rohr', 112, 96, False), ('rohr', 656, 112, True),
                              ('flasche', 72, 80, False), ('flasche', 664, 80, True), ('flasche', 704, 392, False),
                              ('lampe', 72, 300, False), ('lampe', 700, 330, True)]:
-        o = suche(n, px, py, {'anim': 'lampe'} if n == 'lampe' else {}, sp_, r=3, schritt=8)
+        o = suche(n, px, py, {'anim': 'lampe'} if n == 'lampe' else {}, sp_, r=5, schritt=8)
     for (n, px, py, sp_) in [('gitter', 600, 470, False), 
                               ('kabel', 160, 300, False), ('bolzen', 190, 330, False),
                              ('bolzen', 330, 475, True), ('bolzen', 640, 230, False), 
                              ('pfuetze', 140, 520, True)]:
-        suche(n, px, py, {}, sp_, r=3, schritt=8)
+        suche(n, px, py, {}, sp_, r=5, schritt=8, belag='g')   # Kleinkram nur auf Metallboden, nicht auf den Blasen
     # Kernel: befallene Technik, Ranken, Waechter-Wesen in den Gaengen
     for (n, px, py, sp_) in [('befallen', 60, 470, False), ('konsole', 392, 504, False),
                              ('ranke', 536, 456, False), ('ranke', 168, 520, True), ('ranke', 712, 140, False),
                              ]:
-        suche(n, px, py, {'anim': 'maschine', 'leds': True} if n in ('rack', 'konsole', 'befallen') else {}, sp_, r=3,
+        suche(n, px, py, {'anim': 'maschine', 'leds': True} if n in ('rack', 'konsole', 'befallen') else {}, sp_, r=5,
               schritt=8, belag='gf')   # Ranke mit Steinkranz nur auf Metallboden
     json.dump(objekte, open(os.path.join(OBJ, 'platzierung.json'), 'w'), indent=0)
     print(len(objekte), 'Objekte')
