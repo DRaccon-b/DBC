@@ -36,7 +36,7 @@ BL_ROT = np.array((214, 38, 62), np.float32)
 BL_DUNKEL = np.array((112, 10, 36), np.float32)
 BL_HELL = np.array((255, 120, 140), np.float32)
 BL_GLANZ = np.array((255, 214, 222), np.float32)
-BL_FUGE = np.array((86, 6, 28), np.float32)
+BL_FUGE = np.array((96, 10, 28), np.float32)   # Luecken zwischen den Schlammflecken (Ton der Flecken)
 
 
 def blasen(h, w, f, seed, x0=0, y0=0):
@@ -80,6 +80,26 @@ _STEMPEL = None
 FEIN_DICHTE = 2                                                        # 1 = jede Kachel ein Haufen, 2 = jede zweite
 
 
+def _ohne_spritzer(im):
+    """Nur die groesste zusammenhaengende Flaeche behalten (lose Tropfen am Rand des Schlammflecks entfernen)."""
+    a = np.array(im)
+    m = a[..., 3] > 0
+    lab = np.zeros(m.shape, int); n = 0; groesse = {}
+    for y0, x0 in zip(*np.nonzero(m)):
+        if lab[y0, x0]:
+            continue
+        n += 1; st = [(y0, x0)]; lab[y0, x0] = n; c = 0
+        while st:
+            y, x = st.pop(); c += 1
+            for yy, xx in ((y + 1, x), (y - 1, x), (y, x + 1), (y, x - 1)):
+                if 0 <= yy < m.shape[0] and 0 <= xx < m.shape[1] and m[yy, xx] and not lab[yy, xx]:
+                    lab[yy, xx] = n; st.append((yy, xx))
+        groesse[n] = c
+    if groesse:
+        a[lab != max(groesse, key=groesse.get)] = 0
+    return Image.fromarray(a)
+
+
 def stempel_laden():
     """PixelLab-Blasenhaufen (Gruppen k52_masse / k52_masse_klein, Draufsicht) als Stempel fuer die Masse."""
     global _STEMPEL
@@ -87,8 +107,9 @@ def stempel_laden():
         import os
         basis = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'assets', 'objekte', 'karte52')
         gross = [Image.open(os.path.join(basis, 'masse', '%02d.png' % i)).convert('RGBA') for i in (0, 1, 3)]
-        klein = [Image.open(os.path.join(basis, 'masse_klein', '%02d.png' % i)).convert('RGBA')
-                 for i in (0, 2, 12, 15)]                            # helle, runde Haufen (dunkle wirken am Rand wie Saum)
+        # Nutzer: durchgehender dunkelroter Schlamm (PixelLab k52_schlamm) statt Blasenhaufen; lose Spritzer entfernt
+        klein = [_ohne_spritzer(Image.open(os.path.join(basis, 'schlamm', '%02d.png' % i)).convert('RGBA'))
+                 for i in (0, 1, 2, 3)] + [_ohne_spritzer(Image.open(os.path.join(basis, 'schlamm_gross', '01.png')).convert('RGBA'))]
         fein = [Image.open(os.path.join(basis, 'masse_fein', '%02d.png' % i)).convert('RGBA') for i in (0, 1, 2, 3)]
         _STEMPEL = ([g.crop(g.getbbox()) for g in gross], [k.crop(k.getbbox()) for k in klein],
                     [k.crop(k.getbbox()) for k in fein])
@@ -212,7 +233,7 @@ def schlamm(mm, h, w, f, seed, x0, y0):
     return col
 
 
-def masse(a, m, frame=None, seed=52, boden=None, flach=False, stil='schlamm'):
+def masse(a, m, frame=None, seed=52, boden=None, flach=False, stil='stempel'):
     """Zeichnet die Masse in a (H x W x 3 uint8) auf die Pixelmaske m. boden: Maske, auf die der Schatten darf.
     flach: begehbarer Belag (Karte 54) - keine Stirnseite, kein Schatten, flachere Beulen."""
     f = (frame or 0) % 4
@@ -250,7 +271,7 @@ def masse(a, m, frame=None, seed=52, boden=None, flach=False, stil='schlamm'):
     if stil in ('blasen', 'stempel'):                                  # Anime-Stil: Blasenmasse statt Beulen/Adern
         col = blasen(h, w, f, seed + y0 * 3 + x0, x0, y0)
         if stil == 'stempel':                                          # Nutzer: hoeher aufloesend - PixelLab-Blasenhaufen
-            col = col * 0.55 + BL_FUGE[None, None] * 0.45
+            col = col * 0.15 + BL_FUGE[None, None] * 0.85                # Schlamm: Fugen im Ton der Flecken
             st_ebene, st_dist = stempeln(mm, f, seed, flach, x0, y0)
         if flach:                                                      # begehbarer Belag: dunkler, flacher
             col = col * 0.72 + BL_FUGE[None, None] * 0.28
