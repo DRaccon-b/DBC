@@ -50,42 +50,11 @@
    ]
   },
   {
-   "name": "terminal/00",
-   "datei": "varianten/terminal-00.png",
-   "animation": "maschine",
+   "name": "lampe/48",
+   "datei": "varianten/lampe-48.png",
+   "animation": "lampe",
    "slot_kacheln": {
     "x": 4,
-    "y": 0,
-    "breite": 4,
-    "hoehe": 4
-   },
-   "objektblock_im_slot": {
-    "x": 0,
-    "y": 0,
-    "breite": 4,
-    "hoehe": 4
-   },
-   "fundstellen_karte": [
-    {
-     "block": [
-      9,
-      27,
-      4,
-      4
-     ],
-     "fusskachel": [
-      11,
-      30
-     ]
-    }
-   ]
-  },
-  {
-   "name": "k18s/18",
-   "datei": "varianten/k18s-18.png",
-   "animation": "leuchten",
-   "slot_kacheln": {
-    "x": 8,
     "y": 0,
     "breite": 3,
     "hoehe": 3
@@ -124,9 +93,9 @@
     {
      "block": [
       16,
-      28,
+      27,
       1,
-      2
+      3
      ],
      "fusskachel": [
       16,
@@ -136,9 +105,9 @@
     {
      "block": [
       39,
-      28,
+      27,
       1,
-      2
+      3
      ],
      "fusskachel": [
       39,
@@ -152,7 +121,7 @@
    "datei": "varianten/dach-01.png",
    "animation": "portal_box",
    "slot_kacheln": {
-    "x": 11,
+    "x": 7,
     "y": 0,
     "breite": 2,
     "hoehe": 2
@@ -241,13 +210,13 @@
     {
      "block": [
       39,
-      17,
+      16,
       5,
       2
      ],
      "fusskachel": [
       41,
-      18
+      17
      ]
     }
    ]
@@ -972,54 +941,11 @@
    ]
   },
   {
-   "name": "dach/38",
-   "datei": "varianten/dach-38.png",
-   "animation": null,
-   "slot_kacheln": {
-    "x": 22,
-    "y": 4,
-    "breite": 2,
-    "hoehe": 2
-   },
-   "objektblock_im_slot": {
-    "x": 0,
-    "y": 0,
-    "breite": 2,
-    "hoehe": 2
-   },
-   "fundstellen_karte": [
-    {
-     "block": [
-      17,
-      11,
-      2,
-      2
-     ],
-     "fusskachel": [
-      18,
-      12
-     ]
-    },
-    {
-     "block": [
-      25,
-      16,
-      2,
-      2
-     ],
-     "fusskachel": [
-      26,
-      17
-     ]
-    }
-   ]
-  },
-  {
    "name": "fass/blau",
    "datei": "varianten/fass-blau.png",
    "animation": null,
    "slot_kacheln": {
-    "x": 24,
+    "x": 22,
     "y": 4,
     "breite": 2,
     "hoehe": 2
@@ -1050,7 +976,7 @@
    "datei": "varianten/fass-blau_m.png",
    "animation": null,
    "slot_kacheln": {
-    "x": 26,
+    "x": 24,
     "y": 4,
     "breite": 2,
     "hoehe": 2
@@ -1105,7 +1031,7 @@
    "datei": "varianten/fass-grau.png",
    "animation": null,
    "slot_kacheln": {
-    "x": 28,
+    "x": 26,
     "y": 4,
     "breite": 2,
     "hoehe": 2
