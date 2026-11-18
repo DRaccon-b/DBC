@@ -20,6 +20,7 @@ import karte17_bauen as k17
 import karte18_bauen as k18
 import karte20_bauen as k20
 import karte30_bauen as k30
+import karte35_bauen as k35
 
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
 KARTE = os.path.join(ROOT, 'maps', 'karte55')
@@ -48,6 +49,7 @@ def texturen(cols, rows):
     return {
         'geh': k18.textur('g', cols, rows),
         'asph': k18.textur('s', cols, rows),
+        'rasen': k18.textur('n', cols, rows),
         'praerie': k20.flaeche(k6.kacheln(os.path.join(basis, 'gras_%d.png'), 5,
                                           faerben((132, 124, 64), (206, 190, 112), 0.3, 0.5)), cols, rows),
         'schotter': k20.flaeche(k6.kacheln(kies, 5, faerben((122, 104, 82), (184, 164, 128), 0.25, 0.6)), cols, rows),
@@ -78,20 +80,18 @@ def bauen(frame=None, speichern=True):
     kl = np.array([list(r) for r in lay['klassen']])
     cls = lay['klassen']
     gross = lambda m: np.kron(m, np.ones((T, T), int)).astype(bool)
-    a = np.zeros((Hp, Wp, 3), np.uint8)
-    a[:] = LEER
-    land = gross(kl != '.')
-    ring = gross(kl == 'r')
-    leer = ~land
-    k16.leere(a, leer, frame)
     tex = texturen(cols, rows)
     (nx, ny), (cx_, cy_) = lay['raeume']
     RW, RH = lay['raum']
-    links = np.zeros((Hp, Wp), bool); links[:, :(nx + RW + 2) * T] = True
+    guertel = gross(np.isin(kl, list('hHLE')))                         # Baumguertel ringsum (nicht begehbar)
+    links = np.zeros((Hp, Wp), bool); links[:, :lay['grenze'] * T] = True
     rechts = ~links
+    land = np.ones((Hp, Wp), bool)
+    a = tex['rasen'].copy()                                             # NY-Guertel: Parkrasen (wie Karte 35)
     # ------------------------------------------------------------------ New York
-    ny_land = land & links
+    ny_land = gross(~np.isin(kl, list('hHLE'))) & links
     a[ny_land] = tex['geh'][ny_land]
+    ring = np.zeros((Hp, Wp), bool)
     av0, av1 = lay['avenue']
     asph_k = np.zeros_like(kl, bool)
     asph_k[ny + av0:ny + av1 + 1, nx + 1:nx + RW - 1] = True
@@ -125,18 +125,16 @@ def bauen(frame=None, speichern=True):
         sub[(d <= 4) & ((yy + xx) % 3 == 0)] = H('#3a3f4c')
         sub[(d > 3.4) & (d <= 4) & (yy < 0)] = H('#6a7080')
     # ------------------------------------------------------------------ Colorado
-    co_land = land & rechts
+    co_land = rechts
     a[co_land] = tex['praerie'][co_land]
-    # Strasse und Bankett laufen bis an die Plattformkante (der Weg ist ein Stueck Landstrasse, das im Netz schwebt):
-    # Kachelmaske direkt aus der Achse, auch unter dem Randring und darueber hinaus, dann 45-Grad-Raster
+    # Strasse und Bankett laufen durch den Guertel bis an den Kartenrand (Kiefern stehen daneben):
+    # Kachelmaske direkt aus der Achse, dann 45-Grad-Raster
     yy_, xx_ = np.mgrid[0:rows, 0:cols].astype(float)
     import karte55_layout as k55l
     d = k55l.abstand_polylinie(xx_ - cx_ + 0.5, yy_ - cy_ + 0.5, lay['strasse'])
-    nahe = (xx_ >= cx_ - 2) & (xx_ <= cx_ + RW + 1)
+    nahe = xx_ >= lay['grenze']
     strasse_k = np.kron(((d <= 2.0) & nahe).astype(np.float32), np.ones((T, T), np.float32))
     bank_k = np.kron(((d <= 3.0) & nahe).astype(np.float32), np.ones((T, T), np.float32))
-    ring_co = ring & rechts
-    a[ring_co] = (tex['schotter'][ring_co] * 0.8).astype(np.uint8)        # Randring: Erdkante statt Gras
     bank = k4.weich(bank_k, 5, 0, 55) & co_land
     a[bank] = tex['schotter'][bank]
     strasse = k4.weich(strasse_k, 5, 0, 56) & co_land
@@ -150,12 +148,20 @@ def bauen(frame=None, speichern=True):
     innen = k4.weich(strasse_k, 5, 0, 56) & ~gross(np.isin(kl, list('o')))
     for _ in range(6):                                                  # Linie nur weit innen (nicht am Rand)
         innen = innen & np.roll(innen, 1, 0) & np.roll(innen, -1, 0) & np.roll(innen, 1, 1) & np.roll(innen, -1, 1)
-    mittellinie_polylinie(a, innen & co_land & ~ring, lay['strasse'], cx_, cy_, GELB)
-    # ------------------------------------------------------------------ Randring, Marken
-    a[ring] = (a[ring] * 0.72).astype(np.uint8)
-    innen_l = land & ~ring
-    a[innen_l & np.roll(ring, -1, 0)] = (18, 26, 46)
-    a[innen_l & np.roll(ring, 1, 0)] = (a[innen_l & np.roll(ring, 1, 0)] * 1.15).clip(0, 255).astype(np.uint8)
+    mittellinie_polylinie(a, innen & co_land, lay['strasse'], cx_, cy_, GELB)
+    # Gehweg -> Parkrasen: Steinkante wie die Gruenstreifen der Stadtkarten (2 px hell, 1 px Fuge)
+    geh = ny_land
+    um = links & ~geh
+    nah = np.zeros_like(geh)
+    for dy, dx in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+        nah |= np.roll(np.roll(geh, dy, 0), dx, 1)
+    kante = um & nah
+    a[kante] = H('#9aa0ae')
+    nah2 = np.zeros_like(geh)
+    for dy, dx in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+        nah2 |= np.roll(np.roll(kante, dy, 0), dx, 1)
+    a[um & ~kante & nah2] = H('#6e7482')
+    # ------------------------------------------------------------------ Marken
     for i, (x0, y0) in enumerate(lay['raeume']):
         fy, fx = np.nonzero(kl[y0:y0 + RH, x0:x0 + RW] == 'f')
         k17.feld_marken(a, x0 + fx.min(), y0 + fy.min(), fx.max() - fx.min() + 1, fy.max() - fy.min() + 1, frame)
@@ -167,21 +173,8 @@ def bauen(frame=None, speichern=True):
             if kl[y, x] in 'zg':
                 k16.pfeil_marke(a, x, y, (110, 225, 250) if kl[y, x] == 'z' else (250, 200, 90), frame, n * 0.25)
                 n += 1
-    # ------------------------------------------------------------------ Kanten, Front, Leere
-    front = k16.front_und_faeden(a, land, frame)
-    ak = kontur(land)
-    a[ak] = (8, 14, 30)
-    mischen(a, kontur(land & ~ak), CYAN, 0.4 + 0.3 * puls(frame, 0.6))
-    nah = np.array(Image.fromarray(((land | front) * 255).astype(np.uint8)).filter(ImageFilter.MaxFilter(25))) > 0
-    rest = leer & ~front
-    k16.straenge(a, rest & ~nah, frame, seed=5555, zonen=((8, 88), (552, 664), (1128, 1208), (100, 1100)), n=6,
-                 y_bereich=(60, 440))
-    stellen = [(20, 40), (40, 300), (16, 500), (300, 18), (720, 30), (1000, 20), (556, 140), (560, 330),
-               (556, 500), (1172, 150), (1172, 340), (1160, 540), (220, 540), (860, 545)]
-    k16.fragmente(a, rest & ~nah, frame, seed=5556, stellen=stellen)
-    lvl = np.zeros((Hp, Wp), np.uint8)
-    lvl[land] = 2
-    lvl[front] = 9
+    lvl = np.full((Hp, Wp), 2, np.uint8)
+    rest = guertel
     if speichern and frame is None:
         np.save(os.path.join(KARTE, 'pixelhoehe.npy'), lvl)
         np.save(os.path.join(KARTE, 'wasser.npy'), np.packbits(np.zeros((Hp, Wp), bool)))
@@ -199,6 +192,12 @@ def bauen(frame=None, speichern=True):
             k4.objekte_zeichnen(img, objs, cache, land, frame, ebenen=ebenen)
             if frame is not None:
                 k4.animieren(img, objs, cache, frame)
+    # digitaler Nebel nur ganz aussen ueber dem Guertel (wie Karte 35)
+    a = np.array(img.convert('RGB'))
+    innen_n = np.zeros((Hp, Wp), bool)
+    innen_n[T:-T, T:-T] = True
+    k35.nebel_digital(a, innen_n, frame)
+    img = Image.fromarray(a).convert('RGBA')
     if speichern and frame is None:
         img.save(os.path.join(KARTE, 'terrain.png'))
     print('Karte 55 %dx%d gebaut' % (cols, rows))

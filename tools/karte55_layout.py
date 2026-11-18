@@ -27,8 +27,9 @@ KARTE = os.path.join(ROOT, 'maps', 'karte55')
 C, R = 76, 38
 RAEUME = [(6, 6), (42, 6)]
 RW, RH = 28, 24
+GRENZE = 38                                                  # Spalte: ab hier Colorado-Seite
 # Landstrasse: Mittellinie in Raumkoordinaten (Kachelmitten), Breite 4 Kacheln, Bankett 1 Kachel
-STRASSE = [(-1, 7.5), (6, 7.5), (10, 11.5), (17, 11.5), (21, 15.5), (29, 15.5)]   # Boegen exakt 45 Grad
+STRASSE = [(-8, 7.5), (6, 7.5), (10, 11.5), (17, 11.5), (21, 15.5), (36, 15.5)]   # Boegen exakt 45 Grad
 
 
 def abstand_polylinie(px, py, pts):
@@ -42,21 +43,28 @@ def abstand_polylinie(px, py, pts):
 
 def main():
     os.makedirs(KARTE, exist_ok=True)
-    k = np.full((R, C), '.')
+    k = np.full((R, C), 'h')                                     # Baumguertel ringsum (Nutzer: wie Karte 35)
+    k[:, GRENZE:] = 'H'                                          # Colorado-Seite: Kiefern auf Praerie
     for i, (x0, y0) in enumerate(RAEUME):
-        k[y0:y0 + RH, x0:x0 + RW] = 'r'
-        sub = k[y0 + 1:y0 + RH - 1, x0 + 1:x0 + RW - 1]          # Innenflaeche, Raumkoordinate = Index + 1
+        sub = k[y0:y0 + RH, x0:x0 + RW]                          # Raumkoordinate = Index (ganzer Raum begehbar)
         if i == 0:                                               # ---------------- New York
             sub[:] = 's'
-            sub[0:10, :] = 'x'                                   # Gebaeudeflaeche Reihen 1-10
-            sub[12:17, :] = 'a'                                  # Avenue Reihen 13-17
-            sub[12:17, 9:12] = 'c'                               # Zebrastreifen Spalten 10-12
+            sub[1:11, 1:RW - 1] = 'x'                            # Gebaeudeflaeche Reihen 1-10 (Reihe 0: Gehweg)
+            sub[13:18, 1:RW - 1] = 'a'                           # Avenue Reihen 13-17, endet mit Bordstein
+            sub[13:18, 10:13] = 'c'                              # Zebrastreifen Spalten 10-12
         else:                                                    # ---------------- Colorado
-            yy, xx = np.mgrid[1:RH - 1, 1:RW - 1].astype(float)
-            d = abstand_polylinie(xx + 0.5, yy + 0.5, STRASSE)
             sub[:] = 'q'
-            sub[d <= 3.0] = 'e'
-            sub[d <= 2.0] = 'l'
+    # Landstrasse: laeuft durch den Guertel bis an den Kartenrand (dort gesperrt: L/E)
+    x0, y0 = RAEUME[1]
+    yy, xx = np.mgrid[0:R, 0:C].astype(float)
+    d = abstand_polylinie(xx - x0 + 0.5, yy - y0 + 0.5, STRASSE)
+    rechts = xx >= GRENZE
+    raum = (xx >= x0) & (xx < x0 + RW) & (yy >= y0) & (yy < y0 + RH)
+    k[rechts & ~raum & (d <= 3.0)] = 'E'
+    k[rechts & ~raum & (d <= 2.0)] = 'L'
+    k[raum & (d <= 3.0)] = 'e'
+    k[raum & (d <= 2.0)] = 'l'
+    for i, (x0, y0) in enumerate(RAEUME):
         k[y0 + 18:y0 + 23, x0 + 1:x0 + 7] = 'f'
         k[y0 + 23, x0 + 1:x0 + 3] = 'z'
         if i == 0:
@@ -64,15 +72,15 @@ def main():
             k[y0 + 14:y0 + 16, x0 + 25:x0 + 27] = 'g'
         else:
             k[y0 + 12, x0 + 14] = 'o'
-    h = np.where(k == '.', 0, 2)
+    h = np.where(np.isin(k, list('hHLE')), 0, 2)
     lay = {'groesse': [C, R], 'klassen': [''.join(z) for z in k], 'hoehe': [''.join(str(c) for c in z) for z in h],
-           'raeume': RAEUME, 'raum': [RW, RH], 'strasse': STRASSE,
+           'raeume': RAEUME, 'raum': [RW, RH], 'strasse': STRASSE, 'grenze': GRENZE,
            'avenue': [13, 17], 'zebra': [10, 12], 'gebaeude_fuss': 10, 'ringmarken': [[16, 14], [14, 12]],
            'teleporter': [{'x': RAEUME[0][0] + 1, 'y': RAEUME[0][1] + 23, 'b': 2, 'h': 1, 'art': 'ankunft'},
                           {'x': RAEUME[1][0] + 1, 'y': RAEUME[1][1] + 23, 'b': 2, 'h': 1, 'art': 'ankunft'},
                           {'x': RAEUME[0][0] + 25, 'y': RAEUME[0][1] + 14, 'b': 2, 'h': 2, 'art': 'ausgang'}]}
     json.dump(lay, open(os.path.join(KARTE, 'layout.json'), 'w'), indent=0)
-    F = {'.': (10, 14, 30), 'r': (34, 48, 78), 'f': (70, 100, 130), 'z': (60, 200, 230), 'g': (230, 180, 70),
+    F = {'h': (40, 96, 40), 'H': (30, 70, 50), 'L': (60, 60, 64), 'E': (120, 104, 84), 'f': (70, 100, 130), 'z': (60, 200, 230), 'g': (230, 180, 70),
          'o': (240, 60, 60), 'x': (120, 96, 84), 's': (170, 168, 160), 'b': (210, 210, 205), 'a': (62, 64, 70),
          'm': (220, 190, 60), 'c': (235, 235, 235), 'q': (176, 160, 92), 'l': (80, 80, 84), 'e': (150, 132, 108)}
     S = 12
@@ -82,7 +90,7 @@ def main():
         for x in range(C):
             dr.rectangle((x * S, y * S, x * S + S - 1, y * S + S - 1), fill=F[k[y, x]], outline=(0, 0, 0))
     im.save(os.path.join(KARTE, 'layout_vorschau.png'))
-    print('Karte 55 Layout %dx%d, begehbar %d Kacheln' % (C, R, int((~np.isin(k, ['.', 'x'])).sum())))
+    print('Karte 55 Layout %dx%d, begehbar %d Kacheln' % (C, R, int((~np.isin(k, list('xhHLE'))).sum())))
 
 
 if __name__ == '__main__':

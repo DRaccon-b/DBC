@@ -136,12 +136,58 @@ def streudeko(L, x0, y0):
             break
 
 
+def guertel(L):
+    """Dichter Baumguertel ringsum (Nutzer: wie Karte 35): NY-Seite Parkbaeume, Colorado-Seite Kiefern; Kronen bleiben
+    ganz auf Guertelkacheln (nie ueber Gehweg, Fassaden oder Praerie der Raeume) und im Kartenbild; Luecken mit
+    Bueschen schliessen (kein kahler Boden im Guertel)."""
+    lay = json.load(open(LAYOUT))
+    kl = np.array([list(r) for r in lay['klassen']])
+    rows, cols = kl.shape
+    rs = np.random.RandomState(5557)
+    wald = {'h': ['karte35/varianten/k01-baum%02d.png' % i for i in (0, 1, 2, 4, 15)],
+            'H': ['karte35/varianten/k01-baum09.png'] * 3 + ['karte35/varianten/k01-baum02.png']}
+    busch = {'h': ['karte35/varianten/k01-baum%02d.png' % i for i in (12, 13, 14)],
+             'H': ['karte55/land/06.png', 'karte35/varianten/k01-baum12.png']}
+    fremd = [_rechteck(o) for o in L]
+
+    def versuch(quelle, tx, ty, art):
+        n = sprite(quelle, 'wald-' + os.path.basename(quelle)[:-4].replace('k01-', ''), spiegeln=bool(rs.randint(2)))
+        o = setzen([], n, tx, ty, breite=1, anim='baum' if art == 'baum' else 'wehen')
+        r = _rechteck(o)
+        if r[0] < 0 or r[1] < 0 or r[2] > cols * T or r[3] > rows * T:
+            return None
+        if any(kl[y][x] not in 'hHLE' for y in range(r[1] // T, (r[3] - 1) // T + 1)
+               for x in range(r[0] // T, (r[2] - 1) // T + 1)):
+            return None
+        if any(not (r[2] + 2 <= f[0] or f[2] + 2 <= r[0] or r[3] + 2 <= f[1] or f[3] + 2 <= r[1]) for f in fremd):
+            return None
+        L.append(o)
+        return r
+
+    deck = np.zeros((rows * T, cols * T), bool)
+    n_b = n_s = 0
+    for ty in range(rows):
+        for tx in range(cols):
+            if kl[ty, tx] in 'hH' and (tx + ty) % 2 == 0:
+                r = versuch(wald[kl[ty, tx]][rs.randint(len(wald[kl[ty, tx]]))], tx, ty, 'baum')
+                if r:
+                    deck[r[1]:r[3], r[0]:r[2]] = True; n_b += 1
+    for ty in range(rows):
+        for tx in range(cols):
+            if kl[ty, tx] in 'hH' and deck[ty * T:(ty + 1) * T, tx * T:(tx + 1) * T].mean() < 0.7:
+                r = versuch(busch[kl[ty, tx]][rs.randint(len(busch[kl[ty, tx]]))], tx, ty, 'busch')
+                if r:
+                    deck[r[1]:r[3], r[0]:r[2]] = True; n_s += 1
+    print('Baumguertel: %d Baeume, %d Buesche' % (n_b, n_s))
+
+
 def main():
     lay = json.load(open(LAYOUT))
     (nx, ny), (cx, cy) = lay['raeume']
     L = []
     new_york(L, nx, ny)
     colorado(L, cx, cy)
+    guertel(L)
     json.dump(L, open(os.path.join(OBJ, 'platzierung.json'), 'w'), indent=0)
     print('Karte 55: %d Objekte' % len(L))
 
