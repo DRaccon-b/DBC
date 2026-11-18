@@ -23,7 +23,7 @@ D = {'ranke_a': 'karte54/ranke96/00.png', 'ranke_b': 'karte54/ranke96/01.png', '
      'quer_a': 'karte54/ranke_quer/00.png', 'quer_b': 'karte54/ranke_quer/01.png',
      'senk_a': 'karte54/ranke_quer/02.png', 'senk_b': 'karte54/ranke_quer/03.png',
      'saeule': 'karte52/n48/05.png', 'cluster': 'karte52/n48b/06.png', 'huegel': 'karte52/n48b/02.png'}
-RV = os.environ.get('K54_RANKEN', 'rv1')                                # Nutzer: Version 1 (tropfender Schlamm, k54_rv1)
+RV = os.environ.get('K54_RANKEN', 'rv6')                                # Nutzer: duenne Gelenkarme mit Haken (k54_rv6)
 if RV:
     for i_, n_ in enumerate(('ranke_a', 'ranke_b', 'ranke_c', 'ranke_d')):
         D[n_] = 'karte54/%s/%02d.png' % (RV, i_)
@@ -33,7 +33,7 @@ if RV:
 # Mitte, Spiegelbild an der Ostwand), 'n' = Nordwand bei Spalte x (px relativ zur Achse, je eine links und rechts)
 LIEGEND = [('quer_a', 'w', -56), ('quer_b', 'w', 84), ('senk_a', 'n', -88), ('senk_b', 'n', 70)]
 # stehende Ranken und Begleiter: (Motiv, Winkel in Grad; 0 = Osten, 90 = Sueden, 270 = Norden), Spiegelbild (180 - w)
-RANKEN = [('ranke_a', 214), ('ranke_d', (240, 236, 246, 232)), ('ranke_b', 142), ('ranke_c', (118, 122, 114))]
+RANKEN = [('ranke_a', 214), ('ranke_d', (240, 236, 246, 232)), ('ranke_b', (142, 148, 136, 154)), ('ranke_c', (118, 122, 114))]
 # Nutzer: unregelmaessiger, nicht spiegelgleich - die Ostseite bekommt ein anderes Motiv, einen versetzten Winkel und
 # eine andere Tiefe (Seite, Motiv, Versatz in Grad, Tiefe in px)
 PARTNER = {'ranke_a': 'ranke_c', 'ranke_c': 'ranke_a', 'ranke_b': 'ranke_d', 'ranke_d': 'ranke_b',
@@ -69,7 +69,8 @@ def main():
         if name.startswith(('quer', 'senk')):                           # Pruefung: Sprite-Fehler der liegenden Ranken
             a = np.array(im).astype(int)
             kuehl = (a[..., 3] > 0) & (a[..., 1] > a[..., 0]) & (a[..., 2] > a[..., 0])
-            a[kuehl, :3] = (62, 14, 30)                                  # petrolfarbener Saum -> dunkle Rotkontur
+            if RV != 'rv6':                                              # Haken der Gelenkarme bleiben grau
+                a[kuehl, :3] = (62, 14, 30)                              # petrolfarbener Saum -> dunkle Rotkontur
             if a[0, :, 3].any() and (a[0, :, :3][a[0, :, 3] > 0].sum(-1) > 200).any():   # oben angeschnitten
                 neu = np.zeros((a.shape[0] + 1, a.shape[1], 4), int); neu[1:] = a
                 neu[0] = np.where(a[0, :, 3:4] > 0, [62, 14, 30, 255], 0)  # Kontur oben ergaenzen (rund abschliessen)
@@ -187,7 +188,10 @@ def main():
         if not paar(n_, w):
             print('  Paar nicht gesetzt:', n_, w)
     import dreaper                                                     # Nutzer: Objekte passend zum Schlamm (Version 8)
-    dreaper.objekte_faerben(OBJ, objekte, None)
+    if RV == 'rv6':                                                    # Gelenkarme behalten ihr Rot und die grauen Haken
+        dreaper.objekte_faerben(OBJ, objekte, ['huegel', 'cluster', 'saeule'])
+    else:
+        dreaper.objekte_faerben(OBJ, objekte, None)
     json.dump(objekte, open(os.path.join(OBJ, 'platzierung.json'), 'w'), indent=0)
     print(len(objekte), 'Objekte')
 
