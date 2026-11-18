@@ -345,6 +345,10 @@ def bauen(frame=None, speichern=True):
         m_ = gross(kl == kk)                                          # Platzpflaster, Ziegelplatz, dunkle Gehwegstreifen
         t_ = np.clip(k18.textur(art, cols, rows).astype(np.float32) * np.array(f), 0, 255).astype(np.uint8)
         a[m_] = t_[m_]
+    zb = gross(kl == 'b')                                             # Ziegelplatz: Kantenlinie zum Gehweg (keine Naht im Ziegel)
+    p_ = np.pad(zb, 1)
+    kante_b = zb & ~(p_[:-2, 1:-1] & p_[2:, 1:-1] & p_[1:-1, :-2] & p_[1:-1, 2:]) & ~gross(np.isin(kl, ['a', 'x']))
+    a[kante_b] = (112, 100, 88)
     rasen = gross(kl == 'n')
     k18.mittelstreifen(a, rasen, k18.textur('n', cols, rows))         # Gruenstreifen mit Steinkante
     k18.bordsteine(a, asphalt, ~asphalt)

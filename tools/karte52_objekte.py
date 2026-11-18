@@ -11,7 +11,7 @@ die Masse umschliesst die Karte (bauen).
 import json, math, os, random, shutil, sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import numpy as np
-from PIL import Image
+from PIL import Image, ImageFilter
 
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
 KARTE = os.path.join(ROOT, 'maps', 'karte52')
@@ -145,6 +145,9 @@ def main():
            for t in lay['teleporter']]
     tps_eng = [(t['x'] * T, t['y'] * T, (t['x'] + t['b']) * T - 1, (t['y'] + t['h']) * T - 1) for t in lay['teleporter']]
     objekte, rects = [], []
+    _gk = np.array([list(z) for z in cls])
+    masse_d = np.kron(np.isin(_gk, ['r', 'h']), np.ones((T, T), np.uint8)).astype(bool)
+    masse_d = np.array(Image.fromarray(masse_d.astype(np.uint8) * 255).filter(ImageFilter.MaxFilter(13))) > 0
 
     def schnitt(a, b, rand=0):
         return not (a[2] + rand < b[0] or b[2] + rand < a[0] or a[3] + rand < b[1] or b[3] + rand < a[1])
@@ -175,6 +178,8 @@ def main():
             if any(art2 not in ('wald',) and schnitt(r, tuple(rr), 2) for (*rr, art2) in rects):
                 return None
         elif pruefen:
+            if masse_d[max(0, r[3] - 8):r[3] + 3, max(0, r[0]):r[2] + 1].any():
+                return None                                            # Fuss nie auf/an der Blasenmasse (Ueberstand)
             if art not in ('gebaeude', 'auto') and any(abs(o2['y'] + o2['fuss'] - r[3]) <= 6 and
                                                        o2['x'] - 40 < r[2] and r[0] < o2['x'] + 72 for o2 in objekte
                                                        if not o2.get('gebaeude') and not o2.get('liegend')):
@@ -220,7 +225,7 @@ def main():
             print('Gebaeude nicht gesetzt:', n_)
     G = 'kqb'                                                          # begehbarer Belag fuer Deko
     # ---------------------------------------------------------------- Wracks und Sperren (Vorlage: Autos, X-Sperren)
-    for (n_, tx, ty, sp) in (('dr/auto', 13, 29, False), ('k18a/01', 47, 39, True), ('dr/auto', 77, 40, True),
+    for (n_, tx, ty, sp) in (('k18a/03', 13, 29, False), ('k18a/01', 47, 39, True), ('k18a/03', 77, 40, True),
                              ('k18a/01', 28, 74, False), ('k18a/02', 60, 38, False), ('k18a/05', 14, 68, True)):   # verlassene Autos (Seitenansicht)
         kachel(n_, tx + P, ty + P, {}, sp, klassen='a', weit=2)
     for (n_, tx, ty, sp) in (('reaper/sperre', 21, 28, False), ('reaper/sperre', 31, 23, True), ('reaper/sperre', 55, 46, False),
@@ -250,7 +255,7 @@ def main():
     rand_k = []
     for ty in range(P + 3, rows - P - 3):
         for tx in range(P + 3, cols - P - 3):
-            if gk[ty, tx] in 'akqb' and masse[ty - 1:ty + 2, tx - 1:tx + 2].any() and gk[ty, tx] != 'e' \
+            if gk[ty, tx] in 'akqb' and masse[ty - 2:ty + 3, tx - 2:tx + 3].any() and not masse[ty - 1:ty + 2, tx - 1:tx + 2].any() and gk[ty, tx] != 'e' \
                     and not masse[ty, tx]:
                 rand_k.append((tx, ty))
     rnd.shuffle(rand_k)

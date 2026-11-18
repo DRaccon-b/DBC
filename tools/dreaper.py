@@ -107,7 +107,7 @@ def _abstand(mm, schritte=14):
     return d
 
 
-def stempeln(mm, f, seed, flach=False, x0=0, y0=0, T=16):
+def stempeln(mm, f, seed, flach=False, x0=0, y0=0, T=16, ueber=5):
     """Masse wie ein Baumguertel (Nutzer): ganze grosse PixelLab-Blasenhaufen auf dem Kachelraster, versetzt nebeneinander
     (jede zweite Kachel, Reihen um eine Kachel verschoben), leicht ueberlappend, von Norden nach Sueden gezeichnet - keine
     kleinen Fuellblasen, nichts beschnitten. Animation: jeder Haufen hebt/senkt sich mit eigener Phase um 1 px (4 Bilder).
@@ -129,6 +129,19 @@ def stempeln(mm, f, seed, flach=False, x0=0, y0=0, T=16):
                 continue
             rs = np.random.RandomState((seed * 131 + tx * 7919 + ty * 104729) % (2 ** 31))
             im = gross[rs.randint(len(gross))]
+            if not flach:                                              # Ueberstand hoechstens 'ueber' px (Pruefung: Gehwege frei)
+                halb = max(im.width, im.height) / 2.0
+                if dist[cy, cx] + ueber < halb:                        # Haufen nach innen ruecken (entlang des Abstands)
+                    gy_, gx_ = np.gradient(dist[max(0, cy - 8):cy + 9, max(0, cx - 8):cx + 9])
+                    vy, vx = gy_.mean(), gx_.mean()
+                    n_ = (vy ** 2 + vx ** 2) ** 0.5 or 1.0
+                    for schritt_ in range(1, 25):
+                        ny_, nx_ = int(round(cy + vy / n_ * schritt_)), int(round(cx + vx / n_ * schritt_))
+                        if 0 <= ny_ < h and 0 <= nx_ < w and dist[ny_, nx_] + ueber >= halb:
+                            cy, cx = ny_, nx_
+                            break
+                    else:
+                        im = min(gross, key=lambda g: max(g.width, g.height))
             if flach:                                                  # Belag: kleinerer Haufen (exakt halbe Groesse)
                 im = im.resize((im.width // 2 * 1 + im.width // 4, im.height // 2 + im.height // 4), Image.NEAREST)
             if rs.rand() < 0.5:

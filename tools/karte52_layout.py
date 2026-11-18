@@ -124,6 +124,9 @@ def main():
             tps.append((C2 - 3, y0_, 3, b))
     for (x, y, b, h) in tps:
         k2[y:y + h, x:x + b] = 'e'
+    for (yy_, xx_) in ((9 + P, 82 + P), (66 + P, 74 + P), (66 + P, 75 + P)):   # Gehwegzipfel/-reste (Pruefung) angleichen
+        if k2[yy_, xx_] == 'k':
+            k2[yy_, xx_] = 'a'
     for y in range(R2):                                                # schmale Asphaltschlitze (<= 2 Kacheln) zwischen Masse
         x = 0
         while x < C2:
