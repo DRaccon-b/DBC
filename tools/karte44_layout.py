@@ -112,6 +112,14 @@ def main():
             k[y, bx0:bx1 + 1] = 'b'
             k[y, bx0 - 3:bx0] = np.where(k[y, bx0 - 3:bx0] == 'h', 'h', 'w')
             k[y, bx1 + 1:bx1 + 4] = np.where(k[y, bx1 + 1:bx1 + 4] == 'h', 'h', 'w')
+        # Pruefung/Nutzer: der Bach laeuft 2 Reihen vor und nach der Bruecke genau in den Brueckenspalten (gerade Ufer)
+        for y in list(range(y0 - 2, y0)) + list(range(y1 + 1, y1 + 3)):
+            for x in range(bx0 - 4, bx1 + 5):
+                if bx0 <= x <= bx1:
+                    k[y, x] = 'x'
+                elif k[y, x] == 'x':
+                    k[y, x] = 'g'
+    k[4, 63:76] = np.where(k[4, 63:76] == 'g', 'h', k[4, 63:76])       # Pruefung: kein 1-Reihen-Graben unter dem Guertel
     for (tx, ty, b, hh) in TELEPORTER:                                # Ausgaenge: Weg durch den Guertel
         k[ty:ty + hh, tx:tx + b] = 'T'
         if tx == 0:
@@ -141,6 +149,16 @@ def main():
         for x in range(1, C - 1):
             if k[y, x] == 'h' and k[y, x - 1] != 'h' and k[y, x + 1] != 'h':
                 k[y, x] = 'g'
+    for _ in range(2):                                                # Pruefung: Zipfel nach allen Korrekturen angleichen
+        for y in range(1, R - 1):
+            for x in range(1, C - 1):
+                nb = [k[y + dy, x + dx] for dy, dx in ((1, 0), (-1, 0), (0, 1), (0, -1))]
+                if k[y, x] == 'g' and nb.count('g') <= 1 and any(c in 'wbx' for c in nb):
+                    k[y, x] = 'w'                                     # Erdzunge im Sandweg -> Weg
+                elif k[y, x] == 'w' and k[y - 1, x] in 'gh' and k[y + 1, x] in 'gh' \
+                        and not (k[max(0, y - 4):y + 5, max(0, x - 4):x + 5] == 'T').any() \
+                        and not (k[y, max(0, x - 3):x + 4] == 'b').any():
+                    k[y, x] = 'g'                                     # 1 Reihe hohe Sandzunge -> Erde
     h = np.where(k == 'h', 1, 0)
     bruecken = []
     for (x0, y0, x1, y1) in bru:

@@ -27,7 +27,7 @@ for _n, _i in ((0, 2), (3, 1), (4, 0)):                            # Nutzer-Vorl
 FASS = [0, 1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 13, 14, 15]             # Nutzer: alle Weinfaesser ausser 9 und 12
 for _i in FASS:
     FREMD['fass%02d' % _i] = 'karte44/fass_klein/%02d.png' % _i      # auf ~60 % verkleinert (Massstab zu den Huetten)
-for _n, _i in (('bank', 0), ('stamm', 1), ('fels', 2), ('zaun', 3), ('schneemann', 4), ('schild', 5), ('stumpf', 6),
+for _n, _i in (('bank', 0), ('stamm', 1), ('fels_alt', 2), ('zaun', 3), ('schneemann', 4), ('schild', 5), ('stumpf', 6),
                ('brunnen', 7), ('steine', 10), ('farn', 15)):
     FREMD[_n] = 'karte44/deko/%02d.png' % _i
 for _i in (0, 1, 2, 3, 5, 6, 7, 8, 9, 12, 13, 14):
@@ -50,6 +50,7 @@ KLEINFELS[:] = [2, 6, 14, 17, 25, 27, 28, 35, 44, 52, 53, 63]
 for _i in KLEINFELS:
     FREMD['kf%02d' % _i] = 'karte27/fels_klein/%02d.png' % _i
 FREMD['steinhaufen'] = 'karte04/mittel/15.png'
+FREMD['fels'] = 'karte27/fels/03.png'                     # Pruefung: grauer Fels ohne Moos (Matschdorf)
 # Nutzer: neue trockene Baeume (PixelLab k44_baum): Affenbrotbaum, knorriger Savannenbaum, Schirmakazie, ausgebleichter
 # toter Baum, Herbstbaum, Strauchbaum, Dattelpalme, hohler Affenbrotbaum, Dornbaum, Doppelkrone, Rostbaum
 for _i in (0, 1, 2, 3, 4, 5, 7, 8, 9, 12, 13, 15):
@@ -210,6 +211,7 @@ def main():
         tx_ = (o_['x'] + (np.nonzero(md_)[1].mean() if md_.sum() > 10 else ww_ / 2.0))
         dx0 = int(tx_ // T) if (tx_ % T) >= 8 else int(tx_ // T) - 1           # zwei Spalten um die Tuer
         fy_ = (o_['y'] + o_['fuss']) // T + 1
+        stumpf.append((int(tx_) - 18, o_['y'] + o_['fuss'] - 4, int(tx_) + 18, o_['y'] + o_['fuss'] + 44))   # Pruefung: Tuer frei
         from collections import deque as _dq
         start = [(fy_, dx0)]
         prev = {start[0]: None}
@@ -221,7 +223,7 @@ def main():
             d_ = 0; p_ = (cy_, cx_)
             while prev[p_] is not None:
                 p_ = prev[p_]; d_ += 1
-            if d_ >= 9:
+            if d_ >= 14:                                                     # Pruefung: auch entferntere Wege
                 continue
             for (ny_, nx_) in ((cy_ + 1, cx_), (cy_, cx_ - 1), (cy_, cx_ + 1), (cy_ - 1, cx_)):
                 if (ny_, nx_) in prev or not (2 < ny_ < rows - 3 and 2 < nx_ < cols - 4):
@@ -261,7 +263,7 @@ def main():
             for sd_ in seiten:
                 for gap_ in (4, 8, 12, 16):
                     cx_ = (h_['x'] + hb_[2] + gap_ + fw_ / 2.0) if sd_ > 0 else (h_['x'] + hb_[0] - gap_ - fw_ / 2.0)
-                    for dy_ in (0, -6, 6):
+                    for dy_ in [(0, -6, 6), (-T, -12, T), (T, 12, -T)][anz_ % 3]:   # Pruefung: nicht auf einer Fusszeile
                         ok_ = setze(f_, cx_, fy_ + dy_, {}, False, 'g')
                         if ok_:
                             break
