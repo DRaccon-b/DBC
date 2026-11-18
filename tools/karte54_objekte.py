@@ -143,6 +143,8 @@ def main():
             for (x, y, r), d_, n_ in ((a_, datei, name), (b_, d2, n2)):
                 objekte.append({'datei': d_, 'basis': n_, 'x': x, 'y': y, 'fuss': r[3] - y, 'kachel': [int(r[0] + r[2]) // 2 // T, r[3] // T],
                                 'ebene': 1, 'ohne_wall': True, 'nur_kontakt': True})
+                if n_.startswith('ranke'):                               # Nutzer: Ranken bewegen sich
+                    objekte[-1]['anim'] = 'ranke'
             return True
         return False
 
@@ -175,6 +177,9 @@ def main():
             objekte.append({'datei': d_, 'basis': name, 'x': x, 'y': y, 'fuss': im_.height - 1,
                             'kachel': [(x + im_.width // 2) // T, (y + im_.height - 1) // T], 'ebene': 0, 'ohne_wall': True,
                             'liegend': True, 'sortier': y})            # flach: vor allen stehenden Objekten gezeichnet
+            # Nutzer: liegende Ranken kriechen; Wurzel steckt in der Wand (West: links, Ost: rechts, Nord: oben)
+            objekte[-1]['anim'] = 'ranke_quer' if name.startswith('quer') else 'ranke_senk'
+            objekte[-1]['wurzel'] = 'oben' if seite == 'n' else ('links' if x < mx else 'rechts')
 
     for n_, s_, l_ in LIEGEND:                                              # liegende Ranken zuerst (laengste Objekte)
         liegend(n_, s_, l_)

@@ -551,6 +551,8 @@ def objekte_zeichnen(img, objs, cache, boden, frame, ebenen=None):
             sp = kb.wehen(sp, kb.wind(frame, o['x']))
         elif frame is not None and o.get('anim') == 'baum':
             sp = baum_wind(sp, frame, o['x'] + o['y'] * 0.3)
+        elif frame is not None and o.get('anim') in ('ranke', 'ranke_quer', 'ranke_senk'):
+            sp = ranke_bewegen(sp, frame, o['x'] * 0.7 + o['y'] * 0.3, o['anim'], o.get('wurzel', 'links'))
         elif frame is not None and o.get('anim') == 'fahne':
             sp = fahne_wehen(sp, frame, o['x'] * 0.37)
         elif frame is not None and o.get('anim') == 'standarte':
@@ -1124,6 +1126,44 @@ def bluete_puls(img, o, sp, frame):
         r_, g_, b_, _ = px[X, Y]
         px[X, Y] = (min(255, int(r_ + (255 - r_) * f)), min(255, int(g_ + (255 - g_) * f)),
                     min(255, int(b_ + (255 - b_) * f)), 255)
+
+
+def ranke_bewegen(sp, frame, phase, art, wurzel='links'):
+    """Lebende Ranken (Karte 54): stehende wiegen sich langsam - je hoeher, desto weiter (bis 3 px), der Fuss in der
+    Masse steht fest; liegende kriechen mit einer Welle, die von der Wurzel (fest in der Kugelwand) zur Spitze laeuft.
+    Nur Zeilen/Spalten verschieben (nicht verbiegen/skalieren), Schleife nahtlos ueber N_FRAMES."""
+    t = 2 * math.pi * (frame / N_FRAMES - phase / 400.0)
+    a = np.array(sp)
+    out = np.zeros_like(a)
+    h, w = a.shape[:2]
+    if art == 'ranke':
+        grenze = h * 0.85
+        for y in range(h):
+            k = max(0.0, 1 - y / grenze)
+            d = int(round((2.2 * math.sin(t) + 0.8 * math.sin(2 * t + 0.7)) * k ** 1.3))
+            if d >= 0:
+                out[y, d:] = a[y, :w - d] if d else a[y]
+            else:
+                out[y, :d] = a[y, -d:]
+        return Image.fromarray(out)
+    lang = w if art == 'ranke_quer' else h
+    for i in range(lang):
+        rel = (i / max(1, lang - 1)) if wurzel in ('links', 'oben') else (1 - i / max(1, lang - 1))
+        k = min(1.0, rel * 1.4)                                       # Wurzel fest, Spitze bewegt sich am meisten
+        d = int(round(1.6 * k * math.sin(t - rel * 2 * math.pi)))
+        if art == 'ranke_quer':
+            col = a[:, i]
+            if d >= 0:
+                out[d:, i] = col[:h - d] if d else col
+            else:
+                out[:d, i] = col[-d:]
+        else:
+            row = a[i]
+            if d >= 0:
+                out[i, d:] = row[:w - d] if d else row
+            else:
+                out[i, :d] = row[-d:]
+    return Image.fromarray(out)
 
 
 def baum_wind(sp, frame, phase):

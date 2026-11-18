@@ -12,7 +12,9 @@
 "ebene": 0,
 "ohne_wall": true,
 "liegend": true,
-"sortier": 255
+"sortier": 255,
+"anim": "ranke_quer",
+"wurzel": "links"
 },
 {
 "datei": "varianten/quer_b_m.png",
@@ -27,7 +29,9 @@
 "ebene": 0,
 "ohne_wall": true,
 "liegend": true,
-"sortier": 281
+"sortier": 281,
+"anim": "ranke_quer",
+"wurzel": "rechts"
 },
 {
 "datei": "varianten/quer_b.png",
@@ -42,7 +46,9 @@
 "ebene": 0,
 "ohne_wall": true,
 "liegend": true,
-"sortier": 391
+"sortier": 391,
+"anim": "ranke_quer",
+"wurzel": "links"
 },
 {
 "datei": "varianten/quer_a_m.png",
@@ -57,7 +63,9 @@
 "ebene": 0,
 "ohne_wall": true,
 "liegend": true,
-"sortier": 373
+"sortier": 373,
+"anim": "ranke_quer",
+"wurzel": "rechts"
 },
 {
 "datei": "varianten/senk_a.png",
@@ -72,7 +80,9 @@
 "ebene": 0,
 "ohne_wall": true,
 "liegend": true,
-"sortier": 38
+"sortier": 38,
+"anim": "ranke_senk",
+"wurzel": "oben"
 },
 {
 "datei": "varianten/senk_b.png",
@@ -87,7 +97,9 @@
 "ebene": 0,
 "ohne_wall": true,
 "liegend": true,
-"sortier": 38
+"sortier": 38,
+"anim": "ranke_senk",
+"wurzel": "oben"
 },
 {
 "datei": "varianten/ranke_a.png",
@@ -101,7 +113,8 @@
 ],
 "ebene": 1,
 "ohne_wall": true,
-"nur_kontakt": true
+"nur_kontakt": true,
+"anim": "ranke"
 },
 {
 "datei": "varianten/ranke_c_m.png",
@@ -115,7 +128,8 @@
 ],
 "ebene": 1,
 "ohne_wall": true,
-"nur_kontakt": true
+"nur_kontakt": true,
+"anim": "ranke"
 },
 {
 "datei": "varianten/ranke_d.png",
@@ -129,7 +143,8 @@
 ],
 "ebene": 1,
 "ohne_wall": true,
-"nur_kontakt": true
+"nur_kontakt": true,
+"anim": "ranke"
 },
 {
 "datei": "varianten/ranke_b_m.png",
@@ -143,7 +158,8 @@
 ],
 "ebene": 1,
 "ohne_wall": true,
-"nur_kontakt": true
+"nur_kontakt": true,
+"anim": "ranke"
 },
 {
 "datei": "varianten/ranke_b.png",
@@ -157,7 +173,8 @@
 ],
 "ebene": 1,
 "ohne_wall": true,
-"nur_kontakt": true
+"nur_kontakt": true,
+"anim": "ranke"
 },
 {
 "datei": "varianten/ranke_d.png",
@@ -171,7 +188,8 @@
 ],
 "ebene": 1,
 "ohne_wall": true,
-"nur_kontakt": true
+"nur_kontakt": true,
+"anim": "ranke"
 },
 {
 "datei": "varianten/ranke_c.png",
@@ -185,7 +203,8 @@
 ],
 "ebene": 1,
 "ohne_wall": true,
-"nur_kontakt": true
+"nur_kontakt": true,
+"anim": "ranke"
 },
 {
 "datei": "varianten/ranke_a.png",
@@ -199,7 +218,8 @@
 ],
 "ebene": 1,
 "ohne_wall": true,
-"nur_kontakt": true
+"nur_kontakt": true,
+"anim": "ranke"
 },
 {
 "datei": "varianten/huegel.png",
@@ -216,7 +236,7 @@
 "nur_kontakt": true
 },
 {
-"datei": "varianten/cluster.png",
+"datei": "varianten/cluster_m.png",
 "basis": "cluster",
 "x": 464,
 "y": 122,
@@ -272,7 +292,7 @@
 "nur_kontakt": true
 },
 {
-"datei": "varianten/huegel_m.png",
+"datei": "varianten/huegel.png",
 "basis": "huegel",
 "x": 530,
 "y": 471,
