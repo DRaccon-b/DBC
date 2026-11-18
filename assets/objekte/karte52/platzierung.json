@@ -224,30 +224,30 @@
 {
 "datei": "varianten/reaper-schutt.png",
 "basis": "reaper/schutt",
-"x": 598,
-"y": 336,
+"x": 614,
+"y": 320,
 "fuss": 31,
 "kachel": [
-38,
-22
+39,
+21
 ],
 "ebene": 1,
 "ohne_wall": true,
-"nur_kontakt": true
+"liegend": true
 },
 {
 "datei": "varianten/reaper-schutt_m.png",
 "basis": "reaper/schutt",
-"x": 246,
-"y": 880,
+"x": 262,
+"y": 864,
 "fuss": 31,
 "kachel": [
-16,
-56
+17,
+55
 ],
 "ebene": 1,
 "ohne_wall": true,
-"nur_kontakt": true
+"liegend": true
 },
 {
 "datei": "varianten/reaper-fass.png",
@@ -272,20 +272,6 @@
 "kachel": [
 35,
 67
-],
-"ebene": 1,
-"ohne_wall": true,
-"nur_kontakt": true
-},
-{
-"datei": "varianten/dr-laterne_m.png",
-"basis": "dr/laterne",
-"x": 1328,
-"y": 817,
-"fuss": 46,
-"kachel": [
-84,
-53
 ],
 "ebene": 1,
 "ohne_wall": true,
@@ -728,21 +714,6 @@
 "schattenlos": true
 },
 {
-"datei": "varianten/klein-zeitung_m.png",
-"basis": "klein/zeitung",
-"x": 1201,
-"y": 618,
-"fuss": 15,
-"kachel": [
-75,
-39
-],
-"ebene": 0,
-"ohne_wall": true,
-"liegend": true,
-"schattenlos": true
-},
-{
 "datei": "varianten/klein-pfuetze.png",
 "basis": "klein/pfuetze",
 "x": 1371,
@@ -751,21 +722,6 @@
 "kachel": [
 86,
 35
-],
-"ebene": 0,
-"ohne_wall": true,
-"liegend": true,
-"schattenlos": true
-},
-{
-"datei": "varianten/klein-pfuetze_m.png",
-"basis": "klein/pfuetze",
-"x": 1232,
-"y": 704,
-"fuss": 15,
-"kachel": [
-77,
-44
 ],
 "ebene": 0,
 "ohne_wall": true,
@@ -796,6 +752,21 @@
 "kachel": [
 64,
 44
+],
+"ebene": 0,
+"ohne_wall": true,
+"liegend": true,
+"schattenlos": true
+},
+{
+"datei": "varianten/klein-pfuetze_m.png",
+"basis": "klein/pfuetze",
+"x": 669,
+"y": 347,
+"fuss": 15,
+"kachel": [
+42,
+22
 ],
 "ebene": 0,
 "ohne_wall": true,

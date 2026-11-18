@@ -147,7 +147,7 @@ def main():
     objekte, rects = [], []
     _gk = np.array([list(z) for z in cls])
     masse_d = np.kron(np.isin(_gk, ['r', 'h']), np.ones((T, T), np.uint8)).astype(bool)
-    masse_d = np.array(Image.fromarray(masse_d.astype(np.uint8) * 255).filter(ImageFilter.MaxFilter(13))) > 0
+    masse_d = np.array(Image.fromarray(masse_d.astype(np.uint8) * 255).filter(ImageFilter.MaxFilter(25))) > 0
 
     def schnitt(a, b, rand=0):
         return not (a[2] + rand < b[0] or b[2] + rand < a[0] or a[3] + rand < b[1] or b[3] + rand < a[1])
@@ -233,7 +233,8 @@ def main():
                              ('reaper/schutt', 36, 20, False), ('reaper/schutt', 13, 55, True), ('reaper/schutt', 70, 25, False),
                              ('reaper/fass', 25, 16, False), ('dr/laterne', 33, 66, False),
                              ('dr/laterne', 80, 52, True)):
-        kachel(n_, tx + P, ty + P, {'anim': 'lampe', 'lampe_box': [8, 0, 29, 9], 'licht_farbe': [255, 210, 120]} if 'laterne_kaputt' in n_ else {}, sp, klassen='a' + G, weit=2)
+        kachel(n_, tx + P, ty + P, {'liegend': True} if 'schutt' in n_ else {}, sp,
+               klassen='k' if n_ == 'dr/laterne' else 'a' + G, weit=3)            # Laternen nur auf Gehweg, Schutt flach
     # ---------------------------------------------------------------- Bahnhofsvorplatz (Ziegelplatz unten rechts)
     gk_ = np.array([list(z) for z in cls])                              # Laternen an den Platzecken, exakt gespiegelt
     ys_b, xs_b = np.nonzero(gk_ == 'b')

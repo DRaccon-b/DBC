@@ -107,7 +107,7 @@ def _abstand(mm, schritte=14):
     return d
 
 
-def stempeln(mm, f, seed, flach=False, x0=0, y0=0, T=16, ueber=5):
+def stempeln(mm, f, seed, flach=False, x0=0, y0=0, T=16, ueber=3):
     """Masse wie ein Baumguertel (Nutzer): ganze grosse PixelLab-Blasenhaufen auf dem Kachelraster, versetzt nebeneinander
     (jede zweite Kachel, Reihen um eine Kachel verschoben), leicht ueberlappend, von Norden nach Sueden gezeichnet - keine
     kleinen Fuellblasen, nichts beschnitten. Animation: jeder Haufen hebt/senkt sich mit eigener Phase um 1 px (4 Bilder).
@@ -115,6 +115,7 @@ def stempeln(mm, f, seed, flach=False, x0=0, y0=0, T=16, ueber=5):
     _, gross = stempel_laden()                                        # 64er-Haufen in Originalgroesse (keine Skalierung, Nutzer: sauber)
     h, w = mm.shape
     dist = _abstand(mm)
+    mm_d = np.array(Image.fromarray(mm.astype(np.uint8) * 255).filter(ImageFilter.MaxFilter(2 * ueber + 1))) > 0
     breite = 30 if flach else 42                                       # Haufenbreite (ueberlappt die Nachbarn leicht)
     liste = []
     ty0, tx0 = -((y0 + 1) // T) - 1, -((x0 + 1) // T) - 1
@@ -129,23 +130,33 @@ def stempeln(mm, f, seed, flach=False, x0=0, y0=0, T=16, ueber=5):
                 continue
             rs = np.random.RandomState((seed * 131 + tx * 7919 + ty * 104729) % (2 ** 31))
             im = gross[rs.randint(len(gross))]
-            if not flach:                                              # Ueberstand hoechstens 'ueber' px (Pruefung: Gehwege frei)
-                halb = max(im.width, im.height) / 2.0
-                if dist[cy, cx] + ueber < halb:                        # Haufen nach innen ruecken (entlang des Abstands)
-                    gy_, gx_ = np.gradient(dist[max(0, cy - 8):cy + 9, max(0, cx - 8):cx + 9])
-                    vy, vx = gy_.mean(), gx_.mean()
-                    n_ = (vy ** 2 + vx ** 2) ** 0.5 or 1.0
-                    for schritt_ in range(1, 25):
-                        ny_, nx_ = int(round(cy + vy / n_ * schritt_)), int(round(cx + vx / n_ * schritt_))
-                        if 0 <= ny_ < h and 0 <= nx_ < w and dist[ny_, nx_] + ueber >= halb:
-                            cy, cx = ny_, nx_
-                            break
-                    else:
-                        im = min(gross, key=lambda g: max(g.width, g.height))
-            if flach:                                                  # Belag: kleinerer Haufen (exakt halbe Groesse)
-                im = im.resize((im.width // 2 * 1 + im.width // 4, im.height // 2 + im.height // 4), Image.NEAREST)
+            if flach:                                                  # Belag: kleinerer Haufen
+                im = im.resize((im.width // 2 + im.width // 4, im.height // 2 + im.height // 4), Image.NEAREST)
             if rs.rand() < 0.5:
                 im = im.transpose(Image.FLIP_LEFT_RIGHT)
+            if not flach:                                              # exakt pruefen: Blasenpixel hoechstens 'ueber' px ausserhalb
+                kand_ = sorted(gross, key=lambda g: -g.width * g.height)
+                kand_ = [im] + [g for g in kand_ if g is not im]
+                gefunden = None
+                gy_, gx_ = np.gradient(dist[max(0, cy - 8):cy + 9, max(0, cx - 8):cx + 9])
+                vy, vx = gy_.mean(), gx_.mean()
+                n_ = (vy ** 2 + vx ** 2) ** 0.5 or 1.0
+                for im_ in kand_:
+                    al_ = np.array(im_)[..., 3] > 128
+                    ih_, iw_ = al_.shape
+                    for schritt_ in range(0, 25, 2):
+                        ny_, nx_ = int(round(cy + vy / n_ * schritt_)), int(round(cx + vx / n_ * schritt_))
+                        ya_, xa_ = ny_ - ih_ // 2, nx_ - iw_ // 2
+                        if ya_ < 0 or xa_ < 0 or ya_ + ih_ > h or xa_ + iw_ > w:
+                            continue
+                        if not (al_ & ~mm_d[ya_:ya_ + ih_, xa_:xa_ + iw_]).any():
+                            gefunden = (ny_, nx_, im_)
+                            break
+                    if gefunden:
+                        break
+                if not gefunden:
+                    continue
+                cy, cx, im = gefunden
             liste.append((cy + im.height // 2, cx, im, rs.randint(0, 4)))   # mittig auf der Kachel (quillt gleichmaessig ueber)
     liste.sort(key=lambda t: t[0])
     ebene = np.zeros((h, w, 4), np.float32)
