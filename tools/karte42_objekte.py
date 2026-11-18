@@ -29,7 +29,7 @@ FREMD = {
     'kristall': 'karte04/klein/05.png', 'pilz': 'karte04/klein/11.png', 'stein': 'karte04/klein/08.png',
     'automat': 'karte42/wueste/00.png', 'saeule': 'karte42/gross/00.png', 'unterstand': 'karte42/gross/02.png',   # groesser (Nutzer)
     'saeule_kaputt': 'karte42/gross/01.png',
-    'huette': 'karte42/haus/00.png',   # Nutzer-Vorlage: bemoostes Kuppelhaus
+    'huette': 'karte42/haus/01.png',   # Nutzer: bemoostes Kuppelhaus, Kandidat 1
     'bank': 'karte42/dorf/01.png', 'kruege': 'karte42/dorf/02.png',
 }
 # (Sprite, Kachel-x der Fussmitte, Fusszeile, Ebene) nach der Vorlage; Ebene 1 Talboden, 2 Hochplateau
