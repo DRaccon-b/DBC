@@ -2841,6 +2841,74 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'big old brown wooden cabinet CRT television standing on short wooden legs, wood grain case, large dark curved '
         'screen with a faint blue glow, a column of round knobs and a speaker grille on the right, ' + FR14,
     ]},
+    # Karte 55 (Hurricane Landing): Colorado-Landstrasse - Ranchzaeune, Praerie, Strassenrand
+    'k55_land': {'size': 48, 'freie_farben': True, 'items': [
+        'weathered wooden ranch fence segment, two horizontal split rails between three grey wooden posts, '
+        'straight horizontal, ' + FR14,
+        'barbed wire pasture fence segment, three strands of wire between two old wooden posts, straight horizontal, ' + FR14,
+        'old wooden telephone pole with a crossbar and two glass insulators, thin and tall, ' + FR14,
+        'round golden hay bale rolled up, ' + FR14,
+        'yellow diamond shaped road warning sign with a black curve arrow on a grey metal post, ' + FR14,
+        'old rusty metal mailbox on a wooden post at a country road, ' + FR14,
+        'dry silver green sagebrush bush, round and scruffy, ' + FR14,
+        'reddish brown sandstone boulder, rounded, ' + FR14,
+    ]},
+    'k55_n32': {'size': 32, 'freie_farben': True, 'items': [
+        'small tuft of dry yellow prairie grass, ' + FR14,
+        'small tumbleweed ball of dry twigs, ' + FR14,
+        'small cluster of purple and yellow wildflowers in dry grass, ' + FR14,
+        'small reddish pebbles and stones lying on the ground, ' + FR14,
+    ]},
+    # Praerie-Baeume fuer den Guertel (Nutzer: rechte Baeume praerieartig statt Kiefernwald)
+    'k55_baum': {'size': 48, 'freie_farben': True, 'items': [
+        'cottonwood tree of the american prairie, wide airy canopy of olive and yellow green leaf clumps, pale grey '
+        'trunk, dry summer, ' + FR14,
+        'rocky mountain juniper tree, scruffy bushy dark blue green foliage, twisted reddish brown trunk, ' + FR14,
+        'gambel scrub oak tree, small round dusty green canopy, short dark trunk, ' + FR14,
+        'dry prairie shrub, rabbitbrush with yellow flower tops and silver green stems, ' + FR14,
+        'large dense sagebrush bush, silver grey green, ' + FR14,
+        'small lone prairie tree with sparse dry olive leaves and a crooked trunk, ' + FR14,
+    ]},
+    # Karte 56 (Golden Digimentals): Blumenwiese mit See, verzerrte Landschaft, Cherubimons Inneres
+    'k56_blumen': {'size': 32, 'freie_farben': True, 'items': [
+        'small cluster of white daisies with yellow centers in short grass, ' + FR14,
+        'small cluster of yellow summer wildflowers, ' + FR14,
+        'small cluster of pink and white cosmos flowers, ' + FR14,
+        'small cluster of blue cornflowers, ' + FR14,
+        'small patch of clover with tiny white flowers, ' + FR14,
+        'small cluster of orange poppies, ' + FR14,
+    ]},
+    'k56_wiese': {'size': 48, 'freie_farben': True, 'items': [
+        'big bright green summer deciduous tree with a round fluffy canopy, sunlit, brown trunk, ' + FR14,
+        'weeping willow tree with long hanging light green branches, ' + FR14,
+        'cluster of cattails and reeds growing at a pond shore, ' + FR14,
+        'large flowering bush full of white and pink blossoms, ' + FR14,
+        'mossy grey boulder with small flowers at its base, two tiles tall, ' + FR14,
+        'tall sunflowers group of three, ' + FR14,
+    ]},
+    'k56_verzerrt': {'size': 48, 'freie_farben': True, 'items': [
+        'twisted dead tree with dark purple bark and glitching magenta pixel fragments instead of leaves, ' + FR14,
+        'withered grey flower bush with drooping dead flowers, faint purple corruption, ' + FR14,
+        'jagged dark purple corrupted crystal shards sticking out of the ground, glowing magenta cracks, ' + FR14,
+        'cracked grey boulder with glowing violet veins, ' + FR14,
+        'distorted tree whose canopy is broken into floating square pixel blocks of green and magenta, ' + FR14,
+        'withered sunflower bent over, grey and purple, ' + FR14,
+    ]},
+    'k56_innen': {'size': 48, 'freie_farben': True, 'items': [
+        'cluster of dark violet thorny crystals, glowing purple core, ' + FR14,
+        'twisted black thorn vine pillar rising from the ground, faint violet glow, ' + FR14,
+        'dark organic pillar of purple flesh with glowing magenta veins, ' + FR14,
+        'floating dark orb crackling with small purple lightning, ' + FR14,
+        'floating glowing memory bubble containing a tiny yellow flower, soft golden light, ' + FR14,
+        'broken dark stone pedestal with purple runes, ' + FR14,
+    ]},
+    # New York: Strassenrand (Hydrant, Briefkasten, Zeitungsautomat)
+    'k55_stadt': {'size': 32, 'freie_farben': True, 'items': [
+        'red fire hydrant on a sidewalk, ' + FR14,
+        'blue metal street mailbox box on four short legs, ' + FR14,
+        'row of two small colorful newspaper vending boxes, ' + FR14,
+        'black metal city trash can with a lid, ' + FR14,
+    ]},
 }
 
 
