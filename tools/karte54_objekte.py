@@ -50,6 +50,18 @@ def main():
     def sprite(name, sp_):
         im = Image.open(os.path.join(ROOT, 'assets', 'objekte', D[name])).convert('RGBA')
         im = im.crop(im.getbbox())
+        if name.startswith(('quer', 'senk')):                           # Pruefung: Sprite-Fehler der liegenden Ranken
+            a = np.array(im).astype(int)
+            kuehl = (a[..., 3] > 0) & (a[..., 1] > a[..., 0]) & (a[..., 2] > a[..., 0])
+            a[kuehl, :3] = (62, 14, 30)                                  # petrolfarbener Saum -> dunkle Rotkontur
+            if a[0, :, 3].any() and (a[0, :, :3][a[0, :, 3] > 0].sum(-1) > 200).any():   # oben angeschnitten
+                neu = np.zeros((a.shape[0] + 1, a.shape[1], 4), int); neu[1:] = a
+                neu[0] = np.where(a[0, :, 3:4] > 0, [62, 14, 30, 255], 0)  # Kontur oben ergaenzen (rund abschliessen)
+                xs_ = np.nonzero(a[0, :, 3])[0]
+                if len(xs_) > 2:
+                    neu[0, xs_[0]] = 0; neu[0, xs_[-1]] = 0
+                a = neu
+            im = Image.fromarray(a.astype(np.uint8))
         if sp_:
             im = im.transpose(Image.FLIP_LEFT_RIGHT)
         datei = 'varianten/%s%s.png' % (name, '_m' if sp_ else '')
@@ -81,6 +93,9 @@ def main():
         for tiefe in range(14, 7 * T, 4):
             rr_ = rad - tiefe
             cx = mx + rr_ * math.cos(math.radians(w))
+            wt_ = -(-im.width // T)                                      # Regel 1b: mittig im kleinsten Kachelblock
+            off_ = 0 if wt_ % 2 == 0 else T / 2.0                        # (Achse liegt auf der Kachelkante -> Paare bleiben exakt)
+            cx = round((cx - off_) / T) * T + off_
             fy = int(my + rr_ * math.sin(math.radians(w))) // T * T + T - 1
             a_ = pruefe(im, cx, fy)
             if not a_:

@@ -158,7 +158,8 @@ def bauen(frame=None, speichern=True):
     for k_ in range(1, 11):
         m_ = boden & (dw == k_)
         a[m_] = (a[m_] * (0.55 + 0.045 * k_)).astype(np.uint8)
-    fenster(a, lay, fm & boden, frame)
+    if (fm & boden).any():                                            # Nutzer: keine Loecher im Boden (Fenster leer)
+        fenster(a, lay, fm & boden, frame)
     a[wand] = (60, 8, 22)                                             # Tiefe zwischen den Blasen
     dreaper.masse(a, wand, frame, 54)                                 # Kugelwand: ganze Blasenhaufen, pulsierend
     yy, xx = np.mgrid[0:Hp, 0:Wp].astype(np.float32)

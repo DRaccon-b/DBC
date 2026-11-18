@@ -40,9 +40,7 @@ def main():
         k[~f_ & (k == 'i') & (nb >= 3)] = 'f'
     k[(yy >= 36) & (xx >= 20) & (xx <= 23)] = 'p'          # Riss in der Kugelwand nach Sueden (Stegbreite 4)
     lay = {'groesse': [C, R], 'klassen': [''.join(z) for z in k], 'mitte': [MX, MY], 'radius': RADIUS,
-           'teleporter': [{'x': 20, 'y': 41, 'b': 4, 'h': 3}],
-           # Blick hinunter: Ausschnitt von Karte 52 (halber Massstab) je Fenster, linke obere Pixelecke in der Quelle
-           'blick': {'karte': 'karte52', 'versatz': [[205, 298], [36, 40], [688, 150], [108, 528], [606, 470]]}}
+           'teleporter': [{'x': 20, 'y': 41, 'b': 4, 'h': 3}]}
     os.makedirs(KARTE, exist_ok=True)
     json.dump(lay, open(os.path.join(KARTE, 'layout.json'), 'w'), indent=0)
     F = {'o': (150, 20, 40), 'i': (200, 110, 140), 'f': (60, 70, 90), 'p': (170, 90, 120)}

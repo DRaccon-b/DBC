@@ -1975,6 +1975,22 @@ def tornado(sp, frame, o):
 TEILANIM.update({'tornado': tornado})
 
 
+def masse_puls(sp, frame, o):
+    """D-Reaper-Masse an Objekten (Karte 52, Pruefung): nur die glaenzend roten Massepixel pulsieren im selben Takt wie die
+    Bodenmasse (heller/dunkler, 4er-Schleife), Mast/Gehaeuse bleiben unveraendert."""
+    a = np.array(sp).astype(np.float32)
+    r_, g_, b_ = a[..., 0], a[..., 1], a[..., 2]
+    rot = (a[..., 3] > 0) & (r_ > 120) & (r_ > g_ * 1.8) & (r_ > b_ * 1.5)
+    if not rot.any():
+        return sp
+    f = 1.0 + 0.12 * math.sin(2 * math.pi * (frame % N_FRAMES) / float(N_FRAMES) + o.get('phase', 0))
+    a[rot, :3] = np.clip(a[rot, :3] * f, 0, 255)
+    return Image.fromarray(a.astype(np.uint8), 'RGBA')
+
+
+TEILANIM.update({'masse_puls': masse_puls})
+
+
 def flammen_boxen(sp, frame, o):
     """Kerzenflammen in festen Boxen (o['flammen_box']): jede Flamme zuengelt fuer sich (Spitze seitlich, streckt sich
     um 1 px); Wachs, Messing und Halter bleiben unveraendert."""

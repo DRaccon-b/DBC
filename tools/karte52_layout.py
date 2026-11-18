@@ -179,6 +179,16 @@ def main():
                 if k2[y, x] == 'a' and sum(k2[y + dy, x + dx] == 'a' for dy, dx in ((1, 0), (-1, 0), (0, 1), (0, -1))) <= 1 \
                         and sum(k2[y + dy, x + dx] in 'kqb' for dy, dx in ((1, 0), (-1, 0), (0, 1), (0, -1))) == 0:
                     k2[y, x] = 'h'
+    # Pruefung: Masseblock zwischen den Gehwegen (Spalten 54-61, Reihen 49-59) wie in der Vorlage als Raute/Kreuz mit
+    # freien Asphaltecken statt als Rechteck; in der Mitte kreuzt die Masse beide Gehwegstreifen symmetrisch
+    for y in range(49, 60):
+        hw = {53: 4, 54: 4, 55: 4, 56: 4, 52: 3, 57: 3, 51: 2, 58: 2, 50: 1, 59: 1}.get(y, 0)
+        for x in range(53, 63):
+            gehweg = x in (53, 62)
+            if gehweg:
+                k2[y, x] = 'r' if y in (54, 55) else 'k'
+            else:
+                k2[y, x] = 'r' if 57.5 - hw <= x + 0.5 <= 58.5 + hw - 1 + 0.0 and abs(x + 0.5 - 58.0) <= hw else 'a'
     lay = {'groesse': [C2, R2], 'klassen': [''.join(z) for z in k2], 'hoehe': ['1' * C2 for _ in range(R2)],
            'versatz': P, 'teleporter': [{'x': x, 'y': y, 'b': b, 'h': h} for (x, y, b, h) in tps],
            'zebra': [], 'strassen_h': [], 'strassen_v': [],

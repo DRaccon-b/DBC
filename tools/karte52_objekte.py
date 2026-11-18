@@ -42,9 +42,11 @@ for n_, (i, f) in DR.items():                                       # D-Reaper w
 for n_, i in {'pfuetze': 0, 'brocken': 1, 'glas': 2, 'zeitung': 3}.items():
     FREMD['klein/' + n_] = ('karte52/klein/%02d.png' % i, 0.75)
 # Nutzer: nie herunterskalieren - alle Objekte neu in Zielgroesse erzeugt (PixelLab k52_n48/n48b/n32/n64), Faktor 1
-NEU = {'k18s/18': 'n48/00', 'k18s/13': 'n32/06', 'k18s/01': 'n48/07', 'k18s/12': 'n32/05', 'k18s/41': 'n48b/05',
+NEU = {'k18s/18': 'n48/00', 'k18s/13': 'n32/06', 'k18s/01': '../karte53/fix/automat',   # roter Fleck am Fuss entfernt
+       'k18s/12': 'n32/05', 'k18s/41': 'n48b/05',
        'k18a/01': 'n64/01', 'k18a/02': 'n64/02', 'k18a/03': 'n64/00', 'k18a/05': 'n64/03',
-       'reaper/sperre': 'n32/00', 'reaper/block': 'n48b/01', 'reaper/schutt': 'n48b/00', 'reaper/fass': 'n48/08',
+       'reaper/sperre': 'n32/00', 'reaper/block': 'n48b/01', 'reaper/schutt': 'n48b/00', 'reaper/fass': 'n48b/07',   # Pruefung: nicht derselbe Reifenstapel wie dr/reifen
+      
        'dr/laterne': 'n48/01', 'dr/hydrant': 'n48/02', 'dr/briefkasten': 'n48/03', 'dr/schild': 'n48/04',
        'dr/turm': 'n48/05', 'dr/tentakel': 'n48/06', 'dr/muell': 'n48/09', 'dr/bank': 'n48/10', 'dr/huegel': 'n48b/02',
        'dr/blasen': 'n48b/06', 'dr/reifen': 'n48/08', 'dr/fahrrad': 'n48/13', 'dr/kisten': 'n48/11',
@@ -239,7 +241,8 @@ def main():
     G = 'kqb'                                                          # begehbarer Belag fuer Deko
     # ---------------------------------------------------------------- Wracks und Sperren (Vorlage: Autos, X-Sperren)
     for (n_, tx, ty, sp) in (('k18a/03', 13, 29, False), ('k18a/01', 47, 39, True), ('k18a/03', 77, 40, True),
-                             ('k18a/01', 28, 74, False), ('k18a/02', 60, 38, False), ('k18a/05', 14, 68, True)):   # verlassene Autos (Seitenansicht)
+                             ('k18a/01', 28, 74, False), ('k18a/02', 60, 38, True)   # Pruefung: Linksverkehr - Front nach Osten in der Nordspur
+                            , ('k18a/05', 14, 68, True)):   # verlassene Autos (Seitenansicht)
         kachel(n_, tx + P, ty + P, {}, sp, klassen='a', weit=2)
     for (n_, tx, ty, sp) in (('reaper/sperre', 21, 28, False), ('reaper/sperre', 31, 23, True), ('reaper/sperre', 55, 46, False),
                              ('reaper/sperre', 59, 58, True), ('reaper/block', 14, 20, False), ('reaper/block', 66, 63, True),
@@ -255,7 +258,7 @@ def main():
     lw = Image.open(os.path.join(OBJ, 'k18s/18.png')).getbbox()
     lw = lw[2] - lw[0]
     xl = bx0 * T + 20
-    for fy_ in ((by0 + 1) * T + 15, by1 * T + 15):
+    for fy_ in ((by0 + 1) * T + 15, (by1 - 1) * T + 15):            # Pruefung: unten eine Reihe eingerueckt (symmetrisch)
         setze('k18s/18', xl + lw / 2.0, fy_, dict(LAMPE), klassen='b')
         setze('k18s/18', (bx1 + 1) * T - 20 - lw / 2.0, fy_, dict(LAMPE), klassen='b')
     for (n_, tx, ty, sp) in (('dr/bank_platz', 80, 62, False), ('k18s/01', 88, 61, False), ('dr/muell_platz', 84, 70, False)):
@@ -324,6 +327,17 @@ def main():
     for o in objekte:
         if o['basis'].startswith('k01/'):
             o['nur_kontakt'] = True
+    # Pruefung: Masse an den D-Reaper-Objekten pulsiert wie die Bodenmasse, Tentakel wiegen sich
+    for j_, o_ in enumerate(objekte):
+        if not o_['basis'].startswith('dr/'):
+            continue
+        o_['phase'] = (j_ * 1.3) % 6.28
+        if o_['basis'] == 'dr/tentakel':
+            o_['anim'] = 'baum'; o_['teil'] = 'masse_puls'
+        elif o_.get('anim'):
+            o_['teil'] = 'masse_puls'
+        else:
+            o_['anim'] = 'masse_puls'
     json.dump(objekte, open(os.path.join(OBJ, 'platzierung.json'), 'w'), indent=0)
     print(len(objekte), 'Objekte')
 

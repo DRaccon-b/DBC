@@ -124,7 +124,7 @@
 "nur_kontakt": true
 },
 {
-"datei": "varianten/k18a-02.png",
+"datei": "varianten/k18a-02_m.png",
 "basis": "k18a/02",
 "x": 981,
 "y": 622,
@@ -182,12 +182,12 @@
 {
 "datei": "varianten/reaper-sperre.png",
 "basis": "reaper/sperre",
-"x": 898,
-"y": 740,
+"x": 914,
+"y": 756,
 "fuss": 27,
 "kachel": [
-57,
-47
+58,
+48
 ],
 "ebene": 1,
 "ohne_wall": true,
@@ -197,11 +197,11 @@
 "datei": "varianten/reaper-sperre_m.png",
 "basis": "reaper/sperre",
 "x": 962,
-"y": 964,
+"y": 948,
 "fuss": 27,
 "kachel": [
 61,
-61
+60
 ],
 "ebene": 1,
 "ohne_wall": true,
@@ -252,9 +252,9 @@
 {
 "datei": "varianten/reaper-fass.png",
 "basis": "reaper/fass",
-"x": 418,
-"y": 263,
-"fuss": 40,
+"x": 424,
+"y": 261,
+"fuss": 42,
 "kachel": [
 27,
 18
@@ -282,7 +282,9 @@
 8,
 22,
 18
-]
+],
+"phase": 4.560000000000001,
+"teil": "masse_puls"
 },
 {
 "datei": "varianten/k18s-18.png",
@@ -318,11 +320,11 @@
 "datei": "varianten/k18s-18.png",
 "basis": "k18s/18",
 "x": 1236,
-"y": 1203,
+"y": 1187,
 "fuss": 44,
 "kachel": [
 77,
-77
+76
 ],
 "ebene": 1,
 "ohne_wall": true,
@@ -333,11 +335,11 @@
 "datei": "varianten/k18s-18.png",
 "basis": "k18s/18",
 "x": 1485,
-"y": 1203,
+"y": 1187,
 "fuss": 44,
 "kachel": [
 93,
-77
+76
 ],
 "ebene": 1,
 "ohne_wall": true,
@@ -356,14 +358,16 @@
 ],
 "ebene": 1,
 "ohne_wall": true,
-"nur_kontakt": true
+"nur_kontakt": true,
+"phase": 4.780000000000001,
+"anim": "masse_puls"
 },
 {
 "datei": "varianten/k18s-01.png",
 "basis": "k18s/01",
-"x": 1440,
-"y": 980,
-"fuss": 43,
+"x": 1442,
+"y": 981,
+"fuss": 42,
 "kachel": [
 91,
 63
@@ -396,17 +400,19 @@
 ],
 "ebene": 1,
 "ohne_wall": true,
-"nur_kontakt": true
+"nur_kontakt": true,
+"phase": 1.0999999999999988,
+"anim": "masse_puls"
 },
 {
 "datei": "varianten/k18s-41.png",
 "basis": "k18s/41",
-"x": 1298,
-"y": 1195,
+"x": 1282,
+"y": 1179,
 "fuss": 36,
 "kachel": [
-82,
-76
+81,
+75
 ],
 "ebene": 1,
 "ohne_wall": true,
@@ -415,110 +421,125 @@
 {
 "datei": "varianten/dr-turm.png",
 "basis": "dr/turm",
-"x": 1159,
-"y": 957,
+"x": 1335,
+"y": 701,
 "fuss": 34,
 "kachel": [
-73,
-61
+84,
+45
 ],
 "ebene": 1,
 "ohne_wall": true,
-"nur_kontakt": true
+"nur_kontakt": true,
+"phase": 3.7,
+"anim": "masse_puls"
 },
 {
 "datei": "varianten/dr-blasen.png",
 "basis": "dr/blasen",
-"x": 1328,
-"y": 329,
+"x": 80,
+"y": 345,
 "fuss": 22,
 "kachel": [
-84,
-21
+6,
+22
 ],
 "ebene": 1,
 "ohne_wall": true,
-"nur_kontakt": true
+"nur_kontakt": true,
+"phase": 4.999999999999997,
+"anim": "masse_puls"
 },
 {
-"datei": "varianten/dr-tentakel_m.png",
+"datei": "varianten/dr-tentakel.png",
 "basis": "dr/tentakel",
-"x": 1366,
-"y": 615,
+"x": 1046,
+"y": 1095,
 "fuss": 40,
 "kachel": [
-86,
-40
-],
-"ebene": 1,
-"ohne_wall": true,
-"nur_kontakt": true
-},
-{
-"datei": "varianten/dr-hydrant_m.png",
-"basis": "dr/hydrant",
-"x": 352,
-"y": 568,
-"fuss": 39,
-"kachel": [
-23,
-37
-],
-"ebene": 1,
-"ohne_wall": true,
-"nur_kontakt": true
-},
-{
-"datei": "varianten/dr-huegel_m.png",
-"basis": "dr/huegel",
-"x": 1026,
-"y": 1111,
-"fuss": 24,
-"kachel": [
-65,
+66,
 70
 ],
 "ebene": 1,
 "ohne_wall": true,
-"nur_kontakt": true
+"nur_kontakt": true,
+"phase": 0.02000000000000135,
+"anim": "baum",
+"teil": "masse_puls"
 },
 {
-"datei": "varianten/dr-briefkasten_m.png",
-"basis": "dr/briefkasten",
-"x": 196,
-"y": 1078,
-"fuss": 41,
+"datei": "varianten/dr-hydrant_m.png",
+"basis": "dr/hydrant",
+"x": 192,
+"y": 1080,
+"fuss": 39,
 "kachel": [
 13,
 69
 ],
 "ebene": 1,
 "ohne_wall": true,
-"nur_kontakt": true
+"nur_kontakt": true,
+"phase": 1.3199999999999985,
+"anim": "masse_puls"
 },
 {
-"datei": "varianten/dr-reifen.png",
-"basis": "dr/reifen",
-"x": 658,
-"y": 343,
-"fuss": 40,
+"datei": "varianten/dr-huegel.png",
+"basis": "dr/huegel",
+"x": 1250,
+"y": 103,
+"fuss": 24,
 "kachel": [
-42,
-23
+79,
+7
 ],
 "ebene": 1,
 "ohne_wall": true,
-"nur_kontakt": true
+"nur_kontakt": true,
+"phase": 2.6200000000000028,
+"anim": "masse_puls"
 },
 {
-"datei": "varianten/dr-laterne_m.png",
+"datei": "varianten/dr-briefkasten_m.png",
+"basis": "dr/briefkasten",
+"x": 372,
+"y": 566,
+"fuss": 41,
+"kachel": [
+24,
+37
+],
+"ebene": 1,
+"ohne_wall": true,
+"nur_kontakt": true,
+"phase": 3.92,
+"anim": "masse_puls"
+},
+{
+"datei": "varianten/dr-reifen_m.png",
+"basis": "dr/reifen",
+"x": 530,
+"y": 439,
+"fuss": 40,
+"kachel": [
+34,
+29
+],
+"ebene": 1,
+"ohne_wall": true,
+"nur_kontakt": true,
+"phase": 5.219999999999997,
+"anim": "masse_puls"
+},
+{
+"datei": "varianten/dr-laterne.png",
 "basis": "dr/laterne",
 "x": 786,
-"y": 820,
+"y": 340,
 "fuss": 43,
 "kachel": [
 50,
-53
+23
 ],
 "ebene": 1,
 "ohne_wall": true,
@@ -529,105 +550,121 @@
 8,
 22,
 18
-]
+],
+"phase": 0.2400000000000011,
+"teil": "masse_puls"
 },
 {
 "datei": "varianten/dr-bank.png",
 "basis": "dr/bank",
-"x": 274,
-"y": 923,
+"x": 258,
+"y": 779,
 "fuss": 36,
 "kachel": [
-18,
-59
-],
-"ebene": 1,
-"ohne_wall": true,
-"nur_kontakt": true
-},
-{
-"datei": "varianten/dr-hydrant.png",
-"basis": "dr/hydrant",
-"x": 192,
-"y": 824,
-"fuss": 39,
-"kachel": [
-13,
-53
-],
-"ebene": 1,
-"ohne_wall": true,
-"nur_kontakt": true
-},
-{
-"datei": "varianten/dr-klima.png",
-"basis": "dr/klima",
-"x": 786,
-"y": 238,
-"fuss": 33,
-"kachel": [
-50,
-16
-],
-"ebene": 1,
-"ohne_wall": true,
-"nur_kontakt": true
-},
-{
-"datei": "varianten/dr-muell_m.png",
-"basis": "dr/muell",
-"x": 744,
-"y": 440,
-"fuss": 39,
-"kachel": [
-47,
-29
-],
-"ebene": 1,
-"ohne_wall": true,
-"nur_kontakt": true
-},
-{
-"datei": "varianten/dr-briefkasten_m.png",
-"basis": "dr/briefkasten",
-"x": 788,
-"y": 966,
-"fuss": 41,
-"kachel": [
-50,
-62
-],
-"ebene": 1,
-"ohne_wall": true,
-"nur_kontakt": true
-},
-{
-"datei": "varianten/dr-busch.png",
-"basis": "dr/busch",
-"x": 787,
-"y": 569,
-"fuss": 38,
-"kachel": [
-50,
-37
-],
-"ebene": 1,
-"ohne_wall": true,
-"nur_kontakt": true
-},
-{
-"datei": "varianten/dr-schild.png",
-"basis": "dr/schild",
-"x": 294,
-"y": 772,
-"fuss": 43,
-"kachel": [
-19,
+17,
 50
 ],
 "ebene": 1,
 "ohne_wall": true,
-"nur_kontakt": true
+"nur_kontakt": true,
+"phase": 1.5399999999999983,
+"anim": "masse_puls"
+},
+{
+"datei": "varianten/dr-hydrant_m.png",
+"basis": "dr/hydrant",
+"x": 752,
+"y": 504,
+"fuss": 39,
+"kachel": [
+48,
+33
+],
+"ebene": 1,
+"ohne_wall": true,
+"nur_kontakt": true,
+"phase": 2.8400000000000025,
+"anim": "masse_puls"
+},
+{
+"datei": "varianten/dr-klima_m.png",
+"basis": "dr/klima",
+"x": 274,
+"y": 990,
+"fuss": 33,
+"kachel": [
+18,
+63
+],
+"ebene": 1,
+"ohne_wall": true,
+"nur_kontakt": true,
+"phase": 4.14,
+"anim": "masse_puls"
+},
+{
+"datei": "varianten/dr-muell_m.png",
+"basis": "dr/muell",
+"x": 760,
+"y": 200,
+"fuss": 39,
+"kachel": [
+48,
+14
+],
+"ebene": 1,
+"ohne_wall": true,
+"nur_kontakt": true,
+"phase": 5.439999999999997,
+"anim": "masse_puls"
+},
+{
+"datei": "varianten/dr-briefkasten_m.png",
+"basis": "dr/briefkasten",
+"x": 772,
+"y": 886,
+"fuss": 41,
+"kachel": [
+49,
+57
+],
+"ebene": 1,
+"ohne_wall": true,
+"nur_kontakt": true,
+"phase": 0.46000000000000085,
+"anim": "masse_puls"
+},
+{
+"datei": "varianten/dr-busch.png",
+"basis": "dr/busch",
+"x": 163,
+"y": 825,
+"fuss": 38,
+"kachel": [
+11,
+53
+],
+"ebene": 1,
+"ohne_wall": true,
+"nur_kontakt": true,
+"phase": 1.759999999999998,
+"anim": "masse_puls"
+},
+{
+"datei": "varianten/dr-schild_m.png",
+"basis": "dr/schild",
+"x": 326,
+"y": 868,
+"fuss": 43,
+"kachel": [
+21,
+56
+],
+"ebene": 1,
+"ohne_wall": true,
+"nur_kontakt": true,
+"phase": 3.0600000000000023,
+"anim": "masse_puls"
 },
 {
 "datei": "varianten/klein-zeitung.png",
@@ -653,21 +690,6 @@
 "kachel": [
 63,
 44
-],
-"ebene": 0,
-"ohne_wall": true,
-"liegend": true,
-"schattenlos": true
-},
-{
-"datei": "varianten/klein-pfuetze.png",
-"basis": "klein/pfuetze",
-"x": 762,
-"y": 871,
-"fuss": 19,
-"kachel": [
-48,
-55
 ],
 "ebene": 0,
 "ohne_wall": true,
