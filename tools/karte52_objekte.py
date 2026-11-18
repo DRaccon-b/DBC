@@ -48,7 +48,8 @@ NEU = {'k18s/18': 'n48/00', 'k18s/13': 'n32/06', 'k18s/01': '../karte53/fix/auto
        'reaper/sperre': 'n32/00', 'reaper/block': 'n48b/01', 'reaper/schutt': 'n48b/00', 'reaper/fass': 'n48b/07',   # Pruefung: nicht derselbe Reifenstapel wie dr/reifen
       
        'dr/laterne': 'n48/01', 'dr/hydrant': 'n48/02', 'dr/briefkasten': 'n48/03', 'dr/schild': 'n48/04',
-       'dr/turm': 'n48/05', 'dr/tentakel': 'n48/06', 'dr/muell': 'n48/09', 'dr/bank': 'n48/10', 'dr/huegel': 'n48b/02',
+       'dr/turm': 'n48/05', 'dr/tentakel': '../karte54/rv6/00',   # Nutzer: Gelenkarm mit Haken wie Karte 54
+       'dr/muell': 'n48/09', 'dr/bank': 'n48/10', 'dr/huegel': 'n48b/02',
        'dr/blasen': 'n48b/06', 'dr/reifen': 'n48/08', 'dr/fahrrad': 'n48/13', 'dr/kisten': 'n48/11',
        'dr/bank_platz': 'n48b/04', 'dr/muell_platz': 'n48b/03', 'dr/klima': 'n48/14', 'dr/busch': 'n48/15',
        'dr/rutsche': 'n48/12',
@@ -333,13 +334,13 @@ def main():
             continue
         o_['phase'] = (j_ * 1.3) % 6.28
         if o_['basis'] == 'dr/tentakel':
-            o_['anim'] = 'baum'; o_['teil'] = 'masse_puls'
+            o_['anim'] = 'ranke'; o_.pop('teil', None)                 # Gelenkarm wiegt sich (wie Karte 54)
         elif o_.get('anim'):
             o_['teil'] = 'masse_puls'
         else:
             o_['anim'] = 'masse_puls'
     import dreaper                                                     # Nutzer: Objekte passend zum Schlamm (Version 8)
-    dreaper.objekte_faerben(OBJ, objekte, ['dr/', 'reaper/'])
+    dreaper.objekte_faerben(OBJ, [o_ for o_ in objekte if o_['basis'] != 'dr/tentakel'], ['dr/', 'reaper/'])
     json.dump(objekte, open(os.path.join(OBJ, 'platzierung.json'), 'w'), indent=0)
     print(len(objekte), 'Objekte')
 

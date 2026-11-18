@@ -1003,16 +1003,17 @@
 {
 "datei": "varianten/reaper-ranke.png",
 "basis": "reaper/ranke",
-"x": 694,
-"y": 263,
-"fuss": 40,
+"x": 678,
+"y": 234,
+"fuss": 69,
 "kachel": [
 44,
 18
 ],
 "ebene": 1,
 "ohne_wall": true,
-"nur_kontakt": true
+"nur_kontakt": true,
+"anim": "ranke"
 },
 {
 "datei": "varianten/reaper-blasen_m.png",
@@ -1032,25 +1033,26 @@
 "datei": "varianten/reaper-ranke_m.png",
 "basis": "reaper/ranke",
 "x": 246,
-"y": 391,
-"fuss": 40,
+"y": 362,
+"fuss": 69,
 "kachel": [
-16,
+17,
 26
 ],
 "ebene": 1,
 "ohne_wall": true,
-"nur_kontakt": true
+"nur_kontakt": true,
+"anim": "ranke"
 },
 {
 "datei": "varianten/reaper-kapsel.png",
 "basis": "reaper/kapsel",
-"x": 242,
-"y": 359,
+"x": 306,
+"y": 407,
 "fuss": 24,
 "kachel": [
-16,
-23
+20,
+26
 ],
 "ebene": 1,
 "ohne_wall": true,

@@ -453,19 +453,18 @@
 {
 "datei": "varianten/dr-tentakel.png",
 "basis": "dr/tentakel",
-"x": 278,
-"y": 903,
-"fuss": 40,
+"x": 184,
+"y": 790,
+"fuss": 73,
 "kachel": [
-18,
-58
+13,
+53
 ],
 "ebene": 1,
 "ohne_wall": true,
 "nur_kontakt": true,
 "phase": 0.02000000000000135,
-"anim": "baum",
-"teil": "masse_puls"
+"anim": "ranke"
 },
 {
 "datei": "varianten/dr-hydrant_m.png",
@@ -502,12 +501,12 @@
 {
 "datei": "varianten/dr-laterne.png",
 "basis": "dr/laterne",
-"x": 258,
-"y": 772,
+"x": 738,
+"y": 484,
 "fuss": 43,
 "kachel": [
-17,
-50
+47,
+32
 ],
 "ebene": 1,
 "ohne_wall": true,
@@ -523,14 +522,14 @@
 "teil": "masse_puls"
 },
 {
-"datei": "varianten/dr-bank.png",
+"datei": "varianten/dr-bank_m.png",
 "basis": "dr/bank",
-"x": 754,
-"y": 459,
+"x": 738,
+"y": 203,
 "fuss": 36,
 "kachel": [
-48,
-30
+47,
+14
 ],
 "ebene": 1,
 "ohne_wall": true,
@@ -541,12 +540,12 @@
 {
 "datei": "varianten/dr-hydrant_m.png",
 "basis": "dr/hydrant",
-"x": 752,
-"y": 200,
+"x": 256,
+"y": 1016,
 "fuss": 39,
 "kachel": [
-48,
-14
+17,
+65
 ],
 "ebene": 1,
 "ohne_wall": true,
@@ -555,14 +554,14 @@
 "anim": "masse_puls"
 },
 {
-"datei": "varianten/dr-klima.png",
+"datei": "varianten/dr-klima_m.png",
 "basis": "dr/klima",
-"x": 770,
-"y": 798,
+"x": 290,
+"y": 926,
 "fuss": 33,
 "kachel": [
-49,
-51
+19,
+59
 ],
 "ebene": 1,
 "ohne_wall": true,
@@ -573,12 +572,12 @@
 {
 "datei": "varianten/dr-muell_m.png",
 "basis": "dr/muell",
-"x": 728,
-"y": 344,
+"x": 776,
+"y": 792,
 "fuss": 39,
 "kachel": [
-46,
-23
+49,
+51
 ],
 "ebene": 1,
 "ohne_wall": true,
@@ -589,12 +588,12 @@
 {
 "datei": "varianten/dr-briefkasten_m.png",
 "basis": "dr/briefkasten",
-"x": 804,
-"y": 566,
+"x": 740,
+"y": 342,
 "fuss": 41,
 "kachel": [
-51,
-37
+47,
+23
 ],
 "ebene": 1,
 "ohne_wall": true,
@@ -605,12 +604,12 @@
 {
 "datei": "varianten/dr-busch_m.png",
 "basis": "dr/busch",
-"x": 307,
-"y": 1001,
+"x": 787,
+"y": 569,
 "fuss": 38,
 "kachel": [
-20,
-64
+50,
+37
 ],
 "ebene": 1,
 "ohne_wall": true,
@@ -632,6 +631,22 @@
 "ohne_wall": true,
 "nur_kontakt": true,
 "phase": 0.46000000000000085,
+"anim": "masse_puls"
+},
+{
+"datei": "varianten/dr-rutsche_m.png",
+"basis": "dr/rutsche",
+"x": 274,
+"y": 775,
+"fuss": 40,
+"kachel": [
+18,
+50
+],
+"ebene": 1,
+"ohne_wall": true,
+"nur_kontakt": true,
+"phase": 1.759999999999998,
 "anim": "masse_puls"
 },
 {

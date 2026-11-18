@@ -52,7 +52,8 @@ NEU = {'evak/bett': 'karte53/n48/00.png', 'evak/sandsack': 'karte53/n48/01.png',
        'evak/rucksack': 'karte53/n32/03.png', 'evak/kanister': 'karte53/n32/00.png', 'evak/kuehlbox': 'karte53/n32/01.png',
        'evak/schlafsack': 'karte53/n32/02.png', 'evak/zelt': 'karte53/gross/00.png', 'evak/lkw': 'karte53/gross/01.png',
        'evak/vorrat': 'karte53/gross/02.png',
-       'reaper/ranke': 'karte52/n48/06.png', 'reaper/blasen': 'karte52/n48b/06.png', 'reaper/kapsel': 'karte52/n48b/02.png',
+       'reaper/ranke': 'karte54/rv6/02.png',   # Nutzer: Gelenkarm mit Haken wie Karte 54
+        'reaper/blasen': 'karte52/n48b/06.png', 'reaper/kapsel': 'karte52/n48b/02.png',
        'k18s/18': 'karte52/n48/00.png', 'k18s/13': 'karte52/n32/06.png', 'k18s/01': 'karte53/fix/automat.png',   # roter Fleck am Fuss entfernt (Pruefung)
        'k18s/12': 'karte52/n32/05.png', 'k18s/41': 'karte52/n48b/05.png',
        'k18a/02': 'karte52/n64/02.png', 'k18a/05': 'karte52/n64/03.png'}
@@ -386,7 +387,10 @@ def main():
             if cls[min(rows - 1, fy_ + 1)][min(cols - 1, fx)] not in 'hn' and cls[fy_][min(cols - 1, fx)] == 'h':
                 o['schattenlos'] = True
     import dreaper                                                     # Nutzer: Objekte passend zum Schlamm (Version 8)
-    dreaper.objekte_faerben(OBJ, objekte, ['reaper/'])
+    for o_ in objekte:                                                 # Gelenkarme wiegen sich (wie Karte 54)
+        if o_['basis'] == 'reaper/ranke':
+            o_['anim'] = 'ranke'; o_.pop('teil', None)
+    dreaper.objekte_faerben(OBJ, [o_ for o_ in objekte if o_['basis'] != 'reaper/ranke'], ['reaper/'])
     json.dump(objekte, open(os.path.join(OBJ, 'platzierung.json'), 'w'), indent=0)
     print(len(objekte), 'Objekte')
 
