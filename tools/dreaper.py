@@ -87,35 +87,75 @@ def stempel_laden():
         basis = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'assets', 'objekte', 'karte52')
         gross = [Image.open(os.path.join(basis, 'masse', '%02d.png' % i)).convert('RGBA') for i in (0, 1, 3)]
         klein = [Image.open(os.path.join(basis, 'masse_klein', '%02d.png' % i)).convert('RGBA')
-                 for i in (0, 1, 2, 4, 8, 9, 12, 14, 15)]
+                 for i in (0, 2, 12, 15)]                            # helle, runde Haufen (dunkle wirken am Rand wie Saum)
         _STEMPEL = ([g.crop(g.getbbox()) for g in gross], [k.crop(k.getbbox()) for k in klein])
     return _STEMPEL
 
 
-def stempeln(col, mm, f, seed, flach=False, ueber=5):
-    """Masse aus PixelLab-Blasenhaufen aufbauen: dichtes, versetztes Raster aus grossen und kleinen Haufen, jeweils auf die
-    Maske beschnitten, von Norden nach Sueden gezeichnet (suedliche Haufen liegen vorn). Animation: jeder Haufen hebt und
-    senkt sich mit eigener Phase um 1 px (die Masse atmet), 4 Bilder nahtlos."""
+def _abstand(mm, schritte=14):
+    """Grober Abstand zur Maskenkante in Pixeln (Viertelaufloesung, wiederholtes Erodieren)."""
+    m4 = Image.fromarray(mm[::4, ::4].astype(np.uint8) * 255)
+    d = np.zeros((m4.height, m4.width), np.float32)
+    cur = m4
+    for i in range(schritte):
+        arr = np.array(cur) > 0
+        d += arr
+        if not arr.any():
+            break
+        cur = cur.filter(ImageFilter.MinFilter(3))
+    d = np.kron(d, np.ones((4, 4), np.float32))[:mm.shape[0], :mm.shape[1]] * 4
+    return d
+
+
+def stempeln(mm, f, seed, flach=False, ueber=12):
+    """Masse aus ganzen PixelLab-Blasenhaufen (nie beschnitten, Nutzer): jeder Haufen wird nur so gross gesetzt, dass er bis
+    auf ueber px in die Maske passt; am Rand ein Kranz kleiner Haufen, sodass der Umriss aus echten Blasen besteht.
+    Von Norden nach Sueden gezeichnet. Animation: jeder Haufen hebt/senkt sich mit eigener Phase um 1 px (4 Bilder).
+    Rueckgabe: RGBA-Ebene (Alpha 0/1) in Groesse der Maske."""
     gross, klein = stempel_laden()
     rs = np.random.RandomState(seed)
     h, w = mm.shape
+    dist = _abstand(mm)
+    alle = [(g, True) for g in gross] + [(k, False) for k in klein]
     liste = []
-    for gy in range(-20, h + 20, 30 if not flach else 40):
-        for gx in range(-20, w + 20, 34 if not flach else 44):
-            cy, cx = gy + rs.randint(-10, 11), gx + rs.randint(-12, 13)
-            if not mm[min(h - 1, max(0, cy)), min(w - 1, max(0, cx))]:
+
+    def waehle(cy, cx, R, nur_klein=False):
+        for _ in range(6):
+            im, ist_gross = alle[rs.randint(len(alle))]
+            if nur_klein and ist_gross:
                 continue
-            if rs.rand() < (0.45 if not flach else 0.2):
-                im = gross[rs.randint(len(gross))]; sk = rs.uniform(0.5, 0.75)
-            else:
-                im = klein[rs.randint(len(klein))]; sk = rs.uniform(0.75, 1.0)
-            im = im.resize((max(4, int(im.width * sk)), max(4, int(im.height * sk))), Image.NEAREST)
+            if ist_gross and rs.rand() < (0.5 if not flach else 0.8):
+                continue
+            halb = max(im.width, im.height) / 2.0
+            sk = min(rs.uniform(0.6, 0.85) if ist_gross else rs.uniform(0.85, 1.15), R / halb)
+            if sk * halb < 6:
+                continue
+            im2 = im.resize((max(4, int(im.width * sk)), max(4, int(im.height * sk))), Image.NEAREST)
             if rs.rand() < 0.5:
-                im = im.transpose(Image.FLIP_LEFT_RIGHT)
-            liste.append((cy, cx, im, rs.randint(0, 4)))
+                im2 = im2.transpose(Image.FLIP_LEFT_RIGHT)
+            liste.append((cy, cx, im2, rs.randint(0, 4)))
+            return
+
+    schritt = (34, 38) if not flach else (40, 44)
+    for gy in range(0, h, schritt[0]):
+        for gx in range(0, w, schritt[1]):
+            cy, cx = gy + rs.randint(-8, 9), gx + rs.randint(-9, 10)
+            if 0 <= cy < h and 0 <= cx < w and mm[cy, cx] and dist[cy, cx] >= 4:
+                waehle(cy, cx, dist[cy, cx] + ueber)
+    if not flach:                                                      # Randkranz aus kleinen Haufen
+        rand = mm & (dist <= 4)
+        ys, xs = np.nonzero(rand)
+        reihen = list(zip(ys, xs))
+        rs.shuffle(reihen)
+        belegt = np.zeros((h // 13 + 2, w // 13 + 2), bool)            # Abstand ueber ein Belegungsraster (alle, nicht nur die letzten)
+        for (cy, cx) in reihen:
+            by, bx = cy // 13, cx // 13
+            if belegt[max(0, by - 1):by + 2, max(0, bx - 1):bx + 2].any():
+                continue
+            belegt[by, bx] = True
+            waehle(cy, cx, 18 + rs.randint(0, 6), nur_klein=True)
     liste.sort(key=lambda t: t[0])
-    mm_d = np.array(Image.fromarray(mm.astype(np.uint8) * 255).filter(ImageFilter.MaxFilter(2 * ueber + 1))) > 0
-    ueberstand = np.zeros((h, w, 4), np.float32)                     # Blasen quellen ein paar Pixel ueber die Kante
+    ebene = np.zeros((h, w, 4), np.float32)
     for (cy, cx, im, ph) in liste:
         dy = (0, 1, 1, 0)[(f + ph) % 4]
         arr = np.array(im).astype(np.float32)
@@ -126,19 +166,12 @@ def stempeln(col, mm, f, seed, flach=False, ueber=5):
         if yb <= ya or xb <= xa:
             continue
         teil = arr[ya - y0:yb - y0, xa - x0:xb - x0]
-        m_ = (teil[..., 3] > 128) & mm[ya:yb, xa:xb]
-        rgb = teil[..., :3]
-        if flach:
-            rgb = rgb * 0.8
-        sub = col[ya:yb, xa:xb]
-        sub[m_] = rgb[m_]
-        if not flach:
-            mu = (teil[..., 3] > 128) & mm_d[ya:yb, xa:xb] & ~mm[ya:yb, xa:xb]
-            us = ueberstand[ya:yb, xa:xb]
-            us[mu, :3] = rgb[mu]
-            us[mu, 3] = 1
-    stempeln.ueberstand = ueberstand
-    return col
+        m_ = teil[..., 3] > 128
+        rgb = teil[..., :3] * (0.8 if flach else 1.0)
+        sub = ebene[ya:yb, xa:xb]
+        sub[m_, :3] = rgb[m_]
+        sub[m_, 3] = 1
+    return ebene, dist
 
 
 def masse(a, m, frame=None, seed=52, boden=None, flach=False, stil='stempel'):
@@ -158,7 +191,7 @@ def masse(a, m, frame=None, seed=52, boden=None, flach=False, stil='stempel'):
     sch = np.zeros((h, w), bool)
     sch[4:, 2:] = mm[:-4, :-2]
     sch &= ~mm
-    if flach:
+    if flach or stil == 'stempel':                                     # Stempel: Schatten folgt spaeter den Blasen
         sch[:] = False
     if boden is not None:
         sch &= boden[y0:y1, x0:x1]
@@ -180,7 +213,7 @@ def masse(a, m, frame=None, seed=52, boden=None, flach=False, stil='stempel'):
         col = blasen(h, w, f, seed + y0 * 3 + x0, x0, y0)
         if stil == 'stempel':                                          # Nutzer: hoeher aufloesend - PixelLab-Blasenhaufen
             col = col * 0.55 + BL_FUGE[None, None] * 0.45
-            col = stempeln(col, mm, f, seed + y0 * 3 + x0, flach)
+            st_ebene, st_dist = stempeln(mm, f, seed + y0 * 3 + x0, flach)
         if flach:                                                      # begehbarer Belag: dunkler, flacher
             col = col * 0.72 + BL_FUGE[None, None] * 0.28
     # Glanzpunkte (feucht), flackern versetzt
@@ -213,16 +246,27 @@ def masse(a, m, frame=None, seed=52, boden=None, flach=False, stil='stempel'):
     col = col * (1 - 0.55 * tief[..., None]) + DUNKEL * 0.55 * tief[..., None]
     p_ = np.pad(mm, 1, mode='edge')                                   # Kartenrand fortsetzen (keine Konturlinie am Bildrand)
     rand = mm & ~(p_[:-2, 1:-1] & p_[2:, 1:-1] & p_[1:-1, :-2] & p_[1:-1, 2:])
-    if stil == 'stempel' and not flach and getattr(stempeln, 'ueberstand', None) is not None:
-        sp_ = np.array(Image.fromarray((stempeln.ueberstand[..., 3] > 0).astype(np.uint8) * 255).filter(ImageFilter.MaxFilter(3))) > 0
-        rand &= ~sp_                                                   # Kontur nur, wo keine Blase ueberquillt
-    col[rand] = DUNKEL * 0.8
-    sub[mm] = col[mm]
-    if stil == 'stempel' and not flach and getattr(stempeln, 'ueberstand', None) is not None:
-        us = stempeln.ueberstand
-        um = (us[..., 3] > 0) & ~mm
+    if stil == 'stempel':                                              # ganze Blasenhaufen ueber dunklem Kern, Umriss aus Blasen
+        kern = mm & (st_dist >= (4 if flach else 8))
+        if flach:
+            kern = mm
+        sub[kern] = col[kern]
+        auf = st_ebene[..., 3] > 0
         if boden is not None:
-            um &= boden[y0:y1, x0:x1]
-        sub[um] = us[um, :3]
+            auf &= mm | boden[y0:y1, x0:x1]
+        if flach:
+            auf &= mm
+        if not flach:                                                  # Schatten der Blasen-Silhouette, nur auf den Boden
+            sil = kern | auf
+            sch2 = np.zeros((h, w), bool)
+            sch2[3:, 2:] = sil[:-3, :-2]
+            sch2 &= ~sil
+            if boden is not None:
+                sch2 &= boden[y0:y1, x0:x1] & ~mm
+            sub[sch2] *= 0.62
+        sub[auf] = st_ebene[auf, :3]
+    else:
+        col[rand] = DUNKEL * 0.8
+        sub[mm] = col[mm]
     a[y0:y1, x0:x1] = np.clip(sub, 0, 255).astype(np.uint8)
     return m
