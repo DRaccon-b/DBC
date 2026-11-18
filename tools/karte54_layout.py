@@ -21,8 +21,7 @@ MX, MY = 22, 21                                # Kugelmitte (Kachelkante)
 RADIUS = 18.6                                  # Innenradius der Kugel in Kacheln
 # Fenster als unregelmaessige Loecher (Mitte in Kacheln, Halbachsen, Zacken) - paarweise gespiegelt zur Achse MX,
 # dazu eines im Norden auf der Achse; am 45-Grad-Raster durch die Kachelmaske
-FENSTER = [(22.0, 7.6, 3.4, 1.9, 1), (10.4, 18.6, 2.9, 2.4, 2), (33.6, 18.6, 2.9, 2.4, 2), (12.8, 29.2, 2.2, 1.7, 3),
-           (31.2, 29.2, 2.2, 1.7, 3)]
+FENSTER = []                                   # Nutzer: keine Loecher im Boden
 
 
 def main():
