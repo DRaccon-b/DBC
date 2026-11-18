@@ -1,48 +1,17 @@
 {
  "kachel": 16,
  "breite_kacheln": 40,
- "hoehe_kacheln": 15,
- "animationsbereich_hoehe_kacheln": 12,
+ "hoehe_kacheln": 16,
+ "animationsbereich_hoehe_kacheln": 13,
  "animationsbilder": 4,
  "bilddauer_ms": 250,
  "objekte": [
-  {
-   "name": "senk_b",
-   "datei": "varianten/senk_b.png",
-   "animation": "ranke_senk",
-   "slot_kacheln": {
-    "x": 0,
-    "y": 0,
-    "breite": 4,
-    "hoehe": 8
-   },
-   "objektblock_im_slot": {
-    "x": 0,
-    "y": 0,
-    "breite": 4,
-    "hoehe": 8
-   },
-   "fundstellen_karte": [
-    {
-     "block": [
-      24,
-      2,
-      4,
-      8
-     ],
-     "fusskachel": [
-      26,
-      9
-     ]
-    }
-   ]
-  },
   {
    "name": "senk_a",
    "datei": "varianten/senk_a.png",
    "animation": "ranke_senk",
    "slot_kacheln": {
-    "x": 4,
+    "x": 0,
     "y": 0,
     "breite": 3,
     "hoehe": 8
@@ -69,211 +38,63 @@
    ]
   },
   {
-   "name": "ranke_a",
-   "datei": "varianten/ranke_a.png",
-   "animation": "ranke",
+   "name": "senk_b",
+   "datei": "varianten/senk_b.png",
+   "animation": "ranke_senk",
    "slot_kacheln": {
-    "x": 7,
+    "x": 3,
     "y": 0,
-    "breite": 4,
-    "hoehe": 6
+    "breite": 3,
+    "hoehe": 8
    },
    "objektblock_im_slot": {
     "x": 0,
     "y": 0,
-    "breite": 4,
-    "hoehe": 6
+    "breite": 3,
+    "hoehe": 8
    },
    "fundstellen_karte": [
     {
      "block": [
-      6,
-      6,
-      4,
-      6
+      25,
+      2,
+      3,
+      8
      ],
      "fusskachel": [
-      7,
-      11
-     ]
-    },
-    {
-     "block": [
-      27,
-      31,
-      4,
-      6
-     ],
-     "fusskachel": [
-      28,
-      36
+      26,
+      9
      ]
     }
    ]
   },
   {
-   "name": "ranke_b",
-   "datei": "varianten/ranke_b.png",
-   "animation": "ranke",
+   "name": "quer_b",
+   "datei": "varianten/quer_b.png",
+   "animation": "ranke_quer",
    "slot_kacheln": {
-    "x": 11,
+    "x": 6,
     "y": 0,
-    "breite": 4,
-    "hoehe": 6
+    "breite": 8,
+    "hoehe": 5
    },
    "objektblock_im_slot": {
     "x": 0,
     "y": 0,
-    "breite": 4,
-    "hoehe": 6
+    "breite": 8,
+    "hoehe": 5
    },
    "fundstellen_karte": [
     {
      "block": [
-      11,
-      23,
-      4,
-      6
+      3,
+      24,
+      8,
+      5
      ],
      "fusskachel": [
-      12,
+      6,
       28
-     ]
-    }
-   ]
-  },
-  {
-   "name": "ranke_b",
-   "datei": "varianten/ranke_b_m.png",
-   "animation": "ranke",
-   "slot_kacheln": {
-    "x": 15,
-    "y": 0,
-    "breite": 4,
-    "hoehe": 6
-   },
-   "objektblock_im_slot": {
-    "x": 0,
-    "y": 0,
-    "breite": 4,
-    "hoehe": 6
-   },
-   "fundstellen_karte": [
-    {
-     "block": [
-      28,
-      1,
-      4,
-      6
-     ],
-     "fusskachel": [
-      29,
-      6
-     ]
-    }
-   ]
-  },
-  {
-   "name": "ranke_c",
-   "datei": "varianten/ranke_c.png",
-   "animation": "ranke",
-   "slot_kacheln": {
-    "x": 19,
-    "y": 0,
-    "breite": 4,
-    "hoehe": 6
-   },
-   "objektblock_im_slot": {
-    "x": 0,
-    "y": 0,
-    "breite": 4,
-    "hoehe": 6
-   },
-   "fundstellen_karte": [
-    {
-     "block": [
-      12,
-      30,
-      4,
-      6
-     ],
-     "fusskachel": [
-      13,
-      35
-     ]
-    }
-   ]
-  },
-  {
-   "name": "ranke_c",
-   "datei": "varianten/ranke_c_m.png",
-   "animation": "ranke",
-   "slot_kacheln": {
-    "x": 23,
-    "y": 0,
-    "breite": 4,
-    "hoehe": 6
-   },
-   "objektblock_im_slot": {
-    "x": 0,
-    "y": 0,
-    "breite": 4,
-    "hoehe": 6
-   },
-   "fundstellen_karte": [
-    {
-     "block": [
-      35,
-      9,
-      4,
-      6
-     ],
-     "fusskachel": [
-      36,
-      14
-     ]
-    }
-   ]
-  },
-  {
-   "name": "ranke_d",
-   "datei": "varianten/ranke_d.png",
-   "animation": "ranke",
-   "slot_kacheln": {
-    "x": 27,
-    "y": 0,
-    "breite": 4,
-    "hoehe": 6
-   },
-   "objektblock_im_slot": {
-    "x": 0,
-    "y": 0,
-    "breite": 4,
-    "hoehe": 6
-   },
-   "fundstellen_karte": [
-    {
-     "block": [
-      11,
-      1,
-      4,
-      6
-     ],
-     "fusskachel": [
-      12,
-      6
-     ]
-    },
-    {
-     "block": [
-      29,
-      21,
-      4,
-      6
-     ],
-     "fusskachel": [
-      30,
-      26
      ]
     }
    ]
@@ -283,7 +104,7 @@
    "datei": "varianten/quer_b_m.png",
    "animation": "ranke_quer",
    "slot_kacheln": {
-    "x": 31,
+    "x": 14,
     "y": 0,
     "breite": 8,
     "hoehe": 5
@@ -310,31 +131,279 @@
    ]
   },
   {
+   "name": "ranke_d",
+   "datei": "varianten/ranke_d.png",
+   "animation": "ranke",
+   "slot_kacheln": {
+    "x": 22,
+    "y": 0,
+    "breite": 5,
+    "hoehe": 5
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 5,
+    "hoehe": 5
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      10,
+      3,
+      5,
+      5
+     ],
+     "fusskachel": [
+      12,
+      7
+     ]
+    }
+   ]
+  },
+  {
+   "name": "ranke_d",
+   "datei": "varianten/ranke_d_m.png",
+   "animation": "ranke",
+   "slot_kacheln": {
+    "x": 27,
+    "y": 0,
+    "breite": 5,
+    "hoehe": 5
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 5,
+    "hoehe": 5
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      32,
+      26,
+      5,
+      5
+     ],
+     "fusskachel": [
+      34,
+      30
+     ]
+    }
+   ]
+  },
+  {
+   "name": "ranke_a",
+   "datei": "varianten/ranke_a.png",
+   "animation": "ranke",
+   "slot_kacheln": {
+    "x": 32,
+    "y": 0,
+    "breite": 4,
+    "hoehe": 5
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 4,
+    "hoehe": 5
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      6,
+      7,
+      4,
+      5
+     ],
+     "fusskachel": [
+      8,
+      11
+     ]
+    }
+   ]
+  },
+  {
+   "name": "ranke_a",
+   "datei": "varianten/ranke_a_m.png",
+   "animation": "ranke",
+   "slot_kacheln": {
+    "x": 36,
+    "y": 0,
+    "breite": 4,
+    "hoehe": 5
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 4,
+    "hoehe": 5
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      27,
+      32,
+      4,
+      5
+     ],
+     "fusskachel": [
+      29,
+      36
+     ]
+    }
+   ]
+  },
+  {
+   "name": "ranke_b",
+   "datei": "varianten/ranke_b.png",
+   "animation": "ranke",
+   "slot_kacheln": {
+    "x": 0,
+    "y": 8,
+    "breite": 4,
+    "hoehe": 5
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 4,
+    "hoehe": 5
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      8,
+      28,
+      4,
+      5
+     ],
+     "fusskachel": [
+      9,
+      32
+     ]
+    }
+   ]
+  },
+  {
+   "name": "ranke_b",
+   "datei": "varianten/ranke_b_m.png",
+   "animation": "ranke",
+   "slot_kacheln": {
+    "x": 4,
+    "y": 8,
+    "breite": 4,
+    "hoehe": 5
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 4,
+    "hoehe": 5
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      28,
+      2,
+      4,
+      5
+     ],
+     "fusskachel": [
+      29,
+      6
+     ]
+    }
+   ]
+  },
+  {
+   "name": "ranke_c",
+   "datei": "varianten/ranke_c.png",
+   "animation": "ranke",
+   "slot_kacheln": {
+    "x": 8,
+    "y": 8,
+    "breite": 4,
+    "hoehe": 5
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 4,
+    "hoehe": 5
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      12,
+      32,
+      4,
+      5
+     ],
+     "fusskachel": [
+      13,
+      36
+     ]
+    }
+   ]
+  },
+  {
+   "name": "ranke_c",
+   "datei": "varianten/ranke_c_m.png",
+   "animation": "ranke",
+   "slot_kacheln": {
+    "x": 12,
+    "y": 8,
+    "breite": 4,
+    "hoehe": 5
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 4,
+    "hoehe": 5
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      35,
+      10,
+      4,
+      5
+     ],
+     "fusskachel": [
+      36,
+      14
+     ]
+    }
+   ]
+  },
+  {
    "name": "quer_a",
    "datei": "varianten/quer_a.png",
    "animation": "ranke_quer",
    "slot_kacheln": {
-    "x": 0,
+    "x": 16,
     "y": 8,
     "breite": 8,
-    "hoehe": 4
+    "hoehe": 3
    },
    "objektblock_im_slot": {
     "x": 0,
     "y": 0,
     "breite": 8,
-    "hoehe": 4
+    "hoehe": 3
    },
    "fundstellen_karte": [
     {
      "block": [
       3,
-      15,
+      16,
       8,
-      4
+      3
      ],
      "fusskachel": [
-      6,
+      7,
       18
      ]
     }
@@ -345,16 +414,16 @@
    "datei": "varianten/quer_a_m.png",
    "animation": "ranke_quer",
    "slot_kacheln": {
-    "x": 8,
+    "x": 24,
     "y": 8,
     "breite": 8,
-    "hoehe": 4
+    "hoehe": 3
    },
    "objektblock_im_slot": {
     "x": 0,
     "y": 0,
     "breite": 8,
-    "hoehe": 4
+    "hoehe": 3
    },
    "fundstellen_karte": [
     {
@@ -362,42 +431,11 @@
       33,
       23,
       8,
-      4
+      3
      ],
      "fusskachel": [
       37,
-      26
-     ]
-    }
-   ]
-  },
-  {
-   "name": "quer_b",
-   "datei": "varianten/quer_b.png",
-   "animation": "ranke_quer",
-   "slot_kacheln": {
-    "x": 16,
-    "y": 8,
-    "breite": 8,
-    "hoehe": 4
-   },
-   "objektblock_im_slot": {
-    "x": 0,
-    "y": 0,
-    "breite": 8,
-    "hoehe": 4
-   },
-   "fundstellen_karte": [
-    {
-     "block": [
-      3,
-      24,
-      8,
-      4
-     ],
-     "fusskachel": [
-      6,
-      27
+      25
      ]
     }
    ]
@@ -408,7 +446,7 @@
    "animation": null,
    "slot_kacheln": {
     "x": 0,
-    "y": 12,
+    "y": 13,
     "breite": 3,
     "hoehe": 3
    },
@@ -439,7 +477,7 @@
    "animation": null,
    "slot_kacheln": {
     "x": 3,
-    "y": 12,
+    "y": 13,
     "breite": 3,
     "hoehe": 3
    },
@@ -470,7 +508,7 @@
    "animation": null,
    "slot_kacheln": {
     "x": 6,
-    "y": 12,
+    "y": 13,
     "breite": 3,
     "hoehe": 2
    },
@@ -492,16 +530,35 @@
       11,
       9
      ]
-    },
+    }
+   ]
+  },
+  {
+   "name": "huegel",
+   "datei": "varianten/huegel_m.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 9,
+    "y": 13,
+    "breite": 3,
+    "hoehe": 2
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 2
+   },
+   "fundstellen_karte": [
     {
      "block": [
-      33,
+      29,
       29,
       3,
       2
      ],
      "fusskachel": [
-      34,
+      30,
       30
      ]
     }
@@ -512,8 +569,8 @@
    "datei": "varianten/cluster.png",
    "animation": null,
    "slot_kacheln": {
-    "x": 9,
-    "y": 12,
+    "x": 12,
+    "y": 13,
     "breite": 2,
     "hoehe": 2
    },
@@ -526,14 +583,14 @@
    "fundstellen_karte": [
     {
      "block": [
-      9,
-      32,
+      12,
+      30,
       2,
       2
      ],
      "fusskachel": [
-      9,
-      33
+      12,
+      31
      ]
     }
    ]
@@ -543,8 +600,8 @@
    "datei": "varianten/cluster_m.png",
    "animation": null,
    "slot_kacheln": {
-    "x": 11,
-    "y": 12,
+    "x": 14,
+    "y": 13,
     "breite": 2,
     "hoehe": 2
    },

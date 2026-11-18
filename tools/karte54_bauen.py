@@ -68,7 +68,7 @@ def membran(Hh, W, mitte_px, radius_px, frame):
     welle = 0.5 + 0.5 * np.sin(2 * math.pi * (f / N_FRAMES - r * 0.9))
     nah = np.clip(1 - r, 0, 1) ** 1.8
     a += (welle * nah)[..., None] * np.array((46, 12, 24), np.float32)
-    stil = os.environ.get('K54_BODEN', '')
+    stil = os.environ.get('K54_BODEN', 'glatt')                        # Nutzer: glatte Membran ohne Strichmuster
     if stil in ('glatt', 'bobbles'):                                   # Nutzer: Boden ohne Strichmuster
         a = innen[None, None] * (1 - r[..., None] ** 1.6) + aussen[None, None] * r[..., None] ** 1.6
         nw = dreaper._rauschen(Hh, W, 22, 5411) - 0.5                   # weiche, grosse Wolken in Pixelstufen
