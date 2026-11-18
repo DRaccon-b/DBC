@@ -29,7 +29,8 @@ FREMD = {
     'kristall': 'karte04/klein/05.png', 'pilz': 'karte04/klein/11.png', 'stein': 'karte04/klein/08.png',
     'automat': 'karte42/wueste/00.png', 'saeule': 'karte42/gross/00.png', 'unterstand': 'karte42/gross/02.png',   # groesser (Nutzer)
     'saeule_kaputt': 'karte42/gross/01.png',
-    'huette': 'karte42/dorf/00.png', 'bank': 'karte42/dorf/01.png', 'kruege': 'karte42/dorf/02.png',
+    'huette': 'karte42/haus/00.png',   # Nutzer-Vorlage: bemoostes Kuppelhaus
+    'bank': 'karte42/dorf/01.png', 'kruege': 'karte42/dorf/02.png',
 }
 # (Sprite, Kachel-x der Fussmitte, Fusszeile, Ebene) nach der Vorlage; Ebene 1 Talboden, 2 Hochplateau
 BAEUME = [('totbaum', 11, 16, 2), ('totbaum', 59, 13, 2), ('totbaum', 79, 18, 2), ('totbaum', 40, 22, 1),
