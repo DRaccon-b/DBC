@@ -2195,6 +2195,12 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'dome shaped dwelling of brown baked mud rising from the sand, decorated all over with embedded pale blue computer chips, rectangular plates, rings and striped vents, small square blue metal door at ground level, seen from the front and slightly above, ' + FR14,
         'hemisphere house of smooth reddish brown earth with many small grey and lavender tech fragments pressed into its surface like a mosaic, metal ring, short pipes, vent grille, low pale blue door, sitting in dusty desert ground, seen from the front and slightly above, ' + FR14,
     ]},
+    'k42_haus': {'size': 80, 'freie_farben': True, 'items': [   # Karte 42 (Nutzer-Vorlage): bemoostes Kuppelhaus im Staubtal
+        'low rounded hut like a mound, olive green and mossy weathered walls streaked with dust and dirt, a thick hump-shaped roof covered in green moss with a dark crack, a round hatch door in the middle of the front wall, standing on dusty ground, seen from the front and slightly above, ' + FR14,
+        'squat dome-shaped dwelling of olive green clay overgrown with patches of moss, rounded heavy roof drooping over the walls, small round door with a thin dark frame in the center, dusty and weathered, seen from the front and slightly above, ' + FR14,
+        'old hut shaped like a green mossy hill, uneven rounded roof of moss and grass tufts, yellow-green stained walls with dirt splashes at the base, circular wooden door in the middle, seen from the front and slightly above, ' + FR14,
+        'rounded earthen hut with a dome roof of thick dark green moss and a mossy olive front wall, round porthole-like door, sitting in a dusty desert valley, seen from the front and slightly above, ' + FR14,
+    ]},
     'k44_fass': {'size': 64, 'freie_farben': True, 'items': [   # Grosse Weinfaesser (Nutzer, fuer diese oder naechste Karte)
         'large oak wine barrel lying on its side on a wooden cradle stand, round front face with iron hoops and a small brass tap, dark brown oak staves, ' + FR14,
         'big standing wooden wine barrel with three dark iron hoops and a round wooden lid, warm brown oak, ' + FR14,
