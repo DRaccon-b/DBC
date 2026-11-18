@@ -127,7 +127,7 @@ def quellbild(karte, frame):
     return _QUELLEN[schluessel]
 
 
-def risse(a, lay, frame, land):
+def risse(a, lay, frame, land, farben=None):
     """Raum-Zeit-Risse (Nutzer): die Ecken der Karte reissen entlang einer Kante auf (Nutzer-Skizze), dahinter ist ein
     Ausschnitt einer anderen A02-Karte im selben Massstab zu sehen (animiert aus deren Animation). Die Risskante liegt
     am 45-Grad-Raster (Kachelmaske, Gauss 5 px, Schwelle 50 % wie Regel 6b) und haelt 1 Kachel Abstand zur Plattform.
@@ -177,7 +177,8 @@ def risse(a, lay, frame, land):
         puls = 0.75 + 0.25 * math.sin(2 * math.pi * f / N_FRAMES + i * 1.3)
         aussen = ring(m, 7, True)
         for k_, ringm in enumerate(aussen):
-            farbe, st = ((255, 250, 255), 1.0) if k_ < 1 else (((200, 140, 255), 0.85) if k_ < 3 else ((110, 200, 255), 0.5 - 0.08 * (k_ - 3)))
+            f0, f1, f2, fu = farben or ((255, 250, 255), (200, 140, 255), (110, 200, 255), ((240, 220, 255), (170, 120, 240)))
+            farbe, st = (f0, 1.0) if k_ < 1 else ((f1, 0.85) if k_ < 3 else (f2, 0.5 - 0.08 * (k_ - 3)))
             al = st * puls
             ringm = ringm & ~land
             a[ringm] = np.clip(a[ringm] * (1 - al) + np.array(farbe) * al, 0, 255).astype(np.uint8)
@@ -188,9 +189,10 @@ def risse(a, lay, frame, land):
             j = rs.randrange(len(ky))
             py, px = ky[j] + rs.randint(-6, 6), kx[j] + rs.randint(-6, 6)
             if 1 <= px < Wp - 1 and 1 <= py < Hp - 1 and not m[py, px] and not land[py, px]:
-                a[py, px] = (240, 220, 255)
+                fu = (farben or (0, 0, 0, ((240, 220, 255), (170, 120, 240))))[3]
+                a[py, px] = fu[0]
                 if rs.random() < 0.5:
-                    a[py, px + 1] = a[py + 1, px] = (170, 120, 240)
+                    a[py, px + 1] = a[py + 1, px] = fu[1]
         gesamt |= m
         for ringm in aussen:
             gesamt |= ringm
