@@ -260,7 +260,7 @@ def main():
         kachel(n_, tx + P, ty + P, {}, sp, klassen='b', weit=2)
     kachel('k18s/41', 80 + P, 74 + P, {}, klassen='b', weit=3)             # Haltestelle (Vorlage) auf dem Vorplatz
     for (tx, ty) in ((18, 12), (40, 46), (60, 45), (22, 76 - 1)):
-        kachel('k18s/18', tx + P, ty + P, dict(LAMPE), klassen='k', weit=2)
+        kachel('k18s/18', tx + P, ty + P, dict(LAMPE), klassen='k', weit=5)
     # ---------------------------------------------------------------- D-Reaper: Auslaeufer an den Masseraendern
     gk = np.array([list(z) for z in cls])
     masse = np.isin(gk, ['r', 'h'])
