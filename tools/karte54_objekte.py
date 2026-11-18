@@ -55,6 +55,9 @@ def main():
 
     def sprite(name, sp_):
         im = Image.open(os.path.join(ROOT, 'assets', 'objekte', D[name])).convert('RGBA')
+        if RV:                                                          # Rankenvarianten: lose Teile/Fragmente entfernen
+            import dreaper
+            im = dreaper._ohne_spritzer(im)
         im = im.crop(im.getbbox())
         if name.startswith(('quer', 'senk')):                           # Pruefung: Sprite-Fehler der liegenden Ranken
             a = np.array(im).astype(int)
