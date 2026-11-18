@@ -385,6 +385,8 @@ def main():
             fx, fy_ = (o['x'] + 24) // T, (o['y'] + o['fuss']) // T     # Guertelbaeume am Weg: kein Schatten aufs Pflaster
             if cls[min(rows - 1, fy_ + 1)][min(cols - 1, fx)] not in 'hn' and cls[fy_][min(cols - 1, fx)] == 'h':
                 o['schattenlos'] = True
+    import dreaper                                                     # Nutzer: Objekte passend zum Schlamm (Version 8)
+    dreaper.objekte_faerben(OBJ, objekte, ['reaper/'])
     json.dump(objekte, open(os.path.join(OBJ, 'platzierung.json'), 'w'), indent=0)
     print(len(objekte), 'Objekte')
 

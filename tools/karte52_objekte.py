@@ -338,6 +338,8 @@ def main():
             o_['teil'] = 'masse_puls'
         else:
             o_['anim'] = 'masse_puls'
+    import dreaper                                                     # Nutzer: Objekte passend zum Schlamm (Version 8)
+    dreaper.objekte_faerben(OBJ, objekte, ['dr/', 'reaper/'])
     json.dump(objekte, open(os.path.join(OBJ, 'platzierung.json'), 'w'), indent=0)
     print(len(objekte), 'Objekte')
 

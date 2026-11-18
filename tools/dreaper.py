@@ -36,7 +36,7 @@ BL_ROT = np.array((214, 38, 62), np.float32)
 BL_DUNKEL = np.array((112, 10, 36), np.float32)
 BL_HELL = np.array((255, 120, 140), np.float32)
 BL_GLANZ = np.array((255, 214, 222), np.float32)
-BL_FUGE = np.array((96, 10, 28), np.float32)   # Luecken zwischen den Schlammflecken (Ton der Flecken)
+BL_FUGE = np.array((60, 6, 30), np.float32)   # Luecken zwischen den Schlammflecken (Ton der Flecken)
 
 
 def blasen(h, w, f, seed, x0=0, y0=0):
@@ -108,7 +108,7 @@ def stempel_laden():
         basis = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'assets', 'objekte', 'karte52')
         gross = [Image.open(os.path.join(basis, 'masse', '%02d.png' % i)).convert('RGBA') for i in (0, 1, 3)]
         # Nutzer: durchgehender dunkelroter Schlamm (PixelLab k52_schlamm) statt Blasenhaufen; lose Spritzer entfernt
-        variante = os.environ.get('DREAPER_SCHLAMM')               # Vorschau der Schlamm-Varianten (k52_sv01..10)
+        variante = os.environ.get('DREAPER_SCHLAMM', 'sv08')       # Nutzer: Version 8 (k52_sv08, Tropfen), sv01..10 Vorschau
         if variante:
             klein = [_ohne_spritzer(Image.open(os.path.join(basis, variante, '%02d.png' % i)).convert('RGBA'))
                      for i in (0, 1, 2, 3)]
@@ -136,7 +136,7 @@ def _abstand(mm, schritte=14):
     return d
 
 
-OHNE_KONTUR = __import__('os').environ.get('DREAPER_OHNE_KONTUR') == '1'   # Vorschau: innere Blasen ohne Rand
+OHNE_KONTUR = __import__('os').environ.get('DREAPER_OHNE_KONTUR', '1') == '1'   # Nutzer: innere Blasen ohne Rand
 
 
 def stempeln(mm, f, seed, flach=False, x0=0, y0=0, T=16, ueber=3):
@@ -447,3 +447,45 @@ def masse(a, m, frame=None, seed=52, boden=None, flach=False, stil='stempel'):
         sub[mm] = col[mm]
     a[y0:y1, x0:x1] = np.clip(sub, 0, 255).astype(np.uint8)
     return m
+
+
+_PAL8 = None
+
+
+def schlamm_faerben(im):
+    """Objekte der Masse (verschluckte Gegenstaende, Ranken, Blasenhaufen) an den Schlamm (Version 8) angleichen:
+    gesaettigte Rot-/Rosapixel per Helligkeitsrang auf die Farben der Schlammflecken abbilden (Histogrammangleich).
+    Metall, Holz, Licht und andere Farben bleiben."""
+    global _PAL8
+    import os
+    if _PAL8 is None:
+        basis = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'assets', 'objekte', 'karte52', 'sv08')
+        px = np.concatenate([np.array(Image.open(os.path.join(basis, '%02d.png' % i)).convert('RGBA')).reshape(-1, 4)
+                             for i in range(4)])
+        px = px[px[:, 3] > 128][:, :3].astype(np.float32)
+        _PAL8 = px[np.argsort(px @ np.array([0.3, 0.55, 0.15], np.float32))]
+    a = np.array(im.convert('RGBA')).astype(np.float32)
+    r, g, b = a[..., 0], a[..., 1], a[..., 2]
+    rot = (a[..., 3] > 0) & (r > 70) & (r > g * 1.6 + 10) & (r > b * 1.15)
+    if rot.sum() < 4:
+        return im
+    lum = a[..., :3] @ np.array([0.3, 0.55, 0.15], np.float32)
+    w = lum[rot]
+    rang = np.argsort(np.argsort(w, kind='stable'), kind='stable') / max(1, len(w) - 1)
+    a[rot, :3] = _PAL8[(rang * (len(_PAL8) - 1)).round().astype(int)]
+    return Image.fromarray(a.astype(np.uint8))
+
+
+def objekte_faerben(obj_dir, objekte, praefixe=None):
+    """Varianten-Dateien der Masse-Objekte einmal umfaerben (praefixe der 'basis', None = alle)."""
+    import os
+    fertig = set()
+    for o in objekte:
+        if praefixe is not None and not str(o.get('basis', '')).startswith(tuple(praefixe)):
+            continue
+        d = o['datei']
+        if d in fertig:
+            continue
+        fertig.add(d)
+        pf = os.path.join(obj_dir, d)
+        schlamm_faerben(Image.open(pf)).save(pf)

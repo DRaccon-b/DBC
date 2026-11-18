@@ -142,6 +142,8 @@ def main():
     for n_, w in RANKEN + CLUSTER:                                          # grosse zuerst, dann Begleiter
         if not paar(n_, w):
             print('  Paar nicht gesetzt:', n_, w)
+    import dreaper                                                     # Nutzer: Objekte passend zum Schlamm (Version 8)
+    dreaper.objekte_faerben(OBJ, objekte, None)
     json.dump(objekte, open(os.path.join(OBJ, 'platzierung.json'), 'w'), indent=0)
     print(len(objekte), 'Objekte')
 
