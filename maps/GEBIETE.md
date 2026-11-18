@@ -38,14 +38,14 @@ Aufstellfelds (cyan = Ankunft, gold = weiter; Funktion `pfeil_marke` in `tools/k
 | 1 | Karte 34 – Shinjuku Central Park | v1.0 fertig (3 Agenten-Prüfrunden), ZIP in maps/karte34/v1.0 |
 | 2 | Karte 35 – Shinjuku Digital Fog | v1.0 fertig (3 Agenten-Prüfrunden), ZIP in maps/karte35/v1.0 |
 | 3 | Karte 36 – Shinjuku Backstreets | v1.0 fertig (3 Agenten-Prüfrunden), ZIP in maps/karte36/v1.0 |
-| 4 | Karte 37 – Hypnos Rooftop | v1.0 fertig (3 Agenten-Prüfrunden), Blick auf Karte 35 im Ring, ZIP in maps/karte37/v1.0 |
+| 4 | Karte 37 – Hypnos Rooftop | v1.0 fertig, Glasfassade Süd, große Laternen (Nutzer), Prüfrunde 4, ZIP in maps/karte37/v1.0 |
 | 5 | Karte 38 – Deva Transit | v1.0 fertig (3 Agenten-Prüfrunden), ZIP in maps/karte38/v1.0 |
 | 6 | Karte 39 – West Shinjuku Siege | v1.0 fertig (2 Agenten-Prüfrunden), ZIP in maps/karte39/v1.0 |
 | 7 | Karte 40 – Shinjuku Siege | v1.0 fertig (3 Agenten-Prüfrunden), Meteor-Furche auf der Nordstraße (Nutzer), ZIP in maps/karte40/v1.0 |
 | 8 | Karte 41 – Digital World: Wind Desert | v1.0 fertig (3 Agenten-Prüfrunden), ZIP in maps/karte41/v1.0 |
-| 9 | Karte 42 – Digital World: Wind Valley | v1.0 fertig (3 Agenten-Prüfrunden), Vorlagenfehler korrigiert, ZIP in maps/karte42/v1.0 |
+| 9 | Karte 42 – Digital World: Wind Valley | v1.0 neu: trocken-matschig wie Karte 44, Moos-Kuppelhaus, Windsäulen (Nutzer), Prüfrunde 4, ZIP in maps/karte42/v1.0 |
 | 10 | Karte 43 – Haunted Castle Outskirts | v1.0 fertig (3 Agenten-Prüfrunden), ZIP in maps/karte43/v1.0 |
-| 11 | Karte 44 – Chuchidarumon Village | v1.0 fertig (3 Agenten-Prüfrunden), Bach unter dem Weg ergänzt (6. Brücke), ZIP in maps/karte44/v1.0 |
+| 11 | Karte 44 – Chuchidarumon Village | v1.0 neu: Matschdorf ohne Gras/Schnee, Kuppelhäuser mit Technikteilen, trockene Bäume (Nutzer), Prüfrunde 4, ZIP in maps/karte44/v1.0 |
 | 12 | Karte 45 – Orochimon's Marsh | v1.0 fertig (2 Agenten-Prüfrunden), Steg ganz über Wasser, treibende Weinfässer, ZIP in maps/karte45/v1.0 |
 | 13 | Karte 46 – Gekomon Marsh | v1.0 fertig (2 Agenten-Prüfrunden), Bauernhaus mit Tiefe (PixelLab Pro), ZIP in maps/karte46/v1.0 |
 | 14 | Karte 47 – Deva Mountain | v1.0 fertig (2 Agenten-Prüfrunden), Graben um die Arena, Fluss mit zwei Wasserfällen (Nutzer), ZIP in maps/karte47/v1.0 |
@@ -53,9 +53,9 @@ Aufstellfelds (cyan = Ankunft, gold = weiter; Funktion `pfeil_marke` in `tools/k
 | 16 | Karte 49 – The Broken Promise | v1.0 fertig (3 Agenten-Prüfrunden), Bossarena Beelzemon, Vorlagenfehler korrigiert, Motorradspuren, ZIP in maps/karte49/v1.0 |
 | 17 | Karte 50 – Zhuqiaomon's Sanctuary | v1.0 fertig (3 Agenten-Prüfrunden), Terrassen mit Torii-Treppen, abgesenkter Hof (Nutzer), ZIP in maps/karte50/v1.0 |
 | 18 | Karte 51 – Suzaku Gate | v1.0 fertig (3 Agenten-Prüfrunden), Zhuqiaomons Arena mit Torii und Brandflecken (Nutzer), ZIP in maps/karte51/v1.0 |
-| 19 | Karte 52 – D-Reaper: Shinjuku | v1.0 fertig (4 Agenten-Prüfrunden), D-Reaper-Masse ringsum statt Baumgürtel, Bahnhofsvorplatz, ZIP in maps/karte52/v1.0 |
+| 19 | Karte 52 – D-Reaper: Shinjuku | v1.0 fertig: Blasenhaufen, Objekte in Zielgröße, verschlungene Stadtmöbel (Nutzer), Prüfrunde 5, ZIP in maps/karte52/v1.0 |
 | 20 | Karte 53 – Shinjuku Evacuation District | v1.0 fertig (3 Agenten-Prüfrunden), Hilfslager und Sanitätsposten (PixelLab), erste D-Reaper-Flecken, ZIP in maps/karte53/v1.0 |
-| 21 | Karte 54 – D-Reaper Kernel | v1.0 fertig (3 Agenten-Prüfrunden), Herz des Kernels, Vorlagenfehler (Teleporter im Becken) korrigiert, ZIP in maps/karte54/v1.0 |
+| 21 | Karte 54 – D-Reaper Kernel | v1.0 neu: Bossarena im Inneren der Kernkugel, Ranken, Pulswelle (Nutzer), Prüfrunde 1, ZIP in maps/karte54/v1.0 |
 
 ## A0S – Sondergebiet
 | Nr. | Karte | Stand |

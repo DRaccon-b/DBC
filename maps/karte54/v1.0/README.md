@@ -1,9 +1,9 @@
 # D-Reaper Kernel (A03 Nr. 21) v1.0
 
-48 x 36 Kacheln zu 16 px (768 x 576 px).
+44 x 44 Kacheln zu 16 px (704 x 704 px).
 
 ## Inhalt
-Kern des D-Reaper: violette Kammer mit Mauerringen, roten Gewebebahnen, Agenten und dunklem Becken
+Kern des D-Reaper: Bossarena im Inneren der Kernkugel - gewoelbte Innenwand aus pulsierenden Blasen, rosa Membranboden mit Pulswelle, Ranken aus der Wand
 
 Alle Bodenkanten liegen am 16er-Raster mit 45-Grad-Schraegen; Objekte stehen am Raster, hohe Objekte blockieren nur
 am Sockel. Kontrolliert nach allen Regeln (CLAUDE.md) inkl. Agenten-Gesamtpruefung.
