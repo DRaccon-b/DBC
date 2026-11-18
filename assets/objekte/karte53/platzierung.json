@@ -98,86 +98,11 @@
 {
 "datei": "varianten/k01-baum00.png",
 "basis": "k01/baum00",
-"x": 1250,
-"y": 289,
+"x": 314,
+"y": 353,
 "fuss": 42,
 "kachel": [
-79,
-20
-],
-"ebene": 1,
-"ohne_wall": true,
-"nur_kontakt": true,
-"anim": "baum"
-},
-{
-"datei": "varianten/k01-baum02_m.png",
-"basis": "k01/baum02",
-"x": 1492,
-"y": 291,
-"fuss": 40,
-"kachel": [
-94,
-20
-],
-"ebene": 1,
-"ohne_wall": true,
-"nur_kontakt": true,
-"anim": "baum"
-},
-{
-"datei": "varianten/k01-baum01.png",
-"basis": "k01/baum01",
-"x": 688,
-"y": 297,
-"fuss": 42,
-"kachel": [
-44,
-21
-],
-"ebene": 1,
-"ohne_wall": true,
-"nur_kontakt": true,
-"anim": "baum"
-},
-{
-"datei": "varianten/k01-baum04_m.png",
-"basis": "k01/baum04",
-"x": 806,
-"y": 297,
-"fuss": 42,
-"kachel": [
-51,
-21
-],
-"ebene": 1,
-"ohne_wall": true,
-"nur_kontakt": true,
-"anim": "baum"
-},
-{
-"datei": "varianten/k01-baum00.png",
-"basis": "k01/baum00",
-"x": 970,
-"y": 297,
-"fuss": 42,
-"kachel": [
-62,
-21
-],
-"ebene": 1,
-"ohne_wall": true,
-"nur_kontakt": true,
-"anim": "baum"
-},
-{
-"datei": "varianten/k01-baum02_m.png",
-"basis": "k01/baum02",
-"x": 284,
-"y": 355,
-"fuss": 40,
-"kachel": [
-19,
+21,
 24
 ],
 "ebene": 1,
@@ -186,8 +111,8 @@
 "anim": "baum"
 },
 {
-"datei": "varianten/k01-baum01.png",
-"basis": "k01/baum01",
+"datei": "varianten/k01-baum00_m.png",
+"basis": "k01/baum00",
 "x": 442,
 "y": 353,
 "fuss": 42,
@@ -201,10 +126,70 @@
 "anim": "baum"
 },
 {
-"datei": "varianten/k01-baum04_m.png",
+"datei": "varianten/k01-baum02.png",
+"basis": "k01/baum02",
+"x": 788,
+"y": 299,
+"fuss": 40,
+"kachel": [
+50,
+21
+],
+"ebene": 1,
+"ohne_wall": true,
+"nur_kontakt": true,
+"anim": "baum"
+},
+{
+"datei": "varianten/k01-baum02_m.png",
+"basis": "k01/baum02",
+"x": 980,
+"y": 299,
+"fuss": 40,
+"kachel": [
+62,
+21
+],
+"ebene": 1,
+"ohne_wall": true,
+"nur_kontakt": true,
+"anim": "baum"
+},
+{
+"datei": "varianten/k01-baum01.png",
+"basis": "k01/baum01",
+"x": 1250,
+"y": 281,
+"fuss": 42,
+"kachel": [
+79,
+20
+],
+"ebene": 1,
+"ohne_wall": true,
+"nur_kontakt": true,
+"anim": "baum"
+},
+{
+"datei": "varianten/k01-baum01_m.png",
+"basis": "k01/baum01",
+"x": 1490,
+"y": 281,
+"fuss": 42,
+"kachel": [
+94,
+20
+],
+"ebene": 1,
+"ohne_wall": true,
+"nur_kontakt": true,
+"anim": "baum"
+},
+{
+"datei": "varianten/k01-baum04.png",
 "basis": "k01/baum04",
 "x": 132,
-"y": 673,
+"y": 665,
 "fuss": 42,
 "kachel": [
 9,
@@ -216,13 +201,13 @@
 "anim": "baum"
 },
 {
-"datei": "varianten/k01-baum00.png",
-"basis": "k01/baum00",
-"x": 442,
-"y": 673,
+"datei": "varianten/k01-baum04_m.png",
+"basis": "k01/baum04",
+"x": 436,
+"y": 665,
 "fuss": 42,
 "kachel": [
-29,
+28,
 44
 ],
 "ebene": 1,
@@ -231,11 +216,11 @@
 "anim": "baum"
 },
 {
-"datei": "varianten/k01-baum02_m.png",
-"basis": "k01/baum02",
-"x": 1260,
-"y": 1027,
-"fuss": 40,
+"datei": "varianten/k01-baum00.png",
+"basis": "k01/baum00",
+"x": 1258,
+"y": 1025,
+"fuss": 42,
 "kachel": [
 80,
 66
@@ -246,11 +231,11 @@
 "anim": "baum"
 },
 {
-"datei": "varianten/k01-baum01.png",
-"basis": "k01/baum01",
-"x": 962,
-"y": 1209,
-"fuss": 42,
+"datei": "varianten/k01-baum02_m.png",
+"basis": "k01/baum02",
+"x": 964,
+"y": 1211,
+"fuss": 40,
 "kachel": [
 61,
 78
@@ -261,9 +246,9 @@
 "anim": "baum"
 },
 {
-"datei": "varianten/k01-baum04_m.png",
-"basis": "k01/baum04",
-"x": 412,
+"datei": "varianten/k01-baum01.png",
+"basis": "k01/baum01",
+"x": 410,
 "y": 1233,
 "fuss": 42,
 "kachel": [
@@ -508,21 +493,6 @@
 {
 "datei": "varianten/k18s-18.png",
 "basis": "k18s/18",
-"x": 128,
-"y": 403,
-"fuss": 44,
-"kachel": [
-8,
-27
-],
-"ebene": 1,
-"ohne_wall": true,
-"nur_kontakt": true,
-"anim": "lampe"
-},
-{
-"datei": "varianten/k18s-18.png",
-"basis": "k18s/18",
 "x": 992,
 "y": 355,
 "fuss": 44,
@@ -592,12 +562,12 @@
 {
 "datei": "varianten/k18s-01.png",
 "basis": "k18s/01",
-"x": 496,
-"y": 484,
-"fuss": 43,
+"x": 482,
+"y": 501,
+"fuss": 42,
 "kachel": [
-32,
-32
+31,
+33
 ],
 "ebene": 1,
 "ohne_wall": true,
@@ -1033,12 +1003,12 @@
 {
 "datei": "varianten/reaper-ranke.png",
 "basis": "reaper/ranke",
-"x": 742,
-"y": 295,
+"x": 694,
+"y": 263,
 "fuss": 40,
 "kachel": [
-47,
-20
+44,
+18
 ],
 "ebene": 1,
 "ohne_wall": true,
@@ -1048,11 +1018,11 @@
 "datei": "varianten/reaper-blasen_m.png",
 "basis": "reaper/blasen",
 "x": 688,
-"y": 345,
+"y": 313,
 "fuss": 22,
 "kachel": [
 44,
-22
+20
 ],
 "ebene": 1,
 "ohne_wall": true,
@@ -1075,12 +1045,12 @@
 {
 "datei": "varianten/reaper-kapsel.png",
 "basis": "reaper/kapsel",
-"x": 274,
-"y": 407,
+"x": 242,
+"y": 359,
 "fuss": 24,
 "kachel": [
-18,
-26
+16,
+23
 ],
 "ebene": 1,
 "ohne_wall": true,

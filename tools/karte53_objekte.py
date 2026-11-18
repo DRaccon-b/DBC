@@ -11,7 +11,7 @@ Gepaeck; D-Reaper-Auslaeufer (Ranken, Blasen) nur direkt an den roten Flecken. R
 import json, math, os, random, shutil, sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import numpy as np
-from PIL import Image
+from PIL import Image, ImageFilter
 
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
 KARTE = os.path.join(ROOT, 'maps', 'karte53')
@@ -53,7 +53,7 @@ NEU = {'evak/bett': 'karte53/n48/00.png', 'evak/sandsack': 'karte53/n48/01.png',
        'evak/schlafsack': 'karte53/n32/02.png', 'evak/zelt': 'karte53/gross/00.png', 'evak/lkw': 'karte53/gross/01.png',
        'evak/vorrat': 'karte53/gross/02.png',
        'reaper/ranke': 'karte52/n48/06.png', 'reaper/blasen': 'karte52/n48b/06.png', 'reaper/kapsel': 'karte52/n48b/02.png',
-       'k18s/18': 'karte52/n48/00.png', 'k18s/13': 'karte52/n32/06.png', 'k18s/01': 'karte52/n48/07.png',
+       'k18s/18': 'karte52/n48/00.png', 'k18s/13': 'karte52/n32/06.png', 'k18s/01': 'karte53/fix/automat.png',   # roter Fleck am Fuss entfernt (Pruefung)
        'k18s/12': 'karte52/n32/05.png', 'k18s/41': 'karte52/n48b/05.png',
        'k18a/02': 'karte52/n64/02.png', 'k18a/05': 'karte52/n64/03.png'}
 for n_, q in NEU.items():
@@ -159,6 +159,10 @@ def main():
     def schnitt(a, b, rand=0):
         return not (a[2] + rand < b[0] or b[2] + rand < a[0] or a[3] + rand < b[1] or b[3] + rand < a[1])
 
+    # D-Reaper-Masse (Klasse 'r'): Blasen ragen bis 3 px ueber ihre Kacheln -> Objekte halten 6 px Abstand (Pruefung)
+    masse = np.kron(np.array([[c_ == 'r' for c_ in z] for z in cls]), np.ones((T, T), bool))
+    masse_d = np.array(Image.fromarray(masse.astype(np.uint8) * 255).filter(ImageFilter.MaxFilter(13))) > 0
+
     def setze(name, cx, fy, opt=None, spiegeln=False, art='objekt', pruefen=True, klassen='k'):
         if not os.path.exists(os.path.join(OBJ, name + '.png')):
             print('fehlt:', name); return None
@@ -186,8 +190,10 @@ def main():
                 return None
         elif pruefen:
             fuss_r = (r[0], max(r[1], r[3] - T + 1), r[2], r[3])           # vor Gebaeuden zaehlt nur der Fuss
-            if any(schnitt(r, tuple(rr), 1) if (art2 == 'gebaeude' and klassen == 'n') else schnitt(r, tuple(rr), 2) for (*rr, art2) in rects) or \
+            if any(schnitt(fuss_r, tuple(rr), 1) if (art2 == 'gebaeude' and klassen == 'n') else schnitt(r, tuple(rr), 2) for (*rr, art2) in rects) or \
                     any(schnitt(r, t_, 0) for t_ in tps):
+                return None
+            if not name.startswith('reaper/') and masse_d[max(0, r[1]):r[3] + 1, max(0, r[0]):r[2] + 1].any():
                 return None
             # ganzes Bildrechteck auf erlaubtem Boden (untere zwei Reihen; liegende ganz) - Pruefliste K44
             ry0 = r[1] // T if (opt or {}).get('liegend') else max(r[1] // T, r[3] // T - 1)
@@ -257,21 +263,57 @@ def main():
     k43.R, k43.C = rows, cols
     beete = [t_ for t_ in k43.flaechen(gk == 'n')]
     arten = ['k01/baum00', 'k01/baum02', 'k01/baum01', 'k01/baum04']
-    nb = 0
+    hw_ = {a_: (lambda b: (b[2] - b[0]) / 2.0 + 1)(Image.open(os.path.join(OBJ, a_ + '.png')).getbbox()) for a_ in arten}
+    gebs = [rr for rr in rects if rr[4] == 'gebaeude']
+    info = []
     for teil in beete:
         ys_ = [p_[0] for p_ in teil]; xs_ = [p_[1] for p_ in teil]
         y0, y1, x0, x1 = min(ys_), max(ys_), min(xs_), max(xs_)
         if y0 < P or y1 >= rows - P:
+            continue
+        gi = next((i for i, g in enumerate(gebs) if g[0] <= (x0 + x1 + 1) * T / 2.0 <= g[2]
+                   and 0 <= y0 * T - g[3] <= 3 * T), None)              # Beetmitte vor der Fassade
+        info.append((y0, y1, x0, x1, gi))
+    nb = 0
+    erledigt = set()
+    # Beete vor einem Gebaeude: Baumpaare exakt gespiegelt zur Gebaeude-/Tuerachse, Stammfuss auf der Beetmitte (Pruefung)
+    for gi, g in enumerate(gebs):
+        teile = [t_ for t_ in info if t_[4] == gi]
+        achse = (g[0] + g[2] + 1) / 2.0
+        li = [t_ for t_ in teile if (t_[2] + t_[3] + 1) * T / 2.0 < achse]
+        re = [t_ for t_ in teile if (t_[2] + t_[3] + 1) * T / 2.0 > achse]
+        if not li or not re:
+            continue
+        L = max(li, key=lambda t_: t_[3] - t_[2]); R = max(re, key=lambda t_: t_[3] - t_[2])
+        art_ = arten[nb % len(arten)]; hw = hw_[art_]
+        d0 = max(achse - ((L[3] + 1) * T - hw), (R[2] * T + hw) - achse)       # beide Fuesse im Beet
+        d1 = min(achse - (L[2] * T + hw), ((R[3] + 1) * T - hw) - achse)
+        if d1 < d0:
+            continue
+        fy = L[0] * T + (L[1] - L[0] + 1) * T // 2 + 3
+        ds = [(d0 + d1) / 2.0] if d1 - d0 < 6 * T else [d0 + (d1 - d0) * 0.2, d0 + (d1 - d0) * 0.8]
+        for j, d in enumerate(ds):
+            a_ = arten[(nb + j) % len(arten)]
+            for dd in (0, 8, -8, 16, -16):
+                n0 = len(objekte)
+                if setze(a_, achse - d - dd, fy, {'anim': 'baum'}, False, klassen='n') and \
+                        setze(a_, achse + d + dd, fy, {'anim': 'baum'}, True, klassen='n'):
+                    break
+                del objekte[n0:]; del rects[n0:]
+        nb += len(ds)
+        erledigt.update([L, R])
+    for (y0, y1, x0, x1, gi) in info:
+        if (y0, y1, x0, x1, gi) in erledigt:
             continue
         fy = y0 * T + (y1 - y0 + 1) * T // 2 + 3
         breite = x1 - x0 + 1
         anteile = (0.5,) if breite < 9 else (0.2, 0.8) if breite < 18 else (0.12, 0.45, 0.88)
         for j, f in enumerate(anteile):
             art_ = arten[(nb + j) % len(arten)]
-            hw = (lambda b: (b[2] - b[0]) / 2.0 + 1)(Image.open(os.path.join(OBJ, art_ + '.png')).getbbox())
+            hw = hw_[art_]
             cx = min(max(x0 * T + f * breite * T, x0 * T + hw), (x1 + 1) * T - hw)
-            for dy_, dx in [(dy_, dx) for dy_ in (0, 8, 12) for dx in (0, -16, 16, -32, 32)]:
-                if setze(art_, cx + dx, fy + dy_, {'anim': 'baum'}, (nb + j) % 2 == 1, klassen='n'):
+            for dx in (0, -16, 16, -32, 32):
+                if setze(art_, cx + dx, fy, {'anim': 'baum'}, (nb + j) % 2 == 1, klassen='n'):
                     break
         nb += len(anteile)
     # ---------------------------------------------------------------- Fahrzeuge (verlassen, Linksverkehr)
