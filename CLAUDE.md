@@ -331,7 +331,7 @@ Vor jeder Abgabe Punkt für Punkt prüfen (vergrößert, Standbild und mehrere A
   danach wieder verworfen – keine großflächige Boden-Hell/Dunkel-Schattierung verwenden.
 - **Matschdorf (Nutzer, Karte 44):** Chuchidarumon Village wirkt matschig, aber trocken und wüstenartig – kein Gras, kein
   Schnee, kein Sumpf (Vorlage war hier irreführend). Boden: getrockneter Lehm, staubige Sandwege, Waldboden trockene Erde;
-  keine Grashalme; Hütten ohne Schneedach (PixelLab k44_huette3); Akazien und tote Bäume wie Karte 41/42, dürre Büsche; keine
+  keine Grashalme; Kuppelhäuser aus Lehm mit eingesetzten Technikteilen ohne Schnee (Nutzer-Vorlage, PixelLab k44_huette4); Akazien und tote Bäume wie Karte 41/42, dürre Büsche; keine
   Gras-/Moosfelsen; Streudeko aus Zweigen, Wurzeln, Steinen, Pilzen. Bei Unklarheit über die Bodenart vorher fragen.
 - **Insel mit Steg (Karte 45):** Steg liegt ganz über Wasser und schließt an die Uferkante an (in der Vorlage teils auf
   Land); Wasserkeile zwischen 45°-Ufer und eckigem Steg nur in den Stegspalten mit Planken schließen (keine Laschen
