@@ -24,7 +24,7 @@ FREMD = {
     'skelett': 'karte03/mittel/06.png', 'knochen': 'karte04/mittel/08.png', 'schaedel': 'karte04/mittel/09.png',
     'busch_tot': 'karte04/mittel/10.png', 'steinhaufen': 'karte04/mittel/15.png',
     'banner': 'karte03/mittel3/01.png', 'laubbaum': 'karte01/baeume/00.png',
-    'gras': 'karte04/klein/00.png', 'gras2': 'karte04/klein/01.png', 'gras3': 'karte04/klein/27.png',
+    'gras': 'karte04/klein/14.png', 'gras2': 'karte04/klein/33.png', 'gras3': 'karte04/klein/38.png',   # Nutzer: kein Gras
     'kiesel': 'karte04/klein/02.png', 'zweig': 'karte04/klein/09.png', 'knochen_k': 'karte04/klein/03.png',
     'kristall': 'karte04/klein/05.png', 'pilz': 'karte04/klein/11.png', 'stein': 'karte04/klein/08.png',
     'automat': 'karte42/wueste/00.png', 'saeule': 'karte42/gross/00.png', 'unterstand': 'karte42/gross/02.png',   # groesser (Nutzer)

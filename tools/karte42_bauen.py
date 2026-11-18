@@ -29,7 +29,7 @@ weich, zell_maske, flaeche = k4.weich, k4.zell_maske, k20.flaeche
 k4.RASTER45 = True                       # Regel 6b: alle Bodenkanten am 16er-Raster mit 45 Grad
 # Felsfront in den Toenen der Vorlage (rotbrauner Wuestenfels, Licht oben links)
 k4.FELS['wueste'] = ['#3e2414', '#5c361e', '#7a4a2a', '#965e36', '#b07444', '#c88c56', '#e0a86c']
-LIPPE = ['#8a5a32', '#a46c3c', '#bc8048', '#cf9256', '#dfa462', '#ecb874']   # Plateaukante (oranger Sand)
+LIPPE = ['#6a4a2c', '#7c5834', '#8e663e', '#a07448', '#b08252', '#c0905c']   # Plateaukante (trockene Erde)
 FRONT = 32
 SEITE = 6                                # seitliche Plateaukanten nur schmal (Regel)
 
@@ -46,14 +46,15 @@ def texturen(cols, rows):
     sand = os.path.join(basis, 'sand_%d.png')
     kies = os.path.join(ROOT, 'assets', 'karte03', 'basis', 'kies_%d.png')
     t = {
-        's': flaeche(k6.kacheln(sand, 5, faerben((206, 184, 128), (242, 224, 168))), cols, rows),
-        'b': flaeche(k6.kacheln(sand, 5, faerben((176, 148, 98), (214, 188, 134))), cols, rows),
+        # Nutzer: wie Karte 44 matschig, trocken und wuestenartig - getrockneter Lehm statt gelbem Sand
+        's': flaeche(k6.kacheln(os.path.join(basis, 'gras_%d.png'), 5, faerben((132, 98, 62), (176, 138, 92), 0.3, 0.5)), cols, rows),
+        'b': flaeche(k6.kacheln(sand, 5, faerben((190, 158, 110), (226, 198, 150))), cols, rows),
         'd': flaeche(k6.kacheln(kies, 5, faerben((150, 120, 80), (198, 168, 118), 0.25, 0.6)), cols, rows),
         'k': flaeche(k6.kacheln(kies, 5, faerben((118, 112, 96), (178, 172, 150), 0.25, 0.6)), cols, rows),
-        'n': flaeche(k6.kacheln(os.path.join(basis, 'gras_%d.png'), 5, faerben((62, 112, 46), (112, 156, 74), 0.3, 0.5)), cols, rows),
+        'n': flaeche(k6.kacheln(os.path.join(basis, 'gras_%d.png'), 5, faerben((120, 88, 56), (164, 128, 86), 0.3, 0.5)), cols, rows),   # kein Gras
         'r': flaeche(k6.kacheln(kies, 5, faerben((176, 118, 70), (226, 166, 108), 0.25, 0.6)), cols, rows),   # Felsrand (hoch)
         'm': flaeche(k6.kacheln(kies, 5, faerben((140, 88, 52), (200, 140, 92), 0.25, 0.6)), cols, rows),   # Bergkette
-        'p': flaeche(k6.kacheln(sand, 5, faerben((206, 160, 104), (242, 200, 140))), cols, rows),   # Hochplateau
+        'p': flaeche(k6.kacheln(os.path.join(basis, 'gras_%d.png'), 5, faerben((150, 104, 66), (194, 146, 100), 0.3, 0.5)), cols, rows),   # Hochplateau (roetlicher Lehm)
     }
     return t
 
