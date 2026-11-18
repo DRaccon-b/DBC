@@ -16,8 +16,8 @@ A02 = ['karte20', 'karte21', 'karte23', 'karte24', 'karte25', 'karte26', 'karte2
        'karte30', 'karte31', 'karte32', 'karte33']
 
 ANIM = {
-    'karte52': {   # Getraenkeautomat: Warenfenster leuchtet (Pruefung K52)
-        'k18s/01': {'anim': 'leuchten', 'licht': [10, 11], 'licht_box': [2, 5, 18, 17], 'licht_r': 7},
+    'karte52': {   # Getraenkeautomat (neu, 31x44): Warenfenster leuchtet (Pruefung K52)
+        'k18s/01': {'anim': 'leuchten', 'licht': [14, 15], 'licht_box': [3, 9, 25, 22], 'licht_r': 9},
     },
     'karte53': {
         'k18s/00': {'anim': 'leuchten', 'licht': [10, 10], 'licht_box': [2, 5, 18, 16], 'licht_r': 7},

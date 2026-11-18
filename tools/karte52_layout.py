@@ -125,6 +125,8 @@ def main():
     for (x, y, b, h) in tps:
         k2[y:y + h, x:x + b] = 'e'
     k2[19:32, 96] = 'k'                                                # Gehweg rechts neben glas_rechts
+    if k2[74, 12] == 'a' and k2[73, 12] == 'k':
+        k2[74, 12] = 'k'                                               # Kerbe im Gehwegstummel (Pruefung)
     for (yy_, xx_) in ((9, 82), (66, 74), (66, 75)):                   # Gehwegzipfel/-reste (Layoutkoordinaten) angleichen
         if k2[yy_, xx_] == 'k':
             k2[yy_, xx_] = 'a'

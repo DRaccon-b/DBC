@@ -244,7 +244,7 @@ def main():
                              ('reaper/schutt', 36, 20, False), ('reaper/schutt', 13, 55, True), ('reaper/schutt', 70, 25, False),
                              ('reaper/fass', 25, 16, False), ('dr/laterne', 33, 66, False),
                              ('dr/laterne', 80, 52, True)):
-        kachel(n_, tx + P, ty + P, {'liegend': True} if 'schutt' in n_ else dict(LAMPE) if n_ == 'dr/laterne' else {}, sp,
+        kachel(n_, tx + P, ty + P, {'liegend': True} if 'schutt' in n_ else {'anim': 'lampe', 'lampe_box': [6, 8, 22, 18]} if n_ == 'dr/laterne' else {}, sp,
                klassen='k' if n_ == 'dr/laterne' else 'a' + G, weit=3)            # Laternen nur auf Gehweg, Schutt flach
     # ---------------------------------------------------------------- Bahnhofsvorplatz (Ziegelplatz unten rechts)
     gk_ = np.array([list(z) for z in cls])                              # Laternen an den Platzecken, exakt gespiegelt
@@ -253,7 +253,7 @@ def main():
     lw = Image.open(os.path.join(OBJ, 'k18s/18.png')).getbbox()
     lw = lw[2] - lw[0]
     xl = bx0 * T + 20
-    for fy_ in ((by0 + 1) * T + 15, by1 * T + 11):
+    for fy_ in ((by0 + 1) * T + 15, by1 * T + 15):
         setze('k18s/18', xl + lw / 2.0, fy_, dict(LAMPE), klassen='b')
         setze('k18s/18', (bx1 + 1) * T - 20 - lw / 2.0, fy_, dict(LAMPE), klassen='b')
     for (n_, tx, ty, sp) in (('k18s/13', 80, 62, False), ('k18s/01', 88, 61, False), ('k18s/12', 84, 70, False)):

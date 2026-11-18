@@ -1,34 +1,34 @@
 {
  "kachel": 16,
  "breite_kacheln": 40,
- "hoehe_kacheln": 38,
- "animationsbereich_hoehe_kacheln": 2,
+ "hoehe_kacheln": 40,
+ "animationsbereich_hoehe_kacheln": 3,
  "animationsbilder": 4,
  "bilddauer_ms": 250,
  "objekte": [
   {
    "name": "k18s/18",
    "datei": "varianten/k18s-18.png",
-   "animation": "leuchten",
+   "animation": "lampe",
    "slot_kacheln": {
     "x": 0,
     "y": 0,
     "breite": 3,
-    "hoehe": 2
+    "hoehe": 3
    },
    "objektblock_im_slot": {
     "x": 1,
     "y": 0,
-    "breite": 1,
-    "hoehe": 2
+    "breite": 2,
+    "hoehe": 3
    },
    "fundstellen_karte": [
     {
      "block": [
       77,
-      60,
-      1,
-      2
+      59,
+      2,
+      3
      ],
      "fusskachel": [
       77,
@@ -37,10 +37,10 @@
     },
     {
      "block": [
-      93,
-      60,
-      1,
-      2
+      92,
+      59,
+      2,
+      3
      ],
      "fusskachel": [
       93,
@@ -51,7 +51,7 @@
      "block": [
       77,
       75,
-      1,
+      2,
       3
      ],
      "fusskachel": [
@@ -61,62 +61,57 @@
     },
     {
      "block": [
-      93,
+      92,
       75,
-      1,
+      2,
       3
      ],
      "fusskachel": [
       93,
       77
-     ]
-    },
-    {
-     "block": [
-      19,
-      12,
-      1,
-      2
-     ],
-     "fusskachel": [
-      19,
-      13
-     ]
-    },
-    {
-     "block": [
-      42,
-      47,
-      1,
-      2
-     ],
-     "fusskachel": [
-      42,
-      48
      ]
     },
     {
      "block": [
       62,
-      46,
+      45,
       1,
-      2
+      3
      ],
      "fusskachel": [
       62,
       47
      ]
-    },
+    }
+   ]
+  },
+  {
+   "name": "dr/laterne",
+   "datei": "varianten/dr-laterne.png",
+   "animation": "lampe",
+   "slot_kacheln": {
+    "x": 3,
+    "y": 0,
+    "breite": 2,
+    "hoehe": 3
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 2,
+    "hoehe": 3
+   },
+   "fundstellen_karte": [
     {
      "block": [
-      25,
-      75,
-      1,
-      2
+      34,
+      65,
+      2,
+      3
      ],
      "fusskachel": [
-      25,
-      76
+      35,
+      67
      ]
     }
    ]
@@ -126,24 +121,24 @@
    "datei": "varianten/k18s-01.png",
    "animation": "leuchten",
    "slot_kacheln": {
-    "x": 3,
+    "x": 5,
     "y": 0,
     "breite": 2,
-    "hoehe": 2
+    "hoehe": 3
    },
    "objektblock_im_slot": {
     "x": 0,
     "y": 0,
     "breite": 2,
-    "hoehe": 2
+    "hoehe": 3
    },
    "fundstellen_karte": [
     {
      "block": [
       90,
-      62,
+      61,
       2,
-      2
+      3
      ],
      "fusskachel": [
       91,
@@ -158,7 +153,7 @@
    "animation": null,
    "slot_kacheln": {
     "x": 0,
-    "y": 2,
+    "y": 3,
     "breite": 10,
     "hoehe": 12
    },
@@ -189,7 +184,7 @@
    "animation": null,
    "slot_kacheln": {
     "x": 10,
-    "y": 2,
+    "y": 3,
     "breite": 22,
     "hoehe": 11
    },
@@ -220,7 +215,7 @@
    "animation": null,
    "slot_kacheln": {
     "x": 0,
-    "y": 14,
+    "y": 15,
     "breite": 22,
     "hoehe": 10
    },
@@ -251,7 +246,7 @@
    "animation": null,
    "slot_kacheln": {
     "x": 22,
-    "y": 14,
+    "y": 15,
     "breite": 14,
     "hoehe": 10
    },
@@ -282,7 +277,7 @@
    "animation": null,
    "slot_kacheln": {
     "x": 0,
-    "y": 24,
+    "y": 25,
     "breite": 10,
     "hoehe": 10
    },
@@ -313,7 +308,7 @@
    "animation": null,
    "slot_kacheln": {
     "x": 10,
-    "y": 24,
+    "y": 25,
     "breite": 10,
     "hoehe": 10
    },
@@ -339,90 +334,28 @@
    ]
   },
   {
-   "name": "dr/laterne",
-   "datei": "varianten/dr-laterne.png",
-   "animation": null,
-   "slot_kacheln": {
-    "x": 20,
-    "y": 24,
-    "breite": 2,
-    "hoehe": 3
-   },
-   "objektblock_im_slot": {
-    "x": 0,
-    "y": 0,
-    "breite": 2,
-    "hoehe": 3
-   },
-   "fundstellen_karte": [
-    {
-     "block": [
-      34,
-      65,
-      2,
-      3
-     ],
-     "fusskachel": [
-      35,
-      67
-     ]
-    }
-   ]
-  },
-  {
-   "name": "dr/turm",
-   "datei": "varianten/dr-turm_m.png",
-   "animation": null,
-   "slot_kacheln": {
-    "x": 22,
-    "y": 24,
-    "breite": 2,
-    "hoehe": 3
-   },
-   "objektblock_im_slot": {
-    "x": 0,
-    "y": 0,
-    "breite": 2,
-    "hoehe": 3
-   },
-   "fundstellen_karte": [
-    {
-     "block": [
-      39,
-      7,
-      2,
-      3
-     ],
-     "fusskachel": [
-      40,
-      9
-     ]
-    }
-   ]
-  },
-  {
    "name": "k18a/01",
    "datei": "varianten/k18a-01_m.png",
    "animation": null,
    "slot_kacheln": {
-    "x": 24,
-    "y": 24,
+    "x": 20,
+    "y": 25,
     "breite": 4,
-    "hoehe": 2
+    "hoehe": 3
    },
    "objektblock_im_slot": {
     "x": 0,
     "y": 0,
     "breite": 4,
-    "hoehe": 2
+    "hoehe": 3
    },
    "fundstellen_karte": [
     {
      "block": [
       48,
-      40,
+      39,
       4,
-      2
+      3
      ],
      "fusskachel": [
       50,
@@ -436,24 +369,24 @@
    "datei": "varianten/k18a-02.png",
    "animation": null,
    "slot_kacheln": {
-    "x": 28,
-    "y": 24,
+    "x": 24,
+    "y": 25,
     "breite": 4,
-    "hoehe": 2
+    "hoehe": 3
    },
    "objektblock_im_slot": {
     "x": 0,
     "y": 0,
     "breite": 4,
-    "hoehe": 2
+    "hoehe": 3
    },
    "fundstellen_karte": [
     {
      "block": [
       61,
-      39,
+      38,
       4,
-      2
+      3
      ],
      "fusskachel": [
       63,
@@ -467,24 +400,24 @@
    "datei": "varianten/k18a-03.png",
    "animation": null,
    "slot_kacheln": {
-    "x": 32,
-    "y": 24,
+    "x": 28,
+    "y": 25,
     "breite": 4,
-    "hoehe": 2
+    "hoehe": 3
    },
    "objektblock_im_slot": {
     "x": 0,
     "y": 0,
     "breite": 4,
-    "hoehe": 2
+    "hoehe": 3
    },
    "fundstellen_karte": [
     {
      "block": [
       14,
-      30,
+      29,
       4,
-      2
+      3
      ],
      "fusskachel": [
       16,
@@ -498,24 +431,24 @@
    "datei": "varianten/k18a-05_m.png",
    "animation": null,
    "slot_kacheln": {
-    "x": 36,
-    "y": 24,
+    "x": 32,
+    "y": 25,
     "breite": 4,
-    "hoehe": 2
+    "hoehe": 3
    },
    "objektblock_im_slot": {
     "x": 0,
     "y": 0,
     "breite": 4,
-    "hoehe": 2
+    "hoehe": 3
    },
    "fundstellen_karte": [
     {
      "block": [
       15,
-      69,
+      68,
       4,
-      2
+      3
      ],
      "fusskachel": [
       17,
@@ -525,32 +458,249 @@
    ]
   },
   {
-   "name": "dr/huegel",
-   "datei": "varianten/dr-huegel_m.png",
+   "name": "dr/reifen",
+   "datei": "varianten/dr-reifen.png",
    "animation": null,
    "slot_kacheln": {
-    "x": 0,
-    "y": 34,
+    "x": 36,
+    "y": 25,
     "breite": 3,
-    "hoehe": 2
+    "hoehe": 3
    },
    "objektblock_im_slot": {
     "x": 0,
     "y": 0,
     "breite": 3,
-    "hoehe": 2
+    "hoehe": 3
    },
    "fundstellen_karte": [
     {
      "block": [
-      33,
-      28,
+      41,
+      21,
       3,
-      2
+      3
      ],
      "fusskachel": [
-      34,
-      29
+      42,
+      23
+     ]
+    }
+   ]
+  },
+  {
+   "name": "dr/turm",
+   "datei": "varianten/dr-turm.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 0,
+    "y": 35,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      72,
+      59,
+      3,
+      3
+     ],
+     "fusskachel": [
+      73,
+      61
+     ]
+    }
+   ]
+  },
+  {
+   "name": "k18s/41",
+   "datei": "varianten/k18s-41.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 3,
+    "y": 35,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      81,
+      74,
+      3,
+      3
+     ],
+     "fusskachel": [
+      82,
+      76
+     ]
+    }
+   ]
+  },
+  {
+   "name": "reaper/block",
+   "datei": "varianten/reaper-block.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 6,
+    "y": 35,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      15,
+      20,
+      3,
+      3
+     ],
+     "fusskachel": [
+      16,
+      22
+     ]
+    }
+   ]
+  },
+  {
+   "name": "reaper/fass",
+   "datei": "varianten/reaper-fass.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 9,
+    "y": 35,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      26,
+      16,
+      3,
+      3
+     ],
+     "fusskachel": [
+      27,
+      18
+     ]
+    }
+   ]
+  },
+  {
+   "name": "reaper/schutt",
+   "datei": "varianten/reaper-schutt.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 12,
+    "y": 35,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      38,
+      19,
+      3,
+      3
+     ],
+     "fusskachel": [
+      39,
+      21
+     ]
+    }
+   ]
+  },
+  {
+   "name": "reaper/schutt",
+   "datei": "varianten/reaper-schutt_m.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 15,
+    "y": 35,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 3
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      16,
+      53,
+      3,
+      3
+     ],
+     "fusskachel": [
+      17,
+      55
+     ]
+    }
+   ]
+  },
+  {
+   "name": "dr/briefkasten",
+   "datei": "varianten/dr-briefkasten_m.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 18,
+    "y": 35,
+    "breite": 2,
+    "hoehe": 3
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 2,
+    "hoehe": 3
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      12,
+      67,
+      2,
+      3
+     ],
+     "fusskachel": [
+      13,
+      69
      ]
     }
    ]
@@ -560,8 +710,70 @@
    "datei": "varianten/dr-hydrant_m.png",
    "animation": null,
    "slot_kacheln": {
-    "x": 3,
-    "y": 34,
+    "x": 20,
+    "y": 35,
+    "breite": 2,
+    "hoehe": 3
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 2,
+    "hoehe": 3
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      22,
+      35,
+      2,
+      3
+     ],
+     "fusskachel": [
+      23,
+      37
+     ]
+    }
+   ]
+  },
+  {
+   "name": "dr/tentakel",
+   "datei": "varianten/dr-tentakel_m.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 22,
+    "y": 35,
+    "breite": 2,
+    "hoehe": 3
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 2,
+    "hoehe": 3
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      85,
+      38,
+      2,
+      3
+     ],
+     "fusskachel": [
+      86,
+      40
+     ]
+    }
+   ]
+  },
+  {
+   "name": "dr/huegel",
+   "datei": "varianten/dr-huegel_m.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 24,
+    "y": 35,
     "breite": 3,
     "hoehe": 2
    },
@@ -574,25 +786,25 @@
    "fundstellen_karte": [
     {
      "block": [
-      22,
-      36,
+      64,
+      69,
       3,
       2
      ],
      "fusskachel": [
-      23,
-      37
+      65,
+      70
      ]
     }
    ]
   },
   {
    "name": "klein/brocken",
-   "datei": "varianten/klein-brocken_m.png",
+   "datei": "varianten/klein-brocken.png",
    "animation": null,
    "slot_kacheln": {
-    "x": 6,
-    "y": 34,
+    "x": 27,
+    "y": 35,
     "breite": 3,
     "hoehe": 2
    },
@@ -603,6 +815,240 @@
     "hoehe": 2
    },
    "fundstellen_karte": [
+    {
+     "block": [
+      23,
+      57,
+      3,
+      2
+     ],
+     "fusskachel": [
+      24,
+      58
+     ]
+    }
+   ]
+  },
+  {
+   "name": "klein/brocken",
+   "datei": "varianten/klein-brocken_m.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 30,
+    "y": 35,
+    "breite": 3,
+    "hoehe": 2
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 2
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      51,
+      67,
+      3,
+      2
+     ],
+     "fusskachel": [
+      52,
+      68
+     ]
+    },
+    {
+     "block": [
+      12,
+      52,
+      3,
+      2
+     ],
+     "fusskachel": [
+      13,
+      53
+     ]
+    }
+   ]
+  },
+  {
+   "name": "klein/glas",
+   "datei": "varianten/klein-glas.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 33,
+    "y": 35,
+    "breite": 3,
+    "hoehe": 2
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 2
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      44,
+      10,
+      3,
+      2
+     ],
+     "fusskachel": [
+      45,
+      11
+     ]
+    },
+    {
+     "block": [
+      85,
+      34,
+      3,
+      2
+     ],
+     "fusskachel": [
+      86,
+      35
+     ]
+    }
+   ]
+  },
+  {
+   "name": "klein/glas",
+   "datei": "varianten/klein-glas_m.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 36,
+    "y": 35,
+    "breite": 3,
+    "hoehe": 2
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 2
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      41,
+      61,
+      3,
+      2
+     ],
+     "fusskachel": [
+      42,
+      62
+     ]
+    },
+    {
+     "block": [
+      21,
+      14,
+      3,
+      2
+     ],
+     "fusskachel": [
+      22,
+      15
+     ]
+    }
+   ]
+  },
+  {
+   "name": "klein/pfuetze",
+   "datei": "varianten/klein-pfuetze.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 0,
+    "y": 38,
+    "breite": 3,
+    "hoehe": 2
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 2
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      10,
+      76,
+      3,
+      2
+     ],
+     "fusskachel": [
+      11,
+      77
+     ]
+    }
+   ]
+  },
+  {
+   "name": "klein/pfuetze",
+   "datei": "varianten/klein-pfuetze_m.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 3,
+    "y": 38,
+    "breite": 3,
+    "hoehe": 2
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 2
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      34,
+      58,
+      3,
+      2
+     ],
+     "fusskachel": [
+      35,
+      59
+     ]
+    }
+   ]
+  },
+  {
+   "name": "klein/zeitung",
+   "datei": "varianten/klein-zeitung_m.png",
+   "animation": null,
+   "slot_kacheln": {
+    "x": 6,
+    "y": 38,
+    "breite": 3,
+    "hoehe": 2
+   },
+   "objektblock_im_slot": {
+    "x": 0,
+    "y": 0,
+    "breite": 3,
+    "hoehe": 2
+   },
+   "fundstellen_karte": [
+    {
+     "block": [
+      86,
+      11,
+      3,
+      2
+     ],
+     "fusskachel": [
+      87,
+      12
+     ]
+    },
     {
      "block": [
       63,
@@ -630,105 +1076,12 @@
    ]
   },
   {
-   "name": "reaper/block",
-   "datei": "varianten/reaper-block.png",
-   "animation": null,
-   "slot_kacheln": {
-    "x": 9,
-    "y": 34,
-    "breite": 3,
-    "hoehe": 2
-   },
-   "objektblock_im_slot": {
-    "x": 0,
-    "y": 0,
-    "breite": 3,
-    "hoehe": 2
-   },
-   "fundstellen_karte": [
-    {
-     "block": [
-      15,
-      21,
-      3,
-      2
-     ],
-     "fusskachel": [
-      16,
-      22
-     ]
-    }
-   ]
-  },
-  {
-   "name": "reaper/schutt",
-   "datei": "varianten/reaper-schutt.png",
-   "animation": null,
-   "slot_kacheln": {
-    "x": 12,
-    "y": 34,
-    "breite": 3,
-    "hoehe": 2
-   },
-   "objektblock_im_slot": {
-    "x": 0,
-    "y": 0,
-    "breite": 3,
-    "hoehe": 2
-   },
-   "fundstellen_karte": [
-    {
-     "block": [
-      38,
-      20,
-      3,
-      2
-     ],
-     "fusskachel": [
-      39,
-      21
-     ]
-    }
-   ]
-  },
-  {
-   "name": "reaper/schutt",
-   "datei": "varianten/reaper-schutt_m.png",
-   "animation": null,
-   "slot_kacheln": {
-    "x": 15,
-    "y": 34,
-    "breite": 3,
-    "hoehe": 2
-   },
-   "objektblock_im_slot": {
-    "x": 0,
-    "y": 0,
-    "breite": 3,
-    "hoehe": 2
-   },
-   "fundstellen_karte": [
-    {
-     "block": [
-      16,
-      54,
-      3,
-      2
-     ],
-     "fusskachel": [
-      17,
-      55
-     ]
-    }
-   ]
-  },
-  {
    "name": "dr/blasen",
    "datei": "varianten/dr-blasen.png",
    "animation": null,
    "slot_kacheln": {
-    "x": 18,
-    "y": 34,
+    "x": 9,
+    "y": 38,
     "breite": 2,
     "hoehe": 2
    },
@@ -741,14 +1094,14 @@
    "fundstellen_karte": [
     {
      "block": [
-      56,
-      38,
+      83,
+      20,
       2,
       2
      ],
      "fusskachel": [
-      57,
-      39
+      84,
+      21
      ]
     }
    ]
@@ -758,8 +1111,8 @@
    "datei": "varianten/k18s-12.png",
    "animation": null,
    "slot_kacheln": {
-    "x": 20,
-    "y": 34,
+    "x": 11,
+    "y": 38,
     "breite": 2,
     "hoehe": 2
    },
@@ -789,8 +1142,8 @@
    "datei": "varianten/k18s-13.png",
    "animation": null,
    "slot_kacheln": {
-    "x": 22,
-    "y": 34,
+    "x": 13,
+    "y": 38,
     "breite": 2,
     "hoehe": 2
    },
@@ -816,301 +1169,12 @@
    ]
   },
   {
-   "name": "k18s/41",
-   "datei": "varianten/k18s-41.png",
-   "animation": null,
-   "slot_kacheln": {
-    "x": 24,
-    "y": 34,
-    "breite": 2,
-    "hoehe": 2
-   },
-   "objektblock_im_slot": {
-    "x": 0,
-    "y": 0,
-    "breite": 2,
-    "hoehe": 2
-   },
-   "fundstellen_karte": [
-    {
-     "block": [
-      82,
-      75,
-      2,
-      2
-     ],
-     "fusskachel": [
-      83,
-      76
-     ]
-    }
-   ]
-  },
-  {
-   "name": "klein/brocken",
-   "datei": "varianten/klein-brocken.png",
-   "animation": null,
-   "slot_kacheln": {
-    "x": 26,
-    "y": 34,
-    "breite": 2,
-    "hoehe": 2
-   },
-   "objektblock_im_slot": {
-    "x": 0,
-    "y": 0,
-    "breite": 2,
-    "hoehe": 2
-   },
-   "fundstellen_karte": [
-    {
-     "block": [
-      17,
-      45,
-      2,
-      2
-     ],
-     "fusskachel": [
-      17,
-      46
-     ]
-    }
-   ]
-  },
-  {
-   "name": "klein/glas",
-   "datei": "varianten/klein-glas.png",
-   "animation": null,
-   "slot_kacheln": {
-    "x": 28,
-    "y": 34,
-    "breite": 2,
-    "hoehe": 2
-   },
-   "objektblock_im_slot": {
-    "x": 0,
-    "y": 0,
-    "breite": 2,
-    "hoehe": 2
-   },
-   "fundstellen_karte": [
-    {
-     "block": [
-      6,
-      34,
-      2,
-      2
-     ],
-     "fusskachel": [
-      7,
-      35
-     ]
-    },
-    {
-     "block": [
-      91,
-      55,
-      3,
-      2
-     ],
-     "fusskachel": [
-      92,
-      56
-     ]
-    }
-   ]
-  },
-  {
-   "name": "klein/glas",
-   "datei": "varianten/klein-glas_m.png",
-   "animation": null,
-   "slot_kacheln": {
-    "x": 30,
-    "y": 34,
-    "breite": 2,
-    "hoehe": 2
-   },
-   "objektblock_im_slot": {
-    "x": 0,
-    "y": 0,
-    "breite": 2,
-    "hoehe": 2
-   },
-   "fundstellen_karte": [
-    {
-     "block": [
-      34,
-      58,
-      2,
-      2
-     ],
-     "fusskachel": [
-      35,
-      59
-     ]
-    }
-   ]
-  },
-  {
-   "name": "klein/pfuetze",
-   "datei": "varianten/klein-pfuetze.png",
-   "animation": null,
-   "slot_kacheln": {
-    "x": 32,
-    "y": 34,
-    "breite": 2,
-    "hoehe": 2
-   },
-   "objektblock_im_slot": {
-    "x": 0,
-    "y": 0,
-    "breite": 2,
-    "hoehe": 2
-   },
-   "fundstellen_karte": [
-    {
-     "block": [
-      93,
-      11,
-      2,
-      2
-     ],
-     "fusskachel": [
-      93,
-      12
-     ]
-    },
-    {
-     "block": [
-      44,
-      10,
-      3,
-      2
-     ],
-     "fusskachel": [
-      45,
-      11
-     ]
-    },
-    {
-     "block": [
-      85,
-      34,
-      3,
-      2
-     ],
-     "fusskachel": [
-      86,
-      35
-     ]
-    },
-    {
-     "block": [
-      80,
-      53,
-      2,
-      2
-     ],
-     "fusskachel": [
-      80,
-      54
-     ]
-    }
-   ]
-  },
-  {
-   "name": "klein/pfuetze",
-   "datei": "varianten/klein-pfuetze_m.png",
-   "animation": null,
-   "slot_kacheln": {
-    "x": 34,
-    "y": 34,
-    "breite": 2,
-    "hoehe": 2
-   },
-   "objektblock_im_slot": {
-    "x": 0,
-    "y": 0,
-    "breite": 2,
-    "hoehe": 2
-   },
-   "fundstellen_karte": [
-    {
-     "block": [
-      42,
-      61,
-      2,
-      2
-     ],
-     "fusskachel": [
-      42,
-      62
-     ]
-    },
-    {
-     "block": [
-      21,
-      14,
-      2,
-      2
-     ],
-     "fusskachel": [
-      22,
-      15
-     ]
-    },
-    {
-     "block": [
-      41,
-      21,
-      3,
-      2
-     ],
-     "fusskachel": [
-      42,
-      22
-     ]
-    }
-   ]
-  },
-  {
-   "name": "reaper/fass",
-   "datei": "varianten/reaper-fass.png",
-   "animation": null,
-   "slot_kacheln": {
-    "x": 36,
-    "y": 34,
-    "breite": 2,
-    "hoehe": 2
-   },
-   "objektblock_im_slot": {
-    "x": 0,
-    "y": 0,
-    "breite": 2,
-    "hoehe": 2
-   },
-   "fundstellen_karte": [
-    {
-     "block": [
-      27,
-      17,
-      2,
-      2
-     ],
-     "fusskachel": [
-      28,
-      18
-     ]
-    }
-   ]
-  },
-  {
    "name": "reaper/sperre",
    "datei": "varianten/reaper-sperre.png",
    "animation": null,
    "slot_kacheln": {
-    "x": 38,
-    "y": 34,
+    "x": 15,
+    "y": 38,
     "breite": 2,
     "hoehe": 2
    },
@@ -1152,8 +1216,8 @@
    "datei": "varianten/reaper-sperre_m.png",
    "animation": null,
    "slot_kacheln": {
-    "x": 0,
-    "y": 36,
+    "x": 17,
+    "y": 38,
     "breite": 2,
     "hoehe": 2
    },
@@ -1186,68 +1250,6 @@
      "fusskachel": [
       61,
       61
-     ]
-    }
-   ]
-  },
-  {
-   "name": "dr/tentakel",
-   "datei": "varianten/dr-tentakel.png",
-   "animation": null,
-   "slot_kacheln": {
-    "x": 2,
-    "y": 36,
-    "breite": 1,
-    "hoehe": 2
-   },
-   "objektblock_im_slot": {
-    "x": 0,
-    "y": 0,
-    "breite": 1,
-    "hoehe": 2
-   },
-   "fundstellen_karte": [
-    {
-     "block": [
-      46,
-      31,
-      1,
-      2
-     ],
-     "fusskachel": [
-      46,
-      32
-     ]
-    }
-   ]
-  },
-  {
-   "name": "klein/zeitung",
-   "datei": "varianten/klein-zeitung_m.png",
-   "animation": null,
-   "slot_kacheln": {
-    "x": 3,
-    "y": 36,
-    "breite": 3,
-    "hoehe": 1
-   },
-   "objektblock_im_slot": {
-    "x": 0,
-    "y": 0,
-    "breite": 3,
-    "hoehe": 1
-   },
-   "fundstellen_karte": [
-    {
-     "block": [
-      12,
-      53,
-      3,
-      1
-     ],
-     "fusskachel": [
-      13,
-      53
      ]
     }
    ]
