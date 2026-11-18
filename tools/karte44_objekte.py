@@ -22,8 +22,8 @@ FREMD = {'gras': 'karte04/klein/00.png', 'gras2': 'karte04/klein/01.png',
          'blume': 'karte04/klein/07.png', 'gras3': 'karte04/klein/27.png'}
 for _i in range(16):
     FREMD['h%02d' % _i] = 'karte44/huette/%02d.png' % _i
-for _i in (0, 3, 4):                                               # Nutzer: Huetten 0, 3, 4 (k44_huette2)
-    FREMD['hn%d' % _i] = 'karte44/huette2/%02d.png' % _i
+for _n, _i in ((0, 0), (3, 3), (4, 2)):                            # Nutzer: Huetten ohne Schnee (k44_huette3 0, 3, 2)
+    FREMD['hn%d' % _n] = 'karte44/huette3/%02d.png' % _i
 FASS = [0, 1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 13, 14, 15]             # Nutzer: alle Weinfaesser ausser 9 und 12
 for _i in FASS:
     FREMD['fass%02d' % _i] = 'karte44/fass_klein/%02d.png' % _i      # auf ~60 % verkleinert (Massstab zu den Huetten)
@@ -37,8 +37,21 @@ for _i in (2, 3, 14):
 KLEINFELS = [0, 3, 4, 15, 24, 26, 27, 31, 52, 55]          # bemooste Felsen, Farn, Buesche, Pilze
 for _i in KLEINFELS:
     FREMD['kf%02d' % _i] = 'karte27/fels_klein/%02d.png' % _i
-WALD = ['b00', 'b02', 'b06', 'b07', 'b08']                   # ohne Runen-Baeume (b01/b05/b09: Leuchtrunen)
-BUSCH = ['b12', 'b13']
+# Nutzer: ganz matschig, kein Gras/Schnee - statt Laubbaeumen kahle tote Baeume (Karte 08), dunkle Buesche (Karte 12),
+# Streudeko aus Zweigen, Wurzeln, Steinen, Pilzen (Karte 04/27) statt Grasbueschel und Blumen
+for _n, _q in (('b00', 'karte08/baeume/01.png'), ('b02', 'karte08/baeume/14.png'), ('b03', 'karte08/baeume/03.png'),
+               ('b06', 'karte08/baeume/03.png'), ('b07', 'karte08/baeume/01.png'), ('b08', 'karte08/baeume/14.png'),   # braune statt graue Baeume
+               ('b12', 'karte12/rand/08.png'), ('b13', 'karte12/rand/11.png'),
+               ('gras', 'karte04/klein/14.png'), ('gras2', 'karte04/klein/33.png'), ('gras3', 'karte04/klein/38.png'),
+               ('blume', 'karte04/klein/43.png'), ('farn', 'karte27/fels_klein/25.png')):
+    FREMD[_n] = _q
+KLEINFELS[:] = [2, 6, 14, 17, 25, 27, 28, 35, 44, 52, 53, 63]
+for _i in KLEINFELS:
+    FREMD['kf%02d' % _i] = 'karte27/fels_klein/%02d.png' % _i
+for _n, _i in (('w0', 0), ('w2', 2), ('w8', 8)):
+    FREMD[_n] = 'karte12/wald/%02d.png' % _i                  # dunkle Sumpfbaeume (Mangrove, gedreht, Trauerweide)
+WALD = ['w0', 'w2', 'w8', 'w0', 'w8', 'b00', 'b06']          # Guertel: dichte Sumpfbaeume, dazwischen tote Baeume
+BUSCH = ['b12', 'b13']                                       # dunkle Buesche (Karte 12) fuellen den Guertel
 # Baeume der Vorlage (Sprite, Kachel-x, Fusszeile): Eichen, runde Baeume, Zypressen; dichte Gruppen aufgelockert
 BAEUME = [('b00', 21, 5), ('b03', 25, 5), ('b00', 24, 9), ('b08', 21, 10), ('b00', 12, 17), ('b03', 7, 17),
           ('b02', 10, 21), ('b03', 15, 21), ('b03', 19, 17), ('b07', 17, 21), ('b02', 26, 16),
@@ -51,13 +64,11 @@ BAEUME = [('b00', 21, 5), ('b03', 25, 5), ('b00', 24, 9), ('b08', 21, 10), ('b00
           ('b03', 25, 73), ('b02', 45, 72), ('b03', 49, 75), ('b08', 43, 76), ('b03', 52, 69)]
 # Huetten der Vorlage (Mitte px) mit Variante; Dorfdeko der Vorlage (Name, px-Mitte, Fuss-px)
 HUETTE_VAR = ['hn0', 'hn3', 'hn4', 'hn3', 'hn0', 'hn4', 'hn0', 'hn3', 'hn4', 'hn0']
-HUETTE_OPT = {'hn0': {'anim': 'lampe', 'lampe_box': [37, 31, 45, 45]},   # Laterne neben der Tuer leuchtet
-              'hn4': {'anim': 'lampe', 'lampe_box': [41, 33, 48, 44]}}
+HUETTE_OPT = {'hn0': {'anim': 'lampe', 'lampe_box': [41, 31, 46, 41]}}   # Laterne neben der Tuer leuchtet
 DEKO = [('stamm', 1010, 416), ('stamm', 475, 624), ('stamm', 300, 846), ('stamm', 595, 1134),
         ('bank', 1100, 432), ('bank', 1167, 560), ('bank', 607, 656), ('bank', 1070, 958),
         ('fels', 640, 200), ('fels', 640, 360), ('fels', 865, 536), ('fels', 880, 760), ('fels', 1152, 856),
-        ('brunnen', 700, 560), ('schneemann', 470, 500), ('schneemann', 1250, 360), ('schneemann', 230, 920),
-        ('schneemann', 1300, 960), ('schild', 760, 230), ('schild', 330, 600), ('schild', 1200, 1010),
+        ('brunnen', 700, 560), ('schild', 760, 230),          # Nutzer: kein Schnee - Schneemaenner entfernt ('schild', 330, 600), ('schild', 1200, 1010),
         ('stumpf', 300, 360), ('steine', 1350, 140), ('stumpf', 1420, 600)]
 
 
@@ -155,7 +166,11 @@ def main():
     # ---------------- Kuppelhuetten (Plaetze der Vorlage), Tuer nach Sueden frei
     for i_, (hx, hy) in enumerate(lay['huetten']):
         n_ = HUETTE_VAR[i_ % len(HUETTE_VAR)]
-        o_ = kachel(n_, int(hx) // T, int(hy + 26) // T, dict(HUETTE_OPT.get(n_, {})), False, 'g', suche=3)
+        o_ = None
+        for n2_ in [n_] + [v for v in ('hn0', 'hn3', 'hn4') if v != n_]:   # nie stillschweigend weglassen (Pruefliste K44)
+            o_ = kachel(n2_, int(hx) // T, int(hy + 26) // T, dict(HUETTE_OPT.get(n2_, {})), False, 'g', suche=9)
+            if o_:
+                break
         if not o_:
             print('  Huette nicht gesetzt', hx, hy)
             continue
@@ -291,7 +306,7 @@ def main():
         sx = o['x'] + int(np.nonzero(tsp[zl - 3:zl + 1].any(0))[0].mean()); sy = o['y'] + int(zl)
         stumpf.append((sx - 32, sy - 28, sx + 32, sy + 30))
         gesetzt.append((i, n, len(rects) - 1, sx, sy))
-    vorne = ['kf00', 'kf24', 'kf26', 'kf31', 'kf52']                # vor dem Stumpf nur 2 Kacheln hohe Begleiter
+    vorne = ['kf06', 'kf17', 'kf44', 'kf52', 'kf53']                # vor dem Stumpf nur 2 Kacheln hohe Begleiter (Matsch: Erde, Wurzel, Steine, Holz)
     zug['v'] = 0
     for j_eig, (i, n, ti, sx, sy) in enumerate(gesetzt):
         seite = 1 if i % 2 == 0 else -1

@@ -2175,6 +2175,12 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'cute round mud hut shaped like a snowman head, white snow roof, two small round windows like eyes, wooden door in the middle, orange walls, seen from the front and slightly above, ' + FR14,
         'small round clay hut with a thick straw ring under a white snow dome roof, light orange walls, wooden door with a small canopy, firewood stacked beside the door, seen from the front and slightly above, ' + FR14,
     ]},
+    'k44_huette3': {'size': 64, 'freie_farben': True, 'items': [   # Karte 44 (Nutzer): matschiges Dorf, Huetten OHNE Schnee
+        'small round clay dome hut, warm terracotta clay walls, dome roof of dark brown packed mud and dried reeds, dark brown outline (no black), small wooden door with a round top and a tiny lantern beside it, a few stones at the base, no snow, seen from the front and slightly above, ' + FR14,
+        'cute round mud hut with a dome roof of thick brown thatch, two small round windows, wooden door in the middle, ochre clay walls splashed with mud at the base, no snow, seen from the front and slightly above, ' + FR14,
+        'small round clay hut with a thick straw ring and a dome roof of dark wet mud, light orange walls, wooden door with a small canopy, firewood stacked beside the door, no snow, seen from the front and slightly above, ' + FR14,
+        'small dome hut with walls of stacked round river stones and clay, dome roof of brown mud and moss patches, wooden door with iron hinges, a little chimney, no snow, seen from the front and slightly above, ' + FR14,
+    ]},
     'k44_fass': {'size': 64, 'freie_farben': True, 'items': [   # Grosse Weinfaesser (Nutzer, fuer diese oder naechste Karte)
         'large oak wine barrel lying on its side on a wooden cradle stand, round front face with iron hoops and a small brass tap, dark brown oak staves, ' + FR14,
         'big standing wooden wine barrel with three dark iron hoops and a round wooden lid, warm brown oak, ' + FR14,
