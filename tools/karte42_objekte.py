@@ -31,6 +31,10 @@ FREMD = {
     'kristall': 'karte04/klein/05.png', 'pilz': 'karte04/klein/11.png', 'stein': 'karte04/klein/08.png',
     'automat': 'karte42/wueste/00.png', 'saeule': 'karte42/gross/00.png', 'unterstand': 'karte42/gross/02.png',   # groesser (Nutzer)
     'saeule_kaputt': 'karte42/gross/01.png',
+    'wk_a': 'karte42/wind48/00.png', 'wk_b': 'karte42/wind48/03.png', 'wk_c': 'karte42/wind48/14.png',
+    'wk_d': 'karte42/wind48/01.png', 'wm_a': 'karte42/wind64/01.png', 'wm_b': 'karte42/wind64/07.png',
+    'wm_c': 'karte42/wind64/15.png', 'wm_d': 'karte42/wind64/00.png', 'wg_a': 'karte42/wind96/00.png',
+    'wg_b': 'karte42/wind96/03.png', 'wg_c': 'karte42/wind96/01.png',   # Windsaeulen/Staubwirbel (Nutzer)
     'huette': 'karte42/haus/01.png',   # Nutzer: bemoostes Kuppelhaus, Kandidat 1
     'bank': 'karte42/dorf/01.png', 'kruege': 'karte42/dorf/02.png',
 }
@@ -309,6 +313,22 @@ def main():
         if setze(n, x * T + rnd.randint(4, 12), y * T + rnd.randint(10, 15), opt_,
                  rnd.random() < 0.5, KL[eb], ebene_soll=eb):
             gesetzt += 1; letzte = n
+    # Nutzer: Tornados/Windsaeulen verschieden gross, moderat ueber die Karte verteilt (animiert, begehbar)
+    wind = ['wg_a', 'wm_a', 'wk_a', 'wg_b', 'wm_b', 'wk_b', 'wm_c', 'wk_c', 'wg_c', 'wm_d', 'wk_d']
+    plaetze = [(x, y) for y in range(4, rows - 4) for x in range(4, cols - 4) if k(x, y) in BODEN + 'p']   # Tal und Plateaus
+    rnd.shuffle(plaetze)
+    gesetzt_w = []
+    for (x, y) in plaetze:
+        if not wind:
+            break
+        if any(abs(x - wx) < 14 and abs(y - wy) < 11 for (wx, wy) in gesetzt_w):
+            continue                                                 # moderat verteilt: Abstand zu anderen Wirbeln
+        n_ = wind[0]
+        if setze(n_, x * T + 8, y * T + T - 1, {'anim': 'tornado', 'ebene': 0, 'nur_kontakt': True,
+                                                'phase': len(gesetzt_w) * 1.7}, rnd.random() < 0.5, klassen=BODEN + 'p',
+                 ebene_soll=int(lvl[min(y * T + T - 1, lvl.shape[0] - 1), x * T + 8])):
+            gesetzt_w.append((x, y)); wind.pop(0)
+    print('  Windsaeulen:', len(gesetzt_w))
     json.dump(objekte, open(os.path.join(OBJ, 'platzierung.json'), 'w'), indent=0)
     print('Karte 42: %d Objekte (%d Streudeko)' % (len(objekte), gesetzt))
 

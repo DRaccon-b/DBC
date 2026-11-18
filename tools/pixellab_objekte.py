@@ -2201,6 +2201,19 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'old hut shaped like a green mossy hill, uneven rounded roof of moss and grass tufts, yellow-green stained walls with dirt splashes at the base, circular wooden door in the middle, seen from the front and slightly above, ' + FR14,
         'rounded earthen hut with a dome roof of thick dark green moss and a mossy olive front wall, round porthole-like door, sitting in a dusty desert valley, seen from the front and slightly above, ' + FR14,
     ]},
+    # Karte 42 (Nutzer): Tornados / Windsaeulen in verschiedenen Groessen (Wind Valley)
+    'k42_wind48': {'size': 48, 'freie_farben': True, 'items': [
+        'small swirling whirlwind of brown dust and sand, funnel shaped, narrow at the bottom touching the ground and wider at the top, translucent wispy edges, small pebbles and dry leaves caught in the wind, no background, ' + FR14,
+        'little dust devil, swirling whirlwind of brown dust and sand, funnel shaped, narrow at the bottom touching the ground and wider at the top, translucent wispy edges, small pebbles and dry leaves caught in the wind, no background, ' + FR14,
+    ]},
+    'k42_wind64': {'size': 64, 'freie_farben': True, 'items': [
+        'medium swirling whirlwind of brown dust and sand, funnel shaped, narrow at the bottom touching the ground and wider at the top, translucent wispy edges, small pebbles and dry leaves caught in the wind, no background, ' + FR14,
+        'tall slim wind column, swirling whirlwind of brown dust and sand, funnel shaped, narrow at the bottom touching the ground and wider at the top, translucent wispy edges, small pebbles and dry leaves caught in the wind, no background, ' + FR14,
+    ]},
+    'k42_wind96': {'size': 96, 'freie_farben': True, 'items': [
+        'large tornado, swirling whirlwind of brown dust and sand, funnel shaped, narrow at the bottom touching the ground and wider at the top, translucent wispy edges, small pebbles and dry leaves caught in the wind, no background, ' + FR14,
+        'big towering dust tornado, swirling whirlwind of brown dust and sand, funnel shaped, narrow at the bottom touching the ground and wider at the top, translucent wispy edges, small pebbles and dry leaves caught in the wind, no background, ' + FR14,
+    ]},
     'k44_fass': {'size': 64, 'freie_farben': True, 'items': [   # Grosse Weinfaesser (Nutzer, fuer diese oder naechste Karte)
         'large oak wine barrel lying on its side on a wooden cradle stand, round front face with iron hoops and a small brass tap, dark brown oak staves, ' + FR14,
         'big standing wooden wine barrel with three dark iron hoops and a round wooden lid, warm brown oak, ' + FR14,

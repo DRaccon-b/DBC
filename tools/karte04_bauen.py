@@ -1942,6 +1942,39 @@ def laub_wehen(sp, frame, o):
 TEILANIM.update({'portal_box': portal_box, 'laub_wehen': laub_wehen})
 
 
+def tornado(sp, frame, o):
+    """Windsaeule/Staubwirbel (Karte 42, Nutzer): der Trichter dreht und schlaengelt sich - jede Zeile wird seitlich
+    verschoben, nach oben hin staerker (Fuss bleibt am Boden), Phase laeuft mit der Hoehe (Verdrehung); dazu wandert
+    ein heller Streifen als Drehbewegung durch den Trichter. Nahtlose Schleife ueber N_FRAMES Bilder."""
+    a = np.array(sp)
+    h, w = a.shape[:2]
+    al = a[..., 3] > 0
+    zl = np.nonzero(al.any(1))[0]
+    if not len(zl):
+        return sp
+    y0, y1 = zl[0], zl[-1]
+    out = np.zeros_like(a)
+    amp = o.get('wirbel_amp', max(1.0, w / 24.0))
+    ph = 2 * math.pi * ((frame % N_FRAMES) / float(N_FRAMES)) + o.get('phase', 0)
+    for y in range(h):
+        t = 0.0 if y1 == y0 else (y1 - y) / float(y1 - y0)            # 0 am Fuss, 1 oben
+        d = int(round(amp * (t ** 1.3) * math.sin(ph + t * 4.0)))
+        if d >= 0:
+            out[y, d:] = a[y, :w - d]
+        else:
+            out[y, :w + d] = a[y, -d:]
+    hell = out[..., 3] > 0
+    yy, xx = np.mgrid[0:h, 0:w]
+    per = max(6, w // 3)
+    off = int(round((frame % N_FRAMES) * per / float(N_FRAMES)))      # nahtlos: nach N_FRAMES genau eine Periode
+    streifen = hell & (((xx + yy // 2 - off) % per) < 2)
+    out[streifen, :3] = np.clip(out[streifen, :3].astype(int) + 26, 0, 255).astype(np.uint8)
+    return Image.fromarray(out, 'RGBA')
+
+
+TEILANIM.update({'tornado': tornado})
+
+
 def flammen_boxen(sp, frame, o):
     """Kerzenflammen in festen Boxen (o['flammen_box']): jede Flamme zuengelt fuer sich (Spitze seitlich, streckt sich
     um 1 px); Wachs, Messing und Halter bleiben unveraendert."""
