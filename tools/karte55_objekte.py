@@ -80,11 +80,10 @@ def new_york(L, x0, y0):
     setzen(L, taube_m, x0 + 9, y0 + 12, liegend=True, **S)
     zeitung = sprite('karte39/varianten/k38-zeitung.png', 'ny-zeitung')
     setzen(L, zeitung, x0 + 8, y0 + 20, liegend=True, **S)
-    for (quelle, tx, ty) in (('k55_stadt/00.png', 6, 12), ('k55_stadt/01.png', 20, 11)):
-        if os.path.exists(os.path.join(SRC, 'karte55', quelle)):
-            n = sprite('karte55/' + quelle, 'ny-' + quelle.replace('/', '_')[:-4])
-            setzen(L, n, x0 + tx, y0 + ty, **S)
-
+    S2 = dict(S)
+    setzen(L, sprite('karte55/stadt/01.png', 'ny-briefkasten'), x0 + 6, y0 + 12, **S2)
+    setzen(L, sprite('karte55/stadt/02.png', 'ny-zeitungsboxen'), x0 + 18, y0 + 12, breite=2, **S2)
+    setzen(L, sprite('karte55/stadt/47.png', 'ny-hotdog'), x0 + 9, y0 + 22, breite=3, **S2)
 
 def colorado(L, x0, y0):
     """Raum rechts: Praerie mit Landstrasse; Zaeune, Masten und Deko an den Raendern (Mitte = Kampfflaeche)."""
@@ -94,6 +93,47 @@ def colorado(L, x0, y0):
     for e in w.get('setzen', []):
         n = sprite('karte55/' + e['quelle'], e['name'], e.get('spiegeln', False))
         setzen(L, n, x0 + e['x'], y0 + e['y'], breite=e.get('b'), **e.get('extra', {}))
+    streudeko(L, x0, y0)
+
+
+def _rechteck(o):
+    w, h = Image.open(os.path.join(OBJ, o['datei'])).size
+    return o['x'], o['y'], o['x'] + w, o['y'] + h
+
+
+def streudeko(L, x0, y0):
+    """Kleinkram dezent (Regel): wenige Bueschel, Blumen, Kiesel, ein Schaedel - nur auf Praerie, nie am Aufstellfeld,
+    nie in Reihen, 2 px Abstand zu allen Objekten, gleiches Motiv nie nah beieinander."""
+    lay = json.load(open(LAYOUT))
+    kl = lay['klassen']
+    motive = [('n32/00.png', 'co-gras'), ('n32/13.png', 'co-gras_hoch'), ('n32/21.png', 'co-gras_rispe'),
+              ('n32/02.png', 'co-blumen'), ('n32/01.png', 'co-steppenlaeufer'), ('n32/03.png', 'co-kiesel'),
+              ('n32/08.png', 'co-schaedel'), ('n32/00.png', 'co-gras'), ('n32/02.png', 'co-blumen'),
+              ('n32/13.png', 'co-gras_hoch'), ('n32/03.png', 'co-kiesel')]
+    rs = np.random.RandomState(5555)
+    kand = [(tx, ty) for ty in range(1, 23) for tx in range(1, 27)
+            if kl[y0 + ty][x0 + tx] == 'q' and not (tx <= 8 and ty >= 16)
+            and all(kl[y0 + ty + dy][x0 + tx + dx] == 'q' for dy in (-1, 0, 1) for dx in (-1, 0, 1)
+                    if 0 < ty + dy < 23 and 0 < tx + dx < 27)]
+    rs.shuffle(kand)
+    gesetzt = []
+    for (q, name) in motive:
+        for (tx, ty) in kand:
+            if any(abs(tx - a) + abs(ty - b) < 4 for (a, b, _) in gesetzt):
+                continue
+            if any(n_ == name and abs(tx - a) + abs(ty - b) < 10 for (a, b, n_) in gesetzt):
+                continue
+            if any(b == ty and abs(tx - a) < 6 for (a, b, _) in gesetzt):       # keine Reihen
+                continue
+            datei = sprite('karte55/' + q, name, spiegeln=bool(rs.randint(2)))
+            o = setzen([], datei, x0 + tx, y0 + ty, liegend=name in ('co-kiesel', 'co-schaedel'))
+            r = _rechteck(o)
+            if any(not (r[2] + 2 <= s_[0] or s_[2] + 2 <= r[0] or r[3] + 2 <= s_[1] or s_[3] + 2 <= r[1])
+                   for s_ in map(_rechteck, L)):
+                continue
+            L.append(o)
+            gesetzt.append((tx, ty, name))
+            break
 
 
 def main():
