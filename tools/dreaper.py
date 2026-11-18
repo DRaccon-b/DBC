@@ -107,65 +107,45 @@ def _abstand(mm, schritte=14):
     return d
 
 
-def stempeln(mm, f, seed, flach=False, ueber=12):
-    """Masse aus ganzen PixelLab-Blasenhaufen (nie beschnitten, Nutzer): jeder Haufen wird nur so gross gesetzt, dass er bis
-    auf ueber px in die Maske passt; am Rand ein Kranz kleiner Haufen, sodass der Umriss aus echten Blasen besteht.
-    Von Norden nach Sueden gezeichnet. Animation: jeder Haufen hebt/senkt sich mit eigener Phase um 1 px (4 Bilder).
-    Rueckgabe: RGBA-Ebene (Alpha 0/1) in Groesse der Maske."""
-    gross, klein = stempel_laden()
-    rs = np.random.RandomState(seed)
+def stempeln(mm, f, seed, flach=False, x0=0, y0=0, T=16):
+    """Masse wie ein Baumguertel (Nutzer): ganze grosse PixelLab-Blasenhaufen auf dem Kachelraster, versetzt nebeneinander
+    (jede zweite Kachel, Reihen um eine Kachel verschoben), leicht ueberlappend, von Norden nach Sueden gezeichnet - keine
+    kleinen Fuellblasen, nichts beschnitten. Animation: jeder Haufen hebt/senkt sich mit eigener Phase um 1 px (4 Bilder).
+    Rueckgabe: RGBA-Ebene (Alpha 0/1) in Groesse der Maske und der Abstand zur Kante."""
+    _, gross = stempel_laden()                                        # 64er-Haufen in Originalgroesse (keine Skalierung, Nutzer: sauber)
     h, w = mm.shape
     dist = _abstand(mm)
-    alle = [(g, True) for g in gross] + [(k, False) for k in klein]
+    breite = 30 if flach else 42                                       # Haufenbreite (ueberlappt die Nachbarn leicht)
     liste = []
-
-    def waehle(cy, cx, R, nur_klein=False):
-        for _ in range(6):
-            im, ist_gross = alle[rs.randint(len(alle))]
-            if nur_klein and ist_gross:
+    ty0, tx0 = -((y0 + 1) // T) - 1, -((x0 + 1) // T) - 1
+    for ty in range(y0 // T - 1, (y0 + h) // T + 2):
+        for tx in range(x0 // T - 1, (x0 + w) // T + 2):
+            if (tx + ty) % 2:
                 continue
-            if ist_gross and rs.rand() < (0.5 if not flach else 0.8):
+            cy, cx = ty * T + T // 2 - y0, tx * T + T // 2 - x0       # Kachelmitte (global am Raster)
+            if not (0 <= cy < h and 0 <= cx < w) or not mm[cy, cx]:
                 continue
-            halb = max(im.width, im.height) / 2.0
-            sk = min(rs.uniform(0.6, 0.85) if ist_gross else rs.uniform(0.85, 1.15), R / halb)
-            if sk * halb < 6:
+            if flach and dist[cy, cx] < breite // 2:                   # begehbarer Belag: ganz innerhalb der Flaeche
                 continue
-            im2 = im.resize((max(4, int(im.width * sk)), max(4, int(im.height * sk))), Image.NEAREST)
+            rs = np.random.RandomState((seed * 131 + tx * 7919 + ty * 104729) % (2 ** 31))
+            im = gross[rs.randint(len(gross))]
+            if flach:                                                  # Belag: kleinerer Haufen (exakt halbe Groesse)
+                im = im.resize((im.width // 2 * 1 + im.width // 4, im.height // 2 + im.height // 4), Image.NEAREST)
             if rs.rand() < 0.5:
-                im2 = im2.transpose(Image.FLIP_LEFT_RIGHT)
-            liste.append((cy, cx, im2, rs.randint(0, 4)))
-            return
-
-    schritt = (34, 38) if not flach else (40, 44)
-    for gy in range(0, h, schritt[0]):
-        for gx in range(0, w, schritt[1]):
-            cy, cx = gy + rs.randint(-8, 9), gx + rs.randint(-9, 10)
-            if 0 <= cy < h and 0 <= cx < w and mm[cy, cx] and dist[cy, cx] >= 4:
-                waehle(cy, cx, dist[cy, cx] + ueber)
-    if not flach:                                                      # Randkranz aus kleinen Haufen
-        rand = mm & (dist <= 4)
-        ys, xs = np.nonzero(rand)
-        reihen = list(zip(ys, xs))
-        rs.shuffle(reihen)
-        belegt = np.zeros((h // 13 + 2, w // 13 + 2), bool)            # Abstand ueber ein Belegungsraster (alle, nicht nur die letzten)
-        for (cy, cx) in reihen:
-            by, bx = cy // 13, cx // 13
-            if belegt[max(0, by - 1):by + 2, max(0, bx - 1):bx + 2].any():
-                continue
-            belegt[by, bx] = True
-            waehle(cy, cx, 18 + rs.randint(0, 6), nur_klein=True)
+                im = im.transpose(Image.FLIP_LEFT_RIGHT)
+            liste.append((cy + im.height // 2, cx, im, rs.randint(0, 4)))   # mittig auf der Kachel (quillt gleichmaessig ueber)
     liste.sort(key=lambda t: t[0])
     ebene = np.zeros((h, w, 4), np.float32)
-    for (cy, cx, im, ph) in liste:
+    for (fy, cx, im, ph) in liste:
         dy = (0, 1, 1, 0)[(f + ph) % 4]
         arr = np.array(im).astype(np.float32)
         ih, iw = arr.shape[:2]
-        y0, x0 = cy - ih // 2 + dy, cx - iw // 2
-        ya, xa = max(0, y0), max(0, x0)
-        yb, xb = min(h, y0 + ih), min(w, x0 + iw)
+        ya0, xa0 = fy - ih + dy, cx - iw // 2
+        ya, xa = max(0, ya0), max(0, xa0)
+        yb, xb = min(h, ya0 + ih), min(w, xa0 + iw)
         if yb <= ya or xb <= xa:
             continue
-        teil = arr[ya - y0:yb - y0, xa - x0:xb - x0]
+        teil = arr[ya - ya0:yb - ya0, xa - xa0:xb - xa0]
         m_ = teil[..., 3] > 128
         rgb = teil[..., :3] * (0.8 if flach else 1.0)
         sub = ebene[ya:yb, xa:xb]
@@ -213,7 +193,7 @@ def masse(a, m, frame=None, seed=52, boden=None, flach=False, stil='stempel'):
         col = blasen(h, w, f, seed + y0 * 3 + x0, x0, y0)
         if stil == 'stempel':                                          # Nutzer: hoeher aufloesend - PixelLab-Blasenhaufen
             col = col * 0.55 + BL_FUGE[None, None] * 0.45
-            st_ebene, st_dist = stempeln(mm, f, seed + y0 * 3 + x0, flach)
+            st_ebene, st_dist = stempeln(mm, f, seed, flach, x0, y0)
         if flach:                                                      # begehbarer Belag: dunkler, flacher
             col = col * 0.72 + BL_FUGE[None, None] * 0.28
     # Glanzpunkte (feucht), flackern versetzt
