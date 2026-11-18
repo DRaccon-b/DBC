@@ -64,11 +64,16 @@ def membran(Hh, W, mitte_px, radius_px, frame):
     a[zelle] *= 0.9
     a[np.roll(zelle, 1, 0) & ~zelle] += 14                            # Lichtkante unter jeder Wand (Licht von oben)
     puls = 0.5 + 0.5 * math.sin(2 * math.pi * f / N_FRAMES)
+    # Nutzer: zur Mitte hin staerker pulsieren - eine Welle laeuft von der Mitte nach aussen (4 Bilder, nahtlos)
+    welle = 0.5 + 0.5 * np.sin(2 * math.pi * (f / N_FRAMES - r * 0.9))
+    nah = np.clip(1 - r, 0, 1) ** 1.8
+    a += (welle * nah)[..., None] * np.array((46, 12, 24), np.float32)
     n2 = dreaper._rauschen(Hh, W, 16, 5403)
     ader = np.abs(n2 - 0.5) < 0.016
-    a[ader] = np.array((150, 30, 64)) + puls * np.array((70, 40, 40))
+    st = (welle * (0.4 + 0.6 * nah))[ader][:, None]
+    a[ader] = np.array((140, 26, 58)) + st * np.array((110, 60, 60))
     kern = np.abs(n2 - 0.5) < 0.005
-    a[kern] = np.array((230, 110, 140)) + puls * np.array((25, 50, 40))
+    a[kern] = np.array((220, 100, 130)) + (welle * (0.4 + 0.6 * nah))[kern][:, None] * np.array((35, 70, 60))
     rs = np.random.RandomState(5404)                                  # kleine Glanzpunkte (feuchte Oberflaeche)
     for _ in range(Hh * W // 900):
         y, x = rs.randint(1, Hh - 1), rs.randint(1, W - 1)
