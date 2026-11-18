@@ -42,7 +42,8 @@ FREMD = {
 BAEUME = [('totbaum', 11, 16, 2), ('dornbaum', 59, 13, 2), ('totbaum', 79, 18, 2), ('knorrig', 40, 22, 1),
           ('dornbaum', 54, 44, 1), ('akazie', 12, 50, 1), ('baobab', 26, 47, 1), ('akazie', 36, 53, 1),
           ('baobab', 74, 42, 1), ('akazie_klein', 81, 57, 1), ('knorrig', 57, 64, 1)]
-GROSS = [('huette', 17, 35, 1), ('kruege', 21, 36, 1), ('unterstand', 9, 56, 1), ('bank', 13, 57, 1),
+GROSS = [('huette', 16, 37, 1), ('kruege', 20, 37, 1),   # Pruefung: Huette 2 Reihen tiefer, weg vom Treppenaustritt
+         ('unterstand', 9, 56, 1), ('bank', 13, 57, 1),
          ('skelett', 28, 12, 2), ('skelett', 70, 24, 2), ('skelett', 59, 50, 1), ('skelett', 33, 61, 1),
          ('schaedel', 30, 18, 2), ('schaedel', 70, 54, 1),
          ('fels_sand', 12, 14, 2), ('felsen', 19, 24, 2), ('fels_sand', 61, 12, 2), ('felsen', 77, 21, 2),
@@ -139,6 +140,17 @@ def main():
                 return None                                          # Fuss ganz auf dem Wuestenboden, nie an der Wand
             if wasser[max(0, r[1]):r[3] + 1, r[0]:r[2] + 1].any():
                 return None                                          # nichts auf Teich oder Ufer
+            o_opt = opt or {}
+            if o_opt.get('begleiter') or o_opt.get('streu'):          # Pruefung: Begleiter/Streudeko nie auf derselben
+                for o2 in objekte:                                   # Fusszeile nebeneinander (keine Reihen)
+                    if (o2.get('begleiter') or o2.get('streu')) and abs((o2['y'] + o2['fuss']) - r[3]) <= 6 \
+                            and abs(o2['x'] - x) < 72:
+                        return None
+            if o_opt.get('streu'):                                   # Pruefung: Streudeko nie auf Kanten/Fronten
+                y0_, y1_ = max(0, r[1] - 2), min(lvl.shape[0], r[3] + 3)
+                x0_, x1_ = max(0, r[0] - 2), min(lvl.shape[1], r[2] + 3)
+                if (lvl[y0_:y1_, x0_:x1_] != lvl[min(r[3], lvl.shape[0] - 1), (r[0] + r[2]) // 2]).any() or wand[y0_:y1_, x0_:x1_].any():
+                    return None
             if ebene_soll == 1 and (lvl[max(0, r[1]):r[3], r[0]:r[2] + 1] > 1).any() and not (opt or {}).get('vor_fels'):
                 hoch = lvl[max(0, r[1]):r[3], r[0]:r[2] + 1] > 1     # Verdeckung durch Hoehen: nur Plateau im Norden
                 if hoch[:, :].any(axis=0).sum() and hoch[-T:].any():
@@ -211,17 +223,17 @@ def main():
         seite = 1 if i % 2 == 0 else -1
         def vor():
             return any(setze(naechster('f' if i % 2 else 'b'), sx + d, sy + T, {'begleiter': True}, seite < 0, kl,
-                             ohne=(ti,), ebene_soll=eb) for d in (0, 3, -3, 6, -6))
+                             ohne=(ti,), ebene_soll=eb) for d in (0, 3, -3, 6, -6, 10, -10, 14, -14))
         def hinter(sd):
             return any(setze(naechster('f'), sx + sd * d, sy - T, {'begleiter': True}, sd < 0, kl, ohne=(ti,), ebene_soll=eb)
                        for d in (24, 32))
         def seitlich(sd):
             return any(setze(naechster('b'), sx + sd * d, sy + dy, {'begleiter': True, 'ebene': 0}, sd > 0, kl, ebene_soll=eb)
-                       for d in (48, 56, 64, 72, 80) for dy in (-T, 2 * T, -2 * T))   # nie in der Stammreihe (keine Reihe Busch-Baum-Busch)
+                       for d in (40, 48, 56, 64, 72, 80, 96) for dy in (-T, 2 * T, -2 * T, 3 * T))   # nie in der Stammreihe (keine Reihe Busch-Baum-Busch)
         nah = sum(1 for (_, _, _, _, _, x2, y2, _) in gesetzte_baeume if (x2, y2) != (sx, sy)
                   and abs(x2 - sx) < 6 * T and abs(y2 - sy) < 5 * T)
         soll = 1 if nah else 2
-        if n == 'totbaum':                                            # ohne Krone: kein Fels 'hinter den Blaettern'
+        if n != 'knorrig':                                            # Pruefung: hohe/keine Krone -> kein Fels 'hinter den Blaettern'
             plan = [[vor, lambda: seitlich(-seite)], [lambda: seitlich(seite), vor]][i % 2]
             ersatz = [lambda: seitlich(seite), vor]                   # abwechseln (Pruefung: alle gleich aufgebaut)
         else:

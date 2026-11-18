@@ -2,23 +2,23 @@
 {
 "datei": "varianten/huette.png",
 "basis": "huette",
-"x": 244,
-"y": 513,
+"x": 228,
+"y": 529,
 "fuss": 62,
 "kachel": [
-17,
-35
+16,
+36
 ],
 "ebene": 1
 },
 {
 "datei": "varianten/kruege.png",
 "basis": "kruege",
-"x": 322,
+"x": 306,
 "y": 560,
 "fuss": 31,
 "kachel": [
-21,
+20,
 36
 ],
 "ebene": 1
@@ -377,13 +377,26 @@
 "begleiter": true
 },
 {
-"datei": "varianten/bg49.png",
-"basis": "bg49",
-"x": 123,
-"y": 231,
-"fuss": 24,
+"datei": "varianten/bg09.png",
+"basis": "bg09",
+"x": 131,
+"y": 280,
+"fuss": 23,
 "kachel": [
-8,
+9,
+18
+],
+"ebene": 0,
+"begleiter": true
+},
+{
+"datei": "varianten/bg03.png",
+"basis": "bg03",
+"x": 896,
+"y": 228,
+"fuss": 27,
+"kachel": [
+56,
 15
 ],
 "ebene": 0,
@@ -403,24 +416,11 @@
 "begleiter": true
 },
 {
-"datei": "varianten/bg02_m.png",
-"basis": "bg02",
-"x": 911,
-"y": 183,
-"fuss": 24,
-"kachel": [
-57,
-12
-],
-"ebene": 1,
-"begleiter": true
-},
-{
-"datei": "varianten/bg09.png",
-"basis": "bg09",
-"x": 1259,
-"y": 296,
-"fuss": 23,
+"datei": "varianten/bg57.png",
+"basis": "bg57",
+"x": 1261,
+"y": 299,
+"fuss": 20,
 "kachel": [
 79,
 19
@@ -429,24 +429,24 @@
 "begleiter": true
 },
 {
-"datei": "varianten/bg33.png",
-"basis": "bg33",
-"x": 1210,
-"y": 260,
-"fuss": 27,
+"datei": "varianten/bg11.png",
+"basis": "bg11",
+"x": 1220,
+"y": 313,
+"fuss": 22,
 "kachel": [
-76,
-17
+77,
+20
 ],
 "ebene": 0,
 "begleiter": true
 },
 {
-"datei": "varianten/bg32_m.png",
-"basis": "bg32",
-"x": 639,
-"y": 342,
-"fuss": 25,
+"datei": "varianten/bg02_m.png",
+"basis": "bg02",
+"x": 638,
+"y": 343,
+"fuss": 24,
 "kachel": [
 40,
 22
@@ -481,50 +481,24 @@
 "begleiter": true
 },
 {
-"datei": "varianten/bg49_m.png",
+"datei": "varianten/bg49.png",
 "basis": "bg49",
-"x": 890,
+"x": 802,
 "y": 743,
 "fuss": 24,
 "kachel": [
-56,
+51,
 47
 ],
 "ebene": 0,
 "begleiter": true
 },
 {
-"datei": "varianten/bg26.png",
-"basis": "bg26",
-"x": 194,
-"y": 747,
-"fuss": 20,
-"kachel": [
-13,
-47
-],
-"ebene": 1,
-"begleiter": true
-},
-{
-"datei": "varianten/bg03_m.png",
+"datei": "varianten/bg03.png",
 "basis": "bg03",
-"x": 227,
-"y": 724,
+"x": 442,
+"y": 804,
 "fuss": 27,
-"kachel": [
-15,
-46
-],
-"ebene": 0,
-"begleiter": true
-},
-{
-"datei": "varianten/bg57.png",
-"basis": "bg57",
-"x": 443,
-"y": 811,
-"fuss": 20,
 "kachel": [
 28,
 51
@@ -533,24 +507,37 @@
 "begleiter": true
 },
 {
-"datei": "varianten/bg03_m.png",
-"basis": "bg03",
-"x": 490,
-"y": 820,
-"fuss": 27,
+"datei": "varianten/bg11_m.png",
+"basis": "bg11",
+"x": 482,
+"y": 825,
+"fuss": 22,
 "kachel": [
-31,
+30,
 52
 ],
 "ebene": 0,
 "begleiter": true
 },
 {
-"datei": "varianten/bg48_m.png",
-"basis": "bg48",
-"x": 569,
-"y": 858,
-"fuss": 21,
+"datei": "varianten/bg19.png",
+"basis": "bg19",
+"x": 528,
+"y": 872,
+"fuss": 23,
+"kachel": [
+34,
+55
+],
+"ebene": 0,
+"begleiter": true
+},
+{
+"datei": "varianten/bg16_m.png",
+"basis": "bg16",
+"x": 571,
+"y": 860,
+"fuss": 19,
 "kachel": [
 36,
 54
@@ -559,24 +546,11 @@
 "begleiter": true
 },
 {
-"datei": "varianten/bg18_m.png",
-"basis": "bg18",
-"x": 546,
-"y": 826,
-"fuss": 21,
-"kachel": [
-35,
-52
-],
-"ebene": 1,
-"begleiter": true
-},
-{
-"datei": "varianten/bg57.png",
-"basis": "bg57",
-"x": 1195,
-"y": 699,
-"fuss": 20,
+"datei": "varianten/bg49.png",
+"basis": "bg49",
+"x": 1193,
+"y": 695,
+"fuss": 24,
 "kachel": [
 75,
 44
@@ -585,24 +559,37 @@
 "begleiter": true
 },
 {
-"datei": "varianten/bg11_m.png",
-"basis": "bg11",
-"x": 1242,
-"y": 713,
-"fuss": 22,
+"datei": "varianten/bg33.png",
+"basis": "bg33",
+"x": 1152,
+"y": 708,
+"fuss": 27,
 "kachel": [
-78,
+72,
 45
 ],
 "ebene": 0,
 "begleiter": true
 },
 {
-"datei": "varianten/bg16_m.png",
-"basis": "bg16",
+"datei": "varianten/bg57.png",
+"basis": "bg57",
+"x": 1219,
+"y": 859,
+"fuss": 20,
+"kachel": [
+76,
+54
+],
+"ebene": 0,
+"begleiter": true
+},
+{
+"datei": "varianten/bg24_m.png",
+"basis": "bg24",
 "x": 1274,
-"y": 908,
-"fuss": 19,
+"y": 905,
+"fuss": 22,
 "kachel": [
 80,
 57
@@ -611,24 +598,11 @@
 "begleiter": true
 },
 {
-"datei": "varianten/bg57.png",
-"basis": "bg57",
-"x": 1227,
-"y": 875,
+"datei": "varianten/bg26.png",
+"basis": "bg26",
+"x": 925,
+"y": 1003,
 "fuss": 20,
-"kachel": [
-77,
-55
-],
-"ebene": 0,
-"begleiter": true
-},
-{
-"datei": "varianten/bg24.png",
-"basis": "bg24",
-"x": 926,
-"y": 1001,
-"fuss": 22,
 "kachel": [
 58,
 63
@@ -637,14 +611,14 @@
 "begleiter": true
 },
 {
-"datei": "varianten/bg41_m.png",
-"basis": "bg41",
-"x": 964,
-"y": 1003,
-"fuss": 20,
+"datei": "varianten/bg09_m.png",
+"basis": "bg09",
+"x": 965,
+"y": 984,
+"fuss": 23,
 "kachel": [
 61,
-63
+62
 ],
 "ebene": 0,
 "begleiter": true
@@ -824,24 +798,11 @@
 "streu": true
 },
 {
-"datei": "varianten/bg18.png",
+"datei": "varianten/bg18_m.png",
 "basis": "bg18",
-"x": 1000,
-"y": 1194,
+"x": 1453,
+"y": 602,
 "fuss": 21,
-"kachel": [
-63,
-75
-],
-"ebene": 1,
-"streu": true
-},
-{
-"datei": "varianten/bg32_m.png",
-"basis": "bg32",
-"x": 1454,
-"y": 598,
-"fuss": 25,
 "kachel": [
 91,
 38
@@ -850,11 +811,11 @@
 "streu": true
 },
 {
-"datei": "varianten/bg09_m.png",
-"basis": "bg09",
-"x": 726,
-"y": 584,
-"fuss": 23,
+"datei": "varianten/bg32_m.png",
+"basis": "bg32",
+"x": 727,
+"y": 582,
+"fuss": 25,
 "kachel": [
 46,
 37
@@ -863,9 +824,22 @@
 "streu": true
 },
 {
+"datei": "varianten/bg09_m.png",
+"basis": "bg09",
+"x": 1020,
+"y": 1192,
+"fuss": 23,
+"kachel": [
+64,
+75
+],
+"ebene": 1,
+"streu": true
+},
+{
 "datei": "varianten/bg49_m.png",
 "basis": "bg49",
-"x": 76,
+"x": 75,
 "y": 679,
 "fuss": 24,
 "kachel": [
@@ -876,9 +850,9 @@
 "streu": true
 },
 {
-"datei": "varianten/gras3_m.png",
+"datei": "varianten/gras3.png",
 "basis": "gras3",
-"x": 1275,
+"x": 1270,
 "y": 1188,
 "fuss": 27,
 "kachel": [
@@ -904,7 +878,7 @@
 {
 "datei": "varianten/bg40.png",
 "basis": "bg40",
-"x": 629,
+"x": 633,
 "y": 675,
 "fuss": 28,
 "kachel": [
@@ -915,37 +889,13 @@
 "streu": true
 },
 {
-"datei": "varianten/be01_m.png",
-"basis": "be01",
-"x": 141,
-"y": 28,
-"fuss": 51,
+"datei": "varianten/be12_m.png",
+"basis": "be12",
+"x": 178,
+"y": 27,
+"fuss": 52,
 "kachel": [
-10,
-4
-],
-"ebene": 1
-},
-{
-"datei": "varianten/be00.png",
-"basis": "be00",
-"x": 1138,
-"y": 4,
-"fuss": 59,
-"kachel": [
-72,
-3
-],
-"ebene": 1
-},
-{
-"datei": "varianten/be14_m.png",
-"basis": "be14",
-"x": 444,
-"y": 26,
-"fuss": 53,
-"kachel": [
-29,
+12,
 4
 ],
 "ebene": 1
@@ -953,49 +903,401 @@
 {
 "datei": "varianten/be13.png",
 "basis": "be13",
-"x": 46,
-"y": 418,
+"x": 410,
+"y": 2,
 "fuss": 61,
 "kachel": [
-4,
-29
-],
-"ebene": 1
-},
-{
-"datei": "varianten/be14_m.png",
-"basis": "be14",
-"x": 909,
-"y": 10,
-"fuss": 53,
-"kachel": [
-58,
+27,
 3
 ],
 "ebene": 1
 },
 {
+"datei": "varianten/be03_m.png",
+"basis": "be03",
+"x": 1180,
+"y": 4,
+"fuss": 59,
+"kachel": [
+75,
+3
+],
+"ebene": 1
+},
+{
+"datei": "varianten/be06_m.png",
+"basis": "be06",
+"x": 974,
+"y": 13,
+"fuss": 50,
+"kachel": [
+62,
+3
+],
+"ebene": 1
+},
+{
+"datei": "varianten/be00.png",
+"basis": "be00",
+"x": 26,
+"y": 420,
+"fuss": 59,
+"kachel": [
+3,
+29
+],
+"ebene": 1
+},
+{
+"datei": "varianten/kristall_m.png",
+"basis": "kristall",
+"x": 1234,
+"y": 120,
+"fuss": 21,
+"kachel": [
+77,
+8
+],
+"ebene": 0,
+"streu": true,
+"liegend": false,
+"anim": "glitzern",
+"glitzer": "cyan"
+},
+{
 "datei": "varianten/knochen_k_m.png",
 "basis": "knochen_k",
-"x": 862,
-"y": 778,
+"x": 842,
+"y": 395,
 "fuss": 20,
 "kachel": [
-54,
-49
+53,
+25
 ],
 "ebene": 0,
 "streu": true,
 "liegend": true
 },
 {
+"datei": "varianten/gras3_m.png",
+"basis": "gras3",
+"x": 795,
+"y": 817,
+"fuss": 27,
+"kachel": [
+50,
+52
+],
+"ebene": 0,
+"streu": true,
+"liegend": false
+},
+{
+"datei": "varianten/gras_m.png",
+"basis": "gras",
+"x": 220,
+"y": 357,
+"fuss": 25,
+"kachel": [
+14,
+23
+],
+"ebene": 0,
+"streu": true,
+"liegend": false
+},
+{
+"datei": "varianten/knochen_k.png",
+"basis": "knochen_k",
+"x": 399,
+"y": 267,
+"fuss": 20,
+"kachel": [
+25,
+17
+],
+"ebene": 0,
+"streu": true,
+"liegend": true
+},
+{
+"datei": "varianten/gras.png",
+"basis": "gras",
+"x": 1022,
+"y": 342,
+"fuss": 25,
+"kachel": [
+64,
+22
+],
+"ebene": 0,
+"streu": true,
+"liegend": false
+},
+{
+"datei": "varianten/kiesel.png",
+"basis": "kiesel",
+"x": 874,
+"y": 541,
+"fuss": 17,
+"kachel": [
+55,
+34
+],
+"ebene": 0,
+"streu": true,
+"liegend": false
+},
+{
 "datei": "varianten/kristall.png",
 "basis": "kristall",
-"x": 1195,
-"y": 1128,
+"x": 978,
+"y": 918,
 "fuss": 21,
 "kachel": [
-75,
+61,
+58
+],
+"ebene": 0,
+"streu": true,
+"liegend": false,
+"anim": "glitzern",
+"glitzer": "cyan"
+},
+{
+"datei": "varianten/kiesel.png",
+"basis": "kiesel",
+"x": 546,
+"y": 364,
+"fuss": 17,
+"kachel": [
+34,
+23
+],
+"ebene": 0,
+"streu": true,
+"liegend": false
+},
+{
+"datei": "varianten/stein_m.png",
+"basis": "stein",
+"x": 427,
+"y": 377,
+"fuss": 17,
+"kachel": [
+27,
+24
+],
+"ebene": 0,
+"streu": true,
+"liegend": false
+},
+{
+"datei": "varianten/kristall.png",
+"basis": "kristall",
+"x": 443,
+"y": 1142,
+"fuss": 21,
+"kachel": [
+28,
+72
+],
+"ebene": 0,
+"streu": true,
+"liegend": false,
+"anim": "glitzern",
+"glitzer": "cyan"
+},
+{
+"datei": "varianten/gras2.png",
+"basis": "gras2",
+"x": 1225,
+"y": 385,
+"fuss": 25,
+"kachel": [
+77,
+25
+],
+"ebene": 0,
+"streu": true,
+"liegend": false
+},
+{
+"datei": "varianten/gras3_m.png",
+"basis": "gras3",
+"x": 1080,
+"y": 274,
+"fuss": 27,
+"kachel": [
+68,
+18
+],
+"ebene": 0,
+"streu": true,
+"liegend": false
+},
+{
+"datei": "varianten/gras2.png",
+"basis": "gras2",
+"x": 1163,
+"y": 774,
+"fuss": 25,
+"kachel": [
+73,
+49
+],
+"ebene": 0,
+"streu": true,
+"liegend": false
+},
+{
+"datei": "varianten/gras_m.png",
+"basis": "gras",
+"x": 423,
+"y": 660,
+"fuss": 25,
+"kachel": [
+27,
+42
+],
+"ebene": 0,
+"streu": true,
+"liegend": false
+},
+{
+"datei": "varianten/gras2.png",
+"basis": "gras2",
+"x": 782,
+"y": 262,
+"fuss": 25,
+"kachel": [
+49,
+17
+],
+"ebene": 0,
+"streu": true,
+"liegend": false
+},
+{
+"datei": "varianten/zweig_m.png",
+"basis": "zweig",
+"x": 792,
+"y": 1011,
+"fuss": 25,
+"kachel": [
+50,
+64
+],
+"ebene": 0,
+"streu": true,
+"liegend": true
+},
+{
+"datei": "varianten/stein_m.png",
+"basis": "stein",
+"x": 413,
+"y": 907,
+"fuss": 17,
+"kachel": [
+26,
+57
+],
+"ebene": 0,
+"streu": true,
+"liegend": false
+},
+{
+"datei": "varianten/knochen_k.png",
+"basis": "knochen_k",
+"x": 1275,
+"y": 712,
+"fuss": 20,
+"kachel": [
+80,
+45
+],
+"ebene": 0,
+"streu": true,
+"liegend": true
+},
+{
+"datei": "varianten/stein.png",
+"basis": "stein",
+"x": 893,
+"y": 778,
+"fuss": 17,
+"kachel": [
+56,
+49
+],
+"ebene": 0,
+"streu": true,
+"liegend": false
+},
+{
+"datei": "varianten/gras3_m.png",
+"basis": "gras3",
+"x": 246,
+"y": 191,
+"fuss": 27,
+"kachel": [
+16,
+13
+],
+"ebene": 0,
+"streu": true,
+"liegend": false
+},
+{
+"datei": "varianten/knochen_k_m.png",
+"basis": "knochen_k",
+"x": 1210,
+"y": 235,
+"fuss": 20,
+"kachel": [
+76,
+15
+],
+"ebene": 0,
+"streu": true,
+"liegend": true
+},
+{
+"datei": "varianten/kiesel_m.png",
+"basis": "kiesel",
+"x": 844,
+"y": 204,
+"fuss": 17,
+"kachel": [
+53,
+13
+],
+"ebene": 0,
+"streu": true,
+"liegend": false
+},
+{
+"datei": "varianten/gras2_m.png",
+"basis": "gras2",
+"x": 303,
+"y": 309,
+"fuss": 25,
+"kachel": [
+19,
+20
+],
+"ebene": 0,
+"streu": true,
+"liegend": false
+},
+{
+"datei": "varianten/kristall_m.png",
+"basis": "kristall",
+"x": 1231,
+"y": 1125,
+"fuss": 21,
+"kachel": [
+77,
 71
 ],
 "ebene": 0,
@@ -1005,28 +1307,28 @@
 "glitzer": "cyan"
 },
 {
-"datei": "varianten/stein_m.png",
-"basis": "stein",
-"x": 1136,
-"y": 779,
-"fuss": 17,
+"datei": "varianten/gras3.png",
+"basis": "gras3",
+"x": 550,
+"y": 738,
+"fuss": 27,
 "kachel": [
-71,
-49
+35,
+47
 ],
 "ebene": 0,
 "streu": true,
 "liegend": false
 },
 {
-"datei": "varianten/kiesel.png",
-"basis": "kiesel",
-"x": 786,
-"y": 1148,
-"fuss": 17,
+"datei": "varianten/gras.png",
+"basis": "gras",
+"x": 959,
+"y": 854,
+"fuss": 25,
 "kachel": [
-49,
-72
+60,
+54
 ],
 "ebene": 0,
 "streu": true,
@@ -1035,169 +1337,27 @@
 {
 "datei": "varianten/kristall_m.png",
 "basis": "kristall",
-"x": 1196,
-"y": 789,
+"x": 560,
+"y": 249,
 "fuss": 21,
 "kachel": [
-75,
-50
+35,
+16
 ],
 "ebene": 0,
 "streu": true,
 "liegend": false,
 "anim": "glitzern",
 "glitzer": "cyan"
-},
-{
-"datei": "varianten/kiesel.png",
-"basis": "kiesel",
-"x": 1200,
-"y": 105,
-"fuss": 17,
-"kachel": [
-75,
-7
-],
-"ebene": 0,
-"streu": true,
-"liegend": false
 },
 {
 "datei": "varianten/stein_m.png",
 "basis": "stein",
-"x": 1018,
-"y": 362,
+"x": 1055,
+"y": 220,
 "fuss": 17,
 "kachel": [
-64,
-23
-],
-"ebene": 0,
-"streu": true,
-"liegend": false
-},
-{
-"datei": "varianten/gras2.png",
-"basis": "gras2",
-"x": 408,
-"y": 353,
-"fuss": 25,
-"kachel": [
-26,
-23
-],
-"ebene": 0,
-"streu": true,
-"liegend": false
-},
-{
-"datei": "varianten/gras3.png",
-"basis": "gras3",
-"x": 844,
-"y": 834,
-"fuss": 27,
-"kachel": [
-53,
-53
-],
-"ebene": 0,
-"streu": true,
-"liegend": false
-},
-{
-"datei": "varianten/gras_m.png",
-"basis": "gras",
-"x": 1209,
-"y": 580,
-"fuss": 25,
-"kachel": [
-76,
-37
-],
-"ebene": 0,
-"streu": true,
-"liegend": false
-},
-{
-"datei": "varianten/knochen_k_m.png",
-"basis": "knochen_k",
-"x": 636,
-"y": 1019,
-"fuss": 20,
-"kachel": [
-40,
-64
-],
-"ebene": 0,
-"streu": true,
-"liegend": true
-},
-{
-"datei": "varianten/kristall_m.png",
-"basis": "kristall",
-"x": 301,
-"y": 278,
-"fuss": 21,
-"kachel": [
-19,
-18
-],
-"ebene": 0,
-"streu": true,
-"liegend": false,
-"anim": "glitzern",
-"glitzer": "cyan"
-},
-{
-"datei": "varianten/kiesel_m.png",
-"basis": "kiesel",
-"x": 526,
-"y": 270,
-"fuss": 17,
-"kachel": [
-33,
-17
-],
-"ebene": 0,
-"streu": true,
-"liegend": false
-},
-{
-"datei": "varianten/knochen_k.png",
-"basis": "knochen_k",
-"x": 368,
-"y": 1002,
-"fuss": 20,
-"kachel": [
-23,
-63
-],
-"ebene": 0,
-"streu": true,
-"liegend": true
-},
-{
-"datei": "varianten/gras3.png",
-"basis": "gras3",
-"x": 490,
-"y": 340,
-"fuss": 27,
-"kachel": [
-31,
-22
-],
-"ebene": 0,
-"streu": true,
-"liegend": false
-},
-{
-"datei": "varianten/gras_m.png",
-"basis": "gras",
-"x": 425,
-"y": 210,
-"fuss": 25,
-"kachel": [
-27,
+66,
 14
 ],
 "ebene": 0,
@@ -1205,42 +1365,28 @@
 "liegend": false
 },
 {
-"datei": "varianten/knochen_k.png",
-"basis": "knochen_k",
-"x": 555,
-"y": 744,
-"fuss": 20,
+"datei": "varianten/zweig_m.png",
+"basis": "zweig",
+"x": 1001,
+"y": 692,
+"fuss": 25,
 "kachel": [
-35,
-47
+63,
+44
 ],
 "ebene": 0,
 "streu": true,
 "liegend": true
 },
 {
-"datei": "varianten/kiesel_m.png",
-"basis": "kiesel",
-"x": 1260,
-"y": 990,
+"datei": "varianten/stein_m.png",
+"basis": "stein",
+"x": 576,
+"y": 121,
 "fuss": 17,
 "kachel": [
-79,
-62
-],
-"ebene": 0,
-"streu": true,
-"liegend": false
-},
-{
-"datei": "varianten/gras_m.png",
-"basis": "gras",
-"x": 313,
-"y": 916,
-"fuss": 25,
-"kachel": [
-20,
-58
+36,
+8
 ],
 "ebene": 0,
 "streu": true,
@@ -1249,9 +1395,23 @@
 {
 "datei": "varianten/knochen_k.png",
 "basis": "knochen_k",
-"x": 1114,
-"y": 136,
+"x": 137,
+"y": 343,
 "fuss": 20,
+"kachel": [
+9,
+22
+],
+"ebene": 0,
+"streu": true,
+"liegend": true
+},
+{
+"datei": "varianten/zweig_m.png",
+"basis": "zweig",
+"x": 1114,
+"y": 131,
+"fuss": 25,
 "kachel": [
 70,
 9
@@ -1261,140 +1421,14 @@
 "liegend": true
 },
 {
-"datei": "varianten/gras2_m.png",
-"basis": "gras2",
-"x": 1007,
-"y": 917,
-"fuss": 25,
-"kachel": [
-63,
-58
-],
-"ebene": 0,
-"streu": true,
-"liegend": false
-},
-{
-"datei": "varianten/knochen_k_m.png",
-"basis": "knochen_k",
-"x": 830,
-"y": 166,
-"fuss": 20,
-"kachel": [
-52,
-11
-],
-"ebene": 0,
-"streu": true,
-"liegend": true
-},
-{
-"datei": "varianten/gras.png",
-"basis": "gras",
-"x": 968,
-"y": 550,
-"fuss": 25,
-"kachel": [
-61,
-35
-],
-"ebene": 0,
-"streu": true,
-"liegend": false
-},
-{
-"datei": "varianten/gras3.png",
+"datei": "varianten/gras3_m.png",
 "basis": "gras3",
-"x": 1206,
-"y": 194,
+"x": 631,
+"y": 212,
 "fuss": 27,
 "kachel": [
-76,
-13
-],
-"ebene": 0,
-"streu": true,
-"liegend": false
-},
-{
-"datei": "varianten/kiesel_m.png",
-"basis": "kiesel",
-"x": 428,
-"y": 606,
-"fuss": 17,
-"kachel": [
-27,
-38
-],
-"ebene": 0,
-"streu": true,
-"liegend": false
-},
-{
-"datei": "varianten/knochen_k_m.png",
-"basis": "knochen_k",
-"x": 251,
-"y": 187,
-"fuss": 20,
-"kachel": [
-16,
-12
-],
-"ebene": 0,
-"streu": true,
-"liegend": true
-},
-{
-"datei": "varianten/stein_m.png",
-"basis": "stein",
-"x": 399,
-"y": 125,
-"fuss": 17,
-"kachel": [
-25,
-8
-],
-"ebene": 0,
-"streu": true,
-"liegend": false
-},
-{
-"datei": "varianten/gras.png",
-"basis": "gras",
-"x": 745,
-"y": 820,
-"fuss": 25,
-"kachel": [
-47,
-52
-],
-"ebene": 0,
-"streu": true,
-"liegend": false
-},
-{
-"datei": "varianten/zweig.png",
-"basis": "zweig",
-"x": 471,
-"y": 978,
-"fuss": 25,
-"kachel": [
-30,
-62
-],
-"ebene": 0,
-"streu": true,
-"liegend": true
-},
-{
-"datei": "varianten/gras.png",
-"basis": "gras",
-"x": 1128,
-"y": 227,
-"fuss": 25,
-"kachel": [
-71,
-15
+40,
+14
 ],
 "ebene": 0,
 "streu": true,
@@ -1403,54 +1437,26 @@
 {
 "datei": "varianten/zweig_m.png",
 "basis": "zweig",
-"x": 413,
-"y": 662,
+"x": 489,
+"y": 993,
 "fuss": 25,
 "kachel": [
-26,
-42
+31,
+63
 ],
 "ebene": 0,
 "streu": true,
 "liegend": true
 },
 {
-"datei": "varianten/gras3.png",
-"basis": "gras3",
-"x": 742,
-"y": 319,
-"fuss": 27,
-"kachel": [
-47,
-21
-],
-"ebene": 0,
-"streu": true,
-"liegend": false
-},
-{
-"datei": "varianten/gras2.png",
-"basis": "gras2",
-"x": 824,
-"y": 337,
-"fuss": 25,
-"kachel": [
-52,
-22
-],
-"ebene": 0,
-"streu": true,
-"liegend": false
-},
-{
 "datei": "varianten/kristall_m.png",
 "basis": "kristall",
-"x": 925,
-"y": 375,
+"x": 955,
+"y": 358,
 "fuss": 21,
 "kachel": [
-58,
-24
+60,
+23
 ],
 "ebene": 0,
 "streu": true,
@@ -1459,98 +1465,70 @@
 "glitzer": "cyan"
 },
 {
-"datei": "varianten/gras3_m.png",
+"datei": "varianten/gras3.png",
 "basis": "gras3",
-"x": 1001,
-"y": 289,
+"x": 1290,
+"y": 194,
 "fuss": 27,
 "kachel": [
-63,
-19
+81,
+13
 ],
 "ebene": 0,
 "streu": true,
 "liegend": false
-},
-{
-"datei": "varianten/knochen_k_m.png",
-"basis": "knochen_k",
-"x": 846,
-"y": 488,
-"fuss": 20,
-"kachel": [
-53,
-31
-],
-"ebene": 0,
-"streu": true,
-"liegend": true
-},
-{
-"datei": "varianten/kiesel.png",
-"basis": "kiesel",
-"x": 202,
-"y": 302,
-"fuss": 17,
-"kachel": [
-13,
-19
-],
-"ebene": 0,
-"streu": true,
-"liegend": false
-},
-{
-"datei": "varianten/stein.png",
-"basis": "stein",
-"x": 925,
-"y": 889,
-"fuss": 17,
-"kachel": [
-58,
-56
-],
-"ebene": 0,
-"streu": true,
-"liegend": false
-},
-{
-"datei": "varianten/knochen_k.png",
-"basis": "knochen_k",
-"x": 538,
-"y": 155,
-"fuss": 20,
-"kachel": [
-34,
-10
-],
-"ebene": 0,
-"streu": true,
-"liegend": true
 },
 {
 "datei": "varianten/gras.png",
 "basis": "gras",
-"x": 137,
-"y": 340,
+"x": 361,
+"y": 966,
 "fuss": 25,
 "kachel": [
-9,
-22
+23,
+61
 ],
 "ebene": 0,
 "streu": true,
 "liegend": false
 },
 {
-"datei": "varianten/wg_a.png",
+"datei": "varianten/gras3_m.png",
+"basis": "gras3",
+"x": 862,
+"y": 292,
+"fuss": 27,
+"kachel": [
+54,
+19
+],
+"ebene": 0,
+"streu": true,
+"liegend": false
+},
+{
+"datei": "varianten/zweig.png",
+"basis": "zweig",
+"x": 232,
+"y": 134,
+"fuss": 25,
+"kachel": [
+15,
+9
+],
+"ebene": 0,
+"streu": true,
+"liegend": true
+},
+{
+"datei": "varianten/wg_a_m.png",
 "basis": "wg_a",
-"x": 1013,
-"y": 784,
+"x": 293,
+"y": 80,
 "fuss": 79,
 "kachel": [
-65,
-53
+20,
+9
 ],
 "ebene": 0,
 "anim": "tornado",
@@ -1558,14 +1536,14 @@
 "phase": 0.0
 },
 {
-"datei": "varianten/wm_a_m.png",
+"datei": "varianten/wm_a.png",
 "basis": "wm_a",
-"x": 344,
-"y": 214,
+"x": 1064,
+"y": 102,
 "fuss": 57,
 "kachel": [
-22,
-16
+67,
+9
 ],
 "ebene": 0,
 "anim": "tornado",
@@ -1573,14 +1551,14 @@
 "phase": 1.7
 },
 {
-"datei": "varianten/wk_a.png",
+"datei": "varianten/wk_a_m.png",
 "basis": "wk_a",
-"x": 790,
-"y": 775,
+"x": 870,
+"y": 855,
 "fuss": 40,
 "kachel": [
-50,
-50
+55,
+55
 ],
 "ebene": 0,
 "anim": "tornado",
@@ -1590,11 +1568,11 @@
 {
 "datei": "varianten/wg_b_m.png",
 "basis": "wg_b",
-"x": 1248,
+"x": 1216,
 "y": 754,
 "fuss": 77,
 "kachel": [
-80,
+78,
 51
 ],
 "ebene": 0,
@@ -1605,12 +1583,12 @@
 {
 "datei": "varianten/wm_b_m.png",
 "basis": "wm_b",
-"x": 1186,
-"y": 127,
+"x": 450,
+"y": 927,
 "fuss": 48,
 "kachel": [
-75,
-10
+29,
+60
 ],
 "ebene": 0,
 "anim": "tornado",
@@ -1620,12 +1598,12 @@
 {
 "datei": "varianten/wk_b.png",
 "basis": "wk_b",
-"x": 906,
-"y": 311,
+"x": 250,
+"y": 343,
 "fuss": 40,
 "kachel": [
-57,
-21
+16,
+23
 ],
 "ebene": 0,
 "anim": "tornado",
@@ -1633,14 +1611,14 @@
 "phase": 8.5
 },
 {
-"datei": "varianten/wm_c.png",
+"datei": "varianten/wm_c_m.png",
 "basis": "wm_c",
-"x": 744,
-"y": 984,
+"x": 888,
+"y": 360,
 "fuss": 55,
 "kachel": [
-47,
-64
+56,
+25
 ],
 "ebene": 0,
 "anim": "tornado",
@@ -1648,14 +1626,14 @@
 "phase": 10.2
 },
 {
-"datei": "varianten/wk_c.png",
+"datei": "varianten/wk_c_m.png",
 "basis": "wk_c",
-"x": 388,
-"y": 1129,
+"x": 356,
+"y": 1145,
 "fuss": 38,
 "kachel": [
-25,
-72
+23,
+73
 ],
 "ebene": 0,
 "anim": "tornado",
@@ -1665,12 +1643,12 @@
 {
 "datei": "varianten/wg_c.png",
 "basis": "wg_c",
-"x": 401,
-"y": 873,
+"x": 433,
+"y": 553,
 "fuss": 86,
 "kachel": [
-27,
-59
+29,
+39
 ],
 "ebene": 0,
 "anim": "tornado",
@@ -1678,14 +1656,14 @@
 "phase": 13.6
 },
 {
-"datei": "varianten/wm_d_m.png",
+"datei": "varianten/wm_d.png",
 "basis": "wm_d",
-"x": 1108,
-"y": 1135,
+"x": 1140,
+"y": 287,
 "fuss": 48,
 "kachel": [
-70,
-73
+72,
+20
 ],
 "ebene": 0,
 "anim": "tornado",
@@ -1693,14 +1671,14 @@
 "phase": 15.299999999999999
 },
 {
-"datei": "varianten/wk_d_m.png",
+"datei": "varianten/wk_d.png",
 "basis": "wk_d",
-"x": 456,
-"y": 615,
+"x": 696,
+"y": 199,
 "fuss": 40,
 "kachel": [
-29,
-40
+44,
+14
 ],
 "ebene": 0,
 "anim": "tornado",
