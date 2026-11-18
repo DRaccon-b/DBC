@@ -21,7 +21,7 @@ ANIM = {
     },
     'karte53': {
         'k18s/00': {'anim': 'leuchten', 'licht': [10, 10], 'licht_box': [2, 5, 18, 16], 'licht_r': 7},
-        'k18s/01': {'anim': 'leuchten', 'licht': [10, 11], 'licht_box': [2, 5, 18, 17], 'licht_r': 7},
+        'k18s/01': {'anim': 'leuchten', 'licht': [14, 15], 'licht_box': [3, 9, 25, 22], 'licht_r': 9},   # neuer Automat (Karte 52)
     },
     'karte21': {   # Fernseher flimmern, Zirkuszelt-Wimpel wehen
         'tv/00': {'anim': 'bildschirm', 'schirm': [[4, 9, 20, 22]]},

@@ -43,9 +43,25 @@ for n_, (i, f) in {'zelt': (0, 0.75), 'lkw': (1, 0.75), 'vorrat': (2, 0.6)}.item
     FREMD['evak/' + n_] = ('karte53/gross/%02d.png' % i, f)
 for n_, (i, f) in {'ranke': ('07', 0.6), 'blasen': ('04b', 0.7), 'kapsel': ('11', 0.55)}.items():   # D-Reaper wie im Anime
     FREMD['reaper/' + n_] = ('karte52/anime/%s.png' % i, f)
+# Nutzer (Karte 52): nie herunterskalieren -> Evakuierungs-Kleinkram neu in Zielgroesse (PixelLab k53_n32/n48/n48b),
+# grosse Objekte (Zelt, LKW, Vorraete) frontal in Originalgroesse, D-Reaper-Auslaeufer und Stadtmobiliar wie Karte 52
+NEU = {'evak/bett': 'karte53/n48/00.png', 'evak/sandsack': 'karte53/n48/01.png', 'evak/gepaeck': 'karte53/n48/02.png',
+       'evak/schild': 'karte53/n48/03.png', 'evak/kisten': 'karte53/n48/04.png', 'evak/flutlicht': 'karte53/n48/05.png',
+       'evak/tisch': 'karte53/n48/06.png', 'evak/generator': 'karte53/n32/40.png', 'evak/kegel': 'karte53/n48b/02.png',
+       'evak/wasser': 'karte53/n48b/00.png', 'evak/sperre': 'karte53/n48b/01.png', 'evak/kocher': 'karte53/n32/04.png',
+       'evak/rucksack': 'karte53/n32/03.png', 'evak/kanister': 'karte53/n32/00.png', 'evak/kuehlbox': 'karte53/n32/01.png',
+       'evak/schlafsack': 'karte53/n32/02.png', 'evak/zelt': 'karte53/gross/00.png', 'evak/lkw': 'karte53/gross/01.png',
+       'evak/vorrat': 'karte53/gross/02.png',
+       'reaper/ranke': 'karte52/n48/06.png', 'reaper/blasen': 'karte52/n48b/06.png', 'reaper/kapsel': 'karte52/n48b/02.png',
+       'k18s/18': 'karte52/n48/00.png', 'k18s/13': 'karte52/n32/06.png', 'k18s/01': 'karte52/n48/07.png',
+       'k18s/12': 'karte52/n32/05.png', 'k18s/41': 'karte52/n48b/05.png',
+       'k18a/02': 'karte52/n64/02.png', 'k18a/05': 'karte52/n64/03.png'}
+for n_, q in NEU.items():
+    FREMD[n_] = (q, 1)
+assert all(f == 1 for (_, f) in FREMD.values())                         # nie herunterskalieren
 WALD = ['k01/baum%02d' % i for i in (0, 1, 2, 4, 9, 15)]
 BUSCH = ['k01/baum%02d' % i for i in (12, 13, 14)]
-LAMPE = {'anim': 'leuchten', 'licht': [4, 7], 'licht_box': [2, 5, 6, 10], 'licht_r': 9}
+LAMPE = {'anim': 'lampe'}                                       # grosse PixelLab-Laterne (Karte 52): Glaskopf leuchtet
 # Gebaeude: Flaeche aus dem Layout, Haelfte, Fassade
 GEB = {'glas_gross': 'halb/glas_gross', 'glas_mitte': 'halb/glas_mitte', 'beige': 'halb/beige',
        'lila_rechts': 'halb/lila', 'lila_links': 'halb/lila', 'glas_zentrum': 'halb/glas'}
@@ -57,7 +73,7 @@ def kopieren(name, quelle, f):
     im = Image.open(os.path.join(ROOT, 'assets', 'objekte', quelle)).convert('RGBA')
     im = im.crop(im.getbbox())
     if f != 1:
-        im = im.resize((max(1, round(im.width * f)), max(1, round(im.height * f))), Image.NEAREST)
+        raise ValueError('nie herunterskalieren: %s' % name)
     im.save(ziel)
 
 
@@ -272,31 +288,31 @@ def main():
     for (tx, ty) in ((27, 44), (37, 36), (62, 60 + 2), (71, 37), (36, 76), (85, 64), (5, 24 - 2), (58, 20)):
         kachel('k18s/18', tx + P, ty + P, dict(LAMPE), weit=2)
     for (n_, tx, ty) in (('k18s/12', 26, 49), ('k18s/00', 92, 29), ('k18s/12', 60, 31), ('k18s/01', 24, 31)):
-        kachel(n_, tx + P, ty + P, {}, weit=2)
+        kachel(n_, tx + P, ty + P, {}, weit=4)
     # ---------------------------------------------------------------- Evakuierung
     # Hilfslager (Block unten links): Zelt, Feldbetten, Vorraete, Wasserspender, Tisch
     for (n_, tx, ty, sp) in (('evak/zelt', 11, 68, False), ('evak/vorrat', 21, 67, False), ('evak/bett', 7, 74, False),
                              ('evak/schlafsack', 12, 75, False), ('evak/wasser', 17, 72, False), ('evak/kuehlbox', 16, 64, False),
                              ('evak/kocher', 25, 71, False), ('evak/schild', 26, 63, False)):
-        kachel(n_, tx + P, ty + P, {'anim': 'kerzen', 'flammen_box': [[12, 6, 20, 12]], 'flammen_alle': True, 'flammen_amp': 1} if n_ == 'evak/kocher' else {}, sp)
+        kachel(n_, tx + P, ty + P, {}, sp)
     # Sanitaetsposten (Block unten rechts): Generator, Flutlicht, Betten
     for (n_, tx, ty, sp) in (('evak/generator', 78, 64, False), ('evak/flutlicht', 82, 66, False),
                              ('evak/bett', 75, 70, False), ('evak/kanister', 80, 71, False), ('evak/kisten', 82, 73, False)):
-        kachel(n_, tx + P, ty + P, {'anim': 'leuchten', 'licht': [13, 4], 'licht_box': [0, 0, 26, 9], 'licht_r': 16}
-               if n_ == 'evak/flutlicht' else {'anim': 'maschine', 'leds': True, 'ruetteln': True, 'led_box': [[18, 22, 21, 25]]} if n_ == 'evak/generator' else {}, sp)
+        kachel(n_, tx + P, ty + P, {'anim': 'leuchten', 'licht': [18, 8], 'licht_box': [7, 1, 35, 17], 'licht_r': 18}
+               if n_ == 'evak/flutlicht' else {'anim': 'maschine', 'leds': True, 'ruetteln': True, 'led_box': [[15, 15, 23, 19]]} if n_ == 'evak/generator' else {}, sp)
     # Sperren und Zurueckgelassenes
     for (n_, tx, ty, sp) in (('evak/sandsack', 33, 22, False), ('evak/sperre', 9, 46, False), ('evak/kegel', 44, 66, False),
                              ('evak/sperre', 58, 69, True), ('evak/gepaeck', 19, 47, False), ('evak/rucksack', 48, 74, False),
                              ('evak/sandsack', 78, 48, True), ('evak/kegel', 88, 40, False), ('evak/gepaeck', 50, 35, True),
                              ('evak/schild', 39, 61, False), ('evak/kisten', 90, 22, True), ('evak/rucksack', 76, 37, True),
                              ('k18s/44', 61, 74, False), ('k18s/07', 13, 33, False)):
-        kachel(n_, tx + P, ty + P, {}, sp)
+        kachel(n_, tx + P, ty + P, {}, sp, weit=5)
     for i, (tx, ty) in enumerate(((44, 37), (13, 56 + 8), (84, 31))):
         kachel('k38/taube', tx + P, ty + P, {'ebene': 0}, i % 2 == 1)
     # D-Reaper-Auslaeufer: Ranken und Blasen direkt an den roten Flecken
     for (n_, tx, ty, sp) in (('reaper/ranke', 41, 12, False), ('reaper/blasen', 37, 13, True), ('reaper/ranke', 11, 22, True),
                              ('reaper/kapsel', 12, 19, False)):
-        kachel(n_, tx + P, ty + P, {}, sp, klassen='kn', weit=2)
+        kachel(n_, tx + P, ty + P, {}, sp, klassen='kn', weit=6)
     # ---------------------------------------------------------------- Baumguertel
     for ty in range(rows):
         for tx in range(cols):
