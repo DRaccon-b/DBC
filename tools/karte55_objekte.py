@@ -77,7 +77,7 @@ def new_york(L, x0, y0):
     taube = sprite('karte39/varianten/k38-taube.png', 'ny-taube')
     taube_m = sprite('karte39/varianten/k38-taube.png', 'ny-taube', spiegeln=True)
     setzen(L, taube, x0 + 12, y0 + 21, liegend=True, **S)
-    setzen(L, taube_m, x0 + 9, y0 + 11, liegend=True, **S)
+    setzen(L, taube_m, x0 + 9, y0 + 12, liegend=True, **S)
     zeitung = sprite('karte39/varianten/k38-zeitung.png', 'ny-zeitung')
     setzen(L, zeitung, x0 + 8, y0 + 20, liegend=True, **S)
     for (quelle, tx, ty) in (('k55_stadt/00.png', 6, 12), ('k55_stadt/01.png', 20, 11)):
