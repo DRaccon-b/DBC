@@ -2820,6 +2820,16 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'small cluster of purple and yellow wildflowers in dry grass, ' + FR14,
         'small reddish pebbles and stones lying on the ground, ' + FR14,
     ]},
+    # Praerie-Baeume fuer den Guertel (Nutzer: rechte Baeume praerieartig statt Kiefernwald)
+    'k55_baum': {'size': 48, 'freie_farben': True, 'items': [
+        'cottonwood tree of the american prairie, wide airy canopy of olive and yellow green leaf clumps, pale grey '
+        'trunk, dry summer, ' + FR14,
+        'rocky mountain juniper tree, scruffy bushy dark blue green foliage, twisted reddish brown trunk, ' + FR14,
+        'gambel scrub oak tree, small round dusty green canopy, short dark trunk, ' + FR14,
+        'dry prairie shrub, rabbitbrush with yellow flower tops and silver green stems, ' + FR14,
+        'large dense sagebrush bush, silver grey green, ' + FR14,
+        'small lone prairie tree with sparse dry olive leaves and a crooked trunk, ' + FR14,
+    ]},
     # New York: Strassenrand (Hydrant, Briefkasten, Zeitungsautomat)
     'k55_stadt': {'size': 32, 'freie_farben': True, 'items': [
         'red fire hydrant on a sidewalk, ' + FR14,

@@ -145,13 +145,14 @@ def guertel(L):
     rows, cols = kl.shape
     rs = np.random.RandomState(5557)
     wald = {'h': ['karte35/varianten/k01-baum%02d.png' % i for i in (0, 1, 2, 4, 15)],
-            'H': ['karte35/varianten/k01-baum09.png'] * 3 + ['karte35/varianten/k01-baum02.png']}
+            'H': ['karte55/baum/%02d.png' % i for i in (0, 0, 0, 1, 1, 2, 2, 5)]}    # Praerie (Nutzer)
     busch = {'h': ['karte35/varianten/k01-baum%02d.png' % i for i in (12, 13, 14)],
-             'H': ['karte55/land/06.png', 'karte35/varianten/k01-baum12.png']}
+             'H': ['karte55/baum/%02d.png' % i for i in (3, 4, 8, 13, 4, 8, 6)]}
     fremd = [_rechteck(o) for o in L]
 
     def versuch(quelle, tx, ty, art):
-        n = sprite(quelle, 'wald-' + os.path.basename(quelle)[:-4].replace('k01-', ''), spiegeln=bool(rs.randint(2)))
+        n = sprite(quelle, 'wald-' + quelle.split('/')[-2].replace('varianten', '') + os.path.basename(quelle)[:-4].replace('k01-', ''),
+                   spiegeln=bool(rs.randint(2)))
         o = setzen([], n, tx, ty, breite=1, anim='baum' if art == 'baum' else 'wehen')
         r = _rechteck(o)
         if r[0] < 0 or r[1] < 0 or r[2] > cols * T or r[3] > rows * T:
@@ -168,7 +169,7 @@ def guertel(L):
     n_b = n_s = 0
     for ty in range(rows):
         for tx in range(cols):
-            if kl[ty, tx] in 'hH' and (tx + ty) % 2 == 0:
+            if (kl[ty, tx] == 'h' and (tx + ty) % 2 == 0) or (kl[ty, tx] == 'H' and (tx + 2 * ty) % 3 == 0):
                 r = versuch(wald[kl[ty, tx]][rs.randint(len(wald[kl[ty, tx]]))], tx, ty, 'baum')
                 if r:
                     deck[r[1]:r[3], r[0]:r[2]] = True; n_b += 1
