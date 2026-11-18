@@ -50,7 +50,14 @@ KLEINFELS[:] = [2, 6, 14, 17, 25, 27, 28, 35, 44, 52, 53, 63]
 for _i in KLEINFELS:
     FREMD['kf%02d' % _i] = 'karte27/fels_klein/%02d.png' % _i
 FREMD['steinhaufen'] = 'karte04/mittel/15.png'
-WALD = ['b00', 'b03', 'b02', 'b00', 'b08', 'b03']          # Guertel: Akazien, dazwischen tote Baeume (wuestenartig)
+# Nutzer: neue trockene Baeume (PixelLab k44_baum): Affenbrotbaum, knorriger Savannenbaum, Schirmakazie, ausgebleichter
+# toter Baum, Herbstbaum, Strauchbaum, Dattelpalme, hohler Affenbrotbaum, Dornbaum, Doppelkrone, Rostbaum
+for _i in (0, 1, 2, 3, 4, 5, 7, 8, 9, 12, 13, 15):
+    FREMD['t%02d' % _i] = 'karte44/baum/%02d.png' % _i
+for _n, _q in (('b00', 't00'), ('b02', 't03'), ('b03', 't02'), ('b06', 't05'), ('b07', 't01'), ('b08', 't04')):
+    FREMD[_n] = FREMD[_q]                                    # Dorfbaeume der Vorlage -> neue Baeume
+FREMD['akazie_k'] = 'karte04/baeume/03.png'                  # kleine Akazie fuer den schmalen oberen Guertel
+WALD = ['t00', 't01', 't02', 't03', 't05', 't07', 't09', 't12', 't13', 't15', 't08', 't04']   # Guertel gemischt
 BUSCH = ['b12', 'b13']                                       # duerre Buesche fuellen den Guertel
 # Baeume der Vorlage (Sprite, Kachel-x, Fusszeile): Eichen, runde Baeume, Zypressen; dichte Gruppen aufgelockert
 BAEUME = [('b00', 21, 5), ('b03', 25, 5), ('b00', 24, 9), ('b08', 21, 10), ('b00', 12, 17), ('b03', 7, 17),
@@ -74,7 +81,8 @@ DEKO = [('stamm', 1010, 416), ('stamm', 475, 624), ('stamm', 300, 846), ('stamm'
 
 def main():
     lay = json.load(open(os.path.join(KARTE, 'layout.json')))
-    cls = [list(z) for z in lay['klassen']]
+    lay.setdefault('klassen_basis', lay['klassen'])                   # Trampelpfade nie aufsummieren: immer vom Basislayout
+    cls = [list(z) for z in lay['klassen_basis']]
     cols, rows = lay['groesse']
     lvl = np.load(os.path.join(KARTE, 'pixelhoehe.npy'))
     wand = np.unpackbits(np.load(os.path.join(KARTE, 'wand.npy')))[:lvl.size].reshape(lvl.shape).astype(bool)
@@ -111,7 +119,8 @@ def main():
             if any(schnitt((r[0], r[3] - 8, r[2], r[3]), (t['x'] * T, t['y'] * T, (t['x'] + t['b']) * T - 1,
                                                           (t['y'] + t['h']) * T - 1), 1) for t in lay['teleporter']):
                 return None                                          # nur der Fuss nie auf dem Teleporter
-            if (lvl[r[3] - 2:min(r[3] + 3, lvl.shape[0]), r[0] + 6:r[2] - 5] != 2).any():
+            unten_ = 1 if r[3] < 3 * T else 3                         # oberer Guertel nur 3 Reihen: Fuss bis an die Mauerkante
+            if (lvl[r[3] - 2:min(r[3] + unten_, lvl.shape[0]), r[0] + 6:r[2] - 5] != 2).any():
                 return None                                          # Fuss auf dem Waldboden (nicht auf der Mauer)
             for yy in range(max(0, r[1] // T), r[3] // T + 1):
                 for xx in range(r[0] // T, r[2] // T + 1):
@@ -355,6 +364,14 @@ def main():
                  rnd.random() < 0.5, art='wald'):
             n_w += 1
             rects[-1][4] = 'wald'
+    # Nutzer: oben standen keine Baeume (Guertel dort nur 3 Reihen) - kleine Akazien ganz im Bild, Fuss an der Mauerkante
+    x = 1
+    while x < cols - 1:                                          # unregelmaessig (keine Reihe): Akazie oder duerrer Busch
+        n_ = 'akazie_k' if rnd.random() < 0.6 else rnd.choice(BUSCH)
+        if cls[2][x] == 'h' and setze(n_, x * T + rnd.randint(0, 15), 3 * T - 2,
+                                      {'anim': 'baum', 'nur_kontakt': True}, rnd.random() < 0.5, art='wald'):
+            rects[-1][4] = 'wald'
+        x += rnd.choice((2, 3, 3, 4, 5))
     for (x, y) in hk + [(x, y) for y in range(rows) for x in range(cols) if cls[y][x] == 'h' and y > rows - 4]:   # Luecken: Buesche
         r_ = (x * T, y * T, x * T + T, y * T + T)
         if not any(art2 == 'wald' and schnitt(r_, tuple(rr), -6) for (*rr, art2) in rects):
