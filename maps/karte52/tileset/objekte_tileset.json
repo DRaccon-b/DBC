@@ -25,14 +25,14 @@
    "fundstellen_karte": [
     {
      "block": [
-      16,
-      48,
+      47,
+      28,
       3,
       3
      ],
      "fusskachel": [
-      17,
-      50
+      48,
+      30
      ]
     }
    ]
@@ -70,7 +70,7 @@
   },
   {
    "name": "dr/busch",
-   "datei": "varianten/dr-busch.png",
+   "datei": "varianten/dr-busch_m.png",
    "animation": "masse_puls",
    "slot_kacheln": {
     "x": 6,
@@ -87,21 +87,21 @@
    "fundstellen_karte": [
     {
      "block": [
-      10,
-      51,
+      19,
+      62,
       3,
       3
      ],
      "fusskachel": [
-      11,
-      53
+      20,
+      64
      ]
     }
    ]
   },
   {
    "name": "dr/klima",
-   "datei": "varianten/dr-klima_m.png",
+   "datei": "varianten/dr-klima.png",
    "animation": "masse_puls",
    "slot_kacheln": {
     "x": 9,
@@ -118,14 +118,14 @@
    "fundstellen_karte": [
     {
      "block": [
-      17,
-      61,
+      48,
+      49,
       3,
       3
      ],
      "fusskachel": [
-      18,
-      63
+      49,
+      51
      ]
     }
    ]
@@ -149,14 +149,14 @@
    "fundstellen_karte": [
     {
      "block": [
-      47,
-      12,
+      45,
+      21,
       3,
       3
      ],
      "fusskachel": [
-      48,
-      14
+      46,
+      23
      ]
     }
    ]
@@ -193,8 +193,8 @@
    ]
   },
   {
-   "name": "dr/reifen",
-   "datei": "varianten/dr-reifen_m.png",
+   "name": "dr/turm",
+   "datei": "varianten/dr-turm_m.png",
    "animation": "masse_puls",
    "slot_kacheln": {
     "x": 18,
@@ -211,45 +211,14 @@
    "fundstellen_karte": [
     {
      "block": [
-      33,
-      27,
+      6,
+      67,
       3,
       3
      ],
      "fusskachel": [
-      34,
-      29
-     ]
-    }
-   ]
-  },
-  {
-   "name": "dr/turm",
-   "datei": "varianten/dr-turm.png",
-   "animation": "masse_puls",
-   "slot_kacheln": {
-    "x": 21,
-    "y": 0,
-    "breite": 3,
-    "hoehe": 3
-   },
-   "objektblock_im_slot": {
-    "x": 0,
-    "y": 0,
-    "breite": 3,
-    "hoehe": 3
-   },
-   "fundstellen_karte": [
-    {
-     "block": [
-      83,
-      43,
-      3,
-      3
-     ],
-     "fusskachel": [
-      84,
-      45
+      7,
+      69
      ]
     }
    ]
@@ -259,7 +228,7 @@
    "datei": "varianten/k18s-18.png",
    "animation": "lampe",
    "slot_kacheln": {
-    "x": 24,
+    "x": 21,
     "y": 0,
     "breite": 3,
     "hoehe": 3
@@ -326,7 +295,7 @@
    "datei": "varianten/dr-briefkasten_m.png",
    "animation": "masse_puls",
    "slot_kacheln": {
-    "x": 27,
+    "x": 24,
     "y": 0,
     "breite": 2,
     "hoehe": 3
@@ -340,26 +309,14 @@
    "fundstellen_karte": [
     {
      "block": [
-      23,
+      50,
       35,
       2,
       3
      ],
      "fusskachel": [
-      24,
+      51,
       37
-     ]
-    },
-    {
-     "block": [
-      48,
-      55,
-      2,
-      3
-     ],
-     "fusskachel": [
-      49,
-      57
      ]
     }
    ]
@@ -369,7 +326,7 @@
    "datei": "varianten/dr-hydrant_m.png",
    "animation": "masse_puls",
    "slot_kacheln": {
-    "x": 29,
+    "x": 26,
     "y": 0,
     "breite": 2,
     "hoehe": 3
@@ -383,26 +340,26 @@
    "fundstellen_karte": [
     {
      "block": [
-      12,
-      67,
+      22,
+      35,
       2,
       3
      ],
      "fusskachel": [
-      13,
-      69
+      23,
+      37
      ]
     },
     {
      "block": [
       47,
-      31,
+      12,
       2,
       3
      ],
      "fusskachel": [
       48,
-      33
+      14
      ]
     }
    ]
@@ -412,7 +369,7 @@
    "datei": "varianten/dr-laterne.png",
    "animation": "lampe",
    "slot_kacheln": {
-    "x": 31,
+    "x": 28,
     "y": 0,
     "breite": 2,
     "hoehe": 3
@@ -438,24 +395,24 @@
     },
     {
      "block": [
-      49,
-      21,
+      16,
+      48,
       2,
       3
      ],
      "fusskachel": [
-      50,
-      23
+      17,
+      50
      ]
     }
    ]
   },
   {
    "name": "dr/schild",
-   "datei": "varianten/dr-schild_m.png",
+   "datei": "varianten/dr-schild.png",
    "animation": "masse_puls",
    "slot_kacheln": {
-    "x": 33,
+    "x": 30,
     "y": 0,
     "breite": 2,
     "hoehe": 3
@@ -469,14 +426,14 @@
    "fundstellen_karte": [
     {
      "block": [
-      20,
-      54,
+      48,
+      57,
       2,
       3
      ],
      "fusskachel": [
-      21,
-      56
+      49,
+      59
      ]
     }
    ]
@@ -486,7 +443,7 @@
    "datei": "varianten/dr-tentakel.png",
    "animation": "baum",
    "slot_kacheln": {
-    "x": 35,
+    "x": 32,
     "y": 0,
     "breite": 2,
     "hoehe": 3
@@ -500,14 +457,14 @@
    "fundstellen_karte": [
     {
      "block": [
-      65,
-      68,
+      17,
+      56,
       2,
       3
      ],
      "fusskachel": [
-      66,
-      70
+      18,
+      58
      ]
     }
    ]
@@ -517,7 +474,7 @@
    "datei": "varianten/k18s-01.png",
    "animation": "leuchten",
    "slot_kacheln": {
-    "x": 37,
+    "x": 34,
     "y": 0,
     "breite": 2,
     "hoehe": 3
@@ -545,11 +502,11 @@
   },
   {
    "name": "dr/huegel",
-   "datei": "varianten/dr-huegel.png",
+   "datei": "varianten/dr-huegel_m.png",
    "animation": "masse_puls",
    "slot_kacheln": {
-    "x": 0,
-    "y": 3,
+    "x": 36,
+    "y": 0,
     "breite": 3,
     "hoehe": 2
    },
@@ -562,14 +519,14 @@
    "fundstellen_karte": [
     {
      "block": [
-      78,
-      6,
+      56,
+      60,
       3,
       2
      ],
      "fusskachel": [
-      79,
-      7
+      57,
+      61
      ]
     }
    ]
@@ -579,7 +536,7 @@
    "datei": "varianten/dr-blasen.png",
    "animation": "masse_puls",
    "slot_kacheln": {
-    "x": 3,
+    "x": 0,
     "y": 3,
     "breite": 2,
     "hoehe": 2
@@ -593,14 +550,14 @@
    "fundstellen_karte": [
     {
      "block": [
-      5,
-      21,
+      64,
+      60,
       2,
       2
      ],
      "fusskachel": [
-      6,
-      22
+      65,
+      61
      ]
     }
    ]
@@ -1110,6 +1067,18 @@
       20,
       30
      ]
+    },
+    {
+     "block": [
+      63,
+      56,
+      3,
+      2
+     ],
+     "fusskachel": [
+      64,
+      57
+     ]
     }
    ]
   },
@@ -1206,6 +1175,18 @@
    "fundstellen_karte": [
     {
      "block": [
+      47,
+      54,
+      3,
+      2
+     ],
+     "fusskachel": [
+      48,
+      55
+     ]
+    },
+    {
+     "block": [
       25,
       6,
       3,
@@ -1268,18 +1249,6 @@
    "fundstellen_karte": [
     {
      "block": [
-      64,
-      57,
-      3,
-      2
-     ],
-     "fusskachel": [
-      65,
-      58
-     ]
-    },
-    {
-     "block": [
       42,
       62,
       3,
@@ -1287,6 +1256,18 @@
      ],
      "fusskachel": [
       43,
+      63
+     ]
+    },
+    {
+     "block": [
+      38,
+      62,
+      3,
+      2
+     ],
+     "fusskachel": [
+      39,
       63
      ]
     }
