@@ -182,7 +182,37 @@ def stempeln(mm, f, seed, flach=False, x0=0, y0=0, T=16, ueber=3):
     return ebene, dist
 
 
-def masse(a, m, frame=None, seed=52, boden=None, flach=False, stil='stempel'):
+SCHLAMM = np.array([(26, 3, 9), (44, 6, 14), (66, 9, 20), (92, 14, 28), (122, 22, 36), (156, 36, 48),
+                    (190, 62, 70)], np.float32)                      # dunkelrote Schlamm-Rampe (Pixelart-Stufen)
+
+
+def schlamm(mm, h, w, f, seed, x0, y0):
+    """Durchgehende, zaehe, dunkelrote Schlammmasse (Nutzer, Karten 52-54): grosse weiche Wuelste und kleinere Beulen,
+    Licht von oben links in 7 Stufen, feuchte Glanzlichter, langsam ueber die Oberflaeche wandernde Glanzwellen und dunkle
+    Adern, die im Takt pulsieren (4 Bilder, nahtlos)."""
+    nb = _rauschen(h, w, 30, seed + 31 + y0)
+    nm = _rauschen(h, w, 12, seed + 37 + x0)
+    ns = _rauschen(h, w, 3, seed + 41 + y0 + x0)
+    dist = _blur(mm.astype(np.float32), 5.0)
+    hoehe = dist * (0.55 + 0.45 * nb) + 0.07 * nm + 0.015 * ns
+    gy, gx = np.gradient(_blur(np.clip(hoehe, 0, 1), 1.5) * 40.0)
+    licht = np.clip(0.5 - 1.1 * (gx + gy), 0, 1)
+    t = np.clip(0.02 + 0.62 * licht + 0.2 * (hoehe - 0.5), 0, 0.86)
+    yy, xx = np.mgrid[0:h, 0:w]
+    welle = 0.5 + 0.5 * np.sin(2 * np.pi * (f / 4.0) - ((xx + x0) * 0.6 + (yy + y0)) / 26.0 + nm * 5.0)
+    t = np.clip(t + 0.07 * (welle - 0.5) * (licht > 0.5), 0, 0.9)       # Glanzwelle wandert langsam
+    stufe = np.clip((t * (len(SCHLAMM) - 1)).round().astype(int), 0, len(SCHLAMM) - 1)
+    col = SCHLAMM[stufe]
+    glanz = (licht > 0.86) & (ns > 0.7) & (dist > 0.7)                # feuchte Glanzlichter auf den Wuelsten (sparsam)
+    col[glanz] = col[glanz] * 0.35 + np.array((236, 132, 132), np.float32) * 0.65
+    n3 = _rauschen(h, w, 14, seed + 23 + y0)
+    ader = (np.abs(n3 - 0.5) < 0.022) & (dist > 0.45)
+    puls = 0.5 + 0.5 * np.sin(2 * np.pi * (f / 4.0) - (xx + yy + x0 + y0) / 40.0)
+    col[ader] = np.array((34, 3, 10), np.float32) * (1 - puls[ader, None]) + np.array((150, 22, 40), np.float32) * puls[ader, None]
+    return col
+
+
+def masse(a, m, frame=None, seed=52, boden=None, flach=False, stil='schlamm'):
     """Zeichnet die Masse in a (H x W x 3 uint8) auf die Pixelmaske m. boden: Maske, auf die der Schatten darf.
     flach: begehbarer Belag (Karte 54) - keine Stirnseite, kein Schatten, flachere Beulen."""
     f = (frame or 0) % 4
@@ -224,9 +254,11 @@ def masse(a, m, frame=None, seed=52, boden=None, flach=False, stil='stempel'):
             st_ebene, st_dist = stempeln(mm, f, seed, flach, x0, y0)
         if flach:                                                      # begehbarer Belag: dunkler, flacher
             col = col * 0.72 + BL_FUGE[None, None] * 0.28
+    if stil == 'schlamm':                                              # Nutzer: durchgehender dunkelroter Schlamm
+        col = schlamm(mm, h, w, f, seed, x0, y0)
     # Glanzpunkte (feucht), flackern versetzt
     rs = np.random.RandomState(seed + 5)
-    n = int(mm.sum() / 180) if stil not in ('blasen', 'stempel') else 0
+    n = int(mm.sum() / (900 if stil == 'schlamm' else 180)) if stil not in ('blasen', 'stempel') else 0   # Schlamm: wenige Glanzpunkte
     py, px = rs.randint(0, h, n), rs.randint(0, w, n)
     ph = rs.randint(0, 4, n)
     for y_, x_, p_ in zip(py, px, ph):
@@ -245,7 +277,7 @@ def masse(a, m, frame=None, seed=52, boden=None, flach=False, stil='stempel'):
     if flach or stil == 'stempel':                                     # Stempel: Blasen bringen eigene Schattierung/Kontur mit
         unten[:] = False
         oben[:] = False
-    col[oben & ~unten] = col[oben & ~unten] * 0.6 + HELL * 0.4
+    col[oben & ~unten] = col[oben & ~unten] * 0.6 + (SCHLAMM[4] if stil == 'schlamm' else HELL) * 0.4
     tief = np.zeros((h, w), np.float32)
     for d in (range(1, 6) if not flach and stil != 'stempel' else []):
         r_ = np.zeros((h, w), bool)
