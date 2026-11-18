@@ -16,7 +16,8 @@ KARTE = os.path.join(ROOT, 'maps', 'karte37')
 OBJ = os.path.join(ROOT, 'assets', 'objekte', 'karte37')
 T = 16
 FREMD = {'fass/blau': 'karte02/klein/00.png', 'fass/grau': 'karte02/klein/01.png', 'gen/00': 'karte26/labor/04.png',
-         'terminal/00': 'karte26/labor/01.png', 'k18s/18': 'karte18/strasse/18.png'}
+         'terminal/00': 'karte26/labor/01.png', 'k18s/18': 'karte18/strasse/18.png',
+         'lampe/48': 'karte52/n48/00.png'}   # grosse PixelLab-Laterne (Nutzer: Lampen groesser)
 # (sprite, Kachel-x, Fusszeile) der Vorlage
 FAESSER = [('fass/blau', 6, 7), ('fass/grau', 8, 7), ('fass/grau', 6, 11), ('fass/blau', 8, 11),
            ('fass/grau', 41, 7), ('fass/blau', 43, 7), ('fass/blau', 41, 12), ('fass/grau', 43, 12)]
@@ -29,7 +30,7 @@ GROSS = [('gen/00', 5, 28), ('gen/00', 41, 28)]   # Terminal-Tisch unten entfern
 GEN_ANIM = {'anim': 'maschine', 'ruetteln': True, 'leds': True, 'led_box': [[34, 18, 48, 30], [9, 41, 15, 47]],
             'fluessig': [[27, 2, 36, 15, 'gruen'], [0, 20, 9, 42, 'cyan'], [53, 14, 62, 40, 'cyan']]}
 # Rohre der Vorlage unter der Ziegelkante der Seitenbuchten (PixelLab k37_rohr, Mittelstueck gekuerzt): (sprite, cx, Fuss-y)
-ROHRE = [('rohr/lang', 120, 273), ('rohr/kurz', 664, 289)]
+ROHRE = [('rohr/lang', 120, 273), ('rohr/kurz', 664, 287)]   # 2 px hoeher: Platz fuer die grosse Laterne
 ACHSE_S = 447.5                                                   # Achse der suedlichen Lueftungsreihen (x 274-621)
 KABEL = [(6, 12), (13, 9), (29, 8), (11, 15), (6, 18), (14, 26), (36, 30), (40, 15)]
 
@@ -102,9 +103,9 @@ def main():
         if not setze(n_, tx, ty, {'nur_kontakt': True}, i % 3 == 0):          # dicht an dicht: nur Kontaktschatten
             print('nicht gesetzt:', n_, tx, ty)
     for (tx, ty) in LATERNEN:
-        fy_ = 322 if ty == 19 else None
+        fy_ = 335 if ty == 19 else None          # grosse Laterne buendig auf der untersten Buchtreihe
         cx_ = 2 * ACHSE_S - 264 if (tx, ty) == (38, 29) else None       # suedliches Paar gespiegelt zur Reihenachse                                 # Bucht: Fuss 13 px ueber der Kante (Rohr darueber)
-        if not setze('k18s/18', tx, ty, fy=fy_, cx=cx_, opt={'anim': 'leuchten', 'licht': [4, 7], 'licht_box': [2, 5, 6, 10], 'licht_r': 9}):
+        if not setze('lampe/48', tx, ty, fy=fy_, cx=cx_, opt={'anim': 'lampe'}):   # Glaskopf leuchtet
             print('Laterne nicht gesetzt:', tx, ty)
     gitter = 'dach/00' if os.path.exists(os.path.join(OBJ, 'dach/00.png')) else None
     if gitter:
@@ -121,8 +122,6 @@ def main():
         for (tx, ty) in ((14, 23), (33, 23)):                                     # zwei Klimageraete am Weg
             setze('dach/01', tx, ty, {'anim': 'portal_box', 'wirbel': [11.5, 8.5, 5]})   # Luefterrad dreht sich
         setze('dach/04', 33, 9, {})                                               # Satellitenschuessel (sparsam)
-        for (tx, ty) in ((17, 12), (25, 17)):                                     # Lueftungshauben auf der Flaeche
-            setze('dach/38', tx, ty, {})
     json.dump(objekte, open(os.path.join(OBJ, 'platzierung.json'), 'w'), indent=0)
     print(len(objekte), 'Objekte')
 

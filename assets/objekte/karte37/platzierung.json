@@ -125,11 +125,11 @@
 "datei": "varianten/rohr-kurz.png",
 "basis": "rohr/kurz",
 "x": 624,
-"y": 272,
+"y": 270,
 "fuss": 17,
 "kachel": [
 41,
-18
+17
 ],
 "ebene": 1,
 "ohne_wall": true,
@@ -248,11 +248,11 @@
 "nur_kontakt": true
 },
 {
-"datei": "varianten/k18s-18.png",
-"basis": "k18s/18",
-"x": 68,
-"y": 293,
-"fuss": 29,
+"datei": "varianten/lampe-48.png",
+"basis": "lampe/48",
+"x": 64,
+"y": 291,
+"fuss": 44,
 "kachel": [
 4,
 20
@@ -260,25 +260,14 @@
 "ebene": 1,
 "ohne_wall": true,
 "nur_kontakt": true,
-"anim": "leuchten",
-"licht": [
-4,
-7
-],
-"licht_box": [
-2,
-5,
-6,
-10
-],
-"licht_r": 9
+"anim": "lampe"
 },
 {
-"datei": "varianten/k18s-18.png",
-"basis": "k18s/18",
-"x": 692,
-"y": 293,
-"fuss": 29,
+"datei": "varianten/lampe-48.png",
+"basis": "lampe/48",
+"x": 688,
+"y": 291,
+"fuss": 44,
 "kachel": [
 43,
 20
@@ -286,25 +275,14 @@
 "ebene": 1,
 "ohne_wall": true,
 "nur_kontakt": true,
-"anim": "leuchten",
-"licht": [
-4,
-7
-],
-"licht_box": [
-2,
-5,
-6,
-10
-],
-"licht_r": 9
+"anim": "lampe"
 },
 {
-"datei": "varianten/k18s-18.png",
-"basis": "k18s/18",
-"x": 260,
-"y": 450,
-"fuss": 29,
+"datei": "varianten/lampe-48.png",
+"basis": "lampe/48",
+"x": 256,
+"y": 435,
+"fuss": 44,
 "kachel": [
 16,
 29
@@ -312,25 +290,14 @@
 "ebene": 1,
 "ohne_wall": true,
 "nur_kontakt": true,
-"anim": "leuchten",
-"licht": [
-4,
-7
-],
-"licht_box": [
-2,
-5,
-6,
-10
-],
-"licht_r": 9
+"anim": "lampe"
 },
 {
-"datei": "varianten/k18s-18.png",
-"basis": "k18s/18",
-"x": 627,
-"y": 450,
-"fuss": 29,
+"datei": "varianten/lampe-48.png",
+"basis": "lampe/48",
+"x": 624,
+"y": 435,
+"fuss": 44,
 "kachel": [
 39,
 29
@@ -338,18 +305,7 @@
 "ebene": 1,
 "ohne_wall": true,
 "nur_kontakt": true,
-"anim": "leuchten",
-"licht": [
-4,
-7
-],
-"licht_box": [
-2,
-5,
-6,
-10
-],
-"licht_r": 9
+"anim": "lampe"
 },
 {
 "datei": "varianten/dach-00.png",
@@ -1160,34 +1116,6 @@
 "kachel": [
 34,
 9
-],
-"ebene": 1,
-"ohne_wall": true,
-"nur_kontakt": true
-},
-{
-"datei": "varianten/dach-38.png",
-"basis": "dach/38",
-"x": 278,
-"y": 182,
-"fuss": 25,
-"kachel": [
-18,
-12
-],
-"ebene": 1,
-"ohne_wall": true,
-"nur_kontakt": true
-},
-{
-"datei": "varianten/dach-38.png",
-"basis": "dach/38",
-"x": 406,
-"y": 262,
-"fuss": 25,
-"kachel": [
-26,
-17
 ],
 "ebene": 1,
 "ohne_wall": true,
