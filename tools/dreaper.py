@@ -136,6 +136,9 @@ def _abstand(mm, schritte=14):
     return d
 
 
+OHNE_KONTUR = __import__('os').environ.get('DREAPER_OHNE_KONTUR') == '1'   # Vorschau: innere Blasen ohne Rand
+
+
 def stempeln(mm, f, seed, flach=False, x0=0, y0=0, T=16, ueber=3):
     """Masse wie ein Baumguertel (Nutzer): ganze grosse PixelLab-Blasenhaufen auf dem Kachelraster, versetzt nebeneinander
     (jede zweite Kachel, Reihen um eine Kachel verschoben), leicht ueberlappend, von Norden nach Sueden gezeichnet - keine
@@ -203,6 +206,17 @@ def stempeln(mm, f, seed, flach=False, x0=0, y0=0, T=16, ueber=3):
         m_ = teil[..., 3] > 128
         rgb = teil[..., :3] * (0.8 if flach else 1.0)
         sub = ebene[ya:yb, xa:xb]
+        if OHNE_KONTUR:                                                # Nutzer: innere Blasen ohne Rand - dunkle Kontur nur
+            mp_ = np.pad(m_, 2)                                        # zeichnen, wo darunter noch nichts liegt (Aussenkante)
+            kern_ = m_.copy()
+            for dy_ in range(-2, 3):
+                for dx_ in range(-2, 3):
+                    if abs(dy_) + abs(dx_) <= 2:
+                        kern_ &= mp_[2 + dy_:2 + dy_ + m_.shape[0], 2 + dx_:2 + dx_ + m_.shape[1]]
+            lum_ = rgb.sum(-1)
+            hell_ = np.median(lum_[kern_]) if kern_.any() else lum_[m_].mean()
+            ring_ = m_ & ~kern_ & (lum_ < 0.62 * hell_)
+            m_ = m_ & ~(ring_ & (sub[..., 3] > 0))
         sub[m_, :3] = rgb[m_]
         sub[m_, 3] = 1
     return ebene, dist
