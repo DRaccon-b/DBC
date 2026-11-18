@@ -2246,6 +2246,18 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'huge glossy bright red sphere made of countless jelly bubbles, glowing softly, resting on the floor, ' + FR14,
         'tall featureless smooth glossy pink-red humanoid creature with long arms and a smooth egg-shaped faceless head, ' + FR14,
     ]},
+    'k52_masse': {'size': 128, 'freie_farben': True, 'items': [   # Nutzer: Masse hochwertiger - aus PixelLab-Blasenhaufen gestempelt
+        'dense heap of glossy bright red jelly bubbles of many different sizes packed tightly together, wet white highlights, seen from directly above, top-down view, no ground, no cast shadow, highly detailed pixel art, classic 2D handheld RPG style',
+        'large mound of glossy crimson jelly spheres and smaller bubbles, darker red gaps between them, seen from directly above, top-down view, no ground, no cast shadow, highly detailed pixel art, classic 2D handheld RPG style',
+        'wide flat sheet of bubbling red jelly with clusters of glossy spheres, seen from directly above, top-down view, no ground, no cast shadow, highly detailed pixel art, classic 2D handheld RPG style',
+        'organic cluster of glossy red and pink jelly bubbles with dark crimson shadows between, seen from directly above, top-down view, no ground, no cast shadow, highly detailed pixel art, classic 2D handheld RPG style',
+    ]},
+    'k52_masse_klein': {'size': 64, 'freie_farben': True, 'items': [
+        'small cluster of glossy bright red jelly bubbles packed together, wet highlights, seen from directly above, top-down view, no ground, no cast shadow, highly detailed pixel art, classic 2D handheld RPG style',
+        'small round heap of glossy crimson jelly spheres, seen from directly above, top-down view, no ground, no cast shadow, highly detailed pixel art, classic 2D handheld RPG style',
+        'few big glossy red jelly bubbles touching each other, seen from directly above, top-down view, no ground, no cast shadow, highly detailed pixel art, classic 2D handheld RPG style',
+        'patch of tiny glossy red jelly bubbles, seen from directly above, top-down view, no ground, no cast shadow, highly detailed pixel art, classic 2D handheld RPG style',
+    ]},
     'k54_klein': {'size': 32, 'freie_farben': True, 'items': [
         'coiled thick black power cable with a brass plug lying on the floor, flat ground detail, ' + FR14,
         'grey metal floor vent grate, flat ground detail, ' + FR14,

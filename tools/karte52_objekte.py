@@ -267,8 +267,6 @@ def main():
         wt_ = max(1, math.ceil(bw_ / T))                                   # Regel 1b: mittig im Kachelblock
         if setze(n_, (tx - (wt_ - 1) // 2) * T + wt_ * T / 2.0, ty * T + T - 1, {}, rnd.random() < 0.5, klassen='a' + G):
             gesetzt_r.append((tx, ty))
-    for (tx, ty) in ((30, 20), (62, 44), (52, 30 + 10), (12, 22), (86, 48)):   # Waechter-Wesen patrouillieren
-        kachel('dr/agent', tx + P, ty + P, {}, (tx // 2) % 2 == 0, klassen='a' + G, weit=3)   # D-Reaper-Agenten
     # ---------------------------------------------------------------- flacher Kleinkram (begehbar)
     klein = ['klein/pfuetze', 'klein/brocken', 'klein/glas', 'klein/zeitung']
     for i in range(40):
