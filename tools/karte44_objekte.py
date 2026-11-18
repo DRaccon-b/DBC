@@ -22,8 +22,8 @@ FREMD = {'gras': 'karte04/klein/00.png', 'gras2': 'karte04/klein/01.png',
          'blume': 'karte04/klein/07.png', 'gras3': 'karte04/klein/27.png'}
 for _i in range(16):
     FREMD['h%02d' % _i] = 'karte44/huette/%02d.png' % _i
-for _n, _i in ((0, 0), (3, 3), (4, 2)):                            # Nutzer: Huetten ohne Schnee (k44_huette3 0, 3, 2)
-    FREMD['hn%d' % _n] = 'karte44/huette3/%02d.png' % _i
+for _n, _i in ((0, 2), (3, 1), (4, 0)):                            # Nutzer-Vorlage: Kuppelhaeuser mit Technik-Teilen (k44_huette4)
+    FREMD['hn%d' % _n] = 'karte44/huette4/%02d.png' % _i
 FASS = [0, 1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 13, 14, 15]             # Nutzer: alle Weinfaesser ausser 9 und 12
 for _i in FASS:
     FREMD['fass%02d' % _i] = 'karte44/fass_klein/%02d.png' % _i      # auf ~60 % verkleinert (Massstab zu den Huetten)
@@ -71,7 +71,7 @@ BAEUME = [('b00', 21, 5), ('b03', 25, 5), ('b00', 24, 9), ('b08', 21, 10), ('b00
           ('b03', 25, 73), ('b02', 45, 72), ('b03', 49, 75), ('b08', 43, 76), ('b03', 52, 69)]
 # Huetten der Vorlage (Mitte px) mit Variante; Dorfdeko der Vorlage (Name, px-Mitte, Fuss-px)
 HUETTE_VAR = ['hn0', 'hn3', 'hn4', 'hn3', 'hn0', 'hn4', 'hn0', 'hn3', 'hn4', 'hn0']
-HUETTE_OPT = {'hn0': {'anim': 'lampe', 'lampe_box': [41, 31, 46, 41]}}   # Laterne neben der Tuer leuchtet
+HUETTE_OPT = {}                                                       # Kuppelhaeuser ohne Laterne
 DEKO = [('stamm', 1010, 416), ('stamm', 475, 624), ('stamm', 300, 846), ('stamm', 595, 1134),
         ('bank', 1100, 432), ('bank', 1167, 560), ('bank', 607, 656), ('bank', 1070, 958),
         ('fels', 640, 200), ('fels', 640, 360), ('fels', 865, 536), ('fels', 880, 760), ('fels', 1152, 856),
