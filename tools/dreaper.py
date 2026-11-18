@@ -256,18 +256,27 @@ def textur_laden():
                 if not n[:2].isdigit():
                     continue
                 a = np.array(Image.open(os.path.join(basis, n)).convert('RGBA'))
-                ys, xs = np.nonzero(a[..., 3] > 0)
+                op = a[..., 3] == 255
+                ys, xs = np.nonzero(op)
                 if not len(ys):
                     continue
-                inn = a[ys.min() + 9:ys.max() - 8, xs.min() + 9:xs.max() - 8]
-                if min(inn.shape[:2]) >= 80 and (inn[..., 3] == 255).all():
-                    wahl.append((n, 9))
+                y0_, y1_, x0_, x1_ = ys.min() + 2, ys.max() - 1, xs.min() + 2, xs.max() - 1
+                while y1_ - y0_ > 60 and x1_ - x0_ > 60 and not op[y0_:y1_, x0_:x1_].all():
+                    # die Seite mit den meisten Luecken einruecken (groesstes deckendes Rechteck, grob)
+                    r_ = op[y0_:y1_, x0_:x1_]
+                    l_ = {'o': (~r_[0]).sum(), 'u': (~r_[-1]).sum(), 'l': (~r_[:, 0]).sum(), 'r': (~r_[:, -1]).sum()}
+                    k_ = max(l_, key=l_.get)
+                    y0_ += k_ == 'o'; y1_ -= k_ == 'u'; x0_ += k_ == 'l'; x1_ -= k_ == 'r'
+                if op[y0_:y1_, x0_:x1_].all() and min(y1_ - y0_, x1_ - x0_) >= 60:
+                    wahl.append(a[y0_ + 2:y1_ - 2, x0_ + 2:x1_ - 2, :3].astype(np.float32))
         else:
-            wahl = [('03.png', 5), ('00.png', 9)]
-        for n, ein in wahl[:4]:
-            a = np.array(Image.open(os.path.join(basis, n)).convert('RGBA'))
-            ys, xs = np.nonzero(a[..., 3] > 0)
-            a = a[ys.min() + ein:ys.max() - ein + 1, xs.min() + ein:xs.max() - ein + 1, :3].astype(np.float32)
+            wahl = []
+            for n, ein in (('03.png', 5), ('00.png', 9)):
+                a = np.array(Image.open(os.path.join(basis, n)).convert('RGBA'))
+                ys, xs = np.nonzero(a[..., 3] > 0)
+                wahl.append(a[ys.min() + ein:ys.max() - ein + 1, xs.min() + ein:xs.max() - ein + 1, :3].astype(np.float32))
+        wahl.sort(key=lambda t: -t.shape[0] * t.shape[1])
+        for a in wahl[:4]:
             _TEXTUR += [a, a[:, ::-1]]
         assert _TEXTUR, 'keine deckenden Texturfelder in ' + basis
     return _TEXTUR
@@ -277,6 +286,8 @@ def textur(h, w, f, seed, x0, y0, zelle=52):
     """Randlose Masse: Texturfelder ueberlappend aneinandergesetzt, Naehte als unregelmaessige Rauschgrenze (Pixel werden
     gewaehlt, nicht gemischt - Palette bleibt). Adern (gelbe Pixel) pulsieren als Welle (4 Bilder, nahtlos)."""
     tex = textur_laden()
+    kl = min(min(t.shape[:2]) for t in tex)
+    zelle = min(zelle, kl - 2 * 16)
     rs = np.random.RandomState(seed)
     t0 = tex[0]                                                        # Grundflaeche gekachelt (keine Luecken)
     out = np.tile(t0, (h // t0.shape[0] + 1, w // t0.shape[1] + 1, 1))[:h, :w].copy()
