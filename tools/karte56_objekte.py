@@ -4,7 +4,7 @@
 
 PixelLab (Objekt-Creator): k56_wiese, k56_verzerrt, k56_innen (48 px), k56_blumen (32 px, als Bodentextur gestempelt).
 Raum 2 ist dieselbe Wiese wie Raum 1 - jedes Objekt steht an derselben Stelle als verzerrtes Gegenstueck (faellt
-weg, wenn sein Fuss auf einem Riss laege). Raum 3: Erinnerungsblasen und dunkle Kugeln schweben (ohne Schatten),
+weg, wenn sein Fuss auf einem Riss laege). Raum 3: dunkle Kugeln schweben (Erinnerungsblasen entfernt, Nutzer) (ohne Schatten),
 Laternenpaar spiegelsymmetrisch zur Ringmarke, Kristalle an den Abgruenden.
 Guertel: Kronen ganz auf Guertelkacheln, Luecken mit Bueschen geschlossen (wie Karte 55).
 Kampfflaeche um die Ringmarke bleibt frei.
@@ -40,9 +40,6 @@ INNEN = [
     ('innen/00', 20, 5, 2, {'spiegeln': True}),
     ('innen/00', 20, 21, 2, {}),
     ('innen/12', 16, 20, 3, {'liegend': True}),                    # Knochen
-    ('innen/04', 8, 10, 2, {'schweben': True}),                    # Erinnerungsblasen (schweben)
-    ('innen/04', 21, 11, 2, {'schweben': True, 'spiegeln': True}),
-    ('innen/04', 14, 3, 2, {'schweben': True}),
     ('innen/03', 5, 15, 2, {'schweben': True}),                    # dunkle Kugeln (schweben)
     ('innen/03', 24, 14, 2, {'schweben': True}),
 ]
