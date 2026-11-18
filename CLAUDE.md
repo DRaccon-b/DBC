@@ -166,6 +166,9 @@ Wenn eine Karte fertig scheint: noch einmal komplett auf **Pixelfehler** und **L
   Straßen- oder Gehwegkacheln; sie bleiben mit einigen Pixeln Abstand auf ihrer Fläche.
 - **Nichts auf Wegen:** Objekte stehen nie mit dem Fuß auf Weg- oder Pflasterkacheln (Prüfung beim Setzen). Ausnahmen:
   Brunnen u. Ä. mitten auf Plätzen, flaches Laub.
+- **Nie herunterskalieren (Nutzer, Karte 52):** Sprites werden nie verkleinert (kein `resize` auf kleinere Größe) – fehlt die
+  passende Größe, wird das Objekt mit PixelLab direkt in Zielgröße neu erzeugt (`size` 32/48/64 …). Verkleinerte Sprites
+  wirken grob und passen nicht zum Stil.
 - **Generierte Sprites umfärben:** Liefert PixelLab Farben, die nicht zur Karte passen, werden Stein/Dach/Holz auf die
   Palette der Karte bzw. eines vorhandenen Vorbild-Objekts umgefärbt (Helligkeit -> Vorbildfarbe, Karte 32: Turm,
   Säulen). Leuchtende Teile, Fenster und Stoff behalten ihre Farbe.
