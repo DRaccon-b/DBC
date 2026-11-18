@@ -2232,6 +2232,20 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'large pulsing crimson organic core sphere with dark veins, held by black metal claws on a round dark steel pedestal, glowing red, ' + FR14,
         'tall crimson organic pillar of twisted flesh tendrils growing out of a dark metal floor plate, ' + FR14,
     ]},
+    'k52_anime': {'size': 64, 'freie_farben': True, 'items': [   # Nutzer: naeher am D-Reaper (Digimon Tamers), ohne Originaldesign
+        'tall featureless smooth glossy pink-red humanoid creature with long thin arms, a smooth egg-shaped head without face, standing upright, ' + FR14,
+        'stack of glossy bright red jelly bubbles rising from the ground like a pillar, wet shine highlights, ' + FR14,
+        'street lamp half swallowed by glossy bright red bubbly jelly mass, ' + FR14,
+        'abandoned car half engulfed by glossy bright red bubbly jelly, ' + FR14,
+        'small cluster of glossy bright red jelly bubbles on the ground, wet shine, ' + FR14,
+        'low glossy bright red bubbly jelly mound creeping over cracked asphalt, ' + FR14,
+        'vending machine half swallowed by glossy bright red bubbly jelly, ' + FR14,
+        'thin glossy red jelly tentacle with a round bubble tip rising from the ground, ' + FR14,
+    ]},
+    'k54_anime': {'size': 96, 'freie_farben': True, 'items': [
+        'huge glossy bright red sphere made of countless jelly bubbles, glowing softly, resting on the floor, ' + FR14,
+        'tall featureless smooth glossy pink-red humanoid creature with long arms and a smooth egg-shaped faceless head, ' + FR14,
+    ]},
     'k54_klein': {'size': 32, 'freie_farben': True, 'items': [
         'coiled thick black power cable with a brass plug lying on the floor, flat ground detail, ' + FR14,
         'grey metal floor vent grate, flat ground detail, ' + FR14,

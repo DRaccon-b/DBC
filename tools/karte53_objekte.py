@@ -41,8 +41,8 @@ FREMD['evak/kuehlbox'] = ('karte53/bett/07.png', 0.5)
 FREMD['evak/schlafsack'] = ('karte53/bett/09.png', 0.6)
 for n_, (i, f) in {'zelt': (0, 0.75), 'lkw': (1, 0.75), 'vorrat': (2, 0.6)}.items():
     FREMD['evak/' + n_] = ('karte53/gross/%02d.png' % i, f)
-for n_, (i, f) in {'ranke': (0, 0.55), 'blasen': (7, 0.5), 'kapsel': (1, 0.5)}.items():
-    FREMD['reaper/' + n_] = ('karte52/reaper/%02d.png' % i, f)
+for n_, (i, f) in {'ranke': ('07', 0.6), 'blasen': ('04b', 0.7), 'kapsel': ('11', 0.55)}.items():   # D-Reaper wie im Anime
+    FREMD['reaper/' + n_] = ('karte52/anime/%s.png' % i, f)
 WALD = ['k01/baum%02d' % i for i in (0, 1, 2, 4, 9, 15)]
 BUSCH = ['k01/baum%02d' % i for i in (12, 13, 14)]
 LAMPE = {'anim': 'leuchten', 'licht': [4, 7], 'licht_box': [2, 5, 6, 10], 'licht_r': 9}

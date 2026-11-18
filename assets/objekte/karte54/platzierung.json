@@ -2,9 +2,9 @@
 {
 "datei": "varianten/herz.png",
 "basis": "herz",
-"x": 363,
-"y": 171,
-"fuss": 68,
+"x": 360,
+"y": 178,
+"fuss": 61,
 "kachel": [
 24,
 14
@@ -14,10 +14,10 @@
 "nur_kontakt": true,
 "anim": "lampe",
 "lampe_box": [
-5,
-1,
-53,
-48
+0,
+0,
+61,
+59
 ],
 "licht_farbe": [
 255,
@@ -28,9 +28,9 @@
 {
 "datei": "varianten/saeule.png",
 "basis": "saeule",
-"x": 280,
-"y": 188,
-"fuss": 51,
+"x": 285,
+"y": 195,
+"fuss": 44,
 "kachel": [
 0,
 14
@@ -42,9 +42,9 @@
 {
 "datei": "varianten/saeule_m.png",
 "basis": "saeule",
-"x": 471,
-"y": 188,
-"fuss": 51,
+"x": 477,
+"y": 195,
+"fuss": 44,
 "kachel": [
 0,
 14
@@ -56,9 +56,9 @@
 {
 "datei": "varianten/nest.png",
 "basis": "nest",
-"x": 274,
-"y": 246,
-"fuss": 41,
+"x": 280,
+"y": 266,
+"fuss": 21,
 "kachel": [
 0,
 17
@@ -70,9 +70,9 @@
 {
 "datei": "varianten/nest_m.png",
 "basis": "nest",
-"x": 466,
-"y": 246,
-"fuss": 41,
+"x": 473,
+"y": 266,
+"fuss": 21,
 "kachel": [
 0,
 17
@@ -407,12 +407,26 @@
 {
 "datei": "varianten/ranke.png",
 "basis": "ranke",
-"x": 496,
+"x": 530,
 "y": 432,
 "fuss": 31,
 "kachel": [
-32,
+33,
 28
+],
+"ebene": 1,
+"ohne_wall": true,
+"nur_kontakt": true
+},
+{
+"datei": "varianten/ranke.png",
+"basis": "ranke",
+"x": 690,
+"y": 96,
+"fuss": 31,
+"kachel": [
+43,
+7
 ],
 "ebene": 1,
 "ohne_wall": true,
@@ -421,11 +435,11 @@
 {
 "datei": "varianten/waechter_m.png",
 "basis": "waechter",
-"x": 676,
-"y": 65,
-"fuss": 30,
+"x": 613,
+"y": 52,
+"fuss": 43,
 "kachel": [
-43,
+39,
 5
 ],
 "ebene": 1,

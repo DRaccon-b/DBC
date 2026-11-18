@@ -21,9 +21,9 @@ T = 16
 D = {'mech': ('karte54/kern/00.png', 0.75), 'terminal': ('karte54/kern/01.png', 0.55), 'lampe': ('karte54/kern/02.png', 0.6),
      'kapsel': ('karte54/kern/03.png', 0.6), 'flasche': ('karte54/kern/04.png', 0.5), 'rack': ('karte54/kern/06.png', 0.6),
      'rohr': ('karte54/kern/07.png', 0.6), 'konsole': ('karte54/kern/09.png', 0.6),
-     'herz': ('karte54/kern_gross/00.png', 0.85), 'saeule': ('karte54/kern_gross/01.png', 0.6),
-     'nest': ('karte54/kern_gross/02.png', 0.55), 'befallen': ('karte54/kern_gross/03.png', 0.5),
-     'waechter': ('karte52/reaper/02.png', 0.6), 'ranke': ('karte52/reaper/00.png', 0.55),
+     'herz': ('karte54/anime/00.png', 0.8), 'saeule': ('karte52/anime/01.png', 0.75),          # Kernkugel wie im Anime
+     'nest': ('karte52/anime/04b.png', 0.8), 'befallen': ('karte54/kern_gross/03.png', 0.5),
+     'waechter': ('karte54/anime/01.png', 0.5), 'ranke': ('karte52/anime/07.png', 0.6),     # Agent, Tentakel
      'kabel': ('karte54/klein/00.png', 0.75), 'gitter': ('karte54/klein/01.png', 0.75), 'bolzen': ('karte54/klein/02.png', 0.6),
      'pfuetze': ('karte54/klein/03.png', 0.7)}
 FLACH = {'kabel', 'gitter', 'bolzen', 'pfuetze', 'traeger', 'rohr'}
@@ -165,7 +165,7 @@ def main():
                              ('ranke', 536, 456, False), ('ranke', 168, 520, True), ('ranke', 712, 140, False),
                              ('waechter', 104, 536, False), ('waechter', 664, 88, True), ('waechter', 392, 216, False)]:
         suche(n, px, py, {'anim': 'maschine', 'leds': True} if n in ('rack', 'konsole', 'befallen') else {}, sp_, r=3,
-              schritt=8, belag='g' if n == 'ranke' else 'gf')   # Ranke mit Steinkranz nur auf Metallboden
+              schritt=8, belag='gf')   # Ranke mit Steinkranz nur auf Metallboden
     json.dump(objekte, open(os.path.join(OBJ, 'platzierung.json'), 'w'), indent=0)
     print(len(objekte), 'Objekte')
 

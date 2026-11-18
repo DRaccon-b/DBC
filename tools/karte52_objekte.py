@@ -3,7 +3,7 @@
   python3 tools/karte52_objekte.py && python3 tools/karte52_bauen.py
 
 Sechs Buerogebaeude aus vorhandenen generierten Haelften (Karte 35/36/40), auf die Vorlagenbreite gebracht und gespiegelt,
-Eingang auf der Achse. Ruinenstadt unter dem D-Reaper (PixelLab k52_reaper/k52_klein): Panzersperren statt der Vorlagen-X,
+Eingang auf der Achse. Ruinenstadt unter dem D-Reaper (PixelLab k52_reaper/k52_klein/k52_anime: rote Blasenmasse wie im Anime, gesichtslose Agenten, verschlungene Dinge): Panzersperren statt der Vorlagen-X,
 ausgebrannte Autowracks, Schutt, umgeknickte Laternen; an den Masserandern Ranken, Blasen, Kapseln und Waechter-Wesen.
 Der Ziegelplatz unten rechts bleibt ein Bahnhofsvorplatz (Haltestelle, Automat, Bank, Laternen). Kein Baumguertel:
 die Masse umschliesst die Karte (bauen).
@@ -34,6 +34,11 @@ for n_, (i, f) in {'ranke': (0, 0.55), 'kapsel': (1, 0.5), 'waechter': (2, 0.6),
                    'block': (5, 0.55), 'wrack': (6, 1.0), 'blasen': (7, 0.5), 'fass': (8, 0.5), 'laterne_kaputt': (9, 0.6),
                    'ei': (12, 0.5)}.items():
     FREMD['reaper/' + n_] = ('karte52/reaper/%02d.png' % i, f)
+DR = {'agent': ('00', 0.75), 'turm': ('01', 0.75), 'laterne': ('02', 0.75), 'auto': ('03', 0.9), 'blasen': ('04b', 0.7),
+      'huegel': ('05', 0.6), 'automat': ('06', 0.6), 'tentakel': ('07', 0.6), 'briefkasten': ('08', 0.55),
+      'schild': ('09', 0.55), 'bank': ('10', 0.6), 'hydrant': ('11', 0.55), 'baum': ('12', 0.75), 'muell': ('14', 0.55)}
+for n_, (i, f) in DR.items():                                       # D-Reaper wie im Anime (Nutzer): verschlungene Dinge, Agenten
+    FREMD['dr/' + n_] = ('karte52/anime/%s.png' % i, f)
 for n_, i in {'pfuetze': 0, 'brocken': 1, 'glas': 2, 'zeitung': 3}.items():
     FREMD['klein/' + n_] = ('karte52/klein/%02d.png' % i, 0.75)
 GANZ = ('halb/buero_links', 'halb/buero_unten')                     # fertige Gebaeude in Vorlagenbreite
@@ -215,14 +220,14 @@ def main():
             print('Gebaeude nicht gesetzt:', n_)
     G = 'kqb'                                                          # begehbarer Belag fuer Deko
     # ---------------------------------------------------------------- Wracks und Sperren (Vorlage: Autos, X-Sperren)
-    for (n_, tx, ty, sp) in (('k18a/03', 13, 29, False), ('k18a/01', 47, 39, True), ('k18a/03', 77, 40, True),
+    for (n_, tx, ty, sp) in (('dr/auto', 13, 29, False), ('k18a/01', 47, 39, True), ('dr/auto', 77, 40, True),
                              ('k18a/01', 28, 74, False), ('k18a/02', 60, 38, False), ('k18a/05', 14, 68, True)):   # verlassene Autos (Seitenansicht)
         kachel(n_, tx + P, ty + P, {}, sp, klassen='a', weit=2)
     for (n_, tx, ty, sp) in (('reaper/sperre', 21, 28, False), ('reaper/sperre', 31, 23, True), ('reaper/sperre', 55, 46, False),
                              ('reaper/sperre', 59, 58, True), ('reaper/block', 14, 20, False), ('reaper/block', 66, 63, True),
                              ('reaper/schutt', 36, 20, False), ('reaper/schutt', 13, 55, True), ('reaper/schutt', 70, 25, False),
-                             ('reaper/fass', 25, 16, False), ('reaper/laterne_kaputt', 33, 66, False),
-                             ('reaper/laterne_kaputt', 80, 52, True)):
+                             ('reaper/fass', 25, 16, False), ('dr/laterne', 33, 66, False),
+                             ('dr/laterne', 80, 52, True)):
         kachel(n_, tx + P, ty + P, {'anim': 'lampe', 'lampe_box': [8, 0, 29, 9], 'licht_farbe': [255, 210, 120]} if 'laterne_kaputt' in n_ else {}, sp, klassen='a' + G, weit=2)
     # ---------------------------------------------------------------- Bahnhofsvorplatz (Ziegelplatz unten rechts)
     gk_ = np.array([list(z) for z in cls])                              # Laternen an den Platzecken, exakt gespiegelt
@@ -249,7 +254,8 @@ def main():
                     and not masse[ty, tx]:
                 rand_k.append((tx, ty))
     rnd.shuffle(rand_k)
-    motive = ['reaper/ranke', 'reaper/blasen', 'reaper/kapsel', 'reaper/ei', 'reaper/ranke', 'reaper/blasen']
+    motive = ['dr/turm', 'dr/blasen', 'dr/tentakel', 'dr/hydrant', 'dr/huegel', 'dr/briefkasten', 'dr/turm', 'dr/muell',
+              'dr/tentakel', 'dr/schild', 'dr/blasen', 'dr/bank', 'dr/huegel', 'dr/baum']
     gesetzt_r = []
     for (tx, ty) in rand_k:
         if len(gesetzt_r) >= 26:
@@ -262,7 +268,7 @@ def main():
         if setze(n_, (tx - (wt_ - 1) // 2) * T + wt_ * T / 2.0, ty * T + T - 1, {}, rnd.random() < 0.5, klassen='a' + G):
             gesetzt_r.append((tx, ty))
     for (tx, ty) in ((30, 20), (62, 44), (52, 30 + 10), (12, 22), (86, 48)):   # Waechter-Wesen patrouillieren
-        kachel('reaper/waechter', tx + P, ty + P, {}, (tx // 2) % 2 == 0, klassen='a' + G, weit=3)
+        kachel('dr/agent', tx + P, ty + P, {}, (tx // 2) % 2 == 0, klassen='a' + G, weit=3)   # D-Reaper-Agenten
     # ---------------------------------------------------------------- flacher Kleinkram (begehbar)
     klein = ['klein/pfuetze', 'klein/brocken', 'klein/glas', 'klein/zeitung']
     for i in range(40):
