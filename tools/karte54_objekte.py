@@ -23,6 +23,12 @@ D = {'ranke_a': 'karte54/ranke96/00.png', 'ranke_b': 'karte54/ranke96/01.png', '
      'quer_a': 'karte54/ranke_quer/00.png', 'quer_b': 'karte54/ranke_quer/01.png',
      'senk_a': 'karte54/ranke_quer/02.png', 'senk_b': 'karte54/ranke_quer/03.png',
      'saeule': 'karte52/n48/05.png', 'cluster': 'karte52/n48b/06.png', 'huegel': 'karte52/n48b/02.png'}
+RV = os.environ.get('K54_RANKEN')                                       # Nutzer: Rankenvarianten rv1..rv5 (PixelLab k54_rvN)
+if RV:
+    for i_, n_ in enumerate(('ranke_a', 'ranke_b', 'ranke_c', 'ranke_d')):
+        D[n_] = 'karte54/%s/%02d.png' % (RV, i_)
+    for i_, n_ in enumerate(('quer_a', 'quer_b', 'senk_a', 'senk_b')):
+        D[n_] = 'karte54/%sq/%02d.png' % (RV, i_)
 # liegende Ranken: (Motiv, Seite, Lage) - Wurzel steckt in der Kugelwand; 'w' = Westwand bei Zeile y (px relativ zur
 # Mitte, Spiegelbild an der Ostwand), 'n' = Nordwand bei Spalte x (px relativ zur Achse, je eine links und rechts)
 LIEGEND = [('quer_a', 'w', -56), ('quer_b', 'w', 84), ('senk_a', 'n', -88), ('senk_b', 'n', 70)]
