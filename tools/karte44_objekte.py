@@ -119,6 +119,10 @@ def main():
                         return None                                  # Krone darf etwas ueber den Weg ragen (Rand natuerlich)
             if any(art2 != 'wald' and schnitt(r, tuple(rr), 3) for (*rr, art2) in rects):
                 return None
+            fx_ = (r[0] + r[2]) / 2.0                                # Nutzer: Waldbaeume nicht so dicht (Fussabstand)
+            if any(art2 == 'wald' and abs((rr[0] + rr[2]) / 2.0 - fx_) < 34 and abs(rr[3] - r[3]) < 26
+                   for (*rr, art2) in rects):
+                return None
         elif pruefen:
             gap = 2 if opt.get('streu') else 4
             if any(schnitt(r, tuple(rr), gap) for i_, (*rr, art2) in enumerate(rects) if i_ not in ohne):
@@ -298,6 +302,8 @@ def main():
         return _setze(name, cx, fy, opt, *a_, **kw)
     gesetzt = []
     for i, (n, tx, ty) in enumerate(BAEUME):
+        if any(abs(tx - BAEUME[j][1]) < 6 and abs(ty - BAEUME[j][2]) < 5 for (j, *_r) in gesetzt):
+            continue                                                 # Nutzer: Baeume nicht so dicht - Abstand im Dorf
         o = kachel(n, tx, ty, {'anim': 'baum'} if n != 'totbaum' else {}, i % 2 == 1)
         if not o:
             continue

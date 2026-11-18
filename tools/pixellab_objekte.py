@@ -2181,6 +2181,14 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'small round clay hut with a thick straw ring and a dome roof of dark wet mud, light orange walls, wooden door with a small canopy, firewood stacked beside the door, no snow, seen from the front and slightly above, ' + FR14,
         'small dome hut with walls of stacked round river stones and clay, dome roof of brown mud and moss patches, wooden door with iron hinges, a little chimney, no snow, seen from the front and slightly above, ' + FR14,
     ]},
+    'k44_baum': {'size': 80, 'freie_farben': True, 'items': [   # Karte 44 (Nutzer): neue Baeume fuer das trockene Lehmdorf
+        'dry baobab tree with a thick bottle-shaped grey-brown trunk and a small sparse crown of dusty olive leaves, ' + FR14,
+        'gnarled dry savanna tree with a twisted brown trunk and a few clumps of dusty olive-green leaves, ' + FR14,
+        'flat-topped umbrella thorn tree with a thin dark trunk and a wide sparse crown of dry yellow-green leaves, ' + FR14,
+        'leafless dead desert tree with pale bleached grey branches and cracked bark, ' + FR14,
+        'old dry tree with cracked brown bark and a sparse crown of brown and orange withered leaves, ' + FR14,
+        'small dry scrub tree with thin crooked branches and a few dusty sage-green leaves, ' + FR14,
+    ]},
     'k44_fass': {'size': 64, 'freie_farben': True, 'items': [   # Grosse Weinfaesser (Nutzer, fuer diese oder naechste Karte)
         'large oak wine barrel lying on its side on a wooden cradle stand, round front face with iron hoops and a small brass tap, dark brown oak staves, ' + FR14,
         'big standing wooden wine barrel with three dark iron hoops and a round wooden lid, warm brown oak, ' + FR14,
