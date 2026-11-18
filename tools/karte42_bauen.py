@@ -29,7 +29,8 @@ weich, zell_maske, flaeche = k4.weich, k4.zell_maske, k20.flaeche
 k4.RASTER45 = True                       # Regel 6b: alle Bodenkanten am 16er-Raster mit 45 Grad
 # Felsfront in den Toenen der Vorlage (rotbrauner Wuestenfels, Licht oben links)
 k4.FELS['wueste'] = ['#3e2414', '#5c361e', '#7a4a2a', '#965e36', '#b07444', '#c88c56', '#e0a86c']
-LIPPE = ['#6a4a2c', '#7c5834', '#8e663e', '#a07448', '#b08252', '#c0905c']   # Plateaukante (trockene Erde)
+LIPPE = ['#5a4128', '#684c30', '#765838', '#846442', '#92704c', '#a07c56']   # Plateaukante (wie Karte 44)
+k4.FELS['lehm42'] = ['#3a2818', '#4c3520', '#5e4229', '#705034', '#845f3e', '#98704a', '#ac825a']   # Felsfronten Erdbraun
 FRONT = 32
 SEITE = 6                                # seitliche Plateaukanten nur schmal (Regel)
 
@@ -47,14 +48,14 @@ def texturen(cols, rows):
     kies = os.path.join(ROOT, 'assets', 'karte03', 'basis', 'kies_%d.png')
     t = {
         # Nutzer: wie Karte 44 matschig, trocken und wuestenartig - getrockneter Lehm statt gelbem Sand
-        's': flaeche(k6.kacheln(os.path.join(basis, 'gras_%d.png'), 5, faerben((132, 98, 62), (176, 138, 92), 0.3, 0.5)), cols, rows),
+        's': flaeche(k6.kacheln(os.path.join(basis, 'gras_%d.png'), 5, faerben((132, 98, 62), (176, 138, 92), 0.3, 0.5)), cols, rows),   # = Karte 44 Lehm
         'b': flaeche(k6.kacheln(sand, 5, faerben((190, 158, 110), (226, 198, 150))), cols, rows),
         'd': flaeche(k6.kacheln(kies, 5, faerben((150, 120, 80), (198, 168, 118), 0.25, 0.6)), cols, rows),
         'k': flaeche(k6.kacheln(kies, 5, faerben((118, 112, 96), (178, 172, 150), 0.25, 0.6)), cols, rows),
         'n': flaeche(k6.kacheln(os.path.join(basis, 'gras_%d.png'), 5, faerben((120, 88, 56), (164, 128, 86), 0.3, 0.5)), cols, rows),   # kein Gras
-        'r': flaeche(k6.kacheln(kies, 5, faerben((176, 118, 70), (226, 166, 108), 0.25, 0.6)), cols, rows),   # Felsrand (hoch)
-        'm': flaeche(k6.kacheln(kies, 5, faerben((140, 88, 52), (200, 140, 92), 0.25, 0.6)), cols, rows),   # Bergkette
-        'p': flaeche(k6.kacheln(os.path.join(basis, 'gras_%d.png'), 5, faerben((150, 104, 66), (194, 146, 100), 0.3, 0.5)), cols, rows),   # Hochplateau (roetlicher Lehm)
+        'r': flaeche(k6.kacheln(kies, 5, faerben((96, 70, 44), (136, 104, 68), 0.25, 0.6)), cols, rows),   # Felsrand (Karte-44-Erdbraun)
+        'm': flaeche(k6.kacheln(kies, 5, faerben((76, 54, 34), (116, 86, 56), 0.25, 0.6)), cols, rows),   # Bergkette (dunkler)
+        'p': flaeche(k6.kacheln(os.path.join(basis, 'gras_%d.png'), 5, faerben((132, 98, 62), (176, 138, 92), 0.3, 0.5)), cols, rows),   # Hochplateau (Karte-44-Lehm)
     }
     return t
 
@@ -85,7 +86,7 @@ def bauen(frame=None, speichern=True):
     frei = np.zeros((Hp, Wp), bool)
     for (x0, x1, ry) in lay['treppen']:                              # Treppen schneiden die Front
         frei[ry * T - 4:ry * T + FRONT + 10, x0 * T:(x1 + 1) * T] = True
-    wand = k4.hoehenkanten(a, h1m, 'wueste', FRONT, SEITE, LIPPE, frei, 42, berg=False)
+    wand = k4.hoehenkanten(a, h1m, 'lehm42', FRONT, SEITE, LIPPE, frei, 42, berg=False)
     # Restnaehte Plateau|Rand (gleiche Hoehe, ohne Bergkette): schmale Kontur mit leichtem Schatten (Nutzer: alle
     # Uebergaenge abgrenzen)
     from PIL import ImageFilter as _IF
@@ -97,7 +98,7 @@ def bauen(frame=None, speichern=True):
     # Bergkette auf dem Felsrand (Nutzer): eine Stufe hoeher, Front zum Plateau bzw. Rand
     hoch3 = weich((hp >= 3).astype(np.float32), 5, 0.0, 13, 0.5) & h1m
     a[hoch3] = tex['m'][hoch3]
-    wand |= k4.hoehenkanten(a, hoch3, 'wueste', FRONT, SEITE, LIPPE, np.zeros_like(frei), 44, berg=False)
+    wand |= k4.hoehenkanten(a, hoch3, 'lehm42', FRONT, SEITE, LIPPE, np.zeros_like(frei), 44, berg=False)
     for (x0, x1, ry) in lay['treppen']:                              # Steintreppe frontal, volle Breite
         k4.treppe(a, x0 * T, (x1 + 1) * T, ry * T - 1, 's', FRONT, 'wueste', tex['b'])
     xm = np.zeros((Hp, Wp), bool)                                    # kein Wasser auf dieser Karte

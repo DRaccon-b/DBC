@@ -18,7 +18,9 @@ KARTE = os.path.join(ROOT, 'maps', 'karte42')
 OBJ = os.path.join(ROOT, 'assets', 'objekte', 'karte42')
 T = 16
 FREMD = {
-    'akazie': 'karte04/baeume/00.png', 'akazie_klein': 'karte04/baeume/03.png', 'totbaum': 'karte04/baeume/02.png',
+    # Nutzer: Baeume wie Karte 44 (PixelLab k44_baum)
+    'akazie': 'karte44/baum/02.png', 'akazie_klein': 'karte44/baum/05.png', 'totbaum': 'karte44/baum/03.png',
+    'baobab': 'karte44/baum/00.png', 'knorrig': 'karte44/baum/01.png', 'dornbaum': 'karte44/baum/09.png',
     'felsen': 'karte42/begleiter/58.png',   # K04-Fels schwebte (Halme unter dem Fuss) -> PixelLab-Fels
     'fels_sand': 'karte03/mittel/07.png', 'fels_grau': 'karte04/mittel/00.png',
     'skelett': 'karte03/mittel/06.png', 'knochen': 'karte04/mittel/08.png', 'schaedel': 'karte04/mittel/09.png',
@@ -33,9 +35,9 @@ FREMD = {
     'bank': 'karte42/dorf/01.png', 'kruege': 'karte42/dorf/02.png',
 }
 # (Sprite, Kachel-x der Fussmitte, Fusszeile, Ebene) nach der Vorlage; Ebene 1 Talboden, 2 Hochplateau
-BAEUME = [('totbaum', 11, 16, 2), ('totbaum', 59, 13, 2), ('totbaum', 79, 18, 2), ('totbaum', 40, 22, 1),
-          ('totbaum', 54, 44, 1), ('akazie', 12, 50, 1), ('akazie', 26, 47, 1), ('akazie', 36, 53, 1),
-          ('akazie', 74, 42, 1), ('akazie_klein', 81, 57, 1), ('akazie', 57, 64, 1)]
+BAEUME = [('totbaum', 11, 16, 2), ('dornbaum', 59, 13, 2), ('totbaum', 79, 18, 2), ('knorrig', 40, 22, 1),
+          ('dornbaum', 54, 44, 1), ('akazie', 12, 50, 1), ('baobab', 26, 47, 1), ('akazie', 36, 53, 1),
+          ('baobab', 74, 42, 1), ('akazie_klein', 81, 57, 1), ('knorrig', 57, 64, 1)]
 GROSS = [('huette', 17, 35, 1), ('kruege', 21, 36, 1), ('unterstand', 9, 56, 1), ('bank', 13, 57, 1),
          ('skelett', 28, 12, 2), ('skelett', 70, 24, 2), ('skelett', 59, 50, 1), ('skelett', 33, 61, 1),
          ('schaedel', 30, 18, 2), ('schaedel', 70, 54, 1),
