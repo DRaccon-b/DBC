@@ -2265,7 +2265,7 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'round patch of many small glossy red bubbles with darker gaps, seen from directly above, top-down view, no ground, no cast shadow, crisp detailed pixel art, classic 2D handheld RPG style',
     ]},
     # Karte 52 (Nutzer): nie herunterskalieren - jedes Objekt direkt in Zielgroesse erzeugen
-    'k52n_48': {'size': 48, 'freie_farben': True, 'items': [
+    'k52_n48': {'size': 48, 'freie_farben': True, 'items': [
         'black iron street lamp on a thin pole with a warm glowing lamp head, ' + FR14,
         'black iron street lamp half swallowed by glossy bright red bubbly jelly at its base, ' + FR14,
         'red fire hydrant half swallowed by glossy bright red bubbly jelly at its base, ' + FR14,
@@ -2275,7 +2275,7 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'thin glossy red jelly tentacle with a round bubble tip rising from the ground, ' + FR14,
         'red drink vending machine with a glowing display of bottles, ' + FR14,
     ]},
-    'k52n_48b': {'size': 48, 'freie_farben': True, 'items': [
+    'k52_n48b': {'size': 48, 'freie_farben': True, 'items': [
         'pile of broken grey concrete rubble with bent rebar, ' + FR14,
         'cracked grey concrete road barrier block, ' + FR14,
         'low mound of glossy bright red jelly bubbles creeping over the ground, ' + FR14,
@@ -2285,7 +2285,7 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'small cluster of glossy bright red jelly bubbles on the ground, ' + FR14,
         'rusty oil barrel leaking glowing yellow liquid, ' + FR14,
     ]},
-    'k52n_32': {'size': 32, 'freie_farben': True, 'items': [
+    'k52_n32': {'size': 32, 'freie_farben': True, 'items': [
         'crossed rusty steel anti-tank hedgehog barricade, ' + FR14,
         'small puddle of dark red goo, flat ground detail, ' + FR14,
         'scattered grey concrete debris chunks, flat ground detail, ' + FR14,
@@ -2295,7 +2295,7 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'wooden park bench, ' + FR14,
         'orange and white traffic cone, ' + FR14,
     ]},
-    'k52n_64': {'size': 64, 'freie_farben': True, 'items': [
+    'k52_n64': {'size': 64, 'freie_farben': True, 'items': [
         'small dusty orange hatchback car seen exactly from the side, facing left, flat side view, no perspective, classic 2D handheld RPG style',
         'small silver sedan car seen exactly from the side, facing left, flat side view, no perspective, classic 2D handheld RPG style',
         'small red compact car seen exactly from the side, facing left, flat side view, no perspective, classic 2D handheld RPG style',

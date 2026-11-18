@@ -41,10 +41,21 @@ for n_, (i, f) in DR.items():                                       # D-Reaper w
     FREMD['dr/' + n_] = ('karte52/anime/%s.png' % i, f)
 for n_, i in {'pfuetze': 0, 'brocken': 1, 'glas': 2, 'zeitung': 3}.items():
     FREMD['klein/' + n_] = ('karte52/klein/%02d.png' % i, 0.75)
+# Nutzer: nie herunterskalieren - alle Objekte neu in Zielgroesse erzeugt (PixelLab k52_n48/n48b/n32/n64), Faktor 1
+NEU = {'k18s/18': 'n48/00', 'k18s/13': 'n32/06', 'k18s/01': 'n48/07', 'k18s/12': 'n32/05', 'k18s/41': 'n48b/05',
+       'k18a/01': 'n64/01', 'k18a/02': 'n64/02', 'k18a/03': 'n64/00', 'k18a/05': 'n64/03',
+       'reaper/sperre': 'n32/00', 'reaper/block': 'n48b/01', 'reaper/schutt': 'n48b/00', 'reaper/fass': 'n48b/08',
+       'dr/laterne': 'n48/01', 'dr/hydrant': 'n48/02', 'dr/briefkasten': 'n48/03', 'dr/schild': 'n48/04',
+       'dr/turm': 'n48/05', 'dr/tentakel': 'n48/06', 'dr/muell': 'n48/09', 'dr/bank': 'n48/10', 'dr/huegel': 'n48b/02',
+       'dr/blasen': 'n48b/06', 'dr/reifen': 'n48/08', 'dr/fahrrad': 'n48/13', 'dr/kisten': 'n48/11',
+       'klein/pfuetze': 'n32/01', 'klein/brocken': 'n32/02', 'klein/glas': 'n32/03', 'klein/zeitung': 'n32/04'}
+for n_, q in NEU.items():
+    FREMD[n_] = ('karte52/%s.png' % q, 1)
+FREMD = {k_: v_ for k_, v_ in FREMD.items() if v_[1] == 1}            # alte, skalierte Fassungen nicht mehr verwenden
 GANZ = ('halb/buero_links', 'halb/buero_unten')                     # fertige Gebaeude in Vorlagenbreite
 WALD = ['k01/baum%02d' % i for i in (0, 1, 2, 4, 9, 15)]
 BUSCH = ['k01/baum%02d' % i for i in (12, 13, 14)]
-LAMPE = {'anim': 'leuchten', 'licht': [4, 7], 'licht_box': [2, 5, 6, 10], 'licht_r': 9}
+LAMPE = {'anim': 'lampe'}                                          # neue Laterne: Glaskopf leuchtet (automatisch erkannt)
 # Gebaeude: Flaeche aus dem Layout, Haelfte, Fassade
 GEB = {'oben_links': 'halb/buero_links', 'beige_links': 'halb/beige', 'glas_mitte': 'halb/glas_mitte',
        'glas_rechts': 'halb/glas', 'beige_rechts': 'halb/beige_flach', 'lila_unten': 'halb/buero_unten'}
@@ -56,7 +67,7 @@ def kopieren(name, quelle, f):
     im = Image.open(os.path.join(ROOT, 'assets', 'objekte', quelle)).convert('RGBA')
     im = im.crop(im.getbbox())
     if f != 1:
-        im = im.resize((max(1, round(im.width * f)), max(1, round(im.height * f))), Image.NEAREST)
+        raise SystemExit('nie skalieren (Nutzer): %s - in Zielgroesse neu erzeugen' % name)
     im.save(ziel)
 
 
@@ -260,8 +271,8 @@ def main():
                     and not masse[ty, tx]:
                 rand_k.append((tx, ty))
     rnd.shuffle(rand_k)
-    motive = ['dr/turm', 'dr/blasen', 'dr/tentakel', 'dr/hydrant', 'dr/huegel', 'dr/briefkasten', 'dr/turm', 'dr/muell',
-              'dr/tentakel', 'dr/schild', 'dr/blasen', 'dr/bank', 'dr/huegel']
+    motive = ['dr/turm', 'dr/blasen', 'dr/tentakel', 'dr/hydrant', 'dr/huegel', 'dr/briefkasten', 'dr/reifen', 'dr/muell',
+              'dr/kisten', 'dr/schild', 'dr/fahrrad', 'dr/bank']
     MOEBEL = ('dr/hydrant', 'dr/briefkasten', 'dr/schild', 'dr/bank', 'dr/muell')   # Strassenmoebel nur auf Gehweg
     motiv_pos = {}
     gesetzt_r = []

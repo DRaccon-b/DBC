@@ -115,7 +115,7 @@ def stempeln(mm, f, seed, flach=False, x0=0, y0=0, T=16, ueber=3):
     (jede zweite Kachel, Reihen um eine Kachel verschoben), leicht ueberlappend, von Norden nach Sueden gezeichnet - keine
     kleinen Fuellblasen, nichts beschnitten. Animation: jeder Haufen hebt/senkt sich mit eigener Phase um 1 px (4 Bilder).
     Rueckgabe: RGBA-Ebene (Alpha 0/1) in Groesse der Maske und der Abstand zur Kante."""
-    gross = stempel_laden()[2]                                         # Nutzer: kleine Blasen (48er-Haufen, Originalgroesse)
+    gross = stempel_laden()[1]                                         # Nutzer: kleine Blasen (48er-Haufen, Originalgroesse)
     h, w = mm.shape
     dist = _abstand(mm)
     mm_d = np.array(Image.fromarray(mm.astype(np.uint8) * 255).filter(ImageFilter.MaxFilter(2 * ueber + 1))) > 0
