@@ -39,19 +39,19 @@ for _i in KLEINFELS:
     FREMD['kf%02d' % _i] = 'karte27/fels_klein/%02d.png' % _i
 # Nutzer: ganz matschig, kein Gras/Schnee - statt Laubbaeumen kahle tote Baeume (Karte 08), dunkle Buesche (Karte 12),
 # Streudeko aus Zweigen, Wurzeln, Steinen, Pilzen (Karte 04/27) statt Grasbueschel und Blumen
-for _n, _q in (('b00', 'karte08/baeume/01.png'), ('b02', 'karte08/baeume/14.png'), ('b03', 'karte08/baeume/03.png'),
-               ('b06', 'karte08/baeume/03.png'), ('b07', 'karte08/baeume/01.png'), ('b08', 'karte08/baeume/14.png'),   # braune statt graue Baeume
-               ('b12', 'karte12/rand/08.png'), ('b13', 'karte12/rand/11.png'),
+# Nutzer: wuestenartig - Akazien und tote Baeume wie in Karte 41/42 (Karte 04/08), duerre Buesche
+for _n, _q in (('b00', 'karte04/baeume/00.png'), ('b02', 'karte04/baeume/02.png'), ('b03', 'karte04/baeume/03.png'),
+               ('b06', 'karte08/baeume/03.png'), ('b07', 'karte04/baeume/02.png'), ('b08', 'karte08/baeume/01.png'),
+               ('b12', 'karte04/mittel/10.png'), ('b13', 'karte27/fels_klein/63.png'),
                ('gras', 'karte04/klein/14.png'), ('gras2', 'karte04/klein/33.png'), ('gras3', 'karte04/klein/38.png'),
                ('blume', 'karte04/klein/43.png'), ('farn', 'karte27/fels_klein/25.png')):
     FREMD[_n] = _q
 KLEINFELS[:] = [2, 6, 14, 17, 25, 27, 28, 35, 44, 52, 53, 63]
 for _i in KLEINFELS:
     FREMD['kf%02d' % _i] = 'karte27/fels_klein/%02d.png' % _i
-for _n, _i in (('w0', 0), ('w2', 2), ('w8', 8)):
-    FREMD[_n] = 'karte12/wald/%02d.png' % _i                  # dunkle Sumpfbaeume (Mangrove, gedreht, Trauerweide)
-WALD = ['w0', 'w2', 'w8', 'w0', 'w8', 'b00', 'b06']          # Guertel: dichte Sumpfbaeume, dazwischen tote Baeume
-BUSCH = ['b12', 'b13']                                       # dunkle Buesche (Karte 12) fuellen den Guertel
+FREMD['steinhaufen'] = 'karte04/mittel/15.png'
+WALD = ['b00', 'b03', 'b02', 'b00', 'b08', 'b03']          # Guertel: Akazien, dazwischen tote Baeume (wuestenartig)
+BUSCH = ['b12', 'b13']                                       # duerre Buesche fuellen den Guertel
 # Baeume der Vorlage (Sprite, Kachel-x, Fusszeile): Eichen, runde Baeume, Zypressen; dichte Gruppen aufgelockert
 BAEUME = [('b00', 21, 5), ('b03', 25, 5), ('b00', 24, 9), ('b08', 21, 10), ('b00', 12, 17), ('b03', 7, 17),
           ('b02', 10, 21), ('b03', 15, 21), ('b03', 19, 17), ('b07', 17, 21), ('b02', 26, 16),
@@ -281,7 +281,7 @@ def main():
             faesser.pop(0); n_f += 1
     print('  Weinfaesser neben Huetten:', n_f, 'uebrig', faesser)
     # ---------------- Baeume der Vorlage mit Begleitern
-    felsen = ['fels02', 'fels03', 'fels14']
+    felsen = ['fels03', 'steinhaufen', 'kf06']                       # Nutzer: wuestenartig - ohne Gras-/Moosfelsen
     klein = ['kf%02d' % i for i in KLEINFELS]
     rnd.shuffle(klein)
     zug = {'k': 0, 'f': 0}

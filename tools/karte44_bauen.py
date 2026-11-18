@@ -29,11 +29,11 @@ k4.N_FRAMES = N_FRAMES
 kb.N_FRAMES = N_FRAMES
 H = k4.H
 weich, zell_maske, flaeche = k4.weich, k4.zell_maske, k20.flaeche
-k4.SCHATTEN = {'farbe': (34, 22, 14), 'dx': 0.3, 'dy': 0.15, 'kern': 100, 'wurf': (66, 52)}   # kuehler, kompakter (Nutzer)
+k4.SCHATTEN = {'farbe': (70, 46, 26), 'dx': 0.3, 'dy': 0.15, 'kern': 100, 'wurf': (66, 52)}   # kuehler, kompakter (Nutzer)
 k4.RASTER45 = True                       # Regel 6b: alle Bodenkanten am 16er-Raster mit 45 Grad
 # niedrige Steinmauer der Waldbloecke (grauer Bruchstein wie in der Vorlage), Kante oben mit Waldboden
 k4.FELS['mauer43'] = ['#2c2f38', '#3e434e', '#545a66', '#6a717e', '#828a96', '#9aa2ac', '#b6bcc4']
-LIPPE = ['#2a1c12', '#342418', '#3e2c1e', '#4a3424', '#563e2c', '#624834']   # Waldkante (dunkler Matsch, Nutzer: kein Gras)
+LIPPE = ['#5a4128', '#684c30', '#765838', '#846442', '#92704c', '#a07c56']   # Waldkante (trockene Erde, Nutzer: kein Gras)
 FRONT = 16
 SEITE = 6                                # seitliche Plateaukanten nur schmal (Regel)
 
@@ -51,11 +51,11 @@ def texturen(cols, rows):
     gras = os.path.join(basis, 'gras_%d.png')
     kies = os.path.join(ROOT, 'assets', 'karte03', 'basis', 'kies_%d.png')
     return {
-        # Nutzer: ganz matschig, kein Gras, kein Schnee - nasser dunkler Matsch, Wege aus festgetretenem hellerem Lehm
-        'g': flaeche(k6.kacheln(gras, 5, faerben((62, 44, 30), (112, 86, 58), 0.3, 0.5)), cols, rows),
-        'w': flaeche(k6.kacheln(sand, 5, faerben((120, 92, 62), (164, 132, 94))), cols, rows),
+        # Nutzer: matschig, aber trocken und wuestenartig - kein Gras, kein Schnee: getrockneter Lehm, staubige Sandwege
+        'g': flaeche(k6.kacheln(gras, 5, faerben((132, 98, 62), (176, 138, 92), 0.3, 0.5)), cols, rows),
+        'w': flaeche(k6.kacheln(sand, 5, faerben((190, 158, 110), (226, 198, 150))), cols, rows),
         'k': flaeche(k6.kacheln(kies, 5, faerben((96, 100, 108), (168, 172, 178), 0.25, 0.6)), cols, rows),
-        'h': flaeche(k6.kacheln(gras, 5, faerben((36, 26, 18), (70, 52, 36), 0.3, 0.5)), cols, rows),
+        'h': flaeche(k6.kacheln(gras, 5, faerben((96, 70, 44), (136, 104, 68), 0.3, 0.5)), cols, rows),
     }
 
 

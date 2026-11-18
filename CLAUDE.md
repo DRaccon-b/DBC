@@ -329,10 +329,10 @@ Vor jeder Abgabe Punkt für Punkt prüfen (vergrößert, Standbild und mehrere A
   kurze Büschel an den Sockelecken (nie vor der Tür). Schatten auf Wiese kühl (dunkles Grün statt Braungrau) und kompakt
   (`k4.SCHATTEN` je Karte). Bodenschattierung (Relief, vertiefte Wege) hat der Nutzer
   danach wieder verworfen – keine großflächige Boden-Hell/Dunkel-Schattierung verwenden.
-- **Matschdorf (Nutzer, Karte 44):** Chuchidarumon Village ist ganz matschig – kein Gras, kein Schnee (Vorlage war hier
-  irreführend). Boden: nasser dunkler Matsch, Wege aus festgetretenem Lehm, Waldboden dunkler Matsch; keine Grashalme; Hütten
-  ohne Schneedach (PixelLab k44_huette3); im Dorf tote Bäume (Karte 08), Gürtel aus dunklen Sumpfbäumen (Karte 12) gemischt mit
-  toten Bäumen; Streudeko aus Zweigen, Wurzeln, Steinen, Pilzen statt Gras/Blumen. Bei Unklarheit über die Bodenart vorher fragen.
+- **Matschdorf (Nutzer, Karte 44):** Chuchidarumon Village wirkt matschig, aber trocken und wüstenartig – kein Gras, kein
+  Schnee, kein Sumpf (Vorlage war hier irreführend). Boden: getrockneter Lehm, staubige Sandwege, Waldboden trockene Erde;
+  keine Grashalme; Hütten ohne Schneedach (PixelLab k44_huette3); Akazien und tote Bäume wie Karte 41/42, dürre Büsche; keine
+  Gras-/Moosfelsen; Streudeko aus Zweigen, Wurzeln, Steinen, Pilzen. Bei Unklarheit über die Bodenart vorher fragen.
 - **Insel mit Steg (Karte 45):** Steg liegt ganz über Wasser und schließt an die Uferkante an (in der Vorlage teils auf
   Land); Wasserkeile zwischen 45°-Ufer und eckigem Steg nur in den Stegspalten mit Planken schließen (keine Laschen
   neben dem Steg). Waldblöcke ringsum mit 1 Reihe Land, unter der Front 2 Reihen (Front nie im Wasser); Gras-Inseln
