@@ -108,8 +108,13 @@ def stempel_laden():
         basis = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'assets', 'objekte', 'karte52')
         gross = [Image.open(os.path.join(basis, 'masse', '%02d.png' % i)).convert('RGBA') for i in (0, 1, 3)]
         # Nutzer: durchgehender dunkelroter Schlamm (PixelLab k52_schlamm) statt Blasenhaufen; lose Spritzer entfernt
-        klein = [_ohne_spritzer(Image.open(os.path.join(basis, 'schlamm', '%02d.png' % i)).convert('RGBA'))
-                 for i in (0, 1, 2, 3)] + [_ohne_spritzer(Image.open(os.path.join(basis, 'schlamm_gross', '01.png')).convert('RGBA'))]
+        variante = os.environ.get('DREAPER_SCHLAMM')               # Vorschau der Schlamm-Varianten (k52_sv01..10)
+        if variante:
+            klein = [_ohne_spritzer(Image.open(os.path.join(basis, variante, '%02d.png' % i)).convert('RGBA'))
+                     for i in (0, 1, 2, 3)]
+        else:
+            klein = [_ohne_spritzer(Image.open(os.path.join(basis, 'schlamm', '%02d.png' % i)).convert('RGBA'))
+                     for i in (0, 1, 2, 3)] + [_ohne_spritzer(Image.open(os.path.join(basis, 'schlamm_gross', '01.png')).convert('RGBA'))]
         fein = [Image.open(os.path.join(basis, 'masse_fein', '%02d.png' % i)).convert('RGBA') for i in (0, 1, 2, 3)]
         _STEMPEL = ([g.crop(g.getbbox()) for g in gross], [k.crop(k.getbbox()) for k in klein],
                     [k.crop(k.getbbox()) for k in fein])
