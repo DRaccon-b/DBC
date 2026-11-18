@@ -253,8 +253,8 @@
 "datei": "varianten/reaper-fass.png",
 "basis": "reaper/fass",
 "x": 418,
-"y": 270,
-"fuss": 33,
+"y": 263,
+"fuss": 40,
 "kachel": [
 27,
 18
@@ -345,13 +345,13 @@
 "anim": "lampe"
 },
 {
-"datei": "varianten/k18s-13.png",
-"basis": "k18s/13",
-"x": 1312,
-"y": 1017,
-"fuss": 22,
+"datei": "varianten/dr-bank_platz.png",
+"basis": "dr/bank_platz",
+"x": 1297,
+"y": 1005,
+"fuss": 34,
 "kachel": [
-83,
+82,
 64
 ],
 "ebene": 1,
@@ -385,13 +385,13 @@
 "licht_r": 9
 },
 {
-"datei": "varianten/k18s-12.png",
-"basis": "k18s/12",
-"x": 1381,
-"y": 1141,
-"fuss": 26,
+"datei": "varianten/dr-muell_platz.png",
+"basis": "dr/muell_platz",
+"x": 1366,
+"y": 1131,
+"fuss": 36,
 "kachel": [
-87,
+86,
 72
 ],
 "ebene": 1,
@@ -411,21 +411,6 @@
 "ebene": 1,
 "ohne_wall": true,
 "nur_kontakt": true
-},
-{
-"datei": "varianten/k18s-18.png",
-"basis": "k18s/18",
-"x": 992,
-"y": 723,
-"fuss": 44,
-"kachel": [
-62,
-47
-],
-"ebene": 1,
-"ohne_wall": true,
-"nur_kontakt": true,
-"anim": "lampe"
 },
 {
 "datei": "varianten/dr-turm.png",
@@ -526,44 +511,133 @@
 "nur_kontakt": true
 },
 {
-"datei": "varianten/klein-brocken_m.png",
-"basis": "klein/brocken",
-"x": 830,
-"y": 1078,
-"fuss": 25,
+"datei": "varianten/dr-laterne_m.png",
+"basis": "dr/laterne",
+"x": 786,
+"y": 820,
+"fuss": 43,
 "kachel": [
-52,
-68
+50,
+53
 ],
-"ebene": 0,
+"ebene": 1,
 "ohne_wall": true,
-"liegend": true,
-"schattenlos": true
+"nur_kontakt": true,
+"anim": "lampe",
+"lampe_box": [
+6,
+8,
+22,
+18
+]
 },
 {
-"datei": "varianten/klein-pfuetze.png",
-"basis": "klein/pfuetze",
-"x": 174,
-"y": 1221,
-"fuss": 19,
+"datei": "varianten/dr-bank.png",
+"basis": "dr/bank",
+"x": 274,
+"y": 923,
+"fuss": 36,
 "kachel": [
-11,
-77
+18,
+59
 ],
-"ebene": 0,
+"ebene": 1,
 "ohne_wall": true,
-"liegend": true,
-"schattenlos": true
+"nur_kontakt": true
 },
 {
-"datei": "varianten/klein-zeitung_m.png",
+"datei": "varianten/dr-hydrant.png",
+"basis": "dr/hydrant",
+"x": 192,
+"y": 824,
+"fuss": 39,
+"kachel": [
+13,
+53
+],
+"ebene": 1,
+"ohne_wall": true,
+"nur_kontakt": true
+},
+{
+"datei": "varianten/dr-klima.png",
+"basis": "dr/klima",
+"x": 786,
+"y": 238,
+"fuss": 33,
+"kachel": [
+50,
+16
+],
+"ebene": 1,
+"ohne_wall": true,
+"nur_kontakt": true
+},
+{
+"datei": "varianten/dr-muell_m.png",
+"basis": "dr/muell",
+"x": 744,
+"y": 440,
+"fuss": 39,
+"kachel": [
+47,
+29
+],
+"ebene": 1,
+"ohne_wall": true,
+"nur_kontakt": true
+},
+{
+"datei": "varianten/dr-briefkasten_m.png",
+"basis": "dr/briefkasten",
+"x": 788,
+"y": 966,
+"fuss": 41,
+"kachel": [
+50,
+62
+],
+"ebene": 1,
+"ohne_wall": true,
+"nur_kontakt": true
+},
+{
+"datei": "varianten/dr-busch.png",
+"basis": "dr/busch",
+"x": 787,
+"y": 569,
+"fuss": 38,
+"kachel": [
+50,
+37
+],
+"ebene": 1,
+"ohne_wall": true,
+"nur_kontakt": true
+},
+{
+"datei": "varianten/dr-schild.png",
+"basis": "dr/schild",
+"x": 294,
+"y": 772,
+"fuss": 43,
+"kachel": [
+19,
+50
+],
+"ebene": 1,
+"ohne_wall": true,
+"nur_kontakt": true
+},
+{
+"datei": "varianten/klein-zeitung.png",
 "basis": "klein/zeitung",
-"x": 1390,
-"y": 184,
+"x": 1035,
+"y": 923,
 "fuss": 19,
 "kachel": [
-87,
-12
+65,
+58
 ],
 "ebene": 0,
 "ohne_wall": true,
@@ -573,101 +647,11 @@
 {
 "datei": "varianten/klein-brocken.png",
 "basis": "klein/brocken",
-"x": 382,
-"y": 915,
+"x": 1000,
+"y": 689,
 "fuss": 25,
 "kachel": [
-24,
-58
-],
-"ebene": 0,
-"ohne_wall": true,
-"liegend": true,
-"schattenlos": true
-},
-{
-"datei": "varianten/klein-glas_m.png",
-"basis": "klein/glas",
-"x": 671,
-"y": 987,
-"fuss": 18,
-"kachel": [
-42,
-62
-],
-"ebene": 0,
-"ohne_wall": true,
-"liegend": true,
-"schattenlos": true
-},
-{
-"datei": "varianten/klein-pfuetze_m.png",
-"basis": "klein/pfuetze",
-"x": 549,
-"y": 933,
-"fuss": 19,
-"kachel": [
-35,
-59
-],
-"ebene": 0,
-"ohne_wall": true,
-"liegend": true,
-"schattenlos": true
-},
-{
-"datei": "varianten/klein-glas.png",
-"basis": "klein/glas",
-"x": 716,
-"y": 170,
-"fuss": 18,
-"kachel": [
-45,
-11
-],
-"ebene": 0,
-"ohne_wall": true,
-"liegend": true,
-"schattenlos": true
-},
-{
-"datei": "varianten/klein-glas.png",
-"basis": "klein/glas",
-"x": 1368,
-"y": 556,
-"fuss": 18,
-"kachel": [
-86,
-35
-],
-"ebene": 0,
-"ohne_wall": true,
-"liegend": true,
-"schattenlos": true
-},
-{
-"datei": "varianten/klein-glas_m.png",
-"basis": "klein/glas",
-"x": 341,
-"y": 234,
-"fuss": 18,
-"kachel": [
-22,
-15
-],
-"ebene": 0,
-"ohne_wall": true,
-"liegend": true,
-"schattenlos": true
-},
-{
-"datei": "varianten/klein-zeitung_m.png",
-"basis": "klein/zeitung",
-"x": 1019,
-"y": 698,
-"fuss": 19,
-"kachel": [
-64,
+63,
 44
 ],
 "ebene": 0,
@@ -676,14 +660,14 @@
 "schattenlos": true
 },
 {
-"datei": "varianten/klein-zeitung_m.png",
-"basis": "klein/zeitung",
-"x": 345,
-"y": 715,
+"datei": "varianten/klein-pfuetze.png",
+"basis": "klein/pfuetze",
+"x": 762,
+"y": 871,
 "fuss": 19,
 "kachel": [
-22,
-45
+48,
+55
 ],
 "ebene": 0,
 "ohne_wall": true,
@@ -693,12 +677,117 @@
 {
 "datei": "varianten/klein-brocken_m.png",
 "basis": "klein/brocken",
-"x": 203,
-"y": 838,
+"x": 1333,
+"y": 787,
 "fuss": 25,
 "kachel": [
-13,
-53
+84,
+50
+],
+"ebene": 0,
+"ohne_wall": true,
+"liegend": true,
+"schattenlos": true
+},
+{
+"datei": "varianten/klein-zeitung_m.png",
+"basis": "klein/zeitung",
+"x": 1370,
+"y": 809,
+"fuss": 19,
+"kachel": [
+86,
+51
+],
+"ebene": 0,
+"ohne_wall": true,
+"liegend": true,
+"schattenlos": true
+},
+{
+"datei": "varianten/klein-brocken_m.png",
+"basis": "klein/brocken",
+"x": 841,
+"y": 1092,
+"fuss": 25,
+"kachel": [
+53,
+69
+],
+"ebene": 0,
+"ohne_wall": true,
+"liegend": true,
+"schattenlos": true
+},
+{
+"datei": "varianten/klein-pfuetze.png",
+"basis": "klein/pfuetze",
+"x": 412,
+"y": 106,
+"fuss": 19,
+"kachel": [
+26,
+7
+],
+"ebene": 0,
+"ohne_wall": true,
+"liegend": true,
+"schattenlos": true
+},
+{
+"datei": "varianten/klein-pfuetze_m.png",
+"basis": "klein/pfuetze",
+"x": 87,
+"y": 502,
+"fuss": 19,
+"kachel": [
+6,
+32
+],
+"ebene": 0,
+"ohne_wall": true,
+"liegend": true,
+"schattenlos": true
+},
+{
+"datei": "varianten/klein-brocken.png",
+"basis": "klein/brocken",
+"x": 312,
+"y": 464,
+"fuss": 25,
+"kachel": [
+20,
+30
+],
+"ebene": 0,
+"ohne_wall": true,
+"liegend": true,
+"schattenlos": true
+},
+{
+"datei": "varianten/klein-glas.png",
+"basis": "klein/glas",
+"x": 703,
+"y": 92,
+"fuss": 18,
+"kachel": [
+44,
+6
+],
+"ebene": 0,
+"ohne_wall": true,
+"liegend": true,
+"schattenlos": true
+},
+{
+"datei": "varianten/klein-zeitung.png",
+"basis": "klein/zeitung",
+"x": 685,
+"y": 1002,
+"fuss": 19,
+"kachel": [
+43,
+63
 ],
 "ebene": 0,
 "ohne_wall": true,

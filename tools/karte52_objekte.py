@@ -44,10 +44,12 @@ for n_, i in {'pfuetze': 0, 'brocken': 1, 'glas': 2, 'zeitung': 3}.items():
 # Nutzer: nie herunterskalieren - alle Objekte neu in Zielgroesse erzeugt (PixelLab k52_n48/n48b/n32/n64), Faktor 1
 NEU = {'k18s/18': 'n48/00', 'k18s/13': 'n32/06', 'k18s/01': 'n48/07', 'k18s/12': 'n32/05', 'k18s/41': 'n48b/05',
        'k18a/01': 'n64/01', 'k18a/02': 'n64/02', 'k18a/03': 'n64/00', 'k18a/05': 'n64/03',
-       'reaper/sperre': 'n32/00', 'reaper/block': 'n48b/01', 'reaper/schutt': 'n48b/00', 'reaper/fass': 'n48b/08',
+       'reaper/sperre': 'n32/00', 'reaper/block': 'n48b/01', 'reaper/schutt': 'n48b/00', 'reaper/fass': 'n48/08',
        'dr/laterne': 'n48/01', 'dr/hydrant': 'n48/02', 'dr/briefkasten': 'n48/03', 'dr/schild': 'n48/04',
        'dr/turm': 'n48/05', 'dr/tentakel': 'n48/06', 'dr/muell': 'n48/09', 'dr/bank': 'n48/10', 'dr/huegel': 'n48b/02',
        'dr/blasen': 'n48b/06', 'dr/reifen': 'n48/08', 'dr/fahrrad': 'n48/13', 'dr/kisten': 'n48/11',
+       'dr/bank_platz': 'n48b/04', 'dr/muell_platz': 'n48b/03', 'dr/klima': 'n48/14', 'dr/busch': 'n48/15',
+       'dr/rutsche': 'n48/12',
        'klein/pfuetze': 'n32/01', 'klein/brocken': 'n32/02', 'klein/glas': 'n32/03', 'klein/zeitung': 'n32/04'}
 for n_, q in NEU.items():
     FREMD[n_] = ('karte52/%s.png' % q, 1)
@@ -256,11 +258,11 @@ def main():
     for fy_ in ((by0 + 1) * T + 15, by1 * T + 15):
         setze('k18s/18', xl + lw / 2.0, fy_, dict(LAMPE), klassen='b')
         setze('k18s/18', (bx1 + 1) * T - 20 - lw / 2.0, fy_, dict(LAMPE), klassen='b')
-    for (n_, tx, ty, sp) in (('k18s/13', 80, 62, False), ('k18s/01', 88, 61, False), ('k18s/12', 84, 70, False)):
+    for (n_, tx, ty, sp) in (('dr/bank_platz', 80, 62, False), ('k18s/01', 88, 61, False), ('dr/muell_platz', 84, 70, False)):
         kachel(n_, tx + P, ty + P, {}, sp, klassen='b', weit=2)
     kachel('k18s/41', 80 + P, 74 + P, {}, klassen='b', weit=3)             # Haltestelle (Vorlage) auf dem Vorplatz
     for (tx, ty) in ((18, 12), (40, 46), (60, 45), (22, 76 - 1)):
-        kachel('k18s/18', tx + P, ty + P, dict(LAMPE), klassen='k', weit=5)
+        kachel('dr/laterne', tx + P, ty + P, {'anim': 'lampe', 'lampe_box': [6, 8, 22, 18]}, klassen='k', weit=5)
     # ---------------------------------------------------------------- D-Reaper: Auslaeufer an den Masseraendern
     gk = np.array([list(z) for z in cls])
     masse = np.isin(gk, ['r', 'h'])
@@ -272,8 +274,8 @@ def main():
                 rand_k.append((tx, ty))
     rnd.shuffle(rand_k)
     motive = ['dr/turm', 'dr/blasen', 'dr/tentakel', 'dr/hydrant', 'dr/huegel', 'dr/briefkasten', 'dr/reifen', 'dr/muell',
-              'dr/kisten', 'dr/schild', 'dr/fahrrad', 'dr/bank']
-    MOEBEL = ('dr/hydrant', 'dr/briefkasten', 'dr/schild', 'dr/bank', 'dr/muell')   # Strassenmoebel nur auf Gehweg
+              'dr/kisten', 'dr/schild', 'dr/fahrrad', 'dr/bank', 'dr/klima', 'dr/busch', 'dr/rutsche']
+    MOEBEL = ('dr/hydrant', 'dr/briefkasten', 'dr/schild', 'dr/bank', 'dr/muell', 'dr/klima', 'dr/busch', 'dr/rutsche')   # Strassenmoebel nur auf Gehweg
     motiv_pos = {}
     gesetzt_r = []
     for (tx, ty) in rand_k:
@@ -290,6 +292,28 @@ def main():
                  klassen='k' if n_ in MOEBEL else 'a' + G):
             motiv_pos.setdefault(n_, []).append((tx, ty))
             gesetzt_r.append((tx, ty))
+    # ---------------------------------------------------------------- verschlungene Stadtmoebel (Nutzer: mehr Blasen-Objekte)
+    zug = ['dr/laterne', 'dr/bank', 'dr/hydrant', 'dr/klima', 'dr/muell', 'dr/briefkasten', 'dr/busch', 'dr/schild',
+           'dr/rutsche', 'dr/fahrrad', 'dr/kisten', 'dr/laterne', 'dr/hydrant', 'dr/bank']
+    kand_m = [(tx, ty) for ty in range(P + 3, rows - P - 3) for tx in range(P + 3, cols - P - 3)
+              if gk[ty, tx] in 'kq' and masse[max(0, ty - 5):ty + 6, max(0, tx - 5):tx + 6].any()]
+    rnd.shuffle(kand_m)
+    gesetzt_m = list(gesetzt_r)
+    zi = 0
+    for (tx, ty) in kand_m:
+        if zi >= len(zug):
+            break
+        if any(abs(tx - a_) + abs(ty - b_) < 9 for (a_, b_) in gesetzt_m):
+            continue
+        n_ = zug[zi]
+        if any(abs(tx - a_) + abs(ty - b_) < 16 for (a_, b_) in motiv_pos.get(n_, [])):
+            continue
+        bw_ = (lambda b: b[2] - b[0])(Image.open(os.path.join(OBJ, n_ + '.png')).getbbox())
+        wt_ = max(1, math.ceil(bw_ / T))
+        opt_ = {'anim': 'lampe', 'lampe_box': [6, 8, 22, 18]} if n_ == 'dr/laterne' else {}
+        if setze(n_, (tx - (wt_ - 1) // 2) * T + wt_ * T / 2.0, ty * T + T - 1, opt_, rnd.random() < 0.5, klassen='kq'):
+            gesetzt_m.append((tx, ty)); motiv_pos.setdefault(n_, []).append((tx, ty)); zi += 1
+    print('verschlungene Moebel:', zi)
     # ---------------------------------------------------------------- flacher Kleinkram (begehbar)
     klein = ['klein/pfuetze', 'klein/brocken', 'klein/glas', 'klein/zeitung']
     for i in range(40):
