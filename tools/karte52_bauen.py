@@ -337,7 +337,7 @@ def bauen(frame=None, speichern=True):
                 nb = [kl_m[y + dy, x + dx] for dy, dx in ((1, 0), (-1, 0), (0, 1), (0, -1))
                       if 0 <= y + dy < rows and 0 <= x + dx < cols]
                 nb = [c for c in nb if c not in 'rh']
-                kl[y, x] = max(set(nb), key=nb.count) if nb else 'a'      # haeufigster Nachbarboden (Gehweg laeuft weiter)
+                kl[y, x] = max(sorted(set(nb)), key=nb.count) if nb else 'a'      # haeufigster Nachbarboden (Gehweg laeuft weiter)
     asph_k = np.isin(kl, ['a', 'x'])
     asphalt = gross(asph_k)
     a[asphalt] = k18.textur('s', cols, rows)[asphalt]

@@ -260,7 +260,9 @@ def main():
                 rand_k.append((tx, ty))
     rnd.shuffle(rand_k)
     motive = ['dr/turm', 'dr/blasen', 'dr/tentakel', 'dr/hydrant', 'dr/huegel', 'dr/briefkasten', 'dr/turm', 'dr/muell',
-              'dr/tentakel', 'dr/schild', 'dr/blasen', 'dr/bank', 'dr/huegel', 'dr/baum']
+              'dr/tentakel', 'dr/schild', 'dr/blasen', 'dr/bank', 'dr/huegel']
+    MOEBEL = ('dr/hydrant', 'dr/briefkasten', 'dr/schild', 'dr/bank', 'dr/muell')   # Strassenmoebel nur auf Gehweg
+    motiv_pos = {}
     gesetzt_r = []
     for (tx, ty) in rand_k:
         if len(gesetzt_r) >= 26:
@@ -268,9 +270,13 @@ def main():
         if any(abs(tx - x_) + abs(ty - y_) < 7 for (x_, y_) in gesetzt_r):
             continue
         n_ = motive[len(gesetzt_r) % len(motive)]
+        if any(abs(tx - a_) + abs(ty - b_) < 16 for (a_, b_) in motiv_pos.get(n_, [])):
+            continue                                                   # gleiches Motiv nie in der Naehe
         bw_ = (lambda b: b[2] - b[0])(Image.open(os.path.join(OBJ, n_ + '.png')).getbbox())
         wt_ = max(1, math.ceil(bw_ / T))                                   # Regel 1b: mittig im Kachelblock
-        if setze(n_, (tx - (wt_ - 1) // 2) * T + wt_ * T / 2.0, ty * T + T - 1, {}, rnd.random() < 0.5, klassen='a' + G):
+        if setze(n_, (tx - (wt_ - 1) // 2) * T + wt_ * T / 2.0, ty * T + T - 1, {}, rnd.random() < 0.5,
+                 klassen='k' if n_ in MOEBEL else 'a' + G):
+            motiv_pos.setdefault(n_, []).append((tx, ty))
             gesetzt_r.append((tx, ty))
     # ---------------------------------------------------------------- flacher Kleinkram (begehbar)
     klein = ['klein/pfuetze', 'klein/brocken', 'klein/glas', 'klein/zeitung']

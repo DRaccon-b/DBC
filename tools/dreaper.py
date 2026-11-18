@@ -240,7 +240,9 @@ def masse(a, m, frame=None, seed=52, boden=None, flach=False, stil='stempel'):
     p_ = np.pad(mm, 1, mode='edge')                                   # Kartenrand fortsetzen (keine Konturlinie am Bildrand)
     rand = mm & ~(p_[:-2, 1:-1] & p_[2:, 1:-1] & p_[1:-1, :-2] & p_[1:-1, 2:])
     if stil == 'stempel':                                              # ganze Blasenhaufen ueber dunklem Kern, Umriss aus Blasen
-        kern = mm & (st_dist >= (4 if flach else 8))
+        auf0 = st_ebene[..., 3] > 0                                    # Grundflaeche nur in Luecken zwischen Haufen (Schliessung)
+        zu = Image.fromarray(auf0.astype(np.uint8) * 255).filter(ImageFilter.MaxFilter(9)).filter(ImageFilter.MinFilter(9))
+        kern = mm & (np.array(zu) > 0)
         if flach:
             kern = mm
         sub[kern] = col[kern]
