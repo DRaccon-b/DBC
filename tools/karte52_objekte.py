@@ -244,7 +244,7 @@ def main():
                              ('reaper/schutt', 36, 20, False), ('reaper/schutt', 13, 55, True), ('reaper/schutt', 70, 25, False),
                              ('reaper/fass', 25, 16, False), ('dr/laterne', 33, 66, False),
                              ('dr/laterne', 80, 52, True)):
-        kachel(n_, tx + P, ty + P, {'liegend': True} if 'schutt' in n_ else {}, sp,
+        kachel(n_, tx + P, ty + P, {'liegend': True} if 'schutt' in n_ else dict(LAMPE) if n_ == 'dr/laterne' else {}, sp,
                klassen='k' if n_ == 'dr/laterne' else 'a' + G, weit=3)            # Laternen nur auf Gehweg, Schutt flach
     # ---------------------------------------------------------------- Bahnhofsvorplatz (Ziegelplatz unten rechts)
     gk_ = np.array([list(z) for z in cls])                              # Laternen an den Platzecken, exakt gespiegelt

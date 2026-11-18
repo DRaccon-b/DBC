@@ -119,6 +119,8 @@ def stempeln(mm, f, seed, flach=False, x0=0, y0=0, T=16, ueber=3):
     h, w = mm.shape
     dist = _abstand(mm)
     mm_d = np.array(Image.fromarray(mm.astype(np.uint8) * 255).filter(ImageFilter.MaxFilter(2 * ueber + 1))) > 0
+    PAD = 48                                                           # am Kartenrand geht die Masse ueber den Bildrand weiter
+    mm_p = np.pad(mm_d, PAD, mode='edge')
     breite = 30 if flach else 42                                       # Haufenbreite (ueberlappt die Nachbarn leicht)
     liste = []
     ty0, tx0 = -((y0 + 1) // T) - 1, -((x0 + 1) // T) - 1
@@ -150,9 +152,9 @@ def stempeln(mm, f, seed, flach=False, x0=0, y0=0, T=16, ueber=3):
                     for schritt_ in range(0, 25, 2):
                         ny_, nx_ = int(round(cy + vy / n_ * schritt_)), int(round(cx + vx / n_ * schritt_))
                         ya_, xa_ = ny_ - ih_ // 2, nx_ - iw_ // 2
-                        if ya_ < 0 or xa_ < 0 or ya_ + ih_ > h or xa_ + iw_ > w:
+                        if ya_ < -PAD or xa_ < -PAD or ya_ + ih_ > h + PAD or xa_ + iw_ > w + PAD:
                             continue
-                        if not (al_ & ~mm_d[ya_:ya_ + ih_, xa_:xa_ + iw_]).any():
+                        if not (al_ & ~mm_p[ya_ + PAD:ya_ + PAD + ih_, xa_ + PAD:xa_ + PAD + iw_]).any():
                             gefunden = (ny_, nx_, im_)
                             break
                     if gefunden:
@@ -255,8 +257,9 @@ def masse(a, m, frame=None, seed=52, boden=None, flach=False, stil='stempel'):
     rand = mm & ~(p_[:-2, 1:-1] & p_[2:, 1:-1] & p_[1:-1, :-2] & p_[1:-1, 2:])
     if stil == 'stempel':                                              # ganze Blasenhaufen ueber dunklem Kern, Umriss aus Blasen
         auf0 = st_ebene[..., 3] > 0                                    # Grundflaeche nur in Luecken zwischen Haufen (Schliessung)
-        zu = Image.fromarray(auf0.astype(np.uint8) * 255).filter(ImageFilter.MaxFilter(9)).filter(ImageFilter.MinFilter(9))
-        kern = mm & (np.array(zu) > 0)
+        zu = Image.fromarray(np.pad(auf0, 8, mode='edge').astype(np.uint8) * 255).filter(ImageFilter.MaxFilter(9)).filter(
+            ImageFilter.MinFilter(9))
+        kern = mm & (np.array(zu)[8:-8, 8:-8] > 0)
         if flach:
             kern = mm
         sub[kern] = col[kern]
