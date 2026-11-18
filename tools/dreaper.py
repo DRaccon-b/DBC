@@ -77,6 +77,7 @@ def blasen(h, w, f, seed, x0=0, y0=0):
 
 
 _STEMPEL = None
+FEIN_DICHTE = 2                                                        # 1 = jede Kachel ein Haufen, 2 = jede zweite
 
 
 def stempel_laden():
@@ -88,7 +89,9 @@ def stempel_laden():
         gross = [Image.open(os.path.join(basis, 'masse', '%02d.png' % i)).convert('RGBA') for i in (0, 1, 3)]
         klein = [Image.open(os.path.join(basis, 'masse_klein', '%02d.png' % i)).convert('RGBA')
                  for i in (0, 2, 12, 15)]                            # helle, runde Haufen (dunkle wirken am Rand wie Saum)
-        _STEMPEL = ([g.crop(g.getbbox()) for g in gross], [k.crop(k.getbbox()) for k in klein])
+        fein = [Image.open(os.path.join(basis, 'masse_fein', '%02d.png' % i)).convert('RGBA') for i in (0, 1, 2, 3)]
+        _STEMPEL = ([g.crop(g.getbbox()) for g in gross], [k.crop(k.getbbox()) for k in klein],
+                    [k.crop(k.getbbox()) for k in fein])
     return _STEMPEL
 
 
@@ -112,7 +115,7 @@ def stempeln(mm, f, seed, flach=False, x0=0, y0=0, T=16, ueber=3):
     (jede zweite Kachel, Reihen um eine Kachel verschoben), leicht ueberlappend, von Norden nach Sueden gezeichnet - keine
     kleinen Fuellblasen, nichts beschnitten. Animation: jeder Haufen hebt/senkt sich mit eigener Phase um 1 px (4 Bilder).
     Rueckgabe: RGBA-Ebene (Alpha 0/1) in Groesse der Maske und der Abstand zur Kante."""
-    _, gross = stempel_laden()                                        # 64er-Haufen in Originalgroesse (keine Skalierung, Nutzer: sauber)
+    gross = stempel_laden()[2]                                         # Nutzer: kleine Blasen (48er-Haufen, Originalgroesse)
     h, w = mm.shape
     dist = _abstand(mm)
     mm_d = np.array(Image.fromarray(mm.astype(np.uint8) * 255).filter(ImageFilter.MaxFilter(2 * ueber + 1))) > 0
@@ -121,7 +124,7 @@ def stempeln(mm, f, seed, flach=False, x0=0, y0=0, T=16, ueber=3):
     ty0, tx0 = -((y0 + 1) // T) - 1, -((x0 + 1) // T) - 1
     for ty in range(y0 // T - 1, (y0 + h) // T + 2):
         for tx in range(x0 // T - 1, (x0 + w) // T + 2):
-            if (tx + ty) % 2:
+            if FEIN_DICHTE == 2 and (tx + ty) % 2:
                 continue
             cy, cx = ty * T + T // 2 - y0, tx * T + T // 2 - x0       # Kachelmitte (global am Raster)
             if not (0 <= cy < h and 0 <= cx < w) or not mm[cy, cx]:

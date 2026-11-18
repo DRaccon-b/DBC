@@ -2258,6 +2258,12 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'few big glossy red jelly bubbles touching each other, seen from directly above, top-down view, no ground, no cast shadow, highly detailed pixel art, classic 2D handheld RPG style',
         'patch of tiny glossy red jelly bubbles, seen from directly above, top-down view, no ground, no cast shadow, highly detailed pixel art, classic 2D handheld RPG style',
     ]},
+    'k52_masse_fein': {'size': 48, 'freie_farben': True, 'items': [   # Nutzer: Blasen kleiner (Objekte wirkten daneben winzig)
+        'round heap of many small glossy bright red jelly bubbles packed tightly, each bubble small with a tiny white highlight, seen from directly above, top-down view, no ground, no cast shadow, crisp detailed pixel art, classic 2D handheld RPG style',
+        'dense cluster of small glossy crimson jelly bubbles of slightly different sizes, seen from directly above, top-down view, no ground, no cast shadow, crisp detailed pixel art, classic 2D handheld RPG style',
+        'compact mound of small glossy red jelly beads with tiny wet highlights, seen from directly above, top-down view, no ground, no cast shadow, crisp detailed pixel art, classic 2D handheld RPG style',
+        'round patch of many small glossy red bubbles with darker gaps, seen from directly above, top-down view, no ground, no cast shadow, crisp detailed pixel art, classic 2D handheld RPG style',
+    ]},
     'k54_klein': {'size': 32, 'freie_farben': True, 'items': [
         'coiled thick black power cable with a brass plug lying on the floor, flat ground detail, ' + FR14,
         'grey metal floor vent grate, flat ground detail, ' + FR14,
