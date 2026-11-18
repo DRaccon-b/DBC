@@ -2350,6 +2350,19 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'small cluster of glossy bright red jelly bubbles on a dark metal floor, ' + FR14,
         'thin glossy red jelly tentacle with a round bubble tip rising from a dark metal floor, ' + FR14,
     ]},
+    # Karte 54 (Nutzer): Ranken so gross wie Baeume, mehr Variationen, auch waagerecht zur Mitte
+    'k54_ranke96': {'size': 96, 'freie_farben': True, 'items': [
+        'huge thick glossy bright red jelly tentacle rising from the ground and curving over, made of fused bubbles, round bubble tip, wet white highlights, ' + FR14,
+        'tall twisted pair of glossy crimson jelly tentacles intertwined, bubbly texture, wet highlights, ' + FR14,
+        'large glossy bright red jelly tentacle bending sideways like a hook, clusters of red bubbles at its base, ' + FR14,
+        'tall glossy red jelly tentacle splitting into three thinner tendrils at the top, each ending in a round bubble, ' + FR14,
+    ]},
+    'k54_ranke_quer': {'size': 128, 'freie_farben': True, 'items': [
+        'long thick glossy bright red jelly tentacle lying flat on the ground, stretching horizontally from left to right, thick bubbly root on the left, tapering to a round bubble tip on the right, wet highlights, seen from directly above, top-down view, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'long glossy crimson jelly tentacle lying flat on the ground in a wavy S-curve from left to right, thick root on the left, round bubble tip on the right, bubbly texture, seen from directly above, top-down view, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'long thick glossy bright red jelly tentacle lying flat on the ground, stretching vertically from top to bottom, thick bubbly root at the top, tapering to a round bubble tip at the bottom, wet highlights, seen from directly above, top-down view, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+        'long glossy crimson jelly tentacle lying flat on the ground in a wavy S-curve from top to bottom, thick root at the top, round bubble tip at the bottom, bubbly texture, seen from directly above, top-down view, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
+    ]},
     'k54_klein': {'size': 32, 'freie_farben': True, 'items': [
         'coiled thick black power cable with a brass plug lying on the floor, flat ground detail, ' + FR14,
         'grey metal floor vent grate, flat ground detail, ' + FR14,
