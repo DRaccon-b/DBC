@@ -31,7 +31,7 @@ Aufstellfelds (cyan = Ankunft, gold = weiter; Funktion `pfeil_marke` in `tools/k
 | 14 | Karte 33 – The World of Dreams | Regeln angewendet, Animation 4+16 Bilder; offen: Kollision, Tileset, v1.0 |
 | … | weitere Karten folgen | – |
 
-## A03 *(in Planung)*
+## A03
 | Nr. | Karte | Stand |
 |---|---|---|
 | … | Karten folgen (Skill `neue-karte`) | – |
@@ -53,9 +53,9 @@ Aufstellfelds (cyan = Ankunft, gold = weiter; Funktion `pfeil_marke` in `tools/k
 | 16 | Karte 49 – The Broken Promise | v1.0 fertig (3 Agenten-Prüfrunden), Bossarena Beelzemon, Vorlagenfehler korrigiert, Motorradspuren, ZIP in maps/karte49/v1.0 |
 | 17 | Karte 50 – Zhuqiaomon's Sanctuary | v1.0 fertig (3 Agenten-Prüfrunden), Terrassen mit Torii-Treppen, abgesenkter Hof (Nutzer), ZIP in maps/karte50/v1.0 |
 | 18 | Karte 51 – Suzaku Gate | v1.0 fertig (3 Agenten-Prüfrunden), Zhuqiaomons Arena mit Torii und Brandflecken (Nutzer), ZIP in maps/karte51/v1.0 |
-| 19 | Karte 52 – D-Reaper: Shinjuku | v1.0 fertig: Blasenhaufen, Objekte in Zielgröße, verschlungene Stadtmöbel (Nutzer), Prüfrunde 5, ZIP in maps/karte52/v1.0 |
+| 19 | Karte 52 – D-Reaper: Shinjuku | v1.0 fertig: Schlamm Version 8 ohne Innenränder, Gelenkarm mit Haken, verschlungene Stadtmöbel (Nutzer), ZIP in maps/karte52/v1.0 |
 | 20 | Karte 53 – Shinjuku Evacuation District | v1.0 fertig (3 Agenten-Prüfrunden), Hilfslager und Sanitätsposten (PixelLab), erste D-Reaper-Flecken, ZIP in maps/karte53/v1.0 |
-| 21 | Karte 54 – D-Reaper Kernel | v1.0 neu: Bossarena im Inneren der Kernkugel, Ranken, Pulswelle (Nutzer), Prüfrunde 1, ZIP in maps/karte54/v1.0 |
+| 21 | Karte 54 – D-Reaper Kernel | v1.0 neu: Bossarena in der Kernkugel, Schlammwand, glatte Membran, bewegte Gelenkarme mit Haken unregelmäßig verteilt (Nutzer), ZIP in maps/karte54/v1.0 |
 
 ## A0S – Sondergebiet
 | Nr. | Karte | Stand |
