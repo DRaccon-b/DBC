@@ -246,13 +246,30 @@ def textur_laden():
     global _TEXTUR
     if _TEXTUR is None:
         import os
-        basis = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'assets', 'objekte', 'karte52', 'masse_tex2')
+        variante = os.environ.get('DREAPER_TEX')                        # Vorschau weiterer Texturvarianten (k52_tv1..5)
+        basis = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'assets', 'objekte', 'karte52',
+                             variante or 'masse_tex2')
         _TEXTUR = []
-        for i, ein in ((3, 5), (0, 9)):
-            a = np.array(Image.open(os.path.join(basis, '%02d.png' % i)).convert('RGBA'))
+        if variante:                                                   # nur voll deckende Felder (Rahmen innen weg)
+            wahl = []
+            for n in sorted(os.listdir(basis)):
+                if not n[:2].isdigit():
+                    continue
+                a = np.array(Image.open(os.path.join(basis, n)).convert('RGBA'))
+                ys, xs = np.nonzero(a[..., 3] > 0)
+                if not len(ys):
+                    continue
+                inn = a[ys.min() + 9:ys.max() - 8, xs.min() + 9:xs.max() - 8]
+                if min(inn.shape[:2]) >= 80 and (inn[..., 3] == 255).all():
+                    wahl.append((n, 9))
+        else:
+            wahl = [('03.png', 5), ('00.png', 9)]
+        for n, ein in wahl[:4]:
+            a = np.array(Image.open(os.path.join(basis, n)).convert('RGBA'))
             ys, xs = np.nonzero(a[..., 3] > 0)
             a = a[ys.min() + ein:ys.max() - ein + 1, xs.min() + ein:xs.max() - ein + 1, :3].astype(np.float32)
             _TEXTUR += [a, a[:, ::-1]]
+        assert _TEXTUR, 'keine deckenden Texturfelder in ' + basis
     return _TEXTUR
 
 
