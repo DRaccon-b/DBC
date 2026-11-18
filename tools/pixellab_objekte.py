@@ -2333,6 +2333,23 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'olive green military supply truck parked, seen exactly from the side, facing left, flat side view, ' + FR14,
         'wooden pallet stacked with wrapped emergency supply boxes and water bottle packs, ' + FR14,
     ]},
+    # Karte 54 neu in Zielgroesse (Nutzer: nie herunterskalieren)
+    'k54_n48': {'size': 48, 'freie_farben': True, 'items': [
+        'old beige computer terminal with a small green crt screen on a short metal stand, ' + FR14,
+        'yellow caged industrial lamp on a thin black metal post, ' + FR14,
+        'grey steel gas cylinder standing upright with a dark band and a valve on top, ' + FR14,
+        'dark purple server rack cabinet with blinking red lights, ' + FR14,
+        'dark metal control console desk with glowing cyan screens and buttons, ' + FR14,
+        'old computer terminal half swallowed by glossy bright red bubbly jelly at its base, ' + FR14,
+        'tall pillar of stacked glossy bright red jelly bubbles rising from a dark metal floor, ' + FR14,
+        'hulking grey and dark blue mech guardian robot standing, glowing blue chest core, heavy armored shoulders, ' + FR14,
+    ]},
+    'k54_n48b': {'size': 48, 'freie_farben': True, 'items': [
+        'sci-fi stasis pod lying on the floor, dark teal glass lid with a cyan glow, ' + FR14,
+        'broken dark metal pipe segment lying on the floor, ' + FR14,
+        'small cluster of glossy bright red jelly bubbles on a dark metal floor, ' + FR14,
+        'thin glossy red jelly tentacle with a round bubble tip rising from a dark metal floor, ' + FR14,
+    ]},
     'k54_klein': {'size': 32, 'freie_farben': True, 'items': [
         'coiled thick black power cable with a brass plug lying on the floor, flat ground detail, ' + FR14,
         'grey metal floor vent grate, flat ground detail, ' + FR14,

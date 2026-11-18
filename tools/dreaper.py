@@ -115,13 +115,14 @@ def stempeln(mm, f, seed, flach=False, x0=0, y0=0, T=16, ueber=3):
     (jede zweite Kachel, Reihen um eine Kachel verschoben), leicht ueberlappend, von Norden nach Sueden gezeichnet - keine
     kleinen Fuellblasen, nichts beschnitten. Animation: jeder Haufen hebt/senkt sich mit eigener Phase um 1 px (4 Bilder).
     Rueckgabe: RGBA-Ebene (Alpha 0/1) in Groesse der Maske und der Abstand zur Kante."""
-    gross = stempel_laden()[1]                                         # Nutzer: kleine Blasen (48er-Haufen, Originalgroesse)
+    gross = stempel_laden()[2 if flach else 1]                         # Nutzer: Originalgroesse, nie herunterskalieren
+                                                                       # (Belag Karte 54: kleinere 48er-Haufen)
     h, w = mm.shape
     dist = _abstand(mm)
     mm_d = np.array(Image.fromarray(mm.astype(np.uint8) * 255).filter(ImageFilter.MaxFilter(2 * ueber + 1))) > 0
     PAD = 48                                                           # am Kartenrand geht die Masse ueber den Bildrand weiter
     mm_p = np.pad(mm_d, PAD, mode='edge')
-    breite = 30 if flach else 42                                       # Haufenbreite (ueberlappt die Nachbarn leicht)
+    breite = 40 if flach else 42                                       # Haufenbreite (ueberlappt die Nachbarn leicht)
     liste = []
     ty0, tx0 = -((y0 + 1) // T) - 1, -((x0 + 1) // T) - 1
     for ty in range(y0 // T - 1, (y0 + h) // T + 2):
@@ -135,8 +136,6 @@ def stempeln(mm, f, seed, flach=False, x0=0, y0=0, T=16, ueber=3):
                 continue
             rs = np.random.RandomState((seed * 131 + tx * 7919 + ty * 104729) % (2 ** 31))
             im = gross[rs.randint(len(gross))]
-            if flach:                                                  # Belag: kleinerer Haufen
-                im = im.resize((im.width // 2 + im.width // 4, im.height // 2 + im.height // 4), Image.NEAREST)
             if rs.rand() < 0.5:
                 im = im.transpose(Image.FLIP_LEFT_RIGHT)
             if not flach:                                              # exakt pruefen: Blasenpixel hoechstens 'ueber' px ausserhalb
