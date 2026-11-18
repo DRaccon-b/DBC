@@ -3,15 +3,16 @@
   python3 tools/karte55_layout.py
 
 Zwei Raeume wie Karte 19 (je 28x24 Kacheln, 8 Kacheln Abstand), schweben als Plattformen in der Leere des Netzes.
-  links:  New York - Wendigomons erstes Auftauchen. Nordrand Hochhausfassaden (gesperrt), Gehweg, breite Avenue
-          (4 Spuren, Mittellinie) mit Zebrastreifen, suedlicher Gehweg mit Aufstellfeld.
+  links:  New York - Wendigomons erstes Auftauchen. Reihen 1-10 Gebaeudeflaeche (Fassaden stehen mit dem Fuss auf
+          Reihe 10, gesperrt), Reihen 11-12 Gehweg vor den Tueren, Reihen 13-17 Avenue (Mittellinie, Zebrastreifen
+          Spalten 10-12), Reihen 18-22 suedlicher Gehweg mit Aufstellfeld.
   rechts: Colorado-Landstrasse - Kampf gegen Wendigomon. Praerie (trockenes Gras), Landstrasse in Boegen mit
           45-Grad-Stufen (Regel 6/6b), Bankett aus Schotter, Weidezaeune folgen spaeter als Objekte.
 Karte 76x38 Kacheln: Raum links x 6-33, Raum rechts x 42-69, Reihen 6-29.
 
 Marken (Raumkoordinaten, wie Karte 19):
   beide:  Aufstellfeld x 1-6, y 18-22 · Ankunft (2 cyan Pfeile) x 1-2, y 23
-  links:  Ringmarke (Gegner) (14,11) auf der Avenue · Ausgang (2x2 gold) x 25-26, y 10-11 (auf der Avenue)
+  links:  Ringmarke (Gegner) (16,14) auf der Avenue · Ausgang (2x2 gold) x 25-26, y 14-15 (auf der Avenue)
   rechts: Ringmarke (Gegner) auf der Landstrasse
 Klassen:  .  Leere  r  Randring  f  Aufstellfeld  z  Pfeil cyan  g  Pfeil gold  o  Ringmarke
           x  Fassade (gesperrt)  s  Gehweg  b  Bordstein  a  Asphalt  m  Mittellinie  c  Zebrastreifen
@@ -27,7 +28,7 @@ C, R = 76, 38
 RAEUME = [(6, 6), (42, 6)]
 RW, RH = 28, 24
 # Landstrasse: Mittellinie in Raumkoordinaten (Kachelmitten), Breite 4 Kacheln, Bankett 1 Kachel
-STRASSE = [(-1, 7.5), (6, 7.5), (11, 11.5), (17, 11.5), (22, 15.5), (28, 15.5)]
+STRASSE = [(-1, 7.5), (6, 7.5), (10, 11.5), (17, 11.5), (21, 15.5), (29, 15.5)]   # Boegen exakt 45 Grad
 
 
 def abstand_polylinie(px, py, pts):
@@ -47,13 +48,9 @@ def main():
         sub = k[y0 + 1:y0 + RH - 1, x0 + 1:x0 + RW - 1]          # Innenflaeche, Raumkoordinate = Index + 1
         if i == 0:                                               # ---------------- New York
             sub[:] = 's'
-            sub[0:4, :] = 'x'                                    # Fassaden Reihen 1-4
-            sub[5, :] = 'b'                                      # Bordstein Nord (Reihe 6)
-            sub[6:15, :] = 'a'                                   # Avenue Reihen 7-15
-            sub[10, :] = 'm'                                     # Mittellinie Reihe 11
-            sub[15, :] = 'b'                                     # Bordstein Sued (Reihe 16)
-            sub[6:15, 9:12] = 'c'                                # Zebrastreifen Spalten 10-12
-            sub[10, 9:12] = 'c'
+            sub[0:10, :] = 'x'                                   # Gebaeudeflaeche Reihen 1-10
+            sub[12:17, :] = 'a'                                  # Avenue Reihen 13-17
+            sub[12:17, 9:12] = 'c'                               # Zebrastreifen Spalten 10-12
         else:                                                    # ---------------- Colorado
             yy, xx = np.mgrid[1:RH - 1, 1:RW - 1].astype(float)
             d = abstand_polylinie(xx + 0.5, yy + 0.5, STRASSE)
@@ -63,16 +60,17 @@ def main():
         k[y0 + 18:y0 + 23, x0 + 1:x0 + 7] = 'f'
         k[y0 + 23, x0 + 1:x0 + 3] = 'z'
         if i == 0:
-            k[y0 + 11, x0 + 14] = 'o'
-            k[y0 + 10:y0 + 12, x0 + 25:x0 + 27] = 'g'
+            k[y0 + 14, x0 + 16] = 'o'
+            k[y0 + 14:y0 + 16, x0 + 25:x0 + 27] = 'g'
         else:
             k[y0 + 12, x0 + 14] = 'o'
     h = np.where(k == '.', 0, 2)
     lay = {'groesse': [C, R], 'klassen': [''.join(z) for z in k], 'hoehe': [''.join(str(c) for c in z) for z in h],
            'raeume': RAEUME, 'raum': [RW, RH], 'strasse': STRASSE,
+           'avenue': [13, 17], 'zebra': [10, 12], 'gebaeude_fuss': 10, 'ringmarken': [[16, 14], [14, 12]],
            'teleporter': [{'x': RAEUME[0][0] + 1, 'y': RAEUME[0][1] + 23, 'b': 2, 'h': 1, 'art': 'ankunft'},
                           {'x': RAEUME[1][0] + 1, 'y': RAEUME[1][1] + 23, 'b': 2, 'h': 1, 'art': 'ankunft'},
-                          {'x': RAEUME[0][0] + 25, 'y': RAEUME[0][1] + 10, 'b': 2, 'h': 2, 'art': 'ausgang'}]}
+                          {'x': RAEUME[0][0] + 25, 'y': RAEUME[0][1] + 14, 'b': 2, 'h': 2, 'art': 'ausgang'}]}
     json.dump(lay, open(os.path.join(KARTE, 'layout.json'), 'w'), indent=0)
     F = {'.': (10, 14, 30), 'r': (34, 48, 78), 'f': (70, 100, 130), 'z': (60, 200, 230), 'g': (230, 180, 70),
          'o': (240, 60, 60), 'x': (120, 96, 84), 's': (170, 168, 160), 'b': (210, 210, 205), 'a': (62, 64, 70),

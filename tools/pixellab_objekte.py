@@ -2802,6 +2802,31 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'big old brown wooden cabinet CRT television standing on short wooden legs, wood grain case, large dark curved '
         'screen with a faint blue glow, a column of round knobs and a speaker grille on the right, ' + FR14,
     ]},
+    # Karte 55 (Hurricane Landing): Colorado-Landstrasse - Ranchzaeune, Praerie, Strassenrand
+    'k55_land': {'size': 48, 'freie_farben': True, 'items': [
+        'weathered wooden ranch fence segment, two horizontal split rails between three grey wooden posts, '
+        'straight horizontal, ' + FR14,
+        'barbed wire pasture fence segment, three strands of wire between two old wooden posts, straight horizontal, ' + FR14,
+        'old wooden telephone pole with a crossbar and two glass insulators, thin and tall, ' + FR14,
+        'round golden hay bale rolled up, ' + FR14,
+        'yellow diamond shaped road warning sign with a black curve arrow on a grey metal post, ' + FR14,
+        'old rusty metal mailbox on a wooden post at a country road, ' + FR14,
+        'dry silver green sagebrush bush, round and scruffy, ' + FR14,
+        'reddish brown sandstone boulder, rounded, ' + FR14,
+    ]},
+    'k55_n32': {'size': 32, 'freie_farben': True, 'items': [
+        'small tuft of dry yellow prairie grass, ' + FR14,
+        'small tumbleweed ball of dry twigs, ' + FR14,
+        'small cluster of purple and yellow wildflowers in dry grass, ' + FR14,
+        'small reddish pebbles and stones lying on the ground, ' + FR14,
+    ]},
+    # New York: Strassenrand (Hydrant, Briefkasten, Zeitungsautomat)
+    'k55_stadt': {'size': 32, 'freie_farben': True, 'items': [
+        'red fire hydrant on a sidewalk, ' + FR14,
+        'blue metal street mailbox box on four short legs, ' + FR14,
+        'row of two small colorful newspaper vending boxes, ' + FR14,
+        'black metal city trash can with a lid, ' + FR14,
+    ]},
 }
 
 

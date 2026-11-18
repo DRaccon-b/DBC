@@ -15,20 +15,20 @@
 "......rxxxxxxxxxxxxxxxxxxxxxxxxxxr........rqqqqqqqqqqqqqqqqqqqqqqqqqqr......",
 "......rxxxxxxxxxxxxxxxxxxxxxxxxxxr........rqqqqqqqqqqqqqqqqqqqqqqqqqqr......",
 "......rxxxxxxxxxxxxxxxxxxxxxxxxxxr........reeeeeqqqqqqqqqqqqqqqqqqqqqr......",
-"......rssssssssssssssssssssssssssr........rllllleeqqqqqqqqqqqqqqqqqqqr......",
-"......rbbbbbbbbbbbbbbbbbbbbbbbbbbr........rllllllleeqqqqqqqqqqqqqqqqqr......",
-"......raaaaaaaaacccaaaaaaaaaaaaaar........rlllllllleeqqqqqqqqqqqqqqqqr......",
-"......raaaaaaaaacccaaaaaaaaaaaaaar........rllllllllleeeeeeeqqqqqqqqqqr......",
-"......raaaaaaaaacccaaaaaaaaaaaaaar........rlllllllllllllllleeqqqqqqqqr......",
-"......raaaaaaaaacccaaaaaaaaaaaaggr........reeeeeelllllllllllleeqqqqqqr......",
-"......rmmmmmmmmmcccmommmmmmmmmmggr........rqqqqqeelllllllllllleeqqqqqr......",
-"......raaaaaaaaacccaaaaaaaaaaaaaar........rqqqqqqeelllllolllllleeeeeer......",
-"......raaaaaaaaacccaaaaaaaaaaaaaar........rqqqqqqqqeellllllllllllllllr......",
-"......raaaaaaaaacccaaaaaaaaaaaaaar........rqqqqqqqqqqeeeeeeelllllllllr......",
-"......raaaaaaaaacccaaaaaaaaaaaaaar........rqqqqqqqqqqqqqqqqeellllllllr......",
-"......rbbbbbbbbbbbbbbbbbbbbbbbbbbr........rqqqqqqqqqqqqqqqqqeelllllllr......",
-"......rssssssssssssssssssssssssssr........rqqqqqqqqqqqqqqqqqqqeelllllr......",
-"......rffffffssssssssssssssssssssr........rffffffqqqqqqqqqqqqqqqeeeeer......",
+"......rxxxxxxxxxxxxxxxxxxxxxxxxxxr........rllllleeqqqqqqqqqqqqqqqqqqqr......",
+"......rxxxxxxxxxxxxxxxxxxxxxxxxxxr........rllllllleqqqqqqqqqqqqqqqqqqr......",
+"......rxxxxxxxxxxxxxxxxxxxxxxxxxxr........rlllllllleqqqqqqqqqqqqqqqqqr......",
+"......rxxxxxxxxxxxxxxxxxxxxxxxxxxr........rllllllllleeeeeeeqqqqqqqqqqr......",
+"......rxxxxxxxxxxxxxxxxxxxxxxxxxxr........rlllllllllllllllleeqqqqqqqqr......",
+"......rxxxxxxxxxxxxxxxxxxxxxxxxxxr........reeeeellllllllllllleqqqqqqqr......",
+"......rssssssssssssssssssssssssssr........rqqqqqellllllllllllleqqqqqqr......",
+"......rssssssssssssssssssssssssssr........rqqqqqqellllllolllllleeeeeer......",
+"......raaaaaaaaacccaaaaaaaaaaaaaar........rqqqqqqqeelllllllllllllllllr......",
+"......raaaaaaaaacccaaaoaaaaaaaaggr........rqqqqqqqqqeeeeeeellllllllllr......",
+"......raaaaaaaaacccaaaaaaaaaaaaggr........rqqqqqqqqqqqqqqqqelllllllllr......",
+"......raaaaaaaaacccaaaaaaaaaaaaaar........rqqqqqqqqqqqqqqqqqellllllllr......",
+"......raaaaaaaaacccaaaaaaaaaaaaaar........rqqqqqqqqqqqqqqqqqqeellllllr......",
+"......rffffffssssssssssssssssssssr........rffffffqqqqqqqqqqqqqqeeeeeer......",
 "......rffffffssssssssssssssssssssr........rffffffqqqqqqqqqqqqqqqqqqqqr......",
 "......rffffffssssssssssssssssssssr........rffffffqqqqqqqqqqqqqqqqqqqqr......",
 "......rffffffssssssssssssssssssssr........rffffffqqqqqqqqqqqqqqqqqqqqr......",
@@ -107,7 +107,7 @@
 7.5
 ],
 [
-11,
+10,
 11.5
 ],
 [
@@ -115,12 +115,31 @@
 11.5
 ],
 [
-22,
+21,
 15.5
 ],
 [
-28,
+29,
 15.5
+]
+],
+"avenue": [
+13,
+17
+],
+"zebra": [
+10,
+12
+],
+"gebaeude_fuss": 10,
+"ringmarken": [
+[
+16,
+14
+],
+[
+14,
+12
 ]
 ],
 "teleporter": [
@@ -140,7 +159,7 @@
 },
 {
 "x": 31,
-"y": 16,
+"y": 20,
 "b": 2,
 "h": 2,
 "art": "ausgang"
