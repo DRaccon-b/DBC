@@ -85,8 +85,25 @@ def main():
     def schnitt(a, b, d):
         return not (a[2] + d < b[0] or b[2] + d < a[0] or a[3] + d < b[1] or b[3] + d < a[1])
 
+    def umfaerben(sp):
+        """Nutzer: orange Felsen auf die Brauntoene von Karte 44 (Helligkeit -> Braunrampe, Regel Umfaerben)."""
+        a = np.array(sp).astype(np.float32)
+        r_, g_, b_ = a[..., 0], a[..., 1], a[..., 2]
+        org = (a[..., 3] > 0) & (r_ > g_ + 12) & (r_ - b_ > 45)
+        if not org.any():
+            return sp
+        rampe = np.array([[40, 28, 18], [58, 42, 26], [78, 56, 36], [100, 74, 48], [124, 94, 62], [148, 114, 78],
+                          [172, 136, 96], [196, 160, 118]], np.float32)
+        lum = (0.3 * r_ + 0.59 * g_ + 0.11 * b_)[org]
+        t = np.clip((lum - 30) / 190.0, 0, 1) * (len(rampe) - 1)
+        i0 = np.floor(t).astype(int); i1 = np.minimum(i0 + 1, len(rampe) - 1); f_ = (t - i0)[:, None]
+        a[org, :3] = rampe[i0] * (1 - f_) + rampe[i1] * f_
+        return Image.fromarray(np.clip(a, 0, 255).astype(np.uint8))
+
     def setze(name, cx, fy, opt=None, spiegeln=False, klassen=BODEN, pruefen=True, ohne=(), ebene_soll=1, rand=2 * T):
         sp = Image.open(pfad(name)).convert('RGBA')
+        if name.startswith(('fels', 'bg', 'ra', 'pl', 'steinhaufen')):  # nur Gestein, nicht Holz/Knochen/Krueqe
+            sp = umfaerben(sp)
         if spiegeln:
             sp = sp.transpose(Image.FLIP_LEFT_RIGHT)
         datei = 'varianten/%s%s.png' % (name, '_m' if spiegeln else '')
