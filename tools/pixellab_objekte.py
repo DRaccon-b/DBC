@@ -2301,6 +2301,38 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'small red compact car seen exactly from the side, facing left, flat side view, no perspective, classic 2D handheld RPG style',
         'small light blue car seen exactly from the side, facing left, flat side view, no perspective, classic 2D handheld RPG style',
     ]},
+    # Karte 53 neu in Zielgroesse (Nutzer: nie herunterskalieren)
+    'k53_n32': {'size': 32, 'freie_farben': True, 'items': [
+        'red plastic jerrycan fuel canister, ' + FR14,
+        'blue and white plastic cooler box, ' + FR14,
+        'rolled up green sleeping bag lying on the ground, ' + FR14,
+        'abandoned blue hiking backpack lying on the ground, ' + FR14,
+        'small camping gas stove with a dented cooking pot, ' + FR14,
+        'green first aid kit case with a white plus sign, ' + FR14,
+        'abandoned grey rolling suitcase standing upright, ' + FR14,
+        'closed brown cardboard box with tape, ' + FR14,
+    ]},
+    'k53_n48': {'size': 48, 'freie_farben': True, 'items': [
+        'folding camp cot with a grey blanket and a white pillow, seen from directly above, top-down view, straight rectangle aligned to the image axes, no perspective, no isometric, classic 2D handheld RPG style',
+        'low straight wall of stacked tan sandbags, ' + FR14,
+        'pile of abandoned suitcases and travel bags, ' + FR14,
+        'yellow evacuation route sign on a grey pole with a green arrow, ' + FR14,
+        'stack of white emergency supply boxes with an orange stripe, ' + FR14,
+        'portable floodlight tower with two bright lamps on a small yellow trailer, ' + FR14,
+        'grey folding table with a radio and papers, ' + FR14,
+        'yellow portable diesel generator with an exhaust pipe on top, ' + FR14,
+    ]},
+    'k53_n48b': {'size': 48, 'freie_farben': True, 'items': [
+        'blue water dispenser with a large upside-down water bottle on top, ' + FR14,
+        'orange and white striped road barrier on two legs, ' + FR14,
+        'group of three orange and white traffic cones, ' + FR14,
+        'grey metal crowd control barrier fence section, ' + FR14,
+    ]},
+    'k53_n96': {'size': 96, 'freie_farben': True, 'items': [
+        'white emergency relief tent with an open front entrance, orange stripe along the roof, tent pegs and ropes, ' + FR14,
+        'olive green military supply truck parked, seen exactly from the side, facing left, flat side view, ' + FR14,
+        'wooden pallet stacked with wrapped emergency supply boxes and water bottle packs, ' + FR14,
+    ]},
     'k54_klein': {'size': 32, 'freie_farben': True, 'items': [
         'coiled thick black power cable with a brass plug lying on the floor, flat ground detail, ' + FR14,
         'grey metal floor vent grate, flat ground detail, ' + FR14,
