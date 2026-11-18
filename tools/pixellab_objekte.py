@@ -2285,6 +2285,17 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'huge glossy bright red sphere made of countless jelly bubbles, glowing softly, resting on the floor, ' + FR14,
         'tall featureless smooth glossy pink-red humanoid creature with long arms and a smooth egg-shaped faceless head, ' + FR14,
     ]},
+    # Nutzer (Karten 52-54): durchgehender dunkelroter Schlamm statt Blasen - Schlammflecken zum Stempeln
+    'k52_schlamm': {'size': 64, 'freie_farben': True, 'items': [
+        'irregular rounded blob of thick glossy dark red sludge, viscous and slimy, a few wet highlights and slow ripples, darker crimson folds, seen from directly above, top-down view, no ground, no cast shadow, highly detailed pixel art, classic 2D handheld RPG style',
+        'thick puddle of dark crimson ooze with soft lumpy folds and a glossy wet surface, irregular rounded outline, seen from directly above, top-down view, no ground, no cast shadow, highly detailed pixel art, classic 2D handheld RPG style',
+        'blob of dark red living sludge with thick rolling folds, small wet shine spots, organic rounded edge, seen from directly above, top-down view, no ground, no cast shadow, highly detailed pixel art, classic 2D handheld RPG style',
+        'patch of glossy dark blood-red slime with gentle bulges and drips, irregular round shape, seen from directly above, top-down view, no ground, no cast shadow, highly detailed pixel art, classic 2D handheld RPG style',
+    ]},
+    'k52_schlamm_gross': {'size': 128, 'freie_farben': True, 'items': [
+        'large irregular rounded mass of thick glossy dark red sludge with rolling folds and bulges, wet highlights, slimy and viscous, seen from directly above, top-down view, no ground, no cast shadow, highly detailed pixel art, classic 2D handheld RPG style',
+        'wide flat pool of dark crimson living ooze with thick lumpy folds and glossy shine, irregular organic outline, seen from directly above, top-down view, no ground, no cast shadow, highly detailed pixel art, classic 2D handheld RPG style',
+    ]},
     'k52_masse': {'size': 128, 'freie_farben': True, 'items': [   # Nutzer: Masse hochwertiger - aus PixelLab-Blasenhaufen gestempelt
         'dense heap of glossy bright red jelly bubbles of many different sizes packed tightly together, wet white highlights, seen from directly above, top-down view, no ground, no cast shadow, highly detailed pixel art, classic 2D handheld RPG style',
         'large mound of glossy crimson jelly spheres and smaller bubbles, darker red gaps between them, seen from directly above, top-down view, no ground, no cast shadow, highly detailed pixel art, classic 2D handheld RPG style',
