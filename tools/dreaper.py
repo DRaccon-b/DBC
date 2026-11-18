@@ -238,9 +238,67 @@ def schlamm(mm, h, w, f, seed, x0, y0):
     return col
 
 
+_TEXTUR = None
+
+
+def textur_laden():
+    """PixelLab-Texturfelder (k52_masse_tex2, voll deckend, Nutzer: Masse ohne Rand wie im Anime) - Innenteil ohne Rahmen."""
+    global _TEXTUR
+    if _TEXTUR is None:
+        import os
+        basis = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'assets', 'objekte', 'karte52', 'masse_tex2')
+        _TEXTUR = []
+        for i, ein in ((3, 5), (0, 9)):
+            a = np.array(Image.open(os.path.join(basis, '%02d.png' % i)).convert('RGBA'))
+            ys, xs = np.nonzero(a[..., 3] > 0)
+            a = a[ys.min() + ein:ys.max() - ein + 1, xs.min() + ein:xs.max() - ein + 1, :3].astype(np.float32)
+            _TEXTUR += [a, a[:, ::-1]]
+    return _TEXTUR
+
+
+def textur(h, w, f, seed, x0, y0, zelle=52):
+    """Randlose Masse: Texturfelder ueberlappend aneinandergesetzt, Naehte als unregelmaessige Rauschgrenze (Pixel werden
+    gewaehlt, nicht gemischt - Palette bleibt). Adern (gelbe Pixel) pulsieren als Welle (4 Bilder, nahtlos)."""
+    tex = textur_laden()
+    rs = np.random.RandomState(seed)
+    t0 = tex[0]                                                        # Grundflaeche gekachelt (keine Luecken)
+    out = np.tile(t0, (h // t0.shape[0] + 1, w // t0.shape[1] + 1, 1))[:h, :w].copy()
+    ueber = 16
+    nz = _rauschen(h + 200, w + 200, 6, seed + 3)
+    for gy in range(-ueber, h, zelle):
+        for gx in range(-ueber, w, zelle):
+            t = tex[rs.randint(len(tex))]
+            th, tw = t.shape[:2]
+            gr = zelle + 2 * ueber
+            oy, ox = rs.randint(0, th - gr + 1), rs.randint(0, tw - gr + 1)
+            stueck = t[oy:oy + gr, ox:ox + gr]
+            ya, xa = gy - ueber, gx - ueber
+            yy, xx = np.mgrid[0:gr, 0:gr]
+            # Rampe 1 in der Zellmitte, 0 am Ueberlappungsrand, plus Rauschen -> unregelmaessige Naht
+            rand = np.minimum(np.minimum(yy, gr - 1 - yy), np.minimum(xx, gr - 1 - xx)) / float(2 * ueber)
+            sy0, sx0 = max(0, ya), max(0, xa)
+            sy1, sx1 = min(h, ya + gr), min(w, xa + gr)
+            if sy1 <= sy0 or sx1 <= sx0:
+                continue
+            r_ = rand[sy0 - ya:sy1 - ya, sx0 - xa:sx1 - xa]
+            n_ = nz[sy0 + 100:sy1 + 100, sx0 + 100:sx1 + 100]
+            neu_ = (r_ + 0.6 * (n_ - 0.5)) > 0.35
+            if gy == -ueber or gx == -ueber:
+                neu_ |= r_ >= 0
+            ziel = out[sy0:sy1, sx0:sx1]
+            ziel[neu_] = stueck[sy0 - ya:sy1 - ya, sx0 - xa:sx1 - xa][neu_]
+    gelb = (out[..., 0] > 170) & (out[..., 1] > 110) & (out[..., 1] > out[..., 2] + 20)
+    yy, xx = np.mgrid[0:h, 0:w]
+    welle = 0.5 + 0.5 * np.sin(2 * np.pi * (f / 4.0) - (xx + yy + x0 + y0) / 40.0)
+    out[gelb] = out[gelb] * (0.82 + 0.3 * welle[gelb, None])
+    return np.clip(out, 0, 255)
+
+
 def masse(a, m, frame=None, seed=52, boden=None, flach=False, stil='stempel'):
     """Zeichnet die Masse in a (H x W x 3 uint8) auf die Pixelmaske m. boden: Maske, auf die der Schatten darf.
     flach: begehbarer Belag (Karte 54) - keine Stirnseite, kein Schatten, flachere Beulen."""
+    import os
+    stil = os.environ.get('DREAPER_STIL', stil)                         # Vorschau anderer Stile
     f = (frame or 0) % 4
     Hh, W = m.shape
     ys, xs = np.nonzero(m)
@@ -282,9 +340,13 @@ def masse(a, m, frame=None, seed=52, boden=None, flach=False, stil='stempel'):
             col = col * 0.72 + BL_FUGE[None, None] * 0.28
     if stil == 'schlamm':                                              # Nutzer: durchgehender dunkelroter Schlamm
         col = schlamm(mm, h, w, f, seed, x0, y0)
+    if stil == 'textur':                                               # Nutzer: Masse ohne Rand/Abgrenzung (Anime-Bild)
+        col = textur(h, w, f, seed + x0 * 3 + y0, x0, y0)
+        if flach:
+            col = col * 0.8
     # Glanzpunkte (feucht), flackern versetzt
     rs = np.random.RandomState(seed + 5)
-    n = int(mm.sum() / (900 if stil == 'schlamm' else 180)) if stil not in ('blasen', 'stempel') else 0   # Schlamm: wenige Glanzpunkte
+    n = int(mm.sum() / (900 if stil == 'schlamm' else 180)) if stil not in ('blasen', 'stempel', 'textur') else 0   # Schlamm: wenige Glanzpunkte
     py, px = rs.randint(0, h, n), rs.randint(0, w, n)
     ph = rs.randint(0, 4, n)
     for y_, x_, p_ in zip(py, px, ph):
@@ -303,13 +365,16 @@ def masse(a, m, frame=None, seed=52, boden=None, flach=False, stil='stempel'):
     if flach or stil == 'stempel':                                     # Stempel: Blasen bringen eigene Schattierung/Kontur mit
         unten[:] = False
         oben[:] = False
+    if stil == 'textur':
+        oben[:] = False
     col[oben & ~unten] = col[oben & ~unten] * 0.6 + (SCHLAMM[4] if stil == 'schlamm' else HELL) * 0.4
     tief = np.zeros((h, w), np.float32)
     for d in (range(1, 6) if not flach and stil != 'stempel' else []):
         r_ = np.zeros((h, w), bool)
         r_[:-d] = mm[:-d] & ~mm[d:]
         tief = np.maximum(tief, r_ * (1.0 - (d - 1) / 6.0))
-    col = col * (1 - 0.55 * tief[..., None]) + DUNKEL * 0.55 * tief[..., None]
+    k_ = 0.3 if stil == 'textur' else 0.55                             # Textur: nur weiche Stirnseite, kein dunkles Band
+    col = col * (1 - k_ * tief[..., None]) + DUNKEL * k_ * tief[..., None]
     p_ = np.pad(mm, 1, mode='edge')                                   # Kartenrand fortsetzen (keine Konturlinie am Bildrand)
     rand = mm & ~(p_[:-2, 1:-1] & p_[2:, 1:-1] & p_[1:-1, :-2] & p_[1:-1, 2:])
     if stil == 'stempel':                                              # ganze Blasenhaufen ueber dunklem Kern, Umriss aus Blasen
@@ -335,7 +400,8 @@ def masse(a, m, frame=None, seed=52, boden=None, flach=False, stil='stempel'):
             sub[sch2] *= 0.62
         sub[auf] = st_ebene[auf, :3]
     else:
-        col[rand] = DUNKEL * 0.8
+        if stil != 'textur':                                           # Textur: keine Konturlinie (Nutzer)
+            col[rand] = DUNKEL * 0.8
         sub[mm] = col[mm]
     a[y0:y1, x0:x1] = np.clip(sub, 0, 255).astype(np.uint8)
     return m
