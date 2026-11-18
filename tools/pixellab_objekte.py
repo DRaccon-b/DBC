@@ -2189,6 +2189,12 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'old dry tree with cracked brown bark and a sparse crown of brown and orange withered leaves, ' + FR14,
         'small dry scrub tree with thin crooked branches and a few dusty sage-green leaves, ' + FR14,
     ]},
+    'k44_huette4': {'size': 64, 'freie_farben': True, 'items': [   # Karte 44 (Nutzer-Vorlage): Kuppelhaeuser mit Technik-Teilen
+        'low half-buried dome house of smooth copper-brown clay sunk into dusty ground, its surface studded with embedded grey-blue electronic parts: small square circuit panels, metal rings, short cylinders and vent slits, a small rectangular pale blue metal door at the bottom front, seen from the front and slightly above, ' + FR14,
+        'round brown dome hut half sunk into reddish desert sand, covered with scattered machine scraps: blue-grey panels with grooves, round washers, two small metal cylinders on top, a round blue porthole window, low blue metal hatch door, seen from the front and slightly above, ' + FR14,
+        'dome shaped dwelling of brown baked mud rising from the sand, decorated all over with embedded pale blue computer chips, rectangular plates, rings and striped vents, small square blue metal door at ground level, seen from the front and slightly above, ' + FR14,
+        'hemisphere house of smooth reddish brown earth with many small grey and lavender tech fragments pressed into its surface like a mosaic, metal ring, short pipes, vent grille, low pale blue door, sitting in dusty desert ground, seen from the front and slightly above, ' + FR14,
+    ]},
     'k44_fass': {'size': 64, 'freie_farben': True, 'items': [   # Grosse Weinfaesser (Nutzer, fuer diese oder naechste Karte)
         'large oak wine barrel lying on its side on a wooden cradle stand, round front face with iron hoops and a small brass tap, dark brown oak staves, ' + FR14,
         'big standing wooden wine barrel with three dark iron hoops and a round wooden lid, warm brown oak, ' + FR14,
