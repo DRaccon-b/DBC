@@ -68,6 +68,40 @@ def membran(Hh, W, mitte_px, radius_px, frame):
     welle = 0.5 + 0.5 * np.sin(2 * math.pi * (f / N_FRAMES - r * 0.9))
     nah = np.clip(1 - r, 0, 1) ** 1.8
     a += (welle * nah)[..., None] * np.array((46, 12, 24), np.float32)
+    stil = os.environ.get('K54_BODEN', '')
+    if stil in ('glatt', 'bobbles'):                                   # Nutzer: Boden ohne Strichmuster
+        a = innen[None, None] * (1 - r[..., None] ** 1.6) + aussen[None, None] * r[..., None] ** 1.6
+        nw = dreaper._rauschen(Hh, W, 22, 5411) - 0.5                   # weiche, grosse Wolken in Pixelstufen
+        nf = dreaper._rauschen(Hh, W, 6, 5412) - 0.5
+        stufe = np.round((nw * 1.6 + nf * 0.5) * 3) / 3.0
+        a += stufe[..., None] * np.array((22, 12, 16), np.float32)
+        a += (welle * nah)[..., None] * np.array((46, 12, 24), np.float32)
+        if stil == 'bobbles':                                          # kleine runde Membranblasen, Licht von oben links
+            rs = np.random.RandomState(5413)
+            orte = []
+            for _ in range(Hh * W // 2600):                            # Gruppen aus 1-5 Blasen verschiedener Groesse
+                gy, gx = rs.randint(10, Hh - 10), rs.randint(10, W - 10)
+                for _k in range(rs.randint(1, 6)):
+                    orte.append((gy + rs.randint(-9, 10), gx + rs.randint(-9, 10), rs.choice([2.2, 3.0, 3.8, 4.8, 6.0])))
+            orte.sort(key=lambda o_: o_[0])
+            for cy, cx, rr in orte:
+                if not (8 <= cy < Hh - 9 and 8 <= cx < W - 9):
+                    continue
+                y0_, y1_, x0_, x1_ = int(cy - rr - 1), int(cy + rr + 2), int(cx - rr - 1), int(cx + rr + 2)
+                yy_, xx_ = np.mgrid[y0_:y1_, x0_:x1_]
+                d_ = np.hypot(yy_ - cy, xx_ - cx)
+                inn = d_ <= rr
+                rand_ = inn & (d_ > rr - 1.0)
+                hl = inn & (np.hypot(yy_ - (cy - rr * 0.4), xx_ - (cx - rr * 0.4)) < rr * 0.38)
+                sch = ~inn & (np.hypot(yy_ - cy - 1, xx_ - cx - 1) <= rr)
+                feld = a[y0_:y1_, x0_:x1_]
+                basis = feld[inn].mean(0)
+                feld[sch] *= 0.86                                      # Kontaktschatten rechts unten
+                feld[inn] = basis * 1.06
+                feld[rand_ & (yy_ >= cy)] = basis * 0.8                # untere Haelfte des Randes dunkler
+                feld[rand_ & (yy_ < cy)] = basis * 0.95
+                feld[hl] = basis * 0.4 + np.array((255, 225, 235)) * 0.6
+        return np.clip(a, 0, 255).astype(np.uint8)
     n2 = dreaper._rauschen(Hh, W, 16, 5403)
     ader = np.abs(n2 - 0.5) < 0.016
     st = (welle * (0.4 + 0.6 * nah))[ader][:, None]
