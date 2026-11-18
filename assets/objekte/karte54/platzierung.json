@@ -1,83 +1,201 @@
 [
 {
-"datei": "varianten/ranke2.png",
-"basis": "ranke2",
-"x": 145,
-"y": 91,
-"fuss": 52,
+"datei": "varianten/quer_a.png",
+"basis": "quer_a",
+"x": 54,
+"y": 258,
+"fuss": 42,
 "kachel": [
-9,
-8
+7,
+18
+],
+"ebene": 0,
+"ohne_wall": true,
+"liegend": true,
+"sortier": 258
+},
+{
+"datei": "varianten/quer_a_m.png",
+"basis": "quer_a",
+"x": 533,
+"y": 258,
+"fuss": 42,
+"kachel": [
+36,
+18
+],
+"ebene": 0,
+"ohne_wall": true,
+"liegend": true,
+"sortier": 258
+},
+{
+"datei": "varianten/quer_b.png",
+"basis": "quer_b",
+"x": 54,
+"y": 398,
+"fuss": 43,
+"kachel": [
+6,
+27
+],
+"ebene": 0,
+"ohne_wall": true,
+"liegend": true,
+"sortier": 398
+},
+{
+"datei": "varianten/quer_b_m.png",
+"basis": "quer_b",
+"x": 535,
+"y": 398,
+"fuss": 43,
+"kachel": [
+37,
+27
+],
+"ebene": 0,
+"ohne_wall": true,
+"liegend": true,
+"sortier": 398
+},
+{
+"datei": "varianten/senk_a.png",
+"basis": "senk_a",
+"x": 242,
+"y": 38,
+"fuss": 118,
+"kachel": [
+16,
+9
+],
+"ebene": 0,
+"ohne_wall": true,
+"liegend": true,
+"sortier": 38
+},
+{
+"datei": "varianten/senk_b.png",
+"basis": "senk_b",
+"x": 395,
+"y": 38,
+"fuss": 117,
+"kachel": [
+26,
+9
+],
+"ebene": 0,
+"ohne_wall": true,
+"liegend": true,
+"sortier": 38
+},
+{
+"datei": "varianten/ranke_a.png",
+"basis": "ranke_a",
+"x": 108,
+"y": 109,
+"fuss": 82,
+"kachel": [
+8,
+11
 ],
 "ebene": 1,
 "ohne_wall": true,
 "nur_kontakt": true
 },
 {
-"datei": "varianten/ranke2_m.png",
-"basis": "ranke2",
-"x": 540,
-"y": 91,
-"fuss": 52,
+"datei": "varianten/ranke_a_m.png",
+"basis": "ranke_a",
+"x": 545,
+"y": 109,
+"fuss": 82,
 "kachel": [
-34,
-8
+35,
+11
 ],
 "ebene": 1,
 "ohne_wall": true,
 "nur_kontakt": true
 },
 {
-"datei": "varianten/ranke.png",
-"basis": "ranke",
-"x": 67,
-"y": 359,
-"fuss": 40,
+"datei": "varianten/ranke_d.png",
+"basis": "ranke_d",
+"x": 188,
+"y": 28,
+"fuss": 83,
 "kachel": [
-4,
-24
+13,
+6
 ],
 "ebene": 1,
 "ohne_wall": true,
 "nur_kontakt": true
 },
 {
-"datei": "varianten/ranke_m.png",
-"basis": "ranke",
-"x": 618,
-"y": 359,
-"fuss": 40,
+"datei": "varianten/ranke_d_m.png",
+"basis": "ranke_d",
+"x": 464,
+"y": 28,
+"fuss": 83,
 "kachel": [
-39,
-24
+30,
+6
 ],
 "ebene": 1,
 "ohne_wall": true,
 "nur_kontakt": true
 },
 {
-"datei": "varianten/ranke2.png",
-"basis": "ranke2",
-"x": 153,
-"y": 507,
-"fuss": 52,
+"datei": "varianten/ranke_b.png",
+"basis": "ranke_b",
+"x": 171,
+"y": 378,
+"fuss": 85,
 "kachel": [
-10,
-34
+12,
+28
 ],
 "ebene": 1,
 "ohne_wall": true,
 "nur_kontakt": true
 },
 {
-"datei": "varianten/ranke2_m.png",
-"basis": "ranke2",
-"x": 532,
-"y": 507,
-"fuss": 52,
+"datei": "varianten/ranke_b_m.png",
+"basis": "ranke_b",
+"x": 485,
+"y": 378,
+"fuss": 85,
 "kachel": [
-33,
-34
+31,
+28
+],
+"ebene": 1,
+"ohne_wall": true,
+"nur_kontakt": true
+},
+{
+"datei": "varianten/ranke_c.png",
+"basis": "ranke_c",
+"x": 194,
+"y": 494,
+"fuss": 81,
+"kachel": [
+13,
+35
+],
+"ebene": 1,
+"ohne_wall": true,
+"nur_kontakt": true
+},
+{
+"datei": "varianten/ranke_c_m.png",
+"basis": "ranke_c",
+"x": 450,
+"y": 494,
+"fuss": 81,
+"kachel": [
+29,
+35
 ],
 "ebene": 1,
 "ohne_wall": true,
@@ -86,12 +204,12 @@
 {
 "datei": "varianten/huegel.png",
 "basis": "huegel",
-"x": 167,
-"y": 103,
+"x": 161,
+"y": 151,
 "fuss": 24,
 "kachel": [
 11,
-7
+10
 ],
 "ebene": 1,
 "ohne_wall": true,
@@ -100,12 +218,12 @@
 {
 "datei": "varianten/huegel_m.png",
 "basis": "huegel",
-"x": 493,
-"y": 103,
+"x": 499,
+"y": 151,
 "fuss": 24,
 "kachel": [
 32,
-7
+10
 ],
 "ebene": 1,
 "ohne_wall": true,
@@ -114,12 +232,12 @@
 {
 "datei": "varianten/saeule.png",
 "basis": "saeule",
-"x": 238,
-"y": 61,
+"x": 72,
+"y": 221,
 "fuss": 34,
 "kachel": [
-15,
-5
+5,
+15
 ],
 "ebene": 1,
 "ohne_wall": true,
@@ -128,12 +246,12 @@
 {
 "datei": "varianten/saeule_m.png",
 "basis": "saeule",
-"x": 432,
-"y": 61,
+"x": 598,
+"y": 221,
 "fuss": 34,
 "kachel": [
-28,
-5
+38,
+15
 ],
 "ebene": 1,
 "ohne_wall": true,
@@ -142,12 +260,12 @@
 {
 "datei": "varianten/cluster.png",
 "basis": "cluster",
-"x": 53,
-"y": 329,
+"x": 149,
+"y": 521,
 "fuss": 22,
 "kachel": [
-4,
-21
+10,
+33
 ],
 "ebene": 1,
 "ohne_wall": true,
@@ -156,40 +274,12 @@
 {
 "datei": "varianten/cluster_m.png",
 "basis": "cluster",
-"x": 619,
-"y": 329,
+"x": 523,
+"y": 521,
 "fuss": 22,
 "kachel": [
-39,
-21
-],
-"ebene": 1,
-"ohne_wall": true,
-"nur_kontakt": true
-},
-{
-"datei": "varianten/huegel.png",
-"basis": "huegel",
-"x": 140,
-"y": 471,
-"fuss": 24,
-"kachel": [
-10,
-30
-],
-"ebene": 1,
-"ohne_wall": true,
-"nur_kontakt": true
-},
-{
-"datei": "varianten/huegel_m.png",
-"basis": "huegel",
-"x": 520,
-"y": 471,
-"fuss": 24,
-"kachel": [
 33,
-30
+33
 ],
 "ebene": 1,
 "ohne_wall": true,
