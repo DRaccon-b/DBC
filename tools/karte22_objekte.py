@@ -6,7 +6,7 @@
 Alle Objekte neu mit dem PixelLab Objekt-Creator (k22_casino, k22_gross) im Netz-Stil von Karte 16.
 Paare stehen exakt spiegelsymmetrisch zur Mittelachse des Casinos (x = 416 px; gespiegelt: x' = 832 - x).
 """
-import json, os, sys
+import json, math, os, sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import numpy as np
 from PIL import Image, ImageFilter
@@ -138,7 +138,8 @@ def main():
         a = np.array(sp.getchannel('A')) >= 128
         zu = int(np.nonzero(a.any(axis=1))[0].max())
         xs = np.nonzero(a.any(axis=0))[0]
-        x = int(round(mitte - (xs.min() + xs.max() + 1) / 2.0))
+        v_ = mitte - (xs.min() + xs.max() + 1) / 2.0                    # Paare pixelgenau gespiegelt (x.5 links ab-, rechts aufrunden)
+        x = int(math.floor(v_)) if mitte < MITTE else int(math.ceil(v_))
         y = (reihe + 1) * T - 1 - zu
         h_, w_ = a.shape
         fuss = a.copy(); fuss[:max(0, zu + 1 - 6)] = False
