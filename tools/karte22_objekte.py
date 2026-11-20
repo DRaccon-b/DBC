@@ -35,14 +35,44 @@ def bar_bauen():
     Image.fromarray(tresen).save(os.path.join(d, 'tresen.png'))
     r = np.array(Image.open(os.path.join(OBJ, 'theke', '03.png')).convert('RGBA'))
     rl, rm, rr = r[:, :3], r[:, 3:37], r[:, 37:]
-    n = (REGAL_BREITE - 6) // rm.shape[1]
-    regal = np.concatenate([rl] + [rm] * n + [rr], axis=1)
-    Image.fromarray(regal).save(os.path.join(d, 'regal.png'))
-    return tresen.shape[1], regal.shape[1]
+    H = r.shape[0]
+
+    def stueck(i):
+        # Nutzer: Rueckwand abwechslungsreich - PixelLab-Stuecke (k22_regal), unten buendig; fehlende Hoehe oben mit dem
+        # Rahmen des Flaschenregals aufgefuellt, damit die Oberkante durchlaeuft
+        v = np.array(Image.open(os.path.join(OBJ, 'regal', '%02d.png' % i)).convert('RGBA'))
+        v = v[-H:]
+        out = np.zeros((H, v.shape[1], 4), np.uint8)
+        fuell = np.concatenate([rm] * (v.shape[1] // rm.shape[1] + 1), axis=1)[:, :v.shape[1]]
+        out[:H - v.shape[0]] = fuell[:H - v.shape[0]]
+        out[H - v.shape[0]:] = v
+        leer = out[..., 3] == 0                                        # Luecken (runde Ecken) mit Regalgrund fuellen
+        out[leer] = fuell[leer]
+        return out
+
+    breiten = []
+    for seite, var in (('links', VARIANTEN[0::2]), ('rechts', VARIANTEN[1::2])):
+        teile, i_ = [rl], 0
+        breite = 6
+        while True:
+            t_ = rm if len(teile) % 2 == 1 else stueck(var[i_ % len(var)])
+            if len(teile) % 2 == 0:
+                i_ += 1
+            if breite + t_.shape[1] > REGAL_BREITE:
+                break
+            teile.append(t_); breite += t_.shape[1]
+        rest_ = REGAL_BREITE - breite                                  # auf volle Breite: Flaschenregal-Stueck anstueckeln
+        while rest_ > 0:
+            teile.append(rm[:, :min(rest_, rm.shape[1])]); rest_ -= rm.shape[1]
+        regal = np.concatenate(teile + [rr], axis=1)
+        Image.fromarray(regal).save(os.path.join(d, 'regal_%s.png' % seite))
+        breiten.append(regal.shape[1])
+    return tresen.shape[1], breiten
 
 
 BAR_BREITE, REGAL_BREITE = 352, 384                                   # je Haelfte (px)
-TRESEN_W, REGAL_W = bar_bauen()
+VARIANTEN = [0, 1, 3, 4, 5, 6, 7, 10, 15, 8, 13, 11]                  # k22_regal: verschiedene Wandstuecke, keine doppelt
+TRESEN_W, (REGAL_WL, REGAL_WR) = bar_bauen()
 
 
 def paar(name, dx, reihe, anim=None, spiegeln_rechts=False):
@@ -53,7 +83,8 @@ def paar(name, dx, reihe, anim=None, spiegeln_rechts=False):
 # (Quelle, Mitte x in px, Fussreihe, Animation, gespiegelt)
 OBJEKTE = (
     # Nutzer: hintere Wand = Bar. Regal an der Wand, eine Reihe Platz fuer den Barkeeper, davor der Tresen, Hocker
-    paar('theke_gebaut/regal', MITTE - 528 + REGAL_W // 2, 5, None, True)
+    [('theke_gebaut/regal_links', 528 - REGAL_WL / 2.0, 5, None, False),
+     ('theke_gebaut/regal_rechts', 592 + REGAL_WR / 2.0, 5, None, False)]
     + paar('theke_gebaut/tresen', MITTE - 512 + TRESEN_W // 2, 8, None, True)
     # Automatenreihen (je 4 Automaten untereinander)
     + sum((paar(AUTOMAT, 320, r, 'automat') for r in (14, 18, 22, 26)), [])    # Nutzer: Anzahl bleibt, mehr Platz ringsum

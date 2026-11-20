@@ -3132,6 +3132,16 @@ OBJEKTGRUPPEN_K22 = {   # Karte 22 (Digicasino): Netz-Stil wie Karte 16, aber mi
         'section of a back bar wall shelf seen from the front, two shelves full of glowing colorful bottles, dark violet '
         'wooden frame with gold trim, flat seamless left and right edges so many pieces can be placed side by side, ' + FR14,
     ]},
+    'k22_regal': {'size': 48, 'items': [   # Nutzer: Rueckwand der Bar abwechslungsreicher
+        'section of a back bar wall seen from the front, dark violet wooden frame with gold trim, same height and frame as a bottle shelf, flat seamless left and right edges so pieces can be placed side by side, two shelves with rows of stacked cocktail glasses and wine glasses, ' + FR14,
+        'section of a back bar wall seen from the front, dark violet wooden frame with gold trim, same height and frame as a bottle shelf, flat seamless left and right edges so pieces can be placed side by side, a glowing pink neon cocktail sign in the middle on a dark panel, ' + FR14,
+        'section of a back bar wall seen from the front, dark violet wooden frame with gold trim, same height and frame as a bottle shelf, flat seamless left and right edges so pieces can be placed side by side, a wine rack with round bottle ends in a diamond lattice, ' + FR14,
+        'section of a back bar wall seen from the front, dark violet wooden frame with gold trim, same height and frame as a bottle shelf, flat seamless left and right edges so pieces can be placed side by side, a tall mirror panel with a few bottles in front and a small cash register, ' + FR14,
+        'section of a back bar wall seen from the front, dark violet wooden frame with gold trim, same height and frame as a bottle shelf, flat seamless left and right edges so pieces can be placed side by side, an old espresso machine and stacked cups on a shelf, ' + FR14,
+        'section of a back bar wall seen from the front, dark violet wooden frame with gold trim, same height and frame as a bottle shelf, flat seamless left and right edges so pieces can be placed side by side, big glass jars with glowing colorful liquids on two shelves, ' + FR14,
+        'section of a back bar wall seen from the front, dark violet wooden frame with gold trim, same height and frame as a bottle shelf, flat seamless left and right edges so pieces can be placed side by side, a small neon screen showing casino odds and two shelves of whiskey bottles, ' + FR14,
+        'section of a back bar wall seen from the front, dark violet wooden frame with gold trim, same height and frame as a bottle shelf, flat seamless left and right edges so pieces can be placed side by side, beer taps with gold handles above a small shelf of mugs, ' + FR14,
+    ]},
     'k22_gross': {'size': 64, 'items': [
         'huge golden jackpot slot machine, tall cabinet with a big glowing screen, flashing yellow lights around the '
         'top sign, red lever, violet and gold body, ' + FR14,
