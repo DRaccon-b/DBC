@@ -59,7 +59,7 @@ def main():
     for (x0, y0, x1, y1) in INSEL_STEGE:                          # Durchgaenge in den Ringen
         k[y0:y1 + 1, x0 - 1] = 'p'; k[y0:y1 + 1, x1 + 1] = 'p'
     # Innenaufteilung (symmetrisch zur Achse 25.5 -> Spalte x <-> 51 - x)
-    rechteck(k, (9, 4, 60, 10), 'w')                              # Nutzer: ganze hintere Wand als Bar
+    rechteck(k, (9, 4, 60, 11), 'w')                              # Nutzer: ganze hintere Wand als Bar
     rechteck(k, (33, 5, 36, 32), 't')                             # Teppich bis zur VIP-Tuer                             # Teppich Mittelgang
     for x0 in (13, 53):                                           # Automatenreihen links/rechts (je 4 breit, Abstand zum Rand)
         rechteck(k, (x0, 12, x0 + 3, 28), 's')

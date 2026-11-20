@@ -48,38 +48,44 @@ def bar_bauen():
         bild.save(os.path.join(d, 'tresen_%s.png' % seite))
     r = np.array(Image.open(os.path.join(OBJ, 'theke', '03.png')).convert('RGBA'))
     rl, rm, rr = r[:, :3], r[:, 3:37], r[:, 37:]
-    H = r.shape[0]
+    # Nutzer: Einsaetze wirkten "draufgeklatscht" -> eine durchgehende Schrankwand: oben ein gemeinsames Kranzgesims
+    # (Regal-Zeilen 0-6), unten ein gemeinsamer Schubladensockel (Zeilen 30-41); dazwischen gleich hohe Faecher, je
+    # von denselben Rahmenleisten getrennt. Flaschenfaecher mit drei Boeden, Sonderfaecher (k22_regal) als Nischen.
+    OBEN, UNTEN, FACH = rm[:7], rm[30:], 39
+    H = OBEN.shape[0] + FACH + UNTEN.shape[0]
+    PANEL = np.array((34, 20, 46, 255), np.uint8)
+    flaschen = np.concatenate([rm[7:30], rm[7:23]], axis=0)            # drei Flaschenboeden (23 + 16 = 39 Zeilen)
 
-    def stueck(i):
-        # Nutzer: Rueckwand abwechslungsreich - PixelLab-Stuecke (k22_regal), unten buendig; fehlende Hoehe oben mit dem
-        # Rahmen des Flaschenregals aufgefuellt, damit die Oberkante durchlaeuft
+    def kachelbreit(streifen, w):
+        return np.concatenate([streifen] * (w // streifen.shape[1] + 1), axis=1)[:, :w]
+
+    def leiste():                                                     # Rahmenleiste zwischen den Faechern (3 px)
+        return np.concatenate([rl[7:30], rl[7:23]], axis=0)
+
+    def nische(i):
         v = np.array(Image.open(os.path.join(OBJ, 'regal', '%02d.png' % i)).convert('RGBA'))
-        v = v[-H:]
-        v[v[..., 3] > 0, 3] = 255                                      # Pruefung: deckend (Espressomaschine war halbtransparent)
-        out = np.zeros((H, v.shape[1], 4), np.uint8)
-        fuell = np.concatenate([rm] * (v.shape[1] // rm.shape[1] + 1), axis=1)[:, :v.shape[1]]
-        out[:H - v.shape[0]] = fuell[:H - v.shape[0]]
-        out[H - v.shape[0]:] = v
-        leer = out[..., 3] == 0                                        # Luecken (runde Ecken) mit Regalgrund fuellen
-        out[leer] = fuell[leer]
+        v = v[2:-2, 2:-2]                                              # eigener Aussenrahmen weg (sitzt jetzt im Schrank)
+        v = v[-(FACH - 1):]
+        v[v[..., 3] > 0, 3] = 255
+        out = np.tile(PANEL, (FACH, v.shape[1] + 4, 1))
+        out[FACH - v.shape[0]:, 2:2 + v.shape[1]][v[..., 3] > 0] = v[v[..., 3] > 0]
         return out
 
     breiten = []
     for seite, var in (('links', VARIANTEN[0::2]), ('rechts', VARIANTEN[1::2])):
-        # Nutzer: jeder Flaschenschrank ist links und rechts mit seinem Rahmen abgeschlossen, wenn ein Wandstueck
-        # dazwischen steht: Schrank | Stueck | Schrank | Stueck | ... | Schrank (letzter Schrank fuellt die Breite)
-        def schrank(w):
-            innen = np.concatenate([rm] * (w // rm.shape[1] + 1), axis=1)[:, :max(1, w - 6)]
-            return np.concatenate([rl, innen, rr], axis=1)
-        teile, breite, i_ = [], 0, 0
-        normal = schrank(rm.shape[1] + 6)
+        mitte, breite, i_ = [leiste()], 3, 0
+        fl = kachelbreit(flaschen, rm.shape[1])
         while True:
-            v_ = stueck(var[i_ % len(var)])
-            if breite + normal.shape[1] + v_.shape[1] + normal.shape[1] > REGAL_BREITE:
+            n_ = nische(var[i_ % len(var)])
+            if breite + fl.shape[1] + 3 + n_.shape[1] + 3 + fl.shape[1] + 3 > REGAL_BREITE:
                 break
-            teile += [normal, v_]; breite += normal.shape[1] + v_.shape[1]; i_ += 1
-        teile.append(schrank(REGAL_BREITE - breite))
-        regal = np.concatenate(teile, axis=1)
+            mitte += [fl, leiste(), n_, leiste()]; breite += fl.shape[1] + n_.shape[1] + 6; i_ += 1
+        mitte += [kachelbreit(flaschen, REGAL_BREITE - breite - 3), leiste()]
+        band = np.concatenate(mitte, axis=1)
+        W = band.shape[1]
+        oben = np.concatenate([rl[:7], kachelbreit(OBEN, W - 6), rr[:7]], axis=1)
+        unten = np.concatenate([rl[30:], kachelbreit(UNTEN, W - 6), rr[30:]], axis=1)
+        regal = np.concatenate([oben, band, unten], axis=0)
         Image.fromarray(regal).save(os.path.join(d, 'regal_%s.png' % seite))
         breiten.append(regal.shape[1])
     return tresen.shape[1], breiten
@@ -100,10 +106,10 @@ def paar(name, dx, reihe, anim=None, spiegeln_rechts=False):
 # (Quelle, Mitte x in px, Fussreihe, Animation, gespiegelt)
 OBJEKTE = (
     # Nutzer: hintere Wand = Bar. Regal an der Wand, eine Reihe Platz fuer den Barkeeper, davor der Tresen, Hocker
-    [('theke_gebaut/regal_links', 528 - REGAL_WL / 2.0, 5, 'automat22', False),
-     ('theke_gebaut/regal_rechts', 592 + REGAL_WR / 2.0, 5, 'automat22', False)]
-    + [('theke_gebaut/tresen_links', 512 - TRESEN_W / 2.0, 8, None, False),
-       ('theke_gebaut/tresen_rechts', 608 + TRESEN_W / 2.0, 8, None, False)]
+    [('theke_gebaut/regal_links', 528 - REGAL_WL / 2.0, 6, 'automat22', False),
+     ('theke_gebaut/regal_rechts', 592 + REGAL_WR / 2.0, 6, 'automat22', False)]
+    + [('theke_gebaut/tresen_links', 512 - TRESEN_W / 2.0, 9, None, False),
+       ('theke_gebaut/tresen_rechts', 608 + TRESEN_W / 2.0, 9, None, False)]
     # Automatenreihen (je 4 Automaten untereinander)
     + sum((paar(AUTOMAT, 320, r, 'automat22') for r in (14, 18, 22, 26)), [])    # Nutzer: Anzahl bleibt, mehr Platz ringsum
     # Spieltische: links Roulette/Karten, rechts Blackjack/Craps (gleiche Plaetze gespiegelt)
@@ -118,10 +124,10 @@ OBJEKTE = (
     # Ankunft: zwei Datenkristalle neben den Pfeilen
     + paar(KRISTALL, 48, 37, 'kristall')
     # Nutzer: Bar oben links/rechts - Tresen, drei Hocker davor, Cocktailtisch und Jukebox (PixelLab k22_bar/k22_bar48)
-    + sum((paar(HOCKER, MITTE - x_, 10) for x_ in (216, 264, 312, 360, 408, 456)), [])
-    + paar(JUKEBOX, MITTE - 168, 11, 'lampe', True)
+    + sum((paar(HOCKER, MITTE - x_, 11) for x_ in (216, 264, 312, 360, 408, 456)), [])
+    + paar(JUKEBOX, MITTE - 168, 12, 'lampe', True)
     # Nutzer: Weinfaesser an der Bar, Chip-Wagen neben den Spieltischen
-    + paar('mittel/00', MITTE - 166, 7) + paar('mittel/01', MITTE - 304, 19, None, True)   # Cocktailtische entfallen (stiessen an Kordeln/Hocker)
+    + paar('mittel/00', MITTE - 166, 8) + paar('mittel/01', MITTE - 304, 19, None, True)   # Cocktailtische entfallen (stiessen an Kordeln/Hocker)
 )
 
 
