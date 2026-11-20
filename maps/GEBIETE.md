@@ -60,7 +60,7 @@ Aufstellfelds (cyan = Ankunft, gold = weiter; Funktion `pfeil_marke` in `tools/k
 ## A0S – Sondergebiet
 | Nr. | Karte | Stand |
 |---|---|---|
-| 1 | Karte 22 – Digicasino | in Arbeit: Gelände und Objekte (Netz-Stil wie Karte 16/17) |
+| 1 | Karte 22 – Digicasino | v1.0 fertig (Agenten-Prüfrunde 1): 82x42, Bar über die ganze Rückwand, große Jackpot-Inseln, Objekte aus K58/59/63 (Nutzer); asymmetrische Variante als Vorschau, ZIP in maps/karte22/v1.0 |
 | 2 | Karte 57 – Coral Jackpot Lagoon | Standbild (PixelLab-Tilesets + Objekte, Grundriss inseln), Animation folgt |
 | 3 | Karte 58 – Desert Mirage Casino | Standbild (PixelLab-Tilesets + Objekte, Grundriss hof), Animation folgt |
 | 4 | Karte 59 – Orbit Station Royale | Standbild (PixelLab-Tilesets + Objekte, Grundriss kreuz), Animation folgt |
