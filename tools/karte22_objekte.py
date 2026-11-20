@@ -139,6 +139,43 @@ OBJEKTE = (
 )
 
 
+# Nutzer: Variante, in der nicht alles gespiegelt ist (K22_ASYM=1). Teppich, Bar, Inseln und Eingang bleiben auf der
+# Achse; rechts werden Objekte anders gruppiert, verschoben oder durch andere Motive ersetzt.
+ASYM = os.environ.get('K22_ASYM') == '1'
+RECHTS_ANDERS = {   # (Quelle, Fussreihe) rechts -> Liste neuer (Quelle, Mitte, Reihe, Animation) oder [] = weg
+    (AUTOMAT, 14): [(AUTOMAT, None, 13, 'automat22')], (AUTOMAT, 18): [(AUTOMAT, None, 16, 'automat22')],
+    (AUTOMAT, 22): [(AUTOMAT, None, 23, 'automat22')],
+    (BLACKJACK, 17): [(BLACKJACK, MITTE + 176, 22, None)], (CRAPS, 23): [(CRAPS, MITTE + 144, 16, None)],
+    ('../karte58/o48/03', 15): [],
+    ('../karte59/o48/08', 31): [('gross/09', MITTE + 296, 31, None)],
+    ('../karte59/o48/07', 25): [('../karte59/o48/07', MITTE + 400, 27, None)],
+    ('mittel/01', 19): [('mittel/01', 920, 21, None)],
+    ('../karte63/o48/07', 29): [('casino/13', MITTE + 112, 30, 'brunnen')],
+    ('../karte63/o48/15', 15): [('../karte63/o48/15', 1184, 15, None)],
+    (LAMPE, 21): None,                                                 # Inselleuchten: siehe unten
+    (ATM, 30): [(ATM, MITTE + 224, 28, 'automat22')],
+}
+
+
+def asym(liste):
+    neu = []
+    for (name, mitte, reihe, anim, sp) in liste:
+        if mitte > MITTE and (name, reihe) in RECHTS_ANDERS:
+            ers = RECHTS_ANDERS[(name, reihe)]
+            if ers is None:                                            # Insel rechts: eine Leuchte nach oben
+                neu.append((name, mitte, reihe if mitte < 1240 else 16, anim, sp))
+                continue
+            for (n2, m2, r2, a2) in ers:
+                neu.append((n2, mitte if m2 is None else m2, r2, a2, sp if n2 == name else False))
+            continue
+        neu.append((name, mitte, reihe, anim, sp))
+    return neu
+
+
+if ASYM:
+    OBJEKTE = asym(list(OBJEKTE))
+
+
 def main():
     lvl = np.load(os.path.join(KARTE, 'pixelhoehe.npy'))
     Hp, Wp = lvl.shape
