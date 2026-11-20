@@ -116,7 +116,8 @@ OBJEKTE = (
     + [(ROULETTE, MITTE - 160, 17, None, False), (BLACKJACK, MITTE + 160, 17, None, False),
        (KARTEN, MITTE - 160, 23, None, False), (CRAPS, MITTE + 160, 23, None, False)]
     # Samtkordeln am Teppich, Neonlaternen am Eingang, Geldautomaten
-    + paar(KORDEL, 53, 14, None, True) + paar(KORDEL, 53, 24, None, True)   # Pruefung: Seilende neben dem Teppich
+    # Nutzer: Seil darf nicht in der Luft enden -> Absperrung mit zwei Goldpfosten (PixelLab, Karte 58), ganz neben dem Teppich
+    + paar('../karte58/o48/12', 61, 14) + paar('../karte58/o48/12', 61, 24)
     + paar(LAMPE, 56, 32, 'lampe')
     + paar(ATM, 200, 30, 'automat22')
     # Jackpot-Inseln: je ein grosser Jackpot-Automat
