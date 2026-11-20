@@ -32,7 +32,20 @@ def bar_bauen():
     links, streifen, rechts = t[:, :26], t[:, 26:42], t[:, 42:]
     n = (BAR_BREITE - links.shape[1] - rechts.shape[1]) // 16
     tresen = np.concatenate([links] + [streifen] * n + [rechts], axis=1)
-    Image.fromarray(tresen).save(os.path.join(d, 'tresen.png'))
+    # Nutzer: Glaeser, Chips usw. auf der Tresenplatte (PixelLab k22_tresen, 16 px Zielgroesse), je Haelfte andere
+    for seite, deko in (('links', TRESEN_DEKO[0]), ('rechts', TRESEN_DEKO[1])):
+        t2 = np.zeros((tresen.shape[0] + 12, tresen.shape[1], 4), np.uint8)
+        t2[12:] = tresen
+        bild = Image.fromarray(t2)
+        for i_, (nr_, x_) in enumerate(deko):
+            g = Image.open(os.path.join(OBJ, 'tresen', '%02d.png' % nr_)).convert('RGBA')
+            g = g.crop(g.getbbox())
+            if seite == 'rechts':                                     # rechte Haelfte wird gespiegelt gesetzt
+                x_ = tresen.shape[1] - x_
+            bild.alpha_composite(g, (int(x_ - g.width // 2), 12 + 9 - g.height + 1))
+        if seite == 'rechts':
+            bild = bild.transpose(Image.FLIP_LEFT_RIGHT)
+        bild.save(os.path.join(d, 'tresen_%s.png' % seite))
     r = np.array(Image.open(os.path.join(OBJ, 'theke', '03.png')).convert('RGBA'))
     rl, rm, rr = r[:, :3], r[:, 3:37], r[:, 37:]
     H = r.shape[0]
@@ -70,8 +83,10 @@ def bar_bauen():
     return tresen.shape[1], breiten
 
 
-BAR_BREITE, REGAL_BREITE = 352, 384                                   # je Haelfte (px)
-VARIANTEN = [0, 1, 3, 4, 5, 6, 7, 10, 15, 8, 13, 11]                  # k22_regal: verschiedene Wandstuecke, keine doppelt
+BAR_BREITE, REGAL_BREITE = 320, 384                                   # je Haelfte (px)
+VARIANTEN = [0, 1, 3, 4, 5, 6, 7, 10, 15, 8, 13, 11]
+TRESEN_DEKO = ([(0, 34), (3, 82), (2, 140), (4, 196), (7, 262)],          # (k22_tresen-Nr., x auf dem Tresen)
+               [(1, 40), (5, 96), (8, 150), (6, 204), (9, 240), (14, 290)])                  # k22_regal: verschiedene Wandstuecke, keine doppelt
 TRESEN_W, (REGAL_WL, REGAL_WR) = bar_bauen()
 
 
@@ -85,7 +100,8 @@ OBJEKTE = (
     # Nutzer: hintere Wand = Bar. Regal an der Wand, eine Reihe Platz fuer den Barkeeper, davor der Tresen, Hocker
     [('theke_gebaut/regal_links', 528 - REGAL_WL / 2.0, 5, None, False),
      ('theke_gebaut/regal_rechts', 592 + REGAL_WR / 2.0, 5, None, False)]
-    + paar('theke_gebaut/tresen', MITTE - 512 + TRESEN_W // 2, 8, None, True)
+    + [('theke_gebaut/tresen_links', 512 - TRESEN_W / 2.0, 8, None, False),
+       ('theke_gebaut/tresen_rechts', 608 + TRESEN_W / 2.0, 8, None, False)]
     # Automatenreihen (je 4 Automaten untereinander)
     + sum((paar(AUTOMAT, 320, r, 'automat') for r in (14, 18, 22, 26)), [])    # Nutzer: Anzahl bleibt, mehr Platz ringsum
     # Spieltische: links Roulette/Karten, rechts Blackjack/Craps (gleiche Plaetze gespiegelt)
@@ -101,7 +117,9 @@ OBJEKTE = (
     + paar(KRISTALL, 48, 37, 'lampe')
     # Nutzer: Bar oben links/rechts - Tresen, drei Hocker davor, Cocktailtisch und Jukebox (PixelLab k22_bar/k22_bar48)
     + sum((paar(HOCKER, MITTE - x_, 10) for x_ in (216, 264, 312, 360, 408, 456)), [])
-    + paar(JUKEBOX, MITTE - 168, 10, 'lampe', True)   # Cocktailtische entfallen (stiessen an Kordeln/Hocker)
+    + paar(JUKEBOX, MITTE - 168, 11, 'lampe', True)
+    # Nutzer: Weinfaesser an der Bar, Chip-Wagen neben den Spieltischen
+    + paar('mittel/00', MITTE - 166, 7) + paar('mittel/01', MITTE - 304, 19, None, True)   # Cocktailtische entfallen (stiessen an Kordeln/Hocker)
 )
 
 

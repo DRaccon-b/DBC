@@ -3142,6 +3142,30 @@ OBJEKTGRUPPEN_K22 = {   # Karte 22 (Digicasino): Netz-Stil wie Karte 16, aber mi
         'section of a back bar wall seen from the front, dark violet wooden frame with gold trim, same height and frame as a bottle shelf, flat seamless left and right edges so pieces can be placed side by side, a small neon screen showing casino odds and two shelves of whiskey bottles, ' + FR14,
         'section of a back bar wall seen from the front, dark violet wooden frame with gold trim, same height and frame as a bottle shelf, flat seamless left and right edges so pieces can be placed side by side, beer taps with gold handles above a small shelf of mugs, ' + FR14,
     ]},
+    'k22_klein': {'size': 32, 'items': [   # Nutzer: Kleinkram an der Bar (Glaeser, Chips, Weinfaesser ...)
+        'two small cocktail glasses with colorful drinks and tiny umbrellas, ' + FR14,
+        'champagne bottle in a silver ice bucket, ' + FR14,
+        'small neat stacks of casino chips in red, blue and gold, ' + FR14,
+        'two red wine glasses half full, ' + FR14,
+        'small wooden wine barrel lying on a wooden stand with a brass tap, ' + FR14,
+        'upright wooden wine barrel with two wine bottles on top, ' + FR14,
+        'glass tip jar with a few gold coins and bills, ' + FR14,
+        'pair of red casino dice and a small stack of chips, ' + FR14,
+    ]},
+    'k22_mittel': {'size': 48, 'items': [
+        'pyramid of three stacked wooden wine barrels with brass bands, ' + FR14,
+        'rolling casino chip trolley cart with rows of colorful chips, gold frame, ' + FR14,
+    ]},
+    'k22_tresen': {'size': 16, 'items': [   # winzige Deko fuer die Tresenplatte (Zielgroesse, nie verkleinern)
+        'tiny cocktail glass with a pink drink, ' + FR14,
+        'tiny red wine glass, ' + FR14,
+        'tiny beer mug with foam, ' + FR14,
+        'tiny stack of casino chips red and gold, ' + FR14,
+        'tiny champagne bottle in an ice bucket, ' + FR14,
+        'tiny pair of red dice, ' + FR14,
+        'tiny wine bottle, ' + FR14,
+        'tiny glass tip jar with gold coins, ' + FR14,
+    ]},
     'k22_gross': {'size': 64, 'items': [
         'huge golden jackpot slot machine, tall cabinet with a big glowing screen, flashing yellow lights around the '
         'top sign, red lever, violet and gold body, ' + FR14,

@@ -26,26 +26,26 @@
 "an_wand": true
 },
 {
-"datei": "sauber/theke_gebaut-tresen.png",
-"basis": "theke_gebaut/tresen",
-"x": 162,
-"y": 111,
-"fuss": 32,
+"datei": "sauber/theke_gebaut-tresen_links.png",
+"basis": "theke_gebaut/tresen_links",
+"x": 194,
+"y": 99,
+"fuss": 44,
 "kachel": [
-21,
+22,
 8
 ],
 "ebene": 2,
 "an_wand": true
 },
 {
-"datei": "sauber/theke_gebaut-tresen_m.png",
-"basis": "theke_gebaut/tresen",
+"datei": "sauber/theke_gebaut-tresen_rechts.png",
+"basis": "theke_gebaut/tresen_rechts",
 "x": 608,
-"y": 111,
-"fuss": 32,
+"y": 99,
+"fuss": 44,
 "kachel": [
-48,
+47,
 8
 ],
 "ebene": 2,
@@ -539,11 +539,11 @@
 "datei": "sauber/bar48-10.png",
 "basis": "bar48/10",
 "x": 152,
-"y": 131,
+"y": 147,
 "fuss": 44,
 "kachel": [
 10,
-10
+11
 ],
 "ebene": 2,
 "an_wand": true,
@@ -553,14 +553,66 @@
 "datei": "sauber/bar48-10_m.png",
 "basis": "bar48/10",
 "x": 936,
-"y": 131,
+"y": 147,
 "fuss": 44,
 "kachel": [
 59,
-10
+11
 ],
 "ebene": 2,
 "an_wand": true,
 "anim": "lampe"
+},
+{
+"datei": "sauber/mittel-00.png",
+"basis": "mittel/00",
+"x": 146,
+"y": 87,
+"fuss": 40,
+"kachel": [
+10,
+7
+],
+"ebene": 2,
+"an_wand": true
+},
+{
+"datei": "sauber/mittel-00.png",
+"basis": "mittel/00",
+"x": 934,
+"y": 87,
+"fuss": 40,
+"kachel": [
+59,
+7
+],
+"ebene": 2,
+"an_wand": true
+},
+{
+"datei": "sauber/mittel-01.png",
+"basis": "mittel/01",
+"x": 285,
+"y": 285,
+"fuss": 34,
+"kachel": [
+19,
+19
+],
+"ebene": 2,
+"an_wand": true
+},
+{
+"datei": "sauber/mittel-01_m.png",
+"basis": "mittel/01",
+"x": 797,
+"y": 285,
+"fuss": 34,
+"kachel": [
+51,
+19
+],
+"ebene": 2,
+"an_wand": true
 }
 ]
