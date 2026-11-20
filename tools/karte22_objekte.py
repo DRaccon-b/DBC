@@ -128,6 +128,13 @@ OBJEKTE = (
     + sum((paar(HOCKER, MITTE - x_, 11) for x_ in (288, 344, 400, 456, 512, 568)), [])
     + paar(JUKEBOX, MITTE - 232, 12, 'lampe', True)
     # Nutzer: Weinfaesser an der Bar, Chip-Wagen neben den Spieltischen
+    # Nutzer: Objekte aus den Casino-Karten - Palmen (58), Lounge-Sitzecke und Holo-Wuerfeltisch (59),
+    # Brunnen und Tischchen mit Chips/Karten (63)
+    + paar('../karte58/o48/03', MITTE - 224, 31) + paar('../karte58/o48/03', MITTE - 232, 15)
+    + paar('../karte59/o48/08', MITTE - 312, 31, None, True)
+    + paar('../karte59/o48/07', MITTE - 384, 25)
+    + paar('../karte63/o48/07', 120, 29, 'brunnen')
+    + paar('../karte63/o48/15', MITTE - 48, 15, None, True)
     + paar('mittel/00', MITTE - 230, 8) + paar('mittel/01', MITTE - 368, 19, None, True)   # Cocktailtische entfallen (stiessen an Kordeln/Hocker)
 )
 
