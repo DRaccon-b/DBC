@@ -3109,6 +3109,16 @@ OBJEKTGRUPPEN_K22 = {   # Karte 22 (Digicasino): Netz-Stil wie Karte 16, aber mi
         'casino velvet rope stanchion post, shiny gold pole on a round base with a red velvet rope hanging to the side, ' + FR14,
         'glowing neon sign on a short metal stand showing a big pink dice, cyan neon frame, ' + FR14,
     ]},
+    'k22_bar': {'size': 96, 'items': [   # Nutzer: oben eine Art Bar
+        'long casino cocktail bar counter, dark violet metal and polished wood top with gold trim, neon cyan light strip '
+        'along the front, a few cocktail glasses and bottles on the counter, ' + FR14,
+        'tall back bar shelf with glowing bottles in rows, violet frame with gold trim and neon cyan underglow, ' + FR14,
+    ]},
+    'k22_bar48': {'size': 48, 'items': [
+        'single casino bar stool, round red velvet seat on a shiny gold pole and round base, ' + FR14,
+        'small round cocktail table with a gold pole, a glowing cocktail glass on top, ' + FR14,
+        'glowing neon cocktail glass sign on a short metal stand, pink and cyan neon, ' + FR14,
+    ]},
     'k22_gross': {'size': 64, 'items': [
         'huge golden jackpot slot machine, tall cabinet with a big glowing screen, flashing yellow lights around the '
         'top sign, red lever, violet and gold body, ' + FR14,

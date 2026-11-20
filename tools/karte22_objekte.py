@@ -16,9 +16,10 @@ ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
 KARTE = os.path.join(ROOT, 'maps', 'karte22')
 OBJ = os.path.join(ROOT, 'assets', 'objekte', 'karte22')
 T = 16
-MITTE = 512                                                       # Achse bei 64 Kacheln Breite
+MITTE = 560                                                       # Achse 34.5 (70 Kacheln Breite)
 AUTOMAT, ROULETTE, KARTEN, CRAPS, BLACKJACK = 'casino/00', 'casino/01', 'casino/02', 'casino/06', 'casino/07'
 KORDEL, ATM, JACKPOT, THEKE, KRISTALL, LAMPE = 'casino/04', 'casino/12', 'gross/00', 'gross/01', 'gross/02', 'gross/10'
+BAR, HOCKER, COCKTAIL, JUKEBOX = 'bar/00', 'bar48/00', 'bar48/01', 'bar48/10'
 
 
 def paar(name, dx, reihe, anim=None, spiegeln_rechts=False):
@@ -31,18 +32,22 @@ OBJEKTE = (
     # Buehne: zwei Preistheken links/rechts der VIP-Tuer (Ausgang bleibt frei)
     paar(THEKE, 112, 6)
     # Automatenreihen (je 4 Automaten untereinander)
-    + sum((paar(AUTOMAT, 304, r, 'automat') for r in (9, 13, 17, 21)), [])     # Nutzer: Anzahl bleibt, mehr Abstand
+    + sum((paar(AUTOMAT, 320, r, 'automat') for r in (14, 18, 22, 26)), [])    # Nutzer: Anzahl bleibt, mehr Platz ringsum
     # Spieltische: links Roulette/Karten, rechts Blackjack/Craps (gleiche Plaetze gespiegelt)
-    + [(ROULETTE, MITTE - 160, 13, None, False), (BLACKJACK, MITTE + 160, 13, None, False),
-       (KARTEN, MITTE - 160, 19, None, False), (CRAPS, MITTE + 160, 19, None, False)]
+    + [(ROULETTE, MITTE - 160, 17, None, False), (BLACKJACK, MITTE + 160, 17, None, False),
+       (KARTEN, MITTE - 160, 23, None, False), (CRAPS, MITTE + 160, 23, None, False)]
     # Samtkordeln am Teppich, Neonlaternen am Eingang, Geldautomaten
-    + paar(KORDEL, 46, 11, None, True) + paar(KORDEL, 46, 19, None, True)
-    + paar(LAMPE, 56, 26, 'lampe')
-    + paar(ATM, 160, 26, 'lampe')
+    + paar(KORDEL, 46, 14, None, True) + paar(KORDEL, 46, 24, None, True)
+    + paar(LAMPE, 56, 32, 'lampe')
+    + paar(ATM, 200, 30, 'lampe')
     # Jackpot-Inseln: je ein grosser Jackpot-Automat
-    + paar(JACKPOT, 456, 15, 'automat')
+    + paar(JACKPOT, 504, 18, 'automat')
     # Ankunft: zwei Datenkristalle neben den Pfeilen
-    + paar(KRISTALL, 48, 31, 'lampe')
+    + paar(KRISTALL, 48, 37, 'lampe')
+    # Nutzer: Bar oben links/rechts - Tresen, drei Hocker davor, Cocktailtisch und Jukebox (PixelLab k22_bar/k22_bar48)
+    + paar(BAR, 312, 6, 'lampe', True)
+    + sum((paar(HOCKER, dx_, 8) for dx_ in (344, 312, 280)), [])
+    + paar(COCKTAIL, 376, 9, None, True) + paar(JUKEBOX, 240, 6, 'lampe', True)
 )
 
 

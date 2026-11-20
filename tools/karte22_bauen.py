@@ -54,6 +54,17 @@ def filz(a, m):
     a[r] = GOLD_D.astype(np.uint8)
 
 
+def barboden(a, m):
+    """Nutzer: Bar oben - dunkle Holzdielen (waagerecht, versetzte Fugen) mit schmaler Goldkante."""
+    Hh, W = m.shape
+    yy, xx = np.mgrid[0:Hh, 0:W]
+    a[m] = (58, 34, 40)
+    a[m & ((yy % 8) < 4)] = (64, 38, 44)
+    fuge = (yy % 8 == 7) | (((xx + (yy // 8) * 11) % 32) == 0)
+    a[m & fuge] = (36, 20, 26)
+    r = m & ~(np.roll(m, 1, 0) & np.roll(m, -1, 0) & np.roll(m, 1, 1) & np.roll(m, -1, 1))
+    a[r] = GOLD_D.astype(np.uint8)
+
 def buehne(a, m, frame):
     """Buehne/Preistheke: dunkelviolette Dielen, Goldkante, nach Sueden eine Stufe (6 px) mit Lichtleiste."""
     Hh, W = m.shape
@@ -102,7 +113,7 @@ def bauen(frame=None, speichern=True):
     gross = lambda arten: np.kron(np.isin(kl, list(arten)), np.ones((T, T), int)).astype(bool)
     a = np.zeros((Hp, Wp, 3), np.uint8)
     a[:] = LEER
-    land = gross('prtskbzgj')
+    land = gross('prtskbzgjw')
     ring = gross('r')
     leer = ~land
     k16.leere(a, leer, frame)
@@ -116,6 +127,7 @@ def bauen(frame=None, speichern=True):
     automatenboden(a, gross('s'))
     filz(a, gross('k'))
     teppich(a, gross('t'))
+    barboden(a, gross('w'))
     for i in range(len(lay['inseln'])):
         x0, y0, x1, y1 = lay['inseln'][i]
         m = np.zeros((Hp, Wp), bool)
