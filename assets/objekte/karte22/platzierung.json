@@ -1,26 +1,52 @@
 [
 {
-"datei": "sauber/gross-01.png",
-"basis": "gross/01",
-"x": 417,
-"y": 49,
-"fuss": 62,
+"datei": "sauber/theke_gebaut-regal.png",
+"basis": "theke_gebaut/regal",
+"x": 148,
+"y": 54,
+"fuss": 41,
 "kachel": [
-28,
-6
+21,
+5
 ],
 "ebene": 2,
 "an_wand": true
 },
 {
-"datei": "sauber/gross-01.png",
-"basis": "gross/01",
-"x": 641,
-"y": 49,
-"fuss": 62,
+"datei": "sauber/theke_gebaut-regal_m.png",
+"basis": "theke_gebaut/regal",
+"x": 592,
+"y": 54,
+"fuss": 41,
 "kachel": [
-42,
-6
+48,
+5
+],
+"ebene": 2,
+"an_wand": true
+},
+{
+"datei": "sauber/theke_gebaut-tresen.png",
+"basis": "theke_gebaut/tresen",
+"x": 162,
+"y": 111,
+"fuss": 32,
+"kachel": [
+21,
+8
+],
+"ebene": 2,
+"an_wand": true
+},
+{
+"datei": "sauber/theke_gebaut-tresen_m.png",
+"basis": "theke_gebaut/tresen",
+"x": 608,
+"y": 111,
+"fuss": 32,
+"kachel": [
+48,
+8
 ],
 "ebene": 2,
 "an_wand": true
@@ -354,42 +380,14 @@
 "anim": "lampe"
 },
 {
-"datei": "sauber/bar-00.png",
-"basis": "bar/00",
-"x": 206,
-"y": 64,
-"fuss": 47,
-"kachel": [
-15,
-6
-],
-"ebene": 2,
-"an_wand": true,
-"anim": "lampe"
-},
-{
-"datei": "sauber/bar-00_m.png",
-"basis": "bar/00",
-"x": 830,
-"y": 64,
-"fuss": 47,
-"kachel": [
-54,
-6
-],
-"ebene": 2,
-"an_wand": true,
-"anim": "lampe"
-},
-{
 "datei": "sauber/bar48-00.png",
 "basis": "bar48/00",
 "x": 204,
-"y": 100,
+"y": 132,
 "fuss": 43,
 "kachel": [
 13,
-8
+10
 ],
 "ebene": 2,
 "an_wand": true
@@ -398,11 +396,11 @@
 "datei": "sauber/bar48-00.png",
 "basis": "bar48/00",
 "x": 892,
-"y": 100,
+"y": 132,
 "fuss": 43,
 "kachel": [
 56,
-8
+10
 ],
 "ebene": 2,
 "an_wand": true
@@ -410,12 +408,12 @@
 {
 "datei": "sauber/bar48-00.png",
 "basis": "bar48/00",
-"x": 236,
-"y": 100,
+"x": 252,
+"y": 132,
 "fuss": 43,
 "kachel": [
-15,
-8
+16,
+10
 ],
 "ebene": 2,
 "an_wand": true
@@ -423,12 +421,12 @@
 {
 "datei": "sauber/bar48-00.png",
 "basis": "bar48/00",
-"x": 860,
-"y": 100,
+"x": 844,
+"y": 132,
 "fuss": 43,
 "kachel": [
-54,
-8
+53,
+10
 ],
 "ebene": 2,
 "an_wand": true
@@ -436,12 +434,12 @@
 {
 "datei": "sauber/bar48-00.png",
 "basis": "bar48/00",
-"x": 268,
-"y": 100,
+"x": 300,
+"y": 132,
 "fuss": 43,
 "kachel": [
-17,
-8
+19,
+10
 ],
 "ebene": 2,
 "an_wand": true
@@ -449,38 +447,90 @@
 {
 "datei": "sauber/bar48-00.png",
 "basis": "bar48/00",
-"x": 828,
-"y": 100,
+"x": 796,
+"y": 132,
 "fuss": 43,
 "kachel": [
-52,
-8
+50,
+10
 ],
 "ebene": 2,
 "an_wand": true
 },
 {
-"datei": "sauber/bar48-01.png",
-"basis": "bar48/01",
-"x": 168,
-"y": 116,
+"datei": "sauber/bar48-00.png",
+"basis": "bar48/00",
+"x": 348,
+"y": 132,
 "fuss": 43,
 "kachel": [
-11,
-9
+22,
+10
 ],
 "ebene": 2,
 "an_wand": true
 },
 {
-"datei": "sauber/bar48-01_m.png",
-"basis": "bar48/01",
-"x": 920,
-"y": 116,
+"datei": "sauber/bar48-00.png",
+"basis": "bar48/00",
+"x": 748,
+"y": 132,
 "fuss": 43,
 "kachel": [
-58,
-9
+47,
+10
+],
+"ebene": 2,
+"an_wand": true
+},
+{
+"datei": "sauber/bar48-00.png",
+"basis": "bar48/00",
+"x": 396,
+"y": 132,
+"fuss": 43,
+"kachel": [
+25,
+10
+],
+"ebene": 2,
+"an_wand": true
+},
+{
+"datei": "sauber/bar48-00.png",
+"basis": "bar48/00",
+"x": 700,
+"y": 132,
+"fuss": 43,
+"kachel": [
+44,
+10
+],
+"ebene": 2,
+"an_wand": true
+},
+{
+"datei": "sauber/bar48-00.png",
+"basis": "bar48/00",
+"x": 444,
+"y": 132,
+"fuss": 43,
+"kachel": [
+28,
+10
+],
+"ebene": 2,
+"an_wand": true
+},
+{
+"datei": "sauber/bar48-00.png",
+"basis": "bar48/00",
+"x": 652,
+"y": 132,
+"fuss": 43,
+"kachel": [
+41,
+10
 ],
 "ebene": 2,
 "an_wand": true
@@ -488,12 +538,12 @@
 {
 "datei": "sauber/bar48-10.png",
 "basis": "bar48/10",
-"x": 304,
-"y": 67,
+"x": 152,
+"y": 131,
 "fuss": 44,
 "kachel": [
-20,
-6
+10,
+10
 ],
 "ebene": 2,
 "an_wand": true,
@@ -502,12 +552,12 @@
 {
 "datei": "sauber/bar48-10_m.png",
 "basis": "bar48/10",
-"x": 784,
-"y": 67,
+"x": 936,
+"y": 131,
 "fuss": 44,
 "kachel": [
-50,
-6
+59,
+10
 ],
 "ebene": 2,
 "an_wand": true,

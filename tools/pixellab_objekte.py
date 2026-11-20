@@ -3119,6 +3119,19 @@ OBJEKTGRUPPEN_K22 = {   # Karte 22 (Digicasino): Netz-Stil wie Karte 16, aber mi
         'small round cocktail table with a gold pole, a glowing cocktail glass on top, ' + FR14,
         'glowing neon cocktail glass sign on a short metal stand, pink and cyan neon, ' + FR14,
     ]},
+    'k22_theke': {'size': 48, 'items': [   # Nutzer: ganze hintere Wand als Bar - kachelbare Stuecke (nahtlos links/rechts)
+        'straight middle section of a long casino bar counter seen from the front, dark violet front panel with thin gold '
+        'trim and a glowing neon cyan light strip along the bottom, polished dark wood counter top, no glasses, completely '
+        'flat and seamless left and right edges so many pieces can be placed side by side in a row, ' + FR14,
+        'left end piece of the same long casino bar counter, rounded closed end on the left, dark violet front panel with '
+        'gold trim and neon cyan light strip, polished dark wood top, flat seamless right edge to connect to the middle '
+        'sections, ' + FR14,
+        'right end piece of the same long casino bar counter, rounded closed end on the right, dark violet front panel with '
+        'gold trim and neon cyan light strip, polished dark wood top, flat seamless left edge to connect to the middle '
+        'sections, ' + FR14,
+        'section of a back bar wall shelf seen from the front, two shelves full of glowing colorful bottles, dark violet '
+        'wooden frame with gold trim, flat seamless left and right edges so many pieces can be placed side by side, ' + FR14,
+    ]},
     'k22_gross': {'size': 64, 'items': [
         'huge golden jackpot slot machine, tall cabinet with a big glowing screen, flashing yellow lights around the '
         'top sign, red lever, violet and gold body, ' + FR14,

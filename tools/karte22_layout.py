@@ -59,14 +59,13 @@ def main():
     for (x0, y0, x1, y1) in INSEL_STEGE:                          # Durchgaenge in den Ringen
         k[y0:y1 + 1, x0 - 1] = 'p'; k[y0:y1 + 1, x1 + 1] = 'p'
     # Innenaufteilung (symmetrisch zur Achse 25.5 -> Spalte x <-> 51 - x)
-    rechteck(k, (33, 8, 36, 32), 't')                             # Teppich Mittelgang
-    rechteck(k, (24, 4, 45, 6), 'b')                              # Buehne / Preistheke oben
+    rechteck(k, (9, 4, 60, 10), 'w')                              # Nutzer: ganze hintere Wand als Bar
+    rechteck(k, (33, 5, 36, 32), 't')                             # Teppich bis zur VIP-Tuer                             # Teppich Mittelgang
     for x0 in (13, 53):                                           # Automatenreihen links/rechts (je 4 breit, Abstand zum Rand)
         rechteck(k, (x0, 12, x0 + 3, 28), 's')
     for x0 in (21, 41):                                           # Spieltische (je 8 breit, mehr Luft)
         rechteck(k, (x0, 13, x0 + 7, 25), 'k')
-    for x0 in (10, 49):                                           # Nutzer: Bar oben links/rechts (gespiegelt)
-        rechteck(k, (x0, 4, x0 + 10, 9), 'w')
+
     for (x0, y0, x1, y1) in INSELN:
         rechteck(k, (x0 + 1, y0 + 1, x1 - 1, y1 - 1), 'j')
     k[ANKUNFT[1] + 1, 33:37] = 'z'                                # Ankunftspfeile
@@ -86,8 +85,7 @@ def main():
         for x in range(C):
             dr.rectangle((x * S, y * S, x * S + S - 1, y * S + S - 1), fill=F[k[y, x]], outline=(0, 0, 0))
     for txt, (x, y) in (('Automaten', (13, 20)), ('Automaten', (53, 20)), ('Roulette', (22, 19)),
-                        ('Karten', (42, 19)), ('Preistheke / Buehne', (27, 5)), ('Teppich', (33, 20)),
-                        ('Bar', (13, 6)), ('Bar', (52, 6)),
+                        ('Karten', (42, 19)), ('Bar', (20, 6)), ('Bar', (46, 6)), ('Teppich', (33, 20)),
                         ('Ankunft', (32, 37)), ('Jackpot', (1, 17)), ('Jackpot', (64, 17))):
         dr.text((x * S + 2, y * S + 2), txt, fill=(255, 255, 255))
     im.save(os.path.join(KARTE, 'layout_vorschau.png'))
