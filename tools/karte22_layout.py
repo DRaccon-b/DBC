@@ -23,13 +23,13 @@ from PIL import Image, ImageDraw
 
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
 KARTE = os.path.join(ROOT, 'maps', 'karte22')
-C, R = 70, 42                    # Nutzer: groesser, mehr Platz an den Automaten, Bar oben (vorher 52x28, 64x36)
-CASINO = (8, 3, 61, 33)          # x0, y0, x1, y1 (inklusive)
-ANKUNFT = (31, 36, 38, 38)
-STEG = (33, 34, 36, 35)
-INSELN = [(1, 15, 5, 20), (64, 15, 68, 20)]
-INSEL_STEGE = [(6, 17, 7, 18), (62, 17, 63, 18)]
-ACHSE = 34.5                     # Mittelachse (Spalten 34/35)
+C, R = 74, 42                    # Nutzer: groesser, mehr Platz an den Automaten, Bar oben (vorher 52x28, 64x36)
+CASINO = (8, 3, 65, 33)          # x0, y0, x1, y1 (inklusive)
+ANKUNFT = (33, 36, 40, 38)
+STEG = (35, 34, 38, 35)
+INSELN = [(1, 15, 5, 20), (68, 15, 72, 20)]
+INSEL_STEGE = [(6, 17, 7, 18), (66, 17, 67, 18)]
+ACHSE = 36.5                     # Mittelachse (Spalten 36/37)
 
 
 def rechteck(k, r, art):
@@ -59,22 +59,22 @@ def main():
     for (x0, y0, x1, y1) in INSEL_STEGE:                          # Durchgaenge in den Ringen
         k[y0:y1 + 1, x0 - 1] = 'p'; k[y0:y1 + 1, x1 + 1] = 'p'
     # Innenaufteilung (symmetrisch zur Achse 25.5 -> Spalte x <-> 51 - x)
-    rechteck(k, (9, 4, 60, 11), 'w')                              # Nutzer: ganze hintere Wand als Bar
-    rechteck(k, (33, 5, 36, 32), 't')                             # Teppich bis zur VIP-Tuer                             # Teppich Mittelgang
-    for x0 in (13, 53):                                           # Automatenreihen links/rechts (je 4 breit, Abstand zum Rand)
+    rechteck(k, (9, 4, 64, 11), 'w')                              # Nutzer: ganze hintere Wand als Bar
+    rechteck(k, (35, 5, 38, 32), 't')                             # Teppich bis zur VIP-Tuer                             # Teppich Mittelgang
+    for x0 in (13, 57):                                           # Automatenreihen links/rechts (Nutzer: mehr Platz ringsum)
         rechteck(k, (x0, 12, x0 + 3, 28), 's')
-    for x0 in (21, 41):                                           # Spieltische (je 8 breit, mehr Luft)
+    for x0 in (23, 43):                                           # Spieltische (je 8 breit, 6 Kacheln Abstand zu den Automaten)
         rechteck(k, (x0, 13, x0 + 7, 25), 'k')
 
     for (x0, y0, x1, y1) in INSELN:
         rechteck(k, (x0 + 1, y0 + 1, x1 - 1, y1 - 1), 'j')
-    k[ANKUNFT[1] + 1, 33:37] = 'z'                                # Ankunftspfeile
-    k[4, 33:37] = 'g'                                             # Pruefung: Ausgang so breit wie der Teppich                                             # Ausgang (VIP-Tuer) hinter der Theke
+    k[ANKUNFT[1] + 1, 35:39] = 'z'                                # Ankunftspfeile
+    k[4, 35:39] = 'g'                                             # Pruefung: Ausgang so breit wie der Teppich                                             # Ausgang (VIP-Tuer) hinter der Theke
     h = np.where(k == '.', 0, 2)
     lay = {'groesse': [C, R], 'klassen': [''.join(z) for z in k], 'hoehe': [''.join(str(c) for c in z) for z in h],
            'casino': CASINO, 'ankunft': ANKUNFT, 'steg': STEG, 'inseln': INSELN, 'achse': ACHSE,
-           'teleporter': [{'x': 33, 'y': ANKUNFT[1] + 1, 'b': 4, 'h': 1, 'art': 'ankunft'},
-                          {'x': 33, 'y': 4, 'b': 4, 'h': 1, 'art': 'ausgang'}]}
+           'teleporter': [{'x': 35, 'y': ANKUNFT[1] + 1, 'b': 4, 'h': 1, 'art': 'ankunft'},
+                          {'x': 35, 'y': 4, 'b': 4, 'h': 1, 'art': 'ausgang'}]}
     json.dump(lay, open(os.path.join(KARTE, 'layout.json'), 'w'), indent=0)
     F = {'.': (10, 14, 30), 'p': (52, 70, 104), 'r': (34, 48, 78), 't': (150, 30, 50), 's': (200, 150, 40),
          'k': (30, 120, 70), 'b': (120, 60, 160), 'w': (110, 70, 40), 'z': (60, 200, 230), 'g': (230, 180, 70), 'j': (210, 80, 200)}

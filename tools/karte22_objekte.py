@@ -16,7 +16,7 @@ ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
 KARTE = os.path.join(ROOT, 'maps', 'karte22')
 OBJ = os.path.join(ROOT, 'assets', 'objekte', 'karte22')
 T = 16
-MITTE = 560                                                       # Achse 34.5 (70 Kacheln Breite)
+MITTE = 592                                                       # Achse 36.5 (74 Kacheln Breite)
 AUTOMAT, ROULETTE, KARTEN, CRAPS, BLACKJACK = 'casino/00', 'casino/01', 'casino/02', 'casino/06', 'casino/07'
 KORDEL, ATM, JACKPOT, THEKE, KRISTALL, LAMPE = 'casino/04', 'casino/12', 'gross/00', 'gross/01', 'gross/02', 'gross/10'
 BAR, HOCKER, COCKTAIL, JUKEBOX = 'bar/00', 'bar48/00', 'bar48/01', 'bar48/10'
@@ -91,7 +91,7 @@ def bar_bauen():
     return tresen.shape[1], breiten
 
 
-BAR_BREITE, REGAL_BREITE = 320, 384                                   # je Haelfte (px)
+BAR_BREITE, REGAL_BREITE = 352, 416                                   # je Haelfte (px)
 VARIANTEN = [0, 1, 3, 4, 5, 6, 7, 10, 15, 13, 11]                    # 8 entfaellt (Textrest unter dem Monitor)
 TRESEN_DEKO = ([(0, 34), (3, 82), (2, 140), (4, 196), (7, 262)],          # (k22_tresen-Nr., x auf dem Tresen)
                [(1, 40), (5, 96), (8, 150), (6, 204), (9, 240), (14, 290)])                  # k22_regal: verschiedene Wandstuecke, keine doppelt
@@ -106,12 +106,12 @@ def paar(name, dx, reihe, anim=None, spiegeln_rechts=False):
 # (Quelle, Mitte x in px, Fussreihe, Animation, gespiegelt)
 OBJEKTE = (
     # Nutzer: hintere Wand = Bar. Regal an der Wand, eine Reihe Platz fuer den Barkeeper, davor der Tresen, Hocker
-    [('theke_gebaut/regal_links', 528 - REGAL_WL / 2.0, 6, 'automat22', False),
-     ('theke_gebaut/regal_rechts', 592 + REGAL_WR / 2.0, 6, 'automat22', False)]
-    + [('theke_gebaut/tresen_links', 512 - TRESEN_W / 2.0, 9, None, False),
-       ('theke_gebaut/tresen_rechts', 608 + TRESEN_W / 2.0, 9, None, False)]
+    [('theke_gebaut/regal_links', MITTE - 32 - REGAL_WL / 2.0, 6, 'automat22', False),
+     ('theke_gebaut/regal_rechts', MITTE + 32 + REGAL_WR / 2.0, 6, 'automat22', False)]
+    + [('theke_gebaut/tresen_links', MITTE - 48 - TRESEN_W / 2.0, 9, None, False),
+       ('theke_gebaut/tresen_rechts', MITTE + 48 + TRESEN_W / 2.0, 9, None, False)]
     # Automatenreihen (je 4 Automaten untereinander)
-    + sum((paar(AUTOMAT, 320, r, 'automat22') for r in (14, 18, 22, 26)), [])    # Nutzer: Anzahl bleibt, mehr Platz ringsum
+    + sum((paar(AUTOMAT, 352, r, 'automat22') for r in (14, 18, 22, 26)), [])    # Nutzer: Anzahl bleibt, mehr Platz ringsum
     # Spieltische: links Roulette/Karten, rechts Blackjack/Craps (gleiche Plaetze gespiegelt)
     + [(ROULETTE, MITTE - 160, 17, None, False), (BLACKJACK, MITTE + 160, 17, None, False),
        (KARTEN, MITTE - 160, 23, None, False), (CRAPS, MITTE + 160, 23, None, False)]
@@ -120,11 +120,11 @@ OBJEKTE = (
     + paar(LAMPE, 56, 32, 'lampe')
     + paar(ATM, 200, 30, 'automat22')
     # Jackpot-Inseln: je ein grosser Jackpot-Automat
-    + paar(JACKPOT, 504, 18, 'automat22')
+    + paar(JACKPOT, 536, 18, 'automat22')
     # Ankunft: zwei Datenkristalle neben den Pfeilen
     + paar(KRISTALL, 48, 37, 'kristall')
     # Nutzer: Bar oben links/rechts - Tresen, drei Hocker davor, Cocktailtisch und Jukebox (PixelLab k22_bar/k22_bar48)
-    + sum((paar(HOCKER, MITTE - x_, 11) for x_ in (216, 264, 312, 360, 408, 456)), [])
+    + sum((paar(HOCKER, MITTE - x_, 11) for x_ in (224, 280, 336, 392, 448, 504)), [])
     + paar(JUKEBOX, MITTE - 168, 12, 'lampe', True)
     # Nutzer: Weinfaesser an der Bar, Chip-Wagen neben den Spieltischen
     + paar('mittel/00', MITTE - 166, 8) + paar('mittel/01', MITTE - 304, 19, None, True)   # Cocktailtische entfallen (stiessen an Kordeln/Hocker)
