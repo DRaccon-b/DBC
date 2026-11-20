@@ -93,8 +93,8 @@ def bar_bauen():
 
 BAR_BREITE, REGAL_BREITE = 352, 416                                   # je Haelfte (px)
 VARIANTEN = [0, 1, 3, 4, 5, 6, 7, 10, 15, 13, 11]                    # 8 entfaellt (Textrest unter dem Monitor)
-TRESEN_DEKO = ([(0, 34), (3, 82), (2, 140), (4, 196), (7, 262)],          # (k22_tresen-Nr., x auf dem Tresen)
-               [(1, 40), (5, 96), (8, 150), (6, 204), (9, 240), (14, 290)])                  # k22_regal: verschiedene Wandstuecke, keine doppelt
+TRESEN_DEKO = ([(0, 70), (3, 176), (7, 286)],                           # Nutzer: weniger Getraenke auf dem Tresen
+               [(1, 64), (5, 170), (9, 280)])                  # k22_regal: verschiedene Wandstuecke, keine doppelt
 TRESEN_W, (REGAL_WL, REGAL_WR) = bar_bauen()
 
 
