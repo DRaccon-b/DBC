@@ -66,19 +66,20 @@ def bar_bauen():
 
     breiten = []
     for seite, var in (('links', VARIANTEN[0::2]), ('rechts', VARIANTEN[1::2])):
-        teile, i_ = [rl], 0
-        breite = 6
+        # Nutzer: jeder Flaschenschrank ist links und rechts mit seinem Rahmen abgeschlossen, wenn ein Wandstueck
+        # dazwischen steht: Schrank | Stueck | Schrank | Stueck | ... | Schrank (letzter Schrank fuellt die Breite)
+        def schrank(w):
+            innen = np.concatenate([rm] * (w // rm.shape[1] + 1), axis=1)[:, :max(1, w - 6)]
+            return np.concatenate([rl, innen, rr], axis=1)
+        teile, breite, i_ = [], 0, 0
+        normal = schrank(rm.shape[1] + 6)
         while True:
-            t_ = rm if len(teile) % 2 == 1 else stueck(var[i_ % len(var)])
-            if len(teile) % 2 == 0:
-                i_ += 1
-            if breite + t_.shape[1] > REGAL_BREITE:
+            v_ = stueck(var[i_ % len(var)])
+            if breite + normal.shape[1] + v_.shape[1] + normal.shape[1] > REGAL_BREITE:
                 break
-            teile.append(t_); breite += t_.shape[1]
-        rest_ = REGAL_BREITE - breite                                  # auf volle Breite: Flaschenregal-Stueck anstueckeln
-        while rest_ > 0:
-            teile.append(rm[:, :min(rest_, rm.shape[1])]); rest_ -= rm.shape[1]
-        regal = np.concatenate(teile + [rr], axis=1)
+            teile += [normal, v_]; breite += normal.shape[1] + v_.shape[1]; i_ += 1
+        teile.append(schrank(REGAL_BREITE - breite))
+        regal = np.concatenate(teile, axis=1)
         Image.fromarray(regal).save(os.path.join(d, 'regal_%s.png' % seite))
         breiten.append(regal.shape[1])
     return tresen.shape[1], breiten
