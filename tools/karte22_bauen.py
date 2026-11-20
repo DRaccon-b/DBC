@@ -135,10 +135,13 @@ def bauen(frame=None, speichern=True):
     mischen(a, kontur(land & ~ak), CYAN, 0.4 + 0.3 * puls(frame, 0.6))
     nah = np.array(Image.fromarray(((land | front) * 255).astype(np.uint8)).filter(ImageFilter.MaxFilter(25))) > 0
     rest = leer & ~front
-    k16.straenge(a, rest & ~nah, frame, seed=2222, zonen=((4, 110), (722, 828), (130, 340), (492, 700)), n=4,
-                 y_bereich=(40, 300))
-    stellen = [(20, 24), (150, 12), (300, 8), (520, 10), (690, 18), (800, 30), (24, 280), (790, 270),
-               (40, 400), (150, 360), (300, 390), (530, 395), (660, 360), (780, 400), (110, 300), (720, 300)]
+    fx, fy = Wp / 832.0, Hp / 448.0                                    # Positionen fuer die groessere Karte skaliert
+    k16.straenge(a, rest & ~nah, frame, seed=2222,
+                 zonen=tuple((int(u * fx), int(v * fx)) for u, v in ((4, 110), (722, 828), (130, 340), (492, 700))),
+                 n=4, y_bereich=(int(40 * fy), int(300 * fy)))
+    stellen = [(int(u * fx), int(v * fy)) for u, v in (
+               (20, 24), (150, 12), (300, 8), (520, 10), (690, 18), (800, 30), (24, 280), (790, 270),
+               (40, 400), (150, 360), (300, 390), (530, 395), (660, 360), (780, 400), (110, 300), (720, 300))]
     k16.fragmente(a, rest & ~nah, frame, seed=2223, stellen=stellen)
     lvl = np.zeros((Hp, Wp), np.uint8)
     lvl[land] = 2

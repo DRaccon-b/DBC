@@ -16,7 +16,7 @@ ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
 KARTE = os.path.join(ROOT, 'maps', 'karte22')
 OBJ = os.path.join(ROOT, 'assets', 'objekte', 'karte22')
 T = 16
-MITTE = 416
+MITTE = 512                                                       # Achse bei 64 Kacheln Breite
 AUTOMAT, ROULETTE, KARTEN, CRAPS, BLACKJACK = 'casino/00', 'casino/01', 'casino/02', 'casino/06', 'casino/07'
 KORDEL, ATM, JACKPOT, THEKE, KRISTALL, LAMPE = 'casino/04', 'casino/12', 'gross/00', 'gross/01', 'gross/02', 'gross/10'
 
@@ -29,20 +29,20 @@ def paar(name, dx, reihe, anim=None, spiegeln_rechts=False):
 # (Quelle, Mitte x in px, Fussreihe, Animation, gespiegelt)
 OBJEKTE = (
     # Buehne: zwei Preistheken links/rechts der VIP-Tuer (Ausgang bleibt frei)
-    paar(THEKE, 96, 6)
+    paar(THEKE, 112, 6)
     # Automatenreihen (je 4 Automaten untereinander)
-    + sum((paar(AUTOMAT, 224, r, 'automat') for r in (8, 11, 14, 17)), [])
+    + sum((paar(AUTOMAT, 304, r, 'automat') for r in (9, 13, 17, 21)), [])     # Nutzer: Anzahl bleibt, mehr Abstand
     # Spieltische: links Roulette/Karten, rechts Blackjack/Craps (gleiche Plaetze gespiegelt)
-    + [(ROULETTE, MITTE - 112, 12, None, False), (BLACKJACK, MITTE + 112, 12, None, False),
-       (KARTEN, MITTE - 112, 16, None, False), (CRAPS, MITTE + 112, 16, None, False)]
+    + [(ROULETTE, MITTE - 160, 13, None, False), (BLACKJACK, MITTE + 160, 13, None, False),
+       (KARTEN, MITTE - 160, 19, None, False), (CRAPS, MITTE + 160, 19, None, False)]
     # Samtkordeln am Teppich, Neonlaternen am Eingang, Geldautomaten
-    + paar(KORDEL, 46, 10, None, True) + paar(KORDEL, 46, 15, None, True)
-    + paar(LAMPE, 56, 20, 'lampe')
-    + paar(ATM, 120, 20, 'lampe')
+    + paar(KORDEL, 46, 11, None, True) + paar(KORDEL, 46, 19, None, True)
+    + paar(LAMPE, 56, 26, 'lampe')
+    + paar(ATM, 160, 26, 'lampe')
     # Jackpot-Inseln: je ein grosser Jackpot-Automat
-    + paar(JACKPOT, 360, 12, 'automat')
+    + paar(JACKPOT, 456, 15, 'automat')
     # Ankunft: zwei Datenkristalle neben den Pfeilen
-    + paar(KRISTALL, 48, 25, 'lampe')
+    + paar(KRISTALL, 48, 31, 'lampe')
 )
 
 
