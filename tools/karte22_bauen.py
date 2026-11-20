@@ -54,6 +54,22 @@ def filz(a, m):
     a[r] = GOLD_D.astype(np.uint8)
 
 
+def automat22(sp, frame, o):
+    """Pruefung: Lichtquellen der Automaten, Bildschirme, Neonschild und leuchtende Flaschen pulsieren (4er-Takt,
+    je Objekt versetzt). Gold, Holz und Gehaeuse (warme bzw. ungesaettigte Pixel) bleiben ruhig."""
+    a = np.array(sp)
+    ai = a.astype(int)
+    r, g, b = ai[..., 0], ai[..., 1], ai[..., 2]
+    mx, mn = ai[..., :3].max(axis=2), ai[..., :3].min(axis=2)
+    gold = (r >= g) & (g >= b) & (r - b > 60)
+    m = (ai[..., 3] > 0) & (mx > 150) & (mx - mn > 60) & ~gold
+    k_ = (0.8, 1.0, 1.18, 1.0)[((frame or 0) + int(o.get('x', 0)) // 40) % 4]
+    a[m, :3] = np.clip(ai[m, :3] * k_, 0, 255).astype(np.uint8)
+    return Image.fromarray(a)
+
+
+k4.TEILANIM['automat22'] = automat22
+
 def barboden(a, m):
     """Nutzer: Bar oben - dunkle Holzdielen (waagerecht, versetzte Fugen) mit schmaler Goldkante."""
     Hh, W = m.shape

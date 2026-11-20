@@ -55,6 +55,7 @@ def bar_bauen():
         # Rahmen des Flaschenregals aufgefuellt, damit die Oberkante durchlaeuft
         v = np.array(Image.open(os.path.join(OBJ, 'regal', '%02d.png' % i)).convert('RGBA'))
         v = v[-H:]
+        v[v[..., 3] > 0, 3] = 255                                      # Pruefung: deckend (Espressomaschine war halbtransparent)
         out = np.zeros((H, v.shape[1], 4), np.uint8)
         fuell = np.concatenate([rm] * (v.shape[1] // rm.shape[1] + 1), axis=1)[:, :v.shape[1]]
         out[:H - v.shape[0]] = fuell[:H - v.shape[0]]
@@ -84,7 +85,7 @@ def bar_bauen():
 
 
 BAR_BREITE, REGAL_BREITE = 320, 384                                   # je Haelfte (px)
-VARIANTEN = [0, 1, 3, 4, 5, 6, 7, 10, 15, 8, 13, 11]
+VARIANTEN = [0, 1, 3, 4, 5, 6, 7, 10, 15, 13, 11]                    # 8 entfaellt (Textrest unter dem Monitor)
 TRESEN_DEKO = ([(0, 34), (3, 82), (2, 140), (4, 196), (7, 262)],          # (k22_tresen-Nr., x auf dem Tresen)
                [(1, 40), (5, 96), (8, 150), (6, 204), (9, 240), (14, 290)])                  # k22_regal: verschiedene Wandstuecke, keine doppelt
 TRESEN_W, (REGAL_WL, REGAL_WR) = bar_bauen()
@@ -98,23 +99,23 @@ def paar(name, dx, reihe, anim=None, spiegeln_rechts=False):
 # (Quelle, Mitte x in px, Fussreihe, Animation, gespiegelt)
 OBJEKTE = (
     # Nutzer: hintere Wand = Bar. Regal an der Wand, eine Reihe Platz fuer den Barkeeper, davor der Tresen, Hocker
-    [('theke_gebaut/regal_links', 528 - REGAL_WL / 2.0, 5, None, False),
-     ('theke_gebaut/regal_rechts', 592 + REGAL_WR / 2.0, 5, None, False)]
+    [('theke_gebaut/regal_links', 528 - REGAL_WL / 2.0, 5, 'automat22', False),
+     ('theke_gebaut/regal_rechts', 592 + REGAL_WR / 2.0, 5, 'automat22', False)]
     + [('theke_gebaut/tresen_links', 512 - TRESEN_W / 2.0, 8, None, False),
        ('theke_gebaut/tresen_rechts', 608 + TRESEN_W / 2.0, 8, None, False)]
     # Automatenreihen (je 4 Automaten untereinander)
-    + sum((paar(AUTOMAT, 320, r, 'automat') for r in (14, 18, 22, 26)), [])    # Nutzer: Anzahl bleibt, mehr Platz ringsum
+    + sum((paar(AUTOMAT, 320, r, 'automat22') for r in (14, 18, 22, 26)), [])    # Nutzer: Anzahl bleibt, mehr Platz ringsum
     # Spieltische: links Roulette/Karten, rechts Blackjack/Craps (gleiche Plaetze gespiegelt)
     + [(ROULETTE, MITTE - 160, 17, None, False), (BLACKJACK, MITTE + 160, 17, None, False),
        (KARTEN, MITTE - 160, 23, None, False), (CRAPS, MITTE + 160, 23, None, False)]
     # Samtkordeln am Teppich, Neonlaternen am Eingang, Geldautomaten
-    + paar(KORDEL, 46, 14, None, True) + paar(KORDEL, 46, 24, None, True)
+    + paar(KORDEL, 53, 14, None, True) + paar(KORDEL, 53, 24, None, True)   # Pruefung: Seilende neben dem Teppich
     + paar(LAMPE, 56, 32, 'lampe')
-    + paar(ATM, 200, 30, 'lampe')
+    + paar(ATM, 200, 30, 'automat22')
     # Jackpot-Inseln: je ein grosser Jackpot-Automat
-    + paar(JACKPOT, 504, 18, 'automat')
+    + paar(JACKPOT, 504, 18, 'automat22')
     # Ankunft: zwei Datenkristalle neben den Pfeilen
-    + paar(KRISTALL, 48, 37, 'lampe')
+    + paar(KRISTALL, 48, 37, 'kristall')
     # Nutzer: Bar oben links/rechts - Tresen, drei Hocker davor, Cocktailtisch und Jukebox (PixelLab k22_bar/k22_bar48)
     + sum((paar(HOCKER, MITTE - x_, 10) for x_ in (216, 264, 312, 360, 408, 456)), [])
     + paar(JUKEBOX, MITTE - 168, 11, 'lampe', True)

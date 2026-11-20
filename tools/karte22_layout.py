@@ -69,12 +69,12 @@ def main():
     for (x0, y0, x1, y1) in INSELN:
         rechteck(k, (x0 + 1, y0 + 1, x1 - 1, y1 - 1), 'j')
     k[ANKUNFT[1] + 1, 33:37] = 'z'                                # Ankunftspfeile
-    k[4, 34:36] = 'g'                                             # Ausgang (VIP-Tuer) hinter der Theke
+    k[4, 33:37] = 'g'                                             # Pruefung: Ausgang so breit wie der Teppich                                             # Ausgang (VIP-Tuer) hinter der Theke
     h = np.where(k == '.', 0, 2)
     lay = {'groesse': [C, R], 'klassen': [''.join(z) for z in k], 'hoehe': [''.join(str(c) for c in z) for z in h],
            'casino': CASINO, 'ankunft': ANKUNFT, 'steg': STEG, 'inseln': INSELN, 'achse': ACHSE,
            'teleporter': [{'x': 33, 'y': ANKUNFT[1] + 1, 'b': 4, 'h': 1, 'art': 'ankunft'},
-                          {'x': 34, 'y': 4, 'b': 2, 'h': 1, 'art': 'ausgang'}]}
+                          {'x': 33, 'y': 4, 'b': 4, 'h': 1, 'art': 'ausgang'}]}
     json.dump(lay, open(os.path.join(KARTE, 'layout.json'), 'w'), indent=0)
     F = {'.': (10, 14, 30), 'p': (52, 70, 104), 'r': (34, 48, 78), 't': (150, 30, 50), 's': (200, 150, 40),
          'k': (30, 120, 70), 'b': (120, 60, 160), 'w': (110, 70, 40), 'z': (60, 200, 230), 'g': (230, 180, 70), 'j': (210, 80, 200)}
