@@ -91,6 +91,9 @@ def objekte(nr):
             po.speichern(gruppe, *po.herunterladen(oid, d))
         for i, (k, _) in enumerate(liste):
             namen[k] = 'o%d/%02d.png' % (gr, i)
+        if gr == 48:                                                  # PixelLab fuellt das Blatt mit weiteren Objekten im
+            n_ = len([f for f in os.listdir(ziel) if f[:2].isdigit()])   # Thema der Karte: als zusaetzliche Deko
+            namen['extra'] = ['o48/%02d.png' % i for i in range(len(liste), n_)]
     json.dump(namen, open(os.path.join(po.ROOT, 'assets', 'objekte', 'karte%d' % nr, 'namen.json'), 'w'), indent=1)
 
 

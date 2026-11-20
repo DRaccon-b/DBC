@@ -68,7 +68,7 @@ def struktur(art, C, R, seed):
             F |= _box(X, Y, x - 5.5, y - 4.5, x + 5.5, y + 4.5, fase=3)
             A |= _box(X, Y, x - 3, y - 2, x + 3, y + 2)
         for a, b in zip(plat, plat[1:]):
-            F |= _seg(X, Y, a, b, 1.6)
+            F |= _seg(X, Y, a, b, 2.2)
         F |= _seg(X, Y, (20, 18), (20, 29), 1.6) | _box(X, Y, 17, 26, 23, 31, fase=1)
         tp = (19, 28)
     elif art == 'raute':
@@ -197,7 +197,8 @@ def platzieren(nr, V, tp, rs):
     rects, objekte = [], []
 
     def versuche(name, tx, ty, extra=None):
-        im = sprite(nr, namen[name])
+        datei = namen[name] if not name.startswith('o') else name
+        im = sprite(nr, datei)
         wt = -(-im.width // T)
         cx = tx * T + (wt * T) / 2.0 if wt % 2 == 0 else tx * T + T / 2.0
         x = int(round(cx - im.width / 2.0))
@@ -208,6 +209,14 @@ def platzieren(nr, V, tp, rs):
             return False
         if any(not (r[2] + 2 < q[0] or q[2] + 2 < r[0] or r[3] + 2 < q[1] or q[3] + 2 < r[1]) for q in rects):
             return False
+        gleich = [o_ for o_ in objekte if o_['basis'] == name]
+        if name == 'automat':                                          # Automaten in kleinen Gruppen (max. 2), dann Luecke
+            nach = [o_ for o_ in gleich if o_['kachel'][1] == ty and abs(o_['kachel'][0] - tx) <= 3]
+            if len(nach) >= 2 or any(abs(o_['kachel'][0] - tx) == 3 for o_ in nach):
+                return False
+        elif any(max(abs(o_['kachel'][0] - tx), abs(o_['kachel'][1] - ty)) < 4 for o_ in gleich):
+            if not (extra or {}).get('paar'):
+                return False
         x0, x1 = r[0] // T, r[2] // T
         unten = range(max(0, (fy - min(im.height, 2 * T) + 1) // T), ty + 1)    # untere zwei Reihen auf Boden
         for yy in unten:
@@ -215,27 +224,41 @@ def platzieren(nr, V, tp, rs):
                 if not geh[yy, xx] or frei[yy, xx]:
                     return False
         rects.append(r)
-        o = {'datei': namen[name], 'basis': name, 'x': x, 'y': y, 'fuss': im.height - 1, 'kachel': [tx, ty], 'ebene': 1}
+        o = {'datei': datei, 'basis': name, 'x': x, 'y': y, 'fuss': im.height - 1, 'kachel': [tx, ty], 'ebene': 1}
         o.update(extra or {})
         objekte.append(o)
         return True
 
     zellen = [(x, y) for y in range(R) for x in range(C)]
     # 1) Zentrum: Mitte der groessten Akzentflaeche
-    ys, xs = np.nonzero(akz)
+    if akz.any():                                                     # groesste zusammenhaengende Akzentflaeche
+        lab = np.zeros(akz.shape, int); grs = {}; n_ = 0
+        for y0, x0 in zip(*np.nonzero(akz)):
+            if lab[y0, x0]:
+                continue
+            n_ += 1; st = [(y0, x0)]; lab[y0, x0] = n_; c_ = 0
+            while st:
+                yy_, xx_ = st.pop(); c_ += 1
+                for y1, x1 in ((yy_ + 1, xx_), (yy_ - 1, xx_), (yy_, xx_ + 1), (yy_, xx_ - 1)):
+                    if 0 <= y1 < R and 0 <= x1 < C and akz[y1, x1] and not lab[y1, x1]:
+                        lab[y1, x1] = n_; st.append((y1, x1))
+            grs[n_] = c_
+        ys, xs = np.nonzero(lab == max(grs, key=grs.get))
+    else:
+        ys, xs = np.array([]), np.array([])
     if len(ys):
         cx0, cy0 = int(round(xs.mean())), int(round(ys.mean()))
     else:
         ys, xs = np.nonzero(geh); cx0, cy0 = int(round(xs.mean())), int(round(ys.mean()))
-    for d in range(0, 6):
-        if any(versuche('zentrum', cx0 + dx, cy0 + d) for dx in (0, -1, 1)):
+    for d in range(0, 8):
+        if any(versuche('zentrum', cx0 + dx, cy0 + dy) for dy in (d, -d) for dx in (0, -1, 1, -2, 2)):
             break
     # 2) Automaten an den Nordkanten (Boden darueber endet), mit Abstand
     kand = [(x, y + 1) for (x, y) in zellen if y + 1 < R and geh[y, x] and (y == 0 or not geh[y - 1, x]) and geh[y + 1, x]]
     rs.shuffle(kand)
     n = 0
     for (x, y) in sorted(kand, key=lambda p: (p[1], p[0])):
-        if n >= 10:
+        if n >= 7:
             break
         if versuche('automat', x, y):
             n += 1
@@ -252,24 +275,27 @@ def platzieren(nr, V, tp, rs):
     mx = C / 2.0
     paare = 0
     for (x, y) in sorted([p for p in zellen if geh[p[1], p[0]] and p[0] < mx - 1], key=lambda p: -p[1]):
-        if paare >= 3:
+        if paare >= 2:
             break
         x2 = int(round(2 * mx - 1 - x))
         if 0 <= x2 < C and geh[y, x2] and abs(y - tp[1]) < 10:
             if versuche('licht', x, y):
-                if versuche('licht', x2, y):
+                if versuche('licht', x2, y, {'paar': True}):
                     paare += 1
                 else:
                     rects.pop(); objekte.pop()
     # 5) Deko locker verteilt (keine Reihen, abwechselnd)
     kand = [p for p in zellen if geh[p[1], p[0]] and not akz[p[1], p[0]]]
     rs.shuffle(kand)
-    n = 0
+    vorrat = ['deko1', 'deko2'] + list(namen.get('extra', []))       # keine Wiederholung, solange der Vorrat reicht
+    rs.shuffle(vorrat)
+    vorrat = ['deko1', 'deko2'] + [v for v in vorrat if v not in ('deko1', 'deko2')] + ['deko1', 'deko2']
+    i_ = 0
     for (x, y) in kand:
-        if n >= 10:
+        if i_ >= min(14, len(vorrat)):
             break
-        if versuche(('deko1', 'deko2')[n % 2], x, y):
-            n += 1
+        if versuche(vorrat[i_], x, y):
+            i_ += 1
     return objekte, geh
 
 

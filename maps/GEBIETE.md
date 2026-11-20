@@ -61,3 +61,13 @@ Aufstellfelds (cyan = Ankunft, gold = weiter; Funktion `pfeil_marke` in `tools/k
 | Nr. | Karte | Stand |
 |---|---|---|
 | 1 | Karte 22 – Digicasino | in Arbeit: Gelände und Objekte (Netz-Stil wie Karte 16/17) |
+| 2 | Karte 57 – Coral Jackpot Lagoon | Standbild (PixelLab-Tilesets + Objekte, Grundriss inseln), Animation folgt |
+| 3 | Karte 58 – Desert Mirage Casino | Standbild (PixelLab-Tilesets + Objekte, Grundriss hof), Animation folgt |
+| 4 | Karte 59 – Orbit Station Royale | Standbild (PixelLab-Tilesets + Objekte, Grundriss kreuz), Animation folgt |
+| 5 | Karte 60 – Inferno Dice Volcano | Standbild (PixelLab-Tilesets + Objekte, Grundriss zickzack), Animation folgt |
+| 6 | Karte 61 – Frost Crown Palace | Standbild (PixelLab-Tilesets + Objekte, Grundriss raute), Animation folgt |
+| 7 | Karte 62 – Jungle Temple of Fortune | Standbild (PixelLab-Tilesets + Objekte, Grundriss terrassen), Animation folgt |
+| 8 | Karte 63 – Cloud Nine Casino | Standbild (PixelLab-Tilesets + Objekte, Grundriss wolken), Animation folgt |
+| 9 | Karte 64 – Neon Arcade Underground | Standbild (PixelLab-Tilesets + Objekte, Grundriss labyrinth), Animation folgt |
+| 10 | Karte 65 – Bayou Riverboat | Standbild (PixelLab-Tilesets + Objekte, Grundriss boot), Animation folgt |
+| 11 | Karte 66 – Crystal Cavern Vault | Standbild (PixelLab-Tilesets + Objekte, Grundriss hoehle), Animation folgt |
