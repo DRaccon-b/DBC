@@ -16,7 +16,7 @@ ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
 KARTE = os.path.join(ROOT, 'maps', 'karte22')
 OBJ = os.path.join(ROOT, 'assets', 'objekte', 'karte22')
 T = 16
-MITTE = 592                                                       # Achse 36.5 (74 Kacheln Breite)
+MITTE = 656                                                       # Achse 40.5 (82 Kacheln Breite)
 AUTOMAT, ROULETTE, KARTEN, CRAPS, BLACKJACK = 'casino/00', 'casino/01', 'casino/02', 'casino/06', 'casino/07'
 KORDEL, ATM, JACKPOT, THEKE, KRISTALL, LAMPE = 'casino/04', 'casino/12', 'gross/00', 'gross/01', 'gross/02', 'gross/10'
 BAR, HOCKER, COCKTAIL, JUKEBOX = 'bar/00', 'bar48/00', 'bar48/01', 'bar48/10'
@@ -120,14 +120,15 @@ OBJEKTE = (
     + paar(LAMPE, 56, 32, 'lampe')
     + paar(ATM, 200, 30, 'automat22')
     # Jackpot-Inseln: je ein grosser Jackpot-Automat
-    + paar(JACKPOT, 536, 18, 'automat22')
+    + paar(JACKPOT, 568, 19, 'automat22')
+    + paar(LAMPE, 616, 21, 'lampe') + paar(LAMPE, 520, 21, 'lampe')   # Nutzer: groessere Jackpot-Insel mit Neonlaternen
     # Ankunft: zwei Datenkristalle neben den Pfeilen
     + paar(KRISTALL, 48, 37, 'kristall')
     # Nutzer: Bar oben links/rechts - Tresen, drei Hocker davor, Cocktailtisch und Jukebox (PixelLab k22_bar/k22_bar48)
-    + sum((paar(HOCKER, MITTE - x_, 11) for x_ in (224, 280, 336, 392, 448, 504)), [])
-    + paar(JUKEBOX, MITTE - 168, 12, 'lampe', True)
+    + sum((paar(HOCKER, MITTE - x_, 11) for x_ in (288, 344, 400, 456, 512, 568)), [])
+    + paar(JUKEBOX, MITTE - 232, 12, 'lampe', True)
     # Nutzer: Weinfaesser an der Bar, Chip-Wagen neben den Spieltischen
-    + paar('mittel/00', MITTE - 166, 8) + paar('mittel/01', MITTE - 304, 19, None, True)   # Cocktailtische entfallen (stiessen an Kordeln/Hocker)
+    + paar('mittel/00', MITTE - 230, 8) + paar('mittel/01', MITTE - 368, 19, None, True)   # Cocktailtische entfallen (stiessen an Kordeln/Hocker)
 )
 
 
