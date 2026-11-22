@@ -33,6 +33,9 @@ GRUNDKACHELN = {   # Name: (Pfadmuster, Anzahl, Umfaerbung aus karte06_bauen, An
     'kies': ('assets/karte03/basis/kies_%d.png', 5, 'beige',
              'Christmas winter edition of this cobblestone pavement tile: the same warm grey-beige stones with small '
              'snow caps on top and snow in the gaps.'),
+    'eis': ('assets/basis/wasser_%d.png', 2, None,
+            'Christmas winter edition of this pond water tile: the water is frozen solid into smooth light blue ice '
+            'with a few white frost streaks and faint cracks, no waves.'),
     'platz': ('assets/karte02/basis/platz_%d.png', 3, 'platten',
               'Christmas winter edition of this concrete slab tile: a light dusting of snow and frost on the slabs, '
               'the seams still visible.'),
@@ -119,7 +122,13 @@ def baum():
     ims[0].save(os.path.join(ziel, 'uebersicht.png'))
 
 
-def bauen():
+_K6 = None
+
+
+def bauen_vorbereiten():
+    global _K6
+    if _K6 is not None:
+        return _K6
     import karte06_bauen as k6
     os.makedirs(KARTE_NEU, exist_ok=True)
     shutil.copy(os.path.join(k6.KARTE, 'layout.json'), os.path.join(KARTE_NEU, 'layout.json'))
@@ -137,6 +146,31 @@ def bauen():
             ks = [k, np.rot90(k, 1).copy(), np.rot90(k, 2).copy(), k[:, ::-1].copy(), np.rot90(k, 3).copy()]
         return ks
     k6.kacheln = kacheln_xmas
+    # Nutzer: Teich zugefroren - das Wasser des vertieften Teichs wird durch die PixelLab-Eiskachel ersetzt
+    # (Helligkeit der Tiefenstufen bleibt erhalten, Erdrand und Steg bleiben), ohne Wellen-Animation
+    import wasser_vertieft
+    if not getattr(wasser_vertieft, '_xmas', False):
+        orig_v = wasser_vertieft.vertiefen
+        eis = [np.array(Image.open(os.path.join(XK, 'eis_%d.png' % v)).convert('RGB')).astype(np.float32) for v in (0, 1)]
+
+        def vertiefen_eis(img, region, frame=None, maske=None, **kw):
+            out = orig_v(img, region, None, maske=maske, **kw)
+            a = np.array(out.convert('RGB')).astype(np.float32)
+            Hh, W = a.shape[:2]
+            tex = np.zeros_like(a)
+            for y in range(0, Hh, 16):
+                for x in range(0, W, 16):
+                    tex[y:y + 16, x:x + 16] = eis[((x // 16) * 7 + (y // 16) * 3) % 2][:min(16, Hh - y), :min(16, W - x)]
+            blau = (a[..., 2] > a[..., 0] + 25) & (a[..., 2] > a[..., 1])
+            if maske is not None:
+                blau &= maske
+            hell = a[..., :3].mean(-1, keepdims=True)
+            ref = np.median(hell[blau]) if blau.any() else 1.0
+            f = np.clip(0.75 + 0.25 * hell / max(ref, 1.0), 0.6, 1.1)
+            a[blau] = np.clip(tex * f, 0, 255)[blau]
+            return Image.fromarray(a.astype(np.uint8)).convert(out.mode)
+        wasser_vertieft.vertiefen = vertiefen_eis
+        wasser_vertieft._xmas = True
     # Objekte: Xmas-Sprites, Brunnen -> Weihnachtsbaum
     p = json.load(open(os.path.join(OBJ_ALT, 'platzierung.json')))
     neu = []
@@ -154,11 +188,38 @@ def bauen():
         neu.append(o)
     json.dump(neu, open(os.path.join(OBJ_NEU, 'platzierung.json'), 'w'), indent=0)
     k6.KARTE, k6.OBJ = KARTE_NEU, OBJ_NEU
-    k6.bauen()
+    _K6 = k6
+    return k6
+
+
+def bild(frame=None):
+    k6 = bauen_vorbereiten()
+    img = k6.bauen(frame=frame, speichern=frame is None)
+    if frame is not None:
+        import karte05_bauen as k5
+        img = img.convert('RGBA')
+        k5.schneefall(img, frame)                                      # Nutzer: Xmas - es schneit
+    return img
+
+
+def animation():
+    import animation_bauen as ab
+    out = os.path.join(KARTE_NEU, 'animation')
+    os.makedirs(out, exist_ok=True)
+    frames = [bild(f).convert('RGB') for f in range(16)]
+    frames[0].save(os.path.join(out, 'karte06_xmas_animiert.webp'), save_all=True, append_images=frames[1:],
+                   duration=170, loop=0, lossless=True, method=4)
+    ab.OUT, ab.DAUER = out, 110
+    ab.discord_gif(frames)
+    os.replace(os.path.join(out, 'karte01_discord.gif'), os.path.join(out, 'karte06_xmas_discord_16.gif'))
+    ab.DAUER = 440
+    ab.discord_gif(frames[::4])
+    os.replace(os.path.join(out, 'karte01_discord.gif'), os.path.join(out, 'karte06_xmas_discord.gif'))
+    print('Animation fertig')
 
 
 BAUM_NR = 0
 AUSWAHL = {'gras': [0, 1, 3, 4], 'sand': [2], 'kies': [0, 3], 'platz': [0, 1, 2]}   # zueinander passende Varianten
 
 if __name__ == '__main__':
-    {'kacheln': kacheln, 'objekte': objekte, 'baum': baum, 'bauen': bauen}[sys.argv[1]]()
+    {'kacheln': kacheln, 'objekte': objekte, 'baum': baum, 'bauen': lambda: bild(None), 'animation': animation}[sys.argv[1]]()
