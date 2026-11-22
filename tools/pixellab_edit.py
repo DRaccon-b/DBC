@@ -25,7 +25,7 @@ def bearbeiten(im, beschreibung, hintergrund=True, seed=None):
     im = im.convert('RGBA')
     w, h = im.size
     assert w <= 256 and h <= 256, (w, h)
-    W, H = -(-w // 4) * 4, -(-h // 4) * 4
+    W, H = max(16, -(-w // 4) * 4), max(16, -(-h // 4) * 4)        # Mindestflaeche 16x16
     pad = Image.new('RGBA', (W, H), (0, 0, 0, 0))
     pad.paste(im, (0, 0))
     b = io.BytesIO()
