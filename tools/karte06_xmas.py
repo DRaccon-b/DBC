@@ -130,7 +130,12 @@ def bauen():
         name = ersatz.get(os.path.normpath(pfad))
         if name is None:
             return orig(pfad, n, umfaerben)
-        return [np.array(Image.open(os.path.join(XK, '%s_%d.png' % (name, v))).convert('RGB')) for v in AUSWAHL[name]]
+        datei = 'weg' if name == 'sand' else name                       # Nutzer: Wege ruhiger (zweite PixelLab-Runde 'weg')
+        ks = [np.array(Image.open(os.path.join(XK, '%s_%d.png' % (datei, v))).convert('RGB')) for v in AUSWAHL[name]]
+        if name == 'sand':                                             # gedreht/gespiegelt: kein sichtbares Raster
+            k = ks[0]
+            ks = [k, np.rot90(k, 1).copy(), np.rot90(k, 2).copy(), k[:, ::-1].copy(), np.rot90(k, 3).copy()]
+        return ks
     k6.kacheln = kacheln_xmas
     # Objekte: Xmas-Sprites, Brunnen -> Weihnachtsbaum
     p = json.load(open(os.path.join(OBJ_ALT, 'platzierung.json')))
@@ -153,7 +158,7 @@ def bauen():
 
 
 BAUM_NR = 0
-AUSWAHL = {'gras': [0, 1, 3, 4], 'sand': [0, 1], 'kies': [0, 3], 'platz': [0, 1, 2]}   # zueinander passende Varianten
+AUSWAHL = {'gras': [0, 1, 3, 4], 'sand': [2], 'kies': [0, 3], 'platz': [0, 1, 2]}   # zueinander passende Varianten
 
 if __name__ == '__main__':
     {'kacheln': kacheln, 'objekte': objekte, 'baum': baum, 'bauen': bauen}[sys.argv[1]]()
