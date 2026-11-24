@@ -198,8 +198,77 @@ def bild(frame=None):
     if frame is not None:
         import karte05_bauen as k5
         img = img.convert('RGBA')
+        xmas_lichter(img, frame)                                       # Lichterkette blinkt, Stern pulsiert
+        eis_glitzern(img, frame)                                       # Eis auf dem See glitzert
         k5.schneefall(img, frame)                                      # Nutzer: Xmas - es schneit
     return img
+
+
+def xmas_lichter(img, frame):
+    """Weihnachtsbaum: die bunten Lichter (gesaettigte helle Pixel in der Krone) blinken in vier Gruppen versetzt,
+    der Stern an der Spitze pulsiert mit weichem Schein. Nur die Lichtpixel aendern sich (Regel: nur die Lichtquelle)."""
+    import math
+    from PIL import ImageDraw, ImageFilter
+    p = json.load(open(os.path.join(OBJ_NEU, 'platzierung.json')))
+    o = next((o for o in p if o.get('basis') == 'xmasbaum'), None)
+    if o is None:
+        return
+    sp = np.array(Image.open(os.path.join(OBJ_NEU, o['datei'])).convert('RGBA')).astype(int)
+    a = np.array(img).astype(int)
+    h, w = sp.shape[:2]
+    x0, y0 = o['x'], o['y']
+    r, g, b = sp[..., 0], sp[..., 1], sp[..., 2]
+    mx, mn = sp[..., :3].max(-1), sp[..., :3].min(-1)
+    licht = (sp[..., 3] > 0) & (mx > 170) & (mx - mn > 70)
+    stern_zeilen = int(h * 0.12)
+    stern = licht.copy(); stern[stern_zeilen:] = False
+    licht[:stern_zeilen] = False
+    ys, xs = np.nonzero(licht)
+    gruppe = ((xs * 7 + ys * 13) // 5) % 4
+    an = gruppe == (frame % 4)
+    aus = gruppe == ((frame + 2) % 4)
+    Y, X = ys + y0, xs + x0
+    ok = (Y >= 0) & (Y < a.shape[0]) & (X >= 0) & (X < a.shape[1])
+    a[Y[ok & an], X[ok & an], :3] = np.minimum(255, sp[ys[ok & an], xs[ok & an], :3] * 1.35 + 40)
+    a[Y[ok & aus], X[ok & aus], :3] = (sp[ys[ok & aus], xs[ok & aus], :3] * 0.55).astype(int)
+    out = Image.fromarray(np.clip(a, 0, 255).astype(np.uint8))
+    sy, sx = np.nonzero(stern)
+    if len(sy):                                                        # Stern: weicher Schein, pulsiert
+        cx, cy = x0 + int(sx.mean()), y0 + int(sy.mean())
+        k = 0.5 + 0.5 * math.sin(2 * math.pi * frame / 16.0)
+        glow = Image.new('RGBA', out.size, (0, 0, 0, 0))
+        ImageDraw.Draw(glow).ellipse((cx - 14, cy - 14, cx + 14, cy + 14), fill=(255, 230, 120, int(60 + 70 * k)))
+        glow = glow.filter(ImageFilter.GaussianBlur(5))
+        out = out.convert('RGBA'); out.alpha_composite(glow)
+    img.paste(out.convert(img.mode))
+
+
+def eis_glitzern(img, frame):
+    """Zugefrorener See: einzelne Eiskristalle blitzen kurz auf (je Stelle eigener Takt, nahtlos ueber 16 Bilder)."""
+    pf = os.path.join(KARTE_NEU, 'wasser.npy')
+    if not os.path.exists(pf):
+        return
+    a = np.array(img)
+    Hh, W = a.shape[:2]
+    m = np.unpackbits(np.load(pf))[:Hh * W].reshape(Hh, W).astype(bool)
+    rs = np.random.RandomState(606)
+    ys, xs = np.nonzero(m)
+    if not len(ys):
+        return
+    idx = rs.choice(len(ys), min(60, len(ys)), replace=False)
+    phase = rs.randint(0, 16, len(idx))
+    for i, ph in zip(idx, phase):
+        t = (frame - ph) % 16
+        if t > 2:
+            continue
+        y, x = ys[i], xs[i]
+        stark = 1.0 if t == 1 else 0.55
+        for dy, dx, f in ((0, 0, 1.0), (-1, 0, 0.6), (1, 0, 0.6), (0, -1, 0.6), (0, 1, 0.6)):
+            Y, X = y + dy, x + dx
+            if 0 <= Y < Hh and 0 <= X < W and m[Y, X]:
+                k = stark * f
+                a[Y, X, :3] = (a[Y, X, :3] * (1 - k) + 255 * k).astype(np.uint8)
+    img.paste(Image.fromarray(a))
 
 
 def animation():
