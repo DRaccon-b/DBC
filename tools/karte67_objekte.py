@@ -6,8 +6,7 @@
 Neu mit PixelLab (k67_rom): Travertinsaeule, Bronze-Feuerschale, Legionsstandarte, Gladiatorenstatue, Waffenstaender,
 Amphoren mit Fass, Kaiserthron, Speisetisch, Brunnen. Baeume des Guertels aus Karte 01 (Laubbaeume, Zypressen, Kiefern,
 Buesche zum Schliessen der Luecken).
-Aufbau (Nutzer): Arena und Tribuene innen ohne Objekte; aussen (Kulisse) Nordplatz mit Saeulen, Suedplatz mit Brunnen
-auf der Achse, Statuen- und Saeulenpaaren, wenige Marktdinge abseits.
+Aufbau (Nutzer): keine Objekte in Arena, Tribuene und auf dem Platz - nur der Palmenguertel am Rand.
 """
 import json, os, random, sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -140,21 +139,7 @@ def main():
         return False
 
     # Nutzer: innen (Arena und Tribuene) keine Objekte - Kampfarena abgeschottet, Tribuene frei begehbar
-    # ---------------- Aussen (Kulisse): Nordplatz mit Saeulenreihe, Suedplatz mit Brunnen
-    for ab in (14, 22, 30):
-        paar('saeule', ab * T, 5 * T, klassen='z')
-    paar('schale', 6 * T, 5 * T, FL, klassen='z')
-    if not setze('brunnen', achse, 65 * T, {'anim': 'brunnen'}):
-        print('  Brunnen nicht gesetzt')
-    paar('statue', 6 * T, 65 * T, klassen='z')
-    paar('schale', 4 * T, 69 * T, FL, klassen='z')
-    for ab in (14, 22, 30):
-        paar('saeule', ab * T, 64 * T, klassen='z')
-    suche('amphoren', 10 * T, 69 * T)
-    suche('tisch', 69 * T, 69 * T)
-    suche('truhe', 72 * T, 10 * T)
-    suche('balliste', 9 * T, 10 * T)
-    suche('schild', 13 * T, 70 * T)
+    # Nutzer: auch aussen keine Objekte (Fackeln, Saeulen, Brunnen usw. entfernt) - nur der Palmenguertel
 
     # ---------------- Baumguertel (Wiese 'n' am Rand): dicht, nicht begehbar, Luecken mit Bueschen
     rnd = random.Random(67)
