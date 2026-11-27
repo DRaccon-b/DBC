@@ -2589,6 +2589,22 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'big standing soccer goal frame, white round posts and crossbar, white mesh net with visible square grid, '
         'net slanting back to the ground, ' + FR14,
     ]},
+    'k67_tor_seite': {'size': 128, 'freie_farben': True, 'items': [   # Karte 67: Tore links/rechts, Breite senkrecht (Nutzer)
+        'soccer goal seen from the side in a top-down rpg view, the goal is tall and narrow, its width runs vertically '
+        'from top to bottom, white posts at the top and bottom, white crossbar, the opening faces right, white net '
+        'stretched out to the left, pixel art, high top-down 3/4 view',
+        'vertical soccer goal for the left end of a top-down football pitch, tall narrow white goal frame with the '
+        'mouth facing right and the net bulging to the left, seen from above at an angle, pixel art',
+        'top-down view of a white football goal rotated 90 degrees, goal line vertical, two posts one above the other, '
+        'net box extending to the left, open side facing right, pixel art game asset',
+    ]},
+    'k67_tor_seite2': {'size': 128, 'freie_farben': True, 'items': [   # zweiter Versuch: ohne Diagonalansicht
+        'soccer goal at the left end of a football pitch in a classic 16-bit top-down rpg, axis-aligned, no diagonal, '
+        'no isometric: tall narrow rectangle, white post at the top and white post at the bottom joined by a vertical white '
+        'crossbar on the right side, white net grid filling the rectangle to the left, symmetric top to bottom, pixel art',
+        'axis-aligned overhead view of a white soccer goal rotated 90 degrees, symmetric top and bottom, goal mouth on '
+        'the right edge, square net grid behind it on the left, posts cast a small shadow, no perspective tilt, pixel art',
+    ]},
     'k54_ranke96': {'size': 96, 'freie_farben': True, 'items': [
         'huge thick glossy bright red jelly tentacle rising from the ground and curving over, made of fused bubbles, round bubble tip, wet white highlights, ' + FR14,
         'tall twisted pair of glossy crimson jelly tentacles intertwined, bubbly texture, wet highlights, ' + FR14,

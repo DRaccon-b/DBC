@@ -2,12 +2,27 @@
 {
 "datei": "varianten/fussballtor.png",
 "basis": "fussballtor",
-"x": 658,
-"y": 749,
-"fuss": 82,
+"x": 416,
+"y": 538,
+"fuss": 107,
 "kachel": [
-45,
-51
+27,
+40
+],
+"ebene": 1,
+"ohne_wall": true,
+"fest_pos": true,
+"nur_kontakt": true
+},
+{
+"datei": "varianten/fussballtor_m.png",
+"basis": "fussballtor",
+"x": 984,
+"y": 538,
+"fuss": 107,
+"kachel": [
+62,
+40
 ],
 "ebene": 1,
 "ohne_wall": true,
