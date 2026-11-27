@@ -20,12 +20,13 @@ from PIL import Image, ImageDraw
 
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
 KARTE = os.path.join(ROOT, 'maps', 'karte67')
-C, R, T = 80, 76, 16
-CX, CY = 40, 32                          # Mitte (Kachelkante)
-A, B = 29.0, 22.0                        # Halbachsen der Fassade aussen (ohne Abflachung)
-DIAG = 38.0                              # Achteck: Lage der 45-Grad-Seiten
+C, R, T = 90, 82, 16
+CX, CY = 45, 37                          # Mitte (Kachelkante)
+A, B = 34.0, 26.0                        # Halbachsen der Fassade aussen (ohne Abflachung)
+DIAG = 45.0                              # Achteck: Lage der 45-Grad-Seiten
 FLACH_X, FLACH_Y = 4.0, 3.0              # gerade Stuecke an den Scheiteln (Treppen N/S, Tore W/O)
-GRENZEN = [0.54, 0.70, 0.86, 1.0]        # Arena | Ring 1 | Ring 2 | Fassade (Nutzer: unterste Etage weg, Arena groesser)
+GRENZEN = [0.46, 0.66, 0.86, 1.0]        # Arena | Ring 1 | Ring 2 | Fassade (Nutzer: unterste Etage weg, Arena groesser;
+                                         # Ringe je ~5 Kacheln tief - 2 Kacheln Front, 3 zum Laufen)
 TOR_H = (CY - 2, CY + 1)                 # Torgaenge W/O: Reihen (4 breit)
 TREPPE_X = (CX - 2, CX + 1)              # Treppen N/S: Spalten (4 breit)
 TELEPORTER = {'x': CX - 2, 'y': 0, 'b': 4, 'h': 2}   # y: Mitte des obersten Suedrings (wird berechnet)

@@ -403,6 +403,8 @@ Vor jeder Abgabe Punkt für Punkt prüfen (vergrößert, Standbild und mehrere A
   als gestrecktes Achteck auf Kacheln (gerade Seiten + reine 45°-Schrägen, `max(dx/A, dy/B, (dx+dy)/D)`), Kanten per
   Kachelmaske mit Gauß 5 px; Muster darin (Sitzstufen) parallel zur Kante über Rauten-Abstand. Kartenpalette auf Wunsch an
   eine Vorbildkarte angleichen (hier Server-Wüste K03: Sandstein, Dünensand, Palmengürtel, Marmor-Sprites umgefärbt).
+  Terrassenringe so tief, dass hinter jeder Front noch mind. 3 Kacheln begehbar bleiben (Ring = Front + Laufzone; an der
+  Treppe nachmessen, Nutzer: „nicht genug Platz zum Laufen“).
 - **Begleiter am Stumpf (5d):** keine 1-Kachel-Blumen auf dem Stumpf, kein Blumenklumpen; Begleiter überlappen sich nicht.
 - **Paare/Achsen:** Paare vor Toren/Bauwerken exakt gespiegelt (Mitte und Fuß), gleiche Objekte auf gleicher Höhe;
   Druckplatten, Obelisken usw. symmetrisch zur berechneten Achse.
