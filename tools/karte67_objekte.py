@@ -25,10 +25,33 @@ D = {'saeule': 'karte67/rom/00.png', 'schale': 'karte67/rom/01.png', 'standarte'
      'thron': 'karte67/rom/06.png', 'tisch': 'karte67/rom/07.png', 'ruestung': 'karte67/rom/08.png',
      'schild': 'karte67/rom/09.png', 'brunnen': 'karte67/rom/10.png', 'truhe': 'karte67/rom/11.png',
      'balliste': 'karte67/rom/12.png', 'bogen': 'karte67/rom/13.png', 'rauch': 'karte67/rom/14.png'}
-for i in (0, 1, 2, 5, 6, 7, 9, 12, 13, 3):
-    D['b%02d' % i] = 'karte01/baeume/%02d.png' % i
-GUERTEL_BAUM = ['b00', 'b01', 'b02', 'b05', 'b06', 'b07', 'b09', 'b07', 'b06']
-GUERTEL_BUSCH = ['b12', 'b13', 'b03']
+# Nutzer: Palette wie die Server-Wueste (Karte 03) - Palmenguertel auf Duenensand, Felsen und duerre Buesche
+for k_, f_ in (('p00', 'palmen/00'), ('p01', 'palmen/01'), ('p02', 'palmen/02'), ('p03', 'palmen/03'), ('p06', 'palmen/06'),
+               ('p08', 'palmen/08'), ('m00', 'mittel/00'), ('m01', 'mittel/01'), ('m02', 'mittel/02'), ('fels', 'mittel/07'),
+               ('busch', 'klein/55'), ('duerr', 'klein/04'), ('stein', 'klein/52')):
+    D[k_] = 'karte03/' + f_ + '.png'
+GUERTEL_BAUM = ['p00', 'p01', 'p02', 'p03', 'p06', 'p08', 'm00', 'm01', 'm02', 'fels']
+GUERTEL_BUSCH = ['busch', 'duerr', 'stein', 'busch']
+SANDSTEIN = [(74, 48, 32), (106, 74, 44), (138, 102, 64), (168, 130, 80), (196, 160, 102), (220, 188, 128), (236, 212, 156),
+             (248, 232, 192)]
+STEIN = {'saeule', 'statue', 'brunnen', 'thron', 'bogen', 'tisch'}
+
+
+def sandstein(sp):
+    """Generierte Marmor-/Graustein-Teile auf die Sandstein-Palette der Karte umfaerben (Helligkeit -> Palettenfarbe);
+    Stoff, Gold, Wasser und Feuer behalten ihre Farbe."""
+    a = np.array(sp).astype(int)
+    mx, mn = a[..., :3].max(2), a[..., :3].min(2)
+    grau = (a[..., 3] > 0) & (mx - mn < 28)
+    if not grau.any():
+        return sp
+    hell = a[..., :3].mean(2)
+    lo, hi = np.percentile(hell[grau], 2), np.percentile(hell[grau], 98)
+    t = np.clip((hell - lo) / max(1, hi - lo), 0, 1)
+    idx = np.clip((t * (len(SANDSTEIN) - 1) + 0.5).astype(int), 0, len(SANDSTEIN) - 1)
+    pal = np.array(SANDSTEIN)
+    a[grau, :3] = pal[idx[grau]]
+    return Image.fromarray(a.astype(np.uint8))
 FL = {'anim': 'kerzen', 'flammen_box': [[2, 0, 23, 20]], 'flammen_alle': True, 'flammen_amp': 1.4}
 ST = {'anim': 'standarte'}
 
@@ -57,6 +80,8 @@ def main():
     def setze(name, cx, fy, opt=None, spiegeln=False, gap=2, pruefen=True, klassen='z'):
         opt = dict(opt or {})
         sp = Image.open(os.path.join(A, D[name])).convert('RGBA')
+        if name in STEIN:
+            sp = sandstein(sp)
         if spiegeln:
             sp = sp.transpose(Image.FLIP_LEFT_RIGHT)
         datei = 'varianten/%s%s.png' % (name, '_m' if spiegeln else '')
@@ -178,7 +203,7 @@ def main():
         deck[y:y + h, x:x + w] |= np.array(im)[..., 3] > 0
         objekte.append({'datei': datei, 'basis': name, 'x': x, 'y': y, 'fuss': h - 1, 'kachel': [tx, ty], 'ebene': 1,
                         'ohne_wall': True, 'nur_kontakt': True, 'guertel': True, 'fest_pos': True,
-                        'anim': 'baum' if name not in GUERTEL_BUSCH else None})
+                        'anim': 'wehen' if name[0] in 'pm' else None})
         return True
 
     kand = []

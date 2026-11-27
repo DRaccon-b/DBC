@@ -23,6 +23,7 @@ KARTE = os.path.join(ROOT, 'maps', 'karte67')
 C, R, T = 80, 76, 16
 CX, CY = 40, 32                          # Mitte (Kachelkante)
 A, B = 29.0, 22.0                        # Halbachsen der Fassade aussen (ohne Abflachung)
+DIAG = 38.0                              # Achteck: Lage der 45-Grad-Seiten
 FLACH_X, FLACH_Y = 4.0, 3.0              # gerade Stuecke an den Scheiteln (Treppen N/S, Tore W/O)
 GRENZEN = [0.38, 0.54, 0.70, 0.86, 1.0]  # Arena | Ring 1 | Ring 2 | Ring 3 | Fassade
 TOR_H = (CY - 2, CY + 1)                 # Torgaenge W/O: Reihen (4 breit)
@@ -34,7 +35,8 @@ def radius():
     yy, xx = np.mgrid[0:R, 0:C].astype(float)
     dx = np.maximum(0, np.abs(xx + 0.5 - CX) - FLACH_X)
     dy = np.maximum(0, np.abs(yy + 0.5 - CY) - FLACH_Y)
-    return np.sqrt((dx / A) ** 2 + (dy / B) ** 2)
+    # Regel 6b (Nutzer): gestrecktes Achteck statt Ellipse - gerade Seiten und reine 45-Grad-Schraegen am Kachelraster
+    return np.maximum(np.maximum(dx / A, dy / B), (dx + dy) / DIAG)
 
 
 def main():

@@ -399,6 +399,10 @@ Vor jeder Abgabe Punkt für Punkt prüfen (vergrößert, Standbild und mehrere A
   (`round(22.5)` rundet auf 22). Paare mit Abständen in ganzen Kacheln von einer Kachelmitte-Achse (zugleich gespiegelt und 1b).
   Felsfront oben nie direkt auf ein Bauwerk: eine Bodenreihe dazwischen. Generierte Schräg-/Isometrie-Sprites (Feldbett)
   frontal bzw. in Draufsicht neu erzeugen.
+- **Runde Bauwerke am 45°-Raster (Nutzer, Karte 67):** Ellipsen/Kreise (Arena, Tribünenringe) nie pixelgenau glatt, sondern
+  als gestrecktes Achteck auf Kacheln (gerade Seiten + reine 45°-Schrägen, `max(dx/A, dy/B, (dx+dy)/D)`), Kanten per
+  Kachelmaske mit Gauß 5 px; Muster darin (Sitzstufen) parallel zur Kante über Rauten-Abstand. Kartenpalette auf Wunsch an
+  eine Vorbildkarte angleichen (hier Server-Wüste K03: Sandstein, Dünensand, Palmengürtel, Marmor-Sprites umgefärbt).
 - **Begleiter am Stumpf (5d):** keine 1-Kachel-Blumen auf dem Stumpf, kein Blumenklumpen; Begleiter überlappen sich nicht.
 - **Paare/Achsen:** Paare vor Toren/Bauwerken exakt gespiegelt (Mitte und Fuß), gleiche Objekte auf gleicher Höhe;
   Druckplatten, Obelisken usw. symmetrisch zur berechneten Achse.

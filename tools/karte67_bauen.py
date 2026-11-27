@@ -26,10 +26,11 @@ BILDDAUER = 250
 k4.N_FRAMES = kb.N_FRAMES = N_FRAMES
 H = k4.H
 weich, zell_maske, flaeche = k4.weich, k4.zell_maske, k20.flaeche
-k4.SCHATTEN = {'farbe': (60, 48, 36), 'dx': 0.3, 'dy': 0.15, 'kern': 100, 'wurf': (66, 52)}
+k4.SCHATTEN = {'farbe': (110, 70, 40), 'dx': 0.3, 'dy': 0.15, 'kern': 100, 'wurf': (66, 52)}   # warm wie Karte 03
 k4.RASTER45 = True
-k4.FELS['travertin'] = ['#3e3328', '#574837', '#715f4a', '#8c7a60', '#a89678', '#c3b294', '#ddcdb0']
-LIPPE = ['#8a7c66', '#9a8c74', '#ab9d84', '#bcae94', '#cdbfa5', '#ddd0b6']
+# Nutzer: Palette wie Karte 03 (Server-Wueste) - Sandstein statt grauem Travertin
+k4.FELS['travertin'] = ['#4a3020', '#6a4a2c', '#8a6640', '#a88250', '#c4a066', '#dcbc80', '#ecd49c']
+LIPPE = ['#a88250', '#b8935c', '#c4a066', '#d2b072', '#dcbc80', '#ecd49c']
 FRONT = 24
 SEITE = 6
 ARKADE = 64                              # Hoehe der Suedfassade (Arkaden, 2 Geschosse + Gesims)
@@ -37,17 +38,17 @@ faerben = k48.faerben
 
 
 def texturen(cols, rows):
-    basis = os.path.join(ROOT, 'assets', 'basis')
-    sand = os.path.join(basis, 'sand_%d.png')
-    gras = os.path.join(basis, 'gras_%d.png')
-    kies = os.path.join(ROOT, 'assets', 'karte03', 'basis', 'kies_%d.png')
+    b3 = os.path.join(ROOT, 'assets', 'karte03', 'basis')
+    duene = os.path.join(b3, 'duene_%d.png')                         # Wuestensand wie Karte 03
+    weg = os.path.join(b3, 'weg_%d.png')
+    kies = os.path.join(b3, 'kies_%d.png')
     return {
-        'a': flaeche(k6.kacheln(sand, 5, faerben((176, 146, 100), (226, 200, 150), 0.3, 0.5)), cols, rows),   # Arenasand
-        'n': flaeche(k6.kacheln(gras, 5), cols, rows),
-        'stein': flaeche(k6.kacheln(kies, 5, faerben((150, 138, 116), (214, 204, 182), 0.25, 0.6)), cols, rows),
-        'z': k48.platten(cols, rows, basis=(196, 186, 164), fuge=(138, 128, 108), seed=67),                  # Platz
-        'g': k48.platten(cols, rows, basis=(150, 140, 120), fuge=(100, 92, 78), seed=68),                    # Torgang
-        'f': k48.platten(cols, rows, basis=(170, 158, 134), fuge=(118, 108, 90), hoehe=8, seed=69),          # Mauerkrone
+        'a': flaeche(k6.kacheln(weg, 5), cols, rows),                                                        # Arenasand
+        'n': flaeche(k6.kacheln(duene, 5), cols, rows),                                                      # Wueste
+        'stein': flaeche(k6.kacheln(kies, 5, faerben((176, 136, 86), (240, 212, 156), 0.25, 0.6)), cols, rows),
+        'z': k48.platten(cols, rows, basis=(220, 186, 128), fuge=(168, 128, 82), seed=67),                   # Platz
+        'g': k48.platten(cols, rows, basis=(184, 146, 96), fuge=(130, 96, 60), seed=68),                     # Torgang
+        'f': k48.platten(cols, rows, basis=(204, 168, 112), fuge=(150, 112, 70), hoehe=8, seed=69),          # Mauerkrone
     }
 
 
@@ -61,14 +62,28 @@ def radius_px(lay, Hp, Wp):
     return np.sqrt((dx / A) ** 2 + (dy / B) ** 2), B
 
 
-def sitzstufen(a, maske, r, B, stein):
-    """Tribuene: umlaufende Sitzstufen (je 8 px tief, entlang der Ellipse): helle Sitzflaeche, dunkle Fuge zur naechsten
-    Stufe, leichte Lichtkante. Stein aus den Kieseltexturen (Travertin)."""
-    s = r * B                                                         # Abstand in px (y-Massstab)
-    band = np.mod(s, 8.0)
+def abstand_4(quelle, maske, n):
+    """Pixelabstand (4er-Nachbarschaft, d. h. Rauten-Metrik) von `quelle` innerhalb `maske` - Linien gleichen Abstands
+    laufen parallel zu geraden Kanten und als 45-Grad-Schraegen um Ecken (Regel 6b)."""
+    d = np.full(quelle.shape, 10 ** 6, np.int32)
+    d[quelle] = 0
+    akt = quelle.copy()
+    for i in range(1, n + 1):
+        neu = akt.copy()
+        neu[1:] |= akt[:-1]; neu[:-1] |= akt[1:]; neu[:, 1:] |= akt[:, :-1]; neu[:, :-1] |= akt[:, 1:]
+        neu &= maske | quelle
+        d[neu & ~akt] = i
+        akt = neu
+    return d
+
+
+def sitzstufen(a, maske, d, stein):
+    """Tribuene: umlaufende Sitzstufen (je 8 px tief, parallel zur Innenkante des Rings am 45-Grad-Raster): helle
+    Sitzflaeche, dunkle Fuge zur naechsten Stufe, leichte Lichtkante."""
+    band = np.mod(d, 8)
     af = stein.astype(np.float32)
-    af[band < 1.2] *= 0.62                                            # Fuge (Schatten der hoeheren Stufe)
-    af[(band >= 1.2) & (band < 2.4)] *= 1.12                          # Lichtkante der Sitzflaeche
+    af[band == 7] *= 0.62                                             # Fuge (Schatten der hoeheren Stufe)
+    af[band == 0] *= 1.12                          # Lichtkante der Sitzflaeche
     a[maske] = np.clip(af, 0, 255).astype(np.uint8)[maske]
 
 
@@ -131,20 +146,27 @@ def bauen(frame=None, speichern=True):
     tex = texturen(cols, rows)
     r, B = radius_px(lay, Hp, Wp)
     gr = lay['grenzen']
-    # Hoehen pixelgenau aus der Ellipse (glatte Ringe), Torgaenge und Rand aus dem Raster
+    # Hoehen aus dem Kachelraster mit 45-Grad-Schraegen (Regel 6b: Gauss 5 px auf der Kachelmaske, Schnitt bei 50 %)
     hp_px = np.zeros((Hp, Wp), int)
-    for i in range(4, -1, -1):
-        hp_px[r < gr[i]] = i
     gk = np.kron(np.array([[c == 'g' for c in z] for z in cls]), np.ones((T, T), bool))
+    g0, g1 = lay['tore']
+    hpo = hpk.copy()                                                  # Torgaenge mit der Ringhoehe fuellen (gerade Schnitte)
+    gkk = np.array([[c == 'g' for c in z] for z in cls])
+    hpo[gkk] = np.maximum(hpk[g0 - 1], hpk[g1 + 1])[None, :].repeat(rows, 0)[gkk]
+    for i in range(1, 5):
+        mi = np.kron(hpo >= i, np.ones((T, T), np.float32))
+        hp_px[weich(mi, 5.0, 0, 0)] = i
     hp_px[gk] = 0
     a0 = tex['z'].copy()
     nm = weich(zell_maske(cls, 'n', cols, rows), 5.0, 0, 3)
     a0[nm] = tex['n'][nm]
     a0[hp_px == 0] = np.where(nm[hp_px == 0][:, None], a0[hp_px == 0], a0[hp_px == 0])
-    arena = (r < gr[0]) & ~gk
+    arena = (hp_px == 0) & weich(zell_maske(cls, 'at', cols, rows), 5.0, 0, 0) & ~gk
     a0[arena] = tex['a'][arena]
-    ring = (hp_px >= 1) & (hp_px <= 3)
-    sitzstufen(a0, ring, r, B, tex['stein'])
+    for L in (1, 2, 3):
+        ring = hp_px == L
+        d = abstand_4((hp_px < L) & ~gk, ring, 80)
+        sitzstufen(a0, ring, d, tex['stein'])
     a0[hp_px == 4] = tex['f'][hp_px == 4]
     a0[gk] = tex['g'][gk]
     a = a0.copy()
