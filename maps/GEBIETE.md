@@ -8,6 +8,7 @@ Einteilung der Karten in Gebiete. Reihenfolge innerhalb eines Gebiets = Spielrei
 | 1 | Karte 16 – The Network | v1.0 (`maps/karte16/v1.0/The_Network_v1.0.zip`) |
 | 2 | Karte 17 – Our War Game! | v1.0 (`maps/karte17/v1.0/Our_War_Game_v1.0.zip`) |
 | 3 | Karte 19 – Revenge | v1.0 (`maps/karte19/v1.0/Revenge_v1.0.zip`) |
+| 4 | Karte 67 – Colosseum | Vorschau (Nutzer): römisches Steinkolosseum, Arena + 3 begehbare Tribünenringe |
 
 Gemeinsamer Stil: schwebende Plattformen in der Leere des Netzes (Datenstränge, Fragmente), Pfeilmarken im Stil des
 Aufstellfelds (cyan = Ankunft, gold = weiter; Funktion `pfeil_marke` in `tools/karte16_bauen.py`).

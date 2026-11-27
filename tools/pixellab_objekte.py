@@ -2575,6 +2575,14 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'thin straight red organic rod-like arm with sharp angular elbow joints, ending in a dark grey metal C-shaped hook claw, lying flat on the ground stretching vertically from top to bottom, root in a dark red fibrous clump at the top, hook at the bottom, seen from directly above, top-down view, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
         'thin straight red organic rod-like arm with sharp angular elbow joints, ending in a dark grey metal C-shaped hook claw, lying flat on the ground in a zigzag from top to bottom, root in a dark red fibrous clump at the top, hook at the bottom, seen from directly above, top-down view, no perspective, no isometric, flat orthographic, classic 2D handheld RPG style',
     ]},
+    'k67_rom': {'size': 48, 'freie_farben': True, 'items': [   # Karte 67 Colosseum: roemische Arena (Nutzer)
+        'tall white travertine roman column with a corinthian capital on a square base, ' + FR14,
+        'bronze roman brazier on three legs with burning fire, ' + FR14,
+        'roman legion standard banner on a wooden pole, red cloth with gold trim and a golden laurel wreath on top, ' + FR14,
+        'marble statue of a roman gladiator with sword and round shield on a stone pedestal, ' + FR14,
+        'wooden weapon rack with roman short swords, spears and a red rectangular shield, ' + FR14,
+        'group of clay amphorae and a wooden barrel, ' + FR14,
+    ]},
     'k54_ranke96': {'size': 96, 'freie_farben': True, 'items': [
         'huge thick glossy bright red jelly tentacle rising from the ground and curving over, made of fused bubbles, round bubble tip, wet white highlights, ' + FR14,
         'tall twisted pair of glossy crimson jelly tentacles intertwined, bubbly texture, wet highlights, ' + FR14,
