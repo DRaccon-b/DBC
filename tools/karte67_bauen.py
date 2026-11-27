@@ -92,7 +92,7 @@ def arkade(a, wand, lay, hp, r, B):
     Geschosse mit Rundboegen zwischen Pfeilern (Bogenoeffnung dunkel, Pfeiler hell, Licht von oben links)."""
     Hp, Wp = hp.shape
     F = [np.array(H(c), np.float32) for c in k4.FELS['travertin']]
-    fass = hp == 4
+    fass = hp == len(lay['grenzen']) - 1                             # Fassade = hoechste Ebene
     cy = lay['mitte'][1] * T
     for x in range(Wp):
         col = fass[:, x]
@@ -154,7 +154,8 @@ def bauen(frame=None, speichern=True):
     if lay['tore']:                                                   # Torgaenge mit der Ringhoehe fuellen (gerade Schnitte)
         g0, g1 = lay['tore']
         hpo[gkk] = np.maximum(hpk[g0 - 1], hpk[g1 + 1])[None, :].repeat(rows, 0)[gkk]
-    for i in range(1, 5):
+    NF = len(gr) - 1                                                  # Ebene der Fassade (Ringe 1..NF-1)
+    for i in range(1, NF + 1):
         mi = np.kron(hpo >= i, np.ones((T, T), np.float32))
         hp_px[weich(mi, 5.0, 0, 0)] = i
     hp_px[gk] = 0
@@ -164,11 +165,11 @@ def bauen(frame=None, speichern=True):
     a0[hp_px == 0] = np.where(nm[hp_px == 0][:, None], a0[hp_px == 0], a0[hp_px == 0])
     arena = (hp_px == 0) & weich(zell_maske(cls, 'at', cols, rows), 5.0, 0, 0) & ~gk
     a0[arena] = tex['a'][arena]
-    for L in (1, 2, 3):
+    for L in range(1, NF):
         ring = hp_px == L
         d = abstand_4((hp_px < L) & ~gk, ring, 80)
         sitzstufen(a0, ring, d, tex['stein'])
-    a0[hp_px == 4] = tex['f'][hp_px == 4]
+    a0[hp_px == NF] = tex['f'][hp_px == NF]
     a0[gk] = tex['g'][gk]
     a = a0.copy()
     frei = np.zeros((Hp, Wp), bool)
@@ -176,7 +177,7 @@ def bauen(frame=None, speichern=True):
         if ri == 's':
             frei[ry * T - 4:ry * T + FRONT + 10, x0 * T:(x1 + 1) * T] = True
     wand = np.zeros((Hp, Wp), bool)
-    for L in (1, 2, 3, 4):                                            # Ringe und Fassade, je mit Front nach Sueden
+    for L in range(1, NF + 1):                                          # Ringe und Fassade, je mit Front nach Sueden
         m = hp_px >= L
         a[m] = a0[m]
         wand &= ~m
@@ -194,7 +195,7 @@ def bauen(frame=None, speichern=True):
         k4.teleporter_zeichnen(a, tp['x'], tp['y'], tp['b'], tp['h'], frame)
     img = Image.fromarray(a).convert('RGBA')
     lvl = (hp_px + 1).astype(np.uint8)
-    lvl[hp_px == 4] = 9                                               # Fassade (Mauerkrone) gesperrt
+    lvl[hp_px == NF] = 9                                               # Fassade (Mauerkrone) gesperrt
     lvl[wand] = 9
     lvl[treppe_m] = 2
     if speichern and frame is None:
