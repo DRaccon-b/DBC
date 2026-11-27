@@ -6,9 +6,8 @@
 Neu mit PixelLab (k67_rom): Travertinsaeule, Bronze-Feuerschale, Legionsstandarte, Gladiatorenstatue, Waffenstaender,
 Amphoren mit Fass, Kaiserthron, Speisetisch, Brunnen. Baeume des Guertels aus Karte 01 (Laubbaeume, Zypressen, Kiefern,
 Buesche zum Schliessen der Luecken).
-Aufbau: Arena frei in der Mitte (Kampfflaeche) - nur Feuerschalen-Paare, Waffenstaender an den Tormuendungen und
-Statuen auf der Querachse; Kaiserloge (Thron) auf dem Suedring; Standarten an den Aussentoren;
-Suedplatz mit Brunnen auf der Achse, Statuen- und Saeulenpaaren, wenige Marktdinge abseits.
+Aufbau (Nutzer): Arena und Tribuene innen ohne Objekte; aussen (Kulisse) Nordplatz mit Saeulen, Suedplatz mit Brunnen
+auf der Achse, Statuen- und Saeulenpaaren, wenige Marktdinge abseits.
 """
 import json, os, random, sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -70,8 +69,6 @@ def main():
     for (x0, x1, ry, r_) in lay['treppen']:                          # Treppen und Austritt (2 Reihen) frei
         y0_, y1_ = ((ry - 2) * T, (ry + 3) * T) if r_ == 's' else ((ry - 2) * T, (ry + 5) * T)
         sperr.append((x0 * T - 2, y0_, (x1 + 1) * T + 2, y1_))
-    g0, g1 = lay['tore']                                             # Torgaenge frei (ganze Breite)
-    sperr.append((0, g0 * T - 2, cols * T, (g1 + 1) * T + 2))
     objekte, rects = [], []
 
     def schnitt(a, b, d):
@@ -142,24 +139,8 @@ def main():
         print('  nicht gesetzt:', name, int(cx) // T, int(fy) // T)
         return False
 
-    # ---------------- Arena: Kampfflaeche frei, Feuerschalen-Paare, Waffenstaender an den Tormuendungen, Statuen
-    paar('schale', 10 * T, 24 * T, FL, klassen='a')
-    paar('schale', 10 * T, 39 * T, FL, klassen='a')
-    paar('waffen', 12 * T, 28 * T, klassen='a')
-    paar('statue', 12 * T, 36 * T, klassen='a')
-    # ---------------- Kaiserloge (Pulvinar) auf dem Suedring 1 neben der Treppe
-    loge = achse - 8 * T                                             # Pulvinar wie im Original auf der Suedseite
-    if suche('thron', loge, 45 * T, klassen='1', r=2):
-        pass                                                         # Thron allein (Standarten sperrten die Treppe)
-    # Suedring 1: Feuerschalen an der Treppe
-    paar('schale', 4 * T, 45 * T, FL, klassen='1')
-    # Oberster Ring: Saeulen im festen Rhythmus an der Nordtreppe
-    paar('saeule', 4 * T, 51 * T, klassen='3')
-
-    # ---------------- Aussen: Standarten an den Toren (West/Ost), Nordplatz mit Saeulenreihe, Suedplatz mit Brunnen
-    for (sx, sp_) in ((5 * T + 8, False), (cols * T - 5 * T - 8, True)):
-        setze('standarte', sx, (g0 - 2) * T, ST, sp_, pruefen=False)
-        setze('standarte', sx, (g1 + 3) * T, ST, sp_, pruefen=False)
+    # Nutzer: innen (Arena und Tribuene) keine Objekte - Kampfarena abgeschottet, Tribuene frei begehbar
+    # ---------------- Aussen (Kulisse): Nordplatz mit Saeulenreihe, Suedplatz mit Brunnen
     for ab in (14, 22, 30):
         paar('saeule', ab * T, 5 * T, klassen='z')
     paar('schale', 6 * T, 5 * T, FL, klassen='z')

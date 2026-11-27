@@ -31,7 +31,7 @@ k4.RASTER45 = True
 # Nutzer: Palette wie Karte 03 (Server-Wueste) - Sandstein statt grauem Travertin
 k4.FELS['travertin'] = ['#4a3020', '#6a4a2c', '#8a6640', '#a88250', '#c4a066', '#dcbc80', '#ecd49c']
 LIPPE = ['#a88250', '#b8935c', '#c4a066', '#d2b072', '#dcbc80', '#ecd49c']
-FRONT = 24
+FRONT = 32                               # Nutzer: hoehere Stufenfronten der Tribuene
 SEITE = 6
 ARKADE = 64                              # Hoehe der Suedfassade (Arkaden, 2 Geschosse + Gesims)
 faerben = k48.faerben
@@ -149,10 +149,11 @@ def bauen(frame=None, speichern=True):
     # Hoehen aus dem Kachelraster mit 45-Grad-Schraegen (Regel 6b: Gauss 5 px auf der Kachelmaske, Schnitt bei 50 %)
     hp_px = np.zeros((Hp, Wp), int)
     gk = np.kron(np.array([[c == 'g' for c in z] for z in cls]), np.ones((T, T), bool))
-    g0, g1 = lay['tore']
-    hpo = hpk.copy()                                                  # Torgaenge mit der Ringhoehe fuellen (gerade Schnitte)
+    hpo = hpk.copy()
     gkk = np.array([[c == 'g' for c in z] for z in cls])
-    hpo[gkk] = np.maximum(hpk[g0 - 1], hpk[g1 + 1])[None, :].repeat(rows, 0)[gkk]
+    if lay['tore']:                                                   # Torgaenge mit der Ringhoehe fuellen (gerade Schnitte)
+        g0, g1 = lay['tore']
+        hpo[gkk] = np.maximum(hpk[g0 - 1], hpk[g1 + 1])[None, :].repeat(rows, 0)[gkk]
     for i in range(1, 5):
         mi = np.kron(hpo >= i, np.ones((T, T), np.float32))
         hp_px[weich(mi, 5.0, 0, 0)] = i

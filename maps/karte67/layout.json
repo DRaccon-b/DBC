@@ -25,7 +25,7 @@
 "nnnnzzzzzfffff3333332222221111111111111111111111111111222222333333fffffzzzzznnnn",
 "nnnnzzzzfffff333333222222111111111111111111111111111111222222333333fffffzzzznnnn",
 "nnnnzzzfffff33333322222211111111111111111111111111111111222222333333fffffzzznnnn",
-"nnnnzzzffff333333222222111111aaaaaaaaattttaaaaaaaaa111111222222333333ffffzzznnnn",
+"nnnnzzzffff333333222222111111aaaaaaaaaaaaaaaaaaaaaa111111222222333333ffffzzznnnn",
 "nnnnzzzffff33333222222111111aaaaaaaaaaaaaaaaaaaaaaaa11111122222233333ffffzzznnnn",
 "nnnnzzzffff3333322222111111aaaaaaaaaaaaaaaaaaaaaaaaaa1111112222233333ffffzzznnnn",
 "nnnnzzzffff333332222111111aaaaaaaaaaaaaaaaaaaaaaaaaaaa111111222233333ffffzzznnnn",
@@ -34,10 +34,10 @@
 "nnnnzzzffff33333222211111aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa11111222233333ffffzzznnnn",
 "nnnnzzzffff33333222211111aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa11111222233333ffffzzznnnn",
 "nnnnzzzffff33333222211111aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa11111222233333ffffzzznnnn",
-"nnnnzzzggggggggggggggggggaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaggggggggggggggggggzzznnnn",
-"nnnnzzzggggggggggggggggggaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaggggggggggggggggggzzznnnn",
-"nnnnzzzggggggggggggggggggaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaggggggggggggggggggzzznnnn",
-"nnnnzzzggggggggggggggggggaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaggggggggggggggggggzzznnnn",
+"nnnnzzzffff33333222211111aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa11111222233333ffffzzznnnn",
+"nnnnzzzffff33333222211111aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa11111222233333ffffzzznnnn",
+"nnnnzzzffff33333222211111aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa11111222233333ffffzzznnnn",
+"nnnnzzzffff33333222211111aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa11111222233333ffffzzznnnn",
 "nnnnzzzffff33333222211111aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa11111222233333ffffzzznnnn",
 "nnnnzzzffff33333222211111aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa11111222233333ffffzzznnnn",
 "nnnnzzzffff33333222211111aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa11111222233333ffffzzznnnn",
@@ -76,10 +76,10 @@
 "nnnnzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzznnnn",
 "nnnnzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzznnnn",
 "nnnnzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzznnnn",
-"nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnzzzzzznnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn",
-"nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnzzzzzznnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn",
-"nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnzzzzzznnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn",
-"nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnzzzzzznnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn"
+"nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn",
+"nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn",
+"nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn",
+"nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn"
 ],
 "hoehe": [
 "00000000000000000000000000000000000000000000000000000000000000000000000000000000",
@@ -112,10 +112,10 @@
 "00000004444333332222111110000000000000000000000000000001111122223333344440000000",
 "00000004444333332222111110000000000000000000000000000001111122223333344440000000",
 "00000004444333332222111110000000000000000000000000000001111122223333344440000000",
-"00000000000000000000000000000000000000000000000000000000000000000000000000000000",
-"00000000000000000000000000000000000000000000000000000000000000000000000000000000",
-"00000000000000000000000000000000000000000000000000000000000000000000000000000000",
-"00000000000000000000000000000000000000000000000000000000000000000000000000000000",
+"00000004444333332222111110000000000000000000000000000001111122223333344440000000",
+"00000004444333332222111110000000000000000000000000000001111122223333344440000000",
+"00000004444333332222111110000000000000000000000000000001111122223333344440000000",
+"00000004444333332222111110000000000000000000000000000001111122223333344440000000",
 "00000004444333332222111110000000000000000000000000000001111122223333344440000000",
 "00000004444333332222111110000000000000000000000000000001111122223333344440000000",
 "00000004444333332222111110000000000000000000000000000001111122223333344440000000",
@@ -190,40 +190,13 @@
 41,
 17,
 "s"
-],
-[
-38,
-41,
-21,
-"s"
-],
-[
-38,
-41,
-42,
-"n"
-],
-[
-38,
-41,
-46,
-"n"
-],
-[
-38,
-41,
-49,
-"n"
 ]
 ],
-"tore": [
-30,
-33
-],
+"tore": [],
 "teleporter": [
 {
 "x": 38,
-"y": 73,
+"y": 51,
 "b": 4,
 "h": 2
 }
