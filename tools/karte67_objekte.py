@@ -22,7 +22,7 @@ D = {'saeule': 'karte67/rom/00.png', 'schale': 'karte67/rom/01.png', 'standarte'
      'statue': 'karte67/rom/03.png', 'waffen': 'karte67/rom/04.png', 'amphoren': 'karte67/rom/05.png',
      'thron': 'karte67/rom/06.png', 'tisch': 'karte67/rom/07.png', 'ruestung': 'karte67/rom/08.png',
      'schild': 'karte67/rom/09.png', 'brunnen': 'karte67/rom/10.png', 'truhe': 'karte67/rom/11.png',
-     'balliste': 'karte67/rom/12.png', 'bogen': 'karte67/rom/13.png', 'rauch': 'karte67/rom/14.png'}
+     'fussballtor': 'karte67/tor/00.png', 'balliste': 'karte67/rom/12.png', 'bogen': 'karte67/rom/13.png', 'rauch': 'karte67/rom/14.png'}
 # Nutzer: Palette wie die Server-Wueste (Karte 03) - Palmenguertel auf Duenensand, Felsen und duerre Buesche
 for k_, f_ in (('p00', 'palmen/00'), ('p01', 'palmen/01'), ('p02', 'palmen/02'), ('p03', 'palmen/03'), ('p06', 'palmen/06'),
                ('p08', 'palmen/08'), ('m00', 'mittel/00'), ('m01', 'mittel/01'), ('m02', 'mittel/02'), ('fels', 'mittel/07'),
@@ -139,6 +139,9 @@ def main():
         return False
 
     # Nutzer: innen (Arena und Tribuene) keine Objekte - Kampfarena abgeschottet, Tribuene frei begehbar
+    # Nutzer: grosses Fussballtor unten (Suedende der Arena), mittig auf der Achse, Fuss in der letzten Arenareihe
+    unten = max(y for y in range(rows) if cls[y][CX] == 'a')
+    setze('fussballtor', achse, unten * T + T - 1, {'fest_pos': True, 'nur_kontakt': True}, pruefen=False)
     # Nutzer: auch aussen keine Objekte (Fackeln, Saeulen, Brunnen usw. entfernt) - nur der Palmenguertel
 
     # ---------------- Baumguertel (Wiese 'n' am Rand): dicht, nicht begehbar, Luecken mit Bueschen

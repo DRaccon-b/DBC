@@ -2583,6 +2583,12 @@ OBJEKTGRUPPEN_K21 = {   # Karte 21 (Digi-Egg Valley), Stil wie Karte 20 / Karte 
         'wooden weapon rack with roman short swords, spears and a red rectangular shield, ' + FR14,
         'group of clay amphorae and a wooden barrel, ' + FR14,
     ]},
+    'k67_tor': {'size': 128, 'freie_farben': True, 'items': [   # Karte 67: grosses Fussballtor am Suedende der Arena (Nutzer)
+        'large upright football soccer goal, white square metal posts and crossbar, white rope net stretched behind, '
+        'wide rectangular goal standing on sand, simple and clean, ' + FR14,
+        'big standing soccer goal frame, white round posts and crossbar, white mesh net with visible square grid, '
+        'net slanting back to the ground, ' + FR14,
+    ]},
     'k54_ranke96': {'size': 96, 'freie_farben': True, 'items': [
         'huge thick glossy bright red jelly tentacle rising from the ground and curving over, made of fused bubbles, round bubble tip, wet white highlights, ' + FR14,
         'tall twisted pair of glossy crimson jelly tentacles intertwined, bubbly texture, wet highlights, ' + FR14,
